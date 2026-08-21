@@ -1752,8 +1752,8 @@ SPEC-10 shall not alter SPEC-09 merely because a semantic model is computational
 
 Full SPEC-10 novelty validation requires:
 
-- working yaw/pitch motion;
-- roll state if used;
+- working powered roll/pitch/yaw motion;
+- measured roll state;
 - measured physical pose;
 - pose timestamps;
 - representative camera mounting.

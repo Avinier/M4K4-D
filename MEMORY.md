@@ -71,7 +71,7 @@ The project had previously explored a broader embodied assistant concept, AURA, 
 The direction began shifting away from a manipulation-heavy assistant and toward a smaller companion robot where the hard problem would be expression, perception, interaction and hardware integration.
 
 **Why**
-- A 4–5 month beginner college project needed a tighter physical scope.
+- A 4–5 month beginner project needed a tighter physical scope.
 - The desire was to learn real robotics/mechatronics rather than build another mostly-software AI demo.
 - A small companion platform created room to go deeper on motion, audio, perception and embodiment.
 
@@ -1283,3 +1283,252 @@ For current follow-up routing:
 
 **Follow-up**
 - Close OQ-20 through head-sweep geometry/sensing work and OQ-21 by restoring and auditing the canonical specs.
+
+---
+
+### MEM-20260813-23 — Existing specsheets and visuals are exploratory starting material
+**Type:** CORRECTION  
+**Status:** CURRENT  
+**Clarifies:** All reconstructed entries that describe specsheets or visual concepts as established project truth  
+**Requirements:** Project-document governance
+
+The current `specsheets/` documents were created to get the Makad project started. Much of their content is exploratory, over-specified or low-confidence material and **is not binding**. Their proposed architectures, requirements, numeric targets, priorities, interfaces and acceptance tests must not be treated as approved merely because they are written in specification form.
+
+The existing visual renders are the closest thing to a starting anchor, but they are also **not a frozen design**. They capture a useful initial character and product direction; the visual design, proportions, mechanical form, component placement and details are expected to change substantially.
+
+At this point, the genuinely established foundation is limited to the Makad concept, name, broad companion-robot intent and a provisional visual starting point. Future engineering and design decisions must be reconsidered deliberately rather than inherited automatically from the current specsheets or renders.
+
+**Why**
+- The documents were intended to begin exploration, not prematurely freeze the project.
+- Specification-style wording creates a false impression of maturity and approval.
+- The design and architecture should remain free to change as the actual V1 is defined.
+
+**Consequences**
+- Treat `specsheets/` as reference/archive material unless an item is explicitly reviewed and adopted later.
+- Treat `visuals/` as inspiration and historical starting material, not engineering truth.
+- The project should be described as early concept/exploration work rather than a completed requirements phase.
+- New binding decisions must be recorded explicitly in later MEMORY entries.
+
+**Follow-up**
+- Establish a short, human-reviewed V1 foundation covering intended character, capabilities, learning goals, constraints and revised visual direction before freezing architecture or parts.
+
+---
+
+## 2026-08-14 — V1 foundation approval
+
+### MEM-20260814-01 — Human-reviewed V1 foundation is approved
+**Type:** DECISION
+**Status:** CURRENT
+**Clarifies:** MEM-20260813-23
+**Requirements:** `docs/00-foundation/vision.md` v1.0; `v1-scope.md` v1.0; `constraints.md` v1.0; `success-criteria.md` v1.0; `core-interaction-scenarios.md` v1.0
+
+The project builder approved the human-reviewed V1 foundation. Makad, technically M4K4-D and commonly M4, is a personal droid whose primary V1 objective is to feel alive. Its differentiator is coordinated expressiveness arising from understanding, visual/audio perception, display animation, astromech sound, status light, physical motion and timing.
+
+The approved Core includes:
+
+- yaw-and-pitch expressive head motion;
+- an animated face and at least one controllable LED beside the head camera;
+- natural-language understanding with authored non-English astromech output;
+- person/face acquisition and sustained tracking;
+- battery-powered wheeled floor locomotion;
+- “come here” and pet-like “follow me” behaviour;
+- collision/obstacle handling and tabletop edge/fall protection;
+- time display, timers, alarms and Spotify playback with an expressive music state;
+- modular, screw-together, rugged droid construction.
+
+Powered neck roll remains a Target. Spatial/directional hearing remains a Candidate; Core come/follow may begin with wake detection followed by visual search. Detailed intent phrasing, astromech vocabulary, drive architecture, component selection and numeric validation thresholds remain later engineering decisions.
+
+The V1 deadline is fixed at **5 December 2026**. The target budget is ₹40,000–₹50,000 with a stretch ceiling of ₹1,00,000. Final V1 must operate untethered from an onboard battery; cloud services are allowed.
+
+**Why**
+- The project now has a human-reviewed product identity, scope, constraints, success definition and two Core interaction scenarios.
+- The approved scenarios translate “feel alive” into observable wake/social, utility, approach and following behaviour.
+- This closes the foundation follow-up in MEM-20260813-23 and provides an authority above the exploratory specsheets.
+
+**Consequences**
+- The approved foundation documents govern V1 scope; existing `specsheets/` remain non-binding reference material unless later adopted explicitly.
+- Architecture, prototypes, components, BOM and CAD must trace back to the approved Core or an explicit Target/Candidate.
+- Following and sustained face tracking are Core completion requirements, not optional Targets.
+- Detailed language design is deferred without weakening the approved interaction semantics.
+
+**Follow-up**
+- Reconcile `README.md` with the approved foundation.
+- Define system architecture, engineering budgets and risk prototypes around the two Core scenarios.
+
+---
+
+### MEM-20260814-02 — README is reconciled with the approved foundation
+**Type:** CHANGE
+**Status:** CURRENT
+**Supersedes:** The 2026-08-13 README status snapshot
+**Requirements:** Approved `docs/00-foundation/` v1.0 documents
+
+`README.md` was rewritten as a current orientation document derived from the approved foundation.
+
+The former README treated exploratory specsheet architectures, numerical targets, interfaces and open-question registers as established project truth. It also described Makad as a desktop/nearby-floor platform, fixed differential drive and four-microphone spatial audio as V1 architecture, and left the newly approved status light, utilities, Spotify interaction and Core come/follow scenario absent or optional.
+
+The reconciled README now records:
+
+- M4K4-D's approved personal-droid identity and “feel alive” priority;
+- the complete approved Core, powered-roll Target and spatial-hearing Candidate;
+- floor-first and tabletop-stationary operating modes;
+- the wake/social and come/follow scenarios;
+- the 5 December 2026 deadline, budget, tool and environment constraints;
+- current project maturity, risk-prototype work and open engineering decisions;
+- foundation-first document authority, with `specsheets/` explicitly non-binding.
+
+**Why**
+- README is the project entry point and must not contradict the approved human-reviewed foundation.
+- Removing false architectural certainty allows the next phase to select mechanisms and components from scenario-driven requirements.
+
+**Consequences**
+- README is again a trustworthy current overview.
+- The old spec map, speculative numerical constraints and obsolete OQ register no longer appear as current authority.
+- Historical decisions remain in `MEMORY.md`, and exploratory technical material remains available under `specsheets/`.
+
+**Follow-up**
+- Define the system architecture, engineering budgets and risk-prototype plan.
+
+---
+
+### MEM-20260814-03 — Powered roll, pitch and yaw are all Core
+**Type:** CHANGE
+**Status:** CURRENT
+**Supersedes:** The powered-roll classification in MEM-20260814-01 and earlier provisional/Target records
+**Requirements:** `docs/00-foundation/vision.md` v1.1; `v1-scope.md` v1.1; `success-criteria.md` v1.1; `core-interaction-scenarios.md` v1.1
+
+The project builder promoted powered neck roll from Target to Core. Makad V1 now requires a powered three-axis head supporting roll, pitch and yaw. A two-axis yaw/pitch head is not a V1-complete fallback.
+
+The exact joint order, actuator class, transmission, structural support, sensing, wiring, range and control implementation remain open engineering decisions. Representative prototyping must solve these decisions while preserving natural movement, camera stability, safe limits, serviceability and coordination with the body and wheels.
+
+**Why**
+- Three-axis physical expression is central to the intended character rather than optional polish.
+- Natural head movement and head–body–wheel coordination are primary mechanical, firmware and robotics learning objectives.
+- Treating roll as removable would direct early architecture and packaging toward the wrong mechanism.
+
+**Consequences**
+- Foundation documents, README, the system-design brief and the exploratory neck spec now classify powered roll/pitch/yaw consistently as Core.
+- The three-axis head mechanism and motion firmware become the first risk prototype.
+- Spatial hearing remains a Candidate; it is not coupled to roll's Core status.
+
+**Follow-up**
+- Define the three-axis prototype load, range hypotheses, mechanical concepts, measurement plan and safe bench fixture in `risk-prototype-plan.md`.
+
+---
+
+### MEM-20260814-04 — Mechanical/firmware priority and planning constraints are reset
+**Type:** CHANGE
+**Status:** CURRENT
+**Supersedes:** The budget, runtime, prototype-order and project-framing parts of MEM-20260814-01 and MEM-20260814-02
+**Requirements:** `docs/00-foundation/constraints.md` v1.1; `docs/01-system/system-design-brief.md` v0.2
+
+No external rubric is part of the current Makad scope. Rubric-specific wording has been removed from the project corpus and does not define project purpose, constraints or success.
+
+No fixed spend ceiling is currently approved. The project will first estimate the full sourced cost of candidate parts, prototype quantities, tools, fabrication, shipping, replacements and contingency. Architecture/component substitutions or scope cuts will then be considered from the complete cost picture rather than an invented ceiling.
+
+The initial untethered mixed-duty runtime requirement is at least 20 minutes. The approved initial movement/interaction envelope is a short single-room household case: ordinary interaction at approximately 0.3–2.0 m, “come here” from approximately 1–2 m with a stop approximately 0.6–0.9 m from the person, and following for up to approximately 3 m at no more than approximately 0.5 m/s on a level floor with one gentle turn and representative obstacles.
+
+Tabletop operation is stationary by default. Only explicitly enabled low-speed test/calibration movement is permitted inside a marked, validated circular footprint; come/follow and excited spin remain floor-only.
+
+Reliable network/cloud access may be assumed for connected Core features. No duplicate offline language, time or Spotify implementation is required. Network loss still requires bounded visible failure/recovery, and physical stop, motion inhibition, obstacle/edge protection and controller failure handling remain locally effective.
+
+Engineering work is reprioritized toward component sourcing, three-axis head mechanics and firmware, electrical/control infrastructure, locomotion, and natural head–body–wheel coordination before the lower-risk CV, audio-processing, interaction-latency and display work.
+
+**Why**
+- Mechanical motion quality, control firmware, coordinated movement and sourcing are the builder's highest-risk and highest-learning areas.
+- The builder expects CV, audio software, interaction processing and display UI to be comparatively familiar work.
+- Cost decisions are more useful after real candidate availability and full landed costs are visible.
+
+**Consequences**
+- Internal communication and external network are separate engineering budgets: the former covers onboard controller links/timebase/watchdogs; the latter covers Wi-Fi/internet/cloud dependency, latency, authentication and failure behaviour.
+- Sourcing/availability is a first-class architecture budget and runs before and during every physical prototype.
+- The system-design brief now orders prototypes: three-axis head; electrical/control and peak power; locomotion/safety; coordinated motion; wake/interaction; sourced layout; short household tracking/following.
+- Physical size and mass remain open for a dedicated architecture/layout discussion.
+
+**Follow-up**
+- Establish access to the required electrical tools.
+- Discuss preliminary physical size, mass and transport assumptions.
+- Produce the risk-prototype plan using the revised order.
+
+---
+
+### MEM-20260814-05 — V1 system design brief is approved
+**Type:** DECISION
+**Status:** CURRENT
+**Requirements:** `docs/01-system/system-design-brief.md` v1.0
+
+The project builder approved the V1 system design brief. The approved baseline fixes the system boundary, whole-system responsibility model, architecture drivers, information classes, operating/failure dimensions, engineering-budget categories, thirteen-decision ADR register, seven-prototype portfolio and mechanical/firmware-first decision order.
+
+Approval does not select processors, controllers, mechanisms, actuators, drive geometry, sensors, batteries, frameworks, protocols, dimensions, component suppliers or final numeric thresholds. Those choices remain evidence-dependent.
+
+**Why**
+- The brief accurately translates the approved product foundation into the engineering problem the system architecture must solve.
+- It separates semantic behaviour, perception evidence, physical control and independent safety authority without prematurely fixing deployment technology.
+- It makes three-axis head motion, natural head–body–wheel coordination, sourcing and bounded failure first-class architecture concerns.
+
+**Consequences**
+- `docs/01-system/system-design-brief.md` v1.0 is the authority for system-architecture work below the approved foundation.
+- Architecture and final component decisions require the named budget, sourcing and prototype evidence.
+- The seven risk prototypes may now be planned and executed in the approved order, with sourcing/layout work beginning alongside the first prototype.
+
+**Follow-up**
+- Review and approve `docs/01-system/risk-prototype-plan.md` before committing prototype hardware.
+- Establish the electrical-tool access plan and preregister the first head-prototype thresholds.
+- Begin provisional engineering budgets and candidate trade studies from measured prototype inputs.
+
+---
+
+## 2026-08-17 — Risk-prototype-plan approval
+
+### MEM-20260817-01 — V1 risk-prototype plan is approved
+**Type:** DECISION
+**Status:** CURRENT
+**Requirements:** `docs/01-system/risk-prototype-plan.md` v1.0
+
+The project builder approved the V1 risk-prototype plan. The approved plan converts the seven-prototype portfolio into an evidence program with an explicit roadmap, dependency order, continuous sourcing/mass/data work, preregistered thresholds, minimum evidence packets, time boxes, pass/iterate/reject/defer outcomes, Core-failure handling, stop/escalation rules and decision closeout.
+
+The approved order remains mechanical/firmware-first. Sourced component envelopes begin alongside RP-01 rather than waiting for RP-06's final closure. Evidence from RP-01 through RP-07 closes the architecture decisions and engineering budgets before final component selection, BOM commitment and integrated CAD freeze.
+
+Approval does not adopt a component, supplier, mechanism, architecture option or final numeric threshold. It also does not approve the new `docs/01-system/workbench.md`, which remains a proposed downstream document. Powered scored tests remain blocked until an independently reviewed workbench/test-readiness setup satisfies the RP plan's safety, instrumentation, configuration and logging requirements.
+
+**Why**
+- The plan makes each risk prototype answer named ADR, success-criteria and budget questions.
+- Preregistered gates and retained failed evidence prevent thresholds or conclusions from being rewritten after results are known.
+- The roadmap preserves time for evidence-backed architecture, integration and validation before 5 December 2026.
+
+**Consequences**
+- `docs/01-system/risk-prototype-plan.md` v1.0 is now the authority for V1 risk-prototype sequencing and evidence governance.
+- Core prototype failures require iteration, an alternative architecture or explicit scope review; they cannot be silently deferred.
+- The workbench draft must be reviewed independently before it can unblock powered scored testing.
+
+**Follow-up**
+- Review and correct `docs/01-system/workbench.md`, then approve or replace its test-readiness gate.
+- Establish the candidate sourcing matrix, mass/envelope ledger, monotonic-time strategy and run-ID convention.
+- Register RP-01 numeric thresholds and select the first head-mechanism candidates.
+
+---
+
+### MEM-20260817-02 — Workbench sourcing and readiness baseline is approved
+**Type:** DECISION
+**Status:** CURRENT
+**Supersedes:** The proposed/non-canonical workbench status recorded in MEM-20260817-01
+**Requirements:** `docs/01-system/workbench.md` v1.0; `docs/01-system/risk-prototype-plan.md` v1.1
+
+The project builder approved `docs/01-system/workbench.md` as Makad's initial Stage 0 workbench sourcing and powered-test-readiness baseline. The approved document identifies the initial tool classes and buy/defer order, current planning-price ranges, motion-rig stop approach, scored-test readiness checklist and deferred battery-work gate.
+
+Approval makes the document canonical for Stage 0 planning. It does not mean that the tools have been purchased, that listed prices or stock are guaranteed, or that any workbench item is a final Makad component. Prices, availability and landed cost are checked again before purchase; final battery and system architecture decisions remain governed by their ADRs and prototype evidence.
+
+**Why**
+- The builder reviewed the workbench as a practical sourcing list and judged it sufficient to start Stage 0.
+- The list converts the approved electrical-tool constraint into an actionable acquisition sequence.
+- The readiness checklist gives RP-01 and later powered rigs a common start gate.
+
+**Consequences**
+- `docs/01-system/workbench.md` v1.0 is approved.
+- `docs/01-system/risk-prototype-plan.md` v1.1 now treats the workbench gate as an approved dependency.
+- Powered scored testing remains blocked until the listed readiness conditions are satisfied for the active rig; document approval alone does not satisfy them.
+
+**Follow-up**
+- Purchase or establish access to the buy-now tool set and record actual landed costs.
+- Fit and verify the stop/isolation method on the first RP-01 motion rig.
+- Continue the component sourcing matrix and mass/envelope ledger needed by RP-01 and RP-06.

@@ -29,11 +29,9 @@ with:
 
 * **yaw** mandatory,
 * **pitch** mandatory,
-* **powered roll** the intended implementation.
+* **powered roll** mandatory.
 
-A 2-DOF yaw/pitch neck remains an explicit fallback only if mechanical prototyping shows that roll produces disproportionate complexity, mass, backlash or packaging problems.
-
-The mechanical design must therefore **reserve roll structurally from the beginning** rather than trying to retrofit it later.
+A 2-DOF yaw/pitch neck is not a V1-complete fallback. Mechanical prototyping must solve the three-axis requirement rather than merely reserving roll for a later retrofit.
 
 ---
 
@@ -1227,7 +1225,6 @@ as if all three were interchangeable pointing devices.
 
 ### TARGET
 
-* powered roll
 * final empirically selected roll range
 * ≤0.5° backlash
 * ±0.5° joint repeatability

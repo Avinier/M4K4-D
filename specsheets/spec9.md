@@ -2632,7 +2632,7 @@ These are now separated:
 
 The robot needs to work across ordinary variation in human appearance.
 
-However a college prototype with a handful of participants cannot honestly establish population-level fairness metrics.
+However a small prototype study with a handful of participants cannot honestly establish population-level fairness metrics.
 
 The correct requirement is diverse validation plus explicit failure reporting.
 

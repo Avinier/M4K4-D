@@ -101,7 +101,7 @@ Head/Camera
 }
 \]
 
-Yaw and pitch are mandatory; roll is the intended expressive architecture, with 2-DOF remaining only a fallback if prototype mechanics show disproportionate cost or complexity.
+Powered roll, pitch and yaw are all mandatory for V1. A 2-DOF yaw/pitch head is not a V1-complete fallback; perception and calibration must therefore support the selected three-axis mechanism across its validated envelope.
 
 Therefore the camera is not fixed to Makad's body frame.
 

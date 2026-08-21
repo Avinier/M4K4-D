@@ -43,7 +43,7 @@ Yes. With wheels now **officially added**, this is the updated Makad capability 
     The screen can temporarily transition away from the character face when useful—for example to show information, controls, status or another small GUI—then return to the character. The expressive face remains the default identity of the robot; we are not making Makad primarily into a touchscreen tablet.
 
 15. **Makad will perform a limited set of genuinely useful desktop/companion-assistant tasks.**
-    This exists partly so the robot is more than a character demonstration and partly for the college project's practical-use requirement. Voice, vision and the GUI can expose a small group of useful functions. We have intentionally **not frozen the exact utility feature set yet**, because those functions should be selected later based on time and what strengthens the final project rather than bloating the robot now.
+    This exists so the robot is more than a character demonstration. Voice, vision and the GUI can expose a small group of useful functions. We have intentionally **not frozen the exact utility feature set yet**, because those functions should be selected later based on time and what strengthens the final project rather than bloating the robot now.
 
 16. **Makad will move autonomously using a wheeled differential-drive base.**
     It will use **two independently powered, encoder-equipped wheels plus a passive caster**, so it remains mechanically stable and does not need self-balancing. The drive system will allow Makad to move forward/backward, turn in arcs and rotate almost in place. This will support behaviours such as approaching someone, following them slowly, turning its entire body toward them, backing away, roaming locally and repositioning itself.
