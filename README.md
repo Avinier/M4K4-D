@@ -30,6 +30,7 @@ This README is an orientation document derived from the approved foundation. It 
 | Engineering budgets | Not yet closed |
 | Risk prototypes | Plan approved; execution not yet started |
 | Workbench sourcing/readiness | Approved; procurement not yet completed |
+| Run identity and evidence storage | Active v1.0 convention; guarded launcher, log schema, and time/video synchronization remain open |
 | Exact components and BOM | Not yet selected |
 | Integrated CAD | Not frozen |
 | Existing `specsheets/` | Exploratory, non-binding reference material |
@@ -49,6 +50,27 @@ This README is an orientation document derived from the approved foundation. It 
 - [Approved system design brief](docs/01-system/system-design-brief.md)
 - [Approved risk-prototype plan](docs/01-system/risk-prototype-plan.md)
 - [Approved workbench sourcing and test-readiness baseline](docs/01-system/workbench.md)
+- [Active run-record convention and evidence layout](docs/01-system/run-record-convention.md)
+
+## Physical prototype run records
+
+Every bounded physical prototype execution that energizes an actuator, applies representative electrical/mechanical load, or produces decision evidence receives one permanent run ID. Routine assembly, soldering, passive inspection, and unpowered fit checks do not require one unless their result will be cited.
+
+The canonical format is:
+
+```text
+RP<prototype>-<gate-and-version-or-EXP>-<exploratory|pilot|scored>-<UTC allocation>-<sequence>
+```
+
+For example, `RP01-G03V1-scored-20260822T091530Z-01` identifies one scored RP-01 execution against gate G03 version 1. A retry, power cycle, controlled configuration change, or new trial block receives a new ID. Failed, invalid, unsafe, and aborted runs keep their IDs and evidence; IDs are never renamed, reused, or deleted.
+
+The run record binds that identity to the repository, firmware, software, applied configuration, runtime overrides, rig revision, ballast/geometry, sourced parts, instruments, active limits, readiness checks, raw data, media, derived results, and artifact hashes. Exploratory motion uses an automatically generated `EXP-exploratory` ID rather than bypassing the record. Gate outcomes remain separate because several runs may contribute to one pass/iterate/reject/defer decision.
+
+The operating invariant is:
+
+> **No valid run ID plus no confirmed logger means no actuator enable.**
+
+Until a guarded launcher enforces this in software, the builder applies it as a pre-arm bench check by creating the run directory from [the run-record template](docs/02-prototypes/_templates/run-record.md), filling the pre-run fields, starting the logger, confirming a sample was written with the same ID, and showing or announcing the ID at the start of external video. The launcher, machine-readable logging schema, monotonic timebase, and video-synchronization validation remain required before the first powered scored run.
 
 ## Identity and design direction
 

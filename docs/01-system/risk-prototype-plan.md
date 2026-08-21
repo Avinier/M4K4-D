@@ -102,7 +102,7 @@ The approved `workbench.md` collects candidate tools, hazard notes, stop/isolati
 - **Candidate sourcing matrix** — verified specifications, supplier, availability, lead time, substitutes, quantity, landed cost, replacement risk, required tools, and fabrication dependency. Aggregate rows into the first complete project cost range (CON-TBD-13) before major procurement.
 - **Mass/envelope ledger** — head, body, battery, drive, electronics, wiring, fasteners, and margin. Unknowns are ranges, not zero. This ledger is the head-CAD blocker and feeds RP-01/RP-06 directly.
 - **Monotonic event-time strategy** — one clock reference for commands, observations, feedback, health, and external video synchronization.
-- **Configuration and run-ID convention** — prevents data from different builds being mixed; every scored run carries firmware/software/rig revision identifiers.
+- **Configuration and run-ID convention** — `run-record-convention.md` prevents data from different builds being mixed; every scored run carries firmware/software/configuration/rig revision identifiers and an immutable evidence manifest.
 
 ## RP-01 — Three-axis head mechanism and motion firmware
 
@@ -483,7 +483,9 @@ The architecture phase may begin with provisional option studies while prototype
 - [ ] Draft the motion storyboard and register the required roll/pitch/yaw cases.
 - [ ] Complete RP-01 numeric gates for range, reversal, repeatability, tracking, settling, noise, temperature, endurance and fault response.
 - [ ] Clamp the RP-01 fixture and verify its E-stop and limits per the `workbench.md` scored-test gate.
-- [ ] Define the run-ID, logging, video synchronization and evidence-storage method.
+- [x] Define the run-ID, configuration identity and evidence-storage convention. (`run-record-convention.md` v1.0 + `docs/02-prototypes/_templates/run-record.md`)
+- [ ] Define and implement the machine-readable logging schema and pre-run write check.
+- [ ] Define and validate the monotonic timebase and external-video synchronization method.
 
 ## Approval note
 

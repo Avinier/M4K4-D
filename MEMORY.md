@@ -1532,3 +1532,43 @@ Approval makes the document canonical for Stage 0 planning. It does not mean tha
 - Purchase or establish access to the buy-now tool set and record actual landed costs.
 - Fit and verify the stop/isolation method on the first RP-01 motion rig.
 - Continue the component sourcing matrix and mass/envelope ledger needed by RP-01 and RP-06.
+
+---
+
+## 2026-08-22 — Physical run identity and evidence storage
+
+### MEM-20260822-01 — Every physical prototype execution receives an immutable run identity
+**Type:** DECISION
+**Status:** CURRENT
+**Requirements:** `docs/01-system/run-record-convention.md` v1.0; `docs/02-prototypes/_templates/run-record.md`; `docs/01-system/risk-prototype-plan.md` v1.1; `docs/01-system/workbench.md` v1.0
+
+The project builder adopted a common run-identity, configuration-identity, and evidence-storage convention for Makad's physical prototypes. Every bounded execution that energizes an actuator, applies representative electrical/mechanical load, or produces evidence used for an engineering decision receives one permanent run ID. Routine assembly, soldering, passive inspection, and unpowered fit checks do not require an ID unless their result will be cited.
+
+The canonical format is:
+
+```text
+RP<prototype>-<gate-and-version-or-EXP>-<exploratory|pilot|scored>-<UTC allocation>-<sequence>
+```
+
+For example, `RP01-G03V1-scored-20260822T091530Z-01` identifies one scored execution of RP-01 against gate G03 version 1. Exploratory work uses `EXP-exploratory`; it does not bypass identity. One bounded arm/start-to-disarm/stop execution receives one ID. A retry, power cycle, changed controlled configuration, or repeated trial block receives a new ID. Preregistered repetitions or input sweeps may share one ID only when each trial and input value is recorded.
+
+Run IDs are allocated before execution and are never renamed, reused, or deleted. Failed, invalid, unsafe, and aborted runs remain in the evidence history. The ID does not encode a result. Run validity and threshold result live in the run record; gate/prototype pass, iterate, reject, or defer decisions remain in the summary because several runs may contribute.
+
+Each scored run records the repository and worktree state; firmware and software revisions; applied configuration and overrides; rig, ballast, geometry and sourced-part revisions; instruments; active safety/test limits; readiness checks; artifacts; and results. Large evidence stored outside Git is represented by a stable path or asset identifier, byte size, and SHA-256 hash.
+
+The operational rule is: **no valid run ID plus no confirmed logger means no actuator enable.** Until a guarded launcher implements that interlock, the builder enforces it in the pre-arm bench workflow: create the run record, complete its pre-run fields, start logging, confirm a sample containing the ID, and show or announce the ID at the start of external video.
+
+**Why**
+- Physical iterations can otherwise mix data, video, firmware, settings, fixtures, or component substitutions and produce an apparently precise result that cannot be trusted or reproduced.
+- Retaining unsuccessful executions prevents accidental cherry-picking and preserves the evidence behind later engineering decisions.
+- A generated exploratory ID keeps the process lightweight enough to use during real bench work instead of restricting traceability to formal scored tests.
+
+**Consequences**
+- `docs/01-system/run-record-convention.md` v1.0 and its reusable template are the current authority for run identity, configuration identity, and evidence layout.
+- The combined RP-01 readiness item is split truthfully: run identity/configuration/evidence storage are defined; the machine-readable log schema and monotonic time/video-synchronization methods remain open.
+- Physical prototype evidence without a conforming run identity and record cannot support a scored gate, ADR, engineering-budget update, component selection, or CAD freeze.
+
+**Follow-up**
+- Implement a run generator that creates the ID, evidence directory, and prefilled run record.
+- Implement a guarded launcher that validates the run record, proves logging is writing, propagates the ID into all logs, and only then permits actuator enable.
+- Define and validate the machine-readable logging schema, monotonic timebase, and external-video synchronization method before the first powered scored run.
