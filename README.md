@@ -47,6 +47,7 @@ This README is an orientation document derived from the approved foundation. It 
 
 ## System engineering
 
+- [Canonical engineering intuition guide (all phases)](docs/intuition.md)
 - [Approved system design brief](docs/01-system/system-design-brief.md)
 - [Approved risk-prototype plan](docs/01-system/risk-prototype-plan.md)
 - [Approved workbench sourcing and test-readiness baseline](docs/01-system/workbench.md)
@@ -231,7 +232,7 @@ The working sequence is:
 
 The foundation phase is complete. The project is now entering system architecture and risk reduction.
 
-The approved architecture input is the [Makad V1 System Design Brief](docs/01-system/system-design-brief.md). The approved [Risk-Prototype Plan](docs/01-system/risk-prototype-plan.md) turns its seven risk questions into procedures, measurements, time boxes, and evidence gates. The approved [workbench baseline](docs/01-system/workbench.md) defines the initial tool sourcing list and powered-test readiness gate; its purchases have not yet been completed, and prices/stock are rechecked at purchase time.
+The approved architecture input is the [Makad V1 System Design Brief](docs/01-system/system-design-brief.md). The approved [Risk-Prototype Plan](docs/01-system/risk-prototype-plan.md) turns its seven risk questions into procedures, measurements, and evidence gates. The approved [workbench baseline](docs/01-system/workbench.md) defines the initial tool sourcing list and powered-test readiness gate; its purchases have not yet been completed, and prices/stock are rechecked at purchase time.
 
 The architecture/prototype priority is deliberately weighted toward mechanical engineering, firmware, sourcing, and natural motion:
 

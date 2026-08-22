@@ -209,7 +209,7 @@ These are the decisions the architecture phase must make. The brief records the 
 
 ## 9. Risk prototypes required before major commitments
 
-This is the prototype portfolio the later `risk-prototype-plan.md` must turn into procedures, materials, measurements, time boxes, and pass/cut gates.
+This is the prototype portfolio the later `risk-prototype-plan.md` must turn into procedures, materials, measurements, and pass/cut gates.
 
 | Priority | Prototype | Question it must answer | Decisions it unlocks |
 |---:|---|---|---|
@@ -261,7 +261,7 @@ These decisions require the budgets, trade studies, and prototype evidence above
 
 This brief feeds the following documents:
 
-1. Approved `risk-prototype-plan.md` defines the seven experiments, measurements, time boxes, and pass/cut gates in the approved mechanical/firmware-first order.
+1. Approved `risk-prototype-plan.md` defines the seven experiments, measurements, and pass/cut gates in the approved mechanical/firmware-first order.
 2. `system-architecture.md` will compare viable architecture options and select the logical/physical design using prototype evidence.
 3. `engineering-budgets.md` will allocate mass, physical space, mechanical motion, sensing/perception, acoustics, power, energy, heat, compute, timing, internal communication, external network, reliability, sourcing, cost, and schedule margins.
 4. `physical-architecture.md` will define envelopes, placement, centre of mass, moving clearances, wiring, cooling, and service paths.

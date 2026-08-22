@@ -1572,3 +1572,55 @@ The operational rule is: **no valid run ID plus no confirmed logger means no act
 - Implement a run generator that creates the ID, evidence directory, and prefilled run record.
 - Implement a guarded launcher that validates the run record, proves logging is writing, propagates the ID into all logs, and only then permits actuator enable.
 - Define and validate the machine-readable logging schema, monotonic timebase, and external-video synchronization method before the first powered scored run.
+
+---
+
+### MEM-20260822-02 — Canonical engineering intuition guide adopted for all phases
+**Type:** DECISION
+**Status:** CURRENT
+**Requirements:** `docs/intuition.md` v1.0
+
+The project builder adopted `docs/intuition.md` v1.0 as the canonical methodological guide spanning every phase: foundation (00), system (01), prototypes (02), architecture (03), BOM (04), and CAD/build. The guide generalizes one working model — retire uncertainty in order; never let a downstream artifact harden around an upstream guess — into per-phase reasoning, a six-step prototype loop (intent → quantification → paper physics → competing concepts → instrumented rig → closed decision), cross-phase invariants, and a catalogue of anti-patterns previously caught in this project's history.
+
+The same decision fixes the prototype evidence layout as `docs/02-prototypes/RP-XX-<name>/` (number for run-ID traceability, name for readability) with a standard internal skeleton (intent, physics, concepts, rig, gates, runs, decision), and records the downstream layering: ADRs and budgets in a future `docs/03-architecture/`, final component selection in `docs/04-bom/`, and integrated CAD in `cad/` — none of which may contain committed content before their roadmap stage.
+
+The guide's authority is methodological only. It cannot override the approved foundation documents, system design brief, risk-prototype plan, workbench baseline, or run-record convention; on any conflict, the phase document wins and the guide must be corrected.
+
+**Why**
+- The builder is learning mechatronics while executing an evidence-gated plan; a single document capturing *how to think* at each phase prevents re-deriving the method per prototype.
+- Making the folder convention and layering explicit prevents part-shaped organization (head/body/wheels with per-part "final" CAD/BOM) from silently contradicting the approved single-freeze sequencing.
+
+**Consequences**
+- `docs/intuition.md` v1.0 is canonical for method; README links it under System engineering.
+- Prototype evidence folders follow the RP-XX-name convention; "final" BOM/CAD artifacts are prohibited inside `docs/02-prototypes/`.
+
+**Follow-up**
+- Scaffold `docs/02-prototypes/RP-01-head/` and begin the motion storyboard.
+- Correct the guide if any statement is found to conflict with an approved phase document.
+
+---
+
+### MEM-20260822-02 — Planning time boxes removed from the risk-prototype plan
+**Type:** CHANGE
+**Status:** CURRENT
+**Supersedes:** The per-prototype time-box provisions recorded in MEM-20260817-01
+**Requirements:** `docs/01-system/risk-prototype-plan.md` v1.2
+
+The project builder removed the per-prototype "Planning time box" sections (the estimated focused-working-day counts for RP-01 through RP-07) from the risk-prototype plan. The plan is now v1.2.
+
+The substantive non-calendar content formerly embedded in those sections is preserved as scope notes: RP-02's staged battery validation with the runtime gate remaining open, RP-05's deferral of detailed vocabulary and face/audio polish, and RP-06's continuous sourcing/envelope updates with evidence-dependent final closure.
+
+The escalation function of time boxes is retained in calendar-free form: repeated iteration on the same gate requires a review of schedule effect and evidence that the remaining problem is localized. The Iterate gate outcome no longer references a time box.
+
+**Why**
+- The day-count estimates were invented precision from a builder with no prior mechatronics bench experience; they carried no evidence and conflicted with the plan's own "measure physics" principle.
+- Unrealistic estimates create either false schedule confidence or pressure to rush gates.
+- Iteration discipline is better enforced by the gate-review rule than by fictional calendars.
+
+**Consequences**
+- `risk-prototype-plan.md` v1.2 contains no calendar estimates; sequencing remains governed by the dependency/concurrency table.
+- The 5 December 2026 deadline and all approved envelope/runtime limits are unchanged.
+- Schedule risk is now managed by tracking actual prototype progress against the deadline rather than against per-prototype allocations.
+
+**Follow-up**
+- None beyond normal roadmap tracking.

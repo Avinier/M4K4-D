@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.1 |
+| Version | 1.2 |
 | Owner | Project builder |
 | Created | 2026-08-14 |
-| Last reviewed | 2026-08-17 |
+| Last reviewed | 2026-08-22 |
 | Depends on | Approved `docs/00-foundation/` v1.1 documents and `system-design-brief.md` v1.0 |
 | Decision authority | Project builder |
 
@@ -55,9 +55,11 @@ RP-06 is numbered sixth to preserve the approved portfolio, but its sourcing and
 | Outcome | Meaning | Next action |
 |---|---|---|
 | Pass | All safety, evidence, and decision criteria pass under the registered test conditions. | Adopt the supported decision provisionally and update affected budgets/ADRs. |
-| Iterate | The question remains answerable within the time box and the evidence identifies a bounded correction. | Record the failed run, change one named variable set, and repeat. |
+| Iterate | The evidence identifies a bounded correction. | Record the failed run, change one named variable set, and repeat. |
 | Reject | A candidate cannot meet a Core need or creates unacceptable integration risk. | Remove that candidate and test the next viable option. |
 | Defer | Evidence is insufficient for an optional capability and Core does not depend on it. | Remove it from the V1 execution path. This outcome is not available for any Core outcome (e.g. roll/pitch/yaw, come/follow). |
+
+Repeated iteration on the same gate requires a review of the schedule effect and evidence that the remaining problem is localized; iteration without that review is not a valid outcome.
 
 ### Threshold registration
 
@@ -117,10 +119,6 @@ Can a manufacturable powered roll/pitch/yaw mechanism carry a representative Mak
 - Thresholds: SC-TBD-03, SC-TBD-04 and SC-TBD-12.
 - Constraints: CON-04 through CON-08, CON-14, CON-17, CON-P01, CON-P02 and CON-P05.
 
-### Planning time box
-
-Seven to ten focused working days for the first candidate comparison and one bounded iteration. A further iteration requires a review of schedule effect and evidence that the remaining problem is localized.
-
 ### Inputs and candidates
 
 - At least two plausible joint-order/support/actuation concepts unless sourcing or calculation eliminates one before fabrication.
@@ -179,9 +177,9 @@ Can the proposed compute/controller split, internal links, power rails, protecti
 - Thresholds: SC-TBD-10, SC-TBD-11, SC-TBD-12 and SC-TBD-14.
 - Constraints: CON-03, CON-07, CON-10, CON-11, CON-P02, CON-P04 and CON-P05.
 
-### Planning time box
+### Scope note
 
-Four to six focused working days after representative loads and candidate control topology exist. Battery validation may be staged after bench-supply characterization, but the runtime gate remains open until representative onboard energy hardware is tested safely.
+Battery validation may be staged after bench-supply characterization, but the runtime gate remains open until representative onboard energy hardware is tested safely.
 
 ### Rig and procedure
 
@@ -224,10 +222,6 @@ Can a candidate wheeled base with representative total mass move expressively at
 - Thresholds: SC-TBD-07, SC-TBD-08, SC-TBD-09 and CON-TBD-14.
 - Constraints: CON-09, CON-14, CON-19, CON-P02 and CON-P05.
 
-### Planning time box
-
-Five to seven focused working days for candidate comparison, representative-ballast trials and one safety-sensor iteration.
-
 ### Rig and procedure
 
 Use a low open chassis with adjustable ballast matching the current mass/centre-of-mass range. Test on named representative indoor surfaces inside a marked test area. Tabletop edge trials require a physical catch platform or tether that prevents an actual fall without masking sensor/controller behaviour.
@@ -267,10 +261,6 @@ Can measured head and base controllers be composed, synchronized, interrupted, c
 - Architecture: ADR-03, ADR-05 and ADR-12.
 - Success: SC-01 through SC-05, SC-09, SC-10 and SC-25.
 - Thresholds: SC-TBD-01, SC-TBD-02 and SC-TBD-04.
-
-### Planning time box
-
-Four to six focused working days for the scheduling/composition comparison and three representative authored motion phrases.
 
 ### Inputs and procedure
 
@@ -312,9 +302,9 @@ Can all approved invocation forms and Core semantic requests travel through repr
 - Thresholds: SC-TBD-05, SC-TBD-13 through SC-TBD-17 and SC-TBD-19.
 - Constraints: CON-11 through CON-13 and CON-P03 through CON-P04.
 
-### Planning time box
+### Scope note
 
-Two to four focused working days for the representative end-to-end path. Detailed vocabulary and face/audio polish remain later implementation work.
+Detailed vocabulary and face/audio polish remain later implementation work.
 
 ### Test matrix and procedure
 
@@ -355,9 +345,9 @@ Can actually obtainable components fit a serviceable head/body layout that prese
 - Success: SC-03, SC-07, SC-08, SC-14, SC-16, SC-17, SC-21 and SC-23.
 - Thresholds: SC-TBD-03, SC-TBD-06, SC-TBD-12, SC-TBD-13, SC-TBD-17 and SC-TBD-19.
 
-### Planning time box
+### Scope note
 
-Two to three focused working days for the first adjustable mock-up, with sourcing/envelope updates continuing during RP-01 through RP-05. Final closure occurs only after their relevant measured inputs exist.
+Sourcing/envelope updates continue during RP-01 through RP-05. Final closure occurs only after their relevant measured inputs exist.
 
 ### Mock-up and procedure
 
@@ -401,10 +391,6 @@ Can Makad acquire, select, retain, lose, reacquire, approach and follow one pers
 - Thresholds: SC-TBD-06, SC-TBD-07, SC-TBD-08 and SC-TBD-18.
 - Constraints: CON-09, CON-12, CON-19, CON-P02 and CON-P04.
 
-### Planning time box
-
-Five to eight focused working days for the selected-person state model, representative vision/control loop and one bounded algorithm/sensor iteration.
-
 ### Route and cases
 
 Mark a level indoor route no longer than approximately 3 m with one gentle turn. Test come from approximately 1–2 m and the approved 0.6–0.9 m stop band. Following speed must not exceed 0.5 m/s. Register household lighting cases, person poses/clothing, approach angles, representative box/furniture/person obstacles, temporary occlusion, target exit/re-entry, distractor person, stale/frozen detections, camera/head movement, sensor loss, controller-link loss and tabletop-mode denial.
@@ -433,7 +419,7 @@ Select the person acquisition/tracking/following approach and compute placement 
 
 ## Spatial-hearing Candidate gate
 
-Spatial hearing remains outside the seven Core risk prototypes. It may receive a separately approved, removal-safe time box only after RP-01 through RP-04 establish a credible mechanical/control path and the Core wake/visual-search/following design does not depend on acoustic direction.
+Spatial hearing remains outside the seven Core risk prototypes. It may receive a separately approved, removal-safe effort only after RP-01 through RP-04 establish a credible mechanical/control path and the Core wake/visual-search/following design does not depend on acoustic direction.
 
 The experiment must compare the approved visual-search baseline against the directional-audio variant on a named Core interaction. Inclusion requires a material, preregistered improvement large enough to justify microphone geometry, synchronized capture, compute, acoustic contamination, cost, packaging and schedule. Otherwise ADR-13 closes with spatial hearing deferred from V1.
 
@@ -489,6 +475,6 @@ The architecture phase may begin with provisional option studies while prototype
 
 ## Approval note
 
-Approved by the project builder on 2026-08-17. Approval adopts the seven-prototype portfolio, roadmap, dependency order, threshold-registration policy, evidence-packet requirements, time boxes, pass/iterate/reject/defer model, Core-failure rule, and decision-closeout process as the V1 risk-reduction baseline.
+Approved by the project builder on 2026-08-17. Approval adopts the seven-prototype portfolio, roadmap, dependency order, threshold-registration policy, evidence-packet requirements, pass/iterate/reject/defer model, Core-failure rule, and decision-closeout process as the V1 risk-reduction baseline. Version 1.2 (2026-08-22) removes the per-prototype planning time boxes; iteration control is exercised through the gate-outcome review rule rather than calendar estimates.
 
 Approval does not approve a component, supplier, mechanism, architecture option, or numeric `SC-TBD-*` or `CON-TBD-*` threshold. `workbench.md` was approved separately on 2026-08-17 and incorporated as the Stage 0 baseline in version 1.1 of this plan. Numeric gates remain subject to preregistration before scored runs, and powered scored testing remains blocked until the approved readiness gate's safety, instrumentation, configuration, and logging requirements are satisfied.
