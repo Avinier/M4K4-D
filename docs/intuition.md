@@ -115,10 +115,10 @@ Folder convention: `docs/02-prototypes/RP-XX-<name>/` — number for run-ID trac
 
 ```
 RP-01-head/
-  01-intent.md        motion storyboard + quantification table
-  02-physics.md       torque/inertia/resonance analysis + assumptions
-  03-concepts/        the ≥2 candidates + comparison matrix
-  04-rig.md           fixture, instrumentation, stop/safety
+  intent.md           motion storyboard + quantification table
+  physics.md          torque/inertia/resonance analysis + assumptions
+  concepts/           the ≥2 candidates + comparison matrix
+  rig.md              fixture, instrumentation, stop/safety
   gates.md            preregistered thresholds (from the RP plan's G01…G06)
   runs/               one directory per run ID, per run-record convention
   decision.md         pass/iterate/reject outcome; cites runs; feeds ADRs
@@ -302,10 +302,10 @@ Current position: foundation and system phases approved; Stage 0 (workbench purc
 
 Immediate order of attack (per the RP plan's open-inputs checklist):
 
-1. **Motion storyboard** (`RP-01-head/01-intent.md`) — 8–12 named moves, then the quantification table: move × (amplitude, duration, α_peak, precision class, settle). Becomes RP-01's registered motion cases.
+1. **Motion storyboard** (`RP-01-head/intent.md`) — 8–12 named moves, then the quantification table: move × (amplitude, duration, α_peak, precision class, settle). Becomes RP-01's registered motion cases.
 2. **Mass/envelope blockout** — dumb solids with real densities for display, camera, servos, wiring; read m, CoM, tensor per candidate axis placement; feed the ledger.
-3. **Torque spreadsheet** (`02-physics.md`) — peak + RMS per axis per concept, reflected inertia where computable, f_n estimate, backlash checklist.
-4. **Two mechanism concepts** (`03-concepts/`) compared on those numbers → what goes on the rig.
+3. **Torque spreadsheet** (`physics.md`) — peak + RMS per axis per concept, reflected inertia where computable, f_n estimate, backlash checklist.
+4. **Two mechanism concepts** (`concepts/`) compared on those numbers → what goes on the rig.
 5. In parallel: complete workbench purchases, and knock out the logging schema + monotonic timebase + video-sync method (software, your home turf, ~days) so process infrastructure never blocks hardware.
 
 Iterate on CoM placement before iterating on servo choice — it's the cheaper lever, and it decides whether Makad hums quietly or buzzes while pretending to sleep.
