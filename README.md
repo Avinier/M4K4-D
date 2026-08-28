@@ -22,7 +22,7 @@ This README is an orientation document derived from the approved foundation. It 
 |---|---|
 | Vision | Approved |
 | V1 scope | Approved |
-| Constraints | Approved; some engineering values remain open |
+| Constraints | Approved; dimensional/packaging target baseline active, some engineering values remain open |
 | Success criteria | Approved; numeric thresholds remain open |
 | Core interaction scenarios | Approved at scenario level |
 | System design brief | Approved |
@@ -52,6 +52,7 @@ This README is an orientation document derived from the approved foundation. It 
 - [Approved risk-prototype plan](docs/01-system/risk-prototype-plan.md)
 - [Approved workbench sourcing and test-readiness baseline](docs/01-system/workbench.md)
 - [Active run-record convention and evidence layout](docs/01-system/run-record-convention.md)
+- [Current dimensional and packaging baseline](docs/01-system/dimensional-baseline.md)
 
 ## Physical prototype run records
 
@@ -86,7 +87,7 @@ The approved visual and physical direction is:
 - approachable without optimizing for minimum size;
 - open to substantial redesign from the current renders.
 
-Exact proportions, face geometry, shell language, colours, dimensions, mass, component placement, and internal architecture are not yet frozen.
+The current physical target is **300 H × 205 W × 180 D mm overall**, with a **100 H × 180 W × 130 D mm head**, **Ø84 mm wheels**, **170 mm track**, and **110 mm drive-axle-to-front-caster wheelbase**. The detailed [dimensional and packaging baseline](docs/01-system/dimensional-baseline.md) overrides earlier planning values. Face geometry, shell language, colours, manufacturing tolerances, total mass, exact parts, and internal architecture remain subject to prototype and packaging validation.
 
 ## V1 Core
 
@@ -113,7 +114,7 @@ V1 is not complete unless the following outcomes work together as one droid.
 ### Mobility and following
 
 - M4 is a battery-powered wheeled floor droid.
-- The exact drive architecture remains an engineering decision.
+- The drive baseline is two independently powered, encoder-equipped wheels plus a front caster and mandatory rear anti-tip skid; exact motors, transmissions, drivers, and control parameters remain engineering decisions.
 - In response to “come here,” M4 finds the person, approaches safely, and stops at a bounded distance.
 - In response to “follow me,” M4 tracks and follows the selected person through an approved indoor route.
 - M4 handles relevant obstacles, stopping, temporary target loss, and unsafe conditions without continuing blindly.
@@ -248,8 +249,8 @@ Exact components and integrated CAD should not be frozen until these risks and b
 
 ## Open engineering decisions
 
-- final visual direction, proportions, dimensions, and mass;
-- drive architecture, motors, wheels, support geometry, and encoders;
+- final visual detailing, manufacturing tolerances, and total mass; current target proportions/dimensions live in the dimensional baseline;
+- exact drive motors, transmissions, drivers, wheel/caster parts, skid construction, encoder parts, and control parameters;
 - roll/pitch/yaw actuation, sensing, transmission, support, wiring, range, and control;
 - camera, display, speaker, microphone, and status-light hardware;
 - person localization, tracking, selection, loss, and reacquisition policy;

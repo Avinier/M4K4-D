@@ -3,10 +3,11 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.1 |
+| Version | 1.2 |
 | Owner | Project builder |
-| Last reviewed | 2026-08-14 |
+| Last reviewed | 2026-08-25 |
 | Depends on | `vision.md`, `v1-scope.md` |
+| Current physical targets | `../01-system/dimensional-baseline.md` |
 
 ## Purpose
 
@@ -29,7 +30,7 @@ This document records the real boundaries inside which V1 must be designed. Unkn
 | CON-11 | Reliable network and cloud access may be assumed for the full Core interaction set; no duplicate offline implementation of language, time, or Spotify capability is required. | External dependencies still need explicit timeout, failure indication, and recovery. Physical stop, motion inhibition, obstacle/edge protection, and bounded controller failure must remain effective without the network. |
 | CON-12 | Normal household lighting is the baseline visual environment. | Vision must be validated in representative indoor lighting rather than ideal studio conditions only. |
 | CON-13 | There is no special project-level prohibition on camera or microphone recording. | Recording and cloud use are permitted; the selected power/sensor controls must make active operation clear and allow it to be stopped. |
-| CON-14 | Dimensions and mass will be derived from the integrated architecture rather than minimized in advance. | Packaging, stability, transport, fabrication, and operating-envelope limits still require deliberate review before CAD freeze. |
+| CON-14 | The current physical target is **300 H × 205 W × 180 D mm overall**, governed in detail by `docs/01-system/dimensional-baseline.md`; total mass remains architecture-derived. | Packaging, stability, transport, fabrication, and operating-envelope checks must preserve this baseline or trigger an explicit revision before CAD freeze. |
 | CON-15 | The existing `specsheets/` content is exploratory and non-binding. | Every architecture, metric, interface, and part choice must be reconsidered before adoption. |
 | CON-16 | Existing renders are provisional visual references. | They guide character direction but do not determine dimensions or internal architecture. |
 | CON-17 | Requirements precede final component selection and CAD freeze. | No component is selected merely because an old document names it. |
@@ -70,7 +71,6 @@ Where an identified behaviour or component can cause harm or damage, safety take
 |---|---|---|
 | CON-TBD-03 | Available electrical tools and acquisition plan | Not yet established |
 | CON-TBD-04 | External fabrication access | Not yet established |
-| CON-TBD-05 | Maximum transport/storage dimensions | To be derived and approved |
 | CON-TBD-06 | Maximum acceptable mass | To be derived and approved; moderate weight is acceptable |
 | CON-TBD-09 | Charging method and whether operation while charging is allowed | Not yet selected |
 | CON-TBD-13 | First complete project cost range | Produce from candidate components, prototype quantities, tools, fabrication, shipping, replacements, and contingency before major procurement |
@@ -95,8 +95,8 @@ Where an identified behaviour or component can cause harm or damage, safety take
 - [ ] Produce the first complete component, prototype, tool, fabrication, shipping, replacement, and contingency cost range.
 - [ ] Select the charging method and whether operation while charging is allowed.
 - [ ] Set the exact tabletop test/calibration footprint after stopping tests.
-- [ ] Approve the eventual dimensions and mass after the first architecture/layout study.
+- [ ] Validate the approved dimensional baseline and derive the maximum acceptable total mass during architecture/layout work.
 
 ### Review notes
 
-Approved by the project builder on 2026-08-14. Version 1.1 removes the fixed budget ceiling, establishes an initial 20-minute untethered runtime, defines a bounded household interaction/following envelope, limits tabletop motion, and prioritizes three-axis mechanical/firmware prototyping. The fixed V1 deadline remains 5 December 2026.
+Approved by the project builder on 2026-08-14. Version 1.1 removed the fixed budget ceiling, established an initial 20-minute untethered runtime, defined a bounded household interaction/following envelope, limited tabletop motion, and prioritized three-axis mechanical/firmware prototyping. Version 1.2 adopts the 2026-08-25 dimensional baseline while leaving maximum total mass architecture-derived. The fixed V1 deadline remains 5 December 2026.

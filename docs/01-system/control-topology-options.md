@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | **Provisional option study — not a selection.** |
-| Version | 0.1 |
+| Version | 0.2 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-08-17 |
+| Last reviewed | 2026-08-27 |
 | Governed by | `risk-prototype-plan.md` — permitted provisional option study (decision-closeout: "the architecture phase may begin with provisional option studies while prototypes run") |
 | Feeds | RP-02 (electrical/control backbone) → **ADR-06 (power)**, **ADR-12 (control topology)**; the monotonic-timebase deliverable (plan §104) |
 | Consumes | `system-design-brief.md` responsibility set + AD-01/AD-06/AD-08; `mass-envelope-ledger.md` head section |
@@ -77,7 +77,7 @@ The camera **must** ride in the head (AD-06). The real question is whether the *
 |---|---|---|---|---|
 | **A. Vector-style (compute in head)** | SBC + camera + display + IMU in the head; dumb motor MCU in body | shortest camera/display buses; proven by Vector | heaviest 3-axis moving mass; power + data down to body; head-CAD must package an SBC | Viable but taxes the 3-axis mechanism |
 | **B. Body-heavy (compute in body)** | SBC in body; head carries only camera + display + light | lightest head, easiest gimbal | **camera bus (MIPI/USB) must flex across 3 joints** — the fragility risk; display bus too | Cable-survival risk is the whole RP-01 concern |
-| **C. Hybrid (recommended to study first)** | SBC in **body**; a **head-aggregation MCU** in the head owns IMU + mic + LED + servo signals; thin serial/bus down; camera routed as its own managed cable | light-ish head; local head-pose IMU feedback (Vector-like); collapses many head wires into a thin link; motor limits/watchdog local | camera still crosses the joints; two firmware targets | **Best first candidate**; matches the separation principle (§1) |
+| **C. Hybrid (recommended to study first)** | SBC in **body**; a **head-aggregation MCU** in the head owns head IMU + LED + servo signals; thin serial/bus down; camera routed as its own managed cable; the four-mic array remains body-mounted | light-ish head; local head-pose IMU feedback (Vector-like); collapses many head wires into a thin link; motor limits/watchdog local | camera still crosses the joints; two firmware targets | **Best first candidate**; matches the separation principle (§1) |
 
 Option C is where the **Arduino Nano 33 BLE Sense** fits — see §6. RP-01 (cable behaviour across the workspace) and RP-02 (electrical backbone) exist precisely to decide between A/B/C with measured evidence.
 
@@ -107,8 +107,8 @@ On-hand part; a strong candidate for the **head-aggregation MCU** in Option C. N
 | Feature | Value to Makad |
 |---|---|
 | nRF52840 (Cortex-M4F) | Ample for a real-time servo/joint loop with limits, watchdog, command-expiry |
-| **Onboard IMU** | Free **head-pose feedback** (Vector-style head IMU) — directly serves RP-01 sensing |
-| **Onboard PDM mic** (Sense variant) | Head mic already on the board |
+| **Onboard IMU** | Free **head-output feedback** for settling, compliance/cable deflection, camera stabilization and RP-01 modal work; not a substitute for body heading |
+| **Onboard PDM mic** (Sense variant) | Present but not part of the approved four-microphone body-array architecture; ignore or use only as a diagnostic channel |
 | APDS9960 (proximity/gesture/ambient-light) | Free extras: dim the face in a dark room, proximity as a wake cue (non-Core, nice-to-have) |
 | I²C / SPI / PWM | Drives LED driver, small display peripherals, generates servo signals — all **local to the head board** (correct use of I²C per §3) |
 | BLE | Not needed for internal comms (wired is more reliable); ignore or keep as debug fallback |
@@ -116,6 +116,8 @@ On-hand part; a strong candidate for the **head-aggregation MCU** in Option C. N
 
 **Caveats to confirm in RP-01/RP-02:**
 - Variant matters: plain *Nano 33 BLE* has the IMU but **no mic**; the **Sense** adds the mic + APDS9960. (Ours is the Sense.)
+- Register the exact board revision and IMU. Configure a higher-rate sensor path for RP-01 modal work; a 104 Hz convenience configuration is too sparse for reliable identification around the 40 Hz pitch target.
+- A separate **body-frame IMU** belongs with the base/drive controller for chassis heading, caster/traction disturbance and tip/pickup detection. Joint encoders plus body attitude provide a kinematic head-pose estimate; the head IMU observes downstream compliance that estimate cannot see.
 - One MCU driving 3 coordinated axes **plus** LED/mic — verify the timing budget holds when everything runs at once (AD-08 concurrent-load risk).
 - Whether it is head-local (Option C) or the system settles on Option A/B is the RP-01/RP-02 decision.
 
@@ -123,7 +125,7 @@ On-hand part; a strong candidate for the **head-aggregation MCU** in Option C. N
 
 ## 7. Provisional recommendation (to be confirmed by RP-02)
 
-1. **Two controllers, heterogeneous by role, not by variety:** a **Linux SBC** (vision, NLU, behaviour, face rendering) + **≥1 real-time MCU**. The **Nano 33 BLE Sense** is a strong head-aggregation candidate; a **base/drive MCU** is the likely second node — same family if possible.
+1. **Two controllers, heterogeneous by role, not by variety:** a **Linux SBC** (vision, NLU, behaviour, face rendering) + **≥1 real-time MCU**. The **Nano 33 BLE Sense** is a strong head-aggregation candidate; a **base/drive MCU with body-frame IMU input** is the likely second node — same family if possible.
 2. **Internal link: UART/USB serial**, Vector-style. Not CAN, not micro-ROS, not I²C across joints — those are documented "grow-into-it" options.
 3. **Compute placement (Option A/B/C) is the open fork** — study Option C first; let RP-01 (cable behaviour) and RP-02 (backbone) decide with evidence.
 4. **Timebase: one master + timestamp-at-source + serial offset reconciliation.** Not PTP.
@@ -134,6 +136,8 @@ On-hand part; a strong candidate for the **head-aggregation MCU** in Option C. N
 
 - [ ] Decide compute placement (Option A / B / C) from RP-01 cable-behaviour + RP-02 backbone evidence.
 - [ ] Confirm head-aggregation MCU candidate (Nano 33 BLE Sense) against the RP-01 3-axis timing budget.
+- [ ] Register the on-hand Nano revision/IMU and prove the head-sensor sampling/timestamp path used for RP-01 modal and settling measurements.
+- [ ] Select or identify the body-frame IMU path independently of the head IMU; feed it into RP-03 locomotion/heading evidence.
 - [ ] Choose and prototype the internal link (UART/USB first); register the message set + expiry/health semantics.
 - [ ] Decide the base/drive MCU and whether it shares the head's family.
 - [ ] Implement the provisional timebase (master + timestamp-at-source + offset reconciliation) before first scored RP-01 run.
@@ -144,3 +148,4 @@ On-hand part; a strong candidate for the **head-aggregation MCU** in Option C. N
 | Date | Version | Change |
 |---|---|---|
 | 2026-08-17 | 0.1 | First provisional study created from prior-art research (Vector/Cozmo, humanoid/AV/cobot literature); Nano 33 BLE Sense added as head-aggregation candidate. No selections made. |
+| 2026-08-27 | 0.2 | Separated head-output and body-heading IMU responsibilities; aligned Option C with the body-mounted microphone array and added exact-revision/high-rate head-IMU checks. |

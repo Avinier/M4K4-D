@@ -2,18 +2,113 @@
 
 | Field | Value |
 |---|---|
-| Status | Not started (blocked on `intent.md` Pass 2 and mass-blockout inputs) |
-| Inputs | α_peak + ranges from `intent.md`; m, CoM, inertia tensor from the mass/envelope blockout; candidate axis placements |
+| Status | Kinematic inputs and preliminary head-load baseline authored; final torque/inertia work remains blocked on CAD mass properties and candidate axis placements |
+| Inputs | `storyboard.md` ranges and kinematic sizing cases; `../../01-system/dimensional-baseline.md`; CAD m, CoM and inertia tensor; candidate axis placements |
 | Method | `docs/intuition.md` §5.1 step 3; worked analogue: the Adam head paper |
+
+## Authored kinematic inputs
+
+`storyboard.md` §4 is authoritative for the profile equations, coefficients and per-motion assignment. Each segment is computed from its authored profile; `k=Cₐ` is no longer treated as a free or global value.
+
+### Current authored cases
+
+| Axis | Requirement | Controlling segment/profile | Current authored value |
+|---|---|---|---:|
+| Pitch | Peak speed | Yes, 26°/0.220 s, `MJ5` | 222°/s |
+| Pitch | Peak acceleration | Laugh, 7°/0.100 s, `MJ5` | 4,041°/s² = 70.5 rad/s² |
+| Yaw | Peak speed | No, 44°/0.233 s, `MJ5` | 354°/s |
+| Yaw | Peak acceleration | No, 14°/0.131 s `MJ5` settle; all segments within 1% | 4,710°/s² = 82.2 rad/s² |
+| Roll | Peak speed | Wobble, 24°/0.267 s, `MJ5` | 169°/s |
+| Roll | Peak acceleration | Wobble, 22°/0.255 s, `MJ5`; all segments within 1% | 1,953°/s² = 34.1 rad/s² |
+
+The simultaneous startle values remain pitch 46.7, yaw 24.9 and roll 18.7 rad/s². Startle is a combined-load case, not an individual-axis peak.
+
+### Rapid-expression profile-freedom envelope
+
+RP-01 provisionally permits later rapid-profile changes up to `Cᵥ=2.0`, `Cₐ=2π=6.2832`. This is an explicit engineering envelope, not the claimed coefficient of every smooth profile.
+
+| Axis | Envelope driver | Speed envelope | Acceleration envelope |
+|---|---|---:|---:|
+| Pitch | Yes 26°/0.220 s; Laugh 7°/0.100 s | 236°/s | 4,398°/s² = 76.8 rad/s² |
+| Yaw | Speed 44°/0.233 s; acceleration 14°/0.131 s | 378°/s | 5,126°/s² = 89.5 rad/s² |
+| Roll | Speed 24°/0.267 s; acceleration 22°/0.255 s | 180°/s | 2,126°/s² = 37.1 rad/s² |
+
+A future rapid trajectory exceeding either coefficient or shortening an authored segment invalidates actuator sizing. Slow `MS7` motions are evaluated directly despite their higher coefficients because their durations are much longer. Final selection still uses the exported firmware trajectory plus torque, RMS/thermal, gravity and margin calculations.
+
+Current proposed best-case usable travel is pitch `-22°…+40°`, yaw `±55°`, roll `±18°`. Minimum-viable proposed usable travel is pitch `-15°…+32°`, yaw `±40°`, roll `±12°`. These include clearance beyond the authored poses but do not yet include final mechanical hard-stop, cable or forbidden-region margin.
+
+## Preliminary physical load baseline
+
+| Input | Current value | How RP-01 uses it |
+|---|---:|---|
+| Complete moving-head envelope | **100 H × 180 W × 130 D mm**, including ears | Clearance, fixture, cable, and candidate-axis packaging boundary |
+| Neck allocation | **60 mm vertical** | Packaging boundary for yaw + pitch + roll; actuators may intrude into body/head |
+| Moving-head mass | **~250 g target** | Representative design and ballast target; supersedes the earlier 300–700 g range |
+| Preliminary head inertia | **~0.001 kg·m²** | First actuator-screening calculation only |
+| Preliminary neck peak torque | **~0.2 N·m** | Sanity-check estimate only, not a per-axis selection threshold |
+
+The moving load includes the display, central camera, shell/structure, required brackets, interfaces, and local wiring. It excludes the four body-mounted microphones, body-mounted speaker, battery, and primary electronics. Before final actuator selection, replace the preliminary inertia with CAD-derived `J_com`, record the complete centre of mass, apply the parallel-axis theorem for each candidate axis, and calculate dynamic plus gravity torque at the controlling storyboard cases. If the representative design cannot approach the ~250 g head target, revise the system baseline explicitly before changing the RP-01 ballast.
+
+## Candidate gimbal-centre geometry
+
+Concept A in `concepts/elevated-ear-pivot-serial-gimbal.md` uses body-fixed yaw, pitch pivots near ear-pod height and head-fixed roll. Pitch and roll should intersect, or nearly intersect, near the measured 3D head CoM. Raising pitch alone while leaving roll below the CoM preserves an inverted-pendulum roll load, so the design variable is the **pitch–roll gimbal centre**, not pitch-axis height in isolation.
+
+For pitch, define `x` as the CoM's forward offset from the pitch axis and `z` as its upward offset. Use
+
+`τ_g,pitch(θ) = m·g·(x·cos θ + z·sin θ)`.
+
+For roll, use the corresponding lateral and vertical offsets about the head-fixed forward axis. Evaluate at least:
+
+| Geometry point | CoM relative to pitch axis | Intent |
+|---|---:|---|
+| A0 | `x=0 mm`, `z=0 mm` | Ideal gravity null |
+| A1 | `x=+5 mm`, `z=0 mm` | Small same-sign pitch preload |
+| A2 | `x=+5 mm`, `z=+10 mm` | Packaging compromise with bounded hold load |
+
+These are sensitivity points, not a frozen mechanism specification. The calculation is iterative because the yoke, bearings, actuators and cable loops change the CoM:
+
+`component blockout → initial CoM → axis candidate → mechanism mass → revised CoM → torque/RMS comparison`.
+
+A small persistent load may keep a gearbox on one tooth flank, but preload is a measured mitigation rather than evidence that backlash is gone. Prefer a small fore–aft pitch offset if it retains one torque sign across the usable range. Keep roll close to balance and evaluate a low-rate torsion/elastic bias only if reversal testing warrants it; avoid an arbitrary lateral mass imbalance.
+
+The pitch actuator moves with yaw. Include `m_actuator·r²` for its lateral offset in `J_yaw`. Compare that penalty with the added mass, compliance and reversal loss of any belt/gear relocation before choosing an offset transmission.
+
+Cable restoring torque is part of `τ_friction/τ_bias`, not zero. Measure it versus joint angle for the complete candidate harness and include its worst same-direction and opposing-direction values in slow-motion, hold and unpowered cases.
+
+## Output precision and structural-dynamics inputs
+
+Candidate output-axis requirements, measured at the head under representative load:
+
+- total reversal lost motion—gearbox lash, spline/horn and linkage lost motion, structural deflection plus control deadband—`≤0.50°` minimum viable, `≤0.25°` target;
+- first loaded yaw/roll structural mode `f₁ ≥25 Hz` as a screening target and `≥30 Hz` as the best-case target;
+- first loaded pitch structural mode `f₁ ≥30 Hz` for minimum viable and `≥40 Hz` for the unshaped best-case laugh.
+
+The first value preserves at least 75% of a 2° correction before residual tracking error. Gear material and bus protocol do not prove it. Use the complete-output, dial-indicator procedure in `storyboard.md` §2.5: quasi-static `±0.50·τ_peak,op`, a 50 mm measurement radius, 10 conditioning reversals, 5 measured reversals and the maximum observed value. The method intentionally measures at the head output so horn/spline fit, joints and printed-part deflection cannot disappear from the result.
+
+Do **not** divide the `≤0.25°` complete-output target equally among yaw, pitch and roll. A reversal directly traverses the tested axis's transmission; other joint errors and compliance map into face orientation through the mechanism Jacobian and current pose. Test each axis independently while the other two are energized at representative poses, then run an additional combined-motion orientation-error case.
+
+The pitch-specific modal target recognizes the 100 ms laugh reversal's characteristic content around 10 Hz and its meaningful higher-frequency content. A 30–40 Hz pitch result requires validated input shaping or a slower laugh; it is not an unqualified best-case pass. Modal frequency alone does not guarantee 300 ms settling—damping, trajectory spectrum and closed-loop bandwidth also determine ring-down. Estimate in CAD, screen with an impact/tap test under representative mass and confirm during commanded motion.
+
+## Explicit combined-load cases
+
+Use the actual candidate mechanism's axis order and mass properties; do not treat these as separable single-axis tests:
+
+1. **Curious yes, best case:** hold roll at `R+12°` while pitch executes `P-4° → P+12° → P-7° → P+8° → P-4°` over 0.90 s. Evaluate roll static gravity torque at every pitch extremum plus dynamic cross-axis reactions.
+2. **Curious no, best case:** hold `R+12° P-4°` while yaw executes `Y0° → YL18° → YR18° → YL12° → Y0°` over 0.95 s. Evaluate roll holding torque, yaw acceleration and bearing/linkage load together.
+3. Compare both with the neutral-axis cases to decide whether roll-axis balancing or gravity compensation is required. The worst case depends on gimbal order and axis-to-CoM geometry, so it cannot be declared from Euler angles alone.
+
+## Load-dependent analysis to complete
 
 Per axis, per candidate axis placement, compute:
 
 1. **Load quantities:** m, d (axis→CoM perpendicular distance), J_axis = J_com + m·d², estimated K (structure + horn + spline)
-2. **Peak torque** τ = J·α_peak + m·g·d·sin(θ_worst) + τ_friction — at the worst instant (direction reversal at max CoM offset) → against actuator peak/stall rating with margin
-3. **RMS torque** over a representative motion cycle (use the storyboard's busiest realistic minute) → against continuous/thermal rating
-4. **Reflected inertia** J/N² vs. rotor inertia, target <~10× — only where the actuator publishes rotor inertia; otherwise mark UNCOMPUTABLE → moves to the rig, not assumed passed
-5. **Resonance estimate** f_n ≈ (1/2π)·√(K/J_eff) — flag anything the storyboard excites near it
-6. **Gravity-compensation option:** τ with pitch axis through CoM / with counterweight — record the trade (added mass + inertia vs. removed holding torque)
+2. **Time-varying torque:** `τ(t) = J_axis·α(t) + τ_gravity(θ,t) + τ_friction + τ_cable + τ_coupling`; preserve sign rather than adding every magnitude blindly
+3. **Transient screen:** compare worst-case `τ(t)` at the simultaneous required speed with the actuator's measured torque-speed/current envelope at the intended voltage and temperature. Do not multiply a peak transient by a generic selection factor and compare it with a continuous/rated point; do not treat stall torque at zero speed as the available trajectory torque.
+4. **Busy-minute RMS/current screen:** `τ_RMS = sqrt((1/T)·∫τ(t)²dt)` over a preregistered realistic busy minute, with measured `I_RMS`, voltage sag and temperature preferred for acceptance. This precedes actuator freeze and remains separate from the transient screen.
+5. **Reflected inertia** J/N² vs. rotor inertia, target <~10× — only where the actuator publishes rotor inertia; otherwise mark UNCOMPUTABLE → moves to the rig, not assumed passed
+6. **Resonance estimate** f_n ≈ (1/2π)·√(K/J_eff) — flag anything the storyboard excites near it
+7. **Balance/preload option:** compare A0/A1/A2 plus any torsion/counterbalance candidate; record added mass, inertia, asymmetric load, unpowered path and thermal consequence
+8. **Combined tilted cases:** evaluate the explicit curious-yes and curious-no trajectories above, including roll holding torque while the other axis accelerates
 
 Cross-axis handling: evaluate each axis at the worst-case configuration of the other two (no full Newton–Euler at this stage).
 

@@ -3,11 +3,11 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.2 |
+| Version | 1.4 |
 | Owner | Project builder |
 | Created | 2026-08-14 |
-| Last reviewed | 2026-08-22 |
-| Depends on | Approved `docs/00-foundation/` v1.1 documents and `system-design-brief.md` v1.0 |
+| Last reviewed | 2026-08-27 |
+| Depends on | Approved `docs/00-foundation/constraints.md` v1.2, other foundation documents, `system-design-brief.md` v1.2, and `dimensional-baseline.md` v1.2 |
 | Decision authority | Project builder |
 
 The prototypes are decision instruments, not partial versions of the final droid. They may use open frames, ballast, external measurement equipment, temporary controllers, and bench power where those choices produce better evidence. A polished appearance is not a pass condition. The approved bench setup and powered-test readiness gate live in `workbench.md`; powered scored testing remains blocked until that gate is satisfied for the active rig and test.
@@ -122,7 +122,8 @@ Can a manufacturable powered roll/pitch/yaw mechanism carry a representative Mak
 ### Inputs and candidates
 
 - At least two plausible joint-order/support/actuation concepts unless sourcing or calculation eliminates one before fabrication.
-- Representative head mass, centre-of-mass range, inertia proxy, camera/display/light/audio envelopes, cable bundle, service clearances, and structural margin from the mass/envelope ledger and RP-06.
+- Concept A is the elevated ear-pivot serial gimbal documented in `../02-prototypes/RP-01-head/concepts/`; it remains a candidate until compared with Concept B and scored evidence.
+- Current **~250 g** representative moving-head target, centre of mass, inertia proxy, **100 H × 180 W × 130 D mm** envelope, camera/display/light envelopes, 60 mm neck allocation, cable bundle, service clearances, and structural margin from `dimensional-baseline.md`, the mass/envelope ledger, and RP-06. Microphones and speaker are body-mounted, not moving-head ballast.
 - Candidate controller loop, feedback strategy, limits, homing/calibration method, watchdog, and command-expiry behaviour.
 - Preliminary motion storyboard listing the attention, wake, bob, tilt, reversal, tracking-correction, settle, and safe-rest moves the mechanism must support.
 
@@ -133,22 +134,23 @@ Use a rigid guarded bench fixture with adjustable ballast at the representative 
 ### Procedure
 
 1. Check static support, fasteners, stops, clearances, cable path, and unpowered movement.
-2. Characterize each axis separately at low energy through its proposed range and both directions.
-3. Measure repeatability and small-command reversal around representative expressive poses.
+2. Characterize each axis separately at low energy through its proposed range and both directions; for near-CoM candidates, compare the preregistered axis/ballast points without changing fixture stiffness.
+3. Measure repeatability and small-command reversal around representative expressive poses; then run a distinct impact/tap modal test on the same fixture rather than treating backlash and resonance as one measurement.
 4. Run step, ramp, smooth trajectory, tracking-correction, and settle profiles with representative ballast.
 5. Exercise coordinated two- and three-axis wake/attention trajectories, including reversals and interruptions.
-6. Repeat tests at relevant head orientations so gravity and cross-axis loading vary.
+6. Repeat tests at relevant head orientations so gravity, cross-axis loading and cable restoring torque vary.
 7. Inject command timeout, controller restart, feedback loss, and high-level link loss without defeating the physical stop.
-8. Run a preregistered repeated-motion/endurance block and remeasure backlash, fastener state, temperature, cable condition, and calibration drift.
+8. Run a preregistered busy-minute RMS/current/thermal sequence before actuator freeze, then a repeated-motion/endurance block and remeasure backlash, fastener state, temperature, cable condition, and calibration drift.
 
 ### Measurements
 
 - usable roll/pitch/yaw range and forbidden/collision region;
-- static torque/load estimate and peak/average current by trajectory;
+- static torque/load estimate, torque/current at the simultaneous required speed, and busy-minute RMS current by trajectory; keep transient and continuous/thermal screens separate;
 - command-to-motion latency and control update timing;
 - absolute/tracking error, repeatability, small-motion resolution, reversal deadband/backlash, overshoot, settling time, and cross-axis coupling;
 - structural deflection, vibration, acoustic level/character, and camera image disturbance;
-- temperature rise, calibration drift, cable twist/flex, connector movement, and fastener retention;
+- temperature rise, calibration drift, angle-dependent cable restoring torque, cable twist/flex, connector movement, and fastener retention;
+- head-output IMU data separated from body-frame heading/attitude data whenever both frames are in scope;
 - stop, timeout, limit, feedback-loss, and restart behaviour.
 
 ### Pass gates
@@ -224,7 +226,7 @@ Can a candidate wheeled base with representative total mass move expressively at
 
 ### Rig and procedure
 
-Use a low open chassis with adjustable ballast matching the current mass/centre-of-mass range. Test on named representative indoor surfaces inside a marked test area. Tabletop edge trials require a physical catch platform or tether that prevents an actual fall without masking sensor/controller behaviour.
+Use a low open chassis with adjustable ballast matching the current mass range and the baseline `x_CoM=+25 mm`, `h_CoM=124 mm`. Represent the 110 mm forward caster contact and the rear skid at ~70 mm behind the axle and ≤14 mm above the floor. Test on named representative indoor surfaces inside a marked test area. Tabletop edge trials require a physical catch platform or tether that prevents an actual fall without masking sensor/controller behaviour.
 
 Characterize wheel/support geometry, traction, odometry/control feedback, minimum controllable motion, straight travel, reversal, turns, excited-spin candidates, stopping and settling. Repeat at mass/centre-of-mass extremes. Test representative person/furniture/box/cable-like obstacles at each registered approach speed. Verify floor/tabletop permission selection, default inhibition, sensor loss and controller/high-level timeout.
 
@@ -232,14 +234,14 @@ Characterize wheel/support geometry, traction, odometry/control feedback, minimu
 
 - minimum repeatable speed, speed error, straight-line drift, turn/spin geometry and reversal response;
 - stopping time/distance, overshoot/rollback, slip, support chatter, vibration and acoustic noise;
-- body pitch/roll or lift indication, wheel/support load behaviour and stability margin;
+- body pitch/roll or lift indication, wheel/support load behaviour, measured caster-lift acceleration, skid-contact angle/acceleration, and stability margin versus the preliminary `a_tip≈2.0 m/s²` model;
 - obstacle/edge detection coverage, latency, stopping clearance, blind region and false inhibit rate;
 - current/energy/temperature by maneuver;
 - mode-selection, inhibit, timeout, sensor-loss, restart and hard-stop behaviour.
 
 ### Pass gates
 
-- **RP03-G01 Floor control:** the registered forward, reverse, turn, stop and settle maneuvers pass across the floor/load matrix without uncontrolled motion or instability.
+- **RP03-G01 Floor control:** the registered forward, reverse, turn, stop and settle maneuvers pass across the floor/load matrix without uncontrolled motion or instability; commanded forward acceleration remains below the registered caster-lift threshold with margin.
 - **RP03-G02 Speed boundary:** the base can regulate the approved slow envelope and cannot exceed the registered test limit; follow trials remain at or below 0.5 m/s.
 - **RP03-G03 Obstacle safety:** every scored representative obstacle case meets its preregistered detection/stopping/contact policy with no harmful contact.
 - **RP03-G04 Tabletop safety:** ordinary autonomous locomotion, come/follow and excited spin are inhibited by default in tabletop mode; every permitted low-speed edge trial stops within the registered footprint and no trial leaves the caught surface.
@@ -351,7 +353,7 @@ Sourcing/envelope updates continue during RP-01 through RP-05. Final closure occ
 
 ### Mock-up and procedure
 
-Build an adjustable physical mock-up or envelope rig using sourced dimensions and realistic mass dummies. Include display/window, camera, status light/optics, microphone(s), speaker/enclosure allowance, head structure/joints, cable bends/connectors, compute where head-mounted, cooling paths, fasteners and service-removal paths.
+Build an adjustable physical mock-up or envelope rig using sourced dimensions and realistic mass dummies inside `dimensional-baseline.md`. Include the head display/window, central camera, status light/optics, ~250 g moving-head target, head structure/joints and moving cable bends/connectors. In the body, include the four-microphone PDM array, speaker/enclosure, low and forward battery placement, primary electronics/compute, cooling paths, fasteners and service-removal paths.
 
 Evaluate display/face legibility over registered angles/distances/lighting; camera field of view and occlusion throughout head motion; LED visibility, light leakage and camera interference; speaker output and enclosure vibration; microphone contamination; heat-source spacing; cable motion; assembly order; and removal of named high-risk modules.
 
@@ -465,7 +467,7 @@ The architecture phase may begin with provisional option studies while prototype
 - [x] Approve `workbench.md` as the Stage 0 sourcing and powered-test-readiness baseline.
 - [ ] Establish access to the required tools and fit/verify the selected stop/isolation method.
 - [ ] Select at least two credible head-mechanism concepts or document why only one survives calculation/sourcing.
-- [x] Create the first sourced head component/envelope and representative mass range. (`mass-envelope-ledger.md` v0.1 + `candidate-sourcing-matrix.md` v0.1)
+- [x] Create the first sourced head component/envelope and representative mass target. (`dimensional-baseline.md` v1.2 + `mass-envelope-ledger.md` v0.4 + `candidate-sourcing-matrix.md` v0.4)
 - [ ] Draft the motion storyboard and register the required roll/pitch/yaw cases.
 - [ ] Complete RP-01 numeric gates for range, reversal, repeatability, tracking, settling, noise, temperature, endurance and fault response.
 - [ ] Clamp the RP-01 fixture and verify its E-stop and limits per the `workbench.md` scored-test gate.
@@ -475,6 +477,6 @@ The architecture phase may begin with provisional option studies while prototype
 
 ## Approval note
 
-Approved by the project builder on 2026-08-17. Approval adopts the seven-prototype portfolio, roadmap, dependency order, threshold-registration policy, evidence-packet requirements, pass/iterate/reject/defer model, Core-failure rule, and decision-closeout process as the V1 risk-reduction baseline. Version 1.2 (2026-08-22) removes the per-prototype planning time boxes; iteration control is exercised through the gate-outcome review rule rather than calendar estimates.
+Approved by the project builder on 2026-08-17. Approval adopts the seven-prototype portfolio, roadmap, dependency order, threshold-registration policy, evidence-packet requirements, pass/iterate/reject/defer model, Core-failure rule, and decision-closeout process as the V1 risk-reduction baseline. Version 1.2 (2026-08-22) removes the per-prototype planning time boxes; iteration control is exercised through the gate-outcome review rule rather than calendar estimates. Version 1.3 (2026-08-25) consumes the selected dimensional/drive baseline and adds its CoM, caster-lift, skid, and forward-acceleration validation inputs to RP-03. Version 1.4 (2026-08-27) records the first credible RP-01 mechanism candidate and tightens the axis/CoM, backlash-versus-modal, harness-restoring-torque, busy-minute thermal, and head/body IMU evidence methods; it selects no mechanism or actuator and freezes no numeric gate.
 
-Approval does not approve a component, supplier, mechanism, architecture option, or numeric `SC-TBD-*` or `CON-TBD-*` threshold. `workbench.md` was approved separately on 2026-08-17 and incorporated as the Stage 0 baseline in version 1.1 of this plan. Numeric gates remain subject to preregistration before scored runs, and powered scored testing remains blocked until the approved readiness gate's safety, instrumentation, configuration, and logging requirements are satisfied.
+Except for the later-adopted dimensional/drive topology baseline, plan approval does not approve an exact component, supplier, mechanism implementation, or numeric `SC-TBD-*` or `CON-TBD-*` gate threshold. `workbench.md` was approved separately on 2026-08-17 and incorporated as the Stage 0 baseline in version 1.1 of this plan. Numeric prototype gates remain subject to preregistration before scored runs, and powered scored testing remains blocked until the approved readiness gate's safety, instrumentation, configuration, and logging requirements are satisfied.

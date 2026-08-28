@@ -3,13 +3,13 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.0 |
+| Version | 1.2 |
 | Owner | Project builder |
 | Created | 2026-08-14 |
-| Last reviewed | 2026-08-14 |
+| Last reviewed | 2026-08-27 |
 | Authority | Derived from the approved `docs/00-foundation/` documents |
 
-This brief defines the engineering problem Makad's system architecture must solve. It sits between the approved foundation and the later architecture, prototypes, subsystem specifications, component choices, and CAD. It does not repeat Core capabilities as "shall" requirements — the foundation owns those — and it does not select a drive type, processor, camera, actuator, battery, framework, or supplier.
+This brief defines the engineering problem Makad's system architecture must solve. It sits between the approved foundation and the later architecture, prototypes, subsystem specifications, component choices, and CAD. It does not repeat Core capabilities as "shall" requirements — the foundation owns those. At its original approval it did not select a drive type or physical dimensions; `dimensional-baseline.md` now supplies those downstream decisions. It still does not select exact motors, processors, cameras, actuators, batteries, frameworks, or suppliers.
 
 ## 1. System boundary
 
@@ -240,19 +240,19 @@ This is the prototype portfolio the later `risk-prototype-plan.md` must turn int
 | Tabletop permissions | Stationary by default; only explicitly enabled low-speed test/calibration motion inside a marked validated circular footprint; no come/follow or excited spin | Edge sensing, mode control, and stopping tests can now use a bounded permission model. |
 | Interaction and following envelope | Single household room; interaction approximately 0.3–2.0 m, come from approximately 1–2 m and stop approximately 0.6–0.9 m away, follow up to approximately 3 m at no more than approximately 0.5 m/s on a level floor with one gentle turn and representative obstacles | Provides a small representative case for perception, drive, camera, and validation work. |
 | Network expectation | Reliable network/cloud may be assumed for connected Core features; no duplicate offline implementation is required | Failure still needs a bounded visible response, while physical stop and motion safety remain local. |
-| Physical size and mass | Derived later rather than minimized | Head torque, stability, battery, transport, and fabrication require preliminary limits before parts. |
+| Physical size and mass | Current geometry, moving-head target, and integrated CoM target are governed by `dimensional-baseline.md`; total mass remains derived rather than minimized | Head torque, stability, battery, transport, and fabrication require validation before parts/CAD freeze. |
 
 ## 11. What is intentionally deferred
 
 The brief does not select:
 
 - processors, microcontrollers, operating systems, middleware, or programming languages;
-- drive layout, motors, wheels, supports, drivers, or encoders;
+- exact motors, transmissions, wheel/caster/skid parts, drivers, or encoder implementations within the selected two-wheel differential-drive/support topology;
 - camera, display, microphone, speaker, light, sensors, or battery;
 - the exact actuators, transmissions, bearings, encoders, joint order, ranges, and implementation of the required roll/pitch/yaw head;
 - vision, speech, language, behaviour, animation, or control libraries;
 - detailed APIs, message schemas, update rates, or process boundaries;
-- dimensions, shell geometry, material selection, or CAD layout;
+- manufacturing tolerances, detailed shell geometry, material selection, or CAD layout within the current dimensional baseline;
 - final numeric acceptance thresholds.
 
 These decisions require the budgets, trade studies, and prototype evidence above. Existing `specsheets/` may suggest candidates, but nothing in them is adopted automatically.
@@ -267,4 +267,4 @@ This brief feeds the following documents:
 4. `physical-architecture.md` will define envelopes, placement, centre of mass, moving clearances, wiring, cooling, and service paths.
 5. `subsystem-interfaces.md` will define observations, state, semantic intents, bounded commands, feedback, health, timebase, and fault behaviour.
 
-Approved 2026-08-14: the system boundary, architecture drivers, responsibility model, decision register, budget categories, prototype portfolio, and mechanical/firmware-first order are the V1 baseline. Approval does not select components, mechanisms, deployment technology, or numeric thresholds.
+Approved 2026-08-14: the system boundary, architecture drivers, responsibility model, decision register, budget categories, prototype portfolio, and mechanical/firmware-first order are the V1 baseline. That approval did not select components, mechanisms, deployment technology, or numeric thresholds. Version 1.1 recorded the later dimensional/drive selections. Version 1.2 consumes `dimensional-baseline.md` v1.2 and its ear-pod mechanical-access clarification without selecting Concept A, an actuator, or an unvalidated prototype limit.

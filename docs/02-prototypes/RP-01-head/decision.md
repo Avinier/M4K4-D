@@ -6,6 +6,7 @@
 | Question | Can a manufacturable powered roll/pitch/yaw mechanism carry a representative Makad head while producing safe, repeatable, quiet-enough and characterful motion with acceptable range, reversal, settling, camera behaviour, wiring movement, calibration, and controller failure handling? |
 | Feeds | ADR-02 (head mechanism), ADR-03 (controller), ADR-08, ADR-12; mass/power/acoustic budget rows |
 | Rule | A failed Core three-axis gate cannot become a two-axis fallback without reopening approved V1 scope. Failed runs stay cited here. |
+| Physical constraint | Selected concept must fit `../../01-system/dimensional-baseline.md`, or the conclusion must request and justify a baseline revision. |
 
 ## Gate outcomes
 
@@ -17,6 +18,15 @@
 | RP01-G04 Integration | | | |
 | RP01-G05 Buildability | | | |
 | RP01-G06 Evidence | | | |
+
+## Candidate register
+
+| Candidate | Status | What is fixed for comparison | What remains open |
+|---|---|---|---|
+| A — elevated ear-pivot serial gimbal | **Credible candidate; not selected** | Body-fixed yaw; yaw→pitch→head-fixed-roll order; independent yaw load bearing; double-supported ear-height pitch; pitch/roll centre near measured CoM; planned axial harness route | Exact A0/A1/A2 axis point, actuator family, bearing sizes, direct/belt drive, preload, yoke geometry, mass/thermal/cost and scored gate results |
+| B | **Required; not authored** | Must satisfy the same physical baseline and evidence rules | Entire concept |
+
+Concept A's source diagram is not a specification. Only the topology extracted into `concepts/elevated-ear-pivot-serial-gimbal.md` is admitted for comparison; its generated-looking labels, proportions and NEMA/Lazy-Susan-scale hardware are excluded.
 
 ## Conclusion
 

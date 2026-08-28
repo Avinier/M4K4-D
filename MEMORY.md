@@ -1624,3 +1624,66 @@ The escalation function of time boxes is retained in calendar-free form: repeate
 
 **Follow-up**
 - None beyond normal roadmap tracking.
+
+---
+
+## 2026-08-25 — Dimensional and packaging baseline
+
+### MEM-20260825-01 — 300 mm Makad geometry and 250 g moving-head target adopted
+**Type:** DECISION  
+**Status:** CURRENT  
+**Supersedes:** Earlier dimensional, head-ballast, microphone-placement, speaker-placement, and drive-geometry planning assumptions where they conflict  
+**Requirements:** `docs/01-system/dimensional-baseline.md` v1.0; `docs/00-foundation/constraints.md` v1.2
+
+The project builder adopted a current physical target of **300 H × 205 W × 180 D mm overall**, with a **100 H × 180 W × 130 D mm complete head**, **Ø84 mm nominal drive wheels**, **170 mm drive-wheel track**, and **110 mm drive-axle-to-front-caster contact spacing**. The vertical stack uses a 140 mm ground-to-body-top/neck datum, a 60 mm three-axis neck allocation, and a 100 mm head; actuator intrusion leaves approximately 35–45 mm of externally visible neck.
+
+The moving-head target is now approximately **250 g**, with preliminary inertia approximately **0.001 kg·m²** and preliminary neck peak-torque estimate approximately **0.2 N·m**. These are starting inputs for RP-01, not substitutes for CAD-derived centre of mass/inertia, axis-specific torque calculations, or registered representative-load tests. The earlier 300–700 g RP-01 head-ballast range is superseded.
+
+The drive baseline is two independently powered encoder-equipped wheels plus a front caster, with a mandatory rear anti-tip skid. Normal travel targets 0.15–0.40 m/s, fast expressive motion 0.40–0.60 m/s, and drivetrain capability up to approximately 0.65–0.70 m/s. The existing 0.5 m/s cap for person-following trials remains in force. The required wheel-speed point is approximately 160 RPM at 0.70 m/s, with 160–200 RPM unloaded used for drivetrain design.
+
+Four PDM MEMS microphones, the speaker, battery, and primary electronics are body-mounted. Ear pods remain visual-only; the sole head sensor is the central camera alongside the display/status-light hardware.
+
+**Why**
+- The integrated proportions now have a coherent dimensional stack and stable differential-drive footprint.
+- Moving audio/electronics mass out of the head protects the three-axis neck load and whole-robot centre of mass.
+- A single authoritative baseline prevents RP-01, sourcing, RP-03, RP-06, and later CAD from hardening around incompatible assumptions.
+
+**Consequences**
+- `docs/01-system/dimensional-baseline.md` v1.0 is authoritative for dimensional, drive-geometry, moving-head-load, and component-placement targets.
+- The mass/envelope ledger, candidate sourcing matrix, workbench framing, and RP-01 inputs now consume this baseline.
+- Any packaging or prototype result that cannot meet it must request an explicit versioned baseline revision; it must not silently restore an older value.
+
+**Follow-up**
+- Produce the ~250 g head CAD mass blockout and replace preliminary CoM/inertia values before final RP-01 actuator selection.
+- Validate drive stability, caster behaviour, braking, skid geometry, and speed control in RP-03.
+- Validate the complete 300 × 205 × 180 mm sourced layout in RP-06 before integrated CAD freeze.
+
+### MEM-20260825-02 — Battery sign, shell clearance, skid geometry, and acceleration stability corrected
+**Type:** CORRECTION  
+**Status:** CURRENT  
+**Supersedes:** The battery-placement and unbounded skid/clearance implications in MEM-20260825-01  
+**Requirements:** `docs/01-system/dimensional-baseline.md` v1.1; `docs/01-system/risk-prototype-plan.md` v1.3
+
+The battery must be packaged **low and forward of the drive axle**, not near/behind it. Under forward acceleration, the inertial moment tends to rotate the body backward about the drive axle and lift the front caster. A forward longitudinal CoM supplies the opposing gravity moment; moving battery mass behind the axle would shrink that restoring arm.
+
+The current whole-robot stability target is `x_CoM=+25 mm` forward of the drive axle and `h_CoM=124 mm` above the floor. The corresponding rigid-body front-caster lift threshold is:
+
+`a_tip = g·x_CoM/h_CoM ≈ 9.81·25/124 = 1.98 m/s² ≈ 2.0 m/s²`.
+
+This lies below the approximate 6 m/s² traction limit, so pitch stability—not available tire friction—governs forward expressive acceleration at the baseline CoM. At 124 mm CoM height, each additional 10 mm of forward CoM offset raises the theoretical threshold by approximately 0.79 m/s².
+
+The 140 mm body-top datum and 105–115 mm visible body-shell height imply **25–35 mm main-shell ground clearance**. The previous 8–12 mm value was geometrically inconsistent and is superseded. The rear anti-tip skid is therefore a distinct lower protrusion. For skid height `h` above the floor and rearward reach `d`, contact must precede the CoM crossing the wheel support line: `h/d < x_CoM/h_CoM ≈ 0.20`. At the adopted `d≈70 mm`, the skid must be **no more than 14 mm above the floor**.
+
+**Why**
+- The previous battery sign reduced rather than improved forward-acceleration pitch stability.
+- The previous clearance value did not close against the vertical datum and visible shell height.
+- A mandatory skid without a height/reach relation could fail to contact before geometric tip-over.
+
+**Consequences**
+- `dimensional-baseline.md` v1.1 is the corrected authority.
+- RP-03 must measure caster-lift onset and skid contact and register forward acceleration below the measured lift threshold with margin.
+- The mass/envelope and sourcing ledgers now require a low, forward battery and the corrected skid envelope.
+
+**Follow-up**
+- Validate the integrated CoM from CAD and measured component masses.
+- Recompute `a_tip` and `h/d` from the measured CoM before the first scored RP-03 acceleration run.

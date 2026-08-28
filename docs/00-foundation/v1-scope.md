@@ -3,16 +3,16 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.1 |
+| Version | 1.2 |
 | Owner | Project builder |
-| Last reviewed | 2026-08-14 |
+| Last reviewed | 2026-08-25 |
 | Depends on | `vision.md` |
 
 ## Scope rule
 
 V1 is the first integrated version of Makad that delivers the approved droid experience within the four-month project window. It is not an exercise in minimizing physical size, cost, or capability. Size, mass, and expenditure may increase when the improvement is justified by expressiveness, reliability, fabrication practicality, or learning value.
 
-This document defines outcomes. Mechanisms, dimensions, architectures, and exact components remain later engineering decisions unless explicitly stated.
+This document defines outcomes. Mechanisms, dimensions, architectures, and exact components remain later engineering decisions unless explicitly stated or adopted by a later authoritative engineering baseline.
 
 The scope labels mean:
 
@@ -33,7 +33,7 @@ The scope labels mean:
 | SCOPE-06 | Astromech communication | Makad responds through a custom non-English astromech-style language authored by the builder, using coordinated droid sounds and behaviour. Ordinary English speech output is not a V1 requirement. |
 | SCOPE-07 | Idle aliveness | When powered but not engaged, Makad shows bounded, non-repetitive signs of life without manual control. |
 | SCOPE-08 | Integrated behaviour | At least three recognizable authored behaviours across the approved scenarios coordinate perception, display, sound, head motion, timing, and available base motion as one action. |
-| SCOPE-09 | Wheeled locomotion | Makad moves using a powered wheeled base. Exact drive architecture is deliberately deferred to system engineering. |
+| SCOPE-09 | Wheeled locomotion | Makad uses two independently powered, encoder-equipped drive wheels plus a front caster and mandatory rear anti-tip skid, as governed by `../01-system/dimensional-baseline.md`. Exact motors, transmissions, drivers, sensing implementation, and control parameters remain engineering decisions. |
 | SCOPE-10 | Floor operation | The primary locomotion environment is a normal indoor floor. Makad can perform the approved movement scenarios without uncontrolled contact or instability. |
 | SCOPE-11 | Tabletop protection | Makad can be placed on a large tabletop for mostly stationary demonstrations. Tabletop mode inhibits ordinary locomotion by default and includes edge/fall protection for any permitted movement or unintended activation. |
 | SCOPE-12 | Collision avoidance and bounded contact | Makad detects relevant obstacles and stops or redirects before harmful contact in the approved operating envelope. “Collision-proof” is treated as a design goal, not an absolute guarantee. |
@@ -95,7 +95,7 @@ Targets and Candidates must have time boxes, evidence gates, and clean removal/f
 
 ## Open implementation decisions
 
-- [ ] Select the wheeled drive architecture after locomotion requirements and prototypes exist.
+- [ ] Validate the selected two-wheel differential-drive/support geometry and select exact motors, transmissions, drivers, encoders, and control limits through RP-03.
 - [ ] Select and validate the roll/pitch/yaw joint arrangement, actuation, support, sensing, wiring, and control using a representative head/load prototype.
 - [ ] Define the detailed natural-language intent set and acceptable phrasing after the Core scenario semantics are stable.
 - [ ] Define the first astromech vocabulary and the behaviours it must express.
@@ -105,4 +105,4 @@ Targets and Candidates must have time boxes, evidence gates, and clean removal/f
 
 ### Review notes
 
-Approved by the project builder on 2026-08-14. Version 1.1 makes powered roll, pitch, and yaw Core. Time, timer, alarm, Spotify playback, and come/follow behaviours remain Core; broader general utility remains uncommitted.
+Approved by the project builder on 2026-08-14. Version 1.1 makes powered roll, pitch, and yaw Core. Time, timer, alarm, Spotify playback, and come/follow behaviours remain Core; broader general utility remains uncommitted. Version 1.2 records the later selection of the two-powered-wheel/front-caster/rear-skid topology while leaving exact drivetrain parts and validated control limits open.
