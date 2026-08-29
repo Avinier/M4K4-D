@@ -22,7 +22,7 @@ The fixture must support the same mechanism with adjustable ballast at the A0/A1
 - a fixed **25 × 24 × 12.4 mm** camera/lens/connector proxy for selected visible-light Camera Module 3 Wide SC0874, positioned centrally with status-light and display-reflection clearances;
 - a rigid 50.0 mm output lever and dial-indicator access on every axis;
 - a repeatable impact point and accelerometer/IMU mount for modal testing;
-- interchangeable complete harnesses routed through the candidate hollow/open yaw centre and pitch/roll service loops;
+- interchangeable H1/H2/H3 complete harnesses from `../../01-system/head-harness-routing-study.md`, with adjustable but recordable yaw/pitch/roll guides, clamp coordinates, free lengths and connector-exit strain relief; the fixture must support separate controlled flex zones without requiring passive CSI connectors at every joint;
 - physical stops beyond usable travel and a safe low-energy/unpowered test path.
 
 Loaded reversal hysteresis and modal frequency may share this fixture but are **different measurements**: fixed-command quasi-static alternating output torque plus hold dwells for hysteresis/hunting, then a separate impact/tap and commanded-ring-down test for structural modes.
@@ -37,6 +37,7 @@ Loaded reversal hysteresis and modal frequency may share this fixture but are **
 - Inline rail current/voltage logging for peak and preregistered busy-minute RMS/thermal runs.
 - Temperature sensors/readback on every actuator plus head electronics where fitted.
 - Bidirectional force gauge for cable restoring torque and the quasi-static output-load method; record both load-sweep directions at matched force/torque points.
+- Live selected-camera monitor logging frame sequence/timestamps, gaps/drops, capture/driver errors, visible corruption and device reset/re-enumeration where applicable while the harness moves; static continuity alone is insufficient.
 
 Every instrument entry records sampling rate, calibration/check method, uncertainty and run-record channel name before scored use.
 

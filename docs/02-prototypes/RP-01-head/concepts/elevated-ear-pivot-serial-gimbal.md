@@ -90,16 +90,18 @@ Before Concept A can be selected, a section through the face, selected no-touch 
 
 ## 6. Cable route
 
-The mechanical concept is incomplete without a harness model:
+The mechanical concept is incomplete without a harness model. Apply the evidence and H1/H2/H3 candidates in `../../../01-system/head-harness-routing-study.md`:
 
-- keep the yaw centre hollow/open and route the bundle close to the yaw axis;
-- approach pitch through the yoke and enter near an ear pivot;
-- provide one deliberate downstream service loop for roll;
-- provide stationary- and moving-side strain relief plus service connectors;
+- partition camera CSI, display/head-node, servo power/bus and local sensor/light branches instead of forcing one cable construction across every circuit;
+- keep the yaw centre hollow/open, route each moving branch close to the yaw axis and give yaw a controlled loop/helical section;
+- fix the downstream orientation at the yoke, approach pitch near an ear pivot and guide a predominantly single-plane rolling bend;
+- fix orientation again before a deliberate short roll loop or purpose-designed torsion section;
+- provide stationary- and moving-side strain relief plus service connectors only where access and signal integrity justify them;
+- treat “one mechanical flex zone per degree of freedom” as the routing objective, but do not add passive connectors to the MIPI CSI path at every joint without lane-rate evidence;
 - avoid a slip ring at the current bounded yaw range;
-- measure angle-dependent cable restoring torque, connector motion and endurance for both candidate camera-link architectures.
+- measure angle-dependent cable restoring torque, connector motion and live-camera endurance for H1 continuous guided FPC, H2 active bridge/high-flex round link and H3 external diagnostic bypass.
 
-Cable torque is part of the slow-expression and static-hold load, not merely an integration note.
+Cable torque is part of the slow-expression and static-hold load, not merely an integration note. Clamp coordinates, free lengths, installed radii and connector-exit lengths are controlled configuration dimensions.
 
 ## 7. IMU roles
 

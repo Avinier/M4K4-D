@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Status | **SELECTED AND LOCKED — Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, order code SC0874** |
-| Version | 0.2 |
+| Version | 0.3 |
 | Owner | Project builder |
 | Created | 2026-08-29 |
 | Last reviewed | 2026-08-29 |
@@ -46,6 +46,8 @@ The standard Camera Module 3 has greater face pixel density and a brighter nomin
 
 Do not treat a static FFC bend-radius claim as a flex-life rating. The selected harness must record conductor construction, connector retention, bend/twist geometry, service-loop length, installed mass, signal errors and endurance cycles.
 
+The candidate mechanical architecture and live-stream endurance protocol are now defined in `head-harness-routing-study.md`. Its preferred direction is axis-conditioned motion: give yaw, pitch and roll separate controlled flex zones while preserving a continuous controlled-impedance CSI path unless an exact active bridge is selected. Purpose-built industrial high-flex cables prove that qualified cable categories exist, but the currently cited long active USB example has a 75 mm dynamic radius and is not a Makad fit.
+
 ## Shopping criteria for other agents
 
 Use this minimum capture schema for every proposed camera:
@@ -85,3 +87,4 @@ Reopen the camera-module selection only after a recorded hard failure: procureme
 |---|---|---|
 | 2026-08-29 | 0.1 | Added the exact camera and moving-link shortlist, India leads, shopping criteria and seven-part lock gate. |
 | 2026-08-29 | 0.2 | Project builder selected and locked Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, order code SC0874; converted the prior lock gate into acceptance/change-control evidence and left supplier, body SBC and production moving interconnect open. |
+| 2026-08-29 | 0.3 | Linked the source-grounded moving-head harness study; adopted axis-conditioned flex zones and live-camera endurance monitoring as the active test direction while keeping the exact production interconnect unselected. |
