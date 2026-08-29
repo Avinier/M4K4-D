@@ -47,11 +47,13 @@ Current proposed best-case usable travel is pitch `-22°…+40°`, yaw `±55°`,
 | Preliminary head inertia | **~0.001 kg·m²** | First actuator-screening calculation only |
 | Preliminary neck peak torque | **~0.2 N·m** | Sanity-check estimate only, not a per-axis selection threshold |
 
-The moving load includes the display, central camera, shell/structure, required brackets, interfaces, and local wiring. It excludes the four body-mounted microphones, body-mounted speaker, battery, and primary electronics. Before final actuator selection, replace the preliminary inertia with CAD-derived `J_com`, record the complete centre of mass, apply the parallel-axis theorem for each candidate axis, and calculate dynamic plus gravity torque at the controlling storyboard cases. If the representative design cannot approach the ~250 g head target, revise the system baseline explicitly before changing the RP-01 ballast.
+The moving load includes the selected no-touch Waveshare ESP32-S3-LCD-4.3 SKU 30493 and selected visible-light Raspberry Pi Camera Module 3 Wide SC0874 at their measured module/installed masses, plus shell/structure, required brackets, interfaces, and local wiring. It excludes the four body-mounted microphones, body-mounted speaker, battery, and primary electronics. Before final actuator selection, replace the preliminary inertia with CAD-derived `J_com`, record the complete centre of mass, apply the parallel-axis theorem for each candidate axis, and calculate dynamic plus gravity torque at the controlling storyboard cases. If the representative design cannot approach the ~250 g head target, revise the system baseline explicitly before changing the RP-01 ballast.
+
+The `~250 g` value is a complete moving-head budget and conservative sensitivity bound, not automatically the moving mass of every joint. Register a mass tree for each mechanism: `m_yaw` is everything downstream of yaw, `m_pitch` everything downstream of pitch, and `m_roll` the roll cradle and its payload. Include moving actuators, bearings, yokes, fasteners and harness segments in the appropriate set. Show the 250 g bound beside any lighter preliminary set until the mass tree is weighed or derived from CAD.
 
 ## Candidate gimbal-centre geometry
 
-Concept A in `concepts/elevated-ear-pivot-serial-gimbal.md` uses body-fixed yaw, pitch pivots near ear-pod height and head-fixed roll. Pitch and roll should intersect, or nearly intersect, near the measured 3D head CoM. Raising pitch alone while leaving roll below the CoM preserves an inverted-pendulum roll load, so the design variable is the **pitch–roll gimbal centre**, not pitch-axis height in isolation.
+Concept A in `concepts/elevated-ear-pivot-serial-gimbal.md` uses body-fixed yaw, pitch pivots near ear-pod height and head-fixed roll. Pitch and roll intersecting, or nearly intersecting, near the measured 3D head CoM is the gravity target to evaluate, subject to a display-clear roll-support and load-path proof. Raising pitch alone while leaving roll below the CoM preserves an inverted-pendulum roll load, so the design variable is the **pitch–roll gimbal centre plus its feasible support layout**, not pitch-axis height in isolation.
 
 For pitch, define `x` as the CoM's forward offset from the pitch axis and `z` as its upward offset. Use
 
@@ -69,6 +71,8 @@ These are sensitivity points, not a frozen mechanism specification. The calculat
 
 `component blockout → initial CoM → axis candidate → mechanism mass → revised CoM → torque/RMS comparison`.
 
+For a `250 g` sensitivity bound, A1 (`x=+5 mm`, `z=0`) gives `0.0123 N·m` at neutral, about `0.0114 N·m` at `-22°`, and about `0.0094 N·m` at `+40°`. The earlier `193 g` proxy is about 23% below the 250 g target; equivalently, the 250 g results are about 30% higher than the 193 g results. Final sizing still uses the registered per-axis mass tree rather than either generic value.
+
 A small persistent load may keep a gearbox on one tooth flank, but preload is a measured mitigation rather than evidence that backlash is gone. Prefer a small fore–aft pitch offset if it retains one torque sign across the usable range. Keep roll close to balance and evaluate a low-rate torsion/elastic bias only if reversal testing warrants it; avoid an arbitrary lateral mass imbalance.
 
 The pitch actuator moves with yaw. Include `m_actuator·r²` for its lateral offset in `J_yaw`. Compare that penalty with the added mass, compliance and reversal loss of any belt/gear relocation before choosing an offset transmission.
@@ -79,11 +83,14 @@ Cable restoring torque is part of `τ_friction/τ_bias`, not zero. Measure it ve
 
 Candidate output-axis requirements, measured at the head under representative load:
 
-- total reversal lost motion—gearbox lash, spline/horn and linkage lost motion, structural deflection plus control deadband—`≤0.50°` minimum viable, `≤0.25°` target;
+- loaded reversal hysteresis at the complete output—gearbox lash, spline/horn and linkage motion, structural compliance plus control behaviour—`≤0.50°` minimum viable, `≤0.25°` target under the registered quasi-static load cycle;
+- no visible or instrumented hold hunting: register external-angle and current peak-to-peak/RMS limits and dwell duration before scored testing;
 - first loaded yaw/roll structural mode `f₁ ≥25 Hz` as a screening target and `≥30 Hz` as the best-case target;
 - first loaded pitch structural mode `f₁ ≥30 Hz` for minimum viable and `≥40 Hz` for the unshaped best-case laugh.
 
-The first value preserves at least 75% of a 2° correction before residual tracking error. Gear material and bus protocol do not prove it. Use the complete-output, dial-indicator procedure in `storyboard.md` §2.5: quasi-static `±0.50·τ_peak,op`, a 50 mm measurement radius, 10 conditioning reversals, 5 measured reversals and the maximum observed value. The method intentionally measures at the head output so horn/spline fit, joints and printed-part deflection cannot disappear from the result.
+The first value preserves at least 75% of a 2° correction before residual tracking error. Gear material, bus protocol and servo-reported position do not prove it. Use the complete-output, dial-indicator procedure in `storyboard.md` §2.5: at a fixed command, sweep quasi-static output load through `+0.50·τ_peak,op → -0.50·τ_peak,op → +0.50·τ_peak,op`, at a 50 mm measurement radius, with 10 conditioning reversals and 5 measured cycles. Record the independent external angle against matched applied-torque points on both sweep directions; report the maximum branch separation, reversal delay and settled command error. Then dwell at representative holds and log external angle plus current for hunting. This intentionally retains horn/spline fit, joints, printed-part deflection and closed-loop behaviour in the result.
+
+The [XL330 public specification](https://emanual.robotis.com/docs/en/dxl/x/xl330-m288/) establishes a 12-bit single-turn absolute position sensor and closed-loop position control, but does not explicitly document the sensor's physical placement. Treat output-side sensing as an inference unless teardown/CAD evidence closes it. In either case the external instrument is necessary: `0.25°` is only about 2.8 counts at the published `0.088°/count` resolution, and servo readback cannot independently validate complete-head motion.
 
 Do **not** divide the `≤0.25°` complete-output target equally among yaw, pitch and roll. A reversal directly traverses the tested axis's transmission; other joint errors and compliance map into face orientation through the mechanism Jacobian and current pose. Test each axis independently while the other two are energized at representative poses, then run an additional combined-motion orientation-error case.
 
@@ -107,7 +114,7 @@ Per axis, per candidate axis placement, compute:
 4. **Busy-minute RMS/current screen:** `τ_RMS = sqrt((1/T)·∫τ(t)²dt)` over a preregistered realistic busy minute, with measured `I_RMS`, voltage sag and temperature preferred for acceptance. This precedes actuator freeze and remains separate from the transient screen.
 5. **Reflected inertia** J/N² vs. rotor inertia, target <~10× — only where the actuator publishes rotor inertia; otherwise mark UNCOMPUTABLE → moves to the rig, not assumed passed
 6. **Resonance estimate** f_n ≈ (1/2π)·√(K/J_eff) — flag anything the storyboard excites near it
-7. **Balance/preload option:** compare A0/A1/A2 plus any torsion/counterbalance candidate; record added mass, inertia, asymmetric load, unpowered path and thermal consequence
+7. **Balance/preload option:** compare A0/A1/A2 plus any torsion/counterbalance candidate; an ordinary torsion spring must remain pre-wound with its free angle outside usable travel if same-sign preload is required. Record torque versus angle, added mass, inertia, asymmetric load, unpowered path, hold current and thermal consequence
 8. **Combined tilted cases:** evaluate the explicit curious-yes and curious-no trajectories above, including roll holding torque while the other axis accelerates
 
 Cross-axis handling: evaluate each axis at the worst-case configuration of the other two (no full Newton–Euler at this stage).

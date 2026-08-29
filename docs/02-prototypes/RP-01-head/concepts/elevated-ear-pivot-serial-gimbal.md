@@ -15,7 +15,7 @@ This note extracts only the credible topology from an unverified, generated-look
 1. A **body-fixed yaw actuator** drives a compact yaw stage recessed into the body/head intrusion allowance.
 2. A bearing or spaced-bearing shaft carries head weight and overturning moment independently of the yaw drive path.
 3. A rising U-yoke terminates at two **double-supported pitch pivots** near ear-pod height.
-4. The inner head cradle rolls about the face's forward axis. The roll axis is head-fixed and intersects, or nearly intersects, the pitch axis near the measured head CoM.
+4. The inner head cradle rolls about the face's forward axis. A roll axis intersecting, or nearly intersecting, the pitch axis near the measured head CoM is the gravity target, **not yet a credible support layout**; the bearing/shaft arrangement must first clear the display and camera and carry the overhung moment.
 5. Ear pods remain microphone-free. Under this concept their removable cosmetic shells may hide pitch bearings and service access; the inner yoke/frame carries structural load.
 
 This serial order means a roll remains a face-relative tilt after yaw and pitch. Firmware must still use rotation matrices/quaternions rather than add Euler angles, but the physical order matches Makad's authored semantic axes. Gimbal lock at pitch ±90° lies well beyond the proposed `-22°…+40°` best-case travel.
@@ -36,7 +36,9 @@ Evaluate at least these blockout candidates before detailed CAD:
 | A1 light preload | `x=+5 mm`, `z=0 mm` | CoM slightly forward of axis, keeping a small same-sign pitch load across the usable range |
 | A2 packaging compromise | `x=+5 mm`, `z=+10 mm` | Allows practical structure while bounding added holding torque |
 
-These are calculation points, not tolerances. With the earlier `m=0.193 kg` subassembly proxy, A1 produces only about `0.007–0.009 N·m` pitch gravity torque across `-22°…+40°`; the value must be recomputed from the actual mass blockout.
+These are calculation points, not tolerances. With the earlier `m=0.193 kg` subassembly proxy, A1 produces about `0.007–0.009 N·m` pitch gravity torque across `-22°…+40°`. At the conservative `m=0.250 kg` complete moving-head target, the same point produces about `0.0094–0.0123 N·m`. Both are sensitivity calculations, not final sizing values.
+
+Do not apply one mass blindly to all three axes. Register the actual moving set downstream of each joint: yaw carries the complete moving yaw output; pitch carries the pitch-and-roll output; roll carries only its cradle and payload. Until those as-built/CAD sets exist, show the `250 g` complete-head bound alongside any lighter subassembly proxy so a favorable blockout cannot silently under-size an actuator.
 
 Use an iterative convergence loop:
 
@@ -51,11 +53,12 @@ A small persistent output load can keep a geartrain on one tooth flank and reduc
 The candidate approach is:
 
 - use a small forward CoM offset for same-sign pitch preload if the complete-output test shows a benefit;
-- keep roll close to balance and add a low-rate torsion/elastic bias only if measured roll reversal needs it;
+- keep roll close to balance and add a low-rate torsion/elastic bias only if measured roll reversal needs it; any ordinary torsion spring must be pre-wound with its free angle outside usable travel so its torque does not cross zero in the workspace;
+- compare the spring's angle-dependent holding current and thermal cost with constant-force/cam or other bias arrangements; do not assume a dead weight or magnetic detent is constant-torque in the assembled three-axis geometry;
 - never claim that preload removes horn/spline slop, bracket compliance or structural modes;
 - do not allocate the `≤0.25°` complete-output target as an unsupported `0.08° per serial stage` rule.
 
-Measure each axis at the head output while the other axes are energized at representative poses. Add a combined-motion orientation-error case because serial-axis errors map through the mechanism Jacobian rather than simply adding as three identical scalar lash values.
+Measure each axis at the head output while the other axes are energized at representative poses. At a fixed command, sweep a specified reversing output load and record applied torque, independent external angle, servo-reported position, current and time. Report the load–position hysteresis and reversal delay, then dwell at representative holds and check external-angle/current peak-to-peak motion for hunting or limit cycling. Add a combined-motion orientation-error case because serial-axis errors map through the mechanism Jacobian rather than simply adding as three identical scalar lash values.
 
 ## 4. Actuator placement and yaw inertia
 
@@ -74,6 +77,16 @@ Every candidate drawing must show:
 - roll support and drive reaction path;
 - mechanical stops and unpowered path;
 - actuator removal and bearing service without destroying the shell.
+
+### Roll-support feasibility blocker
+
+Before Concept A can be selected, a section through the face, selected no-touch Waveshare SKU 30493 module/connector envelope, camera, CoM and roll axis must compare at least:
+
+- a compact rear coaxial bearing cartridge, recording the remaining overhung head moment even if two bearings are used;
+- an annular/perimeter support that leaves the face opening clear, including its mass, diameter, cost and service path;
+- a displaced/lowered roll axis, including the restored vertical CoM offset, gravity torque and thermal penalty.
+
+“Double-supported” is not a substitute for this load-path proof: record bearing spacing, shaft/frame reactions, deflection at the display, and which structure actually closes the moment. The current 125–130 mm head-core depth, selected approximately 106.1 × 67.8 mm module body and 110–120 × 60–65 mm visible face opening are the controlling package, not dimensions from the generated reference.
 
 ## 6. Cable route
 
@@ -102,9 +115,11 @@ Joint encoders plus body attitude provide a kinematic head-pose estimate; the he
 ## 8. Evidence required before selection
 
 - sourced/weighed head blockout and revised 3D CoM/inertia;
+- per-axis downstream moving-mass sets plus the `250 g` complete-head sensitivity bound;
 - A0/A1/A2 torque, RMS/current and thermal comparison;
-- complete-output reversal test per axis and a combined-motion orientation test;
-- impact/tap modal test and commanded ring-down test on the same fixture as, but distinct from, the backlash test;
+- complete-output loaded hysteresis and hold-hunting test per axis, plus a combined-motion orientation test;
+- display-clear roll-support section and load-path comparison;
+- impact/tap modal test and commanded ring-down test on the same fixture as, but distinct from, the loaded-hysteresis/hold-hunting test;
 - measured cable restoring torque through the usable workspace;
 - 60 mm neck/head-intrusion packaging proof;
 - shell/frame/yoke/bearings/actuators mass roll-up;

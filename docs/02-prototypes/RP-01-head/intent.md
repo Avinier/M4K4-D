@@ -4,7 +4,7 @@
 |---|---|
 | Status | Draft — user-authored head vocabulary captured; numeric storyboard and eye/audio placeholders remain provisional |
 | Owner | Project builder |
-| Last updated | 2026-08-27 |
+| Last updated | 2026-08-29 |
 | Physical baseline | `../../01-system/dimensional-baseline.md` — overrides earlier head envelope, ballast, and placement assumptions |
 | Numeric storyboard | `storyboard.md` — keyframes, angles, timing, minimum viable and best-case envelopes |
 | Feeds | `storyboard.md`, `physics.md`, `gates.md`, RP-01 procedure steps 3–5 |
@@ -31,11 +31,11 @@ RP-01 designs and tests within the current system baseline:
 
 - complete moving head, including ears: **100 H × 180 W × 130 D mm**;
 - head core, excluding ears: **~100 H × 140–145 W × 125–130 D mm**;
-- active display area: **~95 W × 54 H mm**, behind a **~110–120 W × 60–65 H mm** face opening/bezel;
+- selected face display: **Waveshare ESP32-S3-LCD-4.3, no touch, SKU 30493**; nominal active area **95.04 W × 53.86 H mm**, approximately **106.1 W × 67.8 H mm** hidden module body, behind a **~110–120 W × 60–65 H mm** visible face opening/bezel;
 - ear pods: **~55–65 mm diameter**, protruding **~17–20 mm** per side; no microphones/sensors, while a mechanism candidate may use removable shells to conceal pitch-bearing access carried by an inner yoke/frame;
 - three-axis neck allocation: **60 mm vertical**, with only **~35–45 mm** expected to remain externally visible because the mechanism intrudes into the head and body;
 - moving-head mass target: **~250 g**;
-- one central moving camera; no microphones or speaker in the head;
+- selected central moving camera: **Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, SC0874**, 25 W × 24 H × 12.4 D mm; no microphones or speaker in the head;
 - preliminary head inertia **~0.001 kg·m²** and preliminary neck peak-torque estimate **~0.2 N·m**, both subject to replacement by CAD mass properties and axis-specific calculations.
 
 These are packaging and load inputs, not permission to treat the preliminary torque estimate as an actuator requirement. `physics.md` must calculate each candidate mechanism, and `gates.md` must register the representative load/configuration before scored runs.
@@ -43,7 +43,7 @@ These are packaging and load inputs, not permission to treat the preliminary tor
 ## 2. Accepted intent decisions
 
 1. **Neutral convention:** `roll=0°, pitch=0°, yaw=0°` names the calibrated attentive-forward pose. It is a coordinate convention, not yet a mechanical range or promise that an unpowered actuator holds it.
-2. **Powered-off behaviour:** when M4 is truly off, no commanded movement occurs and the mechanism rests safely. Holding neutral while unpowered requires balancing, self-locking transmission, a brake, detent or physical support; it cannot be assumed.
+2. **Powered-off behaviour:** when M4 is truly off, no commanded movement occurs and the mechanism rests safely. Holding neutral while unpowered requires balancing, self-locking transmission, a brake, detent or physical support; it cannot be assumed. A bounded forward settle may be authored to read as falling asleep only if RP-01 proves its direction, speed, stop impact and cable behaviour are safe and repeatable; gearbox ratio alone is not evidence that the head will hold or settle gently.
 3. **Sleep:** a commanded sleep transition lowers the head slowly over approximately **2–3 seconds** into a sustainable rest pose.
 4. **Wake:** the target is to move from sleep/rest to an awake attentive pose within **1 second**, provided RP-01 proves this is possible without objectionable peak load, noise, overshoot, vibration or unsafe motion.
 5. **Wake and search are separate semantics:** wake means "M4 is becoming attentive." Search means "M4 is trying to locate a person." A wake may flow immediately into search when no current person track exists.
@@ -158,7 +158,7 @@ RP-01 does not need to score every emotional nuance. Its representative motion s
 1. `HM-02` sleep — slow gravity-loaded motion and sustainable rest;
 2. `HM-03` wake — target one-second rise and controlled settling;
 3. `HM-04` search — large usable yaw workspace, reversals and pauses;
-4. `HM-05` tracking — smallest intentional corrections and reversal loss;
+4. `HM-05` tracking — smallest intentional corrections, loaded hysteresis and hold hunting;
 5. `HM-06`/`HM-07` vigorous yes/no — repeated pitch/yaw reversals;
 6. `HM-08` laugh — low-amplitude resolution, backlash and fast micro-reversal;
 7. `HM-09` roll wobble — readable powered roll and repeated reversal;
@@ -177,10 +177,10 @@ The full panel-by-panel quantification is maintained in `storyboard.md`. This su
 | Sleep | Pitch to `+28°` over 3.0 s | Pitch to `+35°` with `R+4°` over 2.4 s | `MS7` descent → `HOLD` | Slow gravity-loaded travel and sustainable rest |
 | Wake | `P+28° → 0°` within 1.0 s | `P+35° → P-3° → 0°` within 0.85 s | `MS7` rise + `MJ5` overshoot/settle | Fast rise, reversal/overshoot control and settle |
 | Search | Yaw sectors at `±35°` | Yaw sectors at `±50°` | `MJ5` sector turns + `HOLD`s | Usable yaw workspace and cable/camera clearance |
-| Track | Intentional 4° correction | Intentional 2–4° correction | Online `TRACK`; `MJ5` test proxy | Small resolution, reversal loss and chatter |
+| Track | Intentional 4° correction | Intentional 2–4° correction | Online `TRACK`; `MJ5` test proxy | Small resolution, loaded hysteresis, hold hunting and chatter |
 | Yes | Exactly 2 pitch cycles to `+14°/-6°` in 1.0 s | Exactly 2 pitch cycles to `+18°/-8°` in 0.9 s; forward/rebound decay `0.83×/0.63×` | Accented `MJ5` strokes | Pitch speed case and repeated reversal |
 | No | Exactly 2 yaw cycles to `±16°` in 1.0 s | Exactly 2 yaw cycles in 0.95 s; extrema `22°, 22°, 18°, 14°` | Declining stitched `MJ5` reversals | Yaw speed/acceleration case |
-| Laugh | Two `+4°/-1°` pitch pulses in 0.80 s | Three unequal pulses in a 0.68 s active window plus 0.17 s terminal hold | Irregular `MJ5` pulse train | Pitch acceleration, modal and output lost-motion case |
+| Laugh | Two `+4°/-1°` pitch pulses in 0.80 s | Three unequal pulses in a 0.68 s active window plus 0.17 s terminal hold | Irregular `MJ5` pulse train | Pitch acceleration, modal and loaded-hysteresis case |
 | Indian head wobble | Pure roll to `±8°` over 1.15 s | Roll to `±12°`, optional `Y±3°`, over 1.08 s | Declining stitched `MJ5` roll wave | Roll speed/acceleration case and rounded reversal |
 | Curious | Hold `R+8° P-2°` | Hold `R+12° P-4°` | `MS7` tilt → `HOLD` | Static off-neutral load and readable roll |
 | Curious yes | Hold `R+8°`; pitch `-2° → +10° → -5° → -2°` | Hold `R+12°`; pitch `-4° → +12° → -7° → +8° → -4°` | `MJ5` nod in held roll | Roll static gravity load during dynamic pitch motion |

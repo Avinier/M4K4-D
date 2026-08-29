@@ -23,7 +23,7 @@
 
 | Candidate | Status | What is fixed for comparison | What remains open |
 |---|---|---|---|
-| A — elevated ear-pivot serial gimbal | **Credible candidate; not selected** | Body-fixed yaw; yaw→pitch→head-fixed-roll order; independent yaw load bearing; double-supported ear-height pitch; pitch/roll centre near measured CoM; planned axial harness route | Exact A0/A1/A2 axis point, actuator family, bearing sizes, direct/belt drive, preload, yoke geometry, mass/thermal/cost and scored gate results |
+| A — elevated ear-pivot serial gimbal | **Credible candidate; not selected** | Body-fixed yaw; yaw→pitch→head-fixed-roll order; independent yaw load bearing; pitch pivots associated with the ear-pod locations; planned axial harness route; selected Waveshare no-touch SKU 30493 display envelope | Exact pitch height and A0/A1/A2 point; selected-display-clear roll-axis/support layout and resulting CoM; per-axis mass tree; actuator family, bearing sizes, direct/belt drive, preload, yoke geometry, mass/thermal/cost and scored gate results |
 | B | **Required; not authored** | Must satisfy the same physical baseline and evidence rules | Entire concept |
 
 Concept A's source diagram is not a specification. Only the topology extracted into `concepts/elevated-ear-pivot-serial-gimbal.md` is admitted for comparison; its generated-looking labels, proportions and NEMA/Lazy-Susan-scale hardware are excluded.

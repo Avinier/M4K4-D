@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Status | **Current target baseline — supersedes earlier dimensional and packaging assumptions** |
-| Version | 1.2 |
+| Version | 1.6 |
 | Owner | Project builder |
 | Approved | 2026-08-27 |
 | Feeds | Mass/envelope ledger, RP-01 head, RP-03 drive, RP-06 layout, sourcing, integrated CAD |
@@ -25,7 +25,7 @@ This document is the current source of truth for Makad's dimensional, drive-geom
 |---|---:|---|
 | Overall Makad size | **300 H × 205 W × 180 D mm** | Keeps the 30 cm target while providing enough chassis depth for stable differential drive |
 | Head size, including ears | **100 H × 180 W × 130 D mm** | Expressive without making the robot excessively top-heavy |
-| Head core, excluding ears | **~100 H × 140–145 W × 125–130 D mm** | Packages the display, camera, brackets, and neck intrusion |
+| Head core, excluding ears | **~100 H × 140–145 W × 125–130 D mm** | Packages the display, unavoidable lightweight display/head-node electronics, camera, brackets, and neck intrusion |
 | Body-top / neck datum | **140 mm above ground** | Main vertical mechanical reference |
 | Neck allocation | **60 mm vertical** | Packaging space for powered yaw, pitch, and roll |
 | Drive wheels | **Ø84 mm nominal** | Mobility, proportions, and motor-speed compromise |
@@ -38,16 +38,16 @@ The baseline stack is geometrically consistent: the 140 mm ground-to-body-top da
 
 | Part / parameter | Final / target dimension | Design intent |
 |---|---:|---|
-| Face/display active area | **~95 W × 54 H mm** | Fits a common ~4.3-inch 16:9 display |
-| Face opening / bezel | **~110–120 W × 60–65 H mm** | Leaves border and mounting room around the display |
+| Face/display active area | **95.04 W × 53.86 H mm nominal** | Fixed by the selected no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493 |
+| Face opening / bezel | **~110–120 W × 60–65 H mm visible** | Masks the inactive border; RP-06 must separately clear the selected module's approximately 106.1×67.8 mm hidden PCB/body |
 | Ear pods | **~55–65 mm diameter; ~17–20 mm side protrusion each** | Exterior visual elements with no microphones/sensors; a mechanism candidate may use their internal volume for removable pitch-bearing covers, but only an inner frame/yoke may carry structural load |
 | Head mass | **~250 g target** | Controls neck loads and whole-robot centre of mass |
 | Preliminary head inertia | **~0.001 kg·m²** | Starting value for RP-01 neck-actuator calculations |
 | Preliminary neck peak torque | **~0.2 N·m** | Early actuator-sizing estimate; CAD mass properties and RP-01 calculations determine the final value |
 | Neck axes | **Powered yaw + pitch + roll** | Full expressive head motion |
-| Camera | **One central head camera** | Simplifies gaze geometry |
+| Camera | **One central Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, SC0874; 25 W × 24 H × 12.4 D mm module envelope** | Selected 120° diagonal / approximately 102° horizontal FOV simplifies acquisition and gaze geometry; connector, mount and moving-link clearance remain RP-01/RP-06 validation items |
 
-The moving head contains the display, central camera, required brackets/structure, neck interfaces, and local wiring. The microphones, speaker, battery, and primary electronics are body-mounted and must not be added to RP-01 moving-head ballast unless the baseline is formally revised.
+The moving head contains the display, any unavoidable lightweight display controller/head-node electronics and IMU, central camera, required brackets/structure, neck interfaces, and local wiring. **All of those installed items count inside the ~250 g target.** The microphones, speaker, battery, main Linux SBC and other primary electronics are body-mounted and must not be added to RP-01 moving-head ballast unless the baseline is formally revised.
 
 ## Body, neck, and support geometry
 
@@ -98,7 +98,7 @@ Until RP-03 measures lift onset and dynamic compliance, commanded forward accele
 | Ear microphones | **None** | Ear pods remain free of acoustic/electronic function; concealed mechanical access is permitted as a candidate, not selected here |
 | Speaker | **Body-mounted** | More acoustic cavity volume and less moving-head mass |
 | Battery | **Low and forward of the drive axle** | Lowers `h_CoM` and increases the forward restoring arm `x_CoM`; behind-axle placement would reduce forward-acceleration tip resistance |
-| Primary electronics | **Body-mounted** | Keeps the head light and centralizes power/control hardware |
+| Primary electronics | **Body-mounted main Linux SBC and power/control hardware; only unavoidable lightweight display/head-node electronics may move with the head** | Keeps the head light while allowing a short local panel interface; every head-local board, connector, mount and harness segment counts inside the ~250 g target |
 | Rear skid | **Mandatory** | Protects sharp acceleration, braking, and turning cases |
 
 ## Compact handoff
@@ -119,3 +119,7 @@ Design around **300 H × 205 W × 180 D mm overall; 100 H × 180 W × 130 D mm h
 | 2026-08-25 | 1.0 | Adopted the dimensional, moving-head, drive, and component-placement target set. |
 | 2026-08-25 | 1.1 | Corrected battery placement to forward of axle; reconciled shell clearance to 25–35 mm; bounded the separate rear skid at ~70 mm reach and ≤14 mm height; added whole-robot CoM and forward-acceleration tip limits. |
 | 2026-08-27 | 1.2 | Clarified that ear pods have no microphone/sensor role but may conceal removable pitch-bearing access in a mechanism candidate; structural loads must remain on an inner frame/yoke. No mechanism selected. |
+| 2026-08-29 | 1.3 | Clarified the body-mounted-primary-electronics rule after the display study: any unavoidable display controller, head node, head IMU, connectors and mounts are permitted only as lightweight head electronics and count inside the unchanged ~250 g moving-head target. |
+| 2026-08-29 | 1.4 | Propagated the 4.3-inch 800×480 IPS decision and distinguished the 60–65 mm visible opening from the approximately 68 mm hidden module-body clearance required by the first prototype candidate. |
+| 2026-08-29 | 1.5 | Locked the face geometry to the selected no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493, while retaining physical-sample verification of the complete hidden envelope. |
+| 2026-08-29 | 1.6 | Locked the central head-camera envelope to the visible-light Raspberry Pi Camera Module 3 Wide, order code SC0874; retained mount, installed mass and production moving-interconnect validation. |

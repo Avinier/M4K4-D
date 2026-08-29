@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | **Provisional option study — not a selection.** |
-| Version | 0.2 |
+| Version | 0.6 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-08-27 |
+| Last reviewed | 2026-08-29 |
 | Governed by | `risk-prototype-plan.md` — permitted provisional option study (decision-closeout: "the architecture phase may begin with provisional option studies while prototypes run") |
 | Feeds | RP-02 (electrical/control backbone) → **ADR-06 (power)**, **ADR-12 (control topology)**; the monotonic-timebase deliverable (plan §104) |
 | Consumes | `system-design-brief.md` responsibility set + AD-01/AD-06/AD-08; `mass-envelope-ledger.md` head section |
@@ -21,7 +21,7 @@ Every multi-actuator robot above toy complexity uses the same shape — a small 
 
 | Layer | Typical host | Rate | Makad jobs |
 |---|---|---|---|
-| High-level | Linux SBC / GPU | 10–60 Hz | vision/perception, NLU + cloud adapters, behaviour authority, **face rendering**, audio |
+| High-level | Linux SBC / GPU | 10–60 Hz | vision/perception, NLU + cloud adapters, behaviour authority, **semantic face state/assets**, audio; the selected head display performs final rasterization locally |
 | Mid-level | SBC or RTOS | 100 Hz–1 kHz | trajectory shaping, subsystem coordination |
 | Real-time | dedicated MCU + RTOS | 200 Hz–low kHz | servo/motor loops, encoder/IMU capture, limits, watchdog, command-expiry, E-stop |
 
@@ -75,11 +75,28 @@ The camera **must** ride in the head (AD-06). The real question is whether the *
 
 | Option | How | Pros | Cons | Verdict |
 |---|---|---|---|---|
-| **A. Vector-style (compute in head)** | SBC + camera + display + IMU in the head; dumb motor MCU in body | shortest camera/display buses; proven by Vector | heaviest 3-axis moving mass; power + data down to body; head-CAD must package an SBC | Viable but taxes the 3-axis mechanism |
+| **A. Vector-style (compute in head)** | SBC + camera + display + IMU in the head; dumb motor MCU in body | shortest camera/display buses; proven by Vector | heaviest 3-axis moving mass; power + data down to body; head-CAD must package an SBC | **Requires an explicit dimensional-baseline revision** because the current baseline body-mounts primary electronics; retain only as a fallback architecture |
 | **B. Body-heavy (compute in body)** | SBC in body; head carries only camera + display + light | lightest head, easiest gimbal | **camera bus (MIPI/USB) must flex across 3 joints** — the fragility risk; display bus too | Cable-survival risk is the whole RP-01 concern |
-| **C. Hybrid (recommended to study first)** | SBC in **body**; a **head-aggregation MCU** in the head owns head IMU + LED + servo signals; thin serial/bus down; camera routed as its own managed cable; the four-mic array remains body-mounted | light-ish head; local head-pose IMU feedback (Vector-like); collapses many head wires into a thin link; motor limits/watchdog local | camera still crosses the joints; two firmware targets | **Best first candidate**; matches the separation principle (§1) |
+| **C. Hybrid (recommended to study first)** | SBC in **body**; a light head node owns head IMU + LED + servo signals; thin serial/bus down; camera routed as its own managed cable; the four-mic array remains body-mounted. Compare **C1:** separate Nano-class aggregator and **C2:** a display-side MCU, if the selected display architecture already requires one, plus a small external SPI IMU | light-ish head; local head-output sensing; collapses many head wires into a thin link; motor limits/watchdog can remain local | camera still crosses the joints; C1 adds a board/connectors/harness, while C2 couples motor timing and safety to display workload | **Best first topology family**; C1/C2 remain an RP-01/RP-02 evidence decision |
 
-Option C is where the **Arduino Nano 33 BLE Sense** fits — see §6. RP-01 (cable behaviour across the workspace) and RP-02 (electrical backbone) exist precisely to decide between A/B/C with measured evidence.
+Option C is where the on-hand **Arduino Nano 33 BLE Sense** can be compared with consolidation onto an eligible display-side MCU — see §6. RP-01 (moving mass, head sensing and cable behaviour) and RP-02 (timing, watchdog and electrical backbone) exist precisely to decide between A/B/C and C1/C2 with measured evidence.
+
+### 4.1 Consequence of the selected 4.3-inch IPS module
+
+The project builder selected and locked the no-touch **Waveshare ESP32-S3-LCD-4.3, SKU 30493**, which includes an ESP32-S3/LVGL renderer. Head-local display rasterization is therefore a fixed property of the display subsystem. The wider compute placement, motion controller, internal transport and safety boundaries remain RP-01/RP-02 decisions.
+
+The selected path and its change-controlled architectural contingency are:
+
+| Path | Body-to-head traffic | What must be installed in the head | Main risk |
+|---|---|---|---|
+| **D1: body rasterization — contingency only** | Continuous DSI/HDMI-class video across all three joints | Bare IPS panel plus receiver/host/power hardware | High-bandwidth flex life, restoring torque, connector service and SBC/panel compatibility; not active unless display change control is triggered |
+| **D2: head rasterization — SELECTED display path** | Semantic face state, gaze/blink parameters, text/data and occasional asset updates over the eventual internal link | Waveshare ESP32-S3-LCD-4.3 no-touch SKU 30493 with local assets/LVGL | Approximately 106×68 mm board and a listed 118 g value must fit the mass/CoM envelope; rendering load and fault behaviour must be measured |
+
+The selected display path is **D2 using Waveshare no-touch SKU 30493**. The body SBC owns behaviour and semantic face state; the head ESP32-S3 owns rasterization, animation playback and panel refresh. The exact wired transport remains open. HDMI does not solve the cable problem: with a body-mounted SBC it simply makes HDMI the moving high-bandwidth link.
+
+The display MCU should initially remain outside the motor-safety boundary. The dedicated real-time controller retains servo limits, watchdog, command expiry and head sensing while RP-02 deliberately loads the ESP32-S3 renderer and communications. Consolidation is considered only if its worst-case frame workload cannot disturb those functions and display faults cannot defeat safe motion shutdown.
+
+D1 and the DWIN module are now change-controlled contingency references, not active parallel candidates. Reconsider either only if SKU 30493 records a hard procurement, envelope, mass/dynamics, optical/animation or safety/reliability failure under the selection rule in `display-candidate-study.md`.
 
 ## 5. Time synchronization — the monotonic-timebase deliverable, grounded
 
@@ -102,7 +119,7 @@ This is the concrete shape of the plan's **monotonic event-time strategy** (§10
 
 ## 6. Candidate: Arduino Nano 33 BLE Sense (on hand)
 
-On-hand part; a strong candidate for the **head-aggregation MCU** in Option C. Not selected.
+On-hand part; useful as the **C1 head-aggregation prototype/bench reference** in Option C. It is not selected for the production head.
 
 | Feature | Value to Makad |
 |---|---|
@@ -112,7 +129,7 @@ On-hand part; a strong candidate for the **head-aggregation MCU** in Option C. N
 | APDS9960 (proximity/gesture/ambient-light) | Free extras: dim the face in a dark room, proximity as a wake cue (non-Core, nice-to-have) |
 | I²C / SPI / PWM | Drives LED driver, small display peripherals, generates servo signals — all **local to the head board** (correct use of I²C per §3) |
 | BLE | Not needed for internal comms (wired is more reliable); ignore or keep as debug fallback |
-| 18 × 45 mm, 3.3 V | Fits the head envelope; 3.3 V logic is fine for servo PWM/I²C/SPI — servo *power* stays on a separate 5–6 V rail |
+| 17.76 × 43.16 mm, 3.3 V | Fits the geometric envelope, but its measured installed mass—including connectors, mount and harness—must compete with C2; 3.3 V logic is local and servo *power* stays on a separate 5–6 V rail |
 
 **Caveats to confirm in RP-01/RP-02:**
 - Variant matters: plain *Nano 33 BLE* has the IMU but **no mic**; the **Sense** adds the mic + APDS9960. (Ours is the Sense.)
@@ -121,21 +138,34 @@ On-hand part; a strong candidate for the **head-aggregation MCU** in Option C. N
 - One MCU driving 3 coordinated axes **plus** LED/mic — verify the timing budget holds when everything runs at once (AD-08 concurrent-load risk).
 - Whether it is head-local (Option C) or the system settles on Option A/B is the RP-01/RP-02 decision.
 
+### 6.1 C1/C2 head-node comparison
+
+| Criterion | C1: separate Nano 33 BLE Sense | C2: display MCU + external SPI IMU |
+|---|---|---|
+| Added moving hardware | Nano board, mount, connectors and local harness; weigh the installed assembly rather than citing an unsourced bare-board mass | IMU board/device plus local traces/harness; weigh the actual breakout or PCB implementation |
+| Timing isolation | Dedicated servo/sensor task can remain isolated from display rendering | Must prove display transfers/rendering cannot add servo jitter, timestamp drift or missed sensor samples |
+| Safety ownership | Natural place for limits, watchdog and command expiry | Display MCU must retain those functions through display faults, overload and software restart |
+| Sensor path | Onboard IMU, exact board revision and rate to be registered | Select an IMU and SPI path meeting RP-01 bandwidth, timestamp and range requirements |
+| Firmware/tooling | Adds a second head firmware target | Reduces board count but increases responsibility of the display controller |
+
+Prefer C2 for production mass and harness simplicity **only if** it passes the concurrent display/servo/IMU timing test and local-fault requirements. Keep C1 available for early RP-01 isolation and instrumentation. The comparison must include total installed mass and CoM effect, not the bare dev-board mass alone.
+
 **Heterogeneity caution:** using *different* MCU families for head and base multiplies toolchains and debug surfaces for a solo builder. Vector's head-SoC vs body-STM32 split was heterogeneous **by necessity** (one must run Linux, one is a tiny motor relay) — not by preference. If a base MCU is added, prefer the **same family** as the head unless a role genuinely forces otherwise.
 
 ## 7. Provisional recommendation (to be confirmed by RP-02)
 
-1. **Two controllers, heterogeneous by role, not by variety:** a **Linux SBC** (vision, NLU, behaviour, face rendering) + **≥1 real-time MCU**. The **Nano 33 BLE Sense** is a strong head-aggregation candidate; a **base/drive MCU with body-frame IMU input** is the likely second node — same family if possible.
+1. **Three provisional roles, not necessarily three final boards:** a body **Linux SBC** for vision/NLU/behaviour, the head-local **ESP32-S3 display renderer**, and **≥1 real-time MCU role** for motion safety/sensing. Start separated; compare later consolidation with the on-hand Nano C1 prototype only after concurrency/fault evidence. A base/drive MCU with body-frame IMU input remains likely — same family where practical.
 2. **Internal link: UART/USB serial**, Vector-style. Not CAN, not micro-ROS, not I²C across joints — those are documented "grow-into-it" options.
 3. **Compute placement (Option A/B/C) is the open fork** — study Option C first; let RP-01 (cable behaviour) and RP-02 (backbone) decide with evidence.
 4. **Timebase: one master + timestamp-at-source + serial offset reconciliation.** Not PTP.
 5. **Motor limits, watchdog, and E-stop live on the MCU, never on the SBC** — every source insists safety-critical loops must survive the Linux side being busy or rebooting (reinforces the `workbench.md` scored-test gate).
-6. **Command surface across the link should be semantic** (`set head angle`, `drive wheels`, `display face`), not raw PWM — per the system-design-brief's "behaviour expresses intent, controllers enforce physics," and mirrored by Vector's SDK proto.
+6. **Command surface across the link should be semantic** (`set head angle`, `drive wheels`, `set face state/parameters`), not raw PWM or streamed raster frames — per the system-design-brief's "behaviour expresses intent, controllers enforce physics," and mirrored by Vector's SDK proto.
 
 ## 8. Open items → RP-02 / ADR-12 / ADR-06
 
 - [ ] Decide compute placement (Option A / B / C) from RP-01 cable-behaviour + RP-02 backbone evidence.
-- [ ] Confirm head-aggregation MCU candidate (Nano 33 BLE Sense) against the RP-01 3-axis timing budget.
+- [ ] Validate the selected D2 display path with no-touch Waveshare SKU 30493: installed mass/CoM, animation frame time, optical result, power/thermal behaviour, complete moving harness and fault response.
+- [ ] Compare C1 Nano aggregation against C2 display-MCU + external-SPI-IMU using installed mass/CoM, three-axis timing, display concurrency, watchdog/fault containment and harness evidence.
 - [ ] Register the on-hand Nano revision/IMU and prove the head-sensor sampling/timestamp path used for RP-01 modal and settling measurements.
 - [ ] Select or identify the body-frame IMU path independently of the head IMU; feed it into RP-03 locomotion/heading evidence.
 - [ ] Choose and prototype the internal link (UART/USB first); register the message set + expiry/health semantics.
@@ -149,3 +179,7 @@ On-hand part; a strong candidate for the **head-aggregation MCU** in Option C. N
 |---|---|---|
 | 2026-08-17 | 0.1 | First provisional study created from prior-art research (Vector/Cozmo, humanoid/AV/cobot literature); Nano 33 BLE Sense added as head-aggregation candidate. No selections made. |
 | 2026-08-27 | 0.2 | Separated head-output and body-heading IMU responsibilities; aligned Option C with the body-mounted microphone array and added exact-revision/high-rate head-IMU checks. |
+| 2026-08-28 | 0.3 | Split hybrid head aggregation into C1 Nano and C2 display-MCU + external-IMU candidates; made installed mass, display concurrency and local fault handling the selection evidence. |
+| 2026-08-29 | 0.4 | Applied the exact 4.3-inch AMOLED search: marked head-SBC Option A as baseline-revision-only, replaced the blanket Linux-rendering assumption with semantic body ownership, and defined D1 body-raster versus D2 head-raster paths for the raw MIPI panel candidates. |
+| 2026-08-29 | 0.5 | Replaced the blocked AMOLED-controller hypothesis with the India-orderable IPS paths; made the ESP32-S3/LVGL head renderer the first D2 prototype while keeping motion safety on a dedicated controller. |
+| 2026-08-29 | 0.6 | Propagated the builder's SKU 30493 lock: D2 head-local display rendering is now selected while the internal transport, motion controller and safety boundary remain evidence-gated. |

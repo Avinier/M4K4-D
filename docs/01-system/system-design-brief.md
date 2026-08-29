@@ -3,13 +3,13 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.2 |
+| Version | 1.3 |
 | Owner | Project builder |
 | Created | 2026-08-14 |
-| Last reviewed | 2026-08-27 |
+| Last reviewed | 2026-08-29 |
 | Authority | Derived from the approved `docs/00-foundation/` documents |
 
-This brief defines the engineering problem Makad's system architecture must solve. It sits between the approved foundation and the later architecture, prototypes, subsystem specifications, component choices, and CAD. It does not repeat Core capabilities as "shall" requirements — the foundation owns those. At its original approval it did not select a drive type or physical dimensions; `dimensional-baseline.md` now supplies those downstream decisions. It still does not select exact motors, processors, cameras, actuators, batteries, frameworks, or suppliers.
+This brief defines the engineering problem Makad's system architecture must solve. It sits between the approved foundation and the later architecture, prototypes, subsystem specifications, component choices, and CAD. It does not repeat Core capabilities as "shall" requirements — the foundation owns those. At its original approval it did not select a drive type, physical dimensions or components; downstream baselines now supply the drive/dimensional decisions and the locked no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493, face display. It still does not select exact motors, main processors, cameras, actuators, batteries, frameworks, suppliers or the internal transport.
 
 ## 1. System boundary
 
@@ -248,14 +248,14 @@ The brief does not select:
 
 - processors, microcontrollers, operating systems, middleware, or programming languages;
 - exact motors, transmissions, wheel/caster/skid parts, drivers, or encoder implementations within the selected two-wheel differential-drive/support topology;
-- camera, display, microphone, speaker, light, sensors, or battery;
+- camera, microphone, speaker, light, sensors, or battery; the face display is the explicit exception locked downstream as no-touch Waveshare SKU 30493;
 - the exact actuators, transmissions, bearings, encoders, joint order, ranges, and implementation of the required roll/pitch/yaw head;
 - vision, speech, language, behaviour, animation, or control libraries;
 - detailed APIs, message schemas, update rates, or process boundaries;
 - manufacturing tolerances, detailed shell geometry, material selection, or CAD layout within the current dimensional baseline;
 - final numeric acceptance thresholds.
 
-These decisions require the budgets, trade studies, and prototype evidence above. Existing `specsheets/` may suggest candidates, but nothing in them is adopted automatically.
+These decisions require the budgets, trade studies, and prototype evidence above. Existing `specsheets/` may suggest candidates, but nothing in them is adopted automatically. The selected display was adopted explicitly by the project builder and is governed by `display-candidate-study.md` change control.
 
 ## 12. Downstream documents
 
@@ -267,4 +267,4 @@ This brief feeds the following documents:
 4. `physical-architecture.md` will define envelopes, placement, centre of mass, moving clearances, wiring, cooling, and service paths.
 5. `subsystem-interfaces.md` will define observations, state, semantic intents, bounded commands, feedback, health, timebase, and fault behaviour.
 
-Approved 2026-08-14: the system boundary, architecture drivers, responsibility model, decision register, budget categories, prototype portfolio, and mechanical/firmware-first order are the V1 baseline. That approval did not select components, mechanisms, deployment technology, or numeric thresholds. Version 1.1 recorded the later dimensional/drive selections. Version 1.2 consumes `dimensional-baseline.md` v1.2 and its ear-pod mechanical-access clarification without selecting Concept A, an actuator, or an unvalidated prototype limit.
+Approved 2026-08-14: the system boundary, architecture drivers, responsibility model, decision register, budget categories, prototype portfolio, and mechanical/firmware-first order are the V1 baseline. That approval did not select components, mechanisms, deployment technology, or numeric thresholds. Version 1.1 recorded the later dimensional/drive selections. Version 1.2 consumes `dimensional-baseline.md` v1.2 and its ear-pod mechanical-access clarification without selecting Concept A, an actuator, or an unvalidated prototype limit. Version 1.3 records the project builder's explicit selection of the no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493; it does not select its supplier, the wider controller topology or another component.

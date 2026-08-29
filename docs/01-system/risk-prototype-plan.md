@@ -3,11 +3,11 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.4 |
+| Version | 1.7 |
 | Owner | Project builder |
 | Created | 2026-08-14 |
-| Last reviewed | 2026-08-27 |
-| Depends on | Approved `docs/00-foundation/constraints.md` v1.2, other foundation documents, `system-design-brief.md` v1.2, and `dimensional-baseline.md` v1.2 |
+| Last reviewed | 2026-08-29 |
+| Depends on | Approved `docs/00-foundation/constraints.md` v1.2, other foundation documents, `system-design-brief.md` v1.2, and `dimensional-baseline.md` v1.6 |
 | Decision authority | Project builder |
 
 The prototypes are decision instruments, not partial versions of the final droid. They may use open frames, ballast, external measurement equipment, temporary controllers, and bench power where those choices produce better evidence. A polished appearance is not a pass condition. The approved bench setup and powered-test readiness gate live in `workbench.md`; powered scored testing remains blocked until that gate is satisfied for the active rig and test.
@@ -123,7 +123,7 @@ Can a manufacturable powered roll/pitch/yaw mechanism carry a representative Mak
 
 - At least two plausible joint-order/support/actuation concepts unless sourcing or calculation eliminates one before fabrication.
 - Concept A is the elevated ear-pivot serial gimbal documented in `../02-prototypes/RP-01-head/concepts/`; it remains a candidate until compared with Concept B and scored evidence.
-- Current **~250 g** representative moving-head target, centre of mass, inertia proxy, **100 H × 180 W × 130 D mm** envelope, camera/display/light envelopes, 60 mm neck allocation, cable bundle, service clearances, and structural margin from `dimensional-baseline.md`, the mass/envelope ledger, and RP-06. Microphones and speaker are body-mounted, not moving-head ballast.
+- Current **~250 g** representative complete moving-head target and sensitivity bound, per-axis downstream mass tree, centre of mass, inertia proxy, **100 H × 180 W × 130 D mm** envelope, camera/display/light envelopes, 60 mm neck allocation, cable bundle, service clearances, and structural margin from `dimensional-baseline.md`, the mass/envelope ledger, and RP-06. Microphones and speaker are body-mounted, not moving-head ballast.
 - Candidate controller loop, feedback strategy, limits, homing/calibration method, watchdog, and command-expiry behaviour.
 - Preliminary motion storyboard listing the attention, wake, bob, tilt, reversal, tracking-correction, settle, and safe-rest moves the mechanism must support.
 
@@ -135,19 +135,19 @@ Use a rigid guarded bench fixture with adjustable ballast at the representative 
 
 1. Check static support, fasteners, stops, clearances, cable path, and unpowered movement.
 2. Characterize each axis separately at low energy through its proposed range and both directions; for near-CoM candidates, compare the preregistered axis/ballast points without changing fixture stiffness.
-3. Measure repeatability and small-command reversal around representative expressive poses; then run a distinct impact/tap modal test on the same fixture rather than treating backlash and resonance as one measurement.
+3. At fixed commands, measure complete-output load–position hysteresis under a registered bidirectional load sweep and hunting/current during representative hold dwells; then run a distinct impact/tap modal test on the same fixture rather than treating reversal behaviour and resonance as one measurement.
 4. Run step, ramp, smooth trajectory, tracking-correction, and settle profiles with representative ballast.
 5. Exercise coordinated two- and three-axis wake/attention trajectories, including reversals and interruptions.
 6. Repeat tests at relevant head orientations so gravity, cross-axis loading and cable restoring torque vary.
 7. Inject command timeout, controller restart, feedback loss, and high-level link loss without defeating the physical stop.
-8. Run a preregistered busy-minute RMS/current/thermal sequence before actuator freeze, then a repeated-motion/endurance block and remeasure backlash, fastener state, temperature, cable condition, and calibration drift.
+8. Run a preregistered busy-minute RMS/current/thermal sequence before actuator freeze, then a repeated-motion/endurance block and remeasure loaded hysteresis/hold hunting, fastener state, temperature, cable condition, and calibration drift.
 
 ### Measurements
 
 - usable roll/pitch/yaw range and forbidden/collision region;
 - static torque/load estimate, torque/current at the simultaneous required speed, and busy-minute RMS current by trajectory; keep transient and continuous/thermal screens separate;
 - command-to-motion latency and control update timing;
-- absolute/tracking error, repeatability, small-motion resolution, reversal deadband/backlash, overshoot, settling time, and cross-axis coupling;
+- absolute/tracking error, repeatability, small-motion resolution, complete-output loaded hysteresis, reversal delay, hold hunting/current, overshoot, settling time, and cross-axis coupling;
 - structural deflection, vibration, acoustic level/character, and camera image disturbance;
 - temperature rise, calibration drift, angle-dependent cable restoring torque, cable twist/flex, connector movement, and fastener retention;
 - head-output IMU data separated from body-frame heading/attitude data whenever both frames are in scope;
@@ -353,7 +353,7 @@ Sourcing/envelope updates continue during RP-01 through RP-05. Final closure occ
 
 ### Mock-up and procedure
 
-Build an adjustable physical mock-up or envelope rig using sourced dimensions and realistic mass dummies inside `dimensional-baseline.md`. Include the head display/window, central camera, status light/optics, ~250 g moving-head target, head structure/joints and moving cable bends/connectors. In the body, include the four-microphone PDM array, speaker/enclosure, low and forward battery placement, primary electronics/compute, cooling paths, fasteners and service-removal paths.
+Build an adjustable physical mock-up or envelope rig using sourced dimensions and realistic mass dummies inside `dimensional-baseline.md`. Include the selected no-touch Waveshare ESP32-S3-LCD-4.3 (SKU 30493), its window/mount/connectors, the selected visible-light Raspberry Pi Camera Module 3 Wide (SC0874), its mount/connector/moving interconnect, status light/optics, ~250 g moving-head target, head structure/joints and remaining moving cable bends/connectors. In the body, include the four-microphone PDM array, speaker/enclosure, low and forward battery placement, primary electronics/compute, cooling paths, fasteners and service-removal paths.
 
 Evaluate display/face legibility over registered angles/distances/lighting; camera field of view and occlusion throughout head motion; LED visibility, light leakage and camera interference; speaker output and enclosure vibration; microphone contamination; heat-source spacing; cable motion; assembly order; and removal of named high-risk modules.
 
@@ -378,7 +378,7 @@ Evaluate display/face legibility over registered angles/distances/lighting; came
 
 ### Exit decision
 
-Select the provisional head sensory/display/audio layout and sourcing strategy for ADR-01, ADR-08 and ADR-11. Export binding envelopes and margins to `physical-architecture.md` and the next head-CAD iteration.
+Select the provisional head sensory/audio layout and sourcing strategy around the already locked display for ADR-01, ADR-08 and ADR-11. Export binding envelopes and margins to `physical-architecture.md` and the next head-CAD iteration. Reopen the display selection only through the recorded hard-failure change-control rule in `display-candidate-study.md`.
 
 ## RP-07 — Person tracking and short household following loop
 
@@ -477,6 +477,8 @@ The architecture phase may begin with provisional option studies while prototype
 
 ## Approval note
 
-Approved by the project builder on 2026-08-17. Approval adopts the seven-prototype portfolio, roadmap, dependency order, threshold-registration policy, evidence-packet requirements, pass/iterate/reject/defer model, Core-failure rule, and decision-closeout process as the V1 risk-reduction baseline. Version 1.2 (2026-08-22) removes the per-prototype planning time boxes; iteration control is exercised through the gate-outcome review rule rather than calendar estimates. Version 1.3 (2026-08-25) consumes the selected dimensional/drive baseline and adds its CoM, caster-lift, skid, and forward-acceleration validation inputs to RP-03. Version 1.4 (2026-08-27) records the first credible RP-01 mechanism candidate and tightens the axis/CoM, backlash-versus-modal, harness-restoring-torque, busy-minute thermal, and head/body IMU evidence methods; it selects no mechanism or actuator and freezes no numeric gate.
+Approved by the project builder on 2026-08-17. Approval adopts the seven-prototype portfolio, roadmap, dependency order, threshold-registration policy, evidence-packet requirements, pass/iterate/reject/defer model, Core-failure rule, and decision-closeout process as the V1 risk-reduction baseline. Version 1.2 (2026-08-22) removes the per-prototype planning time boxes; iteration control is exercised through the gate-outcome review rule rather than calendar estimates. Version 1.3 (2026-08-25) consumes the selected dimensional/drive baseline and adds its CoM, caster-lift, skid, and forward-acceleration validation inputs to RP-03. Version 1.4 (2026-08-27) records the first credible RP-01 mechanism candidate and tightens the axis/CoM, backlash-versus-modal, harness-restoring-torque, busy-minute thermal, and head/body IMU evidence methods; it selects no mechanism or actuator and freezes no numeric gate. Version 1.5 (2026-08-28) adds per-axis mass accounting, makes the roll-support/display section a Concept-A blocker, and replaces an endpoint “lost motion” proxy with loaded hysteresis plus hold-hunting evidence. Version 1.6 (2026-08-29) consumes the project builder's locked no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493, and makes RP-06 validate the layout around that exact module rather than rerun display selection.
 
-Except for the later-adopted dimensional/drive topology baseline, plan approval does not approve an exact component, supplier, mechanism implementation, or numeric `SC-TBD-*` or `CON-TBD-*` gate threshold. `workbench.md` was approved separately on 2026-08-17 and incorporated as the Stage 0 baseline in version 1.1 of this plan. Numeric prototype gates remain subject to preregistration before scored runs, and powered scored testing remains blocked until the approved readiness gate's safety, instrumentation, configuration, and logging requirements are satisfied.
+Version 1.7 (2026-08-29) consumes the project builder's locked visible-light Raspberry Pi Camera Module 3 Wide, order code SC0874, and makes RP-01/RP-06/RP-07 validate that exact camera while keeping the supplier, body SBC and production moving interconnect open.
+
+Except for the later-adopted dimensional/drive topology baseline, the selected no-touch Waveshare display SKU 30493 and the selected visible-light Raspberry Pi Camera Module 3 Wide SC0874, plan approval does not approve another exact component, supplier, mechanism implementation, production camera interconnect, or numeric `SC-TBD-*` or `CON-TBD-*` gate threshold. `workbench.md` was approved separately on 2026-08-17 and incorporated as the Stage 0 baseline in version 1.1 of this plan. Numeric prototype gates remain subject to preregistration before scored runs, and powered scored testing remains blocked until the approved readiness gate's safety, instrumentation, configuration, and logging requirements are satisfied.

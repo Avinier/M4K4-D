@@ -71,7 +71,7 @@ These are provisional **usable** ranges. Mechanical hard stops, cable limits and
 | Conversational | 0.6–1.2 s complete phrase | Clear initial stroke plus readable hold/settle |
 | Fast sharp pitch/yaw | Primary statement within 250–350 ms; phrase within 1.0 s | Primary statement within 150–250 ms; phrase within 0.8–1.0 s |
 | Roll wobble | `±8°`, rounded reversals, 1.0–1.3 s | `±12°`, rounded declining reversals, optional small yaw coupling, 0.9–1.2 s |
-| Micro-motion | Intentional `≥4°`, 2 grouped pulses in 0.80 s | Intentional `2–5°`, 3 grouped pulses in a 0.68 s active window with low reversal loss |
+| Micro-motion | Intentional `≥4°`, 2 grouped pulses in 0.80 s | Intentional `2–5°`, 3 grouped pulses in a 0.68 s active window with low loaded hysteresis and no hold hunting |
 | Controlled cancellation | No new expressive keyframe after cancellation; settle proposal ≤500 ms | Settle proposal ≤300 ms where the validated load permits |
 
 “Fast sharp” never means a step command or maximum servo speed. It means a shaped stroke whose onset is legible, whose peak acceleration is bounded, and whose exit is slower than its entrance.
@@ -82,24 +82,25 @@ These values are design inputs, not registered gates:
 
 | Property at the head output | Minimum viable | Best-case target | Why |
 |---|---:|---:|---|
-| Total reversal lost motion | `≤0.50°` | `≤0.25°` | A 2° tracking correction and the laugh's 2° reverse excursion must remain visibly intentional after gearbox lash, joints/linkages and control deadband |
+| Complete-output loaded reversal hysteresis | `≤0.50°` | `≤0.25°` | A 2° tracking correction and the laugh's 2° reverse excursion must remain visibly intentional after gearbox lash, joints/linkages, compliance and closed-loop control behaviour |
 | First loaded yaw/roll structural mode `f₁` | `≥25 Hz` screening target | `≥30 Hz` target | Separates these axes' first loaded modes from their authored reversal content and reduces visible ring-down risk |
 | First loaded pitch structural mode `f₁` | `≥30 Hz` for the minimum-viable laugh | `≥40 Hz` for the unshaped best-case laugh | The best laugh contains a 100 ms pitch reversal, with characteristic content around 10 Hz and useful higher-frequency content |
 
-Lost motion is measured at the head output under representative load, in both directions and on every axis; an actuator's gear material or protocol is not evidence of compliance. The `f₁` targets are CAD/bench screening targets, not mathematical guarantees of 300 ms settling: damping, controller bandwidth and trajectory shaping must also be measured. A pitch result between 30 and 40 Hz does not automatically reject the mechanism, but the best-case laugh then requires validated input shaping or a slower trajectory whose speed/acceleration is re-derived and registered. Use an impact/tap test with an accelerometer, IMU or correlated acoustic measurement before control tuning, then confirm with commanded motion.
+Loaded hysteresis is measured at the head output under representative reversing load, in both sweep directions and on every axis; hold hunting is measured during a separate fixed-command dwell. An actuator's gear material, protocol or internal position readback is not proof of complete-output behaviour. The `f₁` targets are CAD/bench screening targets, not mathematical guarantees of 300 ms settling: damping, controller bandwidth and trajectory shaping must also be measured. A pitch result between 30 and 40 Hz does not automatically reject the mechanism, but the best-case laugh then requires validated input shaping or a slower trajectory whose speed/acceleration is re-derived and registered. Use an impact/tap test with an accelerometer, IMU or correlated acoustic measurement before control tuning, then confirm with commanded motion.
 
-### 2.5 Candidate reversal lost-motion test
+### 2.5 Candidate loaded-hysteresis and hold-hunting test
 
 This is the runnable draft method to convert the output budget into evidence after `τ_peak,op` is available from the mass/CoM analysis:
 
 1. Energize the complete head/neck assembly at a fixed mid-range command under representative head mass. Test neutral and the axis's worst registered off-neutral load pose.
 2. Attach a rigid lever or use a rigid head feature at a measured radius `r = 50.0 mm` from the tested axis. Put a dial indicator tangent to the arc at the **head output**, not at the servo horn.
-3. Apply quasi-static alternating torque `+0.50·τ_peak,op` and `-0.50·τ_peak,op` using a calibrated force gauge or known weight and lever arm. Ramp slowly, allow the reading to settle and avoid exciting structural modes.
-4. Precondition with 10 complete reversals, then record 5 complete measured reversals per axis, pose and direction.
-5. For each reversal, calculate total output reversal displacement `δθ = Δx/r` in radians, where `Δx` is the settled tangential dial-indicator difference between the positive- and negative-torque states. Report the maximum of the measured cycles, not the average.
-6. Candidate acceptance is `δθ ≤0.50°` minimum viable and `≤0.25°` best-case. At `r=50 mm`, those limits are `0.436 mm` and `0.218 mm` respectively.
+3. Apply a slow stepped triangular output-load cycle `+0.50·τ_peak,op → -0.50·τ_peak,op → +0.50·τ_peak,op` using a bidirectional calibrated force gauge and lever arm. Use the same registered load steps in both directions, allow each reading to settle and avoid exciting structural modes.
+4. Precondition with 10 complete load cycles, then record 5 complete measured cycles per axis and pose. At every step log applied torque, independent tangential displacement, commanded position, servo-reported position, current and monotonic time.
+5. Convert independent displacement to output angle with `θ_ext = x/r`. At each matched torque, calculate the separation between the increasing- and decreasing-load branches. Report the maximum branch separation, the settled command error at each endpoint and the time to re-settle after load reversal; do not substitute the positive-to-negative compliance span for hysteresis.
+6. Candidate acceptance for maximum branch separation is `≤0.50°` minimum viable and `≤0.25°` best-case. At `r=50 mm`, those angular limits correspond to branch separations of `0.436 mm` and `0.218 mm`.
+7. After the sweep, dwell at neutral and the registered gravity/preload holds without touching the rig. Record external-angle and current peak-to-peak/RMS behaviour plus any audible chatter. Freeze the dwell duration and hunting thresholds before scored testing.
 
-The measurement intentionally includes gearbox backlash, servo control deadband, horn/spline fit, screw-joint slip, linkage lost motion and printed/structural deflection across the complete transmission path. A servo-shaft or horn-only measurement is not admissible. An output encoder may be logged for correlation, but a 12-bit/revolution encoder is not the primary accept/reject instrument for the 0.25° target.
+The measurement intentionally includes gearbox backlash, servo control behaviour, horn/spline fit, screw-joint slip, linkage motion and printed/structural compliance across the complete transmission path. A servo-shaft or horn-only measurement is not admissible. Servo position readback is logged for correlation, but a 12-bit/revolution encoder is not the primary accept/reject instrument for the 0.25° target.
 
 ## 3. Storyboard panels
 
