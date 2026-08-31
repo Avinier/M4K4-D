@@ -87,7 +87,7 @@ The approved visual and physical direction is:
 - approachable without optimizing for minimum size;
 - open to substantial redesign from the current renders.
 
-The current physical target is **300 H × 205 W × 180 D mm overall**, with a **100 H × 180 W × 130 D mm head**, **Ø84 mm wheels**, **170 mm track**, and **110 mm drive-axle-to-front-caster wheelbase**. The detailed [dimensional and packaging baseline](docs/01-system/dimensional-baseline.md) overrides earlier planning values. Face geometry, shell language, colours, manufacturing tolerances, total mass, exact parts, and internal architecture remain subject to prototype and packaging validation.
+The current physical target is **300 H × 205 W × 180 D mm overall**, with an approximately **95 H × 150 W × 115 D mm nominal head** validated within a **90–100 H × 145–155 W × 110–120 D mm** band, **Ø84 mm wheels**, **170 mm track**, and **110 mm drive-axle-to-front-caster wheelbase**. The head envelope is built outward from the selected 106.1 × 67.8 mm display rather than from the earlier oversized concept-art proportion. The detailed [dimensional and packaging baseline](docs/01-system/dimensional-baseline.md) overrides earlier planning values. Face geometry, shell language, colours, manufacturing tolerances, total mass, exact parts, and internal architecture remain subject to prototype and packaging validation.
 
 ## V1 Core
 

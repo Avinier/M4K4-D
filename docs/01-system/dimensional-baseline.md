@@ -3,9 +3,9 @@
 | Field | Value |
 |---|---|
 | Status | **Current target baseline — supersedes earlier dimensional and packaging assumptions** |
-| Version | 1.6 |
+| Version | 1.7 |
 | Owner | Project builder |
-| Approved | 2026-08-27 |
+| Approved | 2026-08-30 |
 | Feeds | Mass/envelope ledger, RP-01 head, RP-03 drive, RP-06 layout, sourcing, integrated CAD |
 
 ## Authority and interpretation
@@ -24,23 +24,23 @@ This document is the current source of truth for Makad's dimensional, drive-geom
 | Part / parameter | Final / target dimension | Design intent |
 |---|---:|---|
 | Overall Makad size | **300 H × 205 W × 180 D mm** | Keeps the 30 cm target while providing enough chassis depth for stable differential drive |
-| Head size, including ears | **100 H × 180 W × 130 D mm** | Expressive without making the robot excessively top-heavy |
-| Head core, excluding ears | **~100 H × 140–145 W × 125–130 D mm** | Packages the display, unavoidable lightweight display/head-node electronics, camera, brackets, and neck intrusion |
+| Head size, including integrated side pods/pivots | **~95 H × 150 W × 115 D mm nominal; validate within 90–100 H × 145–155 W × 110–120 D mm** | Built outward from the selected 106.1 × 67.8 mm display rather than from the earlier oversized concept-art proportion |
+| Head core, excluding side pods/pivots | **~95 H × 125–130 W × 110–115 D mm** | Allows the selected display, camera, lightweight head electronics, mounts, shell structure and rear connector/service clearance without assuming 140–145 mm core width |
 | Body-top / neck datum | **140 mm above ground** | Main vertical mechanical reference |
 | Neck allocation | **60 mm vertical** | Packaging space for powered yaw, pitch, and roll |
 | Drive wheels | **Ø84 mm nominal** | Mobility, proportions, and motor-speed compromise |
 | Wheel track | **~170 mm centre-to-centre** | Lateral stability and expressive turning |
 | Drive axle to front-caster contact | **~105–115 mm; 110 mm target** | Avoids an excessively short/wide chassis and reduces caster instability |
 
-The baseline stack is geometrically consistent: the 140 mm ground-to-body-top datum, 60 mm neck allocation, and 100 mm head height produce the 300 mm overall-height target. The visible 35–45 mm neck is shorter because the mechanism intrudes into the body and head.
+The nominal vertical stack is 140 mm ground-to-body-top, 60 mm neck allocation and approximately 95 mm head height, producing about 295 mm before small exterior crown/clearance variation. The **300 mm overall height remains the rounded outer target**, not a reason to inflate the head. The visible 35–45 mm neck is shorter because the mechanism intrudes into the body and head.
 
 ## Head and face
 
 | Part / parameter | Final / target dimension | Design intent |
 |---|---:|---|
 | Face/display active area | **95.04 W × 53.86 H mm nominal** | Fixed by the selected no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493 |
-| Face opening / bezel | **~110–120 W × 60–65 H mm visible** | Masks the inactive border; RP-06 must separately clear the selected module's approximately 106.1×67.8 mm hidden PCB/body |
-| Ear pods | **~55–65 mm diameter; ~17–20 mm side protrusion each** | Exterior visual elements with no microphones/sensors; a mechanism candidate may use their internal volume for removable pitch-bearing covers, but only an inner frame/yoke may carry structural load |
+| Face optical aperture and bezel | **~94–95 W × 53–54 H mm optical aperture within a ~110–115 W × 60–65 H mm visible bezel/window treatment** | The optical aperture follows the 95.04 × 53.86 mm active image; RP-06 must separately clear the selected module's approximately 106.1 × 67.8 mm hidden PCB/body |
+| Integrated side pods / pivot covers | **~40–50 mm diameter visual target; ~8–12 mm contribution per side beyond the core, within the 145–155 mm complete-width band** | Covers should integrate required pivots instead of adding decorative width after the mechanism; no microphones/sensors, and only an inner frame/yoke carries structural load |
 | Head mass | **~250 g target** | Controls neck loads and whole-robot centre of mass |
 | Preliminary head inertia | **~0.001 kg·m²** | Starting value for RP-01 neck-actuator calculations |
 | Preliminary neck peak torque | **~0.2 N·m** | Early actuator-sizing estimate; CAD mass properties and RP-01 calculations determine the final value |
@@ -103,7 +103,7 @@ Until RP-03 measures lift onset and dynamic compliance, commanded forward accele
 
 ## Compact handoff
 
-Design around **300 H × 205 W × 180 D mm overall; 100 H × 180 W × 130 D mm head; Ø84 mm wheels; 170 mm track; and 110 mm drive-axle-to-front-caster wheelbase**, with a **~250 g moving head**, **60 mm three-axis neck allocation**, whole-robot CoM at approximately **25 mm forward of the axle and 124 mm high**, a **~70 mm rear skid no more than 14 mm above the floor**, and body-mounted audio, forward-low battery, and primary electronics.
+Design around **300 H × 205 W × 180 D mm overall; approximately 95 H × 150 W × 115 D mm nominal head (validate inside 90–100 H × 145–155 W × 110–120 D mm); Ø84 mm wheels; 170 mm track; and 110 mm drive-axle-to-front-caster wheelbase**, with a **~250 g moving head**, **60 mm three-axis neck allocation**, whole-robot CoM at approximately **25 mm forward of the axle and 124 mm high**, a **~70 mm rear skid no more than 14 mm above the floor**, and body-mounted audio, forward-low battery, and primary electronics.
 
 ## Change control
 
@@ -123,3 +123,4 @@ Design around **300 H × 205 W × 180 D mm overall; 100 H × 180 W × 130 D mm h
 | 2026-08-29 | 1.4 | Propagated the 4.3-inch 800×480 IPS decision and distinguished the 60–65 mm visible opening from the approximately 68 mm hidden module-body clearance required by the first prototype candidate. |
 | 2026-08-29 | 1.5 | Locked the face geometry to the selected no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493, while retaining physical-sample verification of the complete hidden envelope. |
 | 2026-08-29 | 1.6 | Locked the central head-camera envelope to the visible-light Raspberry Pi Camera Module 3 Wide, order code SC0874; retained mount, installed mass and production moving-interconnect validation. |
+| 2026-08-30 | 1.7 | Rebuilt the head envelope bottom-up from the selected 106.1 × 67.8 mm display and 25 × 24 × 12.4 mm camera. Replaced the 180 mm concept-art width with a 150 mm nominal complete width, reduced nominal depth to 115 mm, separated the optical aperture from bezel/window size, and required side pods to integrate rather than add width beyond the mechanical pivots. |

@@ -3,9 +3,9 @@
 | Field | Value |
 |---|---|
 | Status | **SELECTED AND LOCKED — Waveshare ESP32-S3-LCD-4.3, no touch, SKU 30493** |
-| Version | 0.5 |
+| Version | 0.6 |
 | Owner | Project builder |
-| Created / last reviewed | 2026-08-29 |
+| Created / last reviewed | 2026-08-29 / 2026-08-30 |
 | Governs | `candidate-sourcing-matrix.md` face-display row |
 | Feeds | RP-01 moving-head mass/roll-support blockout, RP-02 control topology, RP-06 optical/layout mock-up |
 
@@ -22,7 +22,7 @@ The selected module combines the correctly sized 800×480 IPS panel with a local
 - Published product weight: **0.118 kg**. Treat this as an upper-bound/listing value until the received assembly is weighed without packaging.
 - Software path: ESP-IDF/Arduino plus LVGL; official examples and documentation exist.
 
-This is now a component selection, not a continuing display competition. Its 67.8 mm body may sit behind a smaller 60–65 mm visible opening, but the head CAD must provide hidden clearance and non-contact mounting. Its installed mass is material within the approximately 250 g complete moving-head target and must be measured immediately.
+This is now a component selection, not a continuing display competition. Its 67.8 mm hidden body sits behind an approximately 53–54 mm-high optical aperture; the surrounding visible bezel/window treatment may be 60–65 mm high. The head CAD must provide the full hidden clearance and non-contact mounting. Its installed mass is material within the approximately 250 g complete moving-head target and must be measured immediately.
 
 The acceptance tests below validate integration and establish measured design inputs. They do **not** reopen the selection merely because another screen is cheaper, brighter or lighter. Reopening requires a recorded hard failure: the exact module cannot be procured, cannot fit the approved envelope, forces the head beyond an accepted mass/dynamics limit, cannot meet the registered optical/animation gate, or creates an unresolved safety/reliability fault.
 
@@ -31,7 +31,7 @@ The acceptance tests below validate integration and establish measured design in
 | Requirement | Gate |
 |---|---|
 | Active image | Approximately 95 W × 54 H mm in landscape; 800×480 is the preferred native resolution |
-| Visible opening | Approximately 110–120 W × 60–65 H mm; the hidden panel body may be slightly taller if the head core clears it |
+| Optical aperture / visible treatment | Approximately 94–95 W × 53–54 H mm optical aperture within a 110–115 W × 60–65 H mm bezel/window treatment; the head core separately clears the hidden 106.1 × 67.8 mm module body |
 | Exact module | **Waveshare ESP32-S3-LCD-4.3, no touch, SKU 30493; substitutions require explicit change control** |
 | Technology | Full-colour IPS; no touch |
 | Brightness | 300 nit is acceptable only after RP-06 passes through the actual smoked window; prefer ≥400 nit when mass and controller cost are comparable |
@@ -72,7 +72,7 @@ The ESP32-S3 display board should initially own only display rasterization and f
 ## Mechanical fit
 
 - The 800×480 active image is approximately **95.04 × 53.86 mm**, essentially the current 95 × 54 mm target.
-- A 106 × 68 mm module can sit behind the 110–120 × 60–65 mm visible opening because the opening masks the inactive border; this requires at least about 68 mm hidden vertical cavity clearance.
+- A 106.1 × 67.8 mm module sits behind an approximately 94–95 × 53–54 mm optical aperture. The surrounding bezel/window treatment may occupy about 110–115 × 60–65 mm visually, but it is not the clear aperture. The hidden cavity still requires at least about 68 mm vertical module clearance.
 - Do not clamp the LCD glass or PCB. Use a perimeter carrier with compliant pads, connector access and strain relief.
 - Reserve space for the USB/power connector and any low-bandwidth harness before freezing the roll-support geometry.
 - Verify the module's centre of mass relative to the roll and pitch axes, not merely its ability to fit inside the shell.
@@ -121,3 +121,4 @@ Start RP-06 with **60–70% visible-transmission neutral smoke**, a black intern
 | 2026-08-29 | 0.3 | Recorded the earlier AMOLED sourcing study and controller blockers. |
 | 2026-08-29 | 0.4 | Dropped the AMOLED requirement by project decision; ranked India-available IPS paths and recommended the no-touch Waveshare ESP32-S3-LCD-4.3 as the first prototype purchase. |
 | 2026-08-29 | 0.5 | Project builder locked the no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493, as the V1 display; converted alternatives to change-controlled contingencies and retained integration tests as validation gates. |
+| 2026-08-30 | 0.6 | Rebuilt the head-facing geometry around the selected module: separated the 94–95 × 53–54 mm optical aperture from the larger bezel/window treatment and propagated the smaller head-envelope direction without reopening display selection. |

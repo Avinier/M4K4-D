@@ -1631,7 +1631,7 @@ The escalation function of time boxes is retained in calendar-free form: repeate
 
 ### MEM-20260825-01 — 300 mm Makad geometry and 250 g moving-head target adopted
 **Type:** DECISION  
-**Status:** CURRENT  
+**Status:** PARTIALLY SUPERSEDED by MEM-20260830-01 for the head envelope; drive, mass and placement decisions remain current  
 **Supersedes:** Earlier dimensional, head-ballast, microphone-placement, speaker-placement, and drive-geometry planning assumptions where they conflict  
 **Requirements:** `docs/01-system/dimensional-baseline.md` v1.0; `docs/00-foundation/constraints.md` v1.2
 
@@ -1687,3 +1687,56 @@ The 140 mm body-top datum and 105–115 mm visible body-shell height imply **25�
 **Follow-up**
 - Validate the integrated CoM from CAD and measured component masses.
 - Recompute `a_tip` and `h/d` from the measured CoM before the first scored RP-03 acceleration run.
+
+---
+
+## 2026-08-30 — Display-derived head proportion revision
+
+### MEM-20260830-01 — Head envelope rebuilt bottom-up from selected display and camera
+**Type:** CORRECTION  
+**Status:** CURRENT  
+**Supersedes:** The 100 H × 180 W × 130 D mm complete-head and 140–145 mm core-width assumptions in MEM-20260825-01  
+**Requirements:** `docs/01-system/dimensional-baseline.md` v1.7
+
+The selected Waveshare ESP32-S3-LCD-4.3 no-touch module fixes a 106.1 W × 67.8 H mm hidden body around a 95.04 W × 53.86 H mm active image. Building outward from that real component produces an approximately **95 H × 125–130 W × 110–115 D mm core** and an approximately **95 H × 150 W × 115 D mm nominal complete head**, to be validated within **90–100 H × 145–155 W × 110–120 D mm**.
+
+The optical aperture is now distinguished from its surround: approximately 94–95 W × 53–54 H mm clear aperture inside a roughly 110–115 W × 60–65 H mm bezel/window treatment. Compact 40–50 mm side pods may cover required pivots, but their width contribution is limited to approximately 8–12 mm per side and must remain inside the complete-head width band rather than being added afterward.
+
+The approximately 95 mm head height plus the 140 mm body-top datum and 60 mm neck allocation gives a nominal 295 mm stack. The 300 mm overall height remains a rounded outer target and does not require inflating the head.
+
+**Why**
+- The earlier 180 mm width came from a top-down visual proportion and made the head, pods and yoke read too wide on a 300 mm robot.
+- The selected display and camera now provide real package anchors for width and height.
+- The previous 130 mm depth lacked a selected-component derivation; 110–120 mm is the active validation band until the roll support, connectors and cable service loops are blocked out.
+
+**Consequences**
+- RP-01 fixtures, ballast geometry, concept comparisons and swept-envelope work use the smaller v1.7 head envelope.
+- Side pods integrate the mechanical pivots instead of becoming a second additive width allowance.
+- RP-06 must validate the height/depth trade between the stacked camera, display PCB, rear connector clearance and roll support before CAD freeze.
+
+---
+
+## 2026-08-31 — RP-01 head material, finish and mass correction
+
+### MEM-20260831-01 — RP-01 PLA/finish system locked and 250 g head target rejected
+**Type:** DECISION + CORRECTION  
+**Status:** CURRENT FOR RP-01; final Makad material and measured head mass remain open  
+**Supersedes:** The approximately 250 g moving-head target, approximately 0.001 kg·m² preliminary inertia and approximately 0.2 N·m preliminary neck-torque sizing inputs in MEM-20260825-01 for RP-01 design and scored-load use  
+**Requirements:** `docs/02-prototypes/RP-01-head/material-finish-mass-decision.md`; `docs/02-prototypes/RP-01-head/payload-mass-capture.md`
+
+The project builder locked eight RP-01 build decisions: all printed structure and skin use PLA; PLA remains a prototype choice rather than the final Makad material; M010–M012 stay provisional until thermal/creep evidence closes; visible industrial-design fasteners are real M2 button-head screws; the full nine-step chipped-paint/weathering process is required; cosmetic seams are integral/faked except where service needs a real split; adjacent panel heights are modelled 0.3–0.5 mm apart; and the 250 g complete-head target is infeasible for this build.
+
+The selected Waveshare ESP32-S3-LCD-4.3 no-touch SKU 30493 board fits the revised head envelope at 106.1 × 67.8 mm, but width is tight and the wider 110–115 mm window treatment requires a full-width opaque rear mask. The sealed head also requires a flashing/service path. A separable harness boundary at yaw is required so the moving harness and complete M900 head can be weighed without cutting conductors.
+
+The current row-by-row planning model is approximately **490 g at 1.2 mm PLA walls** and approximately **472 g at 1.0 mm walls**. These are `D`/`E` planning values, not accepted measurements. `W` evidence remains the only source for the final mass roll-up. M019 is retired in favour of the irreversible M019a bare → M019b coated → M019c installed/finished sequence, and visible M2 hardware is separately owned by M021a.
+
+**Why**
+- Confirmed display geometry, printable shell area and the required finish/hardware stack independently make 250 g unattainable.
+- PLA gives RP-01 the best stiffness/finish/iteration trade, while explicit provisional flags preserve an honest PETG/ASA fallback if sealed-head temperature or sustained-load creep fails.
+- Integral cosmetic seams preserve monocoque stiffness and avoid approximately 28 g of unnecessary joint hardware.
+
+**Consequences**
+- RP-01 physics, rig ballast, concept comparison and gates use the approximately 490 g planning build-up until replaced by measured per-axis mass, CoM and inertia evidence.
+- Any actuator conclusion based on the old mass, inertia or approximately 0.2 N·m estimate is reopened; the authored motion vocabulary remains intent, but torque-speed, current, thermal and settling feasibility must be recomputed.
+- CAD must implement panel offsets, printable detail minima, full-width masking, display flashing access and the separable yaw-plane boundary.
+- The system-level dimensional/mass baseline, neck torque model, actuator family screen and whole-robot CoM/tip model require controlled downstream revision.

@@ -4,7 +4,7 @@
 |---|---|
 | Status | Not started (thresholds come from `intent.md` + `storyboard.md` + `physics.md`; freeze before first scored run) |
 | Authority | Gate definitions and registration-record fields: `risk-prototype-plan.md` §RP-01. This file holds the registered numeric versions. |
-| Physical baseline | `../../01-system/dimensional-baseline.md`; current moving-head target ~250 g |
+| Physical baseline | `material-finish-mass-decision.md`; current RP-01 planning load ~490 g at 1.2 mm PLA pending measured per-axis tree and system-baseline revision |
 
 Gates to register (from the plan):
 
@@ -23,7 +23,11 @@ This matrix prepares coverage from `storyboard.md`; it does **not** freeze a thr
 
 | Case | Storyboard input | Candidate gate coverage | What must eventually be measured |
 |---|---|---|---|
-| Representative head load and envelope | Complete head 100 H × 180 W × 130 D mm; ~250 g target; selected Waveshare no-touch SKU 30493 display and selected visible-light Camera Module 3 Wide SC0874 at measured module/installed mass; preliminary `J≈0.001 kg·m²` | G02–G06 | registered per-axis downstream mass tree plus 250 g complete-head sensitivity bound, as-built/CAD CoM, inertia proxy, axis offsets, ballast revision, selected-display/camera clearance proxies and complete moving interconnect; preliminary `~0.2 N·m` is not itself a gate |
+| Representative head load and envelope | Complete head ~95 H × 150 W × 115 D mm nominal, validated within 90–100 H × 145–155 W × 110–120 D mm; current `E` build-up ~490 g at 1.2 mm PLA / ~472 g at 1.0 mm; selected Waveshare no-touch SKU 30493 display and visible-light Camera Module 3 Wide SC0874 | G02–G06 | registered per-axis downstream mass tree, as-built/CAD CoM and inertia, axis offsets, ballast revision, selected-display/camera clearance proxies and complete moving interconnect. The old 250 g, `J≈0.001 kg·m²` and `~0.2 N·m` values are not admissible scored-load inputs. |
+| Finish-system mass and scale | 60 × 60 mm representative PLA coupon using the complete nine-step finish process | G05, G06 | bare/finished mass after ≥24 h cure, coating g/cm², exact products/passes and visual `PASS/ITERATE` for texture/chip/detail scale before M019a is coated |
+| PLA thermal/creep viability | M010–M012 representative structure under worst credible parked pitch/roll load at measured sealed-head temperature | G01, G03–G06 | preregistered dwell duration, load/moment, maximum in-dwell deflection, residual deformation and inspection method; failure selects the recorded PETG/ASA structural fallback rather than being waived |
+| CAD access and mass-boundary closure | Full-width opaque rear window mask; display flashing path; yaw-plane demateable connector/cut plane; minimal real service seams | G04–G06 | optical/interior concealment, flash/service demonstration, M020/M900 weighability without cutting, service access and no unowned/double-counted mass rows |
+| Depth challenge | Current 110–115 mm core depth versus approximately 90 mm blockout | G03–G05 | display/camera/roll-support/harness clearance, revised shell area/mass, pitch moment arm, service access and stiffness; choose depth before CAD freeze |
 | Gimbal-centre and roll-support sensitivity | Concept A A0/A1/A2 axis-to-CoM points plus rear-cartridge, annular/perimeter and displaced-roll-axis layouts from `physics.md`/concept note | G02–G05 | gravity/hold torque over full travel, busy-minute RMS/current/temperature, unpowered direction, display/camera/yoke/ear clearance, bearing reactions/deflection and revised CoM after mechanism mass is added |
 | Slow smooth pitch | `HM-02` sleep, 28–35° over 2–3 s | G02, G03, G04 | low-speed smoothness, hold load/noise, final settle, safe rest |
 | Fast sharp pitch | `HM-03` wake and `HM-06` yes; Yes critical speed segment 26°/220 ms `MJ5` | G02, G03 | peak current, tracking, overshoot, repeated reversal, ≤1 s phrase feasibility |

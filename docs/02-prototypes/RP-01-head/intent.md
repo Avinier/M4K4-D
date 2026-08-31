@@ -4,8 +4,8 @@
 |---|---|
 | Status | Draft — user-authored head vocabulary captured; numeric storyboard and eye/audio placeholders remain provisional |
 | Owner | Project builder |
-| Last updated | 2026-08-29 |
-| Physical baseline | `../../01-system/dimensional-baseline.md` — overrides earlier head envelope, ballast, and placement assumptions |
+| Last updated | 2026-08-31 |
+| Physical baseline | Current envelope/placement from `../../01-system/dimensional-baseline.md`; RP-01 material/finish/load override in `material-finish-mass-decision.md` pending system-baseline revision |
 | Numeric storyboard | `storyboard.md` — keyframes, angles, timing, minimum viable and best-case envelopes |
 | Feeds | `storyboard.md`, `physics.md`, `gates.md`, RP-01 procedure steps 3–5 |
 | Method | Two passes kept separate: authored intent first, then quantified motion hypotheses. See `docs/intuition.md` §5.1 steps 1–2. |
@@ -29,14 +29,15 @@ The cues below are original Makad design placeholders informed by reference anal
 
 RP-01 designs and tests within the current system baseline:
 
-- complete moving head, including ears: **100 H × 180 W × 130 D mm**;
-- head core, excluding ears: **~100 H × 140–145 W × 125–130 D mm**;
-- selected face display: **Waveshare ESP32-S3-LCD-4.3, no touch, SKU 30493**; nominal active area **95.04 W × 53.86 H mm**, approximately **106.1 W × 67.8 H mm** hidden module body, behind a **~110–120 W × 60–65 H mm** visible face opening/bezel;
-- ear pods: **~55–65 mm diameter**, protruding **~17–20 mm** per side; no microphones/sensors, while a mechanism candidate may use removable shells to conceal pitch-bearing access carried by an inner yoke/frame;
+- complete moving head, including integrated side pods/pivots: **~95 H × 150 W × 115 D mm nominal**, validated within **90–100 H × 145–155 W × 110–120 D mm**;
+- head core, excluding side pods/pivots: **~95 H × 125–130 W × 110–115 D mm**;
+- selected face display: **Waveshare ESP32-S3-LCD-4.3, no touch, SKU 30493**; nominal active area **95.04 W × 53.86 H mm**, approximately **106.1 W × 67.8 H mm** hidden module body, behind a **~94–95 W × 53–54 H mm optical aperture** and within a **~110–115 W × 60–65 H mm** visible bezel/window treatment;
+- integrated side pods/pivot covers: **~40–50 mm diameter** visual target and **~8–12 mm** width contribution per side beyond the core, with the complete head held inside the 145–155 mm band; no microphones/sensors, and structural load remains on an inner yoke/frame;
 - three-axis neck allocation: **60 mm vertical**, with only **~35–45 mm** expected to remain externally visible because the mechanism intrudes into the head and body;
-- moving-head mass target: **~250 g**;
+- RP-01 moving-head planning build-up: **~490 g at 1.2 mm PLA walls** or approximately **472 g at 1.0 mm**; the system-level 250 g target is obsolete for RP-01 sizing and requires controlled revision;
 - selected central moving camera: **Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, SC0874**, 25 W × 24 H × 12.4 D mm; no microphones or speaker in the head;
-- preliminary head inertia **~0.001 kg·m²** and preliminary neck peak-torque estimate **~0.2 N·m**, both subject to replacement by CAD mass properties and axis-specific calculations.
+- all RP-01 skin and structure printed in **PLA**, with M010–M012 explicitly provisional pending thermal/creep evidence; finish and CAD detail follow `material-finish-mass-decision.md`;
+- the preliminary head inertia `~0.001 kg·m²` and preliminary neck peak torque `~0.2 N·m` are historical values invalidated for actuator sizing; replace them with per-axis CAD/as-built mass properties and calculations.
 
 These are packaging and load inputs, not permission to treat the preliminary torque estimate as an actuator requirement. `physics.md` must calculate each candidate mechanism, and `gates.md` must register the representative load/configuration before scored runs.
 

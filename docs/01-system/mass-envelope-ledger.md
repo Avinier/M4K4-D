@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | **Living — dimensional baseline active; remaining mass values provisional.** |
-| Version | 0.9 |
+| Version | 0.10 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-08-29 |
+| Last reviewed | 2026-08-30 |
 | Governed by | `risk-prototype-plan.md` §"Continuous sourcing and data workstream" (deliverable 2) |
 | Consumes | `dimensional-baseline.md`, foundation scale class (`workbench.md`), `system-design-brief.md` responsibility set |
 | Feeds | RP-01 (representative head load), RP-06 (integrated layout), head-CAD, engineering budgets |
@@ -47,11 +47,11 @@ The head is the first mechanical risk (AD-02) and the CAD blocker, so it gets it
 
 | Element | Envelope allowance | Notes |
 |---|---|---|
-| Complete head including ears | 100 H × 180 W × 130 D mm | Moving-head outer target |
-| Head core excluding ears | ~100 H × 140–145 W × 125–130 D mm | Space for display, camera, brackets, and neck intrusion |
+| Complete head including integrated side pods/pivots | ~95 H × 150 W × 115 D mm nominal; validate within 90–100 H × 145–155 W × 110–120 D mm | Moving-head outer target rebuilt from selected component geometry |
+| Head core excluding side pods/pivots | ~95 H × 125–130 W × 110–115 D mm | Space for display, camera, brackets, lightweight electronics, connector/service clearance and neck intrusion |
 | Face display active area | 95.04 W × 53.86 H mm nominal (4.3-inch 800×480 IPS) | Selected no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493 |
-| Face opening / bezel | ~110–120 W × 60–65 H mm visible; ≥68 mm hidden module clearance | Selected module body is approximately 106.1×67.8 mm; listed 118 g is an unverified product value, not yet a mass-ledger measurement |
-| Ear pods | ~55–65 mm diameter; ~17–20 mm side protrusion each | No microphones. Concept A may use removable ear shells as pitch-bearing covers; inner yoke/frame carries load and all bearing/yoke mass remains in the head roll-up. |
+| Face aperture / bezel | ~94–95 W × 53–54 H mm optical aperture within ~110–115 W × 60–65 H mm bezel/window treatment; ≥68 mm hidden module clearance | Selected module body is approximately 106.1 × 67.8 mm; listed 118 g is an unverified product value, not yet a mass-ledger measurement |
+| Integrated side pods / pivot covers | ~40–50 mm diameter visual target; ~8–12 mm contribution per side beyond the core, held inside the 145–155 mm complete-width band | No microphones. Concept A may use removable covers over its pitch bearings; inner yoke/frame carries load and all bearing/yoke mass remains in the head roll-up. |
 | Camera | selected Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, SC0874; 25 W × 24 H × 12.4 D mm | Moves with head (AD-06). Seller-reported mass is not accepted; weigh module, connector retention, mount and the moving portion of the selected interconnect separately. |
 | Status light + optics | LED beside camera (SCOPE-17) | Placement coupled to camera per AD-06 |
 | Roll/pitch/yaw mechanism | 3 axes in a 60 mm vertical neck allocation; joint order not selected | Concept A proposes body-fixed yaw → elevated ear-pivot pitch → head-fixed roll. Near-CoM roll is a gravity target pending a display-clear support/load-path blockout; ≥1 additional credible concept is still required. |
@@ -85,3 +85,4 @@ Body packaging must separately reserve four PDM MEMS microphones, the speaker an
 | 2026-08-29 | 0.7 | Added the adopted IPS prototype envelope and made its unverified 118 g listing value an immediate RP-01 measurement gate rather than a mass assumption. |
 | 2026-08-29 | 0.8 | Replaced the rank-1 candidate wording with the locked SKU 30493 display baseline; actual module and installed masses remain required measurements. |
 | 2026-08-29 | 0.9 | Replaced the generic camera allowance with the locked visible-light Raspberry Pi Camera Module 3 Wide SC0874 envelope; left installed module/mount/interconnect masses as required measurements. |
+| 2026-08-30 | 0.10 | Propagated the display-derived 95 × 150 × 115 mm nominal complete-head envelope, smaller core, optical-aperture distinction and integrated-pivot side-pod width limit from dimensional baseline v1.7. |

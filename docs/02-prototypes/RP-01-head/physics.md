@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Status | Kinematic inputs and preliminary head-load baseline authored; final torque/inertia work remains blocked on CAD mass properties and candidate axis placements |
-| Inputs | `storyboard.md` ranges and kinematic sizing cases; `../../01-system/dimensional-baseline.md`; CAD m, CoM and inertia tensor; candidate axis placements |
+| Inputs | `storyboard.md` ranges and kinematic sizing cases; `../../01-system/dimensional-baseline.md`; `material-finish-mass-decision.md`; `payload-mass-capture.md`; CAD m, CoM and inertia tensor; candidate axis placements |
 | Method | `docs/intuition.md` §5.1 step 3; worked analogue: the Adam head paper |
 
 ## Authored kinematic inputs
@@ -41,15 +41,20 @@ Current proposed best-case usable travel is pitch `-22°…+40°`, yaw `±55°`,
 
 | Input | Current value | How RP-01 uses it |
 |---|---:|---|
-| Complete moving-head envelope | **100 H × 180 W × 130 D mm**, including ears | Clearance, fixture, cable, and candidate-axis packaging boundary |
+| Complete moving-head envelope | **~95 H × 150 W × 115 D mm nominal**, including integrated side pods/pivots; validate within **90–100 H × 145–155 W × 110–120 D mm** | Clearance, fixture, cable, and candidate-axis packaging boundary rebuilt from selected component geometry |
 | Neck allocation | **60 mm vertical** | Packaging boundary for yaw + pitch + roll; actuators may intrude into body/head |
-| Moving-head mass | **~250 g target** | Representative design and ballast target; supersedes the earlier 300–700 g range |
-| Preliminary head inertia | **~0.001 kg·m²** | First actuator-screening calculation only |
-| Preliminary neck peak torque | **~0.2 N·m** | Sanity-check estimate only, not a per-axis selection threshold |
+| Moving-head mass | **~490 g provisional at 1.2 mm PLA; ~472 g at 1.0 mm walls** | `E` planning build-up from `material-finish-mass-decision.md`; replace row-by-row with `W` evidence |
+| Historical system target | **~250 g — obsolete for RP-01 sizing** | Retained only to expose the required system-baseline revision; do not use as representative ballast |
+| Preliminary head inertia | **~0.001 kg·m² — invalidated as a sizing input** | Recompute from revised per-axis geometry; mass alone is insufficient |
+| Preliminary neck peak torque | **~0.2 N·m — invalidated as a sizing input** | Historical sanity check only, not a per-axis threshold |
 
-The moving load includes the selected no-touch Waveshare ESP32-S3-LCD-4.3 SKU 30493 and selected visible-light Raspberry Pi Camera Module 3 Wide SC0874 at their measured module/installed masses, plus shell/structure, required brackets, interfaces, and local wiring. It excludes the four body-mounted microphones, body-mounted speaker, battery, and primary electronics. Before final actuator selection, replace the preliminary inertia with CAD-derived `J_com`, record the complete centre of mass, apply the parallel-axis theorem for each candidate axis, and calculate dynamic plus gravity torque at the controlling storyboard cases. If the representative design cannot approach the ~250 g head target, revise the system baseline explicitly before changing the RP-01 ballast.
+The moving load includes the selected no-touch Waveshare ESP32-S3-LCD-4.3 SKU 30493 and selected visible-light Raspberry Pi Camera Module 3 Wide SC0874 at their measured module/installed masses, the finished PLA shell, moving structure, required brackets, interfaces, bearings, actuators/outputs, visible and structural fasteners, and local wiring. It excludes the four body-mounted microphones, body-mounted speaker, battery and primary body electronics. The display's integrated ESP32-S3 is already part of M001/M002; M008 is only a possible second controller.
 
-The `~250 g` value is a complete moving-head budget and conservative sensitivity bound, not automatically the moving mass of every joint. Register a mass tree for each mechanism: `m_yaw` is everything downstream of yaw, `m_pitch` everything downstream of pitch, and `m_roll` the roll cradle and its payload. Include moving actuators, bearings, yokes, fasteners and harness segments in the appropriate set. Show the 250 g bound beside any lighter preliminary set until the mass tree is weighed or derived from CAD.
+Before actuator selection, replace the provisional rows with the registered per-axis mass tree and CAD-derived `J_com`, record each component/assembly CoM, apply the parallel-axis theorem for each candidate axis, and calculate dynamic plus gravity torque at the controlling storyboard cases. Register `m_yaw` as everything downstream of yaw, `m_pitch` as everything downstream of pitch, and `m_roll` as the roll cradle and its payload. Include moving actuators, bearing portions, yokes, fasteners, finish and harness segments according to their physical mounting boundaries.
+
+The authored speeds and accelerations in `storyboard.md` remain motion requirements; they are not reduced merely because the head became heavier. What is invalidated is any actuator/load conclusion based on the old mass and inertia. Dynamic torque does not simply double with mass because the revised shell, display, structure and actuators change both `J_com` and axis offsets. Recompute the actual inertia tensor and torque-speed operating points.
+
+PLA is locked for RP-01 structure and skin but remains provisional beyond the prototype. The physics result must include sustained-load creep and thermal exposure at representative parked pitch/roll poses. If M010–M012 are reprinted in PETG or ASA, revise their mass, CoM, stiffness and modal estimates rather than applying a density-only correction.
 
 ## Candidate gimbal-centre geometry
 
@@ -71,7 +76,7 @@ These are sensitivity points, not a frozen mechanism specification. The calculat
 
 `component blockout → initial CoM → axis candidate → mechanism mass → revised CoM → torque/RMS comparison`.
 
-For a `250 g` sensitivity bound, A1 (`x=+5 mm`, `z=0`) gives `0.0123 N·m` at neutral, about `0.0114 N·m` at `-22°`, and about `0.0094 N·m` at `+40°`. The earlier `193 g` proxy is about 23% below the 250 g target; equivalently, the 250 g results are about 30% higher than the 193 g results. Final sizing still uses the registered per-axis mass tree rather than either generic value.
+For the `490 g` provisional complete-head sensitivity case, A1 (`x=+5 mm`, `z=0`) gives approximately `0.0240 N·m` at neutral, `0.0223 N·m` at `-22°`, and `0.0184 N·m` at `+40°`. These values scale only the simple gravity term and must not be reported as actuator torque. Final sizing uses the registered downstream mass and inertia for each axis rather than applying the complete-head mass blindly to pitch or roll.
 
 A small persistent load may keep a gearbox on one tooth flank, but preload is a measured mitigation rather than evidence that backlash is gone. Prefer a small fore–aft pitch offset if it retains one torque sign across the usable range. Keep roll close to balance and evaluate a low-rate torsion/elastic bias only if reversal testing warrants it; avoid an arbitrary lateral mass imbalance.
 
@@ -123,4 +128,4 @@ Every number carries its assumption. A cell without a source is a guess wearing 
 
 ## Results
 
-*(spreadsheet link or table here; keep the spreadsheet in this folder)*
+Physical installed-mass evidence is captured in `payload-mass-capture.md`. The per-axis mass tree and CAD-derived CoM/inertia results remain open until that register and the selected mechanism architecture provide the required membership and geometry.

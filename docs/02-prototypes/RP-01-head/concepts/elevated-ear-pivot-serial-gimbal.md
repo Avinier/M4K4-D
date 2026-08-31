@@ -5,7 +5,7 @@
 | Status | **Candidate — not selected; dimensions, actuators and axis placement remain open** |
 | Authored | 2026-08-27 |
 | Joint order | Body-fixed yaw → pitch → head-fixed roll |
-| Physical baseline | 100 H × 180 W × 130 D mm complete head; ~250 g moving-head target; 60 mm neck allocation |
+| Physical baseline | ~95 H × 150 W × 115 D mm nominal complete head within a 90–100 H × 145–155 W × 110–120 D mm validation band; `../material-finish-mass-decision.md` provisional ~490 g at 1.2 mm PLA; 60 mm neck allocation |
 | Feeds | `comparison.md`, `../physics.md`, `../gates.md`, `../rig.md`; later head blockout/CAD |
 
 This note extracts only the credible topology from an unverified, generated-looking reference diagram. Its labels, scale, proportions, motor sizes and bearing sizes are not source data and must not enter CAD or the BOM.
@@ -36,9 +36,9 @@ Evaluate at least these blockout candidates before detailed CAD:
 | A1 light preload | `x=+5 mm`, `z=0 mm` | CoM slightly forward of axis, keeping a small same-sign pitch load across the usable range |
 | A2 packaging compromise | `x=+5 mm`, `z=+10 mm` | Allows practical structure while bounding added holding torque |
 
-These are calculation points, not tolerances. With the earlier `m=0.193 kg` subassembly proxy, A1 produces about `0.007–0.009 N·m` pitch gravity torque across `-22°…+40°`. At the conservative `m=0.250 kg` complete moving-head target, the same point produces about `0.0094–0.0123 N·m`. Both are sensitivity calculations, not final sizing values.
+These are calculation points, not tolerances. With the current `m=0.490 kg` provisional complete-head planning case, A1 produces approximately `0.0184–0.0240 N·m` simple pitch gravity torque across `-22°…+40°`. This is a sensitivity calculation only: pitch does not necessarily carry the complete head, and actuator sizing also requires the actual downstream inertia, speed, friction/cable terms and coupling.
 
-Do not apply one mass blindly to all three axes. Register the actual moving set downstream of each joint: yaw carries the complete moving yaw output; pitch carries the pitch-and-roll output; roll carries only its cradle and payload. Until those as-built/CAD sets exist, show the `250 g` complete-head bound alongside any lighter subassembly proxy so a favorable blockout cannot silently under-size an actuator.
+Do not apply one mass blindly to all three axes. Register the actual moving set downstream of each joint: yaw carries the complete moving yaw output; pitch carries the pitch-and-roll output; roll carries only its cradle and payload. Until those as-built/CAD sets exist, show the `~490 g` provisional build-up and its row assumptions alongside every lighter downstream proxy so a favorable blockout cannot silently under-size an actuator.
 
 Use an iterative convergence loop:
 
@@ -68,7 +68,7 @@ Start with direct pitch actuation as close to the yaw axis as the ear/yoke layou
 
 ## 5. Load path and scale exclusions
 
-The reference diagram's NEMA-style motors, external spur reduction and Lazy-Susan-scale turntable are not Makad parts. A credible implementation uses compact shafts/bearings sized for a ~250 g moving head and fits the 60 mm neck allocation through body/head intrusion.
+The reference diagram's NEMA-style motors, external spur reduction and Lazy-Susan-scale turntable are not Makad parts. A credible implementation uses compact shafts/bearings sized from the revised ~490 g planning build-up and later measured per-axis tree, and fits the 60 mm neck allocation through body/head intrusion.
 
 Every candidate drawing must show:
 
@@ -86,7 +86,11 @@ Before Concept A can be selected, a section through the face, selected no-touch 
 - an annular/perimeter support that leaves the face opening clear, including its mass, diameter, cost and service path;
 - a displaced/lowered roll axis, including the restored vertical CoM offset, gravity torque and thermal penalty.
 
-“Double-supported” is not a substitute for this load-path proof: record bearing spacing, shaft/frame reactions, deflection at the display, and which structure actually closes the moment. The current 125–130 mm head-core depth, selected approximately 106.1 × 67.8 mm module body and 110–120 × 60–65 mm visible face opening are the controlling package, not dimensions from the generated reference.
+“Double-supported” is not a substitute for this load-path proof: record bearing spacing, shaft/frame reactions, deflection at the display, and which structure actually closes the moment. The current 110–115 mm nominal head-core depth, selected approximately 106.1 × 67.8 mm module body, approximately 94–95 × 53–54 mm optical aperture and 110–115 × 60–65 mm bezel/window treatment are the controlling package, not dimensions from the generated reference.
+
+The board fits, but width is tight: after nominal walls and clearance, only about 5–8 mm per side remains. Do not assume substantial side ribs or side-mounted hardware fit. Depth is the opposite problem; compare the current 110–115 mm core with an approximately 90 mm blockout because reduced depth lowers shell mass and pitch moment arm.
+
+The front assembly must include an opaque rear mask across the full window width and a display flashing/service path. The shell/structure is provisional PLA for RP-01; cosmetic seams remain integral, while real splits are limited to service access. CAD must model 0.3–0.5 mm panel height offsets and the minimum feature sizes in `../material-finish-mass-decision.md` without weakening the yoke or monocoque load path.
 
 ## 6. Cable route
 
@@ -97,6 +101,7 @@ The mechanical concept is incomplete without a harness model. Apply the evidence
 - fix the downstream orientation at the yoke, approach pitch near an ear pivot and guide a predominantly single-plane rolling bend;
 - fix orientation again before a deliberate short roll loop or purpose-designed torsion section;
 - provide stationary- and moving-side strain relief plus service connectors only where access and signal integrity justify them;
+- provide a demateable connector or defined separable cut plane at the yaw boundary so M020 and the complete moving M900 assembly can be weighed and serviced without cutting conductors;
 - treat “one mechanical flex zone per degree of freedom” as the routing objective, but do not add passive connectors to the MIPI CSI path at every joint without lane-rate evidence;
 - avoid a slip ring at the current bounded yaw range;
 - measure angle-dependent cable restoring torque, connector motion and live-camera endurance for H1 continuous guided FPC, H2 active bridge/high-flex round link and H3 external diagnostic bypass.
@@ -117,7 +122,7 @@ Joint encoders plus body attitude provide a kinematic head-pose estimate; the he
 ## 8. Evidence required before selection
 
 - sourced/weighed head blockout and revised 3D CoM/inertia;
-- per-axis downstream moving-mass sets plus the `250 g` complete-head sensitivity bound;
+- per-axis downstream moving-mass sets plus the current `~490 g` provisional complete-head build-up and all row assumptions;
 - A0/A1/A2 torque, RMS/current and thermal comparison;
 - complete-output loaded hysteresis and hold-hunting test per axis, plus a combined-motion orientation test;
 - display-clear roll-support section and load-path comparison;
@@ -125,6 +130,8 @@ Joint encoders plus body attitude provide a kinematic head-pose estimate; the he
 - measured cable restoring torque through the usable workspace;
 - 60 mm neck/head-intrusion packaging proof;
 - shell/frame/yoke/bearings/actuators mass roll-up;
+- PLA structural temperature/creep evidence and a recorded PETG/ASA fallback if it fails;
+- full-width window mask, display flashing access and yaw-plane connector/service proof;
 - safe unpowered path and hard-stop/cable-clearance evidence.
 
 Until these exist, Concept A is a credible proposal only.
