@@ -12,6 +12,14 @@ Bench setup and test-readiness gate for Makad prototypes. The current dimensiona
 
 Current starting equipment: one Elegoo kit. Everything else below must be bought or built.
 
+## On-hand bench instruments (not robot hardware)
+
+| Item | Current role | Explicit exclusion |
+|---|---|---|
+| Arduino Nano 33 BLE Sense | Bench instrument for optional IMU resonance/backlash measurement, APDS-9960 auto-brightness/proximity-startle experiments, and early PDM-mic DOA work toward the 13° target | Not installed in RP-01, not a motion controller, not in the head mass ledger or BOM. Its nRF52840 offers BLE, not Wi-Fi. |
+
+These are candidate-feature experiments, not purchase triggers or V1 commitments. Do not buy a XIAO or SPI IMU now.
+
 ## Buy list (Mumbai)
 
 | Item | Spec | ₹ approx | When |

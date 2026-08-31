@@ -67,7 +67,7 @@ BRIGHTNESS 180
 
 Assets and firmware can be updated while stationary; real-time expression commands are tiny. This is better aligned with a three-axis head than HDMI or DSI from the body.
 
-The ESP32-S3 display board should initially own only display rasterization and face communications. A dedicated controller remains responsible for motor limits, watchdog, command expiry and head sensing until RP-02 proves that consolidating those responsibilities is safe under worst-case rendering load.
+The ESP32-S3 display board remains the head-local renderer and face-communications co-processor, not the main Linux/behaviour computer. Its physical chip may also run local motion firmware only under C1, with rendering/communications pinned to Core 0, a high-priority motion task pinned to Core 1, and IRAM-safe servo ISR work. The official carrier schematic now blocks C1's required native GPIO budget, so RP-01 uses the C2 path: a separate ESP32-S3 motion-controller module runs the same firmware while the display board renders. The exact C2 module is unselected and no purchase is authorized.
 
 ## Mechanical fit
 

@@ -47,7 +47,7 @@ The nominal vertical stack is 140 mm ground-to-body-top, 60 mm neck allocation a
 | Neck axes | **Powered yaw + pitch + roll** | Full expressive head motion |
 | Camera | **One central Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, SC0874; 25 W × 24 H × 12.4 D mm module envelope** | Selected 120° diagonal / approximately 102° horizontal FOV simplifies acquisition and gaze geometry; connector, mount and moving-link clearance remain RP-01/RP-06 validation items |
 
-The moving head contains the display, any unavoidable lightweight display controller/head-node electronics and IMU, central camera, required brackets/structure, neck interfaces, and local wiring. **All of those installed items count inside the ~250 g target.** The microphones, speaker, battery, main Linux SBC and other primary electronics are body-mounted and must not be added to RP-01 moving-head ballast unless the baseline is formally revised.
+The moving head contains the display, any unavoidable lightweight display controller/head-node electronics, central camera, required brackets/structure, neck interfaces, and local wiring. **All of those installed items count inside the ~250 g target.** RP-01 has no runtime head IMU; its Nano/IMU bench instruments are excluded. The microphones, speaker, battery, main Linux SBC and other primary electronics are body-mounted and must not be added to RP-01 moving-head ballast unless the baseline is formally revised.
 
 ## Body, neck, and support geometry
 

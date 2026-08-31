@@ -6,7 +6,7 @@
 | Date | 2026-08-31 |
 | Scope | Head shell material, finish system, display-envelope fit and revised mass model |
 | Supersedes for RP-01 | `../../01-system/dimensional-baseline.md` head mass target of approximately 250 g and any RP-01 load/actuator conclusion derived from it |
-| RP-01 effect | The system-level `~250 g` head target is obsolete for RP-01 sizing; use the provisional `~490 g` build-up until replaced by `W` evidence and the per-axis mass tree |
+| RP-01 effect | The system-level `~250 g` head target is obsolete for RP-01 sizing; the earlier `~490 g` build-up is now a **pre-M008 lower bound** until the required C2 motion module is selected and weighed |
 | Feeds | `payload-mass-capture.md`, CAD blockout, `physics.md`, `rig.md`, `gates.md`, actuator selection |
 
 ## 1. Locked RP-01 decisions
@@ -20,7 +20,7 @@
 | D-05 | Apply the complete nine-step finish system in §5. | The chipped-over-dark-substrate finish is central to the chosen visual read. |
 | D-06 | Fake seams except where assembly/service access requires a real split. | A heavily split shell adds about 28 g of flanges, screws and inserts and weakens the monocoque load path. |
 | D-07 | Model panel height offsets of **0.3–0.5 mm** in CAD. | This depth cue cannot be added honestly by paint alone. |
-| D-08 | Treat the **250 g complete-head target as infeasible** for this RP-01 build. | The provisional row build-up is approximately 490 g at 1.2 mm PLA walls. |
+| D-08 | Treat the **250 g complete-head target as infeasible** for this RP-01 build. | The pre-M008 provisional row build-up is approximately 490 g at 1.2 mm PLA walls; required C2 motion hardware adds further mass. |
 
 These eight decisions are change-controlled RP-01 inputs. A later material, finish, seam, fastener, panel-offset or sizing change must name the affected decision ID, state the evidence that displaced it and propagate the resulting mass/CAD changes; it must not silently edit the planning model.
 
@@ -134,7 +134,8 @@ All values below are `E` evidence. They are a planning model only and never merg
 | M005 | Camera installed | 10 g | Camera Module 3 planning mass + retainer |
 | M006 | Camera moving interconnect | 8 g | FPC + stiffeners + strain relief |
 | M007 | Status-light assembly | 5 g | Planning allowance |
-| M008/M009 | Second head-local controller / separate IMU | 0 g conditional | Assumed absent only for this model; final qty 0 requires a decision reference |
+| M008 | Dedicated motion controller, ESP32-S3 module class, conditional on C1 outcome | `U` | C1 fails on the selected carrier, making C2 required; exact module/mount/harness mass is not estimated and must be weighed |
+| M009 | Runtime head IMU | 0 g | Not installed for stationary RP-01; bench IMU is excluded from the ledger |
 | M010 | Roll cradle, provisional PLA | 25 g | Planning allowance |
 | M011 | Pitch yoke, provisional PLA | 35 g | Planning allowance |
 | M012 | Yaw moving interface, provisional PLA | 20 g | Planning allowance |
@@ -144,9 +145,9 @@ All values below are `E` evidence. They are a planning model only and never merg
 | M020 | Non-camera moving harness | 15 g | Planning allowance |
 | M021 | Structural/hidden fasteners | 8 g | Planning allowance |
 | M021a | Visible M2 button-head fastener set | 11 g | Approximately 0.35 g each; separately tradeable and weighed as one kit |
-| **Total** | | **~490 g** | 1.2 mm PLA build |
+| **Total before M008** | | **~490 g** | 1.2 mm PLA build lower bound; excludes required C2 motion hardware |
 
-At 1.0 mm shell walls the corresponding estimate is approximately **472 g**. The finished shell, visible M2 set and bare-display planning value alone total approximately 277 g at 1.2 mm walls, before the window, camera, internal structure, bearings, actuators or harness. This makes the old 250 g target unusable for RP-01 load sizing.
+At 1.0 mm shell walls the corresponding pre-M008 estimate is approximately **472 g**. Add the selected C2 controller, mount, connectors and local harness to either figure before treating it as a representative head load. The finished shell, visible M2 set and bare-display planning value alone total approximately 277 g at 1.2 mm walls, before the window, camera, internal structure, bearings, actuators or harness. This makes the old 250 g target unusable for RP-01 load sizing.
 
 The mass result does not itself alter the authored motion vocabulary. It invalidates actuator/load conclusions calculated from the old mass and preliminary inertia. Recompute the per-axis mass tree, CoM, inertia, transient torque, busy-minute RMS/current/temperature and whole-robot CoM/tip sensitivity before selecting actuators or freezing motion limits.
 
@@ -168,7 +169,7 @@ The mass result does not itself alter the authored motion vocabulary. It invalid
 
 | Item | Consequence |
 |---|---|
-| Neck physics | Replace 250 g sensitivity sizing with the ~490 g planning build-up and then the actual per-axis tree. Dynamic torque must use revised inertia, not a simple mass multiplier. |
+| Neck physics | Replace 250 g sensitivity sizing with the ~490 g pre-M008 lower bound **plus C2** and then the actual per-axis tree. Dynamic torque must use revised inertia, not a simple mass multiplier. |
 | Actuator family | Reopen any XL330-class conclusion; evaluate torque-speed, current, RMS/thermal and feedback quality against the revised load. Heavier moving actuators feed back into the tree. |
 | Structural dynamics | Real seams and heavier finish affect stiffness/mass; retain the existing ≥25 Hz yaw/roll and ≥30 Hz pitch screening targets until registered evidence changes them. |
 | Whole-robot stability | A heavier head raises whole-robot CoM and reduces acceleration margin; propagate after the system baseline accepts a measured/revised value. |
@@ -187,6 +188,6 @@ Open blockers:
 
 1. Print and run the 60 × 60 mm finish coupon through all nine steps; weigh it bare and finished.
 2. Answer the depth and printer-enclosure blockers.
-3. Apply the provisional ~490 g load to the per-axis physics model and actuator-family screen.
+3. Apply the provisional ~490 g pre-M008 lower bound **plus the selected C2 controller** to the per-axis physics model and actuator-family screen.
 4. Weigh bare M001 and M004 samples as soon as they are available.
 5. Replace every provisional row with `W` evidence during the irreversible build sequence.

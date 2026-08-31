@@ -4,11 +4,11 @@
 |---|---|
 | Status | Not started (blocked on Stage 0 workbench readiness + selected concept) |
 | Authority | `workbench.md` scored-test readiness gate; `risk-prototype-plan.md` RP-01 rig requirements |
-| Physical baseline | `material-finish-mass-decision.md`; representative planning load ~490 g at 1.2 mm PLA pending measured per-axis mass tree and system-baseline revision |
+| Physical baseline | `material-finish-mass-decision.md`; representative planning load is ~490 g at 1.2 mm PLA **plus required M008 C2 hardware**, pending module selection, measured per-axis mass tree and system-baseline revision |
 
 Requirements to satisfy (from the plan): rigid guarded bench fixture; adjustable ballast at representative head CoM; commanded + measured joint state on a monotonic clock; independent video with visible timing cue; safe physical stop; measure/derive joint angle, current, voltage, temperature, sound level at fixed position, structural deflection, camera image movement; cable behaviour across the workspace.
 
-The fixture and ballast must represent the approximately **95 H × 150 W × 115 D mm nominal** complete head, validated within **90–100 H × 145–155 W × 110–120 D mm**, the current **~490 g `E` planning build-up at 1.2 mm PLA** (approximately 472 g at 1.0 mm), selected no-touch Waveshare SKU 30493 display envelope/mass, selected visible-light Raspberry Pi Camera Module 3 Wide SC0874 envelope/mass, actual candidate-axis offsets, and CAD-derived CoM/inertia as soon as available. The 250 g system target is historical and must not be the representative scored ballast. Keep ballast adjustable for controlled sensitivity/overload checks, but record the nominal scored configuration explicitly and replace the planning load with the registered `W`/CAD per-axis tree when available. Microphones, speaker, battery and primary body electronics are not part of nominal moving-head ballast.
+The fixture and ballast must represent the approximately **95 H × 150 W × 115 D mm nominal** complete head, validated within **90–100 H × 145–155 W × 110–120 D mm**, the current **~490 g `E` planning lower bound at 1.2 mm PLA** (approximately 472 g at 1.0 mm) **plus M008 C2 controller hardware**, selected no-touch Waveshare SKU 30493 display envelope/mass, selected visible-light Raspberry Pi Camera Module 3 Wide SC0874 envelope/mass, actual candidate-axis offsets, and CAD-derived CoM/inertia as soon as available. The 250 g system target is historical and must not be the representative scored ballast. Keep ballast adjustable for controlled sensitivity/overload checks, but record the nominal scored configuration explicitly and replace the planning load with the registered `W`/CAD per-axis tree when available. Microphones, speaker, battery and primary body electronics are not part of nominal moving-head ballast.
 
 Design notes, deliberately ugly: the rig is a decision instrument, not a mini droid. Every hour spent making it pretty is an hour not spent measuring.
 
@@ -33,8 +33,8 @@ Loaded reversal hysteresis and modal frequency may share this fixture but are **
 
 - Commanded and servo-reported joint position/current/voltage/temperature on the common monotonic timebase, synchronized with applied load and independent external angle.
 - Dial indicator or equivalent independent displacement instrument at the 50.0 mm output radius for the `storyboard.md` reversal method.
-- Head-mounted accelerometer/IMU sampled fast enough to identify the 25–40 Hz target modes; use **≥400 Hz** for the modal test rather than a default 104 Hz convenience configuration.
-- Body-frame IMU or rigid fixture attitude channel whenever chassis/body disturbance is introduced. The head IMU is not the body-heading reference.
+- A **temporary bench-mounted** accelerometer/IMU sampled fast enough to identify the 25–40 Hz target modes; use **≥400 Hz** for the modal test rather than a default 104 Hz convenience configuration. Remove it after the measurement; it is not runtime head hardware.
+- Servo encoders are the runtime RP-01 joint-angle source. Use a bench IMU/accelerometer only when it is useful for modal or backlash evidence, and record its fixture/head frame. When chassis/body disturbance is introduced later, use a base-frame IMU or rigid fixture attitude channel rather than mounting an IMU in the head.
 - Independent video with a visible timing cue and, for combined reversals, an optical face-orientation marker.
 - Inline rail current/voltage logging for peak and preregistered busy-minute RMS/thermal runs.
 - Temperature sensors/readback on every actuator plus head electronics where fitted.

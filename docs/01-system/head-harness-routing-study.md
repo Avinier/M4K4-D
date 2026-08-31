@@ -40,7 +40,7 @@ Do not force every circuit into one physical cable strategy.
 | Camera MIPI CSI-2 | Its own controlled-impedance route. Keep passive connector count minimal; use a continuous guided FPC or an explicitly compatible active bridge. |
 | Display/head-node power and semantic link | Fine-strand power plus UART/USB/CAN candidate as RP-02 decides; may use joint-segmented replaceable branches. |
 | Servo power/bus | Sized and shielded/separated for peak current and noise; route near each axis without sharing camera strain relief. |
-| IMU/status-light/local signals | Keep local to the head node where practical so only low-bandwidth aggregate traffic crosses the neck. |
+| Status-light/local signals | Keep local to the head node where practical so only low-bandwidth aggregate traffic crosses the neck. RP-01 has no runtime head IMU; any temporary bench IMU lead is instrumentation, not a production harness branch. |
 
 ### 2. Condition motion one joint at a time
 
@@ -99,4 +99,3 @@ One “cycle” must be defined by the exact pose sequence, not by a motor revol
 ## Selection rule
 
 Select the production harness only when one candidate passes packaging, restoring-torque, live-signal endurance, installed mass/CoM, EMI/concurrent-load and service-replacement gates. Reopen the selected camera module only if no viable interconnect can be produced without disproportionate mass, latency, cost or architecture change under `camera-candidate-study.md` change control.
-

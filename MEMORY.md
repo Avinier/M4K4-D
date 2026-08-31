@@ -1740,3 +1740,23 @@ The current row-by-row planning model is approximately **490 g at 1.2 mm PLA wal
 - Any actuator conclusion based on the old mass, inertia or approximately 0.2 N·m estimate is reopened; the authored motion vocabulary remains intent, but torque-speed, current, thermal and settling feasibility must be recomputed.
 - CAD must implement panel offsets, printable detail minima, full-width masking, display flashing access and the separable yaw-plane boundary.
 - The system-level dimensional/mass baseline, neck torque model, actuator family screen and whole-robot CoM/tip model require controlled downstream revision.
+
+---
+
+## 2026-08-31 — RP-01 motion-controller and sensing boundary
+
+### MEM-20260831-02 — ESP32-S3 motion firmware selected; Nano/IMU moved to bench work
+**Type:** DECISION  
+**Status:** CURRENT FOR RP-01  
+**Supersedes:** The Nano 33 BLE Sense C1 installed-controller path and the runtime head-IMU assumptions in the prior control-topology study  
+**Requirements:** `docs/01-system/control-topology-options.md` v0.7; `docs/02-prototypes/RP-01-head/payload-mass-capture.md`
+
+RP-01 motion firmware is an **ESP32-S3** implementation from the start. The on-hand Arduino Nano 33 BLE Sense is now a bench instrument only: it is not installed in the head, does not enter the mass ledger, and does not create a second motion-firmware target. Its nRF52840 is BLE-only, not Wi-Fi.
+
+The preferred C1 arrangement would have shared the selected display board's ESP32-S3 between rendering and local motion. Its mitigation is explicit: renderer/communications on Core 0, a high-priority motion task on Core 1, and IRAM-safe servo ISR work. Any future C1 consideration requires a same-chip timing comparison with rendering off and on.
+
+The official Waveshare SKU 30493 carrier schematic closes the electrical gate first. The RGB565 panel and timing consume 20 GPIO; the remaining nets are assigned to SD, I²C/CH422G, RS-485, USB/CAN or USB-UART. The original future-ready screen needs ten clean native GPIO for SPI, half-duplex servo bus/direction, E-stop, fault and interrupt. Stationary RP-01 removes the runtime-IMU portion but still needs five clean motion/safety signals; the carrier plainly exposes only GPIO6. The CH422G expander is not an acceptable deterministic motion/safety substitute. **C1 is therefore unavailable on the selected carrier.** C2—a dedicated ESP32-S3 motion-controller module—becomes the active RP-01 implementation path, but its exact module remains unselected and no purchase is authorized.
+
+Because the previous 490 g build-up carried M008 as zero while C1/C2 was unresolved, it is now a **pre-M008 lower bound**, not a complete C2-head prediction. Do not invent that module's mass: add it only after selecting and weighing the installed C2 module, mount, connectors and harness.
+
+Stationary RP-01 uses servo encoders for runtime joint angle and has no installed IMU. A bench IMU may be used for backlash and resonance measurements. APDS-9960 auto-brightness/proximity-startle and PDM-mic early DOA work toward the 13° target are candidate bench experiments only. When locomotion arrives, the runtime IMU belongs on the base; a head-mounted IMU would require subtracting neck motion from commanded angles and reintroduce the SPEC-09 timing-skew problem.

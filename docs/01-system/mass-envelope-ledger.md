@@ -18,7 +18,7 @@ This ledger is the **head-CAD blocker** named in the plan. `dimensional-baseline
 - One person places it on a large tabletop for demonstrations (SCOPE-11) → **table-liftable**.
 - "Compact enough to remain approachable" without size minimization (vision).
 - Single household room; following capped at **0.5 m/s** (CON-19).
-- Powered three-axis head carrying the display, any unavoidable lightweight display/head-node electronics and head IMU, central camera, status light, structure, and local wiring (SCOPE-02/03/17, AD-02/AD-06).
+- Powered three-axis head carrying the display, any unavoidable lightweight display/head-node electronics, central camera, status light, structure, and local wiring (SCOPE-02/03/17, AD-02/AD-06). RP-01 has no installed runtime head IMU; bench instrumentation is not robot mass.
 - Two independently powered wheels, a front caster, and a mandatory rear anti-tip skid (`dimensional-baseline.md`).
 
 Current target bounding box: **300 H × 205 W × 180 D mm**. RP-06 validates this baseline against sourced envelopes; it does not silently replace it.
@@ -29,7 +29,7 @@ Ranges carry the current uncertainty. "Basis" states where the number comes from
 
 | Subsystem | Low (g) | High (g) | Basis / assumption | Measured by |
 |---|---:|---:|---|---|
-| **Head** — shell, display + window, display controller/head node + head IMU where required, central camera, status light/optics, joint brackets, connectors and local wiring | 250 | 250 | Current **~250 g target**, not a tolerance band; main Linux SBC, microphones and speaker are body-mounted | RP-01 / RP-06 measured head |
+| **Head** — shell, display + window, display controller/head node where required, central camera, status light/optics, joint brackets, connectors and local wiring | 250 | 250 | Current system **~250 g target** remains pending controlled revision; RP-01 uses the separate ~490 g `E` model in `../02-prototypes/RP-01-head/material-finish-mass-decision.md`. Main Linux SBC, microphones, speaker and bench Nano/IMU are body-mounted or excluded. | RP-01 / RP-06 measured head |
 | **Body** — main structure, outer shell, internal frame, service panels | 400 | 900 | Printed polymer enclosure at the envelope above, single-room duty | RP-06 |
 | **Battery** — cells + holder/pack + protection | 150 | 500 | Low and forward of the drive axle; chemistry undecided (ADR-06) | RP-02 |
 | **Drive** — motors, gearing, Ø84 mm wheels, front caster, mandatory rear skid, drive brackets | 200 | 600 | Two-wheel differential drive; 170 mm track, 110 mm axle-to-caster target, ~70 mm rear skid reach at ≤14 mm floor height | RP-03 |

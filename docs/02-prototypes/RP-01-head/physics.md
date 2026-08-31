@@ -43,12 +43,12 @@ Current proposed best-case usable travel is pitch `-22°…+40°`, yaw `±55°`,
 |---|---:|---|
 | Complete moving-head envelope | **~95 H × 150 W × 115 D mm nominal**, including integrated side pods/pivots; validate within **90–100 H × 145–155 W × 110–120 D mm** | Clearance, fixture, cable, and candidate-axis packaging boundary rebuilt from selected component geometry |
 | Neck allocation | **60 mm vertical** | Packaging boundary for yaw + pitch + roll; actuators may intrude into body/head |
-| Moving-head mass | **~490 g provisional at 1.2 mm PLA; ~472 g at 1.0 mm walls** | `E` planning build-up from `material-finish-mass-decision.md`; replace row-by-row with `W` evidence |
+| Moving-head mass | **~490 g pre-M008 lower bound at 1.2 mm PLA; ~472 g + M008 at 1.0 mm walls** | `E` planning build-up from `material-finish-mass-decision.md`; add the required C2 controller once selected, then replace row-by-row with `W` evidence |
 | Historical system target | **~250 g — obsolete for RP-01 sizing** | Retained only to expose the required system-baseline revision; do not use as representative ballast |
 | Preliminary head inertia | **~0.001 kg·m² — invalidated as a sizing input** | Recompute from revised per-axis geometry; mass alone is insufficient |
 | Preliminary neck peak torque | **~0.2 N·m — invalidated as a sizing input** | Historical sanity check only, not a per-axis threshold |
 
-The moving load includes the selected no-touch Waveshare ESP32-S3-LCD-4.3 SKU 30493 and selected visible-light Raspberry Pi Camera Module 3 Wide SC0874 at their measured module/installed masses, the finished PLA shell, moving structure, required brackets, interfaces, bearings, actuators/outputs, visible and structural fasteners, and local wiring. It excludes the four body-mounted microphones, body-mounted speaker, battery and primary body electronics. The display's integrated ESP32-S3 is already part of M001/M002; M008 is only a possible second controller.
+The moving load includes the selected no-touch Waveshare ESP32-S3-LCD-4.3 SKU 30493 and selected visible-light Raspberry Pi Camera Module 3 Wide SC0874 at their measured module/installed masses, the finished PLA shell, moving structure, required brackets, interfaces, bearings, actuators/outputs, visible and structural fasteners, and local wiring. It excludes the four body-mounted microphones, body-mounted speaker, battery, primary body electronics, Nano 33 BLE Sense and any bench-only IMU. The display's integrated ESP32-S3 is already part of M001/M002; M008 owns the dedicated ESP32-S3 motion module only if C1 cannot share that chip.
 
 Before actuator selection, replace the provisional rows with the registered per-axis mass tree and CAD-derived `J_com`, record each component/assembly CoM, apply the parallel-axis theorem for each candidate axis, and calculate dynamic plus gravity torque at the controlling storyboard cases. Register `m_yaw` as everything downstream of yaw, `m_pitch` as everything downstream of pitch, and `m_roll` as the roll cradle and its payload. Include moving actuators, bearing portions, yokes, fasteners, finish and harness segments according to their physical mounting boundaries.
 
@@ -76,7 +76,7 @@ These are sensitivity points, not a frozen mechanism specification. The calculat
 
 `component blockout → initial CoM → axis candidate → mechanism mass → revised CoM → torque/RMS comparison`.
 
-For the `490 g` provisional complete-head sensitivity case, A1 (`x=+5 mm`, `z=0`) gives approximately `0.0240 N·m` at neutral, `0.0223 N·m` at `-22°`, and `0.0184 N·m` at `+40°`. These values scale only the simple gravity term and must not be reported as actuator torque. Final sizing uses the registered downstream mass and inertia for each axis rather than applying the complete-head mass blindly to pitch or roll.
+For the `490 g` **pre-M008 lower-bound** sensitivity case, A1 (`x=+5 mm`, `z=0`) gives approximately `0.0240 N·m` at neutral, `0.0223 N·m` at `-22°`, and `0.0184 N·m` at `+40°`. The required C2 controller increases the real downstream result. These values scale only the simple gravity term and must not be reported as actuator torque. Final sizing uses the registered downstream mass and inertia for each axis rather than applying the complete-head mass blindly to pitch or roll.
 
 A small persistent load may keep a gearbox on one tooth flank, but preload is a measured mitigation rather than evidence that backlash is gone. Prefer a small fore–aft pitch offset if it retains one torque sign across the usable range. Keep roll close to balance and evaluate a low-rate torsion/elastic bias only if reversal testing warrants it; avoid an arbitrary lateral mass imbalance.
 

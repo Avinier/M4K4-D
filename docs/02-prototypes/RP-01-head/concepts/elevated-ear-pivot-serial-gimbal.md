@@ -5,7 +5,7 @@
 | Status | **Candidate — not selected; dimensions, actuators and axis placement remain open** |
 | Authored | 2026-08-27 |
 | Joint order | Body-fixed yaw → pitch → head-fixed roll |
-| Physical baseline | ~95 H × 150 W × 115 D mm nominal complete head within a 90–100 H × 145–155 W × 110–120 D mm validation band; `../material-finish-mass-decision.md` provisional ~490 g at 1.2 mm PLA; 60 mm neck allocation |
+| Physical baseline | ~95 H × 150 W × 115 D mm nominal complete head within a 90–100 H × 145–155 W × 110–120 D mm validation band; `../material-finish-mass-decision.md` provisional ~490 g pre-M008 lower bound at 1.2 mm PLA plus required C2 hardware; 60 mm neck allocation |
 | Feeds | `comparison.md`, `../physics.md`, `../gates.md`, `../rig.md`; later head blockout/CAD |
 
 This note extracts only the credible topology from an unverified, generated-looking reference diagram. Its labels, scale, proportions, motor sizes and bearing sizes are not source data and must not enter CAD or the BOM.
@@ -36,9 +36,9 @@ Evaluate at least these blockout candidates before detailed CAD:
 | A1 light preload | `x=+5 mm`, `z=0 mm` | CoM slightly forward of axis, keeping a small same-sign pitch load across the usable range |
 | A2 packaging compromise | `x=+5 mm`, `z=+10 mm` | Allows practical structure while bounding added holding torque |
 
-These are calculation points, not tolerances. With the current `m=0.490 kg` provisional complete-head planning case, A1 produces approximately `0.0184–0.0240 N·m` simple pitch gravity torque across `-22°…+40°`. This is a sensitivity calculation only: pitch does not necessarily carry the complete head, and actuator sizing also requires the actual downstream inertia, speed, friction/cable terms and coupling.
+These are calculation points, not tolerances. With the current `m=0.490 kg` **pre-M008 lower-bound** planning case, A1 produces approximately `0.0184–0.0240 N·m` simple pitch gravity torque across `-22°…+40°`; the required C2 controller increases the real value. This is a sensitivity calculation only: pitch does not necessarily carry the complete head, and actuator sizing also requires the actual downstream inertia, speed, friction/cable terms and coupling.
 
-Do not apply one mass blindly to all three axes. Register the actual moving set downstream of each joint: yaw carries the complete moving yaw output; pitch carries the pitch-and-roll output; roll carries only its cradle and payload. Until those as-built/CAD sets exist, show the `~490 g` provisional build-up and its row assumptions alongside every lighter downstream proxy so a favorable blockout cannot silently under-size an actuator.
+Do not apply one mass blindly to all three axes. Register the actual moving set downstream of each joint: yaw carries the complete moving yaw output; pitch carries the pitch-and-roll output; roll carries only its cradle and payload. Until those as-built/CAD sets exist, show the `~490 g` pre-M008 lower bound **and the required C2 controller** alongside every lighter downstream proxy so a favorable blockout cannot silently under-size an actuator.
 
 Use an iterative convergence loop:
 
@@ -68,7 +68,7 @@ Start with direct pitch actuation as close to the yaw axis as the ear/yoke layou
 
 ## 5. Load path and scale exclusions
 
-The reference diagram's NEMA-style motors, external spur reduction and Lazy-Susan-scale turntable are not Makad parts. A credible implementation uses compact shafts/bearings sized from the revised ~490 g planning build-up and later measured per-axis tree, and fits the 60 mm neck allocation through body/head intrusion.
+The reference diagram's NEMA-style motors, external spur reduction and Lazy-Susan-scale turntable are not Makad parts. A credible implementation uses compact shafts/bearings sized from the revised ~490 g pre-M008 lower bound **plus C2** and later measured per-axis tree, and fits the 60 mm neck allocation through body/head intrusion.
 
 Every candidate drawing must show:
 
@@ -108,21 +108,16 @@ The mechanical concept is incomplete without a harness model. Apply the evidence
 
 Cable torque is part of the slow-expression and static-hold load, not merely an integration note. Clamp coordinates, free lengths, installed radii and connector-exit lengths are controlled configuration dimensions.
 
-## 7. IMU roles
+## 7. Runtime and bench sensing
 
-Do not use the head IMU as the only body-heading sensor.
+RP-01 is stationary: servo encoders provide runtime joint angles, and no head IMU is installed. A bench IMU/accelerometer may be attached temporarily for backlash, settling or resonance measurements, but it is instrumentation rather than a head component and does not enter the mass ledger.
 
-| Location | Candidate responsibility |
-|---|---|
-| Head IMU | Actual face motion, settling, compliance/cable deflection, camera stabilization, pickup detection and RP-01 modal measurement |
-| Body IMU | Chassis heading/attitude, caster/traction disturbance rejection, tip/pickup detection and locomotion control |
-
-Joint encoders plus body attitude provide a kinematic head-pose estimate; the head IMU observes output motion that joint encoders cannot see after horns, brackets and compliant structure. Exact sensors and fusion remain RP-01/RP-02/RP-03 decisions.
+When locomotion is introduced, the runtime IMU belongs on the base for chassis heading, caster/traction disturbance and tip/pickup detection. Placing it in the head would require subtracting neck motion using commanded angles, recreating the timing-skew problem addressed by SPEC-09. Exact base sensor and fusion remain RP-03/RP-02 decisions.
 
 ## 8. Evidence required before selection
 
 - sourced/weighed head blockout and revised 3D CoM/inertia;
-- per-axis downstream moving-mass sets plus the current `~490 g` provisional complete-head build-up and all row assumptions;
+- per-axis downstream moving-mass sets plus the current `~490 g` pre-M008 lower bound, required C2 controller and all row assumptions;
 - A0/A1/A2 torque, RMS/current and thermal comparison;
 - complete-output loaded hysteresis and hold-hunting test per axis, plus a combined-motion orientation test;
 - display-clear roll-support section and load-path comparison;

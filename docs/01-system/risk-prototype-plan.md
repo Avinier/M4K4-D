@@ -150,7 +150,7 @@ Use a rigid guarded bench fixture with adjustable ballast at the representative 
 - absolute/tracking error, repeatability, small-motion resolution, complete-output loaded hysteresis, reversal delay, hold hunting/current, overshoot, settling time, and cross-axis coupling;
 - structural deflection, vibration, acoustic level/character, and camera image disturbance;
 - temperature rise, calibration drift, angle-dependent cable restoring torque, cable twist/flex, connector movement, and fastener retention;
-- head-output IMU data separated from body-frame heading/attitude data whenever both frames are in scope;
+- stationary RP-01 uses servo encoders for joint angle; a bench IMU may measure backlash/resonance but is not installed head hardware. When locomotion is in scope, record a base-frame IMU separately from commanded neck motion;
 - stop, timeout, limit, feedback-loss, and restart behaviour.
 
 ### Pass gates

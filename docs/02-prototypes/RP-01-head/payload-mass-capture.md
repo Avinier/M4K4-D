@@ -6,7 +6,7 @@
 | Owner | Project builder |
 | Created | 2026-08-30 |
 | Revised | 2026-08-31 |
-| Governing RP-01 model | `material-finish-mass-decision.md`: approximately 490 g provisional complete head at 1.2 mm PLA; system-level 250 g target is obsolete for RP-01 sizing pending baseline revision |
+| Governing RP-01 model | `material-finish-mass-decision.md`: approximately 490 g **pre-M008 lower bound** at 1.2 mm PLA; add required C2 controller hardware once selected; system-level 250 g target is obsolete for RP-01 sizing pending baseline revision |
 | Feeds | Per-axis mass tree, CoM/inertia model, actuator sizing, representative RP-01 ballast |
 
 ## Purpose and boundary
@@ -84,8 +84,8 @@ Use the head Cartesian frame already adopted by RP-01: origin and final datum re
 | M005 | Installed camera: M004 + final retainer/mount and connector-retention parts owned here | 1 | M005 | `U` |  |  |  |  |  |  | Yes | Mount open; cable parts must be assigned to M005 or M006 before weighing |
 | M006 | Final camera moving interconnect: assigned cable/adapters/stiffeners/connectors/strain relief downstream of yaw | 1 set | M006 | `U` |  |  |  |  |  |  | Yes | Production interconnect open |
 | M007 | Status LED/PCB + optic/diffuser + mount + wiring assigned here | 1 | M007 | `U` |  |  |  |  |  |  | Yes | Implementation open |
-| M008 | **Second** head-local controller beyond the ESP32-S3 already included in M001/M002, plus its mount/connectors | 0–1 | M008 | `U` |  |  |  |  |  |  | Conditional | Qty 0 requires controller decision reference; Nano 33 BLE Sense remains a candidate |
-| M009 | Separate head-output IMU + rigid mount/connectors, only if not already owned by M008 | 0–1 | M009 | `U` |  |  |  |  |  |  | Conditional | Qty 0 requires IMU/controller decision reference |
+| M008 | **Dedicated motion controller, ESP32-S3 module class, conditional on C1 outcome**, plus its mount/connectors | 1 | M008 | `U` |  |  |  |  |  |  | Yes | C1 fails on the selected carrier's GPIO budget, so C2 is required. Select and weigh the module, mount, connectors and local harness before any complete-head mass claim |
+| M009 | Runtime head IMU | 0 | M009 | `E` |  |  |  | 0 |  |  | No | RP-01 architecture decision: not installed; bench IMU is excluded from this ledger. Any future installed sensor requires a superseding decision/new row. |
 | M010 | Roll cradle/payload frame, final cleaned **provisional PLA** part with retained inserts assigned here | 1 set | M010 | `U` |  |  |  |  |  |  | Yes | Thermal/creep flag remains open |
 | M011 | Pitch yoke/moving support, final cleaned **provisional PLA** part with retained inserts assigned here | 1 set | M011 | `U` |  |  |  |  |  |  | Yes | Thermal/creep flag remains open |
 | M012 | Yaw moving interface, final cleaned **provisional PLA** plate/flange/coupler structure downstream of yaw | 1 set | M012 | `U` |  |  |  |  |  |  | Yes | Thermal/creep flag remains open |
@@ -115,7 +115,8 @@ This `D`/`E` model supports pre-purchase physics and actuator screening. It rema
 | M005 | 10 | `E`: camera + retainer |
 | M006 | 8 | `E`: FPC/stiffeners/strain relief |
 | M007 | 5 | `E` |
-| M008/M009 | 0 conditional | `E`: assumed absent only for this model; final qty 0 requires a decision reference |
+| M008 | `U` | Required C2 motion-controller module after C1 carrier-GPIO failure; no defensible mass until the exact module/mount/harness is selected |
+| M009 | 0 | No runtime RP-01 head IMU; bench IMU excluded |
 | M010 | 25 | `E`: provisional PLA roll cradle |
 | M011 | 35 | `E`: provisional PLA pitch yoke |
 | M012 | 20 | `E`: provisional PLA yaw moving interface |
@@ -125,9 +126,9 @@ This `D`/`E` model supports pre-purchase physics and actuator screening. It rema
 | M020 | 15 | `E`: moving harness |
 | M021 | 8 | `E`: structural/hidden fasteners |
 | M021a | 11 | `E`: visible M2 button-head set at approximately 0.35 g each; separately owned and tradeable |
-| **Provisional complete head** | **~490** | Planning-only; see `material-finish-mass-decision.md` |
+| **Provisional complete head before M008** | **~490 + M008** | Planning-only lower bound; see `material-finish-mass-decision.md` |
 
-The corresponding 1.0 mm PLA-wall case is approximately **472 g**. Neither number is accepted `W` evidence.
+The corresponding 1.0 mm PLA-wall case is approximately **472 g + M008**. Neither number is accepted `W` evidence.
 
 ## Roll-up and closure checks
 
@@ -139,7 +140,7 @@ Do not publish a single real payload mass until all rows marked `Yes` have `W` e
 | Complete moving-head cross-check M900 | `TBD g` |
 | Difference: M900 minus row sum | `TBD g` |
 | Difference as percentage of M900 | `TBD %` |
-| Difference from provisional 490 g model: `M900 - 490 g` | `TBD g` |
+| Difference from provisional pre-M008 lower bound: `M900 - 490 g` | `TBD g` |
 | Historical system-target overrun: `M900 - 250 g` | `TBD g` |
 
 Closure requires:

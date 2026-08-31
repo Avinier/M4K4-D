@@ -2,11 +2,11 @@
 
 | Field | Value |
 |---|---|
-| Status | **Provisional option study — not a selection.** |
-| Version | 0.6 |
+| Status | **RP-01 motion-controller class selected; C1 is electrically blocked on the selected display carrier; exact C2 module remains open.** |
+| Version | 0.7 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-08-29 |
+| Last reviewed | 2026-08-31 |
 | Governed by | `risk-prototype-plan.md` — permitted provisional option study (decision-closeout: "the architecture phase may begin with provisional option studies while prototypes run") |
 | Feeds | RP-02 (electrical/control backbone) → **ADR-06 (power)**, **ADR-12 (control topology)**; the monotonic-timebase deliverable (plan §104) |
 | Consumes | `system-design-brief.md` responsibility set + AD-01/AD-06/AD-08; `mass-envelope-ledger.md` head section |
@@ -25,7 +25,7 @@ Every multi-actuator robot above toy complexity uses the same shape — a small 
 | Mid-level | SBC or RTOS | 100 Hz–1 kHz | trajectory shaping, subsystem coordination |
 | Real-time | dedicated MCU + RTOS | 200 Hz–low kHz | servo/motor loops, encoder/IMU capture, limits, watchdog, command-expiry, E-stop |
 
-A companion **separation principle** falls straight out of physics and applies directly to Makad: *proprioceptive* sensors (IMU, joint feedback, encoders) feed the fast inner loops **on the MCU**; *exteroceptive* sensors (the camera) feed slower planning **on the SBC** — because you cannot close a low-latency control loop off a high-latency camera stream. For Makad that means: **head-pose IMU + servo feedback → MCU; camera → SBC.**
+A companion **separation principle** falls straight out of physics and applies directly to Makad: *proprioceptive* feedback feeds the fast inner loop **on the MCU**; *exteroceptive* sensing (the camera) feeds slower planning **on the SBC**. RP-01 is a stationary head with servo encoders providing joint angle, so it needs no runtime head IMU. Use an IMU only as a bench instrument for resonance/backlash work. When locomotion arrives, the runtime IMU belongs rigidly on the base: head placement would require subtracting neck motion from commanded angles and recreate the SPEC-09 timing-skew problem.
 
 **Sources:** SiTime, *The Importance of Precision Timing in Humanoids*; RoboCup/UTRA *Global Systems Description* (Jetson TX2 for vision/AI + STM32 for real-time actuator control, linked by pub/sub over USB — "disentangles control from AI, reducing computational bottlenecks and improving reliability").
 
@@ -77,9 +77,9 @@ The camera **must** ride in the head (AD-06). The real question is whether the *
 |---|---|---|---|---|
 | **A. Vector-style (compute in head)** | SBC + camera + display + IMU in the head; dumb motor MCU in body | shortest camera/display buses; proven by Vector | heaviest 3-axis moving mass; power + data down to body; head-CAD must package an SBC | **Requires an explicit dimensional-baseline revision** because the current baseline body-mounts primary electronics; retain only as a fallback architecture |
 | **B. Body-heavy (compute in body)** | SBC in body; head carries only camera + display + light | lightest head, easiest gimbal | **camera bus (MIPI/USB) must flex across 3 joints** — the fragility risk; display bus too | Cable-survival risk is the whole RP-01 concern |
-| **C. Hybrid (recommended to study first)** | SBC in **body**; a light head node owns head IMU + LED + servo signals; thin serial/bus down; camera routed as its own managed cable; the four-mic array remains body-mounted. Compare **C1:** separate Nano-class aggregator and **C2:** a display-side MCU, if the selected display architecture already requires one, plus a small external SPI IMU | light-ish head; local head-output sensing; collapses many head wires into a thin link; motor limits/watchdog can remain local | camera still crosses the joints; C1 adds a board/connectors/harness, while C2 couples motor timing and safety to display workload | **Best first topology family**; C1/C2 remain an RP-01/RP-02 evidence decision |
+| **C. Hybrid (active RP-01 family)** | SBC in **body**; ESP32-S3 motion firmware owns the head servo bus, limits, watchdog and command expiry; camera remains its own managed cable; the four-mic array remains body-mounted. **C1:** motion and rendering share the display board's ESP32-S3. **C2:** a separate ESP32-S3 module runs motion while the display board renders. | Single motion-firmware target from the start; thin semantic body-to-head link; no runtime head IMU or Nano moving mass | Camera still crosses the joints. C1 has a carrier-I/O gate; C2 adds a board, mount and harness. | **C2 is the active RP-01 implementation path.** C1 is electrically blocked by the selected carrier's GPIO assignment; revisit only with different hardware. |
 
-Option C is where the on-hand **Arduino Nano 33 BLE Sense** can be compared with consolidation onto an eligible display-side MCU — see §6. RP-01 (moving mass, head sensing and cable behaviour) and RP-02 (timing, watchdog and electrical backbone) exist precisely to decide between A/B/C and C1/C2 with measured evidence.
+The on-hand **Arduino Nano 33 BLE Sense** is a bench instrument, not an Option-C installed-controller candidate; see §6. RP-01 and RP-02 still validate timing, watchdog and electrical backbone, but they do not write the motion firmware twice on two MCU families.
 
 ### 4.1 Consequence of the selected 4.3-inch IPS module
 
@@ -94,7 +94,9 @@ The selected path and its change-controlled architectural contingency are:
 
 The selected display path is **D2 using Waveshare no-touch SKU 30493**. The body SBC owns behaviour and semantic face state; the head ESP32-S3 owns rasterization, animation playback and panel refresh. The exact wired transport remains open. HDMI does not solve the cable problem: with a body-mounted SBC it simply makes HDMI the moving high-bandwidth link.
 
-The display MCU should initially remain outside the motor-safety boundary. The dedicated real-time controller retains servo limits, watchdog, command expiry and head sensing while RP-02 deliberately loads the ESP32-S3 renderer and communications. Consolidation is considered only if its worst-case frame workload cannot disturb those functions and display faults cannot defeat safe motion shutdown.
+The display ESP32-S3 is a **head-local co-processor**, not Makad's main brain: the body SBC still owns perception, behaviour and semantic intent. In C1, that same physical ESP32-S3 may also execute the local motion/safety firmware; this is a board-consolidation decision, not a transfer of system authority. The primary C1 mitigation is ESP-IDF dual-core affinity: keep rendering/communications on Core 0, pin the high-priority motion task to Core 1, and keep the servo ISR path IRAM-safe. ESP-IDF documents [pinned dual-core tasks](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-reference/system/freertos_idf.html) and [Core-1/IRAM interrupt guidance](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-guides/performance/speed.html). C1 would still need an on-the-same-chip before/after timing comparison with rendering off and on, plus fault containment evidence.
+
+The **C1 electrical-feasibility gate fails on the selected carrier** before any timing test: it does not provide the required clean GPIO budget. C2 uses a separate ESP32-S3 motion-controller module class and remains the RP-01 implementation path; it runs the same motion firmware from the start. Neither path makes the display board the main Linux/behaviour computer.
 
 D1 and the DWIN module are now change-controlled contingency references, not active parallel candidates. Reconsider either only if SKU 30493 records a hard procurement, envelope, mass/dynamics, optical/animation or safety/reliability failure under the selection rule in `display-candidate-study.md`.
 
@@ -117,44 +119,38 @@ This is the concrete shape of the plan's **monotonic event-time strategy** (§10
 
 **Sources:** SiTime humanoid timing overview; arXiv *A General and Efficient System for Precise Sensor Synchronization* (Principles 1–4); arXiv *Simultaneous Triggering and Synchronization* (Teensy 4.1 + RTC PPS, MCU as PTP master to a Linux OBC); Carnegie Robotics MultiSense time-sync docs; Mayoral Vilches, *Distributed synchronization of industrial robots through ROS 2*.
 
-## 6. Candidate: Arduino Nano 33 BLE Sense (on hand)
+## 6. Bench instrument: Arduino Nano 33 BLE Sense (on hand)
 
-On-hand part; useful as the **C1 head-aggregation prototype/bench reference** in Option C. It is not selected for the production head.
+The Nano is **not installed hardware**, is excluded from the head mass ledger and does not host RP-01 motion firmware. It belongs with the PSU, soldering station and logic analyzer in `workbench.md`. Its nRF52840 supports **BLE only, not Wi-Fi**.
 
 | Feature | Value to Makad |
 |---|---|
-| nRF52840 (Cortex-M4F) | Ample for a real-time servo/joint loop with limits, watchdog, command-expiry |
-| **Onboard IMU** | Free **head-output feedback** for settling, compliance/cable deflection, camera stabilization and RP-01 modal work; not a substitute for body heading |
-| **Onboard PDM mic** (Sense variant) | Present but not part of the approved four-microphone body-array architecture; ignore or use only as a diagnostic channel |
-| APDS9960 (proximity/gesture/ambient-light) | Free extras: dim the face in a dark room, proximity as a wake cue (non-Core, nice-to-have) |
-| I²C / SPI / PWM | Drives LED driver, small display peripherals, generates servo signals — all **local to the head board** (correct use of I²C per §3) |
-| BLE | Not needed for internal comms (wired is more reliable); ignore or keep as debug fallback |
-| 17.76 × 43.16 mm, 3.3 V | Fits the geometric envelope, but its measured installed mass—including connectors, mount and harness—must compete with C2; 3.3 V logic is local and servo *power* stays on a separate 5–6 V rail |
+| Onboard IMU | Bench-only resonance/backlash measurement when useful; never runtime RP-01 head hardware |
+| Onboard PDM mic (Sense variant) | Candidate early DOA bench work toward the 13° target; not the approved body microphone array |
+| APDS9960 | Candidate auto-brightness and proximity-startle bench prototype; neither is installed or Core scope |
+| BLE | Optional debug path only; internal control remains wired. The nRF52840 has no Wi-Fi. |
+| I²C / SPI / GPIO | Convenient on-bench sensor interfaces; not a reason to add the board to the moving head |
 
-**Caveats to confirm in RP-01/RP-02:**
-- Variant matters: plain *Nano 33 BLE* has the IMU but **no mic**; the **Sense** adds the mic + APDS9960. (Ours is the Sense.)
-- Register the exact board revision and IMU. Configure a higher-rate sensor path for RP-01 modal work; a 104 Hz convenience configuration is too sparse for reliable identification around the 40 Hz pitch target.
-- A separate **body-frame IMU** belongs with the base/drive controller for chassis heading, caster/traction disturbance and tip/pickup detection. Joint encoders plus body attitude provide a kinematic head-pose estimate; the head IMU observes downstream compliance that estimate cannot see.
-- One MCU driving 3 coordinated axes **plus** LED/mic — verify the timing budget holds when everything runs at once (AD-08 concurrent-load risk).
-- Whether it is head-local (Option C) or the system settles on Option A/B is the RP-01/RP-02 decision.
+Register the exact Nano revision and the bench sensor configuration when it contributes evidence. A base-mounted runtime IMU remains a later locomotion decision; do not buy a SPI IMU or XIAO now.
 
 ### 6.1 C1/C2 head-node comparison
 
-| Criterion | C1: separate Nano 33 BLE Sense | C2: display MCU + external SPI IMU |
+| Criterion | C1: one ESP32-S3 on the selected display carrier | C2: separate ESP32-S3 motion-controller module |
 |---|---|---|
-| Added moving hardware | Nano board, mount, connectors and local harness; weigh the installed assembly rather than citing an unsourced bare-board mass | IMU board/device plus local traces/harness; weigh the actual breakout or PCB implementation |
-| Timing isolation | Dedicated servo/sensor task can remain isolated from display rendering | Must prove display transfers/rendering cannot add servo jitter, timestamp drift or missed sensor samples |
-| Safety ownership | Natural place for limits, watchdog and command expiry | Display MCU must retain those functions through display faults, overload and software restart |
-| Sensor path | Onboard IMU, exact board revision and rate to be registered | Select an IMU and SPI path meeting RP-01 bandwidth, timestamp and range requirements |
-| Firmware/tooling | Adds a second head firmware target | Reduces board count but increases responsibility of the display controller |
+| Added moving hardware | None beyond M001/M002 display assembly | Added ESP32-S3 module, mount, connectors and local harness; own and weigh it as M008 |
+| GPIO feasibility | **Fails on this carrier:** the future-ready screen is ten signals—SPI (4), half-duplex servo bus/direction (3), E-stop, fault and interrupt. Stationary RP-01 removes the IMU/interrupt need but still requires five clean motion/safety signals; this carrier plainly exposes only GPIO6. | Select a module with the full required pin budget before purchase |
+| Timing isolation | Proposed mitigation only: rendering/communications on Core 0, motion task on Core 1, ISR in IRAM; must be measured on the same chip with rendering off then on | Physical isolation from display rendering; still prove motion timing and fault handling |
+| Safety ownership | Local ESP32-S3 motion task would own limits, watchdog and command expiry | Dedicated ESP32-S3 owns limits, watchdog and command expiry |
+| Runtime IMU | None for stationary RP-01 | None for stationary RP-01 |
+| Firmware/tooling | Same ESP-IDF motion firmware, shared with display application | Same ESP-IDF motion firmware, deployed to a dedicated module |
 
-Prefer C2 for production mass and harness simplicity **only if** it passes the concurrent display/servo/IMU timing test and local-fault requirements. Keep C1 available for early RP-01 isolation and instrumentation. The comparison must include total installed mass and CoM effect, not the bare dev-board mass alone.
+The 2026-08-31 [official-schematic](https://files.waveshare.com/wiki/ESP32-S3-Touch-LCD-4.3/ESP32-S3-Touch-LCD-4.3-Sch.pdf) audit resolves C1 on this carrier: GPIO0/1/2/10/14/17/18/21/38–42/45/47/48 plus GPIO3/5/7/46 are LCD RGB/timing; GPIO11–13 are SD, GPIO8/9 are the shared I²C/CH422G path, GPIO15/16 the RS-485 path, GPIO19/20 USB/CAN, and GPIO43/44 USB-UART. GPIO6 is the only plainly exposed sensor GPIO. The CH422G expander cannot stand in for a deterministic servo bus, E-stop/fault or ISR path. Thus C1 fails both the original ten-signal screen and the reduced stationary-RP-01 five-signal screen. C1 may be reopened only if the received board materially differs from the official schematic or a new carrier is selected through change control.
 
 **Heterogeneity caution:** using *different* MCU families for head and base multiplies toolchains and debug surfaces for a solo builder. Vector's head-SoC vs body-STM32 split was heterogeneous **by necessity** (one must run Linux, one is a tiny motor relay) — not by preference. If a base MCU is added, prefer the **same family** as the head unless a role genuinely forces otherwise.
 
 ## 7. Provisional recommendation (to be confirmed by RP-02)
 
-1. **Three provisional roles, not necessarily three final boards:** a body **Linux SBC** for vision/NLU/behaviour, the head-local **ESP32-S3 display renderer**, and **≥1 real-time MCU role** for motion safety/sensing. Start separated; compare later consolidation with the on-hand Nano C1 prototype only after concurrency/fault evidence. A base/drive MCU with body-frame IMU input remains likely — same family where practical.
+1. **Three roles, two RP-01 head boards:** a body **Linux SBC** for vision/NLU/behaviour, the selected head-local **ESP32-S3 display renderer**, and a separate **ESP32-S3 motion controller** for servo limits/watchdog/command expiry. C1 consolidation onto the display carrier is electrically blocked; C2 is not a second firmware implementation. A base/drive MCU with a base-mounted runtime IMU remains a later locomotion decision.
 2. **Internal link: UART/USB serial**, Vector-style. Not CAN, not micro-ROS, not I²C across joints — those are documented "grow-into-it" options.
 3. **Compute placement (Option A/B/C) is the open fork** — study Option C first; let RP-01 (cable behaviour) and RP-02 (backbone) decide with evidence.
 4. **Timebase: one master + timestamp-at-source + serial offset reconciliation.** Not PTP.
@@ -165,9 +161,10 @@ Prefer C2 for production mass and harness simplicity **only if** it passes the c
 
 - [ ] Decide compute placement (Option A / B / C) from RP-01 cable-behaviour + RP-02 backbone evidence.
 - [ ] Validate the selected D2 display path with no-touch Waveshare SKU 30493: installed mass/CoM, animation frame time, optical result, power/thermal behaviour, complete moving harness and fault response.
-- [ ] Compare C1 Nano aggregation against C2 display-MCU + external-SPI-IMU using installed mass/CoM, three-axis timing, display concurrency, watchdog/fault containment and harness evidence.
-- [ ] Register the on-hand Nano revision/IMU and prove the head-sensor sampling/timestamp path used for RP-01 modal and settling measurements.
-- [ ] Select or identify the body-frame IMU path independently of the head IMU; feed it into RP-03 locomotion/heading evidence.
+- [ ] Select an ESP32-S3 motion-controller module with the required SPI/servo/E-stop/fault/interrupt pin budget; no purchase is authorized yet.
+- [ ] Treat C1 as electrically blocked on SKU 30493's carrier. If later hardware changes reopen it, run the same-chip rendering-off/on timing comparison with Core-0/Core-1/IRAM mitigation before consolidation.
+- [ ] Register the on-hand Nano only when its IMU, APDS9960 or PDM mic produces a bench result.
+- [ ] Select or identify the base-frame IMU path when locomotion begins; feed it into RP-03 heading evidence.
 - [ ] Choose and prototype the internal link (UART/USB first); register the message set + expiry/health semantics.
 - [ ] Decide the base/drive MCU and whether it shares the head's family.
 - [ ] Implement the provisional timebase (master + timestamp-at-source + offset reconciliation) before first scored RP-01 run.
@@ -183,3 +180,4 @@ Prefer C2 for production mass and harness simplicity **only if** it passes the c
 | 2026-08-29 | 0.4 | Applied the exact 4.3-inch AMOLED search: marked head-SBC Option A as baseline-revision-only, replaced the blanket Linux-rendering assumption with semantic body ownership, and defined D1 body-raster versus D2 head-raster paths for the raw MIPI panel candidates. |
 | 2026-08-29 | 0.5 | Replaced the blocked AMOLED-controller hypothesis with the India-orderable IPS paths; made the ESP32-S3/LVGL head renderer the first D2 prototype while keeping motion safety on a dedicated controller. |
 | 2026-08-29 | 0.6 | Propagated the builder's SKU 30493 lock: D2 head-local display rendering is now selected while the internal transport, motion controller and safety boundary remain evidence-gated. |
+| 2026-08-31 | 0.7 | Locked ESP32-S3 as the RP-01 motion-firmware class; moved Nano 33 BLE Sense to bench-only equipment; removed the runtime head-IMU path; recorded Core-0/Core-1/IRAM C1 mitigation and the official schematic audit that blocks C1 on the selected carrier, leaving a separate ESP32-S3 C2 module as the active implementation path. |

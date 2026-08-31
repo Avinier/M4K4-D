@@ -3,14 +3,14 @@
 | Field | Value |
 |---|---|
 | Status | **Living. Face display and head camera selected; remaining rows are candidates unless explicitly marked otherwise.** |
-| Version | 0.14 |
+| Version | 0.15 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-08-30 |
+| Last reviewed | 2026-08-31 |
 | Governed by | `risk-prototype-plan.md` §"Continuous sourcing and data workstream" (deliverable 1) |
 | Feeds | First project cost range (CON-TBD-13), RP-01…RP-07 inputs, later BOM |
 
-The current dimensional baseline selects the two-powered-wheel/front-caster/rear-skid topology and major packaging targets. The project builder has additionally selected the **Waveshare ESP32-S3-LCD-4.3, no-touch, SKU 30493** as the V1 face display and the **Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, order code SC0874** as the V1 head camera. It **does not select a processor beyond the display's integrated renderer, exact motor, actuator, battery, framework, production camera interconnect, or supplier**. Every other purchasable row remains a candidate chosen to bound specification, availability and landed cost. Prices/stock are Mumbai planning estimates and **must be re-checked immediately before purchase** (same rule as `workbench.md`). Bench tooling is not repeated here — it lives in `workbench.md`.
+The current dimensional baseline selects the two-powered-wheel/front-caster/rear-skid topology and major packaging targets. The project builder has additionally selected the **Waveshare ESP32-S3-LCD-4.3, no-touch, SKU 30493** as the V1 face display, the **Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, order code SC0874** as the V1 head camera, and the **ESP32-S3 module class** for RP-01 motion firmware. The exact dedicated motion-controller module, motor, actuator, battery, framework, production camera interconnect and supplier remain open. Every other purchasable row remains a candidate chosen to bound specification, availability and landed cost. Prices/stock are Mumbai planning estimates and **must be re-checked immediately before purchase** (same rule as `workbench.md`). Bench tooling is not repeated here — it lives in `workbench.md`.
 
 Columns follow the plan's required fields (line 102): spec, supplier, availability, lead time, substitute, quantity, landed cost, replacement risk, required tools, fabrication dependency.
 
@@ -21,10 +21,10 @@ Topology (SBC + MCU split, compute placement, bus, timebase) is a provisional op
 | Component | Candidate spec | Supplier (candidate) | Avail. | Lead | Substitute | Qty | Landed ₹ (est.) | Replacement risk | Required tools | Fab dependency |
 |---|---|---|---|---|---|---:|---:|---|---|---|
 | Main compute (SBC) | SBC-class board, USB/CSI camera, GPIO, enough for perception loop | Robu.in / local | Common | 0–3 d | Alt SBC / SBC+MCU split | 1 | 4,000–9,000 | Med (chip cycles) | — | Case/mount printed |
-| Head-node controller | **C1 Arduino Nano 33 BLE Sense** remains the on-hand servo/IMU isolation candidate. The selected display supplies a separate **ESP32-S3 face renderer (C2-display)**; do not assign it motor limits/watchdog until concurrent-load and fault tests explicitly justify consolidation. | On hand / included with selected display | C1 on hand; display renderer locked with SKU 30493 | 0–5 d | Same-family compact real-time MCU | 0–1 added board | 0–1,500 beyond display | Med until concurrency/fault tests close | Logic analyzer/current logger | Installed boards + connectors + mount + harness mass/CoM; see `control-topology-options.md` §6.1 |
-| Head-output IMU | C1 onboard exact-revision IMU or C2 small SPI IMU/PCB implementation; sensor path must support ≥400 Hz RP-01 modal acquisition with source timestamps | On hand / Robu | Mixed | 0–5 d | Alternate high-rate 6-axis IMU | 1 | 0–1,200 | Med (exact breakout/revision) | Logic analyzer | Moving-head mass; rigid output mount; not the body-heading reference |
+| Head motion controller | **Dedicated ESP32-S3 module class, conditional on C1 outcome.** The official SKU 30493 carrier schematic blocks C1 (shared display/motion chip) on GPIO budget, so C2 is the active RP-01 path; exact module remains unselected and **buy nothing now**. | TBD | No purchase | — | ESP32-S3 module with verified native GPIO budget | 0–1 | TBD | Med until module/pinout/fault tests close | Logic analyzer/current logger | Own installed module, mount, connectors and harness in M008; see `control-topology-options.md` §6.1 |
+| Runtime head IMU | **Not installed for stationary RP-01.** Servo encoders provide joint angle; an IMU is bench-only for backlash/resonance when useful. | — | No purchase | — | — | 0 | 0 | None | Nano/bench instrumentation | Excluded from moving-head mass ledger |
 | Real-time controller (MCU) — base/drive | Servo/motor timing + limits + watchdog; prefer same family as head MCU | Elegoo kit / Robu | On hand | 0 | On-SBC RT thread | 1 | 0–800 | Low | — | — |
-| Body-frame IMU | 6-axis gyro/accelerometer for chassis heading/attitude, caster/traction disturbance and tip/pickup detection; independent of the head IMU | On-hand board if suitable / Robu | TBD | 0–5 d | Same sensor family as registered head/base controller where practical | 1 | 0–800 | Low | — | Rigid base/controller mount; feeds RP-03, not moving-head ballast |
+| Base-frame IMU | 6-axis gyro/accelerometer for later chassis heading/attitude, caster/traction disturbance and tip/pickup detection; head mounting is excluded because subtracting neck motion reintroduces the SPEC-09 timing-skew problem | On-hand board if suitable / Robu | Deferred | — | Same family as selected base controller where practical | 0–1 | TBD | Low | — | Rigid base/controller mount; feeds RP-03, not moving-head ballast |
 | Internal link | UART/USB serial (Vector-style) for SBC↔MCU; CAN only if a 3rd distributed node earns it | on-board | On hand | 0 | I²C local-only / CAN later | 1 | 0–500 | Low | Soldering | Harness |
 | Motor/servo driver | Drives base motors + head servos, current sense preferred | Robu / Zbotic | Common | 0–3 d | Separate ESC + servo rail | 1–2 | 500–2,000 | Low | Soldering | Wiring harness |
 
@@ -100,3 +100,4 @@ This is a **planning envelope to gate procurement decisions**, not a budget comm
 | 2026-08-29 | 0.12 | Project builder selected and locked the visible-light Raspberry Pi Camera Module 3 Wide, order code SC0874; retained supplier, body SBC and production moving interconnect as separate decisions and converted the seven camera conditions into acceptance/change-control evidence. |
 | 2026-08-29 | 0.13 | Added the source-grounded H1/H2/H3 moving-link study and axis-conditioned live-signal endurance direction; no production harness selected. |
 | 2026-08-30 | 0.14 | Propagated the display-derived optical aperture and bezel/window geometry from dimensional baseline v1.7; no component selection changed. |
+| 2026-08-31 | 0.15 | Selected ESP32-S3 as the RP-01 motion-firmware class, made a dedicated module conditional on C1, recorded C1's carrier-GPIO block, moved Nano 33 BLE Sense and IMU use to bench equipment, and deferred all new controller/IMU purchases. |
