@@ -3,15 +3,15 @@
 | Field | Value |
 |---|---|
 | Status | **Living — dimensional baseline active; remaining mass values provisional.** |
-| Version | 0.10 |
+| Version | 0.11 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-08-30 |
+| Last reviewed | 2026-09-02 |
 | Governed by | `risk-prototype-plan.md` §"Continuous sourcing and data workstream" (deliverable 2) |
 | Consumes | `dimensional-baseline.md`, foundation scale class (`workbench.md`), `system-design-brief.md` responsibility set |
 | Feeds | RP-01 (representative head load), RP-06 (integrated layout), head-CAD, engineering budgets |
 
-This ledger is the **head-CAD blocker** named in the plan. `dimensional-baseline.md` now supplies committed target geometry, component placement, and a ~250 g moving-head target. Other mass values remain first-pass planning estimates from the approved scale class — *table-liftable, one-person, single-room, follow ≤ 0.5 m/s* — not sourced measurements. They are replaced by measured values as RP-01…RP-07 close (decision-closeout step 6). Do not let a component's absence from a row mean it weighs nothing.
+This ledger is the **head-CAD blocker** named in the plan. `dimensional-baseline.md` supplies committed target geometry and component placement; RP-01 supplies a current **~490 g pre-M008 lower bound at 1.2 mm PLA plus the required C2 controller**, not an accepted complete-head mass. Other mass values remain first-pass planning estimates from the approved scale class — *table-liftable, one-person, single-room, follow ≤ 0.5 m/s* — not sourced measurements. They are replaced by measured values as RP-01…RP-07 close (decision-closeout step 6). Do not let a component's absence from a row mean it weighs nothing.
 
 ## Scale-class anchors (from approved foundation)
 
@@ -29,7 +29,7 @@ Ranges carry the current uncertainty. "Basis" states where the number comes from
 
 | Subsystem | Low (g) | High (g) | Basis / assumption | Measured by |
 |---|---:|---:|---|---|
-| **Head** — shell, display + window, display controller/head node where required, central camera, status light/optics, joint brackets, connectors and local wiring | 250 | 250 | Current system **~250 g target** remains pending controlled revision; RP-01 uses the separate ~490 g `E` model in `../02-prototypes/RP-01-head/material-finish-mass-decision.md`. Main Linux SBC, microphones, speaker and bench Nano/IMU are body-mounted or excluded. | RP-01 / RP-06 measured head |
+| **Head** — shell, display + window, display renderer, separate C2 motion controller, central camera, status light/optics, moving actuator/bearing portions, joint structure, connectors and local wiring | `490 + M008` | TBD | Current `E` lower bound at 1.2 mm PLA; M008 is required but unknown. Replace with the M900 reading and per-axis tree. Main Linux SBC, microphones, speaker and bench Nano/IMU are body-mounted or excluded. | RP-01 / RP-06 measured head |
 | **Body** — main structure, outer shell, internal frame, service panels | 400 | 900 | Printed polymer enclosure at the envelope above, single-room duty | RP-06 |
 | **Battery** — cells + holder/pack + protection | 150 | 500 | Low and forward of the drive axle; chemistry undecided (ADR-06) | RP-02 |
 | **Drive** — motors, gearing, Ø84 mm wheels, front caster, mandatory rear skid, drive brackets | 200 | 600 | Two-wheel differential drive; 170 mm track, 110 mm axle-to-caster target, ~70 mm rear skid reach at ≤14 mm floor height | RP-03 |
@@ -37,9 +37,9 @@ Ranges carry the current uncertainty. "Basis" states where the number comes from
 | **Wiring** — harness, connectors, strain relief across joints | 60 | 180 | Three-axis moving head harness + base runs; unknown ≠ 0 | RP-01 / RP-02 |
 | **Fasteners** — screws, heat-set inserts, brackets, adhesives | 40 | 120 | Repeated-service assembly (heat-set inserts) across head/body/base | RP-06 |
 | **Structural / integration margin** (design reserve) | 150 | 400 | ~15–20% reserve against integration growth (AD-08 concurrent-load risk) | Retired as rows firm up |
-| **TOTAL (rolled up)** | **1400** | **3350** | Sum using the 250 g head target in both columns; not a head tolerance claim | — |
+| **TOTAL (rolled up)** | **`1640 + M008`** | **`3100 + M_head`** | Non-head planning rows plus the current head lower bound/unknown final head mass; not a tolerance claim | — |
 
-The current first-pass whole-robot roll-up is **≈1.4–3.35 kg**, with substantial uncertainty outside the head target. If a later measured roll-up trends above ~4 kg, revisit `workbench.md` hazard notes (its own instruction).
+The current first-pass whole-robot roll-up has a **minimum planning value of approximately 1.64 kg plus M008**. Its upper bound remains open until the complete head mass `M_head` is measured; the other subsystem high rows sum to approximately 3.10 kg before the head. If a later measured roll-up trends above ~4 kg, revisit `workbench.md` hazard notes (its own instruction).
 
 ## Head envelope detail (RP-01 / head-CAD input)
 
@@ -57,16 +57,16 @@ The head is the first mechanical risk (AD-02) and the CAD blocker, so it gets it
 | Roll/pitch/yaw mechanism | 3 axes in a 60 mm vertical neck allocation; joint order not selected | Concept A proposes body-fixed yaw → elevated ear-pivot pitch → head-fixed roll. Near-CoM roll is a gravity target pending a display-clear support/load-path blockout; ≥1 additional credible concept is still required. |
 | Cable bundle + service clearance | bend radius across 3 moving axes | Cable movement is an RP-01 measured item |
 
-**Representative RP-01 moving-head target: ~250 g**, with preliminary inertia **~0.001 kg·m²** and preliminary neck peak-torque estimate **~0.2 N·m**. The mass target supersedes the old 300–700 g ballast range. CAD-derived centre of mass/inertia and the axis-specific physics calculation must replace the preliminary estimates before final actuator selection; the scored rig load is registered from the representative as-built/CAD configuration.
+**Representative RP-01 planning load: ~490 g before M008 at 1.2 mm PLA, plus the required C2 controller.** This is a lower-bound `E` model, not a target or accepted measurement. The former ~250 g target, ~0.001 kg·m² inertia proxy and ~0.2 N·m neck-torque estimate are obsolete for RP-01 sizing. CAD-derived centre of mass/inertia and the axis-specific physics calculation must precede final actuator selection; the scored rig load is registered from the representative as-built/CAD configuration.
 
 Body packaging must separately reserve four PDM MEMS microphones, the speaker and its acoustic cavity, the battery **low and forward of the drive axle**, and primary electronics. Integrated layout targets `x_CoM=+25 mm` forward of the axle and `h_CoM=124 mm` above the floor; none of these body subsystems belongs in moving-head ballast under the current baseline.
 
 ## Open items
 
 - [ ] Validate the 300 × 205 × 180 mm bounding box with sourced envelopes in RP-06; revise the baseline explicitly if it cannot be met.
-- [ ] Produce a ~250 g head mass blockout and replace the preliminary CoM/inertia proxy with CAD mass properties before final RP-01 actuator selection.
+- [ ] Produce the complete `~490 g + M008` planning blockout and replace every provisional row with CAD/measured per-axis mass properties before final RP-01 actuator selection.
 - [ ] Include yoke, bearings, actuator offsets, ear bearing covers and complete harness in the blockout; iterate the A0/A1/A2 gimbal-centre points after their mass shifts the CoM.
-- [ ] Weigh the selected SKU 30493 sample without packaging and with its installed mount/harness; at the listed 118 g it would consume nearly half of the complete 250 g head target.
+- [ ] Weigh the selected SKU 30493 sample without packaging and with its installed mount/harness; replace the 118 g listing evidence in the RP-01 model.
 - [ ] Weigh the selected Camera Module 3 Wide SC0874 sample, connector retention, mount and moving interconnect separately; record their CoM coordinates and per-axis downstream membership.
 - [ ] Replace battery row once chemistry is decided in ADR-06 (RP-02).
 - [ ] Replace the drive mass range after RP-03 selects and measures the motors, transmissions, wheels, caster, skid, and brackets.
@@ -86,3 +86,4 @@ Body packaging must separately reserve four PDM MEMS microphones, the speaker an
 | 2026-08-29 | 0.8 | Replaced the rank-1 candidate wording with the locked SKU 30493 display baseline; actual module and installed masses remain required measurements. |
 | 2026-08-29 | 0.9 | Replaced the generic camera allowance with the locked visible-light Raspberry Pi Camera Module 3 Wide SC0874 envelope; left installed module/mount/interconnect masses as required measurements. |
 | 2026-08-30 | 0.10 | Propagated the display-derived 95 × 150 × 115 mm nominal complete-head envelope, smaller core, optical-aperture distinction and integrated-pivot side-pod width limit from dimensional baseline v1.7. |
+| 2026-09-02 | 0.11 | Replaced the obsolete 250 g system head row with the ~490 g pre-M008 lower bound plus required C2 hardware, reopened the whole-robot upper roll-up, and retired the preliminary inertia/torque values from RP-01 sizing. |

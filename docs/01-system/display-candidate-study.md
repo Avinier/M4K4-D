@@ -3,9 +3,9 @@
 | Field | Value |
 |---|---|
 | Status | **SELECTED AND LOCKED — Waveshare ESP32-S3-LCD-4.3, no touch, SKU 30493** |
-| Version | 0.6 |
+| Version | 0.7 |
 | Owner | Project builder |
-| Created / last reviewed | 2026-08-29 / 2026-08-30 |
+| Created / last reviewed | 2026-08-29 / 2026-09-02 |
 | Governs | `candidate-sourcing-matrix.md` face-display row |
 | Feeds | RP-01 moving-head mass/roll-support blockout, RP-02 control topology, RP-06 optical/layout mock-up |
 
@@ -67,7 +67,7 @@ BRIGHTNESS 180
 
 Assets and firmware can be updated while stationary; real-time expression commands are tiny. This is better aligned with a three-axis head than HDMI or DSI from the body.
 
-The ESP32-S3 display board remains the head-local renderer and face-communications co-processor, not the main Linux/behaviour computer. Its physical chip may also run local motion firmware only under C1, with rendering/communications pinned to Core 0, a high-priority motion task pinned to Core 1, and IRAM-safe servo ISR work. The official carrier schematic now blocks C1's required native GPIO budget, so RP-01 uses the C2 path: a separate ESP32-S3 motion-controller module runs the same firmware while the display board renders. The exact C2 module is unselected and no purchase is authorized.
+The ESP32-S3 display board is the head-local renderer and face-communications co-processor, not the main Linux/behaviour computer or RP-01 motion controller. C1/shared motion is rejected because the official carrier schematic does not expose the required native GPIO budget. **C2 is selected:** a separate ESP32-S3 executes synchronized head trajectories and owns the servo/safety interface while the display board renders the eyes. The exact C2 module is unselected and no purchase is authorized.
 
 ## Mechanical fit
 
@@ -122,3 +122,4 @@ Start RP-06 with **60–70% visible-transmission neutral smoke**, a black intern
 | 2026-08-29 | 0.4 | Dropped the AMOLED requirement by project decision; ranked India-available IPS paths and recommended the no-touch Waveshare ESP32-S3-LCD-4.3 as the first prototype purchase. |
 | 2026-08-29 | 0.5 | Project builder locked the no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493, as the V1 display; converted alternatives to change-controlled contingencies and retained integration tests as validation gates. |
 | 2026-08-30 | 0.6 | Rebuilt the head-facing geometry around the selected module: separated the 94–95 × 53–54 mm optical aperture from the larger bezel/window treatment and propagated the smaller head-envelope direction without reopening display selection. |
+| 2026-09-02 | 0.7 | Closed C1 for selected SKU 30493 and fixed this board's runtime role to eye/display rendering; C2 owns head trajectories, servo communication and motion safety. |

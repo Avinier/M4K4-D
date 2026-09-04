@@ -2,11 +2,11 @@
 
 | Field | Value |
 |---|---|
-| Status | **RP-01 build decisions locked; provisional mass model requires a system-baseline revision** |
-| Date | 2026-08-31 |
+| Status | **RP-01 build decisions locked; system baseline revised; measured mass remains open** |
+| Date / revised | 2026-08-31 / 2026-09-02 |
 | Scope | Head shell material, finish system, display-envelope fit and revised mass model |
 | Supersedes for RP-01 | `../../01-system/dimensional-baseline.md` head mass target of approximately 250 g and any RP-01 load/actuator conclusion derived from it |
-| RP-01 effect | The system-level `~250 g` head target is obsolete for RP-01 sizing; the earlier `~490 g` build-up is now a **pre-M008 lower bound** until the required C2 motion module is selected and weighed |
+| RP-01 effect | The system-level `~250 g` head target is obsolete; the current `~490 g` build-up is a **pre-M008 lower bound** until the selected C2 architecture's exact motion module is chosen and weighed |
 | Feeds | `payload-mass-capture.md`, CAD blockout, `physics.md`, `rig.md`, `gates.md`, actuator selection |
 
 ## 1. Locked RP-01 decisions
@@ -134,7 +134,7 @@ All values below are `E` evidence. They are a planning model only and never merg
 | M005 | Camera installed | 10 g | Camera Module 3 planning mass + retainer |
 | M006 | Camera moving interconnect | 8 g | FPC + stiffeners + strain relief |
 | M007 | Status-light assembly | 5 g | Planning allowance |
-| M008 | Dedicated motion controller, ESP32-S3 module class, conditional on C1 outcome | `U` | C1 fails on the selected carrier, making C2 required; exact module/mount/harness mass is not estimated and must be weighed |
+| M008 | Dedicated C2 motion controller, ESP32-S3 module class | `U` | C1 is rejected on the selected carrier; exact module/mount/harness mass is not estimated and must be weighed |
 | M009 | Runtime head IMU | 0 g | Not installed for stationary RP-01; bench IMU is excluded from the ledger |
 | M010 | Roll cradle, provisional PLA | 25 g | Planning allowance |
 | M011 | Pitch yoke, provisional PLA | 35 g | Planning allowance |
@@ -178,7 +178,7 @@ Open blockers:
 
 1. Decide whether 110–115 mm head-core depth is a real packaging requirement or may shrink toward approximately 90 mm.
 2. Record whether the available printer is enclosed; this selects ASA versus PETG if the PLA structure fails.
-3. Revise the system-level head-mass baseline after accepting this RP-01 model.
+3. Replace the revised system-level lower bound with the measured M900 total and per-axis mass tree when available.
 4. Resolve the roll-bearing arrangement versus the display envelope.
 5. Implement a yaw-plane connector or separable cut plane.
 6. Implement display flashing access.

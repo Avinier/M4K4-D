@@ -5,8 +5,8 @@
 | Status | **Open — no accepted mass total until physical readings are entered** |
 | Owner | Project builder |
 | Created | 2026-08-30 |
-| Revised | 2026-08-31 |
-| Governing RP-01 model | `material-finish-mass-decision.md`: approximately 490 g **pre-M008 lower bound** at 1.2 mm PLA; add required C2 controller hardware once selected; system-level 250 g target is obsolete for RP-01 sizing pending baseline revision |
+| Revised | 2026-09-02 |
+| Governing RP-01 model | `material-finish-mass-decision.md`: approximately 490 g **pre-M008 lower bound** at 1.2 mm PLA; the C2 architecture is selected and its exact ESP32-S3 module remains to be chosen/weighed; the system baseline now carries the same lower bound |
 | Feeds | Per-axis mass tree, CoM/inertia model, actuator sizing, representative RP-01 ballast |
 
 ## Purpose and boundary
@@ -84,7 +84,7 @@ Use the head Cartesian frame already adopted by RP-01: origin and final datum re
 | M005 | Installed camera: M004 + final retainer/mount and connector-retention parts owned here | 1 | M005 | `U` |  |  |  |  |  |  | Yes | Mount open; cable parts must be assigned to M005 or M006 before weighing |
 | M006 | Final camera moving interconnect: assigned cable/adapters/stiffeners/connectors/strain relief downstream of yaw | 1 set | M006 | `U` |  |  |  |  |  |  | Yes | Production interconnect open |
 | M007 | Status LED/PCB + optic/diffuser + mount + wiring assigned here | 1 | M007 | `U` |  |  |  |  |  |  | Yes | Implementation open |
-| M008 | **Dedicated motion controller, ESP32-S3 module class, conditional on C1 outcome**, plus its mount/connectors | 1 | M008 | `U` |  |  |  |  |  |  | Yes | C1 fails on the selected carrier's GPIO budget, so C2 is required. Select and weigh the module, mount, connectors and local harness before any complete-head mass claim |
+| M008 | **Dedicated C2 motion controller, ESP32-S3 module class**, plus its mount/connectors | 1 | M008 | `U` |  |  |  |  |  |  | Yes | C1 is rejected on the selected carrier's GPIO budget. Select and weigh the exact C2 module, mount, connectors and local harness before any complete-head mass claim |
 | M009 | Runtime head IMU | 0 | M009 | `E` |  |  |  | 0 |  |  | No | RP-01 architecture decision: not installed; bench IMU is excluded from this ledger. Any future installed sensor requires a superseding decision/new row. |
 | M010 | Roll cradle/payload frame, final cleaned **provisional PLA** part with retained inserts assigned here | 1 set | M010 | `U` |  |  |  |  |  |  | Yes | Thermal/creep flag remains open |
 | M011 | Pitch yoke/moving support, final cleaned **provisional PLA** part with retained inserts assigned here | 1 set | M011 | `U` |  |  |  |  |  |  | Yes | Thermal/creep flag remains open |
@@ -126,7 +126,7 @@ This `D`/`E` model supports pre-purchase physics and actuator screening. It rema
 | M020 | 15 | `E`: moving harness |
 | M021 | 8 | `E`: structural/hidden fasteners |
 | M021a | 11 | `E`: visible M2 button-head set at approximately 0.35 g each; separately owned and tradeable |
-| **Provisional complete head before M008** | **~490 + M008** | Planning-only lower bound; see `material-finish-mass-decision.md` |
+| **Provisional complete head including unknown M008** | **~490 + M008** | Planning-only lower bound; see `material-finish-mass-decision.md` |
 
 The corresponding 1.0 mm PLA-wall case is approximately **472 g + M008**. Neither number is accepted `W` evidence.
 

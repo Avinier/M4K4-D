@@ -4,7 +4,7 @@
 |---|---|
 | Status | Not started (blocked on Stage 0 workbench readiness + selected concept) |
 | Authority | `workbench.md` scored-test readiness gate; `risk-prototype-plan.md` RP-01 rig requirements |
-| Physical baseline | `material-finish-mass-decision.md`; representative planning load is ~490 g at 1.2 mm PLA **plus required M008 C2 hardware**, pending module selection, measured per-axis mass tree and system-baseline revision |
+| Physical baseline | `material-finish-mass-decision.md`; representative planning load is ~490 g at 1.2 mm PLA **plus selected M008 C2 hardware**, pending exact module selection and the measured per-axis mass tree |
 
 Requirements to satisfy (from the plan): rigid guarded bench fixture; adjustable ballast at representative head CoM; commanded + measured joint state on a monotonic clock; independent video with visible timing cue; safe physical stop; measure/derive joint angle, current, voltage, temperature, sound level at fixed position, structural deflection, camera image movement; cable behaviour across the workspace.
 

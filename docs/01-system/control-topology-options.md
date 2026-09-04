@@ -2,11 +2,11 @@
 
 | Field | Value |
 |---|---|
-| Status | **RP-01 motion-controller class selected; C1 is electrically blocked on the selected display carrier; exact C2 module remains open.** |
-| Version | 0.7 |
+| Status | **RP-01 C2 selected: separate ESP32-S3 motion controller; C1 rejected on selected carrier; exact C2 module remains open.** |
+| Version | 0.8 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-08-31 |
+| Last reviewed | 2026-09-02 |
 | Governed by | `risk-prototype-plan.md` — permitted provisional option study (decision-closeout: "the architecture phase may begin with provisional option studies while prototypes run") |
 | Feeds | RP-02 (electrical/control backbone) → **ADR-06 (power)**, **ADR-12 (control topology)**; the monotonic-timebase deliverable (plan §104) |
 | Consumes | `system-design-brief.md` responsibility set + AD-01/AD-06/AD-08; `mass-envelope-ledger.md` head section |
@@ -77,13 +77,13 @@ The camera **must** ride in the head (AD-06). The real question is whether the *
 |---|---|---|---|---|
 | **A. Vector-style (compute in head)** | SBC + camera + display + IMU in the head; dumb motor MCU in body | shortest camera/display buses; proven by Vector | heaviest 3-axis moving mass; power + data down to body; head-CAD must package an SBC | **Requires an explicit dimensional-baseline revision** because the current baseline body-mounts primary electronics; retain only as a fallback architecture |
 | **B. Body-heavy (compute in body)** | SBC in body; head carries only camera + display + light | lightest head, easiest gimbal | **camera bus (MIPI/USB) must flex across 3 joints** — the fragility risk; display bus too | Cable-survival risk is the whole RP-01 concern |
-| **C. Hybrid (active RP-01 family)** | SBC in **body**; ESP32-S3 motion firmware owns the head servo bus, limits, watchdog and command expiry; camera remains its own managed cable; the four-mic array remains body-mounted. **C1:** motion and rendering share the display board's ESP32-S3. **C2:** a separate ESP32-S3 module runs motion while the display board renders. | Single motion-firmware target from the start; thin semantic body-to-head link; no runtime head IMU or Nano moving mass | Camera still crosses the joints. C1 has a carrier-I/O gate; C2 adds a board, mount and harness. | **C2 is the active RP-01 implementation path.** C1 is electrically blocked by the selected carrier's GPIO assignment; revisit only with different hardware. |
+| **C. Hybrid — SELECTED for RP-01** | SBC in **body**; ESP32-S3 motion firmware owns the head servo bus, limits, watchdog and command expiry; camera remains its own managed cable; the four-mic array remains body-mounted. **Selected C2:** a separate ESP32-S3 module runs motion while the display board renders. **Rejected C1:** motion and rendering share the display board's ESP32-S3. | Single motion-firmware target from the start; thin semantic body-to-head link; no runtime head IMU or Nano moving mass | Camera still crosses the joints; C2 adds a board, mount and harness. C1 lacks the required carrier I/O. | **C2 selected.** C1 is rejected for SKU 30493 and reopens only with changed/materially different hardware. |
 
 The on-hand **Arduino Nano 33 BLE Sense** is a bench instrument, not an Option-C installed-controller candidate; see §6. RP-01 and RP-02 still validate timing, watchdog and electrical backbone, but they do not write the motion firmware twice on two MCU families.
 
 ### 4.1 Consequence of the selected 4.3-inch IPS module
 
-The project builder selected and locked the no-touch **Waveshare ESP32-S3-LCD-4.3, SKU 30493**, which includes an ESP32-S3/LVGL renderer. Head-local display rasterization is therefore a fixed property of the display subsystem. The wider compute placement, motion controller, internal transport and safety boundaries remain RP-01/RP-02 decisions.
+The project builder selected and locked the no-touch **Waveshare ESP32-S3-LCD-4.3, SKU 30493**, which includes an ESP32-S3/LVGL renderer. Head-local display rasterization is therefore a fixed property of the display subsystem. RP-01 now also selects the separate C2 ESP32-S3 motion/safety boundary; the exact C2 module, wider compute placement, internal transport implementation and final RP-02/ADR closure remain open.
 
 The selected path and its change-controlled architectural contingency are:
 
@@ -96,7 +96,7 @@ The selected display path is **D2 using Waveshare no-touch SKU 30493**. The body
 
 The display ESP32-S3 is a **head-local co-processor**, not Makad's main brain: the body SBC still owns perception, behaviour and semantic intent. In C1, that same physical ESP32-S3 may also execute the local motion/safety firmware; this is a board-consolidation decision, not a transfer of system authority. The primary C1 mitigation is ESP-IDF dual-core affinity: keep rendering/communications on Core 0, pin the high-priority motion task to Core 1, and keep the servo ISR path IRAM-safe. ESP-IDF documents [pinned dual-core tasks](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-reference/system/freertos_idf.html) and [Core-1/IRAM interrupt guidance](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-guides/performance/speed.html). C1 would still need an on-the-same-chip before/after timing comparison with rendering off and on, plus fault containment evidence.
 
-The **C1 electrical-feasibility gate fails on the selected carrier** before any timing test: it does not provide the required clean GPIO budget. C2 uses a separate ESP32-S3 motion-controller module class and remains the RP-01 implementation path; it runs the same motion firmware from the start. Neither path makes the display board the main Linux/behaviour computer.
+The **C1 electrical-feasibility gate fails on the selected carrier** before any timing test: it does not provide the required clean GPIO budget. C2 uses a separate ESP32-S3 motion-controller module class and is selected for RP-01; it runs the motion firmware from the start. Neither path makes the display board the main Linux/behaviour computer.
 
 D1 and the DWIN module are now change-controlled contingency references, not active parallel candidates. Reconsider either only if SKU 30493 records a hard procurement, envelope, mass/dynamics, optical/animation or safety/reliability failure under the selection rule in `display-candidate-study.md`.
 
@@ -146,20 +146,31 @@ Register the exact Nano revision and the bench sensor configuration when it cont
 
 The 2026-08-31 [official-schematic](https://files.waveshare.com/wiki/ESP32-S3-Touch-LCD-4.3/ESP32-S3-Touch-LCD-4.3-Sch.pdf) audit resolves C1 on this carrier: GPIO0/1/2/10/14/17/18/21/38–42/45/47/48 plus GPIO3/5/7/46 are LCD RGB/timing; GPIO11–13 are SD, GPIO8/9 are the shared I²C/CH422G path, GPIO15/16 the RS-485 path, GPIO19/20 USB/CAN, and GPIO43/44 USB-UART. GPIO6 is the only plainly exposed sensor GPIO. The CH422G expander cannot stand in for a deterministic servo bus, E-stop/fault or ISR path. Thus C1 fails both the original ten-signal screen and the reduced stationary-RP-01 five-signal screen. C1 may be reopened only if the received board materially differs from the official schematic or a new carrier is selected through change control.
 
+### 6.2 Locked RP-01 runtime ownership
+
+| Layer | Owner | Contract |
+|---|---|---|
+| Behaviour/perception | Body Linux SBC | Produces gaze/head goals, motion requests and cancellations; it does not stream raw PWM or depend on Linux timing for safety. |
+| Face presentation | Selected display carrier's ESP32-S3 | Renders eye expressions, animation and panel refresh from semantic face commands. It does not own the RP-01 servo bus. |
+| Head trajectory and safety | **Separate C2 ESP32-S3** | Instantiates and samples the registered `MJ5`/`MS7`/`TRACK`/`BRAKE` laws, synchronizes yaw/pitch/roll setpoints, applies limits, and owns watchdog, E-stop/fault handling and command expiry. |
+| Actuator inner loop | Purchased smart servos | Closes the local motor/current/position loop around C2 setpoints and reports available position/current/voltage/temperature/fault telemetry. Servo-local interpolation may be used only as a measured low-level aid; it cannot own Makad gesture timing or cross-axis coordination. |
+
+This boundary is selected for RP-01. Exact message schema, bus protocol, update rate and feedforward fields remain interface decisions, but they must preserve centralized, deterministic trajectory ownership on C2.
+
 **Heterogeneity caution:** using *different* MCU families for head and base multiplies toolchains and debug surfaces for a solo builder. Vector's head-SoC vs body-STM32 split was heterogeneous **by necessity** (one must run Linux, one is a tiny motor relay) — not by preference. If a base MCU is added, prefer the **same family** as the head unless a role genuinely forces otherwise.
 
-## 7. Provisional recommendation (to be confirmed by RP-02)
+## 7. Selected RP-01 boundary and provisional wider-system recommendation
 
 1. **Three roles, two RP-01 head boards:** a body **Linux SBC** for vision/NLU/behaviour, the selected head-local **ESP32-S3 display renderer**, and a separate **ESP32-S3 motion controller** for servo limits/watchdog/command expiry. C1 consolidation onto the display carrier is electrically blocked; C2 is not a second firmware implementation. A base/drive MCU with a base-mounted runtime IMU remains a later locomotion decision.
 2. **Internal link: UART/USB serial**, Vector-style. Not CAN, not micro-ROS, not I²C across joints — those are documented "grow-into-it" options.
-3. **Compute placement (Option A/B/C) is the open fork** — study Option C first; let RP-01 (cable behaviour) and RP-02 (backbone) decide with evidence.
+3. **Option C is the active RP-01 baseline.** RP-01 cable evidence and RP-02 still close the wider body/head transport and final system architecture; they do not reopen C1 on SKU 30493 without change control.
 4. **Timebase: one master + timestamp-at-source + serial offset reconciliation.** Not PTP.
 5. **Motor limits, watchdog, and E-stop live on the MCU, never on the SBC** — every source insists safety-critical loops must survive the Linux side being busy or rebooting (reinforces the `workbench.md` scored-test gate).
 6. **Command surface across the link should be semantic** (`set head angle`, `drive wheels`, `set face state/parameters`), not raw PWM or streamed raster frames — per the system-design-brief's "behaviour expresses intent, controllers enforce physics," and mirrored by Vector's SDK proto.
 
 ## 8. Open items → RP-02 / ADR-12 / ADR-06
 
-- [ ] Decide compute placement (Option A / B / C) from RP-01 cable-behaviour + RP-02 backbone evidence.
+- [ ] Close the wider body/head compute placement and transport in RP-02/ADR-12 while retaining selected RP-01 Option C/C2 unless change control records contrary evidence.
 - [ ] Validate the selected D2 display path with no-touch Waveshare SKU 30493: installed mass/CoM, animation frame time, optical result, power/thermal behaviour, complete moving harness and fault response.
 - [ ] Select an ESP32-S3 motion-controller module with the required SPI/servo/E-stop/fault/interrupt pin budget; no purchase is authorized yet.
 - [ ] Treat C1 as electrically blocked on SKU 30493's carrier. If later hardware changes reopen it, run the same-chip rendering-off/on timing comparison with Core-0/Core-1/IRAM mitigation before consolidation.
@@ -181,3 +192,4 @@ The 2026-08-31 [official-schematic](https://files.waveshare.com/wiki/ESP32-S3-To
 | 2026-08-29 | 0.5 | Replaced the blocked AMOLED-controller hypothesis with the India-orderable IPS paths; made the ESP32-S3/LVGL head renderer the first D2 prototype while keeping motion safety on a dedicated controller. |
 | 2026-08-29 | 0.6 | Propagated the builder's SKU 30493 lock: D2 head-local display rendering is now selected while the internal transport, motion controller and safety boundary remain evidence-gated. |
 | 2026-08-31 | 0.7 | Locked ESP32-S3 as the RP-01 motion-firmware class; moved Nano 33 BLE Sense to bench-only equipment; removed the runtime head-IMU path; recorded Core-0/Core-1/IRAM C1 mitigation and the official schematic audit that blocks C1 on the selected carrier, leaving a separate ESP32-S3 C2 module as the active implementation path. |
+| 2026-09-02 | 0.8 | Closed the C1/C2 fork in favour of C2, locked display-versus-motion ownership, centralized trajectory execution and safety on the separate ESP32-S3, and retained only the exact module and interface details as open. |

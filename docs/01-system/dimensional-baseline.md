@@ -3,9 +3,9 @@
 | Field | Value |
 |---|---|
 | Status | **Current target baseline — supersedes earlier dimensional and packaging assumptions** |
-| Version | 1.7 |
+| Version | 1.8 |
 | Owner | Project builder |
-| Approved | 2026-08-30 |
+| Approved / revised | 2026-08-30 / 2026-09-02 |
 | Feeds | Mass/envelope ledger, RP-01 head, RP-03 drive, RP-06 layout, sourcing, integrated CAD |
 
 ## Authority and interpretation
@@ -41,13 +41,13 @@ The nominal vertical stack is 140 mm ground-to-body-top, 60 mm neck allocation a
 | Face/display active area | **95.04 W × 53.86 H mm nominal** | Fixed by the selected no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493 |
 | Face optical aperture and bezel | **~94–95 W × 53–54 H mm optical aperture within a ~110–115 W × 60–65 H mm visible bezel/window treatment** | The optical aperture follows the 95.04 × 53.86 mm active image; RP-06 must separately clear the selected module's approximately 106.1 × 67.8 mm hidden PCB/body |
 | Integrated side pods / pivot covers | **~40–50 mm diameter visual target; ~8–12 mm contribution per side beyond the core, within the 145–155 mm complete-width band** | Covers should integrate required pivots instead of adding decorative width after the mechanism; no microphones/sensors, and only an inner frame/yoke carries structural load |
-| Head mass | **~250 g target** | Controls neck loads and whole-robot centre of mass |
-| Preliminary head inertia | **~0.001 kg·m²** | Starting value for RP-01 neck-actuator calculations |
-| Preliminary neck peak torque | **~0.2 N·m** | Early actuator-sizing estimate; CAD mass properties and RP-01 calculations determine the final value |
+| Head mass | **~490 g pre-M008 lower bound at 1.2 mm PLA, plus the required C2 module; measured total TBD** | Current RP-01 planning input; replace with the M900 reading and per-axis mass tree |
+| Head inertia | **TBD from CAD/as-built per-axis mass properties** | The former ~0.001 kg·m² proxy is invalid for actuator sizing |
+| Neck torque | **TBD per axis from the registered load and trajectories** | The former ~0.2 N·m estimate is historical only and must not select actuators |
 | Neck axes | **Powered yaw + pitch + roll** | Full expressive head motion |
 | Camera | **One central Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, SC0874; 25 W × 24 H × 12.4 D mm module envelope** | Selected 120° diagonal / approximately 102° horizontal FOV simplifies acquisition and gaze geometry; connector, mount and moving-link clearance remain RP-01/RP-06 validation items |
 
-The moving head contains the display, any unavoidable lightweight display controller/head-node electronics, central camera, required brackets/structure, neck interfaces, and local wiring. **All of those installed items count inside the ~250 g target.** RP-01 has no runtime head IMU; its Nano/IMU bench instruments are excluded. The microphones, speaker, battery, main Linux SBC and other primary electronics are body-mounted and must not be added to RP-01 moving-head ballast unless the baseline is formally revised.
+The moving head contains the selected display/renderer board, the required separate C2 ESP32-S3 motion controller, central camera, required brackets/structure, moving actuator and bearing portions, neck interfaces, and local wiring. **All installed items count in M900 and the per-axis mass tree.** The current planning lower bound is ~490 g before M008 at 1.2 mm PLA; it is not a target or accepted measurement. RP-01 has no runtime head IMU; its Nano/IMU bench instruments are excluded. The microphones, speaker, battery, main Linux SBC and other primary electronics are body-mounted and must not be added to RP-01 moving-head ballast unless the baseline is formally revised.
 
 ## Body, neck, and support geometry
 
@@ -98,12 +98,12 @@ Until RP-03 measures lift onset and dynamic compliance, commanded forward accele
 | Ear microphones | **None** | Ear pods remain free of acoustic/electronic function; concealed mechanical access is permitted as a candidate, not selected here |
 | Speaker | **Body-mounted** | More acoustic cavity volume and less moving-head mass |
 | Battery | **Low and forward of the drive axle** | Lowers `h_CoM` and increases the forward restoring arm `x_CoM`; behind-axle placement would reduce forward-acceleration tip resistance |
-| Primary electronics | **Body-mounted main Linux SBC and power/control hardware; only unavoidable lightweight display/head-node electronics may move with the head** | Keeps the head light while allowing a short local panel interface; every head-local board, connector, mount and harness segment counts inside the ~250 g target |
+| Primary electronics | **Body-mounted main Linux SBC and power hardware; selected display ESP32-S3 plus one separate C2 ESP32-S3 motion controller move with the head** | Display and motion roles are physically separated on RP-01; every head-local board, connector, mount and harness segment counts in M900 |
 | Rear skid | **Mandatory** | Protects sharp acceleration, braking, and turning cases |
 
 ## Compact handoff
 
-Design around **300 H × 205 W × 180 D mm overall; approximately 95 H × 150 W × 115 D mm nominal head (validate inside 90–100 H × 145–155 W × 110–120 D mm); Ø84 mm wheels; 170 mm track; and 110 mm drive-axle-to-front-caster wheelbase**, with a **~250 g moving head**, **60 mm three-axis neck allocation**, whole-robot CoM at approximately **25 mm forward of the axle and 124 mm high**, a **~70 mm rear skid no more than 14 mm above the floor**, and body-mounted audio, forward-low battery, and primary electronics.
+Design around **300 H × 205 W × 180 D mm overall; approximately 95 H × 150 W × 115 D mm nominal head (validate inside 90–100 H × 145–155 W × 110–120 D mm); Ø84 mm wheels; 170 mm track; and 110 mm drive-axle-to-front-caster wheelbase**, with a **~490 g pre-M008 moving-head lower bound plus the required C2 controller**, **60 mm three-axis neck allocation**, whole-robot CoM targets initially at approximately **25 mm forward of the axle and 124 mm high but requiring revision under the heavier head**, a **~70 mm rear skid no more than 14 mm above the floor**, and body-mounted audio, forward-low battery, and main Linux compute.
 
 ## Change control
 
@@ -124,3 +124,4 @@ Design around **300 H × 205 W × 180 D mm overall; approximately 95 H × 150 W 
 | 2026-08-29 | 1.5 | Locked the face geometry to the selected no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493, while retaining physical-sample verification of the complete hidden envelope. |
 | 2026-08-29 | 1.6 | Locked the central head-camera envelope to the visible-light Raspberry Pi Camera Module 3 Wide, order code SC0874; retained mount, installed mass and production moving-interconnect validation. |
 | 2026-08-30 | 1.7 | Rebuilt the head envelope bottom-up from the selected 106.1 × 67.8 mm display and 25 × 24 × 12.4 mm camera. Replaced the 180 mm concept-art width with a 150 mm nominal complete width, reduced nominal depth to 115 mm, separated the optical aperture from bezel/window size, and required side pods to integrate rather than add width beyond the mechanical pivots. |
+| 2026-09-02 | 1.8 | Rejected the obsolete 250 g head target and preliminary inertia/torque sizing inputs; adopted the ~490 g pre-M008 lower bound plus the selected separate C2 ESP32-S3 controller, and flagged whole-robot CoM/tip targets for recalculation under the heavier head. |

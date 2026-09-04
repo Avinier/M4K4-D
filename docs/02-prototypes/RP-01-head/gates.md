@@ -4,7 +4,7 @@
 |---|---|
 | Status | Not started (thresholds come from `intent.md` + `storyboard.md` + `physics.md`; freeze before first scored run) |
 | Authority | Gate definitions and registration-record fields: `risk-prototype-plan.md` §RP-01. This file holds the registered numeric versions. |
-| Physical baseline | `material-finish-mass-decision.md`; current RP-01 planning load is a ~490 g pre-M008 lower bound at 1.2 mm PLA, pending C2 module selection, measured per-axis tree and system-baseline revision |
+| Physical baseline | `material-finish-mass-decision.md`; current RP-01 planning load is a ~490 g pre-M008 lower bound at 1.2 mm PLA plus selected C2 hardware, pending exact module selection and the measured per-axis tree |
 
 Gates to register (from the plan):
 

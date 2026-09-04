@@ -1760,3 +1760,23 @@ The official Waveshare SKU 30493 carrier schematic closes the electrical gate fi
 Because the previous 490 g build-up carried M008 as zero while C1/C2 was unresolved, it is now a **pre-M008 lower bound**, not a complete C2-head prediction. Do not invent that module's mass: add it only after selecting and weighing the installed C2 module, mount, connectors and harness.
 
 Stationary RP-01 uses servo encoders for runtime joint angle and has no installed IMU. A bench IMU may be used for backlash and resonance measurements. APDS-9960 auto-brightness/proximity-startle and PDM-mic early DOA work toward the 13° target are candidate bench experiments only. When locomotion arrives, the runtime IMU belongs on the base; a head-mounted IMU would require subtracting neck motion from commanded angles and reintroduce the SPEC-09 timing-skew problem.
+
+---
+
+## 2026-09-02 — RP-01 C1/C2 closure and trajectory ownership
+
+### MEM-20260902-01 — C2 selected; display and head-motion roles physically separated
+**Type:** DECISION + PROPAGATION
+**Status:** CURRENT FOR RP-01
+**Clarifies:** MEM-20260831-01 and MEM-20260831-02; “active path” is now a closed RP-01 selection rather than a remaining C1/C2 comparison
+**Requirements:** `docs/01-system/control-topology-options.md` v0.8; `docs/01-system/dimensional-baseline.md` v1.8; `docs/01-system/mass-envelope-ledger.md` v0.11; `docs/02-prototypes/RP-01-head/decision.md`
+
+The project builder closed the RP-01 C1/C2 fork. **C1 is rejected for the selected Waveshare SKU 30493 carrier, and C2 is selected:** RP-01 installs one separate ESP32-S3 motion-controller module in addition to the display carrier's ESP32-S3. The exact C2 module and purchase remain open; ESP32-S3 is the locked controller family. The Nano 33 BLE Sense remains bench-only.
+
+Runtime ownership is fixed. The display ESP32-S3 handles eye rendering, animation and display communication. The separate C2 ESP32-S3 instantiates and samples the registered head-motion profiles, synchronizes yaw/pitch/roll setpoints, owns the smart-servo bus, and enforces limits, watchdog, E-stop/fault handling and command expiry. Purchased smart servos close only their local motor/current/position loops and report available telemetry; servo-local interpolation cannot own Makad's gesture timing or cross-axis coordination.
+
+The system dimensional and mass baselines now carry the RP-01 **~490 g pre-M008 lower bound at 1.2 mm PLA plus the required C2 hardware**. The former 250 g head target, ~0.001 kg·m² inertia proxy and ~0.2 N·m neck-torque estimate are historical and inadmissible for actuator selection. The complete mass, exact controller mass, per-axis inertia, actuator family, servo protocol/update rate and whole-robot CoM/tip revision remain open evidence items.
+
+**Reopen rule**
+- C1 may be reconsidered only if the selected display carrier changes through change control or the received board materially differs from the official schematic.
+- A reopened C1 must first close native GPIO/safety feasibility and then run the same-chip rendering-off/on timing test with the documented Core-0/Core-1/IRAM mitigation.

@@ -3,11 +3,11 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.8 |
+| Version | 1.9 |
 | Owner | Project builder |
 | Created | 2026-08-14 |
-| Last reviewed | 2026-08-30 |
-| Depends on | Approved `docs/00-foundation/constraints.md` v1.2, other foundation documents, `system-design-brief.md` v1.2, and `dimensional-baseline.md` v1.6 |
+| Last reviewed | 2026-09-02 |
+| Depends on | Approved `docs/00-foundation/constraints.md` v1.2, other foundation documents, `system-design-brief.md` v1.2, and `dimensional-baseline.md` v1.8 |
 | Decision authority | Project builder |
 
 The prototypes are decision instruments, not partial versions of the final droid. They may use open frames, ballast, external measurement equipment, temporary controllers, and bench power where those choices produce better evidence. A polished appearance is not a pass condition. The approved bench setup and powered-test readiness gate live in `workbench.md`; powered scored testing remains blocked until that gate is satisfied for the active rig and test.
@@ -123,8 +123,8 @@ Can a manufacturable powered roll/pitch/yaw mechanism carry a representative Mak
 
 - At least two plausible joint-order/support/actuation concepts unless sourcing or calculation eliminates one before fabrication.
 - Concept A is the elevated ear-pivot serial gimbal documented in `../02-prototypes/RP-01-head/concepts/`; it remains a candidate until compared with Concept B and scored evidence.
-- Current **~250 g** representative complete moving-head target and sensitivity bound, per-axis downstream mass tree, centre of mass, inertia proxy, approximately **95 H × 150 W × 115 D mm nominal** envelope validated within **90–100 H × 145–155 W × 110–120 D mm**, camera/display/light envelopes, 60 mm neck allocation, cable bundle, service clearances, and structural margin from `dimensional-baseline.md`, the mass/envelope ledger, and RP-06. Microphones and speaker are body-mounted, not moving-head ballast.
-- Candidate controller loop, feedback strategy, limits, homing/calibration method, watchdog, and command-expiry behaviour.
+- Current **~490 g pre-M008 lower bound at 1.2 mm PLA plus the required C2 controller**, per-axis downstream mass tree, centre of mass and CAD/as-built inertia, approximately **95 H × 150 W × 115 D mm nominal** envelope validated within **90–100 H × 145–155 W × 110–120 D mm**, camera/display/light envelopes, 60 mm neck allocation, cable bundle, service clearances, and structural margin from `dimensional-baseline.md`, the mass/envelope ledger, and RP-06. The former 250 g, ~0.001 kg·m² and ~0.2 N·m values are inadmissible for RP-01 sizing. Microphones and speaker are body-mounted, not moving-head ballast.
+- Selected C2 control boundary: a dedicated ESP32-S3 executes synchronized head trajectories and owns the smart-servo bus, limits, watchdog and command expiry; the display ESP32-S3 renders the face. Exact C2 module, servo protocol/update rate, feedback strategy, homing/calibration method and actuators remain open.
 - Preliminary motion storyboard listing the attention, wake, bob, tilt, reversal, tracking-correction, settle, and safe-rest moves the mechanism must support.
 
 ### Rig and instrumentation
@@ -479,6 +479,6 @@ The architecture phase may begin with provisional option studies while prototype
 
 Approved by the project builder on 2026-08-17. Approval adopts the seven-prototype portfolio, roadmap, dependency order, threshold-registration policy, evidence-packet requirements, pass/iterate/reject/defer model, Core-failure rule, and decision-closeout process as the V1 risk-reduction baseline. Version 1.2 (2026-08-22) removes the per-prototype planning time boxes; iteration control is exercised through the gate-outcome review rule rather than calendar estimates. Version 1.3 (2026-08-25) consumes the selected dimensional/drive baseline and adds its CoM, caster-lift, skid, and forward-acceleration validation inputs to RP-03. Version 1.4 (2026-08-27) records the first credible RP-01 mechanism candidate and tightens the axis/CoM, backlash-versus-modal, harness-restoring-torque, busy-minute thermal, and head/body IMU evidence methods; it selects no mechanism or actuator and freezes no numeric gate. Version 1.5 (2026-08-28) adds per-axis mass accounting, makes the roll-support/display section a Concept-A blocker, and replaces an endpoint “lost motion” proxy with loaded hysteresis plus hold-hunting evidence. Version 1.6 (2026-08-29) consumes the project builder's locked no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493, and makes RP-06 validate the layout around that exact module rather than rerun display selection.
 
-Version 1.7 (2026-08-29) consumes the project builder's locked visible-light Raspberry Pi Camera Module 3 Wide, order code SC0874, and makes RP-01/RP-06/RP-07 validate that exact camera while keeping the supplier, body SBC and production moving interconnect open. Version 1.8 (2026-08-30) propagates the selected-component-derived 95 × 150 × 115 mm nominal head envelope and its 90–100 × 145–155 × 110–120 mm validation band into RP-01/RP-06 inputs.
+Version 1.7 (2026-08-29) consumes the project builder's locked visible-light Raspberry Pi Camera Module 3 Wide, order code SC0874, and makes RP-01/RP-06/RP-07 validate that exact camera while keeping the supplier, body SBC and production moving interconnect open. Version 1.8 (2026-08-30) propagates the selected-component-derived 95 × 150 × 115 mm nominal head envelope and its 90–100 × 145–155 × 110–120 mm validation band into RP-01/RP-06 inputs. Version 1.9 (2026-09-02) closes the RP-01 C1/C2 fork in favour of a separate ESP32-S3 C2 motion controller, fixes the display-versus-trajectory ownership boundary, and replaces the obsolete 250 g load input with the ~490 g pre-M008 lower bound plus C2.
 
 Except for the later-adopted dimensional/drive topology baseline, the selected no-touch Waveshare display SKU 30493 and the selected visible-light Raspberry Pi Camera Module 3 Wide SC0874, plan approval does not approve another exact component, supplier, mechanism implementation, production camera interconnect, or numeric `SC-TBD-*` or `CON-TBD-*` gate threshold. `workbench.md` was approved separately on 2026-08-17 and incorporated as the Stage 0 baseline in version 1.1 of this plan. Numeric prototype gates remain subject to preregistration before scored runs, and powered scored testing remains blocked until the approved readiness gate's safety, instrumentation, configuration, and logging requirements are satisfied.
