@@ -5,7 +5,7 @@
 | Status | **Open — no accepted mass total until physical readings are entered** |
 | Owner | Project builder |
 | Created | 2026-08-30 |
-| Revised | 2026-09-02 |
+| Revised | 2026-09-05 |
 | Governing RP-01 model | `material-finish-mass-decision.md`: approximately 490 g **pre-M008 lower bound** at 1.2 mm PLA; the C2 architecture is selected and its exact ESP32-S3 module remains to be chosen/weighed; the system baseline now carries the same lower bound |
 | Feeds | Per-axis mass tree, CoM/inertia model, actuator sizing, representative RP-01 ballast |
 
@@ -22,6 +22,8 @@ It includes the selected display and camera plus their actual mounts, window, sh
 This is a **build-time inventory**, geometry and whole-assembly mass record, not a post-assembly audit. Parts that become bonded, coated or hidden must be weighed and located immediately before the irreversible step. The next step assigns every row to yaw, pitch and roll according to the selected physical mounting arrangement; do not infer that membership here.
 
 Every physical part receives exactly one `Boundary owner ID` before weighing. A note such as “exclude if another row counts it” is insufficient: either that other row owns the part or this row does. Conditional rows resolved to quantity zero require a decision reference so zero cannot be confused with omission.
+
+**Inventory ownership is distinct from per-axis moving membership.** M013/M014/M015 are actuator inventory owners at the complete-head yaw boundary, not instructions to count only parts rotating about the actuator's own axis. For a yaw→pitch→roll serial arrangement, the roll servo housing is carried by yaw and pitch, the pitch servo housing by yaw, and a body-fixed yaw housing belongs to none of the head's downstream sets. Include every housing downstream of yaw once in M900; partition its contribution to the per-axis tree separately. Split mixed-frame kits such as yokes, bearing rings, shell/ear covers and harness branches into named subitems while preserving their parent totals. This clarification selects no mechanism and changes no provisional mass allowance.
 
 ## Accepted evidence rule
 
@@ -89,8 +91,8 @@ Use the head Cartesian frame already adopted by RP-01: origin and final datum re
 | M010 | Roll cradle/payload frame, final cleaned **provisional PLA** part with retained inserts assigned here | 1 set | M010 | `U` |  |  |  |  |  |  | Yes | Thermal/creep flag remains open |
 | M011 | Pitch yoke/moving support, final cleaned **provisional PLA** part with retained inserts assigned here | 1 set | M011 | `U` |  |  |  |  |  |  | Yes | Thermal/creep flag remains open |
 | M012 | Yaw moving interface, final cleaned **provisional PLA** plate/flange/coupler structure downstream of yaw | 1 set | M012 | `U` |  |  |  |  |  |  | Yes | Thermal/creep flag remains open |
-| M013 | Roll actuator moving assembly; whole actuator only if its housing moves with roll, otherwise assigned output hardware only | 1 | M013 | `U` |  |  |  |  |  |  | Yes | Boundary depends on mechanism |
-| M014 | Pitch actuator moving assembly; record housing/horn/mount boundary explicitly | 1 | M014 | `U` |  |  |  |  |  |  | Yes | Boundary depends on mechanism |
+| M013 | Roll actuator hardware downstream of yaw: include the whole actuator when its housing is downstream of yaw, even if the housing does not roll; otherwise assigned moving output hardware only | 1 | M013 | `U` |  |  |  |  |  |  | Yes | Record housing/output subitems and their yaw/pitch/roll membership separately; name the owner of mount/spindle hardware |
+| M014 | Pitch actuator hardware downstream of yaw: include its housing when mounted on the yaw yoke even though that housing does not pitch; record horn/mount ownership explicitly | 1 | M014 | `U` |  |  |  |  |  |  | Yes | Record housing/output subitems and their yaw/pitch/roll membership separately |
 | M015 | Yaw moving horn/coupler/output hardware when housing is body-fixed; whole actuator only if actually downstream | 1 | M015 | `U` |  |  |  |  |  |  | Yes | Boundary depends on mechanism |
 | M016 | Moving portion of roll bearings/pivots; record ring allocation or conservative whole-bearing ownership | 1 set | M016 | `U` |  |  |  |  |  |  | Yes | Support open |
 | M017 | Moving portion of pitch bearings/pivots downstream of yaw; record allocation method | 1 set | M017 | `U` |  |  |  |  |  |  | Yes | Support open |

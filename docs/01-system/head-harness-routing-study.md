@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | **Research-backed candidate architecture — no production harness selected** |
-| Version | 0.1 |
+| Version | 0.2 |
 | Owner | Project builder |
 | Created | 2026-08-29 |
-| Last reviewed | 2026-08-29 |
+| Last reviewed | 2026-09-05 |
 | Feeds | RP-01 mechanism/cable rig, RP-02 electrical backbone, RP-06 layout, ADR-02/ADR-03/ADR-08/ADR-12 |
 | Fixed inputs | Bounded roll/pitch/yaw; body-mounted primary compute; selected Camera Module 3 Wide SC0874; selected Waveshare display SKU 30493 |
 
@@ -94,7 +94,7 @@ One “cycle” must be defined by the exact pose sequence, not by a motor revol
 - Draw neutral, all extrema and recovery pose cable geometry before requesting quotes.
 - Keep the supplied Camera Module 3 FPC for static image/driver work only until H1 earns moving use.
 - Request exact OD, mass per metre, dynamic radius, torsion rating, conductor/shield construction, connector termination and cycle-test conditions from any high-flex supplier.
-- Carry all moving cable, guides, clamps, adapters and connector-retention hardware in the 250 g head mass tree and per-axis moving-mass sets.
+- Carry all moving cable, guides, clamps, adapters and connector-retention hardware in the current approximately 490 g pre-M008 planning model plus required C2 hardware, replacing existing allowances rather than adding them twice. Assign each item to its actual per-axis moving-mass sets and replace planning values with measured evidence; the former 250 g target is obsolete.
 
 ## Selection rule
 
