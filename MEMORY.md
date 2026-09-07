@@ -1829,3 +1829,41 @@ The [pre-layout brief](docs/02-prototypes/RP-01-head/cad/head/pre-layout-brief.m
 The builder selected A0 after reviewing the A0/A1/A2 pivot comparison. [HEAD-CAD-07](docs/02-prototypes/RP-01-head/cad/head/decisions.md#head-cad-07--a0-balance-target) targets the pitch axis through the estimated centre of mass of its carried assembly, with roll near the rolling assembly's own CoM. Exact pivot coordinates follow the component layout and its revised mass distribution, including the ears, camera crown and controller.
 
 A1/A2 remain fallback/sensitivity comparisons if packaging or measured reversal/hold behaviour warrants reconsideration. No deliberate gravity-bias offset or spring preload is selected for the initial layout. This does not freeze manufacturing coordinates, validate the mechanism or select servos.
+
+---
+
+### MEM-20260907-04 — C2 motion-controller module selected: Waveshare ESP32-S3-Zero
+
+**Type:** DECISION
+
+**Status:** CURRENT FOR RP-01; purchase authorization, servo family and RP02-G05 validation remain open
+
+**Clarifies:** MEM-20260902-01 — the C2 architecture was selected there; this closes *which module* carries it
+
+**Requirements:** [`control-topology-options.md`](docs/01-system/control-topology-options.md) v0.9 §6.3; [RP-01 decision](docs/02-prototypes/RP-01-head/decision.md) CTRL-04/CTRL-06; [`candidate-sourcing-matrix.md`](docs/01-system/candidate-sourcing-matrix.md) v0.17; CAD-04a in [head CAD requirements](docs/02-prototypes/RP-01-head/cad/head/requirements.md)
+
+The installed C2 motion controller is the **Waveshare ESP32-S3-Zero** — plain ESP32-S3FH4R2 variant, **headerless**, 4 MB flash / 2 MB PSRAM, 19 exposed GPIO, 23.5 × 18 mm castellated. Firmware is developed on a bench **ESP32-S3-DevKitC-1-N8R8**, which is bench equipment only: not installed, not in the mass ledger or BOM, and not a second firmware target — only a board-pin mapping header differs.
+
+**Why**
+
+- **Pin budget**, the criterion that killed C1. The future-ready screen is twelve signals: servo bus TX/RX/DIR (3), E-stop, fault, interrupt (3), SPI (4), body-SBC UART (2). Nineteen exposed, less GPIO0 (BOOT strapping) and GPIO21 (WS2812), leaves ~17 clean — margin of five over the full screen, not just the reduced five-signal stationary case. The S3 GPIO matrix means UART/SPI are not pin-locked.
+- **Volume.** 23.5 × 18 mm fits the reserved 35 × 25 × 15 mm `layout-01` pocket with connector clearance on both sides.
+- **Bus-neutrality**, the decisive property. The servo family is still unselected, so a bare MCU breakout keeps the transceiver external and leaves half-duplex TTL, RS-485 and PWM all reachable. Castellated edges allow the same part to move onto a custom carrier at integrated-CAD time with no change of chip, toolchain or firmware.
+- **Sourcing.** In stock in India (robosap ₹483.80 incl. GST; Robu.in; Waveshare direct $6.99).
+
+**Rejected:** Seeed XIAO ESP32S3 (11 GPIO, three strapping — fails the twelve-signal screen); ESP32-S3-DevKitC-1 as the *installed* board (63 × 25.5 mm forces a head repackage — kept as bench twin); Waveshare *Servo Driver with ESP32* and *Bus Servo Driver HAT (A)* (ESP32-WROOM-32, not S3 — breaks the locked family, and both are Feetech-wired, which would decide the actuator family from the controller end); SB Components *Serial Servo ESP32* (unnecessary TFT, servo bus on UART0 against the console, poor India stock); bare WROOM-1 on a custom carrier (needs a PCB spin — right for integrated CAD, wrong for RP-01); ESP32-S3-Zero-N8R8 (memory the motion firmware does not need).
+
+**Consequences**
+
+- **M008 remains `U`.** Selection is not a mass. The installed row is board + mount + connectors + local harness, weighed as one assembly; the `layout-01` 10/20/35 g figures stay a sensitivity sweep, and no datasheet value may be entered. The ~490 g pre-M008 lower bound is therefore unchanged.
+- **New CAD-04a:** the Zero has no USB-to-UART bridge, so the sealed head needs a C2 flashing/recovery path — accessible USB-C with BOOT/RESET actuation, or a defined wire-flashing break-out — in addition to the CAD-04 display path.
+- **Pin-assignment constraints:** E-stop, fault and other safe-at-boot signals must avoid strapping pins GPIO0/3/45/46; GPIO21 is the WS2812 and is out of the assignment.
+- **Single-source risk accepted** on Waveshare, with the DevKitC-1 as the repackaging fallback and the ESP32-S3 SuperMini as a rough second source.
+- HEAD-CAD-05 now carries real mount dimensions; the C2 mount, flashing access and pin map are added to the CAD open list.
+
+**Follow-up**
+
+- This is a screen against pin budget, volume and sourcing. It does **not** close **RP02-G05** — measured loop, link and timestamp performance is still required evidence.
+- Select the servo family and bus, then confirm the transceiver arrangement against the reserved pin map.
+- Weigh the installed C2 assembly on arrival and close M008; only then does the head mass tree close.
+- Purchase authorization remains the project builder's; re-check price and stock immediately before payment per the standing sourcing rule.

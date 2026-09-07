@@ -88,7 +88,7 @@ Use the head Cartesian frame already adopted by RP-01: origin and final datum re
 | M005 | Installed camera: M004 + final retainer/mount and connector-retention parts owned here | 1 | M005 | `U` |  |  |  |  |  |  | Yes | Mount open; cable parts must be assigned to M005 or M006 before weighing |
 | M006 | Final camera moving interconnect: assigned cable/adapters/stiffeners/connectors/strain relief downstream of yaw | 1 set | M006 | `U` |  |  |  |  |  |  | Yes | Production interconnect open |
 | M007 | Status LED/PCB + optic/diffuser + mount + wiring assigned here | 1 | M007 | `U` |  |  |  |  |  |  | Yes | Implementation open |
-| M008 | **Dedicated C2 motion controller, ESP32-S3 module class**, plus its mount/connectors | 1 | M008 | `U` |  |  |  |  |  |  | Yes | C1 is rejected on the selected carrier's GPIO budget. Select and weigh the exact C2 module, mount, connectors and local harness before any complete-head mass claim |
+| M008 | **Dedicated C2 motion controller: selected Waveshare ESP32-S3-Zero (ESP32-S3FH4R2, headerless, 23.5 × 18 mm)**, plus its mount/connectors | 1 | M008 | `U` |  |  |  |  |  | 23.5 × 18 board only | Yes | Module selected 2026-09-07; **mass still unknown**. Weigh the board, mount, connectors and assigned local harness as one assembly before any complete-head mass claim. No datasheet or board-only figure may be entered here |
 | M009 | Runtime head IMU | 0 | M009 | `E` |  |  |  | 0 |  |  | No | RP-01 architecture decision: not installed; bench IMU is excluded from this ledger. Any future installed sensor requires a superseding decision/new row. |
 | M010 | Roll cradle/payload frame, final cleaned **provisional PLA** part with retained inserts assigned here | 1 set | M010 | `U` |  |  |  |  |  |  | Yes | Thermal/creep flag remains open |
 | M011 | Pitch yoke/moving support, final cleaned **provisional PLA** part with retained inserts assigned here | 1 set | M011 | `U` |  |  |  |  |  |  | Yes | Thermal/creep flag remains open |
@@ -119,7 +119,7 @@ This `D`/`E` model supports pre-purchase physics and actuator screening. It rema
 | M005 | 10 | `E`: camera + retainer |
 | M006 | 8 | `E`: FPC/stiffeners/strain relief |
 | M007 | 5 | `E` |
-| M008 | `U` | Required C2 motion-controller module after C1 carrier-GPIO failure; no defensible mass until the exact module/mount/harness is selected |
+| M008 | `U` | Module selected (Waveshare ESP32-S3-Zero); the installed assembly is board + mount + connectors + local harness and remains unweighed, so no defensible mass exists yet. The `layout-01` 10/20/35 g sweep stays a sensitivity scenario, not a planning value |
 | M009 | 0 | No runtime RP-01 head IMU; bench IMU excluded |
 | M010 | 25 | `E`: provisional PLA roll cradle |
 | M011 | 35 | `E`: provisional PLA pitch yoke |

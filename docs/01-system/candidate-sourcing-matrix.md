@@ -3,25 +3,25 @@
 | Field | Value |
 |---|---|
 | Status | **Living. Face display and head camera selected; remaining rows are candidates unless explicitly marked otherwise.** |
-| Version | 0.16 |
+| Version | 0.17 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-09-02 |
+| Last reviewed | 2026-09-07 |
 | Governed by | `risk-prototype-plan.md` §"Continuous sourcing and data workstream" (deliverable 1) |
 | Feeds | First project cost range (CON-TBD-13), RP-01…RP-07 inputs, later BOM |
 
-The current dimensional baseline selects the two-powered-wheel/front-caster/rear-skid topology and major packaging targets. The project builder has additionally selected the **Waveshare ESP32-S3-LCD-4.3, no-touch, SKU 30493** as the V1 face display, the **Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, order code SC0874** as the V1 head camera, and **C2: a separate ESP32-S3 motion-controller module** for RP-01. C1 is closed and rejected on the selected display carrier's GPIO budget. The exact C2 module, motor, actuator, battery, framework, production camera interconnect and supplier remain open. Every other purchasable row remains a candidate chosen to bound specification, availability and landed cost. Prices/stock are Mumbai planning estimates and **must be re-checked immediately before purchase** (same rule as `workbench.md`). Bench tooling is not repeated here — it lives in `workbench.md`.
+The current dimensional baseline selects the two-powered-wheel/front-caster/rear-skid topology and major packaging targets. The project builder has additionally selected the **Waveshare ESP32-S3-LCD-4.3, no-touch, SKU 30493** as the V1 face display, the **Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, order code SC0874** as the V1 head camera, and **C2: a separate ESP32-S3 motion-controller module — the Waveshare ESP32-S3-Zero** — for RP-01. C1 is closed and rejected on the selected display carrier's GPIO budget. The motor, actuator, battery, framework, production camera interconnect and C2 purchase authorization remain open. Every other purchasable row remains a candidate chosen to bound specification, availability and landed cost. Prices/stock are Mumbai planning estimates and **must be re-checked immediately before purchase** (same rule as `workbench.md`). Bench tooling is not repeated here — it lives in `workbench.md`.
 
 Columns follow the plan's required fields (line 102): spec, supplier, availability, lead time, substitute, quantity, landed cost, replacement risk, required tools, fabrication dependency.
 
 ## Compute & control
 
-The RP-01 head-controller split is selected: the display carrier renders the face and a separate ESP32-S3 executes head trajectories and owns motion safety. Exact modules, the wider SBC/base topology, bus implementation and timebase remain subject to RP-02 → ADR-06/ADR-12. Rows below are candidates unless explicitly marked selected.
+The RP-01 head-controller split is selected: the display carrier renders the face and a separate ESP32-S3 executes head trajectories and owns motion safety. The C2 module is now selected; the SBC, wider base topology, bus implementation and timebase remain subject to RP-02 → ADR-06/ADR-12. Rows below are candidates unless explicitly marked selected.
 
 | Component | Candidate spec | Supplier (candidate) | Avail. | Lead | Substitute | Qty | Landed ₹ (est.) | Replacement risk | Required tools | Fab dependency |
 |---|---|---|---|---|---|---:|---:|---|---|---|
 | Main compute (SBC) | SBC-class board, USB/CSI camera, GPIO, enough for perception loop | Robu.in / local | Common | 0–3 d | Alt SBC / SBC+MCU split | 1 | 4,000–9,000 | Med (chip cycles) | — | Case/mount printed |
-| **Head motion controller — C2 SELECTED** | **One dedicated ESP32-S3 module.** C1/shared-display control is rejected on SKU 30493's GPIO budget. The exact module remains unselected and **buy nothing now**. | TBD | No purchase | — | ESP32-S3 module with verified native GPIO budget | 1 | TBD | Med until module/pinout/fault tests close | Logic analyzer/current logger | Own installed module, mount, connectors and harness in M008; see `control-topology-options.md` §6.1 |
+| **Head motion controller — C2 MODULE SELECTED** | **Waveshare ESP32-S3-Zero**, plain ESP32-S3FH4R2 variant, **headerless** (not `-M`). 4 MB flash / 2 MB PSRAM, 19 exposed GPIO, 23.5 × 18 mm castellated. C1/shared-display control is rejected on SKU 30493's GPIO budget. Selected on pin budget, pocket fit and bus-neutrality; see `control-topology-options.md` §6.3. | robosap.in (48 in stock 2026-09-07); Robu.in; Waveshare direct | In stock | 0–3 d | ESP32-S3-DevKitC-1 if head repackaging is accepted; ESP32-S3 SuperMini as rough second source | 1 + 1 spare | **~484 each incl. GST** (Waveshare direct $6.99) | Med — single-source Waveshare; two documented fallbacks | Logic analyzer/current logger, scale | Own installed module, mount, connectors and harness in M008 — **weigh the assembly, do not enter a datasheet mass**. Reconfirm price/stock before payment |
 | Runtime head IMU | **Not installed for stationary RP-01.** Servo encoders provide joint angle; an IMU is bench-only for backlash/resonance when useful. | — | No purchase | — | — | 0 | 0 | None | Nano/bench instrumentation | Excluded from moving-head mass ledger |
 | Real-time controller (MCU) — base/drive | Servo/motor timing + limits + watchdog; prefer same family as head MCU | Elegoo kit / Robu | On hand | 0 | On-SBC RT thread | 1 | 0–800 | Low | — | — |
 | Base-frame IMU | 6-axis gyro/accelerometer for later chassis heading/attitude, caster/traction disturbance and tip/pickup detection; head mounting is excluded because subtracting neck motion reintroduces the SPEC-09 timing-skew problem | On-hand board if suitable / Robu | Deferred | — | Same family as selected base controller where practical | 0–1 | TBD | Low | — | Rigid base/controller mount; feeds RP-03, not moving-head ballast |
@@ -102,3 +102,4 @@ This is a **planning envelope to gate procurement decisions**, not a budget comm
 | 2026-08-30 | 0.14 | Propagated the display-derived optical aperture and bezel/window geometry from dimensional baseline v1.7; no component selection changed. |
 | 2026-08-31 | 0.15 | Selected ESP32-S3 as the RP-01 motion-firmware class, made a dedicated module conditional on C1, recorded C1's carrier-GPIO block, moved Nano 33 BLE Sense and IMU use to bench equipment, and deferred all new controller/IMU purchases. |
 | 2026-09-02 | 0.16 | Closed the C1/C2 fork: rejected C1 on selected-carrier GPIO evidence, selected one dedicated ESP32-S3 C2 motion controller, retained the exact module and purchase as open, and replaced the stale 250 g actuator-sizing input with the ~490 g pre-M008 lower bound plus C2. |
+| 2026-09-07 | 0.17 | Selected the exact C2 module (Waveshare ESP32-S3-Zero, headerless) with verified India stock, a spare and two fallbacks, and recorded that M008 mass still requires a weigh-in. The ESP32-S3-DevKitC-1-N8R8 bench twin is recorded in `workbench.md`, not here. Servo family and purchase authorization remain open. |

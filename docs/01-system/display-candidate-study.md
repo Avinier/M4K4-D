@@ -67,7 +67,7 @@ BRIGHTNESS 180
 
 Assets and firmware can be updated while stationary; real-time expression commands are tiny. This is better aligned with a three-axis head than HDMI or DSI from the body.
 
-The ESP32-S3 display board is the head-local renderer and face-communications co-processor, not the main Linux/behaviour computer or RP-01 motion controller. C1/shared motion is rejected because the official carrier schematic does not expose the required native GPIO budget. **C2 is selected:** a separate ESP32-S3 executes synchronized head trajectories and owns the servo/safety interface while the display board renders the eyes. The exact C2 module is unselected and no purchase is authorized.
+The ESP32-S3 display board is the head-local renderer and face-communications co-processor, not the main Linux/behaviour computer or RP-01 motion controller. C1/shared motion is rejected because the official carrier schematic does not expose the required native GPIO budget. **C2 is selected:** a separate ESP32-S3 executes synchronized head trajectories and owns the servo/safety interface while the display board renders the eyes. The C2 module is the Waveshare ESP32-S3-Zero, selected 2026-09-07; purchase authorization remains open.
 
 ## Mechanical fit
 

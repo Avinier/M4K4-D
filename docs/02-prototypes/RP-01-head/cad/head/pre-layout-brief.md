@@ -36,7 +36,7 @@ These are grouped **planning values**, not new measurements. IDs and original ro
 | Non-camera moving harness | 15 g | M020 |
 | Hidden and visible fasteners | 19 g | M021 + M021a |
 | **Total before C2** | **490 g** | Rounded provisional rows |
-| Dedicated C2 board/mount/connectors | **Unknown** | M008; exact module not selected |
+| Dedicated C2 board/mount/connectors | **Unknown** | M008; module selected 2026-09-07 (Waveshare ESP32-S3-Zero, 23.5 × 18 mm) but the installed assembly is unweighed |
 
 The 35 g actuator allowance is not a limit into which all servo hardware must fit. Replace it with actual candidate hardware masses carried downstream of yaw. Likewise, ear covers already exist inside M019c: attaching them to the face changes pitch/roll membership and inertia without adding a second ear mass to the complete-head inventory. Added mounting features can change the revised totals and must be owned explicitly.
 
@@ -53,7 +53,7 @@ Yes, the servo references are already present in [packaging estimates](packaging
 
 The inspected ST3215-C046 drawing has a 36.5 mm full axial outline, which the existing depth comparison already uses. These references are not three selected per-axis servos. Use replaceable servo adapters so a candidate change does not require redesigning the face carrier. Final axis assignments follow the torque-speed and thermal calculations with the revised mass tree.
 
-For C2, only **ESP32-S3** and its separate-controller role are selected; no exact module SKU/envelope is recorded in the [control study](../../../../01-system/control-topology-options.md). Keep its reserved pocket provisional until a module/pinout/connector package is chosen. The display ESP32-S3 remains part of M002, not an additional M008 board.
+For C2, the **Waveshare ESP32-S3-Zero** is selected as of 2026-09-07 — headerless, 23.5 × 18 mm, 19 exposed GPIO — recorded in [control study](../../../../01-system/control-topology-options.md) §6.3. Its board envelope is therefore known, but the pinout assignment, connector package and installed mass are not; keep the reserved pocket provisional until those close, and allow for the CAD-04a flashing access. The display ESP32-S3 remains part of M002, not an additional M008 board.
 
 ## Proposed arrangement before modeling
 

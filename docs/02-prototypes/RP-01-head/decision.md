@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Mechanism decision open; material/mass and C2 controller-boundary decisions locked** |
+| Status | **Mechanism decision open; material/mass, C2 controller-boundary and C2 module decisions locked** |
 | Revised | 2026-09-07 |
 | Question | Can a manufacturable powered roll/pitch/yaw mechanism carry a representative Makad head while producing safe, repeatable, quiet-enough and characterful motion with acceptable range, reversal, settling, camera behaviour, wiring movement, calibration, and controller failure handling? |
 | Feeds | ADR-02 (head mechanism), ADR-03 (controller), ADR-08, ADR-12; mass/power/acoustic budget rows |
@@ -35,10 +35,19 @@ These decisions do not close the final Makad production material, measured head 
 | CTRL-01 | Motion firmware targets ESP32-S3 from the start. The Nano 33 BLE Sense is bench equipment only. |
 | CTRL-02 | **C1 is closed and rejected for selected display carrier SKU 30493. C2 is selected:** one separate ESP32-S3 motion-controller module is installed and owned by M008. |
 | CTRL-03 | The display carrier's ESP32-S3 owns eye rendering/display communication. The C2 ESP32-S3 executes synchronized yaw/pitch/roll trajectories and owns the smart-servo bus, limits, watchdog, E-stop/fault handling and command expiry. Smart servos retain only their local inner motor-control loops. |
-| CTRL-04 | The exact C2 module, servo family, electrical interface, bus update rate and purchase remain open. C1 may reopen only through display-carrier change control or evidence that the received carrier materially differs from the official schematic. |
+| CTRL-04 | **The exact C2 module is selected: Waveshare ESP32-S3-Zero** (ESP32-S3FH4R2, 4 MB flash / 2 MB PSRAM, headerless castellated, 23.5 × 18 mm, 19 exposed GPIO). Servo family, electrical interface, bus update rate and purchase authorization remain open. C1 may reopen only through display-carrier change control or evidence that the received carrier materially differs from the official schematic. |
 | CTRL-05 | RP-01 has no runtime head IMU. Servo encoders provide runtime joint angle; temporary bench IMU measurements do not enter the installed mass ledger. |
+| CTRL-06 | Motion firmware is developed on a bench **ESP32-S3-DevKitC-1-N8R8**. That board is bench equipment under `workbench.md`: it is not installed, not in the mass ledger or BOM, and does not create a second firmware target. Only the board-pin mapping differs between it and the installed Zero, and it lives in one configuration header. |
 
-Any controller-boundary change must supersede CTRL-01…CTRL-05 and propagate through `control-topology-options.md`, M008, firmware interfaces, physics, rig and gates.
+Three constraints follow from the selected module and bind the pin assignment and CAD:
+
+- **E-stop, fault and any other safe-at-boot signal must not use GPIO0, GPIO3, GPIO45 or GPIO46** — these are ESP32-S3 strapping pins and are not deterministic through reset.
+- **GPIO21 carries the board's WS2812 LED** and is excluded from the motion/safety assignment.
+- **The Zero has no USB-to-UART bridge.** Flashing uses native USB with BOOT held, so the sealed head needs a C2 flashing path as well as the display one; see CAD-04a.
+
+The module selection is a screen against pin budget, volume and sourcing. It does not close RP02-G05: measured loop, link and timestamp performance remain required evidence. Single-source risk on the Zero is accepted with the DevKitC-1 recorded as the repackaging fallback.
+
+Any controller-boundary change must supersede CTRL-01…CTRL-06 and propagate through `control-topology-options.md`, M008, firmware interfaces, physics, rig and gates.
 
 ## First-layout CAD decisions
 

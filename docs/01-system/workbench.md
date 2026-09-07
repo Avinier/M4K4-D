@@ -17,6 +17,7 @@ Current starting equipment: one Elegoo kit. Everything else below must be bought
 | Item | Current role | Explicit exclusion |
 |---|---|---|
 | Arduino Nano 33 BLE Sense | Bench instrument for optional IMU resonance/backlash measurement, APDS-9960 auto-brightness/proximity-startle experiments, and early PDM-mic DOA work toward the 13° target | Not installed in RP-01, not a motion controller, not in the head mass ledger or BOM. Its nRF52840 offers BLE, not Wi-Fi. |
+| ESP32-S3-DevKitC-1-N8R8 **(to buy)** | Bench twin for the selected C2 module. Develops and probes the RP-01 motion firmware with all ~36 GPIO on headers, where a logic analyzer and scope probes can actually reach them — impossible once the Zero is sealed in the head. | Not installed, not in the head mass ledger or BOM, and **not a second firmware target**: same ESP32-S3 family and same ESP-IDF build, differing only in a board-pin mapping header. Robu.in / Probots (~₹1,299 incl. GST, N8R2) / compoindia (~₹885 + GST, N16R8); re-check price and stock before purchase. |
 
 These are candidate-feature experiments, not purchase triggers or V1 commitments. Do not buy a XIAO or SPI IMU now.
 

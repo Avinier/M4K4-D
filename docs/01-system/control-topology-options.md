@@ -2,11 +2,11 @@
 
 | Field | Value |
 |---|---|
-| Status | **RP-01 C2 selected: separate ESP32-S3 motion controller; C1 rejected on selected carrier; exact C2 module remains open.** |
-| Version | 0.8 |
+| Status | **RP-01 C2 selected: separate ESP32-S3 motion controller; C1 rejected on selected carrier; C2 module selected — Waveshare ESP32-S3-Zero.** |
+| Version | 0.9 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-09-02 |
+| Last reviewed | 2026-09-07 |
 | Governed by | `risk-prototype-plan.md` — permitted provisional option study (decision-closeout: "the architecture phase may begin with provisional option studies while prototypes run") |
 | Feeds | RP-02 (electrical/control backbone) → **ADR-06 (power)**, **ADR-12 (control topology)**; the monotonic-timebase deliverable (plan §104) |
 | Consumes | `system-design-brief.md` responsibility set + AD-01/AD-06/AD-08; `mass-envelope-ledger.md` head section |
@@ -83,7 +83,7 @@ The on-hand **Arduino Nano 33 BLE Sense** is a bench instrument, not an Option-C
 
 ### 4.1 Consequence of the selected 4.3-inch IPS module
 
-The project builder selected and locked the no-touch **Waveshare ESP32-S3-LCD-4.3, SKU 30493**, which includes an ESP32-S3/LVGL renderer. Head-local display rasterization is therefore a fixed property of the display subsystem. RP-01 now also selects the separate C2 ESP32-S3 motion/safety boundary; the exact C2 module, wider compute placement, internal transport implementation and final RP-02/ADR closure remain open.
+The project builder selected and locked the no-touch **Waveshare ESP32-S3-LCD-4.3, SKU 30493**, which includes an ESP32-S3/LVGL renderer. Head-local display rasterization is therefore a fixed property of the display subsystem. RP-01 now also selects the separate C2 ESP32-S3 motion/safety boundary, and §6.3 selects its module. Wider compute placement, internal transport implementation and final RP-02/ADR closure remain open.
 
 The selected path and its change-controlled architectural contingency are:
 
@@ -159,6 +159,46 @@ This boundary is selected for RP-01. Exact message schema, bus protocol, update 
 
 **Heterogeneity caution:** using *different* MCU families for head and base multiplies toolchains and debug surfaces for a solo builder. Vector's head-SoC vs body-STM32 split was heterogeneous **by necessity** (one must run Linux, one is a tiny motor relay) — not by preference. If a base MCU is added, prefer the **same family** as the head unless a role genuinely forces otherwise.
 
+### 6.3 Selected C2 module — Waveshare ESP32-S3-Zero
+
+Selected **2026-09-07**. Screened on pin budget, installed volume, bus-neutrality and India sourcing. The locked ESP32-S3 family is unchanged; this closes only which module carries it.
+
+| Criterion | Result |
+|---|---|
+| Part | Waveshare **ESP32-S3-Zero**, plain ESP32-S3FH4R2 variant, **headerless** (not the `-M` pre-soldered version) |
+| Silicon | Xtensa LX7 dual-core to 240 MHz; 4 MB in-package flash, 2 MB PSRAM, 512 KB SRAM |
+| Exposed GPIO | **19** — GPIO33–37 are internal to PSRAM and not led out |
+| Size | 23.5 × 18 mm, castellated half-hole edges, 2.54 mm row pitch |
+| Sourcing | robosap ₹483.80 incl. GST (in stock 2026-09-07); Robu.in carries it; Waveshare direct $6.99 |
+| Bench twin | **ESP32-S3-DevKitC-1-N8R8** — Robu.in / Probots (~₹1,299 incl. GST, N8R2) / compoindia (~₹885 + GST, N16R8) |
+
+**Pin budget.** The future-ready screen needs twelve signals: servo bus TX/RX/DIR (3), E-stop, fault, interrupt (3), SPI (4), and the body-SBC UART link (2). Against 19 exposed, less GPIO0 (BOOT strapping) and GPIO21 (WS2812), roughly **17 remain clean — a margin of five over the full screen**, not merely over the reduced stationary-RP-01 five-signal case. The ESP32-S3 GPIO matrix means UART and SPI are not pin-locked, so the assignment is free rather than dictated by the board.
+
+**Volume.** 23.5 × 18 mm fits the reserved 35 × 25 × 15 mm C2 pocket in `layout-01` with clearance for a connector on each side. Headerless matters: pre-soldered 2.54 mm headers would consume most of the pocket's 15 mm depth, so the harness solders to the castellations.
+
+**Bus-neutrality — the decisive property.** The servo family is still unselected. A bare MCU breakout keeps the transceiver external, so half-duplex TTL, RS-485 and plain PWM all remain reachable without changing the controller. Castellated edges also allow the same part to be reflowed onto a custom carrier at integrated-CAD time with no change of chip, toolchain or firmware.
+
+**Rejected candidates**
+
+| Candidate | Reason |
+|---|---|
+| Seeed XIAO ESP32S3 | Only 11 GPIO exposed, three of them strapping. Fails the twelve-signal future-ready screen outright and clears the reduced screen with no margin. |
+| ESP32-S3-DevKitC-1 *(as installed board)* | ~36 GPIO and the best documentation, but 63 × 25.5 mm against a 35 mm pocket forces a head repackage for no functional gain. **Retained as the bench twin**, where its size helps. |
+| Waveshare *Servo Driver with ESP32* (65 × 30 mm); *Bus Servo Driver HAT (A)* (65 × 57 mm) | ESP32-WROOM-32, not S3 — breaks the locked family. Both are wired for Feetech ST/SC servos, so selecting one would silently decide the actuator family from the controller end. |
+| SB Components *Serial Servo ESP32* | Correct silicon and an integrated bus, but carries an unnecessary 1.14″ TFT, places the servo bus on UART0 GPIO43/44 against the console, and is not reliably stocked in India. |
+| Bare ESP32-S3-WROOM-1 on a custom carrier | Best mass and volume, but requires a PCB spin. Correct for integrated CAD, wrong for RP-01. |
+| ESP32-S3-Zero-N8R8 | 8 MB/8 MB via ESP32-S3-PICO-1. Motion firmware needs neither; take the cheaper, simpler part. |
+
+**Constraints this imposes**
+
+1. E-stop, fault and other safe-at-boot signals must avoid strapping pins GPIO0/3/45/46.
+2. GPIO21 is the WS2812 and is out of the assignment.
+3. No USB-to-UART bridge — flashing is native USB with BOOT held, so the sealed head needs a C2 flashing path (CAD-04a) alongside the display one.
+4. Single-source (Waveshare). DevKitC-1 is the documented fallback if repackaging becomes acceptable; ESP32-S3 SuperMini is a rough second source.
+5. **M008 stays `U`.** The installed row is board + mount + connectors + local harness, and no mass enters the ledger from a datasheet. Keep the 10/20/35 g sensitivity sweep until the assembly is weighed.
+
+This is a selection, not validation. **RP02-G05 still owns** measured loop, link and timestamp performance.
+
 ## 7. Selected RP-01 boundary and provisional wider-system recommendation
 
 1. **Three roles, two RP-01 head boards:** a body **Linux SBC** for vision/NLU/behaviour, the selected head-local **ESP32-S3 display renderer**, and a separate **ESP32-S3 motion controller** for servo limits/watchdog/command expiry. C1 consolidation onto the display carrier is electrically blocked; C2 is not a second firmware implementation. A base/drive MCU with a base-mounted runtime IMU remains a later locomotion decision.
@@ -172,7 +212,7 @@ This boundary is selected for RP-01. Exact message schema, bus protocol, update 
 
 - [ ] Close the wider body/head compute placement and transport in RP-02/ADR-12 while retaining selected RP-01 Option C/C2 unless change control records contrary evidence.
 - [ ] Validate the selected D2 display path with no-touch Waveshare SKU 30493: installed mass/CoM, animation frame time, optical result, power/thermal behaviour, complete moving harness and fault response.
-- [ ] Select an ESP32-S3 motion-controller module with the required SPI/servo/E-stop/fault/interrupt pin budget; no purchase is authorized yet.
+- [x] **Closed 2026-09-07 (§6.3):** selected the Waveshare ESP32-S3-Zero as the installed C2 module and the ESP32-S3-DevKitC-1-N8R8 as its bench twin. Purchase authorization remains the project builder's; RP02-G05 validation is outstanding.
 - [ ] Treat C1 as electrically blocked on SKU 30493's carrier. If later hardware changes reopen it, run the same-chip rendering-off/on timing comparison with Core-0/Core-1/IRAM mitigation before consolidation.
 - [ ] Register the on-hand Nano only when its IMU, APDS9960 or PDM mic produces a bench result.
 - [ ] Select or identify the base-frame IMU path when locomotion begins; feed it into RP-03 heading evidence.
@@ -193,3 +233,4 @@ This boundary is selected for RP-01. Exact message schema, bus protocol, update 
 | 2026-08-29 | 0.6 | Propagated the builder's SKU 30493 lock: D2 head-local display rendering is now selected while the internal transport, motion controller and safety boundary remain evidence-gated. |
 | 2026-08-31 | 0.7 | Locked ESP32-S3 as the RP-01 motion-firmware class; moved Nano 33 BLE Sense to bench-only equipment; removed the runtime head-IMU path; recorded Core-0/Core-1/IRAM C1 mitigation and the official schematic audit that blocks C1 on the selected carrier, leaving a separate ESP32-S3 C2 module as the active implementation path. |
 | 2026-09-02 | 0.8 | Closed the C1/C2 fork in favour of C2, locked display-versus-motion ownership, centralized trajectory execution and safety on the separate ESP32-S3, and retained only the exact module and interface details as open. |
+| 2026-09-07 | 0.9 | Selected the C2 module (Waveshare ESP32-S3-Zero) and its bench twin (ESP32-S3-DevKitC-1-N8R8) in new §6.3, recorded the rejected candidates, strapping/WS2812/flashing constraints and single-source risk, and kept M008 unknown pending a weigh-in. Servo family, bus implementation and RP02-G05 validation remain open. |

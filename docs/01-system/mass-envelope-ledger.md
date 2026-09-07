@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Status | **Living — dimensional baseline active; remaining mass values provisional.** |
-| Version | 0.11 |
+| Version | 0.12 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
 | Last reviewed | 2026-09-02 |
@@ -29,7 +29,7 @@ Ranges carry the current uncertainty. "Basis" states where the number comes from
 
 | Subsystem | Low (g) | High (g) | Basis / assumption | Measured by |
 |---|---:|---:|---|---|
-| **Head** — shell, display + window, display renderer, separate C2 motion controller, central camera, status light/optics, moving actuator/bearing portions, joint structure, connectors and local wiring | `490 + M008` | TBD | Current `E` lower bound at 1.2 mm PLA; M008 is required but unknown. Replace with the M900 reading and per-axis tree. Main Linux SBC, microphones, speaker and bench Nano/IMU are body-mounted or excluded. | RP-01 / RP-06 measured head |
+| **Head** — shell, display + window, display renderer, separate C2 motion controller, central camera, status light/optics, moving actuator/bearing portions, joint structure, connectors and local wiring | `490 + M008` | TBD | Current `E` lower bound at 1.2 mm PLA. The C2 module is now selected (Waveshare ESP32-S3-Zero) but **M008 remains unweighed and therefore unknown** — selection is not a mass. Replace with the M900 reading and per-axis tree. Main Linux SBC, microphones, speaker and bench Nano/DevKitC-1/IMU are body-mounted or excluded. | RP-01 / RP-06 measured head |
 | **Body** — main structure, outer shell, internal frame, service panels | 400 | 900 | Printed polymer enclosure at the envelope above, single-room duty | RP-06 |
 | **Battery** — cells + holder/pack + protection | 150 | 500 | Low and forward of the drive axle; chemistry undecided (ADR-06) | RP-02 |
 | **Drive** — motors, gearing, Ø84 mm wheels, front caster, mandatory rear skid, drive brackets | 200 | 600 | Two-wheel differential drive; 170 mm track, 110 mm axle-to-caster target, ~70 mm rear skid reach at ≤14 mm floor height | RP-03 |
@@ -87,3 +87,4 @@ Body packaging must separately reserve four PDM MEMS microphones, the speaker an
 | 2026-08-29 | 0.9 | Replaced the generic camera allowance with the locked visible-light Raspberry Pi Camera Module 3 Wide SC0874 envelope; left installed module/mount/interconnect masses as required measurements. |
 | 2026-08-30 | 0.10 | Propagated the display-derived 95 × 150 × 115 mm nominal complete-head envelope, smaller core, optical-aperture distinction and integrated-pivot side-pod width limit from dimensional baseline v1.7. |
 | 2026-09-02 | 0.11 | Replaced the obsolete 250 g system head row with the ~490 g pre-M008 lower bound plus required C2 hardware, reopened the whole-robot upper roll-up, and retired the preliminary inertia/torque values from RP-01 sizing. |
+| 2026-09-07 | 0.12 | Recorded the selected C2 module (Waveshare ESP32-S3-Zero) against the head row while keeping M008 unknown until the installed assembly is weighed, and excluded the ESP32-S3-DevKitC-1 bench twin from the ledger. Roll-up values unchanged. |

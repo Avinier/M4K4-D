@@ -70,7 +70,9 @@ Provide the existing separable yaw-plane boundary for service and mass measureme
 
 Place M008 on a removable mount on the rolling cradle, close to the roll axis where packaging allows, with programming and connector access. Its board, mount, connectors and attached moving wiring therefore contribute to yaw, pitch and roll payloads.
 
-**C2 and M008 refer to the same separate ESP32-S3 motion-controller assembly.** The display's ESP32-S3 renderer is already owned by M002. The two-controller boundary is already locked in the [RP-01 decision](../../decision.md#locked-controller-and-sensing-boundary); this record adds a working placement, not another board. Exact module, dimensions and installed mass remain open.
+**C2 and M008 refer to the same separate ESP32-S3 motion-controller assembly.** The display's ESP32-S3 renderer is already owned by M002. The two-controller boundary is already locked in the [RP-01 decision](../../decision.md#locked-controller-and-sensing-boundary); this record adds a working placement, not another board.
+
+**Module selected 2026-09-07:** Waveshare **ESP32-S3-Zero**, headerless, **23.5 × 18 mm**. It fits the reserved 35 × 25 × 15 mm pocket with clearance on both sides. Solder the harness to its castellated edges — pre-soldered 2.54 mm headers would consume most of the pocket depth, which is why the `-M` variant is excluded. The mount must expose the board's USB-C and BOOT/RESET, or route a defined flashing break-out, per CAD-04a. **Installed mass remains open**: M008 is board + mount + connectors + local harness, weighed as one assembly.
 
 ## HEAD-CAD-06 — Camera crown and continuous bezel
 
@@ -103,6 +105,7 @@ Retain A1 (pitch pivot 5 mm behind the carried CoM) and A2 (5 mm behind and 10 m
 | Servo selection | Actual trajectory torque/speed demand plus thermal, reversal and settling evidence |
 | Bearing and printed interfaces | Loads, retention, fits, stiffness, creep and assembly access |
 | Cable routing | Selected cable geometry, live data, restoring torque, flex endurance and service replacement |
+| C2 mount, flashing access and pin assignment | Mount geometry for the selected 23.5 × 18 mm Zero, CAD-04a flashing/recovery path, and a pin map that keeps E-stop/fault off strapping pins GPIO0/3/45/46 and off the GPIO21 WS2812 |
 
 The approximately **490 g pre-M008 planning lower bound** already includes provisional mechanism masses. Replace those allowances with boundary-owned parts; do not add the full mechanism again. It is neither measured mass nor the payload of every individual axis. Existing component masses, envelopes, candidate pivots and the proposed internal arrangement are collected in the [pre-layout brief](pre-layout-brief.md); the project is not starting from an empty mass or fit model.
 
