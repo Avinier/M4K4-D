@@ -1,0 +1,761 @@
+{
+  "method": "BREP intersection of documented envelopes at 56 roll/pitch poses, including positions independent of the relief construction samples; no yaw/body mesh/cable swept-solid validation.",
+  "pairs_per_pose": 21,
+  "poses": 56,
+  "hits": [],
+  "head_z_samples": [
+    {
+      "roll_deg": -18,
+      "pitch_deg": -22,
+      "head_min_z_mm": -42.27449748953945
+    },
+    {
+      "roll_deg": -18,
+      "pitch_deg": -15,
+      "head_min_z_mm": -35.809654874689166
+    },
+    {
+      "roll_deg": -18,
+      "pitch_deg": -5,
+      "head_min_z_mm": -24.44679373269276
+    },
+    {
+      "roll_deg": -18,
+      "pitch_deg": 0,
+      "head_min_z_mm": -17.920916191368377
+    },
+    {
+      "roll_deg": -18,
+      "pitch_deg": 10,
+      "head_min_z_mm": -23.397758955126044
+    },
+    {
+      "roll_deg": -18,
+      "pitch_deg": 20,
+      "head_min_z_mm": -26.719448986405833
+    },
+    {
+      "roll_deg": -18,
+      "pitch_deg": 30,
+      "head_min_z_mm": -27.785058414463546
+    },
+    {
+      "roll_deg": -18,
+      "pitch_deg": 40,
+      "head_min_z_mm": -26.56220923605203
+    },
+    {
+      "roll_deg": -15,
+      "pitch_deg": -22,
+      "head_min_z_mm": -39.88773216124705
+    },
+    {
+      "roll_deg": -15,
+      "pitch_deg": -15,
+      "head_min_z_mm": -33.323159601358384
+    },
+    {
+      "roll_deg": -15,
+      "pitch_deg": -5,
+      "head_min_z_mm": -21.88238004718373
+    },
+    {
+      "roll_deg": -15,
+      "pitch_deg": 0,
+      "head_min_z_mm": -15.346706862186752
+    },
+    {
+      "roll_deg": -15,
+      "pitch_deg": 10,
+      "head_min_z_mm": -20.862657649871633
+    },
+    {
+      "roll_deg": -15,
+      "pitch_deg": 20,
+      "head_min_z_mm": -24.30048347541562
+    },
+    {
+      "roll_deg": -15,
+      "pitch_deg": 30,
+      "head_min_z_mm": -25.555727740733364
+    },
+    {
+      "roll_deg": -15,
+      "pitch_deg": 40,
+      "head_min_z_mm": -24.590250484007417
+    },
+    {
+      "roll_deg": -6,
+      "pitch_deg": -22,
+      "head_min_z_mm": -31.77924138257458
+    },
+    {
+      "roll_deg": -6,
+      "pitch_deg": -15,
+      "head_min_z_mm": -24.875859082945052
+    },
+    {
+      "roll_deg": -6,
+      "pitch_deg": -5,
+      "head_min_z_mm": -13.170369496683492
+    },
+    {
+      "roll_deg": -6,
+      "pitch_deg": 0,
+      "head_min_z_mm": -6.6014178467076805
+    },
+    {
+      "roll_deg": -6,
+      "pitch_deg": 10,
+      "head_min_z_mm": -12.250229225095342
+    },
+    {
+      "roll_deg": -6,
+      "pitch_deg": 20,
+      "head_min_z_mm": -16.082599920929884
+    },
+    {
+      "roll_deg": -6,
+      "pitch_deg": 30,
+      "head_min_z_mm": -17.982085289891483
+    },
+    {
+      "roll_deg": -6,
+      "pitch_deg": 40,
+      "head_min_z_mm": -17.890970430230244
+    },
+    {
+      "roll_deg": 0,
+      "pitch_deg": -22,
+      "head_min_z_mm": -25.65851333785817
+    },
+    {
+      "roll_deg": 0,
+      "pitch_deg": -15,
+      "head_min_z_mm": -18.499379094684535
+    },
+    {
+      "roll_deg": 0,
+      "pitch_deg": -5,
+      "head_min_z_mm": -6.594072037905072
+    },
+    {
+      "roll_deg": 0,
+      "pitch_deg": 0,
+      "head_min_z_mm": 0.0
+    },
+    {
+      "roll_deg": 0,
+      "pitch_deg": 10,
+      "head_min_z_mm": -5.749101748784466
+    },
+    {
+      "roll_deg": 0,
+      "pitch_deg": 20,
+      "head_min_z_mm": -9.879296283654268
+    },
+    {
+      "roll_deg": 0,
+      "pitch_deg": 30,
+      "head_min_z_mm": -12.265089733646668
+    },
+    {
+      "roll_deg": 0,
+      "pitch_deg": 40,
+      "head_min_z_mm": -12.833990972053373
+    },
+    {
+      "roll_deg": 6,
+      "pitch_deg": -22,
+      "head_min_z_mm": -31.64230378362143
+    },
+    {
+      "roll_deg": 6,
+      "pitch_deg": -15,
+      "head_min_z_mm": -24.73319960632952
+    },
+    {
+      "roll_deg": 6,
+      "pitch_deg": -5,
+      "head_min_z_mm": -13.023239551123474
+    },
+    {
+      "roll_deg": 6,
+      "pitch_deg": 0,
+      "head_min_z_mm": -6.453725888657859
+    },
+    {
+      "roll_deg": 6,
+      "pitch_deg": 10,
+      "head_min_z_mm": -12.104781039750332
+    },
+    {
+      "roll_deg": 6,
+      "pitch_deg": 20,
+      "head_min_z_mm": -15.943814877801037
+    },
+    {
+      "roll_deg": 6,
+      "pitch_deg": 30,
+      "head_min_z_mm": -17.854180302285677
+    },
+    {
+      "roll_deg": 6,
+      "pitch_deg": 40,
+      "head_min_z_mm": -17.77783182647282
+    },
+    {
+      "roll_deg": 15,
+      "pitch_deg": -22,
+      "head_min_z_mm": -39.548666059137304
+    },
+    {
+      "roll_deg": 15,
+      "pitch_deg": -15,
+      "head_min_z_mm": -32.9699257705126
+    },
+    {
+      "roll_deg": 15,
+      "pitch_deg": -5,
+      "head_min_z_mm": -21.51807705424367
+    },
+    {
+      "roll_deg": 15,
+      "pitch_deg": 0,
+      "head_min_z_mm": -14.981012290997116
+    },
+    {
+      "roll_deg": 15,
+      "pitch_deg": 10,
+      "head_min_z_mm": -20.502518800929597
+    },
+    {
+      "roll_deg": 15,
+      "pitch_deg": 20,
+      "head_min_z_mm": -23.956842985407256
+    },
+    {
+      "roll_deg": 15,
+      "pitch_deg": 30,
+      "head_min_z_mm": -25.23902695205708
+    },
+    {
+      "roll_deg": 15,
+      "pitch_deg": 40,
+      "head_min_z_mm": -24.31011218986882
+    },
+    {
+      "roll_deg": 18,
+      "pitch_deg": -22,
+      "head_min_z_mm": -41.869669522853755
+    },
+    {
+      "roll_deg": 18,
+      "pitch_deg": -15,
+      "head_min_z_mm": -35.38791134852681
+    },
+    {
+      "roll_deg": 18,
+      "pitch_deg": -5,
+      "head_min_z_mm": -24.01183418064148
+    },
+    {
+      "roll_deg": 18,
+      "pitch_deg": 0,
+      "head_min_z_mm": -17.484295164490334
+    },
+    {
+      "roll_deg": 18,
+      "pitch_deg": 10,
+      "head_min_z_mm": -22.967771182728395
+    },
+    {
+      "roll_deg": 18,
+      "pitch_deg": 20,
+      "head_min_z_mm": -26.30915942936857
+    },
+    {
+      "roll_deg": 18,
+      "pitch_deg": 30,
+      "head_min_z_mm": -27.406933513360713
+    },
+    {
+      "roll_deg": 18,
+      "pitch_deg": 40,
+      "head_min_z_mm": -26.2277381246632
+    }
+  ],
+  "component_bounds": {
+    "front_bezel": {
+      "min": [
+        -3.0,
+        -65.0,
+        0.0
+      ],
+      "max": [
+        0.0,
+        65.0,
+        95.0
+      ]
+    },
+    "main_skin_with_trial_neck_reliefs": {
+      "min": [
+        -113.8,
+        -65.0,
+        0.0
+      ],
+      "max": [
+        -3.0,
+        65.0,
+        95.0
+      ]
+    },
+    "removable_rear_cover": {
+      "min": [
+        -115.0,
+        -65.0,
+        0.0
+      ],
+      "max": [
+        -113.8,
+        65.0,
+        95.0
+      ]
+    },
+    "camera_crown_trial": {
+      "min": [
+        -24.0,
+        -29.0,
+        94.0
+      ],
+      "max": [
+        0.0,
+        29.0,
+        109.0
+      ]
+    },
+    "window_mask_reserve": {
+      "min": [
+        -2.8,
+        -55.0,
+        10.0
+      ],
+      "max": [
+        -1.3,
+        55.0,
+        76.0
+      ]
+    },
+    "display_board_glass_envelope": {
+      "min": [
+        -14.4,
+        -53.05,
+        9.0
+      ],
+      "max": [
+        -3.8,
+        53.05,
+        77.0
+      ]
+    },
+    "display_active_area": {
+      "min": [
+        -3.75,
+        -47.52,
+        16.07
+      ],
+      "max": [
+        -3.55,
+        47.52,
+        69.93
+      ]
+    },
+    "display_rear_connector_reserve": {
+      "min": [
+        -18.0,
+        -53.05,
+        9.0
+      ],
+      "max": [
+        -14.4,
+        53.05,
+        77.0
+      ]
+    },
+    "camera_module_envelope": {
+      "min": [
+        -14.4,
+        -12.5,
+        81.0
+      ],
+      "max": [
+        -2.0,
+        12.5,
+        105.0
+      ]
+    },
+    "camera_CSI_exit_reserve": {
+      "min": [
+        -24.0,
+        -11.0,
+        79.0
+      ],
+      "max": [
+        -14.5,
+        11.0,
+        91.0
+      ]
+    },
+    "status_light_reserve": {
+      "min": [
+        -7.5,
+        17.5,
+        91.5
+      ],
+      "max": [
+        -2.5,
+        22.5,
+        96.5
+      ]
+    },
+    "C2_board_mount_reserve": {
+      "min": [
+        -35.0,
+        -47.5,
+        37.5
+      ],
+      "max": [
+        -20.0,
+        -12.5,
+        62.5
+      ]
+    },
+    "C2_plug_withdrawal_reserve": {
+      "min": [
+        -48.0,
+        -47.5,
+        37.5
+      ],
+      "max": [
+        -35.0,
+        -12.5,
+        62.5
+      ]
+    },
+    "cradle_rib_-52": {
+      "min": [
+        -38.0,
+        -53.5,
+        20.0
+      ],
+      "max": [
+        -19.0,
+        -50.5,
+        70.0
+      ]
+    },
+    "cradle_rib_52": {
+      "min": [
+        -38.0,
+        50.5,
+        20.0
+      ],
+      "max": [
+        -19.0,
+        53.5,
+        70.0
+      ]
+    },
+    "rolling_flange": {
+      "min": [
+        -40.0,
+        -15.7065,
+        33.699
+      ],
+      "max": [
+        -36.0,
+        14.2935,
+        63.699
+      ]
+    },
+    "rolling_spindle": {
+      "min": [
+        -72.0,
+        -3.7065,
+        45.699
+      ],
+      "max": [
+        -40.0,
+        2.2935,
+        51.699
+      ]
+    },
+    "bearing_reserve_1": {
+      "min": [
+        -46.0,
+        -8.7065,
+        40.699
+      ],
+      "max": [
+        -40.0,
+        7.2935,
+        56.699
+      ]
+    },
+    "bearing_reserve_2": {
+      "min": [
+        -68.0,
+        -8.7065,
+        40.699
+      ],
+      "max": [
+        -62.0,
+        7.2935,
+        56.699
+      ]
+    },
+    "bearing_cartridge_reserve": {
+      "min": [
+        -69.0,
+        -12.7065,
+        36.699
+      ],
+      "max": [
+        -39.0,
+        11.2935,
+        60.699
+      ]
+    },
+    "coaxial_coupling_reserve": {
+      "min": [
+        -77.5,
+        -6.7065,
+        42.699
+      ],
+      "max": [
+        -69.0,
+        5.2935,
+        54.699
+      ]
+    },
+    "roll_servo_envelope": {
+      "min": [
+        -106.5,
+        -10.7065,
+        24.199
+      ],
+      "max": [
+        -77.5,
+        9.2935,
+        58.199
+      ]
+    },
+    "pitch_servo_envelope": {
+      "min": [
+        -61.7662,
+        24.5,
+        37.5316
+      ],
+      "max": [
+        -27.7662,
+        53.5,
+        57.5316
+      ]
+    },
+    "pitch_frame_arm_-49": {
+      "min": [
+        -74.0,
+        -51.0,
+        28.699
+      ],
+      "max": [
+        -33.2662,
+        -47.0,
+        32.699
+      ]
+    },
+    "pitch_frame_upright_-49": {
+      "min": [
+        -41.2662,
+        -51.0,
+        32.699
+      ],
+      "max": [
+        -33.2662,
+        -47.0,
+        51.5316
+      ]
+    },
+    "pitch_trunnion_reserve_-49": {
+      "min": [
+        -41.2662,
+        -53.5,
+        43.5316
+      ],
+      "max": [
+        -33.2662,
+        -44.5,
+        51.5316
+      ]
+    },
+    "pitch_frame_arm_49": {
+      "min": [
+        -74.0,
+        47.0,
+        28.699
+      ],
+      "max": [
+        -33.2662,
+        51.0,
+        32.699
+      ]
+    },
+    "pitch_frame_upright_49": {
+      "min": [
+        -41.2662,
+        47.0,
+        32.699
+      ],
+      "max": [
+        -33.2662,
+        51.0,
+        51.5316
+      ]
+    },
+    "pitch_trunnion_reserve_49": {
+      "min": [
+        -41.2662,
+        44.5,
+        43.5316
+      ],
+      "max": [
+        -33.2662,
+        53.5,
+        51.5316
+      ]
+    },
+    "pitch_frame_crossmember": {
+      "min": [
+        -74.0,
+        -49.0,
+        28.699
+      ],
+      "max": [
+        -39.0,
+        49.0,
+        32.699
+      ]
+    },
+    "cartridge_seat_reserve": {
+      "min": [
+        -69.0,
+        -12.7065,
+        32.699
+      ],
+      "max": [
+        -39.0,
+        11.2935,
+        36.699
+      ]
+    },
+    "yaw_yoke_leg_-55": {
+      "min": [
+        -74.0,
+        -58.0,
+        -32.0
+      ],
+      "max": [
+        -33.2662,
+        -52.0,
+        53.5316
+      ]
+    },
+    "yaw_yoke_leg_55": {
+      "min": [
+        -74.0,
+        52.0,
+        -32.0
+      ],
+      "max": [
+        -33.2662,
+        58.0,
+        53.5316
+      ]
+    },
+    "yaw_yoke_bridge": {
+      "min": [
+        -74.0,
+        -58.0,
+        -36.0
+      ],
+      "max": [
+        -64.0,
+        58.0,
+        -32.0
+      ]
+    },
+    "yaw_spindle_bridge_reserve": {
+      "min": [
+        -74.0,
+        -7.0,
+        -36.0
+      ],
+      "max": [
+        -33.2662,
+        7.0,
+        -32.0
+      ]
+    },
+    "yaw_spindle_reserve": {
+      "min": [
+        -41.2662,
+        -4.0,
+        -60.0
+      ],
+      "max": [
+        -33.2662,
+        4.0,
+        -36.0
+      ]
+    },
+    "rolling_ear_-1": {
+      "min": [
+        -65.5,
+        -75.0,
+        25.5
+      ],
+      "max": [
+        -20.5,
+        -65.0,
+        70.5
+      ]
+    },
+    "rolling_ear_1": {
+      "min": [
+        -65.5,
+        65.0,
+        25.5
+      ],
+      "max": [
+        -20.5,
+        75.0,
+        70.5
+      ]
+    }
+  },
+  "outer_ear_face_area_mm2": {
+    "-1": 1590.4312808798325,
+    "1": 1590.4312808798325
+  },
+  "neutral_gaps_mm": {
+    "display_to_camera_PCB_vertical": 4,
+    "display_reserve_to_C2": 2,
+    "roll_servo_to_rear_cover": 7.3,
+    "bearing_center_spacing": 22
+  },
+  "cautions": [
+    "Some supports and covers remain unconnected or overlapping reservations, not detailed load paths.",
+    "Zero sampled overlap is not continuous swept clearance.",
+    "C2 and connector reservations are assumptions, not selected parts."
+  ]
+}

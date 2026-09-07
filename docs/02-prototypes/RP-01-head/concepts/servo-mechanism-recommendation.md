@@ -4,11 +4,13 @@ Research date: 2026-09-05. Status: **recommended architecture for the next block
 
 Revision 0.2, 2026-09-05: resolves bearing-cover ownership, makes per-axis mass membership explicit, and specifies the remaining interface, harness and dynamic-analysis work. All load calculations here remain illustrative; no calculated or measured per-axis assembly load has been established.
 
-Build a **bearing-supported serial yaw → pitch → roll gimbal**, with elevated pitch pivots near the head's centre of mass, a rear-supported roll spindle, and each actuator housing attached to the frame immediately upstream of its joint. This develops Concept A into a more specific build proposal. The proposed blockout uses short direct 1:1 drives on all three axes and non-rolling ear covers attached to the yaw yoke. Offset transmissions remain conditional comparison options, not automatic packaging fixes.
+**Revision 0.3 / first-layout update, 2026-09-07:** use the [head CAD decision register](../cad/head/decisions.md) for current construction, roll-drive, ear-cover, wiring and C2-placement choices. The builder has selected both cosmetic ears attached to the rolling face/cradle, superseding the September 5 yaw-yoke cover proposal. The per-axis table below now includes both ears in yaw, pitch and roll; the total shell allowance is unchanged. The first yaw layout uses an external loop beside a solid spindle. These updates add no measured fit or load evidence.
+
+Build a **bearing-supported serial yaw → pitch → roll gimbal**, with elevated pitch pivots near the head's centre of mass, a rear-supported roll spindle, and each actuator housing attached to the frame immediately upstream of its joint. This develops Concept A into a more specific build proposal. Start with short direct 1:1 drives and face-attached rolling cosmetic ears per the current CAD register. Offset transmissions remain conditional comparison options, not automatic packaging fixes.
 
 The decision optimizes for Makad's small reversible expressions, fast pitch/yaw strokes, quiet holds, three powered axes, serviceable printed construction and current packaging. It is an engineering recommendation from the available evidence, not proof of a global optimum. A parallel pitch/roll alternative is specified below so the recommendation can be challenged fairly.
 
-The current [decision register](../decision.md#candidate-register) still marks the mechanism open, requires a comparison concept and leaves direct/belt drive unresolved. This recommendation does not claim an existing direct-only lock or select an alternative on the builder's behalf.
+The current [decision register](../decision.md#candidate-register) still marks the final mechanism open and requires a comparison concept. Coaxial direct roll is now the first-layout choice in the CAD register; final drive suitability and actuator selection remain unresolved.
 
 ## Requirements extracted from the project
 
@@ -41,17 +43,17 @@ The old 250 g target, 0.001 kg·m² inertia proxy and 0.2 N·m neck-torque estim
 | Display/renderer, window, camera, light: M002/M003/M005/M007 | Yes | Yes | Yes |
 | C2 motion controller and its mount: **M008**, proposed on rolling cradle | Yes | Yes | Yes |
 | Roll cradle/backplate/ribs: M010; spindle is assigned to M013 below | Yes | Yes | Yes |
-| Rolling shell portion of M019c and its attached fasteners | Yes | Yes | Yes |
+| Rolling main-shell portion of M019c and its attached fasteners, excluding the separately listed ears | Yes | Yes | Yes |
 | Roll output horn/coupling/spindle: assigned M013 subitems | Yes | Yes | Yes |
 | Roll servo housing/mount: M013; rear cartridge housing: tilting M011 subitem; non-rolling bearing portions: M016 | Yes | Yes | No |
 | Tilting pitch frame: M011 subitem; pitch output trunnions: M014 subitems | Yes | Yes | No |
 | Pitch servo housing/mount: M014; yaw U-yoke and pitch-bearing housings: yaw-only M011 subitems | Yes | No | No |
-| **Ear covers attached to the yaw yoke**: M019c subitems, separated from rolling shell ownership | Yes | No | No |
+| **Ear covers attached to the rolling face/cradle**: M019c subitems, with fasteners assigned by owner | Yes | Yes | Yes |
 | Yaw moving interface, shaft/output hardware: M012/M015 and moving M018 portions | Yes | No | No |
 | Body-fixed yaw servo housing and yaw bearing housing | No | No | No |
 | Bearing rings, cable segments, guides, connectors and fasteners | Assign each subitem by its attachment and flex boundary; do not apply one membership flag to the entire kit | By subitem | By subitem |
 
-Split M011 into named yaw-yoke and tilting-frame subitems and M019c into rolling-shell and non-rolling-cover subitems when constructing the CAD mass tree. Preserve each parent total; do not add the subitems again. Likewise, M013 owns the roll actuator hardware downstream of yaw even though its housing does not roll. A row named after an actuator axis is not permission to omit its housing from the upstream axes that carry it.
+Split M011 into named yaw-yoke and tilting-frame subitems and M019c into main-shell and rolling-ear subitems when constructing the CAD mass tree. Preserve each parent total; do not add the subitems again. Moving the ears from the former yaw-only proposal to the rolling cradle changes pitch/roll membership and inertia, not the existing M900 inventory total by itself. Likewise, M013 owns the roll actuator hardware downstream of yaw even though its housing does not roll. A row named after an actuator axis is not permission to omit its housing from the upstream axes that carry it.
 
 In compact form, `m_pitch = m_roll + pitch-carried non-rolling hardware`, and `m_yaw = m_pitch + yaw-carried non-pitching hardware`, with cable and bearing parts apportioned consistently. All three final values remain **TBD**. Replace the 35 g actuator allowance and the existing structural/bearing allowances with their actual totals; do not add a new 80–120 g mechanism package on top of the unadjusted 490 g ledger. Published or weighed servo mass alone cannot establish the complete installed set.
 
@@ -133,9 +135,9 @@ The servos provide torque. The bearing/frame chain supports weight, bending and 
 
 **Pitch:** raise two pivots toward the *pitch assembly's* measured CoM. One servo drives one side; the other side is a passive bearing. Join the two through a rigid pitch frame. Two servos rigidly fighting over the same shaft add synchronization, heat and backlash issues without creating another useful degree of freedom. The inward servo pocket and complete roll sweep must be shown in section before accepting this placement. If the direct pocket fails, quantify that failure before comparing an offset drive within the yaw frame; do not silently grow the ears.
 
-**Ear-cover choice for this proposal:** attach both cosmetic pods/covers to the **yaw yoke's pitch-bearing housings**. They yaw with the neck, but do not pitch or roll with the face. The trunnions rotate inside the supported pivots while the covers remain centred on their housings. The 8–12 mm side allowance is for these covers and bearing access, not an entire unspecified servo.
+**Ear-cover choice, updated by the builder on 2026-09-07:** attach both removable cosmetic ears to the **rolling face/cradle**, so they follow all three head axes. The pitch-bearing housings remain on their structural frames and do not gain roll motion. Keep the 8–12 mm neutral side allowance within the complete-head width; it is not room for an entire unspecified servo.
 
-A cover attached to the rolling shell at a 75 mm lateral radius would move approximately **23.2 mm vertically and 3.7 mm inward at 18° roll** relative to the non-rolling support. That arrangement cannot be described as a cover remaining centred on the bearing. The selected proposal therefore uses fixed-to-yoke covers rather than shell-mounted covers travelling around slotted trunnion apertures. The rolling shell still needs a proven clearance relief around the stationary support; concealing that relief under a cover is a packaging goal, not an established invisible seam. Check pitch and compound poses as well as roll, and include the covers only in the yaw mass set.
+A cover attached to the rolling shell at a 75 mm lateral radius would move approximately **23.2 mm vertically and 3.7 mm inward at 18° roll** relative to the non-rolling support. That arrangement cannot be described as a cover remaining centred on the bearing. Lay out the yoke/pivot supports and the inner/rear ear surfaces to clear that relative motion; whether an opening or relief can stay hidden is a packaging question, not an established invisible seam. Check pitch and compound poses as well as roll. Both covers now belong to yaw, pitch and roll mass sets. The September 5 fixed-to-yoke arrangement is superseded for the first layout and cannot be restored without recording a changed decision.
 
 **Roll:** keep its axis near the *rolling payload's* CoM. A rear bearing cartridge carries a short metal spindle connected to a rigid payload backplate/spider, which supports the front display and shell through ribs. The roll servo housing stays on the pitch frame; it does not roll with its own payload. The roll axis is an imaginary line through the head; **no physical shaft needs to pass through the display**.
 

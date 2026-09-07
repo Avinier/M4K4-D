@@ -8,6 +8,8 @@
 
 Credibility checklist per concept: load path (no bare servo-horn cantilever), actuator class with a sourcing path, cable route, service/assembly story, physics numbers clearing `intent.md` requirements with margin.
 
+First-layout construction and fitting choices are recorded in [head CAD decisions](../cad/head/decisions.md), dated 2026-09-07. Both cosmetic ears now attach to the rolling face/cradle by builder selection, with support clearance still to be proved. These choices guide the next blockout; the mechanism comparison and gate outcomes remain open.
+
 | Criterion | Concept A: elevated ear-pivot serial gimbal | Concept B: open |
 |---|---|---|
 | Joint order (e.g. yaw→pitch→roll) | Body-fixed yaw → pitch → head-fixed roll. This matches intrinsic face motion and keeps the Euler singularity far outside Makad's pitch range. | |
@@ -18,9 +20,9 @@ Credibility checklist per concept: load path (no bare servo-horn cantilever), ac
 | Reflected inertia ratio (or UNCOMPUTABLE) | UNCOMPUTABLE until exact actuators publish rotor inertia or the rig measures response. Include lateral pitch-actuator `m·r²` in yaw inertia before adding an offset transmission. | |
 | f_n estimate | Pending yoke/cradle stiffness. Screen pitch ≥30 Hz minimum / ≥40 Hz unshaped best case; yaw/roll ≥25/30 Hz per `gates.md`. | |
 | Loaded hysteresis / hold stability (geartrain, spline, horn, structure, controller) | Unknown. Do not divide the complete-output 0.25° target equally by three stages. At a fixed command, measure external angle versus reversing output load, reversal delay and hold hunting/current at representative poses; add a combined-orientation case. Small designed preload is a candidate mitigation, not a specification. | |
-| Cable route through the workspace | Open/hollow yaw centre; bundle approaches each joint near its axis; pitch loop enters near an ear pivot; one controlled downstream roll loop; no slip ring for current ±55° yaw. Measure restoring torque and endurance. | |
+| Cable route through the workspace | First layout: external guided yaw loop beside a solid spindle; branches approach each joint near its axis; pitch loop enters near an ear pivot; one controlled downstream roll loop; no slip ring for current ±55° yaw. Hollow-centre routing remains a comparison option. Measure restoring torque and endurance. | |
 | Sourcing: availability, landed cost, lead time, substitute | Pending candidate-matrix expansion and re-check before purchase. Large Lazy-Susan/NEMA-scale hardware is excluded by moving-mass and 60 mm packaging constraints, not used as a sourcing reference. | |
-| Fabrication/assembly/calibration/service story | Rising provisional-PLA U-yoke, removable ear bearing covers, independently replaceable actuators, accessible harness connectors, yaw-plane demateable mass boundary, display flashing access, axis-zero registration and complete-output calibration. Cosmetic seams stay integral; only required service splits are real. Detailed CAD waits for the CoM/axis convergence loop and PLA thermal/creep evidence. | |
+| Fabrication/assembly/calibration/service story | Rising provisional-PLA U-yoke, removable face-attached rolling cosmetic ears with clearance around the pitch supports, independently replaceable actuators, accessible harness connectors, yaw-plane demateable mass boundary, display flashing access, axis-zero registration and complete-output calibration. Cosmetic seams stay integral; only required service splits are real. Detailed CAD waits for the CoM/axis convergence loop and PLA thermal/creep evidence. | |
 | Failure/safe-rest behaviour (unpowered pose?) | Near-CoM axes reduce uncontrolled gravity fall; small preload/counterbalance may bias a safe direction. Stops and cable loops must bound the unpowered path. Final behaviour is a rig result. | |
 | Verdict | **Credible candidate; advance to mass blockout and rig screening, not selected.** Full note: [`elevated-ear-pivot-serial-gimbal.md`](elevated-ear-pivot-serial-gimbal.md). | |
 

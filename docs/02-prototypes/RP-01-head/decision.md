@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Status | **Mechanism decision open; material/mass and C2 controller-boundary decisions locked** |
-| Revised | 2026-09-02 |
+| Revised | 2026-09-07 |
 | Question | Can a manufacturable powered roll/pitch/yaw mechanism carry a representative Makad head while producing safe, repeatable, quiet-enough and characterful motion with acceptable range, reversal, settling, camera behaviour, wiring movement, calibration, and controller failure handling? |
 | Feeds | ADR-02 (head mechanism), ADR-03 (controller), ADR-08, ADR-12; mass/power/acoustic budget rows |
 | Rule | A failed Core three-axis gate cannot become a two-axis fallback without reopening approved V1 scope. Failed runs stay cited here. |
@@ -40,6 +40,16 @@ These decisions do not close the final Makad production material, measured head 
 
 Any controller-boundary change must supersede CTRL-01…CTRL-05 and propagate through `control-topology-options.md`, M008, firmware interfaces, physics, rig and gates.
 
+## First-layout CAD decisions
+
+The fitting discussion is recorded in [cad/head/decisions.md](cad/head/decisions.md), dated 2026-09-07. It fixes the first layout's rib/backplate construction and service splits, coaxial direct roll trial, external yaw service loop beside a solid spindle, and rolling-cradle C2 placement. The builder selected both rounded cosmetic ears attached to the rolling face/cradle, so they move with yaw, pitch and roll. Mounting geometry and support clearance remain to be demonstrated.
+
+These are working layout inputs, not scored outcomes or a final mechanism/actuator selection. The [CAD requirements](cad/head/requirements.md) retain CAD-01…CAD-06, and [packaging estimates](cad/head/packaging-estimates.md) distinguish sourced envelopes from unverified fit allowances.
+
+The [pre-layout brief](cad/head/pre-layout-brief.md) inventories existing mass/geometry evidence and prepares the internal arrangement before the first CAD blockout. Candidate pivot coordinates will be evaluated in that layout rather than selected from appearance alone.
+
+The builder selected **A0 as the first-layout balance target** in [HEAD-CAD-07](cad/head/decisions.md#head-cad-07--a0-balance-target). Derive the pitch pivot coordinates from the estimated pitch-carried CoM and keep roll near its own carried CoM. A1/A2 remain fallback comparisons; achieved balance, final mechanism acceptance and actuator selection remain open.
+
 ## Gate outcomes
 
 | Gate | Outcome | Evidence (run IDs) | Notes |
@@ -55,7 +65,7 @@ Any controller-boundary change must supersede CTRL-01…CTRL-05 and propagate th
 
 | Candidate | Status | What is fixed for comparison | What remains open |
 |---|---|---|---|
-| A — elevated ear-pivot serial gimbal | **Credible candidate; not selected** | Body-fixed yaw; yaw→pitch→head-fixed-roll order; independent yaw load bearing; pitch pivots associated with the ear-pod locations; planned axial harness route; selected Waveshare no-touch SKU 30493 display envelope; RP-01 PLA/finish decisions | Exact pitch height and A0/A1/A2 point; selected-display-clear roll-axis/support layout and resulting CoM; 110–115 mm versus ~90 mm depth; per-axis mass tree around the ~490 g pre-M008 lower bound plus the required C2 controller; actuator family, bearing sizes, direct/belt drive, preload, yoke geometry, PLA thermal/creep result, mass/thermal/cost and scored gate results |
+| A — elevated ear-pivot serial gimbal | **Credible candidate; not selected** | Body-fixed yaw; yaw→pitch→head-fixed-roll order; independent yaw load bearing; pitch pivots associated with the ear-pod locations; selected Waveshare no-touch SKU 30493 display envelope; RP-01 PLA/finish decisions; first-layout coaxial roll, face-attached rolling ears and external yaw cable loop per the CAD register | Exact pitch coordinates to achieve selected A0; selected-display-clear roll-axis/support layout and resulting CoM; complete fit within the current depth band; rolling-ear mounting/clearance; per-axis mass tree around the ~490 g pre-M008 lower bound plus the required C2 controller; actuator family, bearing sizes, validated drive arrangement, preload, yoke geometry, PLA thermal/creep result, mass/thermal/cost and scored gate results |
 | B | **Required; not authored** | Must satisfy the same physical baseline and evidence rules | Entire concept |
 
 Concept A's source diagram is not a specification. Only the topology extracted into `concepts/elevated-ear-pivot-serial-gimbal.md` is admitted for comparison; its generated-looking labels, proportions and NEMA/Lazy-Susan-scale hardware are excluded.

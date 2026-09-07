@@ -1,0 +1,13 @@
+{
+  "input": "docs/02-prototypes/RP-01-head/cad/head/layout-01/head-layout.step.py",
+  "mode": "view",
+  "outputs": [
+    {"path":"docs/02-prototypes/RP-01-head/cad/head/layout-01/review/iso.png","camera":"iso"},
+    {"path":"docs/02-prototypes/RP-01-head/cad/head/layout-01/review/opposite.png","camera":{"direction":[-1,1,-0.8]}},
+    {"path":"docs/02-prototypes/RP-01-head/cad/head/layout-01/review/front.png","camera":"right"},
+    {"path":"docs/02-prototypes/RP-01-head/cad/head/layout-01/review/side.png","camera":"front"},
+    {"path":"docs/02-prototypes/RP-01-head/cad/head/layout-01/review/top.png","camera":"top"}
+  ],
+  "theme":{"projection":"orthographic","grid":{"visible":false}},
+  "render":{"viewLabels":true,"padding":0.12,"sizeProfile":"diagnostic"}
+}

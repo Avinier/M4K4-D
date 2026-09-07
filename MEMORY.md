@@ -1780,3 +1780,52 @@ The system dimensional and mass baselines now carry the RP-01 **~490 g pre-M008 
 **Reopen rule**
 - C1 may be reconsidered only if the selected display carrier changes through change control or the received board materially differs from the official schematic.
 - A reopened C1 must first close native GPIO/safety feasibility and then run the same-chip rendering-off/on timing test with the documented Core-0/Core-1/IRAM mitigation.
+
+---
+
+## 2026-09-07 — Head CAD preparation and fitting decisions
+
+### MEM-20260907-01 — Dedicated CAD records and first-layout choices
+**Type:** DECISION + ORGANIZATION
+
+**Status:** CURRENT FOR FIRST RP-01 LAYOUT; final mechanism, actuator selection and integrated CAD freeze remain open
+
+**Requirements:** [Head CAD decisions](docs/02-prototypes/RP-01-head/cad/head/decisions.md); [head CAD requirements](docs/02-prototypes/RP-01-head/cad/head/requirements.md); [packaging estimates](docs/02-prototypes/RP-01-head/cad/head/packaging-estimates.md)
+
+The builder requested a dedicated home for CAD and its decisions after discussing head connections and fitting. `cad/` now owns that documentation. Existing system, sourcing and prototype studies remain in their original locations because they serve more than CAD. CAD-01…CAD-06 and the service-seam rule were relocated unchanged from the material/finish/mass decision into `cad/head/requirements.md`, with the old heading retained as a forwarding link.
+
+For the first layout, use an integral printed rib/backplate structure with removable service assemblies; a coaxial direct 1:1 roll trial with independent spindle/bearing support and an XC330-size packaging reference; a solid yaw spindle with an external guided cable loop; and removable C2/M008 placement on the rolling cradle. These are layout choices, not validated fits or hardware selections.
+
+Preserve the rounded, cute ear character. Ear-cover attachment remains open: investigate covers that roll with the face against the earlier yaw-yoke-mounted arrangement. The serial body → yaw → pitch → roll order is unchanged; the outer U-shaped yaw yoke does not itself roll. Record final cover ownership before deriving per-axis mass properties.
+
+The approximately 105 mm coaxial depth stack and 20–25 mm bearing-centre spacing remain estimates. Exact components, fits, combined-motion clearance, per-axis mass/CoM/inertia, harness endurance and RP-01 gate outcomes are still required. The approximately 490 g pre-M008 model already contains provisional mechanism allowances, which must be replaced rather than added twice.
+
+**Location correction, 2026-09-07:** the builder intended the CAD folder to live inside RP-01 and moved it to `docs/02-prototypes/RP-01-head/cad/`. That is the current home of these prototype layout records; links were repaired after the move. The earlier root-level placement was a misunderstanding, and root `cad/` remains reserved for later integrated CAD. The layout decisions themselves are unchanged.
+
+---
+
+### MEM-20260907-02 — Ears follow the rolling face; existing RP-01 inputs carried into layout preparation
+
+**Type:** DECISION + CLARIFICATION
+
+**Status:** CURRENT FOR FIRST RP-01 LAYOUT
+
+**Supersedes:** Open ear-attachment ownership in MEM-20260907-01 and the September 5 yaw-yoke-mounted cosmetic-cover proposal
+
+The builder selected both rounded cosmetic ears attached to the rolling face/cradle. They therefore follow yaw, pitch and roll. Their mounts and clearance around non-rolling structural supports remain layout work. Update the per-axis shell/fastener membership accordingly, preserving existing M019c and M900 inventory totals rather than adding a second ear allowance.
+
+The builder also clarified that pivot positions should be reviewed in geometry and that the internal arrangement must be thought through before the first CAD layout. The RP-01 audit confirms that detailed provisional masses, selected display/camera envelopes, tentative servo references, motion trajectories and A0/A1/A2 pivot comparisons already exist. Accepted component weigh-ins, component coordinates and final per-axis mass properties remain open; these existing planning inputs are sufficient to prepare a provisional blockout.
+
+The [pre-layout brief](docs/02-prototypes/RP-01-head/cad/head/pre-layout-brief.md) gathers that evidence and proposes the front/camera stack, rear roll support, pitch pocket, rolling controller and ears, and neck cable route. It records the tight camera/display height stack for section review. No CAD modeling or final component selection was performed.
+
+---
+
+### MEM-20260907-03 — A0 selected for the first head layout
+
+**Type:** DECISION
+
+**Status:** CURRENT FOR FIRST RP-01 LAYOUT
+
+The builder selected A0 after reviewing the A0/A1/A2 pivot comparison. [HEAD-CAD-07](docs/02-prototypes/RP-01-head/cad/head/decisions.md#head-cad-07--a0-balance-target) targets the pitch axis through the estimated centre of mass of its carried assembly, with roll near the rolling assembly's own CoM. Exact pivot coordinates follow the component layout and its revised mass distribution, including the ears, camera crown and controller.
+
+A1/A2 remain fallback/sensitivity comparisons if packaging or measured reversal/hold behaviour warrants reconsideration. No deliberate gravity-bias offset or spring preload is selected for the initial layout. This does not freeze manufacturing coordinates, validate the mechanism or select servos.

@@ -58,6 +58,8 @@ PLA is locked for RP-01 structure and skin but remains provisional beyond the pr
 
 ## Candidate gimbal-centre geometry
 
+**First-layout selection, 2026-09-07:** the builder selected A0 in [HEAD-CAD-07](cad/head/decisions.md#head-cad-07--a0-balance-target). Use zero pitch-axis-to-carried-CoM offset as the initial balance target; derive actual coordinates from the component layout. A1/A2 below remain fallback/sensitivity cases, not equally active layout choices. No mass-property calculation or validation result is implied by this selection.
+
 Concept A in `concepts/elevated-ear-pivot-serial-gimbal.md` uses body-fixed yaw, pitch pivots near ear-pod height and head-fixed roll. Pitch and roll intersecting, or nearly intersecting, near the measured 3D head CoM is the gravity target to evaluate, subject to a display-clear roll-support and load-path proof. Raising pitch alone while leaving roll below the CoM preserves an inverted-pendulum roll load, so the design variable is the **pitch–roll gimbal centre plus its feasible support layout**, not pitch-axis height in isolation.
 
 For pitch, define `x` as the CoM's forward offset from the pitch axis and `z` as its upward offset. Use
@@ -78,7 +80,7 @@ These are sensitivity points, not a frozen mechanism specification. The calculat
 
 For the `490 g` **pre-M008 lower-bound** sensitivity case, A1 (`x=+5 mm`, `z=0`) gives approximately `0.0240 N·m` at neutral, `0.0223 N·m` at `-22°`, and `0.0184 N·m` at `+40°`. The required C2 controller increases the real downstream result. These values scale only the simple gravity term and must not be reported as actuator torque. Final sizing uses the registered downstream mass and inertia for each axis rather than applying the complete-head mass blindly to pitch or roll.
 
-A small persistent load may keep a gearbox on one tooth flank, but preload is a measured mitigation rather than evidence that backlash is gone. Prefer a small fore–aft pitch offset if it retains one torque sign across the usable range. Keep roll close to balance and evaluate a low-rate torsion/elastic bias only if reversal testing warrants it; avoid an arbitrary lateral mass imbalance.
+A small persistent load may keep a gearbox on one tooth flank, but preload is a measured mitigation rather than evidence that backlash is gone. If testing justifies departing from the initial A0 target, evaluate a small fore–aft pitch offset that retains one torque sign across the usable range. Keep roll close to balance and evaluate a low-rate torsion/elastic bias only if reversal testing warrants it; avoid an arbitrary lateral mass imbalance.
 
 The pitch actuator moves with yaw. Include `m_actuator·r²` for its lateral offset in `J_yaw`. Compare that penalty with the added mass, compliance and reversal loss of any belt/gear relocation before choosing an offset transmission.
 

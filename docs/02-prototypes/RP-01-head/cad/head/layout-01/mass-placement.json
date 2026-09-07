@@ -1,0 +1,389 @@
+{
+  "units": "g, mm",
+  "warning": "Provisional centre-of-mass allocation, not measured; centroid positions themselves need refinement.",
+  "rows": [
+    {
+      "owner": "M002",
+      "name": "display installed",
+      "frame": "R",
+      "mass_g": 133,
+      "center_mm": [
+        -10,
+        0,
+        43
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M003",
+      "name": "window and mask",
+      "frame": "R",
+      "mass_g": 15,
+      "center_mm": [
+        -1,
+        0,
+        43
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M005",
+      "name": "camera installed",
+      "frame": "R",
+      "mass_g": 10,
+      "center_mm": [
+        -10,
+        0,
+        94
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M006",
+      "name": "camera cable",
+      "frame": "R",
+      "mass_g": 8,
+      "center_mm": [
+        -32,
+        15,
+        66
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M007",
+      "name": "status light",
+      "frame": "R",
+      "mass_g": 5,
+      "center_mm": [
+        -8,
+        20,
+        94
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M008",
+      "name": "C2 scenario",
+      "frame": "R",
+      "mass_g": 20.0,
+      "center_mm": [
+        -27.5,
+        -30,
+        50
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M010",
+      "name": "rolling cradle",
+      "frame": "R",
+      "mass_g": 25,
+      "center_mm": [
+        -30,
+        0,
+        47
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M011-P",
+      "name": "pitch frame",
+      "frame": "P",
+      "mass_g": 20,
+      "center_mm": [
+        -60,
+        0,
+        34
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M011-Y",
+      "name": "yaw yoke",
+      "frame": "Y",
+      "mass_g": 15,
+      "center_mm": [
+        -57,
+        0,
+        7
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M012",
+      "name": "yaw interface",
+      "frame": "Y",
+      "mass_g": 20,
+      "center_mm": [
+        -40,
+        0,
+        -27
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M013-15-roll",
+      "name": "roll servo housing",
+      "frame": "P",
+      "mass_g": 23,
+      "center_mm": [
+        -92,
+        0,
+        41.2
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M013-15-pitch",
+      "name": "pitch servo housing",
+      "frame": "Y",
+      "mass_g": 23,
+      "center_mm": [
+        -45,
+        39,
+        47.5
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M013-15-horn-R",
+      "name": "rolling horn/hub allowance",
+      "frame": "R",
+      "mass_g": 4,
+      "center_mm": [
+        -72,
+        0,
+        47
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M013-15-horn-P",
+      "name": "pitch horn allowance",
+      "frame": "P",
+      "mass_g": 2,
+      "center_mm": [
+        -40,
+        54,
+        47
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M016-18-R",
+      "name": "rotating bearing/shaft portions",
+      "frame": "R",
+      "mass_g": 6,
+      "center_mm": [
+        -54,
+        0,
+        47
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M016-18-P",
+      "name": "pitch-carried bearing portions",
+      "frame": "P",
+      "mass_g": 8,
+      "center_mm": [
+        -54,
+        0,
+        47
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M016-18-Y",
+      "name": "yaw-carried bearing portions",
+      "frame": "Y",
+      "mass_g": 8,
+      "center_mm": [
+        -40,
+        0,
+        15
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M019c",
+      "name": "finished shell and ears",
+      "frame": "R",
+      "mass_g": 148,
+      "center_mm": [
+        -57.5,
+        0,
+        47.5
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "CROWN-01",
+      "name": "crown increment scenario",
+      "frame": "R",
+      "mass_g": 6.0,
+      "center_mm": [
+        -12,
+        0,
+        101
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M020-R",
+      "name": "rolling harness",
+      "frame": "R",
+      "mass_g": 8,
+      "center_mm": [
+        -34,
+        12,
+        42
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M020-P",
+      "name": "pitch harness",
+      "frame": "P",
+      "mass_g": 4,
+      "center_mm": [
+        -65,
+        0,
+        36
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M020-Y",
+      "name": "yaw harness",
+      "frame": "Y",
+      "mass_g": 3,
+      "center_mm": [
+        -52,
+        0,
+        -10
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M021-R",
+      "name": "rolling hidden/visible hardware",
+      "frame": "R",
+      "mass_g": 14,
+      "center_mm": [
+        -32,
+        0,
+        47
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M021-P",
+      "name": "pitch hardware",
+      "frame": "P",
+      "mass_g": 3,
+      "center_mm": [
+        -58,
+        0,
+        47
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    },
+    {
+      "owner": "M021-Y",
+      "name": "yaw hardware",
+      "frame": "Y",
+      "mass_g": 2,
+      "center_mm": [
+        -40,
+        0,
+        0
+      ],
+      "evidence": "D/E allocation; M008 and CROWN-01 are scenarios"
+    }
+  ],
+  "scenarios": [
+    {
+      "c2_g": 10,
+      "roll": {
+        "mass_g": 392.0,
+        "center_mm": [
+          -32.3469387755102,
+          0.04081632653061224,
+          48.66581632653061
+        ]
+      },
+      "pitch": {
+        "mass_g": 452.0,
+        "center_mm": [
+          -37.482300884955755,
+          0.2743362831858407,
+          47.47699115044247
+        ]
+      },
+      "yaw": {
+        "mass_g": 523.0,
+        "center_mm": [
+          -38.60038240917782,
+          1.9521988527724665,
+          42.46099426386233
+        ]
+      }
+    },
+    {
+      "c2_g": 20,
+      "roll": {
+        "mass_g": 402.0,
+        "center_mm": [
+          -32.22636815920398,
+          -0.7064676616915423,
+          48.69900497512438
+        ]
+      },
+      "pitch": {
+        "mass_g": 462.0,
+        "center_mm": [
+          -37.26623376623377,
+          -0.38095238095238093,
+          47.531601731601725
+        ]
+      },
+      "yaw": {
+        "mass_g": 533.0,
+        "center_mm": [
+          -38.392120075046904,
+          1.3527204502814258,
+          42.60243902439024
+        ]
+      }
+    },
+    {
+      "c2_g": 35,
+      "roll": {
+        "mass_g": 417.0,
+        "center_mm": [
+          -32.05635491606714,
+          -1.7601918465227817,
+          48.74580335731415
+        ]
+      },
+      "pitch": {
+        "mass_g": 477.0,
+        "center_mm": [
+          -36.959119496855344,
+          -1.3123689727463312,
+          47.60922431865828
+        ]
+      },
+      "yaw": {
+        "mass_g": 548.0,
+        "center_mm": [
+          -38.09397810218978,
+          0.49452554744525545,
+          42.80492700729927
+        ]
+      }
+    }
+  ]
+}

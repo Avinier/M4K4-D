@@ -10,13 +10,15 @@
 
 This note extracts only the credible topology from an unverified, generated-looking reference diagram. Its labels, scale, proportions, motor sizes and bearing sizes are not source data and must not enter CAD or the BOM.
 
+**First-layout update, 2026-09-07:** [head CAD decisions](../cad/head/decisions.md) now owns the working construction and fitting choices. Start with coaxial direct roll and an external yaw cable loop beside a solid spindle. The builder selected cosmetic ears attached to the rolling face/cradle; their clearance around the structural supports remains to be demonstrated. These choices do not select Concept A as the final mechanism.
+
 ## 1. Candidate topology
 
 1. A **body-fixed yaw actuator** drives a compact yaw stage recessed into the body/head intrusion allowance.
 2. A bearing or spaced-bearing shaft carries head weight and overturning moment independently of the yaw drive path.
 3. A rising U-yoke terminates at two **double-supported pitch pivots** near ear-pod height.
 4. The inner head cradle rolls about the face's forward axis. A roll axis intersecting, or nearly intersecting, the pitch axis near the measured head CoM is the gravity target, **not yet a credible support layout**; the bearing/shaft arrangement must first clear the display and camera and carry the overhung moment.
-5. Ear pods remain microphone-free. Under this concept their removable cosmetic shells may hide pitch bearings and service access; the inner yoke/frame carries structural load.
+5. Ear pods remain microphone-free. Their removable cosmetic shells attach to the rolling face/cradle and move with all three axes; the inner yoke/frame carries structural load. Position the pitch supports and ear inner surfaces for relative-motion clearance rather than treating a rolling ear as a stationary bearing cap.
 
 This serial order means a roll remains a face-relative tilt after yaw and pitch. Firmware must still use rotation matrices/quaternions rather than add Euler angles, but the physical order matches Makad's authored semantic axes. Gimbal lock at pitch ±90° lies well beyond the proposed `-22°…+40°` best-case travel.
 
@@ -97,7 +99,7 @@ The front assembly must include an opaque rear mask across the full window width
 The mechanical concept is incomplete without a harness model. Apply the evidence and H1/H2/H3 candidates in `../../../01-system/head-harness-routing-study.md`:
 
 - partition camera CSI, display/head-node, servo power/bus and local sensor/light branches instead of forcing one cable construction across every circuit;
-- keep the yaw centre hollow/open, route each moving branch close to the yaw axis and give yaw a controlled loop/helical section;
+- for the first layout, route each moving branch beside the solid yaw spindle and give yaw a controlled external service loop; retain a hollow/open-centre route as a comparison if the initial layout fails its packaging or harness checks;
 - fix the downstream orientation at the yoke, approach pitch near an ear pivot and guide a predominantly single-plane rolling bend;
 - fix orientation again before a deliberate short roll loop or purpose-designed torsion section;
 - provide stationary- and moving-side strain relief plus service connectors only where access and signal integrity justify them;

@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | **Research-backed candidate architecture — no production harness selected** |
-| Version | 0.2 |
+| Version | 0.3 |
 | Owner | Project builder |
 | Created | 2026-08-29 |
-| Last reviewed | 2026-09-05 |
+| Last reviewed | 2026-09-07 |
 | Feeds | RP-01 mechanism/cable rig, RP-02 electrical backbone, RP-06 layout, ADR-02/ADR-03/ADR-08/ADR-12 |
 | Fixed inputs | Bounded roll/pitch/yaw; body-mounted primary compute; selected Camera Module 3 Wide SC0874; selected Waveshare display SKU 30493 |
 
@@ -15,6 +15,8 @@
 Makad V1 does **not** need unlimited yaw. Slip rings therefore remain out of the active V1 architecture unless a later requirement introduces continuous rotation or the service-loop concepts fail their registered workspace/endurance gates. This note does not select a cable SKU, connector family, CSI bridge or production harness. It converts external examples into candidate geometry and a test protocol.
 
 The central problem is not simply cable flexibility. A viable assembly must simultaneously preserve camera signal integrity, remain inside the 60 mm neck/head-intrusion package, contribute acceptable moving mass, avoid objectionable restoring torque, protect connector exits and remain replaceable.
+
+**First-layout choice, 2026-09-07:** [HEAD-CAD-04](../02-prototypes/RP-01-head/cad/head/decisions.md#head-cad-04--yaw-wiring) uses a solid yaw spindle with an external guided service loop behind the neck. Visible insulated wiring is acceptable to the builder. This supersedes the hollow-centre starting assumption for the first layout; exact cables, connectors, bend radii and endurance remain open under this study.
 
 ## What the cited designs actually support
 
@@ -46,7 +48,7 @@ Do not force every circuit into one physical cable strategy.
 
 For Concept A's body-fixed yaw → elevated pitch → head-fixed roll stack:
 
-1. Enter yaw close to the yaw axis through the open/hollow centre and give yaw its own controlled loop or helical section.
+1. For the first layout, enter close beside the solid yaw spindle and give yaw its own guided external service loop behind the neck. Keep the open/hollow-centre route as a comparison if the initial route fails packaging, restoring-torque or live-signal endurance checks.
 2. Fix the downstream reference at the yoke so yaw motion is not passed into the pitch loop as uncontrolled torsion.
 3. Enter pitch near one pitch pivot and guide a rolling, predominantly single-plane bend.
 4. Fix the downstream reference again before the roll branch.

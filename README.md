@@ -32,6 +32,7 @@ This README is an orientation document derived from the approved foundation. It 
 | Workbench sourcing/readiness | Approved; procurement not yet completed |
 | Run identity and evidence storage | Active v1.0 convention; guarded launcher, log schema, and time/video synchronization remain open |
 | Exact components and BOM | Not yet selected |
+| Head CAD preparation | First-layout decisions recorded in `docs/02-prototypes/RP-01-head/cad/`; ears move with the face; fit and actuator selection remain open |
 | Integrated CAD | Not frozen |
 | Existing `specsheets/` | Exploratory, non-binding reference material |
 | Existing `visuals/` | Provisional visual references |
@@ -53,6 +54,10 @@ This README is an orientation document derived from the approved foundation. It 
 - [Approved workbench sourcing and test-readiness baseline](docs/01-system/workbench.md)
 - [Active run-record convention and evidence layout](docs/01-system/run-record-convention.md)
 - [Current dimensional and packaging baseline](docs/01-system/dimensional-baseline.md)
+
+## CAD layout and decisions
+
+The [CAD folder](docs/02-prototypes/RP-01-head/cad/README.md) is the entry point for layout work. It contains the [head fitting decisions](docs/02-prototypes/RP-01-head/cad/head/decisions.md), [CAD requirements](docs/02-prototypes/RP-01-head/cad/head/requirements.md) and [component packaging estimates](docs/02-prototypes/RP-01-head/cad/head/packaging-estimates.md). These define the first RP-01 layout inputs; mechanism acceptance and integrated CAD freeze remain open.
 
 ## Physical prototype run records
 

@@ -25,6 +25,8 @@ Every physical part receives exactly one `Boundary owner ID` before weighing. A 
 
 **Inventory ownership is distinct from per-axis moving membership.** M013/M014/M015 are actuator inventory owners at the complete-head yaw boundary, not instructions to count only parts rotating about the actuator's own axis. For a yaw→pitch→roll serial arrangement, the roll servo housing is carried by yaw and pitch, the pitch servo housing by yaw, and a body-fixed yaw housing belongs to none of the head's downstream sets. Include every housing downstream of yaw once in M900; partition its contribution to the per-axis tree separately. Split mixed-frame kits such as yokes, bearing rings, shell/ear covers and harness branches into named subitems while preserving their parent totals. This clarification selects no mechanism and changes no provisional mass allowance.
 
+**First-layout ear ownership, 2026-09-07:** the builder selected both cosmetic ears attached to the rolling face/cradle in [HEAD-CAD-03](cad/head/decisions.md#head-cad-03--ears-and-moving-frames). Their M019c shell subitems and attached fasteners contribute to yaw, pitch and roll. They were already included in the complete-head provisional inventory; do not add another ear allowance to M900. No measured mass, component coordinates or inertia are created by this ownership decision.
+
 ## Accepted evidence rule
 
 Only `W` evidence contributes to the final real-mass total:

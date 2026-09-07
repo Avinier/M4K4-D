@@ -71,16 +71,9 @@ If PLA fails structural creep/thermal evidence, reprint M010–M012 in PETG or A
 
 ## 4. CAD requirements
 
-| ID | Requirement |
-|---|---|
-| CAD-01 | Model adjacent panels at 0.3–0.5 mm relative height offsets. |
-| CAD-02 | Provide correctly sized wells and bosses for each real visible M2 fastener. |
-| CAD-03 | Make the rear-surface window mask opaque across the full 110–115 mm width. |
-| CAD-04 | Provide display flashing access or a defined wire-flashing path in the sealed head. |
-| CAD-05 | Provide a demateable connector or a defined separable cut plane at the yaw boundary so M020 and M900 can be weighed without cutting conductors. |
-| CAD-06 | Use panel lines at least 0.6–0.8 mm wide × 0.5 mm deep, raised rivets at least 2 mm diameter × 0.5 mm proud, recessed fastener wells at least 3 mm diameter and real panel gaps at least 0.8 mm. |
+**Relocated 2026-09-07:** the unchanged CAD-01…CAD-06 requirements and service-seam rule now live in [head CAD requirements](cad/head/requirements.md). This heading is retained for existing references. Their authority remains the D-01…D-08 decisions in this record; relocation does not change their status.
 
-Only rear/bottom access and pod-cap seams should be real unless another split is justified by assembly or service. Cosmetic panel lines and rivets should remain integral features.
+The [head CAD decision register](cad/head/decisions.md) separately records the agreed first-layout construction and fitting choices. Material, finish and mass evidence remain here.
 
 ## 5. Finish system
 
