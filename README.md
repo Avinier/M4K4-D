@@ -1,10 +1,8 @@
 # Makad / M4K4-D
 
-> **Current project overview**
+> **Current project overview** — last reconciled **8 September 2026**
 >
-> Foundation approved: **14 August 2026**
->
-> V1 deadline: **5 December 2026**
+> Foundation approved: **14 August 2026** · V1 deadline: **5 December 2026** · Roadmap position: **Stage 0/1 — RP-01 head preparation**
 
 **Makad**, technical designation **M4K4-D** and commonly shortened to **M4**, is a personal droid. M4 is intended to occupy the kind of companion role R2-D2 occupied for Luke Skywalker: recognizable, attentive, expressive, and full of character.
 
@@ -12,281 +10,154 @@ The central V1 priority is simple:
 
 > **M4 should feel alive.**
 
-Makad's defining advantage is expressiveness. That expression comes from what M4 understands, sees, and hears—and from how convincingly its display, status light, astromech audio, head, wheeled base, and timing communicate one intent.
+Makad's defining advantage is expressiveness. That expression comes from what M4 understands, sees, and hears, and from how convincingly its display, status light, astromech audio, head, wheeled base, and timing communicate one intent.
 
-This README is an orientation document derived from the approved foundation. It does not replace the detailed source documents linked below.
+This README is the orientation document over the whole repository. It states current truth and links to the documents that own it. [`MEMORY.md`](MEMORY.md) records how that truth changed over time.
 
-## Project status
+## Where the project stands
 
-| Area | Status |
+| Area | Status (2026-09-08) |
 |---|---|
-| Vision | Approved |
-| V1 scope | Approved |
-| Constraints | Approved; dimensional/packaging target baseline active, some engineering values remain open |
-| Success criteria | Approved; numeric thresholds remain open |
-| Core interaction scenarios | Approved at scenario level |
-| System design brief | Approved |
-| System architecture | Not yet defined |
-| Engineering budgets | Not yet closed |
-| Risk prototypes | Plan approved; execution not yet started |
-| Workbench sourcing/readiness | Approved; procurement not yet completed |
-| Run identity and evidence storage | Active v1.0 convention; guarded launcher, log schema, and time/video synchronization remain open |
-| Exact components and BOM | Not yet selected |
-| Head CAD preparation | First-layout decisions recorded in `docs/02-prototypes/RP-01-head/cad/`; ears move with the face; fit and actuator selection remain open |
-| Integrated CAD | Not frozen |
-| Existing `specsheets/` | Exploratory, non-binding reference material |
-| Existing `visuals/` | Provisional visual references |
+| Foundation (vision, scope, constraints, success criteria, scenarios) | Approved. Numeric `SC-TBD`/`CON-TBD` thresholds remain open by design. |
+| System design brief | Approved v1.3. Thirteen ADRs defined, none closed. |
+| Risk-prototype plan | Approved v1.9. Seven prototypes; **no run has been executed.** |
+| Workbench / Stage 0 | Approved; first tools selected and partly ordered. Tool access, E-stop verification, logging schema, monotonic timebase and video sync are still open, so **powered scored testing is blocked.** |
+| Run identity | Convention v1.0 active. Guarded launcher not built. |
+| Dimensional baseline | v1.8 active: 300 × 205 × 180 mm robot, 95 × 150 × 115 mm nominal head, Ø84 wheels, 170 mm track, 110 mm axle-to-caster, 60 mm neck. |
+| Selected components | Display, camera and C2 motion-controller module locked (see below). Servos, SBC, battery, drive motors, harness: open. |
+| RP-01 three-axis head | Intent, storyboard and physics framework authored. Concept A credible; Concept B not yet authored. Gates unregistered. Rig not built. First packaging study (`layout-01`) exists. |
+| Head mass | Planning lower bound ~490 g at 1.2 mm PLA **before** the C2 assembly; nothing weighed yet. The earlier 250 g target and its inertia/torque proxies are inadmissible. |
+| Architecture, budgets, BOM, integrated CAD | Not started; blocked on prototype evidence by design. |
+| `specsheets/` | Exploratory, non-binding. |
+| `visuals/` | Provisional references; several show superseded details (mouths, ear microphones, yoke-mounted ears). |
 
-## Approved foundation
+### Selected and locked
+
+| Item | Selection | Governing record |
+|---|---|---|
+| Face display | Waveshare ESP32-S3-LCD-4.3, **no-touch, SKU 30493** — 800×480 IPS with on-board ESP32-S3/LVGL renderer | [`display-candidate-study.md`](docs/01-system/display-candidate-study.md) |
+| Head camera | Raspberry Pi Camera Module 3 **Wide**, visible-light, **SC0874** | [`camera-candidate-study.md`](docs/01-system/camera-candidate-study.md) |
+| Head motion controller (C2) | Waveshare **ESP32-S3-Zero**, headerless; bench twin ESP32-S3-DevKitC-1-N8R8 | [`control-topology-options.md`](docs/01-system/control-topology-options.md) §6.3 |
+| Control split | Body Linux SBC owns behaviour; display ESP32-S3 renders eyes; C2 ESP32-S3 owns trajectories, servo bus, limits, watchdog, E-stop | [`RP-01 decision.md`](docs/02-prototypes/RP-01-head/decision.md) CTRL-01…06 |
+| Drive topology | Two encoder wheels + front caster + mandatory rear anti-tip skid | [`dimensional-baseline.md`](docs/01-system/dimensional-baseline.md) |
+| RP-01 material and finish | PLA structure and skin (provisional beyond RP-01), real M2 button-heads, nine-step weathered finish | [`material-finish-mass-decision.md`](docs/02-prototypes/RP-01-head/material-finish-mass-decision.md) D-01…08 |
+| First head layout choices | Serial body→yaw→pitch→roll; coaxial direct roll on a supported spindle; ears roll with the face; trapezoidal camera crown; external yaw cable loop; C2 on the rolling cradle; A0 balance target | [`cad/head/decisions.md`](docs/02-prototypes/RP-01-head/cad/head/decisions.md) HEAD-CAD-01…07 |
+
+Each lock reopens only through the change-control rule in its governing record.
+
+### Immediate next work
+
+Ordered by the risk-prototype plan's open-inputs list and the intuition guide:
+
+1. **Per-axis mass tree and A0 coordinates** from `layout-01`, replacing the 35 g actuator allowance with real housings and making M008 explicit.
+2. **Concept B** for the mechanism comparison (the parallel pitch/roll alternative is the named candidate).
+3. **Torque, RMS and modal screen** per axis from the mass tree, then a servo family shortlist.
+4. **Register RP-01 gates** (thresholds frozen before any scored run).
+5. **Stage 0 closure:** verify tools and E-stop, implement the logging schema, monotonic timebase and video-sync method, and the run generator/guarded launcher. This is software work and should not wait on hardware.
+6. **First weigh-ins** when the display and camera samples arrive (M001, M004, finish coupon).
+
+## Documents
+
+### Approved foundation
 
 - [Vision](docs/00-foundation/vision.md)
 - [V1 scope](docs/00-foundation/v1-scope.md)
 - [Constraints](docs/00-foundation/constraints.md)
 - [Success criteria](docs/00-foundation/success-criteria.md)
 - [Core interaction scenarios](docs/00-foundation/core-interaction-scenarios.md)
-- [Decision history](MEMORY.md)
 
-## System engineering
+### System engineering
 
-- [Canonical engineering intuition guide (all phases)](docs/intuition.md)
-- [Approved system design brief](docs/01-system/system-design-brief.md)
-- [Approved risk-prototype plan](docs/01-system/risk-prototype-plan.md)
-- [Approved workbench sourcing and test-readiness baseline](docs/01-system/workbench.md)
-- [Active run-record convention and evidence layout](docs/01-system/run-record-convention.md)
-- [Current dimensional and packaging baseline](docs/01-system/dimensional-baseline.md)
+- [Engineering intuition guide (method, all phases)](docs/intuition.md)
+- [System design brief](docs/01-system/system-design-brief.md)
+- [Risk-prototype plan](docs/01-system/risk-prototype-plan.md)
+- [Workbench and test-readiness baseline](docs/01-system/workbench.md)
+- [Run-record convention](docs/01-system/run-record-convention.md) and [run-record template](docs/02-prototypes/_templates/run-record.md)
+- [Dimensional and packaging baseline](docs/01-system/dimensional-baseline.md)
+- Living ledgers: [mass/envelope](docs/01-system/mass-envelope-ledger.md), [candidate sourcing matrix](docs/01-system/candidate-sourcing-matrix.md)
+- Studies: [control topology](docs/01-system/control-topology-options.md), [display](docs/01-system/display-candidate-study.md), [display shopping brief](docs/01-system/display-shopping-brief.md), [camera](docs/01-system/camera-candidate-study.md), [head harness routing](docs/01-system/head-harness-routing-study.md)
 
-## CAD layout and decisions
+### RP-01 — three-axis head
 
-The [CAD folder](docs/02-prototypes/RP-01-head/cad/README.md) is the entry point for layout work. It contains the [head fitting decisions](docs/02-prototypes/RP-01-head/cad/head/decisions.md), [CAD requirements](docs/02-prototypes/RP-01-head/cad/head/requirements.md) and [component packaging estimates](docs/02-prototypes/RP-01-head/cad/head/packaging-estimates.md). These define the first RP-01 layout inputs; mechanism acceptance and integrated CAD freeze remain open.
+Folder: [`docs/02-prototypes/RP-01-head/`](docs/02-prototypes/RP-01-head/)
+
+- [Intent](docs/02-prototypes/RP-01-head/intent.md) — authored head vocabulary (HM-00…HM-18) with eye/audio placeholders
+- [Storyboard](docs/02-prototypes/RP-01-head/storyboard.md) — keyframes, profile laws (`MJ5`, `MS7`, `TRACK`, `BRAKE`), per-axis peak speed/acceleration, hysteresis and modal targets
+- [Physics](docs/02-prototypes/RP-01-head/physics.md), [gates](docs/02-prototypes/RP-01-head/gates.md), [rig](docs/02-prototypes/RP-01-head/rig.md), [decision](docs/02-prototypes/RP-01-head/decision.md)
+- [Material/finish/mass decision](docs/02-prototypes/RP-01-head/material-finish-mass-decision.md) and [payload mass capture](docs/02-prototypes/RP-01-head/payload-mass-capture.md)
+- Concepts: [comparison](docs/02-prototypes/RP-01-head/concepts/comparison.md), [Concept A](docs/02-prototypes/RP-01-head/concepts/elevated-ear-pivot-serial-gimbal.md), [servo mechanism recommendation](docs/02-prototypes/RP-01-head/concepts/servo-mechanism-recommendation.md)
+- CAD: [entry point](docs/02-prototypes/RP-01-head/cad/README.md), [decisions](docs/02-prototypes/RP-01-head/cad/head/decisions.md), [requirements](docs/02-prototypes/RP-01-head/cad/head/requirements.md), [packaging estimates](docs/02-prototypes/RP-01-head/cad/head/packaging-estimates.md), [pre-layout brief](docs/02-prototypes/RP-01-head/cad/head/pre-layout-brief.md), [layout-01 study](docs/02-prototypes/RP-01-head/cad/head/layout-01/brief.md)
+
+Root `cad/`, `docs/03-architecture/` and `docs/04-bom/` are reserved for later stages and must stay empty until then.
+
+## Repository layers
+
+```
+docs/00-foundation/     WHAT M4 must be              approved, the test oracle
+docs/01-system/         HOW we will find out          approved instruments and living ledgers
+docs/02-prototypes/     EVIDENCE                      RP-XX folders, runs, decisions
+docs/03-architecture/   COMMITMENTS                   ADRs, budgets, interfaces   (stage 6, empty)
+docs/04-bom/            PURCHASES                     final selection, sourcing   (stage 7, empty)
+cad/                    GEOMETRY                      integrated CAD, frozen last (stage 7, empty)
+docs/archive/           superseded verbatim documents
+MEMORY.md               append-only history of how every decision changed
+README.md               this orientation
+```
+
+Information flows down; citations flow up; nothing skips a layer. A part is never bought because a prototype "showed it works"; it passes through an ADR first.
 
 ## Physical prototype run records
 
-Every bounded physical prototype execution that energizes an actuator, applies representative electrical/mechanical load, or produces decision evidence receives one permanent run ID. Routine assembly, soldering, passive inspection, and unpowered fit checks do not require one unless their result will be cited.
-
-The canonical format is:
+Every bounded physical execution that energizes an actuator, applies representative load, or produces decision evidence receives one permanent run ID:
 
 ```text
 RP<prototype>-<gate-and-version-or-EXP>-<exploratory|pilot|scored>-<UTC allocation>-<sequence>
 ```
 
-For example, `RP01-G03V1-scored-20260822T091530Z-01` identifies one scored RP-01 execution against gate G03 version 1. A retry, power cycle, controlled configuration change, or new trial block receives a new ID. Failed, invalid, unsafe, and aborted runs keep their IDs and evidence; IDs are never renamed, reused, or deleted.
-
-The run record binds that identity to the repository, firmware, software, applied configuration, runtime overrides, rig revision, ballast/geometry, sourced parts, instruments, active limits, readiness checks, raw data, media, derived results, and artifact hashes. Exploratory motion uses an automatically generated `EXP-exploratory` ID rather than bypassing the record. Gate outcomes remain separate because several runs may contribute to one pass/iterate/reject/defer decision.
-
-The operating invariant is:
+IDs are allocated before the run and never renamed, reused or deleted; failed and aborted runs keep their evidence. The operating invariant is:
 
 > **No valid run ID plus no confirmed logger means no actuator enable.**
 
-Until a guarded launcher enforces this in software, the builder applies it as a pre-arm bench check by creating the run directory from [the run-record template](docs/02-prototypes/_templates/run-record.md), filling the pre-run fields, starting the logger, confirming a sample was written with the same ID, and showing or announcing the ID at the start of external video. The launcher, machine-readable logging schema, monotonic timebase, and video-synchronization validation remain required before the first powered scored run.
+Until a guarded launcher enforces this, the builder applies it as a pre-arm bench check from the [run-record template](docs/02-prototypes/_templates/run-record.md). Detail is in the [run-record convention](docs/01-system/run-record-convention.md).
 
 ## Identity and design direction
 
-M4 is a droid, not primarily a desktop assistant, smart speaker, or generic social robot.
-
-The approved visual and physical direction is:
+M4 is a droid, not a desktop assistant, smart speaker, or generic social robot. The approved direction is:
 
 - strongly inspired by Star Wars droids;
 - cyberpunk, rugged, scrappy, and characterful;
 - mechanical rather than glossy or appliance-like;
-- modular and screw-together, with visible fasteners, panels, seams, and service access contributing to the personality;
+- modular and screw-together, with visible fasteners, panels, seams, and service access as part of the personality;
+- eyes only on the face, no mouth;
 - approachable without optimizing for minimum size;
 - open to substantial redesign from the current renders.
 
-The current physical target is **300 H × 205 W × 180 D mm overall**, with an approximately **95 H × 150 W × 115 D mm nominal head** validated within a **90–100 H × 145–155 W × 110–120 D mm** band, **Ø84 mm wheels**, **170 mm track**, and **110 mm drive-axle-to-front-caster wheelbase**. The head envelope is built outward from the selected 106.1 × 67.8 mm display rather than from the earlier oversized concept-art proportion. The detailed [dimensional and packaging baseline](docs/01-system/dimensional-baseline.md) overrides earlier planning values. Face geometry, shell language, colours, manufacturing tolerances, total mass, exact parts, and internal architecture remain subject to prototype and packaging validation.
+Face geometry, shell language, colours, tolerances, total mass and internal architecture remain subject to prototype and packaging validation. Four PDM microphones, the speaker, battery and main compute are body-mounted; the head carries only the display, camera, status light, C2 controller and local structure.
 
 ## V1 Core
 
-V1 is not complete unless the following outcomes work together as one droid.
+V1 is not complete unless the following outcomes work together as one droid. Exact wording lives in [`v1-scope.md`](docs/00-foundation/v1-scope.md) (SCOPE-01…21).
 
-### Expression and character
+**Expression and character** — animated face on the onboard display; powered roll, pitch and yaw head motion; at least one controllable LED beside the camera; a builder-authored non-English astromech language; idle aliveness without manual control; display, LED, audio, head, base and timing express one intent; at least one bounded excited spin.
 
-- A high-quality animated face runs on M4's onboard display.
-- Powered roll, pitch, and yaw head motion communicate attention and authored expression.
-- At least one controllable LED beside the head camera participates in wake, attention, and status behaviours.
-- M4 communicates in a custom non-English astromech-style language authored by the builder.
-- Idle behaviour makes M4 feel alive without constant manual control.
-- Display, LED, astromech audio, head motion, base motion, and timing express the same perceived intent.
-- M4 can perform at least one bounded excited spin as a deliberate character action.
+**Understanding and perception** — natural spoken interaction within the approved scenarios; invocation forms **"M4," "M4K4," and "Makad"**; visual acquisition of a nearby person or face; tracking maintained or reacquired through later-defined test cases.
 
-### Understanding and perception
+**Mobility and following** — battery-powered wheeled floor droid; "come here" finds, approaches and stops at a bounded distance; "follow me" tracks the selected person through an approved indoor route; obstacles, stopping, target loss and unsafe conditions are handled without continuing blindly.
 
-- M4 understands natural spoken interaction within the approved V1 scenarios.
-- The approved invocation forms are **“M4,” “M4K4,” and “Makad.”**
-- M4 visually acquires a nearby person or face and directs attention toward them.
-- M4 maintains or reacquires person tracking through the later-defined V1 test cases.
-- Detailed intent phrasing and the astromech vocabulary will be designed later; the approved scenario semantics already define what the system must accomplish.
+**Utility and entertainment** — display the time; create and signal timers and alarms; start Spotify playback through an approved integration; eyes "vibe" to music.
 
-### Mobility and following
+**Operation and construction** — untethered on onboard battery for at least 20 minutes; floor mode primary; tabletop mode inhibits locomotion by default and protects edges; accessible stop or cutoff with bounded failure; assembled, started, demonstrated, inspected and serviced from documentation.
 
-- M4 is a battery-powered wheeled floor droid.
-- The drive baseline is two independently powered, encoder-equipped wheels plus a front caster and mandatory rear anti-tip skid; exact motors, transmissions, drivers, and control parameters remain engineering decisions.
-- In response to “come here,” M4 finds the person, approaches safely, and stops at a bounded distance.
-- In response to “follow me,” M4 tracks and follows the selected person through an approved indoor route.
-- M4 handles relevant obstacles, stopping, temporary target loss, and unsafe conditions without continuing blindly.
-- Movement must remain stable and avoid harmful contact inside the validated operating envelope.
-
-### Utility and entertainment
-
-- M4 can display the current time when asked.
-- M4 can create and signal timers.
-- M4 can create and signal alarms.
-- M4 can start requested Spotify playback through an approved connected integration.
-- During music playback, M4 enters an expressive music state; at minimum, its eyes visually “vibe” to the music.
-
-### Operation and construction
-
-- Final V1 runs untethered from an onboard battery; tethered or bench operation is acceptable during development.
-- Floor mode is the primary locomotion mode.
-- Large-tabletop use is primarily stationary demonstration and development.
-- Tabletop mode inhibits ordinary autonomous locomotion by default and provides edge/fall protection whenever movement could occur.
-- Plausibly hazardous outputs have an immediately accessible stop or power cutoff and bounded failure behaviour.
-- The droid can be assembled, started, demonstrated, inspected, and serviced from project documentation.
-
-## V1 Candidate
-
-- **Spatial/directional hearing:** include it only if a microphone and processing prototype proves that sound direction materially improves an approved interaction.
-
-Core “come here” may initially use invocation detection followed by visual search; direct acoustic localization is not currently required.
-
-### Uncommitted
-
-Capabilities not listed as Core, Target, or Candidate are uncommitted. The project is not maintaining a permanent “never” list at this stage. Arms, manipulation, walking, self-balancing, spherical drive, full-house navigation, SLAM, biometric identity, broad assistant functionality, productionization, and large VLM features are not in the approved V1 plan, but they are not being evaluated as permanent exclusions.
+**Candidate:** spatial/directional hearing, included only if a prototype proves sound direction materially improves an approved interaction. Everything else is uncommitted; there is no permanent "never" list.
 
 ## Approved Core scenarios
 
-The detailed source is [core-interaction-scenarios.md](docs/00-foundation/core-interaction-scenarios.md).
+Source: [`core-interaction-scenarios.md`](docs/00-foundation/core-interaction-scenarios.md).
 
-### 1. Wake, socialize, and assist
+**1. Wake, socialize, assist.** M4 idles head-down. A person calls its name. M4 wakes as one coordinated performance: three-axis head rise, eyes, camera-side LED, astromech acknowledgement, face acquisition and gaze. A greeting produces an in-character response. The person can request the time, a timer, an alarm, or Spotify playback; M4 confirms visibly, performs it, and vibes during music.
 
-1. M4 is stationary in an idle/head-down state.
-2. A person calls “M4,” “M4K4,” or “Makad.”
-3. M4 wakes as one coordinated performance: powered roll/pitch/yaw head rise and orientation, animated eyes, camera-side LED, astromech acknowledgement, face acquisition, and attentive gaze.
-4. A natural greeting such as “Hi, how are you?” produces an in-character response using eyes, head movement, LED, chirps/beeps, and deliberate timing.
-5. The person can request the time, set a timer, set an alarm, or request Spotify playback.
-6. M4 confirms the request visibly and in character, performs it, and returns to an appropriate attentive or idle state.
-7. During playback, M4 visually vibes to the music.
-
-### 2. Come here and follow me
-
-1. M4 begins on an approved indoor floor and may initially be looking elsewhere.
-2. The person invokes M4 and says “come here.”
-3. M4 acknowledges, searches for and acquires the person, turns toward them, approaches safely, and stops at the approved distance.
-4. The person says “follow me.”
-5. M4 follows the selected person through the approved route while maintaining distance and handling obstacles or temporary target loss.
-6. When continuing safely is impossible, M4 stops and communicates the problem rather than moving blindly.
-7. M4 performs an approved excited spin and settles back into an attentive state.
+**2. Come here and follow me.** On an approved floor, the person invokes M4 and says "come here." M4 acknowledges, searches, acquires, turns, approaches safely and stops approximately 0.6–0.9 m away. "Follow me" makes M4 follow through an approved route of up to about 3 m at no more than about 0.5 m/s while handling obstacles and target loss. When continuing is unsafe, M4 stops and says so. M4 performs an excited spin and settles.
 
 ## Success definition
 
-V1 succeeds when M4 delivers these interactions as a convincing, repeatable droid encounter on battery power—not as a sequence of manually rescued subsystem demos.
-
-The approved validation categories include:
-
-- recognizable droid identity;
-- fluid onboard display expression;
-- controlled roll/pitch/yaw head motion;
-- coherent cross-channel timing;
-- natural-language understanding;
-- authored astromech communication;
-- named wake and status-light behaviour;
-- face acquisition, tracking, loss handling, and reacquisition;
-- time, timer, alarm, and Spotify functions;
-- safe floor movement, approach, following, obstacle handling, and expressive spin;
-- tabletop movement inhibition and edge/fall protection;
-- untethered battery operation;
-- controlled stopping and bounded failure;
-- physical robustness, serviceability, reproducible startup, and documented learning.
-
-The exact numeric pass thresholds remain engineering work. They must be selected before final validation, not rewritten afterward to fit the result.
-
-## Confirmed constraints
-
-| Constraint | Current decision |
-|---|---|
-| V1 deadline | **5 December 2026** |
-| Weekly project time | Approximately **60–80 hours** |
-| Cost policy | No fixed ceiling yet; cost the complete architecture, prototypes, tools, sourcing, shipping, replacements, and contingency, then review substitutions/cuts before major procurement |
-| Primary environment | Normal indoor floors |
-| Interaction/following envelope | Single household room; interaction approximately 0.3–2.0 m, “come” from approximately 1–2 m, stop approximately 0.6–0.9 m away, follow up to approximately 3 m at no more than approximately 0.5 m/s |
-| Tabletop environment | Large tables; stationary by default, with only explicitly enabled low-speed test/calibration movement inside a marked validated circular footprint |
-| Final power | Onboard battery, untethered; initial mixed-duty runtime at least **20 minutes** |
-| Cloud access | Reliable network/cloud may be assumed for Core connected features; no duplicate offline feature implementation is required |
-| Recording | Allowed; active sensors/services must remain stoppable |
-| Lighting baseline | Normal household lighting |
-| Construction | Modular, screw-together, and serviceable |
-| Fabrication | Several 3D printers available; exact machine/material chosen per part |
-| Current electrical tools | Soldering, bench supply, multimeter, oscilloscope, and logic analyser are not yet established as available |
-| External fabrication | Laser cutting, CNC, and machining access not yet confirmed |
-
-Safety work is proportional to actual hazards rather than generic product-certification bureaucracy. Real risks—mobile contact, tabletop falls, pinch points, battery faults, heat, instability, and uncontrolled motion after a failure—must be addressed. Where harm or damage is plausible, safety overrides expression.
-
-## Engineering principles
-
-1. **Approved outcomes before architecture.** Design the system around the approved Core scenarios.
-2. **Architecture before final parts.** Use candidate parts for risk prototypes, but close coupled mechanical, electrical, compute, perception, internal-communication, external-network, sourcing, timing, and thermal budgets before final component selection.
-3. **Prototype risk before CAD freeze.** Test the uncertain mechanisms and perception/control loops before packaging hardens around them.
-4. **Measure physics.** Torque, inertia, backlash, speed, stopping distance, stability, power, heat, latency, and failure timing need evidence rather than invented precision.
-5. **Preserve coherent fallbacks.** Candidate features and implementation options need clean removal plans, but fallback paths must not quietly lower Core quality. Powered roll is Core and is not a fallback decision.
-6. **Make failure explicit.** Ambiguity, target loss, service timeout, sensor failure, and low battery must produce named states and bounded behaviour.
-7. **Keep character and control connected.** Expression is not a post-processing layer; timing and motion quality affect architecture and component choices.
-
-The working sequence is:
-
-**approved scenarios → approved system brief → prototype plan plus provisional budgets/trade studies → risk-prototype evidence → evidence-backed ADRs and system architecture → final component selection → BOM → integrated CAD → build and integration → validation**
-
-## Current engineering phase
-
-The foundation phase is complete. The project is now entering system architecture and risk reduction.
-
-The approved architecture input is the [Makad V1 System Design Brief](docs/01-system/system-design-brief.md). The approved [Risk-Prototype Plan](docs/01-system/risk-prototype-plan.md) turns its seven risk questions into procedures, measurements, and evidence gates. The approved [workbench baseline](docs/01-system/workbench.md) defines the initial tool sourcing list and powered-test readiness gate; its purchases have not yet been completed, and prices/stock are rechecked at purchase time.
-
-The architecture/prototype priority is deliberately weighted toward mechanical engineering, firmware, sourcing, and natural motion:
-
-1. **Three-axis head mechanism and firmware:** powered roll/pitch/yaw load paths, torque, support, sensing, backlash, noise, wiring, control, and natural trajectories.
-2. **Electrical/control backbone and peak power:** controller boundaries, stop/watchdog paths, rails, representative concurrent loads, brownout, and thermal behaviour.
-3. **Mobile base:** drive trade study, low-speed quality, stability, braking, obstacles, tabletop edges, and expressive spin.
-4. **Coordinated motion:** natural head–body–wheel composition, scheduling, interruption, feedback, and settling.
-5. **Interaction pipeline:** invocation aliases, natural-language latency, cloud/service failure, timers/alarms, and cancellation behaviour.
-6. **Physical layout and sourcing:** component availability, alternatives, cost, lead time, serviceability, camera/display/light/audio placement, and manufacturability.
-7. **Tracking/following and remaining software integration:** person acquisition, selection, loss/reacquisition, bounded following, audio processing, display UI, and connected utilities.
-
-Exact components and integrated CAD should not be frozen until these risks and budgets are sufficiently understood.
-
-## Open engineering decisions
-
-- final visual detailing, manufacturing tolerances, and total mass; current target proportions/dimensions live in the dimensional baseline;
-- exact drive motors, transmissions, drivers, wheel/caster parts, skid construction, encoder parts, and control parameters;
-- roll/pitch/yaw actuation, sensing, transmission, support, wiring, range, and control;
-- camera, display, speaker, microphone, and status-light hardware;
-- person localization, tracking, selection, loss, and reacquisition policy;
-- final tolerances and pass criteria within the approved household interaction/following envelope;
-- complete natural-language intent set and accepted phrasing;
-- astromech vocabulary, grammar, synthesis, and behaviour pairings;
-- display layouts for time, timer, alarm, and music;
-- Spotify authentication and playback-control path;
-- compute split, internal communication, and cloud/network degradation behaviour;
-- charging method, regulation, low-battery state, and whether runtime should increase beyond the initial 20-minute requirement;
-- exact tabletop test/calibration radius, speed, and mode selection;
-- electrical-tool acquisition/borrowing plan;
-- first complete sourced cost range and affordability review;
-- quantitative success thresholds.
-
-## Document authority
-
-Use project documents in this order:
-
-1. **Approved foundation documents** define the product identity, V1 scope, constraints, scenarios, and success conditions.
-2. **Approved human-reviewed system and subsystem documents** define how the approved outcomes will be engineered; draft system documents guide work only after their status and open review decisions are checked, and they cannot silently change V1 scope.
-3. **Approved component, material, and assembly records** define selections and physical implementation.
-4. **BOM and procurement records** summarize selected items and sourcing status.
-5. **CAD, software, and firmware** implement the approved decisions.
-6. **README.md** provides the current orientation and must be corrected if it conflicts with an authority above it.
-7. **MEMORY.md** is the append-only decision history explaining how the project changed.
-8. **`specsheets/`** contains exploratory starting material and is non-binding unless a specific item is explicitly reviewed and adopted later.
-9. **`visuals/`** contains inspiration and historical references, not frozen engineering truth.
-
-No old requirement number, architecture, metric, or component becomes authoritative merely because it appears in a specification-style document.
-
-## One-sentence definition
-
-**M4K4-D is a rugged personal floor droid whose understanding, perception, animated face, astromech voice, expressive head and wheeled movement coordinate convincingly enough that M4 feels attentive, responsive, and alive.**
+V1 succeeds when M4 delivers these interactions as a convincing, repeatable droid encounter on battery power, not as a sequence of manually rescued subsystem demos. The validation categories and open thresholds are in [`success-criteria.md`](docs/00-foundation/success-criteria.md) (SC-01…25). Thresholds are selected before final validation and never rewritten afterward to fit the result.
