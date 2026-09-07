@@ -7,6 +7,8 @@ Retrieved for Layout 01 on 2026-09-07. Models are reference geometry, not a serv
 | `camera-module-3-wide.step` | [STEP-parts exact Camera Module 3 Wide record](https://www.step.parts/parts/raspberry_pi_camera_module_3_wide), sourced there from Raspberry Pi design files | Raw CAD spans 23.862 × 25 × 11.4 mm; retain the published 25 × 24 × 12.4 mm conservative installed-module reservation. The CAD does not establish the optical entrance pupil. |
 | `xc330.stp` | [ROBOTIS XC330 eManual](https://emanual.robotis.com/docs/en/dxl/x/xc330-m288/), official STEP download no. 1987, resolving to the manufacturer's linked Dropbox `XL,XC-330.stp` | Raw bounds X −10…10, Y −24.5…9.5, Z −22.5…6.5 mm. Total 20 × 34 × 29 mm including supplied protrusions, larger than nominal 26 mm package depth. Output cylinders are coaxial with local Z at X=Y=0. |
 
+**Not stored in Git.** `camera-module-3-wide.step` (28.5 MB) is excluded by `.gitignore`; re-download it from the provenance link above and verify the checksum below before use. `xc330.stp` is small enough to be tracked and is in the repo. The sibling `head-layout.step` is likewise excluded and is regenerated with `python3 head-layout.step.py`.
+
 Camera SHA256: `3c73aaa3091e78f92b0d5d9fa84d6be2389f843a15106f5251a770759ef651df` (catalog checksum verified).
 
 Servo SHA256: `e2f7b060801a1d6a21f23bca2554f29a402f7d73b8498cb201c9e6adf3139eb6` (local file hash, not an upstream checksum assertion).

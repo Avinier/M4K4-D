@@ -1,2 +1,11 @@
 __cadgen__/
 __pycache__/
+
+# Large CAD binaries kept out of Git under the risk-prototype-plan rule that raw
+# artefacts may live outside the repo provided a stable path or hash is recorded.
+# Generated output: reproduce with `python3 head-layout.step.py`; the STEP hash is
+# recorded in review/geometry-facts.json.
+head-layout.step
+# Upstream reference part: re-download per parts/README.md, which records its
+# catalog SHA256 (3c73aaa3...ef651df).
+parts/camera-module-3-wide.step
