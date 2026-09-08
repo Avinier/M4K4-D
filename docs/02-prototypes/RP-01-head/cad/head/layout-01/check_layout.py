@@ -44,7 +44,7 @@ result={'method':'BREP intersection of documented envelopes at 56 roll/pitch pos
  'pairs_per_pose':len(pairs),'poses':len(roll_samples)*len(pitch_samples),'hits':hits,'head_z_samples':mins,'component_bounds':dimensions,
  'outer_ear_face_area_mm2':ear_caps,
  'neutral_gaps_mm':{'display_to_camera_PCB_vertical':4,'display_reserve_to_C2':2,'roll_servo_to_rear_cover':7.3,'bearing_center_spacing':22},
- 'cautions':['Some supports and covers remain unconnected or overlapping reservations, not detailed load paths.','Zero sampled overlap is not continuous swept clearance.','C2 and connector reservations are assumptions, not selected parts.']}
+ 'cautions':['Some supports and covers remain unconnected or overlapping reservations, not detailed load paths.','Zero sampled overlap is not continuous swept clearance.','C2 installed-assembly and connector reserves are assumptions; the Zero board is selected separately.']}
 (HERE/'fit-checks.json').write_text(json.dumps(result,indent=2)+'\n')
 worst={}
 for h in hits:

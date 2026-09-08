@@ -756,6 +756,6 @@
   "cautions": [
     "Some supports and covers remain unconnected or overlapping reservations, not detailed load paths.",
     "Zero sampled overlap is not continuous swept clearance.",
-    "C2 and connector reservations are assumptions, not selected parts."
+    "C2 installed-assembly and connector reserves are assumptions; the Zero board is selected separately."
   ]
 }

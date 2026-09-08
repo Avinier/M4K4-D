@@ -1,6 +1,6 @@
 # Head pre-layout brief
 
-Prepared: **2026-09-07**. Status: **existing evidence reviewed; internal arrangement proposed; CAD modeling not started**.
+Prepared: **2026-09-07**. This remains the preparation brief. **2026-09-08 update:** [Layout 01](layout-01/README.md) now contains the proposed arrangement, generated CAD, spatial mass allocation and sampled clearance results. Detailed fit and final servo selection remain open.
 
 RP-01 already provides component envelopes, a detailed provisional mass model, motion targets, support concepts and candidate pivot offsets. The missing spatial inputs are the positions of those components and joints, followed by verified clearances and per-axis mass properties. Use the existing estimates to prepare the first layout and retain their evidence labels; do not treat every input as unknown or wait for a complete physical weigh-in before making a provisional blockout.
 
