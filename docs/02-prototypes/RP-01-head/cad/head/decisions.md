@@ -15,6 +15,7 @@ This is the current record of the head fitting discussion. **Fixed for first lay
 | HEAD-CAD-05 | **Fixed for first layout** | Mount the separate C2 motion controller, M008, removably on the rolling cradle, near the roll axis where practical |
 | HEAD-CAD-06 | **Fixed for first layout — builder selected** | Form an integrated trapezoidal crown above the camera, continuing the head shell and face bezel into one coherent silhouette |
 | HEAD-CAD-07 | **Fixed for first layout — builder selected** | Use A0 as the balance target: pitch axis through the estimated pitch-carried CoM; roll axis near the rolling assembly's own CoM |
+| HEAD-CAD-08 | **Builder selected after Layout 01 review** | Restore the octagonal head with crisp perimeter facets, a slim inner octagonal opening, coordinated bezel/crown height reduction, visible real screw points and larger hollow rolling ears |
 
 These choices develop the existing body → yaw → pitch → roll candidate. They do not change joint order or close the [RP-01 mechanism decision](../../decision.md).
 
@@ -94,11 +95,22 @@ This selects a balance target, not an absolute pivot coordinate or a demonstrate
 
 Retain A1 (pitch pivot 5 mm behind the carried CoM) and A2 (5 mm behind and 10 mm below) as fallback/sensitivity comparisons. They are not equally active first-layout choices. Revisit them only if packaging or measured reversal/hold behaviour provides a reason, recording any changed decision. No deliberate gravity-bias offset or spring preload is selected for the initial A0 layout.
 
+## HEAD-CAD-08 — Exterior refinements after Layout 01
+
+The builder's appearance review is captured in [the Layout 02 brief](layout-02-brief.md), including the supplied close-up. Use real component dimensions at physical scale to determine the shell; lower both the excessive upper bezel and the crown's highest point as a coordinated revision. Restore clipped outer corners through the front/shell/rear cover, with crisp flat facets rather than softened exterior edges. The front-to-side transition has a sloping perimeter band bounded by **two distinct edges**. Clip inner aperture corners minimally to maximize visible active display area.
+
+The builder accepted one front bezel incorporating the compact crown and a separate removable camera bracket. Place the entire LED package within the crown if practical; omission is authorized if compact packaging cannot accommodate it. Retain the existing real M2 screw appearance requirements and include actual wells/bosses and visible screw locations in the next revision. Larger, hollow or thinner-wall cosmetic ears are accepted; precise diameter/thickness and the revised head dimensions remain open. Recalculate balance and clearance rather than scaling the physical components or carrying over Layout 01's validation.
+
 ## What is still open
+
+**Current revision, 2026-09-08:** [Layout 02](layout-02/README.md) implements HEAD-CAD-08 with an **86 mm main roof, 102 mm crown-inclusive head, 130 mm core width, 150 mm complete width, 115 mm depth and Ø60 mm hollow rolling ears**. Bezel and crown are one part; the light reserve fits entirely in the crown. The 99 × 58 mm opening uses 3 mm clips outside the active image. It adds real screw/well/boss geometry, connected cradle and frame supports, a revised C2 footprint/service direction, and a new provisional mass/A0 tree. The visible ear/skin reliefs are packaging clearances only: the finished exterior must hide the yoke with a moving or overlapping shroud/side panel while maintaining the motion envelope. These dimensions are recorded in system baseline v1.9. This closes the appearance/layout implementation, not manufacturing fits, continuous collision clearance, measured balance or servo selection.
+
+**Layout evidence, 2026-09-08:** [Layout 01](layout-01/README.md) proposes a 109 mm crown-equipped head height, a 35 × 25 × 15 mm C2 installed-assembly pocket and provisional A0 pitch coordinates about 37.3 mm behind the front plane / 47.5 mm above the main-head bottom. It records 56 sampled clearance poses, inward/rearward yoke placement and hidden ear/skin reliefs. These are reviewed study inputs, not newly locked dimensions or a complete fit release; see the study's validation limits and imported-geometry findings.
 
 | Item | Evidence needed |
 |---|---|
 | Rolling-ear attachment geometry | Mounting and hidden clearance around the non-rolling supports through combined poses; attachment to the face is selected |
+| Ear/yoke shroud | Add and validate a moving or overlapping cover that hides the current clearance opening in normal views without contacting the yoke through combined motion |
 | Camera crown dimensions | Size the selected trapezoidal protrusion, camera mount and optical opening; report total head height and revised shell/mass properties |
 | Actual component fit | Exact variant envelopes, horn/coupling hardware, connector exits, tool access and complete front/camera stack |
 | Exact axis coordinates and achieved balance | A0 target is selected; derive coordinates from per-axis mass, 3D centre of mass and inertia, then verify fit and achieved offsets |
@@ -119,3 +131,5 @@ When a fixed first-layout choice changes, record the affected HEAD-CAD ID, reaso
 | 2026-09-07 | Builder selected ears attached to the rolling face. Closed attachment ownership, updated mass membership, and retained mounting/clearance as layout work. Pivot positions will be reviewed in geometry; internal arrangement is prepared before modeling. |
 | 2026-09-07 | Builder selected an integrated trapezoidal camera crown and continuous bezel. Local upward shell extension is authorized; crown dimensions, complete-head envelope and mass effects remain to be established. |
 | 2026-09-07 | Builder selected A0 as the first-layout balance target. Exact coordinates remain derived layout inputs; A1/A2 remain fallback comparisons. |
+| 2026-09-08 | Builder approved all Layout 02 changes and the 1:1 method. Implemented slimmer octagonal head, integrated compact crown, crown-only LED reserve, Ø60 hollow rolling ears, real screw features and updated support geometry; revised baseline envelope and recalculated the provisional mass/A0 tree. |
+| 2026-09-08 | Recorded that the current ear/skin clearance openings are temporary packaging reliefs. A finished moving or overlapping shroud must hide the yoke while preserving combined-motion clearance. |

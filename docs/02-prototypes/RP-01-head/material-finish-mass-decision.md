@@ -26,6 +26,8 @@ These eight decisions are change-controlled RP-01 inputs. A later material, fini
 
 ## 2. Selected-display geometry and fit
 
+**Layout revision, 2026-09-08:** the builder-approved [Layout 02](cad/head/layout-02/README.md) and [dimensional baseline v1.9](../../01-system/dimensional-baseline.md) now use an 86 mm main roof, 102 mm crown-inclusive height, 150 mm overall width, 115 mm depth, Ø60 mm hollow rolling ears and a 99 × 58 mm minimally clipped opening. The sizing tables below preserve this record's earlier planning basis; they are superseded for current CAD. D-01…D-08 remain unchanged. The new layout replaces its own old shell/mechanism allowances with CAD volumes while retaining explicit finish/hardware/module estimates; it does not create measured W evidence or silently overwrite the historical ~490 g pre-M008 model.
+
 The selected display is the no-touch **Waveshare ESP32-S3-LCD-4.3, SKU 30493**. The confirmed board outline is **106.1 × 67.8 mm**; the panel is 800 × 480 with approximately **95.0 × 53.9 mm** active area. The published `118 g` remains `D`/listing evidence and is not an accepted mass measurement.
 
 | Dimension | Current RP-01 value |

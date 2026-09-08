@@ -1,0 +1,7 @@
+__cadgen__/
+__pycache__/
+
+# Generated exports are reproducible from the checked-in parametric sources and
+# are too large for this documentation repository.
+head-layout.step
+head-internals.step

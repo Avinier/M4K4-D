@@ -1,0 +1,13 @@
+# Layout 02 construction brief
+
+Approved appearance revision; 1:1 millimetre model. Origin is front/bottom centre, +X forward, +Y robot-left, +Z up. Preserve Layout 01 as history.
+
+Design targets: main shell 130 W × 115 D × 86 H; crown-inclusive height 102; ears 60 diameter with total width 150. Main outer corners 14 mm; front face 120 W, Z2–84, clipped 10 mm; a ruled planar band spans X−2 to−8. The front bezel and crown are one part. Skin 1.2 mm, locally reinforced at removable fasteners. Real service gaps 0.8 mm; integral panel offsets 0.4 mm and engraved seams 0.7 × 0.5 mm.
+
+Purchased components remain full size: display union 106.1 × 68 × 10.6, active 95.04 × 53.86; Camera Module 3 Wide imported manufacturer STEP; two unselected XC330 servo references imported manufacturer STEP. The display moves to **Z6–74**, camera board to Z75–99. Opening 99 × 58, **Z11–69**, with only 3 mm corner clips. The 2 mm upward display refinement clears the front depth-facet corners and leaves a 1 mm vertical board gap. Compact crown is 46 mm wide at Z85, 34 mm at Z102. LED module must fit entirely above Z86; its on-hand addressable package is still an estimated reserve. C2 uses the selected 23.5 × 18 mm ESP32-S3-Zero footprint, with installed-depth and service reserves distinguished. USB exits the board's short upper edge toward +Z; rear access is required for service.
+
+Ears: hollow stepped 60 mm rims, tapered outer caps, 1.2 mm cosmetic walls, reinforced screw bosses, circular outer faces retained through sampled motion. Forward attachments connect ears to the rolling cradle. Cradle, flange, bearing cartridge and roll-servo saddle must form understandable connected support paths; hole fits, insert sizes, structural stiffness and optical field of view remain fabrication gates.
+
+Model visible M2 × 6 button-head geometry at 3.5 mm head diameter, 1.3 mm height, 1.3 mm hex across flats, using the supplier dimensional table linked in README. Thread is represented by its major-diameter cylinder. Heads sit in 4.2 mm wells; adjacent parts have 2.3 mm clearance holes and provisional 1.6 mm receiving pilots. These are layout geometries, not a decision to repeatedly screw into bare PLA. Final insert and screw length selection remains open.
+
+Validation: positive closed authored solids; explicit module bounds; aperture versus complete active pixel rectangle; crown/LED containment; screw well/boss alignment; recomputed provisional mass tree and A0; independent combined roll/pitch samples against all relevant supports. Snapshot front, side, perspective and internals with the text-to-cad snapshot tool. No continuous collision, optical, cable-flex, body/yaw or print-readiness claim.

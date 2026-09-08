@@ -1,11 +1,14 @@
 # Makad CAD
 
-This folder, `docs/02-prototypes/RP-01-head/cad/`, owns RP-01 CAD layout decisions, CAD-specific requirements and packaging notes. Current work is **head-layout preparation for RP-01**; integrated geometry, fit and actuator selection remain unvalidated. Creating this folder does not freeze CAD or start modeling.
+This folder, `docs/02-prototypes/RP-01-head/cad/`, owns RP-01 CAD layout decisions, CAD-specific requirements and packaging notes. **Layout 02 is the current 1:1 head layout**, implementing the slimmer octagonal shell, compact crown, real screw geometry and larger hollow ears. Detailed fabrication interfaces, complete integrated fit and actuator selection remain open; CAD is not frozen.
 
 ## Start here
 
 | Document | Purpose |
 |---|---|
+| [Current Layout 02](head/layout-02/README.md) | Revised head, interactive motion/visibility controls, STEP, assembly checks and updated provisional A0/mass tree |
+| [Layout 01 study](head/layout-01/README.md) | Proposed crown, internal arrangement, A0 coordinates, STEP review and explicitly bounded validation |
+| [Layout 02 exterior brief](head/layout-02-brief.md) | Approved inputs behind the current CAD revision |
 | [Head decisions](head/decisions.md) | Agreed choices for the first layout, reasons, open decisions and conditions for revision |
 | [Head CAD requirements](head/requirements.md) | Existing CAD-01…CAD-06 requirements, relocated here with their original IDs and authority preserved |
 | [Head packaging estimates](head/packaging-estimates.md) | Component envelope references, the provisional roll depth stack and missing fit checks |

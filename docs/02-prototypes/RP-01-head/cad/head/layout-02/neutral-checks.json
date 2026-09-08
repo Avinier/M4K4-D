@@ -1,0 +1,882 @@
+{
+  "method": "Conservative 1:1 package BREP overlaps; 56 discrete poses (7 roll \u00d7 8 pitch), distinct from relief design samples. Intended bearing/shaft contacts omitted.",
+  "axes": {
+    "roll_y": -0.6,
+    "roll_z": 44.0,
+    "pitch_x": -40.0,
+    "pitch_z": 43.0
+  },
+  "poses": 1,
+  "pairs_per_pose": 138,
+  "hits": [
+    {
+      "roll": 0,
+      "pitch": 0,
+      "a": "connected_pitch_frame_roll_servo_saddle",
+      "b": "pitch_XC330_1to1_reference",
+      "volume_mm3": 230.4471
+    }
+  ],
+  "worst_by_pair": {
+    "connected_pitch_frame_roll_servo_saddle / pitch_XC330_1to1_reference": {
+      "roll": 0,
+      "pitch": 0,
+      "a": "connected_pitch_frame_roll_servo_saddle",
+      "b": "pitch_XC330_1to1_reference",
+      "volume_mm3": 230.4471
+    }
+  },
+  "static_package_hits": [],
+  "active_area_excluded_mm3": 0.0,
+  "outer_cap_face_area_mm2": {
+    "-1": 644.7289615824993,
+    "1": 644.728961582493
+  },
+  "lowest_sampled_shell_z": -1.0000000097197095e-07,
+  "bounds": {
+    "front_bezel_integral_camera_crown": {
+      "min": [
+        -24.0000001,
+        -65.0000001,
+        -1.0000000097197095e-07
+      ],
+      "max": [
+        1e-07,
+        65.0000001,
+        102.0000001
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 15166.943681900932
+    },
+    "main_octagonal_skin": {
+      "min": [
+        -112.6,
+        -65.0,
+        -9.99173454123776e-16
+      ],
+      "max": [
+        -8.799999999999986,
+        65.0,
+        86.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 41332.46780593079
+    },
+    "removable_octagonal_rear_cover": {
+      "min": [
+        -115.0,
+        -65.0,
+        -9.719709489350734e-16
+      ],
+      "max": [
+        -112.0,
+        65.0,
+        86.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 17363.731141702152
+    },
+    "window_opaque_mask_110mm": {
+      "min": [
+        -2.85,
+        -55.0,
+        5.999999999999999
+      ],
+      "max": [
+        -1.3499999999999999,
+        55.0,
+        70.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 1926.0
+    },
+    "active_display_95_04x53_86": {
+      "min": [
+        -3.75,
+        -47.52,
+        11.069999999999997
+      ],
+      "max": [
+        -3.55,
+        47.52,
+        64.93
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 1023.7708800000012
+    },
+    "display_module_1to1_envelope": {
+      "min": [
+        -14.4,
+        -53.05,
+        4.0
+      ],
+      "max": [
+        -3.799999999999999,
+        53.05,
+        72.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 76476.88
+    },
+    "display_connector_and_flashing_access_reserve": {
+      "min": [
+        -18.0,
+        -53.05,
+        4.0
+      ],
+      "max": [
+        -14.4,
+        53.05,
+        72.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 25973.28
+    },
+    "camera_module_3_wide_1to1": {
+      "min": [
+        -14.399999999999999,
+        -12.5,
+        75.0
+      ],
+      "max": [
+        -1.9999999999999982,
+        12.5,
+        99.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 7440.0
+    },
+    "camera_CSI_exit_and_bend_reserve": {
+      "min": [
+        -24.0,
+        -11.0,
+        73.0
+      ],
+      "max": [
+        -14.5,
+        11.0,
+        85.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 2508.0
+    },
+    "removable_camera_edge_bracket_trial": {
+      "min": [
+        -17.0,
+        -15.0,
+        74.0
+      ],
+      "max": [
+        -14.8,
+        15.0,
+        100.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 467.27999999999986
+    },
+    "addressable_status_LED_package_reserve": {
+      "min": [
+        -8.0,
+        12.7,
+        89.3
+      ],
+      "max": [
+        -5.0,
+        17.7,
+        94.3
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 75.0
+    },
+    "crown_status_light_diffuser": {
+      "min": [
+        -5.0,
+        13.5,
+        90.1
+      ],
+      "max": [
+        -2.1,
+        16.9,
+        93.5
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 26.329688029736044
+    },
+    "C2_ESP32_S3_Zero_23_5x18_footprint": {
+      "min": [
+        -28.6,
+        -46.0,
+        28.0
+      ],
+      "max": [
+        -27.0,
+        -28.0,
+        51.5
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 676.8000000000005
+    },
+    "C2_installed_components_reserve": {
+      "min": [
+        -36.0,
+        -46.0,
+        28.0
+      ],
+      "max": [
+        -28.6,
+        -28.0,
+        51.5
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 3130.1999999999994
+    },
+    "C2_USB_C_withdrawal_BOOT_RESET_service_reserve": {
+      "min": [
+        -49.0,
+        -47.0,
+        26.0
+      ],
+      "max": [
+        -36.0,
+        -27.0,
+        53.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 7020.0
+    },
+    "connected_rolling_cradle_flange_ear_stalks": {
+      "min": [
+        -40.0,
+        -68.0,
+        2.499999999999999
+      ],
+      "max": [
+        -14.0,
+        68.0,
+        76.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 10833.857617866712
+    },
+    "rolling_spindle_6mm": {
+      "min": [
+        -72.0,
+        -3.6,
+        41.0
+      ],
+      "max": [
+        -40.0,
+        2.4,
+        47.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 904.7786842338605
+    },
+    "roll_bearing_1_16x6_reserve": {
+      "min": [
+        -46.0,
+        -8.6,
+        36.0
+      ],
+      "max": [
+        -40.0,
+        7.4,
+        52.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 1025.2273465724932
+    },
+    "roll_bearing_2_16x6_reserve": {
+      "min": [
+        -68.0,
+        -8.6,
+        36.0
+      ],
+      "max": [
+        -61.99999999999999,
+        7.4,
+        52.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 1025.2273465724932
+    },
+    "bearing_cartridge_trial": {
+      "min": [
+        -69.0,
+        -12.6,
+        32.0
+      ],
+      "max": [
+        -39.0,
+        11.4,
+        56.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 10787.270462825974
+    },
+    "coaxial_coupling_trial": {
+      "min": [
+        -77.5,
+        -6.6,
+        38.0
+      ],
+      "max": [
+        -69.0,
+        5.4,
+        50.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 961.3273519984766
+    },
+    "roll_XC330_1to1_reference": {
+      "min": [
+        -106.5,
+        -10.6,
+        19.5
+      ],
+      "max": [
+        -77.5,
+        9.4,
+        53.5
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 19720.000000000004
+    },
+    "pitch_XC330_1to1_reference": {
+      "min": [
+        -64.5,
+        24.5,
+        33.0
+      ],
+      "max": [
+        -30.5,
+        53.5,
+        53.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 19720.0
+    },
+    "pitch_trunnion_-49": {
+      "min": [
+        -44.0,
+        -53.5,
+        39.0
+      ],
+      "max": [
+        -36.0,
+        -44.5,
+        47.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 452.38934211693027
+    },
+    "pitch_trunnion_49": {
+      "min": [
+        -44.0,
+        44.5,
+        39.0
+      ],
+      "max": [
+        -36.0,
+        53.5,
+        47.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 452.38934211693027
+    },
+    "connected_pitch_frame_roll_servo_saddle": {
+      "min": [
+        -108.0,
+        -51.0,
+        16.5
+      ],
+      "max": [
+        -35.999999999999936,
+        51.0,
+        47.0
+      ],
+      "solids": 5,
+      "valid": true,
+      "volume": 15744.014286047779
+    },
+    "yaw_yoke_leg_-55": {
+      "min": [
+        -74.0,
+        -58.0,
+        -32.0
+      ],
+      "max": [
+        -35.99999999999999,
+        -52.0,
+        49.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 4697.552793874631
+    },
+    "yaw_yoke_leg_55": {
+      "min": [
+        -74.0,
+        52.0,
+        -32.0
+      ],
+      "max": [
+        -35.99999999999999,
+        58.0,
+        49.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 4697.552793874631
+    },
+    "yaw_yoke_spindle_bridge": {
+      "min": [
+        -74.0,
+        -58.0,
+        -36.0
+      ],
+      "max": [
+        -36.0,
+        58.0,
+        -32.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 6207.999999999998
+    },
+    "yaw_spindle_interface_reserve": {
+      "min": [
+        -44.0,
+        -4.0,
+        -60.0
+      ],
+      "max": [
+        -36.0,
+        4.0,
+        -36.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 1206.3715789784803
+    },
+    "ear_-1_M2_1": {
+      "min": [
+        -27.07233047033631,
+        -75.18052463510537,
+        57.92766952966369
+      ],
+      "max": [
+        -23.57233047033631,
+        -68.0,
+        61.42766952966369
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 25.32544429234549
+    },
+    "ear_-1_M2_2": {
+      "min": [
+        -62.42766952966369,
+        -75.18052463510537,
+        57.92766952966369
+      ],
+      "max": [
+        -58.92766952966369,
+        -68.0,
+        61.42766952966369
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 25.32544429234549
+    },
+    "ear_-1_M2_3": {
+      "min": [
+        -62.42766952966369,
+        -75.18052463510537,
+        22.572330470336315
+      ],
+      "max": [
+        -58.92766952966369,
+        -68.0,
+        26.072330470336315
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 25.3254442923455
+    },
+    "ear_-1_M2_4": {
+      "min": [
+        -27.072330470336315,
+        -75.18052463510537,
+        22.572330470336308
+      ],
+      "max": [
+        -23.572330470336315,
+        -68.0,
+        26.072330470336308
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 25.325444292345505
+    },
+    "ear_-1_ridged_inner_mount": {
+      "min": [
+        -73.0,
+        -71.2,
+        21.722330470336306
+      ],
+      "max": [
+        -12.999999999999996,
+        -65.0,
+        72.0
+      ],
+      "solids": 3,
+      "valid": true,
+      "volume": 755.6496907089819
+    },
+    "ear_-1_hollow_removable_cap": {
+      "min": [
+        -73.0000001,
+        -75.0000001,
+        13.903595547978464
+      ],
+      "max": [
+        -12.9999999,
+        -67.99999989999998,
+        72.0000001
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 4182.544216083397
+    },
+    "ear_-1_amber_inlay": {
+      "min": [
+        -64.8,
+        -74.74000000000001,
+        20.2
+      ],
+      "max": [
+        -21.2,
+        -74.56,
+        63.8
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 16.981564929707986
+    },
+    "ear_-1_dark_centre": {
+      "min": [
+        -64.0,
+        -74.705,
+        21.0
+      ],
+      "max": [
+        -22.0,
+        -74.55499999999999,
+        63.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 207.81635403496693
+    },
+    "ear_1_M2_1": {
+      "min": [
+        -27.07233047033631,
+        68.0,
+        57.92766952966369
+      ],
+      "max": [
+        -23.57233047033631,
+        75.18052463510537,
+        61.42766952966369
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 25.32544429234549
+    },
+    "ear_1_M2_2": {
+      "min": [
+        -62.42766952966369,
+        68.0,
+        57.92766952966369
+      ],
+      "max": [
+        -58.92766952966369,
+        75.18052463510537,
+        61.42766952966369
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 25.325444292345487
+    },
+    "ear_1_M2_3": {
+      "min": [
+        -62.42766952966369,
+        68.0,
+        22.572330470336315
+      ],
+      "max": [
+        -58.92766952966369,
+        75.18052463510537,
+        26.072330470336315
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 25.325444292345505
+    },
+    "ear_1_M2_4": {
+      "min": [
+        -27.072330470336315,
+        68.0,
+        22.572330470336308
+      ],
+      "max": [
+        -23.572330470336315,
+        75.18052463510537,
+        26.072330470336308
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 25.325444292345505
+    },
+    "ear_1_ridged_inner_mount": {
+      "min": [
+        -73.0,
+        65.0,
+        21.722330470336306
+      ],
+      "max": [
+        -12.999999999999996,
+        71.2,
+        72.0
+      ],
+      "solids": 3,
+      "valid": true,
+      "volume": 754.3752781615498
+    },
+    "ear_1_hollow_removable_cap": {
+      "min": [
+        -73.0000001,
+        67.99999989999999,
+        13.926826846278166
+      ],
+      "max": [
+        -12.9999999,
+        75.00000010000045,
+        72.0000001
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 4175.215446962756
+    },
+    "ear_1_amber_inlay": {
+      "min": [
+        -64.8,
+        74.56,
+        20.2
+      ],
+      "max": [
+        -21.2,
+        74.74000000000001,
+        63.8
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 16.981564929707957
+    },
+    "ear_1_dark_centre": {
+      "min": [
+        -64.0,
+        74.55499999999999,
+        21.0
+      ],
+      "max": [
+        -22.0,
+        74.705,
+        63.0
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 207.81635403496693
+    },
+    "front_M2x10_1": {
+      "min": [
+        -11.7,
+        -58.45,
+        14.25
+      ],
+      "max": [
+        -0.5194753648946269,
+        -54.95,
+        17.75
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 37.891814906717215
+    },
+    "front_M2x10_2": {
+      "min": [
+        -11.7,
+        54.95,
+        14.25
+      ],
+      "max": [
+        -0.5194753648946269,
+        58.45,
+        17.75
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 37.89181490671722
+    },
+    "front_M2x10_3": {
+      "min": [
+        -11.7,
+        -58.45,
+        62.25
+      ],
+      "max": [
+        -0.5194753648946269,
+        -54.95,
+        65.75
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 37.891814906717244
+    },
+    "front_M2x10_4": {
+      "min": [
+        -11.7,
+        54.95,
+        62.25
+      ],
+      "max": [
+        -0.5194753648946269,
+        58.45,
+        65.75
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 37.89181490671724
+    },
+    "front_M2x10_5": {
+      "min": [
+        -11.7,
+        -33.75,
+        75.25
+      ],
+      "max": [
+        -0.5194753648946269,
+        -30.25,
+        78.75
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 37.89181490671726
+    },
+    "front_M2x10_6": {
+      "min": [
+        -11.7,
+        30.25,
+        75.25
+      ],
+      "max": [
+        -0.5194753648946269,
+        33.75,
+        78.75
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 37.89181490671725
+    },
+    "rear_M2x6_1": {
+      "min": [
+        -115.18052463510537,
+        -57.75,
+        17.25
+      ],
+      "max": [
+        -108.0,
+        -54.25,
+        20.75
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 25.325444292345487
+    },
+    "rear_M2x6_2": {
+      "min": [
+        -115.18052463510537,
+        54.25,
+        17.25
+      ],
+      "max": [
+        -108.0,
+        57.75,
+        20.75
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 25.325444292345487
+    },
+    "rear_M2x6_3": {
+      "min": [
+        -115.18052463510537,
+        -57.75,
+        65.25
+      ],
+      "max": [
+        -108.0,
+        -54.25,
+        68.75
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 25.32544429234551
+    },
+    "rear_M2x6_4": {
+      "min": [
+        -115.18052463510537,
+        54.25,
+        65.25
+      ],
+      "max": [
+        -108.0,
+        57.75,
+        68.75
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 25.32544429234551
+    }
+  },
+  "limitations": [
+    "No continuous sweep, cable flex, optical field of view, body/yaw model, manufacturing tolerance or structural certification.",
+    "Servo references remain unselected. Board depth, LED installed package, connector and service envelopes are assumptions."
+  ]
+}

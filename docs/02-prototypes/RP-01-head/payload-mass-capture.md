@@ -5,8 +5,8 @@
 | Status | **Open — no accepted mass total until physical readings are entered** |
 | Owner | Project builder |
 | Created | 2026-08-30 |
-| Revised | 2026-09-05 |
-| Governing RP-01 model | `material-finish-mass-decision.md`: approximately 490 g **pre-M008 lower bound** at 1.2 mm PLA; the C2 architecture is selected and its exact ESP32-S3 module remains to be chosen/weighed; the system baseline now carries the same lower bound |
+| Revised | 2026-09-08 |
+| Governing RP-01 model | `material-finish-mass-decision.md`: approximately 490 g **pre-M008 lower bound** at 1.2 mm PLA; the C2 architecture and its module are selected (Waveshare ESP32-S3-Zero, `control-topology-options.md` v0.9 §6.3) and M008 remains unweighed; the system baseline now carries the same lower bound |
 | Feeds | Per-axis mass tree, CoM/inertia model, actuator sizing, representative RP-01 ballast |
 
 ## Purpose and boundary
@@ -109,6 +109,8 @@ Use the head Cartesian frame already adopted by RP-01: origin and final datum re
 | M900 | **Complete moving head cross-check**, independently weighed downstream of yaw and ready to operate | 1 | M900 | `U` |  |  |  |  |  |  | Cross-check | Include harness in defined neutral service-loop state; requires CAD-05 boundary |
 
 ## Parallel provisional model
+
+**Layout 02 working spatial model, 2026-09-08:** [mass-placement.json](cad/head/layout-02/mass-placement.json) separately recomputes the revised shell, Ø60 mm ears, cradle and support geometry at PLA density, with explicit D/E module, coating, harness and hardware allowances. It owns the provisional A0 coordinates and inertia estimates for that CAD revision. Its M019 shell/crown and frame quantities replace the corresponding old allowances within that study; never add the new CAD parts on top of the complete table below. M002 retention, M005 bracket and M008 installed mounting already sit inside their respective allowances. No accepted W row or M900 reading is supplied by the CAD study.
 
 This `D`/`E` model supports pre-purchase physics and actuator screening. It remains permanently separate from the accepted `W` total.
 

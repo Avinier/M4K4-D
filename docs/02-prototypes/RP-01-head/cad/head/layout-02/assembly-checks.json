@@ -1,0 +1,158 @@
+{
+  "same_frame_non_fastener_intersections": [],
+  "C2_top_exit_service_reserve_neutral_hits": [],
+  "authored_single_valid_solid": {
+    "front_bezel_integral_camera_crown": true,
+    "main_octagonal_skin": true,
+    "removable_octagonal_rear_cover": true,
+    "window_opaque_mask_110mm": true,
+    "window_clear_optical_area": true,
+    "active_display_95_04x53_86": true,
+    "display_module_1to1_envelope": true,
+    "display_connector_and_flashing_access_reserve": true,
+    "camera_module_3_wide_1to1": true,
+    "camera_CSI_exit_and_bend_reserve": true,
+    "removable_camera_edge_bracket_trial": true,
+    "addressable_status_LED_package_reserve": true,
+    "crown_status_light_diffuser": true,
+    "C2_ESP32_S3_Zero_23_5x18_footprint": true,
+    "C2_installed_components_reserve": true,
+    "C2_USB_C_withdrawal_BOOT_RESET_service_reserve": true,
+    "connected_rolling_cradle_flange_ear_stalks": true,
+    "rolling_spindle_6mm": true,
+    "roll_bearing_1_16x6_reserve": true,
+    "roll_bearing_2_16x6_reserve": true,
+    "bearing_cartridge_trial": true,
+    "coaxial_coupling_trial": true,
+    "roll_XC330_1to1_reference": true,
+    "pitch_XC330_1to1_reference": true,
+    "pitch_trunnion_-49": true,
+    "pitch_trunnion_49": true,
+    "connected_pitch_frame_roll_servo_saddle": true,
+    "yaw_yoke_leg_-55": true,
+    "yaw_yoke_leg_55": true,
+    "yaw_yoke_spindle_bridge": true,
+    "pitch_servo_to_yoke_adapter_trial": true,
+    "yaw_spindle_interface_reserve": true,
+    "ear_-1_M2_1": true,
+    "ear_-1_M2_2": true,
+    "ear_-1_M2_3": true,
+    "ear_-1_M2_4": true,
+    "ear_-1_hidden_mount_M2_-4": true,
+    "ear_-1_hidden_mount_M2_4": true,
+    "ear_-1_ridged_inner_mount": true,
+    "ear_-1_hollow_removable_cap": true,
+    "ear_-1_amber_inlay": true,
+    "ear_-1_dark_centre": true,
+    "ear_1_M2_1": true,
+    "ear_1_M2_2": true,
+    "ear_1_M2_3": true,
+    "ear_1_M2_4": true,
+    "ear_1_hidden_mount_M2_-4": true,
+    "ear_1_hidden_mount_M2_4": true,
+    "ear_1_ridged_inner_mount": true,
+    "ear_1_hollow_removable_cap": true,
+    "ear_1_amber_inlay": true,
+    "ear_1_dark_centre": true,
+    "front_M2x10_1": true,
+    "front_M2x10_2": true,
+    "front_M2x10_3": true,
+    "front_M2x10_4": true,
+    "front_M2x10_5": true,
+    "front_M2x10_6": true,
+    "rear_M2x6_1": true,
+    "rear_M2x6_2": true,
+    "rear_M2x6_3": true,
+    "rear_M2x6_4": true
+  },
+  "catalog": [
+    {
+      "file": "../layout-01/parts/camera-module-3-wide.step",
+      "raw_solid_count": 631,
+      "retained_solid_count": 631,
+      "discarded_invalid_solid_indices": [],
+      "raw_bounds": {
+        "min": [
+          -8.01581023779363e-14,
+          -8.01581023779363e-14,
+          -8.805000000000001
+        ],
+        "max": [
+          23.861999511719052,
+          25.00000000000025,
+          2.595
+        ]
+      },
+      "retained_bounds": {
+        "min": [
+          -8.01581023779363e-14,
+          -8.01581023779363e-14,
+          -8.805000000000001
+        ],
+        "max": [
+          23.861999511719052,
+          25.00000000000025,
+          2.595
+        ]
+      },
+      "note": "Only closed positive-volume solids are used; imported non-solid annotation/open-surface geometry is excluded. All transforms rigid, scale 1."
+    },
+    {
+      "file": "../layout-01/parts/xc330.stp",
+      "raw_solid_count": 15,
+      "retained_solid_count": 15,
+      "discarded_invalid_solid_indices": [],
+      "raw_bounds": {
+        "min": [
+          -10.000000000000073,
+          -24.500000000000075,
+          -22.500000000000004
+        ],
+        "max": [
+          10.0,
+          9.500000000000073,
+          6.50000015604894
+        ]
+      },
+      "retained_bounds": {
+        "min": [
+          -10.000000000000073,
+          -24.500000000000075,
+          -22.500000000000004
+        ],
+        "max": [
+          10.0,
+          9.500000000000073,
+          6.50000015604894
+        ]
+      },
+      "note": "Only closed positive-volume solids are used; imported non-solid annotation/open-surface geometry is excluded. All transforms rigid, scale 1."
+    }
+  ],
+  "checks": {
+    "main_shell_HWD_mm": [
+      86,
+      130,
+      115
+    ],
+    "crown_inclusive_HWD_mm": [
+      102,
+      150,
+      115
+    ],
+    "camera_board_to_display_vertical_gap_mm": 1.0,
+    "display_active_rect_corner_margin_to_aperture_diagonal_mm": 0.7424621202458748,
+    "roll_bearing_centres_mm": [
+      -43,
+      -65
+    ],
+    "roll_bearing_spacing_mm": 22,
+    "ear_diameter_mm": 60,
+    "LED_package_above_main_roof_mm": 3.299999999999997
+  },
+  "notes": [
+    "Screw major cylinders intentionally occupy pilot-hole thread material; fasteners excluded from neutral overlap pairs.",
+    "Service volume is for stationary maintenance with rear cover removed; it is not a moving USB cable or sealed recovery connector model.",
+    "Camera bracket fasteners, C2 clips/antenna clearance, servo mount holes, final inserts, shaft retention, optics and cable paths remain fabrication gates."
+  ]
+}

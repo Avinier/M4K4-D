@@ -39,9 +39,11 @@ Current proposed best-case usable travel is pitch `-22°…+40°`, yaw `±55°`,
 
 ## Preliminary physical load baseline
 
+**Layout 02 update, 2026-09-08:** the [CAD mass tree](cad/head/layout-02/mass-placement.json) now supplies provisional D/E spatial estimates: approximately 371 g roll, 443 g pitch and 515 g complete/yaw-carried mass with the 20 g M008 scenario. The [layout report](cad/head/layout-02/README.md) records A0 coordinates and estimated inertias. These supersede the historical planning allocation within that CAD study; final trajectory torque, thermal acceptance and measured mass validation remain open. The historical mass rows below retain their original assumptions for audit.
+
 | Input | Current value | How RP-01 uses it |
 |---|---:|---|
-| Complete moving-head envelope | **~95 H × 150 W × 115 D mm nominal**, including integrated side pods/pivots; validate within **90–100 H × 145–155 W × 110–120 D mm** | Clearance, fixture, cable, and candidate-axis packaging boundary rebuilt from selected component geometry |
+| Complete moving-head envelope | **102 H × 150 W × 115 D mm**, crown/ears included; main core **86 H × 130 W × 115 D mm** | Layout 02 working geometry per dimensional baseline v1.9; replaces the earlier 95 mm nominal/90–100 mm height band. Manufacturing and body integration remain open. |
 | Neck allocation | **60 mm vertical** | Packaging boundary for yaw + pitch + roll; actuators may intrude into body/head |
 | Moving-head mass | **~490 g pre-M008 lower bound at 1.2 mm PLA; ~472 g + M008 at 1.0 mm walls** | `E` planning build-up from `material-finish-mass-decision.md`; add the required C2 controller once selected, then replace row-by-row with `W` evidence |
 | Historical system target | **~250 g — obsolete for RP-01 sizing** | Retained for audit history only; dimensional/mass baselines now carry the revised lower bound |
