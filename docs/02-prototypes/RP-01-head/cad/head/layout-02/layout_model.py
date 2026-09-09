@@ -77,7 +77,7 @@ def clean_catalog(path):
 def build_parts(catalog=True,reliefs=True):
     out={}
     def add(n,s,f,color='#e3ddc9',kind='physical',alpha=1,owner=None):
-        out[n]=dict(shape=tint(s,n,color,alpha),frame=f,kind=kind,owner=owner)
+        out[n]=dict(shape=tint(s,n,color,alpha),frame=f,kind=kind,owner=owner,color=color,alpha=alpha)
     # Planar front ring and sloping depth band; crown fuses into this one part.
     outer=prism(120,2,84,10,-2,0)+loft([profile(120,2,84,10,-2),profile(130,0,86,14,-8)],ruled=True)
     cp=[(-23,73),(23,73),(23,85),(17,102),(-17,102),(-23,85)]
@@ -179,7 +179,8 @@ def build_parts(catalog=True,reliefs=True):
         port=block(-24,-14.5,62,67,EAR_Z-7.5,EAR_Z+7.5)
         if sign==-1:port=port.moved(Location((0,-129,0)))
         skin=skin-port
-    out['main_octagonal_skin']['shape']=tint(skin,'main_octagonal_skin','#e3ddc9')
+    skin_style=out['main_octagonal_skin']
+    skin_style['shape']=tint(skin,'main_octagonal_skin',skin_style['color'],skin_style['alpha'])
     add('rolling_spindle_6mm',axial(3,32,(-56,ROLL_Y,ROLL_Z)),'R','#b7bfc0',owner='M016-18-R')
     for i,x in enumerate([-43,-65]):
         add(f'roll_bearing_{i+1}_16x6_reserve',axial(8,6,(x,ROLL_Y,ROLL_Z))-axial(3.1,8,(x,ROLL_Y,ROLL_Z)),'P','#acb5b9',owner='M016-18-P')
@@ -294,7 +295,9 @@ def build_parts(catalog=True,reliefs=True):
                     lo=[min(tuple(b.min)[i] for b in bounds)-2 for i in range(3)]
                     hi=[max(tuple(b.max)[i] for b in bounds)+2 for i in range(3)]
                     cuts.append(block(lo[0],hi[0],lo[1],hi[1],lo[2],hi[2]))
-            if cuts:out[name]['shape']=tint(s.cut(*cuts),name,'#718d95' if 'cradle' in name else '#e3ddc9' if 'cap' in name or 'skin' in name else '#303a3c')
+            if cuts:
+                style=out[name]
+                style['shape']=tint(s.cut(*cuts),name,style['color'],style['alpha'])
     return out
 
 def assembly(internals=False,roll=0,pitch=0,yaw=0):

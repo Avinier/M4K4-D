@@ -29,6 +29,11 @@ for filename in ['camera-module-3-wide.step','xc330.stp']:
     catalog.append(dict(file='../layout-01/parts/'+filename,raw_solid_count=len(solids),retained_solid_count=len(clean.solids()),discarded_invalid_solid_indices=bad,raw_bounds=dict(min=list(raw.bounding_box().min),max=list(raw.bounding_box().max)),retained_bounds=dict(min=list(clean.bounding_box().min),max=list(clean.bounding_box().max)),note='Only closed positive-volume solids are used; imported non-solid annotation/open-surface geometry is excluded. All transforms rigid, scale 1.'))
 single_solid={n:len(d['shape'].solids())==1 and d['shape'].is_valid for n,d in p.items()}
 result=dict(same_frame_non_fastener_intersections=hits,C2_top_exit_service_reserve_neutral_hits=service_hits,authored_single_valid_solid=single_solid,catalog=catalog,checks=dict(main_shell_HWD_mm=[86,130,115],crown_inclusive_HWD_mm=[102,150,115],camera_board_to_display_vertical_gap_mm=camera_gap,display_active_rect_corner_margin_to_aperture_diagonal_mm=(1.98+2.07-3)/2**.5,roll_bearing_centres_mm=[-43,-65],roll_bearing_spacing_mm=22,ear_diameter_mm=60,LED_package_above_main_roof_mm=m.LED_Z-2.5-m.MAIN_H),notes=['Screw major cylinders intentionally occupy pilot-hole thread material; fasteners excluded from neutral overlap pairs.','Service volume is for stationary maintenance with rear cover removed; it is not a moving USB cable or sealed recovery connector model.','Camera bracket fasteners, C2 clips/antenna clearance, servo mount holes, final inserts, shaft retention, optics and cable paths remain fabrication gates.'])
-(HERE/'assembly-checks.json').write_text(json.dumps(result,indent=2)+'\n')
+report=HERE/'assembly-checks.json'
+temporary=report.with_suffix('.json.tmp')
+temporary.write_text(json.dumps(result,indent=2)+'\n')
+temporary.replace(report)
 print(json.dumps({k:v for k,v in result.items() if k!='authored_single_valid_solid'},indent=2))
 print('single solids',all(single_solid.values()))
+if hits or service_hits or not all(single_solid.values()) or any(c['discarded_invalid_solid_indices'] for c in catalog):
+    raise SystemExit(1)

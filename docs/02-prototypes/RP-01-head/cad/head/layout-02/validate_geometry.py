@@ -13,9 +13,15 @@ commands=[
  ('bearing-spacing.json',['measure',str(target),'--from','#o1.2.1','--to','#o1.2.2','--axis','x']),
 ]
 for filename,args in commands:
-    with (HERE/'review'/filename).open('w') as f:
-        result=subprocess.run([sys.executable,str(CLI/'inspect'),*args],stdout=f)
-    data=json.loads((HERE/'review'/filename).read_text())
+    result=subprocess.run([sys.executable,str(CLI/'inspect'),*args],capture_output=True,text=True)
+    if result.stderr:print(result.stderr,file=sys.stderr,end='')
+    data=json.loads(result.stdout)
+    # Publish complete JSON atomically so readers never see a half-written report.
+    report=HERE/'review'/filename
+    temporary=report.with_suffix('.json.tmp')
+    temporary.write_text(result.stdout)
+    temporary.replace(report)
     print(filename,'exit',result.returncode,'ok',data.get('ok'),'keys',list(data),flush=True)
     if result.returncode:raise SystemExit(result.returncode)
+    if data.get('ok') is not True:raise SystemExit(1)
 print('Authored occurrences fully checked:',len(authored),flush=True)

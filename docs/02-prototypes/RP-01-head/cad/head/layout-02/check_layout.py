@@ -48,5 +48,11 @@ for h in hits:
     k=h['a']+' / '+h['b']
     if k not in worst or h['volume_mm3']>worst[k]['volume_mm3']:worst[k]=h
 result=dict(method='Conservative 1:1 package BREP overlaps; 56 discrete poses (7 roll × 8 pitch), distinct from relief design samples. Intended bearing/shaft contacts omitted.',axes=m.AXES,poses=len(rolls)*len(pitches),pairs_per_pose=len(pairs),hits=hits,worst_by_pair=worst,static_package_hits=static,active_area_excluded_mm3=screen_excluded,outer_cap_face_area_mm2=outer_caps,lowest_sampled_shell_z=min(minz),bounds=dimensions,limitations=['No continuous sweep, cable flex, optical field of view, body/yaw model, manufacturing tolerance or structural certification.','Servo references remain unselected. Board depth, LED installed package, connector and service envelopes are assumptions.'])
-(HERE/('neutral-checks.json' if '--neutral' in sys.argv else 'fit-checks.json')).write_text(json.dumps(result,indent=2)+'\n')
+result['method']=f'Conservative 1:1 package BREP overlaps; {len(rolls)*len(pitches)} discrete poses ({len(rolls)} roll × {len(pitches)} pitch). Intended bearing/shaft contacts omitted.'
+report=HERE/('neutral-checks.json' if '--neutral' in sys.argv else 'fit-checks.json')
+temporary=report.with_suffix('.json.tmp')
+temporary.write_text(json.dumps(result,indent=2)+'\n')
+temporary.replace(report)
 print(json.dumps({k:result[k] for k in ['poses','pairs_per_pose','worst_by_pair','static_package_hits','active_area_excluded_mm3','outer_cap_face_area_mm2','lowest_sampled_shell_z']},indent=2))
+if hits or static or screen_excluded>1e-4 or any(not d['valid'] or d['solids']!=1 for d in dimensions.values()):
+    raise SystemExit(1)
