@@ -2,17 +2,17 @@
 
 | Field | Value |
 |---|---|
-| Status | In progress — Concept A authored as a candidate; Concept B remains open; no mechanism selected |
-| Rule | Minimum two credible concepts unless calculation/sourcing eliminates one first (RP plan open input). Sketches and napkin geometry — not CAD. |
+| Status | Concept A is the RP-01 path; Concept B will not be authored (builder, 2026-09-09). No scored mechanism selection. |
+| Rule | Minimum two credible concepts unless the builder closes one path first. Concept B waived 2026-09-09. |
 | Physical baseline | ~95 × 150 × 115 mm nominal complete head within a 90–100 × 145–155 × 110–120 mm validation band; `../material-finish-mass-decision.md` provisional ~490 g pre-M008 lower bound at 1.2 mm PLA plus required C2 hardware; 60 mm neck allocation |
 
 Credibility checklist per concept: load path (no bare servo-horn cantilever), actuator class with a sourcing path, cable route, service/assembly story, physics numbers clearing `intent.md` requirements with margin.
 
-First-layout construction and fitting choices are recorded in [head CAD decisions](../cad/head/decisions.md), dated 2026-09-07. Both cosmetic ears now attach to the rolling face/cradle by builder selection, with support clearance still to be proved. These choices guide the next blockout; the mechanism comparison and gate outcomes remain open.
+First-layout construction and fitting choices are recorded in [head CAD decisions](../cad/head/decisions.md). Both cosmetic ears attach to the rolling face/cradle. Concept B was waived on 2026-09-09; gate outcomes remain open.
 
-| Criterion | Concept A: elevated ear-pivot serial gimbal | Concept B: open |
+| Criterion | Concept A: elevated ear-pivot serial gimbal | Concept B |
 |---|---|---|
-| Joint order (e.g. yaw→pitch→roll) | Body-fixed yaw → pitch → head-fixed roll. This matches intrinsic face motion and keeps the Euler singularity far outside Makad's pitch range. | |
+| Joint order (e.g. yaw→pitch→roll) | Body-fixed yaw → pitch → head-fixed roll. This matches intrinsic face motion and keeps the Euler singularity far outside Makad's pitch range. | Not authored. Builder waived the comparison on 2026-09-09. |
 | Fits 60 mm neck allocation and head intrusion envelope | Candidate only. Yaw bearing/drive must recess into the body/head and the pitch yoke must rise beside the head; generated-reference proportions are explicitly rejected. Compare the current 110–115 mm core depth with an approximately 90 mm blockout before CAD freeze. | |
 | Actuation class per axis | Body-fixed yaw actuator; direct pitch and roll actuation first. Feetech/DYNAMIXEL classes remain candidates, not selections. A belt/gear offset is added only if packaging or quantified yaw inertia earns its backlash/compliance cost. | |
 | Support/bearing scheme (where does the load actually go?) | Compact yaw shaft/bearing carries axial and overturning load independently of the yaw drive. Pitch is double-supported near the ear-pod locations. Near-CoM roll is a gravity target, not yet a support solution: compare a rear spaced-bearing cartridge, face-clear annular/perimeter support and displaced axis around the selected Waveshare no-touch SKU 30493 envelope, including connector/service clearance and overhung moment. Cosmetic ear shells cover rather than carry pivots. | |
@@ -24,6 +24,6 @@ First-layout construction and fitting choices are recorded in [head CAD decision
 | Sourcing: availability, landed cost, lead time, substitute | Pending candidate-matrix expansion and re-check before purchase. Large Lazy-Susan/NEMA-scale hardware is excluded by moving-mass and 60 mm packaging constraints, not used as a sourcing reference. | |
 | Fabrication/assembly/calibration/service story | Rising provisional-PLA U-yoke, removable face-attached rolling cosmetic ears with clearance around the pitch supports, independently replaceable actuators, accessible harness connectors, yaw-plane demateable mass boundary, display flashing access, axis-zero registration and complete-output calibration. Cosmetic seams stay integral; only required service splits are real. Detailed CAD waits for the CoM/axis convergence loop and PLA thermal/creep evidence. | |
 | Failure/safe-rest behaviour (unpowered pose?) | Near-CoM axes reduce uncontrolled gravity fall; small preload/counterbalance may bias a safe direction. Stops and cable loops must bound the unpowered path. Final behaviour is a rig result. | |
-| Verdict | **Credible candidate; advance to mass blockout and rig screening, not selected.** Full note: [`elevated-ear-pivot-serial-gimbal.md`](elevated-ear-pivot-serial-gimbal.md). | |
+| Verdict | **RP-01 path; advance Layout 03 detailing and rig screening. Not gate-selected.** Full note: [`elevated-ear-pivot-serial-gimbal.md`](elevated-ear-pivot-serial-gimbal.md). | **Waived; will not be authored for RP-01.** |
 
 Sketches and per-concept notes as separate files in this folder.

@@ -1,0 +1,788 @@
+{
+  "poses": 1,
+  "mechanism_pairs_per_pose": 444,
+  "jacket_pairs_per_pose": 200,
+  "same_frame_hits": [],
+  "motion_hits": [
+    {
+      "roll": 0,
+      "pitch": 0,
+      "a": "pitch_XC330_1to1_reference",
+      "b": "pitch_trunnion_49",
+      "volume_mm3": 100.53096
+    }
+  ],
+  "harness_pinches": [],
+  "optical_pose_checks": [
+    {
+      "roll": -18,
+      "pitch": -22,
+      "part": "front_bezel_integral_camera_crown",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": -18,
+      "pitch": -22,
+      "part": "window_opaque_mask_110mm",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": -18,
+      "pitch": -22,
+      "part": "window_clear_optical_area",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": -18,
+      "pitch": -22,
+      "part": "main_octagonal_skin",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": -18,
+      "pitch": -22,
+      "part": "crown_status_light_diffuser",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": -18,
+      "pitch": 0,
+      "part": "front_bezel_integral_camera_crown",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": -18,
+      "pitch": 0,
+      "part": "window_opaque_mask_110mm",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": -18,
+      "pitch": 0,
+      "part": "window_clear_optical_area",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": -18,
+      "pitch": 0,
+      "part": "main_octagonal_skin",
+      "intersection_mm3": 0.0
+    },
+    {
+      "roll": -18,
+      "pitch": 0,
+      "part": "crown_status_light_diffuser",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": -18,
+      "pitch": 40,
+      "part": "front_bezel_integral_camera_crown",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": -18,
+      "pitch": 40,
+      "part": "window_opaque_mask_110mm",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": -18,
+      "pitch": 40,
+      "part": "window_clear_optical_area",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": -18,
+      "pitch": 40,
+      "part": "main_octagonal_skin",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": -18,
+      "pitch": 40,
+      "part": "crown_status_light_diffuser",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 0,
+      "pitch": -22,
+      "part": "front_bezel_integral_camera_crown",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 0,
+      "pitch": -22,
+      "part": "window_opaque_mask_110mm",
+      "intersection_mm3": 0.0
+    },
+    {
+      "roll": 0,
+      "pitch": -22,
+      "part": "window_clear_optical_area",
+      "intersection_mm3": 0.0
+    },
+    {
+      "roll": 0,
+      "pitch": -22,
+      "part": "main_octagonal_skin",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 0,
+      "pitch": -22,
+      "part": "crown_status_light_diffuser",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 0,
+      "pitch": 0,
+      "part": "front_bezel_integral_camera_crown",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 0,
+      "pitch": 0,
+      "part": "window_opaque_mask_110mm",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 0,
+      "pitch": 0,
+      "part": "window_clear_optical_area",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 0,
+      "pitch": 0,
+      "part": "main_octagonal_skin",
+      "intersection_mm3": 0.0
+    },
+    {
+      "roll": 0,
+      "pitch": 0,
+      "part": "crown_status_light_diffuser",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 0,
+      "pitch": 40,
+      "part": "front_bezel_integral_camera_crown",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 0,
+      "pitch": 40,
+      "part": "window_opaque_mask_110mm",
+      "intersection_mm3": 0.0
+    },
+    {
+      "roll": 0,
+      "pitch": 40,
+      "part": "window_clear_optical_area",
+      "intersection_mm3": 0.0
+    },
+    {
+      "roll": 0,
+      "pitch": 40,
+      "part": "main_octagonal_skin",
+      "intersection_mm3": 0.0
+    },
+    {
+      "roll": 0,
+      "pitch": 40,
+      "part": "crown_status_light_diffuser",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 18,
+      "pitch": -22,
+      "part": "front_bezel_integral_camera_crown",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 18,
+      "pitch": -22,
+      "part": "window_opaque_mask_110mm",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 18,
+      "pitch": -22,
+      "part": "window_clear_optical_area",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 18,
+      "pitch": -22,
+      "part": "main_octagonal_skin",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 18,
+      "pitch": -22,
+      "part": "crown_status_light_diffuser",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 18,
+      "pitch": 0,
+      "part": "front_bezel_integral_camera_crown",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 18,
+      "pitch": 0,
+      "part": "window_opaque_mask_110mm",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 18,
+      "pitch": 0,
+      "part": "window_clear_optical_area",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 18,
+      "pitch": 0,
+      "part": "main_octagonal_skin",
+      "intersection_mm3": 0.0
+    },
+    {
+      "roll": 18,
+      "pitch": 0,
+      "part": "crown_status_light_diffuser",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 18,
+      "pitch": 40,
+      "part": "front_bezel_integral_camera_crown",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 18,
+      "pitch": 40,
+      "part": "window_opaque_mask_110mm",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 18,
+      "pitch": 40,
+      "part": "window_clear_optical_area",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 18,
+      "pitch": 40,
+      "part": "main_octagonal_skin",
+      "intersection_mm3": 0
+    },
+    {
+      "roll": 18,
+      "pitch": 40,
+      "part": "crown_status_light_diffuser",
+      "intersection_mm3": 0
+    }
+  ],
+  "old_aperture_conservative_vignetting_mm3": 285.3487925594356,
+  "optics_assumption": "102\u00b0 horizontal, vertical tangent from 16:9; pupil at X\u22128 and entrance half-size3mm, front of lens X\u22122; no entrance-pupil measurement or optical certification.",
+  "hard_stops": [
+    {
+      "axis": "roll",
+      "angle": -18,
+      "at_limit": true,
+      "overlap_mm3": 1.5807029750482596e-08,
+      "distance_mm": 0.0
+    },
+    {
+      "axis": "roll",
+      "angle": -19,
+      "at_limit": false,
+      "overlap_mm3": 0.5438348378005896,
+      "distance_mm": 0.0
+    },
+    {
+      "axis": "roll",
+      "angle": 18,
+      "at_limit": true,
+      "overlap_mm3": 1.5807029631561602e-08,
+      "distance_mm": 0.0
+    },
+    {
+      "axis": "roll",
+      "angle": 19,
+      "at_limit": false,
+      "overlap_mm3": 0.5438348378005338,
+      "distance_mm": 0.0
+    },
+    {
+      "axis": "pitch",
+      "angle": -22,
+      "at_limit": true,
+      "overlap_mm3": 0,
+      "distance_mm": 0.0
+    },
+    {
+      "axis": "pitch",
+      "angle": -23,
+      "at_limit": false,
+      "overlap_mm3": 0.6972357625537542,
+      "distance_mm": 0.0
+    },
+    {
+      "axis": "pitch",
+      "angle": 40,
+      "at_limit": true,
+      "overlap_mm3": 0,
+      "distance_mm": 0.0
+    },
+    {
+      "axis": "pitch",
+      "angle": 41,
+      "at_limit": false,
+      "overlap_mm3": 0.6972357625539012,
+      "distance_mm": 0.0
+    }
+  ],
+  "C2_service_hits": [
+    {
+      "reserve": "C2_USB_C_installed_plug_reserve",
+      "part": "C2_removable_open_rear_tray",
+      "overlap_mm3": 24.000000000000124
+    }
+  ],
+  "solids": {
+    "front_bezel_integral_camera_crown": {
+      "valid": true,
+      "solids": 1,
+      "volume": 14018.65071351881
+    },
+    "main_octagonal_skin": {
+      "valid": true,
+      "solids": 1,
+      "volume": 39307.54305706657
+    },
+    "removable_octagonal_rear_cover": {
+      "valid": true,
+      "solids": 1,
+      "volume": 15466.271312319275
+    },
+    "window_opaque_mask_110mm": {
+      "valid": true,
+      "solids": 1,
+      "volume": 1926.0
+    },
+    "window_clear_optical_area": {
+      "valid": true,
+      "solids": 1,
+      "volume": 8586.0
+    },
+    "active_display_95_04x53_86": {
+      "valid": true,
+      "solids": 1,
+      "volume": 1023.7708800000012
+    },
+    "display_module_1to1_envelope": {
+      "valid": true,
+      "solids": 1,
+      "volume": 76476.88
+    },
+    "display_connector_and_flashing_access_reserve": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25973.28
+    },
+    "camera_module_3_wide_1to1": {
+      "valid": true,
+      "solids": 1,
+      "volume": 7440.0
+    },
+    "camera_CSI_exit_and_bend_reserve": {
+      "valid": true,
+      "solids": 1,
+      "volume": 2508.0
+    },
+    "removable_camera_edge_bracket_trial": {
+      "valid": true,
+      "solids": 1,
+      "volume": 467.27999999999986
+    },
+    "addressable_status_LED_package_reserve": {
+      "valid": true,
+      "solids": 1,
+      "volume": 75.0
+    },
+    "crown_status_light_diffuser": {
+      "valid": true,
+      "solids": 1,
+      "volume": 26.329688029736044
+    },
+    "C2_ESP32_S3_Zero_23_5x18_footprint": {
+      "valid": true,
+      "solids": 1,
+      "volume": 676.8000000000005
+    },
+    "C2_installed_components_reserve": {
+      "valid": true,
+      "solids": 1,
+      "volume": 3130.199999999999
+    },
+    "C2_USB_C_withdrawal_BOOT_RESET_service_reserve": {
+      "valid": true,
+      "solids": 1,
+      "volume": 2160.0
+    },
+    "connected_rolling_cradle_flange_ear_stalks": {
+      "valid": true,
+      "solids": 1,
+      "volume": 10018.453583788276
+    },
+    "rolling_spindle_6mm": {
+      "valid": true,
+      "solids": 1,
+      "volume": 904.7786842338605
+    },
+    "roll_bearing_1_16x6_reserve": {
+      "valid": true,
+      "solids": 1,
+      "volume": 1025.2273465724932
+    },
+    "roll_bearing_2_16x6_reserve": {
+      "valid": true,
+      "solids": 1,
+      "volume": 1025.2273465724932
+    },
+    "bearing_cartridge_trial": {
+      "valid": true,
+      "solids": 1,
+      "volume": 11812.294986190687
+    },
+    "coaxial_coupling_trial": {
+      "valid": true,
+      "solids": 1,
+      "volume": 675.9231459996518
+    },
+    "roll_XC330_1to1_reference": {
+      "valid": true,
+      "solids": 1,
+      "volume": 19720.000000000004
+    },
+    "pitch_XC330_1to1_reference": {
+      "valid": true,
+      "solids": 1,
+      "volume": 19720.0
+    },
+    "pitch_trunnion_-49": {
+      "valid": true,
+      "solids": 1,
+      "volume": 452.38934211693027
+    },
+    "pitch_trunnion_49": {
+      "valid": true,
+      "solids": 1,
+      "volume": 452.38934211693027
+    },
+    "connected_pitch_frame_roll_servo_saddle": {
+      "valid": true,
+      "solids": 1,
+      "volume": 15009.56826347795
+    },
+    "yaw_yoke_leg_-55": {
+      "valid": true,
+      "solids": 1,
+      "volume": 5633.2012838702485
+    },
+    "yaw_yoke_leg_55": {
+      "valid": true,
+      "solids": 1,
+      "volume": 4846.202227779498
+    },
+    "yaw_yoke_spindle_bridge": {
+      "valid": true,
+      "solids": 1,
+      "volume": 6265.640270828183
+    },
+    "pitch_servo_to_yoke_adapter_trial": {
+      "valid": true,
+      "solids": 1,
+      "volume": 3201.599999999994
+    },
+    "yaw_spindle_interface_reserve": {
+      "valid": true,
+      "solids": 1,
+      "volume": 1206.3715789784803
+    },
+    "ear_-1_M2_1": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.32544429234549
+    },
+    "ear_-1_M2_2": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.32544429234549
+    },
+    "ear_-1_M2_3": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.3254442923455
+    },
+    "ear_-1_M2_4": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.325444292345505
+    },
+    "ear_-1_hidden_mount_M2_-4": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.325444292345487
+    },
+    "ear_-1_hidden_mount_M2_4": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.325444292345487
+    },
+    "ear_-1_ridged_inner_mount": {
+      "valid": true,
+      "solids": 1,
+      "volume": 1416.8558842490108
+    },
+    "ear_-1_hollow_removable_cap": {
+      "valid": true,
+      "solids": 1,
+      "volume": 3862.375875212271
+    },
+    "ear_-1_amber_inlay": {
+      "valid": true,
+      "solids": 1,
+      "volume": 16.981564929707986
+    },
+    "ear_-1_dark_centre": {
+      "valid": true,
+      "solids": 1,
+      "volume": 207.81635403496693
+    },
+    "ear_1_M2_1": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.32544429234549
+    },
+    "ear_1_M2_2": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.325444292345487
+    },
+    "ear_1_M2_3": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.325444292345505
+    },
+    "ear_1_M2_4": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.325444292345505
+    },
+    "ear_1_hidden_mount_M2_-4": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.32544429234549
+    },
+    "ear_1_hidden_mount_M2_4": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.325444292345487
+    },
+    "ear_1_ridged_inner_mount": {
+      "valid": true,
+      "solids": 1,
+      "volume": 1408.095329965202
+    },
+    "ear_1_hollow_removable_cap": {
+      "valid": true,
+      "solids": 1,
+      "volume": 3821.311230222129
+    },
+    "ear_1_amber_inlay": {
+      "valid": true,
+      "solids": 1,
+      "volume": 16.981564929707986
+    },
+    "ear_1_dark_centre": {
+      "valid": true,
+      "solids": 1,
+      "volume": 207.81635403496693
+    },
+    "front_M2x10_1": {
+      "valid": true,
+      "solids": 1,
+      "volume": 37.89181490671722
+    },
+    "front_M2x10_2": {
+      "valid": true,
+      "solids": 1,
+      "volume": 37.891814906717215
+    },
+    "front_M2x10_3": {
+      "valid": true,
+      "solids": 1,
+      "volume": 37.891814906717244
+    },
+    "front_M2x10_4": {
+      "valid": true,
+      "solids": 1,
+      "volume": 37.891814906717244
+    },
+    "front_M2x10_5": {
+      "valid": true,
+      "solids": 1,
+      "volume": 37.89181490671726
+    },
+    "front_M2x10_6": {
+      "valid": true,
+      "solids": 1,
+      "volume": 37.89181490671725
+    },
+    "rear_M2x6_1": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.325444292345487
+    },
+    "rear_M2x6_2": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.325444292345487
+    },
+    "rear_M2x6_3": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.32544429234551
+    },
+    "rear_M2x6_4": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.32544429234551
+    },
+    "C2_tray_M2_-39": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.325444292345505
+    },
+    "C2_tray_M2_-19": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.32544429234551
+    },
+    "C2_removable_open_rear_tray": {
+      "valid": true,
+      "solids": 1,
+      "volume": 2040.120305903018
+    },
+    "C2_USB_C_installed_plug_reserve": {
+      "valid": true,
+      "solids": 1,
+      "volume": 1080.0
+    },
+    "C2_BOOT_RESET_rear_tool_access_reserve": {
+      "valid": true,
+      "solids": 1,
+      "volume": 17920.0
+    },
+    "roll_bearing_retainer_39.5": {
+      "valid": true,
+      "solids": 1,
+      "volume": 152.1001548381563
+    },
+    "bearing_retainer_M2_39.5_-9": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.32544429234553
+    },
+    "bearing_retainer_M2_39.5_9": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.32544429234553
+    },
+    "roll_bearing_retainer_68.5": {
+      "valid": true,
+      "solids": 1,
+      "volume": 154.3967380514247
+    },
+    "bearing_retainer_M2_68.5_-9": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.325444292345484
+    },
+    "bearing_retainer_M2_68.5_9": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.325444292345487
+    },
+    "roll_hard_stop_pin": {
+      "valid": true,
+      "solids": 1,
+      "volume": 5.08938009881547
+    },
+    "pitch_hard_stop_pin": {
+      "valid": true,
+      "solids": 1,
+      "volume": 12.56637061435916
+    }
+  },
+  "harness_gaps": [
+    {
+      "branch": "csi",
+      "from_point_mm": [
+        -48,
+        0,
+        80
+      ],
+      "frame": "R",
+      "reason": "Stop at labelled keep-out: connector exit drawing and dynamic cable radius/FFC orientation unselected; roll/pitch transition is not qualified."
+    },
+    {
+      "branch": "display_link",
+      "from_point_mm": [
+        -48,
+        -44,
+        65
+      ],
+      "frame": "R",
+      "reason": "Stop at labelled keep-out: connector exit drawing and dynamic cable radius/FFC orientation unselected; roll/pitch transition is not qualified."
+    },
+    {
+      "branch": "c2_local",
+      "from_point_mm": [
+        -65,
+        -29,
+        40
+      ],
+      "frame": "R",
+      "reason": "Stop at labelled keep-out: connector exit drawing and dynamic cable radius/FFC orientation unselected; roll/pitch transition is not qualified."
+    },
+    {
+      "branch": "servo_bus",
+      "from_point_mm": [
+        -100,
+        -45.05657092116625,
+        37.72434162814874
+      ],
+      "frame": "P",
+      "reason": "Stop at labelled keep-out: connector exit drawing and dynamic cable radius/FFC orientation unselected; roll/pitch transition is not qualified."
+    },
+    {
+      "branch": "led_local",
+      "reason": "Crown depth cannot accept a 30 mm rearward straight exit. Keep-out only until the on-hand LED exit drawing permits a shorter or differently oriented lead."
+    },
+    {
+      "branch": "yaw_service_loop",
+      "reason": "R8 is illustrative packaging only, not a qualified dynamic radius. Both head-side transitions to this Y-carried loop are open. Body-side yaw anchor belongs to RP-06."
+    }
+  ],
+  "limitations": [
+    "Discrete poses, no continuous-sweep or tolerance certificate.",
+    "Rigid harness islands stop before unqualified transitions; no electrical continuity or cable flex/endurance claim.",
+    "Yaw loop R8 is a visible trial, not a selected cable bend radius; body anchor absent."
+  ],
+  "passed": false
+}

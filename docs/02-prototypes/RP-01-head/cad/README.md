@@ -1,12 +1,16 @@
 # Makad CAD
 
-This folder, `docs/02-prototypes/RP-01-head/cad/`, owns RP-01 CAD layout decisions, CAD-specific requirements and packaging notes. **Layout 02 is the current 1:1 head layout**, implementing the slimmer octagonal shell, compact crown, real screw geometry and larger hollow ears. Detailed fabrication interfaces, complete integrated fit and actuator selection remain open; CAD is not frozen.
+This folder, `docs/02-prototypes/RP-01-head/cad/`, owns RP-01 CAD layout decisions, CAD-specific requirements and packaging notes. **Layout 03 is the current detailed 1:1 packaging revision**, built on Layout 02 and preserving it as history. It adds deeper helmet shoulders and a 104 mm wide tapered stern, a 3 mm camera/display gap, removable C2 tray, trial insert/bearing/coupling/stop details, and independent physics/harness/annotation groups. The crown is 104 mm (+2 mm); the provisional robot stack is 304 mm. Sampled geometry checks pass, but cable-flex transitions and hardware-specific fits/retention remain open; CAD is not frozen.
 
 ## Start here
 
 | Document | Purpose |
 |---|---|
-| [Current Layout 02](head/layout-02/README.md) | Revised head, interactive motion/visibility controls, STEP, assembly checks and updated provisional A0/mass tree |
+| [Current Layout 03](head/layout-03/README.md) | Tapered head, service details, STEP, motion/optical checks, independent inspection groups and revised mass/A0 |
+| [Layout 03 verification](head/layout-03/review/verification.md) | Final checks, service paths, snapshots and explicit remaining gaps |
+| [Preserved Layout 02](head/layout-02/README.md) | Previous head layout and its original verification |
+| [Layout 02 dimensions](head/layout-02/dimensions.md) | Generated bounding boxes, axis datums and yoke-length segments for the current model |
+| [Layout 03 brief](head/layout-03-brief.md) | Builder direction implemented in Layout 03; hardware-specific limitations remain explicit |
 | [Layout 01 study](head/layout-01/README.md) | Proposed crown, internal arrangement, A0 coordinates, STEP review and explicitly bounded validation |
 | [Layout 02 exterior brief](head/layout-02-brief.md) | Approved inputs behind the current CAD revision |
 | [Head decisions](head/decisions.md) | Agreed choices for the first layout, reasons, open decisions and conditions for revision |

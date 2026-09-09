@@ -1,0 +1,32 @@
+{
+  "input": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.step.py",
+  "mode": "view",
+  "theme": {
+    "projection": "orthographic",
+    "grid": {
+      "visible": false
+    }
+  },
+  "render": {
+    "viewLabels": true,
+    "padding": 0.12,
+    "sizeProfile": "assembly"
+  },
+  "outputs": [
+    {
+      "path": "docs/02-prototypes/RP-01-head/cad/head/layout-03/review/helmet-shape-preview.png",
+      "camera": {
+        "direction": [
+          -1,
+          -1,
+          0.7
+        ]
+      }
+    }
+  ],
+  "stepParameters": {
+    "show_physics": false,
+    "show_harness": false,
+    "show_annotations": false
+  }
+}

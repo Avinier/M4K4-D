@@ -2,8 +2,8 @@
 
 | Field | Value |
 |---|---|
-| Status | **Mechanism decision open; material/mass, C2 controller-boundary and C2 module decisions locked** |
-| Revised | 2026-09-07 |
+| Status | **Mechanism path: Concept A for RP-01; Concept B not authored. Material/mass, C2 controller-boundary and C2 module decisions locked. Actuator family and scored gates still open.** |
+| Revised | 2026-09-09 |
 | Question | Can a manufacturable powered roll/pitch/yaw mechanism carry a representative Makad head while producing safe, repeatable, quiet-enough and characterful motion with acceptable range, reversal, settling, camera behaviour, wiring movement, calibration, and controller failure handling? |
 | Feeds | ADR-02 (head mechanism), ADR-03 (controller), ADR-08, ADR-12; mass/power/acoustic budget rows |
 | Rule | A failed Core three-axis gate cannot become a two-axis fallback without reopening approved V1 scope. Failed runs stay cited here. |
@@ -74,10 +74,10 @@ The builder selected **A0 as the first-layout balance target** in [HEAD-CAD-07](
 
 | Candidate | Status | What is fixed for comparison | What remains open |
 |---|---|---|---|
-| A — elevated ear-pivot serial gimbal | **Credible candidate; not selected** | Body-fixed yaw; yaw→pitch→head-fixed-roll order; independent yaw load bearing; pitch pivots associated with the ear-pod locations; selected Waveshare no-touch SKU 30493 display envelope; RP-01 PLA/finish decisions; first-layout coaxial roll, face-attached rolling ears and external yaw cable loop per the CAD register | Exact pitch coordinates to achieve selected A0; selected-display-clear roll-axis/support layout and resulting CoM; complete fit within the current depth band; rolling-ear mounting/clearance; per-axis mass tree around the ~490 g pre-M008 lower bound plus the required C2 controller; actuator family, bearing sizes, validated drive arrangement, preload, yoke geometry, PLA thermal/creep result, mass/thermal/cost and scored gate results |
-| B | **Required; not authored** | Must satisfy the same physical baseline and evidence rules | Entire concept |
+| A — elevated ear-pivot serial gimbal | **RP-01 implementation path; not gate-selected** | Body-fixed yaw; yaw→pitch→head-fixed-roll order; independent yaw load bearing; pitch pivots associated with the ear-pod locations; selected Waveshare no-touch SKU 30493 display envelope; RP-01 PLA/finish decisions; first-layout coaxial roll, face-attached rolling ears and external yaw cable loop per the CAD register | Exact pitch coordinates to achieve selected A0; complete fit; rolling-ear clearance (no shroud); per-axis mass tree; actuator family, bearing SKUs, validated drive arrangement, PLA thermal/creep, scored gate results |
+| B | **Not authored; comparison waived 2026-09-09** | Builder directed RP-01 to proceed on A only. Parallel/B will not be developed for this prototype. | Entire concept — closed without a counterpart |
 
-Concept A's source diagram is not a specification. Only the topology extracted into `concepts/elevated-ear-pivot-serial-gimbal.md` is admitted for comparison; its generated-looking labels, proportions and NEMA/Lazy-Susan-scale hardware are excluded.
+Concept A's source diagram is not a specification. Only the topology extracted into `concepts/elevated-ear-pivot-serial-gimbal.md` is admitted. On 2026-09-09 the builder waived authoring Concept B so remaining time goes to detailing A (Layout 03). This does not pass RP-01 gates or freeze a servo family.
 
 ## Conclusion
 

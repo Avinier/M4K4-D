@@ -1,6 +1,6 @@
 # Head CAD decisions
 
-Recorded: **2026-09-07**. Scope: **first RP-01 head layout**.
+Recorded: **2026-09-07**. Revised: **2026-09-09**. Scope: **first RP-01 head layout, including the Layout 03 pass direction**.
 
 This is the current record of the head fitting discussion. **Fixed for first layout** means use the choice when laying out the head; it does not mean the mechanism has passed RP-01, an actuator has been selected, or manufacturing dimensions have been frozen. Estimates remain in [packaging-estimates.md](packaging-estimates.md), and inherited geometric requirements remain in [requirements.md](requirements.md).
 
@@ -16,6 +16,8 @@ This is the current record of the head fitting discussion. **Fixed for first lay
 | HEAD-CAD-06 | **Fixed for first layout — builder selected** | Form an integrated trapezoidal crown above the camera, continuing the head shell and face bezel into one coherent silhouette |
 | HEAD-CAD-07 | **Fixed for first layout — builder selected** | Use A0 as the balance target: pitch axis through the estimated pitch-carried CoM; roll axis near the rolling assembly's own CoM |
 | HEAD-CAD-08 | **Builder selected after Layout 01 review** | Restore the octagonal head with crisp perimeter facets, a slim inner octagonal opening, coordinated bezel/crown height reduction, visible real screw points and larger hollow rolling ears |
+| HEAD-CAD-09 | **Modelled in Layout 03; hardware-specific gaps remain** | Layered/tapered head: feasibility first vs Layout 02, reject only if way worse; yoke length by engineering judgment; **no shroud**; keep **modular service splits** (easy disassembly / module removal); 3 mm camera gap; C2 tray; inserts/bearings/coupling/stops; **look into vignetting**. Intended last RP-01 packaging/detailing pass |
+| HEAD-CAD-10 | **Modelled in Layout 03; hardware-specific gaps remain** | Labelled viewer tree: physical subgroups; separate physics overlays (axes, CoM, gravity); separate trial harness; per-component global XYZ and size annotations, all hideable |
 
 These choices develop the existing body → yaw → pitch → roll candidate. They do not change joint order or close the [RP-01 mechanism decision](../../decision.md).
 
@@ -25,7 +27,7 @@ Print the structural ribs and rear backplate together in PLA for RP-01. Make the
 
 Use locating shoulders or other registered mating features to position structural parts, with screws providing clamping. Use captive nuts or metal inserts at repeatedly serviced internal joints; choose the exact hardware and validate its retention in the printed parts during detailing. Do not assume every internal structural screw must be M2: **visible M2 button-head hardware** is the existing appearance decision, while internal sizes and screw counts remain open.
 
-This preserves the rugged, inspectable, screw-together droid character in the [foundation](../../../../00-foundation/constraints.md) while avoiding a separate bolted joint at every rib. Apply the existing PLA, weathering, panel-offset and cosmetic-seam decisions in the [material record](../../material-finish-mass-decision.md).
+This preserves the rugged, inspectable, screw-together droid character in the [foundation](../../../../00-foundation/constraints.md) while avoiding a separate bolted joint at every rib. Apply the existing PLA, weathering, panel-offset and cosmetic-seam decisions in the [material record](../../material-finish-mass-decision.md). Layout 03 must not undo these splits: layered appearance lives on the removable parts; do not trap display, camera, C2, servos or the bearing cartridge behind a fused hull.
 
 Open details: wall/rib thickness, locating features, fastener sizes/counts, insert or captive-nut pockets, access direction, print orientation and assembly sequence. No press fits or bearing-seat tolerances are selected yet.
 
@@ -101,23 +103,52 @@ The builder's appearance review is captured in [the Layout 02 brief](layout-02-b
 
 The builder accepted one front bezel incorporating the compact crown and a separate removable camera bracket. Place the entire LED package within the crown if practical; omission is authorized if compact packaging cannot accommodate it. Retain the existing real M2 screw appearance requirements and include actual wells/bosses and visible screw locations in the next revision. Larger, hollow or thinner-wall cosmetic ears are accepted; precise diameter/thickness and the revised head dimensions remain open. Recalculate balance and clearance rather than scaling the physical components or carrying over Layout 01's validation.
 
+## HEAD-CAD-09 — Layout 03: layered taper, yoke, no shroud
+
+The builder directed a **Layout 03 pass** after reviewing Layout 02, recorded in [the Layout 03 brief](layout-03-brief.md). [Layout 03](layout-03/README.md) is now generated and checked; Layout 02 remains preserved. See [verification](layout-03/review/verification.md) for the 104 mm crown, retained 32 mm yoke, mass/A0, service checks and explicitly open cable/hardware details.
+
+**Taper:** use [`visuals/mvp-updated-after-spechseet.png`](../../../../../visuals/mvp-updated-after-spechseet.png) as a non-binding appearance cue (not ear mics, not body CAD). The head is not a plain octagonal tube — it may be layered and tapered. The modelling agent must first **deem that feasible** around 1:1 hardware and reject it only if it is way worse than Layout 02. Aesthetic layering comes after that call.
+
+**Yoke:** the agent chooses the visible length below the head bottom. Do what is best for stiffness, look-up, cable loop and stack height. Do not drop A0.
+
+**Shroud:** builder does not want one. Combined-motion clearance still applies; visible yoke at the ear openings is accepted.
+
+Builder follow-up, 2026-09-09: Layout 03 is the intended last RP-01 packaging/detailing pass. Include a **3 mm** camera–display board gap, a removable C2 tray with CAD-04a flashing access, insert/captive-nut pockets, named bearing seats, coupling fastening and mechanical hard stops. **Look into vignetting** via the camera FOV cone overlay and a written clear/hit report. Do not recentre the pitch servo. Concept B will not be authored.
+
+**Practicality:** keep the head modular and fairly simple to disassemble. Layered taper is appearance on the existing service parts, not a reason to glue stacks or trap modules. A scheme that is much harder to service than Layout 02 is way worse and is rejected.
+
+## HEAD-CAD-10 — Layout 03 inspection tree
+
+The builder required the Layout 03 STEP to be inspectable by group, recorded in [the Layout 03 brief](layout-03-brief.md#inspection-tree-head-cad-10). Layout 02’s three motion compounds plus one shell switch are not enough.
+
+Build a labelled occurrence tree with four top groups: **physical**, **physics**, **harness**, **annotations**. Master viewer toggles hide each of the last three as a whole; named subgroups and parts remain independently hideable in the scene tree. Physics overlays show the three joint axes, origin triad, estimated roll/pitch/complete CoMs and gravity, driven from A0 and the mass tree. Harness is trial centreline-and-jacket geometry partitioned by function (CSI, display link, servo bus, LED, C2 local, yaw service loop), posed with the joint it rides; it does not select a cable SKU or certify flex. Annotations put each named part’s global XYZ (head-layout frame) and bounding-box size in a sibling subgroup, generated from the dimensions script.
+
+Default open state: physical, physics and harness visible; annotations hidden. Overlays are not fabrication solids and must not enter the mass tree as PLA.
+
 ## What is still open
 
-**Current revision, 2026-09-08:** [Layout 02](layout-02/README.md) implements HEAD-CAD-08 with an **86 mm main roof, 102 mm crown-inclusive head, 130 mm core width, 150 mm complete width, 115 mm depth and Ø60 mm hollow rolling ears**. Bezel and crown are one part; the light reserve fits entirely in the crown. The 99 × 58 mm opening uses 3 mm clips outside the active image. It adds real screw/well/boss geometry, connected cradle and frame supports, a revised C2 footprint/service direction, and a new provisional mass/A0 tree. The visible ear/skin reliefs are packaging clearances only: the finished exterior must hide the yoke with a moving or overlapping shroud/side panel while maintaining the motion envelope. These dimensions are recorded in system baseline v1.9. This closes the appearance/layout implementation, not manufacturing fits, continuous collision clearance, measured balance or servo selection.
+**Current revision, 2026-09-08:** [Layout 02](layout-02/README.md) implements HEAD-CAD-08 with an **86 mm main roof, 102 mm crown-inclusive head, 130 mm core width, 150 mm complete width, 115 mm depth and Ø60 mm hollow rolling ears**. Bezel and crown are one part; the light reserve fits entirely in the crown. The 99 × 58 mm opening uses 3 mm clips outside the active image. It adds real screw/well/boss geometry, connected cradle and frame supports, a revised C2 footprint/service direction, and a new provisional mass/A0 tree. Ear/skin openings are packaging-clearance reliefs. These dimensions are recorded in system baseline v1.9. A per-part bounding-box log was added on 2026-09-09 at [layout-02/dimensions.md](layout-02/dimensions.md).
+
+**Current CAD pass, 2026-09-09:** [Layout 03](layout-03/README.md) is modelled and checked; see [verification and limitations](layout-03/review/verification.md). Intended last RP-01 packaging/detailing pass: layered/tapered head (feasibility first), yoke length by judgment, **no shroud**, **keep modular disassembly**, inspection tree, 3 mm camera gap, C2 tray, inserts/bearings/coupling/stops, **vignetting look-in**. Concept A only.
 
 **Layout evidence, 2026-09-08:** [Layout 01](layout-01/README.md) proposes a 109 mm crown-equipped head height, a 35 × 25 × 15 mm C2 installed-assembly pocket and provisional A0 pitch coordinates about 37.3 mm behind the front plane / 47.5 mm above the main-head bottom. It records 56 sampled clearance poses, inward/rearward yoke placement and hidden ear/skin reliefs. These are reviewed study inputs, not newly locked dimensions or a complete fit release; see the study's validation limits and imported-geometry findings.
 
 | Item | Evidence needed |
 |---|---|
-| Rolling-ear attachment geometry | Mounting and hidden clearance around the non-rolling supports through combined poses; attachment to the face is selected |
-| Ear/yoke shroud | Add and validate a moving or overlapping cover that hides the current clearance opening in normal views without contacting the yoke through combined motion |
+| Rolling-ear attachment geometry | Mounting and hidden clearance around the non-rolling supports through combined poses; attachment to the face is selected; **no shroud** |
+| Layered / tapered shell | Layout 03: feasibility vs Layout 02 using `visuals/mvp-updated-after-spechseet.png`; reject only if way worse, including if serviceability is much worse; aesthetics after that call |
+| Service / modularity | Layout 03: preserve HEAD-CAD-01 splits; fairly simple to disassemble and remove display, camera, C2, ears, servos, bearing cartridge; do not trap parts behind layered shells |
+| Visible yoke length | Layout 03: agent chooses what is best; do not drop A0 |
+| Vignetting | Layout 03: FOV cone overlay plus a written clear/hit report at neutral and authored extrema |
 | Camera crown dimensions | Size the selected trapezoidal protrusion, camera mount and optical opening; report total head height and revised shell/mass properties |
 | Actual component fit | Exact variant envelopes, horn/coupling hardware, connector exits, tool access and complete front/camera stack |
 | Exact axis coordinates and achieved balance | A0 target is selected; derive coordinates from per-axis mass, 3D centre of mass and inertia, then verify fit and achieved offsets |
 | Servo selection | Actual trajectory torque/speed demand plus thermal, reversal and settling evidence |
-| Bearing and printed interfaces | Loads, retention, fits, stiffness, creep and assembly access |
-| Cable routing | Selected cable geometry, live data, restoring torque, flex endurance and service replacement |
-| C2 mount, flashing access and pin assignment | Mount geometry for the selected 23.5 × 18 mm Zero, CAD-04a flashing/recovery path, and a pin map that keeps E-stop/fault off strapping pins GPIO0/3/45/46 and off the GPIO21 WS2812 |
+| Bearing and printed interfaces | Layout 03: insert/captive-nut pockets, named bearing seats, coupling fastening, hard stops; purchased SKUs and PLA creep still later |
+| Cable routing | Layout 03: trial centreline/jacket branches in a hideable harness group per HEAD-CAD-10; live data, restoring torque, flex endurance and SKU remain later evidence |
+| Inspection overlays | Layout 03: physics, harness and annotation groups with per-component global XYZ and ΔX×ΔY×ΔZ, hideable independently |
+| Camera–display gap | Layout 03: **3 mm** board-to-board; report crown height vs 102 mm |
+| C2 mount, flashing access and pin assignment | Layout 03: removable Zero tray, CAD-04a USB/BOOT path; keep E-stop/fault off GPIO0/3/45/46 and GPIO21 |
 
 The approximately **490 g pre-M008 planning lower bound** already includes provisional mechanism masses. Replace those allowances with boundary-owned parts; do not add the full mechanism again. It is neither measured mass nor the payload of every individual axis. Existing component masses, envelopes, candidate pivots and the proposed internal arrangement are collected in the [pre-layout brief](pre-layout-brief.md); the project is not starting from an empty mass or fit model.
 
@@ -133,3 +164,9 @@ When a fixed first-layout choice changes, record the affected HEAD-CAD ID, reaso
 | 2026-09-07 | Builder selected A0 as the first-layout balance target. Exact coordinates remain derived layout inputs; A1/A2 remain fallback comparisons. |
 | 2026-09-08 | Builder approved all Layout 02 changes and the 1:1 method. Implemented slimmer octagonal head, integrated compact crown, crown-only LED reserve, Ø60 hollow rolling ears, real screw features and updated support geometry; revised baseline envelope and recalculated the provisional mass/A0 tree. |
 | 2026-09-08 | Recorded that the current ear/skin clearance openings are temporary packaging reliefs. A finished moving or overlapping shroud must hide the yoke while preserving combined-motion clearance. |
+| 2026-09-09 | Logged Layout 02 per-part dimensions from the parametric model. Opened Layout 03 (HEAD-CAD-09): rear flank taper, visible-yoke length vs stiffness without dropping A0, shroud on the revised shell. Not modelled. |
+| 2026-09-09 | HEAD-CAD-10: Layout 03 occurrence tree must expose physics overlays, a trial harness group, and per-component global XYZ plus bounding-box dimensions, each hideable as a group and by named part. |
+| 2026-09-09 | Builder: Layout 03 is the intended last packaging/detailing pass. 3 mm camera–display gap; C2 tray/CAD-04a; insert pockets, coupling, bearings, stops. Concept A is the RP-01 path; Concept B will not be authored. |
+| 2026-09-09 | Builder: no yoke shroud. Yoke visible length is the modeller’s best judgment without dropping A0. Layered/tapered head is a feasibility call against Layout 02 (MVP3 visual; aesthetics after); reject only if way worse. Look into vignetting. |
+| 2026-09-09 | Builder: preserve practicality and modularity. Fairly simple to disassemble and remove components; layered appearance must not trap modules or undo HEAD-CAD-01 service splits. |
+| 2026-09-09 | Implemented Layout 03 on Layout 02: modest stern taper, 3 mm camera gap / 104 mm crown, 32 mm visible yoke, C2 tray and service path, trial inserts/bearing retention/coupling/stops, field-envelope check, grouped overlays and trial harness islands. Final sampled motion and revised service checks pass; cable-flex transitions and hardware-specific fabrication details remain open. |

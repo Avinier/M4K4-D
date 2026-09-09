@@ -6,7 +6,9 @@
 
 - [Interactive complete head](http://127.0.0.1:3245/Users/avinier/robotics/makad/docs/02-prototypes/RP-01-head/cad?file=head%2Flayout-02%2Fhead-layout.step.py): roll, pitch and yaw controls, plus **Show shell and ear caps**. The complete front, side, rear and ear enclosure parts are rendered translucent in the viewer so the internal arrangement can be inspected through the whole head while the enclosure remains visible. Viewer controls change the displayed pose only; exported STEP is neutral. Pitch follows the storyboard convention: positive is chin down, negative is chin up.
 - [Internal arrangement](http://127.0.0.1:3245/Users/avinier/robotics/makad/docs/02-prototypes/RP-01-head/cad?file=head%2Flayout-02%2Fhead-internals.step.py): same source geometry with skins/visible screws removed and translucent component/service reserves shown.
-- [Primary STEP](head-layout.step), [entry source](head-layout.step.py), [parametric model](layout_model.py), [construction brief](brief.md).
+- [Primary STEP](head-layout.step), [entry source](head-layout.step.py), [parametric model](layout_model.py), [construction brief](brief.md), [per-part dimensions](dimensions.md).
+
+Appearance changes after this revision (layered taper, yoke visible length; **no shroud**) are [Layout 03](../layout-03-brief.md), not edits to this model.
 
 ## What changed
 
@@ -25,7 +27,7 @@ The main shell, rear cover and face have clipped outer corners. A **flat sloping
 
 The **front bezel and camera crown are one solid part**. A separate camera edge bracket sits behind it. The addressable-light package reserve is entirely within the crown: its lower edge is Z89.3, **3.3 mm above the main roof**. The full LED assembly still needs its actual on-hand PCB/optic dimensions; the CAD reserve is 5 × 5 × 3 mm plus a small diffuser, not a newly selected LED SKU.
 
-The ears have dark ridged mounting rings, hollow tapered removable caps, reinforced receiving posts, four recessed visible M2 screws per cap and two hidden mounting screws per ear. A thin amber ring and dark centre represent surface treatments. Their cosmetic walls remain thin; the local bosses and internal web provide the mounting material. The current lower/inboard ear/skin openings are **temporary layout-clearance reliefs**, not an approved exposed-mechanism exterior. The finished head needs a moving or overlapping shroud/side panel that hides the yoke in normal views while retaining combined-motion clearance. The circular outer ear faces remain intact; validate the eventual shroud on a physical mock-up from low angles.
+The ears have dark ridged mounting rings, hollow tapered removable caps, reinforced receiving posts, four recessed visible M2 screws per cap and two hidden mounting screws per ear. A thin amber ring and dark centre represent surface treatments. Their cosmetic walls remain thin; the local bosses and internal web provide the mounting material. The current lower/inboard ear/skin openings are **temporary layout-clearance reliefs**, not an approved exposed-mechanism exterior. Layout 02 recorded a moving/overlapping shroud as unfinished appearance work. **Layout 03 supersedes that:** no shroud; combined-motion clearance remains. The circular outer ear faces remain intact.
 
 Visible hardware totals **18 M2 screws**: six front, four rear, eight ear-cap screws. Four additional hidden ear-mount screws are included in the existing hidden-hardware allowance. Front screws are nominal M2×10; rear/cap/ear-mount screws M2×6. Heads, hex sockets, 4.2 mm wells, clearance holes and receiving pilots are modeled. Threads are simplified major-diameter cylinders. **Receiving pilots are not approved repeat-use PLA threads**: select inserts/captive nuts and finalize screw engagement before printing functional parts.
 
@@ -77,9 +79,10 @@ Verification artifacts:
 - [Combined-motion checks](fit-checks.json): independent 7×8 grid across roll ±18° and pitch −22…+40°, including the changed shell/ears/cradle and both actuator envelopes.
 - [Neutral assembly checks](assembly-checks.json): same-frame non-fastener intersections, full-size package fit, active-pixel exposure, LED placement, service corridor and imported solids.
 - [Final verification and snapshots](review/verification.md): 54 authored occurrences passed full solid checks; all 715 occurrences passed topology checks. The 8,904 sampled motion-pair checks had no overlaps.
+- [Per-part dimensions](dimensions.md): generated axis-aligned boxes, datums and yoke-length segments at neutral pose. Refresh with `write_dimensions.py`.
 
 These checks do not establish continuous clearance, manufacturing tolerance, complete cable routing, body/yaw clearance, fatigue, printed stiffness/creep, optics or print readiness. The neutral 102 mm crown-inclusive head also means **302 mm** for the original 140+60 mm body/neck stack; [baseline v1.9](../../../../../01-system/dimensional-baseline.md) records that explicitly for RP-06 integration.
 
 ## Reproduce
 
-Use the **text-to-cad 0.4.28** interpreter and matching plugin CLI; the newer global cadgen workflow uses a different entry contract. Run from the repository root. `mass_layout.py --solve` refreshes A0, `write_viewer_params.py` refreshes the self-contained pose sidecar, and the matching plugin `scripts/gen` writes each `.step.py` target with `--write`. Then run `check_layout.py`, `check_assembly.py`, plugin `inspect refs/validate/measure`, and plugin `snapshot --job …/review/snapshot-job.json`. Never edit STEP or generated topology to fix geometry.
+Use the **text-to-cad 0.4.28** interpreter and matching plugin CLI; the newer global cadgen workflow uses a different entry contract. Run from the repository root. `mass_layout.py --solve` refreshes A0, `write_dimensions.py` refreshes the per-part dimension log, `write_viewer_params.py` refreshes the self-contained pose sidecar, and the matching plugin `scripts/gen` writes each `.step.py` target with `--write`. Then run `check_layout.py`, `check_assembly.py`, plugin `inspect refs/validate/measure`, and plugin `snapshot --job …/review/snapshot-job.json`. Never edit STEP or generated topology to fix geometry.

@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "occurrences": 1019,
+  "features": {
+    "frame_R": 853,
+    "frame_P": 101,
+    "frame_Y": 60,
+    "physical": 739,
+    "physics": 13,
+    "harness": 15,
+    "annotations": 252,
+    "fov": 1,
+    "shell": 11
+  },
+  "visibility_combinations": 16,
+  "poses": 3,
+  "defaults": {
+    "roll_deg": 0,
+    "pitch_deg": 0,
+    "yaw_deg": 0,
+    "show_physical": true,
+    "show_physics": true,
+    "show_harness": true,
+    "show_annotations": false,
+    "show_fov": true,
+    "show_shell": true
+  }
+}

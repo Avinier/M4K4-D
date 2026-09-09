@@ -1,0 +1,223 @@
+[
+  {
+    "input": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.step",
+    "mode": "view",
+    "theme": {
+      "projection": "orthographic",
+      "grid": {
+        "visible": false
+      }
+    },
+    "render": {
+      "viewLabels": true,
+      "padding": 0.12,
+      "sizeProfile": "assembly"
+    },
+    "outputs": [
+      {
+        "path": "docs/02-prototypes/RP-01-head/cad/head/layout-03/review/iso.png",
+        "camera": "iso"
+      },
+      {
+        "path": "docs/02-prototypes/RP-01-head/cad/head/layout-03/review/front.png",
+        "camera": "right"
+      },
+      {
+        "path": "docs/02-prototypes/RP-01-head/cad/head/layout-03/review/side.png",
+        "camera": "front"
+      },
+      {
+        "path": "docs/02-prototypes/RP-01-head/cad/head/layout-03/review/rear.png",
+        "camera": "left"
+      },
+      {
+        "path": "docs/02-prototypes/RP-01-head/cad/head/layout-03/review/helmet-rear-oblique.png",
+        "camera": {
+          "direction": [
+            -1,
+            -1,
+            0.7
+          ]
+        }
+      },
+      {
+        "path": "docs/02-prototypes/RP-01-head/cad/head/layout-03/review/helmet-top.png",
+        "camera": "top"
+      }
+    ],
+    "stepParameters": {
+      "show_physics": false,
+      "show_harness": false,
+      "show_annotations": false
+    },
+    "stepParametersPath": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.params.js"
+  },
+  {
+    "input": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.step",
+    "mode": "view",
+    "theme": {
+      "projection": "orthographic",
+      "grid": {
+        "visible": false
+      }
+    },
+    "render": {
+      "viewLabels": true,
+      "padding": 0.12,
+      "sizeProfile": "assembly"
+    },
+    "outputs": [
+      {
+        "path": "docs/02-prototypes/RP-01-head/cad/head/layout-03/review/pitch-up.png",
+        "camera": "front"
+      }
+    ],
+    "stepParameters": {
+      "pitch_deg": -22,
+      "show_physics": false,
+      "show_harness": false,
+      "show_annotations": false
+    },
+    "stepParametersPath": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.params.js"
+  },
+  {
+    "input": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.step",
+    "mode": "view",
+    "theme": {
+      "projection": "orthographic",
+      "grid": {
+        "visible": false
+      }
+    },
+    "render": {
+      "viewLabels": true,
+      "padding": 0.12,
+      "sizeProfile": "assembly"
+    },
+    "outputs": [
+      {
+        "path": "docs/02-prototypes/RP-01-head/cad/head/layout-03/review/combined.png",
+        "camera": "iso"
+      }
+    ],
+    "stepParameters": {
+      "pitch_deg": -22,
+      "roll_deg": 18,
+      "show_physics": false,
+      "show_harness": false,
+      "show_annotations": false
+    },
+    "stepParametersPath": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.params.js"
+  },
+  {
+    "input": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.step",
+    "mode": "view",
+    "theme": {
+      "projection": "orthographic",
+      "grid": {
+        "visible": false
+      }
+    },
+    "render": {
+      "viewLabels": true,
+      "padding": 0.12,
+      "sizeProfile": "assembly"
+    },
+    "outputs": [
+      {
+        "path": "docs/02-prototypes/RP-01-head/cad/head/layout-03/review/physics-fov-on.png",
+        "camera": "iso"
+      }
+    ],
+    "stepParameters": {
+      "show_physics": true,
+      "show_harness": false,
+      "show_annotations": false
+    },
+    "stepParametersPath": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.params.js"
+  },
+  {
+    "input": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.step",
+    "mode": "view",
+    "theme": {
+      "projection": "orthographic",
+      "grid": {
+        "visible": false
+      }
+    },
+    "render": {
+      "viewLabels": true,
+      "padding": 0.12,
+      "sizeProfile": "assembly"
+    },
+    "outputs": [
+      {
+        "path": "docs/02-prototypes/RP-01-head/cad/head/layout-03/review/physics-fov-off.png",
+        "camera": "iso"
+      }
+    ],
+    "stepParameters": {
+      "show_physics": true,
+      "show_fov": false,
+      "show_harness": false,
+      "show_annotations": false
+    },
+    "stepParametersPath": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.params.js"
+  },
+  {
+    "input": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.step",
+    "mode": "view",
+    "theme": {
+      "projection": "orthographic",
+      "grid": {
+        "visible": false
+      }
+    },
+    "render": {
+      "viewLabels": true,
+      "padding": 0.12,
+      "sizeProfile": "assembly"
+    },
+    "outputs": [
+      {
+        "path": "docs/02-prototypes/RP-01-head/cad/head/layout-03/review/harness-on.png",
+        "camera": "iso"
+      }
+    ],
+    "stepParameters": {
+      "show_physics": false,
+      "show_harness": true,
+      "show_annotations": false,
+      "show_shell": false
+    },
+    "stepParametersPath": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.params.js"
+  },
+  {
+    "input": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.step",
+    "mode": "view",
+    "theme": {
+      "projection": "orthographic",
+      "grid": {
+        "visible": false
+      }
+    },
+    "render": {
+      "viewLabels": true,
+      "padding": 0.12,
+      "sizeProfile": "assembly"
+    },
+    "outputs": [
+      {
+        "path": "docs/02-prototypes/RP-01-head/cad/head/layout-03/review/harness-off.png",
+        "camera": "iso"
+      }
+    ],
+    "stepParameters": {
+      "show_physics": false,
+      "show_harness": false,
+      "show_annotations": false,
+      "show_shell": false
+    },
+    "stepParametersPath": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.params.js"
+  }
+]
