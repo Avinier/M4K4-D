@@ -5,3 +5,7 @@ __pycache__/
 # are too large for this documentation repository.
 head-layout.step
 head-internals.step
+
+# The snapshot renderer appends UTC timestamps. Keep only deliberately selected
+# review images in Git (`git add -f` when replacing the evidence set).
+review/*_20*.png
