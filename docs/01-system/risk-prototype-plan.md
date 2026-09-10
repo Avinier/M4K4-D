@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.9 |
+| Version | 1.10 |
 | Owner | Project builder |
 | Created | 2026-08-14 |
-| Last reviewed | 2026-09-02 |
+| Last reviewed | 2026-09-08 |
 | Depends on | Approved `docs/00-foundation/constraints.md` v1.2, other foundation documents, `system-design-brief.md` v1.2, and `dimensional-baseline.md` v1.8 |
 | Decision authority | Project builder |
 
@@ -18,7 +18,7 @@ The prototypes are decision instruments, not partial versions of the final droid
 |---:|---|---|
 | 0 | Review and establish the workbench/test-readiness setup + sourcing survey + mass/envelope ledger | Approved readiness gate satisfied, required tools available, stop/isolation verified, and first candidate matrix and cost range exist |
 | 1 | RP-06 phase A (sourced envelopes) feeding RP-01 head prototype | RP01 gates pass → provisional ADR-02/ADR-03 |
-| 2 | RP-02 electrical/control backbone | RP02 gates pass → provisional ADR-06/ADR-12, power/thermal budgets measured |
+| 2 | RP-02 electrical/control backbone | RP02-G01/G04/G05/G06 pass and the G02 coexistence invariant is verified on the loads that exist → provisional ADR-03, ADR-12 and the architecture half of ADR-06; `power-energy-ledger.md` populated; ADR-06 sizing bounded, not closed |
 | 3 | RP-03 drive and motion safety | RP03 gates pass → provisional ADR-04/ADR-07 |
 | 4 | RP-04 coordination, then RP-05 interaction (may overlap) | RP04/RP05 gates pass → provisional ADR-05/ADR-10/ADR-11 |
 | 5 | RP-06 final closure + RP-07 following | RP06/RP07 gates pass → provisional ADR-01/ADR-08/ADR-09; spatial-hearing ADR-13 decision |
@@ -103,7 +103,8 @@ The approved `workbench.md` collects candidate tools, hazard notes, stop/isolati
 
 - **Candidate sourcing matrix** — verified specifications, supplier, availability, lead time, substitutes, quantity, landed cost, replacement risk, required tools, and fabrication dependency. Aggregate rows into the first complete project cost range (CON-TBD-13) before major procurement.
 - **Mass/envelope ledger** — head, body, battery, drive, electronics, wiring, fasteners, and margin. Unknowns are ranges, not zero. This ledger is the head-CAD blocker and feeds RP-01/RP-06 directly.
-- **Monotonic event-time strategy** — one clock reference for commands, observations, feedback, health, and external video synchronization.
+- **Power/energy/thermal ledger** — `power-energy-ledger.md`: per-load-group idle/average/peak, transient character, evidence class, state energy model, the RP02-G02 coexistence invariant with its re-run rule, and trip-wires that force a design review. Created by RP-02; updated by every prototype that energizes anything; the only power budget until stage 6.
+- **Monotonic event-time strategy** — `timebase.md`: one master clock reference, timestamp-at-source, serial offset reconciliation and the status-light video cue for commands, observations, feedback, health, and external video synchronization. Validated under RP02-G05; required before the first scored RP-01 run.
 - **Configuration and run-ID convention** — `run-record-convention.md` prevents data from different builds being mixed; every scored run carries firmware/software/configuration/rig revision identifiers and an immutable evidence manifest.
 
 ## RP-01 — Three-axis head mechanism and motion firmware
@@ -168,9 +169,15 @@ Select the provisional head concept and controller requirements for ADR-02/ADR-0
 
 ## RP-02 — Electrical/control backbone and integrated peak-power rig
 
-### Decision question
+### Design question and gate question
 
-Can the proposed compute/controller split, internal links, power rails, protection, watchdogs and energy source operate representative head, drive, display, camera, audio and compute loads concurrently without unsafe motion, resets, voltage collapse, data staleness or unacceptable heat, and can the representative duty cycle sustain at least 20 minutes?
+RP-02 carries two questions and keeps them separate (v1.10). The design question is the deliverable; the gate question is the falsifier.
+
+**Design question:** what compute/controller split, internal link, rail and protection topology, and energy source lets Makad run representative head, drive, display, camera, audio and compute loads concurrently — and what is the measured margin of that design against each registered state?
+
+**Gate question:** does that design sustain every registered concurrent state and the registered mixed-duty cycle for at least 20 minutes without unsafe motion, unintended reset, rail excursion outside component limits, data staleness or thermal violation — and does every injected fault produce a bounded state?
+
+Evidence documents live in `../02-prototypes/RP-02-electrical/`; the canonical power/energy/thermal budget is `power-energy-ledger.md`; the timebase strategy is `timebase.md`.
 
 ### Traceability
 
@@ -201,15 +208,15 @@ Test cold start, idle, wake/head movement, base acceleration/reversal, audio pea
 ### Pass gates
 
 - **RP02-G01 Protection:** the rig has reviewed isolation, fusing/current limiting, conductor/connector sizing assumptions, and no exposed unbounded hazardous energy path.
-- **RP02-G02 Peak coexistence:** every registered concurrent state completes without unintended reset, unsafe motion, rail excursion outside component limits, data corruption, or thermal-limit violation.
-- **RP02-G03 Runtime:** the representative onboard energy configuration completes at least 20 minutes of the registered mixed-duty cycle with the approved reserve and low-energy behaviour.
+- **RP02-G02 Peak coexistence (standing invariant, v1.10):** *every registered concurrent state completes without unintended reset, unsafe motion, rail excursion outside registered component limits, data corruption, or thermal-limit violation.* The invariant and its re-run rule are owned by `power-energy-ledger.md` §5 because it must be re-verified whenever a load group changes evidence class, a load is added, or the servo rail changes; RP-02 registers the rehearsal metric (per-rail minimum expressed as margin, zero resets, CRC and thermal terms) and records which states were verified with which loads and which remain pending.
+- **RP02-G03 Runtime (rehearsal with margin, v1.10):** the representative onboard energy configuration completes the registered mixed-duty cycle `MD-01` on the RP-02 rig with recorded energy margin against the 20-minute floor and the SC-TBD-10 reserve and low-energy behaviour. Closure of the 20-minute requirement itself is SC-14 on the integrated droid; a negative or thin rehearsal is an `iterate` on the design now, never a threshold change.
 - **RP02-G04 Fault containment:** loss/restart/staleness tests inhibit affected hazardous outputs, reject obsolete commands, expose health state, and recover only from current authorized intent.
 - **RP02-G05 Control feasibility:** measured loop/link/timestamp performance supports the RP-01 and projected base-control needs with registered margin.
 - **RP02-G06 Serviceability:** isolation, charging connection, battery removal, measurement points, and high-risk module access have credible physical paths.
 
 ### Exit decision
 
-Provisionally select the control/power topology and close the first version of ADR-03, ADR-06 and ADR-12. Update power, energy, thermal, compute and communication budgets with measured envelopes.
+Close the first version of ADR-03 and ADR-12 and the **architecture** half of ADR-06 (rail topology, protection, chemistry, isolation, low-energy policy hooks) from cited evidence; record ADR-06 **sizing** (pack capacity, 20-minute closure) as bounded and waiting on the ledger's `W` rows from RP-03/RP-05 loads. Update the power/energy/thermal ledger, and the compute-coexistence and internal-communication budgets, with measured envelopes and margins.
 
 ## RP-03 — Drive and local motion-safety rig
 
@@ -432,7 +439,7 @@ The experiment must compare the approved visual-search baseline against the dire
 | Workbench and sourcing | Immediately | Continuous; powered scored work is blocked until the approved `workbench.md` readiness gate is satisfied. |
 | RP-06 phase A layout/sourcing | With RP-01 planning | Supplies representative head mass/envelopes; it is not postponed until sixth in calendar time. |
 | RP-01 head | After the workbench scored-test gate | First powered mechanical/control prototype. |
-| RP-02 electrical/control | After representative RP-01 loads exist | May use bench power before battery validation. |
+| RP-02 electrical/control | Phase A (state register, ledger seeding, power architecture, link contract, timebase, C2 bench-twin timing) immediately; Phase B after RP-01 selects a servo family and an SBC candidate exists; Phase C after the `workbench.md` battery gate | Phase A is paper and on-hand hardware and unblocks RP-01's scored runs. G02 rehearsals need representative loads; composite peaks above the bench PSU's 5 A need the candidate pack. May use bench power before battery validation. |
 | RP-03 drive/safety | After bounded controller/power path exists | Uses representative total-mass range; must not share an unvalidated power rig with simultaneous head tests. |
 | RP-04 coordination | After RP-01 and RP-03 controllers pass their safety gates | Uses measured response rather than idealized actuator timing. |
 | RP-05 interaction | After the observable lifecycle/timebase exists | May overlap late RP-04 work if it cannot command unvalidated motion directly. |
@@ -473,12 +480,14 @@ The architecture phase may begin with provisional option studies while prototype
 - [ ] Clamp the RP-01 fixture and verify its E-stop and limits per the `workbench.md` scored-test gate.
 - [x] Define the run-ID, configuration identity and evidence-storage convention. (`run-record-convention.md` v1.0 + `docs/02-prototypes/_templates/run-record.md`)
 - [ ] Define and implement the machine-readable logging schema and pre-run write check.
-- [ ] Define and validate the monotonic timebase and external-video synchronization method.
+- [ ] Define and validate the monotonic timebase and external-video synchronization method. (Strategy documented in `timebase.md` v0.1; validation is RP02-G05.)
 
 ## Approval note
 
 Approved by the project builder on 2026-08-17. Approval adopts the seven-prototype portfolio, roadmap, dependency order, threshold-registration policy, evidence-packet requirements, pass/iterate/reject/defer model, Core-failure rule, and decision-closeout process as the V1 risk-reduction baseline. Version 1.2 (2026-08-22) removes the per-prototype planning time boxes; iteration control is exercised through the gate-outcome review rule rather than calendar estimates. Version 1.3 (2026-08-25) consumes the selected dimensional/drive baseline and adds its CoM, caster-lift, skid, and forward-acceleration validation inputs to RP-03. Version 1.4 (2026-08-27) records the first credible RP-01 mechanism candidate and tightens the axis/CoM, backlash-versus-modal, harness-restoring-torque, busy-minute thermal, and head/body IMU evidence methods; it selects no mechanism or actuator and freezes no numeric gate. Version 1.5 (2026-08-28) adds per-axis mass accounting, makes the roll-support/display section a Concept-A blocker, and replaces an endpoint “lost motion” proxy with loaded hysteresis plus hold-hunting evidence. Version 1.6 (2026-08-29) consumes the project builder's locked no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493, and makes RP-06 validate the layout around that exact module rather than rerun display selection.
 
 Version 1.7 (2026-08-29) consumes the project builder's locked visible-light Raspberry Pi Camera Module 3 Wide, order code SC0874, and makes RP-01/RP-06/RP-07 validate that exact camera while keeping the supplier, body SBC and production moving interconnect open. Version 1.8 (2026-08-30) propagates the selected-component-derived 95 × 150 × 115 mm nominal head envelope and its 90–100 × 145–155 × 110–120 mm validation band into RP-01/RP-06 inputs. Version 1.9 (2026-09-02) closes the RP-01 C1/C2 fork in favour of a separate ESP32-S3 C2 motion controller, fixes the display-versus-trajectory ownership boundary, and replaces the obsolete 250 g load input with the ~490 g pre-M008 lower bound plus C2.
+
+Version 1.10 (2026-09-08), by builder direction when RP-02 planning opened, gives RP-02 a separate design question and gate question, reshapes RP02-G02 into a standing coexistence invariant with a re-run rule owned by the new `power-energy-ledger.md`, reshapes RP02-G03 into a rehearsal with recorded margin whose requirement closes at SC-14, splits ADR-06 closure into an architecture half and a sizing half, adds the power/energy/thermal ledger and `timebase.md` as continuous-workstream deliverables, and staggers RP-02's start into phases so its paper and on-hand-hardware work can proceed while RP-01 is open. G01, G04, G05 and G06 are unchanged. No numeric threshold is registered by this version.
 
 Except for the later-adopted dimensional/drive topology baseline, the selected no-touch Waveshare display SKU 30493 and the selected visible-light Raspberry Pi Camera Module 3 Wide SC0874, plan approval does not approve another exact component, supplier, mechanism implementation, production camera interconnect, or numeric `SC-TBD-*` or `CON-TBD-*` gate threshold. `workbench.md` was approved separately on 2026-08-17 and incorporated as the Stage 0 baseline in version 1.1 of this plan. Numeric prototype gates remain subject to preregistration before scored runs, and powered scored testing remains blocked until the approved readiness gate's safety, instrumentation, configuration, and logging requirements are satisfied.

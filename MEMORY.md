@@ -237,3 +237,74 @@ The 2026-08-29 display and camera locks, the 2026-09-07 camera-crown decision an
 **Type / Status / Supersedes:** CHANGE / CURRENT / the verbose format of all prior entries
 
 The builder judged the log bloated. Every entry ID, date, type, status and supersession link was retained; bodies were condensed to the decision and its governing document. Era 0 reconstructed entries were tabulated with a "status now" column because their spec references are retired. The duplicate ID MEM-20260822-02 was resolved by renumbering the time-box entry to MEM-20260822-03. The pre-condensation file is preserved unchanged at `docs/archive/MEMORY-full-20260908.md`. Rule 1 is unbroken: no decision was deleted or reworded in substance.
+
+---
+
+## Era 6 — Electrical/control backbone preparation (2026-09-08 →)
+
+### MEM-20260908-03 — RP-02 reframed: design question plus gate question; G02/G03 reshaped
+**Type / Status / Supersedes / Governs:** DECISION + CHANGE / CURRENT / the v1.9 RP-02 decision question and the v1.9 shape of RP02-G02 and RP02-G03 / `risk-prototype-plan.md` v1.10 §RP-02 and approval note
+
+RP-02 now carries a *design* question (what split, link, rail/protection topology and energy source, with what measured margin) and a separate *gate* question (does it sustain every registered state and `MD-01` for ≥20 min without unsafe motion, reset, rail excursion, staleness or thermal violation, and does every fault bound). G01/G04/G05/G06 stay pass/fail properties. **G02 becomes a standing coexistence invariant with a re-run rule** owned by the power/energy ledger; **G03 becomes a rehearsal with recorded margin**, the 20-minute requirement closing at SC-14. ADR-06 closure is split into an architecture half (stage 2) and a sizing half (after RP-03/RP-05 `W` rows).
+
+**Why**
+- A can-question is falsifiable but teaches nothing about margin; a how-question has no failure mode. RP-02 needs both.
+- G02/G03 needed loads that do not exist at stage 2, reopen with every later subsystem, and G03 duplicated SC-14.
+
+### MEM-20260908-04 — RP-02 folder created; ledger and timebase placed in `01-system/`
+**Type / Status / Governs:** ORGANIZATION + BUILD / CURRENT / `docs/02-prototypes/RP-02-electrical/`, `docs/01-system/power-energy-ledger.md` v0.1, `docs/01-system/timebase.md` v0.1
+
+`RP-02-electrical/` opened with `intent.md`, `state-register.md` (S00…S17 and a proposed `MD-01`, none registered), `power-architecture.md` (PA-01…PA-10, class `E`), `link-contract.md` v0.1, `fault-matrix.md` (F-01…F-16), `rig.md`, `gates.md` (candidates only), `decision.md` (ADR closure ladder, candidate register with nothing selected) and `runs/`. Deliberately not a mirror of `RP-01-head/`. Under the rule that kept the RP-01 CAD sources in place, the power/energy/thermal ledger and the monotonic timebase strategy live in `01-system/` because they serve every prototype; RP-02 populates and validates them. No run, registration, selection or purchase.
+
+**Consequences**
+- The ledger's `E` envelope already shows the composite peak (≈5.5–9.5 A at 2S) exceeds the Korad KA3005D's 5 A, so S13 composite rehearsals need the candidate pack or a second supply.
+- RP-02 Phase A (state register, ledger seeding, link contract and timebase on the DevKitC-1 twin) is live now and unblocks RP-01's first scored run; Phase B waits on RP-01's servo family and an SBC candidate; Phase C on the battery gate.
+
+---
+
+## Era 7 — Layout 02 logging and Layout 03 pass (2026-09-09)
+
+### MEM-20260909-01 — Layout 02 per-part dimensions log
+**Type / Status / Governs:** BUILD / CURRENT FOR LAYOUT 02 / `RP-01-head/cad/head/layout-02/dimensions.md`
+
+Generated axis-aligned bounding boxes, axis datums and yoke-length segments for every named Layout 02 solid at neutral pose, from the parametric model. Not a fabrication drawing, not a freeze, and not Layout 03 geometry. Refresh with `write_dimensions.py`. Mass/CoM remain in `mass-placement.json`.
+
+### MEM-20260909-02 — Layout 03 pass opened
+**Type / Status / Governs:** DECISION / CURRENT FOR NEXT CAD PASS / `RP-01-head/cad/head/layout-03-brief.md`, HEAD-CAD-09
+
+After reviewing Layout 02, the next CAD pass is Layout 03: faceted rear-side taper aft of the ears; visible-yoke length versus stiffness without dropping A0 or lengthening the legs; ear/yoke shroud solved on that shell. Layout 02 remains the current 1:1 model until the pass is generated. Display/C2 seats and pitch-servo recentring are not in this pass.
+
+### MEM-20260909-03 — Layout 03 inspection tree: physics, harness, annotations
+**Type / Status / Clarifies / Governs:** DECISION / CURRENT FOR NEXT CAD PASS / MEM-20260909-02 / HEAD-CAD-10, `layout-03-brief.md`
+
+Layout 03 STEP must be a labelled occurrence tree with four top groups — physical, physics, harness, annotations — so each can be hidden as a whole and by named subgroup. Physics shows joint axes, origin triad, estimated roll/pitch/complete CoMs, gravity and the camera FOV cone, driven from A0 and the mass tree. Harness is trial centreline-and-jacket geometry partitioned by function, posed with the joint it rides; not a cable SKU or flex certification. Annotations show each named part’s global XYZ in the head-layout frame and its bounding-box size, generated from the dimensions script. Default: physical/physics/harness on, annotations off. Overlay solids are not PLA mass.
+
+### MEM-20260909-04 — Layout 03 is the last packaging/detailing pass; Concept A only
+**Type / Status / Clarifies / Governs:** DECISION / CURRENT FOR RP-01 / MEM-20260909-02 / `layout-03-brief.md`, `RP-01-head/decision.md`
+
+Builder: Layout 03 is the intended last RP-01 head packaging and detailing pass. Camera–display board gap **3 mm** (Layout 02’s 1 mm is not the finished stack). Include C2 removable tray and CAD-04a flashing, insert/captive-nut pockets, named bearing seats, coupling fastening and hard stops. **Concept B will not be authored**; RP-01 proceeds on Concept A. This does not freeze a servo SKU, certify optics, or pass gates.
+
+### MEM-20260909-05 — No shroud; yoke by judgment; layered taper feasible-or-keep; look into vignetting
+**Type / Status / Clarifies / Governs:** DECISION / CURRENT FOR NEXT CAD PASS / MEM-20260909-02 / HEAD-CAD-09, `layout-03-brief.md`
+
+Builder: Layout 03 does not add a yoke shroud; ear/yoke combined-motion clearance remains. Visible yoke length (below the head) is chosen for stiffness, look-up and cable loop without dropping A0. The head shell must be judged as a layered/tapered shape against [`visuals/mvp-updated-after-spechseet.png`](docs/../visuals/mvp-updated-after-spechseet.png) (appearance only; not ear mics); **reject only if way worse than Layout 02**; cosmetic layering after that call. **Look into vignetting** (FOV cone + written clearance report).
+
+### MEM-20260909-05 — No shroud; yoke by judgment; layered taper feasibility; look into vignetting
+**Type / Status / Clarifies / Governs:** DECISION / CURRENT FOR NEXT CAD PASS / MEM-20260909-02 / HEAD-CAD-09, `layout-03-brief.md`
+
+Builder: do not add a yoke shroud; ear/yoke clearance still required. Visible yoke length is chosen by the modeller (stiffness, look-up, cable loop, stack); do not drop A0. The head may be layered and tapered per `visuals/mvp-updated-after-spechseet.png` (non-binding; no ear mics). Feasibility first — reject only if way worse than Layout 02; aesthetics after. Layout 03 must look into vignetting (FOV cone + clear/hit report).
+
+### MEM-20260909-06 — Preserve head modularity and easy disassembly in Layout 03
+**Type / Status / Clarifies / Governs:** DECISION / CURRENT FOR NEXT CAD PASS / HEAD-CAD-01, MEM-20260909-02 / `layout-03-brief.md`, CON-P01
+
+Builder: Layout 03 must keep the head practical and modular. It should stay fairly simple to disassemble and to remove components (display, camera, C2, ears, servos, bearing cartridge). Layered/tapered appearance lives on the existing service parts; a scheme that traps hardware or needs destructive disassembly is way worse than Layout 02 and is rejected.
+
+### MEM-20260909-07 — Layout 03 helmet taper checked at 104 mm rear
+**Type / Status / Clarifies / Governs:** VALIDATION + CHANGE / CURRENT FOR LAYOUT 03 / MEM-20260909-02, HEAD-CAD-09 / `layout-03/brief.md`, `layout-03/review/verification.md`
+
+The first Layout 03 stern (122 × 82 mm) was a conservative keep-the-hardware choice, not a proven maximum. The shell now keeps the 130 mm ear belt through X−78, deepens upper shoulders to 24 mm, and narrows to 104 mm at X−115 (Z10…84), with rear M2 lands at Y±44. Combined roll/look-up required clipping an unused pitch-servo adapter corner; the 56-pose grid, jackets, optics, hard stops and C2/camera extraction then passed. Estimated complete mass is 6.34 g below Layout 02. Not a fabrication release, servo freeze or optical certification.
+
+### MEM-20260910-01 — Layout 03 camera, C2 and insert retention modelled
+**Type / Status / Clarifies / Governs:** CHANGE + VALIDATION / CURRENT FOR LAYOUT 03 / MEM-20260909-07, HEAD-CAD-01, HEAD-CAD-09 / `layout-03/review/verification.md`
+
+The accepted 104 mm packaging is unchanged. The camera bracket now C-channels the Module 3 PCB and sits 0.10 mm from the imported rear shield; the C2 tray gains rear-edge jaws and USB-end corner caps so the board lifts with the tray; front/rear Ø3.2 insert pockets open through the receiver faces. Display, servo-SKU, shaft and harness retention remain open. Not a fabrication release.
