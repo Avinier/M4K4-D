@@ -18,11 +18,11 @@ D/E estimates: authored PLA at 1.24 g/cm³ and the existing explicit installed-m
 |---|---:|---:|---:|---:|
 | roll | 371.330 | 361.962 | 0.000702609 | 0.000656427 |
 | pitch | 443.364 | 436.355 | 0.000785705 | 0.000728097 |
-| yaw | 515.339 | 509.361 | 0.001154970 | 0.001080605 |
+| yaw | 515.339 | 508.997 | 0.001154970 | 0.001079537 |
 
-A0: roll Y=-1.10534, Z=46.91913; pitch X=-37.96453, Z=45.55341 mm. Targeted neutral axis-to-CoM residuals are below 0.002 mm in this estimated mass model. Complete CoM: (-39.564, 0.781, 40.308) mm. These are not achieved measured balance or servo-selection evidence.
+A0: roll Y=-1.10534, Z=46.91913; pitch X=-37.96453, Z=45.55341 mm. Targeted neutral axis-to-CoM residuals are below 0.002 mm in this estimated mass model. Complete CoM: (-39.551, 0.746, 40.295) mm. These are not achieved measured balance or servo-selection evidence.
 
-The complete estimated mass is 5.98 g lower than Layout 02, while the estimated principal demand inertias also decrease. Together with the checked clearances and extraction paths, this supports the feasibility decision; it does not certify shell stiffness.
+The complete estimated mass is 6.34 g lower than Layout 02, while the estimated principal demand inertias also decrease. Together with the checked clearances and extraction paths, this supports the feasibility decision; it does not certify shell stiffness.
 
 ## Checks actually run
 
@@ -31,6 +31,8 @@ The complete estimated mass is 5.98 g lower than Layout 02, while the estimated 
 | Physical cross-frame motion | 56 poses × 490 pairs = 27,440; zero detected overlaps |
 | Modeled jacket vs mechanism | 56 poses × 210 pairs = 11,760; zero detected pinches |
 | Neutral same-frame non-fastener intersections | Zero |
+| Camera / C2 positive retention | 0.4 mm nudges of the camera in its bracket and of the C2 PCB in its tray all hit; imported camera-to-bracket gap **0.10 mm** (was 1.50 mm) |
+| Insert pocket mouths | Front and rear Ø3.2 pockets open through the receiver faces; zero plastic on the 0.2 mm face probes (was 0.2 mm / 0.1 mm short) |
 | Original full-size display/package checks | Zero package overlap; zero active-display volume excluded |
 | Optical envelope | Nine neutral/extreme combined poses × five obstructions; zero revised intersections |
 | Roll hard stops | Contact at −18/+18°; positive interference at −19/+19° |
@@ -59,21 +61,39 @@ The repaired display branch sits farther inward; C2 exits 2 mm higher; the exter
 
 ## Visual review
 
-The following PNGs render the exported STEP with its explicit pose/visibility sidecar. Front = +X (renderer preset “right”); side = −Y (“front”); rear = −X (“left”). Shell transparency is intentional, inherited from Layout 02 inspection practice.
-- [iso](iso_20260909T161154Z.png)
-- [front](front_20260909T161154Z.png)
-- [side](side_20260909T161154Z.png)
-- [rear](rear_20260909T161154Z.png)
-- [pitch-up](pitch-up_20260909T161154Z.png)
-- [combined](combined_20260909T161154Z.png)
-- [physics-fov-on](physics-fov-on_20260909T161154Z.png)
-- [physics-fov-off](physics-fov-off_20260909T161154Z.png)
-- [harness-on](harness-on_20260909T161154Z.png)
-- [harness-off](harness-off_20260909T161154Z.png)
-- [C2-rear-access](C2-rear-access_20260909T161517Z.png)
-- [C2-isolated-open-rear-XYZ](C2-isolated-open-rear-XYZ_20260909T161656Z.png)
+The following PNGs render the current generator package with its explicit pose/visibility sidecar. Front = +X (renderer preset “right”); side = −Y (“front”); rear = −X (“left”). Shell transparency is intentional, inherited from Layout 02 inspection practice. Helmet-top and rear-oblique views were added to judge the 104 mm stern and inward shoulders.
+- [iso](iso_20260909T171825Z.png)
+- [front](front_20260909T171825Z.png)
+- [side](side_20260909T171825Z.png)
+- [rear](rear_20260909T171825Z.png)
+- [helmet-rear-oblique](helmet-rear-oblique_20260909T171825Z.png)
+- [helmet-top](helmet-top_20260909T171825Z.png)
+- [pitch-up](pitch-up_20260909T171825Z.png)
+- [combined](combined_20260909T171825Z.png)
+- [physics-fov-on](physics-fov-on_20260909T171825Z.png)
+- [physics-fov-off](physics-fov-off_20260909T171825Z.png)
+- [harness-on](harness-on_20260909T171825Z.png)
+- [harness-off](harness-off_20260909T171825Z.png)
+- [C2-rear-access](C2-rear-access_20260909T172433Z.png)
+- [C2-isolated-XYZ-dimensions](C2-isolated-XYZ-dimensions_20260909T172433Z.png)
+- [C2-isolated-open-rear-XYZ](C2-isolated-open-rear-XYZ_20260909T172641Z.png)
+- [camera-clamp-rear](camera-clamp-rear_20260910T155539Z.png)
+- [camera-clamp-side](camera-clamp-side_20260910T155539Z.png)
+- [C2-pcb-keepers](C2-pcb-keepers_20260910T155539Z.png)
+- [insert-mouths-front](insert-mouths-front_20260910T155539Z.png)
+- [insert-mouths-rear](insert-mouths-rear_20260910T155539Z.png)
 
-Isolated tray annotation: global neutral centre **(-29.300, -29.000, 40.000) mm**; **ΔX × ΔY × ΔZ = 11.400 × 25.600 × 28.000 mm**. RGB triads and dimension bars are geometry; numeric labels are native occurrence-tree names. The open-rear view avoids hiding the centre triad behind the tray wall.
+Isolated tray annotation: global neutral centre **(-29.300, -29.000, 40.000) mm**; **ΔX × ΔY × ΔZ = 11.400 × 25.600 × 28.000 mm**. RGB triads and dimension bars are geometry; numeric labels are native occurrence-tree names. The open-rear view avoids hiding the centre triad behind the tray wall. Keepers sit inside that same tray envelope.
+
+## Retention detailing — 2026-09-10
+
+Packaging direction (104 mm stern, 3 mm camera gap, A0, 56-pose) is unchanged. Three reviewed detailing gaps are now modelled:
+
+1. **Camera.** The removable bracket was 1.50 mm behind the imported module and only screwed to the crown. It now pads the rear shield at 0.10 mm and C-channels the PCB Y-edges (empty 1 mm rim outside the shield and lens), with the lower centre open for CSI. The two M2s still fasten bracket to crown; camera and bracket still extract together −X on the removed carrier.
+2. **C2.** The tray still uses 0.10 mm seating gaps. Rear edge jaws at the castellated Y margins and USB-end corner caps (outside Y −35…−23) keep the board in the tray during the +Z27 then −X lift. USB-C / BOOT/RESET reserves stay clear. Drop-in snaps past the corner caps; this is a trial printed keeper, not a purchased clip.
+3. **Inserts.** Front and rear Ø3.2 × 3 mm pockets now break through the receiver faces by 0.4 mm (no sacrificial membrane). Purchased insert SKU and thermal fit remain open.
+
+Display retention, servo attachment patterns, shaft/horn retention and harness flex transitions remain unfinished. Layout 03 is still not a fabrication release.
 
 The initial iso snapshot and first failing reports are retained as diagnostic history only; they are not the final verification images.
 
@@ -81,4 +101,4 @@ The initial iso snapshot and first failing reports are retained as diagnostic hi
 
 Confirm purchased insert fits and screw lengths, servo mounting pattern/adapters and liner/preload, complete spindle/horn retention, bearing SKU/preload, display retention hardware, guide fastening and cable flex zones. C2 component/USB/BOOT locations and the LED package remain installed reserves awaiting the actual parts. Optical entrance pupil and final window effects require measurement. These limits are explicit in the source/brief and do not constitute a servo freeze, optical certification, continuous-motion certificate, print approval or scored RP gate.
 
-Final STEP SHA-256: `ed17a3c7a9556424f14136d814420add83b65f789783ff6e7d2b310c6bfdd01d`.
+Final STEP SHA-256: `fac2cfd185056c8f1daea1750994e43525ad64003a1e18a3f4bff8e0997e1c1f`.

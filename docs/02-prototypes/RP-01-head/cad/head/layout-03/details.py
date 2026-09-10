@@ -4,6 +4,12 @@ from build123d import *
 import layout_model as m
 
 INSERT_R,INSERT_DEPTH=1.6,3.0
+INSERT_BREAKTHROUGH=0.4
+# Boss/receiver insertion faces from layout_model axial seats; open the Ø3.2 pocket through.
+FRONT_INSERT_FACE_X=-8.8
+REAR_INSERT_FACE_X=-112.3
+FRONT_INSERT_X=FRONT_INSERT_FACE_X+INSERT_BREAKTHROUGH-INSERT_DEPTH/2
+REAR_INSERT_X=REAR_INSERT_FACE_X-INSERT_BREAKTHROUGH+INSERT_DEPTH/2
 
 def slot(axis,radius,pin_radius,start,end,centre,length):
     """Circular-centreline slot with exact circular ends and fine polygon flanks.
@@ -33,8 +39,8 @@ def detail_parts(out):
     setshape(name,face)
     # M2 heat-set receivers. Recut after bridges so the union cannot fill them.
     n='main_octagonal_skin';skin=out[n]['shape']
-    for y,z in m.FRONT_SCREWS:skin=skin-a(INSERT_R,INSERT_DEPTH,(-10.5,y,z))
-    for y,z in m.REAR_SCREWS:skin=skin-a(INSERT_R,INSERT_DEPTH,(-110.7,y,z))
+    for y,z in m.FRONT_SCREWS:skin=skin-a(INSERT_R,INSERT_DEPTH,(FRONT_INSERT_X,y,z))
+    for y,z in m.REAR_SCREWS:skin=skin-a(INSERT_R,INSERT_DEPTH,(REAR_INSERT_X,y,z))
     # Two integral recessed stern lands: match the tapered plane, retain >=0.8 wall.
     for sign in [-1,1]:
         land=b(-104,-84,min(sign*50,sign*64),max(sign*50,sign*64),27,59)
@@ -71,6 +77,12 @@ def detail_parts(out):
         add(f'C2_tray_M2_{y}',screw,owner='M021-R',color='#555b5a')
     setshape('connected_rolling_cradle_flange_ear_stalks',cradle)
     tray=tray-b(-34.1,-24.9,-38.1,-19.9,27.9,51.6)-b(-33.1,-23.9,-35.1,-22.9,51.5,55)
+    # PCB edge keepers: rear jaws at the castellated Y margins, corner caps above
+    # the USB-end corners (outside Y −35…−23). Board drop-in snaps past the caps.
+    for y0,y1 in [(-38.45,-36.9),(-21.1,-19.55)]:
+        tray=tray+b(-27.55,-26.70,y0,y1,28.15,51.35)
+    tray=tray+b(-26.70,-24.80,-38.45,-35.15,51.60,52.90)
+    tray=tray+b(-26.70,-24.80,-22.85,-19.55,51.60,52.90)
     add('C2_removable_open_rear_tray',tray,owner='M008')
     add('C2_USB_C_installed_plug_reserve',b(-33,-24,-35,-23,51.5,61.5),owner=None,kind='reserve',color='#b58ed0',alpha=.18)
     # Split the former single corridor into installed plug and withdrawal.
@@ -128,8 +140,8 @@ def detail_parts(out):
     frame=out['connected_pitch_frame_roll_servo_saddle']['shape']
     lug=b(m.PITCH_X-11,m.PITCH_X-4,-51,-47,m.PITCH_Z-2,m.PITCH_Z+2)
     setshape('connected_pitch_frame_roll_servo_saddle',(frame+lug)-out['pitch_hard_stop_pin']['shape'])
-    # Independent camera bracket, two rear-access M2 screws into long crown
-    # receivers. Boss centres clear the 25 mm board; front roots join crown wall.
+    # Independent camera bracket: PCB Y-edge C-channels plus two rear-access M2
+    # screws into long crown receivers. Boss centres clear the 25 mm board.
     face=out['front_bezel_integral_camera_crown']['shape']
     bracket=out['removable_camera_edge_bracket_trial']['shape']
     for y in [-15,15]:

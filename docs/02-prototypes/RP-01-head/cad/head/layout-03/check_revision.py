@@ -86,9 +86,32 @@ for dx in [-3,-10,-25,-40]:
     for n in ['camera_module_3_wide_1to1','removable_camera_edge_bracket_trial']:
         v=overlap(p[n]['shape'].moved(Location((dx,0,0))),p['front_bezel_integral_camera_crown']['shape'])
         if v>1e-4:extraction.append(dict(service='camera on removed front carrier',moving=n,translation=[dx,0,0],intersection_mm3=v))
-result=dict(motion_evidence_reused=bool(prior),motion_poses_executed_this_run=len(rolls)*len(pitches),C2_extraction_path='Neutral service pose; unplug and unfasten, lift 27mm in +Z, then withdraw rearward in -X with rear cover removed.',axes=m.AXES,source_sha256=inputs,service_extraction_hits=extraction,intended_pair_exclusions=[sorted(x) for x in intended],poses=prior['poses'] if prior else len(rolls)*len(pitches),mechanism_pairs_per_pose=len(pairs),jacket_pairs_per_pose=len(jackets)*len(physical),same_frame_hits=static,motion_hits=hits,harness_pinches=pinches,optical_pose_checks=optics,old_aperture_conservative_vignetting_mm3=oldhit,optics_assumption='102° horizontal, vertical tangent from 16:9; pupil at X−8 and entrance half-size3mm, front of lens X−2; no entrance-pupil measurement or optical certification.',hard_stops=stops,C2_service_hits=service,solids=valid,harness_gaps=gaps,limitations=['Discrete poses, no continuous-sweep or tolerance certificate.','Rigid harness islands stop before unqualified transitions; no electrical continuity or cable flex/endurance claim.','Yaw loop R8 is a visible trial, not a selected cable bend radius; body anchor absent.'])
-errors=bool(extraction or static or hits or pinches or service or any(x['intersection_mm3']>1e-4 for x in optics) or any(not d['valid'] or d['solids']!=1 or d['volume']<=0 for d in valid.values()) or any((s['overlap_mm3']>1e-4 or s['distance_mm']>.01) if s['at_limit'] else s['overlap_mm3']<1e-4 for s in stops))
+# Positive retention: a 0.4 mm nudge of the module into its mount must hit plastic.
+retention=[]
+cam,br=p['camera_module_3_wide_1to1']['shape'],p['removable_camera_edge_bracket_trial']['shape']
+pcb,tray=p['C2_ESP32_S3_Zero_23_5x18_footprint']['shape'],p['C2_removable_open_rear_tray']['shape']
+gap=cam.distance_to(br)
+if gap>0.25:retention.append(dict(service='camera nearest bracket',distance_mm=gap))
+for moving,fixed,label,shifts in [
+    (cam,br,'camera in bracket',[(-.4,0,0),(.4,0,0),(0,.4,0),(0,-.4,0),(0,0,.4)]),
+    (pcb,tray,'C2 PCB in tray',[(-.4,0,0),(0,.4,0),(0,-.4,0),(0,0,.4)]),
+]:
+    for dx,dy,dz in shifts:
+        v=overlap(moving.moved(Location((dx,dy,dz))),fixed)
+        if v<=1e-4:retention.append(dict(service=label,translation=[dx,dy,dz],intersection_mm3=v))
+# Insert pockets must open through the receiver faces; no leftover membrane.
+from details import INSERT_R,FRONT_INSERT_FACE_X,REAR_INSERT_FACE_X
+insert_mouths=[]
+skin=p['main_octagonal_skin']['shape']
+for y,z in m.FRONT_SCREWS:
+    v=overlap(skin,m.axial(INSERT_R,.2,(FRONT_INSERT_FACE_X,y,z)))
+    if v>1e-4:insert_mouths.append(dict(side='front',y=y,z=z,plastic_mm3=v))
+for y,z in m.REAR_SCREWS:
+    v=overlap(skin,m.axial(INSERT_R,.2,(REAR_INSERT_FACE_X,y,z)))
+    if v>1e-4:insert_mouths.append(dict(side='rear',y=y,z=z,plastic_mm3=v))
+result=dict(motion_evidence_reused=bool(prior),motion_poses_executed_this_run=len(rolls)*len(pitches),C2_extraction_path='Neutral service pose; unplug and unfasten, lift 27mm in +Z, then withdraw rearward in -X with rear cover removed. PCB stay-with-tray keepers are integral to the tray.',axes=m.AXES,source_sha256=inputs,service_extraction_hits=extraction,retention_misses=retention,insert_mouth_plastic=insert_mouths,intended_pair_exclusions=[sorted(x) for x in intended],poses=prior['poses'] if prior else len(rolls)*len(pitches),mechanism_pairs_per_pose=len(pairs),jacket_pairs_per_pose=len(jackets)*len(physical),same_frame_hits=static,motion_hits=hits,harness_pinches=pinches,optical_pose_checks=optics,old_aperture_conservative_vignetting_mm3=oldhit,optics_assumption='102° horizontal, vertical tangent from 16:9; pupil at X−8 and entrance half-size3mm, front of lens X−2; no entrance-pupil measurement or optical certification.',hard_stops=stops,C2_service_hits=service,solids=valid,harness_gaps=gaps,limitations=['Discrete poses, no continuous-sweep or tolerance certificate.','Rigid harness islands stop before unqualified transitions; no electrical continuity or cable flex/endurance claim.','Yaw loop R8 is a visible trial, not a selected cable bend radius; body anchor absent.','Camera and C2 keepers are trial printed snaps/channels, not purchased hardware or certified retention.'])
+errors=bool(extraction or retention or insert_mouths or static or hits or pinches or service or any(x['intersection_mm3']>1e-4 for x in optics) or any(not d['valid'] or d['solids']!=1 or d['volume']<=0 for d in valid.values()) or any((s['overlap_mm3']>1e-4 or s['distance_mm']>.01) if s['at_limit'] else s['overlap_mm3']<1e-4 for s in stops))
 result['passed']=not errors
 path=HERE/('revision-neutral.json' if '--neutral' in sys.argv else 'revision-checks.json');path.write_text(json.dumps(result,indent=2)+'\n')
-print(json.dumps({k:result[k] for k in ['passed','service_extraction_hits','same_frame_hits','motion_hits','harness_pinches','C2_service_hits','hard_stops','old_aperture_conservative_vignetting_mm3']},indent=2))
+print(json.dumps({k:result[k] for k in ['passed','service_extraction_hits','retention_misses','insert_mouth_plastic','same_frame_hits','motion_hits','harness_pinches','C2_service_hits','hard_stops','old_aperture_conservative_vignetting_mm3']},indent=2))
 raise SystemExit(1 if errors else 0)

@@ -1,6 +1,6 @@
 # Makad CAD
 
-This folder, `docs/02-prototypes/RP-01-head/cad/`, owns RP-01 CAD layout decisions, CAD-specific requirements and packaging notes. **Layout 03 is the current detailed 1:1 packaging revision**, built on Layout 02 and preserving it as history. It adds deeper helmet shoulders and a 104 mm wide tapered stern, a 3 mm camera/display gap, removable C2 tray, trial insert/bearing/coupling/stop details, and independent physics/harness/annotation groups. The crown is 104 mm (+2 mm); the provisional robot stack is 304 mm. Sampled geometry checks pass, but cable-flex transitions and hardware-specific fits/retention remain open; CAD is not frozen.
+This folder, `docs/02-prototypes/RP-01-head/cad/`, owns RP-01 CAD layout decisions, CAD-specific requirements and packaging notes. **Layout 03 is the current detailed 1:1 packaging revision**, built on Layout 02 and preserving it as history. It adds deeper helmet shoulders and a 104 mm wide tapered stern, a 3 mm camera/display gap, removable C2 tray with PCB keepers, camera PCB edge clamp, trial insert/bearing/coupling/stop details, and independent physics/harness/annotation groups. The crown is 104 mm (+2 mm); the provisional robot stack is 304 mm. Sampled geometry checks pass, but cable-flex transitions and remaining hardware-specific fits (display, servo, shaft) remain open; CAD is not frozen.
 
 ## Start here
 

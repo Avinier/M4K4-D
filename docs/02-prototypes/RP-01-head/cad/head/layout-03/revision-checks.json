@@ -1,7 +1,7 @@
 {
   "motion_evidence_reused": false,
   "motion_poses_executed_this_run": 56,
-  "C2_extraction_path": "Neutral service pose; unplug and unfasten, lift 27mm in +Z, then withdraw rearward in -X with rear cover removed.",
+  "C2_extraction_path": "Neutral service pose; unplug and unfasten, lift 27mm in +Z, then withdraw rearward in -X with rear cover removed. PCB stay-with-tray keepers are integral to the tray.",
   "axes": {
     "roll_y": -1.1053356325240153,
     "roll_z": 46.9191299433943,
@@ -9,13 +9,15 @@
     "pitch_z": 45.55341378595055
   },
   "source_sha256": {
-    "layout_model.py": "1a6434ab37fc900f8a696b38707fbf74c64bc81f4e0d834daa00f61c70364df7",
-    "details.py": "adf2d83a1a285f27e2a939c97b8e2824721c750d4a4680a35ed187c319911201",
+    "layout_model.py": "99c7d058200c5775a69f053b93d49aa2e60d4a3de40cbcd86ad2d5948a8e0c49",
+    "details.py": "62fc46f66804b242f171ccafdd8175189566b840732891fc06ab85bcba0f2d35",
     "layout_axes.py": "4f8875dd381529a110b3df1419a40baff2ec5acdbf71e3e5a757deff656d3e1b",
     "harness.py": "dd941cfa6c4f6fcbe7c0ea6bdcd5e941643832e957084c8fb6b5c117885d206a",
     "optics.py": "94185c1fd76a8727f90995de3ce8225a6b3498d9c08c3f2e1a598d8c3f233f3a"
   },
   "service_extraction_hits": [],
+  "retention_misses": [],
+  "insert_mouth_plastic": [],
   "intended_pair_exclusions": [
     [
       "pitch_XC330_1to1_reference",
@@ -370,7 +372,7 @@
     "main_octagonal_skin": {
       "valid": true,
       "solids": 1,
-      "volume": 37949.11559692105
+      "volume": 37982.491878113055
     },
     "removable_octagonal_rear_cover": {
       "valid": true,
@@ -405,7 +407,7 @@
     "camera_module_3_wide_1to1": {
       "valid": true,
       "solids": 1,
-      "volume": 7440.0
+      "volume": 2531.7878
     },
     "camera_CSI_exit_and_bend_reserve": {
       "valid": true,
@@ -415,7 +417,7 @@
     "removable_camera_edge_bracket_trial": {
       "valid": true,
       "solids": 1,
-      "volume": 482.8219985562655
+      "volume": 1509.7781374018646
     },
     "addressable_status_LED_package_reserve": {
       "valid": true,
@@ -435,7 +437,7 @@
     "C2_installed_components_reserve": {
       "valid": true,
       "solids": 1,
-      "volume": 3130.199999999999
+      "volume": 2782.399999999999
     },
     "C2_USB_C_withdrawal_BOOT_RESET_service_reserve": {
       "valid": true,
@@ -685,7 +687,7 @@
     "C2_removable_open_rear_tray": {
       "valid": true,
       "solids": 1,
-      "volume": 2012.6703059030183
+      "volume": 2083.9100041008705
     },
     "C2_USB_C_installed_plug_reserve": {
       "valid": true,
@@ -821,7 +823,8 @@
   "limitations": [
     "Discrete poses, no continuous-sweep or tolerance certificate.",
     "Rigid harness islands stop before unqualified transitions; no electrical continuity or cable flex/endurance claim.",
-    "Yaw loop R8 is a visible trial, not a selected cable bend radius; body anchor absent."
+    "Yaw loop R8 is a visible trial, not a selected cable bend radius; body anchor absent.",
+    "Camera and C2 keepers are trial printed snaps/channels, not purchased hardware or certified retention."
   ],
   "passed": true
 }

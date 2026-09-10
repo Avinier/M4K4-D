@@ -1,6 +1,5 @@
 {
-  "input": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.step",
-  "stepParametersPath": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.params.js",
+  "input": "docs/02-prototypes/RP-01-head/cad/head/layout-03/head-layout.step.py",
   "mode": "view",
   "theme": {
     "projection": "orthographic",

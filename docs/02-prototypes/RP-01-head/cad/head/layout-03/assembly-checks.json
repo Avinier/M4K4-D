@@ -10,12 +10,12 @@
     "main_octagonal_skin": {
       "valid": true,
       "solids": 1,
-      "volume": 39069.67023262228
+      "volume": 37982.491878113055
     },
     "removable_octagonal_rear_cover": {
       "valid": true,
       "solids": 1,
-      "volume": 15466.271312319275
+      "volume": 12069.161908861772
     },
     "window_opaque_mask_110mm": {
       "valid": true,
@@ -45,7 +45,7 @@
     "camera_module_3_wide_1to1": {
       "valid": true,
       "solids": 1,
-      "volume": 7440.0
+      "volume": 2531.7878
     },
     "camera_CSI_exit_and_bend_reserve": {
       "valid": true,
@@ -55,7 +55,7 @@
     "removable_camera_edge_bracket_trial": {
       "valid": true,
       "solids": 1,
-      "volume": 482.8219985562655
+      "volume": 1509.7781374018646
     },
     "addressable_status_LED_package_reserve": {
       "valid": true,
@@ -75,7 +75,7 @@
     "C2_installed_components_reserve": {
       "valid": true,
       "solids": 1,
-      "volume": 3130.199999999999
+      "volume": 2782.399999999999
     },
     "C2_USB_C_withdrawal_BOOT_RESET_service_reserve": {
       "valid": true,
@@ -85,7 +85,7 @@
     "connected_rolling_cradle_flange_ear_stalks": {
       "valid": true,
       "solids": 1,
-      "volume": 10021.106444171251
+      "volume": 9756.533747692454
     },
     "rolling_spindle_6mm": {
       "valid": true,
@@ -95,32 +95,32 @@
     "roll_bearing_1_16x6_reserve": {
       "valid": true,
       "solids": 1,
-      "volume": 1025.227346572493
+      "volume": 1025.2273465724932
     },
     "roll_bearing_2_16x6_reserve": {
       "valid": true,
       "solids": 1,
-      "volume": 1025.227346572493
+      "volume": 1025.2273465724932
     },
     "bearing_cartridge_trial": {
       "valid": true,
       "solids": 1,
-      "volume": 11812.294986190696
+      "volume": 11812.294986190695
     },
     "coaxial_coupling_trial": {
       "valid": true,
       "solids": 1,
-      "volume": 675.9231460076459
+      "volume": 675.9231460036256
     },
     "roll_XC330_1to1_reference": {
       "valid": true,
       "solids": 1,
-      "volume": 19720.0
+      "volume": 19719.999999999996
     },
     "pitch_XC330_1to1_reference": {
       "valid": true,
       "solids": 1,
-      "volume": 19720.0
+      "volume": 19719.999999999996
     },
     "pitch_trunnion_-49": {
       "valid": true,
@@ -135,27 +135,27 @@
     "connected_pitch_frame_roll_servo_saddle": {
       "valid": true,
       "solids": 1,
-      "volume": 14970.054469864297
+      "volume": 15001.41510901857
     },
     "yaw_yoke_leg_-55": {
       "valid": true,
       "solids": 1,
-      "volume": 5626.888491213213
+      "volume": 5650.066710789359
     },
     "yaw_yoke_leg_55": {
       "valid": true,
       "solids": 1,
-      "volume": 4839.889970836357
+      "volume": 4862.970431057763
     },
     "yaw_yoke_spindle_bridge": {
       "valid": true,
       "solids": 1,
-      "volume": 6262.742659549842
+      "volume": 6321.986226910209
     },
     "pitch_servo_to_yoke_adapter_trial": {
       "valid": true,
       "solids": 1,
-      "volume": 3201.600000000001
+      "volume": 2907.600000000002
     },
     "yaw_spindle_interface_reserve": {
       "valid": true,
@@ -195,12 +195,12 @@
     "ear_-1_ridged_inner_mount": {
       "valid": true,
       "solids": 1,
-      "volume": 1419.83417378869
+      "volume": 1409.2249894274676
     },
     "ear_-1_hollow_removable_cap": {
       "valid": true,
       "solids": 1,
-      "volume": 3875.41306104858
+      "volume": 3839.7135526116076
     },
     "ear_-1_amber_inlay": {
       "valid": true,
@@ -245,12 +245,12 @@
     "ear_1_ridged_inner_mount": {
       "valid": true,
       "solids": 1,
-      "volume": 1411.0044186493237
+      "volume": 1400.1272685684528
     },
     "ear_1_hollow_removable_cap": {
       "valid": true,
       "solids": 1,
-      "volume": 3835.0369791966596
+      "volume": 3795.3030638407818
     },
     "ear_1_amber_inlay": {
       "valid": true,
@@ -325,7 +325,7 @@
     "C2_removable_open_rear_tray": {
       "valid": true,
       "solids": 1,
-      "volume": 2012.6703059030178
+      "volume": 2083.9100041008705
     },
     "C2_USB_C_installed_plug_reserve": {
       "valid": true,
@@ -340,7 +340,7 @@
     "roll_bearing_retainer_39.5": {
       "valid": true,
       "solids": 1,
-      "volume": 152.10015483815647
+      "volume": 152.1001548381571
     },
     "bearing_retainer_M2_39.5_-9": {
       "valid": true,
@@ -350,12 +350,12 @@
     "bearing_retainer_M2_39.5_9": {
       "valid": true,
       "solids": 1,
-      "volume": 25.325444292345527
+      "volume": 25.32544429234553
     },
     "roll_bearing_retainer_68.5": {
       "valid": true,
       "solids": 1,
-      "volume": 154.39673805142482
+      "volume": 154.3967380514253
     },
     "bearing_retainer_M2_68.5_-9": {
       "valid": true,
@@ -365,7 +365,7 @@
     "bearing_retainer_M2_68.5_9": {
       "valid": true,
       "solids": 1,
-      "volume": 25.325444292345484
+      "volume": 25.325444292345487
     },
     "roll_hard_stop_pin": {
       "valid": true,
@@ -390,7 +390,7 @@
     "removable_roll_servo_saddle_strap": {
       "valid": true,
       "solids": 1,
-      "volume": 615.9936008638686
+      "volume": 615.9936008638689
     },
     "coupling_M3_radial_grub_74.5": {
       "valid": true,

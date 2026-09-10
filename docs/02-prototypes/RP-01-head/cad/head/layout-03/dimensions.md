@@ -18,11 +18,11 @@ Visible yoke 32 mm; pitch to knee 77.553 mm. A0: `{'roll_y': -1.1053356325240153
 | `display_connector_and_flashing_access_reserve` | R | -16.200 × 0.000 × 40.000 | 3.600 × 106.100 × 68.000 |
 | `camera_module_3_wide_1to1` | R | -7.700 × 0.000 × 88.931 | 11.400 × 25.000 × 23.862 |
 | `camera_CSI_exit_and_bend_reserve` | R | -19.250 × 0.000 × 81.000 | 9.500 × 22.000 × 12.000 |
-| `removable_camera_edge_bracket_trial` | R | -15.900 × 0.000 × 89.000 | 2.200 × 34.400 × 26.000 |
+| `removable_camera_edge_bracket_trial` | R | -13.400 × 0.000 × 89.000 | 7.200 × 34.400 × 26.000 |
 | `addressable_status_LED_package_reserve` | R | -6.500 × 15.200 × 91.800 | 3.000 × 5.000 × 5.000 |
 | `crown_status_light_diffuser` | R | -3.550 × 15.200 × 91.800 | 2.900 × 3.400 × 3.400 |
 | `C2_ESP32_S3_Zero_23_5x18_footprint` | R | -25.800 × -29.000 × 39.750 | 1.600 × 18.000 × 23.500 |
-| `C2_installed_components_reserve` | R | -30.300 × -29.000 × 39.750 | 7.400 × 18.000 × 23.500 |
+| `C2_installed_components_reserve` | R | -30.300 × -29.000 × 39.750 | 7.400 × 16.000 × 23.500 |
 | `C2_USB_C_withdrawal_BOOT_RESET_service_reserve` | R | -28.500 × -29.000 × 71.500 | 9.000 × 12.000 × 20.000 |
 | `connected_rolling_cradle_flange_ear_stalks` | R | -27.500 × 0.000 × 39.250 | 25.000 × 141.000 × 73.500 |
 | `rolling_spindle_6mm` | R | -56.000 × -1.105 × 46.919 | 32.000 × 6.000 × 6.000 |

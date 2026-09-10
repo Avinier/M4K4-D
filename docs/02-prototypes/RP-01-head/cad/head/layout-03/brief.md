@@ -12,9 +12,9 @@ Retain the 32 mm visible yoke segment and rearward knee: the original look-up cl
 
 Camera PCB bottom Z77 gives 3 mm above the fixed display top Z74. Crown top Z104 allows the camera/bracket and roof: +2 mm versus Layout 02 and a 304 mm provisional 140+60+104 stack. Preserve board and servo dimensions.
 
-Trial M2 insert pockets: 3.2 mm diameter, 3 mm depth, visible M2 retained; exact insert SKU/thermal fit unselected. Internal removable joints use explicit screw clearance and insert seats. Bearing pair remains Ø16 × 6 at X−43/−65, 22 spacing, with stepped seats, shoulders and removable end retention. Coupling retains 6 mm shaft bore with radial fastening. Geometric pitch −22/+40 and roll ±18 hard-stop slots act independently of software.
+Trial M2 insert pockets: 3.2 mm diameter, 3 mm depth, open through the receiver faces; visible M2 retained; exact insert SKU/thermal fit unselected. Internal removable joints use explicit screw clearance and insert seats. Bearing pair remains Ø16 × 6 at X−43/−65, 22 spacing, with stepped seats, shoulders and removable end retention. Coupling retains 6 mm shaft bore with radial fastening. Geometric pitch −22/+40 and roll ±18 hard-stop slots act independently of software.
 
-C2 rear-removable tray, upper USB installed plug and withdrawal corridors, BOOT/RESET access; camera, servo mounts, bearing cartridge independently removable. No shroud. Optical overlay uses 102° horizontal field with conservative corner coverage and a stated pupil assumption; check actual plastic intersections.
+C2 rear-removable tray with PCB edge/top keepers, upper USB installed plug and withdrawal corridors, BOOT/RESET access; camera PCB edge clamp, servo mounts, bearing cartridge independently removable. No shroud. Optical overlay uses 102° horizontal field with conservative corner coverage and a stated pupil assumption; check actual plastic intersections.
 
 Separate physical, physics, harness, annotations occurrence groups. Pose switches act by named frame groups. Dimensions and triads share one measurement function. Physical/physics/harness on, annotations off. Trial branch diameters and straight exits are geometric assumptions; unresolved joint bends stop at named keep-outs. Existing M006/M020 mass allowances remain single-counted until cable SKUs are weighed.
 

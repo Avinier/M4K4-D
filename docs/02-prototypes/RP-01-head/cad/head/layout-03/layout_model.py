@@ -103,6 +103,39 @@ def clean_catalog(path):
             solids.append(s)
     return Compound(label=path.stem,children=solids)
 
+# Imported Module 3 Wide groups after the existing Y−90 placement, mm.
+# PCB X −10.775…−10.104 × Y±12.5 × Z77…100.862; lens toward +X; shield/components −X.
+CAMERA_PCB_X=(-10.775,-10.104)
+
+def camera_fit_proxy():
+    """One-solid conservative groups matching the imported camera, with empty Y-edge rims.
+
+    The old 12.4 mm box occupied the air behind the PCB and forbade an edge clamp.
+    """
+    z0,z1=CAMERA_BOTTOM,CAMERA_BOTTOM+23.862
+    pcb=block(*CAMERA_PCB_X,-12.5,12.5,z0,z1)
+    lens=block(-10.25,-2,-6,6,84,98)
+    shield=block(-13.4,-10.70,-11.46,11.46,93.95,100.50)
+    comps=block(-12.6,-10.70,-10,10,78,88.3)
+    return pcb+lens+shield+comps
+
+def camera_edge_clamp():
+    """Rear-access U with CSI window, pad to the rear shield, and PCB Y-edge C-channels.
+
+    Side hooks sit in the empty 1 mm board rim outside the rear shield and lens.
+    Lower centre stays open for the CSI exit. Nominal 0.12–0.15 mm seating gaps.
+    """
+    back=block(-17,-14.8,-15,15,76,102)-block(-18,-14,-12.9,12.9,76,88.8)
+    pad=block(-14.9,-13.50,-11.35,11.35,94.05,100.40)
+    clamp=back+pad
+    for y0,y1 in [(12.65,15.0),(-15.0,-12.65)]:
+        clamp=clamp+block(-14.9,-9.80,y0,y1,88.8,102.0)
+    for y0,y1 in [(11.75,15.0),(-15.0,-11.75)]:
+        clamp=clamp+block(-11.02,-10.92,y0,y1,88.8,100.76)
+        clamp=clamp+block(-9.95,-9.80,y0,y1,88.8,100.76)
+        clamp=clamp+block(-10.90,-9.95,y0,y1,100.96,102.0)
+    return clamp
+
 def build_parts(catalog=True,reliefs=True):
     out={}
     def add(n,s,f,color='#e3ddc9',kind='physical',alpha=1,owner=None):
@@ -169,17 +202,15 @@ def build_parts(catalog=True,reliefs=True):
     add('display_connector_and_flashing_access_reserve',block(-18,-14.4,-53.05,53.05,6,74),'R','#49adbe','reserve',.25)
     if catalog:
         camera=clean_catalog(CATALOG/'camera-module-3-wide.step').rotate(Axis.Y,-90).moved(Location((-10.805,-12.5,CAMERA_BOTTOM)))
-    else:camera=block(-14.4,-2,-12.5,12.5,CAMERA_BOTTOM,CAMERA_BOTTOM+24)
+    else:camera=camera_fit_proxy()
     add('camera_module_3_wide_1to1',camera,'R','#2d5949',owner='M005')
     add('camera_CSI_exit_and_bend_reserve',block(-24,-14.5,-11,11,75,87),'R','#61a384','reserve',.3)
-    # Separately removable U bracket: top/bottom edge clamp, behind camera PCB.
-    camera_bracket=block(-17,-14.8,-15,15,76,102)-block(-18,-14,-12.9,12.9,78,100)
-    add('removable_camera_edge_bracket_trial',camera_bracket,'R','#8c9e9a',owner='M005')
+    add('removable_camera_edge_bracket_trial',camera_edge_clamp(),'R','#8c9e9a',owner='M005')
     add('addressable_status_LED_package_reserve',block(-8,-5,LED_Y-2.5,LED_Y+2.5,LED_Z-2.5,LED_Z+2.5),'R','#d3922d','reserve',.7,owner='M007')
     add('crown_status_light_diffuser',axial(1.7,2.9,(-3.55,LED_Y,LED_Z)),'R','#e4b35b',owner='M007')
     # C2 footprint is exact; installed height/USB socket are clearly reserved.
     add('C2_ESP32_S3_Zero_23_5x18_footprint',block(-26.6,-25,-38,-20,28,51.5),'R','#67559a',owner='M008')
-    add('C2_installed_components_reserve',block(-34,-26.6,-38,-20,28,51.5),'R','#a58ac4','reserve',.35)
+    add('C2_installed_components_reserve',block(-34,-26.6,-37,-21,28,51.5),'R','#a58ac4','reserve',.35)
     add('C2_USB_C_withdrawal_BOOT_RESET_service_reserve',block(-33,-24,-35,-23,51.5,81.5),'R','#a58ac4','reserve',.18)
     # One connected rolling cradle: perimeter rails + cross + 4 flange struts.
     cradle=prism(116,2.5,76,8,-23.5,-21)-prism(110,5.5,73,6,-24,-20)
