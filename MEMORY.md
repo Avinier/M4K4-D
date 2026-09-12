@@ -308,3 +308,27 @@ The first Layout 03 stern (122 × 82 mm) was a conservative keep-the-hardware ch
 **Type / Status / Clarifies / Governs:** CHANGE + VALIDATION / CURRENT FOR LAYOUT 03 / MEM-20260909-07, HEAD-CAD-01, HEAD-CAD-09 / `layout-03/review/verification.md`
 
 The accepted 104 mm packaging is unchanged. The camera bracket now C-channels the Module 3 PCB and sits 0.10 mm from the imported rear shield; the C2 tray gains rear-edge jaws and USB-end corner caps so the board lifts with the tray; front/rear Ø3.2 insert pockets open through the receiver faces. Display, servo-SKU, shaft and harness retention remain open. Not a fabrication release.
+
+---
+
+## Era 8 — Cross-document reconciliation (2026-09-12)
+
+### MEM-20260912-01 — Duplicate 2026-09-09 ID given a citation alias
+**Type / Status / Clarifies:** CORRECTION / CURRENT / the two preserved `MEM-20260909-05` headings above
+
+The first heading retains canonical ID `MEM-20260909-05`. To preserve this append-only log without rewriting history, cite the second occurrence as **`MEM-20260909-05B`**. Both record the same builder direction; neither creates an additional design decision.
+
+### MEM-20260912-02 — Layout 03 is the current RP-01 planning baseline
+**Type / Status / Supersedes / Governs:** CHANGE + VALIDATION / CURRENT / the Layout 02 and 95 mm planning baselines / `dimensional-baseline.md` v1.10, RP-01 Layout 03
+
+Current head planning geometry is **104 H × 150 W × 115 D mm**, with an 86 × 130 × 115 mm main core and a provisional 304 mm robot stack. Layout 03 provides the current D/E mass tree: approximately **362/436/509 g roll/pitch/yaw** at nominal M008=20 g, with approximately **499–524 g complete** across M008=10/20/35 g. Its two 23 g XC330-size servo references must be replaced for each actuator candidate. No physical mass or fabrication gate was promoted.
+
+### MEM-20260912-03 — M008 uncertainty remains physical, not architectural
+**Type / Status / Clarifies / Governs:** DECISION + CORRECTION / CURRENT / MEM-20260907-04 and Layout 03 analytical use / RP-01 mass, physics, rig and gates
+
+C2 architecture and module are selected, but installed M008 mass remains `U`. Use 20 g only as the nominal analytical E case and retain the 10/20/35 g sensitivity until the complete installed assembly is weighed. This is not a reopened C1/C2 fork.
+
+### MEM-20260912-04 — RP-02 draft consistency repair
+**Type / Status / Governs:** CORRECTION / CURRENT / RP-02 draft contracts and ledgers
+
+The proposed MD-01 rows now total exactly 20 minutes. S13 is a transient-overlap anchor and does not replace state-specific sustained runs. The serial link now transports the complete offset/rate/reference/uncertainty time model. Heartbeat failure must initiate BRAKE within one control tick after timeout; reaching rest follows the registered bounded BRAKE trajectory. All values remain draft and unregistered.

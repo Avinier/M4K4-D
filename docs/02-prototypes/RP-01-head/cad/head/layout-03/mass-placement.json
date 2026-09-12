@@ -1,5 +1,5 @@
 {
-  "method": "CAD-volume PLA at 1.24 g/cm3 + listed D/E allowances. A0 iterated around this estimate. Uniform geometry/box intrinsic inertia and parallel-axis terms; NOT measured mass, torque or servo approval.",
+  "method": "CAD-volume PLA at 1.24 g/cm3 + listed D/E allowances. C2 hardware is selected but M008 installed mass remains U. A0 is solved around the nominal 20 g E case; 10/20/35 g sensitivity cases remain until the complete M008 assembly is weighed. Uniform geometry/box intrinsic inertia and parallel-axis terms; NOT measured mass, torque or servo approval.",
   "axes": {
     "roll_y": -1.1053356325240153,
     "roll_z": 46.9191299433943,
@@ -28,16 +28,16 @@
       "owner": "M019a",
       "name": "main_octagonal_skin",
       "frame": "R",
-      "mass_g": 47.0569033401821,
+      "mass_g": 47.09828992886019,
       "center_mm": [
-        -61.91388296289476,
-        -0.07779432022064059,
-        49.97740026942728
+        -61.90317145684508,
+        -0.07772593716300817,
+        49.976541601525334
       ],
       "intrinsic_diagonal_g_mm2": [
-        141352.91249402383,
-        103851.68808861627,
-        135563.0756292063
+        141475.07397378638,
+        103972.61515527092,
+        135757.28118824709
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -676,9 +676,9 @@
       "frame": "R",
       "mass_g": 29,
       "center_mm": [
-        -57.03840693868152,
-        -0.09608636628960196,
-        50.42889451823955
+        -57.03513016356248,
+        -0.09604330833224768,
+        50.428254482934314
       ],
       "intrinsic_diagonal_g_mm2": [
         58715.333333333336,
@@ -693,9 +693,9 @@
       "frame": "R",
       "mass_g": 10,
       "center_mm": [
-        -57.03840693868152,
-        -0.09608636628960196,
-        50.42889451823955
+        -57.03513016356248,
+        -0.09604330833224768,
+        50.428254482934314
       ],
       "intrinsic_diagonal_g_mm2": [
         12416.666666666666,
@@ -791,9 +791,9 @@
     },
     {
       "owner": "M008",
-      "name": "C2 installed scenario",
+      "name": "C2 installed allowance",
       "frame": "R",
-      "mass_g": 20,
+      "mass_g": 20.0,
       "center_mm": [
         -29.5,
         -29,
@@ -1045,103 +1045,134 @@
       "basis": "D/E allocation; uniform bounding-box inertia approximation"
     }
   ],
+  "working": {
+    "c2_g": 20.0,
+    "roll": {
+      "mass_g": 362.00345278133335,
+      "center_mm": [
+        -31.514513053627635,
+        -1.1056520103765075,
+        46.92028018119339
+      ],
+      "estimated_inertia_kg_m2": 0.0006565493870131483
+    },
+    "pitch": {
+      "mass_g": 436.39634151164717,
+      "center_mm": [
+        -37.965391875887434,
+        -0.9865984221558034,
+        45.55550498336188
+      ],
+      "estimated_inertia_kg_m2": 0.0007282124893036282
+    },
+    "yaw": {
+      "mass_g": 509.03793156753756,
+      "center_mm": [
+        -39.55188359184538,
+        0.7458558252366899,
+        40.295971393290785
+      ],
+      "estimated_inertia_kg_m2": 0.0010797259590051168
+    }
+  },
   "scenarios": [
     {
-      "c2_g": 10,
+      "c2_g": 10.0,
       "roll": {
-        "mass_g": 351.96206619265524,
+        "mass_g": 352.00345278133335,
         "center_mm": [
-          -31.56997156475659,
-          -0.31324831925054203,
-          47.12382962043264
+          -31.57174297673521,
+          -0.3132067156153897,
+          47.12397932461195
         ],
-        "estimated_inertia_kg_m2": 0.0006474019116912402
+        "estimated_inertia_kg_m2": 0.0006475240914366209
       },
       "pitch": {
-        "mass_g": 426.35495492296906,
+        "mass_g": 426.39634151164717,
         "center_mm": [
-          -38.16310286595009,
-          -0.3296540140813627,
-          45.6913951499237
+          -38.16392528369942,
+          -0.329618076627229,
+          45.6916577693539
         ],
-        "estimated_inertia_kg_m2": 0.0007265156616605459
+        "estimated_inertia_kg_m2": 0.0007266315018919615
       },
       "yaw": {
-        "mass_g": 498.99654497885945,
+        "mass_g": 499.03793156753756,
         "center_mm": [
-          -39.752737962289686,
-          1.3420277813959125,
-          40.30624087478612
+          -39.753308833415126,
+          1.3419198505063004,
+          40.30691187213527
         ],
-        "estimated_inertia_kg_m2": 0.0010700730667212537
+        "estimated_inertia_kg_m2": 0.001070261976042493
       }
     },
     {
-      "c2_g": 20,
+      "c2_g": 20.0,
       "roll": {
-        "mass_g": 361.96206619265524,
+        "mass_g": 362.00345278133335,
         "center_mm": [
-          -31.51278403716482,
-          -1.1057830724774413,
-          46.92011132204865
+          -31.514513053627635,
+          -1.1056520103765075,
+          46.92028018119339
         ],
-        "estimated_inertia_kg_m2": 0.0006564272072677675
+        "estimated_inertia_kg_m2": 0.0006565493870131483
       },
       "pitch": {
-        "mass_g": 436.35495492296906,
+        "mass_g": 436.39634151164717,
         "center_mm": [
-          -37.96456947545658,
-          -0.9866958480850555,
-          45.555235468845424
+          -37.965391875887434,
+          -0.9865984221558034,
+          45.55550498336188
         ],
-        "estimated_inertia_kg_m2": 0.0007280966490722127
+        "estimated_inertia_kg_m2": 0.0007282124893036282
       },
       "yaw": {
-        "mass_g": 508.99654497885945,
+        "mass_g": 509.03793156753756,
         "center_mm": [
-          -39.551307558420916,
-          0.7459131696030932,
-          40.2953126891182
+          -39.55188359184538,
+          0.7458558252366899,
+          40.295971393290785
         ],
-        "estimated_inertia_kg_m2": 0.0010795370496838772
+        "estimated_inertia_kg_m2": 0.0010797259590051168
       }
     },
     {
-      "c2_g": 35,
+      "c2_g": 35.0,
       "roll": {
-        "mass_g": 376.96206619265524,
+        "mass_g": 377.00345278133335,
         "center_mm": [
-          -31.432691732752307,
-          -2.215744236842979,
-          46.63479967009117
+          -31.43436074843922,
+          -2.2154965403337394,
+          46.634993131633436
         ],
-        "estimated_inertia_kg_m2": 0.0006699651506325586
+        "estimated_inertia_kg_m2": 0.0006700873303779394
       },
       "pitch": {
-        "mass_g": 451.35495492296906,
+        "mass_g": 451.39634151164717,
         "center_mm": [
-          -37.683264172951326,
-          -1.9176694813543258,
-          45.36230852502237
+          -37.68408503650749,
+          -1.9174899359427415,
+          45.36258677215351
         ],
-        "estimated_inertia_kg_m2": 0.0007304681301897128
+        "estimated_inertia_kg_m2": 0.0007305839704211284
       },
       "yaw": {
-        "mass_g": 523.9965449788594,
+        "mass_g": 524.0379315675376,
         "center_mm": [
-          -39.26357739145503,
-          -0.10559759286204431,
-          40.279702490129
+          -39.26415966043709,
+          -0.105586046621485,
+          40.28034357246708
         ],
-        "estimated_inertia_kg_m2": 0.0010937330241278132
+        "estimated_inertia_kg_m2": 0.0010939219334490523
       }
     }
   ],
   "visible_M2_count": 18,
   "notes": [
-    "Display 133 g already includes 15 g retention; camera 10 g includes bracket; C2 and LED installed allowances include their mounts. Do not add modeled visual envelopes again.",
+    "Display 133 g already includes 15 g retention; camera 10 g includes bracket; nominal C2 20 g E and LED installed allowances include their mounts. Do not add modeled visual envelopes again.",
+    "M008 remains U in the physical mass register. The sensitivity cases are analytical inputs only and do not constitute W evidence.",
     "M012 includes the modeled yaw bridge; bearing rows own shaft/trunnion metal.",
     "Old M019c=148 g and CROWN=6 g replaced by current skin/ear geometry +29 g finish +10 g misc; no double counting.",
-    "Density uses solid CAD walls/ribs. Print process, insert choice, finish and actual modules must be weighed before actuator freeze."
+    "Density uses solid CAD walls/ribs. Print process, insert choice, finish, candidate-specific servo mass and actual modules must be weighed/recalculated before actuator freeze."
   ]
 }

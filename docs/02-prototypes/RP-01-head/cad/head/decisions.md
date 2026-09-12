@@ -1,6 +1,6 @@
 # Head CAD decisions
 
-Recorded: **2026-09-07**. Revised: **2026-09-09**. Scope: **first RP-01 head layout, including the Layout 03 pass direction**.
+Recorded: **2026-09-07**. Revised: **2026-09-12**. Scope: **RP-01 Layout 03 planning architecture and retained hardware-specific gaps**.
 
 This is the current record of the head fitting discussion. **Fixed for first layout** means use the choice when laying out the head; it does not mean the mechanism has passed RP-01, an actuator has been selected, or manufacturing dimensions have been frozen. Estimates remain in [packaging-estimates.md](packaging-estimates.md), and inherited geometric requirements remain in [requirements.md](requirements.md).
 
@@ -85,7 +85,7 @@ Use this crown to provide camera packaging space above the main roofline. This s
 
 The visual continuity does not require an extra permanent assembly joint or prevent the existing removable front-carrier/service arrangement. The crown and camera remain part of the rolling head and follow all three axes with the face.
 
-**Shape direction is locked; dimensions remain open:** crown height, width, depth, shoulder angles, edge treatment, wall thickness and camera mounting coordinates will be established in the layout. The decision authorizes the local upward extension; the resulting complete-head height, including the crown, must be reported explicitly against the earlier 95 mm nominal / 90–100 mm height band. Do not claim that the crown already fits that band, or silently treat it as outside the measured head envelope. Propagate the resulting dimensions when known.
+**Shape direction is locked; Layout 03 establishes the planning dimensions:** 104 mm crown-inclusive height, 150 mm width and 115 mm depth. The earlier 95 mm nominal / 90–100 mm band is superseded by dimensional baseline v1.10. Manufacturing tolerances and integrated RP-06 fit remain open.
 
 Check lens field-of-view clearance, camera connector access, display clearance and the crown's swept envelope. Revise the shell/finish and camera-mount mass estimates and per-axis mass properties from the resulting geometry; the existing approximately 490 g pre-M008 model does not establish the revised crown-equipped head's mass.
 
@@ -127,7 +127,7 @@ Default open state: physical, physics and harness visible; annotations hidden. O
 
 ## What is still open
 
-**Current revision, 2026-09-08:** [Layout 02](layout-02/README.md) implements HEAD-CAD-08 with an **86 mm main roof, 102 mm crown-inclusive head, 130 mm core width, 150 mm complete width, 115 mm depth and Ø60 mm hollow rolling ears**. Bezel and crown are one part; the light reserve fits entirely in the crown. The 99 × 58 mm opening uses 3 mm clips outside the active image. It adds real screw/well/boss geometry, connected cradle and frame supports, a revised C2 footprint/service direction, and a new provisional mass/A0 tree. Ear/skin openings are packaging-clearance reliefs. These dimensions are recorded in system baseline v1.9. A per-part bounding-box log was added on 2026-09-09 at [layout-02/dimensions.md](layout-02/dimensions.md).
+**Superseded Layout 02 revision, 2026-09-08:** [Layout 02](layout-02/README.md) implemented HEAD-CAD-08 with an **86 mm main roof, 102 mm crown-inclusive head, 130 mm core width, 150 mm complete width, 115 mm depth and Ø60 mm hollow rolling ears**. Bezel and crown were one part; the light reserve fit entirely in the crown. The 99 × 58 mm opening used 3 mm clips outside the active image. It added real screw/well/boss geometry, connected cradle and frame supports, a revised C2 footprint/service direction, and a provisional mass/A0 tree. These historical dimensions are recorded in baseline v1.9; Layout 03 and baseline v1.10 now govern. A per-part bounding-box log was added on 2026-09-09 at [layout-02/dimensions.md](layout-02/dimensions.md).
 
 **Current CAD pass, 2026-09-10:** [Layout 03](layout-03/README.md) packaging is the accepted direction (104 mm stern, 3 mm camera gap, A0). Camera PCB clamp, C2 tray keepers and through-face insert pockets are modelled; see [verification](layout-03/review/verification.md). Display/servo/shaft retention and harness flex remain open. Concept A only.
 
@@ -150,7 +150,7 @@ Default open state: physical, physics and harness visible; annotations hidden. O
 | Camera–display gap | Layout 03: **3 mm** board-to-board; report crown height vs 102 mm |
 | C2 mount, flashing access and pin assignment | Layout 03: removable Zero tray, CAD-04a USB/BOOT path; keep E-stop/fault off GPIO0/3/45/46 and GPIO21 |
 
-The approximately **490 g pre-M008 planning lower bound** already includes provisional mechanism masses. Replace those allowances with boundary-owned parts; do not add the full mechanism again. It is neither measured mass nor the payload of every individual axis. Existing component masses, envelopes, candidate pivots and the proposed internal arrangement are collected in the [pre-layout brief](pre-layout-brief.md); the project is not starting from an empty mass or fit model.
+The historical approximately **490 g pre-M008 spreadsheet** already included provisional mechanism masses. Layout 03 supersedes it with a nominal ~362/436/509 g per-axis tree at M008=20 g while retaining M008 sensitivity. Replace reference allowances with candidate-specific boundary-owned parts; do not add the full mechanism again. Neither model is measured mass or the payload of every individual axis.
 
 ## Revision rule
 

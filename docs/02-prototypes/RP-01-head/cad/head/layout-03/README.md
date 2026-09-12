@@ -35,6 +35,8 @@ The harness group contains separate CSI, display, servo bus, C2, LED and yaw-loo
 
 Existing M006/M020 cable allowances are retained once in the mass ledger. Jacket solids and reserves add no second full cable mass. The volume-based shell/frame rows are recalculated, while installed camera/C2/module allowances continue to include their small mounts.
 
+The current mass artifact uses **M008=20 g as a nominal E case** and retains **10/20/35 g sensitivity**, producing approximately **362/436/509 g roll/pitch/yaw nominal** and **499–524 g complete** across the sensitivity. M008 remains physically `U`. Two 23 g XC330-size servo reference packages are embedded in the nominal tree and must be replaced with each candidate's mass and envelope before actuator selection.
+
 ## Service sequence
 
 1. Power off and support the head. Remove the four rear-cover screws. C2 BOOT/RESET tool access and upward USB plug/withdrawal reserves are then exposed. Remove the two tray screws and disconnect its local harness, lift the tray 27 mm in +Z into the upper service space, then withdraw rearward (−X). The PCB stays in the tray (edge jaws and corner caps). The sideways route was rejected because it hits the pitch frame.

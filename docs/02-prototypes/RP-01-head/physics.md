@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Kinematic inputs and preliminary head-load baseline authored; final torque/inertia work remains blocked on CAD mass properties and candidate axis placements |
+| Status | **Layout 03 paper-physics inputs available; candidate servo screening is ready.** Final actuator freeze remains blocked on candidate-specific iteration, physical mass, torque-speed, RMS/thermal, cable, hysteresis and modal evidence |
 | Inputs | `storyboard.md` ranges and kinematic sizing cases; `../../01-system/dimensional-baseline.md`; `material-finish-mass-decision.md`; `payload-mass-capture.md`; CAD m, CoM and inertia tensor; candidate axis placements |
 | Method | `docs/intuition.md` §5.1 step 3; worked analogue: the Adam head paper |
 
@@ -39,20 +39,20 @@ Current proposed best-case usable travel is pitch `-22°…+40°`, yaw `±55°`,
 
 ## Preliminary physical load baseline
 
-**Layout 02 update, 2026-09-08:** the [CAD mass tree](cad/head/layout-02/mass-placement.json) now supplies provisional D/E spatial estimates: approximately 371 g roll, 443 g pitch and 515 g complete/yaw-carried mass with the 20 g M008 scenario. The [layout report](cad/head/layout-02/README.md) records A0 coordinates and estimated inertias. These supersede the historical planning allocation within that CAD study; final trajectory torque, thermal acceptance and measured mass validation remain open. The historical mass rows below retain their original assumptions for audit.
+**Layout 03 working tree, reconciled 2026-09-12:** C2 is selected (Waveshare ESP32-S3-Zero on the rolling cradle), so there is no C1/C2 architecture fork. Its complete installed M008 mass remains `U`. The [Layout 03 mass tree](cad/head/layout-03/mass-placement.json) uses **20 g E as the nominal analytical case**: approximately **362 g roll, 436 g pitch, 509 g yaw/complete**, while retaining the **10/20/35 g** sensitivity cases until M008 is weighed. Nested membership is R ⊂ RP ⊂ RPY. Layout 02 (~371/443/515 g) remains history. Trajectory torque, thermal acceptance and all `W` mass remain open.
 
 | Input | Current value | How RP-01 uses it |
 |---|---:|---|
-| Complete moving-head envelope | **102 H × 150 W × 115 D mm**, crown/ears included; main core **86 H × 130 W × 115 D mm** | Layout 02 working geometry per dimensional baseline v1.9; replaces the earlier 95 mm nominal/90–100 mm height band. Manufacturing and body integration remain open. |
+| Complete moving-head envelope | **104 H × 150 W × 115 D mm**, crown/ears included; main core **86 H × 130 W × 115 D mm** | Layout 03 working geometry; crown is 104 mm. Manufacturing and body integration remain open. |
 | Neck allocation | **60 mm vertical** | Packaging boundary for yaw + pitch + roll; actuators may intrude into body/head |
-| Moving-head mass | **~490 g pre-M008 lower bound at 1.2 mm PLA; ~472 g + M008 at 1.0 mm walls** | `E` planning build-up from `material-finish-mass-decision.md`; add the required C2 controller once selected, then replace row-by-row with `W` evidence |
+| Moving-head mass | **~362 / 436 / 509 g** roll / pitch / yaw (nominal 20 g C2 E); complete-yaw sensitivity **~499–524 g** for M008=10–35 g | Layout 03 D/E tree. Spreadsheet ~490 g was complete-head before C2; this tree already includes its nominal C2 allowance and two 23 g XC330-size reference packages. Recalculate per servo candidate and replace row-by-row with `W` evidence |
 | Historical system target | **~250 g — obsolete for RP-01 sizing** | Retained for audit history only; dimensional/mass baselines now carry the revised lower bound |
 | Preliminary head inertia | **~0.001 kg·m² — invalidated as a sizing input** | Recompute from revised per-axis geometry; mass alone is insufficient |
 | Preliminary neck peak torque | **~0.2 N·m — invalidated as a sizing input** | Historical sanity check only, not a per-axis threshold |
 
-The moving load includes the selected no-touch Waveshare ESP32-S3-LCD-4.3 SKU 30493 and selected visible-light Raspberry Pi Camera Module 3 Wide SC0874 at their measured module/installed masses, the finished PLA shell, moving structure, required brackets, interfaces, bearings, actuators/outputs, visible and structural fasteners, and local wiring. It excludes the four body-mounted microphones, body-mounted speaker, battery, primary body electronics, Nano 33 BLE Sense and any bench-only IMU. The display's integrated ESP32-S3 is already part of M001/M002; M008 always owns the selected C2 architecture's separate ESP32-S3 motion module, mount, connectors and assigned local harness.
+The moving load represents the selected no-touch Waveshare ESP32-S3-LCD-4.3 SKU 30493 and selected visible-light Raspberry Pi Camera Module 3 Wide SC0874 using **provisional D/E module and installed allowances, not measured W masses**, together with the estimated finished PLA shell, moving structure, brackets, interfaces, bearings, actuator references/outputs, fasteners and local wiring. It excludes the four body-mounted microphones, body-mounted speaker, battery, primary body electronics, Nano 33 BLE Sense and any bench-only IMU. The display's integrated ESP32-S3 is already part of M001/M002; M008 always owns the selected C2 architecture's separate ESP32-S3 motion module, mount, connectors and assigned local harness.
 
-Before actuator selection, replace the provisional rows with the registered per-axis mass tree and CAD-derived `J_com`, record each component/assembly CoM, apply the parallel-axis theorem for each candidate axis, and calculate dynamic plus gravity torque at the controlling storyboard cases. Register `m_yaw` as everything downstream of yaw, `m_pitch` as everything downstream of pitch, and `m_roll` as the roll cradle and its payload. Include moving actuators, bearing portions, yokes, fasteners, finish and harness segments according to their physical mounting boundaries.
+Before actuator selection, use the current per-axis tree as the screening baseline, then replace its XC330-size reference masses and envelopes with each candidate servo's values and rerun CoM/inertia. Calculate dynamic plus gravity torque at the controlling storyboard cases. `m_yaw` is everything downstream of yaw, `m_pitch` everything downstream of pitch, and `m_roll` the roll cradle and its payload. Include moving actuators, bearing portions, yokes, fasteners, finish and harness segments according to their physical mounting boundaries. Physical acceptance still requires the parallel `W` register and an as-built rerun.
 
 The authored speeds and accelerations in `storyboard.md` remain motion requirements; they are not reduced merely because the head became heavier. What is invalidated is any actuator/load conclusion based on the old mass and inertia. Dynamic torque does not simply double with mass because the revised shell, display, structure and actuators change both `J_com` and axis offsets. Recompute the actual inertia tensor and torque-speed operating points.
 
@@ -80,7 +80,7 @@ These are sensitivity points, not a frozen mechanism specification. The calculat
 
 `component blockout → initial CoM → axis candidate → mechanism mass → revised CoM → torque/RMS comparison`.
 
-For the `490 g` **pre-M008 lower-bound** sensitivity case, A1 (`x=+5 mm`, `z=0`) gives approximately `0.0240 N·m` at neutral, `0.0223 N·m` at `-22°`, and `0.0184 N·m` at `+40°`. The required C2 controller increases the real downstream result. These values scale only the simple gravity term and must not be reported as actuator torque. Final sizing uses the registered downstream mass and inertia for each axis rather than applying the complete-head mass blindly to pitch or roll.
+For provenance, the historical `490 g` **pre-M008 complete-head** sensitivity case gave A1 (`x=+5 mm`, `z=0`) approximately `0.0240 N·m` at neutral, `0.0223 N·m` at `-22°`, and `0.0184 N·m` at `+40°`. It is not the current pitch load and must not be used for selection. Final sizing uses the candidate-specific Layout 03 downstream mass and inertia for each axis rather than applying complete-head mass blindly to pitch or roll.
 
 A small persistent load may keep a gearbox on one tooth flank, but preload is a measured mitigation rather than evidence that backlash is gone. If testing justifies departing from the initial A0 target, evaluate a small fore–aft pitch offset that retains one torque sign across the usable range. Keep roll close to balance and evaluate a low-rate torsion/elastic bias only if reversal testing warrants it; avoid an arbitrary lateral mass imbalance.
 
@@ -132,4 +132,4 @@ Every number carries its assumption. A cell without a source is a guess wearing 
 
 ## Results
 
-Physical installed-mass evidence is captured in `payload-mass-capture.md`. The per-axis mass tree and CAD-derived CoM/inertia results remain open until that register and the selected mechanism architecture provide the required membership and geometry.
+Physical installed-mass evidence is captured in `payload-mass-capture.md`. Layout 03 now supplies the provisional per-axis membership, CoM and inertia needed for candidate screening. These remain `D/E` planning results—not accepted physical evidence—and must be recalculated for each servo candidate, then replaced by the as-built `W` tree before actuator freeze.

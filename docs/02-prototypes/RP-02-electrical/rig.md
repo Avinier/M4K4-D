@@ -5,7 +5,7 @@
 | Status | Not built. Design proposed; blocked on `workbench.md` tool arrival for anything powered, on RP-01 servo selection for Phase B, on the battery gate for Phase C |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Authority | `../../01-system/workbench.md` scored-test gate, PSU rule, E-stop rule, battery gate; `../../01-system/risk-prototype-plan.md` v1.10 §RP-02 rig and measurements |
+| Authority | `../../01-system/workbench.md` scored-test gate, PSU rule, E-stop rule, battery gate; `../../01-system/risk-prototype-plan.md` v1.11 §RP-02 rig and measurements |
 | Design it realises | `power-architecture.md` §1 two-domain tree, on a bench, ugly |
 | Instrument rule | `workbench.md` item 6: an instrument on the bench must resolve the gate's threshold or the run is exploratory |
 

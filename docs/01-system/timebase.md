@@ -3,11 +3,11 @@
 | Field | Value |
 |---|---|
 | Status | **Strategy documented; not implemented; not validated.** Validation is RP02-G05; RP-01's first scored run depends on it |
-| Version | 0.1 |
+| Version | 0.2 |
 | Owner | Project builder |
-| Created | 2026-09-08 |
-| Governed by | `risk-prototype-plan.md` v1.10 §"Continuous sourcing and data workstream" (monotonic event-time strategy deliverable) and §"Open inputs before RP-01 scored testing" |
-| Grounding | `control-topology-options.md` v0.9 §5 (one master, timestamp-at-source, serial offset reconciliation; PTP overkill, NTP too coarse) |
+| Created | 2026-09-08; revised 2026-09-12 |
+| Governed by | `risk-prototype-plan.md` v1.11 §"Continuous sourcing and data workstream" (monotonic event-time strategy deliverable) and §"Open inputs before RP-01 scored testing" |
+| Grounding | `control-topology-options.md` v0.10 §5 (one master, timestamp-at-source, serial offset reconciliation; PTP overkill, NTP too coarse) |
 | Consumes | `docs/02-prototypes/RP-02-electrical/link-contract.md` §4.4 `TIME_SYNC`; `run-record-convention.md` |
 | Feeds | Every scored run's timestamps; RP-02 G05; RP-04 coordination; `subsystem-interfaces.md`; ADR-12 |
 
@@ -27,7 +27,7 @@ The moment there is more than one controller there is more than one clock. Indep
 
 Alternatives considered: making C2 the master (the most stable timer, the source of the safety-critical events) — rejected for V1 because every other producer (camera, audio, cloud round-trips, video) lives on the SBC side and would then need converting; and a GPS/PPS or RTC-disciplined master — unnecessary at Makad's scale. If a base MCU is added, it reconciles to the SBC exactly as C2 does.
 
-Consequence: C2 and the display board each hold `(offset_us, rate_ppm, uncertainty_us, last_sync_ts)` and apply them to their own stamps before transmitting `capture_ts_us`; they also transmit the raw local stamp in debug builds.
+Consequence: C2 and the display board each hold `(offset_at_ref_us, rate_ppb, model_ref_local_us, uncertainty_us, last_sync_ts)` and apply them to their own stamps before transmitting `capture_ts_us`; they also transmit the raw local stamp in debug builds.
 
 ## 3. Offset reconciliation over the serial link
 
@@ -48,7 +48,7 @@ Rules that make this honest on a UART:
 - **Stamp at the hardware edge**, not in application code: on C2, `t2` in the UART RX interrupt for the frame's first byte and `t3` immediately before the TX FIFO write; on the SBC, `t1`/`t4` as close to the syscall as the driver allows. The residual asymmetry is measured in §6, not assumed away.
 - **Filter.** Keep the sample with the smallest `round_trip` in a sliding window (minimum-filter), then fit `offset(t) = a + b·t` over the window to estimate rate. Reject samples whose `round_trip` exceeds 2× the window minimum (a scheduling hiccup on the SBC, not a clock fact).
 - **Rate.** 1–2 Hz sync is enough: at 20 ppm the drift between syncs is ≤ 20 µs, far inside the candidate 1 ms p95 budget, and the rate fit removes most of it anyway.
-- **Report.** The filtered `offset_us`, `rate_ppm`, window minimum `round_trip` and a derived `uncertainty_us` (half the minimum round trip plus fit residual) travel in the next `TIME_SYNC_REQ` and are logged every sync.
+- **Report.** The filtered `offset_at_ref_us`, `rate_ppb`, `model_ref_local_us`, window minimum `round_trip` and a derived `uncertainty_us` (half the minimum round trip plus fit residual) travel in the next `TIME_SYNC_REQ` and are logged every sync. For local stamp `L`, C2 uses `offset(L) = offset_at_ref_us + rate_ppb·(L−model_ref_local_us)/10^9`, then `master_us = L−offset(L)`. `model_valid=0` during bootstrap.
 - **Bootstrap.** Until the first three valid samples, C2 marks time `degraded` and uses local expiry for command validity (`link-contract.md` §5).
 
 ## 4. Rules for producers
@@ -100,3 +100,4 @@ Candidate acceptance (registered in `RP-02-electrical/gates.md` G05): **p95 ≤ 
 | Date | Version | Change |
 |---|---|---|
 | 2026-09-08 | 0.1 | Strategy documented from `control-topology-options.md` §5: SBC `CLOCK_MONOTONIC` master, timestamp-at-source rules per producer, four-timestamp serial reconciliation with minimum-filter and rate fit, status-light video cue, and a logic-analyzer validation method with candidate acceptance for RP02-G05. Not implemented. |
+| 2026-09-12 | 0.2 | Defined the time-model fields and conversion equation carried by link-contract v0.2: offset at a local reference, signed rate in ppb, uncertainty and bootstrap validity. Not implemented or validated. |

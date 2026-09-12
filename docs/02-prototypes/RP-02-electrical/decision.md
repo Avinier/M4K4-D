@@ -4,7 +4,7 @@
 |---|---|
 | Status | **Open — no gate outcome, no ADR closed, no candidate selected** |
 | Created | 2026-09-08 |
-| Revised | 2026-09-08 |
+| Revised | 2026-09-12 |
 | Design question | What compute/controller split, internal link, rail and protection topology, and energy source lets Makad run representative head, drive, display, camera, audio and compute loads concurrently — and with what measured margin? |
 | Gate question | Does that design sustain every registered state and the registered mixed-duty cycle for at least 20 minutes without unsafe motion, unintended reset, rail excursion, data staleness or thermal violation — and does every injected fault produce a bounded state? |
 | Feeds | ADR-03, ADR-06, ADR-12; power/energy, thermal, internal-communication and compute-coexistence budget rows; `subsystem-interfaces.md` |
@@ -19,7 +19,7 @@ Nothing in RP-02 reopens these; RP-02 measures them.
 | CTRL-01…CTRL-06 | ESP32-S3 motion firmware; C2 separate from the display board; C2 = Waveshare ESP32-S3-Zero; bench twin DevKitC-1-N8R8; no runtime head IMU | `../RP-01-head/decision.md` |
 | Display | SKU 30493 renders locally; receives semantic face state | display study; MEM-20260902-01 |
 | Camera | Camera Module 3 Wide SC0874, CSI to the SBC | camera study |
-| Placement | SBC, mics, speaker, battery in the body; battery low and forward of the axle | dimensional baseline v1.9 |
+| Placement | SBC, mics, speaker, battery in the body; battery low and forward of the axle | dimensional baseline v1.10 |
 | E-stop | Motor bus, not logic | `workbench.md` |
 
 ## Gate outcomes

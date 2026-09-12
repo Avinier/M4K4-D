@@ -5,7 +5,8 @@
 | Status | **Proposed — no state is registered.** Registration requires a dated builder approval before the first scored run that cites it |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Authority | `../../01-system/risk-prototype-plan.md` v1.10 §RP-02 ("every registered concurrent state"); `../../01-system/power-energy-ledger.md` coexistence invariant |
+| Revised | 2026-09-12 |
+| Authority | `../../01-system/risk-prototype-plan.md` v1.11 §RP-02 ("every registered concurrent state"); `../../01-system/power-energy-ledger.md` coexistence invariant |
 | Load-group codes | `LG-xx` are defined once in `../../01-system/power-energy-ledger.md` §2 and only referenced here |
 | Character sources | `../RP-01-head/intent.md` HM-00…HM-18; `../../00-foundation/core-interaction-scenarios.md`; `../../01-system/system-design-brief.md` §6 state dimensions |
 
@@ -73,7 +74,7 @@ Expected class per load group: `–` off, `I` idle/quiescent, `A` average workin
 
 | ID | State | Definition | Hazard exposed | Why it is registered |
 |---|---|---|---|---|
-| **S13** | Maximum safe concurrency | The registered worst credible composite: S07 startle **during** S09 playback **during** S10 base reversal, with perception at S11 load and the display transitioning. Composed from registered states; not a new load profile | Everything at once | **The anchor of the G02 invariant.** If S13 passes with margin, the individual states are covered; if it cannot be produced on the rig, that is recorded, not assumed |
+| **S13** | Maximum safe concurrency | The registered worst credible composite: S07 startle **during** S09 playback **during** S10 base reversal, with perception at S11 load and the display transitioning. Composed from registered states; not a new load profile | Everything at once | **The transient anchor of the G02 invariant.** Passing S13 covers only simultaneous peak rail/current behaviour; sustained, thermal, protocol and state-specific behaviours still require their individual states. If S13 cannot be produced on the rig, that is recorded, not assumed |
 | **S14** | Low-energy operation | Energy state `low`: registered inhibitions apply (candidate: base motion inhibited, gesture amplitude reduced, audio level capped) while visible/audible response is retained | Motion after the threshold crossing | SC-TBD-10 reserve and low-battery behaviour; ADR-06 policy |
 | **S16** | Critical / charging | Energy state `critical` (orderly shutdown forced) and `charging` (all hazardous outputs inhibited; display may show state) | Motion while charging | G06 charging path; battery gate; SC-TBD-10 |
 
@@ -84,16 +85,16 @@ CON-10 requires 20 minutes of *representative mixed-duty* operation. Without a f
 | Segment | State | Count / duration | Rationale |
 |---|---|---|---|
 | Quiet idle | S02 | 4 min total, split across the cycle | A droid on a desk spends real time asleep |
-| Attentive idle | S03 | 6 min total | Awake, alive, not performing |
-| Wakes | S04 | 6 events, ~1 s each plus 3 s S05 search after two of them | Scenario 1 repeated; the coexistence case must recur, not happen once |
-| Gesture bursts | S06 | 12 events, ~1–2 s each | Yes/no/laugh/wobble spread through the interactions |
-| Startles | S07 | 2 events | Rare, but the largest head transient must be inside the cycle |
-| Spoken requests | S08 | 4 round-trips | Time, timer, alarm, Spotify start |
+| Attentive idle | S03 | **8 min 34 s total** | Awake, alive, not performing; includes the time needed to make the proposed cycle exactly 20 minutes |
+| Wakes | S04 | 6 events × 1 s, plus 2 searches × 3 s in S05 (**12 s total**) | Scenario 1 repeated; the coexistence case must recur, not happen once |
+| Gesture bursts | S06 | 12 events, **20 s total** | Yes/no/laugh/wobble spread through the interactions |
+| Startles | S07 | 2 events, **1 s total** | Rare, but the largest head transient must be inside the cycle |
+| Spoken requests | S08 | 4 round-trips, **40 s total** | Time, timer, alarm, Spotify start |
 | Music | S09 | 3 min continuous | Sustained audio peak inside the cycle |
 | Base motion | S10 + S11 | 3 min total including 2 come approaches and 1 follow route of ~3 m at ≤0.5 m/s, with ≥6 accelerations/reversals | Scenario 2 |
-| Spin | S12 | 1 event | SC-25 |
-| Shutdown | S15 | 1, at the end | Orderly, on the energy remaining |
-| **Total** | | **≈20 min** with S13 composite produced at least once by overlap | |
+| Spin | S12 | 1 event, **3 s** | SC-25 |
+| Shutdown | S15 | 1, **10 s**, at the end | Orderly, on the energy remaining |
+| **Total** | | **20 min elapsed**; S13 is produced by overlap within the listed time and adds no duration | |
 
 Freeze fields when registered: exact ordering, the overlap that produces S13, servo family and load configuration, and the instrument that logs per-group current at ≥ the transient-resolving rate.
 

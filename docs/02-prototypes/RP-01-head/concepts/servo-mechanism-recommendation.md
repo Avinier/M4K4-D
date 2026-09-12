@@ -1,6 +1,6 @@
 # RP-01 servo mechanism recommendation
 
-Research date: 2026-09-05. Status: **recommended architecture for the next blockout and prototype; not a selected mechanism, registered gate, packaging proof, or actuator selection.**
+Research date: 2026-09-05. Reconciled: 2026-09-12. Status: **architecture selected for RP-01 and modelled in Layout 03; not a registered gate, fabrication release or actuator selection.**
 
 Revision 0.2, 2026-09-05: resolves bearing-cover ownership, makes per-axis mass membership explicit, and specifies the remaining interface, harness and dynamic-analysis work. All load calculations here remain illustrative; no calculated or measured per-axis assembly load has been established.
 
@@ -10,7 +10,7 @@ Build a **bearing-supported serial yaw → pitch → roll gimbal**, with elevate
 
 The decision optimizes for Makad's small reversible expressions, fast pitch/yaw strokes, quiet holds, three powered axes, serviceable printed construction and current packaging. It is an engineering recommendation from the available evidence, not proof of a global optimum. A parallel pitch/roll alternative is specified below so the recommendation can be challenged fairly.
 
-The current [decision register](../decision.md#candidate-register) still marks the final mechanism open and requires a comparison concept. Coaxial direct roll is now the first-layout choice in the CAD register; final drive suitability and actuator selection remain unresolved.
+The current [decision register](../decision.md#candidate-register) selects Concept A for RP-01 and records Concept B as waived. Coaxial direct roll is modelled in Layout 03; final drive suitability and actuator selection remain unresolved.
 
 ## Requirements extracted from the project
 
@@ -20,17 +20,17 @@ Sources: [storyboard](../storyboard.md), [intent](../intent.md), [physics](../ph
 
 | Input | Current evidence |
 |---|---|
-| Complete head | Nominal **95 H × 150 W × 115 D mm**; validation band 90–100 H × 145–155 W × 110–120 D mm |
-| Head core | 95 H × 125–130 W × 110–115 D mm |
+| Complete head | Layout 03 **104 H × 150 W × 115 D mm** planning envelope |
+| Head core | **86 H × 130 W × 115 D mm** |
 | Neck | **60 mm vertical allocation**, approximately 35–45 mm externally visible; intrusion into head/body permitted |
 | Selected display | Module approximately **106.1 × 67.8 mm**; thickness, connectors and service space must be established from the sample |
-| Complete moving assembly | Approximately **490 g + M008** at 1.2 mm PLA; M008 is the required separate C2 motion-controller assembly |
-| Thinner-shell scenario | Approximately 472 g + M008 at 1.0 mm PLA; not a structural recommendation |
+| Complete moving assembly | Layout 03 nominal **~509 g at M008=20 g E**; ~499–524 g across M008=10–35 g |
+| Servo dependency | Nominal tree contains two 23 g XC330-size reference packages; replace them with each candidate's mass/envelope before screening |
 | Accepted measured mass | **Unknown.** M900 and the component measurements are blank |
 
-The 490 g model already includes 133 g installed display, 15 g window/mask, 23 g camera/interconnect/light, 80 g cradle/yoke/yaw interface, 35 g provisional actuator moving hardware, 22 g bearing portions, 148 g finished shell, 15 g harness and 19 g fasteners. Rounded rows total about 490 g. It is not 490 g of bare payload to which the entire mechanism should be added again.
+The historical spreadsheet model included 133 g installed display, 15 g window/mask, 23 g camera/interconnect/light, 80 g cradle/yoke/yaw interface, 35 g provisional actuator moving hardware, 22 g bearing portions, 148 g finished shell, 15 g harness and 19 g fasteners. Its rounded rows totalled about 490 g before M008. It remains useful only for provenance and must not be added to the Layout 03 tree.
 
-However, **the 35 g actuator allowance is not evidence that the moving pitch and roll servo housings will fit that mass**. In this proposed layout their full housings move downstream of yaw and must be counted. Replace that allowance and every other provisional row with actual boundary-owned masses. The final result can exceed 490 g + M008 substantially. Neither a 550 g nor a 650 g finished head can currently be promised.
+Layout 03 instead contains two 23 g XC330-size reference packages. **Those reference masses are not evidence that the selected pitch and roll servo housings will fit or weigh 23 g.** Their full downstream housings and moving outputs must be counted according to the selected architecture. Replace both references and every other provisional row with candidate-specific, then actual boundary-owned masses. Neither a 550 g nor a 650 g finished head can currently be promised.
 
 The old 250 g target, 0.001 kg·m² inertia proxy and 0.2 N·m neck-torque estimate must not be used for selection. This study does not replace them with another guessed sizing inertia.
 
@@ -55,7 +55,7 @@ The old 250 g target, 0.001 kg·m² inertia proxy and 0.2 N·m neck-torque estim
 
 Split M011 into named yaw-yoke and tilting-frame subitems and M019c into main-shell and rolling-ear subitems when constructing the CAD mass tree. Preserve each parent total; do not add the subitems again. Moving the ears from the former yaw-only proposal to the rolling cradle changes pitch/roll membership and inertia, not the existing M900 inventory total by itself. Likewise, M013 owns the roll actuator hardware downstream of yaw even though its housing does not roll. A row named after an actuator axis is not permission to omit its housing from the upstream axes that carry it.
 
-In compact form, `m_pitch = m_roll + pitch-carried non-rolling hardware`, and `m_yaw = m_pitch + yaw-carried non-pitching hardware`, with cable and bearing parts apportioned consistently. All three final values remain **TBD**. Replace the 35 g actuator allowance and the existing structural/bearing allowances with their actual totals; do not add a new 80–120 g mechanism package on top of the unadjusted 490 g ledger. Published or weighed servo mass alone cannot establish the complete installed set.
+In compact form, `m_pitch = m_roll + pitch-carried non-rolling hardware`, and `m_yaw = m_pitch + yaw-carried non-pitching hardware`, with cable and bearing parts apportioned consistently. Layout 03 estimates these as ~362/436/509 g in the nominal reference case; final values remain **TBD**. Replace the reference actuator rows with each candidate's installed totals rather than adding another complete mechanism package on top of the tree. Published or weighed servo mass alone cannot establish the complete installed set.
 
 This table concerns bodies and payload carried by each joint. Motor rotors and internal gears also contribute drive inertia about their driven axes; include those separately when data or identification permits, without counting their physical mass twice in M900.
 
@@ -201,12 +201,12 @@ Balancing removes the relevant gravity lever arm and reduces the parallel-axis t
 
 **Keep backlash mitigation honest.** Begin near balance, with adjustable small offsets. Add light preload only if output tests show a benefit. It will not eliminate dynamic flank changes if inertial/cable torque reverses the total load. Do not introduce a large constant spring load merely to hide unloaded buzz.
 
-## Credible alternatives and why they are not first choice
+## Retained alternatives — reopen only through change control
 
 | Architecture | Concrete arrangement | Benefit | Cost for Makad | Recommendation |
 |---|---|---|---|---|
 | Proposed serial yaw → pitch → roll | Body yaw; supported ear-height pitch; rear roll cartridge | Simple independent axes, short fast-pitch path, straightforward service and calibration | Moving pitch/roll housings; tight side pocket and rear roll support | **First blockout and RP-01 build** |
-| Yaw + parallel pitch/roll | Body-fixed yaw rotates a platform carrying two tilt servos, a central mast and a near-CoM universal joint; two short rigid pushrods attach fore/aft-offset and left/right-offset on the output | Both tilt housings remain upstream of both tilt axes; compact external neck; load sharing | Two rod paths and joints, nonlinear leverage, shared actuator limits, extra calibration and potential reversal error | **Strongest comparison concept** if serial packaging fails |
+| Yaw + parallel pitch/roll | Body-fixed yaw rotates a platform carrying two tilt servos, a central mast and a near-CoM universal joint; two short rigid pushrods attach fore/aft-offset and left/right-offset on the output | Both tilt housings remain upstream of both tilt axes; compact external neck; load sharing | Two rod paths and joints, nonlinear leverage, shared actuator limits, extra calibration and potential reversal error | Documented fallback only; Concept B was waived for RP-01 |
 | Yaw → roll → pitch | Rear roll support rotates a U-yoke with inner double-supported pitch and pitch servo | Familiar gimbal topology; pitch occurs in the rolled local frame | Roll must accelerate the pitch yoke and servo; different gravity/clearance map | Compare if it resolves a real assembly conflict |
 | Three-actuator spherical parallel neck | Three coupled drives orient one output about a common centre | Compact rotational centre and upstream motors possible | Precision transmission, nonlinear kinematics/workspace and fabrication burden | Useful reference, not the first custom build |
 | Low three-servo stack / flexible tendon neck | Pitch/roll axes below the head or compliant neck spine | Easy initial assembly or deliberate compliance | Gravity/inertia penalty, moving stacks or elastic modes oppose fast clean reversals | Poor match to current small-expression requirements |
@@ -224,16 +224,16 @@ Adam is a useful caution when counting motors: it uses three neck servos but onl
 ## Packaging and motion checks that can change the recommendation
 
 1. **Prove the rear roll section.** Place actual display thickness/connectors, camera, front carrier, rolling backplate, spindle, bearings, coupling and servo envelope inside the head depth. Record the CoM-to-bearing overhang and structural deflection at the display. If rear support fails, compare perimeter support or the parallel concept; do not silently lower roll far below CoM.
-2. **Prove the pitch pocket and rolling-shell sweep.** A 130 × 95 mm rectangular cross-section rolls to roughly **153 mm projected width at 18°**, even before stationary supports. This is a conservative rectangular silhouette calculation, not a demonstrated collision of the final shaped head. Side pods/pivots cannot simply be added outside it. The neutral head dimension and its moving swept volume must be distinguished. Check yoke arms, shell cutaways, ear covers, connectors and fasteners through compound poses, not just individual sweeps.
+2. **Prove the pitch pocket and rolling-shell sweep.** Layout 03's 130 × 86 mm main-core rectangular cross-section projects to roughly **150 mm width at 18° roll**, even before stationary supports. This is a conservative rectangular-silhouette calculation, not a demonstrated collision of the final shaped head. Side pods/pivots cannot simply be added outside it. Distinguish the 150 mm neutral complete-head width from the moving swept volume, and check yoke arms, shell cutaways, ear covers, connectors and fasteners through compound poses, not just individual sweeps.
 3. **Balance the correct downstream sets.** Pitch and roll do not have exactly the same CoM because the pitch output includes the roll housing and support. Aim for nearby axis intersections while balancing each assembly; add adjustable mounts or exchangeable spacers before final hole positions. Recalculate the whole-robot CoM after the heavier head is known.
 4. **Preserve the intended coordinate semantics.** In a yaw → pitch → roll chain, holding the roll joint while moving pitch is not automatically a nod about the already-rolled head's local left–right axis. Use rotation matrices/quaternions and the actual forward/inverse kinematics to implement the storyboard's chosen robot-relative or head-local meaning. Recheck actuator peaks if that remapping introduces coupled joint movement.
 5. **Design the harness with the mechanism.** Use the branch and conduit-section requirements above, with M008's mounting frame explicit. One mechanically controlled flex zone per axis; yaw near-axis loop, pitch loop near a pivot, controlled roll loop at the rear. Keep camera CSI separate from power/bus strain relief; avoid unnecessary CSI connectors. Bounded ±55° yaw does not require a slip ring. Apply the current mass baseline to all moving harness hardware.
 6. **Validate output quality under the actual load.** Registered external-output hysteresis/hold tests; representative cable-torque measurements; pitch modal screening ≥30 Hz minimum / ≥40 Hz for unshaped best-case laugh and yaw/roll ≥25/30 Hz; real gesture settling and combined-pose checks. Modal targets are project hypotheses, not guaranteed settling bandwidth. Follow with busy-minute current/temperature, sustained holds, and unpowered support/stop checks. No powered tests were performed for this recommendation.
 
-The actionable next artifact is a **sectioned mass-and-envelope blockout of this serial layout and the parallel comparison**, using actual component envelopes while keeping actuator choices open. If both fit, the serial architecture is preferred for its short pitch drive and simpler reversal behaviour. If the serial design needs a large roll ring, enlarged ear pods or excessive rear depth, re-evaluate the parallel layout from the same mass, stiffness, cable and gesture criteria before selecting hardware.
+The actionable next artifact is the **candidate-specific servo screen on the existing Layout 03 serial blockout**: replace both XC330-size references, rerun mass/CoM/inertia and evaluate trajectory torque-speed, RMS/current/thermal, cable torque, hysteresis and modal evidence. Reopen a retained alternative only if Concept A fails a registered packaging or mechanism gate; doing so requires an explicit change-control entry.
 
 ## Research method and limits
 
 Exa searches were run through agent-reach/mcporter for robot-head gimbals, balancing, spherical/differential mechanisms, Adam, and timing-belt engineering. Only original papers and manufacturer/project documentation support the engineering conclusions above. Exa supplied indexed primary-source excerpts; direct web opens additionally verified the Gremsy balance and Reachy 2023 specification pages. Some direct publisher/wiki opens were unavailable, so those entries rely on the primary-source excerpts rather than claimed full-text inspection. Source designs demonstrate mechanisms and design practices, not Makad-specific performance. All new numerical examples are explicitly illustrative and independently calculated; no FEA, CAD interference proof, servo testing or procurement was performed.
 
-**Calculation status:** the 0.40 kg rear-support example and 0.60 kg pivot-offset example use stated hypothetical loads. They neither apply 490 g to every joint nor constitute final calculations for the actual downstream sets. `m_roll`, `m_pitch`, `m_yaw`, their CoMs/inertia tensors, bearing reactions and trajectory-dependent torque-speed demands must all be produced from the component table before any load capability is claimed. The authored kinematic peaks and illustrative geometry/load arithmetic have been checked; assembly-level dynamics remain open.
+**Calculation status:** the 0.40 kg rear-support example and 0.60 kg pivot-offset example remain illustrative. Layout 03 now supplies provisional `m_roll`, `m_pitch`, `m_yaw`, CoMs and principal-axis inertia estimates, so candidate screening may proceed. Candidate-specific servo substitution, bearing reactions, trajectory torque-speed, cable/friction, RMS/thermal and physical output evidence remain open; no load capability is yet claimed.

@@ -5,8 +5,8 @@
 | Status | **Open — no accepted mass total until physical readings are entered** |
 | Owner | Project builder |
 | Created | 2026-08-30 |
-| Revised | 2026-09-08 |
-| Governing RP-01 model | `material-finish-mass-decision.md`: approximately 490 g **pre-M008 lower bound** at 1.2 mm PLA; the C2 architecture and its module are selected (Waveshare ESP32-S3-Zero, `control-topology-options.md` v0.9 §6.3) and M008 remains unweighed; the system baseline now carries the same lower bound |
+| Revised | 2026-09-12 |
+| Governing RP-01 model | Layout 03: nominal ~362/436/509 g roll/pitch/yaw D/E tree at M008=20 g, with ~499–524 g complete C2 sensitivity. The C2 architecture and Waveshare ESP32-S3-Zero module are selected, but installed M008 mass remains `U`; candidate servo masses/envelopes must replace the two XC330-size references before selection |
 | Feeds | Per-axis mass tree, CoM/inertia model, actuator sizing, representative RP-01 ballast |
 
 ## Purpose and boundary
@@ -40,7 +40,7 @@ The currently published `118 g` display value is therefore not an accepted measu
 
 ## Scale and measurement method
 
-Use a digital scale with **0.1 g resolution or better**. Its capacity, including the tray/fixture, must be at least **2× the largest expected reading**. With the current approximately 490 g model, use at least a 1 kg scale. A 1 g kitchen scale may screen the assembled head but is not adequate for the camera, cable, fastener or adhesive rows.
+Use a digital scale with **0.1 g resolution or better**. Its capacity, including the tray/fixture, must be at least **2× the largest expected reading**. With the current ~499–524 g analytical range before candidate-servo substitution, use at least a 2 kg scale to preserve the 2× rule. A 1 g kitchen scale may screen the assembled head but is not adequate for the camera, cable, fastener or adhesive rows.
 
 Before a measurement session:
 
@@ -110,7 +110,7 @@ Use the head Cartesian frame already adopted by RP-01: origin and final datum re
 
 ## Parallel provisional model
 
-**Layout 02 working spatial model, 2026-09-08:** [mass-placement.json](cad/head/layout-02/mass-placement.json) separately recomputes the revised shell, Ø60 mm ears, cradle and support geometry at PLA density, with explicit D/E module, coating, harness and hardware allowances. It owns the provisional A0 coordinates and inertia estimates for that CAD revision. Its M019 shell/crown and frame quantities replace the corresponding old allowances within that study; never add the new CAD parts on top of the complete table below. M002 retention, M005 bracket and M008 installed mounting already sit inside their respective allowances. No accepted W row or M900 reading is supplied by the CAD study.
+**Layout 03 working spatial model, reconciled 2026-09-12:** [mass-placement.json](cad/head/layout-03/mass-placement.json) separately recomputes the current shell, Ø60 mm rolling ears, cradle and support geometry at PLA density, with explicit D/E module, coating, harness and hardware allowances. It owns the provisional A0 coordinates and inertia estimates for this CAD revision. Its shell/frame quantities replace the corresponding historical spreadsheet allowances within that study; never add the CAD parts on top of the complete table below. M002 retention, M005 bracket and the nominal M008 mounting allowance already sit inside their respective analytical rows. No accepted W row or M900 reading is supplied by the CAD study.
 
 This `D`/`E` model supports pre-purchase physics and actuator screening. It remains permanently separate from the accepted `W` total.
 
@@ -121,7 +121,7 @@ This `D`/`E` model supports pre-purchase physics and actuator screening. It rema
 | M005 | 10 | `E`: camera + retainer |
 | M006 | 8 | `E`: FPC/stiffeners/strain relief |
 | M007 | 5 | `E` |
-| M008 | `U` | Module selected (Waveshare ESP32-S3-Zero); the installed assembly is board + mount + connectors + local harness and remains unweighed, so no defensible mass exists yet. The `layout-01` 10/20/35 g sweep stays a sensitivity scenario, not a planning value |
+| M008 | `U` physically; 20 g nominal `E` in Layout 03 | Module selected (Waveshare ESP32-S3-Zero); installed board + mount + connectors + assigned local harness remains unweighed. Layout 03 retains 10/20/35 g sensitivity around the 20 g nominal analytical case; none is accepted W evidence |
 | M009 | 0 | No runtime RP-01 head IMU; bench IMU excluded |
 | M010 | 25 | `E`: provisional PLA roll cradle |
 | M011 | 35 | `E`: provisional PLA pitch yoke |
@@ -132,9 +132,9 @@ This `D`/`E` model supports pre-purchase physics and actuator screening. It rema
 | M020 | 15 | `E`: moving harness |
 | M021 | 8 | `E`: structural/hidden fasteners |
 | M021a | 11 | `E`: visible M2 button-head set at approximately 0.35 g each; separately owned and tradeable |
-| **Provisional complete head including unknown M008** | **~490 + M008** | Planning-only lower bound; see `material-finish-mass-decision.md` |
+| **Current Layout 03 complete head** | **~509 g nominal; ~499–524 g M008 sensitivity** | Planning-only D/E result using two 23 g XC330-size servo references; recalculate for each candidate. Historical spreadsheet model was ~490 g before M008 |
 
-The corresponding 1.0 mm PLA-wall case is approximately **472 g + M008**. Neither number is accepted `W` evidence.
+The historical 1.0 mm spreadsheet-wall case was approximately **472 g + M008**. It is not the current Layout 03 geometry. Neither historical nor current analytical number is accepted `W` evidence.
 
 ## Roll-up and closure checks
 
@@ -146,7 +146,7 @@ Do not publish a single real payload mass until all rows marked `Yes` have `W` e
 | Complete moving-head cross-check M900 | `TBD g` |
 | Difference: M900 minus row sum | `TBD g` |
 | Difference as percentage of M900 | `TBD %` |
-| Difference from provisional pre-M008 lower bound: `M900 - 490 g` | `TBD g` |
+| Difference from registered Layout 03 comparison case: `M900 - m_layout03,candidate-specific` | `TBD g` |
 | Historical system-target overrun: `M900 - 250 g` | `TBD g` |
 
 Closure requires:

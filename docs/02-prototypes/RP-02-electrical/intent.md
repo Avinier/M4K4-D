@@ -5,8 +5,8 @@
 | Status | Draft — design and gate questions authored; no state, threshold or candidate is registered; no run executed |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Governing plan | `../../01-system/risk-prototype-plan.md` v1.10 §RP-02 |
-| Electrical baseline inherited | `../../01-system/control-topology-options.md` v0.9 (C2 selected, UART/USB link and timebase recommended); `../RP-01-head/decision.md` CTRL-01…CTRL-06; `../../01-system/workbench.md` E-stop and PSU rules |
+| Governing plan | `../../01-system/risk-prototype-plan.md` v1.11 §RP-02 |
+| Electrical baseline inherited | `../../01-system/control-topology-options.md` v0.10 (C2 selected, UART/USB link and timebase recommended); `../RP-01-head/decision.md` CTRL-01…CTRL-06; `../../01-system/workbench.md` E-stop and PSU rules |
 | Ledger | `../../01-system/power-energy-ledger.md` — the canonical power/energy/thermal budget; RP-02 populates it, it does not own a second copy |
 | Feeds | ADR-03 (controller), ADR-06 (battery, rails, charging, isolation, low-energy policy), ADR-12 (internal communication and timebase); `subsystem-interfaces.md` at stage 6 |
 | Method | `../../intuition.md` §5.1 — intent before numbers; step 3 electrical toolkit: peak concurrent current × path resistance, energy integration over the mixed-duty cycle, regulator/driver/wire thermal steady state |
@@ -67,19 +67,19 @@ G02 and G03 changed shape in plan v1.10. See `gates.md` §2 for what RP-02 recor
 
 | Input | Value | Source |
 |---|---|---|
-| Head motion controller | **C2: Waveshare ESP32-S3-Zero**, headerless; bench twin ESP32-S3-DevKitC-1-N8R8; one firmware target, pin map in one header | control study v0.9 §6.3; CTRL-04/06 |
+| Head motion controller | **C2: Waveshare ESP32-S3-Zero**, headerless; bench twin ESP32-S3-DevKitC-1-N8R8; one firmware target, pin map in one header | control study v0.10 §6.3; CTRL-04/06 |
 | C2 responsibilities | Instantiates `MJ5`/`MS7`/`TRACK`/`BRAKE`, synchronizes yaw/pitch/roll, owns servo bus, limits, watchdog, E-stop/fault, command expiry | CTRL-03 |
 | C2 pin constraints | E-stop/fault off GPIO0/3/45/46; GPIO21 is WS2812; native-USB flashing only (CAD-04a) | MEM-20260907-04 |
 | Display | Waveshare ESP32-S3-LCD-4.3 no-touch SKU 30493; own ESP32-S3/LVGL renderer; receives semantic face state, never raster | display study; MEM-20260902-01 |
 | Camera | Raspberry Pi Camera Module 3 Wide SC0874, 2-lane CSI-2, powered from the SBC camera port | camera study |
-| Compute placement | Body-mounted Linux SBC (unselected); mics, speaker, battery body-mounted; head carries display, camera, light, C2 | dimensional baseline v1.9 |
+| Compute placement | Body-mounted Linux SBC (unselected); mics, speaker, battery body-mounted; head carries display, camera, light, C2 | dimensional baseline v1.10 |
 | Link recommendation | UART/USB serial, Vector-style; not CAN, micro-ROS or I²C across joints; semantic command surface | control study §3, §7 |
 | Timebase recommendation | One master, timestamp-at-source, serial round-trip offset reconciliation; not PTP/NTP | control study §5 → `timebase.md` |
-| Head load | ~490 g pre-M008 lower bound plus C2; per-axis sets ~392–548 g provisional (layout-01) — this sets servo class, which sets the servo rail | MEM-20260907-06 |
+| Head load | Layout 03 nominal D/E tree ~362/436/509 g roll/pitch/yaw at M008=20 g, with ~499–524 g complete C2 sensitivity; substitute each servo candidate for the two 23 g references — this sets servo class, which sets the servo rail | dimensional baseline v1.10; RP-01 physics |
 | Servo family | **Unselected.** XC330 is a packaging reference only (5 V class, `D` stall ≈1.8 A per unit — verify against eManual before use) | RP-01 decision; sourcing matrix |
 | E-stop rule | Cuts the **motor bus, not logic power**; latching mushroom plus a physically yankable XT60 | workbench.md |
 | PSU rule | Korad KA3005D: set current limit to expected draw plus margin before first power-up; **5 A ceiling** | workbench.md |
-| Battery placement and mass row | Low and forward of the drive axle; ledger row 150–500 g; chemistry undecided | mass ledger v0.12; dimensional baseline |
+| Battery placement and mass row | Low and forward of the drive axle; ledger row 150–500 g; chemistry undecided | mass ledger v0.13; dimensional baseline |
 | Harness partition | Camera CSI on its own controlled route; power + semantic link as a segmented branch; servo power/bus sized for peak and separated from camera strain relief; demateable boundary at yaw (CAD-05) | harness study |
 
 ## 5. Scope

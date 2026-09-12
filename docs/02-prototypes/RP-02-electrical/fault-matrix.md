@@ -5,7 +5,7 @@
 | Status | **Rows proposed; no injection performed; no threshold registered** |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Authority | `../../01-system/risk-prototype-plan.md` v1.10 §RP-02 (inject "high-level process loss, internal-link loss/corruption or staleness, controller restart, sensor absence, network loss, and one allowed subsystem brownout at a time"); RP02-G04 |
+| Authority | `../../01-system/risk-prototype-plan.md` v1.11 §RP-02 (inject "high-level process loss, internal-link loss/corruption or staleness, controller restart, sensor absence, network loss, and one allowed subsystem brownout at a time"); RP02-G04 |
 | Required behaviours | `../../01-system/system-design-brief.md` §6 failure priorities; `link-contract.md` §5 |
 | Success criteria | SC-15 controlled stop and failure; CON-11 and CON-P04 (safety independent of network) |
 | Feeds | `gates.md` G04; ADR-03; ADR-12 |

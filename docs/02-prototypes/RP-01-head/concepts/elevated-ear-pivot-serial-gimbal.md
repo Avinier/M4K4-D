@@ -2,15 +2,15 @@
 
 | Field | Value |
 |---|---|
-| Status | **Candidate — not selected; dimensions, actuators and axis placement remain open** |
+| Status | **Selected RP-01 mechanism path and modelled in Layout 03; actuator SKUs and physical gate evidence remain open** |
 | Authored | 2026-08-27 |
 | Joint order | Body-fixed yaw → pitch → head-fixed roll |
-| Physical baseline | ~95 H × 150 W × 115 D mm nominal complete head within a 90–100 H × 145–155 W × 110–120 D mm validation band; `../material-finish-mass-decision.md` provisional ~490 g pre-M008 lower bound at 1.2 mm PLA plus required C2 hardware; 60 mm neck allocation |
+| Physical baseline | Layout 03: 104 H × 150 W × 115 D mm; nominal ~362/436/509 g roll/pitch/yaw at M008=20 g E with ~499–524 g complete C2 sensitivity; 60 mm neck allocation |
 | Feeds | `comparison.md`, `../physics.md`, `../gates.md`, `../rig.md`; later head blockout/CAD |
 
 This note extracts only the credible topology from an unverified, generated-looking reference diagram. Its labels, scale, proportions, motor sizes and bearing sizes are not source data and must not enter CAD or the BOM.
 
-**First-layout update, 2026-09-07:** [head CAD decisions](../cad/head/decisions.md) now owns the working construction and fitting choices. Start with coaxial direct roll and an external yaw cable loop beside a solid spindle. The builder selected cosmetic ears attached to the rolling face/cradle; their clearance around the structural supports remains to be demonstrated. These choices do not select Concept A as the final mechanism.
+**Layout 03 reconciliation, 2026-09-12:** [head CAD decisions](../cad/head/decisions.md) owns the working construction and fitting choices. Coaxial direct roll, external yaw loop beside a solid spindle, rolling ears and A0 are modelled in Layout 03. Concept A is the RP-01 path; that selection does not pass a gate or select an actuator.
 
 ## 1. Candidate topology
 
@@ -38,9 +38,9 @@ Evaluate at least these blockout candidates before detailed CAD:
 | A1 light preload | `x=+5 mm`, `z=0 mm` | CoM slightly forward of axis, keeping a small same-sign pitch load across the usable range |
 | A2 packaging compromise | `x=+5 mm`, `z=+10 mm` | Allows practical structure while bounding added holding torque |
 
-These are calculation points, not tolerances. With the current `m=0.490 kg` **pre-M008 lower-bound** planning case, A1 produces approximately `0.0184–0.0240 N·m` simple pitch gravity torque across `-22°…+40°`; the required C2 controller increases the real value. This is a sensitivity calculation only: pitch does not necessarily carry the complete head, and actuator sizing also requires the actual downstream inertia, speed, friction/cable terms and coupling.
+These are calculation points, not tolerances. Layout 03 now supplies the current candidate-screening tree: nominal pitch downstream mass is approximately `0.436 kg` at M008=20 g E, with its own CoM/inertia. The older `m=0.490 kg` complete-head calculation produced `0.0184–0.0240 N·m` for A1 across `-22°…+40°`, but is retained only as historical provenance. Recompute gravity and dynamic terms from the candidate-specific Layout 03 pitch set; actuator sizing also requires speed, friction/cable terms and coupling.
 
-Do not apply one mass blindly to all three axes. Register the actual moving set downstream of each joint: yaw carries the complete moving yaw output; pitch carries the pitch-and-roll output; roll carries only its cradle and payload. Until those as-built/CAD sets exist, show the `~490 g` pre-M008 lower bound **and the required C2 controller** alongside every lighter downstream proxy so a favorable blockout cannot silently under-size an actuator.
+Do not apply one mass blindly to all three axes. Layout 03 currently gives nominal D/E sets of approximately **509 g yaw, 436 g pitch and 362 g roll** at M008=20 g, with 10/20/35 g M008 sensitivity. For every actuator candidate, replace the tree's two XC330-size reference packages according to downstream membership; later replace all analytical rows with the registered as-built/CAD sets.
 
 Use an iterative convergence loop:
 
@@ -70,7 +70,7 @@ Start with direct pitch actuation as close to the yaw axis as the ear/yoke layou
 
 ## 5. Load path and scale exclusions
 
-The reference diagram's NEMA-style motors, external spur reduction and Lazy-Susan-scale turntable are not Makad parts. A credible implementation uses compact shafts/bearings sized from the revised ~490 g pre-M008 lower bound **plus C2** and later measured per-axis tree, and fits the 60 mm neck allocation through body/head intrusion.
+The reference diagram's NEMA-style motors, external spur reduction and Lazy-Susan-scale turntable are not Makad parts. A credible implementation uses compact shafts/bearings screened against the candidate-specific Layout 03 downstream tree and later the measured per-axis tree, and fits the 60 mm neck allocation through body/head intrusion.
 
 Every candidate drawing must show:
 
@@ -119,7 +119,7 @@ When locomotion is introduced, the runtime IMU belongs on the base for chassis h
 ## 8. Evidence required before selection
 
 - sourced/weighed head blockout and revised 3D CoM/inertia;
-- per-axis downstream moving-mass sets plus the current `~490 g` pre-M008 lower bound, required C2 controller and all row assumptions;
+- candidate-specific Layout 03 downstream moving-mass sets, retained M008 sensitivity and all row assumptions;
 - A0/A1/A2 torque, RMS/current and thermal comparison;
 - complete-output loaded hysteresis and hold-hunting test per axis, plus a combined-motion orientation test;
 - display-clear roll-support section and load-path comparison;

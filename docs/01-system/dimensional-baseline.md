@@ -3,9 +3,9 @@
 | Field | Value |
 |---|---|
 | Status | **Current target baseline — supersedes earlier dimensional and packaging assumptions** |
-| Version | 1.9 |
+| Version | 1.10 |
 | Owner | Project builder |
-| Approved / revised | 2026-08-30 / 2026-09-08 |
+| Approved / revised | 2026-08-30 / 2026-09-12 |
 | Feeds | Mass/envelope ledger, RP-01 head, RP-03 drive, RP-06 layout, sourcing, integrated CAD |
 
 ## Authority and interpretation
@@ -24,30 +24,30 @@ This document is the current source of truth for Makad's dimensional, drive-geom
 | Part / parameter | Final / target dimension | Design intent |
 |---|---:|---|
 | Overall Makad size | **300 H × 205 W × 180 D mm** | Keeps the 30 cm target while providing enough chassis depth for stable differential drive |
-| Head size, including camera crown and side pods | **102 H × 150 W × 115 D mm — RP-01 Layout 02 working envelope** | Builder-approved slimmer octagonal appearance revision, derived around 1:1 components; replaces the earlier 95 mm nominal / 90–100 mm height band for this layout. Manufacturing tolerances and integrated fit remain open. |
-| Head core, excluding crown and side pods | **86 H × 130 W × 115 D mm — RP-01 Layout 02** | Main roof lowered with the crown; width/depth retained for sourced hardware. See the [layout and validation boundaries](../02-prototypes/RP-01-head/cad/head/layout-02/README.md). |
+| Head size, including camera crown and side pods | **104 H × 150 W × 115 D mm — RP-01 Layout 03 planning envelope** | Current 1:1 packaging direction around selected display/camera/C2 envelopes; supersedes Layout 02's 102 mm height and the earlier 95 mm nominal / 90–100 mm band. Manufacturing tolerances and integrated fit remain open. |
+| Head core, excluding crown and side pods | **86 H × 130 W × 115 D mm — RP-01 Layout 03** | Main core retained while the crown rises to 104 mm and the stern tapers to 104 mm width. See the [layout and validation boundaries](../02-prototypes/RP-01-head/cad/head/layout-03/README.md). |
 | Body-top / neck datum | **140 mm above ground** | Main vertical mechanical reference |
 | Neck allocation | **60 mm vertical** | Packaging space for powered yaw, pitch, and roll |
 | Drive wheels | **Ø84 mm nominal** | Mobility, proportions, and motor-speed compromise |
 | Wheel track | **~170 mm centre-to-centre** | Lateral stability and expressive turning |
 | Drive axle to front-caster contact | **~105–115 mm; 110 mm target** | Avoids an excessively short/wide chassis and reduces caster instability |
 
-The Layout 02 neutral stack is 140 mm ground-to-body-top + 60 mm neck allocation + 102 mm crown-inclusive head = **302 mm** if those datums are retained. The **300 mm overall height remains the rounded outer target**; RP-06 must reconcile the actual body/neck mounting datums and moving envelope. The visible 35–45 mm neck is shorter because the mechanism intrudes into the body and head.
+The Layout 03 neutral stack is 140 mm ground-to-body-top + 60 mm neck allocation + 104 mm crown-inclusive head = **304 mm** if those datums are retained. The **300 mm overall height remains a rounded outer target, not a passed envelope**; RP-06 must explicitly accept the 304 mm stack or recover 4 mm through the actual body/neck mounting datums. The visible 35–45 mm neck is shorter because the mechanism intrudes into the body and head.
 
 ## Head and face
 
 | Part / parameter | Final / target dimension | Design intent |
 |---|---:|---|
 | Face/display active area | **95.04 W × 53.86 H mm nominal** | Fixed by the selected no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493 |
-| Face optical aperture and bezel | **Layout 02: 99 W × 58 H mm opening, four 3 mm corner clips; 110 W × 64 H mm masked window** | Active pixels remain 95.04 × 53.86 mm. The small aperture diagonals stay outside that rectangle; full-size hidden board uses a conservative 106.1 × 68 mm union envelope. |
-| Integrated cosmetic ear covers | **Layout 02: Ø60 mm, hollow, +10 mm per side; 150 mm complete width** | Builder selected larger layered ears attached to the rolling face. Ears carry cosmetic loads; the separate inner pitch/yaw structure carries the joint loads. |
-| Head mass | **~490 g pre-M008 lower bound at 1.2 mm PLA, plus the required C2 module; measured total TBD** | Current RP-01 planning input; replace with the M900 reading and per-axis mass tree |
-| Head inertia | **TBD from CAD/as-built per-axis mass properties** | The former ~0.001 kg·m² proxy is invalid for actuator sizing |
+| Face optical aperture and bezel | **Layout 03: 99 W × 58 H mm opening, four 3 mm corner clips; 110 W × 64 H mm masked window** | Active pixels remain 95.04 × 53.86 mm. The revised flared camera aperture clears the conservative FOV envelope in sampled CAD checks; optical certification remains open. |
+| Integrated cosmetic ear covers | **Layout 03: Ø60 mm, hollow; 150 mm complete width** | Ears attach to and roll with the face. Cosmetic shells carry their own loads; the separate pitch/yaw structure carries joint loads. |
+| Head mass | **Nominal Layout 03 D/E tree: ~509 g complete at M008=20 g; M008 sensitivity gives ~499–524 g; measured total TBD** | The nominal tree includes two 23 g XC330-size servo references, not selected servos. Recalculate per candidate and replace with the M900 reading and measured per-axis tree. |
+| Head inertia | **Layout 03 D/E: ~0.000656 / 0.000728 / 0.001080 kg·m² roll / pitch / yaw at nominal M008=20 g** | Candidate-screening input only; replace servo references per candidate and confirm from the as-built mass tree. The former generic ~0.001 proxy remains inadmissible. |
 | Neck torque | **TBD per axis from the registered load and trajectories** | The former ~0.2 N·m estimate is historical only and must not select actuators |
 | Neck axes | **Powered yaw + pitch + roll** | Full expressive head motion |
 | Camera | **One central Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, SC0874; 25 W × 24 H × 12.4 D mm module envelope** | Selected 120° diagonal / approximately 102° horizontal FOV simplifies acquisition and gaze geometry; connector, mount and moving-link clearance remain RP-01/RP-06 validation items |
 
-The moving head contains the selected display/renderer board, the required separate C2 ESP32-S3 motion controller, central camera, required brackets/structure, moving actuator and bearing portions, neck interfaces, and local wiring. **All installed items count in M900 and the per-axis mass tree.** The current planning lower bound is ~490 g before M008 at 1.2 mm PLA; it is not a target or accepted measurement. RP-01 has no runtime head IMU; its Nano/IMU bench instruments are excluded. The microphones, speaker, battery, main Linux SBC and other primary electronics are body-mounted and must not be added to RP-01 moving-head ballast unless the baseline is formally revised.
+The moving head contains the selected display/renderer board, the required separate C2 ESP32-S3 motion controller, central camera, required brackets/structure, moving actuator and bearing portions, neck interfaces, and local wiring. **All installed items count in M900 and the per-axis mass tree.** Layout 03's ~509 g nominal result is a `D/E` calculation using M008=20 g and XC330-size servo references; it is not a target or accepted measurement. Keep M008 at `U` in the physical register and retain its 10/20/35 g analytical sensitivity until weighed. RP-01 has no runtime head IMU; its Nano/IMU bench instruments are excluded. The microphones, speaker, battery, main Linux SBC and other primary electronics are body-mounted and must not be added to RP-01 moving-head ballast unless the baseline is formally revised.
 
 ## Body, neck, and support geometry
 
@@ -103,7 +103,7 @@ Until RP-03 measures lift onset and dynamic compliance, commanded forward accele
 
 ## Compact handoff
 
-Design around **300 H × 205 W × 180 D mm overall as a rounded target; RP-01 Layout 02 head 102 H × 150 W × 115 D mm including crown (86 mm main roof); Ø84 mm wheels; 170 mm track; and 110 mm drive-axle-to-front-caster wheelbase**, with a **~490 g pre-M008 moving-head planning lower bound plus C2**, **60 mm three-axis neck allocation**, whole-robot CoM targets initially at approximately **25 mm forward of the axle and 124 mm high but requiring revision under the heavier head**, a **~70 mm rear skid no more than 14 mm above the floor**, and body-mounted audio, forward-low battery, and main Linux compute. The new neutral vertical stack is 302 mm; confirm integrated datums in RP-06. The layout's separate CAD-volume/allowance mass tree is working E evidence, not a measured replacement for M900.
+Design around **300 H × 205 W × 180 D mm overall as a rounded target; RP-01 Layout 03 head 104 H × 150 W × 115 D mm including crown (86 mm main core); Ø84 mm wheels; 170 mm track; and 110 mm drive-axle-to-front-caster wheelbase**, with a **nominal ~509 g Layout 03 D/E head tree at M008=20 g and ~499–524 g C2 sensitivity before candidate-specific servo substitution**, **60 mm three-axis neck allocation**, whole-robot CoM targets initially at approximately **25 mm forward of the axle and 124 mm high but requiring revision under the heavier head**, a **~70 mm rear skid no more than 14 mm above the floor**, and body-mounted audio, forward-low battery, and main Linux compute. The neutral vertical stack is 304 mm; RP-06 must accept it or recover 4 mm. The CAD-volume/allowance tree is working evidence, not a measured replacement for M900.
 
 ## Change control
 
@@ -126,3 +126,4 @@ Design around **300 H × 205 W × 180 D mm overall as a rounded target; RP-01 La
 | 2026-08-30 | 1.7 | Rebuilt the head envelope bottom-up from the selected 106.1 × 67.8 mm display and 25 × 24 × 12.4 mm camera. Replaced the 180 mm concept-art width with a 150 mm nominal complete width, reduced nominal depth to 115 mm, separated the optical aperture from bezel/window size, and required side pods to integrate rather than add width beyond the mechanical pivots. |
 | 2026-09-02 | 1.8 | Rejected the obsolete 250 g head target and preliminary inertia/torque sizing inputs; adopted the ~490 g pre-M008 lower bound plus the selected separate C2 ESP32-S3 controller, and flagged whole-robot CoM/tip targets for recalculation under the heavier head. |
 | 2026-09-08 | 1.9 | Builder approved the Layout 02 appearance revision and 1:1 component method. Recorded 86 mm main shell, 102 mm crown-inclusive height, 150 mm width, 115 mm depth, Ø60 mm rolling ears and 99 × 58 mm minimally clipped aperture. Explicitly replaces the earlier head-height/pod targets for RP-01 and exposes the 302 mm neutral stack; integrated fit and measured mass remain open. |
+| 2026-09-12 | 1.10 | Adopted Layout 03 as the planning geometry: 104 × 150 × 115 mm complete head, 86 × 130 × 115 mm core and 304 mm provisional stack. Recorded the nominal 362/436/509 g and inertia tree at M008=20 g while retaining M008 uncertainty and candidate-specific servo recalculation. No fabrication release, measured-mass acceptance or gate pass. |

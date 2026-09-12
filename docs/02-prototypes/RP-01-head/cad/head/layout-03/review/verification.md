@@ -12,17 +12,17 @@ Camera/display board gap **3 mm**. Crown **104 mm**, +2 mm against Layout 02. Th
 
 ## Mass and A0
 
-D/E estimates: authored PLA at 1.24 g/cm³ and the existing explicit installed-module, hardware, finish and cable allowances. No duplicate mass from physics/harness/annotation solids.
+D/E estimates: authored PLA at 1.24 g/cm³ and the existing explicit installed-module, hardware, finish and cable allowances. No duplicate mass from physics/harness/annotation solids. The table below is the nominal M008=20 g case; retained 10/20/35 g analytical cases give approximately 499/509/524 g complete. M008 remains physically `U`, and the two 23 g XC330-size servo references must be replaced for every candidate screen.
 
 | Carried set | Layout 02 mass (g) | Layout 03 mass (g) | Layout 02 inertia (kg m²) | Layout 03 inertia (kg m²) |
 |---|---:|---:|---:|---:|
-| roll | 371.330 | 361.962 | 0.000702609 | 0.000656427 |
-| pitch | 443.364 | 436.355 | 0.000785705 | 0.000728097 |
-| yaw | 515.339 | 508.997 | 0.001154970 | 0.001079537 |
+| roll | 371.330 | 362.003 | 0.000702609 | 0.000656549 |
+| pitch | 443.364 | 436.396 | 0.000785705 | 0.000728212 |
+| yaw | 515.339 | 509.038 | 0.001154970 | 0.001079726 |
 
-A0: roll Y=-1.10534, Z=46.91913; pitch X=-37.96453, Z=45.55341 mm. Targeted neutral axis-to-CoM residuals are below 0.002 mm in this estimated mass model. Complete CoM: (-39.551, 0.746, 40.295) mm. These are not achieved measured balance or servo-selection evidence.
+A0: roll Y=-1.10534, Z=46.91913; pitch X=-37.96453, Z=45.55341 mm. Targeted neutral axis-to-CoM residuals are below 0.002 mm in this estimated mass model. Complete CoM: (-39.552, 0.746, 40.296) mm. These are not achieved measured balance or servo-selection evidence.
 
-The complete estimated mass is 6.34 g lower than Layout 02, while the estimated principal demand inertias also decrease. Together with the checked clearances and extraction paths, this supports the feasibility decision; it does not certify shell stiffness.
+The complete nominal estimated mass is 6.30 g lower than Layout 02, while the estimated principal demand inertias also decrease. Together with the checked clearances and extraction paths, this supports the feasibility decision; it does not certify shell stiffness.
 
 ## Checks actually run
 
@@ -61,7 +61,7 @@ The repaired display branch sits farther inward; C2 exits 2 mm higher; the exter
 
 ## Visual review
 
-The following PNGs render the current generator package with its explicit pose/visibility sidecar. Front = +X (renderer preset “right”); side = −Y (“front”); rear = −X (“left”). Shell transparency is intentional, inherited from Layout 02 inspection practice. Helmet-top and rear-oblique views were added to judge the 104 mm stern and inward shoulders.
+The following 2026-09-09 overview PNGs render the accepted 104 mm packaging revision before the small 2026-09-10 camera/C2/insert retention details. Front = +X (renderer preset “right”); side = −Y (“front”); rear = −X (“left”). Shell transparency is intentional, inherited from Layout 02 inspection practice. The dated retention close-ups below are the authoritative images for the later details; the final source and geometric reports include them.
 - [iso](iso_20260909T171825Z.png)
 - [front](front_20260909T171825Z.png)
 - [side](side_20260909T171825Z.png)

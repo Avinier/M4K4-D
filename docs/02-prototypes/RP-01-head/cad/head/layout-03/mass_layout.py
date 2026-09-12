@@ -9,7 +9,13 @@ from build123d import CenterOf
 import layout_model as m
 import layout_axes
 HERE=Path(__file__).parent
-def rows_for(parts,c2=20):
+# C2 is selected (Waveshare ESP32-S3-Zero on the rolling face), but M008 is
+# still an unweighed installed assembly. Use 20 g as the nominal E case while
+# retaining the pre-existing sensitivity range until board + mount +
+# connectors + assigned local harness are weighed together.
+C2_NOMINAL_G=20.0
+C2_SENSITIVITY_G=(10.0,20.0,35.0)
+def rows_for(parts,c2=C2_NOMINAL_G):
     rows=[]
     def add(owner,name,frame,mass,centre,size=(0,0,0),shape=None,basis='D/E allocation; uniform bounding-box inertia approximation'):
         if shape is not None:
@@ -34,7 +40,7 @@ def rows_for(parts,c2=20):
     add('M005','camera + bracket allowance','R',10,(-10,0,m.CAMERA_BOTTOM+14),(12.4,25,24))
     add('M006','CSI cable + strain relief','R',8,(-30,10,65),(20,20,20))
     add('M007','addressable LED installed allowance','R',5,(-6,m.LED_Y,m.LED_Z),(5,5,5))
-    add('M008','C2 installed scenario','R',c2,(-29.5,-29,39.75),(9,18,23.5))
+    add('M008','C2 installed allowance','R',c2,(-29.5,-29,39.75),(9,18,23.5))
     add('M012','yaw moving interface incl. modeled bridge','Y',20,(-56,0,-34),(40,116,5))
     add('M013-15-roll','XC330 roll reference','P',23,(-92,m.ROLL_Y,m.ROLL_Z-7.5),(29,20,34))
     add('M013-15-pitch','XC330 pitch reference','Y',23,(m.PITCH_X-7.5,32,m.PITCH_Z),(34,29,20))
@@ -67,15 +73,17 @@ if __name__=='__main__':
             m=importlib.reload(m)
             if error<.02:break
 
-    parts=m.build_parts(catalog=False);rows=rows_for(parts)
+    parts=m.build_parts(catalog=False);rows=rows_for(parts,C2_NOMINAL_G)
     scenarios=[]
-    for c in [10,20,35]:
-        rs=rows_for(parts,c);case=dict(c2_g=c)
+    for c2 in C2_SENSITIVITY_G:
+        scenario_rows=rows_for(parts,c2)
+        case=dict(c2_g=c2)
         for label,frames,index,origin in [('roll','R',0,(0,m.ROLL_Y,m.ROLL_Z)),('pitch','RP',1,(m.PITCH_X,0,m.PITCH_Z)),('yaw','RPY',2,(m.PITCH_X,0,-60))]:
-            group=[r for r in rs if r['frame'] in frames]
+            group=[r for r in scenario_rows if r['frame'] in frames]
             inertia=sum(r['intrinsic_diagonal_g_mm2'][index]+r['mass_g']*sum((r['center_mm'][i]-origin[i])**2 for i in range(3) if i!=index) for r in group)
-            case[label]=com(rs,frames)|dict(estimated_inertia_kg_m2=inertia*1e-9)
+            case[label]=com(scenario_rows,frames)|dict(estimated_inertia_kg_m2=inertia*1e-9)
         scenarios.append(case)
-    result=dict(method='CAD-volume PLA at 1.24 g/cm3 + listed D/E allowances. A0 iterated around this estimate. Uniform geometry/box intrinsic inertia and parallel-axis terms; NOT measured mass, torque or servo approval.',axes=m.AXES,rows=rows,scenarios=scenarios,visible_M2_count=sum(r['owner']=='M021a' for r in rows),notes=['Display 133 g already includes 15 g retention; camera 10 g includes bracket; C2 and LED installed allowances include their mounts. Do not add modeled visual envelopes again.','M012 includes the modeled yaw bridge; bearing rows own shaft/trunnion metal.','Old M019c=148 g and CROWN=6 g replaced by current skin/ear geometry +29 g finish +10 g misc; no double counting.','Density uses solid CAD walls/ribs. Print process, insert choice, finish and actual modules must be weighed before actuator freeze.'])
+    working=next(case for case in scenarios if case['c2_g']==C2_NOMINAL_G)
+    result=dict(method='CAD-volume PLA at 1.24 g/cm3 + listed D/E allowances. C2 hardware is selected but M008 installed mass remains U. A0 is solved around the nominal 20 g E case; 10/20/35 g sensitivity cases remain until the complete M008 assembly is weighed. Uniform geometry/box intrinsic inertia and parallel-axis terms; NOT measured mass, torque or servo approval.',axes=m.AXES,rows=rows,working=working,scenarios=scenarios,visible_M2_count=sum(r['owner']=='M021a' for r in rows),notes=['Display 133 g already includes 15 g retention; camera 10 g includes bracket; nominal C2 20 g E and LED installed allowances include their mounts. Do not add modeled visual envelopes again.','M008 remains U in the physical mass register. The sensitivity cases are analytical inputs only and do not constitute W evidence.','M012 includes the modeled yaw bridge; bearing rows own shaft/trunnion metal.','Old M019c=148 g and CROWN=6 g replaced by current skin/ear geometry +29 g finish +10 g misc; no double counting.','Density uses solid CAD walls/ribs. Print process, insert choice, finish, candidate-specific servo mass and actual modules must be weighed/recalculated before actuator freeze.'])
     (HERE/'mass-placement.json').write_text(json.dumps(result,indent=2)+'\n')
-    print(json.dumps(dict(axes=m.AXES,scenarios=scenarios),indent=2))
+    print(json.dumps(dict(axes=m.AXES,working=working,scenarios=scenarios),indent=2))

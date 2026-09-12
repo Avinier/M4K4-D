@@ -2,10 +2,11 @@
 
 | Field | Value |
 |---|---|
-| Status | **v0.1 draft.** Interface specification, not evidence. Field sizes, rates and timeouts marked *candidate* are proposals for G05/G04 registration |
+| Status | **v0.2 draft.** Interface specification, not evidence. Field sizes, rates and timeouts marked *candidate* are proposals for G05/G04 registration |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Authority | `../../01-system/control-topology-options.md` v0.9 §3, §7 (UART/USB serial, semantic command surface); `../../01-system/system-design-brief.md` §5 information contracts and contract rules 1–5; §6 state dimensions and failure priorities |
+| Revised | 2026-09-12 |
+| Authority | `../../01-system/control-topology-options.md` v0.10 §3, §7 (UART/USB serial, semantic command surface); `../../01-system/system-design-brief.md` §5 information contracts and contract rules 1–5; §6 state dimensions and failure priorities |
 | Timebase | `../../01-system/timebase.md` — all timestamps in this contract are master-monotonic microseconds after offset reconciliation |
 | Feeds | ADR-12; `subsystem-interfaces.md` at stage 6; `fault-matrix.md`; `gates.md` G04/G05 |
 | Not in scope | The servo bus protocol (RP-01 servo selection decides Dynamixel 2.0 / Feetech / other); display asset transfer; any wireless path |
@@ -39,7 +40,7 @@ Both UART links cross the yaw boundary on the head-logic branch (PA-06) through 
 | Integrity | **CRC-16/CCITT** over header + payload, before COBS | Detects the bit-flips an unshielded UART across a servo harness will see (F-04) |
 | Header | `ver:u8` · `type:u8` · `seq:u16` · `src_ts_us:u64` · `len:u8` | `seq` detects loss and duplicates; `src_ts_us` is the stamp *at the producer*, never at receipt |
 | Encoding | Little-endian packed structs; fixed-point where noted | No parsing ambiguity; no allocation on C2 |
-| Max frame | 64 bytes payload candidate | Keeps worst-case serialization under one loop tick at 921 600 baud (~0.7 ms for 64 B) |
+| Max frame | 64 bytes payload candidate | A full 64-byte payload is about 81 bytes on wire after the 13-byte header, CRC, COBS overhead and delimiter: ~0.88 ms at 921 600 baud, still below one 5 ms control tick |
 
 ## 4. Message set
 
@@ -52,7 +53,7 @@ Types are grouped by the five information kinds in SDB §5. `→` SBC to control
 | `HELLO` | ↔ | `fw_hash:u32` · `contract_ver:u16` · `board_id:u8` · `capabilities:u16` | First frame after either side (re)starts. Mismatched `contract_ver` → controller stays `inhibited` and reports `FAULT(CONTRACT_MISMATCH)` |
 | `LIMITS_SET` | → | per axis: `min:i16` · `max:i16` (0.01°) · `vmax:u16` (°/s) · `amax:u16` (°/s²) · `imax:u16` (mA) · `tmax:u8` (°C); `cmd_ttl_default_ms:u16`; `heartbeat_timeout_ms:u16` | Must be acknowledged before `HEAD_ENABLE` is accepted. Values are clamped to C2's compiled hard limits; the clamped set is echoed in the `ACK` |
 | `HEAD_ENABLE` | → | `nonce:u32` | Transitions C2 `inhibited → enabled` **only if** limits are set, heartbeat is fresh, no fault is latched and the motor domain is present. The nonce prevents a stale frame from re-enabling after a restart |
-| `HEAD_INHIBIT` | → | `reason:u8` | Immediate `BRAKE` to rest, then `inhibited`. Idempotent |
+| `HEAD_INHIBIT` | → | `reason:u8` | Initiate `BRAKE` immediately, then enter `inhibited` when the registered bounded trajectory reaches rest. Idempotent |
 
 ### 4.2 Commands (bounded, expiring)
 
@@ -78,8 +79,8 @@ Types are grouped by the five information kinds in SDB §5. `→` SBC to control
 
 | Type | Dir | Payload | Semantics |
 |---|---|---|---|
-| `TIME_SYNC_REQ` | → | `t1_master_us:u64` | Sent at 1–2 Hz. C2 stamps receipt `t2` and transmit `t3` on its local clock |
-| `TIME_SYNC_RESP` | ← | `t1:u64` · `t2_local_us:u64` · `t3_local_us:u64` | SBC stamps `t4` at receipt; offset and round-trip per `timebase.md` §3. Filtered offset is pushed back in the next `TIME_SYNC_REQ` as `offset_us:i64` so C2 can convert its own `capture_ts_us` |
+| `TIME_SYNC_REQ` | → | `t1_master_us:u64` · `model_valid:u8` · `offset_at_ref_us:i64` · `rate_ppb:i32` · `model_ref_local_us:u64` · `uncertainty_us:u32` | Sent at 1–2 Hz. C2 stamps receipt `t2` and transmit `t3` on its local clock. The model fields carry the previous filtered fit; they are ignored until `model_valid=1` |
+| `TIME_SYNC_RESP` | ← | `t1:u64` · `t2_local_us:u64` · `t3_local_us:u64` | SBC stamps `t4` at receipt and updates the offset/rate fit per `timebase.md` §3. The next `TIME_SYNC_REQ` carries the complete model (`offset_at_ref_us`, `rate_ppb`, `model_ref_local_us`, `uncertainty_us`) so C2 can convert its own `capture_ts_us` |
 
 ## 5. Watchdog and recovery semantics
 
@@ -87,7 +88,7 @@ These are the G04 behaviours, stated as contract so they can be tested rather th
 
 | Condition on C2 | Required behaviour | Fault case |
 |---|---|---|
-| No valid `HEARTBEAT` from SBC for `heartbeat_timeout_ms` (candidate **150 ms**, i.e. three missed at 20 Hz) | `BRAKE` to rest within one control tick; state `inhibited`; `FAULT(HB_TIMEOUT)` latched; **queue flushed** | F-01, F-02, F-03 |
+| No valid `HEARTBEAT` from SBC for `heartbeat_timeout_ms` (candidate **150 ms**, i.e. three missed at 20 Hz) | **Initiate** `BRAKE` no later than one control tick after timeout; state becomes `braking` then `inhibited` on completion; `FAULT(HB_TIMEOUT)` latched; **queue flushed**. Time to rest is bounded by the registered BRAKE trajectory, not one tick | F-01, F-02, F-03 |
 | Heartbeats resume | Stay `inhibited`. Report. **Do not resume the interrupted gesture.** Resume only on a fresh `LIMITS_SET` → `HEAD_ENABLE` with a new nonce and a *new* `HEAD_GOAL` | "Recover only from current authorized intent" |
 | Frame fails CRC | Discard; increment `crc_err_count`; no state change. Above a registered rate per second → `degraded`; above a higher rate → `inhibited` | F-04 |
 | Command arrives with `valid_until_us` in the past | `NACK(EXPIRED)`. A burst of expired commands after reconnect (queue drain on the SBC side) is **rejected frame by frame**; `FAULT(EXPIRED_BURST)` if more than N in one tick | F-05 |
@@ -101,12 +102,12 @@ The SBC side mirrors: on link-down it **drops its outbox**, marks head `unavaila
 
 ## 6. Bandwidth estimate (candidate, for the baud decision)
 
-| Stream | Bytes/frame (incl. header, CRC, COBS overhead ≈ 8 + 2 + ~2 %) | Rate | kbit/s |
+| Stream | Bytes/frame (incl. 13-byte header, 2-byte CRC, COBS overhead and delimiter) | Rate | kbit/s |
 |---|---|---|---|
 | `HEAD_STATE` | ~46 | 100 Hz | ~37 |
 | `HEARTBEAT` ×2 | ~22 each | 20 Hz each | ~7 |
 | `HEAD_GOAL` (`TRACK`) | ~32 | 50 Hz | ~13 |
-| `TIME_SYNC` pair | ~34 + ~42 | 2 Hz | <1 |
+| `TIME_SYNC` pair | ~50 + ~41 | 2 Hz | <2 |
 | `ACK`/`NACK` | ~14 | ≤50 Hz | ~6 |
 | **Total** | | | **~64 kbit/s** |
 
@@ -125,7 +126,7 @@ The SBC side mirrors: on link-down it **drops its outbox**, marks head `unavaila
 
 ## 8. What is deliberately not specified yet
 
-- Exact byte layouts — pinned when the first firmware implements v0.1 and the SBC-side codec is generated from one schema file (one source, two targets).
+- Exact byte layouts — pinned when the first firmware implements this v0.2 draft and the SBC-side codec is generated from one schema file (one source, two targets).
 - Authentication — none on a wired internal link; the nonce guards against replay, not adversaries.
 - Display asset upload — a bulk-transfer mode with its own flow control, designed when face assets exist.
 - Base/drive MCU messages — added when RP-03 selects a base controller; they inherit this framing and the same expiry/heartbeat rules.
@@ -135,3 +136,4 @@ The SBC side mirrors: on link-down it **drops its outbox**, marks head `unavaila
 | Date | Version | Change |
 |---|---|---|
 | 2026-09-08 | 0.1 | First draft: transports, COBS+CRC-16 framing, message set across session/command/feedback/time, watchdog and recovery semantics, bandwidth estimate, candidate timing requirements for G05. No field layout frozen; nothing registered. |
+| 2026-09-12 | 0.2 | Added the complete offset/rate/reference/uncertainty model to TIME_SYNC_REQ so C2 can perform the conversion required by timebase v0.2. Corrected heartbeat failure semantics to BRAKE onset within one tick after timeout; rest completion follows the bounded BRAKE trajectory. Nothing registered. |

@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Status | **Not started.** Candidate metrics and thresholds below are proposals; nothing is registered; no scored run exists |
-| Authority | Gate definitions and registration fields: `../../01-system/risk-prototype-plan.md` v1.10 §RP-02. This file holds the registered numeric versions |
+| Authority | Gate definitions and registration fields: `../../01-system/risk-prototype-plan.md` v1.11 §RP-02. This file holds the registered numeric versions |
 | Sources for thresholds | `intent.md`; `state-register.md`; `link-contract.md` §7; `fault-matrix.md` §3; `power-architecture.md` PA-06; `../../01-system/power-energy-ledger.md` |
 | Rule | Registration uses the plan's fields — Gate ID, Metric, Threshold, Rationale, Conditions, Repetitions, Instrument, Freeze record (date + builder approval **before** scored data is inspected). A threshold change after results is a new gate version with a documented reason and a fresh test set, never an edit |
 
@@ -30,6 +30,8 @@ The v1.9 gate ("every registered concurrent state completes without…") is a *m
 - **RP-02's registration** is the rehearsal metric that any re-run uses: per state, per rail — *minimum voltage versus the component's registered undervoltage limit, expressed as margin*; reset count (must be 0); CRC-error count during the state; maximum temperature versus SC-TBD-12. RP-02 executes the first rehearsal with whatever loads Phase B has and records what it could and could not produce (the Korad 5 A ceiling makes S13 a Phase C item).
 
 What a *pass* looks like in `decision.md`: "invariant verified on 2026-xx-xx against ledger vX.Y for states S00…S09 with real head loads and substitute drive; S10–S13 pending RP-03 hardware; re-run due on next load-group change."
+
+S13 is the worst simultaneous **transient** anchor. It may cover peak rail/current excursion for less-demanding states, but it does not replace sustained, thermal, accumulated-link-error or state-specific recovery runs. The invariant still requires every registered state to be exercised under its own duration and behaviour.
 
 ### 2.2 G03 — what "runtime" means after v1.10
 

@@ -4,7 +4,7 @@
 |---|---|
 | Status | Draft — user-authored head vocabulary captured; numeric storyboard and eye/audio placeholders remain provisional |
 | Owner | Project builder |
-| Last updated | 2026-08-31 |
+| Last updated | 2026-09-12 |
 | Physical baseline | Current envelope/placement and revised load lower bound from `../../01-system/dimensional-baseline.md`; detailed RP-01 material/finish/mass ownership in `material-finish-mass-decision.md` |
 | Numeric storyboard | `storyboard.md` — keyframes, angles, timing, minimum viable and best-case envelopes |
 | Feeds | `storyboard.md`, `physics.md`, `gates.md`, RP-01 procedure steps 3–5 |
@@ -29,12 +29,12 @@ The cues below are original Makad design placeholders informed by reference anal
 
 RP-01 designs and tests within the current system baseline:
 
-- complete moving head, including integrated side pods/pivots: **~95 H × 150 W × 115 D mm nominal**, validated within **90–100 H × 145–155 W × 110–120 D mm**;
-- head core, excluding side pods/pivots: **~95 H × 125–130 W × 110–115 D mm**;
+- complete moving head, including camera crown and rolling ears: **104 H × 150 W × 115 D mm — Layout 03 planning envelope**;
+- head core, excluding crown and side pods: **86 H × 130 W × 115 D mm**;
 - selected face display: **Waveshare ESP32-S3-LCD-4.3, no touch, SKU 30493**; nominal active area **95.04 W × 53.86 H mm**, approximately **106.1 W × 67.8 H mm** hidden module body, behind a **~94–95 W × 53–54 H mm optical aperture** and within a **~110–115 W × 60–65 H mm** visible bezel/window treatment;
-- integrated side pods/pivot covers: **~40–50 mm diameter** visual target and **~8–12 mm** width contribution per side beyond the core, with the complete head held inside the 145–155 mm band; no microphones/sensors, and structural load remains on an inner yoke/frame;
+- integrated side pods/pivot covers: **Ø60 mm hollow rolling ears**, with complete width held at 150 mm; no microphones/sensors, and structural load remains on an inner yoke/frame;
 - three-axis neck allocation: **60 mm vertical**, with only **~35–45 mm** expected to remain externally visible because the mechanism intrudes into the head and body;
-- RP-01 moving-head planning build-up: **~490 g at 1.2 mm PLA walls** or approximately **472 g at 1.0 mm**, both pre-M008 lower bounds; add the selected C2 architecture's exact ESP32-S3 motion-controller hardware when chosen. The system baseline now carries this revision, and the former 250 g target is historical only;
+- RP-01 moving-head planning tree: nominal **~362/436/509 g roll/pitch/yaw** at M008=20 g E, with **~499–524 g complete** across M008=10–35 g. The C2 module is selected but its installed mass remains `U`; the tree also contains two 23 g XC330-size reference packages that must be replaced per servo candidate. The former 250 g target is historical only;
 - selected central moving camera: **Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, SC0874**, 25 W × 24 H × 12.4 D mm; no microphones or speaker in the head;
 - all RP-01 skin and structure printed in **PLA**, with M010–M012 explicitly provisional pending thermal/creep evidence; finish and CAD detail follow `material-finish-mass-decision.md`;
 - the preliminary head inertia `~0.001 kg·m²` and preliminary neck peak torque `~0.2 N·m` are historical values invalidated for actuator sizing; replace them with per-axis CAD/as-built mass properties and calculations.

@@ -3,11 +3,11 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.10 |
+| Version | 1.11 |
 | Owner | Project builder |
 | Created | 2026-08-14 |
-| Last reviewed | 2026-09-08 |
-| Depends on | Approved `docs/00-foundation/constraints.md` v1.2, other foundation documents, `system-design-brief.md` v1.2, and `dimensional-baseline.md` v1.8 |
+| Last reviewed | 2026-09-12 |
+| Depends on | Approved `docs/00-foundation/constraints.md` v1.2, other foundation documents, `system-design-brief.md` v1.2, and `dimensional-baseline.md` v1.10 |
 | Decision authority | Project builder |
 
 The prototypes are decision instruments, not partial versions of the final droid. They may use open frames, ballast, external measurement equipment, temporary controllers, and bench power where those choices produce better evidence. A polished appearance is not a pass condition. The approved bench setup and powered-test readiness gate live in `workbench.md`; powered scored testing remains blocked until that gate is satisfied for the active rig and test.
@@ -122,10 +122,9 @@ Can a manufacturable powered roll/pitch/yaw mechanism carry a representative Mak
 
 ### Inputs and candidates
 
-- At least two plausible joint-order/support/actuation concepts unless sourcing or calculation eliminates one before fabrication.
-- Concept A is the elevated ear-pivot serial gimbal documented in `../02-prototypes/RP-01-head/concepts/`; it remains a candidate until compared with Concept B and scored evidence.
-- Current **~490 g pre-M008 lower bound at 1.2 mm PLA plus the required C2 controller**, per-axis downstream mass tree, centre of mass and CAD/as-built inertia, approximately **95 H × 150 W × 115 D mm nominal** envelope validated within **90–100 H × 145–155 W × 110–120 D mm**, camera/display/light envelopes, 60 mm neck allocation, cable bundle, service clearances, and structural margin from `dimensional-baseline.md`, the mass/envelope ledger, and RP-06. The former 250 g, ~0.001 kg·m² and ~0.2 N·m values are inadmissible for RP-01 sizing. Microphones and speaker are body-mounted, not moving-head ballast.
-- Selected C2 control boundary: a dedicated ESP32-S3 executes synchronized head trajectories and owns the smart-servo bus, limits, watchdog and command expiry; the display ESP32-S3 renders the face. Exact C2 module, servo protocol/update rate, feedback strategy, homing/calibration method and actuators remain open.
+- Concept A, the elevated body-yaw → pitch → coaxial supported-roll serial gimbal documented in `../02-prototypes/RP-01-head/concepts/`, is the RP-01 path. Concept B was explicitly waived before fabrication; this satisfies the alternative-concept rule through recorded elimination rather than an unfinished comparison.
+- Current Layout 03 planning inputs: **104 H × 150 W × 115 D mm**, 60 mm neck allocation, nominal D/E masses **~362/436/509 g roll/pitch/yaw at M008=20 g**, and complete-head sensitivity **~499–524 g for M008=10–35 g**. The tree contains two 23 g XC330-size reference packages, so every servo candidate must replace those rows before torque-speed/RMS screening. Camera/display/light envelopes, cable bundle, service clearances and structural margin come from `dimensional-baseline.md` v1.10, the mass/envelope ledger and RP-06. The former 95 mm band, 250 g mass, generic ~0.001 kg·m² and ~0.2 N·m values are inadmissible.
+- Selected C2 control boundary: a dedicated Waveshare ESP32-S3-Zero executes synchronized head trajectories and owns the smart-servo bus, limits, watchdog and command expiry; the display ESP32-S3 renders the face. M008 installed mass remains `U`; servo protocol/update rate, feedback strategy, homing/calibration method and actuators remain open.
 - Preliminary motion storyboard listing the attention, wake, bob, tilt, reversal, tracking-correction, settle, and safe-rest moves the mechanism must support.
 
 ### Rig and instrumentation
@@ -473,14 +472,14 @@ The architecture phase may begin with provisional option studies while prototype
 
 - [x] Approve `workbench.md` as the Stage 0 sourcing and powered-test-readiness baseline.
 - [ ] Establish access to the required tools and fit/verify the selected stop/isolation method.
-- [ ] Select at least two credible head-mechanism concepts or document why only one survives calculation/sourcing.
+- [x] Select at least two credible head-mechanism concepts or document why only one survives calculation/sourcing. (Concept A selected; builder waived Concept B before fabrication, recorded in HEAD-CAD-09.)
 - [x] Create the first sourced head component/envelope and representative mass target. (`dimensional-baseline.md` v1.2 + `mass-envelope-ledger.md` v0.4 + `candidate-sourcing-matrix.md` v0.4)
 - [ ] Draft the motion storyboard and register the required roll/pitch/yaw cases.
 - [ ] Complete RP-01 numeric gates for range, reversal, repeatability, tracking, settling, noise, temperature, endurance and fault response.
 - [ ] Clamp the RP-01 fixture and verify its E-stop and limits per the `workbench.md` scored-test gate.
 - [x] Define the run-ID, configuration identity and evidence-storage convention. (`run-record-convention.md` v1.0 + `docs/02-prototypes/_templates/run-record.md`)
 - [ ] Define and implement the machine-readable logging schema and pre-run write check.
-- [ ] Define and validate the monotonic timebase and external-video synchronization method. (Strategy documented in `timebase.md` v0.1; validation is RP02-G05.)
+- [ ] Define and validate the monotonic timebase and external-video synchronization method. (Strategy documented in `timebase.md` v0.2; validation is RP02-G05.)
 
 ## Approval note
 
@@ -489,5 +488,7 @@ Approved by the project builder on 2026-08-17. Approval adopts the seven-prototy
 Version 1.7 (2026-08-29) consumes the project builder's locked visible-light Raspberry Pi Camera Module 3 Wide, order code SC0874, and makes RP-01/RP-06/RP-07 validate that exact camera while keeping the supplier, body SBC and production moving interconnect open. Version 1.8 (2026-08-30) propagates the selected-component-derived 95 × 150 × 115 mm nominal head envelope and its 90–100 × 145–155 × 110–120 mm validation band into RP-01/RP-06 inputs. Version 1.9 (2026-09-02) closes the RP-01 C1/C2 fork in favour of a separate ESP32-S3 C2 motion controller, fixes the display-versus-trajectory ownership boundary, and replaces the obsolete 250 g load input with the ~490 g pre-M008 lower bound plus C2.
 
 Version 1.10 (2026-09-08), by builder direction when RP-02 planning opened, gives RP-02 a separate design question and gate question, reshapes RP02-G02 into a standing coexistence invariant with a re-run rule owned by the new `power-energy-ledger.md`, reshapes RP02-G03 into a rehearsal with recorded margin whose requirement closes at SC-14, splits ADR-06 closure into an architecture half and a sizing half, adds the power/energy/thermal ledger and `timebase.md` as continuous-workstream deliverables, and staggers RP-02's start into phases so its paper and on-hand-hardware work can proceed while RP-01 is open. G01, G04, G05 and G06 are unchanged. No numeric threshold is registered by this version.
+
+Version 1.11 (2026-09-12) propagates Layout 03 as the RP-01 planning baseline (104 × 150 × 115 mm; nominal 362/436/509 g roll/pitch/yaw at M008=20 g), retains 10/20/35 g M008 sensitivity until weigh-in, requires candidate-specific servo substitution, records Concept B's explicit waiver and removes the superseded 95 mm validation band. No numeric gate is registered and no physical evidence is upgraded.
 
 Except for the later-adopted dimensional/drive topology baseline, the selected no-touch Waveshare display SKU 30493 and the selected visible-light Raspberry Pi Camera Module 3 Wide SC0874, plan approval does not approve another exact component, supplier, mechanism implementation, production camera interconnect, or numeric `SC-TBD-*` or `CON-TBD-*` gate threshold. `workbench.md` was approved separately on 2026-08-17 and incorporated as the Stage 0 baseline in version 1.1 of this plan. Numeric prototype gates remain subject to preregistration before scored runs, and powered scored testing remains blocked until the approved readiness gate's safety, instrumentation, configuration, and logging requirements are satisfied.

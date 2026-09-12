@@ -4,7 +4,7 @@
 |---|---|
 | Status | Concept A is the RP-01 path; Concept B will not be authored (builder, 2026-09-09). No scored mechanism selection. |
 | Rule | Minimum two credible concepts unless the builder closes one path first. Concept B waived 2026-09-09. |
-| Physical baseline | ~95 × 150 × 115 mm nominal complete head within a 90–100 × 145–155 × 110–120 mm validation band; `../material-finish-mass-decision.md` provisional ~490 g pre-M008 lower bound at 1.2 mm PLA plus required C2 hardware; 60 mm neck allocation |
+| Physical baseline | Layout 03: 104 × 150 × 115 mm; nominal ~362/436/509 g roll/pitch/yaw at M008=20 g E with ~499–524 g complete C2 sensitivity; 60 mm neck allocation |
 
 Credibility checklist per concept: load path (no bare servo-horn cantilever), actuator class with a sourcing path, cable route, service/assembly story, physics numbers clearing `intent.md` requirements with margin.
 
@@ -13,10 +13,10 @@ First-layout construction and fitting choices are recorded in [head CAD decision
 | Criterion | Concept A: elevated ear-pivot serial gimbal | Concept B |
 |---|---|---|
 | Joint order (e.g. yaw→pitch→roll) | Body-fixed yaw → pitch → head-fixed roll. This matches intrinsic face motion and keeps the Euler singularity far outside Makad's pitch range. | Not authored. Builder waived the comparison on 2026-09-09. |
-| Fits 60 mm neck allocation and head intrusion envelope | Candidate only. Yaw bearing/drive must recess into the body/head and the pitch yoke must rise beside the head; generated-reference proportions are explicitly rejected. Compare the current 110–115 mm core depth with an approximately 90 mm blockout before CAD freeze. | |
+| Fits 60 mm neck allocation and head intrusion envelope | Modelled in Layout 03 with body/head intrusion and a 32 mm visible yoke; sampled CAD clearance passes. Integrated RP-06 fit, continuous sweep, purchased fits and physical stiffness remain open. | |
 | Actuation class per axis | Body-fixed yaw actuator; direct pitch and roll actuation first. Feetech/DYNAMIXEL classes remain candidates, not selections. A belt/gear offset is added only if packaging or quantified yaw inertia earns its backlash/compliance cost. | |
 | Support/bearing scheme (where does the load actually go?) | Compact yaw shaft/bearing carries axial and overturning load independently of the yaw drive. Pitch is double-supported near the ear-pod locations. Near-CoM roll is a gravity target, not yet a support solution: compare a rear spaced-bearing cartridge, face-clear annular/perimeter support and displaced axis around the selected Waveshare no-touch SKU 30493 envelope, including connector/service clearance and overhung moment. Cosmetic ear shells cover rather than carry pivots. | |
-| τ_peak margin per axis (from physics.md) | Pending the per-axis downstream mass tree around the current ~490 g `E` pre-M008 lower bound **plus C2**, candidate gimbal-centre sweep and separate transient/RMS screen in `physics.md`. Old 250 g / 0.2 N·m conclusions are inadmissible. A low-axis inverted-pendulum arrangement is not the reference geometry. | |
+| τ_peak margin per axis (from physics.md) | Layout 03 supplies the provisional tree and A0 axes; candidate-specific torque-speed and RMS/thermal screening is now ready but not executed. Use 20 g nominal plus M008 sensitivity and replace XC330 reference rows per candidate. Old 250 g / 0.2 N·m conclusions are inadmissible. | |
 | Reflected inertia ratio (or UNCOMPUTABLE) | UNCOMPUTABLE until exact actuators publish rotor inertia or the rig measures response. Include lateral pitch-actuator `m·r²` in yaw inertia before adding an offset transmission. | |
 | f_n estimate | Pending yoke/cradle stiffness. Screen pitch ≥30 Hz minimum / ≥40 Hz unshaped best case; yaw/roll ≥25/30 Hz per `gates.md`. | |
 | Loaded hysteresis / hold stability (geartrain, spline, horn, structure, controller) | Unknown. Do not divide the complete-output 0.25° target equally by three stages. At a fixed command, measure external angle versus reversing output load, reversal delay and hold hunting/current at representative poses; add a combined-orientation case. Small designed preload is a candidate mitigation, not a specification. | |

@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | **RP-01 build decisions locked; system baseline revised; measured mass remains open** |
-| Date / revised | 2026-08-31 / 2026-09-02 |
+| Date / revised | 2026-08-31 / 2026-09-12 |
 | Scope | Head shell material, finish system, display-envelope fit and revised mass model |
 | Supersedes for RP-01 | `../../01-system/dimensional-baseline.md` head mass target of approximately 250 g and any RP-01 load/actuator conclusion derived from it |
-| RP-01 effect | The system-level `~250 g` head target is obsolete; the current `~490 g` build-up is a **pre-M008 lower bound** until the selected C2 architecture's exact motion module is chosen and weighed |
+| RP-01 effect | The system-level `~250 g` head target is obsolete. This record's historical `~490 g` build-up is a pre-M008 spreadsheet model; current Layout 03 is nominally ~509 g complete at M008=20 g E, with M008 still unweighed and candidate servo substitution required |
 | Feeds | `payload-mass-capture.md`, CAD blockout, `physics.md`, `rig.md`, `gates.md`, actuator selection |
 
 ## 1. Locked RP-01 decisions
@@ -20,17 +20,17 @@
 | D-05 | Apply the complete nine-step finish system in §5. | The chipped-over-dark-substrate finish is central to the chosen visual read. |
 | D-06 | Fake seams except where assembly/service access requires a real split. | A heavily split shell adds about 28 g of flanges, screws and inserts and weakens the monocoque load path. |
 | D-07 | Model panel height offsets of **0.3–0.5 mm** in CAD. | This depth cue cannot be added honestly by paint alone. |
-| D-08 | Treat the **250 g complete-head target as infeasible** for this RP-01 build. | The pre-M008 provisional row build-up is approximately 490 g at 1.2 mm PLA walls; required C2 motion hardware adds further mass. |
+| D-08 | Treat the **250 g complete-head target as infeasible** for this RP-01 build. | The historical pre-M008 spreadsheet build-up was approximately 490 g at 1.2 mm PLA walls. Current Layout 03 is nominally ~509 g complete at M008=20 g E, with ~499–524 g C2 sensitivity and candidate-servo substitution still required. |
 
 These eight decisions are change-controlled RP-01 inputs. A later material, finish, seam, fastener, panel-offset or sizing change must name the affected decision ID, state the evidence that displaced it and propagate the resulting mass/CAD changes; it must not silently edit the planning model.
 
 ## 2. Selected-display geometry and fit
 
-**Layout revision, 2026-09-08:** the builder-approved [Layout 02](cad/head/layout-02/README.md) and [dimensional baseline v1.9](../../01-system/dimensional-baseline.md) now use an 86 mm main roof, 102 mm crown-inclusive height, 150 mm overall width, 115 mm depth, Ø60 mm hollow rolling ears and a 99 × 58 mm minimally clipped opening. The sizing tables below preserve this record's earlier planning basis; they are superseded for current CAD. D-01…D-08 remain unchanged. The new layout replaces its own old shell/mechanism allowances with CAD volumes while retaining explicit finish/hardware/module estimates; it does not create measured W evidence or silently overwrite the historical ~490 g pre-M008 model.
+**Current layout reconciliation, 2026-09-12:** [Layout 03](cad/head/layout-03/README.md) and [dimensional baseline v1.10](../../01-system/dimensional-baseline.md) now use an 86 mm main core, 104 mm crown-inclusive height, 150 mm overall width, 115 mm depth, Ø60 mm hollow rolling ears and a 99 × 58 mm minimally clipped opening. The sizing tables below preserve this record's earlier spreadsheet planning basis; they are historical inputs superseded for current CAD mass/geometry by Layout 03. D-01…D-08 remain unchanged. Layout 03 replaces old shell/mechanism allowances with CAD volumes while retaining explicit D/E finish/hardware/module estimates; it does not create measured W evidence.
 
 The selected display is the no-touch **Waveshare ESP32-S3-LCD-4.3, SKU 30493**. The confirmed board outline is **106.1 × 67.8 mm**; the panel is 800 × 480 with approximately **95.0 × 53.9 mm** active area. The published `118 g` remains `D`/listing evidence and is not an accepted mass measurement.
 
-| Dimension | Current RP-01 value |
+| Dimension | Historical pre-Layout-03 planning value |
 |---|---:|
 | Nominal complete head | 95 H × 150 W × 115 D mm |
 | Validation range | 90–100 H × 145–155 W × 110–120 D mm |
@@ -107,7 +107,7 @@ Validate this with a **60 × 60 mm finish coupon** containing representative pan
 
 Install heat-set inserts **after the coated-shell M019b reading**. Keep insert bores empty and paint-free for that reading by masking or drilling them clean, and record the method.
 
-## 6. Provisional mass model
+## 6. Historical provisional spreadsheet mass model
 
 The shell-area estimate uses a 127.5 W × 112.5 D × 95 H mm core box, subtracts the window opening and adds two side pods:
 
@@ -129,7 +129,7 @@ All values below are `E` evidence. They are a planning model only and never merg
 | M005 | Camera installed | 10 g | Camera Module 3 planning mass + retainer |
 | M006 | Camera moving interconnect | 8 g | FPC + stiffeners + strain relief |
 | M007 | Status-light assembly | 5 g | Planning allowance |
-| M008 | Dedicated C2 motion controller, ESP32-S3 module class | `U` | C1 is rejected on the selected carrier; exact module/mount/harness mass is not estimated and must be weighed |
+| M008 | Dedicated C2 motion controller, selected Waveshare ESP32-S3-Zero installed assembly | `U` | Board + mount + connectors + assigned local harness must be weighed. Layout 03's 20 g nominal and 10/20/35 g sweep are separate E analysis, not W evidence |
 | M009 | Runtime head IMU | 0 g | Not installed for stationary RP-01; bench IMU is excluded from the ledger |
 | M010 | Roll cradle, provisional PLA | 25 g | Planning allowance |
 | M011 | Pitch yoke, provisional PLA | 35 g | Planning allowance |
@@ -164,14 +164,14 @@ The mass result does not itself alter the authored motion vocabulary. It invalid
 
 | Item | Consequence |
 |---|---|
-| Neck physics | Replace 250 g sensitivity sizing with the ~490 g pre-M008 lower bound **plus C2** and then the actual per-axis tree. Dynamic torque must use revised inertia, not a simple mass multiplier. |
+| Neck physics | Use Layout 03's nominal ~362/436/509 g roll/pitch/yaw D/E tree with its 10/20/35 g M008 sensitivity, then substitute each candidate servo and later the measured tree. Dynamic torque must use revised inertia, not a simple mass multiplier. |
 | Actuator family | Reopen any XL330-class conclusion; evaluate torque-speed, current, RMS/thermal and feedback quality against the revised load. Heavier moving actuators feed back into the tree. |
 | Structural dynamics | Real seams and heavier finish affect stiffness/mass; retain the existing ≥25 Hz yaw/roll and ≥30 Hz pitch screening targets until registered evidence changes them. |
 | Whole-robot stability | A heavier head raises whole-robot CoM and reduces acceleration margin; propagate after the system baseline accepts a measured/revised value. |
 
 Open blockers:
 
-1. Decide whether 110–115 mm head-core depth is a real packaging requirement or may shrink toward approximately 90 mm.
+1. Validate Layout 03's 115 mm head depth and its swept/service clearances with physical hardware; any reduction is a controlled later optimization.
 2. Record whether the available printer is enclosed; this selects ASA versus PETG if the PLA structure fails.
 3. Replace the revised system-level lower bound with the measured M900 total and per-axis mass tree when available.
 4. Resolve the roll-bearing arrangement versus the display envelope.
@@ -183,6 +183,6 @@ Open blockers:
 
 1. Print and run the 60 × 60 mm finish coupon through all nine steps; weigh it bare and finished.
 2. Answer the depth and printer-enclosure blockers.
-3. Apply the provisional ~490 g pre-M008 lower bound **plus the selected C2 controller** to the per-axis physics model and actuator-family screen.
+3. Apply Layout 03's nominal and 10/20/35 g M008-sensitivity per-axis trees to the actuator-family screen, replacing the two XC330-size reference packages with each candidate's mass and envelope.
 4. Weigh bare M001 and M004 samples as soon as they are available.
 5. Replace every provisional row with `W` evidence during the irreversible build sequence.

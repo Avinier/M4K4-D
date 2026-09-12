@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | **RP-01 C2 selected: separate ESP32-S3 motion controller; C1 rejected on selected carrier; C2 module selected — Waveshare ESP32-S3-Zero.** |
-| Version | 0.9 |
+| Version | 0.10 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-09-07 |
+| Last reviewed | 2026-09-12 |
 | Governed by | `risk-prototype-plan.md` — permitted provisional option study (decision-closeout: "the architecture phase may begin with provisional option studies while prototypes run") |
 | Feeds | RP-02 (electrical/control backbone) → **ADR-06 (power)**, **ADR-12 (control topology)**; the monotonic-timebase deliverable (plan §104) |
 | Consumes | `system-design-brief.md` responsibility set + AD-01/AD-06/AD-08; `mass-envelope-ledger.md` head section |
@@ -174,7 +174,7 @@ Selected **2026-09-07**. Screened on pin budget, installed volume, bus-neutralit
 
 **Pin budget.** The future-ready screen needs twelve signals: servo bus TX/RX/DIR (3), E-stop, fault, interrupt (3), SPI (4), and the body-SBC UART link (2). Against 19 exposed, less GPIO0 (BOOT strapping) and GPIO21 (WS2812), roughly **17 remain clean — a margin of five over the full screen**, not merely over the reduced stationary-RP-01 five-signal case. The ESP32-S3 GPIO matrix means UART and SPI are not pin-locked, so the assignment is free rather than dictated by the board.
 
-**Volume.** 23.5 × 18 mm fits the reserved 35 × 25 × 15 mm C2 pocket in `layout-01` with clearance for a connector on each side. Headerless matters: pre-soldered 2.54 mm headers would consume most of the pocket's 15 mm depth, so the harness solders to the castellations.
+**Volume.** 23.5 × 18 mm fits the retained 35 × 25 × 15 mm C2 pocket now modelled in Layout 03. Headerless matters: pre-soldered 2.54 mm headers would consume most of the pocket's 15 mm depth, so the harness solders to the castellations. Layout 03 adds the removable tray and keepers, but actual plug/tool access and installed mass remain physical checks.
 
 **Bus-neutrality — the decisive property.** The servo family is still unselected. A bare MCU breakout keeps the transceiver external, so half-duplex TTL, RS-485 and plain PWM all remain reachable without changing the controller. Castellated edges also allow the same part to be reflowed onto a custom carrier at integrated-CAD time with no change of chip, toolchain or firmware.
 
@@ -195,7 +195,7 @@ Selected **2026-09-07**. Screened on pin budget, installed volume, bus-neutralit
 2. GPIO21 is the WS2812 and is out of the assignment.
 3. No USB-to-UART bridge — flashing is native USB with BOOT held, so the sealed head needs a C2 flashing path (CAD-04a) alongside the display one.
 4. Single-source (Waveshare). DevKitC-1 is the documented fallback if repackaging becomes acceptable; ESP32-S3 SuperMini is a rough second source.
-5. **M008 stays `U`.** The installed row is board + mount + connectors + local harness, and no mass enters the ledger from a datasheet. Keep the 10/20/35 g sensitivity sweep until the assembly is weighed.
+5. **M008 stays `U`.** The installed row is board + mount + connectors + local harness, and no mass enters the physical ledger from a datasheet. Layout 03 may use **20 g as a nominal `E` analytical case**, but must retain the **10/20/35 g sensitivity sweep** until the assembly is weighed.
 
 This is a selection, not validation. **RP02-G05 still owns** measured loop, link and timestamp performance.
 
@@ -234,3 +234,4 @@ This is a selection, not validation. **RP02-G05 still owns** measured loop, link
 | 2026-08-31 | 0.7 | Locked ESP32-S3 as the RP-01 motion-firmware class; moved Nano 33 BLE Sense to bench-only equipment; removed the runtime head-IMU path; recorded Core-0/Core-1/IRAM C1 mitigation and the official schematic audit that blocks C1 on the selected carrier, leaving a separate ESP32-S3 C2 module as the active implementation path. |
 | 2026-09-02 | 0.8 | Closed the C1/C2 fork in favour of C2, locked display-versus-motion ownership, centralized trajectory execution and safety on the separate ESP32-S3, and retained only the exact module and interface details as open. |
 | 2026-09-07 | 0.9 | Selected the C2 module (Waveshare ESP32-S3-Zero) and its bench twin (ESP32-S3-DevKitC-1-N8R8) in new §6.3, recorded the rejected candidates, strapping/WS2812/flashing constraints and single-source risk, and kept M008 unknown pending a weigh-in. Servo family, bus implementation and RP02-G05 validation remain open. |
+| 2026-09-12 | 0.10 | Clarified the M008 evidence boundary: physical mass remains U; Layout 03 uses 20 g only as a nominal E calculation while retaining 10/20/35 g sensitivity until the installed assembly is weighed. |

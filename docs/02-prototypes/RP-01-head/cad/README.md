@@ -9,10 +9,11 @@ This folder, `docs/02-prototypes/RP-01-head/cad/`, owns RP-01 CAD layout decisio
 | [Current Layout 03](head/layout-03/README.md) | Tapered head, service details, STEP, motion/optical checks, independent inspection groups and revised mass/A0 |
 | [Layout 03 verification](head/layout-03/review/verification.md) | Final checks, service paths, snapshots and explicit remaining gaps |
 | [Preserved Layout 02](head/layout-02/README.md) | Previous head layout and its original verification |
-| [Layout 02 dimensions](head/layout-02/dimensions.md) | Generated bounding boxes, axis datums and yoke-length segments for the current model |
+| [Layout 02 dimensions](head/layout-02/dimensions.md) | Preserved generated dimensions for the superseded Layout 02 model |
+| [Layout 03 model](head/layout-03/README.md) | Current planning CAD, generated dimensions, mass-placement model and verification record |
 | [Layout 03 brief](head/layout-03-brief.md) | Builder direction implemented in Layout 03; hardware-specific limitations remain explicit |
 | [Layout 01 study](head/layout-01/README.md) | Proposed crown, internal arrangement, A0 coordinates, STEP review and explicitly bounded validation |
-| [Layout 02 exterior brief](head/layout-02-brief.md) | Approved inputs behind the current CAD revision |
+| [Layout 02 exterior brief](head/layout-02-brief.md) | Historical inputs behind the superseded Layout 02 revision |
 | [Head decisions](head/decisions.md) | Agreed choices for the first layout, reasons, open decisions and conditions for revision |
 | [Head CAD requirements](head/requirements.md) | Existing CAD-01…CAD-06 requirements, relocated here with their original IDs and authority preserved |
 | [Head packaging estimates](head/packaging-estimates.md) | Component envelope references, the provisional roll depth stack and missing fit checks |

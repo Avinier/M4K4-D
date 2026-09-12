@@ -2,7 +2,7 @@
 
 Status: **modelled as [Layout 03](layout-03/README.md); checked packaging revision, not fabrication release**. See the [verification and remaining gaps](layout-03/review/verification.md). Preserve [Layout 02](layout-02/README.md) unchanged. Do not treat Layout 02 sampled clearance, mass tree or A0 datums as valid for the revised shell, yoke or harness.
 
-This brief records the 2026-09-09 review of Layout 02. The [Layout 02 dimensions log](layout-02/dimensions.md) is **not** part of this pass; it is a Layout 02 logging artifact generated from the current model. Layout 03 must emit its own dimensions log after the geometry exists.
+This brief records the 2026-09-09 review of Layout 02. The [Layout 02 dimensions log](layout-02/dimensions.md) is **not** part of this pass; it is a preserved Layout 02 logging artifact generated from that model. Layout 03 subsequently emitted its own dimensions log with the implemented geometry.
 
 ## What stays locked
 

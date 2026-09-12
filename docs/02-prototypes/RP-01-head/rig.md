@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Status | Not started (blocked on Stage 0 workbench readiness + selected concept) |
+| Status | Not started (Concept A selected; blocked on Stage 0 workbench readiness, candidate servo screen and gate registration) |
 | Authority | `workbench.md` scored-test readiness gate; `risk-prototype-plan.md` RP-01 rig requirements |
-| Physical baseline | `material-finish-mass-decision.md`; representative planning load is ~490 g at 1.2 mm PLA **plus selected M008 C2 hardware**, pending exact module selection and the measured per-axis mass tree |
+| Physical baseline | `dimensional-baseline.md` v1.10 + Layout 03: 104 × 150 × 115 mm; nominal D/E mass ~362/436/509 g roll/pitch/yaw at M008=20 g, with ~499–524 g complete C2 sensitivity. M008 remains physically unweighed; substitute servo candidates before freezing ballast |
 
 Requirements to satisfy (from the plan): rigid guarded bench fixture; adjustable ballast at representative head CoM; commanded + measured joint state on a monotonic clock; independent video with visible timing cue; safe physical stop; measure/derive joint angle, current, voltage, temperature, sound level at fixed position, structural deflection, camera image movement; cable behaviour across the workspace.
 
-The fixture and ballast must represent the approximately **95 H × 150 W × 115 D mm nominal** complete head, validated within **90–100 H × 145–155 W × 110–120 D mm**, the current **~490 g `E` planning lower bound at 1.2 mm PLA** (approximately 472 g at 1.0 mm) **plus M008 C2 controller hardware**, selected no-touch Waveshare SKU 30493 display envelope/mass, selected visible-light Raspberry Pi Camera Module 3 Wide SC0874 envelope/mass, actual candidate-axis offsets, and CAD-derived CoM/inertia as soon as available. The 250 g system target is historical and must not be the representative scored ballast. Keep ballast adjustable for controlled sensitivity/overload checks, but record the nominal scored configuration explicitly and replace the planning load with the registered `W`/CAD per-axis tree when available. Microphones, speaker, battery and primary body electronics are not part of nominal moving-head ballast.
+The fixture and ballast must represent the **104 H × 150 W × 115 D mm Layout 03** complete head and its nominal **~362/436/509 g D/E roll/pitch/yaw tree at M008=20 g**, while remaining adjustable across at least the current ~499–524 g complete C2 sensitivity and the mass/CoM change of each servo candidate. It must include the selected no-touch Waveshare SKU 30493 display and Camera Module 3 Wide SC0874 envelopes, actual candidate-axis offsets and the candidate-specific CAD CoM/inertia. The 95 mm band and 250 g system target are historical and must not define scored ballast. Record the nominal scored configuration explicitly and replace planning rows with the registered as-built `W`/CAD tree when available. Microphones, speaker, battery and primary body electronics are not part of moving-head ballast.
 
 Design notes, deliberately ugly: the rig is a decision instrument, not a mini droid. Every hour spent making it pretty is an hour not spent measuring.
 

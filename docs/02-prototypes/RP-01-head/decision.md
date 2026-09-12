@@ -2,8 +2,8 @@
 
 | Field | Value |
 |---|---|
-| Status | **Mechanism path: Concept A for RP-01; Concept B not authored. Material/mass, C2 controller-boundary and C2 module decisions locked. Actuator family and scored gates still open.** |
-| Revised | 2026-09-09 |
+| Status | **Mechanism path: Concept A for RP-01; Concept B explicitly waived. Material/finish, C2 controller-boundary and C2 module decisions locked. Physical mass, actuator family and scored gates still open.** |
+| Revised | 2026-09-12 |
 | Question | Can a manufacturable powered roll/pitch/yaw mechanism carry a representative Makad head while producing safe, repeatable, quiet-enough and characterful motion with acceptable range, reversal, settling, camera behaviour, wiring movement, calibration, and controller failure handling? |
 | Feeds | ADR-02 (head mechanism), ADR-03 (controller), ADR-08, ADR-12; mass/power/acoustic budget rows |
 | Rule | A failed Core three-axis gate cannot become a two-axis fallback without reopening approved V1 scope. Failed runs stay cited here. |
@@ -22,7 +22,7 @@
 | D-05 | Apply the complete nine-step finish system after a weighed 60 × 60 mm coupon validates coating mass and scale. |
 | D-06 | Keep cosmetic seams integral; create real splits only for demonstrated assembly/service access. |
 | D-07 | Model 0.3–0.5 mm panel height offsets in CAD. |
-| D-08 | Use the approximately 490 g 1.2 mm-wall **pre-M008 lower bound**, then add the required C2 controller hardware for RP-01 sizing; the old 250 g target is infeasible for this build. |
+| D-08 | The old 250 g target is infeasible. For current screening use Layout 03's nominal ~362/436/509 g roll/pitch/yaw D/E tree at M008=20 g, retain 10/20/35 g C2 sensitivity, and substitute each servo candidate before selection; physical M008/M900 remain unweighed. |
 
 The same record makes the full-width opaque window mask, display flashing path and separable yaw-plane harness boundary mandatory CAD requirements. Any departure from D-01…D-08 requires an explicit superseding decision and propagation through the mass register, physics, rig and gates.
 

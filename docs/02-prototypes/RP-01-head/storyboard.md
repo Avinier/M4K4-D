@@ -4,16 +4,16 @@
 |---|---|
 | Status | Provisional authored kinematics v0.2 — per-motion profiles assigned; design hypotheses, not registered gate thresholds |
 | Owner | Project builder |
-| Last updated | 2026-08-31 |
+| Last updated | 2026-09-12 |
 | Semantic source | `intent.md` |
-| Load baseline | `material-finish-mass-decision.md`: approximately 490 g at 1.2 mm PLA is a pre-M008 lower bound; add required C2 hardware. Old 250 g / preliminary inertia and torque assumptions are invalid for feasibility sizing |
+| Load baseline | Layout 03 nominal D/E tree: ~362/436/509 g roll/pitch/yaw at M008=20 g; retain 10/20/35 g C2 sensitivity and substitute each servo candidate. Nothing is W evidence. Old 250 g / generic inertia and torque assumptions are invalid |
 | Feeds | `physics.md`, `gates.md`, mechanism concept comparison and later motion firmware |
 
 ## 1. How to read this storyboard
 
 This document translates the accepted character vocabulary in `intent.md` into poses, keyframes, angles and timing that a mechanism can be designed against. It deliberately starts each move with what the audience should read; numbers describe that performance rather than replace it.
 
-The numbers are **authored targets** chosen from Makad's intended character, human head-gesture research and practical droid-performance references. They are not yet pass/fail thresholds. They must be reviewed by the builder, exercised in simulation or an acted mock-up, checked against the revised approximately 490 g pre-M008 lower bound **plus C2 hardware** and eventual per-axis mass tree, and frozen in `gates.md` before scored RP-01 runs. The kinematic targets remain authored intent; actuator feasibility, torque, current, thermal load and settling must be recomputed from the new mass/CoM/inertia evidence rather than inherited from the old 250 g baseline.
+The numbers are **authored targets** chosen from Makad's intended character, human head-gesture research and practical droid-performance references. They are not yet pass/fail thresholds. They must be reviewed by the builder, exercised in simulation or an acted mock-up, checked against the Layout 03 per-axis tree with C2 sensitivity and candidate-specific servo substitution, and frozen in `gates.md` before scored RP-01 runs. The kinematic targets remain authored intent; actuator feasibility, torque, current, thermal load and settling must be computed from the current mass/CoM/inertia evidence rather than inherited from the old 250 g baseline.
 
 ### Coordinate convention
 

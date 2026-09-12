@@ -1,6 +1,6 @@
 # Makad / M4K4-D
 
-> **Current project overview** — last reconciled **8 September 2026**
+> **Current project overview** — last reconciled **12 September 2026**
 >
 > Foundation approved: **14 August 2026** · V1 deadline: **5 December 2026** · Roadmap position: **Stage 0/1 — RP-01 head preparation; RP-02 planning opened**
 
@@ -16,18 +16,18 @@ This README is the orientation document over the whole repository. It states cur
 
 ## Where the project stands
 
-| Area | Status (2026-09-08) |
+| Area | Status (2026-09-12) |
 |---|---|
 | Foundation (vision, scope, constraints, success criteria, scenarios) | Approved. Numeric `SC-TBD`/`CON-TBD` thresholds remain open by design. |
 | System design brief | Approved v1.3. Thirteen ADRs defined, none closed. |
-| Risk-prototype plan | Approved v1.10. Seven prototypes; **no run has been executed.** v1.10 gives RP-02 a design question plus a gate question and reshapes RP02-G02/G03 (see below). |
+| Risk-prototype plan | Approved v1.11. Seven prototypes; **no run has been executed.** v1.10 introduced the RP-02 design/gate split; v1.11 propagates Layout 03, C2 mass sensitivity, candidate-servo substitution and the Concept B waiver. |
 | Workbench / Stage 0 | Approved; first tools selected and partly ordered. Tool access, E-stop verification, logging schema, monotonic timebase and video sync are still open, so **powered scored testing is blocked.** |
 | Run identity | Convention v1.0 active. Guarded launcher not built. |
-| Dimensional baseline | v1.8 active: 300 × 205 × 180 mm robot, 95 × 150 × 115 mm nominal head, Ø84 wheels, 170 mm track, 110 mm axle-to-caster, 60 mm neck. |
+| Dimensional baseline | v1.10 active: 300 × 205 × 180 mm rounded robot target; Layout 03 head 104 × 150 × 115 mm, provisional 304 mm neutral stack, Ø84 wheels, 170 mm track, 110 mm axle-to-caster, 60 mm neck. RP-06 must accept the 304 mm stack or recover 4 mm. |
 | Selected components | Display, camera and C2 motion-controller module locked (see below). Servos, SBC, battery, drive motors, harness: open. |
-| RP-01 three-axis head | Intent, storyboard and physics authored. **Concept A is the RP-01 path; Concept B will not be authored.** Gates unregistered. Rig not built. **Layout 03** is the current 1:1 packaging revision (104 mm helmet stern, 104 mm crown, 32 mm yoke); camera/C2/insert retention details closed 2026-09-10. Layout 02 is preserved. Not a fabrication release or servo freeze. |
-| Head mass | Planning lower bound ~490 g at 1.2 mm PLA **before** the C2 assembly; nothing weighed yet. The earlier 250 g target and its inertia/torque proxies are inadmissible. |
-| RP-02 electrical/control backbone | Folder opened 2026-09-08: intent (design + gate question), state register S00…S17 and proposed `MD-01`, power architecture PA-01…10, link contract v0.1, fault matrix F-01…16, rig, candidate gates, ADR closure ladder. Power/energy ledger v0.1 and timebase strategy v0.1 live in `01-system/`. **Nothing registered, selected or run.** Phase A is live; Phase B waits on the RP-01 servo family and an SBC candidate; Phase C on the battery gate. |
+| RP-01 three-axis head | Intent, storyboard and physics authored. **Concept A is the RP-01 path; Concept B is waived.** Gates unregistered. Rig not built. **Layout 03** is the current 1:1 packaging revision (104 mm helmet stern/crown, 32 mm visible yoke). Camera/C2/insert **CAD detailing** is closed; purchased fits and physical retention remain open. Layout 02 is history. Not a fabrication release or servo freeze. |
+| Head mass | Layout 03 nominal D/E tree: ~362/436/509 g roll/pitch/yaw at a 20 g C2 allowance; C2 sensitivity gives ~499–524 g complete. Nothing is weighed, M008 remains `U`, and candidate servo masses must be substituted before selection. The earlier 250 g target and generic inertia/torque proxies are inadmissible. |
+| RP-02 electrical/control backbone | Folder opened 2026-09-08: intent (design + gate question), state register S00…S17 and exact-20-minute proposed `MD-01`, power architecture PA-01…10, link contract v0.2, fault matrix F-01…16, rig, candidate gates and ADR closure ladder. Power/energy ledger v0.2 and timebase strategy v0.2 live in `01-system/`. **Nothing registered, selected or run.** Phase A is live; Phase B waits on the RP-01 servo family and an SBC candidate; Phase C on the battery gate. |
 | Architecture, budgets, BOM, integrated CAD | Not started; blocked on prototype evidence by design. |
 | `specsheets/` | Exploratory, non-binding. |
 | `visuals/` | Provisional references; several show superseded details (mouths, ear microphones, yoke-mounted ears). |
@@ -50,11 +50,11 @@ Each lock reopens only through the change-control rule in its governing record.
 
 Ordered by the risk-prototype plan's open-inputs list and the intuition guide:
 
-1. **Torque, RMS and modal screen** per axis from the Layout 03 mass tree, then a servo family shortlist. Layout 03 packaging (104 mm helmet) is the accepted direction; camera/C2/insert retention is modelled. Display, servo-SKU, shaft and harness details remain open.
+1. **Torque-speed, RMS/thermal and modal screen** per axis from the Layout 03 mass tree, recalculated for each servo candidate. Use M008=20 g as the nominal analytical case and retain 10/20/35 g sensitivity until weighed. Layout 03 packaging is the accepted direction; display, servo-SKU, shaft, purchased fits and qualified harness details remain open.
 2. **Register RP-01 gates** (thresholds frozen before any scored run).
 3. **Stage 0 closure:** verify tools and E-stop, implement the logging schema, monotonic timebase and video-sync method, and the run generator/guarded launcher. This is software work and should not wait on hardware.
 4. **First weigh-ins** when the display and camera samples arrive (M001, M004, finish coupon).
-5. **RP-02 Phase A:** approve and register the state set and `MD-01`; replace the power ledger's `E` datasheet references with cited `D` rows; implement the timebase and link contract v0.1 on the DevKitC-1 twin and run the offset-error measurement as exploratory runs; register G04/G05 candidate thresholds. Software and paper — does not wait on purchases.
+5. **RP-02 Phase A:** approve and register the state set and `MD-01`; replace the power ledger's `E` datasheet references with cited `D` rows; implement timebase v0.2 and link contract v0.2 on the DevKitC-1 twin and run the offset-error measurement as exploratory runs; register G04/G05 candidate thresholds. Software and paper — does not wait on purchases.
 6. **Distribution bench** when the Korad, multimeter and logic analyzer arrive; G01 review on it.
 
 ## Documents

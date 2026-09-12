@@ -1,10 +1,10 @@
 # Head packaging estimates
 
-Recorded: **2026-09-07**, from the fitting discussion and its component-dimension research. Status: **layout inputs and estimates; no CAD fit proof**. Use [decisions.md](decisions.md) for choices and [requirements.md](requirements.md) for inherited CAD requirements.
+Recorded: **2026-09-07**, from the fitting discussion and its component-dimension research. Status: **historical pre-layout inputs, superseded by Layout 03 geometry and mass properties**. Use [decisions.md](decisions.md) for current choices, [layout-03](layout-03/README.md) for current packaging and [requirements.md](requirements.md) for inherited CAD requirements.
 
 ## System envelope
 
-The [dimensional baseline](../../../../01-system/dimensional-baseline.md) remains the authority. Values below are a working extract; revise this extract if that source changes.
+The [dimensional baseline](../../../../01-system/dimensional-baseline.md) remains the authority. Values below preserve the inputs used before Layout 01 and must not be used as the current envelope.
 
 **Camera-crown update, 2026-09-07:** [HEAD-CAD-06](decisions.md#head-cad-06--camera-crown-and-continuous-bezel) selects an upward trapezoidal protrusion at the camera, integrated into the head shell and continuous bezel. The figures below predate its dimensioned layout. Include the crown in total head height and swept clearance, then revise shell/finish, camera-mount mass and per-axis properties. Its dimensions and any resulting revision to the earlier head-height band are not yet established.
 

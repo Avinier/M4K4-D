@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | **Living. Face display and head camera selected; remaining rows are candidates unless explicitly marked otherwise.** |
-| Version | 0.17 |
+| Version | 0.18 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-09-07 |
+| Last reviewed | 2026-09-12 |
 | Governed by | `risk-prototype-plan.md` §"Continuous sourcing and data workstream" (deliverable 1) |
 | Feeds | First project cost range (CON-TBD-13), RP-01…RP-07 inputs, later BOM |
 
@@ -36,7 +36,7 @@ The RP-01 head-controller split is selected: the display carrier renders the fac
 | Smoked face window | Acrylic/PC with ~94–95 W × 53–54 H mm optical aperture inside a ~110–115 W × 60–65 H mm bezel/window treatment, hiding display edges | Local acrylic | Common | 0–2 d | Tint film over clear panel | 1 | 200–800 | Low | Cutting | Laser/print fit |
 | **Camera — SELECTED** | **Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, order code SC0874**; IMX708, 11.9 MP, 120° diagonal / 102° horizontal / 67° vertical, autofocus, HDR, 25 × 24 × 12.4 mm, MIPI CSI-2. Exact module is locked; see `camera-candidate-study.md`. | Supplier not locked; ElectroPi and Silverline are current leads | ElectroPi listed 62 units and Silverline listed in stock on 2026-08-29; reconfirm | Domestic dispatch estimate to be confirmed | Contingency only: Arducam B031202 after recorded change control | 1 sample; second only after acceptance | **3,088–3,210 verified listings; planning allowance 3,000–4,500** | Med until actual mass, SBC compatibility, image/latency and moving-interconnect tests close | Camera calibration target, live frame/error/latency logger, axis-conditioned cable endurance fixture, scale | Central lens/LED/display clearance; complete module, mount, connector and three-axis moving-link mass/CoM. Supplied 200 mm FPC is bench-usable only until the H1/H2/H3 evidence in `head-harness-routing-study.md` selects a production interconnect |
 | Status light | Addressable LED beside camera (SCOPE-17) | Elegoo / Robu | On hand | 0 | Single-colour LED + driver | 1+ | 100–500 | Low | Soldering | Optic/diffuser |
-| Head actuators (roll/pitch/yaw) | Smart servos/geared motors + feedback sized from the **~490 g pre-M008 lower bound plus C2 hardware** and the eventual per-axis mass/inertia tree; Concept A uses body-fixed yaw and moving pitch/roll, with candidate selection gated by transient torque-speed plus busy-minute RMS/current/thermal evidence | Robu / Zbotic / MG Super Labs | Mixed; re-check exact SKU | 0–10 d | Feetech STS class ↔ DYNAMIXEL XL/XC class | 3+ plus one bench sample where needed | 3,000–34,000 | Med–High (exact SKU/cost) | Current/voltage logging, output indicator | 60 mm neck allocation, near-CoM gimbal centre, direct actuation first |
+| Head actuators (roll/pitch/yaw) | Smart servos/geared motors + feedback screened against Layout 03's nominal **~362/436/509 g roll/pitch/yaw** tree at M008=20 g, retaining M008 sensitivity and substituting each candidate's own mass/envelope; Concept A uses body-fixed yaw and moving pitch/roll, with selection gated by torque-speed plus busy-minute RMS/current/thermal evidence | Robu / Zbotic / MG Super Labs | Mixed; re-check exact SKU | 0–10 d | Feetech STS class ↔ DYNAMIXEL XL/XC class | 3+ plus one bench sample where needed | 3,000–34,000 | Med–High (exact SKU/cost) | Current/voltage logging, output indicator | 60 mm neck allocation, A0 gimbal centre, direct actuation first |
 | Head joint structure | Compact yaw load-bearing shaft/bearing, rising pitch yoke with double ear pivots, and an unresolved display-clear roll support; compare rear spaced-bearing cartridge, annular/perimeter support and displaced roll axis. Ear shells are removable covers, not the structural load path | Local bearing supplier / fabricated parts | Common classes, exact sizes TBD | 0–7 d | Small radial/angular-contact pair ↔ suitable compact supported shaft/ring | set | 500–3,000 | Med until roll load path closes | Printer/machining/measurement | Concept A section blockout; must prove display clearance, overhung moment/deflection, mass and 60 mm fit before CAD freeze |
 | Body microphone array | 4 synchronized PDM MEMS microphones, non-collinear/wide rigid body geometry | Robu | Common | 0–3 d | Alternate synchronized digital MEMS array | 4 | 800–2,400 | Med | Soldering | Body PCB/subframe + acoustic ports; none in ears/head |
 
@@ -79,7 +79,7 @@ This is a **planning envelope to gate procurement decisions**, not a budget comm
 
 - [ ] Verify local stock/price for the "Now" candidates by walking Lamington Road once (per workbench sourcing note).
 - [ ] Confirm Hubtronics physically holds the selected no-touch SKU 30493, obtain one sample and run the geometry/mass/animation/power/window validation before freezing the head CAD.
-- [ ] Add and source a credible Concept B before RP-01 fabrication; Concept A alone does not satisfy the ≥2-concept rule.
+- [x] Concept B was explicitly waived by the builder before fabrication; Concept A is the RP-01 path. No second mechanism sourcing campaign is required unless change control reopens it.
 - [ ] Resolve battery chemistry candidate (ADR-06) before any pack purchase.
 - [ ] Attach a verified source + one acceptable substitute to each architecture-critical row (RP06-G05 gate).
 - [ ] Promote selected rows into a later `hardware/bom/` roll-up once ADRs close.
@@ -103,3 +103,4 @@ This is a **planning envelope to gate procurement decisions**, not a budget comm
 | 2026-08-31 | 0.15 | Selected ESP32-S3 as the RP-01 motion-firmware class, made a dedicated module conditional on C1, recorded C1's carrier-GPIO block, moved Nano 33 BLE Sense and IMU use to bench equipment, and deferred all new controller/IMU purchases. |
 | 2026-09-02 | 0.16 | Closed the C1/C2 fork: rejected C1 on selected-carrier GPIO evidence, selected one dedicated ESP32-S3 C2 motion controller, retained the exact module and purchase as open, and replaced the stale 250 g actuator-sizing input with the ~490 g pre-M008 lower bound plus C2. |
 | 2026-09-07 | 0.17 | Selected the exact C2 module (Waveshare ESP32-S3-Zero, headerless) with verified India stock, a spare and two fallbacks, and recorded that M008 mass still requires a weigh-in. The ESP32-S3-DevKitC-1-N8R8 bench twin is recorded in `workbench.md`, not here. Servo family and purchase authorization remain open. |
+| 2026-09-12 | 0.18 | Propagated the Layout 03 per-axis mass tree and required candidate-servo substitution into the actuator row; recorded Concept B's explicit waiver. No actuator or new purchase selected. |
