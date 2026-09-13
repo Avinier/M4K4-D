@@ -1,6 +1,6 @@
 # Layout 03 — layered taper, yoke, inspection tree
 
-Status: **modelled as [Layout 03](layout-03/README.md); checked packaging revision, not fabrication release**. See the [verification and remaining gaps](layout-03/review/verification.md). Preserve [Layout 02](layout-02/README.md) unchanged. Do not treat Layout 02 sampled clearance, mass tree or A0 datums as valid for the revised shell, yoke or harness.
+Status: **modelled as [Layout 03](layout-03/README.md); audited packaging revision with known blockers, not fabrication release**. See the [verification and remaining gaps](layout-03/review/verification.md). Preserve [Layout 02](layout-02/README.md) unchanged. Do not treat Layout 02 sampled clearance, mass tree or A0 datums as valid for the revised shell, yoke or harness.
 
 This brief records the 2026-09-09 review of Layout 02. The [Layout 02 dimensions log](layout-02/dimensions.md) is **not** part of this pass; it is a preserved Layout 02 logging artifact generated from that model. Layout 03 subsequently emitted its own dimensions log with the implemented geometry.
 
@@ -29,7 +29,7 @@ Go beyond trial boxes. Layout 03 must show:
 - heat-set / captive-nut pockets at repeatedly serviced joints (visible M2 stay appearance; internal size may be M3 as already listed in the sourcing matrix)
 - named roll-bearing seats and retention on the 22 mm pair (fits still trial until a SKU)
 - coaxial coupling with a shaft bore and a fastening scheme, still XC330-size as the envelope
-- mechanical hard stops for pitch and roll at the usable-travel limits, independent of servo commands
+- mechanical hard stops for pitch and roll **beyond** the registered usable-travel limits with separately defined margin, independent of servo commands; the first Layout-03 implementation incorrectly placed contact at the provisional usable limits and must be revised
 
 Receiving pilots are not PLA threads. Exact purchased insert SKU can remain a BOM line; the CAD must have the pockets.
 

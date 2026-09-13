@@ -25,7 +25,7 @@ All angles are robot-relative Euler-angle commands from the calibrated attentive
 | Yaw `Y` | Face forward | Turn toward robot-left | Turn toward robot-right |
 | Roll `R` | Head level | Robot-left side rises | Robot-left side lowers |
 
-`P0 Y0 R0` is neutral. A keyframe such as `P+18 Y0 R0` means 18° down from neutral. Direction signs are a documentation convention; firmware signs may differ but must expose this convention at its interface.
+`P0 Y0 R0` is neutral. A keyframe such as `P+18 Y0 R0` means 18° down from neutral. These storyboard signs are the required public motion interface. The current Layout-03 CAD right-hand rotations map as `P_cad=+P_story`, `Y_cad=-Y_story`, `R_cad=-R_story`. Firmware or tooling may use different internal signs only through an explicit, tested mapping; signed gravity/cable calculations and asymmetric pose checks must never mix the conventions silently.
 
 ### Curve language
 

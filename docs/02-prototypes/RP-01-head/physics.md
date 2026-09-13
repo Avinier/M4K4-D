@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Layout 03 paper-physics inputs available; candidate servo screening is ready.** Final actuator freeze remains blocked on candidate-specific iteration, physical mass, torque-speed, RMS/thermal, cable, hysteresis and modal evidence |
+| Status | **Layout 03 external rigid-body demand complete 2026-09-13; complete paper physics OPEN.** Structural screening flags the current pitch frame and roll saddle; actuator-internal inertia is absent from the numerical model. C01 remains a preliminary external-load screen, not a paper pass. |
 | Inputs | `storyboard.md` ranges and kinematic sizing cases; `../../01-system/dimensional-baseline.md`; `material-finish-mass-decision.md`; `payload-mass-capture.md`; CAD m, CoM and inertia tensor; candidate axis placements |
 | Method | `docs/intuition.md` §5.1 step 3; worked analogue: the Adam head paper |
 
@@ -105,6 +105,19 @@ Do **not** divide the `≤0.25°` complete-output target equally among yaw, pitc
 
 The pitch-specific modal target recognizes the 100 ms laugh reversal's characteristic content around 10 Hz and its meaningful higher-frequency content. A 30–40 Hz pitch result requires validated input shaping or a slower laugh; it is not an unqualified best-case pass. Modal frequency alone does not guarantee 300 ms settling—damping, trajectory spectrum and closed-loop bandwidth also determine ring-down. Estimate in CAD, screen with an impact/tap test under representative mass and confirm during commanded motion.
 
+### Layout-03 stiffness screen — 2026-09-13
+
+This is an order-of-magnitude risk screen, not FEA and not measured modal evidence. With `J_pitch≈0.000728 kg·m²`, the pitch targets require:
+
+| Loaded pitch target | Required equivalent rotational stiffness `K=(2πf)²J` |
+|---:|---:|
+| 30 Hz | approximately 25.9 N·m/rad |
+| 40 Hz | approximately 46.0 N·m/rad |
+
+The current pitch frame removes its front crossbar for servo sweep and uses a light 4 mm-deep loop plus a 2 mm adapter. A deliberately simple 4 × 4 × 30 mm PLA-member estimate over `E=1.5–3.5 GPa` gives only about 1.1–2.5 N·m/rad and a corresponding 6–9 Hz pitch mode. The exact assembly load path is more complicated, so those values are not a predicted final frequency. They are sufficient to classify the current geometry as a **high-risk structural blocker** because the estimate lies near the laugh's ~10 Hz content and far below the 30/40 Hz targets.
+
+The open roll-servo saddle similarly screens near 12 N·m/rad and ~21 Hz using thin open-section torsion. Treat it as a secondary stiffness risk against the 25/30 Hz yaw/roll targets. Stiffen/redesign first, then obtain representative loaded modal evidence; control tuning cannot be credited with repairing an unverified flexible load path.
+
 ## Explicit combined-load cases
 
 Use the actual candidate mechanism's axis order and mass properties; do not treat these as separable single-axis tests:
@@ -118,10 +131,10 @@ Use the actual candidate mechanism's axis order and mass properties; do not trea
 Per axis, per candidate axis placement, compute:
 
 1. **Load quantities:** m, d (axis→CoM perpendicular distance), J_axis = J_com + m·d², estimated K (structure + horn + spline)
-2. **Time-varying torque:** `τ(t) = J_axis·α(t) + τ_gravity(θ,t) + τ_friction + τ_cable + τ_coupling`; preserve sign rather than adding every magnitude blindly
+2. **External time-varying torque:** `τ_external(t) = J_axis·α(t) + τ_gravity(θ,t) + τ_friction + τ_cable + τ_coupling`; preserve sign rather than adding every magnitude blindly. The completed workbook covers this boundary.
 3. **Transient screen:** compare worst-case `τ(t)` at the simultaneous required speed with the actuator's measured torque-speed/current envelope at the intended voltage and temperature. Do not multiply a peak transient by a generic selection factor and compare it with a continuous/rated point; do not treat stall torque at zero speed as the available trajectory torque.
 4. **Busy-minute RMS/current screen:** `τ_RMS = sqrt((1/T)·∫τ(t)²dt)` over a preregistered realistic busy minute, with measured `I_RMS`, voltage sag and temperature preferred for acceptance. This precedes actuator freeze and remains separate from the transient screen.
-5. **Reflected inertia** J/N² vs. rotor inertia, target <~10× — only where the actuator publishes rotor inertia; otherwise mark UNCOMPUTABLE → moves to the rig, not assumed passed
+5. **Actuator internal/reflected inertia:** add `J_internal,eq·α` to the transient actuator demand, or compare `J_load/N²` with rotor inertia on the motor side. For M288 pitch, `J_load/N²≈8.78×10⁻⁹ kg·m² = 0.0878 g·cm²`; this is the rotor-inertia value at which internal and payload acceleration demand are equal. Actual XC330 rotor/gear inertia is not in the retained evidence, so mark the contribution `U/UNCOMPUTABLE` and obtain official data or bound it with a controlled unloaded acceleration/current test. Do not assume a 2–4× multiplier.
 6. **Resonance estimate** f_n ≈ (1/2π)·√(K/J_eff) — flag anything the storyboard excites near it
 7. **Balance/preload option:** compare A0/A1/A2 plus any torsion/counterbalance candidate; an ordinary torsion spring must remain pre-wound with its free angle outside usable travel if same-sign preload is required. Record torque versus angle, added mass, inertia, asymmetric load, unpowered path, hold current and thermal consequence
 8. **Combined tilted cases:** evaluate the explicit curious-yes and curious-no trajectories above, including roll holding torque while the other axis accelerates
@@ -132,4 +145,4 @@ Every number carries its assumption. A cell without a source is a guess wearing 
 
 ## Results
 
-Physical installed-mass evidence is captured in `payload-mass-capture.md`. Layout 03 now supplies the provisional per-axis membership, CoM and inertia needed for candidate screening. These remain `D/E` planning results—not accepted physical evidence—and must be recalculated for each servo candidate, then replaced by the as-built `W` tree before actuator freeze.
+Physical installed-mass evidence is captured in `payload-mass-capture.md`. Layout 03 supplies the provisional per-axis membership, CoM and payload inertia needed for candidate screening, and `fullproofmath.md` records the completed **external rigid-body** demand/sensitivity calculation plus the 2026-09-13 closure audit. These remain `D/E` planning results—not accepted physical evidence. Structural dynamics and actuator-internal inertia are not passed. C01 (XC330-M288-T) matches the 23 g housings already in the tree, but that mass match does not complete its acceleration, stiffness, voltage or thermal screen.

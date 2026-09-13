@@ -1,6 +1,6 @@
 # Layout 03 verification — 2026-09-09
 
-**Geometry, sampled motion, modeled jackets, optics, hard stops and the revised service paths passed the checks below.** Layout 02 was not modified by this implementation. Layout 03 retains unresolved purchased fits and cable-flex transitions; it is not a fabrication release.
+**The originally scoped non-fastener packaging, sampled motion, modeled jackets, optics and service-path checks passed. A 2026-09-13 closure audit found two cross-frame screw collisions and showed that the authored hard stops conflict with the required usable-range margin.** Layout 02 was not modified by this implementation. Layout 03 retains unresolved structural, purchased-fit and cable-flex work; it is not a fabrication release.
 
 ## Envelope and taper decision
 
@@ -28,15 +28,15 @@ The complete nominal estimated mass is 6.30 g lower than Layout 02, while the es
 
 | Check | Result |
 |---|---|
-| Physical cross-frame motion | 56 poses × 490 pairs = 27,440; zero detected overlaps |
+| Physical cross-frame motion | Original scope: 56 poses × 490 **non-fastener** pairs = 27,440; zero detected overlaps. This is not an all-hardware clearance pass. |
 | Modeled jacket vs mechanism | 56 poses × 210 pairs = 11,760; zero detected pinches |
 | Neutral same-frame non-fastener intersections | Zero |
 | Camera / C2 positive retention | 0.4 mm nudges of the camera in its bracket and of the C2 PCB in its tray all hit; imported camera-to-bracket gap **0.10 mm** (was 1.50 mm) |
 | Insert pocket mouths | Front and rear Ø3.2 pockets open through the receiver faces; zero plastic on the 0.2 mm face probes (was 0.2 mm / 0.1 mm short) |
 | Original full-size display/package checks | Zero package overlap; zero active-display volume excluded |
 | Optical envelope | Nine neutral/extreme combined poses × five obstructions; zero revised intersections |
-| Roll hard stops | Contact at −18/+18°; positive interference at −19/+19° |
-| Pitch hard stops | Contact at −22/+40°; positive interference at −23/+41° |
+| Roll hard stops | Geometry contact at −18/+18°; positive interference at −19/+19°. **Requirements conflict:** ±18° is currently the provisional usable range, so no separate stop margin exists. |
+| Pitch hard stops | Geometry contact at −22/+40°; positive interference at −23/+41°. **Requirements conflict:** −22/+40° is currently the provisional usable range, so no separate stop margin exists. |
 | C2 USB installed plug / withdrawal / rear-tool reserves | Clear with rear cover removed |
 | C2 removal | Three lift samples to +Z27, then five rearward samples to −X100; tray and board clear other retained physical components |
 | Camera removal | Four rearward samples on detached front carrier; camera and bracket clear crown opening |
@@ -45,7 +45,30 @@ The complete nominal estimated mass is 6.30 g lower than Layout 02, while the es
 | Entire assembly topology | 1,019 solid occurrences, zero failures; whole-assembly self-intersection skipped for catalog detail |
 | Viewer controls | Actual installed resolver tested: 16 master combinations, three pose settings, no missing/double frame assignments; sidecar A0 matches axes.json |
 
-The motion grid is 7 roll values (−18, −15, −6, 0, 6, 15, 18) × 8 pitch values (−22, −15, −5, 0, 10, 20, 30, 40). The sole excluded cross-frame pair is the intentional pitch-servo/output-trunnion interface. Conservative catalog envelopes are used for collision checking; the export retains all 631 camera and 15+15 servo solids at scale 1.
+The motion grid is 7 roll values (−18, −15, −6, 0, 6, 15, 18) × 8 pitch values (−22, −15, −5, 0, 10, 20, 30, 40). Within the original non-fastener set, the sole excluded cross-frame pair is the intentional pitch-servo/output-trunnion interface. Fasteners were excluded globally from that set. Conservative catalog envelopes are used for collision checking; the export retains all 631 camera and 15+15 servo solids at scale 1.
+
+## Closure-audit corrections — 2026-09-13
+
+An expanded read-only collision audit included cross-frame fasteners and found two unintended intersections:
+
+| Fastener | Other part | Intersection volume |
+|---|---|---:|
+| `bearing_retainer_M2_39.5_-9` | `connected_rolling_cradle_flange_ear_stalks` | approximately 5.53 mm³ |
+| `bearing_retainer_M2_39.5_+9` | `connected_rolling_cradle_flange_ear_stalks` | approximately 5.53 mm³ |
+
+Therefore the previous “zero detected overlaps” statement remains true only for its explicitly restricted non-fastener set. Layout 03 does **not** currently pass complete hardware collision clearance.
+
+The same audit also established these open items:
+
+- the pitch frame has a high-risk first-order stiffness estimate near 6–9 Hz, versus 30/40 Hz targets;
+- the roll saddle has a secondary estimate near 21 Hz, versus 25/30 Hz targets;
+- the Ø16.2 × 6.2 mm bearing seats remain trial geometry without a frozen SKU;
+- hard-stop placement and pin/load-path strength are not accepted;
+- A0 solver residuals are audit values, not physical trim precision;
+- storyboard yaw and roll positive signs are opposite the raw CAD right-hand rotations; pitch agrees;
+- bearing reactions, spindle bending and yaw-yoke stiffness have not been demonstrated.
+
+The stiffness values are deliberately simple screening estimates, not FEA or measured modal results. They identify redesign/test priorities and must not be reported as exact natural frequencies.
 
 The first extraction route (sideways, then rearward) failed against the pitch frame. It was replaced with the +Z27 lift and rearward path. The helmet refinement reruns the entire 56-pose grid after its mass/A0 update, together with static, optics, hard-stop and service checks. See [source-tagged final checks](../revision-checks.json), [neutral/package report](../assembly-checks.json), [full solid validation](validate-authored.json), [all topology](validate-all-topology.json) and [viewer checks](viewer-checks.json).
 
@@ -99,6 +122,6 @@ The initial iso snapshot and first failing reports are retained as diagnostic hi
 
 ## Remaining hardware-specific work
 
-Confirm purchased insert fits and screw lengths, servo mounting pattern/adapters and liner/preload, complete spindle/horn retention, bearing SKU/preload, display retention hardware, guide fastening and cable flex zones. C2 component/USB/BOOT locations and the LED package remain installed reserves awaiting the actual parts. Optical entrance pupil and final window effects require measurement. These limits are explicit in the source/brief and do not constitute a servo freeze, optical certification, continuous-motion certificate, print approval or scored RP gate.
+Remove and recheck the two retainer-screw collisions; stiffen/verify the pitch frame and roll saddle; move hard stops beyond registered usable travel and validate their complete load path; define physical A0 trim and the storyboard↔CAD/firmware sign mapping. Also confirm purchased insert fits and screw lengths, servo mounting pattern/adapters and liner/preload, complete spindle/horn retention, bearing SKU/preload, bearing reactions, spindle bending, yaw-yoke stiffness, display retention hardware, guide fastening and cable flex zones. C2 component/USB/BOOT locations and the LED package remain installed reserves awaiting the actual parts. Optical entrance pupil and final window effects require measurement. These limits are explicit and mean Layout 03 is not a servo freeze, optical certification, continuous-motion certificate, print approval or scored RP gate.
 
 Final STEP SHA-256: `fac2cfd185056c8f1daea1750994e43525ad64003a1e18a3f4bff8e0997e1c1f`.

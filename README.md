@@ -1,8 +1,8 @@
 # Makad / M4K4-D
 
-> **Current project overview** — last reconciled **12 September 2026**
+> **Current project overview** — last reconciled **13 September 2026**
 >
-> Foundation approved: **14 August 2026** · V1 deadline: **5 December 2026** · Roadmap position: **Stage 0/1 — RP-01 head preparation; RP-02 planning opened**
+> Foundation approved: **14 August 2026** · V1 deadline: **5 December 2026** · Roadmap position: **Stage 0/1 — RP-01 paper demand complete, C01 screen OPEN; RP-02 Phase A live**
 
 **Makad**, technical designation **M4K4-D** and commonly shortened to **M4**, is a personal droid. M4 is intended to occupy the kind of companion role R2-D2 occupied for Luke Skywalker: recognizable, attentive, expressive, and full of character.
 
@@ -16,18 +16,18 @@ This README is the orientation document over the whole repository. It states cur
 
 ## Where the project stands
 
-| Area | Status (2026-09-12) |
+| Area | Status (2026-09-13) |
 |---|---|
 | Foundation (vision, scope, constraints, success criteria, scenarios) | Approved. Numeric `SC-TBD`/`CON-TBD` thresholds remain open by design. |
 | System design brief | Approved v1.3. Thirteen ADRs defined, none closed. |
-| Risk-prototype plan | Approved v1.11. Seven prototypes; **no run has been executed.** v1.10 introduced the RP-02 design/gate split; v1.11 propagates Layout 03, C2 mass sensitivity, candidate-servo substitution and the Concept B waiver. |
+| Risk-prototype plan | Approved v1.12. Seven prototypes; **no run has been executed.** Layout 03 external rigid-body demand is retained; the 2026-09-13 closure audit keeps C01 and RP-01 paper passage open on structural, actuator-internal and CAD/hardware blockers. |
 | Workbench / Stage 0 | Approved; first tools selected and partly ordered. Tool access, E-stop verification, logging schema, monotonic timebase and video sync are still open, so **powered scored testing is blocked.** |
 | Run identity | Convention v1.0 active. Guarded launcher not built. |
 | Dimensional baseline | v1.10 active: 300 × 205 × 180 mm rounded robot target; Layout 03 head 104 × 150 × 115 mm, provisional 304 mm neutral stack, Ø84 wheels, 170 mm track, 110 mm axle-to-caster, 60 mm neck. RP-06 must accept the 304 mm stack or recover 4 mm. |
-| Selected components | Display, camera and C2 motion-controller module locked (see below). Servos, SBC, battery, drive motors, harness: open. |
-| RP-01 three-axis head | Intent, storyboard and physics authored. **Concept A is the RP-01 path; Concept B is waived.** Gates unregistered. Rig not built. **Layout 03** is the current 1:1 packaging revision (104 mm helmet stern/crown, 32 mm visible yoke). Camera/C2/insert **CAD detailing** is closed; purchased fits and physical retention remain open. Layout 02 is history. Not a fabrication release or servo freeze. |
-| Head mass | Layout 03 nominal D/E tree: ~362/436/509 g roll/pitch/yaw at a 20 g C2 allowance; C2 sensitivity gives ~499–524 g complete. Nothing is weighed, M008 remains `U`, and candidate servo masses must be substituted before selection. The earlier 250 g target and generic inertia/torque proxies are inadmissible. |
-| RP-02 electrical/control backbone | Folder opened 2026-09-08: intent (design + gate question), state register S00…S17 and exact-20-minute proposed `MD-01`, power architecture PA-01…10, link contract v0.2, fault matrix F-01…16, rig, candidate gates and ADR closure ladder. Power/energy ledger v0.2 and timebase strategy v0.2 live in `01-system/`. **Nothing registered, selected or run.** Phase A is live; Phase B waits on the RP-01 servo family and an SBC candidate; Phase C on the battery gate. |
+| Selected components | Display, camera and C2 motion-controller module locked (see below). Servos, SBC, battery, drive motors, harness: open. XC330-M288-T is paper candidate C01, not selected. |
+| RP-01 three-axis head | Intent, storyboard and external rigid-body physics authored. **Concept A is the RP-01 path; Concept B is waived.** C01 (XC330-M288-T) is a comparison candidate only. Physical gates are unregistered and the rig is not built. **Layout 03** remains the 1:1 packaging direction, but two screw collisions, hard-stop margin, pitch/roll stiffness, bearing SKU, balance trim and sign mapping are open. Not a fabrication release or servo freeze. |
+| Head mass | Layout 03 nominal D/E tree: ~362/436/509 g roll/pitch/yaw at a 20 g C2 allowance; C2 sensitivity gives ~499–524 g complete. External rigid-body demand is calculated; nothing is weighed, M008 remains `U`, and actuator-internal inertia is not included. C01 matches the 23 g housings already in the tree. The earlier 250 g target and generic inertia/torque proxies are inadmissible. |
+| RP-02 electrical/control backbone | Folder opened 2026-09-08, reconciled 2026-09-13 to C01/paper demand. Intent (design + gate question), state register S00…S17 and exact-20-minute proposed `MD-01`, power architecture PA-01…10, link contract v0.2, fault matrix F-01…16, rig, candidate gates and ADR closure ladder. Power/energy ledger v0.3 and timebase strategy v0.2 live in `01-system/`. **Nothing registered, selected or run.** Phase A is live; Phase B waits on a named RP-01 servo load (C01 as reference, or later family freeze) and an SBC candidate; Phase C on the battery gate. |
 | Architecture, budgets, BOM, integrated CAD | Not started; blocked on prototype evidence by design. |
 | `specsheets/` | Exploratory, non-binding. |
 | `visuals/` | Provisional references; several show superseded details (mouths, ear microphones, yoke-mounted ears). |
@@ -50,12 +50,13 @@ Each lock reopens only through the change-control rule in its governing record.
 
 Ordered by the risk-prototype plan's open-inputs list and the intuition guide:
 
-1. **Torque-speed, RMS/thermal and modal screen** per axis from the Layout 03 mass tree, recalculated for each servo candidate. Use M008=20 g as the nominal analytical case and retain 10/20/35 g sensitivity until weighed. Layout 03 packaging is the accepted direction; display, servo-SKU, shaft, purchased fits and qualified harness details remain open.
-2. **Register RP-01 gates** (thresholds frozen before any scored run).
-3. **Stage 0 closure:** verify tools and E-stop, implement the logging schema, monotonic timebase and video-sync method, and the run generator/guarded launcher. This is software work and should not wait on hardware.
-4. **First weigh-ins** when the display and camera samples arrive (M001, M004, finish coupon).
-5. **RP-02 Phase A:** approve and register the state set and `MD-01`; replace the power ledger's `E` datasheet references with cited `D` rows; implement timebase v0.2 and link contract v0.2 on the DevKitC-1 twin and run the offset-error measurement as exploratory runs; register G04/G05 candidate thresholds. Software and paper — does not wait on purchases.
-6. **Distribution bench** when the Korad, multimeter and logic analyzer arrive; G01 review on it.
+1. **Correct the Layout-03 blockers:** stiffen/verify pitch frame and roll saddle; remove two retainer-screw collisions; move/check stops beyond usable travel; select the bearing; add physical balance trim and explicit CAD/firmware sign mapping.
+2. **Complete the actuator paper boundary:** obtain or measure internal rotor/gear acceleration demand, then close C01 supply-curve, 65/81 rpm and thermal evidence gaps or screen another candidate. Rerun the external-load model when geometry/candidate mass changes. Not a SKU freeze.
+3. **Register RP-01 physical gates** (thresholds frozen before any scored run). Paper P01–P08 are drafted, not registered.
+4. **Stage 0 closure:** verify tools and E-stop, implement the logging schema, monotonic timebase and video-sync method, and the run generator/guarded launcher. This is software work and should not wait on hardware.
+5. **First weigh-ins** when the display and camera samples arrive (M001, M004, finish coupon). M008 still `U`.
+6. **RP-02 Phase A:** approve and register the state set and `MD-01`; replace remaining power-ledger `E` datasheet references with cited `D` rows (C01 stall `D` is now cited); implement timebase v0.2 and link contract v0.2 on the DevKitC-1 twin and run the offset-error measurement as exploratory runs; register G04/G05 candidate thresholds. Software and paper — does not wait on purchases.
+7. **Distribution bench** when the Korad, multimeter and logic analyzer arrive; G01 review on it.
 
 ## Documents
 
@@ -85,7 +86,7 @@ Folder: [`docs/02-prototypes/RP-01-head/`](docs/02-prototypes/RP-01-head/)
 
 - [Intent](docs/02-prototypes/RP-01-head/intent.md) — authored head vocabulary (HM-00…HM-18) with eye/audio placeholders
 - [Storyboard](docs/02-prototypes/RP-01-head/storyboard.md) — keyframes, profile laws (`MJ5`, `MS7`, `TRACK`, `BRAKE`), per-axis peak speed/acceleration, hysteresis and modal targets
-- [Physics](docs/02-prototypes/RP-01-head/physics.md), [gates](docs/02-prototypes/RP-01-head/gates.md), [rig](docs/02-prototypes/RP-01-head/rig.md), [decision](docs/02-prototypes/RP-01-head/decision.md)
+- [Physics](docs/02-prototypes/RP-01-head/physics.md), [fullproof math](docs/02-prototypes/RP-01-head/fullproofmath.md), [C01 actuator screen](docs/02-prototypes/RP-01-head/actuator-screen-01.md), [gates](docs/02-prototypes/RP-01-head/gates.md), [rig](docs/02-prototypes/RP-01-head/rig.md), [decision](docs/02-prototypes/RP-01-head/decision.md)
 - [Material/finish/mass decision](docs/02-prototypes/RP-01-head/material-finish-mass-decision.md) and [payload mass capture](docs/02-prototypes/RP-01-head/payload-mass-capture.md)
 - Concepts: [comparison](docs/02-prototypes/RP-01-head/concepts/comparison.md), [Concept A](docs/02-prototypes/RP-01-head/concepts/elevated-ear-pivot-serial-gimbal.md), [servo mechanism recommendation](docs/02-prototypes/RP-01-head/concepts/servo-mechanism-recommendation.md)
 - CAD: [entry point](docs/02-prototypes/RP-01-head/cad/README.md), [decisions](docs/02-prototypes/RP-01-head/cad/head/decisions.md), [Layout 03](docs/02-prototypes/RP-01-head/cad/head/layout-03/README.md), [Layout 03 verification](docs/02-prototypes/RP-01-head/cad/head/layout-03/review/verification.md), [Layout 02](docs/02-prototypes/RP-01-head/cad/head/layout-02/README.md), [requirements](docs/02-prototypes/RP-01-head/cad/head/requirements.md)

@@ -2,8 +2,8 @@
 
 | Field | Value |
 |---|---|
-| Status | **Mechanism path: Concept A for RP-01; Concept B explicitly waived. Material/finish, C2 controller-boundary and C2 module decisions locked. Physical mass, actuator family and scored gates still open.** |
-| Revised | 2026-09-12 |
+| Status | **Mechanism path: Concept A for RP-01; Concept B explicitly waived. Material/finish, C2 controller-boundary and C2 module decisions locked. Layout 03 external rigid-body demand complete 2026-09-13, but closure audit found structural, actuator-internal and CAD/hardware blockers. C01 is a comparison candidate only; paper approval, fabrication release, actuator freeze and scored gates remain OPEN.** |
+| Revised | 2026-09-13 |
 | Question | Can a manufacturable powered roll/pitch/yaw mechanism carry a representative Makad head while producing safe, repeatable, quiet-enough and characterful motion with acceptable range, reversal, settling, camera behaviour, wiring movement, calibration, and controller failure handling? |
 | Feeds | ADR-02 (head mechanism), ADR-03 (controller), ADR-08, ADR-12; mass/power/acoustic budget rows |
 | Rule | A failed Core three-axis gate cannot become a two-axis fallback without reopening approved V1 scope. Failed runs stay cited here. |
@@ -74,11 +74,11 @@ The builder selected **A0 as the first-layout balance target** in [HEAD-CAD-07](
 
 | Candidate | Status | What is fixed for comparison | What remains open |
 |---|---|---|---|
-| A — elevated ear-pivot serial gimbal | **RP-01 implementation path; not gate-selected** | Body-fixed yaw; yaw→pitch→head-fixed-roll order; independent yaw load bearing; pitch pivots associated with the ear-pod locations; selected Waveshare no-touch SKU 30493 display envelope; RP-01 PLA/finish decisions; first-layout coaxial roll, face-attached rolling ears and external yaw cable loop per the CAD register | Exact pitch coordinates to achieve selected A0; complete fit; rolling-ear clearance (no shroud); per-axis mass tree; actuator family, bearing SKUs, validated drive arrangement, PLA thermal/creep, scored gate results |
+| A — elevated ear-pivot serial gimbal | **RP-01 implementation path; not gate-selected** | Body-fixed yaw; yaw→pitch→head-fixed-roll order; independent yaw load bearing; pitch pivots associated with the ear-pod locations; selected Waveshare no-touch SKU 30493 display envelope; RP-01 PLA/finish decisions; first-layout coaxial roll, face-attached rolling ears and external yaw cable loop per the CAD register | Stiffen/verify pitch frame and roll saddle; include or measure actuator-internal inertia; remove two confirmed retainer-screw collisions; move/check hard stops beyond usable travel; select bearing SKUs; define storyboard↔CAD/firmware sign multipliers; provide physical balance trim; complete fit and rolling-ear clearance; per-axis `W` mass tree; voltage/thermal/hysteresis/creep evidence; actuator family freeze and scored gate results |
 | B | **Not authored; comparison waived 2026-09-09** | Builder directed RP-01 to proceed on A only. Parallel/B will not be developed for this prototype. | Entire concept — closed without a counterpart |
 
-Concept A's source diagram is not a specification. Only the topology extracted into `concepts/elevated-ear-pivot-serial-gimbal.md` is admitted. On 2026-09-09 the builder waived authoring Concept B so remaining time goes to detailing A (Layout 03). This does not pass RP-01 gates or freeze a servo family.
+Concept A's source diagram is not a specification. Only the topology extracted into `concepts/elevated-ear-pivot-serial-gimbal.md` is admitted. On 2026-09-09 the builder waived authoring Concept B so remaining time goes to detailing A (Layout 03). This does not pass RP-01 gates or freeze a servo family. The 2026-09-13 C01 screen (`actuator-screen-01.md`) only shows that the external payload demand looks plausible against retained XC330 data; it is not a complete paper pass or freeze.
 
 ## Conclusion
 
-*(pass / iterate / reject, selected concept, controller requirements, budget updates, downstream assumptions changed)*
+**Current outcome: ITERATE — RP-01 remains open.** Retain Concept A and the verified external rigid-body workbook. Revise/verify the structural and hardware items recorded in `fullproofmath.md` §12 and `gates.md` P07/P08, close or bound actuator-internal acceleration demand, then rerun the affected candidate screen before freezing an actuator or registering scored physical runs.

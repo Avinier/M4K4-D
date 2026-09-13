@@ -1,6 +1,6 @@
 # RP-01 Layout 03
 
-Layout 03 builds on Layout 02 source and reuses its catalog STEP inputs, explicit R/P/Y transforms, purchased envelopes and checking approach. Layout 02 is preserved. This is a detailed packaging revision, not a servo freeze or fabrication release.
+Layout 03 builds on Layout 02 source and reuses its catalog STEP inputs, explicit R/P/Y transforms, purchased envelopes and checking approach. Layout 02 is preserved. This is a detailed packaging revision, not a servo freeze or fabrication release. A 2026-09-13 closure audit found two fastener collisions, a hard-stop/range conflict and high structural-dynamics risk; the earlier non-fastener packaging pass must not be read as fabrication approval.
 
 [Interactive CAD Viewer](http://127.0.0.1:3245/Users/avinier/robotics/makad/docs/02-prototypes/RP-01-head/cad?file=head%2Flayout-03%2Fhead-layout.step.py) · [STEP](head-layout.step) · [construction and feasibility brief](brief.md) · [dimensions](dimensions.md) · [verification](review/verification.md)
 
@@ -10,8 +10,8 @@ Layout 03 builds on Layout 02 source and reuses its catalog STEP inputs, explici
 - Display remains at Z6…74. Camera PCB starts Z77, giving the requested 3 mm gap. Crown top is **Z104**, +2 mm against Layout 02. The provisional 140 mm body +60 mm neck +104 mm head stack is **304 mm**, pending RP-06 integration.
 - Visible yoke remains **32 mm** below the head, with the rearward knee. This preserves look-up clearance and external-loop space. Pitch remains an elevated, mass-derived axis; it was not lowered for appearance.
 - M2 serviced receivers have nominal **Ø3.2 × 3 mm insert pockets** that open through the front and rear insertion faces. Existing visible screw appearance is retained. Final purchased insert dimensions, screw engagement and printed fits still need a SKU and trial coupon.
-- Bearing cartridge has two **Ø16.2 × 6.2 mm trial seats**, 22 mm apart, central shoulders and removable end retention plates. The 6 mm spindle and coaxial coupling remain independently bearing-supported. The coupling has radial M3 fastening bores and two simplified grub screws.
-- Pitch and roll hard stops use a pin and an annular slot. Endpoint contact is authored at pitch −22/+40° and roll ±18°. They act independently of servo commands.
+- Bearing cartridge has two **Ø16.2 × 6.2 mm trial seats**, 22 mm apart, central shoulders and removable end retention plates. This is not a selected 6 × 16 × 6 bearing SKU; common-series and specialty availability must be resolved before the seats are finalized. The 6 mm spindle and coaxial coupling remain independently bearing-supported. The coupling has radial M3 fastening bores and two simplified grub screws.
+- Pitch and roll hard stops use a pin and an annular slot. Endpoint contact is currently authored at pitch −22/+40° and roll ±18°. This conflicts with `storyboard.md`, where those values are usable travel and the hard stops must lie beyond them. At 0.93 N·m stall, first-order pin shear is about 30 MPa pitch and 35 MPa roll before pin-root bending and printed anisotropy; the stop geometry/load path is unresolved.
 - C2 retains its original board seat in a removable open-rear tray. Rear edge jaws and USB-end corner caps keep the castellated PCB in the tray during lift. USB-C installed-plug depth, upward withdrawal and rear tool access are separate reserves. BOOT/RESET access assumes rear-cover removal. GPIO0/3/45/46 and GPIO21 are excluded from E-stop/fault assignments; no pin allocation is frozen here.
 - Camera bracket and roll-servo saddle strap are removable. The camera bracket C-channels the Module 3 PCB Y-edges and pads the rear shield; two rear-access M2s still fasten the bracket to the crown. Actual servo attachment patterns, bearing fits, shaft retention and mount preload still need hardware-specific detailing.
 
@@ -37,6 +37,27 @@ Existing M006/M020 cable allowances are retained once in the mass ledger. Jacket
 
 The current mass artifact uses **M008=20 g as a nominal E case** and retains **10/20/35 g sensitivity**, producing approximately **362/436/509 g roll/pitch/yaw nominal** and **499–524 g complete** across the sensitivity. M008 remains physically `U`. Two 23 g XC330-size servo reference packages are embedded in the nominal tree and must be replaced with each candidate's mass and envelope before actuator selection.
 
+The A0 coordinates are numerical balance targets from D/E masses, not machinable micron-level datums. For example, replacing the 23 g roll reference with a 55 g actuator moves estimated pitch balance by about 3.69 mm and adds about 0.017 N·m neutral hold torque. The physical design needs a measured trim/adjustment method.
+
+## Structural and collision audit — 2026-09-13
+
+- The open pitch frame removes the +Y/front crossbar for servo sweep. A simple member screen places the pitch mode around 6–9 Hz versus the 30/40 Hz storyboard targets, close to the laugh's ~10 Hz content. This is a risk estimate, not FEA or a measured mode; it requires redesign/stiffening and representative loaded modal validation.
+- The open roll-servo saddle screens near 21 Hz versus the 25/30 Hz yaw/roll targets and remains a secondary stiffness risk.
+- The two `bearing_retainer_M2_39.5_±9` screws each overlap `connected_rolling_cradle_flange_ear_stalks` by approximately 5.53 mm³. The current checker omits fasteners from its `physical` motion set, so its reported zero cross-frame overlaps excludes this defect.
+- Bearing reactions, spindle bending and yaw-yoke stiffness have not been demonstrated by the present record. Keep them OPEN rather than calling them acceptable without calculations or measurements.
+
+## Motion-interface signs
+
+Storyboard signs are the external command convention. Relative to the raw CAD right-hand rotations, use:
+
+| Axis | Storyboard positive | CAD right-hand mapping |
+|---|---|---:|
+| Pitch | Chin down | `+1` |
+| Yaw | Robot-right | `-1` |
+| Roll | Robot-left side lowers | `-1` |
+
+Magnitude-only clearance and torque screens are unaffected. Signed gravity, cable, asymmetric-pose and firmware checks must apply this mapping explicitly.
+
 ## Service sequence
 
 1. Power off and support the head. Remove the four rear-cover screws. C2 BOOT/RESET tool access and upward USB plug/withdrawal reserves are then exposed. Remove the two tray screws and disconnect its local harness, lift the tray 27 mm in +Z into the upper service space, then withdraw rearward (−X). The PCB stays in the tray (edge jaws and corner caps). The sideways route was rejected because it hits the pitch frame.
@@ -50,7 +71,7 @@ The current mass artifact uses **M008=20 g as a nominal E case** and retains **1
 Use `/Users/avinier/.codex/runtimes/text-to-cad/0.4.28/venv/bin/python` and the matching plugin scripts. Run from the repository root; prefix shell commands with `rtk proxy`.
 
 1. `mass_layout.py --solve` refreshes the mass tree and A0.
-2. `check_revision.py` checks neutral intersections, the 56-pose grid, jackets, hard stops, optics and C2 access; `check_layout.py` retains the original display/package checks.
+2. `check_revision.py` checks neutral intersections, the 56-pose grid, jackets, hard stops, optics and C2 access; `check_layout.py` retains the original display/package checks. As of this audit, `check_revision.py` excludes fasteners from the physical cross-frame grid and therefore does not prove fastener clearance.
 3. Matching `scripts/gen …/head-layout.step.py --write` exports the inspection assembly. `write_dimensions.py` creates the real imported-part dimension log.
 4. `write_viewer_params.py` resolves named source groups against the generated occurrence tree, then rerun the generator to package the updated sidecar. Re-resolve after changing the tree.
 5. `validate_geometry.py` checks exported references and solid validity. Matching `scripts/snapshot --job …/review/snapshot-job.json` creates the review packet. `check_viewer.mjs` checks the actual viewer feature resolver and switches.
