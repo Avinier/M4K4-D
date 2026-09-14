@@ -5,6 +5,7 @@
 | Status | **Candidate design, evidence class `E`.** Nothing here is selected, sized or purchased. It is the ADR-06 *architecture* input; ADR-06 *sizing* waits on the ledger |
 | Owner | Project builder |
 | Created | 2026-09-08 |
+| Revised | 2026-09-13 |
 | Inputs | `../../01-system/power-energy-ledger.md` (planning envelopes); `../../01-system/workbench.md` (E-stop, PSU, battery rules); `../../01-system/dimensional-baseline.md` (battery low and forward of axle; body-mounted SBC); `../../01-system/head-harness-routing-study.md` (branch partition; yaw boundary); `state-register.md` |
 | Feeds | ADR-06; `gates.md` G01 and G06; `rig.md`; sourcing matrix power rows |
 | Method | `../../intuition.md` §5.1 step 3 electrical toolkit; each numbered choice below is a `PA-xx` proposal with its reason and its reopen condition |
@@ -83,11 +84,11 @@ flowchart TB
 
 | Servo class (examples, none selected) | Rail | Pack implication |
 |---|---|---|
-| 5 V class (XC330 reference: 3.7–6.0 V) | Servo rail = regulated 5–6 V | 2S pack + high-current buck on the motor domain; buck must survive S07 transient; **direct 2S is out of the servo's window** |
+| **5 V class — C01 leading working assumption** (XC330-M288-T: 3.7–6.0 V, recommended 5.0 V) | Servo rail = regulated 5–6 V | 2S pack + high-current buck on the motor domain; buck must survive S07 transient; **direct 2S is out of the servo's window**. C01 yaw fails the rapid envelope at the 3.7 V endpoint, so the loaded sag floor is a named RP-01 paper-gate P02 input this rail must supply |
 | 6–7.4 V class (many bus servos) | Servo rail = 2S direct | 2S pack, no conversion loss on the largest load; rail sags with cell voltage — trajectory feel changes over discharge unless the servo compensates |
 | 12 V class (XL430/XM-class) | Servo rail = 3S direct | 3S pack; compute buck sees 12.6 V in; more headroom, more mass |
 
-**Choice.** Design the rig with a servo-rail regulator socket so both "regulated from 2S" and "direct from pack" can be measured. Do not pre-empt RP-01's actuator selection from the power side — the same error `control-topology-options.md` §6.3 avoided when it rejected controller boards that "silently decide the actuator family."
+**Choice.** Design the rig with a servo-rail regulator socket so both "regulated from 2S" and "direct from pack" can be measured. Do not pre-empt RP-01's actuator selection from the power side — the same error `control-topology-options.md` §6.3 avoided when it rejected controller boards that "silently decide the actuator family." C01 makes the 5 V / regulated-from-2S row the *leading* working assumption; it does not collapse this table.
 
 **Reopen if.** RP-01 selects; then this collapses to one row and the ledger's servo rail gets a voltage.
 
@@ -153,7 +154,8 @@ ADR-06 architecture closes when every `PA-xx` above is either confirmed by a G01
 
 ## 4. Open items
 
-- [ ] Servo family (RP-01) → collapse PA-04 to one row; give the ledger a servo-rail voltage.
+- [ ] Servo family (RP-01) → collapse PA-04 to one row; give the ledger a servo-rail voltage. Until then, C01 / 5 V regulated-from-2S is the leading working assumption, not the freeze.
+- [ ] Register the loaded servo-terminal sag floor that RP-01 paper gate P02 needs (C01 3.7 V is a manufacturer endpoint, not a predicted sag).
 - [ ] SBC candidate → Buck A rating; camera current on the same rail.
 - [ ] Pack internal resistance `D` value for the working-assumption cells; replace with `W` on the rig.
 - [ ] Register the rail-excursion definition (PA-06 candidate ≤3 %) and the undervoltage limits per component before any scored G02 rehearsal.

@@ -332,3 +332,8 @@ C2 architecture and module are selected, but installed M008 mass remains `U`. Us
 **Type / Status / Governs:** CORRECTION / CURRENT / RP-02 draft contracts and ledgers
 
 The proposed MD-01 rows now total exactly 20 minutes. S13 is a transient-overlap anchor and does not replace state-specific sustained runs. The serial link now transports the complete offset/rate/reference/uncertainty time model. Heartbeat failure must initiate BRAKE within one control tick after timeout; reaching rest follows the registered bounded BRAKE trajectory. All values remain draft and unregistered.
+
+### MEM-20260913-01 — RP-02 reconciled to RP-01 paper demand and C01
+**Type / Status / Clarifies / Governs:** CORRECTION / CURRENT / MEM-20260912-03 and MEM-20260912-04 / RP-02 folder, `power-energy-ledger.md` v0.3, `risk-prototype-plan.md` v1.12
+
+RP-01 Layout 03 mechanical demand is complete; XC330-M288-T is named paper candidate C01 (paper OPEN, not a SKU freeze). Complete-head `W` mass still cannot close while M008 is `U`; paper demand does not wait on that weigh-in. RP-02 Phase B may use C01 as a named reference load; PA-04 still collapses only on family freeze. 5 V regulated-from-2S is the leading rail working assumption. C01 eManual stall `D` is 1.80 A at 5.0 V. Nothing registered, selected or run.

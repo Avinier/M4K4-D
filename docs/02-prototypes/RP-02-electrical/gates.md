@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Status | **Not started.** Candidate metrics and thresholds below are proposals; nothing is registered; no scored run exists |
-| Authority | Gate definitions and registration fields: `../../01-system/risk-prototype-plan.md` v1.11 §RP-02. This file holds the registered numeric versions |
-| Sources for thresholds | `intent.md`; `state-register.md`; `link-contract.md` §7; `fault-matrix.md` §3; `power-architecture.md` PA-06; `../../01-system/power-energy-ledger.md` |
+| Authority | Gate definitions and registration fields: `../../01-system/risk-prototype-plan.md` v1.12 §RP-02. This file holds the registered numeric versions |
+| Sources for thresholds | `intent.md`; `state-register.md`; `link-contract.md` §7; `fault-matrix.md` §3; `power-architecture.md` PA-06; `../../01-system/power-energy-ledger.md`; RP-01 paper P02 sag-floor need |
 | Rule | Registration uses the plan's fields — Gate ID, Metric, Threshold, Rationale, Conditions, Repetitions, Instrument, Freeze record (date + builder approval **before** scored data is inspected). A threshold change after results is a new gate version with a documented reason and a fresh test set, never an edit |
 
 ## 1. Gates to register
@@ -61,7 +61,7 @@ Every number below is a candidate awaiting a dated builder approval. Registering
 
 | Metric | Candidate threshold | Instrument |
 |---|---|---|
-| Rail minimum margin, per rail per state | `V_min − V_UVLO(component) ≥ 0.25 V` on compute and head-logic rails; servo rail ≥ servo family's minimum operating voltage with drop ≤ 3 % (PA-06) | INA226 at max rate; oscilloscope for S07 when available — resolution stated in the run record |
+| Rail minimum margin, per rail per state | `V_min − V_UVLO(component) ≥ 0.25 V` on compute and head-logic rails; servo rail ≥ servo family's minimum operating voltage with drop ≤ 3 % (PA-06). For C01 the manufacturer window is 3.7–6.0 V; **3.7 V is a sensitivity endpoint, not the registered sag floor** — P02 needs the loaded terminal voltage from this rehearsal | INA226 at max rate; oscilloscope for S07 when available — resolution stated in the run record |
 | Unintended resets | 0 across all repetitions of every registered state | Reset-reason logs |
 | CRC errors on the SBC↔C2 link | ≤ registered rate from F-04 | `HEARTBEAT` counters |
 | Temperatures | ≤ SC-TBD-12 values once registered; until then, record and flag > 60 °C on any touchable surface | Thermistors |

@@ -2,11 +2,12 @@
 
 | Field | Value |
 |---|---|
-| Status | Draft — design and gate questions authored; no state, threshold or candidate is registered; no run executed |
+| Status | Draft — design and gate questions authored; no state, threshold or candidate is registered; no run executed. Reconciled to RP-01 Layout-03 paper demand and C01 screen on 2026-09-13 |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Governing plan | `../../01-system/risk-prototype-plan.md` v1.11 §RP-02 |
-| Electrical baseline inherited | `../../01-system/control-topology-options.md` v0.10 (C2 selected, UART/USB link and timebase recommended); `../RP-01-head/decision.md` CTRL-01…CTRL-06; `../../01-system/workbench.md` E-stop and PSU rules |
+| Revised | 2026-09-13 |
+| Governing plan | `../../01-system/risk-prototype-plan.md` v1.12 §RP-02 |
+| Electrical baseline inherited | `../../01-system/control-topology-options.md` v0.11 (C2 selected, UART/USB link and timebase recommended; C01 paper candidate named, family unselected); `../RP-01-head/decision.md` CTRL-01…CTRL-06; `../../01-system/workbench.md` E-stop and PSU rules |
 | Ledger | `../../01-system/power-energy-ledger.md` — the canonical power/energy/thermal budget; RP-02 populates it, it does not own a second copy |
 | Feeds | ADR-03 (controller), ADR-06 (battery, rails, charging, isolation, low-energy policy), ADR-12 (internal communication and timebase); `subsystem-interfaces.md` at stage 6 |
 | Method | `../../intuition.md` §5.1 — intent before numbers; step 3 electrical toolkit: peak concurrent current × path resistance, energy integration over the mixed-duty cycle, regulator/driver/wire thermal steady state |
@@ -75,8 +76,8 @@ G02 and G03 changed shape in plan v1.10. See `gates.md` §2 for what RP-02 recor
 | Compute placement | Body-mounted Linux SBC (unselected); mics, speaker, battery body-mounted; head carries display, camera, light, C2 | dimensional baseline v1.10 |
 | Link recommendation | UART/USB serial, Vector-style; not CAN, micro-ROS or I²C across joints; semantic command surface | control study §3, §7 |
 | Timebase recommendation | One master, timestamp-at-source, serial round-trip offset reconciliation; not PTP/NTP | control study §5 → `timebase.md` |
-| Head load | Layout 03 nominal D/E tree ~362/436/509 g roll/pitch/yaw at M008=20 g, with ~499–524 g complete C2 sensitivity; substitute each servo candidate for the two 23 g references — this sets servo class, which sets the servo rail | dimensional baseline v1.10; RP-01 physics |
-| Servo family | **Unselected.** XC330 is a packaging reference only (5 V class, `D` stall ≈1.8 A per unit — verify against eManual before use) | RP-01 decision; sourcing matrix |
+| Head load | Layout 03 nominal D/E tree ~362/436/509 g roll/pitch/yaw at M008=20 g, with ~499–524 g complete C2 sensitivity. **Paper demand complete 2026-09-13** (`fullproofmath.md`): controlling physical-law peaks pitch 0.0953 N·m at 57.8°/s, roll 0.0560 N·m at 70.2°/s, yaw 0.1099 N·m at 90.5°/s. Complete-head `W` mass still waits on M008 weigh-in | dimensional baseline v1.10; RP-01 physics; `fullproofmath.md` |
+| Servo family | **Unselected.** First named paper candidate is ROBOTIS **XC330-M288-T** (C01, SKU 902-0173-000), 5 V class, Dynamixel Protocol 2.0 TTL; paper approval OPEN; yaw fails the rapid envelope at the 3.7 V sensitivity endpoint. Layout 03 already uses 23 g XC330 housings, so C01 adds zero mass to the paper tree. Not a SKU freeze. eManual `D`: stall 1.80 A at 5.0 V | `../RP-01-head/actuator-screen-01.md`; RP-01 `gates.md` paper P01–P06 |
 | E-stop rule | Cuts the **motor bus, not logic power**; latching mushroom plus a physically yankable XT60 | workbench.md |
 | PSU rule | Korad KA3005D: set current limit to expected draw plus margin before first power-up; **5 A ceiling** | workbench.md |
 | Battery placement and mass row | Low and forward of the drive axle; ledger row 150–500 g; chemistry undecided | mass ledger v0.13; dimensional baseline |
@@ -111,14 +112,19 @@ Phase is a status field per document, not a directory. Artifacts mature at diffe
 | Phase | Needs | Can produce | Cannot produce |
 |---|---|---|---|
 | **A — paper and on-hand hardware** | Nothing purchased beyond `workbench.md`; DevKitC-1 twin; display sample when it arrives; Korad PSU | State register; ledger `D`/`E` rows; power architecture candidate; link contract v0.x on a loopback and on DevKitC-1↔laptop; timebase implementation and offset measurement; G01 and G06 paper review; fault matrix rows; gate registrations | Any `W` row for a load that does not exist; G02 composite peaks; G03 |
-| **B — representative loads** | RP-01 servo family selected (or a reference unit), an SBC candidate, camera, amp/speaker candidate; characterized substitutes for drive | Per-group `W` rows; G05 on real servo bus; G04 injection campaign on real link; G02 rehearsal at head-plus-compute concurrency; conductor/regulator thermal | Drive `W` rows; composite peak above the Korad 5 A ceiling without a second source |
+| **B — representative loads** | A named RP-01 servo load (C01 as reference unit, or a later selected family), an SBC candidate, camera, amp/speaker candidate; characterized substitutes for drive. C01 purchase is not a family freeze | Per-group `W` rows; G05 on real servo bus; G04 injection campaign on real link; G02 rehearsal at head-plus-compute concurrency; conductor/regulator thermal | Drive `W` rows; composite peak above the Korad 5 A ceiling without a second source; collapsed PA-04 rail voltage (needs family selection) |
 | **C — onboard energy** | `workbench.md` battery gate satisfied (written procedure, bag, balance charger); candidate pack | G03 rehearsal with margin; ADR-06 sizing input; charging and isolation paths for G06 | SC-14 closure (integrated droid only) |
 
 ## 7. Relationship to RP-01
 
-The dependency is circular and should be named rather than hidden. RP-01's complete mass cannot close because M008 is `U` until the installed C2 assembly is weighed; C2's timing and electrical validity is RP02-G05. RP-01's first scored run needs the timebase and logging schema that RP-02 builds. RP-01's servo selection sets RP-02's servo rail voltage and the largest transient on the tree.
+The dependency is circular and should be named rather than hidden. The two closures are different objects:
 
-The resolution: RP-02's Phase A work runs now and **unblocks** RP-01's scored runs; RP-02's scored gates that need representative loads follow RP-01's selections. Neither prototype waits for the other to finish.
+- RP-01's **complete-head `W` mass** (M900 / the physical ledger) cannot close while M008 is `U`. The installed C2 assembly — board + mount + connectors + assigned local harness — has not been weighed. That is unchanged.
+- Layout 03 **paper demand does not wait on that weigh-in.** The mechanical-demand and 1,560-case sensitivity calculation is complete as of 2026-09-13 (`fullproofmath.md`), using M008=20 g `E` plus the 10/20/35 g sweep. Paper physics can screen a candidate; it cannot accept M900.
+- C2's timing and electrical validity is still RP02-G05. RP-01's first scored run still needs the timebase and logging schema that RP-02 builds.
+- RP-01's servo **selection** still sets RP-02's servo-rail voltage and the largest transient on the tree. The family is still unselected. The first named paper candidate is XC330-M288-T (C01) at a proposed 5 V nominal; paper approval is OPEN. That is a leading PA-04 working assumption, not a collapse. RP-01 paper gate P02 explicitly needs the loaded servo-terminal sag floor from this rail.
+
+The resolution: RP-02's Phase A work runs now and **unblocks** RP-01's scored runs; Phase B may use C01 as a named reference load without treating a purchase as a family freeze; scored gates that need the frozen rail follow RP-01's selection. Neither prototype waits for the other to finish.
 
 ## 8. Evidence rules carried in from day one
 

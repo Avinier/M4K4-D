@@ -2,10 +2,11 @@
 
 | Field | Value |
 |---|---|
-| Status | Not built. Design proposed; blocked on `workbench.md` tool arrival for anything powered, on RP-01 servo selection for Phase B, on the battery gate for Phase C |
+| Status | Not built. Design proposed; blocked on `workbench.md` tool arrival for anything powered, on a named RP-01 servo load for Phase B (C01 as reference unit, or later selected family), on the battery gate for Phase C |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Authority | `../../01-system/workbench.md` scored-test gate, PSU rule, E-stop rule, battery gate; `../../01-system/risk-prototype-plan.md` v1.11 §RP-02 rig and measurements |
+| Revised | 2026-09-13 |
+| Authority | `../../01-system/workbench.md` scored-test gate, PSU rule, E-stop rule, battery gate; `../../01-system/risk-prototype-plan.md` v1.12 §RP-02 rig and measurements |
 | Design it realises | `power-architecture.md` §1 two-domain tree, on a bench, ugly |
 | Instrument rule | `workbench.md` item 6: an instrument on the bench must resolve the gate's threshold or the run is exploratory |
 
@@ -46,7 +47,7 @@ The plan permits "characterized electronic/dynamic substitutes only where their 
 |---|---|---|---|---|
 | LG-01 SBC | Laptop over USB-serial standing in for the SBC **for link work only** — not an electrical load | SBC candidate, real | Real | Phase A: the laptop reproduces protocol behaviour, not power draw or boot timing; no ledger row from it |
 | LG-02 C2 | **Real** — DevKitC-1-N8R8 twin, then the Zero when purchased | Real | Real | None needed; note that the DevKitC's USB-UART bridge adds ~10–20 mA the Zero does not have |
-| LG-03 servos Y/P/R | Absent, or one reference unit if RP-01 buys an XC330 for packaging | RP-01's selected family, three units, mounted on the RP-01 rig or a dummy inertia | Real | If a resistor/electronic load is ever used: it reproduces average current only; **it does not reproduce stall inrush, inductive kick, regenerative current on deceleration, or bus telemetry** — no G02 claim from it |
+| LG-03 servos Y/P/R | Absent, or C01 (XC330-M288-T) as a named reference unit — not a family freeze | RP-01's selected family, three units, mounted on the RP-01 rig or a dummy inertia; C01 remains admissible as the reference until that freeze | Real | If a resistor/electronic load is ever used: it reproduces average current only; **it does not reproduce stall inrush, inductive kick, regenerative current on deceleration, or bus telemetry** — no G02 claim from it. C01 eManual stall is 1.80 A at 5.0 V (`D`); operating current during Layout 03 peaks is unmeasured |
 | LG-04 drive | Absent | Programmable electronic load stepping a recorded profile, **or** two gearmotors of the RP-03 candidate class on a brake | RP-03 hardware if it exists | Electronic load: reproduces a current-time profile; does not reproduce inductive transients or regenerative current — acceptable for energy integration, not for the S10 transient term |
 | LG-05 display + light | **Real** when the SKU 30493 sample arrives; a 5 V resistive dummy before that | Real | Real | Dummy: average only |
 | LG-06 camera | Absent | Real on the SBC candidate | Real | — |

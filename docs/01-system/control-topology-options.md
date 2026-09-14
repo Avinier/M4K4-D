@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | **RP-01 C2 selected: separate ESP32-S3 motion controller; C1 rejected on selected carrier; C2 module selected — Waveshare ESP32-S3-Zero.** |
-| Version | 0.10 |
+| Version | 0.11 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-09-12 |
+| Last reviewed | 2026-09-13 |
 | Governed by | `risk-prototype-plan.md` — permitted provisional option study (decision-closeout: "the architecture phase may begin with provisional option studies while prototypes run") |
 | Feeds | RP-02 (electrical/control backbone) → **ADR-06 (power)**, **ADR-12 (control topology)**; the monotonic-timebase deliverable (plan §104) |
 | Consumes | `system-design-brief.md` responsibility set + AD-01/AD-06/AD-08; `mass-envelope-ledger.md` head section |
@@ -176,7 +176,7 @@ Selected **2026-09-07**. Screened on pin budget, installed volume, bus-neutralit
 
 **Volume.** 23.5 × 18 mm fits the retained 35 × 25 × 15 mm C2 pocket now modelled in Layout 03. Headerless matters: pre-soldered 2.54 mm headers would consume most of the pocket's 15 mm depth, so the harness solders to the castellations. Layout 03 adds the removable tray and keepers, but actual plug/tool access and installed mass remain physical checks.
 
-**Bus-neutrality — the decisive property.** The servo family is still unselected. A bare MCU breakout keeps the transceiver external, so half-duplex TTL, RS-485 and plain PWM all remain reachable without changing the controller. Castellated edges also allow the same part to be reflowed onto a custom carrier at integrated-CAD time with no change of chip, toolchain or firmware.
+**Bus-neutrality — the decisive property.** The servo family is still unselected. The first named paper candidate is XC330-M288-T (C01): Dynamixel Protocol 2.0 TTL if that screen closes, paper approval OPEN. A bare MCU breakout keeps the transceiver external, so half-duplex TTL, RS-485 and plain PWM all remain reachable without changing the controller. Castellated edges also allow the same part to be reflowed onto a custom carrier at integrated-CAD time with no change of chip, toolchain or firmware.
 
 **Rejected candidates**
 
@@ -235,3 +235,4 @@ This is a selection, not validation. **RP02-G05 still owns** measured loop, link
 | 2026-09-02 | 0.8 | Closed the C1/C2 fork in favour of C2, locked display-versus-motion ownership, centralized trajectory execution and safety on the separate ESP32-S3, and retained only the exact module and interface details as open. |
 | 2026-09-07 | 0.9 | Selected the C2 module (Waveshare ESP32-S3-Zero) and its bench twin (ESP32-S3-DevKitC-1-N8R8) in new §6.3, recorded the rejected candidates, strapping/WS2812/flashing constraints and single-source risk, and kept M008 unknown pending a weigh-in. Servo family, bus implementation and RP02-G05 validation remain open. |
 | 2026-09-12 | 0.10 | Clarified the M008 evidence boundary: physical mass remains U; Layout 03 uses 20 g only as a nominal E calculation while retaining 10/20/35 g sensitivity until the installed assembly is weighed. |
+| 2026-09-13 | 0.11 | Recorded RP-01 C01 (XC330-M288-T) as the named paper candidate implying Dynamixel 2.0 TTL if selected. Family, bus implementation and RP02-G05 remain open. M008 still `U`. |

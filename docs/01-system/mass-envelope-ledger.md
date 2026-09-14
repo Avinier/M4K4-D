@@ -3,15 +3,15 @@
 | Field | Value |
 |---|---|
 | Status | **Living — dimensional baseline active; remaining mass values provisional.** |
-| Version | 0.13 |
+| Version | 0.14 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-09-12 |
+| Last reviewed | 2026-09-13 |
 | Governed by | `risk-prototype-plan.md` §"Continuous sourcing and data workstream" (deliverable 2) |
 | Consumes | `dimensional-baseline.md`, foundation scale class (`workbench.md`), `system-design-brief.md` responsibility set |
 | Feeds | RP-01 (representative head load), RP-06 (integrated layout), head-CAD, engineering budgets |
 
-This ledger is the canonical system mass/envelope roll-up. `dimensional-baseline.md` supplies committed target geometry and component placement; RP-01 now supplies a **Layout 03 D/E tree** with a nominal ~509 g complete head at M008=20 g and a ~499–524 g C2 sensitivity. It is not an accepted complete-head mass, and it already contains two 23 g XC330-size reference packages that must be replaced per servo candidate. Other mass values remain first-pass planning estimates from the approved scale class — *table-liftable, one-person, single-room, follow ≤ 0.5 m/s* — not sourced measurements. They are replaced by measured values as RP-01…RP-07 close (decision-closeout step 6). Do not let a component's absence from a row mean it weighs nothing.
+This ledger is the canonical system mass/envelope roll-up. `dimensional-baseline.md` supplies committed target geometry and component placement; RP-01 now supplies a **Layout 03 D/E tree** with a nominal ~509 g complete head at M008=20 g and a ~499–524 g C2 sensitivity. It is not an accepted complete-head mass. The tree already contains two 23 g XC330-size housings; the first named paper candidate XC330-M288-T (C01) matches those housings, so substituting C01 adds zero mass. Other families still replace those rows. Complete-head `W` still waits on M008. Other mass values remain first-pass planning estimates from the approved scale class — *table-liftable, one-person, single-room, follow ≤ 0.5 m/s* — not sourced measurements. They are replaced by measured values as RP-01…RP-07 close (decision-closeout step 6). Do not let a component's absence from a row mean it weighs nothing.
 
 ## Scale-class anchors (from approved foundation)
 
@@ -54,10 +54,10 @@ The head is the first mechanical risk (AD-02) and the CAD blocker, so it gets it
 | Integrated side pods / pivot covers | Layout 03 Ø60 mm hollow rolling ears; complete width 150 mm | No microphones. Ears attach to the rolling face; inner yoke/frame carries joint loads and all bearing/yoke mass remains in the head roll-up. |
 | Camera | selected Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, SC0874; 25 W × 24 H × 12.4 D mm | Moves with head (AD-06). Seller-reported mass is not accepted; weigh module, connector retention, mount and the moving portion of the selected interconnect separately. |
 | Status light + optics | LED beside camera (SCOPE-17) | Placement coupled to camera per AD-06 |
-| Roll/pitch/yaw mechanism | 3 axes in a 60 mm vertical neck allocation; **body yaw → elevated pitch → coaxial supported roll** is the RP-01 path | Layout 03 models Concept A with A0 estimated balance and an XC330-size packaging reference. Concept B is waived; servo SKU, purchased interfaces and physical evidence remain open. |
+| Roll/pitch/yaw mechanism | 3 axes in a 60 mm vertical neck allocation; **body yaw → elevated pitch → coaxial supported roll** is the RP-01 path | Layout 03 models Concept A with A0 estimated balance and 23 g XC330 housings. C01 (XC330-M288-T) matches those housings. Concept B is waived; servo SKU, purchased interfaces and physical evidence remain open. |
 | Cable bundle + service clearance | bend radius across 3 moving axes | Cable movement is an RP-01 measured item |
 
-**Representative RP-01 planning load: nominal ~509 g complete at M008=20 g, with ~499–524 g C2 sensitivity in the current Layout 03 D/E tree.** M008 remains `U` as physical evidence, and the tree's XC330-size servo references must be substituted per candidate. This is not a target or accepted measurement. The former ~250 g target, generic ~0.001 kg·m² inertia proxy and ~0.2 N·m neck-torque estimate are obsolete for RP-01 sizing. Candidate-specific centre of mass/inertia and axis calculations precede actuator selection; the scored rig load is registered from the representative as-built/CAD configuration.
+**Representative RP-01 planning load: nominal ~509 g complete at M008=20 g, with ~499–524 g C2 sensitivity in the current Layout 03 D/E tree.** M008 remains `U` as physical evidence. C01 (XC330-M288-T) matches the tree's 23 g housings; other families still substitute. This is not a target or accepted measurement. The former ~250 g target, generic ~0.001 kg·m² inertia proxy and ~0.2 N·m neck-torque estimate are obsolete for RP-01 sizing. Candidate-specific centre of mass/inertia and axis calculations precede actuator freeze; the scored rig load is registered from the representative as-built/CAD configuration.
 
 Body packaging must separately reserve four PDM MEMS microphones, the speaker and its acoustic cavity, the battery **low and forward of the drive axle**, and primary electronics. Integrated layout targets `x_CoM=+25 mm` forward of the axle and `h_CoM=124 mm` above the floor; none of these body subsystems belongs in moving-head ballast under the current baseline.
 
@@ -65,7 +65,7 @@ Body packaging must separately reserve four PDM MEMS microphones, the speaker an
 
 - [ ] Validate the 300 × 205 × 180 mm bounding box with sourced envelopes in RP-06; revise the baseline explicitly if it cannot be met.
 - [x] Produce a complete Layout 03 D/E per-axis blockout including yoke, bearing, reference-actuator, ear and harness allowances.
-- [ ] Replace the reference actuators with every screened servo candidate and rerun mass, CoM, inertia and A0 sensitivity before selection.
+- [ ] Replace the reference actuators with every screened servo candidate other than C01 (already a mass match) and rerun mass, CoM, inertia and A0 sensitivity before selection.
 - [ ] Weigh the selected SKU 30493 sample without packaging and with its installed mount/harness; replace the 118 g listing evidence in the RP-01 model.
 - [ ] Weigh the selected Camera Module 3 Wide SC0874 sample, connector retention, mount and moving interconnect separately; record their CoM coordinates and per-axis downstream membership.
 - [ ] Replace battery row once chemistry is decided in ADR-06 (RP-02).
@@ -89,3 +89,4 @@ Body packaging must separately reserve four PDM MEMS microphones, the speaker an
 | 2026-09-02 | 0.11 | Replaced the obsolete 250 g system head row with the ~490 g pre-M008 lower bound plus required C2 hardware, reopened the whole-robot upper roll-up, and retired the preliminary inertia/torque values from RP-01 sizing. |
 | 2026-09-07 | 0.12 | Recorded the selected C2 module (Waveshare ESP32-S3-Zero) against the head row while keeping M008 unknown until the installed assembly is weighed, and excluded the ESP32-S3-DevKitC-1 bench twin from the ledger. Roll-up values unchanged. |
 | 2026-09-12 | 0.13 | Propagated Layout 03's 104 × 150 × 115 mm envelope and provisional 362/436/509 g per-axis tree. Kept M008 physically unknown, retained the 10/20/35 g analytical sensitivity and made candidate-specific servo substitution explicit. No W evidence added. |
+| 2026-09-13 | 0.14 | Recorded that C01 (XC330-M288-T) matches the existing 23 g housings, so substituting that candidate adds zero mass. Family still unselected; M008 still `U`; no `W` evidence. |

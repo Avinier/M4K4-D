@@ -5,11 +5,11 @@
 | Status | **v0.2 draft.** Interface specification, not evidence. Field sizes, rates and timeouts marked *candidate* are proposals for G05/G04 registration |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Revised | 2026-09-12 |
-| Authority | `../../01-system/control-topology-options.md` v0.10 §3, §7 (UART/USB serial, semantic command surface); `../../01-system/system-design-brief.md` §5 information contracts and contract rules 1–5; §6 state dimensions and failure priorities |
+| Revised | 2026-09-13 |
+| Authority | `../../01-system/control-topology-options.md` v0.11 §3, §7 (UART/USB serial, semantic command surface); `../../01-system/system-design-brief.md` §5 information contracts and contract rules 1–5; §6 state dimensions and failure priorities |
 | Timebase | `../../01-system/timebase.md` — all timestamps in this contract are master-monotonic microseconds after offset reconciliation |
 | Feeds | ADR-12; `subsystem-interfaces.md` at stage 6; `fault-matrix.md`; `gates.md` G04/G05 |
-| Not in scope | The servo bus protocol (RP-01 servo selection decides Dynamixel 2.0 / Feetech / other); display asset transfer; any wireless path |
+| Not in scope | The servo bus protocol (RP-01 family freeze decides Dynamixel 2.0 / Feetech / other; C01 would be Dynamixel Protocol 2.0 TTL, 3.3 V logic 5 V compatible); display asset transfer; any wireless path |
 
 This is the artifact RP-02 produces that outlives it. It is versioned as a specification: a change is a new minor version with a changelog line; a breaking change is a new major version and a `fault-matrix.md` re-run.
 
@@ -28,7 +28,7 @@ This is the artifact RP-02 produces that outlives it. It is versioned as a speci
 |---|---|---|---|
 | SBC ↔ C2 | 3.3 V TTL UART, full duplex, no flow control; **USB-CDC on the Zero's native USB is the fallback** if UART throughput or the flashing path makes it preferable | 921 600 baud candidate (115 200 is ~11.5 kB/s and too tight against §6) | Two boards, one enclosure, permanent wire: the openvmp "dumb serial relay" test says serial. UART keeps native USB free for flashing (CAD-04a) |
 | SBC ↔ display ESP32-S3 | Same framing over a second UART | 115 200–921 600; face-state traffic is small | Same code path on the SBC; the display board's GPIO budget (RS-485 or UART pins per the schematic audit) decides the physical pair |
-| C2 ↔ servos | **Out of scope here** — half-duplex TTL or RS-485 per servo family | family-defined | Owned by RP-01's actuator selection; C2 keeps the transceiver external (bus-neutrality, control study §6.3) |
+| C2 ↔ servos | **Out of scope here** — half-duplex TTL or RS-485 per servo family. C01 (XC330-M288-T) would be TTL Dynamixel 2.0 | family-defined | Owned by RP-01's actuator selection; C2 keeps the transceiver external (bus-neutrality, control study §6.3). C01 does not freeze the transceiver |
 
 Both UART links cross the yaw boundary on the head-logic branch (PA-06) through the demateable connector. Signal integrity across the flexing harness is a G05 measurement (frame CRC error rate per hour under S05 sweeps).
 
@@ -137,3 +137,4 @@ The SBC side mirrors: on link-down it **drops its outbox**, marks head `unavaila
 |---|---|---|
 | 2026-09-08 | 0.1 | First draft: transports, COBS+CRC-16 framing, message set across session/command/feedback/time, watchdog and recovery semantics, bandwidth estimate, candidate timing requirements for G05. No field layout frozen; nothing registered. |
 | 2026-09-12 | 0.2 | Added the complete offset/rate/reference/uncertainty model to TIME_SYNC_REQ so C2 can perform the conversion required by timebase v0.2. Corrected heartbeat failure semantics to BRAKE onset within one tick after timeout; rest completion follows the bounded BRAKE trajectory. Nothing registered. |
+| 2026-09-13 | 0.2 | No framing change. Recorded C01 (XC330-M288-T) as the named RP-01 paper candidate implying Dynamixel 2.0 TTL if selected; family remains unselected. |

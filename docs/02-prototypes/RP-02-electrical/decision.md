@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Status | **Open — no gate outcome, no ADR closed, no candidate selected** |
+| Status | **Open — no gate outcome, no ADR closed, no candidate selected.** RP-01 C01 paper screen recorded 2026-09-13; servo family still unselected |
 | Created | 2026-09-08 |
-| Revised | 2026-09-12 |
+| Revised | 2026-09-13 |
 | Design question | What compute/controller split, internal link, rail and protection topology, and energy source lets Makad run representative head, drive, display, camera, audio and compute loads concurrently — and with what measured margin? |
 | Gate question | Does that design sustain every registered state and the registered mixed-duty cycle for at least 20 minutes without unsafe motion, unintended reset, rail excursion, data staleness or thermal violation — and does every injected fault produce a bounded state? |
 | Feeds | ADR-03, ADR-06, ADR-12; power/energy, thermal, internal-communication and compute-coexistence budget rows; `subsystem-interfaces.md` |
@@ -21,6 +21,15 @@ Nothing in RP-02 reopens these; RP-02 measures them.
 | Camera | Camera Module 3 Wide SC0874, CSI to the SBC | camera study |
 | Placement | SBC, mics, speaker, battery in the body; battery low and forward of the axle | dimensional baseline v1.10 |
 | E-stop | Motor bus, not logic | `workbench.md` |
+
+## Inherited RP-01 paper state — not locked
+
+These are current inputs. They are not SKU freezes, purchases, or `W` mass.
+
+| Input | Current value | Source |
+|---|---|---|
+| Layout 03 paper demand | Nominal D/E tree ~362/436/509 g at M008=20 g; controlling peaks 0.0953 / 0.0560 / 0.1099 N·m pitch/roll/yaw. Complete-head `W` still waits on M008 | `../RP-01-head/fullproofmath.md`; physics.md |
+| C01 paper candidate | XC330-M288-T, proposed 5 V, paper approval OPEN; **not a family freeze**. Layout 03 already uses matching 23 g housings | `../RP-01-head/actuator-screen-01.md` |
 
 ## Gate outcomes
 
@@ -39,9 +48,9 @@ This is the folder's purpose. Each row closes independently and says what it is 
 
 | ADR | Half | Closes when | Waiting on | Status |
 |---|---|---|---|---|
-| **ADR-03** controller backbone | — | G05 with margin on the Zero (or the twin with the pin-map header noted) **and** G04 on the SBC↔C2 link with real servos | RP-01 servo family for the bus; Phase B | Open |
+| **ADR-03** controller backbone | — | G05 with margin on the Zero (or the twin with the pin-map header noted) **and** G04 on the SBC↔C2 link with real servos | Named servo load for the bus (C01 as reference, or later selected family); Phase B | Open |
 | **ADR-12** internal communication and timebase | — | `link-contract.md` v1.0 implemented at both ends; G05 link and timestamp metrics met; `timebase.md` validated per its §6 | Phase A for loopback and DevKitC-1; Phase B for the flexing-harness CRC measurement | Open |
-| **ADR-06** battery, rails, isolation, low-energy policy | **Architecture** | Every `PA-xx` confirmed or superseded; G01 passed on the rig; chemistry chosen from the ledger's envelope; G06 paths credible on the body layout | Servo rail voltage (RP-01); an SBC candidate; RP-06 body layout for G06 reach | Open |
+| **ADR-06** battery, rails, isolation, low-energy policy | **Architecture** | Every `PA-xx` confirmed or superseded; G01 passed on the rig; chemistry chosen from the ledger's envelope; G06 paths credible on the body layout | Servo rail voltage (RP-01 family freeze; C01 makes 5 V the leading working assumption); an SBC candidate; RP-06 body layout for G06 reach | Open |
 | **ADR-06** | **Sizing** | Ledger `W` rows cover every load group; trip-wire evaluated against the candidate pack; G03 rehearsal margin recorded | RP-03 drive `W` rows; Phase C battery gate | Open — **expected to close after RP-03, not in stage 2**; RP-02 records it as *bounded, not sized* |
 
 ## Candidate register
@@ -50,9 +59,10 @@ Candidates are recorded so selection happens from evidence. **No row is selected
 
 | Decision | Candidates | What is fixed for comparison | What decides it |
 |---|---|---|---|
+| Servo family | C01 XC330-M288-T (5 V TTL Dynamixel 2.0, paper OPEN); faster XC330-M181-T named as yaw comparison if sag/speed conflict unresolved; other families still admissible | Direct 1:1; Layout 03 23 g housings already match C01 | RP-01 paper P01–P06 then scored G01–G06; **this row is not selected** |
 | Main SBC (LG-01) | Raspberry Pi 5 class (5 V / 5 A supply, highest perception headroom); Raspberry Pi 4 class (5 V / 3 A, lower draw); other CSI-capable Linux SBC with equivalent camera stack support | Must drive the selected CM3 Wide over CSI with a supported stack; body-mounted; UART pairs for C2 and display | Perception workload (RP-07 profiling), ledger LG-01 `W` row, thermal, India sourcing; recorded in the sourcing matrix. Not chosen for RP-02's convenience |
 | Battery chemistry | Protected 18650 Li-ion in holder (working assumption for rig design, PA-03); LiPo pouch | Placement low and forward; mass row 150–500 g; handling rules in `workbench.md` | Ledger composite peak and energy; G06 charging/removal paths; solo-builder risk |
-| Pack configuration | 2S (regulated servo rail or direct for 6–7.4 V servos); 3S (12 V servo class) | Coupled to RP-01 servo family (PA-04) | RP-01 actuator selection, then ledger |
+| Pack configuration | 2S (regulated servo rail or direct for 6–7.4 V servos); 3S (12 V servo class) | Coupled to RP-01 servo family (PA-04). C01 points at 5 V class → 2S + motor-domain buck is the leading working assumption | RP-01 actuator selection, then ledger |
 | Servo-rail conversion | Direct from pack; high-current buck on the motor domain | Rig socket accommodates both | Servo voltage window; measured S07 transient with each |
 | Compute-rail converter | Buck module rated 5 V / ≥ 5 A with low ripple; two candidates minimum | Own converter, never shared with the motor domain (PA-05) | SBC candidate's requirement; S07 compute-rail minimum |
 | Link transport | 3.3 V UART at 921 600 (primary); USB-CDC on native USB (fallback) | Same framing either way | G05 CRC error rate across the flexing harness; flashing-path conflict (CAD-04a) |

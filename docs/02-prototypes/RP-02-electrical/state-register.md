@@ -5,8 +5,8 @@
 | Status | **Proposed — no state is registered.** Registration requires a dated builder approval before the first scored run that cites it |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Revised | 2026-09-12 |
-| Authority | `../../01-system/risk-prototype-plan.md` v1.11 §RP-02 ("every registered concurrent state"); `../../01-system/power-energy-ledger.md` coexistence invariant |
+| Revised | 2026-09-13 |
+| Authority | `../../01-system/risk-prototype-plan.md` v1.12 §RP-02 ("every registered concurrent state"); `../../01-system/power-energy-ledger.md` coexistence invariant |
 | Load-group codes | `LG-xx` are defined once in `../../01-system/power-energy-ledger.md` §2 and only referenced here |
 | Character sources | `../RP-01-head/intent.md` HM-00…HM-18; `../../00-foundation/core-interaction-scenarios.md`; `../../01-system/system-design-brief.md` §6 state dimensions |
 
@@ -96,7 +96,7 @@ CON-10 requires 20 minutes of *representative mixed-duty* operation. Without a f
 | Shutdown | S15 | 1, **10 s**, at the end | Orderly, on the energy remaining |
 | **Total** | | **20 min elapsed**; S13 is produced by overlap within the listed time and adds no duration | |
 
-Freeze fields when registered: exact ordering, the overlap that produces S13, servo family and load configuration, and the instrument that logs per-group current at ≥ the transient-resolving rate.
+Freeze fields when registered: exact ordering, the overlap that produces S13, servo family and load configuration (C01 as named reference until family freeze), and the instrument that logs per-group current at ≥ the transient-resolving rate.
 
 ## 5. Not states
 

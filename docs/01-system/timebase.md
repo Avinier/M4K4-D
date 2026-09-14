@@ -6,7 +6,7 @@
 | Version | 0.2 |
 | Owner | Project builder |
 | Created | 2026-09-08; revised 2026-09-12 |
-| Governed by | `risk-prototype-plan.md` v1.11 §"Continuous sourcing and data workstream" (monotonic event-time strategy deliverable) and §"Open inputs before RP-01 scored testing" |
+| Governed by | `risk-prototype-plan.md` v1.12 §"Continuous sourcing and data workstream" (monotonic event-time strategy deliverable) and §"Open inputs before RP-01 scored testing" |
 | Grounding | `control-topology-options.md` v0.10 §5 (one master, timestamp-at-source, serial offset reconciliation; PTP overkill, NTP too coarse) |
 | Consumes | `docs/02-prototypes/RP-02-electrical/link-contract.md` §4.4 `TIME_SYNC`; `run-record-convention.md` |
 | Feeds | Every scored run's timestamps; RP-02 G05; RP-04 coordination; `subsystem-interfaces.md`; ADR-12 |

@@ -2,8 +2,8 @@
 
 | Field | Value |
 |---|---|
-| Status | **Planning open, reconciled 2026-09-12.** No state registered, no gate registered, no run executed. Phase A work is live; Phase B waits on RP-01's servo selection and an SBC candidate; Phase C waits on the battery gate |
-| Governing plan | `../../01-system/risk-prototype-plan.md` v1.11 §RP-02 |
+| Status | **Planning open, reconciled 2026-09-13.** No state registered, no gate registered, no run executed. Phase A work is live. Phase B waits on a named RP-01 servo load (C01 paper candidate or a later selected family) and an SBC candidate; Phase C waits on the battery gate. RP-01 Layout-03 mechanical demand is complete; the servo family is still unselected |
+| Governing plan | `../../01-system/risk-prototype-plan.md` v1.12 §RP-02 |
 | Purpose | Close **ADR-03** (controller backbone), **ADR-12** (internal communication and timebase) and the *architecture* half of **ADR-06** (battery, rails, isolation, low-energy policy); bound the *sizing* half |
 
 RP-01 is an object. RP-02 is a set of states and interfaces: a tree of rails, three boards, a message contract across a moving joint, and a space of concurrent operating conditions. Every subsystem will work alone; AD-08 says the peaks happen together. RP-02 is the instrument that makes the coexistence failure visible before the enclosure exists.
@@ -40,18 +40,20 @@ G01, G04, G05 and G06 are properties — a fuse coordinates or it does not; a st
 
 ## Relationship to RP-01
 
-Circular, and named: RP-01's mass cannot close until M008 is weighed, and C2's validity is RP02-G05; RP-01's first scored run needs RP-02's timebase; RP-01's servo family sets RP-02's servo rail. Resolution: RP-02 Phase A runs now and unblocks RP-01; RP-02's load-dependent gates follow RP-01's selections.
+Circular, and named — but the two closures are different objects. RP-01's **complete-head `W` mass** (M900) cannot close while M008 is `U`; that is unchanged. Layout 03 **paper demand** does not wait on that weigh-in: it is complete as of 2026-09-13 (`fullproofmath.md`), using the 20 g `E` C2 case plus 10/20/35 g sensitivity. C2's timing and electrical validity is still RP02-G05; RP-01's first scored run still needs RP-02's timebase. The servo **family** is still unselected and still sets the servo rail, but RP-01 now has a named paper candidate — XC330-M288-T (C01), proposed 5 V, paper approval OPEN — which is a leading PA-04 working assumption, not a collapse. Resolution: RP-02 Phase A runs now and unblocks RP-01; Phase B may use C01 as a named reference load without treating a purchase as a family freeze; load-dependent gates that need the frozen rail follow selection.
 
 ## What to do next, in order
 
 1. Read `intent.md` §2 and approve or amend the design/gate split — everything below cites it.
 2. Approve, adjust and **register** the state set and `MD-01` in `state-register.md`.
-3. Seed `power-energy-ledger.md` `D` rows from datasheets: C2 (Espressif), display board (Waveshare wiki), SBC candidates, reference servo (ROBOTIS eManual). Replace planning ranges with sourced `D` values; keep `U` where no datasheet exists.
+3. Seed `power-energy-ledger.md` `D` rows from datasheets: C2 (Espressif), display board (Waveshare wiki), SBC candidates, C01 servo (ROBOTIS eManual XC330-M288-T: stall 1.80 A at 5.0 V). Replace planning ranges with sourced `D` values; keep `U` where no datasheet exists.
 4. Implement `timebase.md` v0.2 §3 and `link-contract.md` v0.2 on the DevKitC-1 twin against a laptop; run the §6 offset-error measurement as `RP02-EXP-exploratory` runs. This is software and does not wait on any purchase.
 5. Register G05 and G04 candidate thresholds (dated approval) before the first scored link/timing run.
 6. Build the distribution board when the Korad, multimeter and logic analyzer arrive; run G01's review on it.
-7. After RP-01 selects a servo family: collapse PA-04, give the ledger a servo-rail voltage, begin Phase B.
+7. After RP-01 selects a servo family: collapse PA-04, give the ledger a servo-rail voltage, begin scored Phase B. Until then, C01 is the named 5 V working assumption and a legal reference-unit load; it does not freeze the rail.
 
 ## Organization record — 2026-09-08
 
 Created by builder direction after the RP-01 head reached its first packaging study and the C2 module was selected. The folder deliberately does not mirror `RP-01-head/`: there is no `physics.md` (the ledger is the model), no `storyboard.md` (the state register is its analogue), no `concepts/` or `cad/`. The power/energy ledger and timebase strategy were placed in `01-system/` under the same rule that kept the RP-01 CAD folder's sources in place — documents serving more than one consumer stay put and get linked.
+
+Reconciled 2026-09-13 to RP-01 Layout 03 paper demand and C01 (XC330-M288-T) without selecting a servo family or collapsing PA-04.

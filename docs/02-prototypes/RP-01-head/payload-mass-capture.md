@@ -5,8 +5,8 @@
 | Status | **Open — no accepted mass total until physical readings are entered** |
 | Owner | Project builder |
 | Created | 2026-08-30 |
-| Revised | 2026-09-12 |
-| Governing RP-01 model | Layout 03: nominal ~362/436/509 g roll/pitch/yaw D/E tree at M008=20 g, with ~499–524 g complete C2 sensitivity. The C2 architecture and Waveshare ESP32-S3-Zero module are selected, but installed M008 mass remains `U`; candidate servo masses/envelopes must replace the two XC330-size references before selection |
+| Revised | 2026-09-13 |
+| Governing RP-01 model | Layout 03: nominal ~362/436/509 g roll/pitch/yaw D/E tree at M008=20 g, with ~499–524 g complete C2 sensitivity. Paper demand complete 2026-09-13. C2 module selected; installed M008 mass remains `U`. C01 (XC330-M288-T) matches the two 23 g XC330 housings already in the tree; other families still substitute before selection |
 | Feeds | Per-axis mass tree, CoM/inertia model, actuator sizing, representative RP-01 ballast |
 
 ## Purpose and boundary
