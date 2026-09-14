@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | **Living — created 2026-09-08; every row is `E`, `D`-cited or `U`. No `W` evidence exists.** |
-| Version | 0.3 |
+| Version | 0.4 |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Last reviewed | 2026-09-13 |
+| Last reviewed | 2026-09-14 |
 | Governed by | `risk-prototype-plan.md` v1.12 §"Continuous sourcing and data workstream" (power/energy/thermal ledger deliverable) and §RP-02 (G02 invariant, G03 rehearsal) |
 | Consumes | `docs/02-prototypes/RP-02-electrical/state-register.md` (states, `MD-01`); `docs/02-prototypes/RP-02-electrical/power-architecture.md` (rails); `mass-envelope-ledger.md` (battery mass row); `system-design-brief.md` §7 power/energy, thermal, internal-communication budgets |
 | Feeds | RP-02 (rig sizing, G02 invariant, G03 rehearsal); RP-03 (drive rail); RP-06 (thermal/airflow, battery volume); ADR-06 sizing; stage-6 `engineering-budgets.md` |
@@ -32,7 +32,7 @@ Load-group codes are defined here once; `state-register.md`, `rig.md` and run-re
 
 | Code | Load group | Domain (PA-01) | Rail | Selected hardware |
 |---|---|---|---|---|
-| `LG-01` | Main compute — Linux SBC | Logic | Buck A, 5 V | **Unselected** (Pi 4 / Pi 5 class candidates) |
+| `LG-01` | Main compute — Linux SBC | Logic | Buck A, 5 V | **Unselected.** Suggested lead candidate from the 2026-09-14 review: Raspberry Pi 5 2 GB (5 V / 5 A class); Pi 4 class cost-dominated |
 | `LG-02` | Head motion controller C2 + servo-bus transceiver | Logic | Buck B, 5 V → on-board 3.3 V | Waveshare ESP32-S3-Zero (selected); DevKitC-1 twin on the bench |
 | `LG-03Y/P/R` | Head servos yaw / pitch / roll — **separately observable** | Motor | Servo rail (voltage per PA-04) | **Unselected.** First named paper candidate: XC330-M288-T (C01), 5 V class; paper OPEN |
 | `LG-04` | Drive — two gearmotors + driver | Motor | Drive rail | **Unselected** (RP-03) |
@@ -58,13 +58,13 @@ Currents at the rail stated; power in W where the rail is open. "Transient" is t
 
 | Code | Idle | Average working | Peak / transient | Transient character | Class | Basis | Measured by |
 |---|---|---|---|---|---|---|---|
-| `LG-01` SBC | 2.5–3 W | 4–8 W | 10–12 W; supply requirement 5 V / 3–5 A per class | Sustained compute peaks under perception; USB/CSI inrush at boot | `E` (class) | Published Pi 4 / Pi 5 class figures; **record the exact datasheet row as `D` when a candidate is chosen** | RP-02 Phase B; RP-07 workload profiling |
+| `LG-01` SBC | 2.5–3 W | 4–8 W | 10–12 W; supply requirement 5 V / 3–5 A per class; **Pi 5 class (suggested candidate) is 5 V / 5 A and throttles above ~80 °C — active cooler and a vent path are part of the load, and the fan is a noise source for `LG-07`** | Sustained compute peaks under perception; USB/CSI inrush at boot; SD-card corruption on an unclean brownout makes the PA-07 soft-shutdown a requirement, not a nicety | `E` (class) | Published Pi 4 / Pi 5 class figures; **record the exact datasheet row (supply, undervoltage warning threshold for T-4) as `D` when a candidate is chosen** | RP-02 Phase B; RP-07 workload profiling |
 | `LG-02` C2 | 0.2–0.4 W | 0.3–0.5 W | ≤ 1.5 W if Wi-Fi TX ever enabled (it should not be — wired link) | Boot inrush; negligible otherwise | `E` | ESP32-S3 dual-core active ≈ 60–110 mA at 3.3 V; Wi-Fi TX peak ≈ 300–400 mA — **verify against the Espressif ESP32-S3 datasheet current-consumption table and record as `D`** | RP-02 Phase A on the twin (note bridge current), then the Zero |
 | `LG-03Y/P/R` servos | hold: 0.1–0.5 A each if gravity-loaded; ~0 if balanced (A0 target) | 0.3–0.8 A each during gestures | stall-class transient per unit at launch/reversal; **C01 XC330-M288-T eManual `D`: stall 1.80 A at 5.0 V, 1.34 A at 3.7 V, 2.15 A at 6.0 V**; operating current at Layout 03 peaks is unmeasured; other families 1–3 A | Launch inrush tens of ms; reversal spikes every stitched `MJ5` segment (HM-07 four in ~1 s); regenerative current on deceleration | `U` (family), `D` C01 stall | RP-01 `actuator-screen-01.md`; Layout 03 paper peaks 0.0953 / 0.0560 / 0.1099 N·m. C01 housing mass already matches the 23 g tree | RP-01 busy-minute runs; RP-02 Phase B |
 | `LG-04` drive | 0 (inhibited) | 3–8 W in motion for two small encoder gearmotors | 20–40 W for both at stall/reversal; 1.5–3 A per motor class | Stall inrush on every S10 reversal; regenerative on braking | `E` (class) | JGA25/N20-class encoder gearmotor figures; RP-03 selects | RP-03; substitute profile in RP-02 until then |
 | `LG-05` display + light | 1–1.5 W (dimmed idle) | 1.5–3 W | 3–3.5 W (full backlight + ESP32-S3 rendering + light) | Backlight step at wake; small | `U`; `E` range | Sibling panel SKU 24159 is listed ≈ 1.2 W (`D`, display study); add ESP32-S3 + backlight driver losses. **Waveshare wiki value for SKU 30493 to be recorded as `D`; measure on the sample** | RP-02 Phase A when the sample arrives |
 | `LG-06` camera | 0.1–0.3 W (streaming idle) | 0.3–1.0 W | ≤ 1.5 W (autofocus actuator + full-rate capture) | AF motor steps; small | `U`; `E` range | No official power figure; community CM3 measurements 200–300 mA at 3.3 V | RP-02 Phase B on the SBC candidate |
-| `LG-07` mics + front end | < 0.05 W | < 0.1 W | < 0.2 W | None material | `E` | PDM MEMS ≈ 1 mA each; codec/front end dominates | RP-05 |
+| `LG-07` mics + front end | < 0.05 W | < 0.1 W | < 0.2 W (codec HAT) or ≤ 1 W (XMOS-class USB array with onboard DSP) | None material | `E` | PDM MEMS ≈ 1 mA each; codec/front end dominates. **A Pi-class SBC needs a 4-channel front end (2026-09-14 review); the USB-array option moves ~0.5–1 W onto Buck A via the SBC's USB rail** | RP-05 |
 | `LG-08` speaker + amp | 0.1–0.3 W (amp idle) | 0.5–1.5 W (chirps, speech-level music) | 3–5 W electrical at registered peak level | Music transients; sustained in S09 | `U`; `E` range | Small class-D amp + 3 W speaker class | RP-05/RP-06; RP-02 Phase B with a candidate |
 | `LG-09` losses | 10–15 % of load | 10–15 % | 15–20 % at peak (buck efficiency falls at high current) | Follows load | `E` | Typical buck-module efficiency 85–92 % at these currents | Derived from `i_in · v_in` minus Σ `W` rows |
 | `LG-10` base MCU + safety sensing | 0.2–0.4 W | 0.3–0.6 W | ≤ 1 W (ToF/IR emitters) | Sensor emitter pulses | `U` | RP-03 | RP-03 |
@@ -139,3 +139,4 @@ Evaluated at every ledger revision; a trip forces a **mandatory design review** 
 | 2026-09-08 | 0.1 | Created under plan v1.10 as the canonical power/energy/thermal budget. Defined load groups `LG-01…LG-10` and rails, entered planning envelopes (`E`/`U`) for every group, computed an illustrative `MD-01` energy and composite-peak envelope, and adopted the coexistence invariant with its re-run rule and four trip-wires. No `W` evidence; no selection. |
 | 2026-09-12 | 0.2 | Corrected proposed MD-01 to exactly 20 minutes by extending S03 to 8 min 34 s; recomputed the planning energy to ~2.8–5.3 Wh and top-of-range pack requirement to ~8.3 Wh. Clarified that S13 covers transient concurrency, not sustained/state-specific verification. No state or threshold registered. |
 | 2026-09-13 | 0.3 | Consumed RP-01 C01 paper screen (XC330-M288-T): cited eManual stall `D` 1.80 A at 5.0 V; recorded Layout 03 paper peaks; 5 V regulated-from-2S is the leading rail working assumption. Family remains unselected; no `W` row. |
+| 2026-09-14 | 0.4 | Component review (MEM-20260914-01): noted Raspberry Pi 5 2 GB as the suggested, unselected `LG-01` candidate with its 5 V / 5 A, thermal, fan-noise and clean-shutdown consequences; widened the `LG-07` peak for a USB-array front end. No class change, no `W` row, no selection. |

@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | **RP-01 C2 selected: separate ESP32-S3 motion controller; C1 rejected on selected carrier; C2 module selected — Waveshare ESP32-S3-Zero.** |
-| Version | 0.11 |
+| Version | 0.12 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-09-13 |
+| Last reviewed | 2026-09-14 |
 | Governed by | `risk-prototype-plan.md` — permitted provisional option study (decision-closeout: "the architecture phase may begin with provisional option studies while prototypes run") |
 | Feeds | RP-02 (electrical/control backbone) → **ADR-06 (power)**, **ADR-12 (control topology)**; the monotonic-timebase deliverable (plan §104) |
 | Consumes | `system-design-brief.md` responsibility set + AD-01/AD-06/AD-08; `mass-envelope-ledger.md` head section |
@@ -193,7 +193,7 @@ Selected **2026-09-07**. Screened on pin budget, installed volume, bus-neutralit
 
 1. E-stop, fault and other safe-at-boot signals must avoid strapping pins GPIO0/3/45/46.
 2. GPIO21 is the WS2812 and is out of the assignment.
-3. No USB-to-UART bridge — flashing is native USB with BOOT held, so the sealed head needs a C2 flashing path (CAD-04a) alongside the display one.
+3. No USB-to-UART bridge — flashing uses the ESP32-S3's built-in USB-Serial-JTAG peripheral on GPIO19/20. *Correction 2026-09-14:* that peripheral is hardware, so esptool can enter download mode without BOOT held as long as the firmware never reconfigures the USB PHY (TinyUSB/USB-CDC). Keeping the body link on UART, as the link contract prefers, preserves this; the USB-CDC link fallback would forfeit it. The sealed head still needs a physical C2 USB access path (CAD-04a) alongside the display one.
 4. Single-source (Waveshare). DevKitC-1 is the documented fallback if repackaging becomes acceptable; ESP32-S3 SuperMini is a rough second source.
 5. **M008 stays `U`.** The installed row is board + mount + connectors + local harness, and no mass enters the physical ledger from a datasheet. Layout 03 may use **20 g as a nominal `E` analytical case**, but must retain the **10/20/35 g sensitivity sweep** until the assembly is weighed.
 
@@ -217,6 +217,8 @@ This is a selection, not validation. **RP02-G05 still owns** measured loop, link
 - [ ] Register the on-hand Nano only when its IMU, APDS9960 or PDM mic produces a bench result.
 - [ ] Select or identify the base-frame IMU path when locomotion begins; feed it into RP-03 heading evidence.
 - [ ] Choose and prototype the internal link (UART/USB first); register the message set + expiry/health semantics.
+- [ ] **Suggestion (2026-09-14 review, undecided):** evaluate routing `FACE_STATE`/`LIGHT_STATE` through C2 over a short in-head UART instead of a second SBC↔display pair across the yaw boundary — two fewer moving conductors, one head-local timebase for face and motion; cost is C2 as a relay. Decide with the G05 flex-harness CRC evidence.
+- [ ] **Suggestion (2026-09-14 review, undecided):** Raspberry Pi 5 2 GB as the body SBC lead candidate; see `../02-prototypes/RP-02-electrical/decision.md` candidate register and the sourcing matrix. Keep C2 firmware radio-off at build time (no Wi-Fi/BT init) so loop jitter and the head-logic rail never see the 300–400 mA TX transient.
 - [ ] Decide the base/drive MCU and whether it shares the head's family.
 - [ ] Implement the provisional timebase (master + timestamp-at-source + offset reconciliation) before first scored RP-01 run.
 - [ ] Feed the resulting topology into `system-architecture.md` when ADR-12/ADR-06 close.
@@ -236,3 +238,4 @@ This is a selection, not validation. **RP02-G05 still owns** measured loop, link
 | 2026-09-07 | 0.9 | Selected the C2 module (Waveshare ESP32-S3-Zero) and its bench twin (ESP32-S3-DevKitC-1-N8R8) in new §6.3, recorded the rejected candidates, strapping/WS2812/flashing constraints and single-source risk, and kept M008 unknown pending a weigh-in. Servo family, bus implementation and RP02-G05 validation remain open. |
 | 2026-09-12 | 0.10 | Clarified the M008 evidence boundary: physical mass remains U; Layout 03 uses 20 g only as a nominal E calculation while retaining 10/20/35 g sensitivity until the installed assembly is weighed. |
 | 2026-09-13 | 0.11 | Recorded RP-01 C01 (XC330-M288-T) as the named paper candidate implying Dynamixel 2.0 TTL if selected. Family, bus implementation and RP02-G05 remain open. M008 still `U`. |
+| 2026-09-14 | 0.12 | Component review (MEM-20260914-01): corrected the C2 flashing note (USB-Serial-JTAG needs no BOOT hold unless firmware takes the USB PHY); added two undecided suggestions to §8 — face-state relay via C2 and Raspberry Pi 5 2 GB as SBC lead. No selection changed. |

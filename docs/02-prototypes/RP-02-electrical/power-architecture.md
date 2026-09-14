@@ -5,7 +5,7 @@
 | Status | **Candidate design, evidence class `E`.** Nothing here is selected, sized or purchased. It is the ADR-06 *architecture* input; ADR-06 *sizing* waits on the ledger |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Revised | 2026-09-13 |
+| Revised | 2026-09-14 |
 | Inputs | `../../01-system/power-energy-ledger.md` (planning envelopes); `../../01-system/workbench.md` (E-stop, PSU, battery rules); `../../01-system/dimensional-baseline.md` (battery low and forward of axle; body-mounted SBC); `../../01-system/head-harness-routing-study.md` (branch partition; yaw boundary); `state-register.md` |
 | Feeds | ADR-06; `gates.md` G01 and G06; `rig.md`; sourcing matrix power rows |
 | Method | `../../intuition.md` §5.1 step 3 electrical toolkit; each numbered choice below is a `PA-xx` proposal with its reason and its reopen condition |
@@ -156,7 +156,7 @@ ADR-06 architecture closes when every `PA-xx` above is either confirmed by a G01
 
 - [ ] Servo family (RP-01) → collapse PA-04 to one row; give the ledger a servo-rail voltage. Until then, C01 / 5 V regulated-from-2S is the leading working assumption, not the freeze.
 - [ ] Register the loaded servo-terminal sag floor that RP-01 paper gate P02 needs (C01 3.7 V is a manufacturer endpoint, not a predicted sag).
-- [ ] SBC candidate → Buck A rating; camera current on the same rail.
+- [ ] SBC candidate → Buck A rating; camera current on the same rail. *2026-09-14 suggestion (undecided):* Raspberry Pi 5 2 GB lead candidate → Buck A 5 V / ≥ 5 A fed through the header pins (no USB-PD negotiation on a robot rail), plus the `LG-07` front end's draw if a USB array is chosen. Register the Pi 5 undervoltage warning threshold from its documentation as the T-4 `D` value.
 - [ ] Pack internal resistance `D` value for the working-assumption cells; replace with `W` on the rig.
 - [ ] Register the rail-excursion definition (PA-06 candidate ≤3 %) and the undervoltage limits per component before any scored G02 rehearsal.
 - [ ] Decide whether per-servo polyfuses stay after measuring their drop at S07 peak.

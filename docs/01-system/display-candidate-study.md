@@ -3,9 +3,9 @@
 | Field | Value |
 |---|---|
 | Status | **SELECTED AND LOCKED — Waveshare ESP32-S3-LCD-4.3, no touch, SKU 30493** |
-| Version | 0.7 |
+| Version | 0.8 |
 | Owner | Project builder |
-| Created / last reviewed | 2026-08-29 / 2026-09-02 |
+| Created / last reviewed | 2026-08-29 / 2026-09-14 |
 | Governs | `candidate-sourcing-matrix.md` face-display row |
 | Feeds | RP-01 moving-head mass/roll-support blockout, RP-02 control topology, RP-06 optical/layout mock-up |
 
@@ -35,7 +35,7 @@ The acceptance tests below validate integration and establish measured design in
 | Exact module | **Waveshare ESP32-S3-LCD-4.3, no touch, SKU 30493; substitutions require explicit change control** |
 | Technology | Full-colour IPS; no touch |
 | Brightness | 300 nit is acceptable only after RP-06 passes through the actual smoked window; prefer ≥400 nit when mass and controller cost are comparable |
-| Refresh | Demonstrate fluid eye motion at 50–60 fps or show that the selected animation style remains convincing at the achieved rate |
+| Refresh | Demonstrate fluid eye motion at 50–60 fps or show that the selected animation style remains convincing at the achieved rate. **Review note 2026-09-14 (suggestion):** Waveshare's own figure for this board is a 41 fps LVGL benchmark on one core with the 120 MHz PSRAM option, which ESP-IDF still marks experimental and temperature-limited. A 16-bit 800×480 frame is 768 KB scanned out of PSRAM, so rendering, panel refresh and the UART receiver share one bandwidth. Plan on a solid 30–40 fps with partial redraws; register the gate as "≥30 fps sustained, no tearing, UART receiver active" rather than discovering the ceiling in RP-06 |
 | Architecture | Head-local ESP32-S3/LVGL rasterization is fixed by the selected module; the body-to-head transport remains an RP-02/ADR-12 decision |
 | Installed mass | Weigh display, controller, connectors, mount, window and harness; do not use shipping weight in the mass ledger |
 | Supply | Live India stock or written delivery quote; exact SKU and touch/no-touch variant verified before payment |
@@ -96,7 +96,8 @@ Start RP-06 with **60–70% visible-transmission neutral smoke**, a black intern
 2. Weigh the bare received module, then the installed module with mount, connectors and harness.
 3. Measure idle, typical animated-face and worst-case full-white power at the intended brightness.
 4. Render the representative eye animation for 30 minutes; record achieved frame rate, frame-time spikes and board temperature.
-5. Repeat while receiving semantic commands and running the intended communications stack.
+5. Repeat while receiving semantic commands and running the intended communications stack — the UART receiver is the bandwidth-contention path against the PSRAM-scanned RGB panel; record frame time with it idle and active.
+5a. Leave the onboard single-cell CS8501 charger path unpopulated/unused; the 5 V head-logic rail (Buck B) is the only power path. Route the camera CSI flex away from the RGB bus edge of the board.
 6. View dark, neutral and bright faces through 60%, 70% and clear window samples under dim-room and daylight-room conditions.
 7. Install the mass dummy/module in the RP-01 head blockout and measure actuator current, settling and cable restoring torque.
 8. Record whether a second identical unit remains orderable and identify the DSI or DWIN fallback before committing CAD.
@@ -123,3 +124,4 @@ Start RP-06 with **60–70% visible-transmission neutral smoke**, a black intern
 | 2026-08-29 | 0.5 | Project builder locked the no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493, as the V1 display; converted alternatives to change-controlled contingencies and retained integration tests as validation gates. |
 | 2026-08-30 | 0.6 | Rebuilt the head-facing geometry around the selected module: separated the 94–95 × 53–54 mm optical aperture from the larger bezel/window treatment and propagated the smaller head-envelope direction without reopening display selection. |
 | 2026-09-02 | 0.7 | Closed C1 for selected SKU 30493 and fixed this board's runtime role to eye/display rendering; C2 owns head trajectories, servo communication and motion safety. |
+| 2026-09-14 | 0.8 | Component review (MEM-20260914-01): recorded the 41 fps vendor benchmark and PSRAM-bandwidth reasoning as a suggestion to register the refresh gate at ≥30 fps sustained; added UART-active frame-time and charger/CSI-routing notes to the acceptance test. Selection unchanged. |

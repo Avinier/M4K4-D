@@ -32,6 +32,8 @@ This is the artifact RP-02 produces that outlives it. It is versioned as a speci
 
 Both UART links cross the yaw boundary on the head-logic branch (PA-06) through the demateable connector. Signal integrity across the flexing harness is a G05 measurement (frame CRC error rate per hour under S05 sweeps).
 
+**Alternative topology under consideration (2026-09-14 review, not adopted):** only the SBC ↔ C2 pair crosses the yaw boundary; C2 forwards `FACE_STATE` and `LIGHT_STATE` to the display board over a short in-head UART using the same framing. Two fewer moving conductors, and face and motion timestamps live on one head-local clock. Costs: C2 becomes a relay (a C2 reset takes the face to idle, which the expiry rule already tolerates), and the fault matrix gains a relay case. Decide with the G05 CRC evidence; if adopted this is a v0.x minor change because the message set is unchanged.
+
 ## 3. Framing
 
 | Layer | Choice | Reason |
@@ -138,3 +140,4 @@ The SBC side mirrors: on link-down it **drops its outbox**, marks head `unavaila
 | 2026-09-08 | 0.1 | First draft: transports, COBS+CRC-16 framing, message set across session/command/feedback/time, watchdog and recovery semantics, bandwidth estimate, candidate timing requirements for G05. No field layout frozen; nothing registered. |
 | 2026-09-12 | 0.2 | Added the complete offset/rate/reference/uncertainty model to TIME_SYNC_REQ so C2 can perform the conversion required by timebase v0.2. Corrected heartbeat failure semantics to BRAKE onset within one tick after timeout; rest completion follows the bounded BRAKE trajectory. Nothing registered. |
 | 2026-09-13 | 0.2 | No framing change. Recorded C01 (XC330-M288-T) as the named RP-01 paper candidate implying Dynamixel 2.0 TTL if selected; family remains unselected. |
+| 2026-09-14 | 0.2 | No framing change. Recorded the C2-relay alternative for the display link as under consideration (MEM-20260914-01); baseline remains two SBC-originated UART pairs. |
