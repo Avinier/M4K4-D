@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Planning open, reconciled 2026-09-13.** No state registered, no gate registered, no run executed. Phase A work is live. Phase B waits on a named RP-01 servo load (C01 paper candidate or a later selected family) and an SBC candidate; Phase C waits on the battery gate. RP-01 Layout-03 mechanical demand is complete; the servo family is still unselected |
+| Status | **Part-1 state/load baseline registered as `RP02-P1-REG-01` on 2026-09-15.** Situation coverage, namespaces, policies, cases, profile vocabulary, fault definitions and `MD-01` are frozen; run-specific configurations and numeric thresholds remain open. No scored run exists. Phase A is live |
 | Governing plan | `../../01-system/risk-prototype-plan.md` v1.12 §RP-02 |
 | Purpose | Close **ADR-03** (controller backbone), **ADR-12** (internal communication and timebase) and the *architecture* half of **ADR-06** (battery, rails, isolation, low-energy policy); bound the *sizing* half |
 
@@ -12,11 +12,14 @@ RP-01 is an object. RP-02 is a set of states and interfaces: a tree of rails, th
 
 | Document | What it owns | Phase live |
 |---|---|---|
+| [Operating situations](operating-situations.md) | Reader-first audited umbrella map: every situation with its `OM/EN/BS/PC/AL/HL/EV`, loads, cases, faults and evidence | A |
 | [Intent](intent.md) | The design question and the gate question, kept separate; traceability; inherited inputs; non-goals; the phase ladder | A |
-| [State register](state-register.md) | The **proposed, unregistered** concurrent states `S00…S17` and exact 20-minute draft `MD-01` — RP-02's storyboard | A |
+| [State register](state-register.md) | Orthogonal mode, energy, behaviour, person-continuity, action-lifecycle and health dimensions; events, qualification cases, forbidden concurrency and `MD-01` | A |
+| [State coverage matrix](state-coverage-matrix.md) | Requirement → runtime vector → qualification case → load profiles → rules/faults → evidence | A |
+| [Load model](load-model.md) | Named per-load profiles, time-scale classes, aggregation rules and measurement dependencies; contains no competing numeric budget | A |
 | [Power architecture](power-architecture.md) | Two-domain rail tree, layered protection, chemistry and pack-voltage comparison, brownout ordering, measurement points — `PA-01…PA-10`, evidence class `E` | A |
 | [Link contract](link-contract.md) | SBC ↔ C2 ↔ display message set, framing, expiry, heartbeat, recovery semantics, bandwidth and timing candidates — v0.2, the artifact that outlives the prototype | A |
-| [Fault matrix](fault-matrix.md) | `F-01…F-16` injected faults × inhibit / reject / expose / recover, with injection methods and evidence | A (rows), B (campaign) |
+| [Fault matrix](fault-matrix.md) | `F-01…F-22` injected faults × inhibit / reject / expose / recover, with injection methods and evidence | A (rows), B (campaign) |
 | [Rig](rig.md) | The distribution bench: fuses, INA-class monitors, E-stop, real-versus-substitute loads with equivalence records, procedures | A (design), B (build) |
 | [Gates](gates.md) | Candidate registrations for G01/G04/G05/G06; what RP-02 records against the reshaped G02 invariant and the G03/SC-14 rehearsal | A (registration) |
 | [Decision](decision.md) | Gate outcomes, the **ADR closure ladder** (ADR-06 split into architecture and sizing), candidate register with nothing selected | — |
@@ -45,12 +48,13 @@ Circular, and named — but the two closures are different objects. RP-01's **co
 ## What to do next, in order
 
 1. Read `intent.md` §2 and approve or amend the design/gate split — everything below cites it.
-2. Approve, adjust and **register** the state set and `MD-01` in `state-register.md`.
-3. Seed `power-energy-ledger.md` `D` rows from datasheets: C2 (Espressif), display board (Waveshare wiki), SBC candidates, C01 servo (ROBOTIS eManual XC330-M288-T: stall 1.80 A at 5.0 V). Replace planning ranges with sourced `D` values; keep `U` where no datasheet exists.
-4. Implement `timebase.md` v0.2 §3 and `link-contract.md` v0.2 on the DevKitC-1 twin against a laptop; run the §6 offset-error measurement as `RP02-EXP-exploratory` runs. This is software and does not wait on any purchase.
-5. Register G05 and G04 candidate thresholds (dated approval) before the first scored link/timing run.
-6. Build the distribution board when the Korad, multimeter and logic analyzer arrive; run G01's review on it.
-7. After RP-01 selects a servo family: collapse PA-04, give the ledger a servo-rail voltage, begin scored Phase B. Until then, C01 is the named 5 V working assumption and a legal reference-unit load; it does not freeze the rail.
+2. Use registered baseline `RP02-P1-REG-01`; changes to its namespaces, cases, safety policies or `MD-01` require an explicit new revision/supersession record.
+3. Freeze the first executable case configurations: firmware, real/substitute loads, instruments/rates, environment and the applicable open numeric thresholds.
+4. Recompute the illustrative system ledger from bound `CC/LP` profiles and seed `D` rows from datasheets. Keep `U` where no source exists.
+5. Implement `timebase.md` and `link-contract.md` on the DevKitC-1 twin; exploratory timing runs do not wait on purchases.
+6. Register G05 and G04 thresholds before scored link/timing work.
+7. Build the distribution board when the required instruments arrive and run G01 review.
+8. After RP-01 selects a servo family, collapse PA-04 and begin scored Phase B. C01 remains a reference, not a freeze.
 
 ## Organization record — 2026-09-08
 

@@ -16,7 +16,7 @@ Deliberately ugly, per `intuition.md`: the rig is a decision instrument. It is a
 
 | Constraint | Consequence |
 |---|---|
-| **Korad KA3005D is 30 V / 5 A.** The ledger's `E` composite peak at 7.4 V is 5.5–9.5 A | Per-group characterization on the Korad is fine. **S13 composite peaks cannot be produced from the bench PSU.** Composite runs need the candidate pack (Phase C) or a second, higher-current supply. Record this rather than quietly test a smaller composite |
+| **Korad KA3005D is 30 V / 5 A.** The ledger's old `E` synthetic composite at 7.4 V is 5.5–9.5 A | Per-profile characterization is fine. Full `ST-01` may exceed the supply; run only the largest recorded vector, then repeat from a protected Phase-C source. `CC-PEAK-01` is evaluated separately as the credible peak |
 | The Korad is linear CV/CC with a current limit that snaps to CC | Every new branch is first energized at a limit of expected draw + margin (`workbench.md` standing rule). The CC snap is also a useful **brownout injector** for F-11 and F-16 |
 | Oscilloscope deferred "until an analog problem appears" | G02's rail-excursion term is a millisecond event. Either the scope is un-deferred for Phase B, or the INA-class monitors run at their maximum conversion rate with the MCU brownout flags as the coarse indicator, and G02 rehearsals are labelled by the resolution they achieved |
 | Logic analyzer probes ≤ 5 V only | Fine for UART/servo-bus decode and for the GPIO edge co-timestamping in `timebase.md` §6. **Never** on the servo or drive rail |
@@ -33,7 +33,7 @@ One board, two domains, physically separated by a visible line.
 | Logic domain bus bar | Feeds Buck A (compute), Buck B (head logic), audio rail | Each buck on a 2.54 mm header so modules can be swapped without rewiring |
 | **E-stop** | Latching mushroom in series with the motor domain bus bar | Verified working *every session* per the scored-test gate; F-12/F-13 |
 | Motor domain bus bar | Servo rail regulator socket (PA-04: populated or bridged), drive rail | The socket makes "regulated from 2S" versus "direct" a plug change |
-| Per-branch fuses | Polyfuse holders on Y, P, R, drive L/R, compute buck input | Values from the ledger; polyfuse drop measured at S07 peak (PA-02 reopen condition) |
+| Per-branch fuses | Polyfuse holders on Y, P, R, drive L/R, compute buck input | Values from the ledger; polyfuse drop measured during `CC-06` (PA-02 reopen condition) |
 | Per-branch monitors | INA226-class high-side monitors on every branch, addressable over I²C; a shunt + scope point on the servo rail for transients | Logged by the **bench instrument MCU** (§4) |
 | Test points | Voltage at the *load end* of every branch (PA-06: drop is measured at the servo connector, not the bus bar) | Labelled with the ledger's `LG-xx` codes |
 | Yaw-boundary connector | The candidate demateable connector for the head branches, in line, so its drop and mating behaviour are measured from Phase B | CAD-05 |
@@ -48,7 +48,7 @@ The plan permits "characterized electronic/dynamic substitutes only where their 
 | LG-01 SBC | Laptop over USB-serial standing in for the SBC **for link work only** — not an electrical load | SBC candidate, real | Real | Phase A: the laptop reproduces protocol behaviour, not power draw or boot timing; no ledger row from it |
 | LG-02 C2 | **Real** — DevKitC-1-N8R8 twin, then the Zero when purchased | Real | Real | None needed; note that the DevKitC's USB-UART bridge adds ~10–20 mA the Zero does not have |
 | LG-03 servos Y/P/R | Absent, or C01 (XC330-M288-T) as a named reference unit — not a family freeze | RP-01's selected family, three units, mounted on the RP-01 rig or a dummy inertia; C01 remains admissible as the reference until that freeze | Real | If a resistor/electronic load is ever used: it reproduces average current only; **it does not reproduce stall inrush, inductive kick, regenerative current on deceleration, or bus telemetry** — no G02 claim from it. C01 eManual stall is 1.80 A at 5.0 V (`D`); operating current during Layout 03 peaks is unmeasured |
-| LG-04 drive | Absent | Programmable electronic load stepping a recorded profile, **or** two gearmotors of the RP-03 candidate class on a brake | RP-03 hardware if it exists | Electronic load: reproduces a current-time profile; does not reproduce inductive transients or regenerative current — acceptable for energy integration, not for the S10 transient term |
+| LG-04 drive | Absent | Programmable electronic load stepping a recorded profile, **or** two gearmotors of the RP-03 candidate class on a brake | RP-03 hardware if it exists | Electronic load reproduces current-time duty but not inductive/regenerative behaviour — acceptable for energy, not `CC-10A/B` transient closure |
 | LG-05 display + light | **Real** when the SKU 30493 sample arrives; a 5 V resistive dummy before that | Real | Real | Dummy: average only |
 | LG-06 camera | Absent | Real on the SBC candidate | Real | — |
 | LG-07 mics / audio front end | Absent (negligible current) | Candidate front end | Real | — |
@@ -62,8 +62,8 @@ The plan permits "characterized electronic/dynamic substitutes only where their 
 | Quantity | Instrument | Rate / resolution | Channel name | Gate |
 |---|---|---|---|---|
 | Branch current (all `LG-xx`) | INA226-class monitors, 16-bit, shunt sized per branch | up to ~2.8 kHz conversion; log at ≥ 1 kHz for peaks, 10 Hz for energy | `i_LGxx` | G02 invariant, ledger `W` rows, G03 |
-| Servo-rail transient minimum | Oscilloscope on the servo-rail test point (when un-deferred); until then INA226 at max rate with **resolution stated in the run record** | scope: ≥ 1 MS/s, single-shot on S07 trigger | `v_srv_min` | G02 rail-excursion term |
-| Compute-rail minimum during S07 | Same, second channel | — | `v_cmp_min` | PA-05 verification |
+| Servo-rail transient minimum | Oscilloscope on servo-rail load-end test point; until then INA226 at max rate with resolution stated | scope: ≥1 MS/s, single-shot on `CC-06`/`ST-01` trigger | `v_srv_min` | G02 rail-excursion term |
+| Compute-rail minimum during head/whole-robot peaks | Same, second channel | — | `v_cmp_min` | PA-05 verification |
 | Pack / supply voltage and current | INA226 at the input + the Korad's own display for cross-check | 1 kHz | `v_in`, `i_in` | G03; conversion-loss residual |
 | Regulator, wire and connector temperature | Thermocouple or thermistor on each buck, the servo-rail conductor at the yaw connector, the connector body | 1 Hz | `T_<point>` | G02 thermal term; SC-TBD-12 |
 | Reset / brownout events | MCU reset-reason registers read at boot and logged; SBC `dmesg`/journal | event | `evt_reset_<board>` | G02, G04 |
@@ -78,20 +78,20 @@ Every instrument entry gets sampling rate, calibration/check method, uncertainty
 
 ### 5.1 Per-group characterization (Phase A/B, exploratory → ledger rows)
 
-1. Branch alone on the Korad, current limit set; log `i_LGxx` and `v_in` through the group's own idle / average / peak conditions as defined by the states it participates in.
+1. Branch alone on the Korad, current limit set; execute its named `LP-xx-*` profiles from `load-model.md`, including the required transient and sustained windows.
 2. Enter the row in the ledger as `W` with run ID, conditions and the firmware/config identity.
 
 ### 5.2 Coexistence rehearsal (Phase B/C, pilot → scored against the G02 invariant)
 
 1. Verify E-stop; set limits for this test; confirm logging; allocate the run ID.
-2. Bring up the registered state one group at a time; log the composite.
-3. For S04/S06/S07: trigger the gesture from the SBC via `HEAD_GOAL`; capture the servo-rail and compute-rail minima on the transient instrument.
+2. Bring up the registered `CC-xx` case one group/profile at a time; log the composite and exact event alignment.
+3. For `CC-03/05/06`: trigger the exact gesture from the SBC via `HEAD_GOAL`; capture servo-rail and compute-rail minima.
 4. Repeat with added servo-rail bulk capacitance to quantify PA-05/PA-07.
-5. Report per state: composite peak, per-rail minimum, margin to each component's undervoltage limit, resets (must be zero), thermal trajectory. Margin is the deliverable.
+5. Report per case: profile revisions, composite waveform, per-rail minimum/maximum, component-limit margin, reset/error count and thermal trajectory.
 
 ### 5.3 Brownout ordering (PA-07 verification)
 
-Under S13 (or the largest composite the supply allows), ramp the Korad voltage down at ~0.1 V/s. Record the order in which: servo tracking degrades, C2 reports `degraded`, any rail hits its UVLO, the SBC logs undervoltage, anything resets. The required order is PA-07's; a violation is a design finding, not a threshold failure.
+Under `CC-PEAK-01`, then the largest admissible `ST-01` vector, ramp the source down at the registered rate. Record when servo tracking degrades, C2 reports degraded, each rail reaches its limit, the SBC reports undervoltage and any reset occurs. A PA-07 ordering violation is a design finding.
 
 ### 5.4 Fault campaign (G04)
 

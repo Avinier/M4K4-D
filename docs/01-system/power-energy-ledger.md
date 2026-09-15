@@ -2,11 +2,11 @@
 
 | Field | Value |
 |---|---|
-| Status | **Living — created 2026-09-08; every row is `E`, `D`-cited or `U`. No `W` evidence exists.** |
-| Version | 0.4 |
+| Status | **Living — Part-1 `CC/LP` vocabulary registered under `RP02-P1-REG-01`; every numeric row remains `E`, `D`-cited or `U`. No `W` evidence exists.** |
+| Version | 0.7 |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Last reviewed | 2026-09-14 |
+| Last reviewed | 2026-09-15 |
 | Governed by | `risk-prototype-plan.md` v1.12 §"Continuous sourcing and data workstream" (power/energy/thermal ledger deliverable) and §RP-02 (G02 invariant, G03 rehearsal) |
 | Consumes | `docs/02-prototypes/RP-02-electrical/state-register.md` (states, `MD-01`); `docs/02-prototypes/RP-02-electrical/power-architecture.md` (rails); `mass-envelope-ledger.md` (battery mass row); `system-design-brief.md` §7 power/energy, thermal, internal-communication budgets |
 | Feeds | RP-02 (rig sizing, G02 invariant, G03 rehearsal); RP-03 (drive rail); RP-06 (thermal/airflow, battery volume); ADR-06 sizing; stage-6 `engineering-budgets.md` |
@@ -60,40 +60,39 @@ Currents at the rail stated; power in W where the rail is open. "Transient" is t
 |---|---|---|---|---|---|---|---|
 | `LG-01` SBC | 2.5–3 W | 4–8 W | 10–12 W; supply requirement 5 V / 3–5 A per class; **Pi 5 class (suggested candidate) is 5 V / 5 A and throttles above ~80 °C — active cooler and a vent path are part of the load, and the fan is a noise source for `LG-07`** | Sustained compute peaks under perception; USB/CSI inrush at boot; SD-card corruption on an unclean brownout makes the PA-07 soft-shutdown a requirement, not a nicety | `E` (class) | Published Pi 4 / Pi 5 class figures; **record the exact datasheet row (supply, undervoltage warning threshold for T-4) as `D` when a candidate is chosen** | RP-02 Phase B; RP-07 workload profiling |
 | `LG-02` C2 | 0.2–0.4 W | 0.3–0.5 W | ≤ 1.5 W if Wi-Fi TX ever enabled (it should not be — wired link) | Boot inrush; negligible otherwise | `E` | ESP32-S3 dual-core active ≈ 60–110 mA at 3.3 V; Wi-Fi TX peak ≈ 300–400 mA — **verify against the Espressif ESP32-S3 datasheet current-consumption table and record as `D`** | RP-02 Phase A on the twin (note bridge current), then the Zero |
-| `LG-03Y/P/R` servos | hold: 0.1–0.5 A each if gravity-loaded; ~0 if balanced (A0 target) | 0.3–0.8 A each during gestures | stall-class transient per unit at launch/reversal; **C01 XC330-M288-T eManual `D`: stall 1.80 A at 5.0 V, 1.34 A at 3.7 V, 2.15 A at 6.0 V**; operating current at Layout 03 peaks is unmeasured; other families 1–3 A | Launch inrush tens of ms; reversal spikes every stitched `MJ5` segment (HM-07 four in ~1 s); regenerative current on deceleration | `U` (family), `D` C01 stall | RP-01 `actuator-screen-01.md`; Layout 03 paper peaks 0.0953 / 0.0560 / 0.1099 N·m. C01 housing mass already matches the 23 g tree | RP-01 busy-minute runs; RP-02 Phase B |
-| `LG-04` drive | 0 (inhibited) | 3–8 W in motion for two small encoder gearmotors | 20–40 W for both at stall/reversal; 1.5–3 A per motor class | Stall inrush on every S10 reversal; regenerative on braking | `E` (class) | JGA25/N20-class encoder gearmotor figures; RP-03 selects | RP-03; substitute profile in RP-02 until then |
+| `LG-03Y/P/R` servos | **sleep: torque off (`LP-03-OFF`, SD-02);** attentive hold 0.1–0.5 A each if gravity-loaded, lower if balanced | 0.3–0.8 A each during gestures | stall-class transient per unit at launch/reversal; **C01 XC330-M288-T eManual `D`: stall 1.80 A at 5.0 V, 1.34 A at 3.7 V, 2.15 A at 6.0 V**; operating current unmeasured | Launch/reversal/regenerative profiles | `U` (family), `D` C01 stall | RP-01 paper peaks 0.0953 / 0.0560 / 0.1099 N·m; sleep decision is not servo-family evidence | RP-01 busy-minute runs; RP-02 Phase B |
+| `LG-04` drive | 0 (inhibited) | 3–8 W in motion for two small encoder gearmotors | 20–40 W for both at stall/reversal; 1.5–3 A per motor class | `LP-04-LAUNCH/REV/BRAKE`; signed regenerative current required | `E` (class) | JGA25/N20-class encoder gearmotor figures; RP-03 selects | RP-03; substitute profile in RP-02 until then |
 | `LG-05` display + light | 1–1.5 W (dimmed idle) | 1.5–3 W | 3–3.5 W (full backlight + ESP32-S3 rendering + light) | Backlight step at wake; small | `U`; `E` range | Sibling panel SKU 24159 is listed ≈ 1.2 W (`D`, display study); add ESP32-S3 + backlight driver losses. **Waveshare wiki value for SKU 30493 to be recorded as `D`; measure on the sample** | RP-02 Phase A when the sample arrives |
 | `LG-06` camera | 0.1–0.3 W (streaming idle) | 0.3–1.0 W | ≤ 1.5 W (autofocus actuator + full-rate capture) | AF motor steps; small | `U`; `E` range | No official power figure; community CM3 measurements 200–300 mA at 3.3 V | RP-02 Phase B on the SBC candidate |
 | `LG-07` mics + front end | < 0.05 W | < 0.1 W | < 0.2 W (codec HAT) or ≤ 1 W (XMOS-class USB array with onboard DSP) | None material | `E` | PDM MEMS ≈ 1 mA each; codec/front end dominates. **A Pi-class SBC needs a 4-channel front end (2026-09-14 review); the USB-array option moves ~0.5–1 W onto Buck A via the SBC's USB rail** | RP-05 |
-| `LG-08` speaker + amp | 0.1–0.3 W (amp idle) | 0.5–1.5 W (chirps, speech-level music) | 3–5 W electrical at registered peak level | Music transients; sustained in S09 | `U`; `E` range | Small class-D amp + 3 W speaker class | RP-05/RP-06; RP-02 Phase B with a candidate |
+| `LG-08` speaker + amp | 0.1–0.3 W (amp idle) | 0.5–1.5 W (chirps, speech-level music) | 3–5 W electrical at registered peak level | `LP-08-MUSIC` RMS plus separate `LP-08-CREST` transients | `U`; `E` range | Small class-D amp + 3 W speaker class | RP-05/RP-06; RP-02 Phase B with a candidate |
 | `LG-09` losses | 10–15 % of load | 10–15 % | 15–20 % at peak (buck efficiency falls at high current) | Follows load | `E` | Typical buck-module efficiency 85–92 % at these currents | Derived from `i_in · v_in` minus Σ `W` rows |
 | `LG-10` base MCU + safety sensing | 0.2–0.4 W | 0.3–0.6 W | ≤ 1 W (ToF/IR emitters) | Sensor emitter pulses | `U` | RP-03 | RP-03 |
 
-## 4. State energy model — planning envelope
+## 4. Qualification-case energy model — planning envelope
 
-Per registered state in `state-register.md`, summed from §3 midpoints at the stated class. This is the `E_MD01` integration in `power-architecture.md` §2. **Illustrative only: no state is registered and no row is `W`.**
+The state model now separates modes (`OM`), behaviours (`BS`), events (`EV`), qualification cases (`CC`) and synthetic stress (`ST`). Named profiles live in `RP-02-electrical/load-model.md`. This remains a coarse `E` envelope: nothing is registered and no row is `W`.
 
 | State | Composition (dominant groups) | Power range (W) | `MD-01` duration | Energy range (Wh) |
 |---|---|---|---|---|
-| S02 quiet idle | SBC idle + display dim + servo hold or off | 4–8 | 4 min | 0.27–0.53 |
-| S03 attentive idle | SBC avg + camera + display + small servo motion | 7–14 | 8 min 34 s | 1.00–2.00 |
-| S04 wake ×6 | Three-axis launch + chirp + perception spin-up | 25–45 peak, ~1 s each | 6 s total | ~0.05 |
-| S05 search | Yaw sweeps + camera + perception | 10–18 | ~6 s | ~0.03 |
-| S06 gestures ×12 | Servo reversal bursts | 15–30, 1–2 s each | ~20 s | ~0.12 |
-| S07 startle ×2 | Three-axis simultaneous peak + audio + display | 30–50 peak, <0.5 s | ~1 s | ~0.01 |
-| S08 requests ×4 | SBC peak + audio + display utility view | 10–18 | ~40 s | ~0.15 |
-| S09 music | Sustained audio peak + eyes + capture | 8–16 | 3 min | 0.40–0.80 |
-| S10/S11 base motion | Drive avg + tracking compute + head corrections | 15–30 | 3 min | 0.75–1.50 |
-| S12 spin ×1 | Drive sustained max + head + audio | 30–50 | ~3 s | ~0.04 |
-| S15 shutdown | Descent + sign-off | 5–10 | ~10 s | ~0.02 |
-| **`MD-01` total** | | **average ≈ 8.5–16 W** | **20 min** | **≈ 2.8–5.3 Wh** |
-| **Composite peak (S13)** | S07 during S09 during S10 reversal, perception at S11 load | **≈ 40–70 W** → **5.5–9.5 A at 7.4 V**, 3.5–6.5 A at 11.1 V | instantaneous | — |
+| `CC-01` boot/inhibit | Board inrush/startup; motors off | `U/E` | 20 s | ~0.05–0.11 |
+| `CC-02F/T` quiet idle | SBC wake listening + dim face + health; camera off and head torque off; tabletop variant additionally verifies drive inhibit | 4–8 | 5 min | 0.33–0.67 |
+| `BS-02/04 + CC-05` attentive/social | Camera/display/listening + sparse gestures | 7–14 baseline | 6 min 25 s + events | ~0.75–1.55 |
+| `CC-03/04` wake/search/acquire | Head motion + display/chirp + perception/camera | 10–45 profile-dependent | 50 s sequence | ~0.10–0.25 |
+| `CC-07A/B/C` request phases | Capture, service wait and response are sequential | 7–18 by phase | 1 min | 0.12–0.30 |
+| `CC-08` music | Audio RMS/crests + eye animation + capture + small head motion | 8–16 | 3 min | 0.40–0.80 |
+| `CC-09/09C/09R/10A/10B/10C` come/follow | Drive + tracking + head correction + safety; includes stopping-band, continuity and obstacle interventions | 15–30 | 3 min | 0.75–1.50 |
+| `CC-11` spin/settle | Short drive peak inside complete action | 30–50 during peak | 15 s action | ~0.04–0.12 |
+| `CC-16 / EV-14` shutdown | Descent, sign-off and log flush | 5–10 | 10 s | ~0.02 |
+| **Draft `MD-01` v0.2** | Chronological recipe in state register | **average `E` ≈7.7–15.9 W** | **20 min** | **`E` ≈2.6–5.3 Wh** |
+| **`CC-PEAK-01` credible peak** | Drive reversal/brake + tracking/camera + ordinary head correction + audio crest + face/safety | `U`; rebuild from aligned profiles | transient | — |
+| **`ST-01` synthetic stress** | Aligns startle, drive reversal, audio crest, display transition and perception | Historical `E` ≈40–70 W pending rebuild | transient | — |
 
 Consequences already visible from the envelope, all `E`:
 
-- The composite peak exceeds the **Korad KA3005D's 5 A** at 2S voltage. S13 cannot be produced from the bench supply; `rig.md` §1 records this.
-- Required pack energy at the top of the range with 25 % reserve and 80 % usable depth of discharge: `5.3 / 0.8 × 1.25 ≈ 8.3 Wh`. A 2S1P of ordinary 2.5 Ah 18650s is ≈ 18 Wh; a 2S 1500 mAh LiPo is ≈ 11 Wh. **Neither is a selection**; the point is that the trip-wire in §6 is not close to firing on the planning envelope, and the interesting risk is still the *peak*.
-- Servo transients dominate the peak; the servo family selection in RP-01 is the largest single lever on the pack, the fuses and the conductor across the yaw boundary. C01 (5 V class, stall 1.80 A `D` at 5.0 V) is the named paper candidate; three-axis stall-class coincidence would be ~5.4 A on the servo rail before conversion — still a planning envelope, not a G02 measurement.
+- Historical `ST-01` could exceed the **Korad KA3005D's 5 A** at 2S. Phase B records the largest safe vector; full alignment waits on a protected suitable source.
+- The prior 25% reserve/80% usable-depth example still gives ~8.3 Wh from the 5.3 Wh high case. It is not a pack selection.
+- Servo and drive transients remain the largest unknowns. C01's 1.80 A at 5 V is stall `D`, not an operating profile; three-axis stall coincidence is stress/reference only.
 
 ## 5. Coexistence invariant (the reshaped RP02-G02)
 
@@ -104,7 +103,7 @@ Consequences already visible from the envelope, all `E`:
 1. a load-group row changes evidence class (`U`→`E`, `E`→`W`, or a `W` value changes by more than its stated uncertainty);
 2. a load group is added or a substitute is replaced by real hardware;
 3. the servo rail voltage or the pack configuration changes;
-4. a new state is registered, or `MD-01` is re-versioned;
+4. a mode/state/event/case/profile is registered or revised, or `MD-01` is re-versioned;
 5. any conductor, connector or fuse on the tree changes.
 
 The record names which states were verified with which loads, which remain pending, and when the next re-run is due. "Verified in September on bench loads" is not verification in November with drive motors.
@@ -116,20 +115,21 @@ Evaluated at every ledger revision; a trip forces a **mandatory design review** 
 | Trip | Condition | Review must consider |
 |---|---|---|
 | **T-1 Energy** | `E_MD01,high / (usable DoD · η_conv) · (1 + reserve)` exceeds the usable energy of the *largest* pack that fits the mass row's high bound (500 g) and the low-and-forward placement | Servo class, head mass, `MD-01` composition honesty, runtime target (CON-10 may rise, never fall) |
-| **T-2 Peak** | Composite peak current at the pack exceeds the working-assumption pack's continuous rating, or the servo-rail drop at S07 exceeds the PA-06 limit with the largest credible conductor across the yaw boundary | Servo family, bulk capacitance, conductor gauge versus harness flex life, pack P-count |
-| **T-3 Thermal** | Any regulator's steady-state dissipation at the S11 sustained average exceeds what a passive enclosure can shed at the SC-TBD-12 limit | Converter choice, airflow in RP-06, duty cycle |
-| **T-4 Compute rail** | SBC rail minimum during S07 falls within 0.25 V of the SBC's undervoltage threshold on the planning model | PA-05 separation, converter transient response, bulk capacitance placement |
+| **T-2 Peak** | `CC-PEAK-01` exceeds source capability, or servo-terminal drop during `CC-06` exceeds PA-06 with the largest credible flex conductor | Servo/drive family, capacitance, flex life versus gauge, pack P-count |
+| **T-3 Thermal** | Regulator dissipation under `CC-08/09` and `MD-01` exceeds passive capability at SC-TBD-12 | Converter, RP-06 airflow, duty |
+| **T-4 Compute rail** | SBC rail during `CC-06/CC-PEAK-01/ST-01` falls within 0.25 V of its undervoltage threshold | PA-05 separation, transient response, capacitance |
 
 ## 7. Open items
 
 - [ ] Replace every `E`-class datasheet reference in §3 with a cited `D` row (Espressif, Waveshare, ROBOTIS, SBC vendor) — one afternoon, no purchase.
-- [ ] Register the state set and `MD-01`; recompute §4 from registered durations.
+- [x] Register the `OM/EN/BS/PC/AL/HL/EV/CC/LP` set and `MD-01` definition — `RP02-P1-REG-01`, 2026-09-15.
+- [ ] Recompute §4 from run-bound profiles once the required real loads or admissible substitutes are frozen; registration did not convert `U/E/D` values into `W` evidence.
 - [ ] Servo family (RP-01) → servo rail voltage; per-unit stall/hold `D`; then `W` from the RP-01 busy-minute runs. C01 stall `D` is now cited; family freeze still required to collapse the rail.
 - [ ] SBC candidate → `D` row; then `W` under RP-07 workload.
 - [ ] Display sample → `W` idle/average/peak on the RP-02 rig.
 - [ ] Pack internal resistance `D` for the working-assumption cells; `W` in Phase C.
 - [ ] Register per-component undervoltage limits so the invariant's "rail excursion" term is testable.
-- [ ] Drive `W` rows from RP-03; until then the S10–S13 rows carry a named substitute.
+- [ ] Drive `W` profiles from RP-03; until then `CC-09/09C/09R/10A/10B/10C/11/PEAK`, `CC-12C`, and the drive portion of `ST-01` use an explicit substitute record.
 - [ ] Retire `LG-09` as a lump once per-branch `W` rows allow the residual to be attributed.
 
 ## Change log
@@ -140,3 +140,6 @@ Evaluated at every ledger revision; a trip forces a **mandatory design review** 
 | 2026-09-12 | 0.2 | Corrected proposed MD-01 to exactly 20 minutes by extending S03 to 8 min 34 s; recomputed the planning energy to ~2.8–5.3 Wh and top-of-range pack requirement to ~8.3 Wh. Clarified that S13 covers transient concurrency, not sustained/state-specific verification. No state or threshold registered. |
 | 2026-09-13 | 0.3 | Consumed RP-01 C01 paper screen (XC330-M288-T): cited eManual stall `D` 1.80 A at 5.0 V; recorded Layout 03 paper peaks; 5 V regulated-from-2S is the leading rail working assumption. Family remains unselected; no `W` row. |
 | 2026-09-14 | 0.4 | Component review (MEM-20260914-01): noted Raspberry Pi 5 2 GB as the suggested, unselected `LG-01` candidate with its 5 V / 5 A, thermal, fan-noise and clean-shutdown consequences; widened the `LG-07` peak for a USB-array front end. No class change, no `W` row, no selection. |
+| 2026-09-14 | 0.5 | Adopted the refactored Part-1 state/load vocabulary: modes/behaviours/events, named profiles, credible `CC-PEAK-01` versus synthetic `ST-01`, and chronological `MD-01` v0.2. Re-keyed the illustrative model without creating `W` evidence or registering a case/profile. |
+| 2026-09-15 | 0.6 | Reconciled the energy model with the complete foundation/system situation audit: distinguished come, follow, target-continuity and obstacle cases; named `CC-16` as the shutdown case; and added `PC`, per-action `AL` and `HL` to the registration dependency. The numerical envelope is unchanged and remains `E`; no case/profile is registered. |
+| 2026-09-15 | 0.7 | Recorded `RP02-P1-REG-01`: the state/case/profile vocabulary and `MD-01` definition are now the approved baseline. Planning numbers retain their existing evidence classes; no numeric value was promoted to `W`, and the ledger must still be recomputed after run-specific load binding. |

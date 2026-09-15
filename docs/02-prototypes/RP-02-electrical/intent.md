@@ -2,10 +2,10 @@
 
 | Field | Value |
 |---|---|
-| Status | Draft — design and gate questions authored; no state, threshold or candidate is registered; no run executed. Reconciled to RP-01 Layout-03 paper demand and C01 screen on 2026-09-13 |
+| Status | Design/gate intent current; Part-1 state/load baseline registered as `RP02-P1-REG-01` on 2026-09-15. Numeric thresholds and component candidates remain unregistered; no scored run executed |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Revised | 2026-09-13 |
+| Revised | 2026-09-15 |
 | Governing plan | `../../01-system/risk-prototype-plan.md` v1.12 §RP-02 |
 | Electrical baseline inherited | `../../01-system/control-topology-options.md` v0.11 (C2 selected, UART/USB link and timebase recommended; C01 paper candidate named, family unselected); `../RP-01-head/decision.md` CTRL-01…CTRL-06; `../../01-system/workbench.md` E-stop and PSU rules |
 | Ledger | `../../01-system/power-energy-ledger.md` — the canonical power/energy/thermal budget; RP-02 populates it, it does not own a second copy |
@@ -87,7 +87,10 @@ G02 and G03 changed shape in plan v1.10. See `gates.md` §2 for what RP-02 recor
 
 ### 5.1 RP-02 owns
 
-- the **registered state set** (`state-register.md`) and the proposed mixed-duty cycle awaiting freeze;
+- the **reader-first operating-situation map** (`operating-situations.md`), audited against all approved foundation/system situations and grouping mode, energy, behaviour, person continuity, per-action lifecycle, health, events, loads, cases, faults and evidence under recognisable conditions;
+- the **operating-state model** (`state-register.md`): modes/permissions, energy/health overlays, behavioural states, transitions, qualification concurrency, forbidden combinations and the proposed mixed-duty cycle;
+- the **coverage proof** (`state-coverage-matrix.md`): requirement-to-vector-to-case-to-load-to-fault-to-evidence traceability;
+- the **named load-profile contract** (`load-model.md`), which binds those cases to reproducible waveforms/duties without duplicating the numeric ledger;
 - the **candidate power architecture** (`power-architecture.md`) as an ADR-06 input, evidence class `E`;
 - the **link contract** (`link-contract.md`) as a versioned interface specification that outlives the prototype;
 - the **fault-injection matrix** (`fault-matrix.md`) and its required observables;

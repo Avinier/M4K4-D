@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Open — no gate outcome, no ADR closed, no candidate selected.** RP-01 C01 paper screen recorded 2026-09-13; servo family still unselected. 2026-09-14 component review added suggested candidates (SBC, mic front end, link topology) — suggestions only, MEM-20260914-01 |
+| Status | **Open — no gate outcome, no ADR closed, no component candidate selected.** Part-1 decisions SD-01…SD-04 recorded 2026-09-15; complete case/profile registration remains pending |
 | Created | 2026-09-08 |
 | Revised | 2026-09-14 |
 | Design question | What compute/controller split, internal link, rail and protection topology, and energy source lets Makad run representative head, drive, display, camera, audio and compute loads concurrently — and with what measured margin? |
@@ -31,12 +31,21 @@ These are current inputs. They are not SKU freezes, purchases, or `W` mass.
 | Layout 03 paper demand | Nominal D/E tree ~362/436/509 g at M008=20 g; controlling peaks 0.0953 / 0.0560 / 0.1099 N·m pitch/roll/yaw. Complete-head `W` still waits on M008 | `../RP-01-head/fullproofmath.md`; physics.md |
 | C01 paper candidate | XC330-M288-T, proposed 5 V, paper approval OPEN; **not a family freeze**. Layout 03 already uses matching 23 g housings | `../RP-01-head/actuator-screen-01.md` |
 
+## RP-02 Part-1 builder decisions — 2026-09-15
+
+| ID | Decision | Architectural consequence |
+|---|---|---|
+| SD-01 | Camera off in quiet sleep | Wake/acquire timing includes camera startup; `CC-02F/T` use `LP-06-OFF` |
+| SD-02 | Head-servo torque off in sleep; head rests down | RP-01 must prove a safe passive rest; idle load cannot include guessed hold current |
+| SD-03 | Floor/table mode manually selected in the control app for V1 | Selection is session-scoped and locally enforced; boot/reset/app-link loss returns to motion inhibit |
+| SD-04 | Display on while charging | External AC-to-DC adapter plus chemistry-specific onboard charge/power path is required; only display/minimum supervision remain on; all motors, camera and normal interaction/audio stay off |
+
 ## Gate outcomes
 
 | Gate | Outcome | Evidence (run IDs) | Notes |
 |---|---|---|---|
 | RP02-G01 Protection | | | Verification; per rig revision |
-| RP02-G02 Peak coexistence | | | Recorded as: invariant verified against ledger v_ for states S__ with loads __; pending states __; re-run due on __ |
+| RP02-G02 Peak coexistence | | | Record registered `CC` cases/profile revisions verified, pending cases, `CC-PEAK-01`/`ST-01` coverage and re-run trigger |
 | RP02-G03 Runtime | | | Recorded as a rehearsal with margin; SC-14 closes the requirement at integration |
 | RP02-G04 Fault containment | | | Verification; zero unbounded outcomes across the campaign |
 | RP02-G05 Control feasibility | | | Measurement with margin ratios |
@@ -63,13 +72,13 @@ Candidates are recorded so selection happens from evidence. **No row is selected
 | Main SBC (LG-01) | **Suggested lead candidate (2026-09-14 review, not selected): Raspberry Pi 5, 2 GB.** Same BCM2712 silicon, ISP and libcamera path as the larger variants; a headless perception + wake-word + behaviour stack fits in ~1–1.2 GB with zram. Other rows: Pi 5 4/8 GB (same board, now ₹14.5k / ₹20.3k after the 2026 DRAM price rises); Pi 4 class (now costs more than a 2 GB Pi 5 for roughly a third of the compute, cost-dominated); Jetson Orin Nano (IMX708 only via a third-party 14 fps driver, 9–20 V input, heavy carrier, V1 has no SLAM/VLM); RK3588 boards (no usable IMX708 path). Pi 5 1 GB is not suggested: the libcamera + Python stack sits at the edge of memory | Must drive the selected CM3 Wide over CSI with a supported stack — in practice this binds the SBC to Raspberry Pi; body-mounted; UART pairs for C2 and display; Pi 5 needs a 22-to-15-pin CSI cable, active cooler and a 5 V / 5 A Buck A | Perception workload (RP-07 profiling), ledger LG-01 `W` row, thermal, India sourcing; recorded in the sourcing matrix. Not chosen for RP-02's convenience. **Purchase authorization remains the project builder's** |
 | Battery chemistry | Protected 18650 Li-ion in holder (working assumption for rig design, PA-03); LiPo pouch | Placement low and forward; mass row 150–500 g; handling rules in `workbench.md` | Ledger composite peak and energy; G06 charging/removal paths; solo-builder risk |
 | Pack configuration | 2S (regulated servo rail or direct for 6–7.4 V servos); 3S (12 V servo class) | Coupled to RP-01 servo family (PA-04). C01 points at 5 V class → 2S + motor-domain buck is the leading working assumption | RP-01 actuator selection, then ledger |
-| Servo-rail conversion | Direct from pack; high-current buck on the motor domain | Rig socket accommodates both | Servo voltage window; measured S07 transient with each |
-| Compute-rail converter | Buck module rated 5 V / ≥ 5 A with low ripple; two candidates minimum | Own converter, never shared with the motor domain (PA-05) | SBC candidate's requirement; S07 compute-rail minimum |
+| Servo-rail conversion | Direct from pack; high-current buck on the motor domain | Rig socket accommodates both | Servo voltage window; measured `CC-06` transient with each |
+| Compute-rail converter | Buck module rated 5 V / ≥ 5 A with low ripple; two candidates minimum | Own converter, never shared with the motor domain (PA-05) | SBC requirement; compute-rail minimum during `CC-06/CC-PEAK-01/ST-01` |
 | Link transport | 3.3 V UART at 921 600 (primary); USB-CDC on native USB (fallback) | Same framing either way | G05 CRC error rate across the flexing harness; flashing-path conflict (CAD-04a) |
 | Base/drive MCU | Same family as C2 (ESP32-S3) preferred; on-SBC RT thread rejected by AD-04 unless proven | Added in RP-03 | RP-03; heterogeneity caution in the control study |
 | Microphone front end (LG-07) | **Suggested addition (2026-09-14 review):** a Raspberry Pi has one I2S port and no native 4-channel PDM capture, so four synchronized PDM MEMS mics need a codec HAT (AC108-class, I2S TDM, kernel-driver risk on current Pi 5 kernels) or a USB array (XMOS-class, no kernel driver, onboard DOA/beamforming — would also supply CAND-01 spatial hearing). Neither is selected | Body-mounted, non-collinear geometry per dimensional baseline | RP-05; sourcing matrix row; the SBC candidate's audio inputs |
 | SBC ↔ display link topology | Two UART pairs across the yaw boundary (link-contract v0.2 baseline); **suggested alternative (2026-09-14 review):** SBC ↔ C2 only, with C2 relaying `FACE_STATE`/`LIGHT_STATE` to the display over a short in-head UART, removing two conductors from the moving harness and putting face and motion on one head-local timebase | Same framing either way; display's RS-485/UART pins per the schematic audit | G05 CRC measurement across the flex; whether C2-as-relay complicates fault containment (F-xx re-run) |
-| Charging | External via removable pack or exposed connector (default, PA-09); onboard 2S charger board | — | G06 procedure timing and the battery gate |
+| Charging input/power path | Certified external AC-to-DC adapter feeding keyed low-voltage input; onboard chemistry/S-count charger with load sharing; exact parts open | Display + minimum supervision on; motors/camera/normal SBC/audio off; AC mains never enters Makad | Chemistry/pack selection, charger datasheet, CC-15 thermal/load test, G06 |
 | Low-energy thresholds | Loaded-voltage thresholds; coulomb counting | Must trigger above any rail's sag point (PA-07) | SC-TBD-10 registration; pack internal resistance `W` |
 
 ## Conclusion

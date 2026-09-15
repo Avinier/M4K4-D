@@ -30,7 +30,7 @@ This is the artifact RP-02 produces that outlives it. It is versioned as a speci
 | SBC ↔ display ESP32-S3 | Same framing over a second UART | 115 200–921 600; face-state traffic is small | Same code path on the SBC; the display board's GPIO budget (RS-485 or UART pins per the schematic audit) decides the physical pair |
 | C2 ↔ servos | **Out of scope here** — half-duplex TTL or RS-485 per servo family. C01 (XC330-M288-T) would be TTL Dynamixel 2.0 | family-defined | Owned by RP-01's actuator selection; C2 keeps the transceiver external (bus-neutrality, control study §6.3). C01 does not freeze the transceiver |
 
-Both UART links cross the yaw boundary on the head-logic branch (PA-06) through the demateable connector. Signal integrity across the flexing harness is a G05 measurement (frame CRC error rate per hour under S05 sweeps).
+Both UART links cross the yaw boundary on the head-logic branch (PA-06) through the demateable connector. Signal integrity across the flexing harness is a G05 measurement (frame CRC error rate per hour under `CC-04` search sweeps).
 
 **Alternative topology under consideration (2026-09-14 review, not adopted):** only the SBC ↔ C2 pair crosses the yaw boundary; C2 forwards `FACE_STATE` and `LIGHT_STATE` to the display board over a short in-head UART using the same framing. Two fewer moving conductors, and face and motion timestamps live on one head-local clock. Costs: C2 becomes a relay (a C2 reset takes the face to idle, which the expiry rule already tolerates), and the fault matrix gains a relay case. Decide with the G05 CRC evidence; if adopted this is a v0.x minor change because the message set is unchanged.
 

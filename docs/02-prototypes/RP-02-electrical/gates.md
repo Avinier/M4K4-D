@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Status | **Not started.** Candidate metrics and thresholds below are proposals; nothing is registered; no scored run exists |
+| Status | **Part-1 case-to-gate coverage approved under `RP02-P1-REG-01` on 2026-09-15.** Candidate numeric metrics/thresholds below remain proposals; no numeric gate is registered and no scored run exists |
 | Authority | Gate definitions and registration fields: `../../01-system/risk-prototype-plan.md` v1.12 §RP-02. This file holds the registered numeric versions |
-| Sources for thresholds | `intent.md`; `state-register.md`; `link-contract.md` §7; `fault-matrix.md` §3; `power-architecture.md` PA-06; `../../01-system/power-energy-ledger.md`; RP-01 paper P02 sag-floor need |
+| Sources for thresholds | `intent.md`; `state-register.md`; `load-model.md`; `link-contract.md` §7; `fault-matrix.md` §3; `power-architecture.md` PA-06; `../../01-system/power-energy-ledger.md`; RP-01 paper P02 sag-floor need |
 | Rule | Registration uses the plan's fields — Gate ID, Metric, Threshold, Rationale, Conditions, Repetitions, Instrument, Freeze record (date + builder approval **before** scored data is inspected). A threshold change after results is a new gate version with a documented reason and a fresh test set, never an edit |
 
 ## 1. Gates to register
@@ -26,12 +26,12 @@ Plan v1.10 keeps six IDs and changes the shape of two.
 
 The v1.9 gate ("every registered concurrent state completes without…") is a *moment*; the electrical backbone never has one. Every subsystem that arrives later — drive in RP-03, speaker in RP-05 — reopens it. So the claim is now split:
 
-- **The invariant** (owned by `power-energy-ledger.md` §5): *every registered state in `state-register.md` completes without unintended reset, unsafe motion, rail excursion outside registered component limits, data corruption, or thermal-limit violation.* It carries a **re-run rule**: re-verify all registered states whenever a load group changes evidence class, a load group is added, or the servo rail voltage changes.
-- **RP-02's registration** is the rehearsal metric that any re-run uses: per state, per rail — *minimum voltage versus the component's registered undervoltage limit, expressed as margin*; reset count (must be 0); CRC-error count during the state; maximum temperature versus SC-TBD-12. RP-02 executes the first rehearsal with whatever loads Phase B has and records what it could and could not produce (the Korad 5 A ceiling makes S13 a Phase C item).
+- **The invariant** (owned by `power-energy-ledger.md` §5): every registered `CC-xx` state vector completes without unintended reset, unsafe motion, rail excursion outside registered component limits, data corruption or thermal-limit violation. Re-run all applicable cases whenever a load profile changes evidence/hardware, a load group is added, or a rail changes.
+- **RP-02's registration** is the rehearsal metric any re-run uses: per case, per rail — minimum voltage versus component limit, reset count, CRC errors and temperature. `CC-PEAK-01` is the maximum credible transient; synthetic `ST-01` is a separate robustness test and may require the Phase-C source because the Korad is limited to 5 A.
 
-What a *pass* looks like in `decision.md`: "invariant verified on 2026-xx-xx against ledger vX.Y for states S00…S09 with real head loads and substitute drive; S10–S13 pending RP-03 hardware; re-run due on next load-group change."
+What a *pass* looks like in `decision.md`: "invariant verified on 2026-xx-xx against ledger vX.Y for the registered non-drive cases (`CC-01`, `CC-02F/T`, `CC-03/03N`, `CC-04…08`, `CC-12A/B`, `CC-13H`, `CC-14…18`) with real head loads; drive-dependent `CC-09/09C/09R`, `CC-10A/B/C`, `CC-11`, `CC-12C`, `CC-13D`, `CC-PEAK-01` and the drive portion of `ST-01` pending RP-03 hardware; re-run due on the next profile/hardware change." Lettered lifecycle cases such as `CC-07D/E` are named individually in the actual record rather than hidden by a range.
 
-S13 is the worst simultaneous **transient** anchor. It may cover peak rail/current excursion for less-demanding states, but it does not replace sustained, thermal, accumulated-link-error or state-specific recovery runs. The invariant still requires every registered state to be exercised under its own duration and behaviour.
+`CC-PEAK-01` is the worst currently credible whole-robot transient. `ST-01` deliberately aligns otherwise forbidden peaks. Neither replaces sustained, thermal, accumulated-link-error or state-specific recovery runs.
 
 ### 2.2 G03 — what "runtime" means after v1.10
 
@@ -48,11 +48,11 @@ Every number below is a candidate awaiting a dated builder approval. Registering
 | Item | Pass condition | Method |
 |---|---|---|
 | Main isolation | One physical action (yank XT60) removes the pack from everything; reachable without tools; visible | Review + demonstration |
-| E-stop | In series with the motor domain only; latching; verified this session; logic domain stays up (S00) | Demonstration under S07 |
+| E-stop | In series with the motor domain only; latching; verified this session; logic stays up (`OM-04`) | Demonstration under `CC-06`, later `CC-10A` |
 | Pack protection | BMS/PCM present and its trip points documented; or protected cells with their PCM ratings recorded | Datasheet + review |
-| Main fuse | Value ≤ conductor rating downstream; > registered S13 composite peak × 1.25 | Ledger + I²t curve |
+| Main fuse | Value ≤ downstream conductor rating; non-trip energy clears `CC-PEAK-01` and registered `ST-01`; branch fault coordinates before main/pack protection | Ledger + time-current/I²t curves |
 | Per-branch fuses | Each servo, each drive channel, compute-buck input; coordination such that a branch short trips the branch before the main | Ledger + I²t curves |
-| Conductor sizing | Every conductor rated above its branch fuse; servo-rail conductor drop ≤ PA-06 limit at S07 peak | Calculation + `v_srv` at the connector |
+| Conductor sizing | Every conductor rated above its branch fuse; servo-rail drop ≤ PA-06 limit during `CC-06` | Calculation + load-end `v_srv` |
 | Connectors | No connector can mate reversed; every connector rated ≥ its branch fuse; yaw-boundary connector's mated resistance recorded | Review + measurement |
 | No unbounded path | Walk the tree: every node between the pack and a load has a fuse or current limit upstream | Review with the diagram in `power-architecture.md` §1 |
 | Repetitions | Review once per rig revision; E-stop demonstration every session | — |
@@ -61,17 +61,17 @@ Every number below is a candidate awaiting a dated builder approval. Registering
 
 | Metric | Candidate threshold | Instrument |
 |---|---|---|
-| Rail minimum margin, per rail per state | `V_min − V_UVLO(component) ≥ 0.25 V` on compute and head-logic rails; servo rail ≥ servo family's minimum operating voltage with drop ≤ 3 % (PA-06). For C01 the manufacturer window is 3.7–6.0 V; **3.7 V is a sensitivity endpoint, not the registered sag floor** — P02 needs the loaded terminal voltage from this rehearsal | INA226 at max rate; oscilloscope for S07 when available — resolution stated in the run record |
+| Rail minimum margin, per rail per case | `V_min − V_UVLO(component) ≥ 0.25 V` on compute/head logic; servo rail ≥ family minimum with drop ≤ 3 % (PA-06). C01's 3.7 V is a sensitivity endpoint, not the sag floor | INA226 at max rate; oscilloscope for `CC-06/CC-PEAK-01/ST-01`; resolution stated |
 | Unintended resets | 0 across all repetitions of every registered state | Reset-reason logs |
 | CRC errors on the SBC↔C2 link | ≤ registered rate from F-04 | `HEARTBEAT` counters |
 | Temperatures | ≤ SC-TBD-12 values once registered; until then, record and flag > 60 °C on any touchable surface | Thermistors |
-| Repetitions | ≥ 3 per state; S04/S06/S07 ≥ 10 gesture events each | — |
+| Repetitions | ≥3 per registered `CC`; `CC-03/05/06` ≥10 events per registered motion variant | — |
 
 ### RP02-G03 rehearsal — candidate metrics
 
 | Metric | Candidate threshold | Instrument |
 |---|---|---|
-| `MD-01` completion on the candidate pack | Completes; energy state never reaches `critical` before the final S15 | INA226 at input, 10 Hz |
+| `MD-01` completion on the candidate pack | Completes; `EN-03` is not reached before scheduled `EV-14` | INA226 at input, 10 Hz |
 | Energy margin | `E_pack,usable · (1 − reserve) − E_MD01 ≥ 20 %` of `E_MD01` | Integration of `i_in · v_in` |
 | Reserve | Per SC-TBD-10 once registered; candidate 25 % | — |
 | Repetitions | 2 full cycles on the same pack state; pack rested between | — |
@@ -88,7 +88,7 @@ Per `fault-matrix.md` §3: time-to-`BRAKE` ≤ 200 ms (heartbeat-mediated) or �
 | Servo bus update rate | ≥ 100 Hz sync write + read, three axes | Family-defined; measured, not assumed | Bus decode on the analyzer |
 | Link round-trip p95 | ≤ 5 ms at 921 600 baud | `TRACK` feel; RP-05 tightens | `TIME_SYNC` round-trip statistics |
 | Timestamp reconciliation error p95 | ≤ 1 ms | Per-axis event alignment for RP-01 combined reversals | `sync_edge` versus `c2_tick` on the analyzer (`timebase.md` §6) |
-| Link CRC error rate across the flexing harness | Registered from measurement under S05 sweeps; candidate acceptance ≤ 1 per 10⁵ frames | F-04; harness signal integrity | `crc_err_count` |
+| Link CRC error rate across the flexing harness | Registered from measurement under `CC-04` search sweeps; candidate acceptance ≤1 per 10⁵ frames | F-04; harness signal integrity | `crc_err_count` |
 | Heartbeat-timeout-to-brake | ≤ 200 ms | SC-15 | F-01 timing |
 | Margin | Every metric reports measured / threshold as a ratio; ADR-03 closes only with ≥ 1.5× on loop rate and ≤ 0.5× on latency figures | "with registered margin" is in the plan's wording | — |
 | Repetitions | ≥ 10 min continuous capture per configuration; ≥ 3 configurations (rendering off/on on the display board is *not* required — C2 is a separate board — but link load high/low and servo bus active/idle are) | — | — |
@@ -98,7 +98,7 @@ Per `fault-matrix.md` §3: time-to-`BRAKE` ≤ 200 ms (heartbeat-mediated) or �
 | Path | Pass condition |
 |---|---|
 | Isolation | Main XT60 reachable and yankable with the shell on, no tools |
-| Charging connection | Charge/balance connector or pack removal achievable in ≤ 2 min with the documented tool list |
+| Charging connection | Keyed low-voltage DC charge input reachable with shell on; strain relief/polarity protection documented; pack remains separately removable for service |
 | Battery removal | Pack out and in without disturbing unrelated assemblies; documented procedure with time |
 | Measurement points | Pack voltage/current and servo-rail voltage accessible for a multimeter without disassembly beyond a service panel |
 | High-risk module access | The named high-risk module (SC-17 — candidate: the C2 assembly, because of CAD-04a flashing and the moving harness) replaceable without destructive disassembly |
