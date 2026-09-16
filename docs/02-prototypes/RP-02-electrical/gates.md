@@ -4,7 +4,7 @@
 |---|---|
 | Status | **Part-1 case-to-gate coverage approved under `RP02-P1-REG-01` on 2026-09-15.** Candidate numeric metrics/thresholds below remain proposals; no numeric gate is registered and no scored run exists |
 | Authority | Gate definitions and registration fields: `../../01-system/risk-prototype-plan.md` v1.12 §RP-02. This file holds the registered numeric versions |
-| Sources for thresholds | `intent.md`; `state-register.md`; `load-model.md`; `link-contract.md` §7; `fault-matrix.md` §3; `power-architecture.md` PA-06; `../../01-system/power-energy-ledger.md`; RP-01 paper P02 sag-floor need |
+| Sources for thresholds | `intent.md`; `state-register.md`; `load-model.md`; `link-contract.md` §7; `fault-matrix.md` §3; `power-architecture.md` PA-06; registered `power-implementation-basis.md`; derived `power-calculation-ledger.md`; `../../01-system/power-energy-ledger.md`; RP-01 paper P02 sag-floor need |
 | Rule | Registration uses the plan's fields — Gate ID, Metric, Threshold, Rationale, Conditions, Repetitions, Instrument, Freeze record (date + builder approval **before** scored data is inspected). A threshold change after results is a new gate version with a documented reason and a fresh test set, never an edit |
 
 ## 1. Gates to register
@@ -47,24 +47,28 @@ Every number below is a candidate awaiting a dated builder approval. Registering
 
 | Item | Pass condition | Method |
 |---|---|---|
-| Main isolation | One physical action (yank XT60) removes the pack from everything; reachable without tools; visible | Review + demonstration |
-| E-stop | In series with the motor domain only; latching; verified this session; logic stays up (`OM-04`) | Demonstration under `CC-06`, later `CC-10A` |
-| Pack protection | BMS/PCM present and its trip points documented; or protected cells with their PCM ratings recorded | Datasheet + review |
-| Main fuse | Value ≤ downstream conductor rating; non-trip energy clears `CC-PEAK-01` and registered `ST-01`; branch fault coordinates before main/pack protection | Ledger + time-current/I²t curves |
-| Per-branch fuses | Each servo, each drive channel, compute-buck input; coordination such that a branch short trips the branch before the main | Ledger + I²t curves |
-| Conductor sizing | Every conductor rated above its branch fuse; servo-rail drop ≤ PA-06 limit during `CC-06` | Calculation + load-end `v_srv` |
-| Connectors | No connector can mate reversed; every connector rated ≥ its branch fuse; yaw-boundary connector's mated resistance recorded | Review + measurement |
-| No unbounded path | Walk the tree: every node between the pack and a load has a fuse or current limit upstream | Review with the diagram in `power-architecture.md` §1 |
+| Main isolation | One physical action at the selected retained pack connector/isolation device removes the pack from everything; reachable without tools; visible | Review + demonstration |
+| System motor-arm | `PB-MOTOR` is off in system `OFF`, boot inhibit and `CHARGE`, independent of E-stop release state | Demonstration across the registered power-state matrix |
+| E-stop | Latching hardware stage dominates the motor-arm command; assertion removes `PB-MOTOR` while safety supervision stays up (`OM-04`); release does not restore motion authorization or an old command | Demonstration under `CC-06`, later `CC-10A`, including F-12/F-13 |
+| Pack protection | Complete retained pack assembly has documented protection, cell matching/retention and assembly-level current/temperature limits | Datasheet + assembly review |
+| Main protection | Rating is within downstream conductor/connector limits; non-trip envelope clears `CC-PEAK-01` and the registered admissible `ST-01`; branch faults coordinate before main/pack protection | Ledger + applicable time-current, I²t or current-limit curves |
+| Branch protection | Every registered final `PB-*` branch has an identified protective element or a justified bounded upstream limit; a branch fault is contained before main/pack protection where selectivity is required | Ledger + fault-current and protection-coordinate analysis |
+| Conductor sizing | Every conductor is rated above the maximum energy its upstream protection can pass; `PB-HEAD-Y/P/R` load-end drop stays within the registered servo-family limit during `CC-06` | Calculation + load-end measurement |
+| Connectors | No power connector can mate reversed; current/voltage/temperature rating covers the protected branch; yaw-boundary connector's mated resistance is recorded | Review + measurement |
+| Returns and back-power | Star/paired return intent is preserved; no signal, telemetry, programming or charge path back-powers an off branch | Schematic walk + partial-power injection |
+| No unbounded path | Walk the tree: every node between an energy source and a load has a fuse, e-fuse, current limiter or documented bounded source upstream | Review with `power-architecture.md` and `power-branch-contracts.md` |
 | Repetitions | Review once per rig revision; E-stop demonstration every session | — |
 
 ### RP02-G02 rehearsal — candidate metrics
 
 | Metric | Candidate threshold | Instrument |
 |---|---|---|
-| Rail minimum margin, per rail per case | `V_min − V_UVLO(component) ≥ 0.25 V` on compute/head logic; servo rail ≥ family minimum with drop ≤ 3 % (PA-06). C01's 3.7 V is a sensitivity endpoint, not the sag floor | INA226 at max rate; oscilloscope for `CC-06/CC-PEAK-01/ST-01`; resolution stated |
+| Rail minimum margin, per rail per case | `V_min − V_UVLO(component) ≥ 0.25 V` on `PB-COMPUTE` and applicable safety branches; head-axis terminal voltage ≥ family minimum with drop ≤ 3 % (PA-06). C01's 3.7 V is a sensitivity endpoint, not the sag floor | INA226 at max rate; oscilloscope for `CC-06/CC-PEAK-01/ST-01`; resolution stated |
 | Unintended resets | 0 across all repetitions of every registered state | Reset-reason logs |
 | CRC errors on the SBC↔C2 link | ≤ registered rate from F-04 | `HEARTBEAT` counters |
 | Temperatures | ≤ SC-TBD-12 values once registered; until then, record and flag > 60 °C on any touchable surface | Thermistors |
+| Brownout order | Under the preregistered slow path, new peaks stop at `EN-02`, non-safety demand sheds at `EN-03`, and motor permission/local enables are inactive before safety-control validity is lost; under the fast path, hardware/local inhibit does not wait for the SBC | Time-correlated source/rail, `ENERGY_OK`, gate/enable, PG/reset and motor-bus capture per `brownout-restart-contract.md` §8 |
+| Recovery after energy loss/reset | 0 old actions replayed and 0 motor re-enables without the required fresh mode/arm/enable/action sequence | Epoch/session/action logs plus motor-arm and driver-enable probes |
 | Repetitions | ≥3 per registered `CC`; `CC-03/05/06` ≥10 events per registered motion variant | — |
 
 ### RP02-G03 rehearsal — candidate metrics
@@ -72,8 +76,8 @@ Every number below is a candidate awaiting a dated builder approval. Registering
 | Metric | Candidate threshold | Instrument |
 |---|---|---|
 | `MD-01` completion on the candidate pack | Completes; `EN-03` is not reached before scheduled `EV-14` | INA226 at input, 10 Hz |
-| Energy margin | `E_pack,usable · (1 − reserve) − E_MD01 ≥ 20 %` of `E_MD01` | Integration of `i_in · v_in` |
-| Reserve | Per SC-TBD-10 once registered; candidate 25 % | — |
+| Energy margin | `(E_pack,usable / E_MD01) − 1 ≥ registered reserve`; candidate reserve 25% | Integration of `i_in · v_in`; `E_pack,usable = E_pack,nominal · DoD_usable · η_system` |
+| Reserve | Per SC-TBD-10 once registered; candidate additive reserve `r = 25%`, using the convention in `power-calculation-ledger.md` | — |
 | Repetitions | 2 full cycles on the same pack state; pack rested between | — |
 
 ### RP02-G04 Fault containment — candidate metrics
@@ -97,10 +101,10 @@ Per `fault-matrix.md` §3: time-to-`BRAKE` ≤ 200 ms (heartbeat-mediated) or �
 
 | Path | Pass condition |
 |---|---|
-| Isolation | Main XT60 reachable and yankable with the shell on, no tools |
+| Isolation | Selected main pack isolation action is reachable with the shell on and requires no tools |
 | Charging connection | Keyed low-voltage DC charge input reachable with shell on; strain relief/polarity protection documented; pack remains separately removable for service |
 | Battery removal | Pack out and in without disturbing unrelated assemblies; documented procedure with time |
-| Measurement points | Pack voltage/current and servo-rail voltage accessible for a multimeter without disassembly beyond a service panel |
+| Measurement points | `PB-MAIN` voltage/current plus registered branch source/load-end points are accessible without disassembly beyond a service panel |
 | High-risk module access | The named high-risk module (SC-17 — candidate: the C2 assembly, because of CAD-04a flashing and the moving harness) replaceable without destructive disassembly |
 | Repetitions | Procedure performed twice by the builder, timed |
 

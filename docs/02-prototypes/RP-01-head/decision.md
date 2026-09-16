@@ -8,6 +8,7 @@
 | Feeds | ADR-02 (head mechanism), ADR-03 (controller), ADR-08, ADR-12; mass/power/acoustic budget rows |
 | Rule | A failed Core three-axis gate cannot become a two-axis fallback without reopening approved V1 scope. Failed runs stay cited here. |
 | Physical constraint | Selected concept must fit the current envelope/placement baseline, revised head-load lower bound, selected C2 controller boundary and RP-01 material/finish decisions. |
+| Remaining-open index | Folder-wide list lives in [`../openitems.md`](../openitems.md). This file remains the RP-01 decision record. |
 
 ## Locked RP-01 sub-decisions
 

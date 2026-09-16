@@ -42,7 +42,7 @@ A profile may occupy several classes: music has `TB-2` crests inside a `TB-3` RM
 
 | Group | Boundary | Selection state |
 |---|---|---|
-| `LG-01` | Body Linux SBC | Unselected; placement/responsibility decided |
+| `LG-01` | Body Raspberry Pi 5 2 GB | Selected under `RP02-P2-REG-02`; exact workload, storage, cooling and power-entry configuration unmeasured |
 | `LG-02` | C2 + servo-bus transceiver | ESP32-S3-Zero selected; installed power unmeasured |
 | `LG-03Y/P/R` | Head servo branches, separately observable | Family unselected; C01 is paper comparison only |
 | `LG-04` | Drive motors + driver | Unselected; RP-03 owns real profiles |

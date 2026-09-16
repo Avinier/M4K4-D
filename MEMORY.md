@@ -362,3 +362,23 @@ A line-by-line audit of every `00-foundation` document plus the operating/failur
 **Type / Status / Supersedes / Governs:** DECISION / CURRENT / the draft/unregistered status in MEM-20260915-03 / `RP02-P1-REG-01`; RP-02 `operating-situations.md` v0.2, `state-register.md` v0.4, `state-coverage-matrix.md` v0.2, `load-model.md` v0.3, `fault-matrix.md` v0.2; `power-energy-ledger.md` v0.7
 
 Builder explicitly approved the complete reviewed Part-1 baseline on 2026-09-15. The operating situations, `OM/EN/BS/PC/AL/HL/EV` definitions, every listed `CC` variant, `CC-PEAK-01`, `ST-01`, load-profile vocabulary, `F-01…22` obligations and `MD-01` v0.2 definition are frozen under `RP02-P1-REG-01` and are now append-only. Registration approves what will be tested; it does not promote estimates to measurements or close open numeric thresholds, hardware/configuration, route/fixture details, load equivalence or gate results. No scored run or `W` evidence exists yet.
+
+### MEM-20260916-01 — RP-02 Part-2 functional power topology registered
+**Type / Status / Governs:** DECISION / CURRENT / `RP02-P2-REG-01`; RP-02 `power-architecture.md` v0.2 and `power-branch-contracts.md`
+
+Builder approved the `PA-01…16` architecture and stable `PB-*` branch namespace on 2026-09-16. The registration fixes the pack-to-load energy routes, four failure-consequence domains, independent C2 and base-safety supplies, application-branch containment, charge-mode restrictions, common-reference star return, true `OFF/OPERATE/CHARGE` control, and battery-only motor energy behind both the system motor-arm gate and dominant hardware E-stop. It selects no pack, charger, converter, protection device, connector, conductor or numeric rating.
+
+### MEM-20260916-02 — RP-02 Part-2 implementation basis registered; Raspberry Pi 5 selected
+**Type / Status / Governs:** DECISION / CURRENT / `RP02-P2-REG-02`; RP-02 `power-implementation-basis.md` v1.0; `power-energy-ledger.md` v0.10
+
+Builder adopted the voltage-domain, grounding, connector, conductor-calculation, terminal-drop, protection-coordination, branch-local-capacitance and circuit-level sequencing basis on 2026-09-16, including E-stop assertion clearing the system motor-arm latch. Raspberry Pi 5 2 GB is selected as body compute `LG-01`, with a dedicated 5.1 V nominal, 5 A-capable `PB-COMPUTE` interface. Selection is not purchase authorization; exact power entry, workload, cooling/storage configuration and all other power-component selections remain open, and no estimate is promoted to measured evidence.
+
+### MEM-20260916-03 — RP-02 initial power calculations and energy correction
+**Type / Status / Governs:** CORRECTION + REVIEW FINDING / CURRENT / RP-02 `power-calculation-ledger.md` v0.1; `power-energy-ledger.md` v0.11; candidate G03 arithmetic
+
+The first calculation issue derives voltage-drop/heat sensitivities, converter loss and source current, `MD-01` source/nominal energy, and the complete protection-coordination method from `RP02-P2-REG-01/02`. It corrects the former 8.3 Wh pack example: 8.28 Wh is valid only for lossless conversion, while the same 5.3 Wh load case, 80% usable depth and 25% additive reserve require 8.72–9.74 Wh across the present 95–85% efficiency sensitivity. No load input, component, pack, gate or evidence class is selected or promoted.
+
+### MEM-20260916-04 — RP-02 brownout/reset/restart baseline registered; Part-2 definition complete
+**Type / Status / Governs:** DECISION / CURRENT / `RP02-P2-REG-03`; RP-02 `brownout-restart-contract.md` v1.0
+
+Builder explicitly approved the complete reviewed Part-2 work on 2026-09-16. `RP02-P2-REG-03` freezes `BR-01…10`: independent loaded-source observation, controlled-depletion and fast-collapse paths, fail-inactive motor permission, reset-inhibited defaults, fresh-intent recovery, threshold ownership, symbolic threshold/hold-up/discharge methods, branch priority, restart truth table and verification contract. Together with `RP02-P2-REG-01/02`, all seven Part-2 power-architecture subparts are complete at design-definition level; the branch-contract, calculation-ledger and candidate-screen issues are accepted supporting artifacts rather than additional component selections or numeric registrations. Numeric thresholds, timing, capacitance/discharge values, component and battery selections, purchases, run configurations, gate outcomes and measured evidence remain explicitly open.

@@ -98,7 +98,7 @@ Until RP-03 measures lift onset and dynamic compliance, commanded forward accele
 | Ear microphones | **None** | Ear pods remain free of acoustic/electronic function; concealed mechanical access is permitted as a candidate, not selected here |
 | Speaker | **Body-mounted** | More acoustic cavity volume and less moving-head mass |
 | Battery | **Low and forward of the drive axle** | Lowers `h_CoM` and increases the forward restoring arm `x_CoM`; behind-axle placement would reduce forward-acceleration tip resistance |
-| Primary electronics | **Body-mounted main Linux SBC and power hardware; selected display ESP32-S3 plus one separate C2 ESP32-S3 motion controller move with the head** | Display and motion roles are physically separated on RP-01; every head-local board, connector, mount and harness segment counts in M900 |
+| Primary electronics | **Body-mounted Raspberry Pi 5 2 GB and power hardware; selected display ESP32-S3 plus one separate C2 ESP32-S3 motion controller move with the head** | Pi 5 selected under `RP02-P2-REG-02`; display and motion roles are physically separated on RP-01; every head-local board, connector, mount and harness segment counts in M900 |
 | Rear skid | **Mandatory** | Protects sharp acceleration, braking, and turning cases |
 
 ## Compact handoff

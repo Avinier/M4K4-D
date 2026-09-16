@@ -2,18 +2,18 @@
 
 | Field | Value |
 |---|---|
-| Status | **RP-01 C2 selected: separate ESP32-S3 motion controller; C1 rejected on selected carrier; C2 module selected — Waveshare ESP32-S3-Zero.** |
-| Version | 0.12 |
+| Status | **RP-01 C2 selected: separate ESP32-S3 motion controller; C1 rejected on selected carrier; C2 module selected — Waveshare ESP32-S3-Zero. Body SBC selected — Raspberry Pi 5 2 GB under `RP02-P2-REG-02`.** |
+| Version | 0.13 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-09-14 |
+| Last reviewed | 2026-09-16 |
 | Governed by | `risk-prototype-plan.md` — permitted provisional option study (decision-closeout: "the architecture phase may begin with provisional option studies while prototypes run") |
 | Feeds | RP-02 (electrical/control backbone) → **ADR-06 (power)**, **ADR-12 (control topology)**; the monotonic-timebase deliverable (plan §104) |
 | Consumes | `system-design-brief.md` responsibility set + AD-01/AD-06/AD-08; `mass-envelope-ledger.md` head section |
 
-This document surveys **how to split Makad's computation and control across hardware**, grounded in how comparable robots are actually built. It selects nothing. A binding choice is made only when RP-02 closes with measured evidence and the relevant ADRs cite it. The purpose now is to (a) fix the vocabulary, (b) record prior art so we don't re-derive it, and (c) name the specific forks RP-01/RP-02 must resolve.
+This document surveys **how to split Makad's computation and control across hardware**, grounded in how comparable robots are actually built. It records the selected RP-01 C2 split/module and selected Raspberry Pi 5 2 GB body SBC; wider transport and base-control choices remain open until their evidence and ADRs close. The purpose is to (a) fix the vocabulary, (b) record prior art so we don't re-derive it, and (c) name the specific forks RP-01/RP-02 must resolve.
 
-Nothing here overrides the foundation's deferral of processor, controller, battery, and framework selection.
+Nothing here selects the base controller, battery, framework, internal transport, or final implementation details that remain explicitly open.
 
 ## 1. The industry pattern: hierarchical, heterogeneous control
 
@@ -218,7 +218,7 @@ This is a selection, not validation. **RP02-G05 still owns** measured loop, link
 - [ ] Select or identify the base-frame IMU path when locomotion begins; feed it into RP-03 heading evidence.
 - [ ] Choose and prototype the internal link (UART/USB first); register the message set + expiry/health semantics.
 - [ ] **Suggestion (2026-09-14 review, undecided):** evaluate routing `FACE_STATE`/`LIGHT_STATE` through C2 over a short in-head UART instead of a second SBC↔display pair across the yaw boundary — two fewer moving conductors, one head-local timebase for face and motion; cost is C2 as a relay. Decide with the G05 flex-harness CRC evidence.
-- [ ] **Suggestion (2026-09-14 review, undecided):** Raspberry Pi 5 2 GB as the body SBC lead candidate; see `../02-prototypes/RP-02-electrical/decision.md` candidate register and the sourcing matrix. Keep C2 firmware radio-off at build time (no Wi-Fi/BT init) so loop jitter and the head-logic rail never see the 300–400 mA TX transient.
+- [x] **Selected 2026-09-16 (`RP02-P2-REG-02`):** Raspberry Pi 5 2 GB as the body SBC. Purchase, exact power entry, cooler/storage configuration and measured workload remain open. Keep C2 firmware radio-off at build time (no Wi-Fi/BT init) so loop jitter and the head-logic rail avoid radio-transmit transients.
 - [ ] Decide the base/drive MCU and whether it shares the head's family.
 - [ ] Implement the provisional timebase (master + timestamp-at-source + offset reconciliation) before first scored RP-01 run.
 - [ ] Feed the resulting topology into `system-architecture.md` when ADR-12/ADR-06 close.
@@ -239,3 +239,4 @@ This is a selection, not validation. **RP02-G05 still owns** measured loop, link
 | 2026-09-12 | 0.10 | Clarified the M008 evidence boundary: physical mass remains U; Layout 03 uses 20 g only as a nominal E calculation while retaining 10/20/35 g sensitivity until the installed assembly is weighed. |
 | 2026-09-13 | 0.11 | Recorded RP-01 C01 (XC330-M288-T) as the named paper candidate implying Dynamixel 2.0 TTL if selected. Family, bus implementation and RP02-G05 remain open. M008 still `U`. |
 | 2026-09-14 | 0.12 | Component review (MEM-20260914-01): corrected the C2 flashing note (USB-Serial-JTAG needs no BOOT hold unless firmware takes the USB PHY); added two undecided suggestions to §8 — face-state relay via C2 and Raspberry Pi 5 2 GB as SBC lead. No selection changed. |
+| 2026-09-16 | 0.13 | Consumed `RP02-P2-REG-02`: recorded Raspberry Pi 5 2 GB as the selected body SBC while retaining purchase, power entry, cooling/storage configuration and workload evidence as open. |

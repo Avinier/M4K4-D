@@ -90,7 +90,7 @@ Candidate acceptance (registered in `RP-02-electrical/gates.md` G05): **p95 ≤ 
 ## 8. Open items
 
 - [ ] Implement §3 on the DevKitC-1 twin and a laptop; run the §6 measurement as `RP02-EXP-exploratory`.
-- [ ] Decide the SBC-side stamping point once the SBC candidate and its UART driver are known; measure the syscall-to-wire latency.
+- [ ] Decide the Raspberry Pi 5 SBC-side stamping point with its selected UART driver; measure the syscall-to-wire latency.
 - [ ] Register G05 timing thresholds.
 - [ ] Extend to the display board and, later, a base MCU with no method change.
 - [ ] Define the logging schema so converted and raw stamps are both retained.

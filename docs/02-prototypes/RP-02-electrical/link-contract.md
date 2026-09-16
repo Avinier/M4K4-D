@@ -5,7 +5,7 @@
 | Status | **v0.2 draft.** Interface specification, not evidence. Field sizes, rates and timeouts marked *candidate* are proposals for G05/G04 registration |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Revised | 2026-09-13 |
+| Revised | 2026-09-16 |
 | Authority | `../../01-system/control-topology-options.md` v0.11 §3, §7 (UART/USB serial, semantic command surface); `../../01-system/system-design-brief.md` §5 information contracts and contract rules 1–5; §6 state dimensions and failure priorities |
 | Timebase | `../../01-system/timebase.md` — all timestamps in this contract are master-monotonic microseconds after offset reconciliation |
 | Feeds | ADR-12; `subsystem-interfaces.md` at stage 6; `fault-matrix.md`; `gates.md` G04/G05 |
@@ -30,7 +30,7 @@ This is the artifact RP-02 produces that outlives it. It is versioned as a speci
 | SBC ↔ display ESP32-S3 | Same framing over a second UART | 115 200–921 600; face-state traffic is small | Same code path on the SBC; the display board's GPIO budget (RS-485 or UART pins per the schematic audit) decides the physical pair |
 | C2 ↔ servos | **Out of scope here** — half-duplex TTL or RS-485 per servo family. C01 (XC330-M288-T) would be TTL Dynamixel 2.0 | family-defined | Owned by RP-01's actuator selection; C2 keeps the transceiver external (bus-neutrality, control study §6.3). C01 does not freeze the transceiver |
 
-Both UART links cross the yaw boundary on the head-logic branch (PA-06) through the demateable connector. Signal integrity across the flexing harness is a G05 measurement (frame CRC error rate per hour under `CC-04` search sweeps).
+The baseline has two signal pairs across the yaw boundary through the demateable connector: SBC↔C2 accompanies `PB-SAFE-C2`, while SBC↔display accompanies `PB-DISPLAY`. They share the registered common reference but neither signal path may back-power the other branch. Together with the hazardous `PB-HEAD` conductors, these form the three functional moving-harness paths in `PA-06`. Signal integrity across the flexing harness is a G05 measurement (frame CRC error rate per hour under `CC-04` search sweeps).
 
 **Alternative topology under consideration (2026-09-14 review, not adopted):** only the SBC ↔ C2 pair crosses the yaw boundary; C2 forwards `FACE_STATE` and `LIGHT_STATE` to the display board over a short in-head UART using the same framing. Two fewer moving conductors, and face and motion timestamps live on one head-local clock. Costs: C2 becomes a relay (a C2 reset takes the face to idle, which the expiry rule already tolerates), and the fault matrix gains a relay case. Decide with the G05 CRC evidence; if adopted this is a v0.x minor change because the message set is unchanged.
 

@@ -3,9 +3,9 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.0 |
+| Version | 1.1 |
 | Owner | Project builder |
-| Last reviewed | 2026-08-20 |
+| Last reviewed | 2026-09-16 |
 | Decision authority | Project builder |
 
 Bench setup and test-readiness gate for Makad prototypes. The current dimensional target is defined by `dimensional-baseline.md`; total mass remains underived (CON-14; CON-TBD-06 allows "moderate weight"; the mass/envelope ledger produces the real number). The scale class remains a droid that one person places on a large tabletop for demonstrations (SCOPE-11), "compact enough to remain approachable" without size minimization (vision), operating in a single household room with following capped at 0.5 m/s (CON-19). That means table-liftable — heavier than a toy, lighter than anything that needs two hands and a plan. At that scale the hazard energy is low: a prototype fault damages the robot, not a person. Revisit the hazard notes if the ledger or drive envelope grows materially beyond that picture. This doc covers only the physical bench; sourcing matrices, the mass/envelope ledger, and the monotonic timebase are engineering deliverables in `risk-prototype-plan.md`; run identity and evidence storage are defined in `run-record-convention.md`.
@@ -29,7 +29,7 @@ These are candidate-feature experiments, not purchase triggers or V1 commitments
 | Bench PSU | 30 V / 5 A **with current limit** (Korad KA3005D class) | 3,000–6,000 | Now — highest-value item on this list — **✅ selected, see below** |
 | Multimeter | With a fast continuity beeper | 800–3,000 | Now |
 | Logic analyzer | 8-ch clone + sigrok/PulseView; Saleae later if earned | 800–1,500 | Now |
-| E-stop parts | Latching mushroom switch + XT60 in the motor rail | ~300 | Before first motion rig |
+| E-stop parts | Latching mushroom control plus a DC-rated motor-energy switching/interconnect prototype; exact device and connector follow RP-02 fault-current/interruption calculations | ~300 placeholder | Before first motion rig |
 | Calipers, helping hands, ESD mat | — | ~1,500 | Now |
 | Solder, breadboards, jumpers, wire, connectors, component stock | — | 1,500–3,000 | Now |
 | Oscilloscope | Budget 2-ch DSO (Fnirsi 1014D / Hantek) | 4,500–9,000 | **Defer** until an analog problem appears (motor noise on a rail, brownout) |
@@ -45,7 +45,7 @@ Standing PSU rule: before first power-up of any new circuit, set the current lim
 |---|---|---|---|---|
 | Bench PSU | **Korad KA3005D** (30 V / 5 A, linear, CV/CC) | mtools.co.in | ~4,500 | Plain **D** (no USB/PC control) is sufficient; do not pay extra for the "S"/"P" programmable variants. |
 | Power leads | **4 mm banana → alligator/crocodile, 1 m, 15 A** — red + black pair | Robu.in | ~150 ea (~300/pair) | Buy one red + one black. 15 A rating is ample (PSU maxes at 5 A). |
-| Soldering station | **Yihua 948DB+-II** (T12 cartridge, 75 W, PID, digital) | Robu.in / ElectronicsComp | ~2,650 (₹2,249 + 18% GST) | Iron-only, no hot air (SMD rework not in scope). Ships with stand + 3 T12 tips + cord. Chosen for **T12 thermal recovery**, the spec that matters for servo-lead/XT60/JST joints. |
+| Soldering station | **Yihua 948DB+-II** (T12 cartridge, 75 W, PID, digital) | Robu.in / ElectronicsComp | ~2,650 (₹2,249 + 18% GST) | Iron-only, no hot air (SMD rework not in scope). Ships with stand + 3 T12 tips + cord. Chosen for **T12 thermal recovery**, the spec that matters for servo leads and later selected high-current/locking connector joints. |
 | Multimeter | **ANENG** TRMS, 9999-count, auto-range, NCV | Amazon.in / Robu.in | ~1,200–1,800 | **Buy the rotary-dial variant with a dedicated continuity (·))) ) position — not the dial-less "Smart" auto-detect body.** Do short-hunting from the manual continuity position, never Smart mode (its auto-detect adds beeper latency and can guess the wrong function). TRMS/NCV are nice-to-have, not why it was chosen; the **fast continuity beeper** is. |
 | Logic analyzer | **FX2LA 8-ch, 24 MHz USB clone** ("24M 8CH, Saleae-compatible") | Amazon.in / Robu.in | ~800–1,500 | Drive it with **free sigrok/PulseView** (loads `fx2lafw` firmware + protocol decoders) — the "Saleae-compatible" label just means it enumerates; you won't use Saleae's software. **Logic-level only: probe ≤5 V signals, never the motor rail or anything >~5 V (no input protection).** 24 MHz is ample for Makad's I²C/UART/servo PWM; only genuinely fast SPI would ever earn an upgrade. Pick the cheapest listing with dupont test clips included. |
 | Calipers | **Birud 150 mm stainless-steel digital caliper**, ±0.01 mm | Amazon.in | ~700–1,100 | The one spec that matters is **stainless measuring surfaces + ±0.01 mm accuracy** — this unit has both. "Plastic, Stainless Steel" = steel jaws/beam, plastic LCD housing (normal). **Reject carbon-fibre/composite units and anything quoting ±0.1–0.2 mm** (e.g. the KD Royale carbon-fibre ±0.2 mm — 10× worse, feeds garbage into the mass/envelope ledger). Keep spare LR44 batteries. |
@@ -67,7 +67,7 @@ Multimeter acceptance test — run on arrival, within the return window:
 3. Noticeable lag before the beep = the laggy-beeper failure this row exists to avoid → return within the window.
 4. Sanity-check accuracy against the Korad: set the PSU to 5.00 V, measure → meter should read within a few counts.
 
-Why the **T12** class over the alternatives: in a traditional 936-style station the heater and sensor sit in the handle, behind the tip, so recovery is slow when the tip dumps heat into a thick servo lead or a ground plane. A T12 cartridge puts heater **and** sensor in the tip itself, millimetres from the joint — it recovers in ~1 s where a 936 sulks for ~10. Thermal recovery, not max temperature, is what separates a clean joint from a cold blob, and Makad's work (22–26 AWG servo leads, JST/XT60 connectors) hits that case constantly. Iron-only is deliberate: hot-air combos (Yihua 862D class) exist for SMD rework Makad isn't doing yet, and the combo compromises the iron to hit the price. Genuine Hakko FX-888D (~₹10–12k) uses older T18 tips, not cartridges, and counterfeit Hakko tips are rife in India — bad value here specifically. The 948DB+-II being ~₹2,650 is **not** suspiciously cheap: a T12 base unit is commodity electronics (the intelligence lives in the replaceable tip), and iron-only skips the expensive hot-air/high-wattage hardware. The money in this category buys tip quality, power headroom, and build QC — none of which Makad's soldering needs yet.
+Why the **T12** class over the alternatives: in a traditional 936-style station the heater and sensor sit in the handle, behind the tip, so recovery is slow when the tip dumps heat into a thick servo lead or a ground plane. A T12 cartridge puts heater **and** sensor in the tip itself, millimetres from the joint — it recovers in ~1 s where a 936 sulks for ~10. Thermal recovery, not max temperature, is what separates a clean joint from a cold blob, and Makad's work (servo leads and later selected locking/high-current connectors) hits that case constantly. Iron-only is deliberate: hot-air combos (Yihua 862D class) exist for SMD rework Makad isn't doing yet, and the combo compromises the iron to hit the price. Genuine Hakko FX-888D (~₹10–12k) uses older T18 tips, not cartridges, and counterfeit Hakko tips are rife in India — bad value here specifically. The 948DB+-II being ~₹2,650 is **not** suspiciously cheap: a T12 base unit is commodity electronics (the intelligence lives in the replaceable tip), and iron-only skips the expensive hot-air/high-wattage hardware. The money in this category buys tip quality, power headroom, and build QC — none of which Makad's soldering needs yet.
 
 Soldering-station acceptance test — run before first use:
 1. **Grounding / ESD-safe check** (the one real catch on cheap T12 units, KSGER-class included): unit unplugged, check **continuity from the iron tip to the earth pin of the mains plug** → must read near-0 Ω. Open circuit = not ESD-safe and mildly unsafe; note it or return.
@@ -94,7 +94,7 @@ Prototyping stock — starting equipment is the **Elegoo EL-KIT-003 UNO Super St
 |---|---|---|---|
 | Breadboards | 2× 830-point (→ 3 total with the kit's one) | Amazon | Spares let one rig stay wired while experimenting on another. |
 
-Deferred as **as-needed, not blind-stocked** (they pair with components not yet chosen): mixed **M-F / F-F jumper set** (~₹150, when wiring sensors/servos), **22 AWG solid-core hookup wire**, **power connectors** (XT60/JST/screw terminals + Dupont crimp kit — chosen once battery/motor-driver are picked), **heatshrink tubing**.
+Deferred as **as-needed, not blind-stocked** (they pair with components not yet chosen): mixed **M-F / F-F jumper set** (~₹150, bench-only sensor wiring), hookup/flex wire in the gauges calculated by RP-02, locking power/signal connectors chosen after the branch envelope is known, an appropriate crimp tool, and heatshrink tubing. Dupont jumpers remain bench-only.
 
 ## Hazard notes
 
@@ -111,7 +111,7 @@ No exclusion zones, spotters, tethers, or marked floor geometry — those exist 
 
 ## E-stop
 
-Fit one to every motion rig. It must cut **motor bus power, not logic power** — killing the MCU mid-motion while motors hold position is a different, worse failure. A latching mushroom switch in the motor rail plus an XT60 you can physically yank covers it.
+Fit one to every motion rig. It must cut **motor bus power, not safety-supervision power**. Under registered `RP02-P2-REG-01`, the system motor-arm gate and a latching hardware E-stop are series permissions in the battery-only motor path; the selected DC-rated switching element must interrupt or command removal of the actual load/fault class. A separately accessible retained-pack isolation action remains required, but its connector family is not preselected.
 
 ## Scored-test gate
 
@@ -130,8 +130,8 @@ Exploratory bench poking is outside this gate. The dominant solo-builder failure
 
 Battery-pack fabrication or charging does not begin without a **written, dated procedure produced before first use and not edited during the session**, plus the LiPo bag and balance charger. Rules when there: charge in the bag, never unattended, correct cell count and rate, non-flammable surface (tile/metal/concrete, not a wooden desk or carpet), store at 40–60% (3.7–3.85 V/cell).
 
-Worth evaluating in ADR-06: protected 18650 cells in a holder are meaningfully more forgiving than LiPo pouches, and Makad's draw (small servos + SBC-class compute) doesn't need LiPo discharge rates. That is a spec decision, not a shopping decision.
+ADR-06 evaluates candidate batteries as complete retained pack assemblies: cells, interconnect, protection, charging/balancing, enclosure, connector, fault current, regeneration acceptance and service method. A loose-cell holder is only a historical planning case, not the preferred construction. That is a system decision, not a shopping decision.
 
 ## Approval note
 
-Approved by the project builder on 2026-08-17 as the initial workbench sourcing and powered-test-readiness baseline. Prices, stock, and local availability are planning estimates and must be checked again immediately before purchase. Approval does not select final Makad components, battery chemistry, pack design, or system architecture.
+Approved by the project builder on 2026-08-17 as the initial workbench sourcing and powered-test-readiness baseline. Reconciled 2026-09-16 to registered RP-02 architecture `RP02-P2-REG-01`, removing the former XT60 and loose-cell-holder presumptions without changing the powered-test gate. Prices, stock, and local availability are planning estimates and must be checked again immediately before purchase. Approval does not select final Makad components, battery chemistry or pack design.

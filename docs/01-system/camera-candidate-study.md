@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | **SELECTED AND LOCKED — Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, order code SC0874** |
-| Version | 0.4 |
+| Version | 0.5 |
 | Owner | Project builder |
 | Created | 2026-08-29 |
-| Last reviewed | 2026-09-14 |
+| Last reviewed | 2026-09-16 |
 | Feeds | RP-01 moving-harness work, RP-06 layout, RP-07 person tracking, ADR-01/ADR-08/ADR-09/ADR-12 |
 | Selected upstream component | Waveshare ESP32-S3-LCD-4.3 no-touch, SKU 30493 |
 
@@ -18,7 +18,7 @@ This is a component lock, not a claim that the integrated camera subsystem has a
 
 The display choice already fixes head-local face rendering. Camera frames still go to the body-mounted Linux perception computer, so the camera interface crosses the moving head unless a later architecture revision relocates compute.
 
-**SBC coupling (review finding 2026-09-14).** A working IMX708 stack with a hardware ISP exists only on Raspberry Pi. Jetson has a third-party RidgeRun driver with a single 14 fps mode; RK3588 boards (Rock 5, Orange Pi 5) have no usable path. This lock therefore binds the body SBC to the Raspberry Pi family in practice, even though the SBC is formally unselected. Consequences carried into the RP-02 candidate register: a Pi 5 needs a 22-pin-to-15-pin CSI cable (the module ships with a 15-pin 1 mm cable), so the moving-harness study should assume that geometry; lock the PDAF lens position in software during head gestures to avoid focus breathing; rolling-shutter smear at the RP-01 peak accelerations only affects mid-gesture frames, and tracking runs when the head is settled. Face pixel budget at 3 m through the wide lens is roughly 30–45 px depending on mode — enough for detection and tracking, not identity, which V1 does not need.
+**SBC coupling (review finding 2026-09-14; resolved 2026-09-16).** A working IMX708 stack with a hardware ISP exists only on Raspberry Pi. Jetson has a third-party RidgeRun driver with a single 14 fps mode; RK3588 boards (Rock 5, Orange Pi 5) have no usable path. The builder selected Raspberry Pi 5 2 GB under `RP02-P2-REG-02`. It needs a 22-pin-to-15-pin CSI cable (the module ships with a 15-pin 1 mm cable), so the moving-harness study assumes that geometry; lock the PDAF lens position in software during head gestures to avoid focus breathing; rolling-shutter smear at the RP-01 peak accelerations only affects mid-gesture frames, and tracking runs when the head is settled. Face pixel budget at 3 m through the wide lens is roughly 30–45 px depending on mode — enough for detection and tracking, not identity, which V1 does not need.
 
 ## Selected module and contingency references
 
@@ -91,3 +91,4 @@ Reopen the camera-module selection only after a recorded hard failure: procureme
 | 2026-08-29 | 0.2 | Project builder selected and locked Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, order code SC0874; converted the prior lock gate into acceptance/change-control evidence and left supplier, body SBC and production moving interconnect open. |
 | 2026-08-29 | 0.3 | Linked the source-grounded moving-head harness study; adopted axis-conditioned flex zones and live-camera endurance monitoring as the active test direction while keeping the exact production interconnect unselected. |
 | 2026-09-14 | 0.4 | Component review (MEM-20260914-01): recorded that IMX708 support binds the body SBC to Raspberry Pi in practice, the Pi 5 22-to-15-pin cable consequence, AF-lock and pixel-budget notes. Selection unchanged; SBC still formally unselected. |
+| 2026-09-16 | 0.5 | Consumed `RP02-P2-REG-02`: Raspberry Pi 5 2 GB is now selected as the body SBC; camera module and moving-interconnect evidence obligations are unchanged. |

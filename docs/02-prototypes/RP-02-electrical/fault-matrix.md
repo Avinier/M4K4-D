@@ -29,7 +29,7 @@ Columns: **Inhibit** — what must stop and by when (candidate). **Reject** — 
 | ID | Fault | Injected into | Method | Inhibit | Reject | Expose | Recover | Evidence |
 |---|---|---|---|---|---|---|---|---|
 | **F-01** | Behaviour process loss (SBC alive, process dead) | `CC-05` mid-gesture | `kill -9` the process that owns the heartbeat | `BRAKE` within heartbeat timeout + 1 tick (candidate ≤ 200 ms) | Any `HEAD_GOAL` queued in the dead process is never executed | C2 `FAULT(HB_TIMEOUT)`; SBC supervisor marks head `unavailable` | Process restart → `HELLO` → `LIMITS_SET` → `HEAD_ENABLE`(new nonce) → **new** goal. The interrupted gesture is not resumed | `HEAD_STATE` trace showing brake onset; ACK/NACK log showing zero executions of pre-fault seq numbers after recovery |
-| **F-02** | SBC full loss / reboot | `CC-03` wake rise | Cut Buck A (SBC rail) at the distribution board; separately, `reboot` | As F-01; additionally C2 must not misinterpret SBC boot-time UART noise as frames | All | As F-01; C2 heartbeat continues to display board so the face can show a fault expression if RP-04 later wants it | SBC boots to a supervisor that **does not auto-enable**; enable requires the documented start sequence (SC-18) | Brake onset; CRC-error counter during boot noise; no `HEAD_ENABLE` before operator action |
+| **F-02** | SBC full loss / reboot | `CC-03` wake rise | Open `PB-COMPUTE` at the distribution board; separately, `reboot` | As F-01; additionally C2 must not misinterpret SBC boot-time UART noise as frames | All | As F-01; if the selected display topology permits, C2 may continue reporting health for a bounded fault indication | SBC boots to a supervisor that **does not auto-enable**; enable requires the documented start sequence (SC-18) | Brake onset; CRC-error counter during boot noise; no `HEAD_ENABLE` before operator action |
 
 ### 2.2 Internal link
 
@@ -45,7 +45,7 @@ Columns: **Inhibit** — what must stop and by when (candidate). **Reject** — 
 
 | ID | Fault | Injected into | Method | Inhibit | Reject | Expose | Recover | Evidence |
 |---|---|---|---|---|---|---|---|---|
-| **F-06** | C2 restart mid-gesture | `CC-06` startle outbound | Reset DevKitC; separately task-watchdog stall and head-logic brownout | No stale goal after reboot; boot is inhibited with no limits loaded. Servo hold/torque-off comes from RP-01 HM-00 | Pre-reset RAM | `HELLO` with reset reason | Fresh enable sequence | Reset reason; first post-boot bus frame is safe torque state, not goal |
+| **F-06** | C2 restart mid-gesture | `CC-06` startle outbound | Reset DevKitC; separately task-watchdog stall and `PB-SAFE-C2` brownout | No stale goal after reboot; boot is inhibited with no limits loaded. Servo hold/torque-off comes from RP-01 HM-00 | Pre-reset RAM | `HELLO` with reset reason | Fresh enable sequence | Reset reason; first post-boot bus frame is safe torque state, not goal |
 | **F-07** | Display board restart | `CC-03` | Reset display board | No hazardous effect; **must not** affect C2 | Expired face state decays to idle | Display `HELLO` | Automatic | `HEAD_STATE` continuous through reset |
 | **F-08** | Servo absent / bus fault | `CC-05` | Unplug one servo bus connector mid-gesture; separately short data briefly | Missing axis unavailable; other axes brake; head inhibited | Missing-axis goals | `FAULT(SERVO_SILENT, axis)` | Reconnect, remain inhibited, fresh enable | Per-axis flags; no remaining-axis runaway |
 | **F-09** | Camera absence | `CC-09` tracking | Power off, unplug non-hot-pluggable CSI, then boot without camera | Head holds; base stops because track evidence is gone | New `TRACK` goals | Perception unavailable | Restore camera; behaviour reissues current intent | No goals after loss; head returns to `BS-02` |
@@ -69,7 +69,7 @@ Columns: **Inhibit** — what must stop and by when (candidate). **Reject** — 
 | ID | Fault | Injected into | Method | Inhibit | Reject | Expose | Recover | Evidence |
 |---|---|---|---|---|---|---|---|---|
 | **F-12** | E-stop asserted mid-motion | `CC-06` and `CC-10A` | Press mushroom during outbound stroke/launch | Motor domain dead by hardware; C2 detects absence within one tick and enters `OM-04`. Logic stays up | Everything | Fault in heartbeat/face if desired | See F-13 | Motor rail to 0; logic flat; heartbeat continues |
-| **F-13** | E-stop released | after F-12 | Twist to release | **Nothing moves.** Servos regain power but C2 is `inhibited` with the fault latched; servos boot into their own power-on state, which must be torque-off or hold — never a stored goal | Any goal until re-enabled | Fault clears only on explicit `HEAD_INHIBIT`+`HEAD_ENABLE` sequence | Operator-initiated fresh enable | Zero motion for ≥10 s after release with the SBC actively sending goals — the goals must all `NACK(INHIBITED)` |
+| **F-13** | E-stop released | after F-12 | Twist to release | **Nothing moves and `PB-MOTOR` does not return merely on release.** C2 remains `inhibited`, the motor-arm latch remains clear and local enables remain inactive | Any goal until a fresh arm/readiness/enable sequence | Release status is exposed, but motion authority remains invalid | Operator-initiated fresh system arm, controller readiness/enable and new action | Motor rail/arm/enable trace plus zero motion for ≥10 s after release while stale/old-session goals all `NACK(INHIBITED)` |
 
 ## 3. Candidate G04 thresholds (not registered)
 
@@ -91,3 +91,5 @@ Injections are ordered by increasing authority: F-15, F-14 and F-04 first; then 
 | Registration | Date | Approved scope | Not yet registered |
 |---|---|---|---|
 | `RP02-P1-REG-01` | 2026-09-15 | `F-01…F-22`, their primary cases, injection intents, inhibit/reject/expose/recover obligations and campaign ordering; explicit builder approval in the project conversation | Hardware-specific injection fixtures, repetitions/configurations and numeric G04 thresholds before scored runs |
+
+Part-2 implementation maintenance note, 2026-09-16: F-13 now reflects the stricter already-registered `PA-13`/implementation-basis rule that E-stop release cannot itself restore `PB-MOTOR`. This tightens the electrical implementation without weakening the Part-1 no-motion/fresh-authorization obligation. F-11/F-16 electrical ordering and reset/recovery details are owned by `brownout-restart-contract.md` v0.1; their numeric injection thresholds remain preregistered run values.
