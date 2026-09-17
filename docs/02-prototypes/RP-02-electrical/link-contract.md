@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Part-4 definition baseline `RP02-P4-REG-01` (2026-09-17).** Message set, framing method, authorization/expiry and no-replay recovery are registered. Exact byte layouts, numeric rates/timeouts, C3 drive messages and measured evidence remain open; THVD1451D is an implementation lead |
+| Status | **Part-4 C0↔C2 definition baseline `RP02-P4-REG-01` (2026-09-17).** Message set, framing method, authorization/expiry and no-replay recovery are registered for C0↔C2. **C3 `BASE_*` payloads are a v0.5 proposal from RP-03 Part 4; they are not registered.** Exact byte layouts, numeric rates/timeouts and measured evidence remain open; THVD1451D is an implementation lead. Registration of v0.5 waits on RP-02 accepting this proposal (`RP02-P4-REG-02` is not issued) |
 | Owner | Project builder |
 | Created | 2026-09-08 |
 | Revised | 2026-09-17 |
@@ -135,13 +135,49 @@ The table below predates the explicit boot UUID/epoch envelope and uses a 13-byt
 - Exact byte layouts and message type numbers — pinned after the first C0/C2 implementation and SBC-side codec are generated from one schema file (one source, two targets). Any exploratory codec must declare its layout revision and cannot be scored as this registered definition.
 - Authentication — none on a wired internal link; the nonce guards against replay, not adversaries.
 - Display asset upload — a bulk-transfer mode with its own flow control, designed when face assets exist.
-- Base/drive MCU messages — added when RP-03 selects motor/driver/sensor semantics; they inherit this framing and the same expiry/heartbeat rules. C3 controller selection alone does not define drive messages.
+- Base/drive MCU messages — C3 controller selection alone does not define drive messages. RP-03 Part 4 now drafts `BASE_*` in §v0.5 below; that section is a proposal, not `RP02-P4-REG-02`. Byte layouts, type numbers, baud and timeouts stay open.
 
 ## Part-4 registration — 2026-09-17
 
 `RP02-P4-REG-01` freezes the definition baseline in §§1–5: semantic commands; the C0↔C2 message set; C2 relay of face/light state; source stamps; explicit expiry checked at execution; C0 session/epoch plus a fresh C2 boot challenge and arm nonce; limits acknowledged before enable; heartbeat loss causing bounded brake and queue flush; and reconnect/reset/E-stop recovery requiring a new limits/enable/goal sequence. The physical topology remains governed by `RP02-P3-REG-01`. The C2 challenge must change on every reset and cannot be inferred from old wire traffic; its generation and retained replay window need implementation review.
 
 The candidate byte widths, type numbers, baud/rates/timeouts, transceiver suffix, C3 drive payloads and measured G04/G05 outcomes are **not** registered by this decision. A physical or scored implementation requires those items to be versioned and preregistered separately. No ADR or gate closes here.
+
+## v0.5 proposal (unregistered) — C0↔C3 `BASE_*`
+
+**Proposal from RP-03 Part 4 (`base-control-architecture.md`), 2026-09-17. Not `RP02-P4-REG-02`.** §§1–5 and `RP02-P4-REG-01` are unchanged: they remain the registered C0↔C2 definition. This section drafts C3 payloads in the **same envelope** (COBS, CRC-16/CCITT, session / C0 boot identity / epoch / C3 boot challenge, `src_ts_us`, explicit expiry, fresh-arm nonce) over the independent C0↔C3 differential UART. Byte layouts, field widths, type numbers, baud and numeric timeouts are **OPEN**. Motor/driver/sensor SKUs are not frozen by naming these types.
+
+`HELLO`, `HEARTBEAT`, `TIME_SYNC_REQ` / `TIME_SYNC_RESP`, and `ACK` / `NACK` are the same types as the head link, on this independent session. `ACK` / `NACK` reasons are unchanged: `OK` / `EXPIRED` / `OUT_OF_LIMITS` / `INHIBITED` / `UNKNOWN_TYPE` / `BAD_CRC` / `QUEUE_FULL` / `NO_LIMITS` / `NONCE_REPLAY`. Authority stays `CA-09` / `CA-13`: clearing an inhibit reports availability and does not resume old intent.
+
+`→` C0 to C3; `←` C3 to C0. Payload columns name semantics, not wire widths.
+
+### Session and authorization
+
+| Type | Dir | Payload | Semantics |
+|---|---|---|---|
+| `BASE_LIMITS_SET` | → | Per wheel: `vmin`, `vmax`, `amax`, `imax`; yaw `wmax`; `cmd_ttl`; `heartbeat_timeout` | Must be acknowledged before `BASE_ENABLE`. Values are clamped to C3 compiled hard maxima (`CA-14`); the clamped set is echoed in the `ACK` |
+| `BASE_ENABLE` | → | Fresh arm nonce | `inhibited → enabled` **only if** limits are set, heartbeat is fresh, no fault is latched, motor domain is present, and mode is valid. Bound to the current C3 boot challenge, C0 boot identity and epoch. Does **not** grant `CC-12C` |
+| `BASE_INHIBIT` | → | `reason` | Initiate `BRAKE` immediately, then inhibited when the bounded trajectory reaches rest. Idempotent |
+| `CC-12C_ARM` | → | Separate nonce + expiry + speed clamp | Arms minimum-speed tabletop calibration in `OM-02` only. Clamp is storyboard `BM-11` 0.06 m/s. Never implied by `BASE_ENABLE`. Never grants come / follow / spin |
+
+### Commands (bounded, expiring)
+
+| Type | Dir | Payload | Semantics |
+|---|---|---|---|
+| `BASE_GOAL` | → | `profile_id` (`LAUNCH` / `CRUISE` / `DECEL0` / `PIVOT` / `ARC` / `SPIN` / `WIGGLE` / `BRAKE` / `HOLD`) · `v`, `ω` · `duration_ms` · `valid_until_us` · `flags` (hold-after, interruptible) | One segment. C3 instantiates the profile law. Latest-wins bounded queue. Expiry checked at **execution** |
+| `BASE_CANCEL` | → | settle / `BRAKE` law | Reject queued segments; current motion decelerates under `BRAKE` |
+
+### Feedback and health
+
+| Type | Dir | Payload | Rate (candidate) |
+|---|---|---|---|
+| `BASE_STATE` | ← | `capture_ts_us`; body `v`, `ω`, `x`, `y`, `θ`; per-wheel pos / vel / cur; `ctrl_state`; `mode`; `sensor_valid_mask`; `oldest_sensor_age_ms` | 100 Hz candidate. Yaw is published for the mic-array frame (MEM-20260812-03) |
+| `BASE_HAZARD` | ← | `cliff_mask`; `obst_range_mm`; `bump`; IMU flags (lift / tip / slip); per-channel ages | Event; latched summary while any bit is active. Unknown is representable, never zeroed. ToF, if present, is telemetry and not the sole obstacle bit |
+| `BASE_FAULT` | ← | `code`, `detail`, `ts`, `latched` | Event, retransmitted with every `HEARTBEAT` while latched |
+| `HEARTBEAT` | ↔ | Same fields as §4.3 | 20 Hz each way on this link (candidate) |
+| `ACK` / `NACK` | ← | `for_seq` · `reason` as §4.3 | Per command frame |
+
+RP-02 accepts this proposal only by a later registration that names layouts and timeouts. Until then, implementers may prototype against RP-03 `base-control-architecture.md` and must declare the layout revision; a prototype codec cannot be scored as this contract.
 
 ## Change log
 
@@ -154,3 +190,4 @@ The candidate byte widths, type numbers, baud/rates/timeouts, transceiver suffix
 | 2026-09-16 | 0.3 | Registered the C2-relay topology and full-duplex differential SBC↔C2 physical layer under `RP02-P3-REG-01`; direct TTL became bench-only and USB became service-only. Added relay isolation and C3 inheritance rules. Message framing and candidate timing values remain unvalidated. |
 | 2026-09-16 | 0.4 | Cost-down sourcing review replaced the MAX3490E implementation lead with THVD1451D SOIC. The registered differential topology, framing and candidate timing remain unchanged and unvalidated. |
 | 2026-09-17 | 0.4 definition baseline | `RP02-P4-REG-01` registered message/recovery semantics while keeping byte layouts, C3 messages, timing numbers and evidence open. Reconciled authorization context with `CA-09`. |
+| 2026-09-17 | 0.5 proposal (unregistered) | `BASE_*` draft from RP-03 Part 4; byte layouts still open; not `RP02-P4-REG-02`. Registered C0↔C2 text in §§1–5 unchanged. |

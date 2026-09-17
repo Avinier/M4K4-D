@@ -27,7 +27,7 @@ RP-01 is an object. RP-02 is a set of states and interfaces: a tree of rails, fo
 | [State coverage matrix](state-coverage-matrix.md) | Requirement → runtime vector → qualification case → load profiles → rules/faults → evidence | A |
 | [Load model](load-model.md) | Named per-load profiles, time-scale classes, aggregation rules and measurement dependencies; contains no competing numeric budget | A |
 | [Power architecture](power-architecture.md) | Registered Part-2 domain/rail baseline: safety, application, motor and charge paths; independent C2/base safety branches; return topology; power-state matrix; registered `PB-*` keys | A |
-| [Link contract](link-contract.md) | Registered Part-4 C0↔C2 definition: message set, framing method, expiry, heartbeat and recovery semantics. Byte layouts, C3 drive messages and timing remain implementation/evidence items | A |
+| [Link contract](link-contract.md) | Registered Part-4 C0↔C2 definition: message set, framing method, expiry, heartbeat and recovery semantics. Byte layouts and timing remain implementation/evidence items. **C3 `BASE_*` is a v0.5 proposal from RP-03; not registered (`RP02-P4-REG-02` is not issued)** | A |
 | [Phase A reference](phase-a/README.md) | Exploratory single-schema C0/C2 frame codecs, host safety/time model, board-role reservations and logging record; not scored or flashed | A |
 | [Candidate circuits and paper review](phase-a/candidate-circuits-review.md) | Candidate compute/C2/display, E-stop and link circuits plus unscored G01/G06 walk | A |
 | [Fault matrix](fault-matrix.md) | `F-01…F-30` injected faults × inhibit / reject / expose / recover, including Part-3 process, watchdog, relay, differential-link, storage and reset cases | A (rows), B (campaign) |
@@ -59,7 +59,7 @@ Circular, and named — but the two closures are different objects. RP-01's **co
 
 ## What to do next, in order
 
-1. Implement the C0/C2 shared schema, board-role pin maps and authority-lease state machines from the registered Part-4 definition; keep C3 drive payloads for RP-03. No hardware purchase is required for codec/unit simulation.
+1. Implement the C0/C2 shared schema, board-role pin maps and authority-lease state machines from the registered Part-4 definition. C3 `BASE_*` payloads now exist as an **unregistered** v0.5 proposal in `link-contract.md`; accept or revise them as `RP02-P4-REG-02` before treating them as the ICD. No hardware purchase is required for codec/unit simulation.
 2. Implement `timebase.md` and `link-contract.md` v0.4 on the DevKitC-1 twin, first TTL loopback and then THVD1451 differential breakout pairs; exploratory timing runs do not wait on carrier PCBs.
 3. Freeze the first executable case configurations and register G05/G04 numeric thresholds before scored link/watchdog work, including `F-23…30`.
 4. Convert the surviving `PCD-*`/`CCD-*` leads into reviewed candidate circuits and bench configurations; choose exact transceiver/watchdog suffixes only from the measured timing and harness conditions.

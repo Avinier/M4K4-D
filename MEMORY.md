@@ -402,3 +402,14 @@ The cost-down pass retained the selected Raspberry Pi 5 2 GB, official Active Co
 **Type / Status / Governs:** DECISION / PROVISIONAL / `docs/02-prototypes/RP-03-locomotion/plan.md`; `docs/02-prototypes/openitems.md` RP-03 section
 
 Builder directed that RP-03 be planned rather than researched now that RP-01 paper demand and RP-02 Parts 1–4 are defined. The plan fixes the folder layout (intent, storyboard, physics, concepts, drivetrain and sensing screens, base-control architecture, fault matrix, rig, gates, decision), a six-Part authoring order with `RP03-P<n>-REG-<nn>` registrations, the inherited-input table, twelve authored base-motion panels `BM-00…12`, builder decisions `BD-01…07`, and a three-phase ladder in which both-motor transients above the Korad 5 A ceiling wait for Phase C. It separates ADR-04 (geometry) from ADR-07 (sensing) closures and names the RP-02 items that wait on the RP-03 pin map, driver/sensor interface and base message set. No document beyond the plan is authored; no candidate, purchase, gate registration, threshold or run exists.
+
+### MEM-20260917-02 — RP-03 Parts 1–5 defined at design-definition level
+**Type / Status / Supersedes / Governs:** DECISION / CURRENT / the “no document beyond the plan” clause of MEM-20260917-01 / `RP03-P1-REG-01` … `RP03-P5-REG-01`; `docs/02-prototypes/RP-03-locomotion/`
+
+The RP-03 folder is populated through Part 5: intent and `BM-00…BM-12` storyboard; physics envelope; two concepts with a filled comparison (Concept A working lead, not a freeze); drivetrain and sensing screens (D02 / DRV8874-class / S01/S04/S06/S07 leads, not a freeze); `BC-01…10`, C3 pin map v0.1 and `BASE_*` draft; `F-31…F-45`; rig designed not built; G01–G06 candidate registrations with an empty registered section. `BD-01…07` are working assumptions. No purchase, no gate pass, no scored run. `link-contract.md` v0.5 is a proposal (`RP02-P4-REG-02` is not issued).
+
+### MEM-20260917-03 — Layout 03 `a_tip` is a placement target, not a roll-up
+**Type / Status / Governs:** REVIEW FINDING / CURRENT / RP-03 `physics.md`; `dimensional-baseline.md` v1.11
+
+A lumped Layout 03 mass model does not automatically produce `x_CoM = +25 mm`, `h_CoM = 124 mm`. At that target `a_tip ≈ 1.98 m/s²`; under the lumped tree `a_tip` is about 0.9–1.9 m/s² with the battery low and forward, and changes sign if the battery sits on or behind the axle (forbidden). The 2.0 m/s² figure is retained as a placement target. If the integrated article misses +25/124, the dimensional baseline is revised — commanded acceleration is not quietly shrunk to hide the miss. Drive mass 200–600 g is unchanged.
+

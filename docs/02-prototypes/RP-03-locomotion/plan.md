@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Plan only.** No RP-03 document beyond this plan exists; no candidate is named, no purchase authorized, no gate registered, no run executed. This file says what the folder will contain, in what order, from which fixed inputs, and what each document may and may not claim |
+| Status | **Construction record.** Parts 1–5 are populated at design-definition level (2026-09-17). This file is not the start-here index — that is `README.md`. No candidate is frozen, no purchase authorized, no gate registered, no run executed |
 | Created | 2026-09-17 |
 | Owner | Project builder |
 | Governing plan | `../../01-system/risk-prototype-plan.md` v1.12 §RP-03 (stage 3) |

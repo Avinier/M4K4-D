@@ -3,9 +3,9 @@
 | Field | Value |
 |---|---|
 | Status | **Current target baseline — supersedes earlier dimensional and packaging assumptions** |
-| Version | 1.10 |
+| Version | 1.11 |
 | Owner | Project builder |
-| Approved / revised | 2026-08-30 / 2026-09-12 |
+| Approved / revised | 2026-08-30 / 2026-09-17 |
 | Feeds | Mass/envelope ledger, RP-01 head, RP-03 drive, RP-06 layout, sourcing, integrated CAD |
 
 ## Authority and interpretation
@@ -83,12 +83,12 @@ The skid is a separate lower protrusion, not flush with the main shell. For a di
 | Maximum theoretical spin capability | **300°/s+ possible, drivetrain-dependent** | Headroom; not a normal commanded rate |
 | Longitudinal whole-robot CoM target | **`x_CoM = +25 mm` forward of drive axle** | Forward offset supplies the gravity restoring arm against backward tip during forward acceleration |
 | Whole-robot CoM height target | **`h_CoM = 124 mm` above floor** | Baseline vertical lever arm for acceleration stability |
-| Theoretical front-caster lift threshold | **~2.0 m/s² forward acceleration** | `a_tip = g·x_CoM/h_CoM ≈ 9.81·25/124 = 1.98 m/s²`; tipping governs before the ~6 m/s² traction estimate |
+| Theoretical front-caster lift threshold | **~2.0 m/s² at the CoM *target*** | `a_tip = g·x_CoM/h_CoM ≈ 9.81·25/124 = 1.98 m/s²` **if** that placement is hit. RP-03 `physics.md` shows this is a placement target, not a Layout 03 mass-roll-up result |
 | CoM sensitivity | **Each +10 mm forward raises `a_tip` by ~0.8 m/s²** | `Δa_tip = g·10/124 ≈ 0.79 m/s²` at the target CoM height |
 
 The existing **0.5 m/s maximum for person-following trials remains a behavioural safety/validation limit**. It does not conflict with the higher drivetrain capability target, which exists for bounded expressive moves and engineering headroom.
 
-Until RP-03 measures lift onset and dynamic compliance, commanded forward acceleration must remain below the theoretical 2.0 m/s² caster-lift threshold with a registered safety margin. A higher expressive acceleration requires a validated forward CoM shift, lower CoM, or support-geometry revision; tire traction alone does not justify it.
+Until RP-03 measures lift onset and dynamic compliance, commanded forward acceleration must remain below the theoretical 2.0 m/s² caster-lift threshold **and** below the Layout 03 lumped `a_tip` range in RP-03 `physics.md`, with a registered safety margin. A higher expressive acceleration requires a validated forward CoM shift, lower CoM, or support-geometry revision; tire traction alone does not justify it. Battery-on-or-behind-axle (RP-03 `HIGH_AFT`) is a forbidden placement: `a_tip` changes sign. If the +25 / 124 mm target is missed on the integrated article, **this baseline is revised** — RP-03 does not quietly shrink commanded acceleration to hide a CoM miss.
 
 ## Component placement
 
@@ -127,3 +127,4 @@ Design around **300 H × 205 W × 180 D mm overall as a rounded target; RP-01 La
 | 2026-09-02 | 1.8 | Rejected the obsolete 250 g head target and preliminary inertia/torque sizing inputs; adopted the ~490 g pre-M008 lower bound plus the selected separate C2 ESP32-S3 controller, and flagged whole-robot CoM/tip targets for recalculation under the heavier head. |
 | 2026-09-08 | 1.9 | Builder approved the Layout 02 appearance revision and 1:1 component method. Recorded 86 mm main shell, 102 mm crown-inclusive height, 150 mm width, 115 mm depth, Ø60 mm rolling ears and 99 × 58 mm minimally clipped aperture. Explicitly replaces the earlier head-height/pod targets for RP-01 and exposes the 302 mm neutral stack; integrated fit and measured mass remain open. |
 | 2026-09-12 | 1.10 | Adopted Layout 03 as the planning geometry: 104 × 150 × 115 mm complete head, 86 × 130 × 115 mm core and 304 mm provisional stack. Recorded the nominal 362/436/509 g and inertia tree at M008=20 g while retaining M008 uncertainty and candidate-specific servo recalculation. No fabrication release, measured-mass acceptance or gate pass. |
+| 2026-09-17 | 1.11 | Consumed RP-03 `physics.md`: retained the +25 / 124 mm CoM **target** and the 1.98 m/s² figure as the value *at that target*; recorded that Layout 03 lumped roll-up does not automatically hit it (`a_tip` about 0.9–1.9 m/s² with battery forward; sign reversal if battery is on/behind the axle). No geometry target changed. No gate pass. |

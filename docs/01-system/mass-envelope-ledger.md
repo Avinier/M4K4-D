@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | **Living — dimensional baseline active; remaining mass values provisional.** |
-| Version | 0.14 |
+| Version | 0.15 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-09-13 |
+| Last reviewed | 2026-09-17 |
 | Governed by | `risk-prototype-plan.md` §"Continuous sourcing and data workstream" (deliverable 2) |
 | Consumes | `dimensional-baseline.md`, foundation scale class (`workbench.md`), `system-design-brief.md` responsibility set |
 | Feeds | RP-01 (representative head load), RP-06 (integrated layout), head-CAD, engineering budgets |
@@ -90,3 +90,4 @@ Body packaging must separately reserve four PDM MEMS microphones, the speaker an
 | 2026-09-07 | 0.12 | Recorded the selected C2 module (Waveshare ESP32-S3-Zero) against the head row while keeping M008 unknown until the installed assembly is weighed, and excluded the ESP32-S3-DevKitC-1 bench twin from the ledger. Roll-up values unchanged. |
 | 2026-09-12 | 0.13 | Propagated Layout 03's 104 × 150 × 115 mm envelope and provisional 362/436/509 g per-axis tree. Kept M008 physically unknown, retained the 10/20/35 g analytical sensitivity and made candidate-specific servo substitution explicit. No W evidence added. |
 | 2026-09-13 | 0.14 | Recorded that C01 (XC330-M288-T) matches the existing 23 g housings, so substituting that candidate adds zero mass. Family still unselected; M008 still `U`; no `W` evidence. |
+| 2026-09-17 | 0.15 | RP-03 `physics.md` (`RP03-P2-REG-01`) reviewed the drive row and **does not move** the 200–600 g bound. D02 JGA25-class is a reference-unit lead, not a freeze, not `W`. |
