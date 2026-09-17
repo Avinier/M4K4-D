@@ -2,16 +2,16 @@
 
 | Field | Value |
 |---|---|
-| Status | **v0.2 draft.** Interface specification, not evidence. Field sizes, rates and timeouts marked *candidate* are proposals for G05/G04 registration |
+| Status | **Part-4 definition baseline `RP02-P4-REG-01` (2026-09-17).** Message set, framing method, authorization/expiry and no-replay recovery are registered. Exact byte layouts, numeric rates/timeouts, C3 drive messages and measured evidence remain open; THVD1451D is an implementation lead |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Revised | 2026-09-16 |
-| Authority | `../../01-system/control-topology-options.md` v0.11 §3, §7 (UART/USB serial, semantic command surface); `../../01-system/system-design-brief.md` §5 information contracts and contract rules 1–5; §6 state dimensions and failure priorities |
+| Revised | 2026-09-17 |
+| Authority | `compute-control-architecture.md` `CA-01…16`; `../../01-system/control-topology-options.md` §3, §7 (framed serial, semantic command surface); `../../01-system/system-design-brief.md` §5 information contracts and contract rules 1–5; §6 state dimensions and failure priorities |
 | Timebase | `../../01-system/timebase.md` — all timestamps in this contract are master-monotonic microseconds after offset reconciliation |
 | Feeds | ADR-12; `subsystem-interfaces.md` at stage 6; `fault-matrix.md`; `gates.md` G04/G05 |
 | Not in scope | The servo bus protocol (RP-01 family freeze decides Dynamixel 2.0 / Feetech / other; C01 would be Dynamixel Protocol 2.0 TTL, 3.3 V logic 5 V compatible); display asset transfer; any wireless path |
 
-This is the artifact RP-02 produces that outlives it. It is versioned as a specification: a change is a new minor version with a changelog line; a breaking change is a new major version and a `fault-matrix.md` re-run.
+This is the artifact RP-02 produces that outlives it. `RP02-P4-REG-01` registers the **definition** of the C0↔C2 message set, COBS-delimited/CRC-protected framing method, source stamps, explicit expiry, heartbeat supervision, two-phase arm and fresh-intent recovery. It does not register numeric timing or a wire-compatible codec. Changes to these semantics need a new registration and fault review; byte-layout revisions remain versioned here and are qualified under G04/G05.
 
 ## 1. Principles carried in from the design brief
 
@@ -26,13 +26,15 @@ This is the artifact RP-02 produces that outlives it. It is versioned as a speci
 
 | Link | Transport | Candidate rate | Why |
 |---|---|---|---|
-| SBC ↔ C2 | 3.3 V TTL UART, full duplex, no flow control; **USB-CDC on the Zero's native USB is the fallback** if UART throughput or the flashing path makes it preferable | 921 600 baud candidate (115 200 is ~11.5 kB/s and too tight against §6) | Two boards, one enclosure, permanent wire: the openvmp "dumb serial relay" test says serial. UART keeps native USB free for flashing (CAD-04a) |
-| SBC ↔ display ESP32-S3 | Same framing over a second UART | 115 200–921 600; face-state traffic is small | Same code path on the SBC; the display board's GPIO budget (RS-485 or UART pins per the schematic audit) decides the physical pair |
+| SBC ↔ C2 | UART framing over **full-duplex differential RS-422/RS-485 signalling**, two twisted pairs plus registered common reference; THVD1451D SOIC implementation lead at each end. Direct TTL is bench-only; native USB is service-only | 921 600 baud candidate (115 200 is ~11.5 kB/s and too tight against §6) | Preserves the simple UART software model while hardening the motor-adjacent moving harness; full duplex avoids direction turnaround and collisions; native USB stays free for flashing (CAD-04a) |
+| C2 ↔ display ESP32-S3 | C2 relays the same framed semantic messages over the display carrier's head-local half-duplex RS-485 path | 115 200 baud initial; face-state traffic is small | One body ingress and one head-local clock model; display traffic has lower queue priority than motion/link health |
 | C2 ↔ servos | **Out of scope here** — half-duplex TTL or RS-485 per servo family. C01 (XC330-M288-T) would be TTL Dynamixel 2.0 | family-defined | Owned by RP-01's actuator selection; C2 keeps the transceiver external (bus-neutrality, control study §6.3). C01 does not freeze the transceiver |
 
-The baseline has two signal pairs across the yaw boundary through the demateable connector: SBC↔C2 accompanies `PB-SAFE-C2`, while SBC↔display accompanies `PB-DISPLAY`. They share the registered common reference but neither signal path may back-power the other branch. Together with the hazardous `PB-HEAD` conductors, these form the three functional moving-harness paths in `PA-06`. Signal integrity across the flexing harness is a G05 measurement (frame CRC error rate per hour under `CC-04` search sweeps).
+The baseline has **one logical head link** across the yaw boundary through the demateable connector: two differential pairs plus common reference accompany `PB-SAFE-C2`; the display receives its semantic state from C2 locally and retains its separate `PB-DISPLAY` supply. No signal path may back-power another branch. Together with camera CSI and hazardous `PB-HEAD` conductors, these remain separate functional moving-harness paths under `PA-06`. Signal integrity across the flexing harness is a G05 measurement (frame CRC/sequence-error rate per hour under `CC-04` search sweeps and representative motor noise).
 
-**Alternative topology under consideration (2026-09-14 review, not adopted):** only the SBC ↔ C2 pair crosses the yaw boundary; C2 forwards `FACE_STATE` and `LIGHT_STATE` to the display board over a short in-head UART using the same framing. Two fewer moving conductors, and face and motion timestamps live on one head-local clock. Costs: C2 becomes a relay (a C2 reset takes the face to idle, which the expiry rule already tolerates), and the fault matrix gains a relay case. Decide with the G05 CRC evidence; if adopted this is a v0.x minor change because the message set is unchanged.
+C2's relay queue is fixed-capacity and lower priority than head control, heartbeat, time sync and faults. `FACE_STATE` is latest-wins; asset transfer is forbidden while motion is enabled. A C2 reset makes D1 expire to idle and boots C2 inhibited. `F-27` proves that a stuck/flooded display path cannot perturb the C2 control deadline.
+
+The base controller C3 uses the same COBS/CRC/session/time/expiry envelope over an independent differential UART. Base message types are deliberately not invented here before RP-03 freezes motor/sensor semantics; they must preserve the same fresh-arm, bounded-queue and no-replay rules.
 
 ## 3. Framing
 
@@ -40,9 +42,9 @@ The baseline has two signal pairs across the yaw boundary through the demateable
 |---|---|---|
 | Byte framing | **COBS** with `0x00` delimiter | Resynchronizes after any corruption without a length pre-read; trivial on an MCU |
 | Integrity | **CRC-16/CCITT** over header + payload, before COBS | Detects the bit-flips an unshielded UART across a servo harness will see (F-04) |
-| Header | `ver:u8` · `type:u8` · `seq:u16` · `src_ts_us:u64` · `len:u8` | `seq` detects loss and duplicates; `src_ts_us` is the stamp *at the producer*, never at receipt |
+| Header | Candidate fields: `ver`, `type`, `seq`, `src_ts_us`, `len`; authorization context additionally includes C0 boot identity and session epoch | `seq` detects loss and duplicates; `src_ts_us` is stamped *at the producer*. The listed field widths/order are candidates, not registered byte layout. C2 must bind every motion command to the active boot/epoch, whether carried in the eventual header or an authenticated session context |
 | Encoding | Little-endian packed structs; fixed-point where noted | No parsing ambiguity; no allocation on C2 |
-| Max frame | 64 bytes payload candidate | A full 64-byte payload is about 81 bytes on wire after the 13-byte header, CRC, COBS overhead and delimiter: ~0.88 ms at 921 600 baud, still below one 5 ms control tick |
+| Max frame | 64 bytes payload candidate | The older 13-byte header gives ~81 wire bytes, but the exploratory envelope carrying C0 boot UUID and epoch is up to 101 wire bytes (~1.10 ms at 921 600 baud, 10 UART bits/byte). Recalculate from the final layout before G05; neither size is registered |
 
 ## 4. Message set
 
@@ -52,9 +54,9 @@ Types are grouped by the five information kinds in SDB §5. `→` SBC to control
 
 | Type | Dir | Payload | Semantics |
 |---|---|---|---|
-| `HELLO` | ↔ | `fw_hash:u32` · `contract_ver:u16` · `board_id:u8` · `capabilities:u16` | First frame after either side (re)starts. Mismatched `contract_ver` → controller stays `inhibited` and reports `FAULT(CONTRACT_MISMATCH)` |
+| `HELLO` | ↔ | `fw_hash`, `contract_ver`, `board_id`, `capabilities`; C2 also supplies a fresh boot challenge that C0 echoes in session establishment (exact field layout open) | First frame after either side (re)starts. Mismatched `contract_ver` → controller stays `inhibited` and reports `FAULT(CONTRACT_MISMATCH)`. Old C0 `HELLO`/limits/enable frames from before a C2 reboot must not establish a new session |
 | `LIMITS_SET` | → | per axis: `min:i16` · `max:i16` (0.01°) · `vmax:u16` (°/s) · `amax:u16` (°/s²) · `imax:u16` (mA) · `tmax:u8` (°C); `cmd_ttl_default_ms:u16`; `heartbeat_timeout_ms:u16` | Must be acknowledged before `HEAD_ENABLE` is accepted. Values are clamped to C2's compiled hard limits; the clamped set is echoed in the `ACK` |
-| `HEAD_ENABLE` | → | `nonce:u32` | Transitions C2 `inhibited → enabled` **only if** limits are set, heartbeat is fresh, no fault is latched and the motor domain is present. The nonce prevents a stale frame from re-enabling after a restart |
+| `HEAD_ENABLE` | → | fresh arm nonce (candidate `u32`) | Transitions C2 `inhibited → enabled` **only if** limits are set, heartbeat is fresh, no fault is latched and the motor domain is present. It is bound to the current C2 boot challenge, C0 boot identity and epoch; a nonce alone cannot prevent replay across a C2 cold reset |
 | `HEAD_INHIBIT` | → | `reason:u8` | Initiate `BRAKE` immediately, then enter `inhibited` when the registered bounded trajectory reaches rest. Idempotent |
 
 ### 4.2 Commands (bounded, expiring)
@@ -104,6 +106,8 @@ The SBC side mirrors: on link-down it **drops its outbox**, marks head `unavaila
 
 ## 6. Bandwidth estimate (candidate, for the baud decision)
 
+The table below predates the explicit boot UUID/epoch envelope and uses a 13-byte header. It is a historical lower-bound screen, **not** a G05 bandwidth result. The final byte layout must be budgeted again with its actual message sizes and bursts.
+
 | Stream | Bytes/frame (incl. 13-byte header, 2-byte CRC, COBS overhead and delimiter) | Rate | kbit/s |
 |---|---|---|---|
 | `HEAD_STATE` | ~46 | 100 Hz | ~37 |
@@ -128,10 +132,16 @@ The SBC side mirrors: on link-down it **drops its outbox**, marks head `unavaila
 
 ## 8. What is deliberately not specified yet
 
-- Exact byte layouts — pinned when the first firmware implements this v0.2 draft and the SBC-side codec is generated from one schema file (one source, two targets).
+- Exact byte layouts and message type numbers — pinned after the first C0/C2 implementation and SBC-side codec are generated from one schema file (one source, two targets). Any exploratory codec must declare its layout revision and cannot be scored as this registered definition.
 - Authentication — none on a wired internal link; the nonce guards against replay, not adversaries.
 - Display asset upload — a bulk-transfer mode with its own flow control, designed when face assets exist.
-- Base/drive MCU messages — added when RP-03 selects a base controller; they inherit this framing and the same expiry/heartbeat rules.
+- Base/drive MCU messages — added when RP-03 selects motor/driver/sensor semantics; they inherit this framing and the same expiry/heartbeat rules. C3 controller selection alone does not define drive messages.
+
+## Part-4 registration — 2026-09-17
+
+`RP02-P4-REG-01` freezes the definition baseline in §§1–5: semantic commands; the C0↔C2 message set; C2 relay of face/light state; source stamps; explicit expiry checked at execution; C0 session/epoch plus a fresh C2 boot challenge and arm nonce; limits acknowledged before enable; heartbeat loss causing bounded brake and queue flush; and reconnect/reset/E-stop recovery requiring a new limits/enable/goal sequence. The physical topology remains governed by `RP02-P3-REG-01`. The C2 challenge must change on every reset and cannot be inferred from old wire traffic; its generation and retained replay window need implementation review.
+
+The candidate byte widths, type numbers, baud/rates/timeouts, transceiver suffix, C3 drive payloads and measured G04/G05 outcomes are **not** registered by this decision. A physical or scored implementation requires those items to be versioned and preregistered separately. No ADR or gate closes here.
 
 ## Change log
 
@@ -141,3 +151,6 @@ The SBC side mirrors: on link-down it **drops its outbox**, marks head `unavaila
 | 2026-09-12 | 0.2 | Added the complete offset/rate/reference/uncertainty model to TIME_SYNC_REQ so C2 can perform the conversion required by timebase v0.2. Corrected heartbeat failure semantics to BRAKE onset within one tick after timeout; rest completion follows the bounded BRAKE trajectory. Nothing registered. |
 | 2026-09-13 | 0.2 | No framing change. Recorded C01 (XC330-M288-T) as the named RP-01 paper candidate implying Dynamixel 2.0 TTL if selected; family remains unselected. |
 | 2026-09-14 | 0.2 | No framing change. Recorded the C2-relay alternative for the display link as under consideration (MEM-20260914-01); baseline remains two SBC-originated UART pairs. |
+| 2026-09-16 | 0.3 | Registered the C2-relay topology and full-duplex differential SBC↔C2 physical layer under `RP02-P3-REG-01`; direct TTL became bench-only and USB became service-only. Added relay isolation and C3 inheritance rules. Message framing and candidate timing values remain unvalidated. |
+| 2026-09-16 | 0.4 | Cost-down sourcing review replaced the MAX3490E implementation lead with THVD1451D SOIC. The registered differential topology, framing and candidate timing remain unchanged and unvalidated. |
+| 2026-09-17 | 0.4 definition baseline | `RP02-P4-REG-01` registered message/recovery semantics while keeping byte layouts, C3 messages, timing numbers and evidence open. Reconciled authorization context with `CA-09`. |

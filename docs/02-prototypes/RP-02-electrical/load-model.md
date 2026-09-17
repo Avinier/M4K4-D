@@ -4,7 +4,7 @@
 |---|---|
 | Status | **Registered Part-1 profile vocabulary v0.3 — builder-approved 2026-09-15; numeric waveform bindings remain open until real or admissible substitute loads are frozen for a run.** |
 | Owner | Project builder |
-| Created / revised | 2026-09-14 / 2026-09-15 |
+| Created / revised | 2026-09-14 / 2026-09-16 |
 | Authority | `state-register.md`; `../../01-system/system-design-brief.md` AD-08 and §7; `intent.md` |
 | Numeric source of truth | `../../01-system/power-energy-ledger.md` — all current, power, energy, loss and temperature values live there |
 | Evidence classes | `W` exact measured hardware/run; `D` manufacturer source; `E` estimate or substitute; `U` unknown/unselected, never zero |
@@ -51,7 +51,7 @@ A profile may occupy several classes: music has `TB-2` crests inside a `TB-3` RM
 | `LG-07` | Mics + audio front end | Unselected |
 | `LG-08` | Speaker + amplifier | Unselected |
 | `LG-09` | Conversion/distribution loss | Derived residual; never commanded |
-| `LG-10` | Base MCU + obstacle/edge sensing | Unselected; RP-03 owns profiles |
+| `LG-10` | Selected ESP32-S3-DevKitC-1-N8 C3 prototype + obstacle/edge sensing | Controller identity fixed by `RP02-P3-REG-01/02`; RP-03 owns sensor binding and measured profiles |
 
 ## 4. Named profiles
 
@@ -241,3 +241,5 @@ An electronic-load substitute can reproduce a current-time trace but cannot prov
 | Scope | Every `LP-01-*` through `LP-08-*` and `LP-10-*` profile defined in §§3–4, their time-scale classes, case bindings and aggregation rules |
 | Numeric status | Waveform values remain `U`, `E`, `D` or later `W` as recorded in the system ledger; approval does not promote estimates to measurements |
 | Scored-run condition | Each required profile must have a frozen real-load record or admissible substitute-equivalence record before its case can be scored |
+
+Post-registration implementation note, 2026-09-16: `RP02-P3-REG-01/02` selected the ESP32-S3-DevKitC-1-N8 as the current C3 prototype board, correcting the initial N8R8 suffix to preserve GPIO35–37. This binds the controller identity behind `LG-10` but does not alter any registered `LP-10-*` semantics, select the safety sensors or promote a numeric waveform.

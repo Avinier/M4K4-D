@@ -1,8 +1,8 @@
 # Makad / M4K4-D
 
-> **Current project overview** — last reconciled **13 September 2026**
+> **Current project overview** — last reconciled **16 September 2026**
 >
-> Foundation approved: **14 August 2026** · V1 deadline: **5 December 2026** · Roadmap position: **Stage 0/1 — RP-01 paper demand complete, C01 screen OPEN; RP-02 Phase A live**
+> Foundation approved: **14 August 2026** · V1 deadline: **5 December 2026** · Roadmap position: **Stage 0/1 — RP-01 paper demand complete, C01 screen OPEN; RP-02 Parts 1–4 defined, Phase A implementation open**
 
 **Makad**, technical designation **M4K4-D** and commonly shortened to **M4**, is a personal droid. M4 is intended to occupy the kind of companion role R2-D2 occupied for Luke Skywalker: recognizable, attentive, expressive, and full of character.
 
@@ -16,7 +16,7 @@ This README is the orientation document over the whole repository. It states cur
 
 ## Where the project stands
 
-| Area | Status (2026-09-13) |
+| Area | Status (2026-09-16) |
 |---|---|
 | Foundation (vision, scope, constraints, success criteria, scenarios) | Approved. Numeric `SC-TBD`/`CON-TBD` thresholds remain open by design. |
 | System design brief | Approved v1.3. Thirteen ADRs defined, none closed. |
@@ -24,10 +24,11 @@ This README is the orientation document over the whole repository. It states cur
 | Workbench / Stage 0 | Approved; first tools selected and partly ordered. Tool access, E-stop verification, logging schema, monotonic timebase and video sync are still open, so **powered scored testing is blocked.** |
 | Run identity | Convention v1.0 active. Guarded launcher not built. |
 | Dimensional baseline | v1.10 active: 300 × 205 × 180 mm rounded robot target; Layout 03 head 104 × 150 × 115 mm, provisional 304 mm neutral stack, Ø84 wheels, 170 mm track, 110 mm axle-to-caster, 60 mm neck. RP-06 must accept the 304 mm stack or recover 4 mm. |
-| Selected components | Display, camera and C2 motion-controller module locked (see below). Servos, SBC, battery, drive motors, harness: open. XC330-M288-T is paper candidate C01, not selected. |
+| Selected components | Display, camera, C2, Raspberry Pi 5 2 GB, official Pi 5 Active Cooler and C3 prototype controller locked at their stated layer (see below). Servos, battery, drive motors/drivers, final harness/carriers and storage: open. XC330-M288-T is paper candidate C01, not selected. |
 | RP-01 three-axis head | Intent, storyboard and external rigid-body physics authored. **Concept A is the RP-01 path; Concept B is waived.** C01 (XC330-M288-T) is a comparison candidate only. Physical gates are unregistered and the rig is not built. **Layout 03** remains the 1:1 packaging direction, but two screw collisions, hard-stop margin, pitch/roll stiffness, bearing SKU, balance trim and sign mapping are open. Not a fabrication release or servo freeze. |
 | Head mass | Layout 03 nominal D/E tree: ~362/436/509 g roll/pitch/yaw at a 20 g C2 allowance; C2 sensitivity gives ~499–524 g complete. External rigid-body demand is calculated; nothing is weighed, M008 remains `U`, and actuator-internal inertia is not included. C01 matches the 23 g housings already in the tree. The earlier 250 g target and generic inertia/torque proxies are inadmissible. |
-| RP-02 electrical/control backbone | Folder opened 2026-09-08, reconciled 2026-09-13 to C01/paper demand. Intent (design + gate question), state register S00…S17 and exact-20-minute proposed `MD-01`, power architecture PA-01…10, link contract v0.2, fault matrix F-01…16, rig, candidate gates and ADR closure ladder. Power/energy ledger v0.3 and timebase strategy v0.2 live in `01-system/`. **Nothing registered, selected or run.** Phase A is live; Phase B waits on a named RP-01 servo load (C01 as reference, or later family freeze) and an SBC candidate; Phase C on the battery gate. |
+| RP-02 electrical/control backbone | **Parts 1–4 complete at design-definition level:** states/load cases `RP02-P1-REG-01`; power topology/implementation/brownout `RP02-P2-REG-01…03`; compute/control ownership and links `RP02-P3-REG-01/02`; C0↔C2 ICD message/recovery definition `RP02-P4-REG-01`. Phase A has an exploratory host codec/state model and unscored G01/G06 paper review. **No gate passed, ADR closed, purchase authorized or scored run executed.** Byte layouts, ratings/suffixes and physical evidence remain open; pack sizing still waits on RP-03 drive measurements. |
+| RP-03 drive and motion safety | **Plan only** (2026-09-17): [`RP-03-locomotion/plan.md`](docs/02-prototypes/RP-03-locomotion/plan.md) fixes the folder layout, six-Part authoring order, inherited inputs, builder decisions `BD-01…07` and phase ladder. No intent, physics, candidate, rig, gate, purchase or run exists. |
 | Architecture, budgets, BOM, integrated CAD | Not started; blocked on prototype evidence by design. |
 | `specsheets/` | Exploratory, non-binding. |
 | `visuals/` | Provisional references; several show superseded details (mouths, ear microphones, yoke-mounted ears). |
@@ -39,7 +40,9 @@ This README is the orientation document over the whole repository. It states cur
 | Face display | Waveshare ESP32-S3-LCD-4.3, **no-touch, SKU 30493** — 800×480 IPS with on-board ESP32-S3/LVGL renderer | [`display-candidate-study.md`](docs/01-system/display-candidate-study.md) |
 | Head camera | Raspberry Pi Camera Module 3 **Wide**, visible-light, **SC0874** | [`camera-candidate-study.md`](docs/01-system/camera-candidate-study.md) |
 | Head motion controller (C2) | Waveshare **ESP32-S3-Zero**, headerless; bench twin ESP32-S3-DevKitC-1-N8R8 | [`control-topology-options.md`](docs/01-system/control-topology-options.md) §6.3 |
-| Control split | Body Linux SBC owns behaviour; display ESP32-S3 renders eyes; C2 ESP32-S3 owns trajectories, servo bus, limits, watchdog, E-stop | [`RP-01 decision.md`](docs/02-prototypes/RP-01-head/decision.md) CTRL-01…06 |
+| Main compute (C0) | **Raspberry Pi 5, 2 GB** with official Pi 5 Active Cooler; exact storage and power-entry implementation open | [`power-implementation-basis.md`](docs/02-prototypes/RP-02-electrical/power-implementation-basis.md); [`compute-control architecture`](docs/02-prototypes/RP-02-electrical/compute-control-architecture.md) |
+| Base controller (C3 prototype) | **Espressif ESP32-S3-DevKitC-1-N8**; selected over N8R8 to preserve GPIO35–37. RP-03 still selects motor driver/sensors and freezes the pin map | [`compute-control architecture`](docs/02-prototypes/RP-02-electrical/compute-control-architecture.md) CA-03 |
+| Control split and links | C0 owns semantic behaviour; D1 renders eyes; C2 owns head trajectory/safety; C3 owns base loops/local hazards. Production links are differential UART; C2 relays face/light state locally | [`compute-control architecture`](docs/02-prototypes/RP-02-electrical/compute-control-architecture.md) `RP02-P3-REG-01` |
 | Drive topology | Two encoder wheels + front caster + mandatory rear anti-tip skid | [`dimensional-baseline.md`](docs/01-system/dimensional-baseline.md) |
 | RP-01 material and finish | PLA structure and skin (provisional beyond RP-01), real M2 button-heads, nine-step weathered finish | [`material-finish-mass-decision.md`](docs/02-prototypes/RP-01-head/material-finish-mass-decision.md) D-01…08 |
 | First head layout choices | Serial body→yaw→pitch→roll; coaxial direct roll on a supported spindle; ears roll with the face; trapezoidal camera crown; external yaw cable loop; C2 on the rolling cradle; A0 balance target | [`cad/head/decisions.md`](docs/02-prototypes/RP-01-head/cad/head/decisions.md) HEAD-CAD-01…07 |
@@ -55,8 +58,8 @@ Ordered by the risk-prototype plan's open-inputs list and the intuition guide:
 3. **Register RP-01 physical gates** (thresholds frozen before any scored run). Paper P01–P08 are drafted, not registered.
 4. **Stage 0 closure:** verify tools and E-stop, implement the logging schema, monotonic timebase and video-sync method, and the run generator/guarded launcher. This is software work and should not wait on hardware.
 5. **First weigh-ins** when the display and camera samples arrive (M001, M004, finish coupon). M008 still `U`.
-6. **RP-02 Phase A:** approve and register the state set and `MD-01`; replace remaining power-ledger `E` datasheet references with cited `D` rows (C01 stall `D` is now cited); implement timebase v0.2 and link contract v0.2 on the DevKitC-1 twin and run the offset-error measurement as exploratory runs; register G04/G05 candidate thresholds. Software and paper — does not wait on purchases.
-7. **Distribution bench** when the Korad, multimeter and logic analyzer arrive; G01 review on it.
+6. **RP-02 Phase A:** implement the shared schema, authority leases, timebase v0.2 and link contract v0.3 on the DevKitC-1 twin; begin with TTL loopback, then differential breakouts; run exploratory offset/jitter/fault measurements and register G04/G05 numeric thresholds before scored work.
+7. **Distribution/link bench:** convert the selected/lead `PCD-*` and `CCD-*` families into reviewed circuits, then exercise G01 plus F-23…30 when the Korad, multimeter and logic analyzer arrive. Exact watchdog/transceiver suffixes follow measured conditions, not storefront availability.
 
 ## Documents
 

@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Living reader index.** Part-1 entries reflect `RP02-P1-REG-01`; Part-2 `EDB-*` principles/source-load contracts are approved, `PA-01…16`/`PB-*` are registered under `RP02-P2-REG-01`, implementation targets/Raspberry Pi 5 2 GB under `RP02-P2-REG-02`, `PCD-*` identifies the derived power-component screen, and `BR-*` is registered under `RP02-P2-REG-03`. |
+| Status | **Living reader index.** Parts 1–3 retain their registered labels; Part-4 ICD definition is `RP02-P4-REG-01`. Byte layouts and C3 drive messages remain open. |
 | Scope | RP-02-owned namespaces, labels and notation, plus externally owned identifiers commonly referenced by RP-02 |
 | Rule | This glossary defines identifier meaning and points to the canonical source. Detailed behaviour, numeric values and acceptance thresholds remain in their owning documents. |
 
@@ -74,6 +74,17 @@ Compact notation used in the RP-02 documents:
 | `PB-*` | Physical power branch | Stable key for a source/distribution path and its branch-side `EDB-03` contract | `power-architecture.md`; registered under `RP02-P2-REG-01` |
 | `PCD-<class>-<nn>` | Power-component candidate | One sourced conversion, protection, E-stop, connector, cable or charging candidate and its use-specific disposition | `power-component-candidate-screen.md`; derived, not registered or selected |
 | `BR-*` | Brownout/reset/restart requirement | Registered energy-loss ordering, threshold ownership, reset default and fresh-intent recovery rule | `brownout-restart-contract.md`; registered under `RP02-P2-REG-03` |
+
+### 2.4 Part-3 compute/control namespaces
+
+| Namespace | Name | What it identifies | Current status |
+|---|---|---|---|
+| `CA-*` | Compute/control architecture rule | Processor ownership, link topology, runtime containment, watchdog, arm/recovery, configuration and service/logging rule | `compute-control-architecture.md`; `CA-01…16` registered under `RP02-P3-REG-01` |
+| `CCD-<class>-<nn>` | Compute/control candidate | One sourced compute, controller, link, watchdog, carrier, middleware, IPC or supervision candidate and its disposition | `compute-control-component-screen.md`; selections/leads are stated per row and do not authorize purchase |
+| `C0` | Application compute | Body-mounted Raspberry Pi 5 2 GB running the Linux application services and master monotonic clock | Selected under `RP02-P2-REG-02`; ownership fixed by `RP02-P3-REG-01` |
+| `C2` | Head safety controller | Head-mounted Waveshare ESP32-S3-Zero owning head trajectories, limits, expiry, servo bus and head readiness | Selected before Part 3; ownership fixed by `RP02-P3-REG-01` |
+| `C3` | Base safety controller | ESP32-S3 controller owning wheel loops, local hazards/reflexes, expiry, odometry capture and base readiness | Role fixed by `RP02-P3-REG-01`; prototype corrected to DevKitC-1-N8 by `RP02-P3-REG-02`; final carrier/pins wait on RP-03 |
+| `D1` | Face renderer | Selected display board's ESP32-S3, receiving semantic face/light state through C2 | Hardware preselected; C2-relay role fixed by `RP02-P3-REG-01` |
 
 ## 3. Registered Part-1 labels
 
@@ -466,7 +477,7 @@ Decision status never upgrades evidence class. A builder-approved estimate is st
 
 ## 10. Protocol labels currently used by RP-02
 
-These are draft interface labels from `link-contract.md`, not registered Part-1 state namespaces.
+These are interface labels from `link-contract.md`, not registered Part-1 state namespaces. Part 3 fixes their ownership and physical paths; Part 4 registers the C0↔C2 message set and safety semantics. Message-layout and numeric timing changes remain versioned in the ICD.
 
 | Family | Labels |
 |---|---|
@@ -483,9 +494,10 @@ These are draft interface labels from `link-contract.md`, not registered Part-1 
 
 | Term | Meaning in RP-02 |
 |---|---|
-| SBC | Body-mounted Linux single-board computer responsible for high-level perception, behaviour, audio and UI work. |
+| SBC / C0 | Body-mounted Raspberry Pi 5 Linux application computer responsible for high-level perception, behaviour, audio, UI, logging and the master timebase. |
 | C2 | Independent ESP32-S3 head-motion/safety controller; owns trajectory limits, watchdog response and stale-command rejection for the head. |
-| Base MCU | Future RP-03 local drive and base-safety controller. |
+| C3 / base MCU | Independent ESP32-S3 drive/base-safety controller; owns wheel loops, local hazards/reflexes, odometry capture, readiness and stale-command rejection for the base. |
+| D1 | The selected display board's ESP32-S3 face renderer; owns LVGL/panel timing but no motion or safety authority. |
 | Domain | Power/failure-containment region. A domain does not necessarily imply galvanic isolation. |
 | Rail | Named regulated or direct electrical supply with a defined voltage envelope. |
 | Branch | One protected/switched path from a distribution point to a load boundary. |
@@ -534,6 +546,6 @@ These identifiers are owned outside the RP-02 folder. This glossary explains why
 
 - Registered Part-1 identifiers are append-only under `RP02-P1-REG-01`.
 - A semantic change to a registered label requires a new ID or explicit supersession record.
-- Proposed identifiers may change until registered, but their decision history must remain reviewable. `PA-*` and `PB-*` are now append-only under `RP02-P2-REG-01`.
-- A new `EDB`, `EC`, `PA`, load, case, profile, fault or gate label must be added here when introduced.
+- Proposed identifiers may change until registered, but their decision history must remain reviewable. `PA-*`/`PB-*` are append-only under `RP02-P2-REG-01`; `CA-*` is append-only under `RP02-P3-REG-01`.
+- A new `EDB`, `EC`, `PA`, `CA`, candidate, load, case, profile, fault or gate label must be added here when introduced.
 - Updating this glossary never by itself changes the canonical behaviour, numeric budget, component selection or gate threshold.

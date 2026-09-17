@@ -184,7 +184,7 @@ Exact low/critical thresholds, debounce, hysteresis, shutdown reserve and behavi
 ### `PA-11` — C2 and base safety receive independent safety branches
 
 1. C2 receives its own converter, branch protection and paired return. The display is not downstream of that protection or converter.
-2. The future base MCU and motion-critical safety sensing receive a separate converter and branch protection from C2.
+2. C3 and motion-critical base safety sensing receive a separate converter and branch protection from C2; Part 3 selects the prototype controller identity without changing this registered power rule.
 3. The two safety branches may share the protected source bus and central 0 V node, but neither may be daisy-chained through the other.
 4. A short, foldback, reset or noisy transient on either safety branch must not reset the other.
 5. C2 remains the minimum powered controller during charging; the base-safety branch is off because drive is forbidden.

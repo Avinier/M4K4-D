@@ -2,8 +2,8 @@
 
 | Field | Value |
 |---|---|
-| Status | **Living — Part-1 `CC/LP` vocabulary is registered under `RP02-P1-REG-01`, branch mapping under `RP02-P2-REG-01`, and implementation targets/Raspberry Pi 5 2 GB selection under `RP02-P2-REG-02`; every numeric row remains `E`, `D`-cited or `U`. No `W` evidence exists.** |
-| Version | 0.11 |
+| Status | **Living — Part-1 `CC/LP` vocabulary is registered under `RP02-P1-REG-01`, branch mapping/implementation under `RP02-P2-REG-01…03`, and compute/control identities under `RP02-P3-REG-01/02`; every numeric row remains `E`, `D`-cited or `U`. No `W` evidence exists.** |
+| Version | 0.13 |
 | Owner | Project builder |
 | Created | 2026-09-08 |
 | Last reviewed | 2026-09-16 |
@@ -32,7 +32,7 @@ Load-group codes are defined here once; `state-register.md`, `rig.md` and run-re
 
 | Code | Load group | Domain (`PA-01`) | Registered branch | Selected hardware |
 |---|---|---|---|---|
-| `LG-01` | Main compute — Linux SBC | Application / `EC-C` | `PB-COMPUTE` | **Selected 2026-09-16:** Raspberry Pi 5 2 GB; purchase, active cooler, input hardware and workload measurement remain open |
+| `LG-01` | Main compute — Linux SBC | Application / `EC-C` | `PB-COMPUTE` | **Selected 2026-09-16:** Raspberry Pi 5 2 GB plus official Active Cooler; purchase, storage, input hardware, enclosure cooling/acoustics and workload measurement remain open |
 | `LG-02` | Head motion controller C2 + servo-bus transceiver | Safety supervision / `EC-S` | `PB-SAFE-C2` | Waveshare ESP32-S3-Zero (selected); DevKitC-1 twin on the bench |
 | `LG-03Y/P/R` | Head servos yaw / pitch / roll — **separately observable** | Hazardous motor / `EC-H` | `PB-HEAD-Y/P/R` via `PB-HEAD` | **Unselected.** First named paper candidate: XC330-M288-T (C01), 5 V class; paper OPEN |
 | `LG-04` | Drive — two gearmotors + driver | Hazardous motor / `EC-H` | `PB-DRIVE` and `PB-DRIVE-L/R` | **Unselected** (RP-03) |
@@ -41,7 +41,7 @@ Load-group codes are defined here once; `state-register.md`, `rig.md` and run-re
 | `LG-07` | Microphones (4× PDM) + audio front end | Application / `EC-N` | `PB-AUDIO-IN`; source open | Unselected |
 | `LG-08` | Speaker + amplifier | Application / `EC-N` | `PB-AUDIO-OUT` | Unselected |
 | `LG-09` | Conversion and distribution losses | — | All `PB-*` paths | Derived: `i_in · v_in − Σ loads` |
-| `LG-10` | Base MCU + safety sensing (obstacle/edge) | Safety supervision / `EC-S` | `PB-SAFE-BASE` | Unselected (RP-03) |
+| `LG-10` | Base MCU + safety sensing (obstacle/edge) | Safety supervision / `EC-S` | `PB-SAFE-BASE` | **C3 prototype selected:** ESP32-S3-DevKitC-1-N8; sensors, carrier and measured load remain RP-03/RP-02 inputs |
 
 | Branch/source | Parent source | Domain | Notes |
 |---|---|---|---|
@@ -155,3 +155,5 @@ Evaluated at every ledger revision; a trip forces a **mandatory design review** 
 | 2026-09-16 | 0.9 | Added manufacturer-backed input evidence for C2 and selected display while drafting the power implementation basis. Promoted only the published display 5 V/450 mA nominal point to `D`; load-profile ranges remain `E/U` and no component rating or gate changed. |
 | 2026-09-16 | 0.10 | Consumed `RP02-P2-REG-02`: selected Raspberry Pi 5 2 GB as `LG-01`, registered its 5.1 V nominal/5 A-capable `PB-COMPUTE` interface, and retained all workload values as `E` pending exact-hardware `W` runs. Selection is not purchase authorization. |
 | 2026-09-16 | 0.11 | Added the derived `power-calculation-ledger.md` feed and corrected the high `MD-01` nominal-pack sensitivity: 8.28 Wh is the lossless-conversion result; including 85–95% efficiency yields 8.72–9.74 Wh. Also corrected the displayed low-case average from 7.7 W to 7.8 W. No load input, pack selection, evidence class or gate changed. |
+| 2026-09-16 | 0.12 | Consumed `RP02-P3-REG-01`: recorded the selected official Pi 5 Active Cooler and ESP32-S3-DevKitC-1-N8R8 C3 prototype identity. Numeric envelopes remain `E/U`; sensors, storage, carriers, purchases and all `W` evidence remain open. |
+| 2026-09-16 | 0.13 | Consumed `RP02-P3-REG-02`: corrected the C3 prototype suffix to N8 to preserve GPIO35–37. No numeric envelope or evidence class changed. |

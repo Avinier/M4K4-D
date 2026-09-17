@@ -2,12 +2,12 @@
 
 | Field | Value |
 |---|---|
-| Status | Design/gate intent current; Part-1 state/load baseline registered as `RP02-P1-REG-01` on 2026-09-15. Numeric thresholds and component candidates remain unregistered; no scored run executed |
+| Status | Design/gate intent current; Parts 1–4 are complete at design-definition level under `RP02-P1-REG-01`, `RP02-P2-REG-01…03`, `RP02-P3-REG-01/02` and `RP02-P4-REG-01`. Numeric thresholds, remaining component suffixes and every gate outcome remain open; no scored run executed |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Revised | 2026-09-15 |
+| Revised | 2026-09-16 |
 | Governing plan | `../../01-system/risk-prototype-plan.md` v1.12 §RP-02 |
-| Electrical baseline inherited | `../../01-system/control-topology-options.md` v0.11 (C2 selected, UART/USB link and timebase recommended; C01 paper candidate named, family unselected); `../RP-01-head/decision.md` CTRL-01…CTRL-06; `../../01-system/workbench.md` E-stop and PSU rules |
+| Electrical baseline inherited | `../../01-system/control-topology-options.md` v0.15 (C2/C3 split, differential production links and C2 display relay selected; C3 suffix corrected to N8; C01 paper candidate named, family unselected); `compute-control-architecture.md` v1.2; `../RP-01-head/decision.md` CTRL-01…CTRL-06; `../../01-system/workbench.md` E-stop and PSU rules |
 | Ledger | `../../01-system/power-energy-ledger.md` — the canonical power/energy/thermal budget; RP-02 populates it, it does not own a second copy |
 | Feeds | ADR-03 (controller), ADR-06 (battery, rails, charging, isolation, low-energy policy), ADR-12 (internal communication and timebase); `subsystem-interfaces.md` at stage 6 |
 | Method | `../../intuition.md` §5.1 — intent before numbers; step 3 electrical toolkit: peak concurrent current × path resistance, energy integration over the mixed-duty cycle, regulator/driver/wire thermal steady state |
@@ -18,11 +18,11 @@ RP-01 is an object: it has geometry, mass and a centre of mass, and it either fi
 
 Every Makad subsystem will work alone. AD-08 says the peaks occur together: three head servos launching a wake rise while the amplifier hits an astromech chirp, the camera streams, the perception loop runs hot and the display transitions. If the rail sags and the C2 brownout detector resets the motion controller mid-slew, that is an unintended reset **and** unsafe motion, and it is invisible to any test that exercises one subsystem at a time. RP-02 is the instrument that makes that failure visible before the enclosure exists.
 
-RP-02 exists to close three architecture decisions. Everything in this folder is justified by one of them.
+RP-02 exists to close three architecture decisions. Everything in this folder is justified by one of them. Parts 1–4 now define the state/load, power, compute/control and C0↔C2 interface baselines; closure still requires registered thresholds and physical evidence.
 
 | ADR | What must be true to close it | Where RP-02 produces that |
 |---|---|---|
-| **ADR-03** controller backbone and compute split | The selected C2 executes trajectories, limits, watchdog and command expiry with measured margin; the split survives high-level failure (AD-04) | `gates.md` G05, G04; `link-contract.md`; `fault-matrix.md` |
+| **ADR-03** controller backbone and compute split | Selected C2/C3 execute trajectories/reflexes, limits, watchdog and command expiry with measured margin; the split survives high-level failure (AD-04) | `compute-control-architecture.md`; `gates.md` G05, G04; `link-contract.md`; `fault-matrix.md` |
 | **ADR-12** internal communication and timebase | The link transport, message set, expiry/health semantics and offset-reconciled timebase are chosen and proven on hardware | `link-contract.md`; `../../01-system/timebase.md`; `gates.md` G05 |
 | **ADR-06** battery, rails, charging, isolation, low-energy policy | Two halves. **Architecture:** rail topology, protection, chemistry and isolation are decided from a budget *envelope*. **Sizing:** pack capacity and the 20-minute closure need the ledger to mature as real loads arrive | `power-architecture.md`; `gates.md` G01, G06; `../../01-system/power-energy-ledger.md`; `decision.md` closure ladder |
 
@@ -68,13 +68,13 @@ G02 and G03 changed shape in plan v1.10. See `gates.md` §2 for what RP-02 recor
 
 | Input | Value | Source |
 |---|---|---|
-| Head motion controller | **C2: Waveshare ESP32-S3-Zero**, headerless; bench twin ESP32-S3-DevKitC-1-N8R8; one firmware target, pin map in one header | control study v0.10 §6.3; CTRL-04/06 |
+| Head motion controller | **C2: Waveshare ESP32-S3-Zero**, headerless; bench twin ESP32-S3-DevKitC-1-N8R8; one firmware target, pin map in one header | control study v0.15 §6.3; CTRL-04/06 |
 | C2 responsibilities | Instantiates `MJ5`/`MS7`/`TRACK`/`BRAKE`, synchronizes yaw/pitch/roll, owns servo bus, limits, watchdog, E-stop/fault, command expiry | CTRL-03 |
 | C2 pin constraints | E-stop/fault off GPIO0/3/45/46; GPIO21 is WS2812; native-USB flashing only (CAD-04a) | MEM-20260907-04 |
 | Display | Waveshare ESP32-S3-LCD-4.3 no-touch SKU 30493; own ESP32-S3/LVGL renderer; receives semantic face state, never raster | display study; MEM-20260902-01 |
 | Camera | Raspberry Pi Camera Module 3 Wide SC0874, 2-lane CSI-2, powered from the SBC camera port | camera study |
 | Compute placement | **Selected Raspberry Pi 5 2 GB**, body-mounted; mics, speaker and battery body-mounted; head carries display, camera, light and C2 | `RP02-P2-REG-02`; dimensional baseline v1.10 |
-| Link recommendation | UART/USB serial, Vector-style; not CAN, micro-ROS or I²C across joints; semantic command surface | control study §3, §7 |
+| Link architecture | Framed UART over full-duplex differential signalling for C0↔C2/C3; C2 relays semantic display state over head-local RS-485; TTL is bench-only and USB service-only; no CAN, micro-ROS or I²C across joints | `RP02-P3-REG-01`; control study §3, §7 |
 | Timebase recommendation | One master, timestamp-at-source, serial round-trip offset reconciliation; not PTP/NTP | control study §5 → `timebase.md` |
 | Head load | Layout 03 nominal D/E tree ~362/436/509 g roll/pitch/yaw at M008=20 g, with ~499–524 g complete C2 sensitivity. **Paper demand complete 2026-09-13** (`fullproofmath.md`): controlling physical-law peaks pitch 0.0953 N·m at 57.8°/s, roll 0.0560 N·m at 70.2°/s, yaw 0.1099 N·m at 90.5°/s. Complete-head `W` mass still waits on M008 weigh-in | dimensional baseline v1.10; RP-01 physics; `fullproofmath.md` |
 | Servo family | **Unselected.** First named paper candidate is ROBOTIS **XC330-M288-T** (C01, SKU 902-0173-000), 5 V class, Dynamixel Protocol 2.0 TTL; paper approval OPEN; yaw fails the rapid envelope at the 3.7 V sensitivity endpoint. Layout 03 already uses 23 g XC330 housings, so C01 adds zero mass to the paper tree. Not a SKU freeze. eManual `D`: stall 1.80 A at 5.0 V | `../RP-01-head/actuator-screen-01.md`; RP-01 `gates.md` paper P01–P06 |
@@ -93,6 +93,7 @@ G02 and G03 changed shape in plan v1.10. See `gates.md` §2 for what RP-02 recor
 - the **named load-profile contract** (`load-model.md`), which binds those cases to reproducible waveforms/duties without duplicating the numeric ledger;
 - the **candidate power architecture** (`power-architecture.md`) as an ADR-06 input, evidence class `E`;
 - the **link contract** (`link-contract.md`) as a versioned interface specification that outlives the prototype;
+- the **compute/control ownership baseline** (`compute-control-architecture.md`) and its component/sourcing screen, including C0 process containment, C2/C3 authority, physical-link choice, watchdog layers and boot/arm/recovery;
 - the **fault-injection matrix** (`fault-matrix.md`) and its required observables;
 - the **bench rig** (`rig.md`), including which loads are real and which are characterized substitutes;
 - **gate registrations** G01, G04, G05, G06 and the recorded rehearsals against the G02 invariant and the G03/SC-14 runtime requirement;
@@ -106,7 +107,7 @@ G02 and G03 changed shape in plan v1.10. See `gates.md` §2 for what RP-02 recor
 - close SC-14 — the 20-minute untethered run of the *integrated droid* is a stage-7 validation; RP-02 rehearses it on the rig and records margin;
 - select servos (RP-01), drive motors (RP-03), microphones or the speaker (RP-05/RP-06);
 - write display firmware or define face assets;
-- authorize any purchase — candidates are recorded in `decision.md` with explicit *not selected* status until an ADR cites evidence.
+- authorize any purchase — architecture selections and implementation leads are recorded with their evidence obligations, but purchase remains a separate builder action and ADR closure still requires the registered gates.
 
 ## 6. Phase ladder
 
@@ -114,7 +115,7 @@ Phase is a status field per document, not a directory. Artifacts mature at diffe
 
 | Phase | Needs | Can produce | Cannot produce |
 |---|---|---|---|
-| **A — paper and on-hand hardware** | Nothing purchased beyond `workbench.md`; DevKitC-1 twin; display sample when it arrives; Korad PSU | State register; ledger `D`/`E` rows; power architecture candidate; link contract v0.x on a loopback and on DevKitC-1↔laptop; timebase implementation and offset measurement; G01 and G06 paper review; fault matrix rows; gate registrations | Any `W` row for a load that does not exist; G02 composite peaks; G03 |
+| **A — paper and on-hand hardware** | Nothing purchased beyond `workbench.md`; DevKitC-1 twin; display sample when it arrives; Korad PSU | Registered state/power/compute-control baselines; ledger `D`/`E` rows; link contract v0.3 first on TTL loopback then differential breakouts; timebase implementation and offset measurement; G01 and G06 paper review; F-01…30 harness; gate registrations | Any `W` row for a load that does not exist; production-link qualification from TTL alone; G02 composite peaks; G03 |
 | **B — representative loads** | A named RP-01 servo load (C01 as reference unit, or a later selected family), selected Raspberry Pi 5 2 GB, selected camera, amp/speaker candidate; characterized substitutes for drive. C01 purchase is not a family freeze | Per-group `W` rows; G05 on real servo bus; G04 injection campaign on real link; G02 rehearsal at head-plus-compute concurrency; conductor/regulator thermal | Drive `W` rows; composite peak above the Korad 5 A ceiling without a second source; collapsed PA-04 rail voltage (needs family selection) |
 | **C — onboard energy** | `workbench.md` battery gate satisfied (written procedure, bag, balance charger); candidate pack | G03 rehearsal with margin; ADR-06 sizing input; charging and isolation paths for G06 | SC-14 closure (integrated droid only) |
 

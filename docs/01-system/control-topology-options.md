@@ -2,8 +2,8 @@
 
 | Field | Value |
 |---|---|
-| Status | **RP-01 C2 selected: separate ESP32-S3 motion controller; C1 rejected on selected carrier; C2 module selected — Waveshare ESP32-S3-Zero. Body SBC selected — Raspberry Pi 5 2 GB under `RP02-P2-REG-02`.** |
-| Version | 0.13 |
+| Status | **System compute/control topology selected at design level.** Pi 5 2 GB application compute; separate ESP32-S3 C2 head and C3 base controllers; selected display renderer; differential serial links and C2 display relay under `RP02-P3-REG-01`; C3 suffix corrected by `RP02-P3-REG-02`. Validation remains open |
+| Version | 0.15 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
 | Last reviewed | 2026-09-16 |
@@ -11,7 +11,7 @@
 | Feeds | RP-02 (electrical/control backbone) → **ADR-06 (power)**, **ADR-12 (control topology)**; the monotonic-timebase deliverable (plan §104) |
 | Consumes | `system-design-brief.md` responsibility set + AD-01/AD-06/AD-08; `mass-envelope-ledger.md` head section |
 
-This document surveys **how to split Makad's computation and control across hardware**, grounded in how comparable robots are actually built. It records the selected RP-01 C2 split/module and selected Raspberry Pi 5 2 GB body SBC; wider transport and base-control choices remain open until their evidence and ADRs close. The purpose is to (a) fix the vocabulary, (b) record prior art so we don't re-derive it, and (c) name the specific forks RP-01/RP-02 must resolve.
+This document surveys **how to split Makad's computation and control across hardware**, grounded in how comparable robots are actually built. It records the path that led to the selected C2 and Pi 5. `RP02-P3-REG-01` now closes the wider design fork into a separate ESP32-S3 C3 base controller, differential UART links, one C2-relayed head ingress and an explicit watchdog/process hierarchy. The purpose here remains prior art and option history; the normative ownership map is `../02-prototypes/RP-02-electrical/compute-control-architecture.md`.
 
 Nothing here selects the base controller, battery, framework, internal transport, or final implementation details that remain explicitly open.
 
@@ -48,7 +48,7 @@ Vector is the closest shipped analog to Makad — WALL·E-inspired desktop droid
 
 1. **Vector put the brain in the head, not the body** — because the camera, display, and IMU (the highest-bandwidth items) all live in the head, so the SoC went there to keep those buses short and send only motor/sensor traffic down a thin serial link.
 2. **The body MCU is intentionally dumb and tiny** — a relay with local motor control, not a second brain.
-3. **The internal link is boring serial** — two boards in one enclosure, short run → UART/USB is correct.
+3. **The internal link is boring serial** — Vector shows that a narrow UART-class contract is sufficient. Makad keeps that software model but, under Part 3, hardens its motor-adjacent production wiring with differential signalling and retains USB for service only.
 
 **The Makad difference that breaks the copy:** Vector's head tilts on **one** axis. Makad's head moves on **three** (roll/pitch/yaw — AD-02). An SoC + camera + display + IMU riding a 3-axis gimbal is far more moving mass and cable flex than Vector ever handled. So Vector answers "how to split," but not "where the compute sits" — that is §4.
 
@@ -201,8 +201,8 @@ This is a selection, not validation. **RP02-G05 still owns** measured loop, link
 
 ## 7. Selected RP-01 boundary and provisional wider-system recommendation
 
-1. **Three roles, two RP-01 head boards:** a body **Linux SBC** for vision/NLU/behaviour, the selected head-local **ESP32-S3 display renderer**, and a separate **ESP32-S3 motion controller** for servo limits/watchdog/command expiry. C1 consolidation onto the display carrier is electrically blocked; C2 is not a second firmware implementation. A base/drive MCU with a base-mounted runtime IMU remains a later locomotion decision.
-2. **Internal link: UART/USB serial**, Vector-style. Not CAN, not micro-ROS, not I²C across joints — those are documented "grow-into-it" options.
+1. **Four roles:** a body **Linux SBC** for vision/NLU/behaviour, the selected head-local **ESP32-S3 display renderer**, a separate **ESP32-S3 C2** for head trajectory/safety, and a separate **ESP32-S3 C3** for base control/local hazards. C1 consolidation onto the display carrier is electrically blocked; C2/C3 share a toolchain, not actuator ownership.
+2. **Internal link: framed UART over full-duplex differential signalling** for production, preserving the simple Vector-style protocol while hardening motor-adjacent wiring. C2 relays semantic display state locally. Direct TTL is bench-only; USB is service-only. Not CAN, not micro-ROS, not I²C across joints.
 3. **Option C is the active RP-01 baseline.** RP-01 cable evidence and RP-02 still close the wider body/head transport and final system architecture; they do not reopen C1 on SKU 30493 without change control.
 4. **Timebase: one master + timestamp-at-source + serial offset reconciliation.** Not PTP.
 5. **Motor limits, watchdog, and E-stop live on the MCU, never on the SBC** — every source insists safety-critical loops must survive the Linux side being busy or rebooting (reinforces the `workbench.md` scored-test gate).
@@ -210,16 +210,16 @@ This is a selection, not validation. **RP02-G05 still owns** measured loop, link
 
 ## 8. Open items → RP-02 / ADR-12 / ADR-06
 
-- [ ] Close the wider body/head compute placement and transport in RP-02/ADR-12 while retaining selected RP-01 Option C/C2 unless change control records contrary evidence.
+- [x] **Closed at design level 2026-09-16 (`RP02-P3-REG-01`):** body Pi 5, C2 head, C3 base, D1 display; full-duplex differential UART production links and C2 display relay. ADR-03/12 still require G04/G05 evidence.
 - [ ] Validate the selected D2 display path with no-touch Waveshare SKU 30493: installed mass/CoM, animation frame time, optical result, power/thermal behaviour, complete moving harness and fault response.
 - [x] **Closed 2026-09-07 (§6.3):** selected the Waveshare ESP32-S3-Zero as the installed C2 module and the ESP32-S3-DevKitC-1-N8R8 as its bench twin. Purchase authorization remains the project builder's; RP02-G05 validation is outstanding.
 - [ ] Treat C1 as electrically blocked on SKU 30493's carrier. If later hardware changes reopen it, run the same-chip rendering-off/on timing comparison with Core-0/Core-1/IRAM mitigation before consolidation.
 - [ ] Register the on-hand Nano only when its IMU, APDS9960 or PDM mic produces a bench result.
 - [ ] Select or identify the base-frame IMU path when locomotion begins; feed it into RP-03 heading evidence.
-- [ ] Choose and prototype the internal link (UART/USB first); register the message set + expiry/health semantics.
-- [ ] **Suggestion (2026-09-14 review, undecided):** evaluate routing `FACE_STATE`/`LIGHT_STATE` through C2 over a short in-head UART instead of a second SBC↔display pair across the yaw boundary — two fewer moving conductors, one head-local timebase for face and motion; cost is C2 as a relay. Decide with the G05 flex-harness CRC evidence.
+- [ ] Implement the registered differential-UART physical layer and `link-contract.md` v0.4; choose the exact THVD1451 package/protection/termination from G05 harness evidence.
+- [x] **Adopted 2026-09-16 (`RP02-P3-REG-01`):** route `FACE_STATE`/`LIGHT_STATE` through C2 over head-local RS-485, with bounded lower-priority relay queues and F-27 isolation evidence still outstanding.
 - [x] **Selected 2026-09-16 (`RP02-P2-REG-02`):** Raspberry Pi 5 2 GB as the body SBC. Purchase, exact power entry, cooler/storage configuration and measured workload remain open. Keep C2 firmware radio-off at build time (no Wi-Fi/BT init) so loop jitter and the head-logic rail avoid radio-transmit transients.
-- [ ] Decide the base/drive MCU and whether it shares the head's family.
+- [x] **Selected at prototype-board level 2026-09-16, corrected by `RP02-P3-REG-02`:** C3 uses official ESP32-S3-DevKitC-1-N8. C3 needs no PSRAM, and N8 preserves GPIO35–37 that N8R8's octal PSRAM consumes. RP-03 still freezes its driver/sensors and pin map. A custom WROOM-1-N8 carrier is later controlled equivalence.
 - [ ] Implement the provisional timebase (master + timestamp-at-source + offset reconciliation) before first scored RP-01 run.
 - [ ] Feed the resulting topology into `system-architecture.md` when ADR-12/ADR-06 close.
 
@@ -240,3 +240,5 @@ This is a selection, not validation. **RP02-G05 still owns** measured loop, link
 | 2026-09-13 | 0.11 | Recorded RP-01 C01 (XC330-M288-T) as the named paper candidate implying Dynamixel 2.0 TTL if selected. Family, bus implementation and RP02-G05 remain open. M008 still `U`. |
 | 2026-09-14 | 0.12 | Component review (MEM-20260914-01): corrected the C2 flashing note (USB-Serial-JTAG needs no BOOT hold unless firmware takes the USB PHY); added two undecided suggestions to §8 — face-state relay via C2 and Raspberry Pi 5 2 GB as SBC lead. No selection changed. |
 | 2026-09-16 | 0.13 | Consumed `RP02-P2-REG-02`: recorded Raspberry Pi 5 2 GB as the selected body SBC while retaining purchase, power entry, cooling/storage configuration and workload evidence as open. |
+| 2026-09-16 | 0.14 | Consumed `RP02-P3-REG-01`: selected the wider C0/C2/C3/D1 ownership, initial C3 prototype suffix, full-duplex differential UART production links, C2 display relay and watchdog hierarchy. ADR/G04/G05 evidence remains open. |
+| 2026-09-16 | 0.15 | Consumed `RP02-P3-REG-02`: corrected the C3 prototype suffix to DevKitC-1-N8 so GPIO35–37 remain available; N8R8 is not a silent substitute. |

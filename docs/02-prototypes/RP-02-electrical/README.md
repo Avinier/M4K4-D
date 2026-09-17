@@ -2,11 +2,11 @@
 
 | Field | Value |
 |---|---|
-| Status | **Part 1 is registered as `RP02-P1-REG-01`; all seven Part-2 power-architecture subparts are complete at design-definition level, with topology under `RP02-P2-REG-01`, implementation basis/Raspberry Pi 5 2 GB under `RP02-P2-REG-02`, and brownout/reset/restart policy under `RP02-P2-REG-03`, all by 2026-09-16.** Numeric thresholds, component selection and scored evidence stay open. Phase A is live |
+| Status | **Parts 1–4 are complete at design-definition level.** Part 4 is `RP02-P4-REG-01` (2026-09-17), registering the ICD definition while byte layouts and C3 drive messages stay open. Numeric thresholds, remaining component suffixes, purchase and scored evidence stay open. Phase A is live |
 | Governing plan | `../../01-system/risk-prototype-plan.md` v1.12 §RP-02 |
 | Purpose | Close **ADR-03** (controller backbone), **ADR-12** (internal communication and timebase) and the *architecture* half of **ADR-06** (battery, rails, isolation, low-energy policy); bound the *sizing* half |
 
-RP-01 is an object. RP-02 is a set of states and interfaces: a tree of rails, three boards, a message contract across a moving joint, and a space of concurrent operating conditions. Every subsystem will work alone; AD-08 says the peaks happen together. RP-02 is the instrument that makes the coexistence failure visible before the enclosure exists.
+RP-01 is an object. RP-02 is a set of states and interfaces: a tree of rails, four compute/control roles, message contracts across noisy and moving boundaries, and a space of concurrent operating conditions. Every subsystem will work alone; AD-08 says the peaks happen together. RP-02 is the instrument that makes the coexistence failure visible before the enclosure exists.
 
 ## Start here
 
@@ -19,14 +19,18 @@ RP-01 is an object. RP-02 is a set of states and interfaces: a tree of rails, th
 | [Power calculation ledger](power-calculation-ledger.md) | Derived voltage-drop, conductor/contact heat, converter-loss, source-current, `MD-01` energy and fuse-coordination calculations; final ratings remain evidence-dependent | A |
 | [Power-component candidate screen](power-component-candidate-screen.md) | Manufacturer-sourced `PCD-*` converter, protection, E-stop, connector, cable and charging candidates; quantitative rejection logic and dated India sourcing snapshot; no selection or purchase | A |
 | [Brownout, reset and restart contract](brownout-restart-contract.md) | Registered `BR-*` slow-depletion/fast-collapse policy, threshold ownership, fail-inactive motor permission, reset defaults, fresh-intent recovery, sizing equations and verification contract; numeric values remain evidence-gated | A |
+| [Compute/control architecture](compute-control-architecture.md) | Registered `CA-01…16`: node ownership, selected base controller class, differential links, C2 display relay, process boundaries, authority leases, watchdog hierarchy, boot/arm/update/logging and new fault obligations | A |
+| [Compute/control component screen](compute-control-component-screen.md) | `CCD-*` exact selections, implementation leads, rejections, dated India sourcing snapshot and receiving tests; purchase remains separately authorized | A |
 | [Operating situations](operating-situations.md) | Reader-first audited umbrella map: every situation with its `OM/EN/BS/PC/AL/HL/EV`, loads, cases, faults and evidence | A |
 | [Intent](intent.md) | The design question and the gate question, kept separate; traceability; inherited inputs; non-goals; the phase ladder | A |
 | [State register](state-register.md) | Orthogonal mode, energy, behaviour, person-continuity, action-lifecycle and health dimensions; events, qualification cases, forbidden concurrency and `MD-01` | A |
 | [State coverage matrix](state-coverage-matrix.md) | Requirement → runtime vector → qualification case → load profiles → rules/faults → evidence | A |
 | [Load model](load-model.md) | Named per-load profiles, time-scale classes, aggregation rules and measurement dependencies; contains no competing numeric budget | A |
 | [Power architecture](power-architecture.md) | Registered Part-2 domain/rail baseline: safety, application, motor and charge paths; independent C2/base safety branches; return topology; power-state matrix; registered `PB-*` keys | A |
-| [Link contract](link-contract.md) | SBC ↔ C2 ↔ display message set, framing, expiry, heartbeat, recovery semantics, bandwidth and timing candidates — v0.2, the artifact that outlives the prototype | A |
-| [Fault matrix](fault-matrix.md) | `F-01…F-22` injected faults × inhibit / reject / expose / recover, with injection methods and evidence | A (rows), B (campaign) |
+| [Link contract](link-contract.md) | Registered Part-4 C0↔C2 definition: message set, framing method, expiry, heartbeat and recovery semantics. Byte layouts, C3 drive messages and timing remain implementation/evidence items | A |
+| [Phase A reference](phase-a/README.md) | Exploratory single-schema C0/C2 frame codecs, host safety/time model, board-role reservations and logging record; not scored or flashed | A |
+| [Candidate circuits and paper review](phase-a/candidate-circuits-review.md) | Candidate compute/C2/display, E-stop and link circuits plus unscored G01/G06 walk | A |
+| [Fault matrix](fault-matrix.md) | `F-01…F-30` injected faults × inhibit / reject / expose / recover, including Part-3 process, watchdog, relay, differential-link, storage and reset cases | A (rows), B (campaign) |
 | [Rig](rig.md) | The distribution bench: fuses, INA-class monitors, E-stop, real-versus-substitute loads with equivalence records, procedures | A (design), B (build) |
 | [Gates](gates.md) | Candidate registrations for G01/G04/G05/G06; what RP-02 records against the reshaped G02 invariant and the G03/SC-14 rehearsal | A (registration) |
 | [Decision](decision.md) | Gate outcomes, the **ADR closure ladder** (ADR-06 split into architecture and sizing), selected Pi 5 record and remaining candidate register | — |
@@ -39,7 +43,7 @@ RP-01 is an object. RP-02 is a set of states and interfaces: a tree of rails, th
 |---|---|---|
 | **Power / energy / thermal budget** | [`power-energy-ledger.md`](../../01-system/power-energy-ledger.md) | Serves every prototype that energizes anything, and the stage-6 `engineering-budgets.md`. Two budgets means one is wrong. RP-02 *populates* it |
 | **Monotonic timebase** | [`timebase.md`](../../01-system/timebase.md) | A continuous-workstream deliverable; RP-01's first scored run needs it too. RP-02 *validates* it under G05 |
-| Control topology, C1/C2, C2 module | [`control-topology-options.md`](../../01-system/control-topology-options.md) v0.10 | RP-02 closes this study into ADR-12; it does not fork it |
+| System control-topology study | [`control-topology-options.md`](../../01-system/control-topology-options.md) v0.14 | Part 3 consumes and closes its ownership/link choices at design level; physical evidence still closes ADR-03/ADR-12 |
 | Bench tools, PSU and E-stop rules, battery gate | [`workbench.md`](../../01-system/workbench.md) | Programme-wide |
 | Candidate parts and cost range | [`candidate-sourcing-matrix.md`](../../01-system/candidate-sourcing-matrix.md) | Programme-wide |
 | Head harness partition and yaw boundary | [`head-harness-routing-study.md`](../../01-system/head-harness-routing-study.md) | Shared with RP-01 |
@@ -55,12 +59,12 @@ Circular, and named — but the two closures are different objects. RP-01's **co
 
 ## What to do next, in order
 
-1. Convert the surviving `PCD-*` leads into candidate circuits and bench configurations; do not promote a lead into a selection until its listed evidence closes.
-2. Freeze the first executable case configurations: firmware, real/substitute loads, instruments/rates, environment and the applicable open numeric thresholds.
-3. Implement `timebase.md` and `link-contract.md` on the DevKitC-1 twin; exploratory timing runs do not wait on purchases.
-4. Register G05 and G04 thresholds before scored link/timing work.
-5. Build the distribution board when the required instruments arrive and run G01 review.
-6. After RP-01 selects a servo family, collapse PA-04 and begin scored Phase B. C01 remains a reference, not a freeze.
+1. Implement the C0/C2 shared schema, board-role pin maps and authority-lease state machines from the registered Part-4 definition; keep C3 drive payloads for RP-03. No hardware purchase is required for codec/unit simulation.
+2. Implement `timebase.md` and `link-contract.md` v0.4 on the DevKitC-1 twin, first TTL loopback and then THVD1451 differential breakout pairs; exploratory timing runs do not wait on carrier PCBs.
+3. Freeze the first executable case configurations and register G05/G04 numeric thresholds before scored link/watchdog work, including `F-23…30`.
+4. Convert the surviving `PCD-*`/`CCD-*` leads into reviewed candidate circuits and bench configurations; choose exact transceiver/watchdog suffixes only from the measured timing and harness conditions.
+5. Build the distribution/link rig when the required instruments arrive and run G01 review plus differential-link/watchdog pilot injections.
+6. After RP-01 selects a servo family, collapse PA-04/servo transceiver and begin scored Phase B. RP-03 supplies the motor-driver/sensor pin freeze and representative drive load; C01 remains a reference, not a freeze.
 
 ## Organization record — 2026-09-08
 

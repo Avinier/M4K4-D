@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Approved electrical-design-basis baseline.** `EDB-01…08` were builder-approved 2026-09-15 and the `EDB-03` source/load contracts were builder-approved 2026-09-16. `RP02-P2-REG-01` supplies stable `PB-*` keys; `RP02-P2-REG-02` supplies implementation targets and the Raspberry Pi 5 2 GB selection; branch-side contracts are issued in `power-branch-contracts.md`. |
+| Status | **Approved electrical-design-basis baseline.** `EDB-01…08` were builder-approved 2026-09-15 and the `EDB-03` source/load contracts were builder-approved 2026-09-16. `RP02-P2-REG-01` supplies stable `PB-*` keys; `RP02-P2-REG-02` supplies implementation targets and the Raspberry Pi 5 2 GB selection; `RP02-P3-REG-01/02` supplies the selected cooler/C3 identities without changing numeric load evidence; branch-side contracts are issued in `power-branch-contracts.md`. |
 | Owner | Project builder |
 | Created | 2026-09-15 |
 | Authority | `state-register.md`, `state-coverage-matrix.md`, `load-model.md`, `fault-matrix.md`, `../../01-system/power-energy-ledger.md`, `../../01-system/risk-prototype-plan.md` §RP-02 |
@@ -158,7 +158,7 @@ Every numeric entry below intentionally points to the ledger. A later `D` or `W`
 | Field | Requirement |
 |---|---|
 | Boundary / class | SBC input power connector or header, including the board-side input protection; `EC-C` |
-| Configuration | **Selected under `RP02-P2-REG-02`: Raspberry Pi 5 2 GB.** Purchase, active cooler, storage and power-entry hardware remain open. |
+| Configuration | **Selected Raspberry Pi 5 2 GB under `RP02-P2-REG-02`; official Pi 5 Active Cooler selected under `RP02-P3-REG-01`.** Purchase, storage and power-entry hardware remain open; final enclosure airflow/acoustics remain evidence items. |
 | Supply contract | Registered 5.1 V nominal `PB-COMPUTE` endpoint with 5 A interface capability. Manufacturer guidance establishes a stable 5 V-class input, reliable operation above 4.8 V and low-voltage indication around 4.63 V (`D`). Final input method, tolerance/ripple behavior, reset behavior and clean-shutdown implementation remain open. |
 | Profiles / cases | All `LP-01-*`; active in `CC-01…14`, `CC-17/18`, `CC-PEAK-01`, `ST-01` and `MD-01` as bound by `load-model.md`; `LP-01-OFF` in `CC-15` and after `CC-16`. |
 | Demand characterization | Boot inrush; idle; perception, audio, service and coexistence mean/RMS; peak width and slew; shutdown energy/time. Values stay in the ledger. |
@@ -166,7 +166,7 @@ Every numeric entry below intentionally points to the ledger. A later `D` or `W`
 | Protection / containment | Own protected supply branch. Its overload, reset or input short must not reset C2 safety supervision or energize motors. Input back-power through USB, GPIO/UART, camera or programming paths must be blocked or explicitly bounded. |
 | Measurement | Input `V/I` at SBC terminal; undervoltage and reset logs; input/board temperature; synchronized event windows for boot and `CC-PEAK-01`. |
 | Fault trace | `F-01`, `F-02`, `F-10`, `F-15`, `F-17`, `F-20`; G02/G03/G04 |
-| Open dependencies | Exact power-entry/PD-current method; RP-07 workload; active-cooler/storage configuration; audio-front-end choice if USB-powered. Blocks converter selection, measured margin and thermal release. |
+| Open dependencies | Exact power-entry/PD-current method; RP-07 workload; storage configuration; final-body Active Cooler airflow/acoustic validation; audio-front-end choice if USB-powered. Blocks converter selection, measured margin and thermal release. |
 
 ### `LG-02` — C2 safety controller and servo-bus transceiver
 
@@ -292,15 +292,15 @@ Every numeric entry below intentionally points to the ledger. A later `D` or `W`
 | Field | Requirement |
 |---|---|
 | Boundary / class | Base local controller plus required obstacle/edge sensing and interfaces; `EC-S` whenever its safety coverage is a motion precondition |
-| Configuration | Unselected; RP-03 owns controller, sensors and update schedule. |
+| Configuration | **ESP32-S3-DevKitC-1-N8 selected as the C3 prototype board under `RP02-P3-REG-02`.** It preserves GPIO35–37; RP-03 owns the motor driver, sensors, final pin map and update schedule; a later WROOM-1-N8 carrier requires controlled equivalence. |
 | Supply contract | Exact voltage, UVLO/reset behavior, sensor emitter pulses and independence from drive-stage disturbances are `U`. It must remain valid while base hazardous energy is present or being removed. |
 | Profiles / cases | `LP-10-OFF/BOOT/IDLE/MOTION/OBSTACLE/EDGE/FAULT`; active for drive/tabletop calibration cases; off during charging and after final shutdown. |
 | Demand characterization | Boot, idle sensing, active control, emitter pulse alignment, obstacle/edge maximum schedule and fault-processing demand. |
 | State behavior | Boots with driver inhibited. Reset, absent/stale sensor evidence or control-app authority loss produces the registered local stop/inhibit and no stale wheel command after recovery. |
 | Protection / containment | Drive-stage, sensor and SBC faults must not defeat hardware-safe driver state. Its supply may share an upstream safety source only if local branch protection and common-impedance analysis preserve independence. |
 | Measurement | Terminal `V/I`; controller reset reason; sensor validity/age; driver-enable state; detection-to-brake trace and temperature. |
-| Fault trace | `F-17`, `F-19`, `F-22`; G01/G02/G04/G05 |
-| Open dependencies | Entire RP-03 control/sensing architecture. Blocks safety-rail branch count/rating, drive enable circuit and base fault qualification. |
+| Fault trace | `F-17`, `F-19`, `F-22`, `F-24`, `F-26`, `F-28`, `F-30`; G01/G02/G04/G05 |
+| Open dependencies | RP-03 motor-driver/sensor set, final C3 carrier/pin map and measured load. Blocks final safety-rail rating, drive-enable circuit and base fault qualification. |
 
 ## 5. Source-side electrical requirements
 
@@ -390,3 +390,5 @@ The approved architecture resolved the domain, energy-route, return, charge-perm
 |---|---|---|
 | 2026-09-15 | `EDB-01…08` principles | Explicit builder approval in the project conversation: “i approve these principles, good foundation” |
 | 2026-09-16 | `EDB-03` schema, cross-cutting requirements and first source/load-side register | Explicit builder approval in the project conversation: “cool i approve, now continue”; no new behavior, component selection, numeric threshold or evidence-class promotion |
+| 2026-09-16 | Part-3 identity reconciliation | Consumed `RP02-P3-REG-01` selected Active Cooler and C3 prototype identity without changing any `EDB-*` rule or promoting a numeric load/evidence class |
+| 2026-09-16 | C3 suffix correction | Consumed `RP02-P3-REG-02`: N8 supersedes N8R8 for C3 to preserve GPIO35–37; no `EDB-*` or load evidence changed |

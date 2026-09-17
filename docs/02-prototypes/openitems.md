@@ -4,7 +4,7 @@
 |---|---|
 | Status | **Living index.** Not a competing decision, budget, CAD or gate record |
 | Created | 2026-09-16 |
-| Scope | Remaining work inside `docs/02-prototypes/` after RP-01 Layout 03 paper demand and RP-02 Part-1 / Part-2 registrations |
+| Scope | Remaining work inside `docs/02-prototypes/` after RP-01 Layout 03 paper demand and RP-02 Parts 1–4 design-definition registrations |
 | Rule | Canonical detail stays in the cited file. Close an item there first, then strike or rewrite the row here. An index line cannot freeze a SKU, promote `E` to `W`, or register a gate |
 
 This file exists so an “intentionally open until the physical input exists” statement does not disappear into a local README. The latest RP-02 example is the same class of claim as the older RP-01 ones: **final wire, fuse, converter and pack ratings remain intentionally open until their required physical inputs exist.**
@@ -25,7 +25,7 @@ Evidence classes are unchanged: `W` measured on the named hardware, `D` manufact
 
 ---
 
-## Shared blockers (both prototypes)
+## Shared blockers (all prototypes)
 
 These sit above RP-01 and RP-02. Scored physical runs wait here even when paper work is live.
 
@@ -97,7 +97,7 @@ These sit above RP-01 and RP-02. Scored physical runs wait here even when paper 
 
 ## RP-02 Electrical / control
 
-**Current outcome:** Part 1 registered (`RP02-P1-REG-01`); all seven Part-2 power-architecture subparts complete at design-definition level; topology registered (`RP02-P2-REG-01`); implementation basis and Raspberry Pi 5 2 GB selected (`RP02-P2-REG-02`); `BR-*` brownout/reset/restart policy registered (`RP02-P2-REG-03`). No gate passed, no ADR closed, no purchase authorized.
+**Current outcome:** Parts 1–4 are complete at design-definition level. Part 4 registers the ICD definition as `RP02-P4-REG-01`; exact byte layouts and C3 drive messages remain open. No gate passed, no ADR closed, no purchase authorized.
 
 ### Intentionally open until physical inputs exist
 
@@ -108,6 +108,7 @@ This is the class that prompted this index. Architecture and calculation method 
 | **Final wire, fuse, converter and pack ratings** | Equations, sensitivity tables and `PCD-*` candidate screen exist; installed path, protection curves, converter maps and pack impedance do not | Candidate-screen evidence list, then one conditional term at a time | `RP-02-electrical/power-calculation-ledger.md` §8; `power-component-candidate-screen.md` §12 | G01; ADR-06 architecture evidence |
 | Battery chemistry, S-count, pack construction | PA-03/04 and `PB-MAIN` admit the servo/drive outcome; 2S 6.0–8.4 V is an `E` planning case only | RP-01 family + RP-03 drive envelope + handling | `electrical-design-basis.md` §8; `decision.md` | Charge path; G03; ADR-06 sizing |
 | Charger, adapter, keyed charge connector | STUSB4500QTR + BQ25798 is the screened architecture lead, not selected; adapter/settings/body inlet open; AC stays outside Makad | Chemistry, charge power, PDO and body layout | `power-component-candidate-screen.md` §9; `power-branch-contracts.md` `PB-CHARGE-*` | `CC-15`; G06 |
+| Charge-insertion motor-arm timing | Conservative bench rule is immediate motor-arm removal; the selected circuit may instead allow a short supervised brake before `CHARGE` is accepted | Source-selector/charger circuit plus a registered stop timing | `power-implementation-basis.md` §8.4; `CC-15`; F-18 | Charge-mode G01/G04 configuration |
 | Motor-arm, source-selector, E-stop switching devices | IDEC XW1E operator and LTC4368-1/external-FET approach are screened leads, not a selected safety subsystem | Fault-current, FET SOA, regeneration and interruption calc | `power-component-candidate-screen.md` §6; `power-architecture.md` PA-13/14 | G01 demonstration |
 | Servo-rail conversion (direct vs motor-domain buck) | Coupled to family; C01 implies regulated 5 V from a 2S planning case | RP-01 freeze (PA-04) | `decision.md`; `power-implementation-basis.md` | Head conductor/fuse |
 | Drive conversion and regeneration sink | RP-03 hardware absent | Drive `W` profiles | `PB-DRIVE*`; ledger `LG-04` | `CC-09/10/11`, `CC-PEAK-01`, G03 |
@@ -121,9 +122,13 @@ This is the class that prompted this index. Architecture and calculation method 
 
 | Item | What is already true | What remains open | Home |
 |---|---|---|---|
-| Raspberry Pi 5 2 GB (`LG-01`) | Selected 2026-09-16 under `RP02-P2-REG-02`; 5.1 V nominal / 5 A-capable `PB-COMPUTE` | Purchase, power-entry/PD hardware, active cooler validation, storage, workload `W` | `decision.md`; `power-implementation-basis.md` |
+| Raspberry Pi 5 2 GB (`LG-01`) | Selected 2026-09-16 under `RP02-P2-REG-02`; 5.1 V nominal / 5 A-capable `PB-COMPUTE`; official Active Cooler selected under Part 3 | Purchase, power-entry/PD hardware, enclosure cooler validation, storage, workload `W` | `decision.md`; `power-implementation-basis.md`; `compute-control-component-screen.md` |
 | C2 Waveshare ESP32-S3-Zero | Module and CTRL-01…06 locked | Installed power `W`, transceiver, pin map vs DevKitC-1, G05 loop/link | RP-01 decision; `load-model.md` |
+| C3 ESP32-S3-DevKitC-1-N8 | Prototype board and ownership selected under `RP02-P3-REG-01/02`; N8 preserves GPIO35–37 | Purchase, RP-03 driver/sensors, **hard pre-carrier pin map** (≥2 spare safe GPIO after safety/watchdog/debug reservations), carrier, power `W`, G04/G05 | `compute-control-architecture.md` §3; `compute-control-component-screen.md` |
+| Differential link + C2 display relay | Production physical/logical topology selected; THVD1451D SOIC is the current cost-down implementation lead; TTL bench-only, USB service-only | Exact THVD1451 suffix/package, protection/termination, carriers and G05 flex/noise evidence | `link-contract.md` v0.4; `compute-control-component-screen.md` v1.2 |
+| External controller watchdog | TPS3436-Q1 window-watchdog family selected per C2/C3 | Exact timing/latch suffix and circuit from measured loop/boot windows; F-25/F-26 | `compute-control-architecture.md` CA-10; `compute-control-component-screen.md` |
 | Display SKU 30493 | Selected; 5 V / 450 mA published `D` | Sample `W`, inrush, brightness, status light, charge-mode profile | ledger `LG-05`; `PB-DISPLAY` |
+| Display onboard battery/charger path | Registered: do **not** feed the display’s single-cell charger from the robot pack; `PB-DISPLAY` enters through the documented 5 V input | Schematic review of whether unused onboard charge/battery circuitry needs physical disablement or may remain unconnected — this is a back-power / second-domain G01 item | `power-implementation-basis.md` §2.3 |
 | Camera Module 3 Wide | Selected on CSI | Official/sample power, 22-to-15 CSI cable in the moving route, PDAF lock during gestures | camera study; `PB-CAMERA` |
 
 ### Still unselected hardware
@@ -133,26 +138,47 @@ This is the class that prompted this index. Architecture and calculation method 
 | Status light | Display row selected; light is not | `LG-05` |
 | Microphone front end (`LG-07`) | Pi 5 has no native 4-ch PDM; codec HAT vs USB array suggested only | `decision.md` candidate register |
 | Speaker + amplifier (`LG-08`) | RP-05/06 | `PB-AUDIO-OUT` |
-| Base/drive MCU and sensors (`LG-10`) | Prefer C2 family; RP-03 | `PB-SAFE-BASE` |
-| Link transport vs C2-as-face-relay | UART 921 600 primary; USB-CDC fallback; in-head relay not adopted | `link-contract.md` v0.2 |
+| Base motor driver and safety sensors (`LG-04/LG-10`) | Controller is selected; motor/encoder/IMU/cliff/bump/proximity implementations remain RP-03 | `PB-DRIVE*`; `compute-control-architecture.md` §3 |
+| Pi storage exact SKU | Official Pi 32 GB A2 is the cost-down lead; SanDisk High Endurance 32 GB is the low-cost endurance comparison; official Pi 64 GB is capacity fallback; no selection | `compute-control-component-screen.md` `CCD-STO-*` |
+| Differential transceiver/watchdog exact suffix and carriers | Families/topology selected; component suffixes and PCBs await measured conditions | `compute-control-component-screen.md` `CCD-LNK/WDG/HDL-*` |
 
 ### RP-02 process remaining
 
 | Item | Why it is open | Waiting on | Home | Blocks |
 |---|---|---|---|---|
 | Numeric G01–G06 registration | Candidate metrics only | Dated builder freeze before inspecting scored data | `RP-02-electrical/gates.md` | Any pass row in `decision.md` |
-| Fault injection campaign | F-01…F-22 defined; none injected | Rig + G04 freeze | `fault-matrix.md` | ADR-03 / ADR-12 evidence |
+| Fault injection campaign | F-01…F-22 Part-1 plus F-23…F-30 Part-3 defined; none injected | Rig + G04 freeze | `fault-matrix.md` | ADR-03 / ADR-12 evidence |
 | Distribution rig | Designed against registered architecture; not built | Instruments + Phase A/B hardware | `rig.md` | G01/G02/G04 |
-| `link-contract.md` v1.0 | v0.2 draft; field sizes/rates candidate | Implement both ends + G05 | `link-contract.md` | ADR-12 |
-| ADR-03 | Open | G05 on Zero (or twin with pin-map note) **and** G04 on real servos | `decision.md` ladder | Controller backbone |
+| C0↔C2 wire codec (`link-contract.md` v1.0) | Part-4 registers **semantics** only. Byte layouts, type numbers and numeric rates/timeouts are unregistered. Phase A `EXP_ONLY_NOT_REGISTERED` codecs are a host reference, not this ICD | One schema generating C0/C2 codecs, then TTL/differential implementation and G04/G05 freeze | `link-contract.md`; `phase-a/README.md` | ADR-12 |
+| C3 drive message set | Framing, expiry, session and fresh-arm rules are inherited; wheel/hazard payloads are not invented in RP-02 | RP-03 motor/driver/sensor freeze | `link-contract.md` §8; `compute-control-architecture.md` | Complete ADR-12; C3 G05 |
+| C2/C3 board-role GPIO header and compiled hard maxima | Role map exists; physical GPIO, board-revision LED pin, and CA-14 generated hard maxima are not assigned | Frozen board revisions and transceiver/carrier; C3 pin map waits on RP-03 I/O | `phase-a/README.md`; `compute-control-architecture.md` CA-14 | Phase A firmware; arm-hash; G05 |
+| ADR-03 | Ownership fixed; evidence open | G05 on C2/C3 and G04 including authority-lease/external-watchdog paths with representative actuators | `decision.md` ladder | Controller backbone |
 | ADR-12 | Open | Contract + G05 + `timebase.md` §6 | same | Internal comms |
 | ADR-06 architecture | Topology/basis fixed; implementation pending | G01, chemistry, remaining power parts, RP-06 layout | same | Rails/isolation/policy |
 | ADR-06 sizing | Expected after RP-03, not in stage 2 | Ledger `W` for every `LG`; G03 margin | same | Pack capacity |
-| Phase A remaining | Paper/on-hand; loopback and DevKitC-1 timing do not wait on buys | Timebase + link on twin; G01/G06 paper review | `intent.md` phase ladder | Unblocks RP-01 scored path |
+| Phase A remaining | Part-4 definition, exploratory host codec/state model and unscored G01/G06 paper review are recorded. Host tests are not a scored G04/G05 run. No attached DevKitC serial device was available | Board-role GPIO header, ESP-IDF twin, TTL then differential loopback, edge-stamped timebase, immutable log ring / pre-run write check, exploratory injections. Do not score Phase A layouts as `RP02-P4-REG-01` | `RP-02-electrical/phase-a/README.md`; `intent.md` phase ladder | Unblocks RP-01 scored path |
 | Phase B | Needs a named RP-01 servo load (C01 as reference is allowed; purchase ≠ family freeze) and the selected Pi 5 | Those parts on the bench | `intent.md` | G05 servo bus; head+compute G02 |
 | Phase C | Battery gate | Pack + procedure | `intent.md` | G03 rehearsal |
 | Drive-dependent cases | `CC-09/09C/09R`, `CC-10A/B/C`, `CC-11`, `CC-12C`, `CC-13D`, drive share of `CC-PEAK-01`/`ST-01` | RP-03 hardware | `gates.md` G02 note | Whole-robot peak claim |
 | SC-14 20-minute Core | Not an RP-02 closure | Integrated droid | plan; G03 | CON-10 |
+
+---
+
+## RP-03 Locomotion
+
+**Current outcome:** not started. Only `RP-03-locomotion/plan.md` (2026-09-17) exists: the folder layout, six-Part authoring sequence, inherited inputs, builder decisions `BD-01…07`, rig/gate requirements and phase ladder. No intent, storyboard, physics, concept, screen, control definition, rig, gate registration, candidate, purchase or run exists.
+
+| Item | Why it is open | Waiting on | Home | Blocks |
+|---|---|---|---|---|
+| Folder population (Parts 1–5) | Plan written; documents not authored | Builder go-ahead per `plan.md` §11 order | `RP-03-locomotion/plan.md` | Everything below |
+| `a_tip` and skid inequality under the Layout 03 head | Dimensional baseline v1.8 flagged CoM/tip for recalculation; still a 2.0 m/s² planning value | Part 2 `physics.md` range analysis | `../../01-system/dimensional-baseline.md`; plan §5 | Drivetrain screen; G01 margin rule |
+| Builder decisions `BD-01…07` | Tabletop calibration motion in V1, obstacle policy, runtime base IMU, surface set, ballast range, test speed limit, catch-fixture form | Part 2 results attached to the questions | plan §4 Part 5; future `decision.md` | Gate registrations; rig design |
+| C3 pin map, driver/sensor interface, base message set | RP-02 left them explicitly to RP-03 | Part 4 `base-control-architecture.md` → `RP03-P4-REG-01` | plan §4 Part 4; RP-02 `compute-control-architecture.md` §3; `link-contract.md` §C3 | RP-02 carrier PCB, `CA-14` config source, `link-contract.md` v0.5, RP02-G05 C3 row |
+| `LG-04`/`LG-10` `E` ranges, then `W` rows | Ledger rows are class estimates | Part 2 refresh; Phase B/C runs | `../../01-system/power-energy-ledger.md` | ADR-06 sizing; drive-dependent `CC` re-run of the G02 invariant |
+| Drive mass row `W` | 200–600 g planning range | Selected drivetrain weighed | `../../01-system/mass-envelope-ledger.md` | Whole-robot roll-up; RP-06 |
+| CON-TBD-14 tabletop footprint | Radius, speed, margin and edge geometry unset | Part 2 proposal → G04 registration → Phase C evidence | plan §5; `constraints.md` | SC-13 closure; SC-TBD-09 |
+| Both-motor stall/reversal transients | Korad 5 A ceiling on a 2S-class bus | Phase C pack or second source | plan §4 Part 2 item 4; `workbench.md` | `CC-PEAK-01`, `CC-10A/B` closure |
+| Scored runs | Same shared blockers as RP-01/RP-02 plus rig, catch fixture and registrations | Workbench gate, timebase, registrations | Shared blockers above; plan §4 Part 6 | RP03-G01…G06; ADR-04/ADR-07 |
 
 ---
 
@@ -182,6 +208,9 @@ This is the class that prompted this index. Architecture and calculation method 
 | Calculation method for drop/loss/heat/energy/fuse coordination | `power-calculation-ledger.md` v0.1 |
 | Manufacturer candidate discovery and `D/E` screen for conversion, protection, E-stop, connectors, cables and charging | `power-component-candidate-screen.md` v0.1; no selection or purchase implied |
 | Brownout order, threshold ownership, fail-inactive reset defaults, fresh-intent recovery and sizing/verification method | `brownout-restart-contract.md` v1.0, `RP02-P2-REG-03`; numeric values remain open by design |
+| `EDB-01…08` electrical-design-basis principles and first source/load contracts (numeric population still open) | `electrical-design-basis.md` |
+| `CA-01…16` ownership, C3 N8 prototype class, Pi Active Cooler, differential production topology (suffixes, carriers, timeouts and evidence still open) | `RP02-P3-REG-01/02`; `compute-control-architecture.md` |
+| C0↔C2 ICD **definition** — messages, framing method, expiry, heartbeat, two-phase arm, fresh-intent recovery (byte layout, C3 payloads, numeric timing unregistered) | `RP02-P4-REG-01`; `link-contract.md` v0.4 |
 
 ---
 

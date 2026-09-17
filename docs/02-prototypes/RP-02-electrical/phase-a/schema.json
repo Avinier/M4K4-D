@@ -1,0 +1,45 @@
+{
+  "name": "rp02-c0-c2-exploratory",
+  "layout_revision": 1,
+  "status": "EXP_ONLY_NOT_REGISTERED",
+  "endianness": "little",
+  "crc": "CRC-16/CCITT-FALSE",
+  "framing": "COBS plus 0x00 delimiter",
+  "max_payload": 64,
+  "header": [
+    ["layout_revision", "u8"],
+    ["type", "u8"],
+    ["seq", "u16"],
+    ["boot_uuid", "bytes16"],
+    ["epoch", "u32"],
+    ["src_ts_us", "u64"],
+    ["payload_len", "u8"]
+  ],
+  "messages": {
+    "HELLO": 1,
+    "LIMITS_SET": 2,
+    "HEAD_ENABLE": 3,
+    "HEAD_INHIBIT": 4,
+    "HEAD_GOAL": 5,
+    "HEAD_CANCEL": 6,
+    "FACE_STATE": 7,
+    "LIGHT_STATE": 8,
+    "HEAD_STATE": 9,
+    "HEARTBEAT": 10,
+    "FAULT": 11,
+    "ACK": 12,
+    "NACK": 13,
+    "TIME_SYNC_REQ": 14,
+    "TIME_SYNC_RESP": 15
+  },
+  "semantic_rules": {
+    "motion_requires_matching_boot_uuid_and_epoch": true,
+    "session_requires_fresh_c2_boot_challenge": true,
+    "limits_ack_precedes_enable": true,
+    "enable_nonce_must_be_fresh": true,
+    "goal_must_follow_enable": true,
+    "expiry_checked_at_execution": true,
+    "link_loss_flushes_queues": true,
+    "estop_release_does_not_rearm": true
+  }
+}
