@@ -97,7 +97,7 @@ These sit above RP-01, RP-02 and RP-03. Scored physical runs wait here even when
 
 ## RP-02 Electrical / control
 
-**Current outcome:** Parts 1–4 are complete at design-definition level. Part 4 registers the ICD definition as `RP02-P4-REG-01`; exact byte layouts and C3 drive messages remain open. No gate passed, no ADR closed, no purchase authorized.
+**Current outcome:** Parts 1–4 are complete at design-definition level. Part 4 registers the C0↔C2 ICD definition as `RP02-P4-REG-01` and C0↔C3 `BASE_*` **semantics** as `RP02-P4-REG-02`. Exact byte layouts remain open. No gate passed, no ADR closed, no purchase authorized.
 
 ### Intentionally open until physical inputs exist
 
@@ -150,8 +150,8 @@ This is the class that prompted this index. Architecture and calculation method 
 | Fault injection campaign | F-01…F-22 Part-1 plus F-23…F-30 Part-3 defined; none injected | Rig + G04 freeze | `fault-matrix.md` | ADR-03 / ADR-12 evidence |
 | Distribution rig | Designed against registered architecture; not built | Instruments + Phase A/B hardware | `rig.md` | G01/G02/G04 |
 | C0↔C2 wire codec (`link-contract.md` v1.0) | Part-4 registers **semantics** only. Byte layouts, type numbers and numeric rates/timeouts are unregistered. Phase A `EXP_ONLY_NOT_REGISTERED` codecs are a host reference, not this ICD | One schema generating C0/C2 codecs, then TTL/differential implementation and G04/G05 freeze | `link-contract.md`; `phase-a/README.md` | ADR-12 |
-| C3 drive message set | Framing, expiry, session and fresh-arm rules are inherited; `BASE_*` is an **unregistered** v0.5 proposal | RP-02 `RP02-P4-REG-02` (not issued); byte layouts after Phase A | `link-contract.md` §v0.5; RP-03 `base-control-architecture.md` | Complete ADR-12; C3 G05 |
-| C2/C3 board-role GPIO header and compiled hard maxima | C3 pin map v0.1 drafted under `RP03-P4-REG-01` (three safe spares). C2 role map exists. Physical generated headers are not | Frozen board revisions; generated `CA-14` source | `phase-a/README.md`; `compute-control-architecture.md` v1.3; RP-03 pin map | Phase A firmware; arm-hash; G05 |
+| C3 drive message set | `BASE_*` **semantics** registered `RP02-P4-REG-02`. Candidate TTL/heartbeat/queue named and unregistered | Byte layouts after Phase A; measured timeouts | `link-contract.md` §v0.5; RP-03 `base-control-architecture.md` | Complete ADR-12; C3 G05 |
+| C2/C3 board-role GPIO header and compiled hard maxima | C3 pin map v0.1 drafted; **`c3_board_role.h` generated** from v0.1 (`RP03-P4-REG-02`). C2 role map exists. Carrier PCB is not | Frozen board revisions; C2 generated header | `phase-a/c3_board_role.h`; `compute-control-architecture.md` v1.3; RP-03 pin map | Phase A firmware; arm-hash; G05; carrier |
 | ADR-03 | Ownership fixed; evidence open | G05 on C2/C3 and G04 including authority-lease/external-watchdog paths with representative actuators | `decision.md` ladder | Controller backbone |
 | ADR-12 | Open | Contract + G05 + `timebase.md` §6 | same | Internal comms |
 | ADR-06 architecture | Topology/basis fixed; implementation pending | G01, chemistry, remaining power parts, RP-06 layout | same | Rails/isolation/policy |
@@ -166,25 +166,26 @@ This is the class that prompted this index. Architecture and calculation method 
 
 ## RP-03 Locomotion
 
-**Current outcome:** Parts 1–5 are complete at design-definition level (`RP03-P1-REG-01` … `RP03-P5-REG-01`, 2026-09-17). Concept A is a working lead, not a freeze. D02 / DRV8874-class / S01/S04/S06/S07 are leads, not a freeze. No purchase, no gate passed, no scored run.
+**Current outcome:** Parts 1–5 are complete at design-definition level (`RP03-P1-REG-01` … `RP03-P5-REG-01`, 2026-09-17). Brief-gap close 2026-09-18 issued `RP03-P1-REG-02` … `RP03-P4-REG-02`. Concept A is a working lead, not a freeze. Set A / D02 / DRV8874-class / S01/S04/S06/S07 are leads, not a freeze. No purchase, no gate passed, no scored run.
 
 ### Intentionally open until physical inputs exist
 
 | Item | Why it is open | Waiting on | Home | Blocks |
 |---|---|---|---|---|
 | `a_tip` as a measured number | Paper range 0.9–1.9 m/s² (and sign reversal if battery is on/behind the axle); 1.98 m/s² remains a placement target | BD-05 ballast on the rig; then M900 | `RP-03-locomotion/physics.md`; `dimensional-baseline.md` v1.11 | Point G01 lift-onset margin; dimensional-baseline revision if +25/124 is missed |
-| Builder decisions `BD-01…07` | Recorded as working assumptions 2026-09-17 so Part 5 could be written | Dated builder confirmation before gate freeze | `RP-03-locomotion/decision.md` | Frozen G01–G06 thresholds |
-| Concept / motor / sensor freeze | Screens complete; leads named | Paper P01–P09 close or bound, then freeze | `concepts/`; `drivetrain-screen-01.md`; `sensing-screen-01.md` | Purchase; `cad/base/` blockout |
+| Builder decisions `BD-01…07` | Paper-confirmed 2026-09-18 (named `S-TILE`/`S-LAM`/`S-RUG`/`S-THR`, head-pose CoM extras, 2.0° slope condition). Still not a gate freeze | Dated freeze at G01–G06 registration | `RP-03-locomotion/decision.md` | Frozen G01–G06 thresholds |
+| Concept / motor / sensor freeze | Screens complete; **Set A / Set B** packaged; leads named. Paper P01–P09 scored against the sets and remain OPEN | Paper P-gates close or bound, then freeze | `concepts/`; `drivetrain-screen-01.md` v0.2; `sensing-screen-01.md`; `gates.md` §4 | Purchase; `cad/base/` blockout |
+| C3 pin map firmware/carrier | v0.1 drafted; ≥2 spare; RGB released; GPIO3 ESTOP input exception; **`c3_board_role.h` generated** from v0.1 | Frozen board revision; carrier PCB | `base-control-architecture.md`; `RP-02-electrical/phase-a/c3_board_role.h`; `compute-control-architecture.md` v1.3 | RP-02 carrier PCB; RP02-G05 C3 |
+| `BASE_*` ICD | v0.5 **semantics** registered `RP02-P4-REG-02`. Candidate TTL 200 ms / `duration+250 ms`, heartbeat 150 ms, queue depth 2 named and unregistered | Byte layouts after Phase A; measured timeouts | `link-contract.md` §v0.5; `base-control-architecture.md` | Complete ADR-12; C3 G05 |
+| `LG-04`/`LG-10` `W` rows | Ledger v0.15 is still `E`/`U`; heat duty and 6.0 vs 8.4 V note recorded | Phase B/C runs | `power-energy-ledger.md` | ADR-06 sizing; G02 invariant re-run |
+| `cad/base/` blockout | Concept A is a working lead, not a freeze. Brief asked for CAD pass 1 now; folder policy still forbids it | Concept freeze **or** an explicit policy change | `RP-03-locomotion/cad/README.md` | Integrated CAD input; caster 360° sweep |
+| Acted 240 fps mock-up | `plan.md` required; not run. V0.1/v0.2 kinematics are paper hypotheses | Weighted-box / caster-push recording, or a storyboard revision against it | `storyboard.md` v0.2 change log | Confidence in come/wiggle timings |
 | D02 stall-current `D` conflict | Oz 900 mA vs NFP ≤3 A, both manufacturer tables | Meter the purchased article (if bought as bench equipment) | `drivetrain-screen-01.md` P03 | Korad 5 A both-motor claim; driver-class confirmation |
-| Analog-IR 0.70 m/s look-ahead | GP2Y 300 mm is tight against 289 mm `d_stop` | Caster-mount proof at 0.50; longer-range stop-path or slower 0.70 if G02 uses that band | `sensing-screen-01.md` P09; `physics.md` §6 | 0.70 m/s obstacle case |
-| C3 pin map firmware/carrier | v0.1 drafted; ≥2 spare; RGB released; GPIO3 ESTOP input exception | Generated `CA-14` header; carrier; G05 | `base-control-architecture.md`; RP-02 `compute-control-architecture.md` v1.3 | RP-02 carrier PCB; RP02-G05 C3 |
-| `BASE_*` ICD | v0.5 proposal in RP-02 `link-contract.md`; not `RP02-P4-REG-02` | RP-02 acceptance; byte layouts after Phase A | `link-contract.md` §v0.5; `base-control-architecture.md` | Complete ADR-12; C3 G05 |
-| `LG-04`/`LG-10` `W` rows | Ledger v0.14 is still `E`/`U` | Phase B/C runs | `power-energy-ledger.md` | ADR-06 sizing; G02 invariant re-run |
-| Drive mass row `W` | 200–600 g bound unchanged (v0.15 note) | Selected drivetrain weighed | `mass-envelope-ledger.md` | Whole-robot roll-up; RP-06 |
+| Analog-IR 0.70 m/s look-ahead | GP2Y 300 mm is tight against 289 mm `d_stop`; 2.0° downhill at 0.50 makes 221 mm | Caster-mount proof at 0.50; longer-range stop-path or slower 0.70 if G02 uses that band | `sensing-screen-01.md` P09; `physics.md` §6 and §10 | 0.70 m/s obstacle case; 0.50 downhill coverage |
+| Drive mass row `W` | 200–600 g bound unchanged | Selected drivetrain weighed | `mass-envelope-ledger.md` | Whole-robot roll-up; RP-06 |
 | CON-TBD-14 | 250 mm radius / 0.06 m/s / 40 mm margin **proposed** | G04 freeze then Phase C evidence | `physics.md` §8; `gates.md` G04 | SC-13; SC-TBD-09 |
 | Both-motor stall/reversal transients | Korad 5 A ceiling | Phase C pack or second source | `physics.md` §5; `workbench.md` | `CC-PEAK-01`, `CC-10A/B` |
-| Scored G01–G06 | Candidate registrations only; registered section empty | Workbench gate, timebase, threshold freeze **before** data, rig built | `gates.md`; `rig.md` | ADR-04/ADR-07 |
-| `cad/base/` blockout | Concept A is a working lead, not a freeze | Concept freeze | `RP-03-locomotion/cad/README.md` | Integrated CAD input |
+| Scored G01–G06 | Candidate registrations only; registered section empty. Cutoff-coast is now a candidate metric | Workbench gate, timebase, threshold freeze **before** data, rig built | `gates.md`; `rig.md` | ADR-04/ADR-07 |
 
 ---
 
@@ -197,9 +198,9 @@ This is the class that prompted this index. Architecture and calculation method 
 | RP-01 first scored run ↔ RP-02 timebase/G05 | Exploratory timing on DevKitC-1. | Scored RP-01 timestamps need implemented `timebase.md`. |
 | G02 invariant ↔ later prototypes | Non-drive rehearsal can start when head+compute exist. | Drive, speaker and later loads force a re-run; they do not delay Phase A. |
 | RP-03 scored runs ↔ RP-02 timebase/logging | Exploratory bench capture on C3 now | Scored G01–G06 need implemented `timebase.md` |
-| RP-03 message set ↔ RP-02 link contract | `BASE_*` drafted in the registered envelope (`RP03-P4-REG-01`) | `RP02-P4-REG-02` (not issued); byte layouts wait on Phase A |
-| RP-03 pin map ↔ RP-02 C3 carrier / `CA-14` | Pin map v0.1 on DevKitC, ≥2 spare | Carrier PCB and generated config source wait on a frozen map |
-| RP-03 drive `W` ↔ ADR-06 sizing | `E` ranges in ledger v0.14 | Sizing waits on Phase B/C `W` |
+| RP-03 message set ↔ RP-02 link contract | `BASE_*` **semantics** registered (`RP02-P4-REG-02`) | Byte layouts wait on Phase A |
+| RP-03 pin map ↔ RP-02 C3 carrier / `CA-14` | Pin map v0.1 on DevKitC, ≥2 spare; `c3_board_role.h` generated | Carrier PCB waits on a frozen map |
+| RP-03 drive `W` ↔ ADR-06 sizing | `E` ranges in ledger v0.15 | Sizing waits on Phase B/C `W` |
 | RP-03 stability ↔ RP-01 head mass | Range analysis with Layout 03 `E` tree | Point `a_tip` waits on M900; RP-03 scores at BD-05 corners |
 
 ---
@@ -221,8 +222,9 @@ This is the class that prompted this index. Architecture and calculation method 
 | Brownout order, threshold ownership, fail-inactive reset defaults, fresh-intent recovery and sizing/verification method | `brownout-restart-contract.md` v1.0, `RP02-P2-REG-03`; numeric values remain open by design |
 | `EDB-01…08` electrical-design-basis principles and first source/load contracts (numeric population still open) | `electrical-design-basis.md` |
 | `CA-01…16` ownership, C3 N8 prototype class, Pi Active Cooler, differential production topology (suffixes, carriers, timeouts and evidence still open) | `RP02-P3-REG-01/02`; `compute-control-architecture.md` |
-| C0↔C2 ICD **definition** — messages, framing method, expiry, heartbeat, two-phase arm, fresh-intent recovery (byte layout, numeric timing unregistered). C3 `BASE_*` is a v0.5 **proposal**, not registered | `RP02-P4-REG-01`; `link-contract.md` v0.4 + v0.5 proposal |
+| C0↔C2 ICD **definition** — messages, framing method, expiry, heartbeat, two-phase arm, fresh-intent recovery (byte layout, numeric timing unregistered). C3 `BASE_*` **semantics** registered `RP02-P4-REG-02`; byte layouts still open | `RP02-P4-REG-01` / `RP02-P4-REG-02`; `link-contract.md` v0.4 + v0.5 |
 | RP-03 Parts 1–5 design-definition (`BM-*`, physics range, Concept A working lead, pin map v0.1, gate *candidates*) | `RP03-P1-REG-01` … `RP03-P5-REG-01` |
+| RP-03 brief-gap paper close (operating cases, BD-04 named surfaces, remaining physics, Set A/B, TTL candidates, cutoff metric, `CA-14` header) | `RP03-P1-REG-02` … `RP03-P4-REG-02`; `RP02-P4-REG-02` |
 
 ---
 

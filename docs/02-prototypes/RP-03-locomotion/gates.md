@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Status | **Paper gates RP03-P01…P09 drafted 2026-09-17; all OPEN — not frozen, not passed.** Physical candidate registrations RP03-G01…G06 complete as *candidates*; **no numeric gate is registered and no scored run exists** |
+| Status | **Paper gates RP03-P01…P09 drafted 2026-09-17; scored against Set A/B in §4 on 2026-09-18; all OPEN — not frozen, not passed.** Physical candidate registrations RP03-G01…G06 complete as *candidates* (cutoff-coast and 2.0° slope named); **no numeric gate is registered in §3 and no scored run exists** |
 | Authority | Gate definitions and registration fields: `../../01-system/risk-prototype-plan.md` v1.12 §RP-03; folder `plan.md` §7. This file holds the registered numeric versions **when they exist** |
-| Sources for thresholds | `intent.md`; `storyboard.md` (authored kinematics, not pass/fail); `physics.md` v0.1 ranges; `drivetrain-screen-01.md`; `sensing-screen-01.md`; `base-control-architecture.md`; `fault-matrix.md`; `rig.md`; BD-01…BD-07 working assumptions in `decision.md` |
+| Sources for thresholds | `intent.md`; `storyboard.md` v0.2 (authored kinematics, not pass/fail); `physics.md` v0.2 ranges; `drivetrain-screen-01.md` v0.2 drive sets; `sensing-screen-01.md`; `base-control-architecture.md`; `fault-matrix.md`; `rig.md`; BD-01…BD-07 paper-confirmed 2026-09-18 in `decision.md` |
 | Rule | Registration uses the plan's eight fields — **Gate ID, Metric, Threshold, Rationale, Conditions, Repetitions, Instrument, Freeze record** (date + builder approval **before** scored data is inspected). A threshold change after results is a new gate version with a documented reason and a fresh test set, never an edit |
 | Instrument rule | `workbench.md` item 6 and `rig.md` §5: if the bench cannot resolve the threshold, that metric is **exploratory-only**. 50 ms detection-to-deceleration is the standing example |
 
@@ -124,7 +124,7 @@ Common freeze record: builder freeze approval = **pending**. Author/date = this 
 |---|---|
 | Gate ID | RP03-P09 |
 | Metric | Analog-IR (or equivalent stop-path rangefinder) look-ahead at the **follow ceiling** versus the 0.70 m/s design-point distance |
-| Threshold | At **0.50 m/s**, look-ahead at caster contact must exceed **179 mm** (`physics.md` §6.2: `t = 50 ms`, `a_brake = 1.20 m/s²`, `d_margin = 50 mm`). An axle-mounted sensor is charged the extra 110 mm (289 mm). **0.70 m/s** (`d_stop = 289 mm` from caster, 399 mm from axle) is **HOLD** for analog-IR coverage: analog-IR is not required to close 0.70 as a commanded V1 case. G02 cannot-exceed still tests the 0.70 clamp; follow **cannot** be weakened to 0.70 to make analog-IR look sufficient |
+| Threshold | At **0.50 m/s** on the level, look-ahead at caster contact must exceed **179 mm** (`physics.md` §6.2: `t = 50 ms`, `a_brake = 1.20 m/s²`, `d_margin = 50 mm`). An axle-mounted sensor is charged the extra 110 mm (289 mm). **2.0° downhill at 0.50 m/s** raises `d_stop` to **221 mm** (`physics.md` §10.2) — a coverage corner, HOLD until caster-mount geometry is proved. **0.70 m/s** (`d_stop = 289 mm` from caster, 399 mm from axle) is **HOLD** for analog-IR coverage: analog-IR is not required to close 0.70 as a commanded V1 case. G02 cannot-exceed still tests the 0.70 clamp; follow **cannot** be weakened to 0.70 to make analog-IR look sufficient |
 | Rationale | Follow ≤ 0.50 is inherited (CON-19). Treating 0.70 as a commanded coverage requirement would quietly enlarge V1 speed |
 | Conditions | Named stop-path sensor class; ToF-as-telemetry is a different architecture and does not satisfy this row by existing on the same board |
 | Repetitions | Once per sensing lead |
@@ -144,10 +144,10 @@ Plan mapping: `BM-02/03/04/05/08/09/12` across BD-04 surfaces × BD-05 corners; 
 | Field | Candidate content |
 |---|---|
 | Gate ID | RP03-G01 |
-| Metric | (1) Minimum controllable speed. (2) Stopping distance from each scored band, overshoot/rollback. (3) Lift-onset body accel versus `a_tip = g·x/h` computed from **this** ballast's measured `(x, h)`. (4) Reverse settle (`BM-08`) without caster-over tip. Also: `BM-03` two-step come, `BM-04` arc without hunting, `BM-05` in-place pivot, `BM-12` cancel-to-HOLD |
-| Threshold | **Candidates, not frozen.** Min speed ≤ **0.04 m/s** on every named BD-04 surface at both BD-05 mass corners (storyboard `BM-02` MV; 0.08 is headroom, not a V1 fail). Stopping: measured `d_stop` ≤ physics table at that `v` **plus stated instrument uncertainty**, no rollback after `v=0`; 0.15 / 0.40 / 0.50 m/s scored, 0.60 exploratory, 0.70 not a commanded storyboard speed. Lift: commanded scored `a_peak` stays below measured `a_lift` at that corner; **do not use 1.98 m/s² as the threshold** — HIGH lumped `a_tip ≈ 0.91 m/s²` has no paper margin at `a_peak = 0.80`. Reverse: `BM-08` reaches HOLD without tip onto the caster. Margin is reported per surface × corner, not as an adjective |
+| Metric | (1) Minimum controllable speed. (2) Stopping distance from each scored band, overshoot/rollback — **commanded `BRAKE`**. (3) **Cutoff-coast distance** from the same `v`, same surface, same ballast (`BM-14`): a distinct metric, not a `BRAKE` fail. (4) Lift-onset body accel versus `a_tip = g·x/h` computed from **this** ballast's measured `(x, h)`. (5) Reverse settle (`BM-08`) without caster-over tip. Also: `BM-03` permission chain, `BM-04` arc without hunting, `BM-05` in-place pivot, `BM-12` cancel-to-HOLD, `BM-13` tabletop-demo stillness (G04 also scores this). Straight-line drift millimetres and final chassis footprint polygon are logged |
+| Threshold | **Candidates, not frozen.** Min speed ≤ **0.04 m/s** on every named BD-04 article (`S-TILE` / `S-LAM` / `S-RUG` / `S-THR`) at both BD-05 mass corners and the head-pose extras. Stopping, commanded: measured `d_BRAKE` ≤ physics table at that `v` **plus stated instrument uncertainty**, no rollback after `v=0`; 0.15 / 0.40 / 0.50 m/s scored, 0.60 exploratory, 0.70 not a commanded storyboard speed. Stopping, cutoff: `d_coast` **recorded**; finite; no restart on release (`FS-07`). Cutoff-coast is **not** required to be ≤ `d_BRAKE`. Lift: commanded scored `a_peak` stays below measured `a_lift` at that corner; **do not use 1.98 m/s² as the threshold**. Reverse: `BM-08` reaches HOLD without tip onto the caster. 2.0° slope is a G01 *condition* on `S-TILE` or `S-LAM` (`physics.md` §10). Margin is reported per surface × corner × head-pose, not as an adjective |
 | Rationale | Floor locomotion is Core (SC-11). Caster lift is a ballast/placement fact. An `E` `a_tip` is not a target |
-| Conditions | Open chassis on the **floor**; workbench scored-test gate; E-stop on the motor bus; ballast `(M, x, h)` recorded; HIGH_AFT forbidden; support geometry recorded; timebase implemented for scored (not exploratory) rows; per-motor Korad discipline. Head motion for `BM-01` may be a recorded torque substitute until RP-01 hardware exists — equivalence required |
+| Conditions | Open chassis on the **floor**; workbench scored-test gate; E-stop on the motor bus; ballast `(M, x, h)` recorded; HIGH_AFT forbidden; support geometry recorded; timebase implemented for scored (not exploratory) rows; per-motor Korad discipline. Head motion for `BM-01` may be a recorded torque substitute until RP-01 hardware exists — equivalence required. `BM-14` cutoff rows use the same course as `BM-09`. 2.0° ramp board is a condition, not a fifth floor |
 | Repetitions | ≥ 3 per surface × BD-05 corner for min-speed, stop, and lift-onset; ≥ 3 `BM-08` and `BM-12` per corner on the controlling surface |
 | Instrument | Encoders, tape/laser (`±2 mm` tape / `±1 mm` laser class), IMU/tilt for lift (`±0.5°` pitch class), top-down video, INA-class V/I. Uncertainty subtracted before a millimetre claim. Stand-motor or electronic load: **no G01 claim** |
 | Freeze record | Pending. Not registered |
@@ -189,7 +189,7 @@ Plan mapping: inhibit-by-default + rejected-request proof; `BM-11` edge trials i
 | Field | Candidate content |
 |---|---|
 | Gate ID | RP03-G04 |
-| Metric | (1) `OM-02` inhibit-by-default: ordinary come/follow/spin **rejected**, logged, no motion. (2) Un-armed `BASE_GOAL` rejected. (3) Armed `CC-12C` creep at 0.04–0.06 m/s stays inside the marked circle and `BRAKE`s well inside the mark on edge appearance. (4) Zero uncaught departures |
+| Metric | (1) `OM-02` inhibit-by-default: ordinary come/follow/spin **rejected**, logged, no motion — **`BM-13` is the user-facing still case**. (2) Un-armed `BASE_GOAL` rejected. (3) Armed `CC-12C` creep at 0.04–0.06 m/s stays inside the marked circle and `BRAKE`s well inside the mark on edge appearance (`BM-11`, owed, not the demo). (4) Zero uncaught departures |
 | Threshold | **Candidates, not frozen.** **0** motions without a valid arm nonce. **0** come/follow/spin executions in `OM-02`. Armed creep: stop **≥ 40 mm inside the mark** candidate (`physics.md` C08) minus uncertainty. **0** falls. Footprint geometry is the CON-TBD-14 **proposal** (250 mm radius) until G04 freeze registers it. Dark and glossy samples included |
 | Rationale | SC-13 / SC-TBD-09. V1 users see a stationary tabletop (BD-01); the owed calibration case still has to be true on the fixture or the sensing arrangement is unproven |
 | Conditions | Catch fixture **verified this session** (BD-07: overhead tether primary; lip only if below FoV). Edge lanes at several angles (proposal 0/45/90/135/180°). Boot/reset/app-link loss returns to `OM-03`. A row without the catch is **invalid**, not a fail of the robot |
@@ -230,3 +230,21 @@ Plan mapping: `BM-05/06/07` onset/settle plus recorded builder judgement; at lea
 ## 3. Registered gates
 
 *(none yet)*
+
+## 4. Paper scores against complete drive sets — 2026-09-18, all OPEN
+
+These are builder paper scores of P01–P09 against **Set A** and **Set B** in `drivetrain-screen-01.md` v0.2. They are **not** a freeze, **not** a purchase, and **not** a §3 registration. Missing evidence returns OPEN/HOLD, never PASS. A later freeze copies a row into §3 with a dated approval **before** scored data.
+
+| Gate | Set A (D02 6 V + D10 4 mm + D20 + dual DRV8874 + 2S direct) | Set B (D03 6 V 1:45 + same wheel/caster/driver/supply/mount) |
+|---|---|---|
+| P01 Torque | **PASS on paper** (Oz stall 0.490 and NFP 0.441 ≥ 0.220; rated ≥ 0.063). 6.0 V under sag still ≥ 0.220 on Oz | **PASS on paper** (Oz stall 0.589 ≥ 0.220; rated 0.108 ≥ 0.063) |
+| P02 Speed | **PASS on paper** at 6 V 176 RPM. **HOLD** at 8.4 V (no-load 1.08 m/s) unless the 0.70 compiled clamp is on — the clamp is mandatory, not optional | **HOLD** — 133 RPM / 0.585 m/s at 6 V is below 160 and below 0.70, still above follow 0.50 |
+| P03 Current / 5 A | **HOLD** — Oz 900 mA vs NFP ≤ 3 A at 6 V; NFP ≤ 4.2 A at 8.4 V. Do not average. Meter the article | **HOLD** — same stall-current `D` conflict |
+| P04 Encoder / creep | **PASS on paper** (11 PPR × 35:1 ≈ 385 CPR, 0.69 mm/count, ~58 c/s at 0.04 m/s) | **PASS on paper** (11 PPR × 45:1 ≈ 495 CPR) |
+| P05 Backdrivability | **Named, not picked** — 35:1 backdrivable; `BM-00` needs active hold or a brake; `BM-01` needs current at `v*=0` | Same class, slightly more residual friction `E` |
+| P06 Mass | **PASS on paper** — two motors ~220 g + wheels/caster/skid/brackets/two DRV8874 → 350–500 g `E` inside 200–600 g | Same mount; 45:1 box is not a mass break |
+| P07 Coverage / latency | **PASS on paper for the arrangement** (three look-downs + analog-IR + bump + IMU). Not a SKU pass. 2.0° downhill at 0.50 m/s makes `d_stop` 221 mm vs 179 mm level — coverage corner, not a P07 fail of the count | Same arrangement |
+| P08 Pin map spare GPIO | **PASS on paper** — v0.1 retains three safe spares; header generated. Not a G05 pass | Same map |
+| P09 Analog-IR 0.50 vs 0.70 | **PASS on paper at 0.50** if caster-mounted (179 mm). **HOLD at 0.70** (289 mm) and **HOLD at 0.50 downhill 2°** (221 mm) until mounting geometry is proved | Same |
+
+Set A is the **reference-unit lead**, not a freeze. Set B stays the comparison. Neither row is purchased.

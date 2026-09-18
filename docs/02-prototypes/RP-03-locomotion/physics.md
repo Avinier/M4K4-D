@@ -2,8 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Status | **Paper envelope v0.1 — ranges, not a freeze.** No motor, sensor or caster selected. No single `a_tip`. No pass threshold. No purchase |
+| Status | **Paper envelope v0.2 — ranges, not a freeze.** No motor, sensor or caster selected. No single `a_tip`. No pass threshold. No purchase. v0.2 adds slope, repeated-phrase heat, low-voltage torque, caster flutter/start/360°, support-triangle load share, and head-pose CoM extras |
 | Created | 2026-09-17 |
+| Last updated | 2026-09-18 |
 | Owner | Project builder |
 | Governing plan | `plan.md` Part 2; `plan.md` §5 checklist |
 | Method | `../../intuition.md` §5.1 step 3; safety toolkit `d_available > v·t_latency + v²/(2·a_brake) + d_margin` |
@@ -119,9 +120,9 @@ None of these is `W`. None is silently zero.
 | ID | Quantity | Value | Class | Basis |
 |---|---|---|---|---|
 | C01 | Rolling-resistance coeff. `C_rr` | 0.025 | `E` | moderate-grip rubber/TPU on hard floor; analogical |
-| C02 | Tile μ | 0.40–0.70 | `E` | household tile, dry, moderate-grip tyre. BD-04 will name the room |
-| C03 | Wood / laminate μ | 0.35–0.60 | `E` | same |
-| C04 | Thin rug μ | 0.45–0.80 | `E` | same; threshold geometry is not a μ problem |
+| C02 | `S-TILE` μ | 0.40–0.70 | `E` | 600×600 vitrified ceramic, dry, moderate-grip tyre. BD-04 named 2026-09-18 |
+| C03 | `S-LAM` μ | 0.35–0.60 | `E` | 8 mm laminate, dry. Dust and polish move this |
+| C04 | `S-RUG` μ | 0.45–0.80 | `E` | Thin cotton/jute, pile < 8 mm. Threshold geometry is `S-THR`, not a μ problem |
 | C05 | Sensor sample-age bound | 20 ms | `E` | ToF frame or analog-IR settle. Digital cliff can be ~1–5 ms; do not take the fast number as the bound |
 | C06 | Driver response | 8 ms | `E` | H-bridge + current loop, analogical; not a named driver |
 | C07 | Floor stopping margin `d_margin` | 50 mm | `E` | clearance hypothesis for G03 |
@@ -131,6 +132,11 @@ None of these is `W`. None is silently zero.
 | C11 | Signed regen current class | 0.3–1.5 A | `E` | `LP-04-REV/BRAKE`; polarity opposite traction |
 | C12 | Blind-region object | 20 mm square × 20 mm tall, floor level | `E` | caster-shadow failure mode |
 | C13 | Scrub lever | `tread/3 = 7 mm` per wheel | `E` | order-of-magnitude patch centroid for a scrubbing tyre, not a measured contact patch |
+| C14 | Allowed indoor slope | **2.0° (3.5 %)** continuous, dry | `E` | SC-TBD-07 grade. V1 envelope, not a measured floor |
+| C15 | `S-THR` geometry | 6–8 mm rise over 30–40 mm run | `E` | Geometric step. Local grade ≈ 11–15° over 40 mm; not a continuous slope |
+| C16 | Caster trail target | 10–18 mm | `E` | Flutter / heading-glitch screen. < 8 mm is HOLD. Currently `U` on any SKU |
+| C17 | Caster starting force | ≤ 2 N at the caster contact | `E` | Creep stick-slip bound. Not a SKU |
+| C18 | Gearbox housing stop-on-temperature | 85 °C candidate | `E` | Obligation, not a dB/thermal gate. Driver IC follows its datasheet derate |
 
 Lumped-block masses and `(x, h)` coordinates are tabulated in §2. Every one is `E`.
 
@@ -140,8 +146,8 @@ Lumped-block masses and `(x, h)` coordinates are tabulated in §2. Every one is 
 |---|---|---|
 | Installed complete-head mass M900 | Layout 03 tree is D/E | A point `a_tip`; waits on RP-01 |
 | Real integrated `x_CoM`, `h_CoM` | No ballast article exists | Lift-onset `W`; RP-03 scores BD-05 corners instead |
-| Floor μ on the builder's surfaces | BD-04 unnamed | Traction `W`; G01 surface matrix |
-| Caster trail / swivel friction | No caster selected | `BM-07` heading-glitch magnitude |
+| Floor μ on the named BD-04 articles | `S-TILE` / `S-LAM` / `S-RUG` named 2026-09-18; μ still `E` | Traction `W`; G01 surface matrix |
+| Caster trail / swivel friction / starting force / flutter speed | No caster selected. C16/C17 are screen bounds, not SKU data | `BM-07` heading-glitch; flutter; creep stick-slip |
 | Ball-transfer rolling resistance and floor denting | No support selected | Concept A vs B comparison numbers stay order-of-magnitude |
 | Driver + gearbox electrical efficiency as a product | No motor selected | `LG-04` stays a band |
 | `LG-10` sensing load | No sensor candidate on the bench | Class remains `U`; do not invent a `W` |
@@ -366,6 +372,43 @@ At HIGH, `a_lat,tip = 9.81 · 85 / 97.25 = 8.57 m/s²` — still not governing. 
 
 If the target is hit, a 14 mm / 70 mm skid just clears. If the target is missed, lengthen reach or drop the skid — or restore `x`. Do not command a smaller `a_peak` to hide it.
 
+### 2.8 Head-pose CoM extras and head-induced rocking
+
+A mass dummy at 304 mm is **not** BD-05. Layout 03 pitch and yaw move the head CoM. Pitch axis height `E` ≈ 200 mm; head lump at `h ≈ 252 mm`; lever **52 mm** `E`. Head mass NOM 509 g.
+
+Recompute NOM `Σ(m x) = 32995 g·mm`, `Σ(m h) = 264068 g·mm`, `M = 2559 g` from §2.2. Only the head lump's `(x, h)` changes.
+
+**`HP-PITCH-FWD` (+35° nose down).** Head `x' = 5 + 52 sin 35° = 5 + 29.8 = 34.8 mm`. Head `h' = 252 − 52 (1 − cos 35°) = 252 − 8.4 = 243.6 mm`.
+
+```text
+Σ(m x) = 32995 − 509·5 + 509·34.8 = 48163 g·mm
+Σ(m h) = 264068 − 509·252 + 509·243.6 = 259793 g·mm
+x = 18.82 mm,  h = 101.52 mm,  x/h = 0.185
+a_tip = 9.81 · 18.82 / 101.52 = 1.819 m/s²
+```
+
+**`HP-PITCH-AFT` (−18° look up).** Head `x' = 5 − 52 sin 18° = 5 − 16.1 = −11.1 mm`. Head `h' = 252 − 52 (1 − cos 18°) = 252 − 2.5 = 249.5 mm`.
+
+```text
+Σ(m x) = 32995 − 2545 + 509·(−11.1) = 24799 g·mm
+Σ(m h) = 264068 − 128268 + 509·249.5 = 262796 g·mm
+x = 9.69 mm,  h = 102.69 mm,  x/h = 0.094
+a_tip = 9.81 · 9.69 / 102.69 = 0.926 m/s²
+```
+
+At NOM, `HP-PITCH-AFT` drops `a_tip` from 1.226 to **0.93 m/s²** — the same class as HIGH's lumped 0.91, and **below** authored `a_peak = 1.00`. Score `BM-07` here. Do not treat a 304 mm dummy as covering this corner.
+
+**`HP-YAW-L/R` (±50°).** Head's +5 mm forward offset rotates: `Δx_head = 5 (cos 50° − 1) = −1.79 mm`, `Δy_head = ±5 sin 50° = ±3.83 mm`. Whole-robot `Δx_CoM = 509·(−1.79)/2559 = −0.36 mm`, `Δy_CoM = ±0.76 mm`. Negligible on caster-lift. Lateral CoM is a spin-walk term (`FS-05`), not an `a_tip` term.
+
+**Head-induced rocking (into `BM-00/01`).** Two inherited paper peaks (`fullproofmath.md`, `E`):
+
+| Couple | Peak | Path into the chassis | Equivalent force |
+|---|---:|---|---|
+| Yaw | 0.1099 N·m at 90.5 °/s | Equal-and-opposite on the 170 mm track | 0.646 N per wheel → 0.027 N·m at each wheel |
+| Pitch | 0.0953 N·m at 57.8 °/s | Sagittal couple on the 110 mm wheelbase | 0.0953 / 0.110 = **0.87 N** at the caster–axle pair |
+
+At LOW, static caster load is `0.227 · 1.65 · 9.81 = 3.68 N`. The pitch couple is **24 %** of that. It will not lift the caster on paper; it **will** walk a backdrivable contact patch and can rock the chassis at laugh-frequency content (~10 Hz, RP-01 pitch-frame note). Named hold/vibration failure: visible patch walk, audible hunting, or chassis pitch oscillation (`FS-09`). Screening only the 0.1099 N·m yaw couple is not `BM-00/01`.
+
 ---
 
 ## 3. Traction and scrub
@@ -374,10 +417,11 @@ If the target is hit, a 14 mm / 70 mm skid just clears. If the target is missed,
 
 | Surface | μ `E` | Notes |
 |---|---|---|
-| Tile | 0.40–0.70 | Dry household tile, moderate-grip rubber/TPU |
-| Wood / laminate | 0.35–0.60 | Dust and polish move this; BD-04 names the room |
-| Thin rug | 0.45–0.80 | Pile can also jam a caster or a ball transfer |
-| Threshold strip | — | **Geometric**, not a μ problem. Treat as an obstacle / pitch disturbance |
+| `S-TILE` | 0.40–0.70 | Dry vitrified ceramic, moderate-grip rubber/TPU |
+| `S-LAM` | 0.35–0.60 | Dust and polish move this |
+| `S-RUG` | 0.45–0.80 | Pile can also jam a caster or a ball transfer |
+| `S-THR` | — | **Geometric**, not a μ problem. 6–8 mm over 30–40 mm |
+| 2.0° slope | same μ as the board it sits on | Grade addend in §10, not a fifth floor |
 
 Do not pick a single μ. Do not treat the top of a band as available.
 
@@ -443,6 +487,56 @@ This is why Concept A vs B exists. Numbers here are comparable, not a winner.
 | Tip geometry | Contact patch moves as it swivels; `L` is not a fixed 110 mm during a reverse | Contact stays put |
 
 A swivel caster with trail yaws during `BM-07` reversal and can produce a one-cycle heading glitch. A ball transfer has no trail but higher rolling resistance and can dent soft floors. Do not select either in this file. Carry both into `concepts/` with the §2 `a_tip` range and the §6 stopping table as the screens.
+
+### 3.5 Caster flutter, starting force, 360° envelope
+
+Trail is currently `U` on any SKU. It is now a **screen axis**, not a footnote.
+
+**Trail.** Target 10–18 mm (C16). Trail < 8 mm is HOLD for flutter: a short-trail Ø25–32 mm caster on a hard floor at 0.50 m/s is the hobby shimmy case. Trail > 20 mm grows the `BM-07` heading glitch and the instantaneous wheelbase wander. Instantaneous `L` during a reverse is `L_nominal ± trail`, not frozen 110 mm.
+
+**Starting force.** Bound ≤ 2 N at the caster contact (C17). At `BM-02` 0.04 m/s, a sticky caster is stick-slip, which reads as a limp. Drive-wheel breakaway is a different number (μ N_drive); do not score creep against caster start and call it traction.
+
+**Flutter.** Caster spin at follow cap: `v / r_caster`. For Ø30 mm, `r = 0.015 m`:
+
+```text
+n_caster (0.50 m/s) = 0.50 / (π · 0.030) · 60 = 318 RPM
+n_caster (0.15 m/s) = 95 RPM
+```
+
+Paper screen: no flutter on `S-TILE` / `S-LAM` at 0.50 m/s with the named trail. Flutter is a G01/G06 observation (heading oscillation, audible chatter, walk). It is not a motor SKU. Ball-transfer `D21` has no flutter of this kind; it has cup-jam and denting instead.
+
+**360° swivel envelope.** The fork, wheel and any bumper must clear the forward battery tray, the three look-down bodies, and the Ø84 tyre at every azimuth. Straight-ahead pose is not the check. Record, on paper until CAD pass 1 exists: (1) collisions, (2) trail as a function of azimuth if the fork is asymmetric, (3) instantaneous wheelbase. Concept napkin geometry is not this sweep.
+
+### 3.6 Support-triangle load share — spin and reverse
+
+Static three-point on a level floor, caster at `+L`, skid **unloaded** (it is a catch, `N_skid = 0` in the normal pose):
+
+```text
+N_caster = M g · x / L
+N_drive  = M g · (L − x) / L          split equally L/R on a straight pose
+```
+
+| Case | `x` (mm) | `L` (mm) | `N_caster / Mg` | `N_drive / Mg` | `N_wheel / Mg` |
+|---|---:|---:|---:|---:|---:|
+| TARGET | 25 | 110 | 0.227 | 0.773 | 0.386 |
+| NOM | 12.89 | 110 | 0.117 | 0.883 | 0.441 |
+| HIGH | 8.97 | 110 | 0.082 | 0.918 | 0.459 |
+| `HP-PITCH-AFT` on NOM | 9.69 | 110 | 0.088 | 0.912 | 0.456 |
+
+HIGH and pitch-aft put **less than 9 %** of weight on the caster. That is a flutter and walk risk, not a traction gift.
+
+**Reverse launch (`BM-08`).** Inertia loads the caster. Dynamic caster share ≈ `x/L + a h / (g L)` with `a` rearward. At TARGET, `a = 1.00 m/s²`, `h = 124 mm`:
+
+```text
+ΔN_caster / Mg = a h / (g L) = 1.00 · 0.124 / (9.81 · 0.110) = 0.115
+N_caster / Mg ≈ 0.227 + 0.115 = 0.342
+```
+
+The skid unloads further. Nothing behind the axle catches a forward rotation except the caster geometry. Reverse is not the dual of forward.
+
+**Excited spin.** A static three-point pose is **not** an excited-spin proof. During `BM-06` the caster yaws; trail makes `L` and the contact patch orbit; scrub on the drive tyres is continuous. If the caster chatters or lifts, support collapses onto the **axle line** (two wheels, 170 mm track) until the skid or the caster returns. Any `x_CoM ≠ 0` then pitches onto caster or skid. That is why the skid is mandatory, why HIGH's 8 % caster share is a spin-walk risk (`FS-05`), and why G06 must export measured translation, not a photograph of the robot standing still.
+
+Skid is a **catch**, not a fourth load-bearing point in the normal pose. Witness skid contact during spin and during forward launch; G01 currently infers lift from pitch, which is not the same observable.
 
 ---
 
@@ -547,6 +641,30 @@ High-ratio N20-class (~150:1) is poorly backdrivable — hold comes from ratio +
 
 Reflected inertia at the wheel grows with `N²`. A high-ratio box makes `BM-07` reversal a current spike and a heading glitch; a low-ratio box makes `BM-00` a brake-or-whine decision. Both are `E` class statements about classes, not SKUs. The drivetrain screen scores all three hold options against `LG-04` idle, acoustic §9, and the 200–600 g row. It does not pick one here.
 
+### 4.7 Torque and speed at low usable supply
+
+Nameplate 6 V tables are **not** the empty-pack case and are not the charged-pack case. RP-02's 2S-class bus is **6.0–8.4 V** `E`, not a freeze. Brushed speed and stall torque scale approximately with terminal voltage (`E` class; brush drop and saturation are `U`).
+
+Reference-unit `D02` is a **6 V** winding. At 8.4 V it is 40 % over voltage.
+
+| Supply | Scale vs 6.0 V | `D02` no-load RPM `E` | Ø84 `v` `E` | Oz stall `τ` `E` | Oz stall `I` `E` | NFP stall `I` `E` |
+|---|---:|---:|---:|---:|---:|---:|
+| 8.4 V (2S full) | 1.40 | 246 | **1.08 m/s** | 0.686 N·m | 1.26 A | 4.2 A |
+| 6.0 V (2S empty, nameplate) | 1.00 | 176 | 0.77 m/s | 0.490 N·m | 0.90 A | ≤ 3 A |
+| 6.0 V under load sag, −10 % `E` | 0.90 | 158 | 0.70 m/s | 0.441 N·m | 0.81 A | ≤ 2.7 A |
+
+Read this as:
+
+1. **Charged 8.4 V overspeeds** the 6 V winding past the 0.70 m/s cannot-exceed (1.08 m/s no-load). C3's compiled clamp at 0.70 is **mandatory**, not a nicety. Brush/thermal life at 8.4 V is `U` and a Set A risk, not a reason to drop the clamp.
+2. **Empty 6.0 V** is the nameplate. No-load 0.77 m/s still clears 0.70 on paper; **loaded** 0.70 will sit near the no-load number and may miss. Follow 0.50 (113.7 RPM) has 176/114 ≈ 1.55× no-load headroom — paper OK. The 0.70 design point has ~10 % no-load headroom and is the first thing sag eats.
+3. **NFP ≤ 3 A at 6 V becomes ≤ 4.2 A at 8.4 V.** Both-motor stall then **exceeds Korad 5 A** even more clearly. Oz 900 mA scales to 1.26 A and stays under. P03 HOLD is not resolved by voltage algebra.
+
+Comparison `D03` 6 V 133 RPM 1:45: at 6.0 V, 0.585 m/s no-load — above follow 0.50, below 0.70 (same P02 HOLD). At 8.4 V, 186 RPM → 0.82 m/s, still needs the 0.70 clamp.
+
+A 12 V JGA25-class winding on the same 2S bus: at 6.0 V, 88 RPM → **0.39 m/s**, which **fails follow 0.50 at empty pack**. That is not Set B.
+
+Margin statement for Set A at 6.0 V under load: follow 0.50 has paper speed margin; 0.70 does not, once sag and load are admitted. Torque at 6.0 V still clears P01 on both Oz and NFP stall tables (0.490 and 0.441 ≥ 0.220). Do not screen motors against 8.4 V stall and then ship them at 6.0 V.
+
 ---
 
 ## 5. Electrical demand for the ledger
@@ -597,6 +715,34 @@ Propose these as revised `E` ranges. This file does not edit the ledger; the cha
 | Peak | ≤ 1.0 W if emitters are pulsed; **≤ 1.2 W if ToF + IR all continuous (flag)** | The 1.2 W continuous case is a flag against `PB-SAFE-BASE` and against the "≤ 1 W" ledger line, not a permission to run continuous |
 
 Drive mass **200–600 g**: physics does **not** move this bound. Do not ask the mass ledger to change. A brake, if chosen later, still has to fit inside it.
+
+Ledger v0.14 already consumed the 2–8 W / `LG-10` `U` proposal on 2026-09-17. v0.2 of this file does not reopen that band. It adds the repeated-phrase heat obligation in §5.4; the ledger change-log row for that is v0.15.
+
+### 5.4 Heat over repeated phrases — duty, rise, stop-on-temperature
+
+RMS over a follow minute (§4.4) is not the thermal case. The phrases that heat a small metal gearbox and a DRV8874-class driver are **repeated** `BM-06` spins, `BM-07` wiggles, `BM-03` come cycles, and a follow minute with scrub.
+
+Mechanical floor load is small. Gearbox inefficiency is the heat:
+
+```text
+P_heat,box ≈ P_mech · (1/η − 1)
+```
+
+At η = 40–70 % `E` and P_mech 0.4–1.4 W, box heat is **0.2–2.1 W** for two motors together during cruise. Reversal and spin add scrub (`τ_scrub` 0.025–0.045 N·m per wheel at 74 RPM → ~0.27 W mechanical per wheel, §3.3) and current spikes that the 40 % end of η turns into winding heat.
+
+| Phrase | Duty hypothesis (`E`) | Electrical class | Heat note |
+|---|---|---|---|
+| Follow minute (`BM-04`) | ~50 s cruise + sparse accel | 2–8 W `LG-04` average | Cruise is the thermal floor, not the peak |
+| `BM-06` × 10 in 60 s | 10 × ~4.3 s spin ≈ 43 s | Scrub-continuous; 4–12 W `E` while spinning | Gearbox housing is the first rise; tyre scrub is a second |
+| `BM-07` × 10 in 60 s | 10 × 3 s = 30 s of reversals | Current spikes through zero; 8–20 W `E` peaks, lower RMS | Driver and windings, not the follow-minute number |
+| `BM-03` × 6 in 60 s | 6 × 5 s = 30 s of 0.40 m/s² launches | Inside the 2–8 W band | Not governing |
+| `BM-14` cutoff | One event | Regenerative path **absent** (bus open) | Energy goes into mechanical coast, not the driver sink |
+
+Lumped thermal mass of a 110 g JGA25-class article is ~50 J/K `E` if the whole housing were isothermal. 3 W into 50 J/K is 0.06 K/s average — a follow minute is ~4 K on that lump. **Windings and the driver copper are not that lump.** Stall at 3 A will cook a winding long before the housing reads 85 °C. The obligation is:
+
+1. Log gearbox housing and driver-tab temperature during the four repeated phrases above, both BD-05 mass corners.
+2. **Stop-on-temperature:** C3 inhibits at a compiled housing candidate of **85 °C** (C18) or at the driver thermal flag, whichever is first. This is an inhibit, not a dB gate and not a scored G01 threshold until registered.
+3. Do not screen a motor against invented heat. Do not treat a quiet cruise wattage as evidence that a spin minute is safe.
 
 ---
 
@@ -733,7 +879,73 @@ No isolation design in RP-03. Inhibit / isolation is a later body decision (MEM-
 
 ---
 
-## 10. What this file does not do
+## 10. Allowed indoor slope (SC-TBD-07)
+
+Pick: **2.0° (3.5 %) continuous, dry**, on `S-TILE` or `S-LAM`. This is the V1 indoor grade. It is not a measured demo-room ramp and not permission to climb a household staircase. `S-THR` (6–8 mm over 30–40 mm) is a **step**, local grade ~11–15° for one caster diameter; treat it as a pitch disturbance / obstacle, not as this slope.
+
+`g sin 2° = 9.81 · 0.0349 = 0.342 m/s²`. `g cos 2° ≈ 9.80 m/s²`.
+
+### 10.1 Climb torque
+
+Climb force `M g sin θ`, shared by two drive wheels, plus rolling resistance:
+
+```text
+τ_climb,wheel = (M g sin θ / 2) · r
+```
+
+| Corner | `M` | `M g sin 2°` (N) | `τ_climb` (N·m) | Launch `τ` at 0.80 m/s² without slope | Sum `E` |
+|---|---:|---:|---:|---:|---:|
+| LOW | 1.65 | 0.56 | 0.012 | 0.036 | **0.048** |
+| Mid | 2.40 | 0.82 | 0.017 | 0.063 (at 1.00) | **0.080** |
+| HIGH | 3.624 | 1.24 | 0.026 | 0.073 (at 0.80) | **0.099** |
+
+Still inside P01's 0.110 / 0.220 stall screen for Set A at 6.0 V. Slope is a **real addend**, not a rounding error, and it is **not** a reason to invent a bigger motor class.
+
+### 10.2 Downhill brake
+
+Gravity adds `g sin θ` to the required deceleration when travelling downhill. Authored `a_brake = 1.20` plus 0.342 is 1.54 m/s² demanded of the wheels if the robot is not to accelerate downhill. Nose-down tip is 6.7 m/s² at TARGET — still does not govern. Traction on `S-LAM` at μ = 0.35: `a_trac ≈ 2.65 m/s²` at TARGET (§3.2) — still above 1.54. Dirty laminate plus a 2° downhill is the first traction-on-brake corner; log it, do not screen a motor against a 10° invented hill.
+
+Stopping table on the slope: add `v · t` unchanged; replace `a_brake` with `a_brake − g sin θ` when travelling downhill (weaker net brake) and `a_brake + g sin θ` uphill. At 0.50 m/s downhill:
+
+```text
+v² / (2 · (1.20 − 0.342)) = 0.25 / 1.716 = 146 mm
+d_stop = 25 + 146 + 50 = 221 mm     vs 179 mm on the level
+```
+
+G01 conditions include this 2° downhill row. Analog-IR look-ahead at 0.50 m/s (179 mm) is **tight** against 221 mm downhill — P09 HOLD at 0.70 was already the analog-IR story; slope makes 0.50 itself a coverage corner. Do not weaken follow to hide it. Mount the stop-path sensor at the caster, or accept that 2° downhill at 0.50 is an exploratory G03 row until look-ahead is proved.
+
+### 10.3 Tip-on-slope
+
+CoM at `(x, h)` on a slope `θ` (positive = facing uphill). Gravity's moment about the drive-axle contact, caster ahead:
+
+```text
+a_tip,uphill = g · (x cos θ − h sin θ) / (h cos θ + x sin θ)
+```
+
+At TARGET `x = 25 mm`, `h = 124 mm`, `θ = 2°`:
+
+```text
+x cos θ − h sin θ = 25.0 − 4.33 = 20.67 mm
+h cos θ + x sin θ = 124.0 + 0.87 = 124.87 mm
+a_tip,uphill = 9.81 · 20.67 / 124.87 = 1.624 m/s²
+```
+
+Versus 1.978 on the level: **−0.35 m/s²**. Authored `a_peak = 0.80` still has paper margin at TARGET. At HIGH lumped `x = 8.97 mm`, `h = 97.25 mm`:
+
+```text
+x cos − h sin = 8.97 − 3.39 = 5.58 mm
+a_tip,uphill = 9.81 · 5.58 / 97.6 ≈ 0.56 m/s²
+```
+
+**Below** authored 0.80. Uphill launch at HIGH on a 2° slope lifts the caster on paper. That is a ballast/placement problem, scored at that corner, not a motor problem and not a reason to drop `a_peak` quietly.
+
+Facing downhill, reverse launch (startle) loads the caster harder; the skid does not catch. G01 reverse rows include the 2° downhill heading.
+
+Put slope into G01 conditions. Do not screen motors against an invented 10° or against heat that this file did not compute.
+
+---
+
+## 11. What this file does not do
 
 - No motor SKU.
 - No sensor SKU.
@@ -749,4 +961,11 @@ No isolation design in RP-03. Inhibit / isolation is a later body decision (MEM-
 
 ## Implication for Part 3
 
-Concepts **must** differ on (1) swivel caster vs ball transfer (scrub / `BM-07` reversal), (2) battery / motor placement vs the 110 mm wheelbase (the CoM lever that decides whether `a_tip` is ~0.9 or ~1.9 m/s²), (3) 3-look-down vs perimeter ring, (4) analog-IR-in-the-stop-path vs ToF-as-telemetry. Screens against the §6 stopping table and the §2 `a_tip` **range**, not against 2.0 m/s². A concept that only exists at the placement target has not been compared; a concept that quietly assumes a rear battery is already HIGH_AFT and is not a concept. The drivetrain screen then names `D01…` against this envelope without becoming a freeze; the sensing screen names `S01…` against coverage and the 50 ms invariant, never because a driver board happened to have the pins.
+Concepts **must** differ on (1) swivel caster vs ball transfer (scrub / `BM-07` reversal), (2) battery / motor placement vs the 110 mm wheelbase (the CoM lever that decides whether `a_tip` is ~0.9 or ~1.9 m/s²), (3) 3-look-down vs perimeter ring, (4) analog-IR-in-the-stop-path vs ToF-as-telemetry. Screens against the §6 stopping table and the §2 `a_tip` **range**, not against 2.0 m/s². A concept that only exists at the placement target has not been compared; a concept that quietly assumes a rear battery is already HIGH_AFT and is not a concept. The drivetrain screen then names complete **drive sets** against this envelope without becoming a freeze; the sensing screen names `S01…` against coverage and the 50 ms invariant, never because a driver board happened to have the pins.
+
+## Change log
+
+| Date | Version | Change |
+|---|---|---|
+| 2026-09-17 | 0.1 | `a_tip` RANGE, four loading cases, traction/scrub, demand, Korad 5 A, stopping table, coverage, CON-TBD-14 proposal |
+| 2026-09-18 | 0.2 | Head-pose CoM extras and rocking §2.8; flutter/start/360° §3.5; support-triangle spin/reverse §3.6; low-voltage §4.7; repeated-phrase heat §5.4; allowed slope 2.0° §10. BD-04 named surfaces. Ledger v0.15 follows |

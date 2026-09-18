@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Design definition v0.1.** Rules `BC-01…BC-10` and pin map v0.1 are written against Espressif ESP32-S3-DevKitC-1-N8. This is not a freeze of motor, driver or sensor SKUs. Byte layouts, message type numbers, baud and numeric timeouts remain **OPEN**. `BASE_*` payloads are proposed into RP-02 `link-contract.md` v0.5; they are not registered. Registration waits on RP-02 accepting v0.5 (`RP02-P4-REG-02` is not issued) |
+| Status | **Design definition v0.2.** Rules `BC-01…BC-10` and pin map v0.1 are written against Espressif ESP32-S3-DevKitC-1-N8. Candidate `cmd_ttl` / heartbeat / queue depth named 2026-09-18 and **unregistered**. Byte layouts, message type numbers and baud remain **OPEN**. `BASE_*` semantics are accepted by RP-02 as `RP02-P4-REG-02`; they are not a byte-layout freeze |
 | Owner | Project builder |
 | Created | 2026-09-17 |
 | Consumes | `intent.md`; `storyboard.md` profile library; `physics.md` §6 latency / §7 coverage and the `a_tip` RANGE; RP-02 `compute-control-architecture.md` `CA-03/11/12/14` and §3 I/O; RP-02 `link-contract.md` v0.4 envelope (`RP02-P4-REG-01`); RP-02 `state-register.md` `OM-01/02/03`, `SD-03`, `CC-12C` |
@@ -105,7 +105,18 @@ Expiry is evaluated at **execution**, not at receipt — same rule as `HEAD_GOAL
 
 The motion queue is **latest-wins** and **fixed-capacity**. There is no unbounded FIFO in the wheel path (`CA-12`). Overflow → `NACK(QUEUE_FULL)`. A goal that arrives while inhibited, unarmed, or in the wrong mode → `NACK(INHIBITED)`. The reason set mirrors `HEAD_*`: `OK` / `EXPIRED` / `OUT_OF_LIMITS` / `INHIBITED` / `UNKNOWN_TYPE` / `BAD_CRC` / `QUEUE_FULL` / `NO_LIMITS` / `NONCE_REPLAY`.
 
-Numeric `cmd_ttl`, heartbeat timeout and queue depth are OPEN. Candidate shapes exist in `link-contract.md` §5 for the head; C3 does not inherit those numbers as registered.
+Numeric `cmd_ttl`, heartbeat timeout and queue depth are **candidates** (2026-09-18). They stay **unregistered** until Phase A measures them. They are no longer "unanswered."
+
+| Quantity | Candidate | Why this number | Registered? |
+|---|---|---|---|
+| `BASE_GOAL` `cmd_ttl` for streamed cruise / follow | **200 ms** | Latest-wins follow is a 20 Hz-class stream. 200 ms is four missed frames, analogous to the head `TRACK` 100 ms but slower because a base cruise is not a 7° laugh pulse | No |
+| `BASE_GOAL` `cmd_ttl` for authored one-shot (`PIVOT`, `SPIN`, `WIGGLE`, come step, `BRAKE`) | **`duration_ms + 250 ms`** | Same shape as `HEAD_GOAL` authored segments | No |
+| `HOLD` | Heartbeat-supervised, not a short TTL | A still body must not expire into coast. Heartbeat loss already `BRAKE`s (`BC-04` rank 4) | No |
+| `CC-12C_ARM` expiry | **5 s** candidate, plus the speed clamp 0.06 m/s | Tabletop arm is a short lease. Expiry is inhibit, not a slow coast to the mark (`F-43`) | No |
+| Heartbeat timeout | **150 ms** (three missed at 20 Hz) | Same candidate as C0↔C2. `BRAKE` onset within one tick after timeout; rest follows the bounded `BRAKE` | No |
+| Motion queue depth | **2** | One executing segment + one pre-empting successor. Overflow → `NACK(QUEUE_FULL)`. Not an unbounded FIFO | No |
+
+C3 does not inherit the head numbers as registered. Soft `cmd_ttl` in `BASE_LIMITS_SET` may only **tighten** the compiled candidate. A prototype codec must declare the revision; it cannot be scored as this contract.
 
 ### `BC-08` — Readiness
 
@@ -236,7 +247,7 @@ Types below are grouped like `HEAD_*`. `→` C0 to C3; `←` C3 to C0. Payload c
 | `BASE_GOAL` | → | `profile_id` (`LAUNCH` / `CRUISE` / `DECEL0` / `PIVOT` / `ARC` / `SPIN` / `WIGGLE` / `BRAKE` / `HOLD`) · `v`, `ω` · `duration_ms` · `valid_until_us` · `flags` (hold-after, interruptible) | **One segment.** C3 instantiates the profile law; C0 never streams intermediate wheel points. Latest-wins if a newer valid goal arrives (`BC-07`) |
 | `BASE_CANCEL` | → | settle / `BRAKE` law | Reject queued segments; current motion decelerates under `BRAKE`. `BM-12` analogue of `HEAD_CANCEL` |
 
-**Expiry rule.** C3 evaluates `now_master_us > valid_until_us` at *execution*. Expired command → `NACK(EXPIRED)`. A burst after reconnect is rejected frame by frame. Candidate TTLs are OPEN (head candidates in `link-contract.md` §4.2 are not imported as registered C3 numbers).
+**Expiry rule.** C3 evaluates `now_master_us > valid_until_us` at *execution*. Expired command → `NACK(EXPIRED)`. A burst after reconnect is rejected frame by frame. Candidate TTLs (2026-09-18, **unregistered**): streamed cruise/follow **200 ms**; authored one-shot **`duration_ms + 250 ms`**; `HOLD` is heartbeat-supervised; queue depth **2**; heartbeat timeout **150 ms**. Head candidates in `link-contract.md` §4.2 are not imported as registered C3 numbers.
 
 ### 4.3 Feedback and health
 
@@ -266,12 +277,13 @@ Paper latency sum in `physics.md` §6.1 is 35 ms `E`. Scoring uses **50 ms**. A 
 
 **Written by this file (design definition, not a Part-4 registration until the builder issues `RP03-P4-REG-01`):** `BC-01…BC-10`; pin map v0.1 against DevKitC-1-N8 with three safe spares; `BASE_*` draft in the registered envelope; `CC-12C_ARM` as a separate nonce; unknown-is-inhibit; fresh-arm after every inhibit; compiled `a_max` default ≤ 0.80 m/s² until measured CoM.
 
-**Still open without weakening the rules:** driver and sensor SKUs; `IPROPI` / ISENSE landing; ToF as optional telemetry; exact RS-422 suffix on this link (implementation lead remains THVD1451D); external-watchdog suffix/window/latch; byte layouts and type numbers; numeric TTL, heartbeat, sensor-age and watchdog windows; G05 / RP02-G05 C3 loop-jitter evidence; BD-01/BD-03; purchase.
+**Still open without weakening the rules:** driver and sensor SKUs; `IPROPI` / ISENSE landing; ToF as optional telemetry; exact RS-422 suffix on this link (implementation lead remains THVD1451D); external-watchdog suffix/window/latch; byte layouts and type numbers; **measured** TTL/heartbeat/sensor-age and watchdog windows (candidates exist, 2026-09-18); G05 / RP02-G05 C3 loop-jitter evidence; purchase.
 
-**Owned elsewhere — link, do not copy:** C0↔C2 registered message set (`RP02-P4-REG-01`); `PA-13` motor-domain authority; `OM/CC/LP` vocabulary; `F-19/F-22/F-26` text (cross-listed in `fault-matrix.md`); coverage millimetres (`physics.md` §7).
+**Owned elsewhere — link, do not copy:** C0↔C2 registered message set (`RP02-P4-REG-01`); C0↔C3 `BASE_*` semantics (`RP02-P4-REG-02`); `PA-13` motor-domain authority; `OM/CC/LP` vocabulary; `F-19/F-22/F-26` text (cross-listed in `fault-matrix.md`); coverage millimetres (`physics.md` §7).
 
 ## Change log
 
 | Date | Version | Change |
 |---|---|---|
 | 2026-09-17 | 0.1 | First draft: `BC-01…BC-10`, DevKitC-1-N8 pin map v0.1 (RGB released; `C3_READY` carrier-qualified; GPIO3 ESTOP input exception; three safe spares), `BASE_*` message-set draft in the RP-02 envelope. Byte layouts, SKUs and numeric timeouts open. Not a registration. |
+| 2026-09-18 | 0.2 | Candidate `cmd_ttl` / heartbeat / queue depth named and kept unregistered. Cutoff-coast pointed at G01/G05 (`BM-14`). CA-14 board-role header generated from pin map v0.1. `RP02-P4-REG-02` accepts v0.5 semantics. |

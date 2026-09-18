@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Status | **Open — no gate outcome, no ADR closed, no purchase authorized.** Parts 1–5 are complete at **design-definition** level under `RP03-P1-REG-01` through `RP03-P5-REG-01`. Numeric thresholds, candidate freeze and every gate outcome remain open; no scored run executed |
+| Status | **Open — no gate outcome, no ADR closed, no purchase authorized.** Parts 1–5 remain complete at **design-definition** level under `RP03-P1-REG-01` … `RP03-P5-REG-01`. Brief-gap close 2026-09-18 issued `RP03-P1-REG-02` … `RP03-P4-REG-02`. Numeric thresholds, candidate freeze and every gate outcome remain open; no scored run executed |
 | Created | 2026-09-17 |
-| Revised | 2026-09-17 |
+| Revised | 2026-09-18 |
 | Design question | What drive/support geometry, drivetrain class and local sensing arrangement lets a representative-mass Makad move expressively at low speed, reverse, turn, spin and stop stably on household floors — and what is the measured margin of that design against caster lift, stopping distance, minimum controllable speed, reversal quality and obstacle/edge coverage? |
 | Gate question | Can a candidate wheeled base with representative total mass move expressively at low speed, reverse, turn, spin and stop stably while local obstacle/edge sensing and controller limits prevent harmful or uncontrolled motion in the approved floor and tabletop permissions? |
 | Feeds | ADR-04, ADR-07 (close provisionally, later); ADR-06 *sizing*; ADR-03 (C3 half of RP02-G05); ADR-05 (measured base model for RP-04) |
@@ -39,19 +39,49 @@ These are current inputs. They are not SKU freezes, purchases, or `W` mass.
 | Timebase | `timebase.md` strategy written; **not implemented or validated**. Scored G01–G06 need it; Phase A exploratory capture may proceed without it | `timebase.md`; RP-02 Phase A |
 | Caster-lift planning value | `a_tip ≈ 1.98 m/s²` is a **placement target** at `x = +25 mm`, `h = 124 mm`, not a Layout 03 roll-up | dimensional baseline; `physics.md` §2 |
 
-## Builder decisions BD-01…BD-07 — working assumptions, 2026-09-17
+## Builder decisions BD-01…BD-07 — paper-confirmed 2026-09-18
 
-Recorded so Part 5 (`rig.md`, `gates.md`) can be written. They are **working assumptions**, not locked product decisions. The builder may revise any row **before gate freeze**. A revision after freeze is a new gate version.
+Recorded 2026-09-17 as working assumptions so Part 5 could be written. **Paper-confirmed 2026-09-18** as the brief-gap close: the rows below are the dated builder position for G01–G06 *candidate* conditions. They are **not** a gate freeze, not a purchase, and not SC-TBD-07/08/09 registration. A revision **before** gate freeze is a row edit with a new date. A revision **after** freeze is a new gate version.
 
-| ID | Working assumption (recommended) | Why it is not locked | Consequence for RP-03 |
+| ID | Paper-confirmed position (2026-09-18) | Why it is not a freeze | Consequence for RP-03 |
 |---|---|---|---|
-| **BD-01** | **V1 tabletop is fully stationary for users.** `CC-12C` remains an **owed caught-fixture calibration case** for G04, not a user-facing V1 behaviour | CON-09 permits either. Builder may still grant armed creep as a V1 service mode | G04 includes inhibit/reject **and** the armed-creep edge trial. Do not tell a user the droid walks on a table |
+| **BD-01** | **V1 tabletop is fully stationary for users.** `BM-13` is the user-facing case. `CC-12C` / `BM-11` remains an **owed caught-fixture calibration case** for G04, not a user-facing V1 behaviour | CON-09 permits either. Builder may still grant armed creep as a V1 service mode | G04 includes inhibit/reject **and** the armed-creep edge trial. Do not tell a user the droid walks on a table |
 | **BD-02** | **V1 obstacle policy = stop-only** | Redirect doubles the G03 matrix; `EV-20` allows stop | G03 is stop-short, heading held, no slew-as-path. Redirect is out of V1 |
-| **BD-03** | **Base IMU is runtime hardware**, installed from **Phase B** (MEM-20260812-02; CA reserves SPI+INT). RP-03 Phase A may log it as a **bench instrument on the stand** | Could have remained bench-only; that would leave pickup/tip/slip without a runtime owner | `LG-10`, pin map and G05 pickup rows assume the IMU is on the frame from Phase B |
-| **BD-04** | Surface set = **tile, wood/laminate, thin rug, threshold strip**, pending the builder naming the actual demo-room floors | SC-TBD-07 needs named surfaces; only the builder knows the room | G01/G03 use these as working labels until renamed. Not a freeze of SC-TBD-07 |
-| **BD-05** | **Four-corner ballast**: 1.65 kg and 3.10 kg+head, **both CoM extremes**. Honest default | Could wait on M900 and narrow; that would hide Layout 03 CoM risk | Rig sets `M`, `x` and `h` independently. HIGH_AFT is forbidden, not a corner |
+| **BD-03** | **Base IMU is runtime hardware**, installed from **Phase B**. RP-03 Phase A may log it as a **bench instrument on the stand** | Could have remained bench-only; that would leave pickup/tip/slip without a runtime owner | `LG-10`, pin map and G05 pickup rows assume the IMU is on the frame from Phase B |
+| **BD-04** | Named demo-room surface set below. Working labels tile / wood / rug / threshold are **retired** | SC-TBD-07 still registers at G01 freeze. If the physical room differs, rename **before** freeze | G01/G03 use `S-TILE` / `S-LAM` / `S-RUG` / `S-THR`. Slope is a G01 *condition*, not a fifth floor |
+| **BD-05** | **Four-corner ballast** plus **head-pose CoM extras**. Mass: 1.65 kg and 3.10 kg+head, both settable CoM extremes. Head-pose: `HP-PITCH-FWD`, `HP-PITCH-AFT`, `HP-YAW-L`, `HP-YAW-R` on top of `HP-NEUTRAL`. A mass dummy at 304 mm is **not** enough | Could wait on M900 and narrow; that would hide Layout 03 CoM *and* pose risk | Rig sets `M`, `x` and `h` independently, and can hold a Layout 03 pose (or a geometrically equivalent dummy). `HIGH_AFT` is forbidden, not a corner |
 | **BD-06** | Cannot-exceed test limit = **0.70 m/s** (top of the max target band). Follow ceiling remains **0.50 m/s** | Dimensional baseline gives a range, not a limit | G02 clamp tests 0.70. Follow cannot be authored or weakened to 0.70 |
 | **BD-07** | **Overhead tether primary** catch; raised lip **only if it sits below cliff FoV**. Lip-only is **rejected as default** because it can mask cliff sensing | Plan allowed either; lip-in-FoV would fake G04 | `rig.md` §7. Catch verified each tabletop session |
+
+### BD-04 named surfaces (demo-room class, 2026-09-18)
+
+These are the articles SC-TBD-07 will freeze against, unless the physical room forces a rename before G01 freeze. μ bands stay `E` in `physics.md`.
+
+| ID | Article | What it is | Why it is in the set |
+|---|---|---|---|
+| `S-TILE` | 600 × 600 mm vitrified ceramic tile, grouted, dry | Living-area hard floor, grout pitch disturbance, moderate specular | Dominant household hard floor; analog-IR and cliff albedo corner when dirty |
+| `S-LAM` | 8 mm laminate wood-look plank, click-lock, dry | Lower μ band, polish/dust, dent risk for `D21` | Second hard floor; `BM-07` heading-glitch and `D21` dent inspection |
+| `S-RUG` | Thin woven cotton or jute area rug, pile height **< 8 mm**, laid on `S-TILE` | Soft, higher μ, caster/ball jam, stick-slip at creep | SC-TBD-07 rug class without shag that would be an obstacle |
+| `S-THR` | Aluminum door-threshold strip, **6–8 mm rise over 30–40 mm run** | Geometric step, not a μ band | Threshold tolerance in SC-TBD-07; treated as a pitch disturbance / obstacle |
+
+Allowed indoor **slope** (SC-TBD-07 grade, not a floor ID): **2.0° (3.5 %) continuous, dry**, as a G01 condition on `S-TILE` or `S-LAM` (a marked ramp board is admissible). `physics.md` §10 computes climb torque, downhill brake and tip-on-slope. Steeper household ramps are out of V1.
+
+### BD-05 head-pose CoM extras
+
+Layout 03 authored best-case poses (`RP-01` `storyboard.md`): pitch **−18°…+35°**, yaw **±50°**. Usable mechanism travel is wider (`−22°…+40°`, yaw `±55°`) and is **not** used as a CoM corner — do not ballast past the authored pose.
+
+Pitch axis height `E` ≈ 200 mm from the floor (140 mm body + 60 mm neck allocation). Head CoM in the lumped model sits at `h ≈ 250–255 mm`, so the pitch lever is **≈ 50–55 mm**. Yaw rotates that same offset about vertical.
+
+| Extra | Pose | First-order CoM move (`E`, NOM head 509 g, lever 52 mm) | What it does to `a_tip` |
+|---|---|---|---|
+| `HP-NEUTRAL` | yaw 0, pitch 0 | The §2 lumped head at `x = +5 mm`, `h = 252 mm` | Baseline of the §2 RANGE |
+| `HP-PITCH-FWD` | pitch **+35°** (nose down) | `Δx ≈ +52 sin 35° = +30 mm` on the head lump; `Δh ≈ −52 (1 − cos 35°) = −8 mm`. Whole-robot NOM: `Δx_CoM ≈ +6.0 mm`, `Δh_CoM ≈ −1.6 mm` | **Helps** forward-launch `a_tip` (more +x, slightly lower h) |
+| `HP-PITCH-AFT` | pitch **−18°** (look up) | `Δx ≈ −52 sin 18° = −16 mm` on the head; `Δh ≈ −52 (1 − cos 18°) = −3 mm`. NOM: `Δx_CoM ≈ −3.2 mm`, `Δh_CoM ≈ −0.5 mm` | **Hurts** forward-launch `a_tip`. Score `BM-07` here |
+| `HP-YAW-L` / `HP-YAW-R` | yaw **±50°**, pitch 0 | Head `x` offset of +5 mm rotates: `Δx = 5 (cos 50° − 1) = −1.8 mm`, `Δy = 5 sin 50° = ±3.8 mm` on the head. NOM `Δx_CoM ≈ −0.4 mm`, lateral `Δy_CoM ≈ ±0.8 mm` | Almost negligible on `a_tip`. Lateral CoM is a spin/walk term, not a caster-lift term |
+
+Numbers are `E` from the lumped model, not CAD CoMs and not M900. Detail in `physics.md` §2.8. The rig must be able to hold these poses, or an equivalent dummy with the same `(m, x, y, h)`.
+
+A mass dummy at 304 mm with the head in one pose is **not** BD-05.
 
 ## Part registrations
 
@@ -88,6 +118,38 @@ Each record freezes **design-definition** only. None is a purchase. None is a ga
 | Frozen at design-definition | `BC-01…10`; C3 **pin map v0.1** (retains **≥ 2 spare** safe GPIO); `BASE_*` draft (`BASE_LIMITS_SET`, `BASE_ENABLE`, `BASE_GOAL`, `BASE_STATE`, `BASE_FAULT`, hazard telemetry) in the registered RP-02 envelope. **Unblocks RP-02 C3 items** marked as waiting on RP-03 |
 | Remains open | **Byte layouts** and type numbers; numeric timeouts; firmware; `link-contract.md` v0.5 registration on the RP-02 side; physical tests |
 | Not | Purchase. RP02-G05 pass. Carrier PCB |
+
+### RP03-P1-REG-02 — storyboard operating cases (2026-09-18)
+
+| | |
+|---|---|
+| Frozen at design-definition | `storyboard.md` v0.2: operating-case grammar on `BM-00…14`; `BM-03` permission chain; `BM-13` tabletop demonstration (not `BM-11`); `BM-14` physical-stop; head-rocking (pitch 0.0953 N·m and yaw 0.1099 N·m) on `BM-00/01`; `FS-01…11` freezeable never-list. `intent.md` character table extended |
+| Remains open | Pass/fail thresholds; the 240 fps acted mock-up; motor SKU; tabletop footprint radius; any gate outcome |
+| Not | Purchase. Gate pass. Freeze of `FS-*` as scored thresholds (they freeze with G01–G06) |
+
+### RP03-P2-REG-02 — remaining physics (2026-09-18)
+
+| | |
+|---|---|
+| Frozen at design-definition | `physics.md` v0.2: allowed indoor slope 2.0°; climb/downhill/tip-on-slope; repeated-phrase heat and stop-on-temperature obligation; wheel torque/speed at 6.0 V vs 8.4 V; caster flutter / starting force / 360° envelope as screen axes; support-triangle load share under spin and reverse; head-pose CoM extras; `LG-04`/`LG-10` change-log row in the programme ledger |
+| Remains open | A point `a_tip`; measured CoM; motor/sensor/caster SKU; CON-TBD-14 registration; ledger `W`; any gate pass |
+| Not | Purchase. Treating 2.0° as a measured floor. Editing the mass ledger bound |
+
+### RP03-P3-REG-02 — complete drive sets (2026-09-18)
+
+| | |
+|---|---|
+| Frozen at design-definition | Two complete drive sets in `drivetrain-screen-01.md` v0.2 (Set A = D02 6 V path; Set B = D03 6 V comparison), each motor+gearbox+encoder+wheel+driver+supply interface+mount. Paper P01–P09 scored against the *sets*. Gearbox backlash/efficiency/shaft load, wheel loaded-radius/runout/retention, caster trail/start/flutter/360°, driver brake/coast/regen as named rows. Matrix snapshot 2026-09-18 |
+| Remains open | Concept freeze; motor freeze; sensor freeze; purchase of any screened part. Paper P-gates remain OPEN as registrations even where a set PASSes on paper |
+| Not | Purchase. Winner. Paper PASS as a freeze |
+
+### RP03-P4-REG-02 — TTL candidates, cutoff metric, CA-14 header (2026-09-18)
+
+| | |
+|---|---|
+| Frozen at design-definition | Candidate `BASE_GOAL` `cmd_ttl`, heartbeat timeout and queue depth in `base-control-architecture.md` and `link-contract.md` v0.5 (**unregistered numbers**, Phase A still measures them). Cutoff-coast as a distinct G01/G05 candidate metric beside commanded `BRAKE`. C3 board-role header generated from pin map v0.1 (`RP-02-electrical/phase-a/c3_board_role.h`). RP-02 issued `RP02-P4-REG-02` for v0.5 *semantics* |
+| Remains open | Byte layouts and type numbers; measured timeouts; carrier PCB; firmware; physical tests |
+| Not | Purchase. RP02-G05 pass. Numeric TTL freeze |
 
 ### RP03-P5-REG-01 — rig and gate candidates
 
@@ -136,7 +198,7 @@ Candidates are recorded so selection happens from evidence. **None of these rows
 | Decision | Candidates | What is fixed for comparison | What decides it |
 |---|---|---|---|
 | Chassis / support concept | **Concept A — working lead, not a freeze.** Concept B remains the comparison (front support and sensing arrangement differ on first-order axes in `physics.md` §10) | Inherited topology; Ø84 / 170 mm / 105–115 mm; skid adjustable 60–80 × 8–16 mm; forward battery bay; HIGH_AFT forbidden | G01/G02/G06 + measured lift/scrub/`BM-07` heading glitch. Interchangeable caster / ball transfer on the rig |
-| Drive motor | **D02 JGA25-370 6 V 176 RPM — reference unit, not a freeze.** Other `D01…` rows remain admissible | Paper P01–P06; Ø84 wheel; 160–200 RPM design window; 1.5–3 A class | P01–P06 then scored G01/G02/G06. **This row is not selected** |
+| Drive motor | **Set A / D02 JGA25-370 6 V 176 RPM — reference unit, not a freeze.** Set B / D03 remains the comparison. Other `D01…` rows remain admissible | Paper P01–P06 against the *set*; Ø84 4 mm D-hub; 160–200 RPM design window; 1.5–3 A class; 0.70 clamp mandatory at 8.4 V | P01–P06 then scored G01/G02/G06. **This row is not selected** |
 | Motor driver | **DRV8874 class — lead, not a freeze.** Brushed H-bridge, per-channel current sense, hardware fault, fail-safe enable | `PB-DRIVE-L/R` separately observable; signed regen; fault/enable on test points | Phase A/B `W` plus G05 driver-fault rows |
 | Sensing leads | **S01, S04, S06, S07 — leads, not a freeze.** Arrangement screened against coverage/latency (P07) and analog-IR 0.50 vs 0.70 HOLD (P09) | Minimum three look-downs; no stop-path on an expander; dark/glossy in G04 | G03/G04/G05. A driver board's cliff pins do not pick this row |
 | Base IMU | Runtime from Phase B (BD-03 working assumption); Phase A may log as bench instrument | SPI+INT reserved on the pin map; rigid base mount; not in the head | G01 lift / G05 pickup. SKU open |
@@ -146,4 +208,4 @@ Candidates are recorded so selection happens from evidence. **None of these rows
 
 *(per ADR: pass / iterate / reject; selected candidates; budget rows updated with measured value, uncertainty and margin; downstream assumptions changed; re-run obligations created)*
 
-No paper gate passed. No physical gate passed. No purchase authorized. Concept A, D02, DRV8874-class and S01/S04/S06/S07 remain leads and a reference unit. Parts 1–5 are design-definition only. Phase A bench work on C3 may begin when the driver evaluation board and reference motor are on the bench; it is not a scored RP-03 run.
+No paper gate passed. No physical gate passed. No purchase authorized. Set A / Concept A / D02 / DRV8874-class and S01/S04/S06/S07 remain leads and a reference unit. Parts 1–5 are design-definition; the 2026-09-18 brief-gap close (`RP03-P1-REG-02` … `RP03-P4-REG-02`) filled operating cases, remaining physics, complete drive sets, TTL candidates, cutoff-coast, and the `CA-14` header. Phase A bench work on C3 may begin when the driver evaluation board and reference motor are on the bench; it is not a scored RP-03 run. CAD pass 1 and the 240 fps mock-up remain open.

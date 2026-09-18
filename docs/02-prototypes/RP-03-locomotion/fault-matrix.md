@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **v0.1 design definition.** Rows `F-31…F-45` are written in the RP-02 schema. `F-19`, `F-22` and `F-26` are cross-listed, not renumbered and not restated as RP-03-owned text. No injection performed. Candidate G05 metrics are **not registered** |
+| Status | **v0.2 design definition.** Rows `F-31…F-45` are written in the RP-02 schema. `F-19`, `F-22` and `F-26` are cross-listed, not renumbered and not restated as RP-03-owned text. `BM-14` cutoff-coast is a G01 metric paired with `F-41`; it is not a `BRAKE` fail. No injection performed. Candidate G05 metrics are **not registered** |
 | Owner | Project builder |
 | Created | 2026-09-17 |
 | Authority | `intent.md`; `base-control-architecture.md` `BC-01…10`; RP-02 `fault-matrix.md` schema and `F-19/F-22/F-26`; RP-02 `state-register.md` `OM-01/02/03`, `CC-12C`; `gates.md` G05 (candidate) |
@@ -59,7 +59,7 @@ Full inhibit / reject / expose / recover text lives in RP-02 `fault-matrix.md`. 
 | **F-38** | Mode-evidence loss (OM bit vs app) | `CC-09` Floor; rejection check in `CC-12B` | Contradict C3's latched `OM-01` against the app session (clear the local latch, inject Table while Floor goals continue, or drop mode evidence) | C3 resolves to `OM-03` (`BC-05`). Drive off | Floor locomotion goals; any `CC-12C_ARM` in the wrong mode | Mode-source unavailable; `BASE_STATE.mode = OM-03`; reason names evidence loss | Explicit new Floor/Table selection → readiness → fresh `BASE_ENABLE` → new goal. App selection is not the interlock | Mode bits vs app session; `nSLEEP`; zero motion in the contradiction window |
 | **F-39** | App-link loss mid-follow | `CC-09`, then `CC-10B`; rejection in `CC-12B` | Cross-list **F-17**. Close the app / sever its control channel / disable its Wi-Fi while C0↔C3 remains alive | Local authority initiates `EV-12` and `OM-03`. No dependency on a remote stop frame | Current and queued behaviour/motion from the lost session | Mode-source/link health unavailable; reason identifies app-session loss | Reconnect → explicit new Floor selection → local readiness → fresh enable nonce → new behaviour request | Injection-to-brake; mode transition; zero post-reconnect motion before the complete fresh sequence |
 | **F-40** | C0 loss mid-follow | `CC-09` / `CC-09C` | Open the C0↔C3 differential pair; separately reboot C0 while C3 and the motor domain remain | Heartbeat timeout → `BRAKE` then `OM-03`; queue flushed (`BC-07`). C3 must not treat C0 boot UART noise as `BASE_ENABLE` | Everything in flight, including old-session `BASE_GOAL` | `FAULT(HB_TIMEOUT)` analogue on this link; `last_rx_age` climbs; base unavailable | Reconnect → `HELLO` → limits → mode → `BASE_ENABLE` → new `BASE_GOAL`. Do not resume follow | Brake onset; outbox depth 0; first post-reconnect frame is `HELLO`; encoder after loss |
-| **F-41** | E-stop mid-spin | `CC-11` (and `CC-10A` as F-12 already requires) | Cross-list **F-12/F-13**. Press the mushroom during `BM-06` / `EV-13`; then twist to release | Motor domain dead by hardware; C3 detects absence within one tick; `OM-04` electrically. Spin does not walk. **Release does not restore `PB-MOTOR` or re-enable** | Everything until a fresh arm/readiness/`BASE_ENABLE` sequence | Fault in heartbeat; motor-domain absent | As F-13: operator-initiated system arm, readiness, enable and a **new** action. Not a resumed spin | Motor rail to 0; logic flat; `nSLEEP`/PWM; zero motion ≥10 s after release while stale goals `NACK(INHIBITED)` |
+| **F-41** | E-stop mid-spin | `CC-11` (and `CC-10A` as F-12 already requires) | Cross-list **F-12/F-13**. Press the mushroom during `BM-06` / `EV-13`; then twist to release. **G01 also scores the same cutoff from straight `v` as `BM-14`**: two distances, commanded `BRAKE` vs cutoff-coast, same course, same ballast | Motor domain dead by hardware; C3 detects absence within one tick; `OM-04` electrically. Spin does not walk. **Release does not restore `PB-MOTOR` or re-enable** | Everything until a fresh arm/readiness/`BASE_ENABLE` sequence | Fault in heartbeat; motor-domain absent | As F-13: operator-initiated system arm, readiness, enable and a **new** action. Not a resumed spin | Motor rail to 0; logic flat; `nSLEEP`/PWM; zero motion ≥10 s after release while stale goals `NACK(INHIBITED)`. Log `d_coast` and `d_BRAKE` as the G01 pair; a longer coast is not `FS-01` |
 | **F-42** | `EN-02` / `EN-03` mid-launch | `CC-10A` / `CC-13D`; `EN-03` under `CC-14` | Ramp energy through registered low then critical during `LP-04-LAUNCH` (RP-02 F-16 method on this rig) | `EN-02`: brake, reject new locomotion/peak. `EN-03`: `OM-03`, bounded settle only if margin permits, then `EV-14` | Goals violating `EN-02/03` → `NACK(INHIBITED)` | Energy state in `HEARTBEAT`; `BASE_FAULT` if latched | Fresh pack/charge → normal → fresh enable. No automatic resume of the launch | Threshold timestamps vs `BRAKE`; `nSLEEP`; zero relaunch on recovery |
 
 ### 2.4 Caught tabletop (last)
@@ -78,6 +78,7 @@ These are campaign-planning numbers. They are not G05 thresholds and not a freez
 | Obsolete commands executed after any fault | **0** | All |
 | Health / `BASE_HAZARD` correct | within 2 heartbeat periods (≤ 100 ms candidate) | All |
 | Motion after recovery without a fresh `BASE_ENABLE` (and `CC-12C_ARM` where required) | **0** | All |
+| Cutoff-coast vs commanded `BRAKE` (`BM-14`) | Two distances from the same `v`; coast finite; **0** restart on release (`FS-07`). Coast is **not** required to be ≤ `d_BRAKE` | F-41; G01 metric |
 | ToF-only inhibit while analog IR valid | **0** | F-44 |
 | Uncaught tabletop departure | **0**; a row without a verified catch is invalid | F-43, F-19 tabletop half, F-31 on table |
 | `BASE_GOAL` flood: wheel-loop p99 | inside the (unregistered) G05 C3 jitter candidate | F-45 |
@@ -91,7 +92,7 @@ Increasing authority, and **never** a live desk before the catch exists:
 2. **Guarded floor, E-stop on the motor bus, workbench scored-test gate satisfied.** Stall/block (`F-36`), pickup/tip (`F-37`), mode-evidence (`F-38`), app-link mid-follow (`F-39`), C0 loss (`F-40`), `EN-02/03` mid-launch (`F-42`), E-stop mid-spin (`F-41`, also every session as F-12/F-13). Inherited `F-19` (floor half), `F-22`, `F-26` on this rig as RP-02 already ordered them.
 3. **Caught tabletop last.** Catch fixture verified. `F-43`; `F-31`/`F-19` tabletop half; no pilot without the catch. Invalid if the catch is absent.
 
-F-12/F-13 remain **every session** on any motion rig (`workbench.md`). F-41 is the spin-specific scoring of that pair, not a replacement.
+F-12/F-13 remain **every session** on any motion rig (`workbench.md`). F-41 is the spin-specific scoring of that pair, not a replacement. G01 records the same cutoff from straight-line `v` as `BM-14` (coast vs `BRAKE`); that pair is a floor-control metric, not a G05 substitute.
 
 ## 5. Registration record
 
@@ -106,3 +107,4 @@ F-12/F-13 remain **every session** on any motion rig (`workbench.md`). F-41 is t
 | Date | Version | Change |
 |---|---|---|
 | 2026-09-17 | 0.1 | First draft: cross-list `F-19/F-22/F-26`; add `F-31…F-45`; bench → guarded floor → caught-tabletop campaign order. Candidate G05 metrics listed and not registered. |
+| 2026-09-18 | 0.2 | `BM-14` cutoff-coast paired with `F-41` and named as a G01 candidate metric distinct from commanded `BRAKE`. Release-does-not-restart remains `FS-07`. |

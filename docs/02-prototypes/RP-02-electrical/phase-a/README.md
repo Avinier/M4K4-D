@@ -24,7 +24,7 @@ No DevKitC serial device was present during this change. TTL loopback, UART edge
 | Safety outputs | Watchdog feed after healthy loop; READY passes external watchdog-good; servo transceiver enable defaults off | Same logical functions with test points and inert load | Watchdog feed, qualified READY and driver inhibit; motor I/O awaits RP-03 |
 | Service/reserved | Native USB service; GPIO21 LED excluded; GPIO0/3/45/46 strapping excluded for safety | Native USB and USB-UART reserved; RGB LED pin varies by board revision | GPIO19/20 native USB, 43/44 USB-UART reserved; 0/3/45/46 strapping excluded; 35–37 available on N8 |
 
-This is a role map and reservation, **not a carrier pinout**. Physical GPIO assignments require the exact board revision, transceiver/carrier circuit and a boot-state audit. C3 motor PWM, encoders, sensors and driver faults belong to RP-03; preserve at least two unassigned safe GPIO after that map.
+This is a role map and reservation, **not a carrier pinout**. Physical GPIO assignments for C3 exist as pin map v0.1 and the generated `c3_board_role.h` (`RP03-P4-REG-02`); the carrier PCB still waits on a frozen map. C2 physical GPIO still requires the exact board revision. Preserve at least two unassigned safe GPIO after the map.
 
 ## Logging record for exploratory timing
 

@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **v1.3 design baseline; `RP02-P3-REG-01` registered the Part-3 architecture, `RP02-P3-REG-02` corrected C3, the 2026-09-16 cost review revised only the differential-transceiver implementation lead, and 2026-09-17 noted the RP-03 pin map v0.1 / `CA-14` draft fill.** Hardware purchase remains separately authorized; G04/G05 and physical qualification remain open |
+| Status | **v1.4 design baseline; `RP02-P3-REG-01` registered the Part-3 architecture, `RP02-P3-REG-02` corrected C3, the 2026-09-16 cost review revised only the differential-transceiver implementation lead, 2026-09-17 noted the RP-03 pin map v0.1 / `CA-14` draft fill, and 2026-09-18 generated `c3_board_role.h`.** Hardware purchase remains separately authorized; G04/G05 and physical qualification remain open |
 | Owner | Project builder |
 | Created | 2026-09-16 |
 | Consumes | `RP02-P1-REG-01`; `RP02-P2-REG-01…03`; selected Raspberry Pi 5 2 GB, Waveshare ESP32-S3-Zero C2 and display SKU 30493; `link-contract.md`; `../../01-system/timebase.md` |
@@ -208,7 +208,7 @@ A versioned machine-readable configuration source generates:
 
 Runtime soft limits may only tighten compiled maxima. A hash mismatch blocks arm. Calibration values are separate from limits, CRC-protected, versioned and reported in `HELLO`; an unreadable calibration puts the affected axis/subsystem unavailable.
 
-RP-03 Part 4 (`RP03-P4-REG-01`) supplies the C3 half of this source as a **draft**: pin map v0.1 and `BASE_LIMITS_SET` field list in `../RP-03-locomotion/base-control-architecture.md`. The generated board-role header and compiled hard maxima are still unbuilt. Byte layouts stay open. The pin map is a pre-carrier gate, not a SKU freeze.
+RP-03 Part 4 (`RP03-P4-REG-01` / `RP03-P4-REG-02`) supplies the C3 half of this source: pin map v0.1, `BASE_LIMITS_SET` field list, and the generated board-role header `phase-a/c3_board_role.h`. Compiled hard maxima in that header are the conservative defaults (`a_max` ≤ 0.80 m/s², follow ≤ 0.50 m/s, clamp 0.70 m/s) until measured CoM. Byte layouts stay open. The pin map is a pre-carrier gate, not a SKU freeze. Carrier PCB still waits on a frozen map.
 
 ### `CA-15` — Updates and service access require physical inactivity
 
@@ -300,7 +300,7 @@ Additional G05 metrics:
 
 **Fixed by `RP02-P3-REG-01`:** node roles; separate C3; ESP32-S3 family; one head ingress with C2 display relay; differential production links; no ROS/micro-ROS safety path; C0 service boundaries; authority lease; three watchdog layers; two-phase arm; radio-off MCU policy; official Pi Active Cooler. **Corrected by `RP02-P3-REG-02`:** C3 prototype suffix is DevKitC-1-N8, not N8R8, to preserve GPIO35–37.
 
-**Still open without weakening the architecture:** exact RS-422 transceiver suffix and protection network; external-watchdog suffix/window/latch circuit; **C3 pin map v0.1 exists as an RP-03 design-definition draft** (`RP03-P4-REG-01`) and still awaits carrier/firmware generation; motor driver and base sensors unselected (D02/S01/S04/S06/S07 are leads, not a freeze); servo transceiver; storage SKU; numeric timeouts; final PCB/carrier; all G04/G05 evidence and purchases.
+**Still open without weakening the architecture:** exact RS-422 transceiver suffix and protection network; external-watchdog suffix/window/latch circuit; **C3 pin map v0.1 and `c3_board_role.h` exist** (`RP03-P4-REG-01` / `RP03-P4-REG-02`) and still await a frozen map and carrier PCB; motor driver and base sensors unselected (Set A / D02 / S01/S04/S06/S07 are leads, not a freeze); servo transceiver; storage SKU; numeric timeouts; final PCB/carrier; all G04/G05 evidence and purchases.
 
 ## Change log
 
@@ -310,3 +310,4 @@ Additional G05 metrics:
 | 2026-09-16 | 1.1 | GPIO audit corrected the C3 prototype from DevKitC-1-N8R8 to DevKitC-1-N8 under `RP02-P3-REG-02`: C3 needs no PSRAM, while N8R8 consumes GPIO35–37. Added explicit reservation/margin rules. All other Part-3 decisions unchanged. |
 | 2026-09-16 | 1.2 | Cost-down sourcing review replaced the MAX3490E implementation lead with THVD1451D SOIC while preserving the registered full-duplex differential topology. No architecture rule, purchase, gate or exact schematic suffix was registered. |
 | 2026-09-17 | 1.3 | Noted RP-03 pin map v0.1 and `BASE_LIMITS_SET` draft as the C3 fill of `CA-14` / §3. The map retains ≥2 spare safe GPIO. Not `RP02-P3-REG-03`. No purchase, no pin freeze, no G05 evidence. |
+| 2026-09-18 | 1.4 | C3 board-role header generated from pin map v0.1 (`phase-a/c3_board_role.h`, `RP03-P4-REG-02`). Compiled maxima and candidate TTL included. `RP02-P4-REG-02` accepts `BASE_*` semantics. Carrier still waits on a frozen map. Not `RP02-P3-REG-03`. |

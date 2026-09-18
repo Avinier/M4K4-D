@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Status | **Open — no gate outcome and no ADR closed. Parts 1–4 are complete at design-definition level; purchase and measured evidence remain open.** Part 1 is `RP02-P1-REG-01`, Part 2 is `RP02-P2-REG-01…03`, Part 3 is `RP02-P3-REG-01/02`, and Part 4 is `RP02-P4-REG-01` |
+| Status | **Open — no gate outcome and no ADR closed. Parts 1–4 are complete at design-definition level; purchase and measured evidence remain open.** Part 1 is `RP02-P1-REG-01`, Part 2 is `RP02-P2-REG-01…03`, Part 3 is `RP02-P3-REG-01/02`, Part 4 is `RP02-P4-REG-01` (C0↔C2) plus `RP02-P4-REG-02` (C0↔C3 `BASE_*` semantics). Byte layouts remain open. |
 | Created | 2026-09-08 |
-| Revised | 2026-09-17 |
+| Revised | 2026-09-18 |
 | Design question | What compute/controller split, internal link, rail and protection topology, and energy source lets Makad run representative head, drive, display, camera, audio and compute loads concurrently — and with what measured margin? |
 | Gate question | Does that design sustain every registered state and the registered mixed-duty cycle for at least 20 minutes without unsafe motion, unintended reset, rail excursion, data staleness or thermal violation — and does every injected fault produce a bounded state? |
 | Feeds | ADR-03, ADR-06, ADR-12; power/energy, thermal, internal-communication and compute-coexistence budget rows; `subsystem-interfaces.md` |
@@ -57,7 +57,9 @@ Part 3 selects the official ESP32-S3-DevKitC-1-N8 as the C3 prototype board and 
 
 ## RP-02 Part-4 interface definition — 2026-09-17
 
-`RP02-P4-REG-01` registers the C0↔C2 ICD definition in `link-contract.md` v0.4: COBS/CRC framing method, semantic message set, timestamps and expiry, heartbeat supervision, session/epoch authorization, two-phase arm and fresh-intent recovery after reset, link loss or E-stop. It does **not** register byte layouts or type numbers, C3 drive messages, numeric timing thresholds, firmware, physical tests, a gate outcome or ADR closure. Those remain explicit implementation and evidence work.
+`RP02-P4-REG-01` registers the C0↔C2 ICD definition in `link-contract.md` v0.4: COBS/CRC framing method, semantic message set, timestamps and expiry, heartbeat supervision, session/epoch authorization, two-phase arm and fresh-intent recovery after reset, link loss or E-stop. It does **not** register byte layouts or type numbers, numeric timing thresholds, firmware, physical tests, a gate outcome or ADR closure.
+
+`RP02-P4-REG-02` (2026-09-18) registers C0↔C3 `BASE_*` **semantics** in `link-contract.md` v0.5: message types, `CC-12C_ARM` as a separate nonce, expiry at execution, latest-wins bounded queue, fresh-arm after inhibit, unknown-is-inhibit. Candidate `cmd_ttl` 200 ms (cruise) / `duration_ms+250 ms` (one-shot), heartbeat 150 ms and queue depth 2 are **named and unregistered**. Byte layouts, type numbers, baud and measured timeouts remain open. The C3 board-role header `phase-a/c3_board_role.h` is the `CA-14` start from pin map v0.1, not a carrier freeze.
 
 ## Gate outcomes
 
@@ -105,6 +107,7 @@ Candidates are recorded so selection happens from evidence. **Selected compute/c
 | SBC ↔ display link topology | **C2 relay selected under `RP02-P3-REG-01`:** only C0↔C2 crosses the moving boundary; C2 forwards semantic face/light state over head-local RS-485 | Same framing; fixed-capacity lower-priority display queue; asset transfer only while inhibited | `F-27` relay-flood isolation and G05 link/timing evidence |
 | Charging input/power path | USB-C inlet + `PCD-CHG-01` STUSB4500QTR PD sink + `PCD-CHG-02` BQ25798 charger/NVDC path is the leading architecture; adapter and exact implementation remain open | Display + minimum supervision on; motors/camera/normal SBC/audio off; AC mains never enters Makad | Chemistry/pack selection, PDO/NVM audit, pack-absent/depleted and CC-15 thermal/load tests, G06 |
 | Low-energy thresholds | Loaded-source assertion/clear thresholds plus conservative energy estimate; coulomb counting is supplementary | Must satisfy `BR-08/10`, assert before the `V_SRC_SAFE` reaction margin is consumed and never restore an old arm/action | Selected pack/converters/controllers, path resistance, stop profile and `W` source/load captures; then preregistration |
+| C3 `BASE_*` ICD | **Semantics registered `RP02-P4-REG-02`.** Byte layouts, type numbers and baud remain open. Candidate TTL 200 ms / `duration+250 ms`, heartbeat 150 ms, queue depth 2 named and unregistered | Framing, expiry-at-execution, latest-wins, fresh-arm, unknown-is-inhibit inherited from C0↔C2 | Phase A byte layouts; measured timeouts; G05 |
 
 ## Conclusion
 

@@ -5,7 +5,7 @@
 | Status | Design/gate intent current; Parts 1–5 are complete at design-definition level under `RP03-P1-REG-01` through `RP03-P5-REG-01`. Numeric thresholds, candidate freeze, purchase and every gate outcome remain open; no scored run executed |
 | Owner | Project builder |
 | Created | 2026-09-17 |
-| Revised | 2026-09-17 |
+| Revised | 2026-09-18 |
 | Governing plan | `../../01-system/risk-prototype-plan.md` v1.12 §RP-03 (stage 3); folder plan `plan.md` |
 | Mechanical baseline inherited | `../../01-system/dimensional-baseline.md` v1.10 (Ø84, 170 mm track, 110 mm wheelbase, caster + mandatory skid); SCOPE-09; MEM-20260825-01/02 |
 | Electrical baseline inherited | `RP02-P3-REG-01/02` (C3 = ESP32-S3-DevKitC-1-N8); `compute-control-architecture.md` CA-03/11/12; `power-architecture.md` PA-11/13; `link-contract.md` v0.4 envelope |
@@ -109,10 +109,10 @@ Numbers live in `storyboard.md`. This section is the audience read only. Each pa
 
 | Panel | Character read | Primitive it exercises | Owed case |
 |---|---|---|---|
-| `BM-00` | Off / inhibited rest: nothing moves, nothing rolls when nudged, nothing rolls when the head moves | Passive holding, backdrivability | `LP-04-OFF`, `CC-02F/T` |
-| `BM-01` | Zero-velocity hold while the head performs: the body does not twitch against a yaw snap | Reaction-torque rejection at v=0 | MEM-20260812-08; `CC-05` with drive armed |
+| `BM-00` | Off / inhibited rest: nothing moves, nothing rolls when nudged, nothing rolls when the head yaws **or** pitches | Passive holding, backdrivability, head-rocking rejection | `LP-04-OFF`, `CC-02F/T` |
+| `BM-01` | Zero-velocity hold while the head performs: the body does not twitch against a yaw snap or a laugh-class pitch | Reaction-torque rejection at v=0 (yaw **and** pitch) | MEM-20260812-08; `CC-05` with drive armed |
 | `BM-02` | Creep: the slowest deliberate motion that still reads as intent, not as a stall | Minimum controllable speed, encoder resolution | `LP-04-STEADY` low end |
-| `BM-03` | Curious / hesitant approach (come): advance, pause, advance, settle in the 0.6–0.9 m band | Launch, low-speed cruise, decel to rest, repeat | `CC-09C`, `CC-10A` |
+| `BM-03` | Curious approach as a permission chain: accept a fresh stationary mark → align → travel only while stopping clearance exists → brake into 0.6–0.9 m → settle with no second creep | Align/arc, clearance-gated cruise, arrival settle | `CC-09C`, `CC-10A` |
 | `BM-04` | Follow: steady walk-pace tracking with one gentle arc, no hunting | Speed regulation ≤ 0.5 m/s, arc geometry, straight-line drift | `CC-09` |
 | `BM-05` | Dramatic turn-toward-caller: one decisive pivot that lands on heading | In-place rotation, yaw-rate profile, settle | `EV-04` base analogue |
 | `BM-06` | Excited spin: full rotations that end crisply, upright, on the spot | High yaw rate, skid/caster behaviour during spin, settle | `CC-11`, SC-25 |
@@ -122,14 +122,16 @@ Numbers live in `storyboard.md`. This section is the audience read only. Each pa
 | `BM-10` | Obstacle intervention: stops short of the thing, visibly, without slewing | Detection-to-decel, stopping clearance, false-inhibit | `CC-10C`, `EV-20` |
 | `BM-11` | Tabletop calibration creep and edge stop: moves only when armed, stops well inside the marked circle | Edge detection coverage, calibration speed, footprint | `CC-12C`, `EV-21` |
 | `BM-12` | Controlled cancel from any of the above: settles, never coasts | Online jerk-limited brake from arbitrary state | `EV-17`; RP-01 `HM-18` analogue |
+| `BM-13` | Tabletop demonstration: head and face remain active, base stays still, ordinary locomotion rejected | Unarmed `OM-02` hold while `HM-*` runs. **Not** `BM-11` | `CC-02T`; BD-01 user-facing tabletop |
+| `BM-14` | Physical stop: motor-bus cutoff while moving; coast vs commanded `BRAKE` as two distances; release does not restart | Hardware cutoff; fresh arm required | `F-12`/`F-13`/`F-41`; CON-P02 |
 
-What must never happen, in any panel: a coast after cancel; a roll when the head yaws; a lurch at reversal that reads as a shove; a follow that hunts; a spin that walks; a tabletop motion that is not armed; an uncaught desk departure.
+Never-lists live in the freezeable register `FS-01…11` in `storyboard.md` §5 (coast after cancel, tabletop motion without arm, uncaught departure, follow hunt, walking spin, unrequested second creep, restart on release, ordinary locomotion in unarmed `OM-02`, hold/vibration rock, reversal lurch, come overshoot). Do not keep a second prose list here.
 
 ## 6. Scope
 
 ### 6.1 RP-03 owns
 
-- the **character and kinematic storyboard** (`storyboard.md`) for `BM-00…BM-12` and the wheel-velocity profile library;
+- the **character and kinematic storyboard** (`storyboard.md`) for `BM-00…BM-14`, the operating-case grammar, the `FS-*` register, and the wheel-velocity profile library;
 - the **physics envelope** (`physics.md`): stability as a range, traction/scrub, drivetrain demand, electrical class, stopping inequality, coverage geometry, CON-TBD-14 *proposal*;
 - **≥ 2 competing concepts** (`concepts/`) differing on a first-order axis, with a filled comparison of `physics.md` quantities;
 - the **drivetrain screen** (`drivetrain-screen-01.md`) `D01…` and the **sensing screen** (`sensing-screen-01.md`) `S01…` — neither is a freeze or a purchase;
@@ -178,6 +180,6 @@ Circular, and named.
 3. **Thresholds freeze before data.** SC-TBD-07/08/09 and CON-TBD-14 get gate-registration records with a dated builder approval before any scored run; a change after results is a new gate version with a fresh test set.
 4. **Transient claims need a transient instrument.** Detection-to-decel at 50 ms and reversal current spikes are not INA-at-10-Hz measurements; the run is exploratory until the bench resolves the threshold.
 5. **No uncaught tabletop trial, ever.** Pilot or scored, a tabletop row without a verified catch fixture is invalid and is recorded as such.
-6. **IDs are append-only.** `BM-`, `D`, `S`, `BC-`, `F-3x`, `BD-`, `RP03-P/G` and `RP03-P<n>-REG-<nn>` are never reused or renumbered.
+6. **IDs are append-only.** `BM-`, `FS-`, `D`, `S`, `BC-`, `F-3x`, `BD-`, `RP03-P/G` and `RP03-P<n>-REG-<nn>` are never reused or renumbered.
 7. **Failed and aborted runs stay cited.** A candidate rejected on the floor is a result, not an embarrassment.
 8. **An `E` value is not a target.** `a_tip ≈ 2.0 m/s²`, the 200–600 g drive mass row and the 1.5–3 A per-motor class are all recomputed as ranges in `physics.md` before any candidate is screened against them.

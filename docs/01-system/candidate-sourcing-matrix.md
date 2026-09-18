@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | **Living. Face display, head camera, C2, Raspberry Pi 5 2 GB, official Pi Active Cooler and C3 prototype controller are selected; remaining rows are candidates unless explicitly marked otherwise.** |
-| Version | 0.27 |
+| Version | 0.28 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-09-17 |
+| Last reviewed | 2026-09-18 |
 | Governed by | `risk-prototype-plan.md` §"Continuous sourcing and data workstream" (deliverable 1) |
 | Feeds | First project cost range (CON-TBD-13), RP-01…RP-07 inputs, later BOM |
 
@@ -45,16 +45,18 @@ Columns follow the plan's required fields (line 102): spec, supplier, availabili
 
 ## Drive & base (RP-03)
 
+Compare **complete drive sets**, not isolated catalog motors. Neither set is purchased. SKU freeze is closed.
+
 | Component | Candidate spec | Supplier | Avail. | Lead | Substitute | Qty | Landed ₹ | Replacement risk | Required tools | Fab dependency |
 |---|---|---|---|---|---|---:|---:|---|---|---|
-| Drive motors | Independently controlled geared motors with encoders; design around 160–200 wheel RPM unloaded for ~0.70 m/s; follow ≤0.5 m/s. **RP-03 screen 2026-09-17:** `D02` JGA25-370-class 6 V 176 RPM 1:35 is a **reference-unit lead, not a freeze**; Oz table stall 5 kg·cm / 900 mA conflicts with NFP ≤3 A (both `D`, P03 HOLD). `D01` N20 lower-bound reject/hold; `D04` 37D upper bound | Robu / Zbotic | Common class; exact SKU stock `U` | 0–5 d | Alternate encoder gearmotor in the same RPM/torque window | 2 | 600–3,000 | Med | — | 170 mm track, wheel + bracket; HIGH_AFT battery bay forbidden |
-| Wheels + front caster + rear skid | Ø84 × ~21 mm moderate-grip rubber/TPU (Ø80–85 OK), ~Ø30 mm front swivel caster (`D20`) or ball transfer (`D21` Concept B), mandatory anti-tip skid adjustable 60–80 mm reach × 8–16 mm height | Robu / local | Common | 0–3 d | In-range wheel/caster alternatives | 2+1+1 | 300–1,200 | Low | — | 110 mm axle-to-caster target |
-| Base motor driver (class) | Brushed H-bridge with hardware nFAULT, per-channel current sense, fail-safe enable. **DRV8874 class lead** (`DRV-B`); TB6612 HOLD if stall is 3 A; Cytron MDD3A bench-only. Not selected | Robu / TI channel / Cytron | Mixed | Recheck | Dual discrete DRV8874 ↔ dual-channel eval board | 1–2 | 400–2,500 | Med | Current/fault logging | `PB-DRIVE-L/R` separately observable |
+| **Set A — reference-unit lead, not a freeze** | `D02` JGA25-370-class **6 V 176 RPM 1:35** + 11 PPR Hall + Ø84×21 **4 mm D-hub** wheel + `D20` Ø25–32 swivel + printed skid + **two DRV8874** + 2S-class 6.0–8.4 V **direct** `PB-DRIVE-L/R` + printed motor clamp. C3 0.70 m/s clamp **mandatory** (8.4 V no-load 1.08 m/s). P03 HOLD on Oz 900 mA vs NFP ≤3 A | Robu / Zbotic / TI channel | Common class; exact SKU stock `U` | 0–5 d | Set B (`D03` 1:45) on the same mount | 2 motors + 2 wheels + 1 caster + 1 skid + 2 DRV8874 | Motors 800–2 400; wheels 150–600; caster 50–400; drivers 400–1 600; mount printed | Med — suffix/encoder magnet/`D` stall conflict | Current/fault logging; shaft-retention check | 170 mm track; 4 mm D-shaft; HIGH_AFT unfittable; radial shaft support HOLD |
+| **Set B — comparison, not a freeze** | Same as Set A except `D03` JGA25 6 V **133 RPM 1:45**. P02 HOLD (0.585 m/s at 6 V). Same driver/wheel/caster/supply/mount | same | same | 0–5 d | Set A | same | same class | Med | same | same |
+| Front-support comparison article | Ø1 inch ball transfer `D21` on the **interchangeable mount**. Not a Set A/B member. Concept B only | Local | Common | 0–3 d | — | 1 | 100–500 | Low | Dent inspection on `S-LAM` | Same caster pocket |
 | Cliff / look-down | GPIO analog/digital reflective IR, **not** I2C-only in the stop path. **S01 TCRT5000 lead** with mandatory dark+glossy trial; QRE1113 comparison; VL53L0X rejected as sole cliff | Robu | Common | 0–3 d | Alternate GPIO look-down | 3+ | 100–800 | Med (surface) | Dark/glossy samples | Three leading contacts: caster, lateral, reverse/skid |
-| Forward obstacle (stop path) | Analog triangulation IR on ADC. **S04 GP2Y0A41SK0F lead** (4–30 cm, 16.5 ms cycle `D`); caster-mounted for 0.50 m/s look-ahead; **HOLD at 0.70 m/s**. VL53L1X is telemetry only | Robu | Common | 0–5 d | Alternate analog IR 4–30 cm class | 1 | 400–1,500 | Med | — | Must see ≥179 mm at 0.50 m/s from the leading contact |
+| Forward obstacle (stop path) | Analog triangulation IR on ADC. **S04 GP2Y0A41SK0F lead** (4–30 cm, 16.5 ms cycle `D`); caster-mounted for 0.50 m/s look-ahead; **HOLD at 0.70 m/s** and **HOLD at 0.50 m/s on 2° downhill** (221 mm `d_stop`). VL53L1X is telemetry only | Robu | Common | 0–5 d | Alternate analog IR 4–30 cm class | 1 | 400–1,500 | Med | — | Must see ≥179 mm at 0.50 m/s from the leading contact, 221 mm downhill |
 | Bump | Miniature lever/microswitch bar, direct GPIO. **S06 lead** | Local / Robu | Common | 0–3 d | Alternate NO lever | 1 | 50–300 | Low | — | Last layer, not first |
 | Base-frame IMU | 6-axis, rigid base mount, **SPI + interrupt**. **S07 ICM-42688-P SPI lead**; UART-MCU angle modules (e.g. Robu 601N1) are not that article. MPU-6500 fallback only if SPI+INT actually wired. Head mounting excluded | Robu / Zbotic | Common modules; confirm SPI | 0–5 d | Bare SPI breakout vs UART-MCU module (reject UART for stop path) | 1 | 300–1,500 | Med | — | `CA` I/O; BD-03 runtime from Phase B |
-| Motion safety / limits | E-stop already in `workbench.md` bench scope | — | — | — | — | 1 | (see workbench) | Low | — | Motor-rail wiring |
+| Motion safety / limits | E-stop already in `workbench.md` bench scope. Cutoff-coast vs commanded `BRAKE` are two G01 metrics (`BM-14`) | — | — | — | — | 1 | (see workbench) | Low | — | Motor-rail wiring; release does not restart |
 
 ## Audio & power
 
@@ -127,3 +129,4 @@ This is a **planning envelope to gate procurement decisions**, not a budget comm
 | 2026-09-16 | 0.25 | Part-3 cost-down sourcing review: retained Pi 5 2 GB/cooler/C2/C3/D1, rejected the 1 GB Pi and N8R8 C3 false economies, moved storage lead to official 32 GB A2, and replaced the MAX3490E implementation lead with THVD1451D SOIC. No purchase or registered architecture changed. |
 | 2026-09-17 | 0.26 | Corrected the SanDisk ₹679 staging-store price as invalid, retained only the official Pi 32 GB card as the storage cost lead, and recorded Renesas ISL83077E as a conditional lower-cost link challenger requiring protection and installed-harness qualification. A constrained 2 GB run is only a pre-screen for a possible 1 GB Pi. |
 | 2026-09-17 | 0.27 | Consumed RP-03 drivetrain/sensing screens: named D02 JGA25-class as a reference-unit lead (not a freeze), DRV8874-class driver lead, S01/S04/S06/S07 sensing leads. No purchase. P03 stall-current `D` conflict and 0.70 m/s analog-IR HOLD remain open. |
+| 2026-09-18 | 0.28 | Recast Drive & base as complete Set A / Set B (motor+box+encoder+wheel+driver+supply+mount). Named gearbox shaft-load HOLD, wheel retention, caster flutter/start/360°, driver brake/coast/regen, 8.4 V overspeed clamp, 2° downhill analog-IR HOLD. No purchase. SKU freeze closed. |
