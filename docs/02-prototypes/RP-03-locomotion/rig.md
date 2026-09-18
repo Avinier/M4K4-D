@@ -5,7 +5,7 @@
 | Status | **Designed, not built.** Architecture and gate *candidates* reconciled to `RP03-P5-REG-01`; blocked on the `workbench.md` scored-test gate for anything powered on this chassis, on a named drivetrain/sensor freeze for scored G01–G06, and on the battery gate plus a verified catch fixture for Phase C |
 | Owner | Project builder |
 | Created | 2026-09-17 |
-| Revised | 2026-09-17 |
+| Revised | 2026-09-19 |
 | Authority | `../../01-system/workbench.md` scored-test gate, PSU rule, E-stop rule, battery gate; `../../01-system/risk-prototype-plan.md` v1.12 §RP-03 rig and measurements; folder `plan.md` §6 |
 | Design it realises | `intent.md` vehicle-plus-safety-authority; `physics.md` v0.1 envelope (ranges, not a freeze); `storyboard.md` `BM-00…12`; interchangeable Concept A/B front support; C3 on the frame |
 | Instrument rule | `workbench.md` item 6: an instrument on the bench must resolve the gate's threshold or the run is **exploratory-only**. If this bench cannot resolve 50 ms detection-to-deceleration, G03 latency and G05 local time-to-brake are exploratory-only |
@@ -30,7 +30,7 @@ The fixture must reproduce inherited drive geometry without pretending to be a b
 
 - an **open frame** carrying two Ø84 mm nominal drive wheels at **170 mm** track (centre-to-centre);
 - an **adjustable axle-to-caster** mount spanning **105–115 mm** (110 mm target), lockable and readable to a millimetre;
-- an **interchangeable front support**: swivel caster (Ø25–32 mm class) **or** ball transfer, swapped without changing the axle-to-contact number that was just set;
+- an **interchangeable front support**: **`D21` ball transfer (selected, BD-08)** or `D20` swivel caster (Ø25–32 mm class, comparison), swapped without changing the axle-to-contact number that was just set. Score `D21` on `S-LAM`/`S-RUG`; do not drop the caster swap;
 - an **adjustable rear anti-tip skid**, reach **60–80 mm** behind the axle and height **8–16 mm** above the floor, lockable and readable. Do not freeze 14 mm / 70 mm — `physics.md` §2.7 fails that pair against every lumped Layout 03 CoM unless ballast restores `x`;
 - **ballast that sets total mass AND both CoM coordinates independently** across BD-05: **1.65 kg** (ledger analytical low) and **3.10 kg + head** (other-subsystem high plus Layout 03 complete-head `E` ~499–524 g), at **both CoM extremes**. Independent means a forward/aft slide that moves `x_CoM` without a first-order change in `h_CoM`, and a vertical stack that moves `h_CoM` without a first-order change in `x_CoM`. Record `(M, x, h)` on every run;
 - a **battery-mass dummy in a FORWARD bay** (low, ahead of the axle). **HIGH_AFT is a forbidden ballast case** — `physics.md` §2.2: pack CoM on or behind the axle reverses the sign of `a_tip` (`−0.111 m/s²` at the tabulated HIGH_AFT). The dummy cannot be parked over or behind the axle "because it fitted";
@@ -171,7 +171,7 @@ This-rig items:
 
 - [ ] Motor-arm confirmed normally-off; Korad limit set; logic analyzer **not** on the motor rail
 - [ ] Ballast `(M, x, h)` recorded; HIGH_AFT not fitted; battery dummy in the forward bay
-- [ ] Support geometry recorded (axle-to-caster, skid reach/height, caster vs ball transfer)
+- [ ] Support geometry recorded (axle-to-front-support, skid reach/height, ball vs caster article)
 - [ ] Surface / obstacle / speed-band marks identified
 - [ ] Timebase and status-light cue confirmed (or the run is exploratory for any 50 ms term)
 - [ ] **Catch fixture verified this session** — required for **any** tabletop row; without it the row is invalid

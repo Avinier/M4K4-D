@@ -2,10 +2,10 @@
 
 | Field | Value |
 |---|---|
-| Status | **Construction record.** Parts 1–5 are populated at design-definition level (2026-09-17). This file is not the start-here index — that is `README.md`. No candidate is frozen, no purchase authorized, no gate registered, no run executed |
+| Status | **Construction record.** Parts 1–5 populated 2026-09-17. **Superseded for front-support type by BD-08 / `dimensional-baseline.md` v1.12:** V1 front support is the ball transfer; this file's caster wording is historical. Not the start-here index — that is `README.md`. No purchase, no gate registered, no run executed |
 | Created | 2026-09-17 |
 | Owner | Project builder |
-| Governing plan | `../../01-system/risk-prototype-plan.md` v1.12 §RP-03 (stage 3) |
+| Governing plan | `../../01-system/risk-prototype-plan.md` v1.13 §RP-03 (stage 3) |
 | Purpose | Close **ADR-04** (wheeled-drive and passive-support geometry) and **ADR-07** (obstacle and tabletop-edge sensing arrangement) provisionally; supply the drive `W` rows that ADR-06 *sizing* waits on; freeze the C3 pin map, motor-driver/sensor interface and base message set that RP-02 left explicitly open; deliver the measured base model RP-04 composes against |
 | Method | `../../intuition.md` §5.1 — intent before numbers, numbers before physics, physics before concepts, concepts before rig, rig before decision. RP-03's toolkit is the safety toolkit: `d_available > v·t_latency + v²/(2·a_brake) + d_margin` |
 | Relationship to siblings | RP-01 is an object, RP-02 is a set of states and interfaces. **RP-03 is a vehicle plus a safety authority.** It is the first prototype that can destroy itself (a desk edge), the first with real inductive/regenerative load on the motor bus, and the first with a sensor inside the stop path |

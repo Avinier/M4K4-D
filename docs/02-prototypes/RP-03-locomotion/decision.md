@@ -4,7 +4,7 @@
 |---|---|
 | Status | **Open — no gate outcome, no ADR closed, no purchase authorized.** Parts 1–5 remain complete at **design-definition** level under `RP03-P1-REG-01` … `RP03-P5-REG-01`. Brief-gap close 2026-09-18 issued `RP03-P1-REG-02` … `RP03-P4-REG-02`. Numeric thresholds, candidate freeze and every gate outcome remain open; no scored run executed |
 | Created | 2026-09-17 |
-| Revised | 2026-09-18 |
+| Revised | 2026-09-19 |
 | Design question | What drive/support geometry, drivetrain class and local sensing arrangement lets a representative-mass Makad move expressively at low speed, reverse, turn, spin and stop stably on household floors — and what is the measured margin of that design against caster lift, stopping distance, minimum controllable speed, reversal quality and obstacle/edge coverage? |
 | Gate question | Can a candidate wheeled base with representative total mass move expressively at low speed, reverse, turn, spin and stop stably while local obstacle/edge sensing and controller limits prevent harmful or uncontrolled motion in the approved floor and tabletop permissions? |
 | Feeds | ADR-04, ADR-07 (close provisionally, later); ADR-06 *sizing*; ADR-03 (C3 half of RP02-G05); ADR-05 (measured base model for RP-04) |
@@ -17,7 +17,7 @@ Nothing in RP-03 reopens these; RP-03 measures them.
 
 | Decision | Locked input | Source |
 |---|---|---|
-| Drive topology | Two independently powered encoder wheels + front caster + **mandatory** rear anti-tip skid; holonomic and self-balancing rejected | dimensional baseline v1.10; SCOPE-09; MEM-20260813-20 |
+| Drive topology | Two independently powered encoder wheels + **front ball transfer** + **mandatory** rear anti-tip skid; holonomic and self-balancing rejected. Swivel caster is the RP-03 comparison swap | dimensional baseline v1.12; SCOPE-09 v1.3; MEM-20260813-20; BD-08 |
 | Geometry targets | Ø84 mm wheels, 170 mm track, axle-to-caster 105–115 mm (110 mm target) | dimensional baseline v1.10 |
 | Base controller | **C3 = ESP32-S3-DevKitC-1-N8** (prototype board); N8R8 is not a silent substitute; later WROOM-1-N8 carrier only by controlled equivalence | `RP02-P3-REG-01/02`; CA-03 |
 | Operating modes | `OM-01` Floor; `OM-02` Tabletop inhibited-by-default; `OM-03` motion inhibited. `SD-03` app selection is a command, not the interlock | RP-02 `state-register.md`; SD-03 |
@@ -39,9 +39,9 @@ These are current inputs. They are not SKU freezes, purchases, or `W` mass.
 | Timebase | `timebase.md` strategy written; **not implemented or validated**. Scored G01–G06 need it; Phase A exploratory capture may proceed without it | `timebase.md`; RP-02 Phase A |
 | Caster-lift planning value | `a_tip ≈ 1.98 m/s²` is a **placement target** at `x = +25 mm`, `h = 124 mm`, not a Layout 03 roll-up | dimensional baseline; `physics.md` §2 |
 
-## Builder decisions BD-01…BD-07 — paper-confirmed 2026-09-18
+## Builder decisions BD-01…BD-08 — paper-confirmed 2026-09-18; BD-08 added 2026-09-19
 
-Recorded 2026-09-17 as working assumptions so Part 5 could be written. **Paper-confirmed 2026-09-18** as the brief-gap close: the rows below are the dated builder position for G01–G06 *candidate* conditions. They are **not** a gate freeze, not a purchase, and not SC-TBD-07/08/09 registration. A revision **before** gate freeze is a row edit with a new date. A revision **after** freeze is a new gate version.
+Recorded 2026-09-17 as working assumptions so Part 5 could be written. **Paper-confirmed 2026-09-18** as the brief-gap close: the rows below are the dated builder position for G01–G06 *candidate* conditions. They are **not** a gate freeze, not a purchase, and not SC-TBD-07/08/09 registration. A revision **before** gate freeze is a row edit with a new date. A revision **after** freeze is a new gate version. **BD-08** (2026-09-19) is the **selected V1 front-support type** on the Concept A chassis. It is not ADR-04 gate closure, not a Concept B freeze, and not a purchase. `dimensional-baseline.md` v1.12 and SCOPE-09 v1.3 record the type.
 
 | ID | Paper-confirmed position (2026-09-18) | Why it is not a freeze | Consequence for RP-03 |
 |---|---|---|---|
@@ -52,6 +52,7 @@ Recorded 2026-09-17 as working assumptions so Part 5 could be written. **Paper-c
 | **BD-05** | **Four-corner ballast** plus **head-pose CoM extras**. Mass: 1.65 kg and 3.10 kg+head, both settable CoM extremes. Head-pose: `HP-PITCH-FWD`, `HP-PITCH-AFT`, `HP-YAW-L`, `HP-YAW-R` on top of `HP-NEUTRAL`. A mass dummy at 304 mm is **not** enough | Could wait on M900 and narrow; that would hide Layout 03 CoM *and* pose risk | Rig sets `M`, `x` and `h` independently, and can hold a Layout 03 pose (or a geometrically equivalent dummy). `HIGH_AFT` is forbidden, not a corner |
 | **BD-06** | Cannot-exceed test limit = **0.70 m/s** (top of the max target band). Follow ceiling remains **0.50 m/s** | Dimensional baseline gives a range, not a limit | G02 clamp tests 0.70. Follow cannot be authored or weakened to 0.70 |
 | **BD-07** | **Overhead tether primary** catch; raised lip **only if it sits below cliff FoV**. Lip-only is **rejected as default** because it can mask cliff sensing | Plan allowed either; lip-in-FoV would fake G04 | `rig.md` §7. Catch verified each tabletop session |
+| **BD-08** | **Selected V1 front support is `D21` Ø1" ball transfer.** Recorded in `dimensional-baseline.md` v1.12 and SCOPE-09 v1.3. `D20` swivel caster remains the **required** comparison swap on the same mount. Concept B's in-WB motors, perimeter ring, and bump-only stop path are **not** taken | Not a gate freeze, not a purchase, not ADR-04 closure. Dent/jam/drag on `S-LAM`/`S-RUG` can still reject the ball and iterate to the caster swap | Rig and Set A score `D21`. Analog-IR stop-path and three look-downs stay. A miss is iterate/reject of `D21`, not a threshold change |
 
 ### BD-04 named surfaces (demo-room class, 2026-09-18)
 
@@ -82,6 +83,19 @@ Pitch axis height `E` ≈ 200 mm from the floor (140 mm body + 60 mm neck alloca
 Numbers are `E` from the lumped model, not CAD CoMs and not M900. Detail in `physics.md` §2.8. The rig must be able to hold these poses, or an equivalent dummy with the same `(m, x, y, h)`.
 
 A mass dummy at 304 mm with the head in one pose is **not** BD-05.
+
+### BD-08 — ball transfer selected as V1 front support (2026-09-19)
+
+Builder direction: the V1 front support **is** the Ø1" ball transfer. That is a **support-type selection**, recorded in the dimensional baseline and SCOPE-09. It is not a concept freeze, not a purchase, and not a G01 pass.
+
+| Taken | Not taken |
+|---|---|
+| `D21` as the V1 front support on the interchangeable mount | Concept B as the working-lead *vehicle* |
+| No-trail `BM-07` as the installed hypothesis | Inboard motors / axle coupling |
+| Dent inspection after every `S-LAM` session; cup-clean as scheduled service | Perimeter cliff ring as the installed map |
+| `D20` caster kept on the same mount as the **comparison** | Bumper-only obstacle stop; ToF as the sole inhibitor |
+
+Paper still does not prove dent/drag/jam. ADR-04 still closes only after G01/G02/G06 plus measured lift. If `D21` fails those rows, iterate to the caster swap — do not silently keep a failed ball.
 
 ## Part registrations
 
@@ -185,7 +199,7 @@ This is the folder's purpose. Each row closes independently and says what it is 
 
 | ADR | Closes when | Waiting on | Status |
 |---|---|---|---|
-| **ADR-04** wheeled-drive and passive-support geometry | G01, G02 and G06 plus **measured** stability (lift onset vs computed `a_tip` at BD-05 corners; skid inequality at the scored ballast) | Scored floor matrix; CoM `W` of the ballast articles; drivetrain freeze after P01–P06 | Open — envelope and working Concept A lead only |
+| **ADR-04** wheeled-drive and passive-support geometry | G01, G02 and G06 plus **measured** stability (lift onset vs computed `a_tip` at BD-05 corners; skid inequality at the scored ballast) | Scored floor matrix; CoM `W` of the ballast articles; drivetrain freeze after P01–P06; **`D21` dent/jam/drag vs `D20` swap** | Open — envelope, Concept A chassis, **D21 selected** (BD-08 / baseline v1.12). Not a gate close |
 | **ADR-07** obstacle and tabletop-edge sensing | G03, G04 and G05 plus **coverage** evidence (three look-downs, look-ahead at 0.50 m/s, dark/glossy, interposer campaign) | Sensing freeze after P07/P09; catch fixture; CON-TBD-14 registration at G04 freeze | Open — arrangement on paper, not proven |
 | **ADR-06 sizing** | Drive `W` rows for `LG-04`/`LG-10` and the G02-invariant re-run obligation raised in the ledger | Phase B/C measured profiles; battery gate; both-motor transients | Open — `E` refresh requested; **expected to close after RP-03 `W`, not from this paper** |
 | **ADR-03** C3 half | RP02-G05 with margin on the C3 wheel loop, encoder capture, hazard scan and watchdog feed | RP02-G05 freeze and evidence; pin map implemented; driver/sensor on the bench | Open — board identity locked; timing unmeasured |
@@ -197,7 +211,7 @@ Candidates are recorded so selection happens from evidence. **None of these rows
 
 | Decision | Candidates | What is fixed for comparison | What decides it |
 |---|---|---|---|
-| Chassis / support concept | **Concept A — working lead, not a freeze.** Concept B remains the comparison (front support and sensing arrangement differ on first-order axes in `physics.md` §10) | Inherited topology; Ø84 / 170 mm / 105–115 mm; skid adjustable 60–80 × 8–16 mm; forward battery bay; HIGH_AFT forbidden | G01/G02/G06 + measured lift/scrub/`BM-07` heading glitch. Interchangeable caster / ball transfer on the rig |
+| Chassis / support concept | **Selected: Concept A chassis/sensing + `D21` ball.** Concept B remains the comparison vehicle (in-WB motors, ring, bump-only stop). `D20` caster is the required swap | Inherited topology; Ø84 / 170 mm / 105–115 mm; skid adjustable 60–80 × 8–16 mm; forward battery bay; HIGH_AFT forbidden; analog-IR in the stop path; baseline v1.12 | G01/G02/G06 + measured lift/scrub/`BM-07` **and** `D21` dent/jam/drag on `S-LAM`/`S-RUG`. Not ADR-04 gate close |
 | Drive motor | **Set A / D02 JGA25-370 6 V 176 RPM — reference unit, not a freeze.** Set B / D03 remains the comparison. Other `D01…` rows remain admissible | Paper P01–P06 against the *set*; Ø84 4 mm D-hub; 160–200 RPM design window; 1.5–3 A class; 0.70 clamp mandatory at 8.4 V | P01–P06 then scored G01/G02/G06. **This row is not selected** |
 | Motor driver | **DRV8874 class — lead, not a freeze.** Brushed H-bridge, per-channel current sense, hardware fault, fail-safe enable | `PB-DRIVE-L/R` separately observable; signed regen; fault/enable on test points | Phase A/B `W` plus G05 driver-fault rows |
 | Sensing leads | **S01, S04, S06, S07 — leads, not a freeze.** Arrangement screened against coverage/latency (P07) and analog-IR 0.50 vs 0.70 HOLD (P09) | Minimum three look-downs; no stop-path on an expander; dark/glossy in G04 | G03/G04/G05. A driver board's cliff pins do not pick this row |
@@ -208,4 +222,4 @@ Candidates are recorded so selection happens from evidence. **None of these rows
 
 *(per ADR: pass / iterate / reject; selected candidates; budget rows updated with measured value, uncertainty and margin; downstream assumptions changed; re-run obligations created)*
 
-No paper gate passed. No physical gate passed. No purchase authorized. Set A / Concept A / D02 / DRV8874-class and S01/S04/S06/S07 remain leads and a reference unit. Parts 1–5 are design-definition; the 2026-09-18 brief-gap close (`RP03-P1-REG-02` … `RP03-P4-REG-02`) filled operating cases, remaining physics, complete drive sets, TTL candidates, cutoff-coast, and the `CA-14` header. Phase A bench work on C3 may begin when the driver evaluation board and reference motor are on the bench; it is not a scored RP-03 run. CAD pass 1 and the 240 fps mock-up remain open.
+No paper gate passed. No physical gate passed. No purchase authorized. **V1 front support is `D21` (BD-08, baseline v1.12, SCOPE-09 v1.3).** Set A / Concept A chassis / D02 / DRV8874-class and S01/S04/S06/S07 remain leads. `D20` is the comparison swap, not waived. ADR-04 is not closed. Parts 1–5 are design-definition; the 2026-09-18 brief-gap close (`RP03-P1-REG-02` … `RP03-P4-REG-02`) filled operating cases, remaining physics, complete drive sets, TTL candidates, cutoff-coast, and the `CA-14` header. Phase A bench work on C3 may begin when the driver evaluation board and reference motor are on the bench; it is not a scored RP-03 run. CAD pass 1 and the 240 fps mock-up remain open.

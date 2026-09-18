@@ -3,9 +3,9 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.2 |
+| Version | 1.3 |
 | Owner | Project builder |
-| Last reviewed | 2026-08-25 |
+| Last reviewed | 2026-09-19 |
 | Depends on | `vision.md` |
 
 ## Scope rule
@@ -33,7 +33,7 @@ The scope labels mean:
 | SCOPE-06 | Astromech communication | Makad responds through a custom non-English astromech-style language authored by the builder, using coordinated droid sounds and behaviour. Ordinary English speech output is not a V1 requirement. |
 | SCOPE-07 | Idle aliveness | When powered but not engaged, Makad shows bounded, non-repetitive signs of life without manual control. |
 | SCOPE-08 | Integrated behaviour | At least three recognizable authored behaviours across the approved scenarios coordinate perception, display, sound, head motion, timing, and available base motion as one action. |
-| SCOPE-09 | Wheeled locomotion | Makad uses two independently powered, encoder-equipped drive wheels plus a front caster and mandatory rear anti-tip skid, as governed by `../01-system/dimensional-baseline.md`. Exact motors, transmissions, drivers, sensing implementation, and control parameters remain engineering decisions. |
+| SCOPE-09 | Wheeled locomotion | Makad uses two independently powered, encoder-equipped drive wheels plus a **front ball transfer** (passive third support) and mandatory rear anti-tip skid, as governed by `../01-system/dimensional-baseline.md` v1.12. A swivel caster remains an RP-03 comparison article on the same mount. Exact motors, transmissions, drivers, sensing implementation, and control parameters remain engineering decisions. |
 | SCOPE-10 | Floor operation | The primary locomotion environment is a normal indoor floor. Makad can perform the approved movement scenarios without uncontrolled contact or instability. |
 | SCOPE-11 | Tabletop protection | Makad can be placed on a large tabletop for mostly stationary demonstrations. Tabletop mode inhibits ordinary locomotion by default and includes edge/fall protection for any permitted movement or unintended activation. |
 | SCOPE-12 | Collision avoidance and bounded contact | Makad detects relevant obstacles and stops or redirects before harmful contact in the approved operating envelope. “Collision-proof” is treated as a design goal, not an absolute guarantee. |
@@ -105,4 +105,4 @@ Targets and Candidates must have time boxes, evidence gates, and clean removal/f
 
 ### Review notes
 
-Approved by the project builder on 2026-08-14. Version 1.1 makes powered roll, pitch, and yaw Core. Time, timer, alarm, Spotify playback, and come/follow behaviours remain Core; broader general utility remains uncommitted. Version 1.2 records the later selection of the two-powered-wheel/front-caster/rear-skid topology while leaving exact drivetrain parts and validated control limits open.
+Approved by the project builder on 2026-08-14. Version 1.1 makes powered roll, pitch, and yaw Core. Time, timer, alarm, Spotify playback, and come/follow behaviours remain Core; broader general utility remains uncommitted. Version 1.2 records the later selection of the two-powered-wheel/front-caster/rear-skid topology while leaving exact drivetrain parts and validated control limits open. Version 1.3 replaces the front caster with a **front ball transfer** as the V1 passive support (`dimensional-baseline.md` v1.12; RP-03 BD-08). The swivel caster is retained as an RP-03 comparison swap. Exact motors, drivers, sensing and validated control limits remain open. No gate pass.

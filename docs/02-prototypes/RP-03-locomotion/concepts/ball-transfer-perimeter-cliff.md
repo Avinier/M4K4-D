@@ -56,7 +56,7 @@ TOP  (+x up the page)
 | G01 | Drive wheels | Ø84 × 21 mm | `E` | Same spec band as A. Hub must match whatever coupling reaches the axle |
 | G05 | Track | 170 mm | `E` | Unchanged. Spin scrub is still a tyre problem |
 | G06 | Wheelbase `L` | 110 mm to **ball contact** | `E` | Contact stays put (unlike a swivelling caster), so `L` is more nearly constant during reverse |
-| — | Front support | Ø1 inch ball transfer (`D21`) | `E` class | Concept B **only**. Soft floors / pile can dent or jam. Rolling resistance `U` |
+| — | Front support | Ø1 inch ball transfer (`D21`) | `E` class | Paper identity of this concept. **V1 also uses `D21`**, but on the Concept A chassis (BD-08) — not with this file's ring or bump-only stop. Soft floors / pile can dent or jam. Rolling resistance `U` |
 | G08/G09 | Skid | 60–80 mm reach, 8–16 mm height | `E` | Same inequality as A. Ball height vs skid height must still satisfy `h/d < x/h` at the scored CoM |
 | — | Motor placement | Inboard, into the WB; CoM `x ≈ +20…+35` mm | `E` | First-order axis vs A. Adds a +`x` lever; adds a coupling. Coupling mass/compliance `U` |
 | — | Battery bay | U-tray around the ball cup, `x = +60…+85`, `h = 18–32` | `E` | Still forward of the axle. Competes with the cup for floor area. HIGH_AFT excluded |
@@ -93,7 +93,7 @@ Head-yaw reaction into the track is unchanged: `0.027 N·m` per wheel `E`. Hold 
 | P05 hold | Still backdrivable JGA25-class. Active hold. Coupling friction is not an acceptable `BM-00` brake |
 | P06 mass | Motors ~170–220 g **plus** cup, ring brackets, coupling. Upper half of 200–600 g `E`. A 37D swap is still rejected by the row |
 
-Ball transfer is `D21` (Concept B only). Skid `D30` unchanged. Wheels `D10` unchanged.
+Ball transfer is `D21`. On this concept it rides with the ring and bump-only stop. On the selected V1 path it rides on the Concept A chassis (BD-08). Skid `D30` unchanged. Wheels `D10` unchanged.
 
 ## 4. Cable route to the body
 

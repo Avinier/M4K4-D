@@ -4,7 +4,7 @@
 |---|---|
 | Status | **Paper gates RP03-P01…P09 drafted 2026-09-17; scored against Set A/B in §4 on 2026-09-18; all OPEN — not frozen, not passed.** Physical candidate registrations RP03-G01…G06 complete as *candidates* (cutoff-coast and 2.0° slope named); **no numeric gate is registered in §3 and no scored run exists** |
 | Authority | Gate definitions and registration fields: `../../01-system/risk-prototype-plan.md` v1.12 §RP-03; folder `plan.md` §7. This file holds the registered numeric versions **when they exist** |
-| Sources for thresholds | `intent.md`; `storyboard.md` v0.2 (authored kinematics, not pass/fail); `physics.md` v0.2 ranges; `drivetrain-screen-01.md` v0.2 drive sets; `sensing-screen-01.md`; `base-control-architecture.md`; `fault-matrix.md`; `rig.md`; BD-01…BD-07 paper-confirmed 2026-09-18 in `decision.md` |
+| Sources for thresholds | `intent.md`; `storyboard.md` v0.2 (authored kinematics, not pass/fail); `physics.md` v0.2 ranges; `drivetrain-screen-01.md` v0.3 drive sets; `sensing-screen-01.md`; `base-control-architecture.md`; `fault-matrix.md`; `rig.md`; BD-01…BD-08 in `decision.md` |
 | Rule | Registration uses the plan's eight fields — **Gate ID, Metric, Threshold, Rationale, Conditions, Repetitions, Instrument, Freeze record** (date + builder approval **before** scored data is inspected). A threshold change after results is a new gate version with a documented reason and a fresh test set, never an edit |
 | Instrument rule | `workbench.md` item 6 and `rig.md` §5: if the bench cannot resolve the threshold, that metric is **exploratory-only**. 50 ms detection-to-deceleration is the standing example |
 
@@ -98,7 +98,7 @@ Common freeze record: builder freeze approval = **pending**. Author/date = this 
 |---|---|
 | Gate ID | RP03-P07 |
 | Metric | Obstacle/edge coverage geometry and stop-path latency versus `physics.md` §6–7 and CA-12 |
-| Threshold | Look-ahead at the **leading contact** exceeds `d_stop` minus mounting offset (`d_stop` at 0.50 m/s = 179 mm, at 0.05 m/s ≈ 45–54 mm). Minimum **three look-down channels** (caster-forward, reverse/skid, wheel-adjacent). Lateral/pivot coverage at 220 °/s is a ~120 mm-class hole if only body-axis forward sensing exists. Blind-region 20 mm cube in the caster shadow is not closed by bump-only at follow speed. Latency **scored at `t = 50 ms`**, not the 35 ms optimistic sum |
+| Threshold | Look-ahead at the **leading contact** exceeds `d_stop` minus mounting offset (`d_stop` at 0.50 m/s = 179 mm, at 0.05 m/s ≈ 45–54 mm). Minimum **three look-down channels** (front-support-forward, reverse/skid, wheel-adjacent). Lateral/pivot coverage at 220 °/s is a ~120 mm-class hole if only body-axis forward sensing exists. Blind-region 20 mm cube in the front-support shadow is not closed by bump-only at follow speed. Latency **scored at `t = 50 ms`**, not the 35 ms optimistic sum |
 | Rationale | ADR-07 is an arrangement, not a SKU. A driver HAT with cliff pins must not choose this geometry |
 | Conditions | Named `S*` set against C3 I/O budget; no stop-path input behind a GPIO expander; dark/glossy called out as the cliff failure mode |
 | Repetitions | Once per sensing arrangement revision |
@@ -124,7 +124,7 @@ Common freeze record: builder freeze approval = **pending**. Author/date = this 
 |---|---|
 | Gate ID | RP03-P09 |
 | Metric | Analog-IR (or equivalent stop-path rangefinder) look-ahead at the **follow ceiling** versus the 0.70 m/s design-point distance |
-| Threshold | At **0.50 m/s** on the level, look-ahead at caster contact must exceed **179 mm** (`physics.md` §6.2: `t = 50 ms`, `a_brake = 1.20 m/s²`, `d_margin = 50 mm`). An axle-mounted sensor is charged the extra 110 mm (289 mm). **2.0° downhill at 0.50 m/s** raises `d_stop` to **221 mm** (`physics.md` §10.2) — a coverage corner, HOLD until caster-mount geometry is proved. **0.70 m/s** (`d_stop = 289 mm` from caster, 399 mm from axle) is **HOLD** for analog-IR coverage: analog-IR is not required to close 0.70 as a commanded V1 case. G02 cannot-exceed still tests the 0.70 clamp; follow **cannot** be weakened to 0.70 to make analog-IR look sufficient |
+| Threshold | At **0.50 m/s** on the level, look-ahead at front-support contact must exceed **179 mm** (`physics.md` §6.2: `t = 50 ms`, `a_brake = 1.20 m/s²`, `d_margin = 50 mm`). An axle-mounted sensor is charged the extra 110 mm (289 mm). **2.0° downhill at 0.50 m/s** raises `d_stop` to **221 mm** (`physics.md` §10.2) — a coverage corner, HOLD until ball-mount geometry is proved. **0.70 m/s** (`d_stop = 289 mm` from front contact, 399 mm from axle) is **HOLD** for analog-IR coverage: analog-IR is not required to close 0.70 as a commanded V1 case. G02 cannot-exceed still tests the 0.70 clamp; follow **cannot** be weakened to 0.70 to make analog-IR look sufficient |
 | Rationale | Follow ≤ 0.50 is inherited (CON-19). Treating 0.70 as a commanded coverage requirement would quietly enlarge V1 speed |
 | Conditions | Named stop-path sensor class; ToF-as-telemetry is a different architecture and does not satisfy this row by existing on the same board |
 | Repetitions | Once per sensing lead |
@@ -235,16 +235,16 @@ Plan mapping: `BM-05/06/07` onset/settle plus recorded builder judgement; at lea
 
 These are builder paper scores of P01–P09 against **Set A** and **Set B** in `drivetrain-screen-01.md` v0.2. They are **not** a freeze, **not** a purchase, and **not** a §3 registration. Missing evidence returns OPEN/HOLD, never PASS. A later freeze copies a row into §3 with a dated approval **before** scored data.
 
-| Gate | Set A (D02 6 V + D10 4 mm + D20 + dual DRV8874 + 2S direct) | Set B (D03 6 V 1:45 + same wheel/caster/driver/supply/mount) |
+| Gate | Set A (D02 6 V + D10 4 mm + **D21** + dual DRV8874 + 2S direct) | Set B (D03 6 V 1:45 + same wheel/ball/driver/supply/mount) |
 |---|---|---|
 | P01 Torque | **PASS on paper** (Oz stall 0.490 and NFP 0.441 ≥ 0.220; rated ≥ 0.063). 6.0 V under sag still ≥ 0.220 on Oz | **PASS on paper** (Oz stall 0.589 ≥ 0.220; rated 0.108 ≥ 0.063) |
 | P02 Speed | **PASS on paper** at 6 V 176 RPM. **HOLD** at 8.4 V (no-load 1.08 m/s) unless the 0.70 compiled clamp is on — the clamp is mandatory, not optional | **HOLD** — 133 RPM / 0.585 m/s at 6 V is below 160 and below 0.70, still above follow 0.50 |
 | P03 Current / 5 A | **HOLD** — Oz 900 mA vs NFP ≤ 3 A at 6 V; NFP ≤ 4.2 A at 8.4 V. Do not average. Meter the article | **HOLD** — same stall-current `D` conflict |
 | P04 Encoder / creep | **PASS on paper** (11 PPR × 35:1 ≈ 385 CPR, 0.69 mm/count, ~58 c/s at 0.04 m/s) | **PASS on paper** (11 PPR × 45:1 ≈ 495 CPR) |
 | P05 Backdrivability | **Named, not picked** — 35:1 backdrivable; `BM-00` needs active hold or a brake; `BM-01` needs current at `v*=0` | Same class, slightly more residual friction `E` |
-| P06 Mass | **PASS on paper** — two motors ~220 g + wheels/caster/skid/brackets/two DRV8874 → 350–500 g `E` inside 200–600 g | Same mount; 45:1 box is not a mass break |
+| P06 Mass | **PASS on paper** — two motors ~220 g + wheels/ball/skid/brackets/two DRV8874 → 350–500 g `E` inside 200–600 g | Same mount; 45:1 box is not a mass break |
 | P07 Coverage / latency | **PASS on paper for the arrangement** (three look-downs + analog-IR + bump + IMU). Not a SKU pass. 2.0° downhill at 0.50 m/s makes `d_stop` 221 mm vs 179 mm level — coverage corner, not a P07 fail of the count | Same arrangement |
 | P08 Pin map spare GPIO | **PASS on paper** — v0.1 retains three safe spares; header generated. Not a G05 pass | Same map |
-| P09 Analog-IR 0.50 vs 0.70 | **PASS on paper at 0.50** if caster-mounted (179 mm). **HOLD at 0.70** (289 mm) and **HOLD at 0.50 downhill 2°** (221 mm) until mounting geometry is proved | Same |
+| P09 Analog-IR 0.50 vs 0.70 | **PASS on paper at 0.50** if mounted at front-support contact (179 mm). **HOLD at 0.70** (289 mm) and **HOLD at 0.50 downhill 2°** (221 mm) until mounting geometry is proved | Same |
 
 Set A is the **reference-unit lead**, not a freeze. Set B stays the comparison. Neither row is purchased.

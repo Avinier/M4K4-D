@@ -3,9 +3,9 @@
 | Field | Value |
 |---|---|
 | Status | **Current target baseline — supersedes earlier dimensional and packaging assumptions** |
-| Version | 1.11 |
+| Version | 1.12 |
 | Owner | Project builder |
-| Approved / revised | 2026-08-30 / 2026-09-17 |
+| Approved / revised | 2026-08-30 / 2026-09-19 |
 | Feeds | Mass/envelope ledger, RP-01 head, RP-03 drive, RP-06 layout, sourcing, integrated CAD |
 
 ## Authority and interpretation
@@ -15,7 +15,7 @@ This document is the current source of truth for Makad's dimensional, drive-geom
 - Dimensions are stated as **height × width × depth** unless a row labels its axes differently.
 - `~` and stated ranges are design targets, not manufacturing tolerances.
 - The final CAD must remain centred on the baseline values below. A conflict discovered during packaging or prototype validation is resolved by an explicit baseline revision, not by silently retaining an older value.
-- The **110 mm wheelbase target** means drive-axle centreline to front-caster ground contact; it is not a second powered-axle spacing.
+- The **110 mm wheelbase target** means drive-axle centreline to **front-support ground contact** (ball transfer); it is not a second powered-axle spacing.
 - The **140 mm body-top/neck datum** is measured from the ground. It is not the visible body-shell height.
 - Longitudinal centre-of-mass coordinates use the drive axle as `x=0`, with positive `x` forward. CoM height is measured upward from the floor.
 
@@ -30,7 +30,7 @@ This document is the current source of truth for Makad's dimensional, drive-geom
 | Neck allocation | **60 mm vertical** | Packaging space for powered yaw, pitch, and roll |
 | Drive wheels | **Ø84 mm nominal** | Mobility, proportions, and motor-speed compromise |
 | Wheel track | **~170 mm centre-to-centre** | Lateral stability and expressive turning |
-| Drive axle to front-caster contact | **~105–115 mm; 110 mm target** | Avoids an excessively short/wide chassis and reduces caster instability |
+| Drive axle to front-support contact | **~105–115 mm; 110 mm target** | Avoids an excessively short/wide chassis; contact is the ball patch, not a caster fork |
 
 The Layout 03 neutral stack is 140 mm ground-to-body-top + 60 mm neck allocation + 104 mm crown-inclusive head = **304 mm** if those datums are retained. The **300 mm overall height remains a rounded outer target, not a passed envelope**; RP-06 must explicitly accept the 304 mm stack or recover 4 mm through the actual body/neck mounting datums. The visible 35–45 mm neck is shorter because the mechanism intrudes into the body and head.
 
@@ -59,7 +59,7 @@ The moving head contains the selected display/renderer board, the required separ
 | Visible neck height | **~35–45 mm** | Actuators overlap into the body and head instead of stacking externally |
 | Overall width across wheel/body structure | **~195–205 mm** | Planted appearance and stability |
 | Axle height | **~42 mm** | Half the nominal Ø84 mm wheel diameter |
-| Front caster | **Ø25–32 mm; ~30 mm target** | Compact passive third support point |
+| Front support | **Ø1 inch (25.4 mm) ball transfer** | Compact passive third support; no trail. Ø25–32 mm swivel caster is the RP-03 **comparison swap only**, not the V1 target |
 | Main body-shell ground clearance | **~25–35 mm** | Closes the 140 mm datum minus the 105–115 mm visible shell height |
 | Rear anti-tip skid reach | **~70 mm behind the drive axle** | Catches backward pitch caused by forward acceleration |
 | Rear anti-tip skid height above floor | **≤14 mm at 70 mm reach** | Must hang below the shell; contact occurs before the CoM crosses the drive-wheel support line |
@@ -70,7 +70,7 @@ The skid is a separate lower protrusion, not flush with the main shell. For a di
 
 | Part / parameter | Final / target dimension | Design intent |
 |---|---:|---|
-| Drive architecture | **Two independently powered wheels + front caster** | Forward/reverse motion, arcs, pivots, and in-place rotation |
+| Drive architecture | **Two independently powered wheels + front ball transfer** | Forward/reverse motion, arcs, pivots, and in-place rotation. Rear anti-tip skid remains mandatory |
 | Drive encoders | **One per drive wheel** | Closed-loop speed and controlled turns |
 | Acceptable drive-wheel range | **Ø80–85 mm** | Practical sourcing without redesign |
 | Drive-wheel tread width | **~20–22 mm; 21 mm nominal** | Grip without excessive turn scrub |
@@ -83,12 +83,12 @@ The skid is a separate lower protrusion, not flush with the main shell. For a di
 | Maximum theoretical spin capability | **300°/s+ possible, drivetrain-dependent** | Headroom; not a normal commanded rate |
 | Longitudinal whole-robot CoM target | **`x_CoM = +25 mm` forward of drive axle** | Forward offset supplies the gravity restoring arm against backward tip during forward acceleration |
 | Whole-robot CoM height target | **`h_CoM = 124 mm` above floor** | Baseline vertical lever arm for acceleration stability |
-| Theoretical front-caster lift threshold | **~2.0 m/s² at the CoM *target*** | `a_tip = g·x_CoM/h_CoM ≈ 9.81·25/124 = 1.98 m/s²` **if** that placement is hit. RP-03 `physics.md` shows this is a placement target, not a Layout 03 mass-roll-up result |
+| Theoretical front-support lift threshold | **~2.0 m/s² at the CoM *target*** | `a_tip = g·x_CoM/h_CoM ≈ 9.81·25/124 = 1.98 m/s²` **if** that placement is hit. Same rigid-body model as the former caster-lift name: the front contact unloads. RP-03 `physics.md` shows this is a placement target, not a Layout 03 mass-roll-up result |
 | CoM sensitivity | **Each +10 mm forward raises `a_tip` by ~0.8 m/s²** | `Δa_tip = g·10/124 ≈ 0.79 m/s²` at the target CoM height |
 
 The existing **0.5 m/s maximum for person-following trials remains a behavioural safety/validation limit**. It does not conflict with the higher drivetrain capability target, which exists for bounded expressive moves and engineering headroom.
 
-Until RP-03 measures lift onset and dynamic compliance, commanded forward acceleration must remain below the theoretical 2.0 m/s² caster-lift threshold **and** below the Layout 03 lumped `a_tip` range in RP-03 `physics.md`, with a registered safety margin. A higher expressive acceleration requires a validated forward CoM shift, lower CoM, or support-geometry revision; tire traction alone does not justify it. Battery-on-or-behind-axle (RP-03 `HIGH_AFT`) is a forbidden placement: `a_tip` changes sign. If the +25 / 124 mm target is missed on the integrated article, **this baseline is revised** — RP-03 does not quietly shrink commanded acceleration to hide a CoM miss.
+Until RP-03 measures lift onset and dynamic compliance, commanded forward acceleration must remain below the theoretical 2.0 m/s² front-support-lift threshold **and** below the Layout 03 lumped `a_tip` range in RP-03 `physics.md`, with a registered safety margin. A higher expressive acceleration requires a validated forward CoM shift, lower CoM, or support-geometry revision; tire traction alone does not justify it. Battery-on-or-behind-axle (RP-03 `HIGH_AFT`) is a forbidden placement: `a_tip` changes sign. If the +25 / 124 mm target is missed on the integrated article, **this baseline is revised** — RP-03 does not quietly shrink commanded acceleration to hide a CoM miss.
 
 ## Component placement
 
@@ -103,12 +103,12 @@ Until RP-03 measures lift onset and dynamic compliance, commanded forward accele
 
 ## Compact handoff
 
-Design around **300 H × 205 W × 180 D mm overall as a rounded target; RP-01 Layout 03 head 104 H × 150 W × 115 D mm including crown (86 mm main core); Ø84 mm wheels; 170 mm track; and 110 mm drive-axle-to-front-caster wheelbase**, with a **nominal ~509 g Layout 03 D/E head tree at M008=20 g and ~499–524 g C2 sensitivity before candidate-specific servo substitution**, **60 mm three-axis neck allocation**, whole-robot CoM targets initially at approximately **25 mm forward of the axle and 124 mm high but requiring revision under the heavier head**, a **~70 mm rear skid no more than 14 mm above the floor**, and body-mounted audio, forward-low battery, and main Linux compute. The neutral vertical stack is 304 mm; RP-06 must accept it or recover 4 mm. The CAD-volume/allowance tree is working evidence, not a measured replacement for M900.
+Design around **300 H × 205 W × 180 D mm overall as a rounded target; RP-01 Layout 03 head 104 H × 150 W × 115 D mm including crown (86 mm main core); Ø84 mm wheels; 170 mm track; and 110 mm drive-axle-to-front-support (ball) wheelbase**, with a **nominal ~509 g Layout 03 D/E head tree at M008=20 g and ~499–524 g C2 sensitivity before candidate-specific servo substitution**, **60 mm three-axis neck allocation**, whole-robot CoM targets initially at approximately **25 mm forward of the axle and 124 mm high but requiring revision under the heavier head**, a **~70 mm rear skid no more than 14 mm above the floor**, and body-mounted audio, forward-low battery, and main Linux compute. The neutral vertical stack is 304 mm; RP-06 must accept it or recover 4 mm. The CAD-volume/allowance tree is working evidence, not a measured replacement for M900.
 
 ## Change control
 
 - RP-01 replaces the preliminary head inertia and torque estimates with CAD-derived mass properties and axis-specific calculations, then validates them with the representative rig.
-- RP-03 validates traction, support geometry, stability, encoder control, speed, braking, caster behaviour, and the mandatory rear skid.
+- RP-03 validates traction, support geometry, stability, encoder control, speed, braking, ball-transfer behaviour (dent/jam/drag), the caster comparison swap, and the mandatory rear skid.
 - RP-06 validates integrated packaging and visible proportions against sourced components.
 - Any required departure is recorded here with a version increment and propagated to affected prototype inputs before CAD freeze.
 
@@ -128,3 +128,4 @@ Design around **300 H × 205 W × 180 D mm overall as a rounded target; RP-01 La
 | 2026-09-08 | 1.9 | Builder approved the Layout 02 appearance revision and 1:1 component method. Recorded 86 mm main shell, 102 mm crown-inclusive height, 150 mm width, 115 mm depth, Ø60 mm rolling ears and 99 × 58 mm minimally clipped aperture. Explicitly replaces the earlier head-height/pod targets for RP-01 and exposes the 302 mm neutral stack; integrated fit and measured mass remain open. |
 | 2026-09-12 | 1.10 | Adopted Layout 03 as the planning geometry: 104 × 150 × 115 mm complete head, 86 × 130 × 115 mm core and 304 mm provisional stack. Recorded the nominal 362/436/509 g and inertia tree at M008=20 g while retaining M008 uncertainty and candidate-specific servo recalculation. No fabrication release, measured-mass acceptance or gate pass. |
 | 2026-09-17 | 1.11 | Consumed RP-03 `physics.md`: retained the +25 / 124 mm CoM **target** and the 1.98 m/s² figure as the value *at that target*; recorded that Layout 03 lumped roll-up does not automatically hit it (`a_tip` about 0.9–1.9 m/s² with battery forward; sign reversal if battery is on/behind the axle). No geometry target changed. No gate pass. |
+| 2026-09-19 | 1.12 | Builder selected the **Ø1 inch ball transfer** as the V1 front support (`RP-03` BD-08). Wheelbase remains 110 mm to **front-support contact**. Swivel caster is the RP-03 comparison swap only. Not a gate pass, not a purchase, not ADR-04 closure. |

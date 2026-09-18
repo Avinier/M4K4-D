@@ -33,7 +33,7 @@ Copied, not re-derived. Score with **`t_latency = 50 ms`** (CA-12 invariant), no
 | Lateral / pivot | Wheels | **0 mm** ahead, **85 mm** off centre; stance sweep ~102 mm |
 | Reverse | Skid | **70 mm** behind axle |
 
-Minimum look-downs: **three** (caster-forward, reverse/skid, one lateral). A perimeter ring is Concept B, not a requirement of this screen. A single forward cliff is not enough.
+Minimum look-downs: **three** (front-support-forward, reverse/skid, one lateral). A perimeter ring is Concept B, not a requirement of this screen. A single forward cliff is not enough.
 
 Blind-region: 20 mm square × 20 mm tall in the front-support shadow. Bumper is **last** layer. Do not close G03 with bump-only at follow speed.
 
@@ -78,7 +78,7 @@ Concept B's 4+ cliff GPIO **plus** the same bump/IMU/nFAULT/enable set spends th
 | GPIO cliff | TCRT5000-class look-down (`S01`) | **Lead** for GPIO cliff **with a mandatory dark+glossy trial**. Failure mode is reflectivity, not geometry |
 | GPIO cliff comparison | QRE1113 (`S02`) | **Comparison**. Tighter geometry (~1 mm mirror `D`) |
 | Downward ToF as cliff | VL53L0X (`S03`) | **Reject as sole stop-path cliff** (bus + surface + latency) |
-| Obstacle stop-path | GP2Y0A41SK0F analog IR (`S04`) | **Lead** obstacle stop-path on ADC. **PASS** at 0.50 if caster-mounted. **HOLD** at the 0.70 design point (289 vs 300 mm max) |
+| Obstacle stop-path | GP2Y0A41SK0F analog IR (`S04`) | **Lead** obstacle stop-path on ADC. **PASS** at 0.50 if mounted at **front-support contact** (ball). **HOLD** at the 0.70 design point (289 vs 300 mm max) |
 | Forward ToF | VL53L1X (`S05`) | **Conditional** telemetry / redundant look-ahead. **Not** sole stop-path |
 | Bump | Miniature lever / microswitch spanning stance (`S06`) | **Lead** bump, last layer, direct GPIO |
 | Base IMU | ICM-42688-P SPI + INT1 (`S07`) | **Lead** IMU. UART-MCU modules (Robu 601N1 class) are **not** the same article — reject UART-angle-output as the stop-path IMU |
@@ -102,7 +102,7 @@ Concept B's 4+ cliff GPIO **plus** the same bump/IMU/nFAULT/enable set spends th
 
 **Stop-path:** **OK** — native GPIO, no bus, sample age bound 10 ms `E`.
 
-**Coverage:** A look-down does not *range* 40 mm; it reports floor-present at a patch **placed** ~40 mm before the contact. Mounting geometry is the coverage. Three channels at caster / skid / one wheel-adjacent match Concept A and `physics.md` §7.5.
+**Coverage:** A look-down does not *range* 40 mm; it reports floor-present at a patch **placed** ~40 mm before the contact. Mounting geometry is the coverage. Three channels at ball-forward / skid / one wheel-adjacent match the selected path and `physics.md` §7.5.
 
 **Failure mode (mandatory trial):** measures **reflectivity**, not geometry. **Glossy black can look like floor; matte white can look like a drop.** Dark and glossy tabletop samples are the cliff failure mode (`physics.md` §7.5, CON-TBD-14 proposal). A PASS without that trial is not a PASS.
 
@@ -140,11 +140,11 @@ Concept B's 4+ cliff GPIO **plus** the same bump/IMU/nFAULT/enable set spends th
 
 **Stop-path:** **OK on ADC.** Direct analog into C3 (or a 5 V-tolerant path with a documented divider). No I2C. No expander. Age bound 25 ms `E` (one cycle + scan). Still score the invariant at 50 ms.
 
-**Coverage from caster contact:**
+**Coverage from front-support contact:**
 
 | Band | Need | 300 mm max `D` | Result |
 |---|---:|---|---|
-| Follow 0.50 m/s | **179 mm** | 300 mm | **PASS if caster-mounted**. Axle-mounted needs 289 mm from axle = 179+110 — still inside 300 mm but **do not** credit axle mount as caster look-ahead; a body-axis ToF/IR on the axle does not see the caster-shadow cube |
+| Follow 0.50 m/s | **179 mm** | 300 mm | **PASS if mounted at front-support contact**. Axle-mounted needs 289 mm from axle = 179+110 — still inside 300 mm but **do not** credit axle mount as leading-contact look-ahead; a body-axis ToF/IR on the axle does not see the front-support-shadow cube |
 | Design 0.70 m/s | **289 mm** | 300 mm | **TIGHT — P-gate HOLD** for the 0.70 design point. 11 mm of paper room is not a margin. Follow cap stays 0.50 |
 | Calibration 0.06 m/s | ~40 mm (cliff job) | This part is the **obstacle** layer, not the look-down | Do not use GP2Y as a cliff |
 
@@ -201,8 +201,8 @@ Concept B's 4+ cliff GPIO **plus** the same bump/IMU/nFAULT/enable set spends th
 
 | Need | Concept A (working lead) | Concept B (comparison) |
 |---|---|---|
-| Cliffs | `S01` × 3 (caster, skid, one lateral). Dark+glossy trial on all three headings | `S01` × 4+ ring. Same trial. GPIO spare at risk |
-| Obstacle stop-path | **`S04` caster-mounted** | Bumper `S06` only — **G03 hole at 0.50**. `S05` telemetry does not close it |
+| Cliffs | `S01` × 3 (ball-forward, skid, one lateral). Dark+glossy trial on all three headings | `S01` × 4+ ring. Same trial. GPIO spare at risk |
+| Obstacle stop-path | **`S04` at the ball contact** | Bumper `S06` only — **G03 hole at 0.50**. `S05` telemetry does not close it |
 | Bump | `S06` last layer | `S06` last **and** only obstacle stop-path |
 | IMU | `S07` SPI+INT | Same |
 | ToF | Optional `S05` if spare GPIO/bus exists | Identity of the comparison; still not stop-path |

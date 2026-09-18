@@ -24,7 +24,7 @@ All commands are robot-relative in the floor plane:
 
 | Quantity | Zero | Negative | Positive |
 |---|---|---|---|
-| Body `x` | No forward travel | Reverse (away from the caster) | Forward of the drive axle (caster direction) |
+| Body `x` | No forward travel | Reverse (away from the front support) | Forward of the drive axle (ball direction) |
 | Body `y` | On the sagittal plane | Toward robot-right | Toward robot-left |
 | Yaw | Heading held | CW viewed from above (turn toward robot-right) | CCW viewed from above (turn toward robot-left) |
 | Wheel RPM | That wheel at rest | That wheel drives the body `−x` | That wheel drives the body `+x` |
@@ -255,7 +255,7 @@ Regulation: stay ≤ `0.50 m/s` always (inherited cap). `a = 0.35 m/s²`. Durati
 | Initial pose | Marked start; 3.0 m route with one 45° arc; heading along the first leg |
 | Head pose | `NEUTRAL` |
 | Mass / CoM | BD-05 four settable corners |
-| Required valid sensors | All `BC-03` valid **before** each cruise segment. Analog-IR look-ahead ≥ `d_stop` at 0.50 m/s (179 mm from caster). Target loss is an interrupt, not RP-07 reacquire |
+| Required valid sensors | All `BC-03` valid **before** each cruise segment. Analog-IR look-ahead ≥ `d_stop` at 0.50 m/s (179 mm from front-support contact). Target loss is an interrupt, not RP-07 reacquire |
 | Interrupt | Replaced follow goal (latest-wins cruise) or `BM-10` / `BM-12`. Never finishes a stale arc |
 | Final footprint | End of the 3.0 m route ±50 mm authored, heading along the last leg. Drift millimetres logged on the straight legs |
 | Settle | Default settle |
@@ -278,7 +278,7 @@ In-place pivot `180°`. Time-to-peak ~250 ms. Settle ≤ 300 ms. Wheel `v` at `1
 | Field | This panel |
 |---|---|
 | `OM` | `OM-01` only |
-| Surface | All BD-04 named articles. `S-RUG` pile is the scrub/caster-glitch corner |
+| Surface | All BD-04 named articles. `S-RUG` pile is the scrub / ball-jam / caster-glitch (swap) corner |
 | Initial pose | Marked centre; heading 0; 180° target |
 | Head pose | `NEUTRAL` or a slight yaw-toward-caller; not a CoM corner unless extras are on |
 | Mass / CoM | BD-05 four settable corners |
@@ -323,7 +323,7 @@ Never: translate more than ~30 mm (walk); tip; continue after the stop command.
 
 ### BM-07 — Side-to-side wiggle
 
-**Audience read:** several small forward-back chuckles of the body, strongest first, declining like a laugh—not a shove, not a stall at mid-stroke, not a caster that steers a new heading.
+**Audience read:** several small forward-back chuckles of the body, strongest first, declining like a laugh—not a shove, not a stall at mid-stroke, not a front support that steers a new heading.
 
 This is the **highest-risk** Core base performance: a reversal. ±40 mm (minimum viable) / ±30 mm (best case; smaller is harder) along `x`, three cycles, declining amplitude. Half-cycle `T = 0.50 s`, so `a_peak ~ 0.80–1.00 m/s²` under min-jerk. Symmetric. Decel through zero with no visible deadband.
 
@@ -346,13 +346,13 @@ This is the **highest-risk** Core base performance: a reversal. ±40 mm (minimum
 
 A visible stop of ≤ 80 ms at zero is a failure of `BM-07`. That is a quality hypothesis, not a gate.
 
-Never: a lurch that reads as a shove (`FS-10`); a pause at zero that reads as a stall; caster-steer heading change > 5° per cycle.
+Never: a lurch that reads as a shove (`FS-10`); a pause at zero that reads as a stall; front-support heading change > 5° per cycle (caster-steer on the `D20` swap; ball-walk on `D21`).
 
 ### BM-08 — Startle retreat
 
 **Audience read:** an immediate reverse away from a frontal surprise, then a frozen assessment. The freeze is as important as the speed.
 
-Reverse 150 mm (minimum viable) / 200 mm (best case), then freeze `HOLD`. Time-to-peak ~200 ms. Reverse launch loads the caster. `a_peak = 0.80 / 1.00 m/s²`.
+Reverse 150 mm (minimum viable) / 200 mm (best case), then freeze `HOLD`. Time-to-peak ~200 ms. Reverse launch loads the front support. `a_peak = 0.80 / 1.00 m/s²`.
 
 | Field | This panel |
 |---|---|
@@ -360,7 +360,7 @@ Reverse 150 mm (minimum viable) / 200 mm (best case), then freeze `HOLD`. Time-t
 | Surface | All BD-04 named articles |
 | Initial pose | Marked origin; heading 0; surprise is frontal |
 | Head pose | `NEUTRAL` |
-| Mass / CoM | BD-05 four settable corners. Reverse loads the caster; `HIGH` with a pitched-forward head is the tip-over-caster corner |
+| Mass / CoM | BD-05 four settable corners. Reverse loads the front support; `HIGH` with a pitched-forward head is the tip-over-front-support corner |
 | Required valid sensors | All `BC-03` valid. **Rear cliff** covering the skid contact must be valid before reverse travel. Forward analog-IR is not a reverse permission |
 | Interrupt | After freeze, a new phrase from rest. The retreat does not bounce forward to “recover” |
 | Final footprint | −150 / −200 mm along x, heading held. No forward hop |
@@ -373,7 +373,7 @@ Reverse 150 mm (minimum viable) / 200 mm (best case), then freeze `HOLD`. Time-t
 
 The 200 ms value is outbound-to-peak, not out-and-return.
 
-Never: a forward hop first; a tip onto the caster; continued roll after freeze.
+Never: a forward hop first; a tip onto the front support; continued roll after freeze.
 
 ### BM-09 — Controlled brake
 
@@ -577,7 +577,7 @@ Values are the panel's **best-case** command unless a range is shown. `t_settle`
 | `BM-05` | `PIVOT` | ~0 body | ~0 body | 140 / 180 °/s | 560 / 720 °/s² (9.8 / 12.6 rad/s²) | ≤300 ms | Wheel 0.207 / 0.267 m/s → 47.2 / 60.7 RPM |
 | `BM-06` | `SPIN` | ~0 body | ~0 body | 180 / 220 °/s | 720 / 880 °/s² if 250 ms launch | ≤350 / ≤250 ms | `720°`; wheel 0.267 / 0.326 m/s → 60.7 / 74.2 RPM |
 | `BM-07` | `WIGGLE` | ~0.15 | 0.80 / 1.00 | ~0 | ~0 | ≤350 / ≤250 ms | ±40 / ±30 mm, 3 declining cycles, `DECEL0` |
-| `BM-08` | reverse `LAUNCH`+`HOLD` | −0.16 / −0.20 | 0.80 / 1.00 | 0 | 0 | freeze | 150 / 200 mm; caster loaded in reverse |
+| `BM-08` | reverse `LAUNCH`+`HOLD` | −0.16 / −0.20 | 0.80 / 1.00 | 0 | 0 | freeze | 150 / 200 mm; front support loaded in reverse |
 | `BM-09` | `BRAKE` | from 0.15 / 0.40 / 0.50 (0.60 exploratory) | 0.80 / 1.00 | 0 | 0 | ≤350 / ≤250 ms | Commanded brake. Overshoot < 20 mm authored. Wheel from 34.1 / 90.9 / 113.7 (136.4 exploratory) RPM |
 | `BM-10` | `BRAKE` | from `BM-04` cruise | `BRAKE` limited | heading held | ~0 | ≤350 / ≤250 ms | Detection-to-decel ≤ 50 ms inherited. No clearance number here |
 | `BM-11` | `LAUNCH`+`CRUISE` | 0.04 / 0.06 | low, inside creep `a` | 0 | 0 | `BRAKE` at edge | Armed only. Radius not set. Wheel 9.1 / 13.6 RPM. Not the demo |

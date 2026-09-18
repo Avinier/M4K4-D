@@ -7,7 +7,7 @@
 | Created | 2026-09-17 |
 | Revised | 2026-09-18 |
 | Governing plan | `../../01-system/risk-prototype-plan.md` v1.12 §RP-03 (stage 3); folder plan `plan.md` |
-| Mechanical baseline inherited | `../../01-system/dimensional-baseline.md` v1.10 (Ø84, 170 mm track, 110 mm wheelbase, caster + mandatory skid); SCOPE-09; MEM-20260825-01/02 |
+| Mechanical baseline inherited | `../../01-system/dimensional-baseline.md` v1.12 (Ø84, 170 mm track, 110 mm wheelbase, **ball transfer** + mandatory skid); SCOPE-09 v1.3; MEM-20260825-01/02; BD-08 |
 | Electrical baseline inherited | `RP02-P3-REG-01/02` (C3 = ESP32-S3-DevKitC-1-N8); `compute-control-architecture.md` CA-03/11/12; `power-architecture.md` PA-11/13; `link-contract.md` v0.4 envelope |
 | Ledger | `../../01-system/power-energy-ledger.md` — RP-03 populates `LG-04`/`LG-10`; `../../01-system/mass-envelope-ledger.md` — RP-03 populates the drive row. No second copy lives here |
 | Feeds | ADR-04 (wheeled-drive and passive-support geometry, provisional); ADR-07 (obstacle and tabletop-edge sensing arrangement, provisional); ADR-06 *sizing* (drive `W` rows); ADR-03 (C3 half of RP02-G05); ADR-05 (measured base response model for RP-04) |
@@ -64,7 +64,7 @@ G06 is the only gate with a judgement component ("sufficiently smooth onset and 
 | Open thresholds | SC-TBD-07 floor surfaces/speed/slope/stopping/stability; SC-TBD-08 obstacle set/speeds/clearance; SC-TBD-09 tabletop surface/edge geometry |
 | Constraints | CON-09 floor primary, tabletop stationary by default; CON-14 300×205×180 mm; CON-19 single-room envelope and follow ≤ 0.5 m/s; CON-P02 accessible cutoff; CON-P05 estimates before CAD freeze |
 | Open constraint | CON-TBD-14 tabletop calibration footprint — proposed in `physics.md`, registered at G04 freeze, not here |
-| Scope | SCOPE-09 two encoder wheels + front caster + mandatory rear skid |
+| Scope | SCOPE-09 v1.3 two encoder wheels + **front ball transfer** + mandatory rear skid; caster is the RP-03 comparison swap |
 | Architecture drivers | AD-04 safety survives high-level failure; AD-08 peak loads occur concurrently |
 | ADRs | ADR-04, ADR-07 (close provisionally); ADR-06 sizing, ADR-03, ADR-05 (informed) |
 | Operating modes | `OM-01` Floor; `OM-02` Tabletop inhibited-by-default; `OM-03` motion inhibited. `SD-03` app selection is a command, not the interlock |
@@ -78,10 +78,10 @@ Everything below is inherited. RP-03 measures against these values. A departure 
 
 | Input | Value | Source |
 |---|---|---|
-| Drive topology | Two independently powered encoder wheels + front caster + **mandatory** rear anti-tip skid; holonomic and self-balancing rejected | dimensional baseline v1.10; SCOPE-09; MEM-20260813-20; MEM-20260825-01 |
+| Drive topology | Two independently powered encoder wheels + **front ball transfer** + **mandatory** rear anti-tip skid; holonomic and self-balancing rejected. Swivel caster is the comparison swap | dimensional baseline v1.12; SCOPE-09 v1.3; MEM-20260813-20; MEM-20260825-01; BD-08 |
 | Wheels | Ø84 mm nominal (Ø80–85 acceptable), ~21 mm tread, moderate-grip rubber/TPU | dimensional baseline §Drive targets |
-| Track / wheelbase | ~170 mm centre-to-centre; drive axle to caster contact 105–115 mm, 110 mm target | same |
-| Caster / skid | Caster Ø25–32 mm (~30 mm); skid ~70 mm behind axle, ≤14 mm above floor, generalized as `h/d < x_CoM/h_CoM` | same; MEM-20260825-02 |
+| Track / wheelbase | ~170 mm centre-to-centre; drive axle to **front-support** contact 105–115 mm, 110 mm target | same |
+| Front support / skid | **Ø1" ball transfer** (V1); Ø25–32 mm swivel caster is the RP-03 comparison swap; skid ~70 mm behind axle, ≤14 mm above floor, generalized as `h/d < x_CoM/h_CoM` | same; MEM-20260825-02; BD-08 |
 | Whole-robot CoM *target* | `x_CoM = +25 mm` forward of axle, `h_CoM = 124 mm`. **Flagged for recalculation under the Layout 03 head.** The 2.0 m/s² figure is a placement target, not a mass-roll-up result — see `physics.md` | dimensional baseline v1.8/v1.10 |
 | Caster-lift planning value | `a_tip = g·x_CoM/h_CoM ≈ 1.98 m/s²` *at the target CoM*; +10 mm forward ≈ +0.8 m/s². Commanded forward acceleration stays below the *recomputed range* with a registered margin until RP-03 measures lift onset | same |
 | Speed bands | Normal 0.15–0.40 m/s; fast expressive 0.40–0.60 m/s; maximum target 0.65–0.70 m/s; **follow ≤ 0.5 m/s cannot be weakened**; ~160–200 RPM unloaded design point | dimensional baseline; CON-19 |

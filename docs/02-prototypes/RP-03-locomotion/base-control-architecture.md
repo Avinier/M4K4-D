@@ -60,7 +60,7 @@ Stop-path bits, all local to C3, no USB sensor, no GPIO expander:
 
 | Channel | Electrical | Role in the stop path |
 |---|---|---|
-| Cliff GPIO (`CLIFF_FL/FR/REAR`) | Digital look-down, three channels covering caster-forward, reverse/skid and wheel-adjacent (`physics.md` §7.5) | Coverage bit; any channel absent/stale/implausible inhibits motion that needs that contact |
+| Cliff GPIO (`CLIFF_FL/FR/REAR`) | Digital look-down, three channels covering front-support-forward, reverse/skid and wheel-adjacent (`physics.md` §7.5) | Coverage bit; any channel absent/stale/implausible inhibits motion that needs that contact |
 | Analog IR obstacle | ADC1 | Obstacle envelope bit; look-ahead is screened against `d_stop` at the leading contact, not against a SKU range |
 | Bump | Digital | Last layer, not the first; do not close G03 on bump-only at follow speed |
 | IMU lift / tip | SPI + interrupt | Pickup and tip bits; rigid base mount |

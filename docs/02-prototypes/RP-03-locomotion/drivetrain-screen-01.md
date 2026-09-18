@@ -3,9 +3,9 @@
 | Field | Value |
 |---|---|
 | Status | **Paper screen complete v0.2. No motor selected. No freeze. No purchase.** Two complete drive sets packaged. `D02` / Set A is a **lead for a reference unit (bench)**, not a freeze |
-| Date | 2026-09-17; sets and shaft/wheel/caster/driver-stop screens 2026-09-18 |
+| Date | 2026-09-17; sets and shaft/wheel/support/driver-stop screens 2026-09-18; BD-08 selected `D21` 2026-09-19 |
 | Scope | Named gearmotor / wheel / caster / skid / driver-**class** rows `D01…` screened against `physics.md` demand. Exact driver IC lead is a Part 4 name; Part 3 screens the class |
-| Inputs | `physics.md` §4–5 (torque 0.036–0.110 N·m, 160–200 RPM, 1.5–3 A class, Korad 5 A `D`, drive mass 200–600 g); `storyboard.md` `BM-00…BM-07`; `concepts/` working lead Concept A (JGA25-class, caster D20); Concept B comparison (ball D21) |
+| Inputs | `physics.md` §4–5 (torque 0.036–0.110 N·m, 160–200 RPM, 1.5–3 A class, Korad 5 A `D`, drive mass 200–600 g); `storyboard.md` `BM-00…BM-07`; `concepts/` Concept A chassis (JGA25-class); **BD-08 selected `D21`** / `D20` required swap; Concept B comparison (in-WB motors, ring, bump-only) |
 | Evidence | Manufacturer / vendor tables `D`. India Robu / Zbotic 2026-09-17 snapshot is availability, not a rating. Prices ranges `E`. Exact SKU stock `U` |
 | Excluded | A freeze; a mass row promoted past `E`; purchase; HIGH_AFT packaging; treating `2.0 m/s²` as the robot's `a_tip` |
 
@@ -45,8 +45,8 @@ Conversion used throughout: `1 kg·cm = 0.0981 N·m` (`g` conventional `D`). Enc
 | Gearmotor comparison | JGA25 6 V 133 RPM 1:45 (`D03`) | **Comparison / P02 HOLD.** 0.58 m/s on Ø84 still above follow 0.50 |
 | Gearmotor upper bound | 37D-class 12 V ~150–200 RPM (`D04`) | **Hold / upper bound**, not lead. Mass eats the drive row |
 | Wheels | Ø84 × 21 mm rubber/TPU, 4 mm or 6 mm hub (`D10`) | Spec band, not SKU |
-| Front support A | Ø25–32 mm swivel (`D20`) | Spec band; trail `U`. Concept A |
-| Front support B | Ø1 inch ball transfer (`D21`) | Concept B **only** |
+| Front support A | Ø25–32 mm swivel (`D20`) | Spec band; trail `U`. **Required comparison swap** (BD-08) |
+| Front support (V1) | Ø1 inch ball transfer (`D21`) | **BD-08 selected** on the Concept A chassis. Not a SKU freeze. Not Concept B |
 | Skid | Printed polymer or PTFE pad (`D30`) | Adjustable 60–80 mm reach, 8–16 mm height |
 | Driver class | TI DRV8874 (`DRV-B`) | **Lead class** (two chips, L/R observability). Exact part is Part 4 |
 | Driver class | TB6612FNG (`DRV-A`) | **Hold** — fails if stall is 3 A `D` |
@@ -169,17 +169,17 @@ Open Impulse repeats the same endpoints and lists **85 g** without calling the e
 
 **India snapshot:** “84 mm robot wheel” class, Robu / generic. Price band `E` ₹150–600 **per pair**. Stock `U`. Hub bore vs 4 mm D-shaft is the receiving check.
 
-### 5.2 `D20` — swivel caster (Concept A)
+### 5.2 `D20` — swivel caster (required comparison)
 
 Ø**25–32 mm** (~30 mm target). Trail **TBD `U`**. This is the `BM-07` heading-glitch owner. Contact patch moves; instantaneous `L` is not frozen 110 mm during reverse.
 
-**Disposition:** spec band for Concept A. No SKU. Interchangeable on the rig with `D21`.
+**Disposition:** required comparison swap on the interchangeable mount (BD-08). No SKU. Not waived because `D21` is selected.
 
-### 5.3 `D21` — ball transfer (Concept B only)
+### 5.3 `D21` — ball transfer (BD-08 selected V1 support)
 
-Ø**1 inch** ball transfer. No trail. Higher rolling resistance `E`; dent risk on wood; pile can jam. **Not** fitted on the Concept A working-lead path except as the interchangeable front-support experiment.
+Ø**1 inch** ball transfer. No trail. Higher rolling resistance `E`; dent risk on wood; pile can jam. **First-fit** on the Concept A chassis per `decision.md` BD-08. Still interchangeable with `D20`. Does **not** import Concept B's motors, ring, or bump-only stop.
 
-**Disposition:** Concept B comparison article. Not a purchase with `D02`.
+**Disposition:** selected V1 front-support type. Not a SKU freeze. Not a purchase with `D02`. Not Concept B.
 
 ### 5.4 `D30` — rear skid
 
@@ -244,7 +244,7 @@ This screen **does not authorize purchase**. If a later builder note authorizes 
 3. **Wheel-only 12 CPR** as the sole `BM-02` encoder.
 4. **37D pair as the lead** (P06 eats 200–600 g).
 5. **TB6612FNG as installed** if stall `D`/meter is ~3 A.
-6. **Ball transfer (`D21`) as a Concept A part** except on the interchangeable rig mount.
+6. **`D21` as an ADR-04 gate freeze** or as a reason to take Concept B's bump-only stop path. Selected type on the interchangeable mount is BD-08, not a purchase and not a waiver of `D20`.
 7. **Behind-axle battery** to “make the motors fit” (HIGH_AFT).
 8. **Unsigned current-sense** that folds regen into “less traction.”
 9. **Driver HAT with built-in cliff inputs** that would freeze ADR-07.
@@ -258,7 +258,7 @@ Permissible later as **bench equipment** if separately authorized: one (preferab
 
 `D02` / **Set A** is the reference-unit **lead** for the bench: P01/P02/P04 pass on the Oz 6 V 176 RPM table; P05 is the known active-hold cost; P06 fits 350–500 g `E`; **P03 is HOLD** until that article is metered (Oz 900 mA vs NFP ≤ 3 A, both `D`). **Set B** (`D03` 1:45) remains the slower comparison (P02 HOLD). `D01` is the rejected lower bound. `D04` is the mass upper bound. `DRV-B` is the driver **class** lead; `DRV-C` is the India bench board; `DRV-A` holds.
 
-Concept A's working-lead geometry (axle motors, forward battery, caster `D20`, skid `D30`) is the packaging this screen assumes. Concept B's ball `D21` and in-WB motors stay a comparison, not waived. `D21` is the interchangeable front-support article on the same mount, not a third drive set.
+Concept A's chassis geometry (axle motors, forward battery, skid `D30`, analog-IR stop-path) is the packaging this screen assumes. **BD-08 selects `D21` on that chassis; `D20` remains the required swap.** Concept B's in-WB motors and ring stay a comparison, not waived. `D21` is not a third drive set.
 
 ## 10. Complete drive sets — 2026-09-18
 
@@ -271,7 +271,7 @@ A catalog motor is not a drivetrain. Each set is **motor + gearbox + encoder + w
 | Motor + gearbox | `D02` JGA25-370-class 6 V, 176 RPM no-load, 35:1 metal spur, 4 mm D-shaft | 25 mm diameter, gearbox length 21 mm Oz; two units at 170 mm track |
 | Encoder | AB Hall, 11 PPR motor-side × 35:1 ≈ 385 CPR | P04 paper PASS |
 | Wheel | `D10` Ø84 × 21 mm rubber/TPU, **4 mm D-hub**, set-screw + Loctite or D-collet | Loaded radius, runout, retention in §10.3 |
-| Front support | `D20` Ø25–32 mm swivel caster on the interchangeable mount | Trail / start / flutter / 360° in §10.4. `D21` ball is the comparison article on the **same mount**, not a Set A part |
+| Front support | **`D21` Ø1" ball transfer** (BD-08 selected) on the interchangeable mount; `D20` caster on the **same mount** as the required comparison | Dent / jam / drag / `BM-07` heading on `D21`; trail / start / flutter / 360° on `D20` in §10.5 |
 | Rear skid | `D30` printed polymer or PTFE, 60–80 × 8–16 mm adjustable | Catch only |
 | Driver | Two TI **DRV8874** (`DRV-B`), PH/EN or PWM, IPROPI, nFAULT, nSLEEP pulled down to inhibit | One chip per wheel. Brake/coast/regen in §10.5 |
 | Supply interface | **2S-class 6.0–8.4 V direct** onto `PB-DRIVE` → `PB-DRIVE-L/R`. No motor-domain buck in this set. C3 compiled clamp at 0.70 m/s is **mandatory** because 8.4 V no-load is 1.08 m/s | Signed INA on the rig until IPROPI lands on a spare |
@@ -281,7 +281,7 @@ India snapshot 2026-09-18 (class, stock `U`, not a buy): JGA25-370 encoder 6 V ~
 
 ### 10.2 Set B — comparison (not a freeze)
 
-Same wheel, caster, skid, driver, supply interface and mount as Set A. Only the box ratio changes: **`D03` JGA25 6 V 133 RPM 1:45**. Stronger stall (0.589 N·m Oz), slower no-load (0.585 m/s on Ø84 at 6 V). P02 HOLD against the 160–200 RPM window; still above follow 0.50. Keep on the selector if Set A overspeeds on the metered article or if stall-current metering favours a longer box.
+Same wheel, front-support mount (`D21` selected / `D20` swap), skid, driver, supply interface and mount as Set A. Only the box ratio changes: **`D03` JGA25 6 V 133 RPM 1:45**. Stronger stall (0.589 N·m Oz), slower no-load (0.585 m/s on Ø84 at 6 V). P02 HOLD against the 160–200 RPM window; still above follow 0.50. Keep on the selector if Set A overspeeds on the metered article or if stall-current metering favours a longer box.
 
 A 12 V JGA25 on 2S is **not** Set B: at 6.0 V empty it makes 0.39 m/s and fails follow. `D04` 37D is **not** Set B: it eats the mass row. `DRV-C` Cytron MDD3A is a **bench evaluation board** for Phase A, not the installed driver of either set.
 
@@ -310,17 +310,19 @@ Set A and Set B share this box family. Neither passes shaft load on paper withou
 | Runout | ≤ **0.5 mm** radial at the tread | Creep 0.04 m/s on a 0.5 mm out-of-round reads as a limp |
 | Shaft retention | D-bore + set-screw on the flat, thread-locker, or a collet. Axial walk under `BM-06` is a fail | 6 mm hub + adapter is allowed only if adapter mass stays in the 200–600 g row and runout still holds |
 
-### 10.5 Caster — trail, 360°, starting force, flutter
+### 10.5 Front support — `D21` selected, `D20` trail/flutter
 
-`D20` on Set A and Set B. `D21` ball-transfer is the comparison article on the interchangeable mount, not a third set.
+**BD-08:** `D21` is the selected V1 support on Set A and Set B. `D20` remains the required swap on the same mount, not a third set.
 
 | Axis | Bound `E` | Why |
 |---|---|---|
-| Trail | 10–18 mm target; < 8 mm HOLD for flutter (`physics.md` C16) | `BM-07` heading glitch grows with trail; flutter grows as trail shrinks |
-| 360° envelope | Fork + wheel clear the battery tray, three look-downs, and the Ø84 tyre at every azimuth | Straight-ahead pose is not the check. CAD pass 1 owns the sweep; paper requires the clearance claim |
-| Starting force | ≤ 2 N at the caster (C17) | Creep stick-slip |
-| Flutter | None at 0.50 m/s on `S-TILE` / `S-LAM` with the named trail | 318 RPM caster spin at 0.50 m/s on Ø30. G01/G06 observation |
-| `D21` comparison | No trail, no flutter of this kind; cup-jam and laminate denting instead | Interchangeable mount only |
+| `D21` dent / jam | No visible dent on `S-LAM` after a scored session; cup free of hair/grit jam on `S-RUG` | Paper `U`. A miss iterates off the ball, not off the named floor |
+| `D21` drag | Rolling resistance bounded before claiming torque margin above the caster | Higher `C_rr` `E`; do not treat Oz 0.083 N·m as extra margin |
+| `D20` trail | 10–18 mm target; < 8 mm HOLD for flutter (`physics.md` C16) | `BM-07` heading glitch grows with trail; flutter grows as trail shrinks |
+| 360° envelope | Fork or cup + contact clear the battery tray, three look-downs, and the Ø84 tyre at every azimuth | Straight-ahead pose is not the check. CAD pass 1 owns the sweep |
+| Starting force | ≤ 2 N at the front contact (C17) | Creep stick-slip |
+| `D20` flutter | None at 0.50 m/s on `S-TILE` / `S-LAM` with the named trail | 318 RPM caster spin at 0.50 m/s on Ø30. G01/G06 observation |
+| `D21` flutter | None of this kind; cup-jam and laminate denting instead | Selected type, still interchangeable |
 
 ### 10.6 Driver — brake vs coast vs regen
 
@@ -355,3 +357,4 @@ Cutoff-coast vs commanded `BRAKE` is a **named row**, not a footnote. Measure bo
 |---|---|---|
 | 2026-09-17 | 0.1 | D01–D04, D10/D20/D21/D30, DRV-A/B/C class screen. D02 reference-unit lead |
 | 2026-09-18 | 0.2 | Complete Set A / Set B; gearbox backlash/shaft load; wheel loaded-radius/runout/retention; caster trail/start/flutter/360°; driver brake/coast/regen as a named row; P01–P09 paper scores in `gates.md` §4 |
+| 2026-09-19 | 0.3 | BD-08: `D21` **selected** V1 support on Set A/B; `D20` required swap. Not a SKU freeze |

@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | **Living — dimensional baseline active; remaining mass values provisional.** |
-| Version | 0.15 |
+| Version | 0.16 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-09-17 |
+| Last reviewed | 2026-09-19 |
 | Governed by | `risk-prototype-plan.md` §"Continuous sourcing and data workstream" (deliverable 2) |
 | Consumes | `dimensional-baseline.md`, foundation scale class (`workbench.md`), `system-design-brief.md` responsibility set |
 | Feeds | RP-01 (representative head load), RP-06 (integrated layout), head-CAD, engineering budgets |
@@ -19,7 +19,7 @@ This ledger is the canonical system mass/envelope roll-up. `dimensional-baseline
 - "Compact enough to remain approachable" without size minimization (vision).
 - Single household room; following capped at **0.5 m/s** (CON-19).
 - Powered three-axis head carrying the display, any unavoidable lightweight display/head-node electronics, central camera, status light, structure, and local wiring (SCOPE-02/03/17, AD-02/AD-06). RP-01 has no installed runtime head IMU; bench instrumentation is not robot mass.
-- Two independently powered wheels, a front caster, and a mandatory rear anti-tip skid (`dimensional-baseline.md`).
+- Two independently powered wheels, a **front ball transfer**, and a mandatory rear anti-tip skid (`dimensional-baseline.md` v1.12). A swivel caster is the RP-03 comparison swap only.
 
 Current target bounding box: **300 H × 205 W × 180 D mm**. RP-06 validates this baseline against sourced envelopes; it does not silently replace it.
 
@@ -32,7 +32,7 @@ Ranges carry the current uncertainty. "Basis" states where the number comes from
 | **Head** — shell, display + window, display renderer, separate C2 motion controller, central camera, status light/optics, moving actuator/bearing portions, joint structure, connectors and local wiring | `499 E` | TBD | Layout 03 analytical sweep is ~499/509/524 g at M008=10/20/35 g; 509 g is nominal, not measured. The selected Waveshare ESP32-S3-Zero installed assembly remains `U`, and servo candidates can exceed the XC330-size reference masses already included. Replace with candidate-specific trees and ultimately M900. Main Linux SBC, microphones, speaker and bench Nano/DevKitC-1/IMU are body-mounted or excluded. | RP-01 / RP-06 measured head |
 | **Body** — main structure, outer shell, internal frame, service panels | 400 | 900 | Printed polymer enclosure at the envelope above, single-room duty | RP-06 |
 | **Battery** — cells + holder/pack + protection | 150 | 500 | Low and forward of the drive axle; chemistry undecided (ADR-06) | RP-02 |
-| **Drive** — motors, gearing, Ø84 mm wheels, front caster, mandatory rear skid, drive brackets | 200 | 600 | Two-wheel differential drive; 170 mm track, 110 mm axle-to-caster target, ~70 mm rear skid reach at ≤14 mm floor height | RP-03 |
+| **Drive** — motors, gearing, Ø84 mm wheels, front ball transfer, mandatory rear skid, drive brackets | 200 | 600 | Two-wheel differential drive; 170 mm track, 110 mm axle-to-front-support target, ~70 mm rear skid reach at ≤14 mm floor height | RP-03 |
 | **Electronics** — compute board(s), motor/servo drivers, power distribution, regulators, connectors | 150 | 400 | SBC-class compute + driver boards per system-design-brief responsibilities | RP-02 |
 | **Wiring** — harness, connectors, strain relief across joints | 60 | 180 | Three-axis moving head harness + base runs; unknown ≠ 0 | RP-01 / RP-02 |
 | **Fasteners** — screws, heat-set inserts, brackets, adhesives | 40 | 120 | Repeated-service assembly (heat-set inserts) across head/body/base | RP-06 |
@@ -69,7 +69,7 @@ Body packaging must separately reserve four PDM MEMS microphones, the speaker an
 - [ ] Weigh the selected SKU 30493 sample without packaging and with its installed mount/harness; replace the 118 g listing evidence in the RP-01 model.
 - [ ] Weigh the selected Camera Module 3 Wide SC0874 sample, connector retention, mount and moving interconnect separately; record their CoM coordinates and per-axis downstream membership.
 - [ ] Replace battery row once chemistry is decided in ADR-06 (RP-02).
-- [ ] Replace the drive mass range after RP-03 selects and measures the motors, transmissions, wheels, caster, skid, and brackets.
+- [ ] Replace the drive mass range after RP-03 selects and measures the motors, transmissions, wheels, ball transfer, skid, and brackets.
 - [ ] Retire structural margin into real rows as subsystems firm up.
 
 ## Change log
@@ -91,3 +91,4 @@ Body packaging must separately reserve four PDM MEMS microphones, the speaker an
 | 2026-09-12 | 0.13 | Propagated Layout 03's 104 × 150 × 115 mm envelope and provisional 362/436/509 g per-axis tree. Kept M008 physically unknown, retained the 10/20/35 g analytical sensitivity and made candidate-specific servo substitution explicit. No W evidence added. |
 | 2026-09-13 | 0.14 | Recorded that C01 (XC330-M288-T) matches the existing 23 g housings, so substituting that candidate adds zero mass. Family still unselected; M008 still `U`; no `W` evidence. |
 | 2026-09-17 | 0.15 | RP-03 `physics.md` (`RP03-P2-REG-01`) reviewed the drive row and **does not move** the 200–600 g bound. D02 JGA25-class is a reference-unit lead, not a freeze, not `W`. |
+| 2026-09-19 | 0.16 | Front support in the drive row is the **ball transfer** (`dimensional-baseline.md` v1.12). Bound 200–600 g unchanged. Not `W`. |

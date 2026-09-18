@@ -166,14 +166,14 @@ This is the class that prompted this index. Architecture and calculation method 
 
 ## RP-03 Locomotion
 
-**Current outcome:** Parts 1–5 are complete at design-definition level (`RP03-P1-REG-01` … `RP03-P5-REG-01`, 2026-09-17). Brief-gap close 2026-09-18 issued `RP03-P1-REG-02` … `RP03-P4-REG-02`. Concept A is a working lead, not a freeze. Set A / D02 / DRV8874-class / S01/S04/S06/S07 are leads, not a freeze. No purchase, no gate passed, no scored run.
+**Current outcome:** Parts 1–5 are complete at design-definition level (`RP03-P1-REG-01` … `RP03-P5-REG-01`, 2026-09-17). Brief-gap close 2026-09-18 issued `RP03-P1-REG-02` … `RP03-P4-REG-02`. **V1 front support is `D21` ball (BD-08, baseline v1.12, SCOPE-09 v1.3).** Concept A chassis/sensing retained. `D20` caster is the required swap. Set A / D02 / DRV8874-class / S01/S04/S06/S07 are leads, not a freeze. No purchase, no gate passed, no scored run. ADR-04 not closed.
 
 ### Intentionally open until physical inputs exist
 
 | Item | Why it is open | Waiting on | Home | Blocks |
 |---|---|---|---|---|
 | `a_tip` as a measured number | Paper range 0.9–1.9 m/s² (and sign reversal if battery is on/behind the axle); 1.98 m/s² remains a placement target | BD-05 ballast on the rig; then M900 | `RP-03-locomotion/physics.md`; `dimensional-baseline.md` v1.11 | Point G01 lift-onset margin; dimensional-baseline revision if +25/124 is missed |
-| Builder decisions `BD-01…07` | Paper-confirmed 2026-09-18 (named `S-TILE`/`S-LAM`/`S-RUG`/`S-THR`, head-pose CoM extras, 2.0° slope condition). Still not a gate freeze | Dated freeze at G01–G06 registration | `RP-03-locomotion/decision.md` | Frozen G01–G06 thresholds |
+| Builder decisions `BD-01…08` | `BD-01…07` paper-confirmed 2026-09-18. **`BD-08` (2026-09-19): `D21` selected V1 support, `D20` required swap.** Still not a gate freeze | Dated freeze at G01–G06 registration; `D21` dent/jam/drag on `S-LAM`/`S-RUG` | `RP-03-locomotion/decision.md`; `dimensional-baseline.md` v1.12 | Frozen G01–G06 thresholds; ADR-04 support type |
 | Concept / motor / sensor freeze | Screens complete; **Set A / Set B** packaged; leads named. Paper P01–P09 scored against the sets and remain OPEN | Paper P-gates close or bound, then freeze | `concepts/`; `drivetrain-screen-01.md` v0.2; `sensing-screen-01.md`; `gates.md` §4 | Purchase; `cad/base/` blockout |
 | C3 pin map firmware/carrier | v0.1 drafted; ≥2 spare; RGB released; GPIO3 ESTOP input exception; **`c3_board_role.h` generated** from v0.1 | Frozen board revision; carrier PCB | `base-control-architecture.md`; `RP-02-electrical/phase-a/c3_board_role.h`; `compute-control-architecture.md` v1.3 | RP-02 carrier PCB; RP02-G05 C3 |
 | `BASE_*` ICD | v0.5 **semantics** registered `RP02-P4-REG-02`. Candidate TTL 200 ms / `duration+250 ms`, heartbeat 150 ms, queue depth 2 named and unregistered | Byte layouts after Phase A; measured timeouts | `link-contract.md` §v0.5; `base-control-architecture.md` | Complete ADR-12; C3 G05 |
@@ -225,6 +225,7 @@ This is the class that prompted this index. Architecture and calculation method 
 | C0↔C2 ICD **definition** — messages, framing method, expiry, heartbeat, two-phase arm, fresh-intent recovery (byte layout, numeric timing unregistered). C3 `BASE_*` **semantics** registered `RP02-P4-REG-02`; byte layouts still open | `RP02-P4-REG-01` / `RP02-P4-REG-02`; `link-contract.md` v0.4 + v0.5 |
 | RP-03 Parts 1–5 design-definition (`BM-*`, physics range, Concept A working lead, pin map v0.1, gate *candidates*) | `RP03-P1-REG-01` … `RP03-P5-REG-01` |
 | RP-03 brief-gap paper close (operating cases, BD-04 named surfaces, remaining physics, Set A/B, TTL candidates, cutoff metric, `CA-14` header) | `RP03-P1-REG-02` … `RP03-P4-REG-02`; `RP02-P4-REG-02` |
+| RP-03 BD-08 V1 front support = `D21` ball; `D20` caster required swap; Concept A chassis retained | `decision.md` BD-08; `dimensional-baseline.md` v1.12; SCOPE-09 v1.3; not ADR-04 gate close |
 
 ---
 

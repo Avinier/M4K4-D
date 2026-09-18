@@ -3,11 +3,11 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.12 |
+| Version | 1.13 |
 | Owner | Project builder |
 | Created | 2026-08-14 |
-| Last reviewed | 2026-09-13 |
-| Depends on | Approved `docs/00-foundation/constraints.md` v1.2, other foundation documents, `system-design-brief.md` v1.2, and `dimensional-baseline.md` v1.10 |
+| Last reviewed | 2026-09-19 |
+| Depends on | Approved `docs/00-foundation/constraints.md` v1.2, other foundation documents, `system-design-brief.md` v1.2, and `dimensional-baseline.md` v1.12 |
 | Decision authority | Project builder |
 
 The prototypes are decision instruments, not partial versions of the final droid. They may use open frames, ballast, external measurement equipment, temporary controllers, and bench power where those choices produce better evidence. A polished appearance is not a pass condition. The approved bench setup and powered-test readiness gate live in `workbench.md`; powered scored testing remains blocked until that gate is satisfied for the active rig and test.
@@ -232,7 +232,7 @@ Can a candidate wheeled base with representative total mass move expressively at
 
 ### Rig and procedure
 
-Use a low open chassis with adjustable ballast matching the current mass range and the baseline `x_CoM=+25 mm`, `h_CoM=124 mm`. Represent the 110 mm forward caster contact and the rear skid at ~70 mm behind the axle and ≤14 mm above the floor. Test on named representative indoor surfaces inside a marked test area. Tabletop edge trials require a physical catch platform or tether that prevents an actual fall without masking sensor/controller behaviour.
+Use a low open chassis with adjustable ballast matching the current mass range and the baseline `x_CoM=+25 mm`, `h_CoM=124 mm`. Represent the 110 mm **front-support** contact (ball transfer per `dimensional-baseline.md` v1.12) and the rear skid at ~70 mm behind the axle and ≤14 mm above the floor. Keep a swivel-caster comparison article on the same mount. Test on named representative indoor surfaces inside a marked test area. Tabletop edge trials require a physical catch platform or tether that prevents an actual fall without masking sensor/controller behaviour.
 
 Characterize wheel/support geometry, traction, odometry/control feedback, minimum controllable motion, straight travel, reversal, turns, excited-spin candidates, stopping and settling. Repeat at mass/centre-of-mass extremes. Test representative person/furniture/box/cable-like obstacles at each registered approach speed. Verify floor/tabletop permission selection, default inhibition, sensor loss and controller/high-level timeout.
 
@@ -240,14 +240,14 @@ Characterize wheel/support geometry, traction, odometry/control feedback, minimu
 
 - minimum repeatable speed, speed error, straight-line drift, turn/spin geometry and reversal response;
 - stopping time/distance, overshoot/rollback, slip, support chatter, vibration and acoustic noise;
-- body pitch/roll or lift indication, wheel/support load behaviour, measured caster-lift acceleration, skid-contact angle/acceleration, and stability margin versus the preliminary `a_tip≈2.0 m/s²` model;
+- body pitch/roll or lift indication, wheel/support load behaviour, measured front-support-lift acceleration, skid-contact angle/acceleration, and stability margin versus the preliminary `a_tip≈2.0 m/s²` model;
 - obstacle/edge detection coverage, latency, stopping clearance, blind region and false inhibit rate;
 - current/energy/temperature by maneuver;
 - mode-selection, inhibit, timeout, sensor-loss, restart and hard-stop behaviour.
 
 ### Pass gates
 
-- **RP03-G01 Floor control:** the registered forward, reverse, turn, stop and settle maneuvers pass across the floor/load matrix without uncontrolled motion or instability; commanded forward acceleration remains below the registered caster-lift threshold with margin.
+- **RP03-G01 Floor control:** the registered forward, reverse, turn, stop and settle maneuvers pass across the floor/load matrix without uncontrolled motion or instability; commanded forward acceleration remains below the registered front-support-lift threshold with margin.
 - **RP03-G02 Speed boundary:** the base can regulate the approved slow envelope and cannot exceed the registered test limit; follow trials remain at or below 0.5 m/s.
 - **RP03-G03 Obstacle safety:** every scored representative obstacle case meets its preregistered detection/stopping/contact policy with no harmful contact.
 - **RP03-G04 Tabletop safety:** ordinary autonomous locomotion, come/follow and excited spin are inhibited by default in tabletop mode; every permitted low-speed edge trial stops within the registered footprint and no trial leaves the caught surface.
@@ -494,5 +494,7 @@ Version 1.10 (2026-09-08), by builder direction when RP-02 planning opened, give
 Version 1.11 (2026-09-12) propagates Layout 03 as the RP-01 planning baseline (104 × 150 × 115 mm; nominal 362/436/509 g roll/pitch/yaw at M008=20 g), retains 10/20/35 g M008 sensitivity until weigh-in, requires candidate-specific servo substitution, records Concept B's explicit waiver and removes the superseded 95 mm validation band. No numeric gate is registered and no physical evidence is upgraded.
 
 Version 1.12 (2026-09-13) consumes the completed Layout 03 **external rigid-body** demand model and the first named RP-01 comparison candidate (XC330-M288-T, C01, paper OPEN). The same-day closure audit clarified that this is not complete electromechanical/structural proof: actuator-internal inertia, structural modes, two screw collisions, stop margin, trial bearing seats, physical balance trim and sign mapping remain open. Complete-head `W` mass remains blocked on M008. RP-02 Phase B may use C01 as a named reference load; PA-04 still collapses only on family freeze.
+
+Version 1.13 (2026-09-19) consumes `dimensional-baseline.md` v1.12: V1 front support is the Ø1 inch ball transfer; the swivel caster is the RP-03 comparison swap. RP-03 rig geometry is 110 mm to front-support contact. No numeric gate is registered.
 
 Except for the later-adopted dimensional/drive topology baseline, the selected no-touch Waveshare display SKU 30493 and the selected visible-light Raspberry Pi Camera Module 3 Wide SC0874, plan approval does not approve another exact component, supplier, mechanism implementation, production camera interconnect, or numeric `SC-TBD-*` or `CON-TBD-*` gate threshold. `workbench.md` was approved separately on 2026-08-17 and incorporated as the Stage 0 baseline in version 1.1 of this plan. Numeric prototype gates remain subject to preregistration before scored runs, and powered scored testing remains blocked until the approved readiness gate's safety, instrumentation, configuration, and logging requirements are satisfied.

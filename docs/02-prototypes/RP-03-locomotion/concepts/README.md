@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Paper comparison v0.1. Not a selection, not a freeze, not a purchase.** Concept A is named as a working lead only after the matrix below is filled. Concept B is retained as a comparison and is not waived |
+| Status | **Paper comparison v0.1. Selected installed path: Concept A chassis/sensing + `D21` ball (BD-08). Not a gate freeze, not a purchase.** Concept B retained. `D20` caster is the required comparison swap |
 | Created | 2026-09-17 |
 | Owner | Project builder |
 | Governing plan | `../plan.md` Part 3; `../intent.md` ADR-04 / ADR-07 split |
@@ -80,18 +80,15 @@ Scan line (two rows, thirteen columns). Detail follows in the criterion table so
 | **Service** | Caster fork drops down; three cliff pigtails; motors outboard on the axle; neck-void harness demates at the body. Skid pad is a screw-adjust shim. Ballast bays independent of the caster swap | Ball cup contamination (hair, grit) is a scheduled clean. Perimeter ring is more connectors. Motor-in-WB coupling is an extra service joint. Neck demate identical. Interchangeable front support on the rig still lets A/B swap without a new chassis |
 | **Verdict** | **Working lead for the rig direction** — after this table is filled, not before. Clears the stop-path architecture, the three-contact cliff minimum, the battery-forward CoM lever, and the JGA25-class demand window on paper. Trail/`BM-07` glitch, dark/glossy TCRT failure, and P03 stall-current conflict remain open. **Not a freeze, not a purchase, not ADR-04/07 closure** | **Comparison retained; not waived.** No-trail `BM-07` and extra cliff headings are the reasons it exists. It loses `d_stop` at 0.50 if ToF stays telemetry-only; it spends C3 GPIO; ball denting/`U` rolling resistance are unowned. Keep it on the rig as the interchangeable front-support / ring-harness alternative. Do not silently drop it because A is the working lead |
 
-## 3. Working lead (after the table)
+## 3. Selected path (after the table)
 
-**Concept A is the working lead** for how the open chassis is first detailed: swivel caster, three look-downs, analog-IR in the stop path, motors on the axle, battery bay low and forward of the axle, JGA25-class reference motors.
+**Installed V1 path (BD-08, `dimensional-baseline.md` v1.12, SCOPE-09 v1.3):** Concept A **chassis and sensing** (three look-downs, analog-IR in the stop path, motors on the axle, battery low and forward, JGA25-class) **plus `D21` ball transfer** as the front support.
 
-That sentence is weaker than a selection:
+Concept A as authored below remains the **caster paper concept**. Concept B remains the **ball + ring + ToF/bump** paper concept. The selected path takes axis 1 from B (the ball) and axes 2–4 from A. It does not freeze a SKU, pass G01–G06, authorize purchase, or close ADR-04.
 
-- It does not freeze a SKU, a trail, a skid height, or `a_tip`.
-- It does not waive Concept B. The rig (`plan.md` §6) still carries an interchangeable front support (caster / ball transfer) and must be able to hang a fourth look-down without respinning the frame.
-- It does not pass G01–G06. Those freeze in `gates.md` after Phase B/C.
-- It does not authorize purchase. A JGA25-class article bought for Phase A is bench equipment until a freeze says otherwise (`plan.md` §10).
-
-Concept B remains the comparison that keeps `BM-07` trail from being treated as inevitable, and that keeps a perimeter ring from being forgotten if three channels fail a heading.
+- The rig still carries an interchangeable front support. `D20` caster is the required comparison swap.
+- A miss on dent, jam, or drag iterates off `D21`; it does not quietly keep a failed ball.
+- Concept B's in-WB motors, perimeter ring, and bump-only stop path are not taken.
 
 ## 4. What neither concept is allowed to do
 
@@ -107,7 +104,7 @@ Concept B remains the comparison that keeps `BM-07` trail from being treated as 
 
 | Document | What it takes from this comparison |
 |---|---|
-| `../drivetrain-screen-01.md` | JGA25-class as the reference-unit *class*; N20 as lower bound; 37D as upper bound; caster D20 vs ball D21; skid D30 adjustable |
+| `../drivetrain-screen-01.md` | JGA25-class as the reference-unit *class*; N20 as lower bound; 37D as upper bound; **BD-08 `D21` selected / `D20` required swap**; skid D30 adjustable |
 | `../sensing-screen-01.md` | A's 3-channel + analog-IR stop-path vs B's ring + ToF telemetry; dark/glossy as the cliff failure mode |
-| `../rig.md` (later) | Interchangeable front support; independent `x`/`h` ballast; skid 60–80 / 8–16 mm |
-| `../decision.md` (later) | Working lead ≠ ADR-04/07 close |
+| `../rig.md` | Interchangeable front support, `D21` selected; independent `x`/`h` ballast; skid 60–80 / 8–16 mm |
+| `../decision.md` | Selected path ≠ ADR-04/07 gate close; **BD-08** is the support-type selection |

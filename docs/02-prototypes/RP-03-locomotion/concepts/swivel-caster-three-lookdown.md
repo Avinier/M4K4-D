@@ -2,15 +2,15 @@
 
 | Field | Value |
 |---|---|
-| Status | **Paper concept v0.1. Working lead after the comparison matrix is filled — not a freeze, not a selection, not a purchase** |
+| Status | **Paper concept v0.1. Chassis/sensing lead. Front-support type superseded for V1 by BD-08 / `D21`.** Not a freeze, not a selection of this file's caster, not a purchase |
 | Created | 2026-09-17 |
 | Owner | Project builder |
 | Comparison | [`README.md`](README.md) |
 | Counterpart | [`ball-transfer-perimeter-cliff.md`](ball-transfer-perimeter-cliff.md) (retained; not waived) |
-| Consumes | `../physics.md` ranges; `../storyboard.md`; dimensional baseline v1.10 (Ø84, 170 track, 110 WB, 70 skid) |
+| Consumes | `../physics.md` ranges; `../storyboard.md`; dimensional baseline v1.12 (Ø84, 170 track, 110 WB, 70 skid; **V1 front support is the ball**) |
 | Does not contain | CAD; a SKU freeze; a single `a_tip`; a trail number presented as measured |
 
-Concept A is the classic differential chassis the dimensional baseline already describes, made explicit as an architecture: **two encoder drive wheels, a front swivel caster, a mandatory rear skid, three look-down cliff channels at the leading contacts, and analog IR in the obstacle stop path.** Motors sit on the axle. The battery **must** sit low and forward of the axle. HIGH_AFT is not a variant of this concept; it is a packaging fault.
+Concept A is the classic differential chassis made explicit as an architecture: **two encoder drive wheels, a front passive support, a mandatory rear skid, three look-down cliff channels at the leading contacts, and analog IR in the obstacle stop path.** This file's napkin uses a **swivel caster** as the paper support. **V1 installs `D21` (ball) instead** (BD-08; baseline v1.12). Motors sit on the axle. The battery **must** sit low and forward of the axle. HIGH_AFT is not a variant of this concept; it is a packaging fault.
 
 ## 1. Napkin geometry
 

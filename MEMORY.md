@@ -413,3 +413,14 @@ The RP-03 folder is populated through Part 5: intent and `BM-00…BM-12` storybo
 
 A lumped Layout 03 mass model does not automatically produce `x_CoM = +25 mm`, `h_CoM = 124 mm`. At that target `a_tip ≈ 1.98 m/s²`; under the lumped tree `a_tip` is about 0.9–1.9 m/s² with the battery low and forward, and changes sign if the battery sits on or behind the axle (forbidden). The 2.0 m/s² figure is retained as a placement target. If the integrated article misses +25/124, the dimensional baseline is revised — commanded acceleration is not quietly shrunk to hide the miss. Drive mass 200–600 g is unchanged.
 
+### MEM-20260919-01 — RP-03 first-fits a ball transfer; caster not waived
+**Type / Status / Governs:** DECISION / PROVISIONAL / RP-03 `decision.md` BD-08; `concepts/README.md`; `drivetrain-screen-01.md`; `rig.md`
+
+Builder prefers the Ø1" ball transfer (`D21`) over the swivel caster as the first-fit front support on the Concept A chassis. The caster (`D20`) remains the required comparison swap. Concept B's inboard motors, perimeter cliff ring, and bump-only obstacle stop are not taken. This is not ADR-04 closure, not a purchase, and not a rewrite of SCOPE-09. Paper still cannot show the ball is "not worse" on dent, drag, or jam; those stay G01/G06 conditions on `S-LAM` and `S-RUG`.
+
+### MEM-20260919-02 — V1 front support is the ball transfer
+**Type / Status / Supersedes / Governs:** DECISION / CURRENT / MEM-20260919-01 first-fit wording / `dimensional-baseline.md` v1.12; `v1-scope.md` v1.3 SCOPE-09; RP-03 `decision.md` BD-08; `mass-envelope-ledger.md` v0.16; `candidate-sourcing-matrix.md` v0.29; `risk-prototype-plan.md` v1.13
+
+Builder selected the Ø1" ball transfer as the V1 front support. SCOPE-09 and the dimensional baseline now name that type. The swivel caster remains the required RP-03 comparison swap on the same mount. Concept A chassis and analog-IR stop-path stay. Concept B's inboard motors, perimeter ring, and bump-only stop are not taken. Not a purchase, not a G01 pass, not ADR-04 gate closure. Dent/jam/drag on `S-LAM`/`S-RUG` can still iterate off the ball.
+
+

@@ -486,7 +486,7 @@ This is why Concept A vs B exists. Numbers here are comparable, not a winner.
 | Soft floors | Kind | Can dent |
 | Tip geometry | Contact patch moves as it swivels; `L` is not a fixed 110 mm during a reverse | Contact stays put |
 
-A swivel caster with trail yaws during `BM-07` reversal and can produce a one-cycle heading glitch. A ball transfer has no trail but higher rolling resistance and can dent soft floors. Do not select either in this file. Carry both into `concepts/` with the §2 `a_tip` range and the §6 stopping table as the screens.
+A swivel caster with trail yaws during `BM-07` reversal and can produce a one-cycle heading glitch. A ball transfer has no trail but higher rolling resistance and can dent soft floors. **BD-08 (2026-09-19) later selected the ball for V1**; this section remains the comparison physics. Carry both into `concepts/` with the §2 `a_tip` range and the §6 stopping table as the screens. The caster stays the required rig swap.
 
 ### 3.5 Caster flutter, starting force, 360° envelope
 
@@ -803,18 +803,18 @@ Stance 205 mm + turn sweep. Leading contacts, from the drive axle:
 
 | Direction | Leading contact | Offset from axle | Offset from centreline |
 |---|---|---|---|
-| Forward | Caster | **110 mm ahead** | 0 |
+| Forward | Front support (ball) | **110 mm ahead** | 0 |
 | Lateral | Wheels | **0 mm ahead** | **85 mm** off centre |
 | Reverse | Skid | **70 mm behind** | 0 |
 
 ### 7.2 Forward obstacle look-ahead
 
-From **caster contact**, using §6.2:
+From **front-support contact**, using §6.2:
 
 - ≥ **179 mm** at 0.50 m/s
 - ≥ **289 mm** at 0.70 m/s
 
-A sensor mounted at the axle needs that **plus 110 mm** (289 → 399 mm at 0.70 m/s; 179 → 289 mm at 0.50 m/s). A sensor mounted at the caster needs `d_stop` itself. Do not credit an axle-mounted ToF with caster-contact look-ahead.
+A sensor mounted at the axle needs that **plus 110 mm** (289 → 399 mm at 0.70 m/s; 179 → 289 mm at 0.50 m/s). A sensor mounted at the ball needs `d_stop` itself. Do not credit an axle-mounted ToF with front-contact look-ahead.
 
 ### 7.3 Lateral / pivot
 
@@ -961,7 +961,7 @@ Put slope into G01 conditions. Do not screen motors against an invented 10° or 
 
 ## Implication for Part 3
 
-Concepts **must** differ on (1) swivel caster vs ball transfer (scrub / `BM-07` reversal), (2) battery / motor placement vs the 110 mm wheelbase (the CoM lever that decides whether `a_tip` is ~0.9 or ~1.9 m/s²), (3) 3-look-down vs perimeter ring, (4) analog-IR-in-the-stop-path vs ToF-as-telemetry. Screens against the §6 stopping table and the §2 `a_tip` **range**, not against 2.0 m/s². A concept that only exists at the placement target has not been compared; a concept that quietly assumes a rear battery is already HIGH_AFT and is not a concept. The drivetrain screen then names complete **drive sets** against this envelope without becoming a freeze; the sensing screen names `S01…` against coverage and the 50 ms invariant, never because a driver board happened to have the pins.
+Concepts **must** differ on (1) swivel caster vs ball transfer (scrub / `BM-07` reversal), (2) battery / motor placement vs the 110 mm wheelbase (the CoM lever that decides whether `a_tip` is ~0.9 or ~1.9 m/s²), (3) 3-look-down vs perimeter ring, (4) analog-IR-in-the-stop-path vs ToF-as-telemetry. **After this file:** BD-08 selected axis 1 toward the ball on the Concept A chassis; axes 2–4 stay A's. Screens against the §6 stopping table and the §2 `a_tip` **range**, not against 2.0 m/s².
 
 ## Change log
 
