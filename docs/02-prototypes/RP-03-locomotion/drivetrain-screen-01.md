@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Paper screen complete v0.2. No motor selected. No freeze. No purchase.** Two complete drive sets packaged. `D02` / Set A is a **lead for a reference unit (bench)**, not a freeze |
+| Status | **Paper screen complete v0.5. No motor selected. No freeze. No purchase.** Two complete drive sets packaged. `D02` / Set A is a **lead for a reference unit (bench)**, not a freeze |
 | Date | 2026-09-17; sets and shaft/wheel/support/driver-stop screens 2026-09-18; BD-08 selected `D21` 2026-09-19 |
 | Scope | Named gearmotor / wheel / caster / skid / driver-**class** rows `D01…` screened against `physics.md` demand. Exact driver IC lead is a Part 4 name; Part 3 screens the class |
 | Inputs | `physics.md` §4–5 (torque 0.036–0.110 N·m, 160–200 RPM, 1.5–3 A class, Korad 5 A `D`, drive mass 200–600 g); `storyboard.md` `BM-00…BM-07`; `concepts/` Concept A chassis (JGA25-class); **BD-08 selected `D21`** / `D20` required swap; Concept B comparison (in-WB motors, ring, bump-only) |
@@ -125,7 +125,7 @@ Open Impulse repeats the same endpoints and lists **85 g** without calling the e
 
 **P06:** Two motors ~**220 g** (110 g × 2 `D` NFP). + Ø84 wheels + caster + skid + brackets → **350–500 g `E`**, inside 200–600 g. Open Impulse 85 g × 2 is the no-encoder article; do not use it to “make mass.”
 
-**India snapshot 2026-09-17.** JGA25-370 / GA25 / “25 mm encoder gear motor 6 V ~170 RPM” class on Robu / Zbotic. Price band `E` ₹400–1 200. Exact suffix (370 vs 370B, encoder magnet count) **`U`**. Reconfirm no-load RPM and encoder PPR on the invoice line, not the category photo.
+**India snapshot 2026-09-19** (see `research.md` §4 `R-MTR`). Robu `25GA-370-6V-130 RPM` is **no encoder** (not D02). Encoder 25GA listings that appeared on Zbotic are **26 RPM** (P02 fail). Exact 6 V ~176 RPM encoder suffix **`U` in India**. Import path remains NFP-GM25-370-EN / Aslong JGA25-370B. Price band `E` ₹400–1 200 class. Reconfirm no-load RPM and encoder PPR on the invoice line, not the category photo.
 
 **Disposition: Lead for a reference unit (bench). NOT a freeze. NOT a purchase authorization.** Same status RP-01 gave a named XC330: encouraging paper envelope, installed behaviour OPEN.
 
@@ -167,17 +167,19 @@ Open Impulse repeats the same endpoints and lists **85 g** without calling the e
 
 Ø**84 × 21 mm** rubber/TPU, moderate grip. Hub **4 mm** to match JGA25 D-shaft, or **6 mm** with a documented adapter (adapter mass in the 200–600 g row). Spec band, not SKU. Shore / µ remain `E` (`physics.md` C02–C04). Threshold strips are geometric, not a tyre SKU.
 
-**India snapshot:** “84 mm robot wheel” class, Robu / generic. Price band `E` ₹150–600 **per pair**. Stock `U`. Hub bore vs 4 mm D-shaft is the receiving check.
+**India snapshot 2026-09-19:** Ø84 × 21 mm 4 mm D-hub is **not a stock article**. Closest classes: 83×35 (too wide, round hole), Pololu 80×10 with 4 mm D collet, or 84×24 skate + 608 + 4 mm adapter. Price band `E` ₹150–600 **per pair** does not pick the family. Hub bore vs 4 mm D-shaft is still the receiving check. **Print the hub/adapter; buy the tread.** A full FDM tyre is a rig experiment, not a `D10` freeze. Details: `research.md` §1.5 and §4 `R-WHL`.
 
 ### 5.2 `D20` — swivel caster (required comparison)
 
-Ø**25–32 mm** (~30 mm target). Trail **TBD `U`**. This is the `BM-07` heading-glitch owner. Contact patch moves; instantaneous `L` is not frozen 110 mm during reverse.
+Ø**25–32 mm** (~30 mm target). Typical India 30 mm robot caster: plate 33×38 mm, overall height **~38 mm** (4 mm shy of the Ø84 axle). Trail **TBD `U`** on the article (swivel-axis to contact). This is the `BM-07` heading-glitch owner. Contact patch moves; instantaneous `L` is not frozen 110 mm during reverse. Same mount as the ball must also eat the ball’s ~13 mm height gap — two adapters, not one hole pattern.
 
 **Disposition:** required comparison swap on the interchangeable mount (BD-08). No SKU. Not waived because `D21` is selected.
 
 ### 5.3 `D21` — ball transfer (BD-08 selected V1 support)
 
 Ø**1 inch** ball transfer. No trail. Higher rolling resistance `E`; dent risk on wood; pile can jam. **First-fit** on the Concept A chassis per `decision.md` BD-08. Still interchangeable with `D20`. Does **not** import Concept B's motors, ring, or bump-only stop.
+
+**CAD envelope 2026-09-19:** Pololu 1″ **POM** ball caster overall height **~29 mm** (hole span 12.2 mm) vs Ø84 axle **42 mm** → **~13 mm drop or shim**. Common Robu “metal ball caster” is **15.9 mm (5/8″)** steel — **not D21**. Industrial Alwayse 1010 flange is 73 mm across and fights the forward battery bay. Prefer plastic ball vs steel on `S-LAM`. **Print the 0–15 mm shim / 3-hole adapter; do not print the ball.** Details: `research.md` §1.5 and §4 `R-BALL`.
 
 **Disposition:** selected V1 front-support type. Not a SKU freeze. Not a purchase with `D02`. Not Concept B.
 
@@ -249,6 +251,7 @@ This screen **does not authorize purchase**. If a later builder note authorizes 
 8. **Unsigned current-sense** that folds regen into “less traction.”
 9. **Driver HAT with built-in cliff inputs** that would freeze ADR-07.
 10. Any SKU treated as frozen because it was convenient on 2026-09-17.
+11. **Printed motor, printed ball, or FDM tyre as frozen `D10`.** Print hubs/shims/adapters only (`research.md` §1.5).
 
 Permissible later as **bench equipment** if separately authorized: one (preferably two) **JGA25-370-class 6 V ~176 RPM encoder** article as the `D02` reference unit; one Cytron MDD3A **or** a DRV8874 breakout for Phase A; Ø84 test wheels; a Ø25–32 caster **and** a ball transfer for the interchangeable mount; a printed skid shim. That authorization is not this document.
 
@@ -305,7 +308,7 @@ Set A and Set B share this box family. Neither passes shaft load on paper withou
 | Axis | Bound `E` | Why |
 |---|---|---|
 | Loaded radius | 41–42 mm on 1.65–3.62 kg (tyre squash 0–1 mm) | Kinematic RPM uses 42 mm. A 2 mm squash is 5 % speed error — log it, do not retarget G02 |
-| Tread grip | μ bands C02–C04 on the named BD-04 articles | Moderate-grip rubber/TPU. Slick ABS rims are reject |
+| Tread grip | μ bands C02–C04 on the named BD-04 articles | Moderate-grip rubber/TPU. Slick PLA/PETG/ABS rims are reject. Full FDM tyre is experiment only, not a freeze (`research.md` §1.5) |
 | Turn scrub | §3.3, 0.025–0.045 N·m per wheel at 2.4 kg | Continuous during `BM-05/06`. Not a rounding error |
 | Runout | ≤ **0.5 mm** radial at the tread | Creep 0.04 m/s on a 0.5 mm out-of-round reads as a limp |
 | Shaft retention | D-bore + set-screw on the flat, thread-locker, or a collet. Axial walk under `BM-06` is a fail | 6 mm hub + adapter is allowed only if adapter mass stays in the 200–600 g row and runout still holds |
@@ -358,3 +361,5 @@ Cutoff-coast vs commanded `BRAKE` is a **named row**, not a footnote. Measure bo
 | 2026-09-17 | 0.1 | D01–D04, D10/D20/D21/D30, DRV-A/B/C class screen. D02 reference-unit lead |
 | 2026-09-18 | 0.2 | Complete Set A / Set B; gearbox backlash/shaft load; wheel loaded-radius/runout/retention; caster trail/start/flutter/360°; driver brake/coast/regen as a named row; P01–P09 paper scores in `gates.md` §4 |
 | 2026-09-19 | 0.3 | BD-08: `D21` **selected** V1 support on Set A/B; `D20` required swap. Not a SKU freeze |
+| 2026-09-19 | 0.4 | Consumed research envelopes: India D02 encoder 176 RPM suffix missing; D10 21 mm tread not a SKU; D21 envelope 1″ POM ~29 mm vs axle 42 mm. Architecture unchanged |
+| 2026-09-19 | 0.5 | Pointed at merged `research.md`. Print hub/shim/adapters; buy tread, POM ball, import encoder motor. FDM tyre not a D10 freeze |

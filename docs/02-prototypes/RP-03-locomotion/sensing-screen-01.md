@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Paper screen complete v0.1. No sensor selected. No freeze. No purchase.** Stop-path leads are classes with mandatory trials, not SKUs |
+| Status | **Paper screen complete v0.3. No sensor selected. No freeze. No purchase.** Stop-path leads are classes with mandatory trials, not SKUs |
 | Date | 2026-09-17 |
 | Scope | Named cliff / obstacle / bump / IMU rows `S01…` screened against `physics.md` §6–7 coverage and the 50 ms invariant, and against the C3 I/O budget. Bus sharing is allowed for **telemetry**, never for a stop-path input |
 | Inputs | `physics.md` stopping table and leading-contact geometry; `storyboard.md` `BM-10`/`BM-11`; `concepts/` (A: 3 look-downs + analog-IR stop-path; B: ring + ToF telemetry); C3 = ESP32-S3-DevKitC-1-N8 (`RP02-P3-REG-02`); CA-11/12 |
@@ -250,3 +250,11 @@ Permissible later as **bench equipment** if the builder separately authorizes: t
 **Screen complete. No freeze.**
 
 Lead combination for Concept A's sensing slice: `S01` × 3 + `S04` + `S06` + `S07`, with dark+glossy as a mandatory cliff trial and `S04` HOLD at 0.70. Concept B remains the ring + ToF-telemetry comparison and is not waived. Part 4 owns the pin map, the age-bound registration, and the fusion rule “unknown = inhibit.”
+
+## Change log
+
+| Date | Version | Change |
+|---|---|---|
+| 2026-09-17 | 0.1 | S01–S07 class screen. Analog-IR stop-path; UART IMU reject |
+| 2026-09-19 | 0.2 | Consumed research envelopes (TCRT 10×6×7, GP2Y 29.5×13×13.5, IMU module outline still `U`). Architecture unchanged |
+| 2026-09-19 | 0.3 | Pointed at merged `research.md`. Print sensor carriers; buy the optos / GP2Y / SPI IMU |

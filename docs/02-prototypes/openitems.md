@@ -178,7 +178,8 @@ This is the class that prompted this index. Architecture and calculation method 
 | C3 pin map firmware/carrier | v0.1 drafted; ≥2 spare; RGB released; GPIO3 ESTOP input exception; **`c3_board_role.h` generated** from v0.1 | Frozen board revision; carrier PCB | `base-control-architecture.md`; `RP-02-electrical/phase-a/c3_board_role.h`; `compute-control-architecture.md` v1.3 | RP-02 carrier PCB; RP02-G05 C3 |
 | `BASE_*` ICD | v0.5 **semantics** registered `RP02-P4-REG-02`. Candidate TTL 200 ms / `duration+250 ms`, heartbeat 150 ms, queue depth 2 named and unregistered | Byte layouts after Phase A; measured timeouts | `link-contract.md` §v0.5; `base-control-architecture.md` | Complete ADR-12; C3 G05 |
 | `LG-04`/`LG-10` `W` rows | Ledger v0.15 is still `E`/`U`; heat duty and 6.0 vs 8.4 V note recorded | Phase B/C runs | `power-energy-ledger.md` | ADR-06 sizing; G02 invariant re-run |
-| `cad/base/` blockout | Concept A is a working lead, not a freeze. Brief asked for CAD pass 1 now; folder policy still forbids it | Concept freeze **or** an explicit policy change | `RP-03-locomotion/cad/README.md` | Integrated CAD input; caster 360° sweep |
+| `cad/base/` blockout | Concept A is a working lead, not a freeze. Brief asked for CAD pass 1 now; folder policy still forbids it | Concept freeze **or** an explicit policy change. Datums: `research.md` §5 | `RP-03-locomotion/cad/README.md`; `RP-03-locomotion/research.md` | Integrated CAD input; ball/caster 360° sweep; 0–15 mm front-support shim |
+| RP-03 part envelopes for CAD | First paper pass 2026-09-19. Remaining `U`: India D02 encoder suffix, caster trail, gearbox radial, SPI IMU module outline, loaded wheel radius | Remaining `U` in `research.md` §6; cost/stock only in the sourcing matrix | `RP-03-locomotion/research.md`; `candidate-sourcing-matrix.md` v0.31 | Honest CAD pass 1; wheel family A/B/C chosen before hub print |
 | Acted 240 fps mock-up | `plan.md` required; not run. V0.1/v0.2 kinematics are paper hypotheses | Weighted-box / caster-push recording, or a storyboard revision against it | `storyboard.md` v0.2 change log | Confidence in come/wiggle timings |
 | D02 stall-current `D` conflict | Oz 900 mA vs NFP ≤3 A, both manufacturer tables | Meter the purchased article (if bought as bench equipment) | `drivetrain-screen-01.md` P03 | Korad 5 A both-motor claim; driver-class confirmation |
 | Analog-IR 0.70 m/s look-ahead | GP2Y 300 mm is tight against 289 mm `d_stop`; 2.0° downhill at 0.50 makes 221 mm | Caster-mount proof at 0.50; longer-range stop-path or slower 0.70 if G02 uses that band | `sensing-screen-01.md` P09; `physics.md` §6 and §10 | 0.70 m/s obstacle case; 0.50 downhill coverage |
@@ -226,6 +227,7 @@ This is the class that prompted this index. Architecture and calculation method 
 | RP-03 Parts 1–5 design-definition (`BM-*`, physics range, Concept A working lead, pin map v0.1, gate *candidates*) | `RP03-P1-REG-01` … `RP03-P5-REG-01` |
 | RP-03 brief-gap paper close (operating cases, BD-04 named surfaces, remaining physics, Set A/B, TTL candidates, cutoff metric, `CA-14` header) | `RP03-P1-REG-02` … `RP03-P4-REG-02`; `RP02-P4-REG-02` |
 | RP-03 BD-08 V1 front support = `D21` ball; `D20` caster required swap; Concept A chassis retained | `decision.md` BD-08; `dimensional-baseline.md` v1.12; SCOPE-09 v1.3; not ADR-04 gate close |
+| RP-03 part-envelope paper research (not a freeze) | `research.md` v0.3 (merged criteria+findings; print-vs-buy); `candidate-sourcing-matrix.md` v0.31 |
 
 ---
 

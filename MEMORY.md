@@ -423,4 +423,14 @@ Builder prefers the Ø1" ball transfer (`D21`) over the swivel caster as the fir
 
 Builder selected the Ø1" ball transfer as the V1 front support. SCOPE-09 and the dimensional baseline now name that type. The swivel caster remains the required RP-03 comparison swap on the same mount. Concept A chassis and analog-IR stop-path stay. Concept B's inboard motors, perimeter ring, and bump-only stop are not taken. Not a purchase, not a G01 pass, not ADR-04 gate closure. Dent/jam/drag on `S-LAM`/`S-RUG` can still iterate off the ball.
 
+### MEM-20260919-03 — RP-03 part envelopes researched on paper
+**Type / Status / Governs:** REVIEW FINDING / CURRENT / `docs/02-prototypes/RP-03-locomotion/research.md`; `candidate-sourcing-matrix.md` v0.31
+
+Paper pass filled CAD envelopes without a SKU freeze. Three drawing-critical misses: Ø84 axle at 42 mm vs 1″ POM ball ~29 mm vs ~30 mm caster ~38 mm (mount must shim 0–15 mm, two hole-pattern adapters); Ø84×21 4 mm D-hub is not a stock India article; the D02 encoder 176 RPM suffix is not listed on Robu/Zbotic (no-encoder 130 RPM or encoder 26 RPM). Do not CAD a 15.9 mm steel “ball caster” as D21. P03 stall-current conflict and analog-IR 0.70 HOLD stand. Remaining `U`: caster trail, gearbox radial, SPI IMU module outline, loaded wheel radius.
+
+### MEM-20260919-04 — Print adapters, not scored articles
+**Type / Status / Governs:** REVIEW FINDING / CURRENT / `docs/02-prototypes/RP-03-locomotion/research.md` §1.5; `cad/README.md`; `rig.md`
+
+Catalog gaps (Ø84×21 hub, 4–13 mm front-support height, unpublished gearbox radial) are closed by **printed interfaces**. The encoder motor is imported; the tread and 1″ POM ball are bought. A printed motor, printed ball, printed caster fork as `D20`, or FDM tyre treated as frozen `D10` is reject. Criteria and findings live in one file (`research.md`).
+
 

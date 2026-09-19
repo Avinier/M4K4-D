@@ -101,6 +101,7 @@ docs/02-prototypes/RP-03-locomotion/
 ├── rig.md                           the ugly chassis: ballast, adjustable support geometry, instruments, catch fixture, course
 ├── gates.md                         paper P01… and physical G01…G06 candidate registrations; registered section
 ├── decision.md                      ADR-04/ADR-07 ladder, ADR-06 sizing and ADR-03/05 inputs, candidate register, outcomes
+├── research.md                      constraints, inventory, filled envelopes, print-vs-buy; not a sourcing matrix
 ├── cad/                             only after a concept is selected: base/ blockout mirroring RP-01 cad/head/
 └── runs/                            one directory per run ID
 ```
@@ -118,6 +119,7 @@ docs/02-prototypes/RP-03-locomotion/
 | `rig.md` | §6 below | RP-01 `rig.md`; RP-02 `rig.md` §1 bench constraints table | A pretty chassis; a scored run before the readiness checklist |
 | `gates.md` | Paper gates `RP03-P01…` (physics/screens) and physical candidate registrations for `RP03-G01…G06` using the plan's eight fields; registered section starts empty | RP-01 `gates.md` (paper + physical); RP-02 `gates.md` §3–4 | A threshold edited after data; a registration without a freeze record |
 | `decision.md` | Inherited locked decisions; builder decisions `BD-01…`; Part registrations `RP03-P<n>-REG-<nn>`; gate outcome table; ADR closure ladder; candidate register; conclusion | RP-02 `decision.md` | A pass claimed from a pilot; a purchase authorization |
+| `research.md` | Constraints, RP-03 part inventory, filled envelopes, CAD datums, print-vs-buy for catalog gaps | — | A buy list; a second sourcing matrix; a SKU freeze; a printed motor/ball/FDM tyre as scored `D10` |
 | `README.md` | Start-here index, "owned elsewhere — link, do not copy", relationship notes, what-to-do-next, organization record | RP-02 `README.md` | Anything canonical; it points |
 
 **Owned elsewhere — link, do not copy.** Drive geometry targets (`dimensional-baseline.md`); drive/battery mass rows (`mass-envelope-ledger.md`); `LG-04`/`LG-10` and the G02 invariant (`power-energy-ledger.md`); `OM/BS/EV/CC/LP` vocabulary and `MD-01` (RP-02 `state-register.md`, `load-model.md`); C0↔MCU framing, expiry, heartbeat, arm nonce (RP-02 `link-contract.md`); `PA-13` motor authority and `PB-DRIVE*` branches (RP-02 `power-architecture.md`); `F-19/22/26` (RP-02 `fault-matrix.md`); sourcing rows (`candidate-sourcing-matrix.md` §Drive & base); bench, PSU and E-stop rules (`workbench.md`); run identity; timebase. RP-03 *populates* the ledgers and *extends* the RP-02 registers; it never carries a second copy.

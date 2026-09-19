@@ -37,6 +37,8 @@ The fixture must reproduce inherited drive geometry without pretending to be a b
 - a head-mass dummy at the 304 mm stack (~250–255 mm lumped CoM height) so BD-05 high corners include the Layout 03 head `E` tree. Complete-head `W` (M900) is not required for paper or for this fixture; a point `a_tip` still waits on M900;
 - physical wheel stops / a floor catch for the chassis on the workbench so a runaway cannot walk off the desk during bring-up. Bench bring-up is not a tabletop trial.
 
+Print versus buy for this frame is in `research.md` §1.5: print the open frame, clamps, ballast bay, skid carrier, bumper bar, sensor patches, and the 0–15 mm front-support adapters. Buy the encoder motors (import if needed), PU tread in the Ø80–85 band, 1″ POM ball, swivel caster article, 608s / D-inserts, and the stop-path sensors. Do not print a motor, a ball, a caster fork as the `D20` comparison, or a full FDM tyre as frozen `D10`.
+
 Loaded reversal, spin scrub and lift-onset may share this frame but are **different measurements**: quasi-static `BM-07` reversals for deadband, `BM-06` for walk/scrub, then a separate commanded-accel ramp for caster-lift onset versus the `a_tip` computed from **that** ballast's `(x, h)`.
 
 ## 3. Motor domain
