@@ -433,4 +433,9 @@ Paper pass filled CAD envelopes without a SKU freeze. Three drawing-critical mis
 
 Catalog gaps (Ø84×21 hub, 4–13 mm front-support height, unpublished gearbox radial) are closed by **printed interfaces**. The encoder motor is imported; the tread and 1″ POM ball are bought. A printed motor, printed ball, printed caster fork as `D20`, or FDM tyre treated as frozen `D10` is reject. Criteria and findings live in one file (`research.md`).
 
+### MEM-20260919-05 — Root scaffolding folders removed
+**Type / Status / Governs:** CHANGE / CURRENT / `run-record-convention.md` (blank `run.md` form)
+
+`docs/02-prototypes/_templates/` is deleted; the run-record blank form lives in the convention. `outputs/` and `sessions/` are deleted as root folders: the Layout-03 paper workbook moved to `docs/02-prototypes/RP-01-head/layout03-paper-model.xlsx`; the 2026-09-11 RP-01 teaching note moved to `docs/archive/`. MEM-20260822-01 still governs run identity.
+
 

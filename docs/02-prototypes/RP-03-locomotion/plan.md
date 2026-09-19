@@ -52,7 +52,7 @@ Everything below is inherited. RP-03 measures against these values; it does not 
 | Zero-velocity hold | Drive must resist head reaction torque at zero commanded velocity; free coasting reads as slop. RP-01 paper yaw peak is 0.1099 N·m at 90.5°/s | MEM-20260812-08; `fullproofmath.md` |
 | Base IMU | Rigid base mount, SPI + interrupt preferred; promoted toward required for slip/lift/tip/odometry-failure detection; head mounting excluded | MEM-20260812-02; `CA` I/O budget; sourcing matrix |
 | Bench rules | E-stop on every motion rig, cutting the motor bus, verified each session; Korad KA3005D **5 A ceiling** with current limit set before first power-up; logic analyzer never on the motor rail; fall from desk is the #1 hardware-loss risk | `workbench.md` |
-| Run identity | `RP03-<scope>-<class>-<UTC>-<seq>` under `run-record-convention.md`; template at `../_templates/run-record.md` | run-record convention v1.0 |
+| Run identity | `RP03-<scope>-<class>-<UTC>-<seq>` under `run-record-convention.md` | run-record convention v1.0 |
 | Timebase | Scored runs need the implemented `timebase.md` and the RP-02 logging schema; not yet implemented | `timebase.md`; RP-02 Phase A |
 
 ## 2. The two questions

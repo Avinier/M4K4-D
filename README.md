@@ -77,7 +77,7 @@ Ordered by the risk-prototype plan's open-inputs list and the intuition guide:
 - [System design brief](docs/01-system/system-design-brief.md)
 - [Risk-prototype plan](docs/01-system/risk-prototype-plan.md)
 - [Workbench and test-readiness baseline](docs/01-system/workbench.md)
-- [Run-record convention](docs/01-system/run-record-convention.md) and [run-record template](docs/02-prototypes/_templates/run-record.md)
+- [Run-record convention](docs/01-system/run-record-convention.md)
 - [Dimensional and packaging baseline](docs/01-system/dimensional-baseline.md)
 - Living ledgers: [mass/envelope](docs/01-system/mass-envelope-ledger.md), [power/energy/thermal](docs/01-system/power-energy-ledger.md), [candidate sourcing matrix](docs/01-system/candidate-sourcing-matrix.md)
 - Strategy: [monotonic timebase](docs/01-system/timebase.md)
@@ -133,7 +133,7 @@ IDs are allocated before the run and never renamed, reused or deleted; failed an
 
 > **No valid run ID plus no confirmed logger means no actuator enable.**
 
-Until a guarded launcher enforces this, the builder applies it as a pre-arm bench check from the [run-record template](docs/02-prototypes/_templates/run-record.md). Detail is in the [run-record convention](docs/01-system/run-record-convention.md).
+Until a guarded launcher enforces this, the builder applies it as a pre-arm bench check from the blank `run.md` form in the [run-record convention](docs/01-system/run-record-convention.md).
 
 ## Identity and design direction
 

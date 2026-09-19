@@ -479,7 +479,7 @@ The architecture phase may begin with provisional option studies while prototype
 - [ ] Stiffen and verify the loaded pitch frame and roll saddle against the authored modal targets; bound actuator rotor/gear acceleration demand before paper passage.
 - [ ] Complete RP-01 numeric gates for range, reversal, repeatability, tracking, settling, noise, temperature, endurance and fault response.
 - [ ] Clamp the RP-01 fixture and verify its E-stop and limits per the `workbench.md` scored-test gate.
-- [x] Define the run-ID, configuration identity and evidence-storage convention. (`run-record-convention.md` v1.0 + `docs/02-prototypes/_templates/run-record.md`)
+- [x] Define the run-ID, configuration identity and evidence-storage convention. (`run-record-convention.md` v1.0)
 - [ ] Define and implement the machine-readable logging schema and pre-run write check.
 - [ ] Define and validate the monotonic timebase and external-video synchronization method. (Strategy documented in `timebase.md` v0.2; validation is RP02-G05.)
 

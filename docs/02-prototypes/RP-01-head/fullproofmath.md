@@ -861,7 +861,7 @@ The two exact timelines were expanded using analytic `MJ5`/`MS7` derivatives and
 | MV-60 | Roll | 0.001756 N·m | 0.012415 N·m | -23.0°/s | 26.119 s | `HM-09 Wobble A settle` |
 | MV-60 | Yaw | 0.009095 N·m | 0.053964 N·m | +105.9°/s | 41.630 s | `HM-07 No C 2` |
 
-Workbook: [Layout-03 paper model](../../../outputs/rp01-layout03-fullproofmath-20260913/layout03-paper-model.xlsx)
+Workbook: [Layout-03 paper model](layout03-paper-model.xlsx)
 
 Audit result:
 
