@@ -48,6 +48,13 @@ def main():
         "tcrt_guard_bottom_z_mm": M.TCRT_GUARD_BOTTOM_Z,
         "tcrt_rear_contact_lookahead_mm": M.TCRT_REAR_LOOKAHEAD,
         "tcrt_coverage_note": "CAD-context choice: rear-only cliff channel; no front or lateral cliff-safety claim",
+        "rear_tail_style": M.REAR_TAIL_STYLE,
+        "rear_tail_visible_color": M.REAR_TAIL_VISIBLE_COLOR,
+        "rear_tail_shell_alpha": M.REAR_TAIL_SHELL_ALPHA,
+        "rear_tail_nominal_wall_mm": M.REAR_TAIL_WALL,
+        "rear_tail_group": "REAR_SKID_TCRT_MODULE",
+        "rear_tail_stations_mm": [list(station) for station in M.REAR_TAIL_STATIONS],
+        "rear_tail_tip_mm": [M.REAR_TAIL_STATIONS[-1][0], 0.0, sum(M.REAR_TAIL_STATIONS[-1][2:4]) / 2.0],
     }
     write_json("dimensions.json", dims)
     write_json("frames.json", M.FRAMES)
@@ -84,6 +91,9 @@ def main():
         f"- TCRT channels: `{M.TCRT_CHANNELS}`; rear center `{M.TCRT_REAR_CENTER}` mm",
         f"- TCRT optical face / sacrificial guard bottom: {M.TCRT_OPTICAL_FACE_Z:.1f} / {M.TCRT_GUARD_BOTTOM_Z:.1f} mm above ground",
         f"- Rear contact lookahead: {M.TCRT_REAR_LOOKAHEAD:.1f} mm",
+        f"- Rear tail: `{M.REAR_TAIL_STYLE}`, {len(M.REAR_TAIL_STATIONS)} straight ruled stations, translucent `{M.REAR_TAIL_VISIBLE_COLOR}` shell at alpha {M.REAR_TAIL_SHELL_ALPHA:.2f}",
+        f"- Rear tail assembly group: `REAR_SKID_TCRT_MODULE`; nominal wall {M.REAR_TAIL_WALL:.1f} mm",
+        f"- Rear tail tip: X={M.REAR_TAIL_STATIONS[-1][0]:.1f} mm, center Z={sum(M.REAR_TAIL_STATIONS[-1][2:4]) / 2.0:.1f} mm",
         "- Coverage: rear-only CAD-context choice; no front or lateral cliff-safety claim",
         "",
         "Generated from `body_chassis_model.py`; do not edit manually.",

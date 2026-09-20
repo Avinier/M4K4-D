@@ -8,7 +8,7 @@
 - Head transform: Layout 03 head origin `(37.9645, 0, 200)` in the chassis frame, making its yaw datum `(0, 0, 140)`.
 - Drivetrain: 170 mm track, 42 mm loaded radius/axle height, frozen two-wheel Concept A, and a fixed non-interchangeable 1-inch ball-transfer module at `X=110`.
 - External body: compact faceted shell, pale upper body, dark lower mobility belt, front service/grille motif. Visual references control cosmetics only.
-- Structure: independent chassis rails, body posts, cross-members, body/chassis mounts, a connected rear-skid module, fixed three-hole ball-transfer nose structure, and head-yaw load path.
+- Structure: independent chassis rails, body posts, cross-members, body/chassis mounts, a separately selectable eleven-station hollow faceted rear-tail module with visible internal load spine, replaceable shoe/guards and flush TCRT cartridge, compact fixed ball-transfer load collar and keeper clips with concealed tactile fascia, and head-yaw load path.
 - Internal packaging: exact downloaded Raspberry Pi 5 STEP; exact downloaded 608ZZ STEP pair; documented envelopes for motor, ball transfer, battery, cooler, drivers, DevKitC, power/safety, sensors, and cables when exact STEP is unavailable.
 - Transparency: shell and panels carry intrinsic alpha; CAD Viewer controls independently hide shell, head, electronics, harness, and physics. Free-standing dimension bars are not part of the assembly.
 - Assembly labels: every serviceable/fabricated/purchased group is independently selectable.
@@ -31,11 +31,16 @@
 | Shell nominal thickness | 2.4 mm |
 | Visible body-shell height | 110 mm |
 | Neutral physical height stack | 304 mm; 300 mm remains a rounded target |
-| TCRT optical-face ground clearance | 5 mm nominal |
-| TCRT sacrificial-guard bottom | 2.5 mm |
+| Rear skid-pad ground clearance | 3.5 mm nominal |
+| TCRT optical-face ground clearance | 10 mm nominal; must be calibrated on the target floor set |
+| TCRT protective-guard bottom | 7 mm |
 | TCRT channels | Rear only; CAD-context decision pending propagation |
-| Rear TCRT center | `(−110, 0, 8.5)` mm |
-| Rear TCRT contact lookahead | 40 mm behind skid contact |
+| Rear TCRT center | `(−97, 0, 13.5)` mm |
+| Rear TCRT contact lookahead | 27 mm behind skid contact |
+| Rear tail construction | Eleven straight ruled stations; no spline; tighter rise and pointed tip at X = −118 mm |
+| Rear tail visible finish | Translucent RP-01 Layout 03 ivory `#E3DDC9`, alpha 0.34 |
+| Rear tail assembly group | `REAR_SKID_TCRT_MODULE`; hollow shell with visible spine, cartridge and cable path |
+| Tactile nose fascia | 42 mm wide; 3 mm nominal travel reserve |
 
 ## Assumptions still requiring measured closure
 
@@ -44,5 +49,7 @@
 - exact battery and body power-module geometries from RP-02;
 - exact ICM-42688-P breakout and selected TCRT5000 breakout/comparator and connector bodies; the modeled carrier is an adjustable guarded requirement envelope;
 - rear-only cliff sensing intentionally provides no dedicated forward or lateral coverage; level-floor operating restrictions and later propagation are tracked by `RP03-CAD-01`;
+- the skid/TCRT packaging is consolidated into a separate hollow faceted-tail assembly under `RP03-CAD-03`; its eleven straight ruled links, translucent shell and visible internal spine/cartridge make packaging review possible, while exact cartridge details remain provisional until the selected breakout and connector are measured;
+- the prior exposed full-width bumper is removed; the compact ball-nose contact fascia has central-contact coverage only, pending propagation under `RP03-CAD-02`;
 - final body-shell split, fastening, tolerances, and fabrication process.
 - RP-01 Layout 03 yaw-yoke legs and trial adapter remain inherited appearance/packaging geometry; actuator substitution, load rating and fabrication detail are not finalized here.

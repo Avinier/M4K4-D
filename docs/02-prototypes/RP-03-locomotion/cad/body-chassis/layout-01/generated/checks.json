@@ -66,6 +66,33 @@
       }
     },
     {
+      "name": "ball_flange_seats_on_load_collar",
+      "ok": true,
+      "evidence": {
+        "collar_top_z_mm": 29.0,
+        "flange_bottom_z_mm": 29.0
+      }
+    },
+    {
+      "name": "ball_housing_clears_load_collar",
+      "ok": true,
+      "evidence": {
+        "collar_bore_radius_mm": 17.25,
+        "housing_radius_mm": 17.0
+      }
+    },
+    {
+      "name": "nose_rails_land_in_collar_wall",
+      "ok": true,
+      "evidence": {
+        "rail_offset_y_mm": 18.5,
+        "collar_wall_mm": [
+          17.25,
+          21.0
+        ]
+      }
+    },
+    {
       "name": "rp01_yaw_transform_closes",
       "ok": true,
       "evidence": {
@@ -139,24 +166,39 @@
       "name": "rear_tcrt_has_contact_lookahead",
       "ok": true,
       "evidence": {
-        "sensor_x_mm": -110.0,
+        "sensor_x_mm": -97.0,
         "skid_contact_x_mm": -70.0,
-        "lookahead_mm": 40.0
+        "lookahead_mm": 27.0
       }
     },
     {
-      "name": "rear_tcrt_optical_face_has_5mm_clearance",
+      "name": "rear_tcrt_optical_face_matches_raised_datum",
       "ok": true,
       "evidence": {
-        "optical_face_z_mm": 5.0
+        "optical_face_z_mm": 10.0
+      }
+    },
+    {
+      "name": "rear_tcrt_lookahead_remains_bounded",
+      "ok": true,
+      "evidence": {
+        "lookahead_mm": 27.0
       }
     },
     {
       "name": "tcrt_guard_is_lower_than_optical_face",
       "ok": true,
       "evidence": {
-        "guard_bottom_z_mm": 2.5,
-        "optical_face_z_mm": 5.0
+        "guard_bottom_z_mm": 7.0,
+        "optical_face_z_mm": 10.0
+      }
+    },
+    {
+      "name": "rear_skid_is_first_sacrificial_contact",
+      "ok": true,
+      "evidence": {
+        "skid_bottom_z_mm": 3.5,
+        "sensor_guard_bottom_z_mm": 7.0
       }
     },
     {
@@ -171,8 +213,159 @@
         "pad_mm": [
           -70.0,
           0.0,
-          9.0
+          4.75
         ]
+      }
+    },
+    {
+      "name": "rear_tail_is_multi_link_faceted_arc",
+      "ok": true,
+      "evidence": {
+        "style": "MULTI_LINK_FACETED_ARC",
+        "station_count": 11
+      }
+    },
+    {
+      "name": "rear_tail_terminal_links_are_short",
+      "ok": true,
+      "evidence": {
+        "terminal_link_lengths_mm": [
+          5.0,
+          4.0
+        ]
+      }
+    },
+    {
+      "name": "rear_tail_tip_is_pointed",
+      "ok": true,
+      "evidence": {
+        "tip_half_width_mm": 1.8,
+        "tip_height_mm": 4.0
+      }
+    },
+    {
+      "name": "rear_tail_uses_head_ivory",
+      "ok": true,
+      "evidence": {
+        "tail_color": "#E3DDC9",
+        "head_palette_ivory": "#E3DDC9"
+      }
+    },
+    {
+      "name": "rear_tail_shell_is_translucent",
+      "ok": true,
+      "evidence": {
+        "shell_alpha": 0.34
+      }
+    },
+    {
+      "name": "rear_tail_has_hollow_wall_definition",
+      "ok": true,
+      "evidence": {
+        "wall_mm": 2.0,
+        "inner_station_count": 9
+      }
+    },
+    {
+      "name": "rear_skid_tcrt_is_separate_top_level_group",
+      "ok": true,
+      "evidence": {
+        "top_level_labels": [
+          "CHASSIS_PRIMARY_FRAME",
+          "BODY_PRIMARY_FRAME",
+          "WHEEL_L",
+          "WHEEL_R",
+          "MOTOR_L",
+          "MOTOR_R",
+          "BEARING_PAIR_L",
+          "BEARING_PAIR_R",
+          "BALL_TRANSFER",
+          "REAR_SKID_TCRT_MODULE",
+          "BODY_ELECTRONICS",
+          "BODY_SENSORS",
+          "HARNESS_ROUTES",
+          "BODY_SHELL",
+          "BODY_PANELS",
+          "LOWER_MOBILITY_BELT",
+          "RP01_HEAD_LAYOUT03",
+          "PHYSICS_OVERLAYS"
+        ]
+      }
+    },
+    {
+      "name": "rear_tail_root_overlaps_crossmember",
+      "ok": true,
+      "evidence": {
+        "overlap_volume_mm3": 1114.9955555609754
+      }
+    },
+    {
+      "name": "rear_tail_spine_enters_crossmember",
+      "ok": true,
+      "evidence": {
+        "overlap_volume_mm3": 135.37161035733826
+      }
+    },
+    {
+      "name": "rear_tail_shoe_is_attached",
+      "ok": true,
+      "evidence": {
+        "overlap_volume_mm3": 15.674113451232746
+      }
+    },
+    {
+      "name": "rear_tail_guards_are_attached",
+      "ok": true,
+      "evidence": {
+        "overlap_volumes_mm3": [
+          8.887289542654509,
+          8.887289542654504
+        ]
+      }
+    },
+    {
+      "name": "rear_tail_cap_is_attached",
+      "ok": true,
+      "evidence": {
+        "overlap_volume_mm3": 78.96169827511146
+      }
+    },
+    {
+      "name": "rear_tcrt_package_clears_shell",
+      "ok": true,
+      "evidence": {
+        "collision_volume_mm3": 0
+      }
+    },
+    {
+      "name": "rear_tail_tip_is_upturned",
+      "ok": true,
+      "evidence": {
+        "sensor_station_center_z_mm": 23.5,
+        "tip_center_z_mm": 26.5
+      }
+    },
+    {
+      "name": "rear_tail_cap_is_flush",
+      "ok": true,
+      "evidence": {
+        "cap_top_z_mm": 22.5,
+        "sensor_station_top_z_mm": 22.5
+      }
+    },
+    {
+      "name": "tactile_nose_precedes_ball_surface",
+      "ok": true,
+      "evidence": {
+        "tactile_face_x_mm": 123.5,
+        "ball_front_x_mm": 122.7
+      }
+    },
+    {
+      "name": "tactile_nose_has_bounded_travel",
+      "ok": true,
+      "evidence": {
+        "travel_mm": 3.0
       }
     },
     {

@@ -2,7 +2,11 @@
 
 This is the active whole-body CAD path. It replaces the purple head lump and base-only presentation in `base/pass-01` with a source-linked RP-01 Layout 03 head, a 110 mm-tall structural body, translucent shell, internal packaging, a fixed engineered ball-transfer nose, a connected rear skid, tyre-clearance wheel wells, connected 608-bearing carriers, upper wheel arches, and purposeful review layers.
 
-Per CAD-context decision [`RP03-CAD-01`](../../decisions.md#rp03-cad-01--rear-only-ground-reflectance-channel), the layout now uses one guarded rear TCRT5000 channel. Its optical patch is 40 mm behind the skid contact, its optical face is modeled 5 mm above ground, and its sacrificial guard rails begin at 2.5 mm. The front and lateral TCRT packages, mounts and cable reserves are removed. This is a CAD-first choice pending permanent propagation, not a project-wide safety approval.
+Per CAD-context decision [`RP03-CAD-01`](../../decisions.md#rp03-cad-01--rear-only-ground-reflectance-channel), the layout now uses one guarded rear TCRT5000 channel. Its optical patch is 27 mm behind the skid contact, its optical face is modeled 10 mm above ground, and its protective rails begin at 7 mm. The connected skid pad begins at 3.5 mm, so it contacts first. The front and lateral TCRT packages, mounts and cable reserves are removed.
+
+Per CAD-context decision [`RP03-CAD-02`](../../decisions.md#rp03-cad-02--lean-fixed-ball-nose-with-concealed-contact), the non-functional stance-wide bumper and outboard switches are removed. The frozen ball datum is retained in a narrower load-bearing collar, paired flange keepers and compact shroud, with a 42 mm concealed-contact fascia and 3 mm travel reserve. These are CAD-first choices pending permanent propagation, not project-wide safety approval.
+
+Per CAD-context decision [`RP03-CAD-03`](../../decisions.md#rp03-cad-03--faceted-rear-tail-and-sensor-cartridge), the rear skid and TCRT packaging are consolidated into one eleven-station faceted arc. Its straight ruled links descend from the rear crossmember, form the skid belly, then rise more tightly toward a compact upturned point—there is no smooth spline. The module is a separate selectable top-level group with a genuinely hollow, 34%-opaque ivory shell, visible blue load spine, visible TCRT cartridge/cable path, replaceable 3.5 mm-clearance wear shoe, replaceable 7 mm-clearance protective lips and a translucent flush sensor cap. Layout 01.5 moves the sensor forward from X = −110 to −97 mm, raises its optical face from 8 to 10 mm, and shortens the root-to-tip projection from 84 to 66 mm.
 
 ## Files
 
@@ -32,14 +36,14 @@ docs/02-prototypes/RP-03-locomotion/cad/base/pass-01/.venv/bin/python \
 
 Then run `write_outputs.py`, `check_layout.py`, CAD inspection, validation, and the snapshot job.
 
-The selected TCRT5000 breakout/comparator PCB and connector are still unresolved. The yellow rear body therefore remains a package envelope and its cyan connector/strain-relief solids are reserved volumes. Layout 01 makes no dedicated forward or lateral cliff-protection claim; its provisional level-floor operating restrictions are recorded in the CAD decision register.
+The selected TCRT5000 breakout/comparator PCB and connector are still unresolved. The yellow body inside the translucent rear module therefore remains a package envelope and its cyan connector/strain-relief solids are reserved volumes. Layout 01 makes no dedicated forward or lateral cliff-protection claim; its provisional level-floor operating restrictions are recorded in the CAD decision register.
 
 ## Validation note
 
-The authored body, chassis, fixed ball-transfer, skid, rear-sensor, shell, panel,
-and mobility-belt groups pass deep solid validation (95 scoped occurrences:
-closed, positive volume, no reported self-intersections). Full-assembly validation additionally
-reports five self-intersecting occurrences under
-`C0_RASPBERRY_PI5_EXACT_STEP`. Those occurrences come from the frozen vendor
-Pi 5 STEP dependency, not the RP-03-authored geometry; the exact SKU model is
-retained rather than substituted with a cosmetically clean placeholder.
+The authored body, chassis, fixed ball-transfer, faceted rear tail, rear sensor,
+shell, panel and mobility-belt geometry remains closed, positive-volume BREP.
+Focused validation of the revised tail and cartridge reports zero invalid or
+self-intersecting occurrences. Full-assembly validation still reports five
+inherited self-intersecting occurrences inside the frozen Raspberry Pi 5 vendor
+STEP. None is part of this RP-03 rear-tail revision; the exact SKU is retained
+rather than replaced with a cosmetic placeholder.

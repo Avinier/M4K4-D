@@ -1,6 +1,6 @@
 {
   "layout_id": "RP03_BODY_CHASSIS_LAYOUT01",
-  "layout_revision": "layout-01.1",
+  "layout_revision": "layout-01.5",
   "units": "mm",
   "coordinate_convention": "+X forward, +Y robot-left, +Z up; origin at axle ground-contact line",
   "wheel_track_mm": 170.0,
@@ -48,12 +48,101 @@
     "REAR"
   ],
   "tcrt_rear_center_mm": [
-    -110.0,
+    -97.0,
     0.0,
-    8.5
+    13.5
   ],
-  "tcrt_optical_face_z_mm": 5.0,
-  "tcrt_guard_bottom_z_mm": 2.5,
-  "tcrt_rear_contact_lookahead_mm": 40.0,
-  "tcrt_coverage_note": "CAD-context choice: rear-only cliff channel; no front or lateral cliff-safety claim"
+  "tcrt_optical_face_z_mm": 10.0,
+  "tcrt_guard_bottom_z_mm": 7.0,
+  "tcrt_rear_contact_lookahead_mm": 27.0,
+  "tcrt_coverage_note": "CAD-context choice: rear-only cliff channel; no front or lateral cliff-safety claim",
+  "rear_tail_style": "MULTI_LINK_FACETED_ARC",
+  "rear_tail_visible_color": "#E3DDC9",
+  "rear_tail_shell_alpha": 0.34,
+  "rear_tail_nominal_wall_mm": 2.0,
+  "rear_tail_group": "REAR_SKID_TCRT_MODULE",
+  "rear_tail_stations_mm": [
+    [
+      -52.0,
+      10.5,
+      28.0,
+      46.0,
+      2.2
+    ],
+    [
+      -61.0,
+      9.6,
+      21.0,
+      36.0,
+      2.0
+    ],
+    [
+      -69.0,
+      8.8,
+      10.0,
+      24.0,
+      1.8
+    ],
+    [
+      -77.0,
+      8.0,
+      5.5,
+      18.0,
+      1.7
+    ],
+    [
+      -85.0,
+      7.4,
+      6.5,
+      19.0,
+      1.5
+    ],
+    [
+      -92.0,
+      7.2,
+      8.0,
+      21.0,
+      1.4
+    ],
+    [
+      -97.0,
+      7.5,
+      10.0,
+      22.5,
+      1.4
+    ],
+    [
+      -103.0,
+      6.8,
+      12.0,
+      24.0,
+      1.2
+    ],
+    [
+      -109.0,
+      5.4,
+      15.5,
+      26.0,
+      1.0
+    ],
+    [
+      -114.0,
+      3.5,
+      20.0,
+      27.0,
+      0.8
+    ],
+    [
+      -118.0,
+      1.8,
+      24.5,
+      28.5,
+      0.5
+    ]
+  ],
+  "rear_tail_tip_mm": [
+    -118.0,
+    0.0,
+    26.5
+  ]
 }

@@ -37,6 +37,11 @@ export default {
         label: "Show drivetrain",
         default: true
       },
+      show_rear_tail: {
+        type: "boolean",
+        label: "Show rear skid / TCRT module",
+        default: true
+      },
       show_electronics: {
         type: "boolean",
         label: "Show electronics",
@@ -63,7 +68,7 @@ export default {
         names: ["BODY_SHELL", "BODY_PANELS", "LOWER_MOBILITY_BELT"]
       },
       head: {
-        ref: "#o1.16"
+        ref: "#o1.17"
       },
       structure: {
         ref: "#o1.1,o1.2"
@@ -71,17 +76,20 @@ export default {
       drive: {
         ref: "#o1.3,o1.4,o1.5,o1.6,o1.7,o1.8,o1.9"
       },
-      electronics: {
+      rear_tail: {
         ref: "#o1.10"
       },
-      sensors: {
+      electronics: {
         ref: "#o1.11"
       },
+      sensors: {
+        ref: "#o1.12"
+      },
       harness: {
-        ref: "#o1.12,o1.16.3"
+        ref: "#o1.13,o1.17.3"
       },
       physics: {
-        ref: "#o1.17,o1.16.2"
+        ref: "#o1.18,o1.17.2"
       }
     }
   },
@@ -95,7 +103,7 @@ export default {
         }
       }]
     });
-    for (const key of ["shell", "head", "structure", "drive", "electronics", "sensors", "harness", "physics"]) {
+    for (const key of ["shell", "head", "structure", "drive", "rear_tail", "electronics", "sensors", "harness", "physics"]) {
       effects.visible(key, params[`show_${key}`] !== false);
     }
   }

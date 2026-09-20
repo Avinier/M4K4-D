@@ -75,13 +75,15 @@ def _load_head_model():
 # ---------------------------------------------------------------------------
 
 LAYOUT_ID = "RP03_BODY_CHASSIS_LAYOUT01"
-LAYOUT_REV = "layout-01.1"
+LAYOUT_REV = "layout-01.5"
 
 # Palette follows RP-01 Layout 03 so the whole robot reads as one assembly.
 IVORY = "#E3DDC9"
-SLATE = "#647787"
-SLATE_DARK = "#44565E"
-FRAME_BLUE = "#718D95"
+SLATE = "#87949A"
+SLATE_DARK = "#707D82"
+FRAME_BLUE = "#86A1A8"
+PANEL_WARM_GRAY = "#C5C0AD"
+MOBILITY_GRAY = "#7E8B8F"
 BRONZE = "#C38A47"
 AMBER = "#B88636"
 STEEL = "#B7BFC0"
@@ -105,6 +107,13 @@ BALL_NATIVE_HEIGHT = 29.0
 BALL_HOLE_RADIUS = 12.2
 BALL_FLANGE_OD = 36.0
 BALL_MOUNT_MODE = "FIXED_3HOLE_NON_INTERCHANGEABLE"
+BALL_COLLAR_OUTER_RADIUS = 21.0
+BALL_COLLAR_BORE_RADIUS = 17.25
+BALL_COLLAR_Z0 = 23.0
+BALL_COLLAR_HEIGHT = 6.0
+BALL_RAIL_OFFSET_Y = 18.5
+BALL_RAIL_END_X = 108.0
+BALL_RAIL_END_Z = 27.5
 
 BODY_X_REAR = -74.0
 BODY_X_FRONT = 82.0
@@ -132,13 +141,54 @@ PI_CENTER = (6.0, 0.0, 102.0)
 BATTERY_CENTER = (38.0, 0.0, 69.0)
 DEVKIT_CENTER = (-24.0, 44.0, 84.0)
 SKID_ROOT_DATUM = (-56.0, 0.0, 34.0)
-SKID_PAD_CENTER = (-70.0, 0.0, 9.0)
+SKID_SHOE_SIZE = (22.0, 16.0, 2.5)
+SKID_SHOE_BOTTOM_Z = 3.5
+SKID_PAD_CENTER = (-70.0, 0.0, SKID_SHOE_BOTTOM_Z + SKID_SHOE_SIZE[2] / 2.0)
 TCRT_PACKAGE_SIZE = (10.2, 5.8, 7.0)
-TCRT_OPTICAL_FACE_Z = 5.0
-TCRT_GUARD_BOTTOM_Z = 2.5
-TCRT_REAR_LOOKAHEAD = 40.0
+TCRT_OPTICAL_FACE_Z = 10.0
+TCRT_GUARD_BOTTOM_Z = 7.0
+TCRT_REAR_LOOKAHEAD = 27.0
 TCRT_CHANNELS = ("REAR",)
 TCRT_REAR_CENTER = (SKID_PAD_CENTER[0] - TCRT_REAR_LOOKAHEAD, 0.0, TCRT_OPTICAL_FACE_Z + TCRT_PACKAGE_SIZE[2] / 2.0)
+REAR_TAIL_STYLE = "MULTI_LINK_FACETED_ARC"
+REAR_TAIL_VISIBLE_COLOR = IVORY
+REAR_TAIL_SHELL_ALPHA = 0.34
+REAR_TAIL_WALL = 2.0
+REAR_TAIL_STATIONS = (
+    # x, half-width, lower-z, upper-z, corner chamfer
+    (-52.0, 10.5, 28.0, 46.0, 2.2),  # crossmember root overlap
+    (-61.0, 9.6, 21.0, 36.0, 2.0),   # first downward break
+    (-69.0, 8.8, 10.0, 24.0, 1.8),   # approach to skid belly
+    (-77.0, 8.0, 5.5, 18.0, 1.7),    # lowest belly station
+    (-85.0, 7.4, 6.5, 19.0, 1.5),    # early rising shank
+    (-92.0, 7.2, 8.0, 21.0, 1.4),    # sensor approach
+    (-97.0, 7.5, 10.0, 22.5, 1.4),   # raised sensor centre
+    (-103.0, 6.8, 12.0, 24.0, 1.2),  # cartridge departure
+    (-109.0, 5.4, 15.5, 26.0, 1.0),  # first terminal link
+    (-114.0, 3.5, 20.0, 27.0, 0.8),  # second terminal link
+    (-118.0, 1.8, 24.5, 28.5, 0.5),  # compact faceted point
+)
+REAR_TAIL_INNER_STATIONS = (
+    # The cavity begins after the load-bearing root and stops before the point.
+    (-57.0, 7.7, 26.0, 39.0, 1.4),
+    (-61.0, 7.6, 23.0, 34.0, 1.2),
+    (-69.0, 6.8, 12.0, 22.0, 1.1),
+    (-77.0, 6.0, 7.5, 16.0, 1.0),
+    (-85.0, 5.4, 8.5, 17.0, 0.9),
+    (-92.0, 5.2, 10.0, 19.0, 0.8),
+    (-97.0, 5.5, 12.0, 20.5, 0.8),
+    (-103.0, 4.8, 14.0, 22.0, 0.7),
+    (-109.0, 3.4, 17.5, 24.0, 0.5),
+)
+REAR_TAIL_SENSOR_POCKET_X = (-103.0, -91.0)
+REAR_TAIL_CAP_SIZE = (14.0, 15.0, 1.5)
+REAR_TAIL_CAP_TOP_Z = 22.5
+REAR_TAIL_GUARD_X = (-105.0, -90.0)
+REAR_TAIL_GUARD_WIDTH = 2.5
+REAR_TAIL_GUARD_HEIGHT = 2.5
+
+TACTILE_NOSE_FACE_X = 123.5
+TACTILE_NOSE_TRAVEL = 3.0
 
 
 FRAMES = {
@@ -273,21 +323,147 @@ def _nose_profile(x, half_width, z0, z1, chamfer):
 
 
 def ball_nose_fairing():
-    """Thin fixed guard around the ball cradle; not an interchangeable adapter."""
+    """Close-fitting fixed shroud around the frozen ball-transfer flange."""
     outer = loft([
-        _nose_profile(84.0, 34.0, 32.0, 55.0, 4.0),
-        _nose_profile(103.0, 29.0, 30.0, 49.0, 4.0),
-        _nose_profile(120.0, 25.0, 27.0, 43.0, 3.5),
+        _nose_profile(88.0, 26.0, 32.0, 49.0, 3.0),
+        _nose_profile(104.0, 22.5, 29.0, 44.0, 3.0),
+        _nose_profile(119.0, 20.5, 27.0, 39.5, 2.5),
     ], ruled=True)
     inner = loft([
-        _nose_profile(86.4, 31.6, 34.4, 52.6, 3.0),
-        _nose_profile(103.0, 26.6, 32.4, 46.6, 3.0),
-        _nose_profile(117.6, 22.6, 29.4, 40.6, 2.5),
+        _nose_profile(90.4, 23.6, 34.4, 46.6, 2.2),
+        _nose_profile(104.0, 20.1, 31.4, 41.6, 2.2),
+        _nose_profile(116.6, 18.1, 29.4, 37.1, 1.8),
     ], ruled=True)
     fairing = outer - inner
-    fairing = fairing - _block(81.0, 89.0, -30.0, 30.0, 35.0, 52.0)
+    fairing = fairing - _block(85.0, 91.0, -24.0, 24.0, 35.0, 48.0)
     fairing = fairing - _vertical_bore(19.0, 22.0, 58.0, BALL_CONTACT[0], 0.0)
-    return _paint(fairing, "BALL_FIXED_NOSE_GUARD", IVORY, 0.72)
+    return _paint(fairing, "BALL_COMPACT_FIXED_SHROUD", IVORY, 0.78)
+
+
+def rear_skid_tcrt_module():
+    """Selectable hollow rear-tail assembly with visible load and sensor paths."""
+    outer = loft(
+        [_nose_profile(x, half_width, z0, z1, chamfer) for x, half_width, z0, z1, chamfer in REAR_TAIL_STATIONS],
+        ruled=True,
+    )
+    inner = loft(
+        [_nose_profile(x, half_width, z0, z1, chamfer) for x, half_width, z0, z1, chamfer in REAR_TAIL_INNER_STATIONS],
+        ruled=True,
+    )
+
+    # A central top/bottom service aperture exposes the cartridge while leaving
+    # the translucent side walls continuous and structurally legible.
+    pocket_x0, pocket_x1 = REAR_TAIL_SENSOR_POCKET_X
+    sensor_pocket = _block(pocket_x0, pocket_x1, -4.0, 4.0, 6.5, 23.0)
+    cable_tunnel = _block(pocket_x1 - 1.0, -74.0, -3.5, 3.5, 16.0, 20.5)
+    shell = _paint(
+        outer - [inner, sensor_pocket, cable_tunnel],
+        "REAR_TAIL_TRANSLUCENT_HOLLOW_SHELL",
+        REAR_TAIL_VISIBLE_COLOR,
+        REAR_TAIL_SHELL_ALPHA,
+    )
+
+    # A narrow blue internal spine makes the load path from crossmember to skid
+    # explicit. It stops before the service cartridge rather than obscuring it.
+    spine_stations = (
+        (-52.0, 3.6, 34.0, 40.0, 1.0),
+        (-61.0, 3.2, 27.0, 32.0, 0.9),
+        (-69.0, 3.0, 15.0, 19.5, 0.8),
+        (-77.0, 2.7, 10.0, 14.0, 0.7),
+        (-85.0, 2.5, 11.0, 14.5, 0.6),
+        (-90.0, 2.3, 13.0, 16.2, 0.5),
+    )
+    spine = loft(
+        [_nose_profile(x, half_width, z0, z1, chamfer) for x, half_width, z0, z1, chamfer in spine_stations],
+        ruled=True,
+    )
+    spine = _paint(spine, "REAR_TAIL_INTERNAL_LOAD_SPINE", FRAME_BLUE, 1.0)
+
+    # Chamfered replaceable shoe retains the original nominal skid datum and
+    # remains lower than every part of the sensor cartridge.
+    sx, sy, sz = SKID_SHOE_SIZE
+    x0 = SKID_PAD_CENTER[0] - sx / 2.0
+    x1 = SKID_PAD_CENTER[0] + sx / 2.0
+    y0 = -sy / 2.0
+    y1 = sy / 2.0
+    c = 2.5
+    shoe_face = Plane.XY * Polygon(
+        (x0 + c, y0), (x1 - c, y0), (x1, y0 + c), (x1, y1 - c),
+        (x1 - c, y1), (x0 + c, y1), (x0, y1 - c), (x0, y0 + c),
+        align=None,
+    )
+    shoe = extrude(shoe_face.moved(Location((0.0, 0.0, SKID_SHOE_BOTTOM_Z))), amount=sz)
+    shoe = _paint(shoe, "REAR_TAIL_REPLACEABLE_WEAR_SHOE", IVORY, 1.0)
+
+    # The low sacrificial lips are separate, replaceable pieces nested into the
+    # shell side walls; they remain below the optical face but above the shoe.
+    gx0, gx1 = REAR_TAIL_GUARD_X
+    guard_length = gx1 - gx0
+    guards = [
+        _box(
+            guard_length,
+            REAR_TAIL_GUARD_WIDTH,
+            REAR_TAIL_GUARD_HEIGHT,
+            ((gx0 + gx1) / 2.0, sign * 6.35, TCRT_GUARD_BOTTOM_Z + REAR_TAIL_GUARD_HEIGHT / 2.0),
+            f"REAR_TAIL_REPLACEABLE_GUARD_{side}",
+            IVORY,
+        )
+        for sign, side in ((1.0, "L"), (-1.0, "R"))
+    ]
+
+    # A translucent flush cap keeps the package visible and serviceable.
+    cap_x, cap_y, cap_z = REAR_TAIL_CAP_SIZE
+    cap_chamfer = 1.5
+    cx = TCRT_REAR_CENTER[0]
+    cy = TCRT_REAR_CENTER[1]
+    cap_face = Plane.XY * Polygon(
+        (cx - cap_x / 2.0 + cap_chamfer, cy - cap_y / 2.0),
+        (cx + cap_x / 2.0 - cap_chamfer, cy - cap_y / 2.0),
+        (cx + cap_x / 2.0, cy - cap_y / 2.0 + cap_chamfer),
+        (cx + cap_x / 2.0, cy + cap_y / 2.0 - cap_chamfer),
+        (cx + cap_x / 2.0 - cap_chamfer, cy + cap_y / 2.0),
+        (cx - cap_x / 2.0 + cap_chamfer, cy + cap_y / 2.0),
+        (cx - cap_x / 2.0, cy + cap_y / 2.0 - cap_chamfer),
+        (cx - cap_x / 2.0, cy - cap_y / 2.0 + cap_chamfer),
+        align=None,
+    )
+    cap = extrude(cap_face.moved(Location((0.0, 0.0, REAR_TAIL_CAP_TOP_Z - cap_z))), amount=cap_z)
+    cap = _paint(cap, "REAR_TAIL_TRANSLUCENT_SENSOR_CAP", IVORY, 0.52)
+
+    cartridge = _tcrt_ski_cartridge("REAR", TCRT_REAR_CENTER)
+    cable = _beam_xz(-91.0, 18.0, -76.0, 18.0, 4.5, 3.0, "TCRT_REAR_INTERNAL_CABLE_ROUTE", "#79C4CB")
+    floor_interface = Compound(label="REAR_TAIL_FLOOR_INTERFACE", children=[shoe, *guards])
+    internals = Compound(label="REAR_TAIL_VISIBLE_INTERNALS", children=[spine, cartridge, cable])
+    return Compound(
+        label="REAR_SKID_TCRT_MODULE",
+        children=[shell, internals, floor_interface, cap],
+    )
+
+
+def rear_ski_keel():
+    """Compatibility alias for checks/scripts written before Layout 01.4."""
+    return rear_skid_tcrt_module()
+
+
+def tactile_ball_nose():
+    """Narrow hidden-contact fascia; replaces the exposed stance-wide bumper."""
+    fascia = _box(2.5, 42.0, 16.0, (TACTILE_NOSE_FACE_X, 0.0, 37.0), "BALL_NOSE_TACTILE_FASCIA", IVORY)
+    flexures = [
+        _box(7.0, 3.0, 10.0, (119.0, sign * 17.0, 37.0), f"BALL_NOSE_FLEXURE_{side}", FRAME_BLUE)
+        for sign, side in ((1.0, "L"), (-1.0, "R"))
+    ]
+    switch = _box(8.0, 12.0, 8.0, (116.0, 0.0, 37.0), "BALL_NOSE_HIDDEN_MICROSWITCH", "#7A4A21", 0.92)
+    plunger = _cylinder(1.8, 5.0, (121.0, 0.0, 37.0), "BALL_NOSE_SWITCH_PLUNGER", STEEL, 1.0, "x")
+    travel = _box(
+        TACTILE_NOSE_TRAVEL,
+        44.0,
+        18.0,
+        (TACTILE_NOSE_FACE_X - TACTILE_NOSE_TRAVEL / 2.0, 0.0, 37.0),
+        "BALL_NOSE_3MM_TRAVEL_RESERVE",
+        "#D95FC5",
+        0.14,
+    )
+    return Compound(label="BALL_NOSE_CONCEALED_CONTACT_MODULE", children=[fascia, *flexures, switch, plunger, travel])
 
 
 def _body_profile(x, inset=0.0, width_factor=1.0):
@@ -357,8 +533,8 @@ def body_shell():
 
 
 def body_panels():
-    front = _panel(82.0, 84.4, 110.0, 92.0, 48.0, 130.0, "FRONT_SERVICE_PANEL", SLATE_DARK, 0.54)
-    rear = _panel(-76.4, -74.0, 104.0, 90.0, 48.0, 130.0, "REAR_SERVICE_PANEL", IVORY, 0.38)
+    front = _panel(82.0, 84.4, 110.0, 92.0, 48.0, 130.0, "FRONT_SERVICE_PANEL", PANEL_WARM_GRAY, 0.84)
+    rear = _panel(-76.4, -74.0, 104.0, 90.0, 48.0, 130.0, "REAR_SERVICE_PANEL", IVORY, 0.62)
     slats = []
     for index, y in enumerate((-38.0, -25.0, -12.0, 0.0, 12.0, 25.0, 38.0), start=1):
         slats.append(_box(2.2, 4.0, 50.0, (85.0, y, 88.0), f"FRONT_GRILLE_SLAT_{index}", SLATE, 0.88))
@@ -381,18 +557,18 @@ def body_panels():
 
 
 def lower_mobility_belt():
-    outer = _box(148.0, 178.0, 28.0, (8.0, 0.0, 45.0), "BELT_OUTER", SLATE_DARK, 0.66)
+    outer = _box(148.0, 178.0, 28.0, (8.0, 0.0, 45.0), "BELT_OUTER", MOBILITY_GRAY, 0.88)
     inner_tool = Box(143.0, 164.0, 23.0).moved(Location((8.0, 0.0, 46.5)))
-    return _paint(outer - [inner_tool, *_wheel_well_tools()], "LOWER_MOBILITY_BELT", SLATE_DARK, 0.66)
+    return _paint(outer - [inner_tool, *_wheel_well_tools()], "LOWER_MOBILITY_BELT", MOBILITY_GRAY, 0.88)
 
 
 def chassis_frame():
     parts = [
         _box(CHASSIS_RAIL_X1 - CHASSIS_RAIL_X0, 8.0, 18.0, ((CHASSIS_RAIL_X0 + CHASSIS_RAIL_X1) / 2, CHASSIS_RAIL_Y, 44.0), "CHASSIS_RAIL_L", SLATE),
         _box(CHASSIS_RAIL_X1 - CHASSIS_RAIL_X0, 8.0, 18.0, ((CHASSIS_RAIL_X0 + CHASSIS_RAIL_X1) / 2, -CHASSIS_RAIL_Y, 44.0), "CHASSIS_RAIL_R", SLATE),
-        _box(12.0, AXLE_CROSSMEMBER_WIDTH, 18.0, (0.0, 0.0, 44.0), "AXLE_CROSSMEMBER", SLATE_DARK),
-        _box(12.0, 116.0, 16.0, (90.0, 0.0, 43.0), "FRONT_CROSSMEMBER", SLATE_DARK),
-        _box(16.0, 116.0, 14.0, (-56.0, 0.0, 41.0), "REAR_SKID_CROSSMEMBER", SLATE_DARK),
+        _box(12.0, AXLE_CROSSMEMBER_WIDTH, 18.0, (0.0, 0.0, 44.0), "AXLE_CROSSMEMBER", FRAME_BLUE),
+        _box(12.0, 116.0, 16.0, (90.0, 0.0, 43.0), "FRONT_CROSSMEMBER", FRAME_BLUE),
+        _box(16.0, 116.0, 14.0, (-56.0, 0.0, 41.0), "REAR_SKID_CROSSMEMBER", FRAME_BLUE),
         _box(126.0, 112.0, 4.0, (22.0, 0.0, DECK_Z), "CHASSIS_DECK", FRAME_BLUE),
     ]
 
@@ -408,36 +584,24 @@ def chassis_frame():
         upper_gusset = upper_gusset.moved(Location((0.0, sign * 65.0, 0.0)))
         parts.extend([carrier, upper_gusset])
 
-    # Frozen, non-interchangeable ball-transfer nose. Twin angled rails carry
-    # the ball reaction into the front crossmember; the annular cradle seats
-    # the selected 3-hole transfer flange at its 29 mm loaded height.
+    # Frozen, non-interchangeable ball-transfer nose. Compact angled rails
+    # carry the ball reaction into the front crossmember. The fixed collar
+    # supports the purchased flange from below; paired keeper clips capture
+    # its top face so the module has an explicit load path in both directions.
     for sign, side in ((1.0, "L"), (-1.0, "R")):
-        rail = _beam_xz(88.0, 43.0, 110.0, 35.0, 8.0, 8.0, f"BALL_NOSE_RAIL_{side}", BRONZE)
-        rail = rail.moved(Location((0.0, sign * 18.0, 0.0)))
+        rail = _beam_xz(88.0, 43.0, BALL_RAIL_END_X, BALL_RAIL_END_Z, 7.0, 7.0, f"BALL_NOSE_RAIL_{side}", SLATE)
+        rail = rail.moved(Location((0.0, sign * BALL_RAIL_OFFSET_Y, 0.0)))
         parts.append(rail)
-        parts.append(_box(12.0, 8.0, 12.0, (110.0, sign * 18.0, 38.0), f"BALL_CRADLE_CHEEK_{side}", BRONZE))
-    cradle = Cylinder(23.0, 4.0).moved(Location((BALL_CONTACT[0], 0.0, 33.0)))
-    cradle = cradle - _vertical_bore(18.5, 32.0, 38.0, BALL_CONTACT[0], 0.0)
-    for angle_deg in (90.0, 210.0, 330.0):
-        angle = math.radians(angle_deg)
-        hx = BALL_CONTACT[0] + BALL_HOLE_RADIUS * math.cos(angle)
-        hy = BALL_HOLE_RADIUS * math.sin(angle)
-        cradle = cradle - _vertical_bore(1.7, 32.0, 38.0, hx, hy)
-    parts.append(_paint(cradle, "BALL_FIXED_CRADLE", FRAME_BLUE, 1.0))
+    collar = Cylinder(BALL_COLLAR_OUTER_RADIUS, BALL_COLLAR_HEIGHT).moved(Location((BALL_CONTACT[0], 0.0, BALL_COLLAR_Z0)))
+    collar = collar - _vertical_bore(BALL_COLLAR_BORE_RADIUS, BALL_COLLAR_Z0 - 1.0, BALL_NATIVE_HEIGHT + 1.0, BALL_CONTACT[0], 0.0)
+    posts = []
+    caps = []
+    for sign, side in ((1.0, "L"), (-1.0, "R")):
+        posts.append(_box(9.0, 4.0, 8.0, (BALL_CONTACT[0], sign * 19.5, 29.0), f"BALL_COLLAR_POST_{side}", FRAME_BLUE))
+        caps.append(_box(9.0, 8.0, 3.0, (BALL_CONTACT[0], sign * 17.5, 34.5), f"BALL_FLANGE_KEEPER_{side}", FRAME_BLUE))
+    parts.append(Compound(label="BALL_FIXED_LOAD_COLLAR", children=[_paint(collar, "BALL_LOAD_COLLAR", FRAME_BLUE, 1.0), *posts, *caps]))
     parts.append(ball_nose_fairing())
 
-    # Rear catch is a connected module: bolted root, continuous diagonal arm,
-    # captured pad seat and replaceable polymer contact pad.
-    skid_root = _box(18.0, 22.0, 14.0, SKID_ROOT_DATUM, "REAR_SKID_ROOT", SLATE)
-    skid_arm = _beam_xz(-56.0, 33.0, -70.0, 15.0, 14.0, 8.0, "REAR_SKID_ARM", SLATE)
-    skid_seat = _box(28.0, 24.0, 6.0, (-70.0, 0.0, 14.0), "REAR_SKID_PAD_SEAT", SLATE)
-    skid_carrier = _paint(skid_root + skid_arm + skid_seat, "REAR_SKID_CARRIER", SLATE, 1.0)
-    skid_pad = _box(26.0, 22.0, 6.0, SKID_PAD_CENTER, "REAR_SKID_REPLACEABLE_PAD", IVORY)
-    skid_screws = [
-        _cylinder(1.6, 10.0, (-76.0, 0.0, 13.0), "REAR_SKID_M3_FRONT", STEEL),
-        _cylinder(1.6, 10.0, (-64.0, 0.0, 13.0), "REAR_SKID_M3_REAR", STEEL),
-    ]
-    parts.append(Compound(label="REAR_SKID_MODULE", children=[skid_carrier, skid_pad, *skid_screws]))
     return Compound(label="CHASSIS_PRIMARY_FRAME", children=parts)
 
 
@@ -502,7 +666,7 @@ def ball_transfer():
     cup_outer = Cylinder(16.0, 13.0).moved(Location((bx, 0.0, 16.0)))
     cup_outer = cup_outer - Sphere(BALL_DIAMETER / 2.0 + 0.45).moved(Location((bx, 0.0, ball_center_z)))
     cup_outer = cup_outer - Cylinder(12.9, 16.0).moved(Location((bx, 0.0, 14.0)))
-    cup = _paint(cup_outer, "BALL_TRANSFER_CAPTURE_CUP", SLATE, 1.0)
+    cup = _paint(cup_outer, "BALL_TRANSFER_PURCHASED_HOUSING", SLATE, 1.0)
 
     lip = Cylinder(16.8, 3.0).moved(Location((bx, 0.0, 16.0)))
     lip = lip - Cylinder(13.05, 4.0).moved(Location((bx, 0.0, 15.5)))
@@ -510,20 +674,16 @@ def ball_transfer():
 
     flange = Cylinder(BALL_FLANGE_OD / 2.0, 4.0).moved(Location((bx, 0.0, 29.0)))
     flange = flange - Cylinder(14.5, 6.0).moved(Location((bx, 0.0, 28.0)))
-    bolts = []
-    for index, angle_deg in enumerate((90.0, 210.0, 330.0), start=1):
+    for angle_deg in (90.0, 210.0, 330.0):
         angle = math.radians(angle_deg)
         hx = bx + BALL_HOLE_RADIUS * math.cos(angle)
         hy = BALL_HOLE_RADIUS * math.sin(angle)
         flange = flange - _vertical_bore(1.7, 28.0, 34.0, hx, hy)
-        bolts.append(_cylinder(1.5, 8.0, (hx, hy, 33.0), f"BALL_TRANSFER_M3_{index}", STEEL, 1.0))
-    flange = _paint(flange, "BALL_TRANSFER_3HOLE_FLANGE", BRONZE, 1.0)
+    flange = _paint(flange, "BALL_TRANSFER_PURCHASED_3HOLE_FLANGE", BRONZE, 1.0)
 
-    rollers = []
-    for index, angle_deg in enumerate((30.0, 150.0, 270.0), start=1):
-        angle = math.radians(angle_deg)
-        rollers.append(_sphere(2.4, (bx + 12.4 * math.cos(angle), 12.4 * math.sin(angle), 23.2), f"BALL_TRANSFER_ROLLER_{index}", STEEL, 1.0))
-    return Compound(label="BALL_TRANSFER_FIXED_MODULE", children=[ball, cup, lip, flange, *rollers, *bolts])
+    # Internal rollers and vendor fasteners are intentionally suppressed: the
+    # purchased transfer is represented as one serviceable SKU envelope.
+    return Compound(label="BALL_TRANSFER_PURCHASED_FIXED_MODULE", children=[ball, cup, lip, flange])
 
 
 def raspberry_pi5():
@@ -559,37 +719,25 @@ def electronics():
     ])
 
 
-def _tcrt_guarded_module(name, center):
-    """Protected, height-adjustable TCRT package envelope with an open optical window."""
+def _tcrt_ski_cartridge(name, center):
+    """Compact sensor cartridge hidden inside the faceted rear tail."""
     x, y, z = center
     package_x, package_y, package_z = TCRT_PACKAGE_SIZE
     parts = [
         _box(package_x, package_y, package_z, center, f"TCRT5000_{name}_PACKAGE_ENVELOPE", "#F5D142", 0.92),
-        _box(10.0, 8.0, 6.0, (x, y, 19.0), f"TCRT_{name}_CONNECTOR_RESERVE", "#4CB7C5", 0.38),
+        _box(11.5, 1.2, 7.5, (x, y - 4.45, z + 0.5), f"TCRT_{name}_INTERNAL_GUIDE_R", FRAME_BLUE, 1.0),
+        _box(11.5, 1.2, 7.5, (x, y + 4.45, z + 0.5), f"TCRT_{name}_INTERNAL_GUIDE_L", FRAME_BLUE, 1.0),
+        _box(11.0, 7.0, 1.0, (x, y, z + 4.25), f"TCRT_{name}_HEIGHT_SHIM", STEEL, 0.78),
+        _box(12.0, 6.5, 4.0, (x + 11.0, y, z + 4.5), f"TCRT_{name}_INTERNAL_CONNECTOR_RESERVE", "#79C4CB", 0.18),
     ]
-
-    # The two wear rails are the lowest features.  They protect the emitter and
-    # detector without closing the downward-looking optical aperture.
-    parts.extend([
-        _box(22.0, 3.0, 3.0, (x, y - 7.0, TCRT_GUARD_BOTTOM_Z + 1.5), f"TCRT_{name}_GUARD_L", SLATE, 1.0),
-        _box(22.0, 3.0, 3.0, (x, y + 7.0, TCRT_GUARD_BOTTOM_Z + 1.5), f"TCRT_{name}_GUARD_R", SLATE, 1.0),
-        _box(3.0, 4.0, 13.0, (x - 8.0, y - 7.0, 10.0), f"TCRT_{name}_ADJUST_EAR_L", SLATE, 1.0),
-        _box(3.0, 4.0, 13.0, (x - 8.0, y + 7.0, 10.0), f"TCRT_{name}_ADJUST_EAR_R", SLATE, 1.0),
-        _box(19.0, 17.0, 2.5, (x - 1.5, y, 14.25), f"TCRT_{name}_RETAINER", SLATE, 1.0),
-    ])
-    return Compound(label=f"TCRT_{name}_GUARDED_ADJUSTABLE_MODULE", children=parts)
+    return Compound(label=f"TCRT_{name}_REAR_TAIL_CARTRIDGE", children=parts)
 
 
 def sensors():
     parts = [
         _box(30.0, 14.0, 14.0, (77.0, 0.0, 88.0), "GP2Y0A41SK0F_ENVELOPE", "#E7B62C", 0.85),
         _cylinder(1.2, 42.0, (100.0, 0.0, 88.0), "GP2Y_OPTICAL_AXIS", "#EE4B3B", 0.70, "x"),
-        _beam_xz(-70.0, 17.0, -106.0, 18.0, 12.0, 4.0, "TCRT_REAR_STRUCTURAL_BOOM", SLATE),
-        _tcrt_guarded_module("REAR", TCRT_REAR_CENTER),
-        _box(14.0, 12.0, 12.0, (-76.0, 0.0, 23.0), "TCRT_REAR_STRAIN_RELIEF", "#4CB7C5", 0.38),
-        _box(8.0, 166.0, 12.0, (91.0, 0.0, 45.0), "BUMPER_BAR", AMBER, 0.92),
-        _box(20.0, 6.0, 10.0, (83.0, 70.0, 45.0), "BUMPER_SWITCH_L", "#7A4A21", 0.9),
-        _box(20.0, 6.0, 10.0, (83.0, -70.0, 45.0), "BUMPER_SWITCH_R", "#7A4A21", 0.9),
+        tactile_ball_nose(),
     ]
     return Compound(label="BODY_SENSORS", children=parts)
 
@@ -655,6 +803,7 @@ def build_assembly():
     asm.add(bearing_pair("L"), "BEARING_PAIR_L")
     asm.add(bearing_pair("R"), "BEARING_PAIR_R")
     asm.add(ball_transfer(), "BALL_TRANSFER")
+    asm.add(rear_skid_tcrt_module(), "REAR_SKID_TCRT_MODULE")
     asm.add(electronics(), "BODY_ELECTRONICS")
     asm.add(sensors(), "BODY_SENSORS")
     asm.add(harness_routes(), "HARNESS_ROUTES")
