@@ -1,7 +1,7 @@
 # RP-03 body and chassis CAD
 
 This directory owns the integrated RP-03 whole-body CAD. The active model is
-[`body-chassis/layout-01/`](body-chassis/layout-01/). It combines the frozen Concept A
+[`body-chassis/layout-02/`](body-chassis/layout-02/). It combines the frozen Concept A
 locomotion layout and ball transfer with a structural chassis, serviceable body,
 internal RP-02 packaging, harness reservations, physics overlays, and the actual
 RP-01 Layout 03 head source.
@@ -19,17 +19,18 @@ recorded in [`decisions.md`](decisions.md).
 |---|---|
 | Locomotion | Frozen Concept A: two powered wheels at 170 mm track plus a fixed, non-interchangeable front ball-transfer module |
 | Head | Live import of RP-01 Layout 03 source; yaw datum at chassis `(0, 0, 140)` mm |
-| Body/chassis | Independent frame, fixed ball-transfer nose, connected rear skid, translucent 110 mm outer shell, removable service panels, muted mobility belt |
+| Body/chassis | Independent bolted frame, fixed ball-transfer nose, connected rear skid, translucent 110 mm outer shell, matched trapezoidal service panels, and removable lower mobility fascia |
+| Audio | Functional front grille over a provisional 50 mm speaker package; four body PDM microphone ports and amplifier envelope |
 | Internal packaging | Compute, storage/cooling allowance, battery, motor drivers, power/safety, controller, IMU and sensor envelopes |
 | Wiring | Main power/data trunks and service-loop keep-outs are selectable review geometry |
 | Purchased CAD | Exact Raspberry Pi 5 and 608ZZ STEP articles; other articles remain explicitly labelled envelopes where no trustworthy STEP was found |
 | Physics | Generated mass register, whole-robot CoM, contact/support overlay, axes, and deterministic geometry checks |
 | Review | Clean exterior, shell-hidden internal, physics, and head-yaw views plus interactive CAD Viewer controls |
-| Release state | Packaging-quality Layout 01; not fabrication release or structural certification |
+| Release state | Packaging-quality Layout 02; not fabrication release or structural certification |
 
 Open the active model documentation at
-[`body-chassis/layout-01/README.md`](body-chassis/layout-01/README.md). The buildable
-source is [`body-chassis/layout-01/body-chassis.step.py`](body-chassis/layout-01/body-chassis.step.py).
+[`body-chassis/layout-02/README.md`](body-chassis/layout-02/README.md). The buildable
+source is [`body-chassis/layout-02/body-chassis.step.py`](body-chassis/layout-02/body-chassis.step.py).
 
 ## Authority and workflow
 

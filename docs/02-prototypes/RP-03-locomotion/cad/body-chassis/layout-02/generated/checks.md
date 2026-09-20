@@ -1,0 +1,62 @@
+# RP-03 Layout 02 deterministic checks
+
+- [x] `concept_a_track` — {'actual_mm': 170.0}
+- [x] `wheel_geometry_mirrors_about_centerline` — {'left_center_y_mm': 85.0, 'right_center_y_mm': -85.0}
+- [x] `wheel_geometry_track_is_170` — {'measured_track_mm': 170.0}
+- [x] `loaded_radius_matches_axle_height` — {'radius_mm': 42.0, 'axle_z_mm': 42.0}
+- [x] `wheel_well_has_radial_clearance` — {'radial_clearance_mm': 4.0}
+- [x] `axle_crossmember_reaches_wheel_hubs` — {'crossmember_half_width_mm': 78.0, 'wheel_inner_face_y_mm': 73.0}
+- [x] `ball_transfer_is_frozen_default` — {'contact_mm': (110.0, 0.0, 0.0)}
+- [x] `ball_mount_is_fixed_not_interchangeable` — {'mount_mode': 'FIXED_3HOLE_NON_INTERCHANGEABLE'}
+- [x] `ball_flange_seats_on_load_collar` — {'collar_top_z_mm': 29.0, 'flange_bottom_z_mm': 29.0}
+- [x] `ball_housing_clears_load_collar` — {'collar_bore_radius_mm': 17.25, 'housing_radius_mm': 17.0}
+- [x] `nose_rails_land_in_collar_wall` — {'rail_offset_y_mm': 18.5, 'collar_wall_mm': [17.25, 21.0]}
+- [x] `rp01_yaw_transform_closes` — {'transformed_mm': (0.0, 0.0, 140.0), 'datum_mm': (0.0, 0.0, 140.0)}
+- [x] `body_frame_has_four_m4_mounts` — {'mount_points_mm': ((-38.0, -48.0), (-38.0, 48.0), (48.0, -48.0), (48.0, 48.0))}
+- [x] `body_frame_has_two_locating_pins` — {'locating_points_mm': ((-33.0, -42.0), (43.0, 42.0))}
+- [x] `body_frame_no_longer_interpenetrates_chassis` — {'overlap_volume_mm3': 0}
+- [x] `body_mount_hardware_is_separate_top_level_group` — {'top_level_labels': ['CHASSIS_PRIMARY_FRAME', 'BODY_PRIMARY_FRAME', 'BODY_CHASSIS_MOUNT_HARDWARE', 'MOBILITY_BELT_MOUNT_HARDWARE', 'WHEEL_L', 'WHEEL_R', 'MOTOR_L', 'MOTOR_R', 'BEARING_PAIR_L', 'BEARING_PAIR_R', 'BALL_TRANSFER', 'REAR_SKID_TCRT_MODULE', 'BODY_ELECTRONICS', 'BODY_SENSORS', 'BODY_AUDIO', 'HARNESS_ROUTES', 'BODY_SHELL', 'BODY_PANELS', 'PANEL_MOUNT_HARDWARE', 'LOWER_MOBILITY_BELT', 'BODY_NECK_COWL', 'RP01_HEAD_LAYOUT03', 'RP01_HEAD_HARNESS', 'RP01_HEAD_PHYSICS', 'PHYSICS_OVERLAYS']}
+- [x] `panel_openings_have_continuous_overlap` — {'panel_overlap_mm': 2.0}
+- [x] `front_and_rear_panels_have_four_fasteners_each` — {'front_count': 4, 'rear_count': 4}
+- [x] `panel_hardware_is_separate_top_level_group` — {'top_level_labels': ['CHASSIS_PRIMARY_FRAME', 'BODY_PRIMARY_FRAME', 'BODY_CHASSIS_MOUNT_HARDWARE', 'MOBILITY_BELT_MOUNT_HARDWARE', 'WHEEL_L', 'WHEEL_R', 'MOTOR_L', 'MOTOR_R', 'BEARING_PAIR_L', 'BEARING_PAIR_R', 'BALL_TRANSFER', 'REAR_SKID_TCRT_MODULE', 'BODY_ELECTRONICS', 'BODY_SENSORS', 'BODY_AUDIO', 'HARNESS_ROUTES', 'BODY_SHELL', 'BODY_PANELS', 'PANEL_MOUNT_HARDWARE', 'LOWER_MOBILITY_BELT', 'BODY_NECK_COWL', 'RP01_HEAD_LAYOUT03', 'RP01_HEAD_HARNESS', 'RP01_HEAD_PHYSICS', 'PHYSICS_OVERLAYS']}
+- [x] `body_audio_is_separate_top_level_group` — {'top_level_labels': ['CHASSIS_PRIMARY_FRAME', 'BODY_PRIMARY_FRAME', 'BODY_CHASSIS_MOUNT_HARDWARE', 'MOBILITY_BELT_MOUNT_HARDWARE', 'WHEEL_L', 'WHEEL_R', 'MOTOR_L', 'MOTOR_R', 'BEARING_PAIR_L', 'BEARING_PAIR_R', 'BALL_TRANSFER', 'REAR_SKID_TCRT_MODULE', 'BODY_ELECTRONICS', 'BODY_SENSORS', 'BODY_AUDIO', 'HARNESS_ROUTES', 'BODY_SHELL', 'BODY_PANELS', 'PANEL_MOUNT_HARDWARE', 'LOWER_MOBILITY_BELT', 'BODY_NECK_COWL', 'RP01_HEAD_LAYOUT03', 'RP01_HEAD_HARNESS', 'RP01_HEAD_PHYSICS', 'PHYSICS_OVERLAYS']}
+- [x] `four_body_microphones_are_allocated` — {'microphone_ports': ((38.0, 70.0, 118.0, 'FRONT_L'), (38.0, -70.0, 118.0, 'FRONT_R'), (-38.0, 70.0, 108.0, 'REAR_L'), (-38.0, -70.0, 108.0, 'REAR_R'))}
+- [x] `speaker_and_front_range_sensor_do_not_overlap` — {'overlap_volume_mm3': 0}
+- [x] `front_range_sensor_is_below_speaker_grille` — {'sensor_z_mm': 58.0, 'speaker_center_z_mm': 99.0}
+- [x] `lower_belt_is_physical_removable_fascia` — {'belt_children': 5}
+- [x] `neck_cowl_preserves_yaw_datum` — {'cowl_top_z_mm': 164.0, 'head_origin_z_mm': 200.0}
+- [x] `body_fits_track_width` — {'body_width_mm': 174.0, 'wheel_stance_mm': 194.0}
+- [x] `body_ground_clearance_in_baseline_band` — {'body_bottom_mm': 30.0, 'target_mm': [25.0, 35.0]}
+- [x] `visible_body_height_in_baseline_band` — {'body_height_mm': 110.0, 'target_mm': [105.0, 115.0]}
+- [x] `neutral_stack_is_documented_304_mm` — {'overall_height_mm': 304.0, 'rounded_target_mm': 300.0}
+- [x] `neck_allocation_is_60_mm` — {'neck_allocation_mm': 60.0}
+- [x] `rear_tcrt_is_only_cliff_channel` — {'channels': ('REAR',)}
+- [x] `rear_tcrt_has_contact_lookahead` — {'sensor_x_mm': -97.0, 'skid_contact_x_mm': -70.0, 'lookahead_mm': 27.0}
+- [x] `rear_tcrt_optical_face_matches_raised_datum` — {'optical_face_z_mm': 10.0}
+- [x] `rear_tcrt_lookahead_remains_bounded` — {'lookahead_mm': 27.0}
+- [x] `tcrt_guard_is_lower_than_optical_face` — {'guard_bottom_z_mm': 7.0, 'optical_face_z_mm': 10.0}
+- [x] `rear_skid_is_first_sacrificial_contact` — {'skid_bottom_z_mm': 3.5, 'sensor_guard_bottom_z_mm': 7.0}
+- [x] `rear_skid_pad_is_below_connected_root` — {'root_mm': (-56.0, 0.0, 34.0), 'pad_mm': (-70.0, 0.0, 4.75)}
+- [x] `rear_tail_is_multi_link_faceted_arc` — {'style': 'MULTI_LINK_FACETED_ARC', 'station_count': 11}
+- [x] `rear_tail_terminal_links_are_short` — {'terminal_link_lengths_mm': [5.0, 4.0]}
+- [x] `rear_tail_tip_is_pointed` — {'tip_half_width_mm': 1.8, 'tip_height_mm': 4.0}
+- [x] `rear_tail_uses_head_ivory` — {'tail_color': '#E3DDC9', 'head_palette_ivory': '#E3DDC9'}
+- [x] `rear_tail_shell_is_translucent` — {'shell_alpha': 0.34}
+- [x] `rear_tail_has_hollow_wall_definition` — {'wall_mm': 2.0, 'inner_station_count': 9}
+- [x] `rear_skid_tcrt_is_separate_top_level_group` — {'top_level_labels': ['CHASSIS_PRIMARY_FRAME', 'BODY_PRIMARY_FRAME', 'BODY_CHASSIS_MOUNT_HARDWARE', 'MOBILITY_BELT_MOUNT_HARDWARE', 'WHEEL_L', 'WHEEL_R', 'MOTOR_L', 'MOTOR_R', 'BEARING_PAIR_L', 'BEARING_PAIR_R', 'BALL_TRANSFER', 'REAR_SKID_TCRT_MODULE', 'BODY_ELECTRONICS', 'BODY_SENSORS', 'BODY_AUDIO', 'HARNESS_ROUTES', 'BODY_SHELL', 'BODY_PANELS', 'PANEL_MOUNT_HARDWARE', 'LOWER_MOBILITY_BELT', 'BODY_NECK_COWL', 'RP01_HEAD_LAYOUT03', 'RP01_HEAD_HARNESS', 'RP01_HEAD_PHYSICS', 'PHYSICS_OVERLAYS']}
+- [x] `rear_tail_root_overlaps_crossmember` — {'overlap_volume_mm3': 1114.9955555609754}
+- [x] `rear_tail_spine_enters_crossmember` — {'overlap_volume_mm3': 135.37161035733826}
+- [x] `rear_tail_shoe_is_attached` — {'overlap_volume_mm3': 15.674113451232746}
+- [x] `rear_tail_guards_are_attached` — {'overlap_volumes_mm3': [8.887289542654509, 8.887289542654504]}
+- [x] `rear_tail_cap_is_attached` — {'overlap_volume_mm3': 78.96169827511146}
+- [x] `rear_tcrt_package_clears_shell` — {'collision_volume_mm3': 0}
+- [x] `rear_tail_tip_is_upturned` — {'sensor_station_center_z_mm': 23.5, 'tip_center_z_mm': 26.5}
+- [x] `rear_tail_cap_is_flush` — {'cap_top_z_mm': 22.5, 'sensor_station_top_z_mm': 22.5}
+- [x] `tactile_nose_precedes_ball_surface` — {'tactile_face_x_mm': 123.5, 'ball_front_x_mm': 122.7}
+- [x] `tactile_nose_has_bounded_travel` — {'travel_mm': 3.0}
+- [x] `battery_forward_of_axle` — {'battery_x_mm': 38.0}
+- [x] `head_source_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-01-head/cad/head/layout-03/layout_model.py'}
+- [x] `pi_step_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-03-locomotion/cad/body-chassis/layout-01/references/purchased/raspberry_pi_5.step'}
+- [x] `bearing_step_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-03-locomotion/cad/body-chassis/layout-01/references/purchased/bearing_608zz.step'}
+- [x] `com_inside_support_x` — {'com_x_mm': 9.677422054512943}
+- [x] `com_below_head_yaw` — {'com_z_mm': 107.9010564770127}

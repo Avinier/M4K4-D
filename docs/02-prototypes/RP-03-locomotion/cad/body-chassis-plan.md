@@ -1,6 +1,6 @@
 # RP-03 integrated body/chassis CAD requirements and closure checklist
 
-Status: Layout 01 implemented for packaging review. This is the living CAD acceptance
+Status: Layout 02 implemented for packaging review. This is the living CAD acceptance
 checklist, not a fabrication release.
 
 ## 1. Frozen inputs
@@ -59,6 +59,8 @@ solid.
 - [x] Provide a viewer parameter for head yaw about the exact body datum.
 - [x] Record the neutral stack as 304 mm and the RP-01 yoke as inherited trial
   geometry, not a finalized or load-rated mechanism.
+- [x] Add a stationary neck cowl and yaw-moving hollow shroud/lower-leg cladding to
+  reduce the visually empty U-shape without changing the inherited yaw or pitch axes.
 - [ ] Replace the body-side yaw collar with the final bearing/fastener stack once the
   selected physical joint is measured.
 - [ ] Check ±55° head motion against shell, cable loop and all service panels.
@@ -67,6 +69,8 @@ solid.
 ### 3.2 Chassis and locomotion
 
 - [x] Model a primary chassis independent of the cosmetic shell.
+- [x] Attach the body frame to the chassis deck with four explicit M4 through-bolts
+  and two locating pins; eliminate frame/chassis solid interpenetration.
 - [x] Maintain 170 mm wheel-centre track and 42 mm nominal axle height.
 - [x] Model the frozen 84 × 24 mm custom wheel envelope on both sides.
 - [x] Keep motors, wheel carriers and 608ZZ bearings as separate selectable parts.
@@ -91,6 +95,11 @@ solid.
 - [x] Make the shell intrinsically translucent and independently hideable.
 - [x] Separate the pale upper body, dark mobility belt, front panel/grille and rear
   service panel into reviewable groups.
+- [x] Model the lower mobility belt as a physical removable fascia with four M3 side
+  fasteners; it is not a moving belt or drive element.
+- [x] Match front and rear shell openings to the trapezoidal panels with a continuous
+  2 mm overlap, internal frames, bosses and four M3 screws per panel.
+- [x] Turn the front slat motif into open grille slots over the speaker package.
 - [x] Preserve wheel, floor, ball-transfer and sensor clearances.
 - [ ] Define the production shell split, fastening direction and removal sequence.
 - [ ] Add bosses, inserts, ribs, draft/print strategy, tolerances and edge treatments.
@@ -110,6 +119,8 @@ cool and remove them.
 - [x] Keep power/safety access reachable through a service opening.
 - [x] Provide cable-trunk volumes from battery/power to compute, drivers, motors,
   sensors and head.
+- [x] Allocate a provisional 50 mm speaker basket, 44 mm cone, acoustic cavity,
+  amplifier and four body-mounted PDM microphones with shell ports.
 - [ ] Replace the battery, DevKit, DRV8874 carriers, power board and sensor breakouts
   with exact RP-02 parts or measurements.
 - [ ] Add microSD/storage access and every required USB, Ethernet, display, camera,
@@ -121,8 +132,10 @@ cool and remove them.
 
 ## 5. Sensors and external interaction
 
-- [x] Include front bumper geometry and front-facing distance-sensor keep-outs.
-- [x] Include three downward reflective-sensor volumes and their optical axes.
+- [x] Include concealed front contact geometry and a front-facing distance-sensor
+  keep-out/window below the speaker.
+- [x] Include the selected rear-only TCRT5000 requirement envelope and optical datum;
+  make no unsupported forward/lateral cliff-safety claim.
 - [x] Keep sensors selectable independently of body and structure.
 - [ ] Replace generic sensor envelopes with the exact frozen modules and carriers.
 - [ ] Check fields of view against shell, floor, wheels, ball transfer and bumper travel.
@@ -139,8 +152,8 @@ views; separate presentation-only CAD copies are not allowed.
 - [x] Shell-hidden internal view: structure, electronics, drive and harness visible.
 - [x] Physics view: support/contact geometry, CoM, axes and dimensions visible.
 - [x] Head-yaw view: representative non-zero yaw about the body datum.
-- [x] Viewer controls: shell, head, structure, drive, electronics, sensors, harness,
-  physics and annotations can be shown or hidden independently.
+- [x] Viewer controls: shell, head, structure, drive, electronics, sensors, audio,
+  harness and physics can be shown or hidden independently.
 - [x] Every serviceable group has a stable assembly name for selection and inspection.
 - [ ] Add subsystem-isolated electrical, drivetrain, sensing and service-removal views
   as exact component geometry closes.
@@ -188,8 +201,8 @@ Current state:
 - [ ] Add inertia estimates only after mass and geometry are credible enough to support
   them; do not infer them from bounding boxes.
 
-Current generated estimate: **2346.5 g**, CoM
-**`(8.40, 0.16, 107.66) mm`**. It is a packaging estimate, not a test result.
+Current generated estimate: **2456.54 g**, CoM
+**`(9.68, 0.15, 107.90) mm`**. It is a packaging estimate, not a test result.
 
 ## 9. Generation, checks and outputs
 
@@ -210,7 +223,9 @@ Every accepted revision must pass:
 
 - [x] source generation and STEP write;
 - [x] assembly reference, geometry fact, plane and positioning inspection;
-- [x] solid validation with zero failed occurrences;
+- [x] all Layout 02-authored solids validate closed and positive-volume; the full
+  assembly retains five documented self-intersection warnings inside the exact
+  Raspberry Pi 5 vendor STEP only;
 - [x] wheel-centre track measurement;
 - [x] RP-01-to-body yaw-transform check;
 - [x] body width, ground clearance, battery position and CoM checks;
@@ -228,7 +243,7 @@ Before fabrication release it must additionally pass:
 
 ## 10. Context-first propagation
 
-1. Make a proposed dimension, placement or interface change in Layout 01 source.
+1. Make a proposed dimension, placement or interface change in Layout 02 source.
 2. Regenerate reports and snapshots and run the deterministic checks.
 3. Review the affected exterior, internal, physics and service views.
 4. Mark the change accepted or rejected in the CAD review context.
