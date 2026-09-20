@@ -1,0 +1,142 @@
+{
+  "layout_id": "RP03_BODY_CHASSIS_LAYOUT01",
+  "mass_g": 2326.54,
+  "com_mm": [
+    8.292560787174613,
+    0.16319102584889347,
+    107.9557030087773
+  ],
+  "rows": [
+    {
+      "id": "RP01_HEAD_LAYOUT03",
+      "mass_g": 509.04,
+      "com_mm": [
+        -1.587351929527685,
+        0.7458558252366899,
+        240.29597139329078
+      ],
+      "source": "RP-01 generated mass tree"
+    },
+    {
+      "id": "BODY_SHELL_AND_PANELS",
+      "mass_g": 285.0,
+      "com_mm": [
+        4.0,
+        0.0,
+        96.0
+      ],
+      "source": "CAD estimate"
+    },
+    {
+      "id": "BODY_PRIMARY_FRAME",
+      "mass_g": 310.0,
+      "com_mm": [
+        4.0,
+        0.0,
+        91.0
+      ],
+      "source": "CAD estimate"
+    },
+    {
+      "id": "CHASSIS_PRIMARY_FRAME",
+      "mass_g": 230.0,
+      "com_mm": [
+        16.0,
+        0.0,
+        47.0
+      ],
+      "source": "CAD estimate"
+    },
+    {
+      "id": "WHEEL_L",
+      "mass_g": 90.0,
+      "com_mm": [
+        0.0,
+        85.0,
+        42.0
+      ],
+      "source": "vendor/envelope"
+    },
+    {
+      "id": "WHEEL_R",
+      "mass_g": 90.0,
+      "com_mm": [
+        0.0,
+        -85.0,
+        42.0
+      ],
+      "source": "vendor/envelope"
+    },
+    {
+      "id": "MOTOR_L",
+      "mass_g": 110.0,
+      "com_mm": [
+        0.0,
+        52.0,
+        42.0
+      ],
+      "source": "vendor"
+    },
+    {
+      "id": "MOTOR_R",
+      "mass_g": 110.0,
+      "com_mm": [
+        0.0,
+        -52.0,
+        42.0
+      ],
+      "source": "vendor"
+    },
+    {
+      "id": "BALL_TRANSFER",
+      "mass_g": 16.5,
+      "com_mm": [
+        110.0,
+        0.0,
+        14.0
+      ],
+      "source": "vendor"
+    },
+    {
+      "id": "BATTERY",
+      "mass_g": 280.0,
+      "com_mm": [
+        38.0,
+        0.0,
+        69.0
+      ],
+      "source": "RP-02 placeholder"
+    },
+    {
+      "id": "RASPBERRY_PI5_AND_COOLER",
+      "mass_g": 76.0,
+      "com_mm": [
+        6.0,
+        0.0,
+        102.0
+      ],
+      "source": "vendor + estimate"
+    },
+    {
+      "id": "CONTROL_POWER_SENSORS",
+      "mass_g": 125.0,
+      "com_mm": [
+        6.0,
+        0.0,
+        80.0
+      ],
+      "source": "estimate; one rear TCRT channel"
+    },
+    {
+      "id": "HARNESS_AND_FASTENERS",
+      "mass_g": 95.0,
+      "com_mm": [
+        4.0,
+        0.0,
+        88.0
+      ],
+      "source": "estimate"
+    }
+  ],
+  "warning": "Estimated/custom masses require measured replacement before release."
+}

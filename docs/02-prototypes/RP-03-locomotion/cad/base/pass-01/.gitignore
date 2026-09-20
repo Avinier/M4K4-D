@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+/STEP/*
+!/STEP/imported/
+!/STEP/*.step.js
+/STL/*
+!/STL/imported/
+/tmp/
+*.egg-info/

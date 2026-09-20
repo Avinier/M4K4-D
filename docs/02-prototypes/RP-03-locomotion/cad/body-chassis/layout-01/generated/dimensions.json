@@ -1,0 +1,59 @@
+{
+  "layout_id": "RP03_BODY_CHASSIS_LAYOUT01",
+  "layout_revision": "layout-01.1",
+  "units": "mm",
+  "coordinate_convention": "+X forward, +Y robot-left, +Z up; origin at axle ground-contact line",
+  "wheel_track_mm": 170.0,
+  "wheel_od_mm": 84.0,
+  "wheel_width_mm": 24.0,
+  "axle_height_mm": 42.0,
+  "front_ball_contact_mm": [
+    110.0,
+    0.0,
+    0.0
+  ],
+  "ball_mount_mode": "FIXED_3HOLE_NON_INTERCHANGEABLE",
+  "body_shell_x_mm": [
+    -74.0,
+    82.0
+  ],
+  "body_shell_z_mm": [
+    30.0,
+    140.0
+  ],
+  "body_visible_height_mm": 110.0,
+  "body_width_lower_mm": 174.0,
+  "body_width_upper_mm": 148.0,
+  "shell_thickness_mm": 2.4,
+  "head_yaw_datum_mm": [
+    0.0,
+    0.0,
+    140.0
+  ],
+  "head_origin_in_chassis_mm": [
+    37.9645316623177,
+    0.0,
+    200.0
+  ],
+  "head_local_yaw_mm": [
+    -37.9645316623177,
+    0.0,
+    -60.0
+  ],
+  "neck_allocation_mm": 60.0,
+  "neutral_overall_physical_height_mm": 304.0,
+  "overall_height_status": "304 mm neutral stack; 300 mm remains a rounded target, not a passed envelope",
+  "rp01_yoke_status": "live Layout 03 trial geometry; not load-rated or fabrication-final",
+  "tcrt_channels": [
+    "REAR"
+  ],
+  "tcrt_rear_center_mm": [
+    -110.0,
+    0.0,
+    8.5
+  ],
+  "tcrt_optical_face_z_mm": 5.0,
+  "tcrt_guard_bottom_z_mm": 2.5,
+  "tcrt_rear_contact_lookahead_mm": 40.0,
+  "tcrt_coverage_note": "CAD-context choice: rear-only cliff channel; no front or lateral cliff-safety claim"
+}

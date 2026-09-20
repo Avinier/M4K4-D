@@ -1,0 +1,118 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "track_170",
+      "ok": true,
+      "detail": "170.0"
+    },
+    {
+      "name": "axle_42",
+      "ok": true,
+      "detail": "42.0"
+    },
+    {
+      "name": "contact_x_in_band",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "contact_x_identical",
+      "ok": true,
+      "detail": "110.0 vs 110.0"
+    },
+    {
+      "name": "shim_ball_in_0_15",
+      "ok": true,
+      "detail": "13.0"
+    },
+    {
+      "name": "shim_caster_in_0_15",
+      "ok": true,
+      "detail": "4.0"
+    },
+    {
+      "name": "shim_reaches_both_native",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "skid_reach_in_band",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "skid_height_in_band",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "not_frozen_14_70",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "battery_entirely_forward",
+      "ok": true,
+      "detail": "xmin=31.0"
+    },
+    {
+      "name": "bay_cannot_sit_at_or_behind_axle",
+      "ok": true,
+      "detail": "20.0"
+    },
+    {
+      "name": "a_tip_positive",
+      "ok": true,
+      "detail": "3.145675462925063"
+    },
+    {
+      "name": "skid_inequality",
+      "ok": true,
+      "detail": "h/d=0.1667 < x/h=0.3207"
+    },
+    {
+      "name": "drive_mass_band",
+      "ok": true,
+      "detail": "572.7"
+    },
+    {
+      "name": "no_zero_mass_installed",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "sku_not_frozen",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "dimensions_json_agrees_params",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "stance_within_205",
+      "ok": true,
+      "detail": "stance=194.0"
+    },
+    {
+      "name": "overall_d_reported",
+      "ok": true,
+      "detail": "extrema_d\u2248239.0 vs CON-14 180.0 (HOLD if >)"
+    },
+    {
+      "name": "wheel_axes_height",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "u_register_present",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "failed": [],
+  "gate_claim": false,
+  "purchase": false
+}

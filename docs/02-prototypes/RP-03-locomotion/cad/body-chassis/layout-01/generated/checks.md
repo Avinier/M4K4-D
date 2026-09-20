@@ -1,0 +1,27 @@
+# RP-03 Layout 01 deterministic checks
+
+- [x] `concept_a_track` — {'actual_mm': 170.0}
+- [x] `wheel_geometry_mirrors_about_centerline` — {'left_center_y_mm': 85.0, 'right_center_y_mm': -85.0}
+- [x] `wheel_geometry_track_is_170` — {'measured_track_mm': 170.0}
+- [x] `loaded_radius_matches_axle_height` — {'radius_mm': 42.0, 'axle_z_mm': 42.0}
+- [x] `wheel_well_has_radial_clearance` — {'radial_clearance_mm': 4.0}
+- [x] `axle_crossmember_reaches_wheel_hubs` — {'crossmember_half_width_mm': 78.0, 'wheel_inner_face_y_mm': 73.0}
+- [x] `ball_transfer_is_frozen_default` — {'contact_mm': (110.0, 0.0, 0.0)}
+- [x] `ball_mount_is_fixed_not_interchangeable` — {'mount_mode': 'FIXED_3HOLE_NON_INTERCHANGEABLE'}
+- [x] `rp01_yaw_transform_closes` — {'transformed_mm': (0.0, 0.0, 140.0), 'datum_mm': (0.0, 0.0, 140.0)}
+- [x] `body_fits_track_width` — {'body_width_mm': 174.0, 'wheel_stance_mm': 194.0}
+- [x] `body_ground_clearance_in_baseline_band` — {'body_bottom_mm': 30.0, 'target_mm': [25.0, 35.0]}
+- [x] `visible_body_height_in_baseline_band` — {'body_height_mm': 110.0, 'target_mm': [105.0, 115.0]}
+- [x] `neutral_stack_is_documented_304_mm` — {'overall_height_mm': 304.0, 'rounded_target_mm': 300.0}
+- [x] `neck_allocation_is_60_mm` — {'neck_allocation_mm': 60.0}
+- [x] `rear_tcrt_is_only_cliff_channel` — {'channels': ('REAR',)}
+- [x] `rear_tcrt_has_contact_lookahead` — {'sensor_x_mm': -110.0, 'skid_contact_x_mm': -70.0, 'lookahead_mm': 40.0}
+- [x] `rear_tcrt_optical_face_has_5mm_clearance` — {'optical_face_z_mm': 5.0}
+- [x] `tcrt_guard_is_lower_than_optical_face` — {'guard_bottom_z_mm': 2.5, 'optical_face_z_mm': 5.0}
+- [x] `rear_skid_pad_is_below_connected_root` — {'root_mm': (-56.0, 0.0, 34.0), 'pad_mm': (-70.0, 0.0, 9.0)}
+- [x] `battery_forward_of_axle` — {'battery_x_mm': 38.0}
+- [x] `head_source_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-01-head/cad/head/layout-03/layout_model.py'}
+- [x] `pi_step_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-03-locomotion/cad/body-chassis/layout-01/references/purchased/raspberry_pi_5.step'}
+- [x] `bearing_step_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-03-locomotion/cad/body-chassis/layout-01/references/purchased/bearing_608zz.step'}
+- [x] `com_inside_support_x` — {'com_x_mm': 8.292560787174613}
+- [x] `com_below_head_yaw` — {'com_z_mm': 107.9557030087773}

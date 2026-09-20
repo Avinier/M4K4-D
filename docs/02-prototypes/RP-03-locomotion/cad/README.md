@@ -1,61 +1,68 @@
-# RP-03 base CAD
+# RP-03 body and chassis CAD
 
-Planning home for the RP-03 base CAD. No geometry here yet.
+This directory owns the integrated RP-03 whole-body CAD. The active model is
+[`body-chassis/layout-01/`](body-chassis/layout-01/). It combines the frozen Concept A
+locomotion layout and ball transfer with a structural chassis, serviceable body,
+internal RP-02 packaging, harness reservations, physics overlays, and the actual
+RP-01 Layout 03 head source.
 
-## Current state
+The earlier [`base/pass-01/`](base/pass-01/) model is retained as historical envelope
+work only. Its purple head lump, caster comparison, and open-SKU assumptions are not
+the current architecture.
 
-| Item | State |
+CAD-first choices that are not yet propagated into permanent RP-03 requirements are
+recorded in [`decisions.md`](decisions.md).
+
+## Active model
+
+| Item | Current CAD state |
 |---|---|
-| Locomotion architecture | Concept A: two powered encoder wheels, passive front support, **mandatory** rear anti-tip skid |
-| Front support | Type selected: Ø1″ ball transfer (`D21`, BD-08). **SKU open.** `D20` swivel caster is the **required** comparison swap on the same mount |
-| SKU set | **Not frozen.** `D02` / `D21` / `DRV-B` / `S01`/`S04`/`S06`/`S07` are leads; substitutes stay live |
-| Gates | None passed. ADR-04 not closed. No purchase authorized |
-| CAD in this directory | Not started. This is planning only |
-| Requirements and todo | [`body-chassis-plan.md`](body-chassis-plan.md) |
-| Part identities and envelopes | [`../research.md`](../research.md) |
+| Locomotion | Frozen Concept A: two powered wheels at 170 mm track plus a fixed, non-interchangeable front ball-transfer module |
+| Head | Live import of RP-01 Layout 03 source; yaw datum at chassis `(0, 0, 140)` mm |
+| Body/chassis | Independent frame, fixed ball-transfer nose, connected rear skid, translucent 110 mm outer shell, removable service panels, muted mobility belt |
+| Internal packaging | Compute, storage/cooling allowance, battery, motor drivers, power/safety, controller, IMU and sensor envelopes |
+| Wiring | Main power/data trunks and service-loop keep-outs are selectable review geometry |
+| Purchased CAD | Exact Raspberry Pi 5 and 608ZZ STEP articles; other articles remain explicitly labelled envelopes where no trustworthy STEP was found |
+| Physics | Generated mass register, whole-robot CoM, contact/support overlay, axes, and deterministic geometry checks |
+| Review | Clean exterior, shell-hidden internal, physics, and head-yaw views plus interactive CAD Viewer controls |
+| Release state | Packaging-quality Layout 01; not fabrication release or structural certification |
 
-## Folder rule
+Open the active model documentation at
+[`body-chassis/layout-01/README.md`](body-chassis/layout-01/README.md). The buildable
+source is [`body-chassis/layout-01/body-chassis.step.py`](body-chassis/layout-01/body-chassis.step.py).
 
-`plan.md` §10 stands: **RP-03 does not produce final chassis CAD.** `base/` is a blockout for the selected concept only, and root `cad/` stays reserved for integrated CAD. Integrated whole-body packaging is RP-06's.
+## Authority and workflow
 
-`research.md` §1.4 bounds what a blockout may contain. CAD pass 1 may consume bounding boxes, mount holes, shafts, cable exits, 360° keep-outs, and mass/`(x,h)` lumps. It may **not** consume a SKU as frozen geometry, and it may not produce a pretty shell.
+Inputs are consumed in this order:
 
-Selection of the ball-transfer *type* (BD-08) is not a gate freeze, not a purchase, and not ADR-04 closure. It does not authorize a styled chassis.
+1. frozen architectural decisions in [`../decision.md`](../decision.md);
+2. SKU identities, procurement status, and source confidence in [`../research.md`](../research.md);
+3. locomotion calculations and test cases in [`../physics.md`](../physics.md);
+4. the RP-01 Layout 03 source and its yaw interface;
+5. RP-02 electrical architecture, power branches, link contracts, and measured hardware;
+6. manufacturer drawings or exact in-hand measurements;
+7. clearly marked CAD envelopes where exact geometry is unavailable.
 
-## What the blockout is, when it opens
+CAD changes are made and reviewed in this active layout first, following the same
+pattern as RP-01 head Layout 03: centralized source parameters, generated dimensions
+and mass properties, deterministic checks, and saved review views. After a value is
+accepted, it is propagated to the affected Markdown specifications. A provisional CAD
+value must not silently become a project-wide requirement.
 
-An **ugly, adjustable envelope model** on the axle datum — origin at the floor on the drive-axle contact line, `+x` toward the front support, `+h` up. Not a mini-droid.
+Cosmetic reference images inform only the faceted body language, panel treatment,
+colour split, and silhouette. They do not override the frozen architecture, package,
+datums, contacts, or service clearances.
 
-It must keep adjustable everything research proved must stay adjustable:
+## Required closure before fabrication
 
-- Ø80–85 mm wheels at 170 mm track, axle at 42 mm;
-- front support at 105–115 mm contact with a **0–15 mm height shim**;
-- ball and caster interchangeable **via two adapters on one mount**, at the same contact `x`;
-- rear skid adjustable across 60–80 mm reach and 8–16 mm height, not a frozen 14/70 solid;
-- ballast that sets mass and both CoM coordinates independently;
-- battery volume entirely forward of the axle, with an aft fit geometrically impossible.
+- measure the exact custom wheel, hub, tread and motor articles;
+- replace remaining motor, ball-transfer, battery, power-module, sensor-board and
+  connector envelopes with vendor or measured geometry;
+- close RP-02 connector orientation, bend-radius and demate-volume requirements;
+- finish shell splits, fastening, tolerances, wall strategy and manufacturing process;
+- weigh fabricated/custom items and regenerate mass, CoM and stability results;
+- run interference, steering/yaw, service-removal, cable-strain and DfAM checks;
+- obtain mechanical review for the chassis, head load path and impact cases.
 
-The datum list is [`../research.md`](../research.md) §5, adopted verbatim as the parameter set. Three CAD-critical mismatches drive the shim stack: axle 42 mm versus 1″ ball ~29 mm versus 30 mm caster ~38 mm; Ø84 × 21 is not a stock article; the `D02` encoder suffix is not listed in India.
-
-Print hubs, shims, carriers, and the two front-support adapters. Buy the tread, the POM ball, and the import encoder motor. Filled envelopes may feed the ugly model. They do not authorize a SKU freeze, an FDM tyre freeze, or a pretty shell.
-
-## Planned tree
-
-Target structure, not files to create before modelling begins. The workflow mirrors [`RP-01-head/cad/head/layout-03`](../../RP-01-head/cad/head/layout-03/): one active folder, centralized parameters, generated dimensions and mass outputs, deterministic checks, saved review views.
-
-```text
-cad/
-├── README.md
-├── body-chassis-plan.md
-└── base/
-    └── pass-01/
-        ├── brief.md
-        ├── source/                  # parametric source and centralized parameters
-        ├── references/              # vendor drawings/models and measured envelopes, with capture class
-        ├── generated/               # dimensions, mass register, CoM/tip outputs, interface tables
-        ├── checks/                  # geometry, clearance, stability, provenance checks
-        ├── exports/                 # STEP/STL only when explicitly generated
-        └── snapshots/               # review views
-```
-
-Accepted values propagate to the Markdown specifications only after checks pass. `decision.md` receives nothing until a freeze.
+The complete requirement and acceptance checklist is
+[`body-chassis-plan.md`](body-chassis-plan.md).

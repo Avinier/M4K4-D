@@ -1,0 +1,13 @@
+{
+  "input": "STEP/assembly.step",
+  "mode": "view",
+  "outputs": [
+    {"path": "snapshots/iso.png", "camera": "iso"},
+    {"path": "snapshots/iso_opposite.png", "camera": {"direction": [-1, 1, -0.8]}},
+    {"path": "snapshots/side.png", "camera": "right"},
+    {"path": "snapshots/front.png", "camera": "front"},
+    {"path": "snapshots/top.png", "camera": "top"},
+    {"path": "snapshots/underside.png", "camera": "bottom"}
+  ],
+  "render": {"viewLabels": true, "padding": 0.12, "sizeProfile": "assembly"}
+}

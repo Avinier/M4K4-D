@@ -1,0 +1,221 @@
+{
+  "layout_id": "RP03_BODY_CHASSIS_LAYOUT01",
+  "ok": true,
+  "checks": [
+    {
+      "name": "concept_a_track",
+      "ok": true,
+      "evidence": {
+        "actual_mm": 170.0
+      }
+    },
+    {
+      "name": "wheel_geometry_mirrors_about_centerline",
+      "ok": true,
+      "evidence": {
+        "left_center_y_mm": 85.0,
+        "right_center_y_mm": -85.0
+      }
+    },
+    {
+      "name": "wheel_geometry_track_is_170",
+      "ok": true,
+      "evidence": {
+        "measured_track_mm": 170.0
+      }
+    },
+    {
+      "name": "loaded_radius_matches_axle_height",
+      "ok": true,
+      "evidence": {
+        "radius_mm": 42.0,
+        "axle_z_mm": 42.0
+      }
+    },
+    {
+      "name": "wheel_well_has_radial_clearance",
+      "ok": true,
+      "evidence": {
+        "radial_clearance_mm": 4.0
+      }
+    },
+    {
+      "name": "axle_crossmember_reaches_wheel_hubs",
+      "ok": true,
+      "evidence": {
+        "crossmember_half_width_mm": 78.0,
+        "wheel_inner_face_y_mm": 73.0
+      }
+    },
+    {
+      "name": "ball_transfer_is_frozen_default",
+      "ok": true,
+      "evidence": {
+        "contact_mm": [
+          110.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "name": "ball_mount_is_fixed_not_interchangeable",
+      "ok": true,
+      "evidence": {
+        "mount_mode": "FIXED_3HOLE_NON_INTERCHANGEABLE"
+      }
+    },
+    {
+      "name": "rp01_yaw_transform_closes",
+      "ok": true,
+      "evidence": {
+        "transformed_mm": [
+          0.0,
+          0.0,
+          140.0
+        ],
+        "datum_mm": [
+          0.0,
+          0.0,
+          140.0
+        ]
+      }
+    },
+    {
+      "name": "body_fits_track_width",
+      "ok": true,
+      "evidence": {
+        "body_width_mm": 174.0,
+        "wheel_stance_mm": 194.0
+      }
+    },
+    {
+      "name": "body_ground_clearance_in_baseline_band",
+      "ok": true,
+      "evidence": {
+        "body_bottom_mm": 30.0,
+        "target_mm": [
+          25.0,
+          35.0
+        ]
+      }
+    },
+    {
+      "name": "visible_body_height_in_baseline_band",
+      "ok": true,
+      "evidence": {
+        "body_height_mm": 110.0,
+        "target_mm": [
+          105.0,
+          115.0
+        ]
+      }
+    },
+    {
+      "name": "neutral_stack_is_documented_304_mm",
+      "ok": true,
+      "evidence": {
+        "overall_height_mm": 304.0,
+        "rounded_target_mm": 300.0
+      }
+    },
+    {
+      "name": "neck_allocation_is_60_mm",
+      "ok": true,
+      "evidence": {
+        "neck_allocation_mm": 60.0
+      }
+    },
+    {
+      "name": "rear_tcrt_is_only_cliff_channel",
+      "ok": true,
+      "evidence": {
+        "channels": [
+          "REAR"
+        ]
+      }
+    },
+    {
+      "name": "rear_tcrt_has_contact_lookahead",
+      "ok": true,
+      "evidence": {
+        "sensor_x_mm": -110.0,
+        "skid_contact_x_mm": -70.0,
+        "lookahead_mm": 40.0
+      }
+    },
+    {
+      "name": "rear_tcrt_optical_face_has_5mm_clearance",
+      "ok": true,
+      "evidence": {
+        "optical_face_z_mm": 5.0
+      }
+    },
+    {
+      "name": "tcrt_guard_is_lower_than_optical_face",
+      "ok": true,
+      "evidence": {
+        "guard_bottom_z_mm": 2.5,
+        "optical_face_z_mm": 5.0
+      }
+    },
+    {
+      "name": "rear_skid_pad_is_below_connected_root",
+      "ok": true,
+      "evidence": {
+        "root_mm": [
+          -56.0,
+          0.0,
+          34.0
+        ],
+        "pad_mm": [
+          -70.0,
+          0.0,
+          9.0
+        ]
+      }
+    },
+    {
+      "name": "battery_forward_of_axle",
+      "ok": true,
+      "evidence": {
+        "battery_x_mm": 38.0
+      }
+    },
+    {
+      "name": "head_source_exists",
+      "ok": true,
+      "evidence": {
+        "path": "/Users/avinier/robotics/makad/docs/02-prototypes/RP-01-head/cad/head/layout-03/layout_model.py"
+      }
+    },
+    {
+      "name": "pi_step_exists",
+      "ok": true,
+      "evidence": {
+        "path": "/Users/avinier/robotics/makad/docs/02-prototypes/RP-03-locomotion/cad/body-chassis/layout-01/references/purchased/raspberry_pi_5.step"
+      }
+    },
+    {
+      "name": "bearing_step_exists",
+      "ok": true,
+      "evidence": {
+        "path": "/Users/avinier/robotics/makad/docs/02-prototypes/RP-03-locomotion/cad/body-chassis/layout-01/references/purchased/bearing_608zz.step"
+      }
+    },
+    {
+      "name": "com_inside_support_x",
+      "ok": true,
+      "evidence": {
+        "com_x_mm": 8.292560787174613
+      }
+    },
+    {
+      "name": "com_below_head_yaw",
+      "ok": true,
+      "evidence": {
+        "com_z_mm": 107.9557030087773
+      }
+    }
+  ]
+}
