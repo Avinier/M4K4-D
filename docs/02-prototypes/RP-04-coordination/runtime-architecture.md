@@ -4,7 +4,7 @@
 |---|---|
 | Status | Part 4 design-definition `RP04-P4-REG-01`. Trigger **`CS-HYBRID`** after `RP04-P5-REG-01`. Not firmware |
 | Owner | Project builder |
-| Consumes | `CA-01…16`; [`situations.md`](situations.md) §11; [`research/README.md`](research/README.md) |
+| Consumes | `CA-01…16`; [`situations.md`](situations.md) §11; [`research/trigger-comparison.md`](research/trigger-comparison.md); [`research/literature.md`](research/literature.md); remaining: [`research/experiment-spec.md`](research/experiment-spec.md) |
 
 This document is the **shared** layer. `CS-TIME` / `CS-PROG` / `CS-HYBRID` are adapters on top. C2/C3 remain legality and stop authority.
 
@@ -45,7 +45,7 @@ Cancellation: core flushes epoch; hwd drops that epoch’s queue; executors abor
 
 ## 5. Trigger adapters
 
-Part 5 selected **`CS-HYBRID`** for the virtual composer: each cue names `time` or `progress`. `CS-TIME` / `CS-PROG` remain in [`prototype/EXPERIMENTAL.md`](prototype/EXPERIMENTAL.md). Physical time tags use `start_at_us` from `RP02-P4-REG-03`; they still need a packed codec.
+Part 5 selected **`CS-HYBRID`** for the virtual composer: each cue names `time` or `progress`. Progress waits use the bounded language in `prototype/wait_model.py` (`event` / `any` / `all`, named thresholds, `T-DEAD` outcomes degrade/deny/abort). `CS-TIME` / `CS-PROG` remain in [`prototype/EXPERIMENTAL.md`](prototype/EXPERIMENTAL.md). Physical time tags use `start_at_us` from `RP02-P4-REG-03`; exploratory packed layout revision 2 lives in RP-02 `phase-a/` and is not a G04/G05 registration.
 
 ## 6. Logging
 

@@ -149,7 +149,7 @@ This is the class that prompted this index. Architecture and calculation method 
 | Numeric G01–G06 registration | Candidate metrics only | Dated builder freeze before inspecting scored data | `RP-02-electrical/gates.md` | Any pass row in `decision.md` |
 | Fault injection campaign | F-01…F-22 Part-1 plus F-23…F-30 Part-3 defined; none injected | Rig + G04 freeze | `fault-matrix.md` | ADR-03 / ADR-12 evidence |
 | Distribution rig | Designed against registered architecture; not built | Instruments + Phase A/B hardware | `rig.md` | G01/G02/G04 |
-| C0↔C2 wire codec (`link-contract.md` v1.0) | Part-4 registers **semantics** only (`RP02-P4-REG-01` plus `RP02-P4-REG-03` coordination fields). Byte layouts, type numbers and numeric rates/timeouts are unregistered. Phase A `EXP_ONLY_NOT_REGISTERED` codecs are a host reference, not this ICD | One schema generating C0/C2 codecs, then TTL/differential implementation and G04/G05 freeze | `link-contract.md`; `phase-a/README.md` | ADR-12 |
+| C0↔C2 wire codec (`link-contract.md` v1.0) | Part-4 registers **semantics** only (`RP02-P4-REG-01` plus `RP02-P4-REG-03` coordination fields). Exploratory layout revision 2 assigns candidate widths/type IDs and payload codecs (`phase-a/payloads.py`). Byte layouts, type numbers and numeric rates/timeouts are **not** G04/G05-registered. `EXP_ONLY_NOT_REGISTERED` | One registered schema, then TTL/differential implementation and G04/G05 freeze | `link-contract.md`; `phase-a/README.md` | ADR-12 |
 | C3 drive message set | `BASE_*` **semantics** registered `RP02-P4-REG-02`. Candidate TTL/heartbeat/queue named and unregistered | Byte layouts after Phase A; measured timeouts | `link-contract.md` §v0.5; RP-03 `base-control-architecture.md` | Complete ADR-12; C3 G05 |
 | C2/C3 board-role GPIO header and compiled hard maxima | C3 pin map v0.1 drafted; **`c3_board_role.h` generated** from v0.1 (`RP03-P4-REG-02`). C2 role map exists. Carrier PCB is not | Frozen board revisions; C2 generated header | `phase-a/c3_board_role.h`; `compute-control-architecture.md` v1.3; RP-03 pin map | Phase A firmware; arm-hash; G05; carrier |
 | ADR-03 | Ownership fixed; evidence open | G05 on C2/C3 and G04 including authority-lease/external-watchdog paths with representative actuators | `decision.md` ladder | Controller backbone |
@@ -192,16 +192,19 @@ This is the class that prompted this index. Architecture and calculation method 
 
 ## RP-04 Coordination
 
-**Current outcome:** Phase A design-definition 2026-09-21 (`RP04-P1-REG-01`…`P6-REG-01`). Virtual composer **`CS-HYBRID`**. TIME/PROG adapters retained. Observer protocol **drafted, not frozen** (pilot not run). IR wire semantics **accepted** `RP02-P4-REG-03`; packed layout open. No physical gate. ADR-05 open.
+**Current outcome:** Phase A design-definition 2026-09-21 (`RP04-P1-REG-01`…`P6-REG-01`). Virtual composer **`CS-HYBRID`** with bounded wait language. TIME/PROG adapters retained. Architecture-family research **closed**. P-02 cue list **validated** (declarative). Exploratory packed layout revision 2 in RP-02 `phase-a/` (`BASE_STATE` 62 bytes, safety retained). `BD-05` household observer panel **superseded**. `BD-08` counter-yaw locus **open**. G03: tune on non-scored runs, freeze, then scored capture. IR wire semantics **accepted** `RP02-P4-REG-03`; packed layout **not** G04-registered. No physical gate. ADR-05 open. **RP-04 remains blocked on Phase B/C evidence.**
 
 | Item | Why it is open | Waiting on | Home | Blocks |
 |---|---|---|---|---|
-| Observer freeze / SC-TBD-01 | Draft exists; ~6-person **pilot not run** | Household pilot, wording correction, dated freeze | `observer-protocol.md`; `BD-05` | Composer tuning; scored G03 |
-| Scored G03 N / pass | Must not use the pilot majority | Instrument freeze, then `gates.md` | `gates.md`; `decision.md` | RP04-G03 |
-| Packed ICD / codec | Coordination **semantics** accepted `RP02-P4-REG-03`; widths, type numbers, lateness window, `BASE_STATE` vs 64 B not frozen | One schema, then G04/G05 | `link-contract.md` v0.6; `phase-a/README.md` | Physical TIME tags; G02/G04 join-by-identity |
-| `BASE_STATE` payload vs 64-byte candidate | No packed layout; identity + onset must be counted | RP-03 sensor freeze, then RP-02 layout. If it will not fit, raise max payload — do not drop safety fields | `link-contract.md` v0.6 Feedback and health | Base cue correlation on the wire |
+| Wake phase-gate / face-deny stall | **Virtual closed** (`any(face, light)` + `T-DEAD`). Physical cells unrun | Phase B `TR-P01-DEN-F` / `DEN-L` | `research/experiment-spec.md` §5; `p01_harness.py` | Honest G04 `W` |
+| P-02 cue-list sufficiency | **Paper closed.** No executable spike | RP-03 base model, then P-02 harness | `situations.md` §12; `prototype/score.py` | Representation reopen only if discrete hand-off needs ad hoc runtime logic |
+| `BD-08` counter-yaw locus | Primitive named on the behind-body list; owner and base-yaw source unset | Close before P-02 Phase C implementation | `decision.md`; `research/experiment-spec.md` §3 #7 | P-02 behind-body execution |
+| Physical trial matrix | **Draft** preregistration. N, thresholds, injection magnitudes, selection rules unset | Freeze those in `gates.md` before scored data. Do not promise p99 until `n` supports it | `research/experiment-spec.md` §5 | G01–G05 |
+| G03 N / pass / clip-selection / SC-TBD-01 | Draft questions exist; not registered | Non-scored engineering runs, then freeze N/pass/clip-selection in `gates.md`, then scored capture. No household panel (`BD-05`) | `observer-protocol.md`; `gates.md`; `research/experiment-spec.md` §§6–7 | RP04-G03; ADR-05 |
+| Packed ICD / codec | Exploratory layout revision 2 assigns widths/type IDs and round-trips `TIME_MODEL_INVALID` / `LATE` / `STALE_EPOCH`. Not a registered ICD | RP-02 G04/G05 freeze | `link-contract.md` v0.6; `phase-a/schema.json` | Physical TIME tags; scored join-by-identity |
+| `BASE_STATE` payload vs 64-byte candidate | **Exploratory resolve:** 62 bytes with identity, onset, `ctrl_state`, `mode`, `sensor_valid_mask`, `oldest_sensor_age_ms` retained. Do not drop safety fields | RP-03 sensor freeze, then RP-02 registered layout | `phase-a/payloads.py`; `link-contract.md` v0.6 | Registered base cue correlation |
 | Source vs witnessed onset | Virtual nodes emit source onset only | Part 6 measurement defs; timebase; camera/mic | `timing-budgets.md`; `gates.md` G01 | G01 `W` |
-| P-02/P-03 backpropagation | Stub except preempt successor | After P-01 Phase B | `situations.md` | Full P-02/P-03 spikes |
+| P-03 backpropagation | Stub | After P-01 Phase B | `situations.md` | Full P-03 spike |
 | `BD-06` / G05 count | Deferred | Runtime cost, then freeze | `decision.md` | RP04-G05 |
 | Phase B physical composition | No scored RP-01+D1+timebase co-rig | Upstream rigs | `gates.md`; RP-01 `rig.md` | Real P-01 G01/G02/G04 |
 | Phase C | No RP-03 G06 base | RP-03 G01/G02/G06 | RP-03 `gates.md` | P-02/P-03; ADR-05 |
@@ -223,11 +226,11 @@ This is the class that prompted this index. Architecture and calculation method 
 | RP-03 pin map ↔ RP-02 C3 carrier / `CA-14` | Pin map v0.1 on DevKitC, ≥2 spare; `c3_board_role.h` generated | Carrier PCB waits on a frozen map |
 | RP-03 drive `W` ↔ ADR-06 sizing | `E` ranges in ledger v0.15 | Sizing waits on Phase B/C `W` |
 | RP-03 stability ↔ RP-01 head mass | Range analysis with Layout 03 `E` tree | Point `a_tip` waits on M900; RP-03 scores at BD-05 corners |
-| RP-04 coordination ↔ RP-02 byte layout | IR **semantics** accepted `RP02-P4-REG-03`; UART/COBS retained; virtual TIME/HYBRID time-tags modelled | Packed layout; codec; physical TIME |
-| RP-04 scores ↔ observer protocol | Draft protocol + catalogue | Pilot, freeze, then scored clips; G03 N is not the pilot |
-| RP-04 software budgets ↔ RP-01/RP-03 models | `E` budgets; virtual P-01 | `W` G01; ADR-05 |
+| RP-04 coordination ↔ RP-02 byte layout | IR **semantics** accepted `RP02-P4-REG-03`; exploratory layout revision 2 packs identity, `start_at_us`, and NACK reasons | Registered layout; G04/G05; physical TIME |
+| RP-04 scores ↔ observer protocol | Draft G03 questions + catalogue. Engineering-tune on non-scored runs | Freeze N/pass/clip-selection, then scored capture |
+| RP-04 software budgets ↔ RP-01/RP-03 models | `E` budgets; virtual P-01 wait language closed | `W` G01; ADR-05 |
 | RP-04 audio/eyes ↔ RP-06 | Semantic `A-*`/`E-*` timing | Quality/artwork |
-| RP-04 architecture ↔ research | `CS-HYBRID` virtual select; losers retained | Physical G01–G05 |
+| RP-04 architecture ↔ research | Family closed (`CS-HYBRID`); P-02 cue list validated; experiment spec software items closed | Physical G01–G05; `BD-08`; Phase B/C |
 
 ---
 
@@ -252,7 +255,7 @@ This is the class that prompted this index. Architecture and calculation method 
 | RP-03 Parts 1–5 design-definition (`BM-*`, physics range, Concept A working lead, pin map v0.1, gate *candidates*) | `RP03-P1-REG-01` … `RP03-P5-REG-01` |
 | RP-03 brief-gap paper close (operating cases, BD-04 named surfaces, remaining physics, Set A/B, TTL candidates, cutoff metric, `CA-14` header) | `RP03-P1-REG-02` … `RP03-P4-REG-02`; `RP02-P4-REG-02` |
 | RP-03 BD-08 V1 front support = `D21` ball; `D20` caster required swap; Concept A chassis retained | `decision.md` BD-08; `dimensional-baseline.md` v1.12; SCOPE-09 v1.3; not ADR-04 gate close |
-| RP-04 Phase A design-definition (`P-01` sheets, HYBRID virtual select, gate candidates). IR wire semantics accepted `RP02-P4-REG-03`. Observer not frozen | `RP04-P1-REG-01`…`RP04-P6-REG-01`; `decision.md`; `RP02-P4-REG-03` |
+| RP-04 Phase A design-definition (`P-01` sheets, HYBRID virtual select, gate candidates). Architecture-family research closed. Empirical spec paper-passed. Virtual wait language and P-02 cue list closed 2026-09-21. IR wire semantics accepted `RP02-P4-REG-03`. Exploratory layout revision 2 is a host reference, not G04. `BD-05` household observer panel superseded | `RP04-P1-REG-01`…`RP04-P6-REG-01`; `research/`; `decision.md`; `RP02-P4-REG-03`; `prototype/` |
 
 ---
 

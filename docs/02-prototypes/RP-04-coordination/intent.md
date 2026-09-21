@@ -110,7 +110,7 @@ If composition cannot beat this baseline, RP-04 has not shown value.
 
 ## 7. Design method
 
-Scenario backpropagation is mandatory. Research fills four axes; lifecycle and supervision are shared. Part 3 shortlists at most three end-to-end bindings; Part 5 selects after the same P-01 spike. The observer instrument freezes in Part 2; clips are scored in Part 6. Detail: [`plan.md`](plan.md) §5, [`situations.md`](situations.md), [`research/README.md`](research/README.md).
+Scenario backpropagation is mandatory. Research fills four axes; lifecycle and supervision are shared. Part 3 shortlists at most three end-to-end bindings; Part 5 selects after the same P-01 spike. Remaining research is empirical HYBRID validation, not a new family. G03 questions live in `observer-protocol.md`; freeze N/pass with the gate, on real clips, in Part 6. Detail: [`plan.md`](plan.md) §5, [`situations.md`](situations.md), [`research/README.md`](research/README.md).
 
 ## 8. Evidence boundary
 
@@ -151,6 +151,6 @@ Part 1 is ready for registration only when:
 
 - the builder accepts the C0/C2/C3/D1 boundary, five-channel scoring (audio on C0), exactly three performances plus the shared overlay set (including `OX-DENY(base)` mapping and the P-01-search `OX-PREEMPT` collision);
 - each performance has composed, independent, cancellation, and denied/inhibited forms;
-- `BD-01…BD-05` and `BD-07` are accepted 2026-09-21 (`decision.md`); `BD-06` is deferred;
+- `BD-01…BD-04` and `BD-07` are accepted 2026-09-21 (`decision.md`); `BD-05` superseded (no household observer panel); `BD-06` is deferred;
 - [`interface-requirements.md`](interface-requirements.md) is acknowledged as an **issued** RP-02 request under `RP04-P1-REG-01`, not as accepted ICD fields;
 - no prose in Part 1 is mistaken for a numeric gate freeze or an ADR-05 selection.

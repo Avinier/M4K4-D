@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Construction record v0.4. Phase A design-definition registered `RP04-P1-REG-01`…`P6-REG-01`. Virtual `CS-HYBRID`. Observer not frozen |
+| Status | Construction record v0.6. Phase A design-definition registered `RP04-P1-REG-01`…`P6-REG-01`. Virtual `CS-HYBRID` wait language and P-02 cue list closed 2026-09-21. Exploratory RP-02 layout revision 2. `BD-05` household observer panel superseded. G03 waits on real clips. RP-04 **blocked on Phase B/C** |
 | Owner | Project builder |
 | Created | 2026-09-21 |
 | Revised | 2026-09-21 |
@@ -117,12 +117,12 @@ Software-shaped. Project-wide governance is retained. There is no `cad/` directo
 | `README.md` | Start-here index | last |
 | `intent.md` | Purpose, controllers, two questions, non-goals, method | 1 |
 | `situations.md` | P-01…P-03 plus shared overlays; backpropagation sheets | 1–2 |
-| `research/README.md` | Axes vs end-to-end bindings; paper shortlist | 3 |
+| `research/` | Closed TIME/PROG/HYBRID; [literature](research/literature.md) grounds the axes; remaining empirical HYBRID spec | 3 closed; literature 2026-09-21; remaining `experiment-spec.md` |
 | `runtime-architecture.md` | Shared ownership, lifecycle, arbitration, cancellation, recovery; selected binding recorded after Part 5 | 4, amended at 5 |
 | `interface-requirements.md` | Coordination needs on RP-02 wire/timebase/logs; change-request only | 1 early / 4 |
 | `timing-budgets.md` | Software/perceptual budgets: skew, jitter, lead, feedback age, cancel propagation, CPU/memory margin | 4 |
 | `prototype/` | Same P-01 spike per shortlisted binding; then the selected composer | 5 |
-| `observer-protocol.md` | Blinded instrument. Draft → pilot → freeze | 2 draft; freeze after pilot |
+| `observer-protocol.md` | G03 questions. Real clips only; freeze with the gate | 6 |
 | `gates.md` | Paper gates and RP04-G01…G05 candidates | 6 |
 | `decision.md` | Builder decisions, Part registrations, ADR-05 ladder | ongoing |
 | `runs/` | Run records | evidence |
@@ -147,13 +147,13 @@ Writes `intent.md`, `situations.md` (scores + overlay set), open `BD-*`, and the
 
 Must not choose a scheduler, add a fourth scored performance, register timing thresholds, or claim readability.
 
-### Part 2 — Scenario backpropagation and observer freeze
+### Part 2 — Scenario backpropagation
 
 Fills the chain in §5 for P-01 completely, then P-02/P-03 and each overlay as deltas, including the concrete `OX-PREEMPT` collision. Ownership and test obligations fall out of the sheets. P-01 is the vertical-slice target.
 
-Writes and **drafts** `observer-protocol.md`, **pilots** with ~6 people on non-scored clips, **then freezes** questions, blinding, and clip construction. Scored G03 N stays Part 6. Composer tuning starts only after freeze. Engineering LED must be cropped from rated clips.
+Drafts `observer-protocol.md` questions. Does **not** run a household or mock-video panel (`BD-05`, builder decision). G03 freeze is Part 6, on real clips, **after** non-scored engineering tuning. Engineering LED must be cropped from rated clips.
 
-Must not convert 80–170 ms from `intuition.md` into a pass threshold, infer physical onset from dispatch, or tune a composer against observer wording.
+Must not convert 80–170 ms from `intuition.md` into a pass threshold, infer physical onset from dispatch, or tune a composer against a **frozen** observer sheet. Non-scored engineering runs may change the composer before freeze.
 
 ### Part 3 — Mechanism shortlist
 
@@ -175,7 +175,17 @@ Do not build three frameworks.
 
 ### Part 6 — Validation, scoring, gates, decision
 
-Collect, score, and analyze observer clips against the Part 2 instrument. Freeze G03 sample/pass rule before those clips. G01…G05 candidates, Phase B/C physical evidence, ADR-05 ladder. Numeric gates freeze before scored data.
+Collect, score, and analyze observer clips against the drafted instrument.
+
+```text
+engineering tuning on non-scored runs
+  → freeze questions, N, pass rule, and clip-selection rule
+  → capture scored runs
+  → select clips by the frozen rule
+  → observer scoring
+```
+
+No household or mock-video panel (`BD-05`). G01…G05 candidates, Phase B/C physical evidence, ADR-05 ladder. Numeric gates freeze before scored data. Do not promise p99 unless frozen `n` supports it.
 
 ## 9. Phase ladder
 
@@ -184,7 +194,7 @@ Phase is a status field, not a directory.
 | Phase | Needs | Can produce | Cannot produce |
 |---|---|---|---|
 | **A — paper, research, virtual nodes** | Parts 1–5 defined; modelled/virtual C2/C3/D1; no claim that models are measured | Situation sheets; interface request; mechanism comparison; P-01 replay/fault harness; invariant tests | `W` timing, observer coherence, gate pass, ADR-05 close |
-| **B — head-domain composition** | Executable RP-01 head; D1; light/bench LED; audio stand-in; timebase/logging; base explicitly inhibited | Real P-01; P-02 without body pivot; non-base G01/G02/G04; eligible observer clips after protocol freeze | P-03, live counter-motion, base timing, SC-07 acoustic quality |
+| **B — head-domain composition** | Executable RP-01 head; D1; light/bench LED; audio stand-in; timebase/logging; base explicitly inhibited | Real P-01; P-02 without body pivot; non-base G01/G02/G04; G03 clips of that hardware | P-03, live counter-motion, base timing, SC-07 acoustic quality |
 | **C — full composition** | RP-03 G01/G02/G06-qualified base and measured response model; integrated head; same witness/logging | Full P-02, P-03, G01…G05, provisional ADR-05 | Person following, integrated SC-01/02, speaker selection |
 
 Phase A is real work. Scored physical G01/G03 wait on sibling controllers, as the governing plan requires. Paper, research, contracts, and the virtual P-01 slice do not wait.
@@ -193,9 +203,9 @@ Phase A is real work. Scored physical G01/G03 wait on sibling controllers, as th
 
 | Loop | What proceeds now | What waits |
 |---|---|---|
-| RP-04 coordination ↔ RP-02 byte layout | Require shared `perf_id`/`cue_id`, denial reasons, onset feedback, and optional scheduled start now | Exact widths/order and codec registration wait on RP-02 review and Phase A measurement |
+| RP-04 coordination ↔ RP-02 byte layout | Require shared `perf_id`/`cue_id`, denial reasons, onset feedback, and optional scheduled start now. Exploratory packed layout revision 2 exists in RP-02 `phase-a/` | Exact registered widths/order and G04/G05 codec qualification wait on RP-02 review and Phase A/B measurement |
 | RP-04 software budgets ↔ RP-01/RP-03 measured models | Backpropagate perceptual targets; mark physical segments `E` | `W` compensation, G01, and ADR-05 wait on measured head/base onset and settle |
-| Observer protocol ↔ working composer | Draft the instrument from the catalogue now | Pilot, then freeze, then composer tuning; scored clips and G03 N wait for Part 6 |
+| Observer protocol ↔ working composer | Draft G03 questions from the catalogue now. Engineering-tune on non-scored runs | Freeze N/pass/clip-selection, then scored capture; no mock-video panel (`BD-05`) |
 | Audio timing ↔ unselected audio hardware | Timestamped stand-in proves scheduling and denial | SC-07 quality and ADR-11 wait on RP-05/RP-06 |
 | Eye timing ↔ unfinished artwork | Semantic `E-*` and frame-flip onset | Final appearance waits on RP-06 |
 | Architecture selection ↔ research | Charter axes and three bindings now | Part 3 shortlists; Part 5 selects after spikes; ADR-05 still needs physical G01/G03 |
@@ -215,9 +225,11 @@ Phase A is real work. Scored physical G01/G03 wait on sibling controllers, as th
 
 ## 12. Current execution order
 
-1. Household pilot of `observer-protocol.md`; freeze after corrections.
-2. Packed ICD / codec for `RP02-P4-REG-03` (does not unwind virtual TIME evidence).
-3. Phase B when sibling rigs exist.
+1. Phase B when sibling rigs exist. Non-scored engineering runs, then G03 freeze, then scored clips. Physical `TR-P01-*` in `research/experiment-spec.md` are not closed by the virtual suite.
+2. Close `BD-08` before implementing counter-yaw. Executable P-02 after the RP-03 base model.
+3. Packed ICD remains exploratory layout revision 2 until RP-02 registers byte layouts under G04/G05.
+
+Virtual software already done (do not reopen): HYBRID `any(face, light)` + `T-DEAD`; P-02 cue list + validator; TIME/PROG frozen evidence.
 
 ## 13. Historical notes in this folder
 

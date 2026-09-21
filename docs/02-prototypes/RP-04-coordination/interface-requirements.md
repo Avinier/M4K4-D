@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Early cross-prototype request v0.3 — **semantics accepted** `RP02-P4-REG-03` 2026-09-21 (`link-contract.md` v0.6). Not a registered wire layout. Audio onset (IR-06) and composer snapshot (IR-10) stay on C0 |
+| Status | Early cross-prototype request v0.4 — **semantics accepted** `RP02-P4-REG-03` 2026-09-21 (`link-contract.md` v0.6). Exploratory packed layout revision 2 is a host reference, not a registered wire layout. Audio onset (IR-06) and composer snapshot (IR-10) stay on C0 |
 | Owner | Project builder |
 | Created | 2026-09-21 |
 | Revised | 2026-09-21 |
@@ -175,7 +175,7 @@ File format is not selected here. The schema must support bounded runtime loggin
 | Audio onset | **Not a wire field** — C0 `makad-audio` (IR-06) |
 | Composer availability snapshot | **Not a wire field** — C0 log (IR-10) |
 | UART / COBS / session | **Unchanged** |
-| Packed widths, type numbers, `BASE_STATE` vs 64 B, lateness ms | **Still open** |
+| Packed widths, type numbers, `BASE_STATE` vs 64 B, lateness ms | **Exploratory layout revision 2** in RP-02 `phase-a/` (`schema.json`, `payloads.py`). `BASE_STATE` is 62 bytes with identity, onset, and safety fields retained. Lateness window numeric still open. Not G04/G05 registered |
 
 Phase A virtual `start_at` evidence is unchanged. Physical TIME tags now have a semantic home; they still need a codec revision and G05.
 

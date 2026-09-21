@@ -1,62 +1,40 @@
-# RP-04 mechanism comparison
+# RP-04 research
 
 | Field | Value |
 |---|---|
-| Status | **`RP04-P3-REG-01` shortlist; `RP04-P5-REG-01` selected `CS-HYBRID` (virtual).** TIME/PROG frozen as evidence. ADR-05 open |
+| Status | **Family closed. Literature supports the selected TIME/PROG/HYBRID taxonomy.** Virtual wait language and P-02 cue list closed. Remaining = physical HYBRID validation. ADR-05 open |
 | Owner | Project builder |
-| Part | 3 shortlist; Part 5 selects |
-| Bound | `BD-07` |
+| Bound | `BD-07`; [`literature.md`](literature.md); [`experiment-spec.md`](experiment-spec.md) compact statement |
 
-`CA-07` already excludes ROS 2 / micro-ROS from the V1 safety path. Adjacent practice is evidence about mechanisms, not a product shortlist.
+There is no `research.md` at the RP-04 root. This folder is the research record.
 
-## 1. Decision axes (not alternatives)
+## Compact statement
 
-| Axis | Choice for Phase A | Shared vs compared |
+> Test whether a bounded HYBRID cue list—using scheduled time only for authored perceptual lead and measured source/progress events for causal phase advancement—can execute P-01 and P-02 on physical controllers with bounded interruption, honest degradation, reproducible settling, and better observer-rated unity than independent dispatch. Reopen score representation only if P-02’s discrete hand-off cannot be expressed without ad hoc runtime logic; treat continuous counter-yaw as an executor/control-contract question, not evidence for a graph by itself.
+
+Do not add architecture-family or middleware research. The 2026-09-21 Exa pass **supports the selected taxonomy**; it did not reopen the family.
+
+## Files
+
+| File | What it owns | Status |
 |---|---|---|
-| Score representation | **Versioned cue list** with optional per-cue trigger tag. Graph/statechart is **not** a competing trigger; it remains an open representation option if a cue list cannot express P-02 hand-off later | Representation axis. Not spiked as `CS-GRAPH` |
-| Trigger mechanism | Compared: scheduled time vs progress/event vs **bounded** per-edge choice | Compared |
-| Action lifecycle | Goal → accept/deny → start → feedback → succeed/abort/expire | **Shared** |
-| Supervision | `makad-core` arbitrates intent; C2/C3 legally refuse and stop; lease loss kills the epoch (`CA-01/09/11`) | **Shared** |
+| [Literature](literature.md) | Four axes from adjacent practice; timing split; interruption; observer | **Pass 2026-09-21.** Supports taxonomy. Not G01 |
+| [Trigger comparison](trigger-comparison.md) | TIME / PROG / HYBRID; axes; selection rule; virtual winner | **Closed** `RP04-P3-REG-01` / `P5-REG-01`. Literature-grounded |
+| [Experiment spec](experiment-spec.md) | Wake phase gates, P-02 cue-list criterion, falsifiers, trial matrix, G03 endpoints, ablation | Virtual software closed; physical `TR-*` open |
 
-A supervisory graph used with either trigger would make “hybrid wins” a tautology. **Do not spike a graph as a third trigger.**
+## Already decided (do not re-research)
 
-## 2. Trigger adapters (spike set)
+- Four axes: only **trigger** was compared. Lifecycle and supervision are shared. Graph is representation, not a third trigger. Literature **supports** TIME / PROG / mixed lists (QLab/MSC/Timeline/BML). Makad’s exact-one-trigger rule is ours.
+- Virtual winner: **`CS-HYBRID`**. TIME/PROG retained as evidence (`prototype/EXPERIMENTAL.md`). Exa redo **kept** this.
+- Catalogue: P-01…P-03 plus overlays. Honest independent baseline. Audio/eyes as timing channels.
+- Counter-yaw is an executor primitive (Disney joystick; Haru VOM). P-03 abandons world-gaze lock. **`BD-08`** (where it runs, who supplies base yaw) is open until implementation.
+- Wake wait: **`any(face, light)` + `T-DEAD`**. Implemented in the HYBRID harness.
+- P-02 discrete list: written and validated. No graph. No executable spike until RP-03.
+- `T-DEAD` is 300 ms from that wait’s intended start, not 300 ms stacked after `T-BEAT`.
 
-Decided before code:
+## Remaining questions (empirical)
 
-| ID | Binding | What the adapter does |
-|---|---|---|
-| `CS-TIME` | Shared runtime + scheduled-time edges | Dispatch at `start_at − lead`. Models `start_at_us` (now on the ICD as `RP02-P4-REG-03`; packed layout still open) |
-| `CS-PROG` | Shared runtime + progress/event edges | Next cue on named `source_onset` / `progress` / `complete` |
-| `CS-HYBRID` | Shared runtime + **explicit per-cue** trigger (`time` **or** `progress`) | P-01: C02 time-lead for face/light; C03/C04 progress-chained to head |
+1. On measured controllers, do G01–G05 and the primary G03 endpoint hold — and if “better,” was it timing, counter-motion, or choreography?
+2. Close `BD-08` before implementing `counter_yaw`. Physical `TR-P01-*` / `TR-P02-*` are not satisfied by the virtual suite.
 
-`CS-HYBRID` is not an unbounded event graph. Each cue names exactly one trigger kind.
-
-## 3. Predeclared selection rule (before any spike)
-
-Recorded here so Part 5 cannot invent a prettier rule after seeing logs.
-
-1. Every candidate **must** pass shared invariants: epoch flush, no claimed onset on deny, P-01 base HOLD, replay, stale reject, preempt epoch cut.
-2. Then compare **identical** P-01 injections: delay robustness (`OX-DELAY`), time-model / late schedule (`OX-TIME`), stuck/missing progress, restart/no-resume (`OX-RESTART`), plus interruption (`OX-CANCEL` / `OX-PREEMPT`), required contract changes (does TIME need IR-03?), traceability, implementation complexity.
-3. Select only after those injections.
-4. **Demo smoothness is not a criterion.**
-5. RP-02 rejection of scheduled start **penalizes or drops TIME**; it does not veto a virtual run already performed.
-
-## 4. Paper matrix (P-01)
-
-| Situation | `CS-TIME` | `CS-PROG` | `CS-HYBRID` |
-|---|---|---|---|
-| Happy P-01 HOLD | Aligns if leads are right; Linux jitter is the risk | Robust to latency; slow head delays audio/face follow-through | Face/light can still lead; head chains on progress |
-| `OX-DELAY` late head | Later time cues still fire → likely desync | Waits → character stays together, may feel slow | Head-chained cues wait; time-tagged cues do not |
-| `OX-TIME` invalid/late | Scheduled cues **must** NACK; empty performance unless fallback | Unaffected | Time-tagged cues NACK; progress cues continue |
-| Stuck progress | Continues on the clock | **Hangs** until timeout/degrade | Only progress-tagged cues hang |
-| `OX-PREEMPT` | Flush + new schedule | Flush + new first event | Same shared supervisor |
-| `OX-RESTART` | Shared: no resume | Shared | Shared |
-| IR-03 `start_at_us` | **Needs** the field (or equivalent) for a fair physical TIME | Not required | Needs it only for time-tagged cues |
-| Spike cost | One dispatch clock | One wait table | Cue tag + both paths |
-
-Shortlist: **all three** adapters. Part 5 ran them. **Selected `CS-HYBRID`** (virtual). See `decision.md` `RP04-P5-REG-01` and `prototype/README.md`.
-
-## 5. Non-goals
-
-No middleware catalogue. No ROS. No treating lifecycle/supervision as competing products. No ADR-05 from this note.
+Detail and falsifiers: [`experiment-spec.md`](experiment-spec.md). Axes and numbers: [`literature.md`](literature.md).
