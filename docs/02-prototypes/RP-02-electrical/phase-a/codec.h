@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#define RP02_LAYOUT_REVISION 1u
+#define RP02_LAYOUT_REVISION 2u
 #define RP02_MAX_PAYLOAD 64u
 #define RP02_HEADER_SIZE 33u
 #define RP02_MAX_RAW (RP02_HEADER_SIZE + RP02_MAX_PAYLOAD + 2u)
@@ -27,6 +27,17 @@ enum rp02_message_type {
     RP02_NACK = 13,
     RP02_TIME_SYNC_REQ = 14,
     RP02_TIME_SYNC_RESP = 15,
+    RP02_FACE_REPORT = 16,
+    RP02_LIGHT_REPORT = 17,
+    RP02_BASE_LIMITS_SET = 18,
+    RP02_BASE_ENABLE = 19,
+    RP02_BASE_INHIBIT = 20,
+    RP02_BASE_GOAL = 21,
+    RP02_BASE_CANCEL = 22,
+    RP02_BASE_STATE = 23,
+    RP02_BASE_HAZARD = 24,
+    RP02_BASE_FAULT = 25,
+    RP02_CC_12C_ARM = 26,
 };
 
 typedef struct {

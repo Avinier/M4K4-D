@@ -1,8 +1,10 @@
 # RP-02 Phase A reference
 
-This directory is an **exploratory host implementation**, not a scored G04/G05 run or a wire-compatible release. `schema.json` is the one source for the provisional C0 Python and C2 C frame codecs. `python3 generate.py` regenerates `codec.py` and `codec.h`. The type numbers and header layout are marked `EXP_ONLY_NOT_REGISTERED`; the registered Part-4 ICD defines message and recovery semantics, and leaves byte layout open.
+This directory is an **exploratory host implementation**, not a scored G04/G05 run or a wire-compatible release. `schema.json` is the one source for the provisional C0 Python and C2 C frame codecs. `python3 generate.py` regenerates `codec.py` and `codec.h`. Layout **revision 2** assigns coordination type IDs and keeps the 64-byte payload candidate. Typed payloads (`HEAD_GOAL`, `BASE_STATE`, `NACK` reasons) live in `payloads.py`. The type numbers and header layout are marked `EXP_ONLY_NOT_REGISTERED`; the registered Part-4 ICD defines message and recovery semantics, and leaves the scored byte layout open.
 
-The generated codecs implement COBS framing, CRC-16/CCITT-FALSE, little-endian envelope fields, a 16-byte C0 boot UUID and session epoch. Payload bytes are opaque: typed payload layouts, hard-limit tables, C3 drive messages and production protocol compatibility remain open. `runtime.py` exercises C0 authority lease, a fresh C2 boot challenge, two-phase arm, heartbeat timeout, queue flush, command expiry at execution, E-stop no-replay and a four-timestamp time model. It is a reference model, not ESP-IDF firmware or a motor-control loop.
+`BASE_STATE` packs in **62 bytes** including cue identity, `onset_ts_us`, `ctrl_state`, `mode`, `sensor_valid_mask`, and `oldest_sensor_age_ms`. Do not drop those fields to fit; raise `max_payload` only if a later sensor freeze needs more.
+
+The generated codecs implement COBS framing, CRC-16/CCITT-FALSE, little-endian envelope fields, a 16-byte C0 boot UUID and session epoch. `runtime.py` exercises C0 authority lease, a fresh C2 boot challenge, two-phase arm, heartbeat timeout, queue flush, command expiry at execution, E-stop no-replay and a four-timestamp time model. It is a reference model, not ESP-IDF firmware or a motor-control loop.
 
 Run host checks from this directory:
 

@@ -222,6 +222,8 @@ Disposes RP-04 `interface-requirements.md` IR-01, IR-02, IR-03, IR-05, IR-07, IR
 
 Registers the **semantics** in this revision. It does **not** register packed widths, type numbers, baud, the lateness window, `BASE_STATE` packed size, firmware, a gate outcome or ADR closure. Exploratory codecs must bump layout revision before they carry these fields on the bench.
 
+Exploratory host layout **revision 2** (`phase-a/schema.json`, `phase-a/payloads.py`, 2026-09-21) assigns candidate type IDs (`FACE_REPORT=16` … `CC_12C_ARM=26`), cue-identity packing `perf_id:u16 · perf_epoch:u32 · cue_id:u8`, `NACK` reasons `TIME_MODEL_INVALID=9`, `LATE=10`, `STALE_EPOCH=11`, and a 62-byte `BASE_STATE` that keeps identity, `onset_ts_us`, `ctrl_state`, `mode`, `sensor_valid_mask`, and `oldest_sensor_age_ms`. It fits the 64-byte payload candidate without dropping safety fields. The lateness-window millisecond value remains unregistered. This revision is `EXP_ONLY_NOT_REGISTERED` and cannot be scored as `RP02-P4-REG-03`.
+
 ## Change log
 
 | Date | Version | Change |
@@ -236,3 +238,4 @@ Registers the **semantics** in this revision. It does **not** register packed wi
 | 2026-09-17 | 0.5 proposal (unregistered) | `BASE_*` draft from RP-03 Part 4; byte layouts still open; not `RP02-P4-REG-02`. Registered C0↔C2 text in §§1–5 unchanged. |
 | 2026-09-18 | 0.5 semantics registered | `RP02-P4-REG-02` accepts C0↔C3 `BASE_*` types, `CC-12C_ARM`, expiry/fresh-arm/unknown-is-inhibit. Candidate TTL/heartbeat/queue named and kept unregistered. Byte layouts still open. C0↔C2 `RP02-P4-REG-01` unchanged. |
 | 2026-09-21 | 0.6 semantics registered | `RP02-P4-REG-03` accepts cue identity, optional `start_at_us`, `FACE_REPORT`/`LIGHT_REPORT`, and `NACK` `TIME_MODEL_INVALID`/`LATE`/`STALE_EPOCH`. No transport change. Byte layouts still open. |
+| 2026-09-21 | 0.6 exploratory layout 2 | Host codec bumped to layout revision 2. Candidate widths/type IDs and `BASE_STATE` 62-byte pack live in `phase-a/`. Not a new Part-4 registration. Lateness ms still open. |

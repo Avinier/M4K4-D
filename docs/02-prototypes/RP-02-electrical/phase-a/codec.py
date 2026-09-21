@@ -4,7 +4,7 @@ from enum import IntEnum
 from dataclasses import dataclass
 import struct
 
-LAYOUT_REVISION = 1
+LAYOUT_REVISION = 2
 MAX_PAYLOAD = 64
 HEADER = struct.Struct("<BBH16sIQB")
 
@@ -24,6 +24,17 @@ class MessageType(IntEnum):
     NACK = 13
     TIME_SYNC_REQ = 14
     TIME_SYNC_RESP = 15
+    FACE_REPORT = 16
+    LIGHT_REPORT = 17
+    BASE_LIMITS_SET = 18
+    BASE_ENABLE = 19
+    BASE_INHIBIT = 20
+    BASE_GOAL = 21
+    BASE_CANCEL = 22
+    BASE_STATE = 23
+    BASE_HAZARD = 24
+    BASE_FAULT = 25
+    CC_12C_ARM = 26
 
 @dataclass(frozen=True)
 class Frame:

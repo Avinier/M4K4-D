@@ -1,6 +1,6 @@
 {
   "name": "rp02-c0-c2-exploratory",
-  "layout_revision": 1,
+  "layout_revision": 2,
   "status": "EXP_ONLY_NOT_REGISTERED",
   "endianness": "little",
   "crc": "CRC-16/CCITT-FALSE",
@@ -14,6 +14,11 @@
     ["epoch", "u32"],
     ["src_ts_us", "u64"],
     ["payload_len", "u8"]
+  ],
+  "cue_identity": [
+    ["perf_id", "u16"],
+    ["perf_epoch", "u32"],
+    ["cue_id", "u8"]
   ],
   "messages": {
     "HELLO": 1,
@@ -30,8 +35,37 @@
     "ACK": 12,
     "NACK": 13,
     "TIME_SYNC_REQ": 14,
-    "TIME_SYNC_RESP": 15
+    "TIME_SYNC_RESP": 15,
+    "FACE_REPORT": 16,
+    "LIGHT_REPORT": 17,
+    "BASE_LIMITS_SET": 18,
+    "BASE_ENABLE": 19,
+    "BASE_INHIBIT": 20,
+    "BASE_GOAL": 21,
+    "BASE_CANCEL": 22,
+    "BASE_STATE": 23,
+    "BASE_HAZARD": 24,
+    "BASE_FAULT": 25,
+    "CC_12C_ARM": 26
   },
+  "nack_reason": {
+    "OK": 0,
+    "EXPIRED": 1,
+    "OUT_OF_LIMITS": 2,
+    "INHIBITED": 3,
+    "UNKNOWN_TYPE": 4,
+    "BAD_CRC": 5,
+    "QUEUE_FULL": 6,
+    "NO_LIMITS": 7,
+    "NONCE_REPLAY": 8,
+    "TIME_MODEL_INVALID": 9,
+    "LATE": 10,
+    "STALE_EPOCH": 11
+  },
+  "base_state_bytes": 62,
+  "base_state_fits_64": true,
+  "base_state_note": "Identity, onset_ts_us, ctrl_state, mode, sensor_valid_mask, and oldest_sensor_age_ms are retained. Compact fixed-point kinematics keep the payload at 62 bytes. Do not drop safety fields to fit; raise max_payload only if a later sensor freeze needs more.",
+  "lateness_window_us": null,
   "semantic_rules": {
     "motion_requires_matching_boot_uuid_and_epoch": true,
     "session_requires_fresh_c2_boot_challenge": true,
@@ -40,6 +74,9 @@
     "goal_must_follow_enable": true,
     "expiry_checked_at_execution": true,
     "link_loss_flushes_queues": true,
-    "estop_release_does_not_rearm": true
+    "estop_release_does_not_rearm": true,
+    "scheduled_invalid_time_nacks_time_model_invalid": true,
+    "scheduled_outside_lateness_window_nacks_late": true,
+    "old_perf_epoch_nacks_stale_epoch": true
   }
 }
