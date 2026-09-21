@@ -15,7 +15,7 @@ Per CAD-context decision [`RP03-CAD-03`](../../decisions.md#rp03-cad-03--faceted
 - `body-chassis.params.js` — viewer controls for shell, head yaw, electronics, harness, and physics.
 - `write_outputs.py` — generated dimensions, frames, and mass/CoM reports.
 - `check_layout.py` — deterministic parameter/interface checks.
-- `references/purchased/` — checksum-verified purchased STEP dependencies.
+- `references/purchased/` — vendor STEP kept local (not in Git). Pi 5 SHA256 `c6347ecec58e77adaf8c1f1cbaa5bb7d02884a108b466a48449bfbbe80bb01cb`; 608ZZ SHA256 `62d262cc91fb6e213ae85f182811201787e583d527d9a7718ea30a08e1f19fc9`.
 - `generated/` — machine-readable and Markdown outputs.
 - `snapshots/` — required visual-review packet.
 

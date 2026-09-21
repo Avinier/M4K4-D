@@ -1,0 +1,3 @@
+# CAD solids stay on disk. Parametric sources, hashes, and provenance stay in Git.
+*.step
+*.stp

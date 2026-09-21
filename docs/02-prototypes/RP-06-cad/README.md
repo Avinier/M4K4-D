@@ -53,7 +53,7 @@ Open Layout 03 in CAD Viewer from [`head/layout-03/README.md`](head/layout-03/RE
 | [Layout 03 brief](head/layout-03-brief.md) | [Layout 02 brief](body-chassis/layout-02/brief.md) |
 | [Layout 03 verification](head/layout-03/review/verification.md) | Historical envelope: [`base/pass-01/`](base/pass-01/) |
 | [Packaging estimates](head/packaging-estimates.md) | [Layout 01 body](body-chassis/layout-01/README.md) (preserved) |
-| [Pre-layout brief](head/pre-layout-brief.md) | Purchased Pi 5 / 608ZZ STEP live under `body-chassis/layout-01/references/purchased/` |
+| [Pre-layout brief](head/pre-layout-brief.md) | Purchased Pi 5 / 608ZZ STEP live locally under `body-chassis/layout-01/references/purchased/` (not in Git) |
 
 ## Locked inputs RP-06 may not reopen
 
