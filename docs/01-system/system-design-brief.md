@@ -255,7 +255,7 @@ The brief does not select:
 - manufacturing tolerances, detailed shell geometry, material selection, or CAD layout within the current dimensional baseline;
 - final numeric acceptance thresholds.
 
-These decisions require the budgets, trade studies, and prototype evidence above. Existing `specsheets/` may suggest candidates, but nothing in them is adopted automatically. The selected display was adopted explicitly by the project builder and is governed by `display-candidate-study.md` change control.
+These decisions require the budgets, trade studies, and prototype evidence above. Archived pre-foundation technical drafts are not engineering inputs and nothing in them is adopted automatically. The selected display was adopted explicitly by the project builder and is governed by `display-candidate-study.md` change control.
 
 ## 12. Downstream documents
 

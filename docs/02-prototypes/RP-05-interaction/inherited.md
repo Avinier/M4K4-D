@@ -57,4 +57,4 @@ RP-06 owns whether the sourced parts still fit. This slice must not shrink or gr
 
 ## 4. Exploratory input — not inherited lock
 
-`specsheets/spec11.md` argues for a body 4-mic array, shared capture/playback timebase, fixed speaker–mic geometry, and against a generic USB array. Placement and geometry agree with the dimensional baseline. **USB vs codec/TDM remains an open RP-02/RP-05 comparison.** Spec-11 DOA (`σ_a ≤ 13°`) is a Candidate spatial-hearing target, not a Core RP-05 gate. Do not cite spec-11 as if it had closed ADR-11.
+Archived pre-foundation audio drafts have no authority in RP-05. The current dimensional baseline independently reserves a body four-microphone geometry. **USB vs codec/TDM remains an open RP-02/RP-05 comparison.** Spatial hearing remains a Candidate and has no inherited numeric direction-of-arrival gate. Do not use archived material to close ADR-11.

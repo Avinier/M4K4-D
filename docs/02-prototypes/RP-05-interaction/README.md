@@ -30,7 +30,7 @@ Namespaces: `AR-*` · `AP-*` · `BD-*` · `RP05-A` · `RP05-G`.
 - author astromech WAV/synth assets;
 - implement `makad-audio`, logging, or any service;
 - register trial counts, false-wake rates, latency ceilings, or coherence windows;
-- treat `specsheets/spec11.md` as a frozen architecture (it is exploratory input);
+- import any archived pre-foundation audio draft as a frozen architecture;
 - pull spatial hearing (`CAND-01` / ADR-13) into Core RP-05.
 
 ## Remaining slices

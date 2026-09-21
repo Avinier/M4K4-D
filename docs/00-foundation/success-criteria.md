@@ -86,7 +86,7 @@ Results from these Target or Candidate prototypes should be documented even when
 - a long feature list without a reliable integrated encounter;
 - one carefully rescued successful run;
 - visual similarity to a concept render;
-- completion of every exploratory specsheets requirement;
+- completion of every requirement from archived exploratory technical drafts;
 - success of face-following while Core collision, language, or expressive behaviour remains unreliable.
 
 ## Thresholds still requiring decisions or measurement

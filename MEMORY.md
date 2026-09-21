@@ -27,7 +27,7 @@ Decision in one or two sentences. Optional Why, Consequences, Follow-up.
 
 ## Era 0 — Reconstructed prehistory (2026-08-03 → 2026-08-13)
 
-All entries below are `Provenance: RECONSTRUCTED` from conversations before any approved foundation existed. The `specsheets/` documents they reference were declared non-binding by MEM-20260813-23 and superseded by the foundation in MEM-20260814-01. The design intents survive where the Status column says so; the spec IDs (SPEC-xx, Cxx-Ryy, OQ-xx) do not.
+All entries below are `Provenance: RECONSTRUCTED` from conversations before any approved foundation existed. The pre-foundation technical drafts they reference were declared non-binding by MEM-20260813-23, superseded by the foundation in MEM-20260814-01, and later moved under `docs/archive/`. The design intents survive where the Status column says so; their old requirement identifiers do not.
 
 | ID | Type | Decision or finding | Status now |
 |---|---|---|---|
@@ -91,7 +91,7 @@ All entries below are `Provenance: RECONSTRUCTED` from conversations before any 
 | MEM-20260813-20 | DECISION | Ball/dual passive support preferred; holonomic drive rejected for V1. | Support type superseded by MEM-20260825-01 (front caster + rear skid); holonomic rejection current |
 | MEM-20260813-21 | CHANGE | Mutable registers moved to README. | Historical |
 | MEM-20260813-22 | CORRECTION | OQ mapping for reconciliation traceability. | Historical |
-| MEM-20260813-23 | CORRECTION | **`specsheets/` and `visuals/` are exploratory and non-binding.** Only the concept, name, broad intent and a provisional visual anchor were established. | Current |
+| MEM-20260813-23 | CORRECTION | **Pre-foundation technical drafts and `visuals/` are exploratory and non-binding.** Only the concept, name, broad intent and a provisional visual anchor were established. | Current |
 
 ---
 
@@ -447,5 +447,4 @@ RP-06 now has an evidence folder and a compact closure checklist. Working CAD re
 **Type / Status / Governs:** ORGANIZATION / CURRENT / `docs/02-prototypes/RP-06-cad/`; `risk-prototype-plan.md` v1.15
 
 Prototype CAD trees move from RP-01 and RP-03 into `docs/02-prototypes/RP-06-cad/` as `head/`, `body-chassis/`, and `base/`. RP-01 `cad/` and RP-03 `cad/` are forwarding stubs. Root `cad/` remains reserved for stage-7 freeze. Body/chassis still live-imports Layout 03. Physical validation remains 0%; no gate is registered. Historical MEMORY paths are not rewritten.
-
 

@@ -96,7 +96,7 @@ Makad V1 is not intended to be:
 - a polished consumer product;
 - a generic voice assistant with a robot shell;
 - a collection of disconnected AI or hardware demonstrations;
-- a design frozen around the current renders or exploratory specsheets;
+- a design frozen around current renders or archived pre-foundation technical drafts;
 - optimized for minimum size, minimum cost, or maximum feature count at the expense of M4's character.
 
 No permanent list of all future exclusions is defined yet. Capabilities outside the approved V1 Core and Targets are simply uncommitted until there is a reason to evaluate them.

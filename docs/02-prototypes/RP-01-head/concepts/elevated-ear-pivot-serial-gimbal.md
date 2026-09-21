@@ -114,7 +114,7 @@ Cable torque is part of the slow-expression and static-hold load, not merely an 
 
 RP-01 is stationary: servo encoders provide runtime joint angles, and no head IMU is installed. A bench IMU/accelerometer may be attached temporarily for backlash, settling or resonance measurements, but it is instrumentation rather than a head component and does not enter the mass ledger.
 
-When locomotion is introduced, the runtime IMU belongs on the base for chassis heading, caster/traction disturbance and tip/pickup detection. Placing it in the head would require subtracting neck motion using commanded angles, recreating the timing-skew problem addressed by SPEC-09. Exact base sensor and fusion remain RP-03/RP-02 decisions.
+When locomotion is introduced, the runtime IMU belongs on the base for chassis heading, caster/traction disturbance and tip/pickup detection. Placing it in the head would require subtracting measured neck motion with aligned timestamps and would add avoidable calibration and timing error. Exact base sensor and fusion remain RP-03/RP-02 decisions.
 
 ## 8. Evidence required before selection
 

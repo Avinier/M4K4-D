@@ -54,7 +54,7 @@ Directionality rules:
 - **Citations flow up** (a CAD feature cites an ADR; an ADR cites run IDs; a run cites its preregistered gate; a gate cites a success criterion; a success criterion cites a scenario).
 - **Nothing skips a layer.** A part may not be purchased because a prototype "showed it works"; the result must pass through an ADR first. A scenario may not be weakened because a prototype failed; that requires an explicit foundation review (Core-failure rule).
 
-`specsheets/` and `visuals/` sit outside this chain deliberately: exploratory reference, binding on nothing.
+Archived pre-foundation technical drafts and `visuals/` sit outside this chain deliberately: exploratory reference, binding on nothing.
 
 ---
 

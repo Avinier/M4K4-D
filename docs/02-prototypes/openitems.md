@@ -4,7 +4,7 @@
 |---|---|
 | Status | **Living index.** Not a competing decision, budget, CAD or gate record |
 | Created | 2026-09-16 |
-| Scope | Remaining work inside `docs/02-prototypes/` after RP-01 Layout 03 paper demand, RP-02 Parts 1–4 design-definition, RP-03 Parts 1–5, RP-04 Phase A design-definition (`RP04-P1-REG-01`…`P6-REG-01`), RP-05 audio-path paper (`RP05-A`, 2026-09-21), and the RP-06 folder/checklist (2026-09-21) |
+| Scope | Remaining work inside `docs/02-prototypes/` after RP-01 Layout 03 paper demand, RP-02 Parts 1–4 design-definition, RP-03 Parts 1–5, RP-04 Phase A design-definition (`RP04-P1-REG-01`…`P6-REG-01`), RP-05 audio-path paper (`RP05-A`, 2026-09-21), the RP-06 folder/checklist, and the RP-07 documentation baseline (2026-09-21) |
 | Rule | Canonical detail stays in the cited file. Close an item there first, then strike or rewrite the row here. An index line cannot freeze a SKU, promote `E` to `W`, or register a gate |
 
 This file exists so an “intentionally open until the physical input exists” statement does not disappear into a local README. The latest RP-02 example is the same class of claim as the older RP-01 ones: **final wire, fuse, converter and pack ratings remain intentionally open until their required physical inputs exist.**
@@ -27,7 +27,7 @@ Evidence classes are unchanged: `W` measured on the named hardware, `D` manufact
 
 ## Shared blockers (all prototypes)
 
-These sit above RP-01 through RP-05. Scored physical runs wait here even when paper work is live.
+These sit above RP-01 through RP-07. Scored physical runs wait here even when paper work is live.
 
 | Item | Why it is open | Waiting on | Home | Blocks |
 |---|---|---|---|---|
@@ -255,6 +255,26 @@ Canonical remaining-work list: [`RP-06-cad/TODO.md`](RP-06-cad/TODO.md). Detail:
 
 ---
 
+## RP-07 Person tracking and following
+
+**Current outcome:** Complete documentation baseline in [`RP-07-following/`](RP-07-following/README.md), 2026-09-21. `PS-HYBRID-01` is the paper implementation lead. `BD-01…09/11` are proposed, `BD-10` inherited. No corpus, code, calibration, live tracking, physical motion, gate registration, scored run, or ADR-09 closure.
+
+| Item | Why it is open | Waiting on | Home | Blocks |
+|---|---|---|---|---|
+| Builder acceptance / paper registrations | Documentation exists; `RP07-P1…P5` remain DRAFT | Dated review of `BD-01…11` | `RP-07-following/decision.md` | Treating the architecture as registered design-definition |
+| Camera corpus and replay harness | Factor/test matrix exists; no frames or annotations recorded | Selected camera/Pi, consent/retention record, `CAL-01`, recording runs | `test-matrix.md`; `plan.md` Parts 2–3 | Detector/tracker selection |
+| Detector/tracker/appearance backends | Families named only | Same-corpus implementation comparison with model/runtime/license hashes | `perception-architecture.md`; `decision.md` §2 | `PS-HYBRID-01` implementation freeze; ADR-09 |
+| Camera/head/body calibration | `CAL-01…07` procedures exist; results all `U` | Physical camera, head and later base fixtures | `geometry-calibration.md` | Motion-eligible target geometry |
+| Selection/reacquisition timings | Policy exists; 150/250 ms and 3 s are pilot starts only | Pilot variance, then pre-scored freeze | `target-continuity.md`; `gates.md` | G02/G05 |
+| Counter-yaw ownership `BD-08` | RP-07 proposes core authorization + C3 yaw + `makad-hwd` relay + C2 primitive | Accept in RP-04 and measure relay/executor timing | `decision.md`; RP-04 `decision.md` BD-08 | P-02 Phase C; head/base handoff |
+| Pi 5 coexistence | Rates/budgets and fallback ladder written; no representative run | Live workload with audio/UI/links/logging and enclosure cooling | `timing-compute.md` | Compute selection; RP02 invariant rerun |
+| Range/control policy | Cue and controller design exists; no measured range/stopping performance | `CAL-07`, surrogate tests, RP-03 stopping evidence | `geometry-calibration.md`; `behaviour-control.md` | G03/G04 forward motion |
+| Physical authority phases | Tests D–G are explicitly blocked/not run | RP-03 safety gates, RP-01 head, RP-04 coordination, workbench readiness | `test-matrix.md`; `plan.md` | Come/follow/fault evidence |
+| Numeric G01–G07 registration | Candidate sheets complete; registered section empty | Builder freeze before scored data | `gates.md` | Any RP-07 pass; ADR-09 |
+| Evidence directory | Structure only; no runs exist | Physical/recording execution | `evidence/README.md` | G07 and every gate conclusion |
+
+---
+
 ## Circular dependencies (named, not stalled)
 
 | Loop | What can proceed now | What must wait |
@@ -277,6 +297,9 @@ Canonical remaining-work list: [`RP-06-cad/TODO.md`](RP-06-cad/TODO.md). Detail:
 | RP-05 audio path ↔ SKU | `AR-*` and `AP-*` comparison can proceed on paper | Family/SKU, duplex `W`, ADR-11 |
 | RP-05 wake engine ↔ corpus | Engine not required to write `AR-20`…`AR-24` | Versioned utterance set before engine freeze |
 | RP-04 audio stand-in ↔ RP-05 | Timing/identity/stop can use `BD-03` stand-in | Acoustic quality, echo, contamination wait on `RP05-A` hardware |
+| RP-07 perception ↔ moving head | Replay and fixed-camera live work can proceed | Ego-motion, rolling shutter and timing accuracy wait on RP-01 head |
+| RP-07 follow control ↔ RP-03 | Interfaces, simulation and surrogate replay can proceed | Powered alignment/come/follow wait on RP-03 local-safety gates |
+| RP-07 counter-yaw ↔ RP-04 | Ownership proposal and relay contract can proceed | Acceptance and physical timing close RP-04 `BD-08` |
 
 ---
 
@@ -303,6 +326,7 @@ Canonical remaining-work list: [`RP-06-cad/TODO.md`](RP-06-cad/TODO.md). Detail:
 | RP-03 BD-08 V1 front support = `D21` ball; `D20` caster required swap; Concept A chassis retained | `decision.md` BD-08; `dimensional-baseline.md` v1.12; SCOPE-09 v1.3; not ADR-04 gate close |
 | RP-04 Phase A design-definition (`P-01` sheets, HYBRID virtual select, gate candidates). Architecture-family research closed. Empirical spec paper-passed. Virtual wait language and P-02 cue list closed 2026-09-21. IR wire semantics accepted `RP02-P4-REG-03`. Exploratory layout revision 2 is a host reference, not G04. `BD-05` household observer panel superseded | `RP04-P1-REG-01`…`RP04-P6-REG-01`; `research/`; `decision.md`; `RP02-P4-REG-03`; `prototype/` |
 | RP-05 audio-path **paper written** (`AR-*` not locked, `AP-*` comparison, no SKU/engine/code/numeric gate). `BD-A01`…`A03` proposed, no registration. Spatial hearing stays Candidate. USB not banned by spec-11 | `RP-05-interaction/`; not design-definition; not ADR-11 |
+| RP-07 **documentation baseline written** (architecture, interfaces, geometry, continuity, behaviour, safety, compute, tests, gates and evidence layout). Paper decisions proposed; no implementation/evidence/gate | `RP-07-following/`; not design-definition; not ADR-09 |
 
 ---
 

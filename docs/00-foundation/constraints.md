@@ -31,7 +31,7 @@ This document records the real boundaries inside which V1 must be designed. Unkn
 | CON-12 | Normal household lighting is the baseline visual environment. | Vision must be validated in representative indoor lighting rather than ideal studio conditions only. |
 | CON-13 | There is no special project-level prohibition on camera or microphone recording. | Recording and cloud use are permitted; the selected power/sensor controls must make active operation clear and allow it to be stopped. |
 | CON-14 | The current physical target is **300 H × 205 W × 180 D mm overall**, governed in detail by `docs/01-system/dimensional-baseline.md`; total mass remains architecture-derived. | Packaging, stability, transport, fabrication, and operating-envelope checks must preserve this baseline or trigger an explicit revision before CAD freeze. |
-| CON-15 | The existing `specsheets/` content is exploratory and non-binding. | Every architecture, metric, interface, and part choice must be reconsidered before adoption. |
+| CON-15 | Pre-foundation technical drafts are archived, exploratory and non-binding. | Every architecture, metric, interface, and part choice must be reconsidered before adoption. |
 | CON-16 | Existing renders are provisional visual references. | They guide character direction but do not determine dimensions or internal architecture. |
 | CON-17 | Requirements precede final component selection and CAD freeze. | No component is selected merely because an old document names it. |
 | CON-18 | V1 is a serious prototype, not a consumer product. | Reliability must support repeated testing and demonstration; certification and production readiness are not implied. |

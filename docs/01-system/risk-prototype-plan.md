@@ -443,7 +443,7 @@ The experiment must compare the approved visual-search baseline against the dire
 | RP-04 coordination | After RP-01 and RP-03 controllers pass their safety gates | Uses measured response rather than idealized actuator timing. |
 | RP-05 interaction | After the observable lifecycle/timebase exists | May overlap late RP-04 work if it cannot command unvalidated motion directly. |
 | RP-06 final closure | After relevant RP-01/RP-02/RP-05 evidence | Layout must reflect measured mass, power, heat and acoustic evidence. |
-| RP-07 following | After RP-03 safety and required RP-04 coordination gates | Begins with replay/head-only stages before floor authority. |
+| RP-07 following | Documentation, corpus design, replay tooling and motors-inhibited perception may begin immediately; head-only work needs the safe RP-01 head; floor authority waits for RP-03 safety and required RP-04 coordination gates | Follow the RP-07 ladder: replay → live/no-motion → head-only → guarded low-speed → come → follow → adverse/fault. |
 
 Parallel work is allowed only when it does not consume the same unsafe rig, depend on an unresolved upstream assumption, or hide the project's mechanical/firmware priority beneath familiar software work.
 

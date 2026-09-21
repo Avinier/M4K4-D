@@ -31,8 +31,8 @@ This README is the orientation document over the whole repository. It states cur
 | RP-03 drive and motion safety | **Parts 1–5 defined; V1 front support is the ball transfer (BD-08).** [`RP-03-locomotion/`](docs/02-prototypes/RP-03-locomotion/README.md). Concept A chassis/sensing retained; caster is the comparison swap. No purchase, no gate, no scored run. ADR-04 open. |
 | RP-05 interaction | **Audio-path paper slice `RP05-A`.** [`RP-05-interaction/`](docs/02-prototypes/RP-05-interaction/README.md). `AR-*` / `AP-*` written; no SKU, engine, implementation, or numeric gate. ADR-10/11 open. |
 | RP-06 sourced layout | **CAD home.** Working geometry lives in [`RP-06-cad/`](docs/02-prototypes/RP-06-cad/README.md) (head Layout 03 + body/chassis Layout 02). Physical validation 0%. No gate, no mock-up, no scored run. |
+| RP-07 person tracking/following | **Documentation baseline complete.** [`RP-07-following/`](docs/02-prototypes/RP-07-following/README.md) defines the paper architecture, interfaces, calibration, target continuity, come/follow control, safety, compute, tests, gates and evidence layout. No corpus, implementation, physical test, registered gate or ADR-09 closure. |
 | Architecture, budgets, BOM, integrated CAD | Not started; blocked on prototype evidence by design. |
-| `specsheets/` | Exploratory, non-binding. |
 | `visuals/` | Provisional references; several show superseded details (mouths, ear microphones, yoke-mounted ears). |
 
 ### Selected and locked
@@ -111,6 +111,16 @@ Folder: [`docs/02-prototypes/RP-06-cad/`](docs/02-prototypes/RP-06-cad/) — [en
 
 - [Closure checklist](docs/02-prototypes/RP-06-cad/checklist.md) — CAD-done vs physical-open against G01–G06; uses the current **~499–524 g / nominal 509 g** head baseline
 - Active models: [head Layout 03](docs/02-prototypes/RP-06-cad/head/layout-03/README.md) and [body/chassis Layout 02](docs/02-prototypes/RP-06-cad/body-chassis/layout-02/README.md). RP-01 and RP-03 `cad/` directories are forwarding stubs.
+
+### RP-07 — person tracking and short household following
+
+Folder: [`docs/02-prototypes/RP-07-following/`](docs/02-prototypes/RP-07-following/) — [entry point](docs/02-prototypes/RP-07-following/README.md)
+
+- [Perception architecture](docs/02-prototypes/RP-07-following/perception-architecture.md), [interfaces](docs/02-prototypes/RP-07-following/interfaces.md), and [geometry/calibration](docs/02-prototypes/RP-07-following/geometry-calibration.md)
+- [Target continuity](docs/02-prototypes/RP-07-following/target-continuity.md), [come/follow control](docs/02-prototypes/RP-07-following/behaviour-control.md), and [safety/fault matrix](docs/02-prototypes/RP-07-following/safety-fault-matrix.md)
+- [Timing/compute](docs/02-prototypes/RP-07-following/timing-compute.md), [test matrix](docs/02-prototypes/RP-07-following/test-matrix.md), [gate workbook](docs/02-prototypes/RP-07-following/gates.md), and [execution plan](docs/02-prototypes/RP-07-following/plan.md)
+
+RP-07 is documentation-only at this point. Replay and motors-inhibited work may begin before floor authority; head-only and powered phases retain their RP-01/RP-03/RP-04 prerequisites.
 
 Root `cad/`, `docs/03-architecture/` and `docs/04-bom/` are reserved for later stages and must stay empty until then.
 

@@ -81,7 +81,7 @@ This slice does not:
 - close ADR-10 or ADR-11;
 - require direction-of-arrival for Core wake or come/follow (`CAND-01` stays Candidate);
 - reopen `CA-07` (no ROS 2 in the V1 safety path), UART/COBS, or C0 Unix-domain sockets;
-- treat `specsheets/spec11.md` “no USB array” as a project lock.
+- treat an archived pre-foundation “no USB array” preference as a project lock.
 
 ## 7. Completion criteria for this paper
 
