@@ -1,17 +1,25 @@
-"""Phase A virtual P-01 composer. Not G01/G03. Not UART/ROS."""
+"""Phase A virtual P-01 composer. Not G01/G03. Not UART/ROS.
+
+TIME and PROG adapters are frozen evidence. Live maintenance is HYBRID only:
+bounded any/all/threshold waits with deadlines. Dispatch/receipt are never onset.
+"""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Literal
 
+from score import FACE_LEAD_US, P01
+from wait_model import Cue, wait_outcome
+
 Adapter = Literal["TIME", "PROG", "HYBRID"]
 Trigger = Literal["time", "progress"]
 
 PHASE_WINDOW_US = 150_000
-FACE_LEAD_US = 100_000
-HEAD_SCHEDULE_US = 250_000
-SEARCH_SCHEDULE_US = 800_000
 STEP_US = 10_000
+PROGRESS_REASON = {
+    "P01-C03": "HM-03.rise_commit",
+    "P02-C02": "HM-10.curious_hold",
+}
 
 
 @dataclass
@@ -22,26 +30,6 @@ class Event:
     epoch: int
     cue_id: str
     reason: str = ""
-
-
-@dataclass
-class Cue:
-    cue_id: str
-    channel: str
-    panel: str
-    trigger: Trigger
-    start_at: int
-    wait_on: str | None
-
-
-P01 = (
-    Cue("P01-C02", "face", "E-open", "time", FACE_LEAD_US, None),
-    Cue("P01-C02", "light", "wake", "time", FACE_LEAD_US, None),
-    Cue("P01-C02", "audio", "A-wake-rise", "time", FACE_LEAD_US, None),
-    Cue("P01-C03", "head", "HM-03", "progress", HEAD_SCHEDULE_US, "face:source_onset"),
-    Cue("P01-C04", "head", "HM-04", "progress", SEARCH_SCHEDULE_US, "head:P01-C03:progress"),
-    Cue("P01-C05", "head", "HOLD", "progress", SEARCH_SCHEDULE_US + 400_000, "head:P01-C04:complete"),
-)
 
 
 @dataclass
@@ -86,21 +74,27 @@ class Sim:
         self.log: list[Event] = []
         self.time_ok = inject != "time_invalid"
         self.nodes = {
-            "face": Node(20_000, deny=inject == "deny_face"),
-            "light": Node(15_000),
+            "face": Node(20_000, deny=inject in ("deny_face", "deny_visible")),
+            "light": Node(10_000, deny=inject in ("deny_light", "deny_visible")),
             "audio": Node(10_000),
             "head": Node(80_000, stuck=inject == "stuck_progress"),
             "base": Node(0),
         }
+        if inject == "cancel_wait":
+            self.nodes["face"].delay_us = 2_000_000
+            self.nodes["light"].delay_us = 2_000_000
         if inject == "delay_head":
             self.nodes["head"].delay_us = 500_000
-        self.dispatched: set[tuple[int, str, str]] = set()
+        self.dispatched: set[tuple[int, str, str, str | None]] = set()
         self.flushed = False
         self.preempted = False
         self.base_motion = False
         self.p02_gaze = False
         self.search_success = False
         self.injected = False
+        self.decision_emitted = False
+        self.unavailable: set[str] = set()
+        self._wait_branch: dict[tuple[int, str, str, str | None], str] = {}
 
     def emit(self, kind: str, channel: str, cue_id: str, reason: str = "", epoch: int | None = None) -> None:
         self.log.append(Event(self.t, kind, channel, self.epoch if epoch is None else epoch, cue_id, reason))
@@ -120,45 +114,67 @@ class Sim:
             n.epoch = self.epoch
         self.flushed = True
 
-    def seen(self, kind: str, channel: str, cue_id: str | None = None) -> bool:
-        for e in self.log:
-            if e.kind == kind and e.channel == channel and (cue_id is None or e.cue_id == cue_id):
-                return True
-        return False
+    def target_reason(self) -> str | None:
+        for e in reversed(self.log):
+            if e.kind == "target_decision" and e.epoch == self.epoch:
+                return e.reason
+        return None
+
+    def cue_allowed(self, cue: Cue) -> bool:
+        if cue.condition in (None, "in_sector", "behind_body"):
+            return True
+        if cue.condition in ("target", "no_target"):
+            decision = self.target_reason() or "no_target"
+            return cue.condition == decision
+        return True
 
     def ready(self, cue: Cue) -> bool:
-        key = (self.epoch, cue.cue_id, cue.channel)
-        if key in self.dispatched or self.flushed:
+        key = (self.epoch, cue.cue_id, cue.channel, cue.condition)
+        if key in self.dispatched or self.flushed or not self.cue_allowed(cue):
             return False
         trig = self.trig(cue)
         if trig == "time":
             if not self.time_ok:
                 return self.t >= min(cue.start_at, FACE_LEAD_US)
             return self.t >= cue.start_at
-        if cue.wait_on is None:
+        outcome = wait_outcome(
+            cue.wait,
+            log=self.log,
+            unavailable=self.unavailable,
+            current_epoch=self.epoch,
+            now_us=self.t,
+            apply_deadline=self.adapter == "HYBRID",
+        )
+        if outcome == "ready":
             return True
-        if cue.wait_on == "face:source_onset":
-            return self.seen("source_onset", "face")
-        if cue.wait_on == "head:P01-C03:progress":
-            return self.seen("progress", "head", "P01-C03")
-        if cue.wait_on == "head:P01-C04:complete":
-            return self.seen("complete", "head", "P01-C04")
-        return False
+        if outcome == "waiting":
+            return False
+        self._wait_branch[key] = outcome
+        return True
 
     def dispatch_cue(self, cue: Cue) -> None:
-        key = (self.epoch, cue.cue_id, cue.channel)
+        key = (self.epoch, cue.cue_id, cue.channel, cue.condition)
+        deadline_out = self._wait_branch.pop(key, None)
+        if deadline_out in ("deny", "abort"):
+            self.emit(deadline_out, cue.channel, cue.cue_id, "OX-DELAY")
+            self.dispatched.add(key)
+            return
+        if deadline_out == "degrade":
+            self.emit("delay", cue.channel, cue.cue_id, "OX-DELAY")
         if self.trig(cue) == "time" and not self.time_ok:
             self.emit("deny", cue.channel, cue.cue_id, "time_model_invalid")
             self.dispatched.add(key)
             return
         self.emit("dispatch", cue.channel, cue.cue_id)
         result = self.nodes[cue.channel].accept(self.epoch, cue.cue_id, self.t)
+        self.emit("receipt", cue.channel, cue.cue_id)
         if result == "accepted":
             self.emit("accept", cue.channel, cue.cue_id)
         elif result == "accepted_stuck":
             self.emit("accept", cue.channel, cue.cue_id, "stuck")
         else:
             self.emit("deny", cue.channel, cue.cue_id, result)
+            self.unavailable.add(cue.channel)
         self.dispatched.add(key)
         if cue.channel == "base" and cue.panel not in ("HOLD", "BM-01", "BM-13"):
             self.base_motion = True
@@ -169,15 +185,24 @@ class Sim:
         for name, node in self.nodes.items():
             if node.stuck or node.dead:
                 continue
-            for cid, ot in node.onset_at.items():
+            for cid, ot in list(node.onset_at.items()):
                 if ot == self.t:
                     self.emit("source_onset", name, cid)
-            for cid, pt in node.progress_at.items():
+            for cid, pt in list(node.progress_at.items()):
                 if pt == self.t:
-                    self.emit("progress", name, cid)
-            for cid, ct in node.complete_at.items():
+                    self.emit("progress", name, cid, PROGRESS_REASON.get(cid, ""))
+            for cid, ct in list(node.complete_at.items()):
                 if ct == self.t:
                     self.emit("complete", name, cid)
+
+    def maybe_perception(self) -> None:
+        if self.decision_emitted or self.flushed:
+            return
+        if not any(e.kind == "progress" and e.reason == "HM-03.rise_commit" and e.epoch == self.epoch for e in self.log):
+            return
+        reason = "target" if self.inject == "target" else "no_target"
+        self.emit("target_decision", "perception", "P01-C04", reason)
+        self.decision_emitted = True
 
     def maybe_inject(self) -> None:
         if self.injected:
@@ -185,10 +210,14 @@ class Sim:
         if self.inject == "cancel" and self.t == 400_000:
             self.flush("OX-CANCEL")
             self.injected = True
+        elif self.inject == "cancel_wait" and self.t == 200_000:
+            self.flush("OX-CANCEL")
+            self.injected = True
         elif self.inject == "preempt" and self.t == 1_000_000:
             self.flush("OX-PREEMPT")
             self.emit("dispatch", "face", "P02-C01")
             r = self.nodes["face"].accept(self.epoch, "P02-C01", self.t)
+            self.emit("receipt", "face", "P02-C01")
             if r == "accepted":
                 self.emit("accept", "face", "P02-C01")
             self.p02_gaze = True
@@ -212,6 +241,7 @@ class Sim:
         while self.t <= until:
             self.maybe_inject()
             self.tick_onsets()
+            self.maybe_perception()
             if not self.flushed:
                 for cue in P01:
                     if self.ready(cue):

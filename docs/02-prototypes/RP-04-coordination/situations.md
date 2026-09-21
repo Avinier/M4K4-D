@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Part 1 registered; Part 2 P-01 sheets filled 2026-09-21; P-02/P-03 backpropagation still stub |
+| Status | Part 1 registered; Part 2 P-01 sheets filled 2026-09-21; P-02 cue list validated 2026-09-21 (declarative; not an executable spike). P-03 backpropagation still stub |
 | Owner | Project builder |
 | Created | 2026-09-21 |
 | Revised | 2026-09-21 |
@@ -41,12 +41,12 @@ Every catalogue row eventually carries this chain. P-01 is filled first and is t
 |---|---|---|---|---|
 | Observable character result | §5 | §6 | §7 | §8 |
 | Semantic beats and phase relationships | drafted | drafted | drafted | drafted as deltas |
-| Required state transitions | **§11** | stub | stub | **§11** |
-| Commands, events, ACKs, feedback | **§11** | stub | stub | **§11** |
-| Scheduling and timing guarantees | **§11** (`E`) | stub | stub | **§11** |
-| Controller/process ownership | **§11** | inherit | inherit | **§11** |
-| Fault and recovery behaviour | **§11** | drafted | drafted | **§11** |
-| Executable tests and evidence | `T-P01-*` | later | later | `T-P01-*` |
+| Required state transitions | **§11** | **§12** | stub | **§11** |
+| Commands, events, ACKs, feedback | **§11** | **§12** | stub | **§11** |
+| Scheduling and timing guarantees | **§11** (`E`) | **§12** (`E`) | stub | **§11** |
+| Controller/process ownership | **§11** | **§12** | inherit | **§11** |
+| Fault and recovery behaviour | **§11** | **§12** | drafted | **§11** |
+| Executable tests and evidence | `T-P01-*` | score validator; physical `TR-P02-*` later | later | `T-P01-*` |
 
 ## 4. Common run contract
 
@@ -267,13 +267,13 @@ Part 2 backpropagates this row into commands, ACKs, and tests. Part 5’s P-01 s
 - `BD-02`: approve the honest independent baseline;
 - `BD-03`: approve audio as a timing channel with a stand-in allowed before ADR-11;
 - `BD-04`: approve RP-04 ownership of `E-*` timing, not artwork;
-- `BD-05`: split — ~6-person **pilot** on non-scored clips, then freeze instrument; scored G03 N is Part 6.
+- `BD-05`: **superseded** — no household / mock-video observer panel (builder decision). G03: tune on non-scored runs, freeze N/pass/clip-selection in `gates.md`, then scored capture.
 
 ## 11. P-01 backpropagation (Part 2)
 
-Filled 2026-09-21. P-02/P-03 remain stubs except `P02-C01` as the `OX-PREEMPT` successor. Millisecond values are `E` hypotheses, not gates. Event names are logical; packed wire encodings remain open after `RP02-P4-REG-03` semantics.
+Filled 2026-09-21. P-02 cue list filled 2026-09-21 (§12). P-03 remains a stub except `P02-C01` as the `OX-PREEMPT` successor. Millisecond values are `E` hypotheses, not gates. Event names are logical; packed exploratory layout is RP-02 phase-a revision 2, still not a registered ICD.
 
-Shared action lifecycle on every cue: `dispatch` → `receipt` → `accept|deny` → `local_start` → `source_onset` → `progress` → `complete|abort`. Composer never treats `dispatch` as onset.
+Shared action lifecycle on every cue: `dispatch` → `receipt` → `accept|deny` → `local_start` → `source_onset` → `progress` → `complete|abort`. Composer never treats `dispatch` or `receipt` as onset.
 
 ### 11.1 Happy path — composed P-01
 
@@ -281,8 +281,8 @@ Shared action lifecycle on every cue: `dispatch` → `receipt` → `accept|deny`
 |---|---|---|---|---|---|
 | `P01-C01` | Idle → `perf_epoch=N` allocated; channel snapshot logged; C3 HOLD/mode checked | `IntentAccept(P-01)`; `AvailabilitySnapshot` | Snapshot before first cue; oldest feedback age recorded | `makad-core` | `T-P01-HAPPY` |
 | `P01-C02` | Face `E-sleep→E-open`; light wake; audio `A-wake-rise` armed | `FACE_STATE`, `LIGHT_STATE`, `AudioPlay` with `perf_epoch/cue_id` | Face/light **lead** head. Hypothesis 80–170 ms world-onset lead. Audio in the same perceptual beat | D1 via C2; C2 light; `makad-audio` | `T-P01-HAPPY` |
-| `P01-C03` | Head `HM-02→HM-03` | `HEAD_GOAL(HM-03)` | Starts after face **source_onset** or at compensated `start_at` (adapter-specific). Base never leaves HOLD | C2 | `T-P01-HAPPY` |
-| `P01-C04` | Target? `HM-05`+`E-gaze` : `HM-04`+`E-lost` | `HEAD_GOAL(HM-04\|05)`; optional `A-query-rise` | Chain off `HM-03` progress/complete. No locomotion | C2; `makad-perception` proposes only | `T-P01-HAPPY` (search branch default in spikes) |
+| `P01-C03` | Head `HM-02→HM-03` | `HEAD_GOAL(HM-03)` | HYBRID: first eligible **visible** `source_onset` (`any(face, light)`) with `T-DEAD`. TIME: compensated `start_at`. Base never leaves HOLD | C2 | `T-P01-HAPPY`; `T-P01-DENY-FACE` / `DEN-L` |
+| `P01-C04` | Target? `HM-05`+`E-gaze` : `HM-04`+`E-lost` | `HEAD_GOAL(HM-04\|05)`; optional `A-query-rise` | Chain off named `HM-03.rise_commit` **and** a target/no-target decision. Unqualified `progress` is illegal. No locomotion | C2; `makad-perception` proposes only | `T-P01-HAPPY` (search default); target branch in the harness |
 | `P01-C05` | Named settle; audio silent; no queued cues | Hold/idle goals; `AudioStop` if still playing | All motion HOLD; no second wake | all | `T-P01-HAPPY` |
 | C3 throughout | `BM-01` or `BM-13` HOLD | `BASE_GOAL(HOLD)` or inhibit snapshot | Zero wheel onset | C3 | `T-P01-HAPPY` |
 
@@ -294,7 +294,7 @@ Independent baseline: same cues, each channel `dispatch` immediately at `P01-C01
 |---|---|---|---|---|---|
 | `OX-CANCEL` | During `P01-C03` rise | Flush epoch N; `HEAD_CANCEL`/`HM-18`; `AudioStop`; bounded face/light; C3 HOLD; **no** `HM-04/05` dispatch | No cue with epoch N after flush; no search start | `makad-core` + C2 | `T-P01-CANCEL` |
 | `OX-PREEMPT` | During `P01-C04` search (`HM-04`) | §8.1: flush N; `makad-hwd` drops queue; C2 preempt; audio stop; epoch N+1 is `P-02` with first cue `P02-C01` gaze; no P-01 search success | New epoch; first post-preempt face cue is P-02 gaze; no `HM-04` complete-as-wake | `makad-core` | `T-P01-PREEMPT` |
-| `OX-DENY(face)` | `P01-C02` D1 NACK/stall | Log deny; do not claim face onset; remaining channels may continue as G04 | No `source_onset` face event; run tagged denied | D1 + composer | `T-P01-DENY-FACE` |
+| `OX-DENY(face)` | `P01-C02` D1 NACK/stall | Log deny; do not claim face onset; remaining channels continue as G04. HYBRID head rise advances on light `source_onset` | No `source_onset` face event; head still dispatched; run tagged denied | D1 + composer | `T-P01-DENY-FACE` |
 | `OX-DENY(base)` vs `OX-INHIBIT-BASE` | At `P01-C01` | Inhibit: C3 HOLD + inhibit reason, P-01 still valid. Deny: C3 unavailable, same HOLD appearance, different reason enum | No wheel onset; reason distinguishes inhibit vs unavailable | C3 | mapping only; not a separate architecture axis |
 | `OX-DELAY` | Head `source_onset` later than phase window after face onset | Composer takes bounded-wait then degrade/log `OX-DELAY`; must not silently score as composed | Delay event logged; later cues follow adapter rule (time continues / progress waits) | composer | `T-P01-DELAY` |
 | `OX-STALE` | Cue for epoch N arrives after flush or with old epoch | Executor NACK `stale_epoch`; composer does not retry that cue | Rejected; no local_start | C2/C3/D1/audio | `T-P01-STALE` |
@@ -306,5 +306,68 @@ Independent baseline: same cues, each channel `dispatch` immediately at `P01-C01
 
 ### 11.3 P-02 stub used by preempt
 
-`P02-C01` after preempt: `FACE_STATE` gaze lead with **new** `perf_id`/`perf_epoch`. Head `HM-10` is not required in the P-01 spike if gaze dispatch proves the epoch cut. Full P-02 backpropagation waits.
+`P02-C01` after preempt: `FACE_STATE` gaze lead with **new** `perf_id`/`perf_epoch`. Head `HM-10` is not required in the P-01 spike if gaze dispatch proves the epoch cut. Full P-02 discrete list is §12. It is not executed by the P-01 harness.
+
+## 12. P-02 cue list (validated 2026-09-21)
+
+Paper sufficiency close. Executable P-02 waits on the RP-03 base model and `BD-08`. Representation stays a **cue list** plus one named executor primitive. A graph is not opened.
+
+Wait language (same as P-01 HYBRID):
+
+| Form | P-02 use |
+|---|---|
+| Single event | Gaze onset before `HM-10`; hold complete before settle |
+| `any` | Optional face/light degradation (inherited from P-01; P-02 gaze is required for the normal score) |
+| `all` | C3 `eligible` plus the behind-body target decision before `BM-05`; `accept` plus `eligible` before `counter_yaw` |
+| Named threshold | `HM-10.curious_hold`; not unqualified `progress` |
+| Deadline | Every external wait carries `deadline_us = T-DEAD` and `on_deadline` ∈ {degrade, deny, abort} |
+
+Illegal in this list: wait on `dispatch` / `receipt`; unqualified `progress`; missing deadline on a cross-channel wait; missing fallback; duplicate `(cue_id, channel, variant)`; wait on another performance’s cue IDs.
+
+### 12.1 In-sector variant
+
+Base remains `BM-01`. No `BM-05`. No counter-yaw.
+
+| Cue | Channel | Panel | Trigger | Wait | Deadline / fallback |
+|---|---|---|---|---|---|
+| `P02-C01` | face | `E-gaze` | time | — | `OX-DENY(face)` |
+| `P02-C01` | light | attentive | time | — | `OX-DENY(light)` |
+| `P02-C01` | audio | `A-query-rise` | progress | `face:source_onset` | `T-DEAD` → degrade (silence allowed); `OX-DENY(audio)` |
+| `P02-C01` | base | `BM-01` | time | — | `OX-INHIBIT-BASE` |
+| `P02-C02` | head | `HM-10` | progress | `face:source_onset` | `T-DEAD` → degrade; cancel fallback `HM-18` |
+| `P02-C03` | face | `E-think` | progress | `head:P02-C02:progress>=HM-10.curious_hold` | `T-DEAD` → degrade; `OX-DENY(face)` |
+| `P02-C03` | head | HOLD | progress | `head:P02-C02:complete` | `T-DEAD` → abort; `HM-18` |
+| `P02-C04` | face | `E-gaze` | progress | `head:P02-C03:complete` | `T-DEAD` → degrade |
+| `P02-C04` | audio | SILENCE | progress | `audio:P02-C01:complete` | `T-DEAD` → degrade; `AudioStop` |
+| `P02-C04` | base | `BM-01` | progress | `head:P02-C03:complete` | `T-DEAD` → abort; remain HOLD |
+
+Cancel during head-only reaction: epoch flush; `HM-18` from measured pose; audio stop; face/light bounded; base stays `BM-01`. No post-stop gaze snap.
+
+### 12.2 Behind-body variant (Phase C)
+
+Same `P02-C01` / `P02-C02` as in-sector (gaze lead, `HM-10` inspect). Body hand-off is additional cues, not a mutated in-sector list.
+
+| Cue | Channel | Panel | Trigger | Wait | Deadline / fallback |
+|---|---|---|---|---|---|
+| `P02-C03` | base | `BM-05` | progress | `all(base:eligible, core:target_decision)` | `T-DEAD` → **deny** the full P-02 (not a fake orientation); `OX-DENY(base)` / `OX-INHIBIT-BASE` |
+| `P02-C03` | head | `counter_yaw` | progress | `all(base:P02-C03:accept, base:eligible)` | `T-DEAD` → deny; fallback `HM-18`. **Executor primitive** `counter_yaw(base_yaw)` — not a discrete cue graph. `BD-08` still names the owner and yaw source |
+| `P02-C04` | head | `HM-10` | progress | `base:P02-C03:complete` | `T-DEAD` → degrade; `HM-18` |
+| `P02-C04` | base | `BM-01` | progress | `base:P02-C03:complete` | `T-DEAD` → abort; cancel from motion is `BM-12` |
+| `P02-C04` | face | `E-gaze` | progress | `base:P02-C03:complete` | `T-DEAD` → degrade |
+| `P02-C04` | audio | SILENCE | progress | `audio:P02-C01:complete` | `T-DEAD` → degrade |
+
+C3 acceptance and eligibility are re-checked at execution. Clearing inhibit does not resume the old epoch.
+
+Cancel during body hand-off: `HM-18` and `BM-12` from measured states; discard the remainder; no post-stop gaze snap.
+
+If `BM-05` is denied, the behind-body P-02 is denied. Do not substitute an in-sector hold as a successful behind-body orientation.
+
+### 12.3 Named counter-yaw primitive
+
+`counter_yaw(base_yaw)` is a C2 (or jointly C2/C3) trajectory, parameterized by published `BASE_STATE.θ`. The score starts, monitors, and ends it. Continuous `HEAD_GOAL` as a function of yaw is not a graph edge. **`BD-08` remains open** until implementation names the locus and the yaw source. A slow C0-mediated loop cannot be rescued by adding cues.
+
+### 12.4 Validator
+
+`prototype/score.py` `validate_score` rejects unqualified `progress`, missing deadlines on external waits, unknown event names, absent fallback, duplicate cue identities, and cross-performance / cross-epoch waits. In-sector and behind-body lists pass. Physical `TR-P02-*` cells in `research/experiment-spec.md` remain Phase C obligations.
+
 
