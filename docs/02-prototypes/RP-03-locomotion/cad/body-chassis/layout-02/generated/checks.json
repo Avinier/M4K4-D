@@ -196,6 +196,30 @@
       }
     },
     {
+      "name": "front_panel_edges_parallel_front_shell_edges",
+      "ok": true,
+      "evidence": {
+        "panel_dy_per_dz": 0.13590909090909087,
+        "shell_dy_per_dz": 0.13590909090909092,
+        "panel_widths_mm": [
+          110.0,
+          87.7109090909091
+        ]
+      }
+    },
+    {
+      "name": "rear_panel_edges_parallel_rear_shell_edges",
+      "ok": true,
+      "evidence": {
+        "panel_dy_per_dz": 0.1329545454545455,
+        "shell_dy_per_dz": 0.13295454545454546,
+        "panel_widths_mm": [
+          104.0,
+          82.19545454545454
+        ]
+      }
+    },
+    {
       "name": "front_and_rear_panels_have_four_fasteners_each",
       "ok": true,
       "evidence": {

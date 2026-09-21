@@ -155,12 +155,20 @@ BODY_MOUNT_POINTS = tuple((x, y) for x in BODY_MOUNT_X for y in BODY_MOUNT_Y)
 # cutout. M3 bosses and front-access screws define removal direction.
 PANEL_REVEAL = 1.0
 PANEL_OVERLAP = 2.0
-FRONT_PANEL_BOTTOM_WIDTH = 110.0
-FRONT_PANEL_TOP_WIDTH = 92.0
-REAR_PANEL_BOTTOM_WIDTH = 104.0
-REAR_PANEL_TOP_WIDTH = 90.0
+FRONT_SHELL_END_WIDTH_FACTOR = 0.92
+REAR_SHELL_END_WIDTH_FACTOR = 0.90
+SHELL_SIDE_EDGE_Z0 = BODY_Z_BOTTOM + 12.0
+SHELL_SIDE_EDGE_Z1 = BODY_Z_TOP - 10.0
 PANEL_Z0 = 48.0
 PANEL_Z1 = 130.0
+FRONT_PANEL_BOTTOM_WIDTH = 110.0
+REAR_PANEL_BOTTOM_WIDTH = 104.0
+FRONT_PANEL_TOP_WIDTH = FRONT_PANEL_BOTTOM_WIDTH - 2.0 * (PANEL_Z1 - PANEL_Z0) * (
+    (BODY_WIDTH_LOWER - BODY_WIDTH_UPPER) * FRONT_SHELL_END_WIDTH_FACTOR / 2.0
+) / (SHELL_SIDE_EDGE_Z1 - SHELL_SIDE_EDGE_Z0)
+REAR_PANEL_TOP_WIDTH = REAR_PANEL_BOTTOM_WIDTH - 2.0 * (PANEL_Z1 - PANEL_Z0) * (
+    (BODY_WIDTH_LOWER - BODY_WIDTH_UPPER) * REAR_SHELL_END_WIDTH_FACTOR / 2.0
+) / (SHELL_SIDE_EDGE_Z1 - SHELL_SIDE_EDGE_Z0)
 FRONT_PANEL_FASTENERS = ((-43.0, 58.0), (43.0, 58.0), (-36.0, 120.0), (36.0, 120.0))
 REAR_PANEL_FASTENERS = ((-40.0, 58.0), (40.0, 58.0), (-34.0, 120.0), (34.0, 120.0))
 
@@ -584,19 +592,19 @@ def _triad(origin, label, scale=18.0):
 def body_shell():
     outer = loft(
         [
-            _body_profile(BODY_X_REAR, 0.0, 0.90),
+            _body_profile(BODY_X_REAR, 0.0, REAR_SHELL_END_WIDTH_FACTOR),
             _body_profile(-58.0, 0.0, 1.00),
             _body_profile(60.0, 0.0, 1.00),
-            _body_profile(BODY_X_FRONT, 0.0, 0.92),
+            _body_profile(BODY_X_FRONT, 0.0, FRONT_SHELL_END_WIDTH_FACTOR),
         ],
         ruled=True,
     )
     inner = loft(
         [
-            _body_profile(BODY_X_REAR + SHELL_THICKNESS, SHELL_THICKNESS, 0.90),
+            _body_profile(BODY_X_REAR + SHELL_THICKNESS, SHELL_THICKNESS, REAR_SHELL_END_WIDTH_FACTOR),
             _body_profile(-56.0, SHELL_THICKNESS, 1.00),
             _body_profile(58.0, SHELL_THICKNESS, 1.00),
-            _body_profile(BODY_X_FRONT - SHELL_THICKNESS, SHELL_THICKNESS, 0.92),
+            _body_profile(BODY_X_FRONT - SHELL_THICKNESS, SHELL_THICKNESS, FRONT_SHELL_END_WIDTH_FACTOR),
         ],
         ruled=True,
     )

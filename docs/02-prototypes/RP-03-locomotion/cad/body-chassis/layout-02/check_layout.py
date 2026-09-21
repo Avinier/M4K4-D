@@ -27,6 +27,16 @@ def main():
     chassis_frame = M.chassis_frame()
     frame_chassis_overlap = (body_frame & chassis_frame).volume
     audio_sensor_overlap = (M.body_audio() & M.sensors()).volume
+    panel_height = M.PANEL_Z1 - M.PANEL_Z0
+    shell_edge_height = M.SHELL_SIDE_EDGE_Z1 - M.SHELL_SIDE_EDGE_Z0
+    front_panel_side_slope = (M.FRONT_PANEL_BOTTOM_WIDTH - M.FRONT_PANEL_TOP_WIDTH) / 2.0 / panel_height
+    rear_panel_side_slope = (M.REAR_PANEL_BOTTOM_WIDTH - M.REAR_PANEL_TOP_WIDTH) / 2.0 / panel_height
+    front_shell_side_slope = (
+        (M.BODY_WIDTH_LOWER - M.BODY_WIDTH_UPPER) * M.FRONT_SHELL_END_WIDTH_FACTOR / 2.0 / shell_edge_height
+    )
+    rear_shell_side_slope = (
+        (M.BODY_WIDTH_LOWER - M.BODY_WIDTH_UPPER) * M.REAR_SHELL_END_WIDTH_FACTOR / 2.0 / shell_edge_height
+    )
     rear_crossmember = M._box(16.0, 116.0, 14.0, (-56.0, 0.0, 41.0), "CHECK_REAR_CROSSMEMBER", M.FRAME_BLUE)
     tail_root_overlap = (tail_shell & rear_crossmember).volume
     tail_shoe_overlap = (tail_shell & tail_shoe).volume
@@ -57,6 +67,8 @@ def main():
         ("body_frame_no_longer_interpenetrates_chassis", frame_chassis_overlap < 1e-3, {"overlap_volume_mm3": frame_chassis_overlap}),
         ("body_mount_hardware_is_separate_top_level_group", "BODY_CHASSIS_MOUNT_HARDWARE" in top_level_labels, {"top_level_labels": top_level_labels}),
         ("panel_openings_have_continuous_overlap", M.PANEL_OVERLAP >= 2.0, {"panel_overlap_mm": M.PANEL_OVERLAP}),
+        ("front_panel_edges_parallel_front_shell_edges", abs(front_panel_side_slope - front_shell_side_slope) < 1e-12, {"panel_dy_per_dz": front_panel_side_slope, "shell_dy_per_dz": front_shell_side_slope, "panel_widths_mm": [M.FRONT_PANEL_BOTTOM_WIDTH, M.FRONT_PANEL_TOP_WIDTH]}),
+        ("rear_panel_edges_parallel_rear_shell_edges", abs(rear_panel_side_slope - rear_shell_side_slope) < 1e-12, {"panel_dy_per_dz": rear_panel_side_slope, "shell_dy_per_dz": rear_shell_side_slope, "panel_widths_mm": [M.REAR_PANEL_BOTTOM_WIDTH, M.REAR_PANEL_TOP_WIDTH]}),
         ("front_and_rear_panels_have_four_fasteners_each", len(M.FRONT_PANEL_FASTENERS) == 4 and len(M.REAR_PANEL_FASTENERS) == 4, {"front_count": len(M.FRONT_PANEL_FASTENERS), "rear_count": len(M.REAR_PANEL_FASTENERS)}),
         ("panel_hardware_is_separate_top_level_group", "PANEL_MOUNT_HARDWARE" in top_level_labels, {"top_level_labels": top_level_labels}),
         ("body_audio_is_separate_top_level_group", "BODY_AUDIO" in top_level_labels, {"top_level_labels": top_level_labels}),

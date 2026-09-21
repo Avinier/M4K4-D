@@ -99,6 +99,8 @@ solid.
   fasteners; it is not a moving belt or drive element.
 - [x] Match front and rear shell openings to the trapezoidal panels with a continuous
   2 mm overlap, internal frames, bosses and four M3 screws per panel.
+- [x] Keep each service panel's trapezoid side edges parametrically parallel to the
+  corresponding front/rear body-shell edges for a uniform visual reveal.
 - [x] Turn the front slat motif into open grille slots over the speaker package.
 - [x] Preserve wheel, floor, ball-transfer and sensor clearances.
 - [ ] Define the production shell split, fastening direction and removal sequence.

@@ -33,6 +33,7 @@
 | Shell nominal thickness | 2.4 mm |
 | Body/chassis attachment | Four M4 through-bolts + two 4 mm locating pins |
 | Service-panel land | 2 mm continuous overlap; four M3 screws per panel |
+| Service-panel edge alignment | Front and rear panel side slopes match their corresponding shell end-profile slopes |
 | Lower mobility fascia | Physical removable shell; four M3 side screws |
 | Speaker | 50 mm basket / 44 mm cone, centered at `(72, 0, 99)` mm |
 | Microphones | Four provisional body PDM ports; front/rear left/right |

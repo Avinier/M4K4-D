@@ -55,6 +55,15 @@
   ],
   "body_mount_fastener": "M4 through-bolt, four places",
   "panel_overlap_mm": 2.0,
+  "front_panel_width_bottom_top_mm": [
+    110.0,
+    87.7109090909091
+  ],
+  "rear_panel_width_bottom_top_mm": [
+    104.0,
+    82.19545454545454
+  ],
+  "panel_edge_intent": "front and rear panel side edges are parallel to their corresponding shell end-profile side edges",
   "front_panel_fasteners_mm": [
     [
       -43.0,
