@@ -41,7 +41,7 @@ RP-01 is an object. RP-02 is a set of states and interfaces: a tree of rails, fo
 
 | Subject | Home | Why it is not here |
 |---|---|---|
-| **Power / energy / thermal budget** | [`power-energy-ledger.md`](../../01-system/power-energy-ledger.md) | Serves every prototype that energizes anything, and the stage-6 `engineering-budgets.md`. Two budgets means one is wrong. RP-02 *populates* it |
+| **Power / energy / thermal budget** | [`power-energy-ledger.md`](../../01-system/power-energy-ledger.md) | Serves every prototype that energizes anything. Two budgets means one is wrong. RP-02 *populates* it |
 | **Monotonic timebase** | [`timebase.md`](../../01-system/timebase.md) | A continuous-workstream deliverable; RP-01's first scored run needs it too. RP-02 *validates* it under G05 |
 | System control-topology study | [`control-topology-options.md`](../../01-system/control-topology-options.md) v0.14 | Part 3 consumes and closes its ownership/link choices at design level; physical evidence still closes ADR-03/ADR-12 |
 | Bench tools, PSU and E-stop rules, battery gate | [`workbench.md`](../../01-system/workbench.md) | Programme-wide |

@@ -6,7 +6,7 @@
 | Version | 1.12 |
 | Owner | Project builder |
 | Approved / revised | 2026-08-30 / 2026-09-19 |
-| Feeds | Mass/envelope ledger, RP-01 head, RP-03 drive, RP-06 layout, sourcing, integrated CAD |
+| Feeds | Mass/envelope ledger, RP-01 head, RP-03 drive, RP-06 layout, sourcing |
 
 ## Authority and interpretation
 

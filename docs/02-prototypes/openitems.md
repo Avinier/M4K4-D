@@ -251,7 +251,7 @@ Canonical remaining-work list: [`RP-06-cad/TODO.md`](RP-06-cad/TODO.md). Detail:
 | Closed-body thermal | Cooler selected; airflow unmeasured | Enclosure run; T-3 | power-energy ledger; checklist T-* | G01; SC-TBD-12 |
 | Service demonstration | Paper sequences exist | Timed non-destructive replacements | Layout 03 README; checklist S-* | G06 |
 | Sourcing G05 audit | Matrix living; invoices and substitutes incomplete | Rechecked landed cost per architecture-critical row | sourcing matrix; checklist §8 | G05; CON-TBD-13 |
-| Physical G01–G06 | None registered | Threshold freeze **before** scored data; mock-up | plan §RP-06; `RP-06-cad/README.md` | ADR-01/08/11; `physical-architecture.md` |
+| Physical G01–G06 | None registered | Threshold freeze **before** scored data; mock-up | plan §RP-06; `RP-06-cad/README.md` | ADR-01/08/11 |
 
 ---
 

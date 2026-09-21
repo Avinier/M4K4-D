@@ -9,7 +9,7 @@
 | Last reviewed | 2026-09-18 |
 | Governed by | `risk-prototype-plan.md` v1.12 §"Continuous sourcing and data workstream" (power/energy/thermal ledger deliverable) and §RP-02 (G02 invariant, G03 rehearsal) |
 | Consumes | `docs/02-prototypes/RP-02-electrical/state-register.md` (states, `MD-01`); registered `docs/02-prototypes/RP-02-electrical/power-architecture.md` and `power-branch-contracts.md`; `mass-envelope-ledger.md` (battery mass row); `system-design-brief.md` §7 power/energy, thermal, internal-communication budgets |
-| Feeds | RP-02 (rig sizing, G02 invariant, G03 rehearsal and `power-calculation-ledger.md`); RP-03 (drive rail); RP-06 (thermal/airflow, battery volume); ADR-06 sizing; stage-6 `engineering-budgets.md` |
+| Feeds | RP-02 (rig sizing, G02 invariant, G03 rehearsal and `power-calculation-ledger.md`); RP-03 (drive rail); RP-06 (thermal/airflow, battery volume); ADR-06 sizing |
 
 This ledger is to power what `mass-envelope-ledger.md` is to mass: the single place where per-load-group current, energy and heat live, with an evidence class on every number, ranges instead of zeros for unknowns, a trip-wire that forces a design review, and a standing invariant that must be re-verified when anything changes. RP-02 creates and first populates it; every prototype that energizes anything updates it; nothing else may carry a competing budget.
 

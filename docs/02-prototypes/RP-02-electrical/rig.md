@@ -10,7 +10,7 @@
 | Design it realises | `power-architecture.md` registered four-domain/`PB-*` topology plus the registered implementation rules in `power-implementation-basis.md`, with measurement ranges derived in `power-calculation-ledger.md`, on a bench, ugly |
 | Instrument rule | `workbench.md` item 6: an instrument on the bench must resolve the gate's threshold or the run is exploratory |
 
-Deliberately ugly, per `intuition.md`: the rig is a decision instrument. It is a plywood board with a protected distribution tree, a row of current monitors, explicit system motor-arm and E-stop stages, and a place to plug real loads in as they arrive and substitutes in until they do.
+The rig is a decision instrument. It is a plywood board with a protected distribution tree, a row of current monitors, explicit system motor-arm and E-stop stages, and a place to plug real loads in as they arrive and substitutes in until they do.
 
 ## 1. Bench constraints that shape the rig
 

@@ -17,7 +17,7 @@ Evidence classes are unchanged: `W` measured on the named hardware, `D` manufact
 1. Phase A (now): replace envelopes with sourced geometry; keep every checkbox honest.
 2. Physical mock-up: run the plan's mock-up procedure against the current **~499–524 g / nominal 509 g** head baseline, not 250 g.
 3. Register `RP06-G01`…`G06` numeric thresholds **before** inspecting scored data.
-4. Export only after G01–G06 pass or a named bounded iteration. Binding envelopes go to `physical-architecture.md` and the next head-CAD iteration.
+4. Keep binding envelopes in this CAD tree, the dimensional baseline, and the mass ledger.
 
 ---
 
@@ -230,7 +230,6 @@ Numeric thresholds, lighting/distance matrix, cycle-life, service-time bar and a
 
 | Destination | What RP-06 may write |
 |---|---|
-| `physical-architecture.md` | Binding envelopes, masses, placements, margins |
 | `dimensional-baseline.md` | Explicit revision if 304 mm, box, or +25/124 cannot be met |
 | `mass-envelope-ledger.md` | Body, fastener, and measured-head rows |
 | `candidate-sourcing-matrix.md` | Rechecked G05 fields |

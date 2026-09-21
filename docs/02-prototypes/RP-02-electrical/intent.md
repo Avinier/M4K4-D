@@ -9,8 +9,8 @@
 | Governing plan | `../../01-system/risk-prototype-plan.md` v1.12 §RP-02 |
 | Electrical baseline inherited | `../../01-system/control-topology-options.md` v0.15 (C2/C3 split, differential production links and C2 display relay selected; C3 suffix corrected to N8; C01 paper candidate named, family unselected); `compute-control-architecture.md` v1.2; `../RP-01-head/decision.md` CTRL-01…CTRL-06; `../../01-system/workbench.md` E-stop and PSU rules |
 | Ledger | `../../01-system/power-energy-ledger.md` — the canonical power/energy/thermal budget; RP-02 populates it, it does not own a second copy |
-| Feeds | ADR-03 (controller), ADR-06 (battery, rails, charging, isolation, low-energy policy), ADR-12 (internal communication and timebase); `subsystem-interfaces.md` at stage 6 |
-| Method | `../../intuition.md` §5.1 — intent before numbers; step 3 electrical toolkit: peak concurrent current × path resistance, energy integration over the mixed-duty cycle, regulator/driver/wire thermal steady state |
+| Feeds | ADR-03 (controller), ADR-06 (battery, rails, charging, isolation, low-energy policy), ADR-12 (internal communication and timebase) |
+| Method | Intent before numbers. Electrical toolkit: peak concurrent current × path resistance, energy integration over the mixed-duty cycle, regulator/driver/wire thermal steady state |
 
 ## 1. Why RP-02 exists
 
@@ -104,7 +104,7 @@ G02 and G03 changed shape in plan v1.10. See `gates.md` §2 for what RP-02 recor
 
 - duplicate `control-topology-options.md` — RP-02 closes it, it does not copy it;
 - hold a second budget — the ledger in `01-system/` is the only power/energy record; the moment there are two, one is wrong;
-- close SC-14 — the 20-minute untethered run of the *integrated droid* is a stage-7 validation; RP-02 rehearses it on the rig and records margin;
+- close SC-14 — the 20-minute untethered run of the integrated droid is not an RP-02 closure; RP-02 rehearses it on the rig and records margin;
 - select servos (RP-01), drive motors (RP-03), microphones or the speaker (RP-05/RP-06);
 - write display firmware or define face assets;
 - authorize any purchase — architecture selections and implementation leads are recorded with their evidence obligations, but purchase remains a separate builder action and ADR closure still requires the registered gates.

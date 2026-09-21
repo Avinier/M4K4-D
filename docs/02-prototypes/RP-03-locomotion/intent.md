@@ -11,7 +11,7 @@
 | Electrical baseline inherited | `RP02-P3-REG-01/02` (C3 = ESP32-S3-DevKitC-1-N8); `compute-control-architecture.md` CA-03/11/12; `power-architecture.md` PA-11/13; `link-contract.md` v0.4 envelope |
 | Ledger | `../../01-system/power-energy-ledger.md` — RP-03 populates `LG-04`/`LG-10`; `../../01-system/mass-envelope-ledger.md` — RP-03 populates the drive row. No second copy lives here |
 | Feeds | ADR-04 (wheeled-drive and passive-support geometry, provisional); ADR-07 (obstacle and tabletop-edge sensing arrangement, provisional); ADR-06 *sizing* (drive `W` rows); ADR-03 (C3 half of RP02-G05); ADR-05 (measured base response model for RP-04) |
-| Method | `../../intuition.md` §5.1 — intent before numbers, numbers before physics, physics before concepts, concepts before rig, rig before decision. Toolkit: `d_available > v·t_latency + v²/(2·a_brake) + d_margin` |
+| Method | Intent before numbers, numbers before physics, physics before concepts, concepts before rig, rig before decision. Toolkit: `d_available > v·t_latency + v²/(2·a_brake) + d_margin` |
 
 ## 1. Why RP-03 exists
 
@@ -24,7 +24,7 @@ RP-03 exists to close two architecture decisions of different kinds. Mixing them
 | ADR | What must be true to close it | Where RP-03 produces that |
 |---|---|---|
 | **ADR-04** wheeled-drive and passive-support geometry | A chassis envelope with named wheel/caster/skid positions, a drivetrain class, and measured margin against caster lift, stopping distance, minimum controllable speed and reversal quality | `physics.md`; `concepts/`; `drivetrain-screen-01.md`; `gates.md` G01, G02, G06; measured CoM/stability in Phase B |
-| **ADR-07** obstacle and tabletop-edge sensing arrangement | A sensing arrangement with coverage geometry, a controller priority order, and a message set that `subsystem-interfaces.md` can inherit; zero uncaught tabletop departures; zero harmful obstacle contact in the registered set | `physics.md` coverage; `sensing-screen-01.md`; `base-control-architecture.md`; `fault-matrix.md`; `gates.md` G03, G04, G05 |
+| **ADR-07** obstacle and tabletop-edge sensing arrangement | A sensing arrangement with coverage geometry, a controller priority order, and a message set the base controller can carry; zero uncaught tabletop departures; zero harmful obstacle contact in the registered set | `physics.md` coverage; `sensing-screen-01.md`; `base-control-architecture.md`; `fault-matrix.md`; `gates.md` G03, G04, G05 |
 | **ADR-06 sizing** (informed, not closed) | Drive `W` rows for `LG-04`/`LG-10` and the G02-invariant re-run obligation | Ledger refresh now as `E`; `W` in Phase B/C |
 | **ADR-03** (informed) | C3 half of RP02-G05: loop rate, jitter, encoder capture, watchdog feed | `base-control-architecture.md`; Phase A bench |
 | **ADR-05** (informed) | Measured base response model — onset latency, decel-through-zero, settle — for RP-04 composition | G06; Phase B profiles |
@@ -147,7 +147,7 @@ Never-lists live in the freezeable register `FS-01…11` in `storyboard.md` §5 
 - implement person perception, target continuity or following *policy* (RP-07);
 - compose head–base performances or judge observer coherence (RP-04);
 - close SC-14 or any integrated-droid requirement;
-- produce final chassis CAD — working geometry lives in [`RP-06-cad`](../RP-06-cad/README.md); root `cad/` stays reserved for stage-7 freeze;
+- produce a second chassis CAD tree — working geometry lives in [`RP-06-cad`](../RP-06-cad/README.md);
 - authorize any purchase; a reference motor bought for Phase A is bench equipment until a freeze says otherwise;
 - weaken the 0.5 m/s follow ceiling, the tabletop-stationary default, or the caster-lift margin rule;
 - carry a second copy of geometry targets, mass rows, power rows, `OM/BS/EV/CC/LP` vocabulary, the C0↔MCU framing, `PA-13`, `F-19/22/26`, sourcing rows, bench rules, run identity, or the timebase.

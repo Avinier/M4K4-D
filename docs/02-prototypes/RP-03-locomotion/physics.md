@@ -7,7 +7,7 @@
 | Last updated | 2026-09-18 |
 | Owner | Project builder |
 | Governing plan | `plan.md` Part 2; `plan.md` §5 checklist |
-| Method | `../../intuition.md` §5.1 step 3; safety toolkit `d_available > v·t_latency + v²/(2·a_brake) + d_margin` |
+| Method | Safety toolkit `d_available > v·t_latency + v²/(2·a_brake) + d_margin` |
 | Consumes | `intent.md`; `storyboard.md`; `../../01-system/dimensional-baseline.md` v1.10; `../../01-system/mass-envelope-ledger.md` v0.14; `../../01-system/power-energy-ledger.md` v0.13; RP-01 `fullproofmath.md` yaw **0.1099 N·m** (`E`, paper) |
 | Feeds | `concepts/`; `drivetrain-screen-01.md`; `sensing-screen-01.md`; `gates.md`; ledger `LG-04`/`LG-10` `E` refresh |
 | Does not claim | A measured CoM, a measured lift onset, a selected drivetrain, a selected sensor, a frozen footprint, a frozen `a_tip`, or any gate pass |

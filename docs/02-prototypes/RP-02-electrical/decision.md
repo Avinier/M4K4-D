@@ -7,7 +7,7 @@
 | Revised | 2026-09-21 |
 | Design question | What compute/controller split, internal link, rail and protection topology, and energy source lets Makad run representative head, drive, display, camera, audio and compute loads concurrently — and with what measured margin? |
 | Gate question | Does that design sustain every registered state and the registered mixed-duty cycle for at least 20 minutes without unsafe motion, unintended reset, rail excursion, data staleness or thermal violation — and does every injected fault produce a bounded state? |
-| Feeds | ADR-03, ADR-06, ADR-12; power/energy, thermal, internal-communication and compute-coexistence budget rows; `subsystem-interfaces.md` |
+| Feeds | ADR-03, ADR-06, ADR-12; power/energy, thermal, internal-communication and compute-coexistence budget rows |
 | Rule | A negative runtime or coexistence result is an `iterate` on the design or a `reject` of a candidate — never a threshold change. CON-10's 20 minutes cannot be weakened; `Defer` is unavailable for Core outcomes. Failed runs stay cited here |
 | Remaining-open index | Folder-wide list lives in [`../openitems.md`](../openitems.md), including final wire/fuse/converter/pack ratings. This file remains the RP-02 decision record. |
 

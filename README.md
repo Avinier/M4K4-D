@@ -12,7 +12,7 @@ The central V1 priority is simple:
 
 Makad's defining advantage is expressiveness. That expression comes from what M4 understands, sees, and hears, and from how convincingly its display, status light, astromech audio, head, wheeled base, and timing communicate one intent.
 
-> As of 2026-09-21, the phase-gated RP → ADR → BOM → CAD workflow is retired. Documents under `01-system` and `02-prototypes` remain engineering references and historical evidence, but their workflow, registration, closure, and purchase-authorization rules no longer govern ongoing development. `00-foundation` remains the product-intent authority.
+`00-foundation` is the product-intent authority. Documents under `01-system` and `02-prototypes` are engineering reference. Design, sourcing, CAD, software, and hardware proceed together.
 
 This README orients the repository around the current design, current build state, and immediate next work. [`MEMORY.md`](MEMORY.md) is a short chronological log of later consequential discoveries and decisions.
 
@@ -22,7 +22,7 @@ M4 is a battery-powered floor droid with a three-axis head, an animated face, a 
 
 The current physical target is **300 × 205 × 180 mm**, with Layout 03 producing a provisional **304 mm** neutral stack (140 mm body-top datum + 60 mm neck + 104 mm crown-inclusive head). Drive geometry is Ø84 mm wheels, 170 mm track, 110 mm axle-to-front-support, and a mandatory rear anti-tip skid. Front support is a Ø1″ ball transfer; a swivel caster remains a comparison article on the same mount.
 
-Working geometry lives in [`docs/02-prototypes/RP-06-cad/`](docs/02-prototypes/RP-06-cad/README.md): head [Layout 03](docs/02-prototypes/RP-06-cad/head/layout-03/README.md) and body/chassis [Layout 02](docs/02-prototypes/RP-06-cad/body-chassis/layout-02/README.md). Root `cad/`, `docs/03-architecture/`, and `docs/04-bom/` may now be used as those artifacts are written.
+Working geometry lives in [`docs/02-prototypes/RP-06-cad/`](docs/02-prototypes/RP-06-cad/README.md): head [Layout 03](docs/02-prototypes/RP-06-cad/head/layout-03/README.md) and body/chassis [Layout 02](docs/02-prototypes/RP-06-cad/body-chassis/layout-02/README.md).
 
 ### Selected components
 
@@ -59,11 +59,11 @@ The design is far ahead of the physical robot. Head and body CAD exist; electric
 
 ## Immediate next work
 
-BOM, CAD, software, and hardware may proceed together. The useful next work is:
+Sourcing, CAD, software, and hardware proceed together. The useful next work is:
 
 - **Finish the current head CAD** so it can be printed: remove the two retainer-screw collisions; stiffen or verify the pitch frame and roll saddle; move hard stops beyond usable travel; select a bearing; add physical balance trim and explicit CAD/firmware sign mapping.
 - **Choose and source remaining parts** as packaging needs them — head servos, wheels/hubs/motors, ball transfer, battery and power hardware, audio, status LED, connectors — and replace CAD envelopes with real geometry.
-- **Keep the whole-robot model current** in RP-06 (or move it to root `cad/` when that is more convenient): accept or recover the 4 mm stack over 300 mm; reconcile Layout 02's rear-only cliff channel with the base safety design.
+- **Keep the whole-robot model current** in RP-06: accept or recover the 4 mm stack over 300 mm; reconcile Layout 02's rear-only cliff channel with the base safety design.
 - **Implement firmware and software** on the same timeline: C2/C3, C0 behaviour and perception, the serial link and timebase, and face rendering on the display.
 - **Build and measure** as parts arrive: weigh display, camera, C2, prints, and finish coupons; print the head and chassis; stand up a protected bench and start moving hardware.
 
@@ -86,7 +86,7 @@ BOM, CAD, software, and hardware may proceed together. The useful next work is:
 
 ### Research and history
 
-These folders remain useful. Their registration, gate, and purchase-authorization language is historical.
+These folders are engineering reference. They do not set how work proceeds.
 
 - [System design brief](docs/01-system/system-design-brief.md), [risk-prototype plan](docs/01-system/risk-prototype-plan.md), [workbench](docs/01-system/workbench.md), [run-record convention](docs/01-system/run-record-convention.md)
 - Head: [`RP-01-head/`](docs/02-prototypes/RP-01-head/)
@@ -95,18 +95,16 @@ These folders remain useful. Their registration, gate, and purchase-authorizatio
 - Coordination: [`RP-04-coordination/`](docs/02-prototypes/RP-04-coordination/README.md)
 - Interaction: [`RP-05-interaction/`](docs/02-prototypes/RP-05-interaction/README.md)
 - Following: [`RP-07-following/`](docs/02-prototypes/RP-07-following/README.md)
-- Earlier memory log: [`docs/archive/MEMORY-20260921.md`](docs/archive/MEMORY-20260921.md)
+- Earlier memory log: [`archive/MEMORY-20260921.md`](archive/MEMORY-20260921.md)
 
 ## Repository
 
 ```
 docs/00-foundation/     product intent and constraints     authoritative
-docs/01-system/         engineering research and planning  reference
-docs/02-prototypes/     evidence, calculations, history    reference
-docs/03-architecture/   architecture notes as they are written
-docs/04-bom/            purchases and sourcing as they are written
-cad/                    geometry as it is useful to keep here
+docs/01-system/         engineering reference
+docs/02-prototypes/     studies, calculations, and working CAD
 docs/archive/           superseded documents
+archive/                prior process log
 MEMORY.md               chronological build and decision log
 README.md               this orientation
 ```

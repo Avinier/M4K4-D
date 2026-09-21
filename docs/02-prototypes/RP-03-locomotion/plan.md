@@ -7,12 +7,12 @@
 | Owner | Project builder |
 | Governing plan | `../../01-system/risk-prototype-plan.md` v1.13 §RP-03 (stage 3) |
 | Purpose | Close **ADR-04** (wheeled-drive and passive-support geometry) and **ADR-07** (obstacle and tabletop-edge sensing arrangement) provisionally; supply the drive `W` rows that ADR-06 *sizing* waits on; freeze the C3 pin map, motor-driver/sensor interface and base message set that RP-02 left explicitly open; deliver the measured base model RP-04 composes against |
-| Method | `../../intuition.md` §5.1 — intent before numbers, numbers before physics, physics before concepts, concepts before rig, rig before decision. RP-03's toolkit is the safety toolkit: `d_available > v·t_latency + v²/(2·a_brake) + d_margin` |
+| Method | Intent before numbers, numbers before physics, physics before concepts, concepts before rig, rig before decision. RP-03's toolkit is the safety toolkit: `d_available > v·t_latency + v²/(2·a_brake) + d_margin` |
 | Relationship to siblings | RP-01 is an object, RP-02 is a set of states and interfaces. **RP-03 is a vehicle plus a safety authority.** It is the first prototype that can destroy itself (a desk edge), the first with real inductive/regenerative load on the motor bus, and the first with a sensor inside the stop path |
 
 ## 0. Why the folder is planned before it is written
 
-RP-01 grew organically and needed a closure audit to find what it had not written down. RP-02 was planned in Parts and closed each Part with a registration record. RP-03 follows the RP-02 pattern because its two closures are different kinds of object: ADR-04 closes into *geometry* (a chassis envelope that integrated CAD transcribes), while ADR-07 closes into *architecture* (a sensing arrangement, a controller priority order and a message set that `subsystem-interfaces.md` inherits). A folder that mixes the two produces a chassis document that quietly decides sensor placement, or a sensor study that quietly fixes the wheelbase. The plan keeps them in separate files with separate registration records.
+RP-01 grew organically and needed a closure audit to find what it had not written down. RP-02 was planned in Parts and closed each Part with a registration record. RP-03 follows the RP-02 pattern because its two closures are different kinds of object: ADR-04 closes into *geometry* (a chassis envelope the body CAD records), while ADR-07 closes into *sensing* (a sensing arrangement, a controller priority order and a message set the base controller publishes). A folder that mixes the two produces a chassis document that quietly decides sensor placement, or a sensor study that quietly fixes the wheelbase. The plan keeps them in separate files with separate registration records.
 
 The three failure modes this plan is written against, all already seen once in this repository:
 
@@ -315,7 +315,7 @@ The rig is a decision instrument, deliberately ugly.
 - implement person perception, target continuity or following policy (RP-07);
 - compose head–base performances or judge coherence (RP-04);
 - close SC-14 or any integrated-droid requirement;
-- produce final chassis CAD — working geometry lives in [`RP-06-cad`](../RP-06-cad/README.md); root `cad/` stays reserved for stage-7 freeze;
+- produce a second chassis CAD tree — working geometry lives in [`RP-06-cad`](../RP-06-cad/README.md);
 - authorize any purchase; a reference motor bought for Phase A is bench equipment until a freeze says otherwise;
 - weaken the 0.5 m/s follow ceiling, the tabletop-stationary default or the caster-lift margin rule.
 

@@ -3,9 +3,9 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.2 |
+| Version | 1.3 |
 | Owner | Project builder |
-| Last reviewed | 2026-08-25 |
+| Last reviewed | 2026-09-22 |
 | Depends on | `vision.md`, `v1-scope.md` |
 | Current physical targets | `../01-system/dimensional-baseline.md` |
 
@@ -85,9 +85,6 @@ Where an identified behaviour or component can cause harm or damage, safety take
 5. Prototype wheeled locomotion, low-speed quality, stopping, stability, obstacle handling, and tabletop-edge protection.
 6. Prototype natural coordinated head–body–wheel motion and the scheduling/firmware behaviour that composes it.
 7. Validate wake/interaction latency, then person tracking/following and audio/display integration against the bounded household envelope.
-8. Close the architecture and mechanical, electrical, power, compute, internal-communication, external-network, perception, timing, sourcing, cost, and schedule budgets from evidence.
-9. Select final components and build the procurement BOM.
-10. Freeze integrated CAD only after the relevant prototype, sourcing, and budget gates pass.
 
 ## Open implementation decisions
 
@@ -95,8 +92,8 @@ Where an identified behaviour or component can cause harm or damage, safety take
 - [ ] Produce the first complete component, prototype, tool, fabrication, shipping, replacement, and contingency cost range.
 - [ ] Select the charging method and whether operation while charging is allowed.
 - [ ] Set the exact tabletop test/calibration footprint after stopping tests.
-- [ ] Validate the approved dimensional baseline and derive the maximum acceptable total mass during architecture/layout work.
+- [ ] Validate the approved dimensional baseline and derive the maximum acceptable total mass during layout work.
 
 ### Review notes
 
-Approved by the project builder on 2026-08-14. Version 1.1 removed the fixed budget ceiling, established an initial 20-minute untethered runtime, defined a bounded household interaction/following envelope, limited tabletop motion, and prioritized three-axis mechanical/firmware prototyping. Version 1.2 adopts the 2026-08-25 dimensional baseline while leaving maximum total mass architecture-derived. The fixed V1 deadline remains 5 December 2026.
+Approved by the project builder on 2026-08-14. Version 1.1 removed the fixed budget ceiling, established an initial 20-minute untethered runtime, defined a bounded household interaction/following envelope, limited tabletop motion, and prioritized three-axis mechanical/firmware prototyping. Version 1.2 adopts the 2026-08-25 dimensional baseline while leaving maximum total mass layout-derived. Version 1.3 ends the engineering decision order at the prototype work. The fixed V1 deadline remains 5 December 2026.

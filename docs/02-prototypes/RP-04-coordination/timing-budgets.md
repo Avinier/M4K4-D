@@ -25,7 +25,7 @@ These are three different quantities. Do not register one number for all three. 
 
 | ID | Quantity | P-01 planning `E` | Literature class | Re-run when |
 |---|---|---|---|---|
-| `T-LEAD` | Face/light **before** head onset | 80–170 ms (`intuition.md`); motor band 80–150 | Eye→head lag ~150 ms reactive / ~30 ms predictive (Sidenmark 2019). **Not** AV fusion | Measured D1 + C2 |
+| `T-LEAD` | Face/light **before** head onset | 80–170 ms planning band; motor band 80–150 | Eye→head lag ~150 ms reactive / ~30 ms predictive (Sidenmark 2019). **Not** AV fusion | Measured D1 + C2 |
 | `T-BEAT` | Same-beat **tolerance** around intended coincidence | 150 ms after intended relation; tighten toward 80–100 ms for a hard transient | Flash+beep ~±40 ms; speech TBW ~200 ms; ITU detectability +45/−125 ms | G01; G03 on real clips |
 | `T-DEAD` | Hang ceiling before `OX-DELAY` | **300 ms from that wait’s intended start** (`300_000` µs). Not stacked after `T-BEAT`. Not “300 ms past the 150 ms window” | Independent engineering overlay. Perception “still together” is `T-BEAT` | Virtual wait-language; then C2/C3 `W` |
 

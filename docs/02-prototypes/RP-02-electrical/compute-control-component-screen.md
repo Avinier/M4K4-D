@@ -107,7 +107,7 @@ Buy one working unit plus one spare only where the workbench/repair strategy cal
 | Two external watchdogs | TPS3436-Q1 family price signal ~563 | Low; example suffix price only, exact timing suffix remains unselected |
 | Carriers/protection/connectors | TBD after schematic/BOM | Open; IC price alone is not an installed carrier cost |
 
-This table is not added to the final BOM and does not authorize spend. The programme-wide roll-up remains `../../01-system/candidate-sourcing-matrix.md` until stage 7.
+This table does not authorize spend. The programme-wide roll-up remains `../../01-system/candidate-sourcing-matrix.md`.
 
 ## 6. Change log
 

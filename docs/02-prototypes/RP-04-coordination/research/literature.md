@@ -100,7 +100,7 @@ Jibo [Embodied Speech](https://hri2024.jibo.media.mit.edu/attachments/SDK-SDK---
 
 ## 3. Timing — three `E` quantities, not one
 
-The 80–170 ms class in [`intuition.md`](../../../intuition.md) mixed three different things. Literature will not let them share a number.
+The old 80–170 ms planning band mixed three different things. Literature will not let them share a number.
 
 | ID | Quantity | Planning `E` | What the literature is | Not |
 |---|---|---|---|---|

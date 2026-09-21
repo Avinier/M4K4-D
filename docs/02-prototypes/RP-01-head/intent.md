@@ -8,7 +8,7 @@
 | Physical baseline | Current envelope/placement and revised load lower bound from `../../01-system/dimensional-baseline.md`; detailed RP-01 material/finish/mass ownership in `material-finish-mass-decision.md` |
 | Numeric storyboard | `storyboard.md` — keyframes, angles, timing, minimum viable and best-case envelopes |
 | Feeds | `storyboard.md`, `physics.md`, `gates.md`, RP-01 procedure steps 3–5 |
-| Method | Two passes kept separate: authored intent first, then quantified motion hypotheses. See `docs/intuition.md` §5.1 steps 1–2. |
+| Method | Two passes kept separate: authored intent first, then quantified motion hypotheses. |
 
 ## 1. Purpose and prototype boundary
 

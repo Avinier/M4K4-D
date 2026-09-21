@@ -9,7 +9,7 @@
 | Governed by | `risk-prototype-plan.md` v1.12 §"Continuous sourcing and data workstream" (monotonic event-time strategy deliverable) and §"Open inputs before RP-01 scored testing" |
 | Grounding | `control-topology-options.md` v0.10 §5 (one master, timestamp-at-source, serial offset reconciliation; PTP overkill, NTP too coarse) |
 | Consumes | `docs/02-prototypes/RP-02-electrical/link-contract.md` §4.4 `TIME_SYNC`; `run-record-convention.md` |
-| Feeds | Every scored run's timestamps; RP-02 G05; RP-04 coordination; `subsystem-interfaces.md`; ADR-12 |
+| Feeds | Every scored run's timestamps; RP-02 G05; RP-04 coordination; ADR-12 |
 
 The moment there is more than one controller there is more than one clock. Independent oscillators drift at tens of ppm — a C2 crystal at 20 ppm is 1.2 ms per minute — so "the same instant" means something different on each board. AD-01 ("one character") and AD-11 ("diagnosable") both fail on unreconciled clocks: coordination looks laggy for reasons no one can find, and a combined-reversal analysis cannot say which axis moved first. This document fixes the method so that every RP-01…RP-07 timestamp is comparable.
 

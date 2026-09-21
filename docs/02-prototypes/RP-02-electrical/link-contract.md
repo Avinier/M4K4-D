@@ -8,7 +8,7 @@
 | Revised | 2026-09-21 |
 | Authority | `compute-control-architecture.md` `CA-01…16`; `../../01-system/control-topology-options.md` §3, §7 (framed serial, semantic command surface); `../../01-system/system-design-brief.md` §5 information contracts and contract rules 1–5; §6 state dimensions and failure priorities |
 | Timebase | `../../01-system/timebase.md` — all timestamps in this contract are master-monotonic microseconds after offset reconciliation |
-| Feeds | ADR-12; `subsystem-interfaces.md` at stage 6; `fault-matrix.md`; `gates.md` G04/G05 |
+| Feeds | ADR-12; `fault-matrix.md`; `gates.md` G04/G05 |
 | Not in scope | The servo bus protocol (RP-01 family freeze decides Dynamixel 2.0 / Feetech / other; C01 would be Dynamixel Protocol 2.0 TTL, 3.3 V logic 5 V compatible); display asset transfer; any wireless path |
 
 This is the artifact RP-02 produces that outlives it. `RP02-P4-REG-01` registers the **definition** of the C0↔C2 message set, COBS-delimited/CRC-protected framing method, source stamps, explicit expiry, heartbeat supervision, two-phase arm and fresh-intent recovery. It does not register numeric timing or a wire-compatible codec. Changes to these semantics need a new registration and fault review; byte-layout revisions remain versioned here and are qualified under G04/G05.

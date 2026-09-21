@@ -4,7 +4,7 @@
 |---|---|
 | Status | **Layout 03 external rigid-body demand complete 2026-09-13; complete paper physics OPEN.** Structural screening flags the current pitch frame and roll saddle; actuator-internal inertia is absent from the numerical model. C01 remains a preliminary external-load screen, not a paper pass. |
 | Inputs | `storyboard.md` ranges and kinematic sizing cases; `../../01-system/dimensional-baseline.md`; `material-finish-mass-decision.md`; `payload-mass-capture.md`; CAD m, CoM and inertia tensor; candidate axis placements |
-| Method | `docs/intuition.md` §5.1 step 3; worked analogue: the Adam head paper |
+| Method | External rigid-body demand before actuator-internal inertia; worked analogue: the Adam head paper |
 
 ## Authored kinematic inputs
 

@@ -10,7 +10,7 @@
 | Design it realises | `intent.md` vehicle-plus-safety-authority; `physics.md` v0.1 envelope (ranges, not a freeze); `storyboard.md` `BM-00…12`; interchangeable Concept A/B front support; C3 on the frame |
 | Instrument rule | `workbench.md` item 6: an instrument on the bench must resolve the gate's threshold or the run is **exploratory-only**. If this bench cannot resolve 50 ms detection-to-deceleration, G03 latency and G05 local time-to-brake are exploratory-only |
 
-Deliberately ugly, per `intuition.md`: the rig is a decision instrument, not a mini-droid. It is an open frame with adjustable support geometry, ballast that sets mass and both CoM coordinates independently, a protected motor tree, a sensor interposer, and a floor-marked course with a catch on the table. Every hour spent making it pretty is an hour not spent measuring lift onset.
+The rig is a decision instrument, not a mini-droid. It is an open frame with adjustable support geometry, ballast that sets mass and both CoM coordinates independently, a protected motor tree, a sensor interposer, and a floor-marked course with a catch on the table. Every hour spent making it pretty is an hour not spent measuring lift onset.
 
 ## 1. Bench constraints that shape the rig
 

@@ -153,7 +153,7 @@ Fills the chain in §5 for P-01 completely, then P-02/P-03 and each overlay as d
 
 Drafts `observer-protocol.md` questions. Does **not** run a household or mock-video panel (`BD-05`, builder decision). G03 freeze is Part 6, on real clips, **after** non-scored engineering tuning. Engineering LED must be cropped from rated clips.
 
-Must not convert 80–170 ms from `intuition.md` into a pass threshold, infer physical onset from dispatch, or tune a composer against a **frozen** observer sheet. Non-scored engineering runs may change the composer before freeze.
+Must not convert the old 80–170 ms planning band into a pass threshold, infer physical onset from dispatch, or tune a composer against a **frozen** observer sheet. Non-scored engineering runs may change the composer before freeze.
 
 ### Part 3 — Mechanism shortlist
 

@@ -22,8 +22,6 @@ The prototypes are decision instruments, not partial versions of the final droid
 | 3 | RP-03 drive and motion safety | RP03 gates pass → provisional ADR-04/ADR-07 |
 | 4 | RP-04 coordination, then RP-05 interaction (may overlap) | RP04/RP05 gates pass → provisional ADR-05/ADR-10/ADR-11 |
 | 5 | RP-06 final closure + RP-07 following | RP06/RP07 gates pass → provisional ADR-01/ADR-08/ADR-09; spatial-hearing ADR-13 decision |
-| 6 | `system-architecture.md` + `engineering-budgets.md` + `physical-architecture.md` + `subsystem-interfaces.md` from evidence | All 13 ADRs closed from cited evidence |
-| 7 | Final component selection → BOM → integrated CAD → build → integration → validation | Core demonstration passes before 5 Dec 2026 |
 
 ## Prototype sequence and evidence flow
 
@@ -37,13 +35,11 @@ flowchart LR
     P5["RP-05 Wake and interaction latency"]
     P6["RP-06 Sourced head/layout mock-up"]
     P7["RP-07 Person tracking and following"]
-    A["Architecture and budgets"]
 
-    P0 --> P1 --> P2 --> P3 --> P4 --> P5 --> P7 --> A
+    P0 --> P1 --> P2 --> P3 --> P4 --> P5 --> P7
     P0 --> P6
     P6 --> P1
     P6 --> P2
-    P6 --> A
 ```
 
 RP-06 is numbered sixth to preserve the approved portfolio, but its sourcing and envelope work begins with the sourcing workstream and runs alongside RP-01. Its final integrated layout gate closes after representative head, electrical, and acoustic evidence exists.
@@ -103,7 +99,7 @@ The approved `workbench.md` collects candidate tools, hazard notes, stop/isolati
 
 - **Candidate sourcing matrix** — verified specifications, supplier, availability, lead time, substitutes, quantity, landed cost, replacement risk, required tools, and fabrication dependency. Aggregate rows into the first complete project cost range (CON-TBD-13) before major procurement.
 - **Mass/envelope ledger** — head, body, battery, drive, electronics, wiring, fasteners, and margin. Unknowns are ranges, not zero. This ledger is the head-CAD blocker and feeds RP-01/RP-06 directly.
-- **Power/energy/thermal ledger** — `power-energy-ledger.md`: per-load-group idle/average/peak, transient character, evidence class, state energy model, the RP02-G02 coexistence invariant with its re-run rule, and trip-wires that force a design review. Created by RP-02; updated by every prototype that energizes anything; the only power budget until stage 6.
+- **Power/energy/thermal ledger** — `power-energy-ledger.md`: per-load-group idle/average/peak, transient character, evidence class, state energy model, the RP02-G02 coexistence invariant with its re-run rule, and trip-wires that force a design review. Created by RP-02; updated by every prototype that energizes anything; the power budget.
 - **Monotonic event-time strategy** — `timebase.md`: one master clock reference, timestamp-at-source, serial offset reconciliation and the status-light video cue for commands, observations, feedback, health, and external video synchronization. Validated under RP02-G05; required before the first scored RP-01 run.
 - **Configuration and run-ID convention** — `run-record-convention.md` prevents data from different builds being mixed; every scored run carries firmware/software/configuration/rig revision identifiers and an immutable evidence manifest.
 
@@ -295,7 +291,7 @@ Run each performance from registered start poses, at representative loads and in
 
 ### Exit decision
 
-Select the provisional expression/motion composition and scheduling model for ADR-05, and export measured timing requirements to `subsystem-interfaces.md` and `engineering-budgets.md`.
+Select the provisional expression/motion composition and scheduling model for ADR-05, and record measured timing requirements with the coordination work.
 
 ## RP-05 — Wake and interaction latency path
 
@@ -384,7 +380,7 @@ Evaluate display/face legibility over registered angles/distances/lighting; came
 
 ### Exit decision
 
-Select the provisional head sensory/audio layout and sourcing strategy around the already locked display for ADR-01, ADR-08 and ADR-11. Export binding envelopes and margins to `physical-architecture.md` and the next head-CAD iteration. Reopen the display selection only through the recorded hard-failure change-control rule in `display-candidate-study.md`.
+Select the provisional head sensory/audio layout and sourcing strategy around the already locked display for ADR-01, ADR-08 and ADR-11. Keep binding envelopes and margins in the working CAD and the dimensional baseline. Reopen the display selection only through the recorded hard-failure change-control rule in `display-candidate-study.md`.
 
 ## RP-07 — Person tracking and short household following loop
 
@@ -451,7 +447,7 @@ Parallel work is allowed only when it does not consume the same unsafe rig, depe
 
 Stop the active test immediately for unexpected unbounded motion, fixture movement, threatened fall, damaged insulation/cable, smoke/odour/swelling, component temperature beyond the registered limit, repeated unexplained reset, failed physical isolation, or any condition outside the reviewed hazard envelope.
 
-A Core prototype that misses its gate produces an iteration, alternative candidate, architecture change, or explicit foundation review—not a quiet scope reduction. A Candidate may be deferred. Major procurement, final component selection and integrated CAD freeze remain blocked until their contributing prototypes, budgets and ADRs have passed.
+A Core prototype that misses its gate produces an iteration, alternative candidate, architecture change, or explicit foundation review—not a quiet scope reduction. A Candidate may be deferred.
 
 ## Decision closeout
 
@@ -465,8 +461,6 @@ After each prototype:
 6. update sourcing/cost and physical-envelope ledgers;
 7. identify which downstream prototype assumptions changed;
 8. decide pass, bounded iteration, candidate rejection, or optional deferral.
-
-The architecture phase may begin with provisional option studies while prototypes run. `system-architecture.md` becomes an approved selection only when its safety-critical, mechanically coupled and packaging-critical choices cite the relevant passed evidence.
 
 ## Open inputs before RP-01 scored testing
 
@@ -499,6 +493,6 @@ Version 1.13 (2026-09-19) consumes `dimensional-baseline.md` v1.12: V1 front sup
 
 Version 1.14 (2026-09-21) replaces the leftover ~250 g moving-head target in the RP-06 mock-up procedure with the current Layout 03 D/E baseline (~499–524 g complete, nominal 509 g at M008=20 g), records the RP-06 evidence folder, and names the selected Pi 5 / Active Cooler as body mock-up content. No numeric gate is registered.
 
-Version 1.15 (2026-09-21) relocates working prototype CAD into `docs/02-prototypes/RP-06-cad/`. RP-01 and RP-03 keep mechanism/physics/gates; their former `cad/` directories become forwarding stubs. Root `cad/` remains reserved for stage-7 freeze. No numeric gate is registered.
+Version 1.15 (2026-09-21) relocates working prototype CAD into `docs/02-prototypes/RP-06-cad/`. RP-01 and RP-03 keep mechanism/physics/gates; their former `cad/` directories become forwarding stubs. No numeric gate is registered.
 
 Except for the later-adopted dimensional/drive topology baseline, the selected no-touch Waveshare display SKU 30493 and the selected visible-light Raspberry Pi Camera Module 3 Wide SC0874, plan approval does not approve another exact component, supplier, mechanism implementation, production camera interconnect, or numeric `SC-TBD-*` or `CON-TBD-*` gate threshold. `workbench.md` was approved separately on 2026-08-17 and incorporated as the Stage 0 baseline in version 1.1 of this plan. Numeric prototype gates remain subject to preregistration before scored runs, and powered scored testing remains blocked until the approved readiness gate's safety, instrumentation, configuration, and logging requirements are satisfied.

@@ -4,17 +4,14 @@ This is a chronological record of consequential build discoveries and decisions.
 Entries are added when they will help future work; routine thought and experimentation
 do not require documentation.
 
-The previous append-only process log is preserved unchanged at
-[`docs/archive/MEMORY-20260921.md`](docs/archive/MEMORY-20260921.md).
+The previous process log is preserved unchanged at
+[`archive/MEMORY-20260921.md`](archive/MEMORY-20260921.md).
 
 ## 2026-09-21 — Development-method reset
 
-Retired the phase-gated RP/ADR methodology. Existing system and prototype documents
-remain reference material. Development now proceeds through iterative design, sourcing,
-CAD, implementation, physical testing, and integration.
-
-`docs/intuition.md` was deleted; Git still has it. `00-foundation` remains the
-product-intent authority. BOM, CAD, software, and hardware may proceed together.
+`00-foundation` remains the product-intent authority. Documents under `01-system`
+and `02-prototypes` remain engineering reference. Design, sourcing, CAD, software,
+and hardware proceed together.
 
 ## YYYY-MM-DD — Short title
 

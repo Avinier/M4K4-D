@@ -7,7 +7,7 @@
 | Owner | Project builder |
 | Created | 2026-08-17 |
 | Last reviewed | 2026-09-16 |
-| Governed by | `risk-prototype-plan.md` — permitted provisional option study (decision-closeout: "the architecture phase may begin with provisional option studies while prototypes run") |
+| Governed by | `risk-prototype-plan.md` |
 | Feeds | RP-02 (electrical/control backbone) → **ADR-06 (power)**, **ADR-12 (control topology)**; the monotonic-timebase deliverable (plan §104) |
 | Consumes | `system-design-brief.md` responsibility set + AD-01/AD-06/AD-08; `mass-envelope-ledger.md` head section |
 
@@ -186,7 +186,7 @@ Selected **2026-09-07**. Screened on pin budget, installed volume, bus-neutralit
 | ESP32-S3-DevKitC-1 *(as installed board)* | ~36 GPIO and the best documentation, but 63 × 25.5 mm against a 35 mm pocket forces a head repackage for no functional gain. **Retained as the bench twin**, where its size helps. |
 | Waveshare *Servo Driver with ESP32* (65 × 30 mm); *Bus Servo Driver HAT (A)* (65 × 57 mm) | ESP32-WROOM-32, not S3 — breaks the locked family. Both are wired for Feetech ST/SC servos, so selecting one would silently decide the actuator family from the controller end. |
 | SB Components *Serial Servo ESP32* | Correct silicon and an integrated bus, but carries an unnecessary 1.14″ TFT, places the servo bus on UART0 GPIO43/44 against the console, and is not reliably stocked in India. |
-| Bare ESP32-S3-WROOM-1 on a custom carrier | Best mass and volume, but requires a PCB spin. Correct for integrated CAD, wrong for RP-01. |
+| Bare ESP32-S3-WROOM-1 on a custom carrier | Best mass and volume, but requires a PCB spin. Right once a custom carrier is worth a board spin, wrong for the head prototype. |
 | ESP32-S3-Zero-N8R8 | 8 MB/8 MB via ESP32-S3-PICO-1. Motion firmware needs neither; take the cheaper, simpler part. |
 
 **Constraints this imposes**
@@ -221,7 +221,6 @@ This is a selection, not validation. **RP02-G05 still owns** measured loop, link
 - [x] **Selected 2026-09-16 (`RP02-P2-REG-02`):** Raspberry Pi 5 2 GB as the body SBC. Purchase, exact power entry, cooler/storage configuration and measured workload remain open. Keep C2 firmware radio-off at build time (no Wi-Fi/BT init) so loop jitter and the head-logic rail avoid radio-transmit transients.
 - [x] **Selected at prototype-board level 2026-09-16, corrected by `RP02-P3-REG-02`:** C3 uses official ESP32-S3-DevKitC-1-N8. C3 needs no PSRAM, and N8 preserves GPIO35–37 that N8R8's octal PSRAM consumes. RP-03 still freezes its driver/sensors and pin map. A custom WROOM-1-N8 carrier is later controlled equivalence.
 - [ ] Implement the provisional timebase (master + timestamp-at-source + offset reconciliation) before first scored RP-01 run.
-- [ ] Feed the resulting topology into `system-architecture.md` when ADR-12/ADR-06 close.
 
 ## Change log
 

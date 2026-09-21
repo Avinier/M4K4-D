@@ -125,7 +125,7 @@ These responsibilities must exist in the final architecture. They may later be c
 
 ## 5. Information contracts
 
-The later `subsystem-interfaces.md` will define exact fields and transports. At this stage, the architecture must preserve five different kinds of information.
+Exact fields and transports are not fixed in this brief. The design must preserve five different kinds of information.
 
 | Information kind | Minimum meaning | Why it must remain distinct |
 |---|---|---|
@@ -180,16 +180,16 @@ These budgets couple architecture and packaging. Initial estimates can be ranges
 | Thermal | Compute, regulators, battery, motors, drivers, charging, enclosure surfaces, duty cycle | Heat affects reliability, safety, throttling, noise, and enclosure design | Before enclosure freeze |
 | Compute | Perception, tracking, display, audio, language, behaviour, logging, integrations, startup/recovery | Determines compute split, responsiveness, thermal load, and battery demand | Representative coexistence prototype |
 | Timing and latency | Wake, visual acquisition, speech, cloud calls, composition, display/audio onset, head/base response, stop path | Both perceived aliveness and safety depend on end-to-end timing | Measured prototype timelines |
-| Internal communication | Onboard buses/links, update rates, payloads, loss behaviour, time synchronization, watchdogs, and restart semantics | Separates high-level compute, firmware controllers, sensors, and actuators without creating stale or unsafe motion | Before subsystem-interface baseline |
+| Internal communication | Onboard buses/links, update rates, payloads, loss behaviour, time synchronization, watchdogs, and restart semantics | Separates high-level compute, firmware controllers, sensors, and actuators without creating stale or unsafe motion | Before the link contract is treated as fixed |
 | External network | Wi-Fi/internet assumption, cloud latency and availability, authentication, bandwidth, deadlines, cancellation, failure indication, and recovery | Connected Core features may require the network, while physical safety must remain independent of it | Before interaction/integration baseline |
 | Reliability and endurance | Joint cycles, cable flex, connector retention, wheel/support wear, thermal duty, controller restarts, service operations, and repeated demonstrations | A mechanism that works once may still fail during integration or repeated use | Representative endurance and service tests before CAD/final build freeze |
 | Sourcing and availability | Verified specifications, candidate vendors, local/import availability, lead time, substitutes, minimum order, replacement risk, required tools, and fabrication access | Component feasibility can force architecture changes before price or performance comparisons even matter | Before prototype and final-part commitments |
-| Cost | Candidate ranges, prototype quantities, replacements, final parts, tools, shipping, fabrication, taxes/duties, and contingency | There is no fixed ceiling; the complete cost picture is needed before substitutions or scope cuts can be judged | Before major procurement and procurement BOM approval |
-| Schedule | research, sourcing, learning, prototype iterations, CAD, fabrication, integration, validation, contingency | Every optional mechanism consumes time needed by Core following and integration | Architecture and milestone review |
+| Cost | Candidate ranges, prototype quantities, replacements, final parts, tools, shipping, fabrication, taxes/duties, and contingency | There is no fixed ceiling; the complete cost picture is needed before substitutions or scope cuts can be judged | Before major purchases |
+| Schedule | research, sourcing, learning, prototype iterations, CAD, fabrication, integration, validation, contingency | Every optional mechanism consumes time needed by Core following and integration | During build reviews |
 
 ## 8. Architecture decision register
 
-These are the decisions the architecture phase must make. The brief records the decision questions, not their answers.
+These are open design decisions. The brief records the questions, not their answers.
 
 | ID | Decision | Evidence needed before commitment | Main trade-off |
 |---|---|---|---|
@@ -259,12 +259,6 @@ These decisions require the budgets, trade studies, and prototype evidence above
 
 ## 12. Downstream documents
 
-This brief feeds the following documents:
-
-1. Approved `risk-prototype-plan.md` defines the seven experiments, measurements, and pass/cut gates in the approved mechanical/firmware-first order.
-2. `system-architecture.md` will compare viable architecture options and select the logical/physical design using prototype evidence.
-3. `engineering-budgets.md` will allocate mass, physical space, mechanical motion, sensing/perception, acoustics, power, energy, heat, compute, timing, internal communication, external network, reliability, sourcing, cost, and schedule margins.
-4. `physical-architecture.md` will define envelopes, placement, centre of mass, moving clearances, wiring, cooling, and service paths.
-5. `subsystem-interfaces.md` will define observations, state, semantic intents, bounded commands, feedback, health, timebase, and fault behaviour.
+This brief feeds the approved `risk-prototype-plan.md`, which defines the seven experiments and measurements.
 
 Approved 2026-08-14: the system boundary, architecture drivers, responsibility model, decision register, budget categories, prototype portfolio, and mechanical/firmware-first order are the V1 baseline. That approval did not select components, mechanisms, deployment technology, or numeric thresholds. Version 1.1 recorded the later dimensional/drive selections. Version 1.2 consumes `dimensional-baseline.md` v1.2 and its ear-pod mechanical-access clarification without selecting Concept A, an actuator, or an unvalidated prototype limit. Version 1.3 records the project builder's explicit selection of the no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493; it does not select its supplier, the wider controller topology or another component.

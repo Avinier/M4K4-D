@@ -4,13 +4,13 @@
 |---|---|
 | Status | **This folder owns the working CAD.** Phase A packaging is the article. Physical validation is 0%. No gate registered, no mock-up built, no scored run |
 | Governing plan | [`risk-prototype-plan.md`](../../01-system/risk-prototype-plan.md) v1.15 §RP-06 |
-| Purpose | Close **ADR-01**, **ADR-08** and **ADR-11** provisionally from an obtainable, serviceable layout; export binding envelopes to `physical-architecture.md` |
+| Purpose | Working whole-robot packaging for an obtainable, serviceable layout |
 | Active models | Head [Layout 03](head/layout-03/README.md). Whole body [Layout 02](body-chassis/layout-02/README.md) |
 | Closure instrument | [`TODO.md`](TODO.md); detail in [`checklist.md`](checklist.md) |
 
 RP-01 is an object. RP-02 is states and interfaces. RP-03 is a vehicle plus local safety. **RP-06 is the whole-robot packaging prototype**, and therefore the home of the CAD.
 
-Root `cad/` stays empty until stage-7 integrated freeze. RP-01 and RP-03 keep mechanism, physics, gates and rigs; they link here for geometry.
+RP-01 and RP-03 keep mechanism, physics, gates and rigs; they link here for geometry.
 
 ## Start here
 
@@ -87,4 +87,4 @@ Open Layout 03 in CAD Viewer from [`head/layout-03/README.md`](head/layout-03/RE
 
 ## Organization record — 2026-09-21
 
-Builder direction: all prototype CAD from RP-01 and RP-03 moves here as `RP-06-cad`. RP-01 `cad/` and RP-03 `cad/` become forwarding stubs. Root `cad/` remains reserved for stage 7.
+Builder direction: all prototype CAD from RP-01 and RP-03 moves here as `RP-06-cad`. RP-01 `cad/` and RP-03 `cad/` become forwarding stubs.
