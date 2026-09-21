@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Design/gate intent current; Parts 1–4 are complete at design-definition level under `RP02-P1-REG-01`, `RP02-P2-REG-01…03`, `RP02-P3-REG-01/02` and `RP02-P4-REG-01`. Numeric thresholds, remaining component suffixes and every gate outcome remain open; no scored run executed |
+| Status | Design/gate intent current; Parts 1–4 are complete at design-definition level under `RP02-P1-REG-01`, `RP02-P2-REG-01…03`, `RP02-P3-REG-01/02` and `RP02-P4-REG-01`…`RP02-P4-REG-03`. Numeric thresholds, remaining component suffixes and every gate outcome remain open; no scored run executed |
 | Owner | Project builder |
 | Created | 2026-09-08 |
 | Revised | 2026-09-16 |

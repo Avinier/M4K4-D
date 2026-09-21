@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Living reader index.** Parts 1–3 retain their registered labels; Part-4 ICD definition is `RP02-P4-REG-01`. Byte layouts and C3 drive messages remain open. |
+| Status | **Living reader index.** Parts 1–3 retain their registered labels; Part-4 ICD definition is `RP02-P4-REG-01` plus `RP02-P4-REG-02` (`BASE_*`) plus `RP02-P4-REG-03` (coordination fields). Byte layouts remain open. |
 | Scope | RP-02-owned namespaces, labels and notation, plus externally owned identifiers commonly referenced by RP-02 |
 | Rule | This glossary defines identifier meaning and points to the canonical source. Detailed behaviour, numeric values and acceptance thresholds remain in their owning documents. |
 

@@ -1,2 +1,4 @@
 .DS_Store
 *.inspect.ndjson
+__pycache__/
+*.pyc

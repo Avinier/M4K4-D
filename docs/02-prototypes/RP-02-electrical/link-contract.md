@@ -2,10 +2,10 @@
 
 | Field | Value |
 |---|---|
-| Status | **Part-4 C0↔C2 definition baseline `RP02-P4-REG-01` (2026-09-17).** C0↔C3 `BASE_*` **semantics** accepted 2026-09-18 as `RP02-P4-REG-02` (`link-contract.md` v0.5). Exact byte layouts, type numbers, baud and measured timeouts remain open on both links; THVD1451D is an implementation lead |
+| Status | **Part-4 C0↔C2 definition baseline `RP02-P4-REG-01` (2026-09-17).** C0↔C3 `BASE_*` **semantics** `RP02-P4-REG-02` (2026-09-18). Coordination fields **`RP02-P4-REG-03`** (2026-09-21, v0.6): cue identity, optional `start_at_us`, face/light source-onset reports, extra `NACK` values. Exact byte layouts, type numbers, baud and measured timeouts remain open on both links; THVD1451D is an implementation lead |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Revised | 2026-09-18 |
+| Revised | 2026-09-21 |
 | Authority | `compute-control-architecture.md` `CA-01…16`; `../../01-system/control-topology-options.md` §3, §7 (framed serial, semantic command surface); `../../01-system/system-design-brief.md` §5 information contracts and contract rules 1–5; §6 state dimensions and failure priorities |
 | Timebase | `../../01-system/timebase.md` — all timestamps in this contract are master-monotonic microseconds after offset reconciliation |
 | Feeds | ADR-12; `subsystem-interfaces.md` at stage 6; `fault-matrix.md`; `gates.md` G04/G05 |
@@ -59,25 +59,33 @@ Types are grouped by the five information kinds in SDB §5. `→` SBC to control
 | `HEAD_ENABLE` | → | fresh arm nonce (candidate `u32`) | Transitions C2 `inhibited → enabled` **only if** limits are set, heartbeat is fresh, no fault is latched and the motor domain is present. It is bound to the current C2 boot challenge, C0 boot identity and epoch; a nonce alone cannot prevent replay across a C2 cold reset |
 | `HEAD_INHIBIT` | → | `reason:u8` | Initiate `BRAKE` immediately, then enter `inhibited` when the registered bounded trajectory reaches rest. Idempotent |
 
+Cue identity (both links, candidate packing `perf_id:u16` · `perf_epoch:u32` · `cue_id:u8`, **not** a registered layout): joins command, ACK, state and onset without using clock proximity. `perf_epoch` is the performance instance; it is not the C0 boot/session epoch. A new intent is a new `perf_epoch`.
+
+Optional `start_at_us` (candidate `u64`, 0 = execute when accepted): do not begin before that master timestamp. `start_at_us > valid_until_us` → `NACK(EXPIRED)`. Non-zero `start_at_us` with an invalid or over-bound time model → `NACK(TIME_MODEL_INVALID)` — never silent immediate run. Arrival after `start_at_us` uses a **registered lateness window** (numeric still open): inside the window, execute; outside → `NACK(LATE)`. Immediate cues (`start_at_us = 0`) keep today's expiry-only rule.
+
 ### 4.2 Commands (bounded, expiring)
 
 | Type | Dir | Payload | Semantics |
 |---|---|---|---|
-| `HEAD_GOAL` | → | `gesture_id:u16` · `segment:u8` · `profile:u8` (`MJ5`/`MS7`/`TRACK`/`BRAKE`) · `yaw,pitch,roll:i16` (0.01°) · `duration_ms:u16` · `valid_until_us:u64` · `flags:u8` (hold-after, interruptible) | One authored segment. C2 instantiates the profile law itself; the SBC never streams intermediate points for authored gestures. For `TRACK`, `HEAD_GOAL` carries the current filtered target and is re-sent at the tracking rate |
-| `HEAD_CANCEL` | → | `gesture_id:u16` or `0xFFFF` all · `settle:u8` (BRAKE law index) | HM-18 controlled cancel. Rejects any queued segment of that gesture; current motion decelerates under `BRAKE` |
-| `FACE_STATE` | → display | `expression:u8` · params: gaze `x,y:i8` · lids `l,r:u8` · `blink:u8` · `brightness:u8` · `utility_view:u8` · `valid_until_us:u64` | Semantic face; the renderer owns pixels and animation. An expired `FACE_STATE` decays to the renderer's idle, never freezes |
-| `LIGHT_STATE` | → head | `pattern:u8` · `intensity:u8` · `period_ms:u16` · `sync_ts_us:u64` | Status light beside the camera. `sync_ts_us` lets the light double as the **video timing cue** (`timebase.md` §5) |
+| `HEAD_GOAL` | → | cue identity · `start_at_us` · `gesture_id:u16` · `segment:u8` · `profile:u8` (`MJ5`/`MS7`/`TRACK`/`BRAKE`) · `yaw,pitch,roll:i16` (0.01°) · `duration_ms:u16` · `valid_until_us:u64` · `flags:u8` (hold-after, interruptible) | One authored segment. C2 instantiates the profile law itself; the SBC never streams intermediate points for authored gestures. For `TRACK`, `HEAD_GOAL` carries the current filtered target and is re-sent at the tracking rate |
+| `HEAD_CANCEL` | → | cue identity · `gesture_id:u16` or `0xFFFF` all · `settle:u8` (BRAKE law index) | HM-18 controlled cancel of that performance instance (or all if `gesture_id` is all). Rejects any queued segment of that gesture; current motion decelerates under `BRAKE` |
+| `FACE_STATE` | → display | cue identity · `start_at_us` · `expression:u8` · params: gaze `x,y:i8` · lids `l,r:u8` · `blink:u8` · `brightness:u8` · `utility_view:u8` · `valid_until_us:u64` | Semantic face; the renderer owns pixels and animation. An expired `FACE_STATE` decays to the renderer's idle, never freezes |
+| `LIGHT_STATE` | → head | cue identity · `start_at_us` · `pattern:u8` · `intensity:u8` · `period_ms:u16` · `sync_ts_us:u64` | Status light beside the camera. `sync_ts_us` is the **requested** video timing cue (`timebase.md` §5), not proof the LED changed |
 
 **Expiry rule.** C2 evaluates `now_master_us > valid_until_us` at *execution*, not at receipt. An expired command is discarded with `NACK(EXPIRED)`. Candidate defaults: `TRACK` goals 100 ms; authored segments `duration_ms + 250 ms`; `FACE_STATE` 2 s. These are G04/G05 registration items.
+
+Stale identity: if `perf_epoch` is older than the executor's current instance for that channel, or belongs to a dead C0 session, `NACK(STALE_EPOCH)` and do not start the cue.
 
 ### 4.3 Feedback and health
 
 | Type | Dir | Payload | Rate (candidate) |
 |---|---|---|---|
-| `HEAD_STATE` | ← | `capture_ts_us:u64` · per axis `pos:i16` (0.01°) · `vel:i16` · `cur:i16` (mA) · `temp:u8` · `servo_flags:u8`; `gesture_id:u16` · `segment:u8` · `progress:u8`; `ctrl_state:u8` (`inhibited/enabled/braking/fault`) | 100 Hz; `capture_ts_us` is the encoder read time on C2's clock, converted per `timebase.md` |
-| `HEARTBEAT` | ↔ | `health:u8` (`available/degraded/unavailable/unsafe`) · `energy:u8` (`normal/low/critical/charging`) · `motor_domain:u8` (present/absent) · `last_rx_age_ms:u16` · `loop_jitter_us_p99:u16` · `crc_err_count:u16` | 20 Hz each way. C2's heartbeat carries its own timing self-report so G05 has continuous evidence, not only a bench measurement |
-| `FAULT` | ← | `code:u16` · `axis:u8` · `detail:u32` · `ts_us:u64` · `latched:u8` | Event, retransmitted with every `HEARTBEAT` while latched. Codes include `HB_TIMEOUT`, `EXPIRED_BURST`, `LIMIT_HIT`, `SERVO_OVERCURRENT`, `SERVO_OVERTEMP`, `SERVO_SILENT`, `MOTOR_DOMAIN_LOST`, `CONTRACT_MISMATCH`, `BROWNOUT_RESET` |
-| `ACK` / `NACK` | ← | `for_seq:u16` · `reason:u8` (`OK/EXPIRED/OUT_OF_LIMITS/INHIBITED/UNKNOWN_TYPE/BAD_CRC/QUEUE_FULL/NO_LIMITS/NONCE_REPLAY`) | Per command frame |
+| `HEAD_STATE` | ← | cue identity · `capture_ts_us:u64` · `onset_ts_us:u64` (0 until first motion above the onset criterion) · per axis `pos:i16` (0.01°) · `vel:i16` · `cur:i16` (mA) · `temp:u8` · `servo_flags:u8`; `gesture_id:u16` · `segment:u8` · `progress:u8`; `ctrl_state:u8` (`inhibited/enabled/braking/fault`) | 100 Hz; `capture_ts_us` is the encoder read time on C2's clock, converted per `timebase.md` |
+| `FACE_REPORT` | ← | cue identity · `expression:u8` · `flip_ts_us:u64` · `outcome:u8` | Event: D1 frame-flip of the first frame that represents that `FACE_STATE`. Receipt or render-queue insertion is not onset. C2 relays |
+| `LIGHT_REPORT` | ← | cue identity · `pattern:u8` · `onset_ts_us:u64` · `outcome:u8` | Event: actual light-output transition. `LIGHT_STATE.sync_ts_us` is not this stamp |
+| `HEARTBEAT` | ↔ | `health:u8` (`available/degraded/unavailable/unsafe`) · `energy:u8` (`normal/low/critical/charging`) · `motor_domain:u8` (present/absent) · `last_rx_age_ms:u16` · `loop_jitter_us_p99:u16` · `crc_err_count:u16` | 20 Hz each way. C2's heartbeat carries its own timing self-report so G05 has continuous evidence, not only a bench measurement. Channel absence is `health`, not a new `NACK` value |
+| `FAULT` | ← | `code:u16` · `axis:u8` · `detail:u32` · `ts_us:u64` · `latched:u8` | Event, retransmitted with every `HEARTBEAT` while latched. Codes include `HB_TIMEOUT`, `EXPIRED_BURST`, `LIMIT_HIT`, `SERVO_OVERCURRENT`, `SERVO_OVERTEMP`, `SERVO_SILENT`, `MOTOR_DOMAIN_LOST`, `CONTRACT_MISMATCH`, `BROWNOUT_RESET`. Progress-stuck is a `FAULT` / state condition, not a command `NACK` |
+| `ACK` / `NACK` | ← | `for_seq:u16` · cue identity when the command carried one · `reason:u8` (`OK` / `EXPIRED` / `OUT_OF_LIMITS` / `INHIBITED` / `UNKNOWN_TYPE` / `BAD_CRC` / `QUEUE_FULL` / `NO_LIMITS` / `NONCE_REPLAY` / `TIME_MODEL_INVALID` / `LATE` / `STALE_EPOCH`) | Per command frame. New values occupy the existing `u8`; they do not widen the field |
 
 ### 4.4 Time
 
@@ -96,7 +104,10 @@ These are the G04 behaviours, stated as contract so they can be tested rather th
 | Heartbeats resume | Stay `inhibited`. Report. **Do not resume the interrupted gesture.** Resume only on a fresh `LIMITS_SET` → `HEAD_ENABLE` with a new nonce and a *new* `HEAD_GOAL` | "Recover only from current authorized intent" |
 | Frame fails CRC | Discard; increment `crc_err_count`; no state change. Above a registered rate per second → `degraded`; above a higher rate → `inhibited` | F-04 |
 | Command arrives with `valid_until_us` in the past | `NACK(EXPIRED)`. A burst of expired commands after reconnect (queue drain on the SBC side) is **rejected frame by frame**; `FAULT(EXPIRED_BURST)` if more than N in one tick | F-05 |
-| `src_ts_us` jumps backwards or ahead beyond the reconciliation window | Treat the sender's time as untrusted: `degraded`, use local expiry until sync recovers | F-15 |
+| Scheduled cue (`start_at_us ≠ 0`) while time model invalid or uncertainty over bound | `NACK(TIME_MODEL_INVALID)`. Do not execute immediately | RP-04 `OX-TIME`; G04 |
+| Scheduled cue arrives after `start_at_us` outside the lateness window | `NACK(LATE)`. Distinct from `EXPIRED` | RP-04 `OX-DELAY`; G04. Window numeric open |
+| Command `perf_epoch` older than the current instance, or from a dead session | `NACK(STALE_EPOCH)`. No local start | RP-04 `OX-STALE` / `OX-RESTART`; G04 |
+| `src_ts_us` jumps backwards or ahead beyond the reconciliation window | Treat the sender's time as untrusted: `degraded`, use local expiry until sync recovers. This is not a scheduled-cue NACK; refuse new `start_at_us ≠ 0` with `TIME_MODEL_INVALID` until sync recovers | F-15 |
 | C2 itself resets (watchdog, brownout, manual) | Boot into `inhibited` with no limits; servos receive torque-off or hold per the RP-01 HM-00 result; `HELLO` with `BROWNOUT_RESET` flag if the reset reason says so | F-06 |
 | Motor domain absent (E-stop asserted) while `enabled` | `FAULT(MOTOR_DOMAIN_LOST)`, state `inhibited`; **release of the E-stop does not re-enable** | F-12, F-13 |
 | Servo silent on the bus for N polls | That axis `unavailable`; other axes complete their `BRAKE`; whole head `inhibited` until re-enabled | F-08 |
@@ -149,7 +160,7 @@ The candidate byte widths, type numbers, baud/rates/timeouts, transceiver suffix
 
 Origin: RP-03 Part 4 (`base-control-architecture.md`). Envelope: COBS, CRC-16/CCITT, session / C0 boot identity / epoch / C3 boot challenge, `src_ts_us`, explicit expiry, fresh-arm nonce, independent C0↔C3 differential UART. Motor/driver/sensor SKUs are not frozen by naming these types.
 
-`HELLO`, `HEARTBEAT`, `TIME_SYNC_REQ` / `TIME_SYNC_RESP`, and `ACK` / `NACK` are the same types as the head link, on this independent session. `ACK` / `NACK` reasons are unchanged: `OK` / `EXPIRED` / `OUT_OF_LIMITS` / `INHIBITED` / `UNKNOWN_TYPE` / `BAD_CRC` / `QUEUE_FULL` / `NO_LIMITS` / `NONCE_REPLAY`. Authority stays `CA-09` / `CA-13`: clearing an inhibit reports availability and does not resume old intent.
+`HELLO`, `HEARTBEAT`, `TIME_SYNC_REQ` / `TIME_SYNC_RESP`, and `ACK` / `NACK` are the same types as the head link, on this independent session. `ACK` / `NACK` reasons follow §4.3, including `TIME_MODEL_INVALID` / `LATE` / `STALE_EPOCH`. Authority stays `CA-09` / `CA-13`: clearing an inhibit reports availability and does not resume old intent. Cue identity and `start_at_us` on `BASE_GOAL` / `BASE_CANCEL` / `BASE_STATE` match the head rules.
 
 `→` C0 to C3; `←` C3 to C0. Payload columns name semantics, not wire widths.
 
@@ -166,8 +177,8 @@ Origin: RP-03 Part 4 (`base-control-architecture.md`). Envelope: COBS, CRC-16/CC
 
 | Type | Dir | Payload | Semantics |
 |---|---|---|---|
-| `BASE_GOAL` | → | `profile_id` (`LAUNCH` / `CRUISE` / `DECEL0` / `PIVOT` / `ARC` / `SPIN` / `WIGGLE` / `BRAKE` / `HOLD`) · `v`, `ω` · `duration_ms` · `valid_until_us` · `flags` (hold-after, interruptible) | One segment. C3 instantiates the profile law. Latest-wins bounded queue. Expiry checked at **execution** |
-| `BASE_CANCEL` | → | settle / `BRAKE` law | Reject queued segments; current motion decelerates under `BRAKE` |
+| `BASE_GOAL` | → | cue identity · `start_at_us` · `profile_id` (`LAUNCH` / `CRUISE` / `DECEL0` / `PIVOT` / `ARC` / `SPIN` / `WIGGLE` / `BRAKE` / `HOLD`) · `v`, `ω` · `duration_ms` · `valid_until_us` · `flags` (hold-after, interruptible) | One segment. C3 instantiates the profile law. Latest-wins bounded queue. Expiry checked at **execution** |
+| `BASE_CANCEL` | → | cue identity · settle / `BRAKE` law | Reject queued segments of that instance; current motion decelerates under `BRAKE` |
 
 **Candidate timeouts (unregistered — Phase A measures, G04/G05 freeze):**
 
@@ -184,7 +195,7 @@ Origin: RP-03 Part 4 (`base-control-architecture.md`). Envelope: COBS, CRC-16/CC
 
 | Type | Dir | Payload | Rate (candidate) |
 |---|---|---|---|
-| `BASE_STATE` | ← | `capture_ts_us`; body `v`, `ω`, `x`, `y`, `θ`; per-wheel pos / vel / cur; `ctrl_state`; `mode`; `sensor_valid_mask`; `oldest_sensor_age_ms` | 100 Hz candidate. Yaw is published for the mic-array frame (MEM-20260812-03) |
+| `BASE_STATE` | ← | cue identity · `capture_ts_us` · `onset_ts_us` (0 until first motion above criterion) · `progress`; body `v`, `ω`, `x`, `y`, `θ`; per-wheel pos / vel / cur; `ctrl_state`; `mode`; `sensor_valid_mask`; `oldest_sensor_age_ms` | 100 Hz candidate. Yaw is published for the mic-array frame (MEM-20260812-03). **Payload vs 64 B is unregistered:** identity + onset must be counted in the packed layout; if it will not fit, raise max payload — do not drop safety/hazard fields |
 | `BASE_HAZARD` | ← | `cliff_mask`; `obst_range_mm`; `bump`; IMU flags (lift / tip / slip); per-channel ages | Event; latched summary while any bit is active. Unknown is representable, never zeroed. ToF, if present, is telemetry and not the sole obstacle bit |
 | `BASE_FAULT` | ← | `code`, `detail`, `ts`, `latched` | Event, retransmitted with every `HEARTBEAT` while latched |
 | `HEARTBEAT` | ↔ | Same fields as §4.3 | 20 Hz each way on this link (candidate) |
@@ -195,6 +206,21 @@ Origin: RP-03 Part 4 (`base-control-architecture.md`). Envelope: COBS, CRC-16/CC
 Registers the C0↔C3 **definition** in this section: semantic `BASE_*` types; `CC-12C_ARM` as a separate nonce; expiry at execution; latest-wins bounded queue; fresh-arm after inhibit; unknown sensor is inhibit; E-stop / cutoff release does not resume. It does **not** register byte layouts, type numbers, baud, the candidate TTL/heartbeat/queue numbers above, firmware, a gate outcome or ADR closure. A prototype codec must declare its layout revision and cannot be scored as this registration.
 
 The generated C3 board-role header from pin map v0.1 lives at `phase-a/c3_board_role.h`. It is a `CA-14` config-source start from v0.1, not a carrier freeze.
+
+## v0.6 — coordination semantics (`RP02-P4-REG-03`, 2026-09-21)
+
+Disposes RP-04 `interface-requirements.md` IR-01, IR-02, IR-03, IR-05, IR-07, IR-08 (motion onset stamp), and the command-reject subset of IR-09. UART, COBS/CRC, session/expiry/heartbeat, and the 64-byte payload *candidate* are unchanged (`CA-05`).
+
+| Accepted on the wire | Not a wire change |
+|---|---|
+| Cue identity on head/base/face/light commands, cancels, state, ACK, and reports | C0 audio onset (IR-06) — `makad-audio` logs only |
+| `start_at_us` on `HEAD_GOAL` / `BASE_GOAL` / `FACE_STATE` / `LIGHT_STATE` | Composer availability snapshot (IR-10) |
+| `FACE_REPORT` / `LIGHT_REPORT` source onset | Byte layouts, type numbers, lateness-window milliseconds |
+| `NACK` values `TIME_MODEL_INVALID`, `LATE`, `STALE_EPOCH` in the existing `u8` | `PROGRESS_STUCK` as NACK — stays `FAULT`/state. Unavailable/degraded stay `HEARTBEAT.health` |
+
+### `RP02-P4-REG-03` — 2026-09-21
+
+Registers the **semantics** in this revision. It does **not** register packed widths, type numbers, baud, the lateness window, `BASE_STATE` packed size, firmware, a gate outcome or ADR closure. Exploratory codecs must bump layout revision before they carry these fields on the bench.
 
 ## Change log
 
@@ -209,3 +235,4 @@ The generated C3 board-role header from pin map v0.1 lives at `phase-a/c3_board_
 | 2026-09-17 | 0.4 definition baseline | `RP02-P4-REG-01` registered message/recovery semantics while keeping byte layouts, C3 messages, timing numbers and evidence open. Reconciled authorization context with `CA-09`. |
 | 2026-09-17 | 0.5 proposal (unregistered) | `BASE_*` draft from RP-03 Part 4; byte layouts still open; not `RP02-P4-REG-02`. Registered C0↔C2 text in §§1–5 unchanged. |
 | 2026-09-18 | 0.5 semantics registered | `RP02-P4-REG-02` accepts C0↔C3 `BASE_*` types, `CC-12C_ARM`, expiry/fresh-arm/unknown-is-inhibit. Candidate TTL/heartbeat/queue named and kept unregistered. Byte layouts still open. C0↔C2 `RP02-P4-REG-01` unchanged. |
+| 2026-09-21 | 0.6 semantics registered | `RP02-P4-REG-03` accepts cue identity, optional `start_at_us`, `FACE_REPORT`/`LIGHT_REPORT`, and `NACK` `TIME_MODEL_INVALID`/`LATE`/`STALE_EPOCH`. No transport change. Byte layouts still open. |
