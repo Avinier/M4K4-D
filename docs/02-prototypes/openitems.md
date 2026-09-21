@@ -4,7 +4,7 @@
 |---|---|
 | Status | **Living index.** Not a competing decision, budget, CAD or gate record |
 | Created | 2026-09-16 |
-| Scope | Remaining work inside `docs/02-prototypes/` after RP-01 Layout 03 paper demand, RP-02 Parts 1–4 design-definition, RP-03 Parts 1–5, and RP-04 Phase A design-definition (`RP04-P1-REG-01`…`P6-REG-01`) |
+| Scope | Remaining work inside `docs/02-prototypes/` after RP-01 Layout 03 paper demand, RP-02 Parts 1–4 design-definition, RP-03 Parts 1–5, RP-04 Phase A design-definition (`RP04-P1-REG-01`…`P6-REG-01`), and RP-05 audio-path paper (`RP05-A`, 2026-09-21) |
 | Rule | Canonical detail stays in the cited file. Close an item there first, then strike or rewrite the row here. An index line cannot freeze a SKU, promote `E` to `W`, or register a gate |
 
 This file exists so an “intentionally open until the physical input exists” statement does not disappear into a local README. The latest RP-02 example is the same class of claim as the older RP-01 ones: **final wire, fuse, converter and pack ratings remain intentionally open until their required physical inputs exist.**
@@ -27,7 +27,7 @@ Evidence classes are unchanged: `W` measured on the named hardware, `D` manufact
 
 ## Shared blockers (all prototypes)
 
-These sit above RP-01 through RP-04. Scored physical runs wait here even when paper work is live.
+These sit above RP-01 through RP-05. Scored physical runs wait here even when paper work is live.
 
 | Item | Why it is open | Waiting on | Home | Blocks |
 |---|---|---|---|---|
@@ -136,8 +136,8 @@ This is the class that prompted this index. Architecture and calculation method 
 | Item | Notes | Home |
 |---|---|---|
 | Status light | Display row selected; light is not | `LG-05` |
-| Microphone front end (`LG-07`) | Pi 5 has no native 4-ch PDM; codec HAT vs USB array suggested only | `decision.md` candidate register |
-| Speaker + amplifier (`LG-08`) | RP-05/06 | `PB-AUDIO-OUT` |
+| Microphone front end (`LG-07`) | Pi 5 has no native 4-ch PDM; `AP-TDM` vs `AP-USB` vs `AP-USB-IO` compared, **none selected** | `RP-05-interaction/audio-path.md`; `decision.md` `BD-A04` |
+| Speaker + amplifier (`LG-08`) | Envelope reserved; SKU and family open | `RP-05-interaction/decision.md` `BD-A06`; `PB-AUDIO-OUT` |
 | Base motor driver and safety sensors (`LG-04/LG-10`) | C3 selected; **leads named** (D02, DRV8874-class, S01/S04/S06/S07) — not a freeze, not purchased | `PB-DRIVE*`; RP-03 screens |
 | Pi storage exact SKU | Official Pi 32 GB A2 is the cost-down lead; SanDisk High Endurance 32 GB is the low-cost endurance comparison; official Pi 64 GB is capacity fallback; no selection | `compute-control-component-screen.md` `CCD-STO-*` |
 | Differential transceiver/watchdog exact suffix and carriers | Families/topology selected; component suffixes and PCBs await measured conditions | `compute-control-component-screen.md` `CCD-LNK/WDG/HDL-*` |
@@ -213,6 +213,27 @@ This is the class that prompted this index. Architecture and calculation method 
 
 ---
 
+## RP-05 Interaction
+
+**Current outcome:** Audio-path paper slice `RP05-A` 2026-09-21. `AR-*` **written, not locked.** `AP-*` compared, none selected. `BD-A01`…`A03` Proposed, no `RP05-P*-REG-*`. No SKU, engine, `makad-audio` code, numeric gate, or ADR-10/11.
+
+Remaining slice order (do not skip registration): (1) accept `BD-A01`…`A03` and register, (2) utterance/intent corpus, (3) wake/ASR/NLU comparison, (4) Spotify/utility behaviour, (5) audio family/SKU, (6) `makad-audio` implementation, (7) numeric G01–G05, (8) acoustic and end-to-end scored runs.
+
+| Item | Why it is open | Waiting on | Home | Blocks |
+|---|---|---|---|---|
+| Builder accept `BD-A01`…`A03` | Slice boundary, no-Core-DOA, USB-not-banned are proposed. A content review is not a registration | Dated accept plus a registration ID in `RP-05-interaction/decision.md` | `RP-05-interaction/decision.md` | Treating `AR-*` as registered design-definition |
+| Capture/playback family `AP-*` | Compared only; kernel vs USB-clock vs duplex still unproven | Later selection slice against `AR-*` §3 reject rules | `audio-path.md`; `BD-A04` | `LG-07`/`LG-08` selection; `PB-AUDIO-IN` source; GPIO18–21 use vs idle |
+| Microphone capsule SKU | Four body PDM ports are a reservation | Family, then capsule, then RP-06 port freeze | `BD-A05` | CAD mesh/port acoustics |
+| Speaker + amplifier SKU | 50 mm / cavity / grille reserved | Family + authored level, then RP-06 | `BD-A06` | `PB-AUDIO-OUT` ratings; enclosure vibration |
+| Wake-word / ASR / NLU engines | Explicitly out of `RP05-A` | Corpus slice, then engine slice | `BD-A07`; plan §RP-05 | ADR-10 |
+| Astromech assets | `A-*` IDs exist in RP-01; no files | Asset production after playback path exists | `BD-A08`; SC-TBD-13 | SC-07 quality; ADR-11 close |
+| Utterance / acoustic matrix | Plan procedure exists; no versioned corpus | Later RP-05 slices | plan §RP-05; `inherited.md` §3 | G01/G02 freeze |
+| Numeric `RP05-G01…G05` | Candidate metrics only (audio share listed) | Freeze before scored data | `RP-05-interaction/gates.md` | Any RP-05 pass |
+| `makad-audio` implementation | Service contract only (`AR-70`…`AR-76`) | After `BD-A04` or an explicit software-stand-in slice | `audio-requirements.md` §8 | Physical IR-06; duplex |
+| ADR-10 / ADR-11 | Requirements ≠ close | Measured G01–G05; family selected | plan exit; `intent.md` | Interaction ADRs |
+
+---
+
 ## Circular dependencies (named, not stalled)
 
 | Loop | What can proceed now | What must wait |
@@ -231,6 +252,9 @@ This is the class that prompted this index. Architecture and calculation method 
 | RP-04 software budgets ↔ RP-01/RP-03 models | `E` budgets; virtual P-01 wait language closed | `W` G01; ADR-05 |
 | RP-04 audio/eyes ↔ RP-06 | Semantic `A-*`/`E-*` timing | Quality/artwork |
 | RP-04 architecture ↔ research | Family closed (`CS-HYBRID`); P-02 cue list validated; experiment spec software items closed | Physical G01–G05; `BD-08`; Phase B/C |
+| RP-05 audio path ↔ SKU | `AR-*` and `AP-*` comparison can proceed on paper | Family/SKU, duplex `W`, ADR-11 |
+| RP-05 wake engine ↔ corpus | Engine not required to write `AR-20`…`AR-24` | Versioned utterance set before engine freeze |
+| RP-04 audio stand-in ↔ RP-05 | Timing/identity/stop can use `BD-03` stand-in | Acoustic quality, echo, contamination wait on `RP05-A` hardware |
 
 ---
 
@@ -256,6 +280,7 @@ This is the class that prompted this index. Architecture and calculation method 
 | RP-03 brief-gap paper close (operating cases, BD-04 named surfaces, remaining physics, Set A/B, TTL candidates, cutoff metric, `CA-14` header) | `RP03-P1-REG-02` … `RP03-P4-REG-02`; `RP02-P4-REG-02` |
 | RP-03 BD-08 V1 front support = `D21` ball; `D20` caster required swap; Concept A chassis retained | `decision.md` BD-08; `dimensional-baseline.md` v1.12; SCOPE-09 v1.3; not ADR-04 gate close |
 | RP-04 Phase A design-definition (`P-01` sheets, HYBRID virtual select, gate candidates). Architecture-family research closed. Empirical spec paper-passed. Virtual wait language and P-02 cue list closed 2026-09-21. IR wire semantics accepted `RP02-P4-REG-03`. Exploratory layout revision 2 is a host reference, not G04. `BD-05` household observer panel superseded | `RP04-P1-REG-01`…`RP04-P6-REG-01`; `research/`; `decision.md`; `RP02-P4-REG-03`; `prototype/` |
+| RP-05 audio-path **paper written** (`AR-*` not locked, `AP-*` comparison, no SKU/engine/code/numeric gate). `BD-A01`…`A03` proposed, no registration. Spatial hearing stays Candidate. USB not banned by spec-11 | `RP-05-interaction/`; not design-definition; not ADR-11 |
 
 ---
 
