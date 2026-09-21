@@ -2,7 +2,7 @@
 
 > **Current project overview** — last reconciled **21 September 2026**
 >
-> Foundation approved: **14 August 2026** · V1 deadline: **5 December 2026** · Roadmap position: **Stage 0/1 — RP-01 paper demand complete, C01 screen OPEN; RP-02 Parts 1–4 defined, Phase A implementation open**
+> Foundation approved: **14 August 2026** · V1 deadline: **5 December 2026**
 
 **Makad**, technical designation **M4K4-D** and commonly shortened to **M4**, is a personal droid. M4 is intended to occupy the kind of companion role R2-D2 occupied for Luke Skywalker: recognizable, attentive, expressive, and full of character.
 
@@ -12,60 +12,64 @@ The central V1 priority is simple:
 
 Makad's defining advantage is expressiveness. That expression comes from what M4 understands, sees, and hears, and from how convincingly its display, status light, astromech audio, head, wheeled base, and timing communicate one intent.
 
-This README is the orientation document over the whole repository. It states current truth and links to the documents that own it. [`MEMORY.md`](MEMORY.md) records how that truth changed over time.
+> As of 2026-09-21, the phase-gated RP → ADR → BOM → CAD workflow is retired. Documents under `01-system` and `02-prototypes` remain engineering references and historical evidence, but their workflow, registration, closure, and purchase-authorization rules no longer govern ongoing development. `00-foundation` remains the product-intent authority.
 
-## Where the project stands
+This README orients the repository around the current design, current build state, and immediate next work. [`MEMORY.md`](MEMORY.md) is a short chronological log of later consequential discoveries and decisions.
 
-| Area | Status (2026-09-21) |
-|---|---|
-| Foundation (vision, scope, constraints, success criteria, scenarios) | Approved. Numeric `SC-TBD`/`CON-TBD` thresholds remain open by design. |
-| System design brief | Approved v1.3. Thirteen ADRs defined, none closed. |
-| Risk-prototype plan | Approved **v1.15**. Seven prototypes; **no run has been executed.** Working CAD lives in [`RP-06-cad/`](docs/02-prototypes/RP-06-cad/). Layout 03 external rigid-body demand is retained; RP-06 mock-up load is the current ~499–524 g D/E head tree (nominal 509 g), not 250 g. |
-| Workbench / Stage 0 | Approved; first tools selected and partly ordered. Tool access, E-stop verification, logging schema, monotonic timebase and video sync are still open, so **powered scored testing is blocked.** |
-| Run identity | Convention v1.0 active. Guarded launcher not built. |
-| Dimensional baseline | **v1.12** active: 300 × 205 × 180 mm rounded robot target; Layout 03 head 104 × 150 × 115 mm, provisional 304 mm neutral stack, Ø84 wheels, 170 mm track, 110 mm axle-to-**front-support (ball)**, 60 mm neck. RP-06 must accept the 304 mm stack or recover 4 mm. |
-| Selected components | Display, camera, C2, Raspberry Pi 5 2 GB, official Pi 5 Active Cooler and C3 prototype controller locked at their stated layer (see below). Servos, battery, drive motors/drivers, final harness/carriers and storage: open. XC330-M288-T is paper candidate C01, not selected. |
-| RP-01 three-axis head | Intent, storyboard and external rigid-body physics authored. **Concept A is the RP-01 path; Concept B is waived.** C01 (XC330-M288-T) is a comparison candidate only. Physical gates are unregistered and the rig is not built. **Layout 03** remains the 1:1 packaging direction, but two screw collisions, hard-stop margin, pitch/roll stiffness, bearing SKU, balance trim and sign mapping are open. Not a fabrication release or servo freeze. |
-| Head mass | Layout 03 nominal D/E tree: ~362/436/509 g roll/pitch/yaw at a 20 g C2 allowance; C2 sensitivity gives ~499–524 g complete. External rigid-body demand is calculated; nothing is weighed, M008 remains `U`, and actuator-internal inertia is not included. C01 matches the 23 g housings already in the tree. The earlier 250 g target and generic inertia/torque proxies are inadmissible. |
-| RP-02 electrical/control backbone | **Parts 1–4 complete at design-definition level:** states/load cases `RP02-P1-REG-01`; power topology/implementation/brownout `RP02-P2-REG-01…03`; compute/control ownership and links `RP02-P3-REG-01/02`; C0↔C2 ICD message/recovery definition `RP02-P4-REG-01`. Phase A has an exploratory host codec/state model and unscored G01/G06 paper review. **No gate passed, ADR closed, purchase authorized or scored run executed.** Byte layouts, ratings/suffixes and physical evidence remain open; pack sizing still waits on RP-03 drive measurements. |
-| RP-03 drive and motion safety | **Parts 1–5 defined; V1 front support is the ball transfer (BD-08).** [`RP-03-locomotion/`](docs/02-prototypes/RP-03-locomotion/README.md). Concept A chassis/sensing retained; caster is the comparison swap. No purchase, no gate, no scored run. ADR-04 open. |
-| RP-05 interaction | **Audio-path paper slice `RP05-A`.** [`RP-05-interaction/`](docs/02-prototypes/RP-05-interaction/README.md). `AR-*` / `AP-*` written; no SKU, engine, implementation, or numeric gate. ADR-10/11 open. |
-| RP-06 sourced layout | **CAD home.** Working geometry lives in [`RP-06-cad/`](docs/02-prototypes/RP-06-cad/README.md) (head Layout 03 + body/chassis Layout 02). Physical validation 0%. No gate, no mock-up, no scored run. |
-| RP-07 person tracking/following | **Documentation baseline complete.** [`RP-07-following/`](docs/02-prototypes/RP-07-following/README.md) defines the paper architecture, interfaces, calibration, target continuity, come/follow control, safety, compute, tests, gates and evidence layout. No corpus, implementation, physical test, registered gate or ADR-09 closure. |
-| Architecture, budgets, BOM, integrated CAD | Not started; blocked on prototype evidence by design. |
-| `visuals/` | Provisional references; several show superseded details (mouths, ear microphones, yoke-mounted ears). |
+## Current design
 
-### Selected and locked
+M4 is a battery-powered floor droid with a three-axis head, an animated face, a camera-side status light, body-mounted hearing and speech, and a two-wheel base. The head carries the display, camera, status light, C2 motion controller, and local structure. The body carries four PDM microphones, the speaker, battery, and main compute. Floor mode is primary; tabletop mode inhibits locomotion by default.
 
-| Item | Selection | Governing record |
+The current physical target is **300 × 205 × 180 mm**, with Layout 03 producing a provisional **304 mm** neutral stack (140 mm body-top datum + 60 mm neck + 104 mm crown-inclusive head). Drive geometry is Ø84 mm wheels, 170 mm track, 110 mm axle-to-front-support, and a mandatory rear anti-tip skid. Front support is a Ø1″ ball transfer; a swivel caster remains a comparison article on the same mount.
+
+Working geometry lives in [`docs/02-prototypes/RP-06-cad/`](docs/02-prototypes/RP-06-cad/README.md): head [Layout 03](docs/02-prototypes/RP-06-cad/head/layout-03/README.md) and body/chassis [Layout 02](docs/02-prototypes/RP-06-cad/body-chassis/layout-02/README.md). Root `cad/`, `docs/03-architecture/`, and `docs/04-bom/` may now be used as those artifacts are written.
+
+### Selected components
+
+| Item | Selection | Record |
 |---|---|---|
 | Face display | Waveshare ESP32-S3-LCD-4.3, **no-touch, SKU 30493** — 800×480 IPS with on-board ESP32-S3/LVGL renderer | [`display-candidate-study.md`](docs/01-system/display-candidate-study.md) |
 | Head camera | Raspberry Pi Camera Module 3 **Wide**, visible-light, **SC0874** | [`camera-candidate-study.md`](docs/01-system/camera-candidate-study.md) |
 | Head motion controller (C2) | Waveshare **ESP32-S3-Zero**, headerless; bench twin ESP32-S3-DevKitC-1-N8R8 | [`control-topology-options.md`](docs/01-system/control-topology-options.md) §6.3 |
-| Main compute (C0) | **Raspberry Pi 5, 2 GB** with official Pi 5 Active Cooler; exact storage and power-entry implementation open | [`power-implementation-basis.md`](docs/02-prototypes/RP-02-electrical/power-implementation-basis.md); [`compute-control architecture`](docs/02-prototypes/RP-02-electrical/compute-control-architecture.md) |
-| Base controller (C3 prototype) | **Espressif ESP32-S3-DevKitC-1-N8**; selected over N8R8 to preserve GPIO35–37. RP-03 still selects motor driver/sensors and freezes the pin map | [`compute-control architecture`](docs/02-prototypes/RP-02-electrical/compute-control-architecture.md) CA-03 |
-| Control split and links | C0 owns semantic behaviour; D1 renders eyes; C2 owns head trajectory/safety; C3 owns base loops/local hazards. Production links are differential UART; C2 relays face/light state locally | [`compute-control architecture`](docs/02-prototypes/RP-02-electrical/compute-control-architecture.md) `RP02-P3-REG-01` |
+| Main compute (C0) | **Raspberry Pi 5, 2 GB** with official Pi 5 Active Cooler; storage and power-entry implementation still open | [`compute-control architecture`](docs/02-prototypes/RP-02-electrical/compute-control-architecture.md) |
+| Base controller (C3 prototype) | **Espressif ESP32-S3-DevKitC-1-N8**, selected over N8R8 to preserve GPIO35–37 | same, CA-03 |
+| Control split | C0 owns semantic behaviour; D1 renders eyes; C2 owns head trajectory and local safety; C3 owns base loops and local hazards. Production links are differential UART; C2 relays face/light state locally | same |
 | Drive topology | Two encoder wheels + **front ball transfer** + mandatory rear anti-tip skid | [`dimensional-baseline.md`](docs/01-system/dimensional-baseline.md) v1.12 |
-| RP-01 material and finish | PLA structure and skin (provisional beyond RP-01), real M2 button-heads, nine-step weathered finish | [`material-finish-mass-decision.md`](docs/02-prototypes/RP-01-head/material-finish-mass-decision.md) D-01…08 |
-| First head layout choices | Serial body→yaw→pitch→roll; coaxial direct roll on a supported spindle; ears roll with the face; trapezoidal camera crown; external yaw cable loop; C2 on the rolling cradle; A0 balance target | [`head/decisions.md`](docs/02-prototypes/RP-06-cad/head/decisions.md) HEAD-CAD-01…07 |
+| Head construction | PLA structure and skin (provisional beyond first head), real M2 button-heads, nine-step weathered finish | [`material-finish-mass-decision.md`](docs/02-prototypes/RP-01-head/material-finish-mass-decision.md) |
+| Head layout | Serial body→yaw→pitch→roll; coaxial direct roll on a supported spindle; ears roll with the face; trapezoidal camera crown; external yaw cable loop; C2 on the rolling cradle; A0 balance target | [`head/decisions.md`](docs/02-prototypes/RP-06-cad/head/decisions.md) |
 
-Each lock reopens only through the change-control rule in its governing record.
+Still open: servos, battery, drive motors/drivers, production camera interconnect, harness/carriers, storage, audio SKUs, status-LED optic, and most power hardware. XC330-M288-T is a paper candidate (C01), not a selected servo.
 
-### Immediate next work
+## Current build state
 
-Ordered by the risk-prototype plan's open-inputs list and the intuition guide:
+The design is far ahead of the physical robot. Head and body CAD exist; electrical and locomotion behaviour are specified on paper; no integrated article has been built, weighed, or run.
 
-1. **Correct the Layout-03 blockers:** stiffen/verify pitch frame and roll saddle; remove two retainer-screw collisions; move/check stops beyond usable travel; select the bearing; add physical balance trim and explicit CAD/firmware sign mapping.
-2. **Complete the actuator paper boundary:** obtain or measure internal rotor/gear acceleration demand, then close C01 supply-curve, 65/81 rpm and thermal evidence gaps or screen another candidate. Rerun the external-load model when geometry/candidate mass changes. Not a SKU freeze.
-3. **Register RP-01 physical gates** (thresholds frozen before any scored run). Paper P01–P08 are drafted, not registered.
-4. **Stage 0 closure:** verify tools and E-stop, implement the logging schema, monotonic timebase and video-sync method, and the run generator/guarded launcher. This is software work and should not wait on hardware.
-5. **First weigh-ins** when the display and camera samples arrive (M001, M004, finish coupon). M008 still `U`.
-6. **RP-02 Phase A:** implement the shared schema, authority leases, timebase v0.2 and link contract v0.3 on the DevKitC-1 twin; begin with TTL loopback, then differential breakouts; run exploratory offset/jitter/fault measurements and register G04/G05 numeric thresholds before scored work.
-7. **Distribution/link bench:** convert the selected/lead `PCD-*` and `CCD-*` families into reviewed circuits, then exercise G01 plus F-23…30 when the Korad, multimeter and logic analyzer arrive. Exact watchdog/transceiver suffixes follow measured conditions, not storefront availability.
+| Area | State (2026-09-21) |
+|---|---|
+| Foundation | Approved. Some numeric thresholds remain open. |
+| Geometry | Head Layout 03 is the 1:1 packaging direction (104 × 150 × 115 mm; ~499–524 g complete D/E tree, nominal 509 g). Body/chassis Layout 02 live-imports that head. Two retainer-screw collisions, hard-stop margin, pitch/roll stiffness, bearing SKU, balance trim, and CAD/firmware sign mapping are still open. Not a fabrication release. |
+| Head mechanism | Concept A (elevated-ear serial gimbal) is the path. External rigid-body demand is calculated; nothing is weighed; actuator-internal inertia is not included. |
+| Electrical / control | States, power topology, compute split, and C0↔C2 message/recovery design are written. Host codec work is exploratory. Pack sizing still needs drive measurements. |
+| Locomotion | Two-wheel + ball + skid is the V1 type. Concept A chassis/sensing is retained; caster is the comparison swap. Motors, hubs, drivers, and sensors are not frozen. Layout 02 currently packages one guarded rear TCRT channel, which does not yet match the fuller stop-path sensing in the control design. |
+| Interaction / following | Audio-path requirements and following architecture are documented. No SKU, corpus, or physical test. |
+| Software / firmware | Timebase, link contract, C2/C3 firmware, and C0 behaviour are specified more than implemented. |
+| Physical hardware | Selected display, camera, C2, Pi 5, and cooler are locked on paper. First weigh-ins wait on samples. No head, chassis, or electrical rig has been built. |
+
+`visuals/` are provisional references; several show superseded details (mouths, ear microphones, yoke-mounted ears).
+
+## Immediate next work
+
+BOM, CAD, software, and hardware may proceed together. The useful next work is:
+
+- **Finish the current head CAD** so it can be printed: remove the two retainer-screw collisions; stiffen or verify the pitch frame and roll saddle; move hard stops beyond usable travel; select a bearing; add physical balance trim and explicit CAD/firmware sign mapping.
+- **Choose and source remaining parts** as packaging needs them — head servos, wheels/hubs/motors, ball transfer, battery and power hardware, audio, status LED, connectors — and replace CAD envelopes with real geometry.
+- **Keep the whole-robot model current** in RP-06 (or move it to root `cad/` when that is more convenient): accept or recover the 4 mm stack over 300 mm; reconcile Layout 02's rear-only cliff channel with the base safety design.
+- **Implement firmware and software** on the same timeline: C2/C3, C0 behaviour and perception, the serial link and timebase, and face rendering on the display.
+- **Build and measure** as parts arrive: weigh display, camera, C2, prints, and finish coupons; print the head and chassis; stand up a protected bench and start moving hardware.
 
 ## Documents
 
-### Approved foundation
+### Product intent — authoritative
 
 - [Vision](docs/00-foundation/vision.md)
 - [V1 scope](docs/00-foundation/v1-scope.md)
@@ -73,86 +77,39 @@ Ordered by the risk-prototype plan's open-inputs list and the intuition guide:
 - [Success criteria](docs/00-foundation/success-criteria.md)
 - [Core interaction scenarios](docs/00-foundation/core-interaction-scenarios.md)
 
-### System engineering
+### Current engineering
 
-- [Engineering intuition guide (method, all phases)](docs/intuition.md)
-- [System design brief](docs/01-system/system-design-brief.md)
-- [Risk-prototype plan](docs/01-system/risk-prototype-plan.md)
-- [Workbench and test-readiness baseline](docs/01-system/workbench.md)
-- [Run-record convention](docs/01-system/run-record-convention.md)
 - [Dimensional and packaging baseline](docs/01-system/dimensional-baseline.md)
-- Living ledgers: [mass/envelope](docs/01-system/mass-envelope-ledger.md), [power/energy/thermal](docs/01-system/power-energy-ledger.md), [candidate sourcing matrix](docs/01-system/candidate-sourcing-matrix.md)
-- Strategy: [monotonic timebase](docs/01-system/timebase.md)
-- Studies: [control topology](docs/01-system/control-topology-options.md), [display](docs/01-system/display-candidate-study.md), [display shopping brief](docs/01-system/display-shopping-brief.md), [camera](docs/01-system/camera-candidate-study.md), [head harness routing](docs/01-system/head-harness-routing-study.md)
+- Working CAD: [RP-06-cad](docs/02-prototypes/RP-06-cad/README.md) — [head Layout 03](docs/02-prototypes/RP-06-cad/head/layout-03/README.md), [body/chassis Layout 02](docs/02-prototypes/RP-06-cad/body-chassis/layout-02/README.md)
+- Ledgers: [mass/envelope](docs/01-system/mass-envelope-ledger.md), [power/energy/thermal](docs/01-system/power-energy-ledger.md), [candidate sourcing](docs/01-system/candidate-sourcing-matrix.md)
+- Studies: [control topology](docs/01-system/control-topology-options.md), [display](docs/01-system/display-candidate-study.md), [camera](docs/01-system/camera-candidate-study.md), [head harness](docs/01-system/head-harness-routing-study.md)
 
-### RP-01 — three-axis head
+### Research and history
 
-Folder: [`docs/02-prototypes/RP-01-head/`](docs/02-prototypes/RP-01-head/)
+These folders remain useful. Their registration, gate, and purchase-authorization language is historical.
 
-- [Intent](docs/02-prototypes/RP-01-head/intent.md) — authored head vocabulary (HM-00…HM-18) with eye/audio placeholders
-- [Storyboard](docs/02-prototypes/RP-01-head/storyboard.md) — keyframes, profile laws (`MJ5`, `MS7`, `TRACK`, `BRAKE`), per-axis peak speed/acceleration, hysteresis and modal targets
-- [Physics](docs/02-prototypes/RP-01-head/physics.md), [fullproof math](docs/02-prototypes/RP-01-head/fullproofmath.md), [C01 actuator screen](docs/02-prototypes/RP-01-head/actuator-screen-01.md), [gates](docs/02-prototypes/RP-01-head/gates.md), [rig](docs/02-prototypes/RP-01-head/rig.md), [decision](docs/02-prototypes/RP-01-head/decision.md)
-- [Material/finish/mass decision](docs/02-prototypes/RP-01-head/material-finish-mass-decision.md) and [payload mass capture](docs/02-prototypes/RP-01-head/payload-mass-capture.md)
-- Concepts: [comparison](docs/02-prototypes/RP-01-head/concepts/comparison.md), [Concept A](docs/02-prototypes/RP-01-head/concepts/elevated-ear-pivot-serial-gimbal.md), [servo mechanism recommendation](docs/02-prototypes/RP-01-head/concepts/servo-mechanism-recommendation.md)
-- CAD: [entry point](docs/02-prototypes/RP-06-cad/README.md), [decisions](docs/02-prototypes/RP-06-cad/head/decisions.md), [Layout 03](docs/02-prototypes/RP-06-cad/head/layout-03/README.md), [Layout 03 verification](docs/02-prototypes/RP-06-cad/head/layout-03/review/verification.md), [Layout 02](docs/02-prototypes/RP-06-cad/head/layout-02/README.md), [requirements](docs/02-prototypes/RP-06-cad/head/requirements.md)
+- [System design brief](docs/01-system/system-design-brief.md), [risk-prototype plan](docs/01-system/risk-prototype-plan.md), [workbench](docs/01-system/workbench.md), [run-record convention](docs/01-system/run-record-convention.md)
+- Head: [`RP-01-head/`](docs/02-prototypes/RP-01-head/)
+- Electrical: [`RP-02-electrical/`](docs/02-prototypes/RP-02-electrical/README.md)
+- Locomotion: [`RP-03-locomotion/`](docs/02-prototypes/RP-03-locomotion/README.md)
+- Coordination: [`RP-04-coordination/`](docs/02-prototypes/RP-04-coordination/README.md)
+- Interaction: [`RP-05-interaction/`](docs/02-prototypes/RP-05-interaction/README.md)
+- Following: [`RP-07-following/`](docs/02-prototypes/RP-07-following/README.md)
+- Earlier memory log: [`docs/archive/MEMORY-20260921.md`](docs/archive/MEMORY-20260921.md)
 
-### RP-02 — electrical/control backbone
-
-Folder: [`docs/02-prototypes/RP-02-electrical/`](docs/02-prototypes/RP-02-electrical/) — [entry point](docs/02-prototypes/RP-02-electrical/README.md)
-
-- [Intent](docs/02-prototypes/RP-02-electrical/intent.md) — design question and gate question, traceability, inherited inputs, phase ladder
-- [State register](docs/02-prototypes/RP-02-electrical/state-register.md) — registered concurrent states and the proposed 20-minute mixed-duty cycle
-- [Power architecture](docs/02-prototypes/RP-02-electrical/power-architecture.md), [link contract](docs/02-prototypes/RP-02-electrical/link-contract.md), [fault matrix](docs/02-prototypes/RP-02-electrical/fault-matrix.md)
-- [Rig](docs/02-prototypes/RP-02-electrical/rig.md), [gates](docs/02-prototypes/RP-02-electrical/gates.md), [decision](docs/02-prototypes/RP-02-electrical/decision.md)
-
-### RP-06 — sourced head/face/camera/audio layout
-
-Folder: [`docs/02-prototypes/RP-06-cad/`](docs/02-prototypes/RP-06-cad/) — [entry point](docs/02-prototypes/RP-06-cad/README.md)
-
-- [Closure checklist](docs/02-prototypes/RP-06-cad/checklist.md) — CAD-done vs physical-open against G01–G06; uses the current **~499–524 g / nominal 509 g** head baseline
-- Active models: [head Layout 03](docs/02-prototypes/RP-06-cad/head/layout-03/README.md) and [body/chassis Layout 02](docs/02-prototypes/RP-06-cad/body-chassis/layout-02/README.md). RP-01 and RP-03 `cad/` directories are forwarding stubs.
-
-### RP-07 — person tracking and short household following
-
-Folder: [`docs/02-prototypes/RP-07-following/`](docs/02-prototypes/RP-07-following/) — [entry point](docs/02-prototypes/RP-07-following/README.md)
-
-- [Perception architecture](docs/02-prototypes/RP-07-following/perception-architecture.md), [interfaces](docs/02-prototypes/RP-07-following/interfaces.md), and [geometry/calibration](docs/02-prototypes/RP-07-following/geometry-calibration.md)
-- [Target continuity](docs/02-prototypes/RP-07-following/target-continuity.md), [come/follow control](docs/02-prototypes/RP-07-following/behaviour-control.md), and [safety/fault matrix](docs/02-prototypes/RP-07-following/safety-fault-matrix.md)
-- [Timing/compute](docs/02-prototypes/RP-07-following/timing-compute.md), [test matrix](docs/02-prototypes/RP-07-following/test-matrix.md), [gate workbook](docs/02-prototypes/RP-07-following/gates.md), and [execution plan](docs/02-prototypes/RP-07-following/plan.md)
-
-RP-07 is documentation-only at this point. Replay and motors-inhibited work may begin before floor authority; head-only and powered phases retain their RP-01/RP-03/RP-04 prerequisites.
-
-Root `cad/`, `docs/03-architecture/` and `docs/04-bom/` are reserved for later stages and must stay empty until then.
-
-## Repository layers
+## Repository
 
 ```
-docs/00-foundation/     WHAT M4 must be              approved, the test oracle
-docs/01-system/         HOW we will find out          approved instruments and living ledgers
-docs/02-prototypes/     EVIDENCE                      RP-XX folders, runs, decisions
-docs/03-architecture/   COMMITMENTS                   ADRs, budgets, interfaces   (stage 6, empty)
-docs/04-bom/            PURCHASES                     final selection, sourcing   (stage 7, empty)
-cad/                    GEOMETRY                      integrated CAD, frozen last (stage 7, empty)
-docs/archive/           superseded verbatim documents
-MEMORY.md               append-only history of how every decision changed
+docs/00-foundation/     product intent and constraints     authoritative
+docs/01-system/         engineering research and planning  reference
+docs/02-prototypes/     evidence, calculations, history    reference
+docs/03-architecture/   architecture notes as they are written
+docs/04-bom/            purchases and sourcing as they are written
+cad/                    geometry as it is useful to keep here
+docs/archive/           superseded documents
+MEMORY.md               chronological build and decision log
 README.md               this orientation
 ```
-
-Information flows down; citations flow up; nothing skips a layer. A part is never bought because a prototype "showed it works"; it passes through an ADR first.
-
-## Physical prototype run records
-
-Every bounded physical execution that energizes an actuator, applies representative load, or produces decision evidence receives one permanent run ID:
-
-```text
-RP<prototype>-<gate-and-version-or-EXP>-<exploratory|pilot|scored>-<UTC allocation>-<sequence>
-```
-
-IDs are allocated before the run and never renamed, reused or deleted; failed and aborted runs keep their evidence. The operating invariant is:
-
-> **No valid run ID plus no confirmed logger means no actuator enable.**
-
-Until a guarded launcher enforces this, the builder applies it as a pre-arm bench check from the blank `run.md` form in the [run-record convention](docs/01-system/run-record-convention.md).
 
 ## Identity and design direction
 
@@ -165,8 +122,6 @@ M4 is a droid, not a desktop assistant, smart speaker, or generic social robot. 
 - eyes only on the face, no mouth;
 - approachable without optimizing for minimum size;
 - open to substantial redesign from the current renders.
-
-Face geometry, shell language, colours, tolerances, total mass and internal architecture remain subject to prototype and packaging validation. Four PDM microphones, the speaker, battery and main compute are body-mounted; the head carries only the display, camera, status light, C2 controller and local structure.
 
 ## V1 Core
 
@@ -182,7 +137,7 @@ V1 is not complete unless the following outcomes work together as one droid. Exa
 
 **Operation and construction** — untethered on onboard battery for at least 20 minutes; floor mode primary; tabletop mode inhibits locomotion by default and protects edges; accessible stop or cutoff with bounded failure; assembled, started, demonstrated, inspected and serviced from documentation.
 
-**Candidate:** spatial/directional hearing, included only if a prototype proves sound direction materially improves an approved interaction. Everything else is uncommitted; there is no permanent "never" list.
+**Candidate:** spatial/directional hearing, included only if it materially improves an approved interaction. Everything else is uncommitted; there is no permanent "never" list.
 
 ## Approved Core scenarios
 
@@ -194,4 +149,4 @@ Source: [`core-interaction-scenarios.md`](docs/00-foundation/core-interaction-sc
 
 ## Success definition
 
-V1 succeeds when M4 delivers these interactions as a convincing, repeatable droid encounter on battery power, not as a sequence of manually rescued subsystem demos. The validation categories and open thresholds are in [`success-criteria.md`](docs/00-foundation/success-criteria.md) (SC-01…25). Thresholds are selected before final validation and never rewritten afterward to fit the result.
+V1 succeeds when M4 delivers these interactions as a convincing, repeatable droid encounter on battery power, not as a sequence of manually rescued subsystem demos. The validation categories and open thresholds are in [`success-criteria.md`](docs/00-foundation/success-criteria.md) (SC-01…25).
