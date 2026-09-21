@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.13 |
+| Version | 1.15 |
 | Owner | Project builder |
 | Created | 2026-08-14 |
-| Last reviewed | 2026-09-19 |
+| Last reviewed | 2026-09-21 |
 | Depends on | Approved `docs/00-foundation/constraints.md` v1.2, other foundation documents, `system-design-brief.md` v1.2, and `dimensional-baseline.md` v1.12 |
 | Decision authority | Project builder |
 
@@ -355,11 +355,11 @@ Can actually obtainable components fit a serviceable head/body layout that prese
 
 ### Scope note
 
-Sourcing/envelope updates continue during RP-01 through RP-05. Final closure occurs only after their relevant measured inputs exist.
+Sourcing/envelope updates continue during RP-01 through RP-05. Final closure occurs only after their relevant measured inputs exist. Working CAD lives in `docs/02-prototypes/RP-06-cad/` (head Layout 03 and body/chassis Layout 02).
 
 ### Mock-up and procedure
 
-Build an adjustable physical mock-up or envelope rig using sourced dimensions and realistic mass dummies inside `dimensional-baseline.md`. Include the selected no-touch Waveshare ESP32-S3-LCD-4.3 (SKU 30493), its window/mount/connectors, the selected visible-light Raspberry Pi Camera Module 3 Wide (SC0874), its mount/connector/moving interconnect, status light/optics, ~250 g moving-head target, head structure/joints and remaining moving cable bends/connectors. In the body, include the four-microphone PDM array, speaker/enclosure, low and forward battery placement, primary electronics/compute, cooling paths, fasteners and service-removal paths.
+Build an adjustable physical mock-up or envelope rig using sourced dimensions and realistic mass dummies inside `dimensional-baseline.md`. Include the selected no-touch Waveshare ESP32-S3-LCD-4.3 (SKU 30493), its window/mount/connectors, the selected visible-light Raspberry Pi Camera Module 3 Wide (SC0874), its mount/connector/moving interconnect, status light/optics, a representative moving-head load from the current Layout 03 D/E tree (**~499–524 g complete, nominal 509 g at M008=20 g**; the former ~250 g target is inadmissible), head structure/joints and remaining moving cable bends/connectors. In the body, include the four-microphone PDM array, speaker/enclosure, low and forward battery placement, Raspberry Pi 5 2 GB with official Active Cooler, remaining electronics, cooling paths, fasteners and service-removal paths.
 
 Evaluate display/face legibility over registered angles/distances/lighting; camera field of view and occlusion throughout head motion; LED visibility, light leakage and camera interference; speaker output and enclosure vibration; microphone contamination; heat-source spacing; cable motion; assembly order; and removal of named high-risk modules.
 
@@ -496,5 +496,9 @@ Version 1.11 (2026-09-12) propagates Layout 03 as the RP-01 planning baseline (1
 Version 1.12 (2026-09-13) consumes the completed Layout 03 **external rigid-body** demand model and the first named RP-01 comparison candidate (XC330-M288-T, C01, paper OPEN). The same-day closure audit clarified that this is not complete electromechanical/structural proof: actuator-internal inertia, structural modes, two screw collisions, stop margin, trial bearing seats, physical balance trim and sign mapping remain open. Complete-head `W` mass remains blocked on M008. RP-02 Phase B may use C01 as a named reference load; PA-04 still collapses only on family freeze.
 
 Version 1.13 (2026-09-19) consumes `dimensional-baseline.md` v1.12: V1 front support is the Ø1 inch ball transfer; the swivel caster is the RP-03 comparison swap. RP-03 rig geometry is 110 mm to front-support contact. No numeric gate is registered.
+
+Version 1.14 (2026-09-21) replaces the leftover ~250 g moving-head target in the RP-06 mock-up procedure with the current Layout 03 D/E baseline (~499–524 g complete, nominal 509 g at M008=20 g), records the RP-06 evidence folder, and names the selected Pi 5 / Active Cooler as body mock-up content. No numeric gate is registered.
+
+Version 1.15 (2026-09-21) relocates working prototype CAD into `docs/02-prototypes/RP-06-cad/`. RP-01 and RP-03 keep mechanism/physics/gates; their former `cad/` directories become forwarding stubs. Root `cad/` remains reserved for stage-7 freeze. No numeric gate is registered.
 
 Except for the later-adopted dimensional/drive topology baseline, the selected no-touch Waveshare display SKU 30493 and the selected visible-light Raspberry Pi Camera Module 3 Wide SC0874, plan approval does not approve another exact component, supplier, mechanism implementation, production camera interconnect, or numeric `SC-TBD-*` or `CON-TBD-*` gate threshold. `workbench.md` was approved separately on 2026-08-17 and incorporated as the Stage 0 baseline in version 1.1 of this plan. Numeric prototype gates remain subject to preregistration before scored runs, and powered scored testing remains blocked until the approved readiness gate's safety, instrumentation, configuration, and logging requirements are satisfied.

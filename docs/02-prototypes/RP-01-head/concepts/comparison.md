@@ -8,7 +8,7 @@
 
 Credibility checklist per concept: load path (no bare servo-horn cantilever), actuator class with a sourcing path, cable route, service/assembly story, physics numbers clearing `intent.md` requirements with margin.
 
-First-layout construction and fitting choices are recorded in [head CAD decisions](../cad/head/decisions.md). Both cosmetic ears attach to the rolling face/cradle. Concept B was waived on 2026-09-09; gate outcomes remain open.
+First-layout construction and fitting choices are recorded in [head CAD decisions](../../RP-06-cad/head/decisions.md). Both cosmetic ears attach to the rolling face/cradle. Concept B was waived on 2026-09-09; gate outcomes remain open.
 
 | Criterion | Concept A: elevated ear-pivot serial gimbal | Concept B |
 |---|---|---|

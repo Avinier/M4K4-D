@@ -26,7 +26,7 @@ These eight decisions are change-controlled RP-01 inputs. A later material, fini
 
 ## 2. Selected-display geometry and fit
 
-**Current layout reconciliation, 2026-09-12:** [Layout 03](cad/head/layout-03/README.md) and [dimensional baseline v1.10](../../01-system/dimensional-baseline.md) now use an 86 mm main core, 104 mm crown-inclusive height, 150 mm overall width, 115 mm depth, Ø60 mm hollow rolling ears and a 99 × 58 mm minimally clipped opening. The sizing tables below preserve this record's earlier spreadsheet planning basis; they are historical inputs superseded for current CAD mass/geometry by Layout 03. D-01…D-08 remain unchanged. Layout 03 replaces old shell/mechanism allowances with CAD volumes while retaining explicit D/E finish/hardware/module estimates; it does not create measured W evidence.
+**Current layout reconciliation, 2026-09-12:** [Layout 03](../RP-06-cad/head/layout-03/README.md) and [dimensional baseline v1.10](../../01-system/dimensional-baseline.md) now use an 86 mm main core, 104 mm crown-inclusive height, 150 mm overall width, 115 mm depth, Ø60 mm hollow rolling ears and a 99 × 58 mm minimally clipped opening. The sizing tables below preserve this record's earlier spreadsheet planning basis; they are historical inputs superseded for current CAD mass/geometry by Layout 03. D-01…D-08 remain unchanged. Layout 03 replaces old shell/mechanism allowances with CAD volumes while retaining explicit D/E finish/hardware/module estimates; it does not create measured W evidence.
 
 The selected display is the no-touch **Waveshare ESP32-S3-LCD-4.3, SKU 30493**. The confirmed board outline is **106.1 × 67.8 mm**; the panel is 800 × 480 with approximately **95.0 × 53.9 mm** active area. The published `118 g` remains `D`/listing evidence and is not an accepted mass measurement.
 
@@ -73,9 +73,9 @@ If PLA fails structural creep/thermal evidence, reprint M010–M012 in PETG or A
 
 ## 4. CAD requirements
 
-**Relocated 2026-09-07:** the unchanged CAD-01…CAD-06 requirements and service-seam rule now live in [head CAD requirements](cad/head/requirements.md). This heading is retained for existing references. Their authority remains the D-01…D-08 decisions in this record; relocation does not change their status.
+**Relocated 2026-09-07:** the unchanged CAD-01…CAD-06 requirements and service-seam rule now live in [head CAD requirements](../RP-06-cad/head/requirements.md). This heading is retained for existing references. Their authority remains the D-01…D-08 decisions in this record; relocation does not change their status.
 
-The [head CAD decision register](cad/head/decisions.md) separately records the agreed first-layout construction and fitting choices. Material, finish and mass evidence remain here.
+The [head CAD decision register](../RP-06-cad/head/decisions.md) separately records the agreed first-layout construction and fitting choices. Material, finish and mass evidence remain here.
 
 ## 5. Finish system
 

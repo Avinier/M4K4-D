@@ -7,7 +7,7 @@
 | Owner | Project builder |
 | Consumes | `intent.md`; `physics.md`; `concepts/`; `drivetrain-screen-01.md`; `sensing-screen-01.md`; `base-control-architecture.md`; `rig.md`; `decision.md` BD-01…08 |
 | Method | Datasheet / vendor pages (Oz, NFP, Vishay, Sharp, TI, Pololu, Alwayse, Robu, Zbotic, Fab.to.Lab). India stock is a class snapshot, re-check before any later buy |
-| Feeds | Ugly CAD envelopes in `cad/`; dated snapshots into [`candidate-sourcing-matrix.md`](../../01-system/candidate-sourcing-matrix.md) §Drive & base |
+| Feeds | Ugly CAD envelopes in the RP-06 CAD folder; dated snapshots into [`candidate-sourcing-matrix.md`](../../01-system/candidate-sourcing-matrix.md) §Drive & base |
 | Does not contain | A buy list; a second sourcing matrix; a motor/sensor SKU freeze; a pass against `2.0 m/s²`; pretty-chassis CAD |
 | Replaces | `research-criteria.md` v0.2 and `research-findings.md` v0.1 (merged) |
 
@@ -398,7 +398,7 @@ Telemetry only. Not researched as stop-path. Do not steal the GP2Y contact mount
 
 ## 5. CAD pass 1 — datum list
 
-Folder policy still defers pretty `cad/base/` until a gate freeze. If a blockout is opened, it is an **ugly envelope model**. Use this list, not napkin 110/14/21:
+Pretty geometry still waits on a gate freeze. Working CAD lives in [`RP-06-cad/`](../RP-06-cad/README.md); [`base/pass-01/`](../RP-06-cad/base/pass-01/) is the historical ugly envelope. Use this list, not napkin 110/14/21:
 
 1. Ground plane; axle at **h = 42 mm**; track **170 mm**.
 2. Wheel envelope: **Ø80–85 × 10–35 mm** until `R-WHL` family is chosen; do not solid a fake 21 mm tyre. Hub is printed; tread is bought.
@@ -486,7 +486,7 @@ Do-not-print as a scored substitute:
 |---|---|
 | `drivetrain-screen-01.md` / `sensing-screen-01.md` | Confirm, HOLD, or add a dated `D`/`U` — do not invent a parallel screen |
 | `candidate-sourcing-matrix.md` | India class, suffix, ₹, substitute — the only price/stock home |
-| `cad/README.md` | Envelope/datum list in §5 when a blockout is actually authorized. Print adapters, not pretty shell |
+| `../RP-06-cad/README.md` | Envelope/datum list in §5 when a blockout is actually authorized. Print adapters, not pretty shell |
 | `rig.md` | Adjustable numbers that research proved must stay adjustable; print-vs-buy for the ugly frame |
 | `decision.md` | Nothing until a freeze. This file does not issue `BD-` or a purchase |
 

@@ -16,7 +16,7 @@ Makad V1 does **not** need unlimited yaw. Slip rings therefore remain out of the
 
 The central problem is not simply cable flexibility. A viable assembly must simultaneously preserve camera signal integrity, remain inside the 60 mm neck/head-intrusion package, contribute acceptable moving mass, avoid objectionable restoring torque, protect connector exits and remain replaceable.
 
-**First-layout choice, 2026-09-07:** [HEAD-CAD-04](../02-prototypes/RP-01-head/cad/head/decisions.md#head-cad-04--yaw-wiring) uses a solid yaw spindle with an external guided service loop behind the neck. Visible insulated wiring is acceptable to the builder. This supersedes the hollow-centre starting assumption for the first layout; exact cables, connectors, bend radii and endurance remain open under this study.
+**First-layout choice, 2026-09-07:** [HEAD-CAD-04](../02-prototypes/RP-06-cad/head/decisions.md#head-cad-04--yaw-wiring) uses a solid yaw spindle with an external guided service loop behind the neck. Visible insulated wiring is acceptable to the builder. This supersedes the hollow-centre starting assumption for the first layout; exact cables, connectors, bend radii and endurance remain open under this study.
 
 ## What the cited designs actually support
 

@@ -102,7 +102,7 @@ docs/02-prototypes/RP-03-locomotion/
 ├── gates.md                         paper P01… and physical G01…G06 candidate registrations; registered section
 ├── decision.md                      ADR-04/ADR-07 ladder, ADR-06 sizing and ADR-03/05 inputs, candidate register, outcomes
 ├── research.md                      constraints, inventory, filled envelopes, print-vs-buy; not a sourcing matrix
-├── cad/                             only after a concept is selected: base/ blockout mirroring RP-01 cad/head/
+├── cad/                             forwarding stub; working CAD is ../RP-06-cad/{head,body-chassis,base}/
 └── runs/                            one directory per run ID
 ```
 
@@ -315,7 +315,7 @@ The rig is a decision instrument, deliberately ugly.
 - implement person perception, target continuity or following policy (RP-07);
 - compose head–base performances or judge coherence (RP-04);
 - close SC-14 or any integrated-droid requirement;
-- produce final chassis CAD — `cad/base/` is a blockout for the selected concept only, and root `cad/` stays reserved for integrated CAD;
+- produce final chassis CAD — working geometry lives in [`RP-06-cad`](../RP-06-cad/README.md); root `cad/` stays reserved for stage-7 freeze;
 - authorize any purchase; a reference motor bought for Phase A is bench equipment until a freeze says otherwise;
 - weaken the 0.5 m/s follow ceiling, the tabletop-stationary default or the caster-lift margin rule.
 

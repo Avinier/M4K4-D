@@ -5,7 +5,7 @@
 | Status | Conceptual checklist and **external rigid-body** Layout-03 demand/sensitivity calculation complete. Closure audit recorded 2026-09-13; structural dynamics, actuator-internal inertia and confirmed CAD/hardware issues keep the paper screen OPEN. |
 | Scope | Explain, calculate and audit the Layout-03 external head-load model, then state exactly which physical effects remain outside it. |
 | Does not claim | Complete electromechanical actuator demand, structural adequacy, servo-SKU selection, registered-gate passage, measured mass, fabrication release or RP-01 closure. |
-| Primary sources | [physics.md](physics.md), [storyboard.md](storyboard.md), [Layout-03 mass tree](cad/head/layout-03/mass-placement.json), [Layout-03 dimensions](cad/head/layout-03/dimensions.md), [rig.md](rig.md), [gates.md](gates.md), [decision.md](decision.md) |
+| Primary sources | [physics.md](physics.md), [storyboard.md](storyboard.md), [Layout-03 mass tree](../RP-06-cad/head/layout-03/mass-placement.json), [Layout-03 dimensions](../RP-06-cad/head/layout-03/dimensions.md), [rig.md](rig.md), [gates.md](gates.md), [decision.md](decision.md) |
 
 ## 1. What has and has not been completed
 

@@ -52,13 +52,13 @@ Any controller-boundary change must supersede CTRL-01…CTRL-06 and propagate th
 
 ## First-layout CAD decisions
 
-The fitting discussion is recorded in [cad/head/decisions.md](cad/head/decisions.md), dated 2026-09-07. It fixes the first layout's rib/backplate construction and service splits, coaxial direct roll trial, external yaw service loop beside a solid spindle, and rolling-cradle C2 placement. The builder selected both rounded cosmetic ears attached to the rolling face/cradle, so they move with yaw, pitch and roll. Mounting geometry and support clearance remain to be demonstrated.
+The fitting discussion is recorded in [head/decisions.md](../RP-06-cad/head/decisions.md), dated 2026-09-07. It fixes the first layout's rib/backplate construction and service splits, coaxial direct roll trial, external yaw service loop beside a solid spindle, and rolling-cradle C2 placement. The builder selected both rounded cosmetic ears attached to the rolling face/cradle, so they move with yaw, pitch and roll. Mounting geometry and support clearance remain to be demonstrated.
 
-These are working layout inputs, not scored outcomes or a final mechanism/actuator selection. The [CAD requirements](cad/head/requirements.md) retain CAD-01…CAD-06, and [packaging estimates](cad/head/packaging-estimates.md) distinguish sourced envelopes from unverified fit allowances.
+These are working layout inputs, not scored outcomes or a final mechanism/actuator selection. The [CAD requirements](../RP-06-cad/head/requirements.md) retain CAD-01…CAD-06, and [packaging estimates](../RP-06-cad/head/packaging-estimates.md) distinguish sourced envelopes from unverified fit allowances.
 
-The [pre-layout brief](cad/head/pre-layout-brief.md) inventories existing mass/geometry evidence and prepares the internal arrangement before the first CAD blockout. Candidate pivot coordinates will be evaluated in that layout rather than selected from appearance alone.
+The [pre-layout brief](../RP-06-cad/head/pre-layout-brief.md) inventories existing mass/geometry evidence and prepares the internal arrangement before the first CAD blockout. Candidate pivot coordinates will be evaluated in that layout rather than selected from appearance alone.
 
-The builder selected **A0 as the first-layout balance target** in [HEAD-CAD-07](cad/head/decisions.md#head-cad-07--a0-balance-target). Derive the pitch pivot coordinates from the estimated pitch-carried CoM and keep roll near its own carried CoM. A1/A2 remain fallback comparisons; achieved balance, final mechanism acceptance and actuator selection remain open.
+The builder selected **A0 as the first-layout balance target** in [HEAD-CAD-07](../RP-06-cad/head/decisions.md#head-cad-07--a0-balance-target). Derive the pitch pivot coordinates from the estimated pitch-carried CoM and keep roll near its own carried CoM. A1/A2 remain fallback comparisons; achieved balance, final mechanism acceptance and actuator selection remain open.
 
 ## Gate outcomes
 

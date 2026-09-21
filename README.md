@@ -1,6 +1,6 @@
 # Makad / M4K4-D
 
-> **Current project overview** — last reconciled **16 September 2026**
+> **Current project overview** — last reconciled **21 September 2026**
 >
 > Foundation approved: **14 August 2026** · V1 deadline: **5 December 2026** · Roadmap position: **Stage 0/1 — RP-01 paper demand complete, C01 screen OPEN; RP-02 Parts 1–4 defined, Phase A implementation open**
 
@@ -16,11 +16,11 @@ This README is the orientation document over the whole repository. It states cur
 
 ## Where the project stands
 
-| Area | Status (2026-09-16) |
+| Area | Status (2026-09-21) |
 |---|---|
 | Foundation (vision, scope, constraints, success criteria, scenarios) | Approved. Numeric `SC-TBD`/`CON-TBD` thresholds remain open by design. |
 | System design brief | Approved v1.3. Thirteen ADRs defined, none closed. |
-| Risk-prototype plan | Approved v1.12. Seven prototypes; **no run has been executed.** Layout 03 external rigid-body demand is retained; the 2026-09-13 closure audit keeps C01 and RP-01 paper passage open on structural, actuator-internal and CAD/hardware blockers. |
+| Risk-prototype plan | Approved **v1.15**. Seven prototypes; **no run has been executed.** Working CAD lives in [`RP-06-cad/`](docs/02-prototypes/RP-06-cad/). Layout 03 external rigid-body demand is retained; RP-06 mock-up load is the current ~499–524 g D/E head tree (nominal 509 g), not 250 g. |
 | Workbench / Stage 0 | Approved; first tools selected and partly ordered. Tool access, E-stop verification, logging schema, monotonic timebase and video sync are still open, so **powered scored testing is blocked.** |
 | Run identity | Convention v1.0 active. Guarded launcher not built. |
 | Dimensional baseline | **v1.12** active: 300 × 205 × 180 mm rounded robot target; Layout 03 head 104 × 150 × 115 mm, provisional 304 mm neutral stack, Ø84 wheels, 170 mm track, 110 mm axle-to-**front-support (ball)**, 60 mm neck. RP-06 must accept the 304 mm stack or recover 4 mm. |
@@ -29,6 +29,8 @@ This README is the orientation document over the whole repository. It states cur
 | Head mass | Layout 03 nominal D/E tree: ~362/436/509 g roll/pitch/yaw at a 20 g C2 allowance; C2 sensitivity gives ~499–524 g complete. External rigid-body demand is calculated; nothing is weighed, M008 remains `U`, and actuator-internal inertia is not included. C01 matches the 23 g housings already in the tree. The earlier 250 g target and generic inertia/torque proxies are inadmissible. |
 | RP-02 electrical/control backbone | **Parts 1–4 complete at design-definition level:** states/load cases `RP02-P1-REG-01`; power topology/implementation/brownout `RP02-P2-REG-01…03`; compute/control ownership and links `RP02-P3-REG-01/02`; C0↔C2 ICD message/recovery definition `RP02-P4-REG-01`. Phase A has an exploratory host codec/state model and unscored G01/G06 paper review. **No gate passed, ADR closed, purchase authorized or scored run executed.** Byte layouts, ratings/suffixes and physical evidence remain open; pack sizing still waits on RP-03 drive measurements. |
 | RP-03 drive and motion safety | **Parts 1–5 defined; V1 front support is the ball transfer (BD-08).** [`RP-03-locomotion/`](docs/02-prototypes/RP-03-locomotion/README.md). Concept A chassis/sensing retained; caster is the comparison swap. No purchase, no gate, no scored run. ADR-04 open. |
+| RP-05 interaction | **Audio-path paper slice `RP05-A`.** [`RP-05-interaction/`](docs/02-prototypes/RP-05-interaction/README.md). `AR-*` / `AP-*` written; no SKU, engine, implementation, or numeric gate. ADR-10/11 open. |
+| RP-06 sourced layout | **CAD home.** Working geometry lives in [`RP-06-cad/`](docs/02-prototypes/RP-06-cad/README.md) (head Layout 03 + body/chassis Layout 02). Physical validation 0%. No gate, no mock-up, no scored run. |
 | Architecture, budgets, BOM, integrated CAD | Not started; blocked on prototype evidence by design. |
 | `specsheets/` | Exploratory, non-binding. |
 | `visuals/` | Provisional references; several show superseded details (mouths, ear microphones, yoke-mounted ears). |
@@ -45,7 +47,7 @@ This README is the orientation document over the whole repository. It states cur
 | Control split and links | C0 owns semantic behaviour; D1 renders eyes; C2 owns head trajectory/safety; C3 owns base loops/local hazards. Production links are differential UART; C2 relays face/light state locally | [`compute-control architecture`](docs/02-prototypes/RP-02-electrical/compute-control-architecture.md) `RP02-P3-REG-01` |
 | Drive topology | Two encoder wheels + **front ball transfer** + mandatory rear anti-tip skid | [`dimensional-baseline.md`](docs/01-system/dimensional-baseline.md) v1.12 |
 | RP-01 material and finish | PLA structure and skin (provisional beyond RP-01), real M2 button-heads, nine-step weathered finish | [`material-finish-mass-decision.md`](docs/02-prototypes/RP-01-head/material-finish-mass-decision.md) D-01…08 |
-| First head layout choices | Serial body→yaw→pitch→roll; coaxial direct roll on a supported spindle; ears roll with the face; trapezoidal camera crown; external yaw cable loop; C2 on the rolling cradle; A0 balance target | [`cad/head/decisions.md`](docs/02-prototypes/RP-01-head/cad/head/decisions.md) HEAD-CAD-01…07 |
+| First head layout choices | Serial body→yaw→pitch→roll; coaxial direct roll on a supported spindle; ears roll with the face; trapezoidal camera crown; external yaw cable loop; C2 on the rolling cradle; A0 balance target | [`head/decisions.md`](docs/02-prototypes/RP-06-cad/head/decisions.md) HEAD-CAD-01…07 |
 
 Each lock reopens only through the change-control rule in its governing record.
 
@@ -92,7 +94,7 @@ Folder: [`docs/02-prototypes/RP-01-head/`](docs/02-prototypes/RP-01-head/)
 - [Physics](docs/02-prototypes/RP-01-head/physics.md), [fullproof math](docs/02-prototypes/RP-01-head/fullproofmath.md), [C01 actuator screen](docs/02-prototypes/RP-01-head/actuator-screen-01.md), [gates](docs/02-prototypes/RP-01-head/gates.md), [rig](docs/02-prototypes/RP-01-head/rig.md), [decision](docs/02-prototypes/RP-01-head/decision.md)
 - [Material/finish/mass decision](docs/02-prototypes/RP-01-head/material-finish-mass-decision.md) and [payload mass capture](docs/02-prototypes/RP-01-head/payload-mass-capture.md)
 - Concepts: [comparison](docs/02-prototypes/RP-01-head/concepts/comparison.md), [Concept A](docs/02-prototypes/RP-01-head/concepts/elevated-ear-pivot-serial-gimbal.md), [servo mechanism recommendation](docs/02-prototypes/RP-01-head/concepts/servo-mechanism-recommendation.md)
-- CAD: [entry point](docs/02-prototypes/RP-01-head/cad/README.md), [decisions](docs/02-prototypes/RP-01-head/cad/head/decisions.md), [Layout 03](docs/02-prototypes/RP-01-head/cad/head/layout-03/README.md), [Layout 03 verification](docs/02-prototypes/RP-01-head/cad/head/layout-03/review/verification.md), [Layout 02](docs/02-prototypes/RP-01-head/cad/head/layout-02/README.md), [requirements](docs/02-prototypes/RP-01-head/cad/head/requirements.md)
+- CAD: [entry point](docs/02-prototypes/RP-06-cad/README.md), [decisions](docs/02-prototypes/RP-06-cad/head/decisions.md), [Layout 03](docs/02-prototypes/RP-06-cad/head/layout-03/README.md), [Layout 03 verification](docs/02-prototypes/RP-06-cad/head/layout-03/review/verification.md), [Layout 02](docs/02-prototypes/RP-06-cad/head/layout-02/README.md), [requirements](docs/02-prototypes/RP-06-cad/head/requirements.md)
 
 ### RP-02 — electrical/control backbone
 
@@ -102,6 +104,13 @@ Folder: [`docs/02-prototypes/RP-02-electrical/`](docs/02-prototypes/RP-02-electr
 - [State register](docs/02-prototypes/RP-02-electrical/state-register.md) — registered concurrent states and the proposed 20-minute mixed-duty cycle
 - [Power architecture](docs/02-prototypes/RP-02-electrical/power-architecture.md), [link contract](docs/02-prototypes/RP-02-electrical/link-contract.md), [fault matrix](docs/02-prototypes/RP-02-electrical/fault-matrix.md)
 - [Rig](docs/02-prototypes/RP-02-electrical/rig.md), [gates](docs/02-prototypes/RP-02-electrical/gates.md), [decision](docs/02-prototypes/RP-02-electrical/decision.md)
+
+### RP-06 — sourced head/face/camera/audio layout
+
+Folder: [`docs/02-prototypes/RP-06-cad/`](docs/02-prototypes/RP-06-cad/) — [entry point](docs/02-prototypes/RP-06-cad/README.md)
+
+- [Closure checklist](docs/02-prototypes/RP-06-cad/checklist.md) — CAD-done vs physical-open against G01–G06; uses the current **~499–524 g / nominal 509 g** head baseline
+- Active models: [head Layout 03](docs/02-prototypes/RP-06-cad/head/layout-03/README.md) and [body/chassis Layout 02](docs/02-prototypes/RP-06-cad/body-chassis/layout-02/README.md). RP-01 and RP-03 `cad/` directories are forwarding stubs.
 
 Root `cad/`, `docs/03-architecture/` and `docs/04-bom/` are reserved for later stages and must stay empty until then.
 

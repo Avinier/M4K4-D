@@ -147,7 +147,7 @@ Never-lists live in the freezeable register `FS-01…11` in `storyboard.md` §5 
 - implement person perception, target continuity or following *policy* (RP-07);
 - compose head–base performances or judge observer coherence (RP-04);
 - close SC-14 or any integrated-droid requirement;
-- produce final chassis CAD — `cad/base/` is a blockout for a selected concept only, and root `cad/` stays reserved for integrated CAD;
+- produce final chassis CAD — working geometry lives in [`RP-06-cad`](../RP-06-cad/README.md); root `cad/` stays reserved for stage-7 freeze;
 - authorize any purchase; a reference motor bought for Phase A is bench equipment until a freeze says otherwise;
 - weaken the 0.5 m/s follow ceiling, the tabletop-stationary default, or the caster-lift margin rule;
 - carry a second copy of geometry targets, mass rows, power rows, `OM/BS/EV/CC/LP` vocabulary, the C0↔MCU framing, `PA-13`, `F-19/22/26`, sourcing rows, bench rules, run identity, or the timebase.

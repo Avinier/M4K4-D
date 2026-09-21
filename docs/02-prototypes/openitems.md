@@ -4,7 +4,7 @@
 |---|---|
 | Status | **Living index.** Not a competing decision, budget, CAD or gate record |
 | Created | 2026-09-16 |
-| Scope | Remaining work inside `docs/02-prototypes/` after RP-01 Layout 03 paper demand, RP-02 Parts 1–4 design-definition, RP-03 Parts 1–5, RP-04 Phase A design-definition (`RP04-P1-REG-01`…`P6-REG-01`), and RP-05 audio-path paper (`RP05-A`, 2026-09-21) |
+| Scope | Remaining work inside `docs/02-prototypes/` after RP-01 Layout 03 paper demand, RP-02 Parts 1–4 design-definition, RP-03 Parts 1–5, RP-04 Phase A design-definition (`RP04-P1-REG-01`…`P6-REG-01`), RP-05 audio-path paper (`RP05-A`, 2026-09-21), and the RP-06 folder/checklist (2026-09-21) |
 | Rule | Canonical detail stays in the cited file. Close an item there first, then strike or rewrite the row here. An index line cannot freeze a SKU, promote `E` to `W`, or register a gate |
 
 This file exists so an “intentionally open until the physical input exists” statement does not disappear into a local README. The latest RP-02 example is the same class of claim as the older RP-01 ones: **final wire, fuse, converter and pack ratings remain intentionally open until their required physical inputs exist.**
@@ -52,9 +52,9 @@ These sit above RP-01 through RP-05. Scored physical runs wait here even when pa
 | Actuator-internal inertia / acceleration current | Payload-side `Jα` is not complete electromechanical demand | Official rotor/gear inertia **or** unloaded-vs-loaded characterization | `fullproofmath.md` §12; `actuator-screen-01.md`; P03/P05 | Complete paper pass; operating current for RP-02 |
 | Pitch-frame stiffness | Screen ~6–9 Hz vs 30/40 Hz laugh targets | Stiffen, then FEA or loaded tap / ring-down | `fullproofmath.md` §12; `gates.md` P07 | Pitch/roll C01 credibility; G03 modal cases |
 | Roll-saddle stiffness | Screen ~21 Hz vs 25/30 Hz | Same as pitch | same | Roll wobble cases |
-| Two retainer-screw collisions | Fasteners overlap rolling-cradle flange/ear stalk (~5.53 mm³ each) | Geometry fix + fastener-inclusive motion grid | `cad/head/layout-03/review/verification.md`; P08 | Fabrication; CAD freeze |
+| Two retainer-screw collisions | Fasteners overlap rolling-cradle flange/ear stalk (~5.53 mm³ each) | Geometry fix + fastener-inclusive motion grid | `RP-06-cad/head/layout-03/review/verification.md`; P08 | Fabrication; CAD freeze |
 | Hard stops vs usable travel | CAD contact equals provisional usable limits; storyboard requires margin beyond | Move stops; check pin/load path (~30–35 MPa first-order shear is unresolved) | Layout 03 README; `storyboard.md`; P08 | Usable-range proof; G01 rest |
-| Bearing SKU | Ø16.2 × 6.2 mm trial seats only | Select real bearing, then seat/preload/retention | Layout 03; `cad/head/decisions.md` HEAD-CAD-02 | Purchased-fit; P08 |
+| Bearing SKU | Ø16.2 × 6.2 mm trial seats only | Select real bearing, then seat/preload/retention | Layout 03; `RP-06-cad/head/decisions.md` HEAD-CAD-02 | Purchased-fit; P08 |
 | Storyboard ↔ CAD/firmware signs | Yaw and roll positives oppose raw CAD right-hand; pitch agrees | Document multipliers at the public motion interface | `fullproofmath.md` §12; `gates.md` P08 | Signed load/firmware |
 | Physical balance trim | A0 residuals are solver output, not millimetre fabrication | Measured trim/adjustment path | `fullproofmath.md` §12; HEAD-CAD-07 | Hold torque; candidate substitution |
 | Bearing reactions, spindle bending, yaw-yoke stiffness | Not in the paper record | Calculation or representative test | `fullproofmath.md` §12 | Support-layout credibility |
@@ -73,7 +73,7 @@ These sit above RP-01 through RP-05. Scored physical runs wait here even when pa
 | Insert / internal fastener SKUs | Visible M2 locked; internals and inserts unselected | Trial coupon + SKU | HEAD-CAD-01; Layout 03 | Repeated service joints |
 | Rolling-ear clearance / attachment geometry | Ownership locked; fit still to demonstrate | Combined-motion sweep | HEAD-CAD-03 | Cosmetic/service freeze |
 | Depth challenge (110–115 vs ~90 mm) | Current core vs blockout | Choose before CAD freeze | `gates.md` candidate matrix | Shell mass/moment |
-| CAD-04 / CAD-04a flashing paths | Requirements exist; sealed-head demonstration does not | Display and C2 USB/BOOT recovery with cover on | `cad/head/requirements.md` | G05/G06 service |
+| CAD-04 / CAD-04a flashing paths | Requirements exist; sealed-head demonstration does not | Display and C2 USB/BOOT recovery with cover on | `RP-06-cad/head/requirements.md` | G05/G06 service |
 | CAD-05 yaw demate | Reserve modelled; connector/construction open | Selected connector + weigh-without-cut | requirements; harness study | M020/M900 |
 | Live harness (H1/H2/H3) | Jackets illustrative; roll/pitch transitions open | Real cables, radii, CSI orientation, endurance | Layout 03 verification; harness study | G04 wiring; restoring torque |
 | Camera FPC vs production interconnect | 200 mm sample is bench hardware | Production moving CSI | `payload-mass-capture.md` | Camera `W` and G04 |
@@ -174,11 +174,11 @@ This is the class that prompted this index. Architecture and calculation method 
 |---|---|---|---|---|
 | `a_tip` as a measured number | Paper range 0.9–1.9 m/s² (and sign reversal if battery is on/behind the axle); 1.98 m/s² remains a placement target | BD-05 ballast on the rig; then M900 | `RP-03-locomotion/physics.md`; `dimensional-baseline.md` v1.11 | Point G01 lift-onset margin; dimensional-baseline revision if +25/124 is missed |
 | Builder decisions `BD-01…08` | `BD-01…07` paper-confirmed 2026-09-18. **`BD-08` (2026-09-19): `D21` selected V1 support, `D20` required swap.** Still not a gate freeze | Dated freeze at G01–G06 registration; `D21` dent/jam/drag on `S-LAM`/`S-RUG` | `RP-03-locomotion/decision.md`; `dimensional-baseline.md` v1.12 | Frozen G01–G06 thresholds; ADR-04 support type |
-| Concept / motor / sensor freeze | Screens complete; **Set A / Set B** packaged; leads named. Paper P01–P09 scored against the sets and remain OPEN | Paper P-gates close or bound, then freeze | `concepts/`; `drivetrain-screen-01.md` v0.2; `sensing-screen-01.md`; `gates.md` §4 | Purchase; `cad/base/` blockout |
+| Concept / motor / sensor freeze | Screens complete; **Set A / Set B** packaged; leads named. Paper P01–P09 scored against the sets and remain OPEN | Paper P-gates close or bound, then freeze | `concepts/`; `drivetrain-screen-01.md` v0.2; `sensing-screen-01.md`; `gates.md` §4 | Purchase; `RP-06-cad/base/` blockout |
 | C3 pin map firmware/carrier | v0.1 drafted; ≥2 spare; RGB released; GPIO3 ESTOP input exception; **`c3_board_role.h` generated** from v0.1 | Frozen board revision; carrier PCB | `base-control-architecture.md`; `RP-02-electrical/phase-a/c3_board_role.h`; `compute-control-architecture.md` v1.3 | RP-02 carrier PCB; RP02-G05 C3 |
 | `BASE_*` ICD | v0.5 **semantics** registered `RP02-P4-REG-02`. Candidate TTL 200 ms / `duration+250 ms`, heartbeat 150 ms, queue depth 2 named and unregistered | Byte layouts after Phase A; measured timeouts | `link-contract.md` §v0.5; `base-control-architecture.md` | Complete ADR-12; C3 G05 |
 | `LG-04`/`LG-10` `W` rows | Ledger v0.15 is still `E`/`U`; heat duty and 6.0 vs 8.4 V note recorded | Phase B/C runs | `power-energy-ledger.md` | ADR-06 sizing; G02 invariant re-run |
-| `cad/base/` blockout | Concept A is a working lead, not a freeze. Brief asked for CAD pass 1 now; folder policy still forbids it | Concept freeze **or** an explicit policy change. Datums: `research.md` §5 | `RP-03-locomotion/cad/README.md`; `RP-03-locomotion/research.md` | Integrated CAD input; ball/caster 360° sweep; 0–15 mm front-support shim |
+| `RP-06-cad/base/` historical envelope | Ugly pass-01 exists; not the active architecture | Use body-chassis Layout 02; pass-01 is history | `RP-06-cad/README.md`; `RP-03-locomotion/research.md` | Do not reopen the head-lump / caster-swap model as current |
 | RP-03 part envelopes for CAD | First paper pass 2026-09-19. Remaining `U`: India D02 encoder suffix, caster trail, gearbox radial, SPI IMU module outline, loaded wheel radius | Remaining `U` in `research.md` §6; cost/stock only in the sourcing matrix | `RP-03-locomotion/research.md`; `candidate-sourcing-matrix.md` v0.31 | Honest CAD pass 1; wheel family A/B/C chosen before hub print |
 | Acted 240 fps mock-up | `plan.md` required; not run. V0.1/v0.2 kinematics are paper hypotheses | Weighted-box / caster-push recording, or a storyboard revision against it | `storyboard.md` v0.2 change log | Confidence in come/wiggle timings |
 | D02 stall-current `D` conflict | Oz 900 mA vs NFP ≤3 A, both manufacturer tables | Meter the purchased article (if bought as bench equipment) | `drivetrain-screen-01.md` P03 | Korad 5 A both-motor claim; driver-class confirmation |
@@ -234,6 +234,27 @@ Remaining slice order (do not skip registration): (1) accept `BD-A01`…`A03` an
 
 ---
 
+## RP-06 Layout
+
+**Current outcome:** Working CAD lives in [`RP-06-cad/`](RP-06-cad/README.md) as of 2026-09-21. Phase A CAD/paper is the working article (Layout 03 + body/chassis Layout 02). Physical validation 0%. No gate registered, no mock-up, no scored run. Plan v1.15 load input is **~499–524 g complete, nominal 509 g** — not 250 g.
+
+Canonical remaining-work list: [`RP-06-cad/TODO.md`](RP-06-cad/TODO.md). Detail: [`checklist.md`](RP-06-cad/checklist.md). Do not copy the checkboxes here.
+
+| Item | Why it is open | Waiting on | Home | Blocks |
+|---|---|---|---|---|
+| 304 mm stack accept-or-recover | 300 mm is a rounded target; CAD documents 304 mm | Named baseline decision | `dimensional-baseline.md`; checklist P-03 | G01; system height |
+| Whole-robot CoM vs +25 / 124 mm | Layout 02 currently ~+9.7 / ~107.9 mm | Installed pack/ballast, then M900 | Layout 02 mass properties; checklist P-04 | G04; `a_tip` placement target |
+| Sourced-article fit | Envelopes and some vendor STEP; not all installed SKUs | Samples + envelope replacement | checklist P-01 / H-* | G01 |
+| Display optical/animation | SKU locked; smoked window and fps unproven | Window samples + 30-minute UART-active run | display study; checklist D-* | G02/G03 |
+| Camera FOV / contamination / interconnect | SC0874 locked; production CSI `U` | Entrance pupil, H1/H2/H3 endurance | camera + harness studies; checklist C-* | G02/G03/G04 |
+| Audio SKU vs ports | Four ports and speaker cavity reserved | RP-05 `BD-A05`/`BD-A06`, then port freeze | RP-05; checklist A-* | G03; ADR-11 packaging |
+| Closed-body thermal | Cooler selected; airflow unmeasured | Enclosure run; T-3 | power-energy ledger; checklist T-* | G01; SC-TBD-12 |
+| Service demonstration | Paper sequences exist | Timed non-destructive replacements | Layout 03 README; checklist S-* | G06 |
+| Sourcing G05 audit | Matrix living; invoices and substitutes incomplete | Rechecked landed cost per architecture-critical row | sourcing matrix; checklist §8 | G05; CON-TBD-13 |
+| Physical G01–G06 | None registered | Threshold freeze **before** scored data; mock-up | plan §RP-06; `RP-06-cad/README.md` | ADR-01/08/11; `physical-architecture.md` |
+
+---
+
 ## Circular dependencies (named, not stalled)
 
 | Loop | What can proceed now | What must wait |
@@ -252,6 +273,7 @@ Remaining slice order (do not skip registration): (1) accept `BD-A01`…`A03` an
 | RP-04 software budgets ↔ RP-01/RP-03 models | `E` budgets; virtual P-01 wait language closed | `W` G01; ADR-05 |
 | RP-04 audio/eyes ↔ RP-06 | Semantic `A-*`/`E-*` timing | Quality/artwork |
 | RP-04 architecture ↔ research | Family closed (`CS-HYBRID`); P-02 cue list validated; experiment spec software items closed | Physical G01–G05; `BD-08`; Phase B/C |
+| RP-06 CAD ↔ physical mock-up | Layout 03 + Layout 02 already exist as the working article; checklist opened | Every `W` row, G01–G06 registration, 304 mm accept-or-recover, CoM hit-or-revise |
 | RP-05 audio path ↔ SKU | `AR-*` and `AP-*` comparison can proceed on paper | Family/SKU, duplex `W`, ADR-11 |
 | RP-05 wake engine ↔ corpus | Engine not required to write `AR-20`…`AR-24` | Versioned utterance set before engine freeze |
 | RP-04 audio stand-in ↔ RP-05 | Timing/identity/stop can use `BD-03` stand-in | Acoustic quality, echo, contamination wait on `RP05-A` hardware |

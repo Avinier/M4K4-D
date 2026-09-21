@@ -1,0 +1,68 @@
+{
+  "jobs": [
+    {
+      "input": "docs/02-prototypes/RP-06-cad/body-chassis/layout-02/body-chassis.step.py",
+      "mode": "view",
+      "display": {"mode": "solid"},
+      "theme": {"projection": "orthographic", "grid": {"visible": false}},
+      "outputs": [
+        {"path": "docs/02-prototypes/RP-06-cad/body-chassis/layout-02/snapshots/iso-clean.png", "camera": "iso"},
+        {"path": "docs/02-prototypes/RP-06-cad/body-chassis/layout-02/snapshots/front-elevation.png", "camera": "right"},
+        {"path": "docs/02-prototypes/RP-06-cad/body-chassis/layout-02/snapshots/rear-elevation.png", "camera": "left"},
+        {"path": "docs/02-prototypes/RP-06-cad/body-chassis/layout-02/snapshots/side-left.png", "camera": "front"},
+        {"path": "docs/02-prototypes/RP-06-cad/body-chassis/layout-02/snapshots/side-right.png", "camera": "180:0"},
+        {"path": "docs/02-prototypes/RP-06-cad/body-chassis/layout-02/snapshots/top-clean.png", "camera": "top"}
+      ],
+      "render": {"viewLabels": true, "padding": 0.10, "sizeProfile": "assembly-large"},
+      "stepParameters": {
+        "show_physics": false,
+        "show_harness": true
+      }
+    },
+    {
+      "input": "docs/02-prototypes/RP-06-cad/body-chassis/layout-02/body-chassis.step.py",
+      "mode": "view",
+      "display": {"mode": "solid"},
+      "theme": {"projection": "orthographic", "grid": {"visible": false}},
+      "outputs": [
+        {"path": "docs/02-prototypes/RP-06-cad/body-chassis/layout-02/snapshots/iso-internals.png", "camera": "iso"},
+        {"path": "docs/02-prototypes/RP-06-cad/body-chassis/layout-02/snapshots/right-internals.png", "camera": "right"}
+      ],
+      "render": {"viewLabels": true, "padding": 0.10, "sizeProfile": "assembly-large"},
+      "stepParameters": {
+        "show_shell": false,
+        "show_physics": false,
+        "show_harness": true
+      }
+    },
+    {
+      "input": "docs/02-prototypes/RP-06-cad/body-chassis/layout-02/body-chassis.step.py",
+      "mode": "view",
+      "display": {"mode": "solid"},
+      "theme": {"projection": "orthographic", "grid": {"visible": false}},
+      "outputs": [
+        {"path": "docs/02-prototypes/RP-06-cad/body-chassis/layout-02/snapshots/iso-physics.png", "camera": "iso"}
+      ],
+      "render": {"viewLabels": true, "padding": 0.10, "sizeProfile": "assembly-large"},
+      "stepParameters": {
+        "show_physics": true,
+        "show_harness": false
+      }
+    },
+    {
+      "input": "docs/02-prototypes/RP-06-cad/body-chassis/layout-02/body-chassis.step.py",
+      "mode": "view",
+      "display": {"mode": "solid"},
+      "theme": {"projection": "orthographic", "grid": {"visible": false}},
+      "outputs": [
+        {"path": "docs/02-prototypes/RP-06-cad/body-chassis/layout-02/snapshots/iso-yaw-35.png", "camera": "iso"}
+      ],
+      "render": {"viewLabels": true, "padding": 0.10, "sizeProfile": "assembly-large"},
+      "stepParameters": {
+        "head_yaw_deg": 35,
+        "show_physics": false,
+        "show_harness": true
+      }
+    }
+  ]
+}

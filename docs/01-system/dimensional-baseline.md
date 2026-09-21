@@ -25,7 +25,7 @@ This document is the current source of truth for Makad's dimensional, drive-geom
 |---|---:|---|
 | Overall Makad size | **300 H × 205 W × 180 D mm** | Keeps the 30 cm target while providing enough chassis depth for stable differential drive |
 | Head size, including camera crown and side pods | **104 H × 150 W × 115 D mm — RP-01 Layout 03 planning envelope** | Current 1:1 packaging direction around selected display/camera/C2 envelopes; supersedes Layout 02's 102 mm height and the earlier 95 mm nominal / 90–100 mm band. Manufacturing tolerances and integrated fit remain open. |
-| Head core, excluding crown and side pods | **86 H × 130 W × 115 D mm — RP-01 Layout 03** | Main core retained while the crown rises to 104 mm and the stern tapers to 104 mm width. See the [layout and validation boundaries](../02-prototypes/RP-01-head/cad/head/layout-03/README.md). |
+| Head core, excluding crown and side pods | **86 H × 130 W × 115 D mm — RP-01 Layout 03** | Main core retained while the crown rises to 104 mm and the stern tapers to 104 mm width. See the [layout and validation boundaries](../02-prototypes/RP-06-cad/head/layout-03/README.md). |
 | Body-top / neck datum | **140 mm above ground** | Main vertical mechanical reference |
 | Neck allocation | **60 mm vertical** | Packaging space for powered yaw, pitch, and roll |
 | Drive wheels | **Ø84 mm nominal** | Mobility, proportions, and motor-speed compromise |

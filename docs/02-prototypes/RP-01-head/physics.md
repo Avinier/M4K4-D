@@ -39,7 +39,7 @@ Current proposed best-case usable travel is pitch `-22°…+40°`, yaw `±55°`,
 
 ## Preliminary physical load baseline
 
-**Layout 03 working tree, reconciled 2026-09-12:** C2 is selected (Waveshare ESP32-S3-Zero on the rolling cradle), so there is no C1/C2 architecture fork. Its complete installed M008 mass remains `U`. The [Layout 03 mass tree](cad/head/layout-03/mass-placement.json) uses **20 g E as the nominal analytical case**: approximately **362 g roll, 436 g pitch, 509 g yaw/complete**, while retaining the **10/20/35 g** sensitivity cases until M008 is weighed. Nested membership is R ⊂ RP ⊂ RPY. Layout 02 (~371/443/515 g) remains history. Trajectory torque, thermal acceptance and all `W` mass remain open.
+**Layout 03 working tree, reconciled 2026-09-12:** C2 is selected (Waveshare ESP32-S3-Zero on the rolling cradle), so there is no C1/C2 architecture fork. Its complete installed M008 mass remains `U`. The [Layout 03 mass tree](../RP-06-cad/head/layout-03/mass-placement.json) uses **20 g E as the nominal analytical case**: approximately **362 g roll, 436 g pitch, 509 g yaw/complete**, while retaining the **10/20/35 g** sensitivity cases until M008 is weighed. Nested membership is R ⊂ RP ⊂ RPY. Layout 02 (~371/443/515 g) remains history. Trajectory torque, thermal acceptance and all `W` mass remain open.
 
 | Input | Current value | How RP-01 uses it |
 |---|---:|---|
@@ -60,7 +60,7 @@ PLA is locked for RP-01 structure and skin but remains provisional beyond the pr
 
 ## Candidate gimbal-centre geometry
 
-**First-layout selection, 2026-09-07:** the builder selected A0 in [HEAD-CAD-07](cad/head/decisions.md#head-cad-07--a0-balance-target). Use zero pitch-axis-to-carried-CoM offset as the initial balance target; derive actual coordinates from the component layout. A1/A2 below remain fallback/sensitivity cases, not equally active layout choices. No mass-property calculation or validation result is implied by this selection.
+**First-layout selection, 2026-09-07:** the builder selected A0 in [HEAD-CAD-07](../RP-06-cad/head/decisions.md#head-cad-07--a0-balance-target). Use zero pitch-axis-to-carried-CoM offset as the initial balance target; derive actual coordinates from the component layout. A1/A2 below remain fallback/sensitivity cases, not equally active layout choices. No mass-property calculation or validation result is implied by this selection.
 
 Concept A in `concepts/elevated-ear-pivot-serial-gimbal.md` uses body-fixed yaw, pitch pivots near ear-pod height and head-fixed roll. Pitch and roll intersecting, or nearly intersecting, near the measured 3D head CoM is the gravity target to evaluate, subject to a display-clear roll-support and load-path proof. Raising pitch alone while leaving roll below the CoM preserves an inverted-pendulum roll load, so the design variable is the **pitch–roll gimbal centre plus its feasible support layout**, not pitch-axis height in isolation.
 

@@ -10,7 +10,7 @@
 
 This note extracts only the credible topology from an unverified, generated-looking reference diagram. Its labels, scale, proportions, motor sizes and bearing sizes are not source data and must not enter CAD or the BOM.
 
-**Layout 03 reconciliation, 2026-09-12:** [head CAD decisions](../cad/head/decisions.md) owns the working construction and fitting choices. Coaxial direct roll, external yaw loop beside a solid spindle, rolling ears and A0 are modelled in Layout 03. Concept A is the RP-01 path; that selection does not pass a gate or select an actuator.
+**Layout 03 reconciliation, 2026-09-12:** [head CAD decisions](../../RP-06-cad/head/decisions.md) owns the working construction and fitting choices. Coaxial direct roll, external yaw loop beside a solid spindle, rolling ears and A0 are modelled in Layout 03. Concept A is the RP-01 path; that selection does not pass a gate or select an actuator.
 
 ## 1. Candidate topology
 

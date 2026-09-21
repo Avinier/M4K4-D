@@ -438,4 +438,14 @@ Catalog gaps (Ø84×21 hub, 4–13 mm front-support height, unpublished gearbox 
 
 `docs/02-prototypes/_templates/` is deleted; the run-record blank form lives in the convention. `outputs/` and `sessions/` are deleted as root folders: the Layout-03 paper workbook moved to `docs/02-prototypes/RP-01-head/layout03-paper-model.xlsx`; the 2026-09-11 RP-01 teaching note moved to `docs/archive/`. MEM-20260822-01 still governs run identity.
 
+### MEM-20260921-01 — RP-06 folder opened; 250 g mock-up load corrected
+**Type / Status / Governs:** DECISION + CORRECTION / CURRENT / `docs/02-prototypes/RP-06-layout/`; `risk-prototype-plan.md` v1.14
+
+RP-06 now has an evidence folder and a compact closure checklist. Working CAD remains RP-01 Layout 03 and RP-03 body/chassis Layout 02; the new folder is not a second geometry tree. The leftover ~250 g moving-head target in the RP-06 mock-up procedure is replaced by the current Layout 03 D/E baseline (~499–524 g complete, nominal 509 g at M008=20 g). Physical validation is 0%; no gate is registered.
+
+### MEM-20260921-02 — Working CAD moved into RP-06-cad
+**Type / Status / Governs:** ORGANIZATION / CURRENT / `docs/02-prototypes/RP-06-cad/`; `risk-prototype-plan.md` v1.15
+
+Prototype CAD trees move from RP-01 and RP-03 into `docs/02-prototypes/RP-06-cad/` as `head/`, `body-chassis/`, and `base/`. RP-01 `cad/` and RP-03 `cad/` are forwarding stubs. Root `cad/` remains reserved for stage-7 freeze. Body/chassis still live-imports Layout 03. Physical validation remains 0%; no gate is registered. Historical MEMORY paths are not rewritten.
+
 

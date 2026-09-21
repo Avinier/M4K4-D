@@ -26,7 +26,7 @@ RP-01 is an object. RP-02 is a set of states and interfaces. **RP-03 is a vehicl
 | [Research](research.md) | Constraints, inventory, filled envelopes, print-vs-buy. CAD datums §5. Not a sourcing matrix, not a freeze, not a purchase | A |
 | [Folder plan](plan.md) | Construction record: layout, Part order, what each file may not contain | Retired into this README's organization record; file kept |
 | [Prototype open items](../openitems.md) | Folder-wide remaining-open index | — |
-| `cad/` | Blockout **after** a concept freeze. Working lead ≠ freeze. See [`cad/README.md`](cad/README.md) | — |
+| [CAD](../RP-06-cad/README.md) | Working body/chassis/head geometry moved to RP-06. Historical envelope in `base/pass-01/` | — |
 | `runs/` | Run records per [`run-record-convention.md`](../../01-system/run-record-convention.md) | — |
 
 Namespaces (no glossary): `BM-` panels · `D` drivetrain · `S` sensing · `BC-` base-control rules · `F-3x` faults · `BD-` builder decisions · `RP03-P` paper gates · `RP03-G` physical gates · `RP03-P<n>-REG-<nn>` Part records.
@@ -55,7 +55,7 @@ Namespaces (no glossary): `BM-` panels · `D` drivetrain · `S` sensing · `BC-`
 ## What to do next, in order
 
 1. Do not buy. Set A / `D02` / **`D21` ball (type selected, SKU open)** / `DRV-B` / `S01` / `S04` / `S06` / `S07` are leads. A reference motor or ball transfer on the bench is equipment until a freeze says otherwise. Catalog gaps: **print hubs/shims/two adapters**; **import** the encoder motor; **buy** the Ø80–85 tread and the 1″ POM ball (`research.md` §1.5).
-2. CAD pass 1 envelope/datum model is still deferred by folder policy (`cad/README.md`) while the selected path is not gate-frozen — that is a remaining policy conflict with the brief, not closed here.
+2. Working CAD is in [`RP-06-cad/`](../RP-06-cad/README.md). Those models are working articles, not a gate freeze or frozen SKU solids — selected path remains unfrozen.
 3. When a driver evaluation board and one reference motor are on the bench: Phase A C3 loop-rate, encoder capture and watchdog feed. Exploratory. Not a scored RP-03 run. Implement `timebase.md`.
 4. Freeze G01–G06 numeric thresholds **before** inspecting scored data. Build the ugly chassis. Then Phase B on the floor, Phase C caught-tabletop last. The 240 fps acted mock-up in `plan.md` is still open.
 
