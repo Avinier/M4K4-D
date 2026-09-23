@@ -40,11 +40,78 @@
       }
     },
     {
-      "name": "axle_crossmember_reaches_wheel_hubs",
+      "name": "wheel_running_clearance_to_static_parts",
       "ok": true,
       "evidence": {
-        "crossmember_half_width_mm": 78.0,
-        "wheel_inner_face_y_mm": 73.0
+        "minimum_mm": 1.5,
+        "sides": {
+          "L": {
+            "min_gap_mm": 1.5,
+            "between": [
+              "WHEEL_L_STUB_SHAFT_8MM",
+              "MOTOR_L_GEARBOX"
+            ]
+          },
+          "R": {
+            "min_gap_mm": 1.5,
+            "between": [
+              "WHEEL_R_STUB_SHAFT_8MM",
+              "MOTOR_R_GEARBOX"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "drivetrain_static_parts_do_not_interfere",
+      "ok": true,
+      "evidence": {
+        "clashes_mm3": {}
+      }
+    },
+    {
+      "name": "motor_face_seats_on_axle_flange",
+      "ok": true,
+      "evidence": {
+        "L": {
+          "gap_mm": 0.0,
+          "overlap_mm3": 0
+        },
+        "R": {
+          "gap_mm": 0.0,
+          "overlap_mm3": 0
+        }
+      }
+    },
+    {
+      "name": "bearings_sit_inside_flange_boss",
+      "ok": true,
+      "evidence": {
+        "bearings": {
+          "BEARING_608ZZ_L_1": true,
+          "BEARING_608ZZ_L_2": true,
+          "BEARING_608ZZ_R_1": true,
+          "BEARING_608ZZ_R_2": true
+        },
+        "boss_end_y_mm": 86.0
+      }
+    },
+    {
+      "name": "battery_tub_is_clear",
+      "ok": true,
+      "evidence": {
+        "battery_center_mm": [
+          42.0,
+          0.0,
+          44.0
+        ],
+        "battery_size_mm": [
+          48.0,
+          75.0,
+          24.0
+        ],
+        "clashes_mm3": {},
+        "tub_vs_shell_mm3": {}
       }
     },
     {
@@ -66,30 +133,141 @@
       }
     },
     {
-      "name": "ball_flange_seats_on_load_collar",
+      "name": "ball_flange_seats_on_pod",
       "ok": true,
       "evidence": {
-        "collar_top_z_mm": 29.0,
-        "flange_bottom_z_mm": 29.0
+        "flange_top_z_mm": 29.0,
+        "pod_seat_z_mm": 29.0,
+        "gap_mm": 0.0,
+        "overlap_mm3": 0
       }
     },
     {
-      "name": "ball_housing_clears_load_collar",
+      "name": "ball_article_stack_is_connected",
       "ok": true,
       "evidence": {
-        "collar_bore_radius_mm": 17.25,
-        "housing_radius_mm": 17.0
+        "housing_to_flange_mm": 0.0,
+        "lip_to_housing_mm": 0.0
       }
     },
     {
-      "name": "nose_rails_land_in_collar_wall",
+      "name": "ball_screws_engage_flange",
       "ok": true,
       "evidence": {
-        "rail_offset_y_mm": 18.5,
-        "collar_wall_mm": [
-          17.25,
-          21.0
-        ]
+        "thread_engagement_mm": {
+          "BALL_M3_SHANK_1": 3.0,
+          "BALL_M3_SHANK_2": 3.0,
+          "BALL_M3_SHANK_3": 3.0
+        }
+      }
+    },
+    {
+      "name": "ball_nose_parts_do_not_interfere",
+      "ok": true,
+      "evidence": {
+        "clashes_mm3": {}
+      }
+    },
+    {
+      "name": "touch_cap_travel_reserve_is_clear",
+      "ok": true,
+      "evidence": {
+        "blockers_mm3": {},
+        "travel_mm": 3.0
+      }
+    },
+    {
+      "name": "rigid_nose_stays_behind_cap_travel",
+      "ok": true,
+      "evidence": {
+        "rigid_front_x_mm": 128.5,
+        "cap_inner_x_mm": 131.5
+      }
+    },
+    {
+      "name": "touch_cap_stops_at_pod_seat",
+      "ok": true,
+      "evidence": {
+        "cap_bottom_z_mm": 29.0,
+        "pod_seat_z_mm": 29.0,
+        "housing_bottom_z_mm": 9.5
+      }
+    },
+    {
+      "name": "c12_low_object_contact_not_claimed",
+      "ok": true,
+      "evidence": {
+        "first_contact": "BALL_TRANSFER_RETAINING_LIP",
+        "hit_face_x_mm": {
+          "BALL_TRANSFER_POM_BALL": 122.7,
+          "BALL_TRANSFER_PURCHASED_HOUSING": 126.0,
+          "BALL_TRANSFER_RETAINING_LIP": 126.8
+        }
+      }
+    },
+    {
+      "name": "front_range_sensor_on_centreline",
+      "ok": true,
+      "evidence": {
+        "sensor_y_mm": 0.0
+      }
+    },
+    {
+      "name": "front_range_face_ahead_of_ball_contact",
+      "ok": true,
+      "evidence": {
+        "face_x_mm": 128.0,
+        "ball_contact_x_mm": 110.0,
+        "credited_mm": 18.0
+      }
+    },
+    {
+      "name": "front_range_lookahead_within_rated_range",
+      "ok": true,
+      "evidence": {
+        "rated_max_mm": 300.0,
+        "cases": {
+          "0.50 m/s level": {
+            "from_ball_contact_mm": 179.0,
+            "needed_from_face_mm": 161.0,
+            "needed_from_face_if_charged_to_nose_front_mm": 184.5
+          },
+          "0.50 m/s 2deg downhill": {
+            "from_ball_contact_mm": 221.0,
+            "needed_from_face_mm": 203.0,
+            "needed_from_face_if_charged_to_nose_front_mm": 226.5
+          },
+          "0.70 m/s level": {
+            "from_ball_contact_mm": 289.0,
+            "needed_from_face_mm": 271.0,
+            "needed_from_face_if_charged_to_nose_front_mm": 294.5
+          }
+        }
+      }
+    },
+    {
+      "name": "ball_pod_passes_shell_notch",
+      "ok": true,
+      "evidence": {
+        "overlap_mm3": {}
+      }
+    },
+    {
+      "name": "front_chassis_stays_inside_shell",
+      "ok": true,
+      "evidence": {
+        "chassis_front_x_mm": 92.0,
+        "shell_inner_front_x_mm": 95.6
+      }
+    },
+    {
+      "name": "ball_nose_is_lean",
+      "ok": true,
+      "evidence": {
+        "nose_width_mm": 40.0,
+        "previous_shroud_width_mm": 52.0,
+        "nose_front_x_mm": 133.5,
+        "spin_radius_mm": 134.78
       }
     },
     {
@@ -97,12 +275,12 @@
       "ok": true,
       "evidence": {
         "transformed_mm": [
-          0.0,
+          16.0,
           0.0,
           140.0
         ],
         "datum_mm": [
-          0.0,
+          16.0,
           0.0,
           140.0
         ]
@@ -114,19 +292,19 @@
       "evidence": {
         "mount_points_mm": [
           [
-            -38.0,
+            -22.0,
             -48.0
           ],
           [
-            -38.0,
+            -22.0,
             48.0
           ],
           [
-            48.0,
+            64.0,
             -48.0
           ],
           [
-            48.0,
+            64.0,
             48.0
           ]
         ]
@@ -138,11 +316,11 @@
       "evidence": {
         "locating_points_mm": [
           [
-            -33.0,
+            -27.0,
             -42.0
           ],
           [
-            43.0,
+            59.0,
             42.0
           ]
         ]
@@ -276,9 +454,10 @@
       "ok": true,
       "evidence": {
         "blocked_volume_mm3": 0,
-        "sensor_y_z_mm": [
-          38.0,
-          68.0
+        "sensor_face_mm": [
+          128.0,
+          0.0,
+          41.0
         ]
       }
     },
@@ -375,25 +554,25 @@
       "evidence": {
         "microphone_ports": [
           [
-            38.0,
+            54.0,
             70.0,
             118.0,
             "FRONT_L"
           ],
           [
-            38.0,
+            54.0,
             -70.0,
             118.0,
             "FRONT_R"
           ],
           [
-            -38.0,
+            -22.0,
             70.0,
             108.0,
             "REAR_L"
           ],
           [
-            -38.0,
+            -22.0,
             -70.0,
             108.0,
             "REAR_R"
@@ -406,14 +585,6 @@
       "ok": true,
       "evidence": {
         "overlap_volume_mm3": 0
-      }
-    },
-    {
-      "name": "front_range_sensor_is_below_speaker_grille",
-      "ok": true,
-      "evidence": {
-        "sensor_z_mm": 68.0,
-        "speaker_center_z_mm": 99.0
       }
     },
     {
@@ -583,8 +754,8 @@
       "name": "rear_tcrt_has_contact_lookahead",
       "ok": true,
       "evidence": {
-        "sensor_x_mm": -70.0,
-        "skid_contact_x_mm": -43.0,
+        "sensor_x_mm": -54.0,
+        "skid_contact_x_mm": -27.0,
         "lookahead_mm": 27.0
       }
     },
@@ -615,10 +786,10 @@
       "ok": true,
       "evidence": {
         "first_contact_pitch_deg": {
-          "shoe": 4.086,
-          "guards": 5.128,
-          "keel_body": 6.34,
-          "tcrt": 7.585
+          "shoe": 6.054,
+          "guards": 6.442,
+          "keel_body": 8.973,
+          "tcrt": 9.604
         }
       }
     },
@@ -643,15 +814,15 @@
       "evidence": {
         "shoe_top_z_mm": 6.0,
         "keel_underside_z_mm": {
-          "-48.0,-4.0": 6.0,
-          "-48.0,0.0": 6.0,
-          "-48.0,4.0": 6.0,
-          "-43.0,-4.0": 6.0,
-          "-43.0,0.0": 6.0,
-          "-43.0,4.0": 6.0,
-          "-38.0,-4.0": 6.0,
-          "-38.0,0.0": 6.0,
-          "-38.0,4.0": 6.0
+          "-32.0,-4.0": 6.0,
+          "-32.0,0.0": 6.0,
+          "-32.0,4.0": 6.0,
+          "-27.0,-4.0": 6.0,
+          "-27.0,0.0": 6.0,
+          "-27.0,4.0": 6.0,
+          "-22.0,-4.0": 6.0,
+          "-22.0,0.0": 6.0,
+          "-22.0,4.0": 6.0
         }
       }
     },
@@ -661,9 +832,9 @@
       "evidence": {
         "guard_top_z_mm": 10.5,
         "keel_underside_z_mm": {
-          "-77.5": 10.0,
-          "-70.5": 10.0,
-          "-63.5": 9.72
+          "-61.5": 10.0,
+          "-54.5": 10.0,
+          "-47.5": 9.72
         }
       }
     },
@@ -762,8 +933,8 @@
       "name": "rear_tail_inside_nose_spin_circle",
       "ok": true,
       "evidence": {
-        "tail_planar_radius_mm": 121.92,
-        "nose_planar_radius_mm": 128.0
+        "tail_planar_radius_mm": 105.93,
+        "nose_planar_radius_mm": 134.78
       }
     },
     {
@@ -813,10 +984,10 @@
           ]
         ],
         "head_min_x_mm": [
-          -71.6,
-          -71.6,
-          -71.6,
-          -71.6
+          -55.6,
+          -55.6,
+          -55.6,
+          -55.6
         ]
       }
     },
@@ -863,7 +1034,7 @@
       "name": "tactile_nose_precedes_ball_surface",
       "ok": true,
       "evidence": {
-        "tactile_face_x_mm": 123.5,
+        "tactile_face_x_mm": 133.5,
         "ball_front_x_mm": 122.7
       }
     },
@@ -878,7 +1049,7 @@
       "name": "battery_forward_of_axle",
       "ok": true,
       "evidence": {
-        "battery_x_mm": 38.0
+        "battery_x_mm": 42.0
       }
     },
     {
@@ -906,14 +1077,47 @@
       "name": "com_inside_support_x",
       "ok": true,
       "evidence": {
-        "com_x_mm": 8.994224685582811
+        "com_x_mm": 20.206316954955636
+      }
+    },
+    {
+      "name": "com_forward_of_physics_margin_line",
+      "ok": true,
+      "evidence": {
+        "com_x_mm": 20.21,
+        "com_h_mm": 103.69,
+        "x_over_h": 0.1949,
+        "a_tip_m_s2": 1.912,
+        "baseline_target": {
+          "x_mm": 25.0,
+          "h_mm": 124.0,
+          "x_over_h": 0.202
+        },
+        "body_shift_x_mm": 16.0,
+        "rule": "RP-03 physics.md 2.5: a_peak 0.80-1.00 m/s2 has margin only when x_CoM >= +20 mm"
+      }
+    },
+    {
+      "name": "ball_share_above_spin_walk_flag",
+      "ok": true,
+      "evidence": {
+        "ball_share": 0.1837,
+        "flag_below": 0.09
+      }
+    },
+    {
+      "name": "rear_skid_catches_before_com_crosses_axle",
+      "ok": true,
+      "evidence": {
+        "shoe_first_contact_pitch_deg": 6.054,
+        "com_over_axle_pitch_deg": 11.027
       }
     },
     {
       "name": "com_below_head_yaw",
       "ok": true,
       "evidence": {
-        "com_z_mm": 106.96044776392628
+        "com_z_mm": 103.69266450531815
       }
     }
   ]
