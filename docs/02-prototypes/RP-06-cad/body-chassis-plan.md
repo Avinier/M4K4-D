@@ -43,7 +43,8 @@ The RP-01 head-local frame remains unchanged. Layout 03 is placed with its origi
 - [x] Label ground, axle, wheel, ball-contact, body, IMU and head-yaw datums.
 - [x] Keep all mass and stability calculations in the chassis frame.
 - [ ] Confirm loaded wheel radius from the physical custom wheel before release.
-- [ ] Confirm ball-transfer loaded height and shimming from the physical article.
+- [ ] Confirm ball-transfer loaded height from the physical article. The fixed pod
+  (`RP03-CAD-04`) has no shim, so a height error is corrected in the pod's seat face.
 
 ## 3. Assembly and geometry requirements
 
@@ -73,17 +74,27 @@ solid.
   and two locating pins; eliminate frame/chassis solid interpenetration.
 - [x] Maintain 170 mm wheel-centre track and 42 mm nominal axle height.
 - [x] Model the frozen 84 × 24 mm custom wheel envelope on both sides.
-- [x] Keep motors, wheel carriers and 608ZZ bearings as separate selectable parts.
+- [x] Keep motors, axle flange/bosses and 608ZZ bearings as separate selectable parts.
+- [x] Make the wheels able to turn (`RP03-CAD-05`): motor face on a chassis flange,
+  bearing boss inside a dished-wheel pocket, 8 mm stub shaft, no axle crossmember,
+  rails carried round the gearboxes. Running gaps (≥ 1.5 mm) and motor/chassis/shell
+  interference are measured from the solids.
 - [x] Model the ball transfer at the frozen front contact.
-- [x] Carry the ball transfer through a fixed three-hole flange, annular cradle,
-  twin nose rails and front crossmember; service keep-out is physics-only.
-- [x] Connect the rear skid root, diagonal arm, captured pad seat and replaceable pad.
+- [x] Carry the ball transfer through its fixed three-hole flange into one printed pod
+  bolted to the front crossmember (`RP03-CAD-04`); flange seating, screw engagement and
+  interference are measured from the solids; service keep-out is physics-only.
+- [x] Carry the rear skid and TCRT in a keel under the rear crossmember; shoe at
+  `X=-27 mm`, 27 mm behind the axle since `RP03-CAD-06`, touching before the CoM
+  crosses the axle.
 - [x] Keep the body inside the wheel stance and the lower body clear of the ground.
-- [x] Provide a continuous load path from wheel/motor carriers through the chassis and
+- [x] Provide a continuous load path from the axle flanges through the chassis and
   body frame into the head-yaw interface.
 - [ ] Replace wheel, hub, motor and ball-transfer envelopes with exact measured parts.
 - [ ] Add final shafts, keys/flats, retainers, fasteners, inserts and assembly tools.
-- [ ] Close tyre scrub, hub runout, bearing preload and motor service access.
+- [ ] Close tyre scrub, hub runout, bearing preload, stub-to-web fixing and axial
+  retention, and motor service access.
+- [ ] Check the stiffness of the two-plate deck, split rails and cheeks that replaced
+  the axle crossmember.
 - [ ] Validate tip, traction and braking cases with measured mass and loaded radii.
 
 ### 3.3 Body structure and shell
@@ -115,7 +126,9 @@ cool and remove them.
 
 - [x] Place the exact Raspberry Pi 5 STEP on a removable compute tray.
 - [x] Reserve an active-cooler volume and airflow space above the Pi.
-- [x] Place the battery forward of the axle and low in the body.
+- [x] Place the battery forward of the axle and low: a chassis tub under the deck with
+  a bottom hatch (`RP03-CAD-06`).
+- [ ] Route the battery harness from the tub to the body and confirm the hatch fastening.
 - [x] Place controller, dual motor-driver, power/safety and IMU groups separately.
 - [x] Keep the IMU on the rigid body frame, away from wheel carriers and loose panels.
 - [x] Keep power/safety access reachable through a service opening.
@@ -203,8 +216,11 @@ Current state:
 - [ ] Add inertia estimates only after mass and geometry are credible enough to support
   them; do not infer them from bounding boxes.
 
-Current generated estimate: **2456.54 g**, CoM
-**`(9.68, 0.15, 107.90) mm`**. It is a packaging estimate, not a test result.
+Current generated estimate: **2614.7 g**, CoM **`(20.21, 0.60, 103.69) mm`**:
+x/h 0.195, a_tip 1.91 m/s², ball share 0.18 (after `RP03-CAD-05/06` and the forward
+`RP03-CAD-04` crossmember; was 2627 g at
+x +9.37 / h 106.72). It is a packaging estimate from the hand-kept register, not a test
+result, and still misses the +25 / 124 target.
 
 ## 9. Generation, checks and outputs
 
@@ -231,6 +247,8 @@ Every accepted revision must pass:
 - [x] wheel-centre track measurement;
 - [x] RP-01-to-body yaw-transform check;
 - [x] body width, ground clearance, battery position and CoM checks;
+- [x] wheel running clearance, drivetrain interference, motor-flange seating,
+  bearing placement and battery-tub checks;
 - [x] visual review from exterior, internal and orthographic directions;
 - [x] interactive CAD Viewer handoff.
 

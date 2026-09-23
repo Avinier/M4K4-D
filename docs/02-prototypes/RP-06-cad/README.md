@@ -21,7 +21,7 @@ RP-01 and RP-03 keep mechanism, physics, gates and rigs; they link here for geom
 | [Head Layout 03](head/layout-03/README.md) | Active 1:1 head. Viewer, verification, mass tree |
 | [Body/chassis Layout 02](body-chassis/layout-02/README.md) | Active whole-robot assembly. Live-imports Layout 03 |
 | [Head decisions](head/decisions.md) | `HEAD-CAD-01…10` |
-| [Body/chassis CAD-context decisions](decisions.md) | `RP03-CAD-01…03` (CAD-first, not RP-03 safety approval) |
+| [Body/chassis CAD-context decisions](decisions.md) | `RP03-CAD-01…06` (CAD-first, not RP-03 safety approval) |
 | [Body/chassis closure plan](body-chassis-plan.md) | Packaging acceptance checklist for the integrated model |
 | [Prototype open items](../openitems.md) | Folder-wide remaining-open index |
 | `runs/` | Run records per [`run-record-convention.md`](../../01-system/run-record-convention.md) |
@@ -81,7 +81,7 @@ Open Layout 03 in CAD Viewer from [`head/layout-03/README.md`](head/layout-03/RE
 ## What to do next
 
 1. Keep editing **this** tree. Fit actual sourced articles into Layout 02 / Layout 03.
-2. **Accept or recover** the 304 mm stack. **Hit or revise** the +25 / 124 mm CoM target — Layout 02 currently reports ~+10 / ~108 mm.
+2. **Accept or recover** the 304 mm stack. **Hit or revise** the +25 / 124 mm CoM target. Layout 02 currently reports +20.2 / 103.7 mm, after the 16 mm body shift in [`RP03-CAD-06`](decisions.md#rp03-cad-06--body-forward-on-the-chassis-and-a-low-battery-tub).
 3. Do not ballast the head to 250 g.
 4. Physical mock-up and G01–G06 registration wait on representative head, electrical, and acoustic evidence.
 
