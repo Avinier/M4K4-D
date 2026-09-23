@@ -134,6 +134,9 @@ AXLE_CHEEK_X = (13.5, 17.0)  # |X| span; 1 mm off the gearbox, clear of the can
 AXLE_CHEEK_Y = (50.0, MOTOR_FACE_Y)  # rail inner face to the flange
 MOTOR_RELIEF_HALF_X = 17.0  # deck relief and shell-floor slot over the motors
 WHEEL_RUNNING_CLEARANCE_MIN = 1.5
+WHEEL_INDEX_R = (6.0, 35.0)  # radial span of the outer-face spin index, inside the tyre
+WHEEL_INDEX_WIDTH = 4.0
+WHEEL_INDEX_DEPTH = 0.8  # flush inlay: cut into the rim face, no added width
 
 BALL_CONTACT = (110.0, 0.0, 0.0)
 BALL_DIAMETER = 25.4
@@ -1379,6 +1382,10 @@ def wheel_assembly(side: str):
     pocket = _axial_bore_y(WHEEL_POCKET_RADIUS, sign * (WHEEL_INNER_FACE_Y - 1.0), sign * WHEEL_POCKET_FLOOR_Y, 0.0, AXLE_Z)
     hub_bore = _axial_bore_y(WHEEL_HUB_BORE_RADIUS, sign * (WHEEL_POCKET_FLOOR_Y - 1.0), sign * STUB_SHAFT_Y[1], 0.0, AXLE_Z)
     rim = rim - [pocket, hub_bore]
+    # Flush radial index inlay on the outer face so wheel rotation reads in review.
+    face_y = sorted((sign * (outer_face - WHEEL_INDEX_DEPTH), sign * outer_face))
+    index = _block(-WHEEL_INDEX_WIDTH / 2.0, WHEEL_INDEX_WIDTH / 2.0, *face_y, AXLE_Z + WHEEL_INDEX_R[0], AXLE_Z + WHEEL_INDEX_R[1])
+    rim = rim - index
     sy0, sy1 = STUB_SHAFT_Y
     stub = _cylinder(STUB_SHAFT_RADIUS, sy1 - sy0, (0.0, sign * (sy0 + sy1) / 2.0, AXLE_Z), "STUB", STEEL, 1.0, "y")
     shaft_end = MOTOR_FACE_Y + MOTOR_SHAFT_LENGTH
@@ -1387,6 +1394,7 @@ def wheel_assembly(side: str):
         _paint(tyre, f"WHEEL_{side}_TYRE", RUBBER, 1.0),
         _paint(rim, f"WHEEL_{side}_DISHED_RIM_AND_WEB", FRAME_BLUE, 1.0),
         _paint(stub, f"WHEEL_{side}_STUB_SHAFT_8MM", STEEL, 1.0),
+        _paint(index, f"WHEEL_{side}_SPIN_INDEX_INLAY", AMBER, 1.0),
     ])
 
 
