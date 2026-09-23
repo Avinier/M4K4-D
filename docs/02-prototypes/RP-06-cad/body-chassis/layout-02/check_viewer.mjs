@@ -137,6 +137,38 @@ for (const [k, d] of Object.entries(module.manifest.parameters)) if (d.type === 
   check(`${k}=${v} finite`, [...effectsByPartId.values()].every(e => !e.matrix || e.matrix.elements.every(Number.isFinite)));
 }
 
-const result = {passed: true, leaves: leaves.length, features: counts, pivots_mm: geo.pivots, checks: checks.length, failed: checks.filter(c => !c.passed).length};
+// Animations: raw values stay inside the slider ranges, every loop closes on
+// the pose it starts from, and the spin turn really turns the robot 360 deg.
+const poseAt = (animation, progress) => {
+  const values = {...defaults};
+  animation.update({progress, elapsed: progress * animation.duration, elapsedSec: progress * animation.duration,
+    duration: animation.duration, cycle: progress, loop: true, params: defaults, speed: 1,
+    set(id, value) {
+      const d = module.manifest.parameters[id];
+      if (!d) throw Error(`${animation.id} sets unknown parameter ${id}`);
+      if (d.type === 'number' && (value < d.min - 1e-9 || value > d.max + 1e-9)) throw Error(`${animation.id} drives ${id}=${value} outside ${d.min}..${d.max}`);
+      values[id] = value;
+    }});
+  return values;
+};
+const matrixSnapshot = values => {
+  const {effectsByPartId} = pose(values);
+  return new Map([...effectsByPartId].map(([id, e]) => [id, e.matrix ? e.matrix.elements : null]));
+};
+for (const animation of definition.animations) {
+  for (let i = 0; i <= 40; i++) poseAt(animation, i / 40);
+  const start = matrixSnapshot(poseAt(animation, 0)), end = matrixSnapshot(poseAt(animation, 1));
+  const identity = new Matrix4().elements;
+  const closes = [...new Set([...start.keys(), ...end.keys()])].every(id => near(start.get(id) || identity, end.get(id) || identity, 1e-6));
+  check(`animation ${animation.id} stays in range and loops seamlessly`, closes);
+}
+{
+  const turn = definition.animations.find(a => a.id === 'spin_turn');
+  const half = pose(poseAt(turn, 0.25)).body, full = pose(poseAt(turn, 0.5)).body;
+  const heading = m => Math.atan2(m.apply([1, 0, 0])[1] - m.apply([0, 0, 0])[1], m.apply([1, 0, 0])[0] - m.apply([0, 0, 0])[0]) * 180 / Math.PI;
+  check('spin turn: 180 deg at a quarter, 360 at half time, on the spot', Math.abs(Math.abs(heading(half)) - 180) < 1e-6 && Math.abs(heading(full)) < 1e-6 && near(half.apply([0, 0, 0]), [0, 0, 0]));
+}
+
+const result = {passed: true, animations: definition.animations.map(a => a.id), leaves: leaves.length, features: counts, pivots_mm: geo.pivots, checks: checks.length, failed: checks.filter(c => !c.passed).length};
 fs.writeFileSync(path.join(here, 'generated/viewer-checks.json'), JSON.stringify({...result, detail: checks}, null, 2) + '\n');
 console.log(JSON.stringify(result, null, 2));

@@ -11,6 +11,8 @@ the order is roll -> pitch -> yaw -> drive):
   Y  yaw-carried (yoke legs, turntable spur, clamp ring, yaw branch)
   wheel L / R spin about their own axle, then the whole robot drives.
 
+Looping animations (the viewer's Animation panel) drive the same sliders.
+
 Run from this folder after `gen`, with the legacy runtime's Python.
 """
 
@@ -38,7 +40,7 @@ HEAD_TRAVEL = {
     "pitch": M.HEAD_ENVELOPE["usable_travel"]["pitch_deg"],
     "yaw": [-55.0, 55.0],  # clock-spring reserve rating, RP-06 yaw stage
 }
-WHEEL_TURNS = 2  # slider range, each way
+WHEEL_TURNS = 3  # slider range, each way; a spin turn on the spot needs ~2.02
 
 
 def _index(root):
@@ -179,8 +181,56 @@ function drivePose(leftDeg, rightDeg) {
   return rot([0, 0, 1], [0, travel / turn, 0], turn / RAD);
 }
 
+const wave = (progress) => Math.sin(2 * Math.PI * progress);
+// Wheel angle for one full heading turn on the spot: each wheel rolls once
+// round a circle of radius track / 2, i.e. pi * track of travel.
+const SPIN_TURN_DEG = (geo.track / 2 / geo.wheel_radius) * 360;
+const animations = {
+  wheels_spin: {
+    label: "Wheels spin in place",
+    duration: 2,
+    update({ progress, set }) {
+      set("drive_on_floor", false);
+      set("wheel_L_deg", 360 * progress);
+      set("wheel_R_deg", 360 * progress);
+    }
+  },
+  drive_forward_back: {
+    label: "Drive forward and back",
+    duration: 5,
+    update({ progress, set }) {
+      const angle = 540 * wave(progress);
+      set("drive_on_floor", true);
+      set("wheel_L_deg", angle);
+      set("wheel_R_deg", angle);
+    }
+  },
+  spin_turn: {
+    // Out and back: a full turn leaves the wheels at ~729 deg, not a whole
+    // number of wheel turns, so a one-way loop would jump the wheel index.
+    label: "Turn 360° on the spot and back",
+    duration: 8,
+    update({ progress, set }) {
+      const angle = SPIN_TURN_DEG * (1 - Math.cos(2 * Math.PI * progress)) / 2;
+      set("drive_on_floor", true);
+      set("wheel_L_deg", -angle);
+      set("wheel_R_deg", angle);
+    }
+  },
+  head_look_around: {
+    label: "Head look around",
+    duration: 8,
+    update({ progress, set }) {
+      const t = geo.travel;
+      set("head_yaw_deg", t.yaw[1] * wave(progress));
+      set("head_pitch_deg", (t.pitch[1] / 2) * Math.max(0, wave(2 * progress)) + (t.pitch[0] / 2) * Math.max(0, -wave(2 * progress)));
+      set("head_roll_deg", (t.roll[1] / 2) * wave(progress + 0.25));
+    }
+  }
+};
+
 export default {
-  manifest: __MANIFEST__,
+  manifest: { ...__MANIFEST__, animations },
   update({ params, effects }) {
     const t = geo.travel;
     const roll = clamp(params.head_roll_deg, t.roll[0], t.roll[1]);

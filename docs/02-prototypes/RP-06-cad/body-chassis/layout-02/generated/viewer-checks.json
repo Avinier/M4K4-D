@@ -1,19 +1,25 @@
 {
   "passed": true,
-  "leaves": 1228,
+  "animations": [
+    "wheels_spin",
+    "drive_forward_back",
+    "spin_turn",
+    "head_look_around"
+  ],
+  "leaves": 1266,
   "features": {
     "frame_R": 703,
     "frame_P": 35,
     "frame_Y": 27,
     "yaw_pinion": 1,
-    "wheel_L": 4,
-    "wheel_R": 4,
+    "wheel_L": 5,
+    "wheel_R": 5,
     "shell": 26,
     "head": 740,
-    "structure": 90,
-    "drive": 24,
+    "structure": 84,
+    "drive": 26,
     "rear_tail": 18,
-    "electronics": 254,
+    "electronics": 296,
     "sensors": 9,
     "audio": 17,
     "harness": 22,
@@ -51,7 +57,7 @@
       42
     ]
   },
-  "checks": 35,
+  "checks": 40,
   "failed": 0,
   "detail": [
     {
@@ -218,19 +224,39 @@
       "passed": true
     },
     {
-      "name": "wheel_L_deg=-720 finite",
+      "name": "wheel_L_deg=-1080 finite",
       "passed": true
     },
     {
-      "name": "wheel_L_deg=720 finite",
+      "name": "wheel_L_deg=1080 finite",
       "passed": true
     },
     {
-      "name": "wheel_R_deg=-720 finite",
+      "name": "wheel_R_deg=-1080 finite",
       "passed": true
     },
     {
-      "name": "wheel_R_deg=720 finite",
+      "name": "wheel_R_deg=1080 finite",
+      "passed": true
+    },
+    {
+      "name": "animation wheels_spin stays in range and loops seamlessly",
+      "passed": true
+    },
+    {
+      "name": "animation drive_forward_back stays in range and loops seamlessly",
+      "passed": true
+    },
+    {
+      "name": "animation spin_turn stays in range and loops seamlessly",
+      "passed": true
+    },
+    {
+      "name": "animation head_look_around stays in range and loops seamlessly",
+      "passed": true
+    },
+    {
+      "name": "spin turn: 180 deg at a quarter, 360 at half time, on the spot",
       "passed": true
     }
   ]
