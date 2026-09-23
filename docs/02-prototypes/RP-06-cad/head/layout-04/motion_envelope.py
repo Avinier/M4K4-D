@@ -111,7 +111,7 @@ if __name__ == '__main__' and '--write' in sys.argv:
         sweep_floor_z_mm=m.SWEEP_FLOOR_Z, yaw_disc_top_z_mm=m.YAW_DISC_TOP_Z,
         clearance_to_disc_top_mm=m.SWEEP_FLOOR_Z - m.YAW_DISC_TOP_Z,
         body_top_z_mm=m.BODY_TOP_Z, yaw_disc_proud_mm=m.YAW_DISC_PROUD,
-        yaw_disc=dict(radius_mm=m.YAW_DISC_R, thickness_mm=m.YAW_DISC_THICKNESS, bore_radius_mm=m.YAW_BORE_R),
+        yaw_disc=dict(radius_mm=m.YAW_DISC_R, thickness_mm=m.YAW_DISC_THICKNESS, plate_mm=m.YAW_DISC_PLATE, bore_radius_mm=m.YAW_BORE_R),
         usable_travel=dict(roll_deg=list(ROLL_USABLE), pitch_deg=list(PITCH_USABLE)),
         hard_stops=dict(roll_deg=list(ROLL_STOP), pitch_deg=list(PITCH_STOP)),
         firmware_rule='Hold commanded roll inside the narrower interval of the neighbouring whole-degree pitch rows.',

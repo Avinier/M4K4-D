@@ -2,9 +2,9 @@
 
 +X forward,+Y left,+Z up; origin front/bottom centre
 
-Physical envelope ΔX × ΔY × ΔZ: 138.316 × 150.000 × 143.000 mm (includes 30.5 mm neck to the flush turntable top). Crown 104 mm; camera/display gap 3 mm. Rear section 104 × 74 mm (Z10…84); full face/ears section unchanged.
+Physical envelope ΔX × ΔY × ΔZ: 139.361 × 150.000 × 152.500 mm (includes 34.5 mm neck to the flush turntable top). Crown 104 mm; camera/display gap 3 mm. Rear section 104 × 74 mm (Z10…84); full face/ears section unchanged.
 
-Visible yoke 30.5 mm above a Ø123 flush turntable; pitch axis to disc top 76.018 mm; A+ sweep floor Z-26.5. A0: `{'roll_y': -1.0775018353835562, 'roll_z': 46.87931035797935, 'pitch_x': -38.18394130377561, 'pitch_z': 45.5179617886593}`.
+Visible yoke 34.5 mm above a Ø125 flush turntable; pitch axis to disc top 80.471 mm; A+ sweep floor Z-30.5. A0: `{'roll_y': -1.0933907025623506, 'roll_z': 47.35624991063, 'pitch_x': -38.138946839609034, 'pitch_z': 45.97142158129681}`.
 
 | Named component | Frame | Centre global XYZ (mm) | ΔX × ΔY × ΔZ (mm) |
 |---|:---:|---|---|
@@ -25,28 +25,28 @@ Visible yoke 30.5 mm above a Ø123 flush turntable; pitch axis to disc top 76.01
 | `C2_installed_components_reserve` | R | -30.300 × -29.000 × 39.750 | 7.400 × 16.000 × 23.500 |
 | `C2_USB_C_withdrawal_BOOT_RESET_service_reserve` | R | -28.500 × -29.000 × 71.500 | 9.000 × 12.000 × 20.000 |
 | `connected_rolling_cradle_flange_ear_stalks` | R | -27.500 × 0.000 × 39.250 | 25.000 × 141.000 × 73.500 |
-| `rolling_spindle_6mm` | R | -56.000 × -1.078 × 46.879 | 32.000 × 6.000 × 6.000 |
-| `roll_bearing_1_16x6_reserve` | P | -43.000 × -1.078 × 46.879 | 6.000 × 16.000 × 16.000 |
-| `roll_bearing_2_16x6_reserve` | P | -65.000 × -1.078 × 46.879 | 6.000 × 16.000 × 16.000 |
-| `bearing_cartridge_trial` | P | -54.000 × -1.078 × 46.879 | 30.000 × 24.000 × 24.000 |
-| `coaxial_coupling_trial` | R | -73.250 × -1.078 × 46.879 | 8.500 × 12.000 × 12.000 |
-| `roll_XC330_1to1_reference` | P | -92.000 × -1.078 × 39.379 | 29.000 × 20.000 × 34.000 |
-| `pitch_XC330_1to1_reference` | Y | -45.684 × 32.000 × 45.518 | 34.000 × 29.000 × 20.000 |
-| `pitch_trunnion_-49` | P | -38.184 × -49.000 × 45.518 | 8.000 × 9.000 × 8.000 |
-| `pitch_trunnion_49` | P | -38.184 × 49.000 × 45.518 | 8.000 × 9.000 × 8.000 |
-| `connected_pitch_frame_roll_servo_saddle` | P | -70.092 × 0.000 × 35.449 | 75.816 × 102.000 × 32.139 |
-| `yaw_yoke_leg_-55` | Y | -41.184 × -55.000 × 14.509 | 34.000 × 6.000 × 90.018 |
-| `yaw_yoke_leg_55` | Y | -46.184 × 55.000 × 10.509 | 24.000 × 6.000 × 82.018 |
-| `yaw_turntable_disc_flush` | Y | -38.184 × 0.000 × -34.750 | 123.000 × 123.000 × 8.500 |
-| `pitch_servo_to_yoke_adapter_trial` | Y | -49.184 × 37.500 × 46.518 | 30.000 × 41.000 × 24.000 |
+| `rolling_spindle_6mm` | R | -56.000 × -1.093 × 47.356 | 32.000 × 6.000 × 6.000 |
+| `roll_bearing_1_16x6_reserve` | P | -43.000 × -1.093 × 47.356 | 6.000 × 16.000 × 16.000 |
+| `roll_bearing_2_16x6_reserve` | P | -65.000 × -1.093 × 47.356 | 6.000 × 16.000 × 16.000 |
+| `bearing_cartridge_trial` | P | -54.000 × -1.093 × 47.356 | 30.000 × 24.000 × 24.000 |
+| `coaxial_coupling_trial` | R | -73.250 × -1.093 × 47.356 | 8.500 × 12.000 × 12.000 |
+| `roll_XC330_1to1_reference` | P | -92.000 × -1.093 × 39.856 | 29.000 × 20.000 × 34.000 |
+| `pitch_XC330_1to1_reference` | Y | -45.639 × 32.000 × 45.971 | 34.000 × 29.000 × 20.000 |
+| `pitch_trunnion_-49` | P | -38.139 × -49.000 × 45.971 | 8.000 × 9.000 × 8.000 |
+| `pitch_trunnion_49` | P | -38.139 × 49.000 × 45.971 | 8.000 × 9.000 × 8.000 |
+| `connected_pitch_frame_roll_servo_saddle` | P | -70.069 × 0.000 × 35.914 | 75.861 × 102.000 × 32.115 |
+| `yaw_yoke_leg_-55` | Y | -41.889 × -55.000 × 12.736 | 35.500 × 6.000 × 94.471 |
+| `yaw_yoke_leg_55` | Y | -46.889 × 55.000 × 8.736 | 25.500 × 6.000 × 86.471 |
+| `yaw_turntable_disc_flush` | Y | -38.139 × 0.000 × -41.500 | 125.000 × 125.000 × 14.000 |
+| `pitch_servo_to_yoke_adapter_trial` | Y | -49.139 × 37.500 × 46.971 | 30.000 × 41.000 × 24.000 |
 | `ear_-1_M2_1` | R | -25.322 × -71.090 × 59.678 | 3.500 × 7.181 × 3.500 |
 | `ear_-1_M2_2` | R | -60.678 × -71.090 × 59.678 | 3.500 × 7.181 × 3.500 |
 | `ear_-1_M2_3` | R | -60.678 × -71.090 × 24.322 | 3.500 × 7.181 × 3.500 |
 | `ear_-1_M2_4` | R | -25.322 × -71.090 × 24.322 | 3.500 × 7.181 × 3.500 |
 | `ear_-1_hidden_mount_M2_-4` | R | -20.500 × -69.190 × 38.000 | 3.500 × 7.181 × 3.500 |
 | `ear_-1_hidden_mount_M2_4` | R | -20.500 × -69.190 × 46.000 | 3.500 × 7.181 × 3.500 |
-| `ear_-1_ridged_inner_mount` | R | -43.000 × -68.550 × 49.358 | 60.000 × 7.100 × 45.284 |
-| `ear_-1_hollow_removable_cap` | R | -43.000 × -71.900 × 43.208 | 60.000 × 6.200 × 57.585 |
+| `ear_-1_ridged_inner_mount` | R | -43.000 × -68.550 × 51.194 | 60.000 × 7.100 × 41.612 |
+| `ear_-1_hollow_removable_cap` | R | -43.000 × -71.900 × 51.326 | 60.000 × 6.200 × 41.349 |
 | `ear_-1_amber_inlay` | R | -43.000 × -74.690 × 42.000 | 43.600 × 0.180 × 43.600 |
 | `ear_-1_dark_centre` | R | -43.000 × -74.675 × 42.000 | 42.000 × 0.150 × 42.000 |
 | `ear_1_M2_1` | R | -25.322 × 71.090 × 59.678 | 3.500 × 7.181 × 3.500 |
@@ -55,8 +55,8 @@ Visible yoke 30.5 mm above a Ø123 flush turntable; pitch axis to disc top 76.01
 | `ear_1_M2_4` | R | -25.322 × 71.090 × 24.322 | 3.500 × 7.181 × 3.500 |
 | `ear_1_hidden_mount_M2_-4` | R | -20.500 × 69.190 × 38.000 | 3.500 × 7.181 × 3.500 |
 | `ear_1_hidden_mount_M2_4` | R | -20.500 × 69.190 × 46.000 | 3.500 × 7.181 × 3.500 |
-| `ear_1_ridged_inner_mount` | R | -43.000 × 68.550 × 49.592 | 60.000 × 7.100 × 44.816 |
-| `ear_1_hollow_removable_cap` | R | -43.000 × 71.900 × 43.231 | 60.000 × 6.200 × 57.538 |
+| `ear_1_ridged_inner_mount` | R | -43.000 × 68.550 × 51.560 | 60.000 × 7.100 × 40.880 |
+| `ear_1_hollow_removable_cap` | R | -43.000 × 71.900 × 51.698 | 60.000 × 6.200 × 40.603 |
 | `ear_1_amber_inlay` | R | -43.000 × 74.690 × 42.000 | 43.600 × 0.180 × 43.600 |
 | `ear_1_dark_centre` | R | -43.000 × 74.675 × 42.000 | 42.000 × 0.150 × 42.000 |
 | `front_M2x10_1` | R | -6.110 × -57.400 × 16.000 | 11.181 × 3.500 × 3.500 |
@@ -69,24 +69,24 @@ Visible yoke 30.5 mm above a Ø123 flush turntable; pitch axis to disc top 76.01
 | `rear_M2x6_2` | R | -111.090 × 44.000 × 26.000 | 7.181 × 3.500 × 3.500 |
 | `rear_M2x6_3` | R | -111.090 × -44.000 × 65.000 | 7.181 × 3.500 × 3.500 |
 | `rear_M2x6_4` | R | -111.090 × 44.000 × 65.000 | 7.181 × 3.500 × 3.500 |
-| `C2_tray_M2_-39` | R | -23.790 × -39.000 × 46.879 | 7.181 × 3.500 × 3.500 |
-| `C2_tray_M2_-19` | R | -23.790 × -19.000 × 46.879 | 7.181 × 3.500 × 3.500 |
+| `C2_tray_M2_-39` | R | -23.790 × -39.000 × 47.356 | 7.181 × 3.500 × 3.500 |
+| `C2_tray_M2_-19` | R | -23.790 × -19.000 × 47.356 | 7.181 × 3.500 × 3.500 |
 | `C2_removable_open_rear_tray` | R | -29.300 × -29.000 × 40.000 | 11.400 × 25.600 × 28.000 |
 | `C2_USB_C_installed_plug_reserve` | R | -28.500 × -29.000 × 56.500 | 9.000 × 12.000 × 10.000 |
 | `C2_BOOT_RESET_rear_tool_access_reserve` | R | -74.000 × -29.000 × 41.000 | 80.000 × 14.000 × 16.000 |
-| `roll_bearing_retainer_39.5` | P | -39.500 × -1.078 × 46.679 | 0.800 × 19.964 × 19.600 |
-| `bearing_retainer_M2_39.5_-9` | P | -41.510 × -10.078 × 46.879 | 7.181 × 3.500 × 3.500 |
-| `bearing_retainer_M2_39.5_9` | P | -41.510 × 7.922 × 46.879 | 7.181 × 3.500 × 3.500 |
-| `roll_bearing_retainer_68.5` | P | -68.500 × -1.078 × 46.879 | 0.800 × 19.964 × 20.000 |
-| `bearing_retainer_M2_68.5_-9` | P | -66.490 × -10.078 × 46.879 | 7.181 × 3.500 × 3.500 |
-| `bearing_retainer_M2_68.5_9` | P | -66.490 × 7.922 × 46.879 | 7.181 × 3.500 × 3.500 |
-| `roll_hard_stop_pin` | R | -39.800 × -1.078 × 57.379 | 2.000 × 1.800 × 1.800 |
-| `pitch_hard_stop_pin` | P | -48.184 × -52.000 × 45.518 | 2.000 × 4.000 × 2.000 |
+| `roll_bearing_retainer_39.5` | P | -39.500 × -1.093 × 47.156 | 0.800 × 19.964 × 19.600 |
+| `bearing_retainer_M2_39.5_-9` | P | -41.510 × -10.093 × 47.356 | 7.181 × 3.500 × 3.500 |
+| `bearing_retainer_M2_39.5_9` | P | -41.510 × 7.907 × 47.356 | 7.181 × 3.500 × 3.500 |
+| `roll_bearing_retainer_68.5` | P | -68.500 × -1.093 × 47.356 | 0.800 × 19.964 × 20.000 |
+| `bearing_retainer_M2_68.5_-9` | P | -66.490 × -10.093 × 47.356 | 7.181 × 3.500 × 3.500 |
+| `bearing_retainer_M2_68.5_9` | P | -66.490 × 7.907 × 47.356 | 7.181 × 3.500 × 3.500 |
+| `roll_hard_stop_pin` | R | -39.800 × -1.093 × 57.856 | 2.000 × 1.800 × 1.800 |
+| `pitch_hard_stop_pin` | P | -48.139 × -52.000 × 45.971 | 2.000 × 4.000 × 2.000 |
 | `camera_bracket_M2_-15` | R | -14.590 × -15.000 × 78.500 | 7.181 × 3.500 × 3.500 |
 | `camera_bracket_M2_15` | R | -14.590 × 15.000 × 78.500 | 7.181 × 3.500 × 3.500 |
-| `removable_roll_servo_saddle_strap` | P | -100.000 × -1.078 × 46.779 | 4.000 × 27.600 × 23.800 |
-| `coupling_M3_radial_grub_74.5` | R | -74.500 × 3.422 × 46.879 | 3.000 × 3.000 × 3.000 |
-| `coupling_M3_radial_grub_71.5` | R | -71.500 × 3.422 × 46.879 | 3.000 × 3.000 × 3.000 |
+| `removable_roll_servo_saddle_strap` | P | -100.000 × -1.093 × 47.256 | 4.000 × 27.600 × 23.800 |
+| `coupling_M3_radial_grub_74.5` | R | -74.500 × 3.407 × 47.356 | 3.000 × 3.000 × 3.000 |
+| `coupling_M3_radial_grub_71.5` | R | -71.500 × 3.407 × 47.356 | 3.000 × 3.000 × 3.000 |
 | `CSI_roof_straight_exit_guide` | R | -47.000 × 0.000 × 81.700 | 4.000 × 8.000 × 6.200 |
 
 Generated from source. Nominal trial fits; no manufacturing drawing or freeze.

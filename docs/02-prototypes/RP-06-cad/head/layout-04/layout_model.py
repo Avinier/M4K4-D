@@ -36,7 +36,7 @@ BODY_TOP_Z=YAW_DISC_TOP_Z-YAW_DISC_PROUD
 NECK=-BODY_TOP_Z
 YAW_DISC_THICKNESS=YAW_DISC_PROUD-1.
 YAW_DISC_PLATE=4.
-YAW_DISC_R=61.5
+YAW_DISC_R=62.5
 YAW_BORE_R=7.
 YAW_INTERFACE_Z=BODY_TOP_Z
 YAW_AXIS=Axis((PITCH_X,0,YAW_INTERFACE_Z),(0,0,1))
@@ -290,13 +290,13 @@ def build_parts(catalog=True,reliefs=True):
     # the rear crossbar, side arms and central cartridge seat remain connected.
     frame=frame-block(-46,-37,16,47,ROLL_Z-21,ROLL_Z-15)
     add('connected_pitch_frame_roll_servo_saddle',frame,'P','#c38a47',owner='M011-P')
-    # Short-knee legs: a vertical lower section 12-20 mm behind the pitch axis
+    # Short-knee legs: a vertical lower section 13.5-21.5 mm behind the pitch axis
     # stays outside the face carrier's chin-down sweep (display, connector
     # reserve and bezel pass under the axis at +40), then angles forward to
     # the trunnion. A forward gusset spreads each foot on the disc.
     d=YAW_DISC_TOP_Z
     for y in [-55,55]:
-        leg=extrude(Plane.XZ*Polygon((PITCH_X-20,d),(PITCH_X-4,d),(PITCH_X-12,d+10),(PITCH_X-12,PITCH_Z-30),(PITCH_X+4,PITCH_Z-8),(PITCH_X+4,PITCH_Z+6),(PITCH_X-6,PITCH_Z+6),(PITCH_X-6,PITCH_Z-6),(PITCH_X-20,PITCH_Z-30),align=None),amount=6).moved(Location((0,y+3,0)))
+        leg=extrude(Plane.XZ*Polygon((PITCH_X-21.5,d),(PITCH_X-5.5,d),(PITCH_X-13.5,d+10),(PITCH_X-13.5,PITCH_Z-30),(PITCH_X+4,PITCH_Z-8),(PITCH_X+4,PITCH_Z+6),(PITCH_X-6,PITCH_Z+6),(PITCH_X-6,PITCH_Z-6),(PITCH_X-21.5,PITCH_Z-30),align=None),amount=6).moved(Location((0,y+3,0)))
         leg=leg-axial(4.2,8,(PITCH_X,y,PITCH_Z),'y')
         add(f'yaw_yoke_leg_{y}',leg,'Y','#647787',owner='M011-Y')
     # Flush turntable disc: top plate, outer rim and bearing hub, with a
@@ -398,7 +398,12 @@ def build_parts(catalog=True,reliefs=True):
                     cuts.append(block(lo[0],hi[0],lo[1],hi[1],lo[2],hi[2]))
             if cuts:
                 style=out[name]
-                style['shape']=tint(s.cut(*cuts),name,style['color'],style['alpha'])
+                cut=s.cut(*cuts)
+                # A relief box ending within 0.1 mm of a free edge leaves a
+                # paper-thin chip; drop fragments below 5 mm3, keep real parts.
+                kept=[x for x in cut.solids() if x.volume>5.]
+                if len(kept)<len(cut.solids()):cut=kept[0] if len(kept)==1 else Compound(children=kept)
+                style['shape']=tint(cut,name,style['color'],style['alpha'])
     return out
 
 def assembly(internals=False,roll=0,pitch=0,yaw=0):

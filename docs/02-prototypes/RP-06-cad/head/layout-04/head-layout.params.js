@@ -1,5 +1,5 @@
 // Generated; presentation only. Per-part scene-tree controls remain available.
-const axes={"roll_y": -1.0775018353835562, "roll_z": 46.87931035797935, "pitch_x": -38.18394130377561, "pitch_z": 45.5179617886593};
+const axes={"roll_y": -1.0933907025623506, "roll_z": 47.35624991063, "pitch_x": -38.138946839609034, "pitch_z": 45.97142158129681};
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,Number(v)||0));
 export default {manifest:{
   "schemaVersion": 1,
@@ -67,10 +67,10 @@ export default {manifest:{
   },
   "features": {
     "frame_R": {
-      "ref": "#o1.3.3.1,o1.3.3.2,o1.3.3.3,o1.3.1.1,o1.3.1.2,o1.3.1.3,o1.3.5.1,o1.4.3.1,o1.4.3.2,o1.4.4.5,o1.4.2.3,o1.4.2.5,o1.4.4.3,o1.4.4.1,o1.4.2.7,o1.4.2.4,o1.4.1.6,o1.4.1.7,o1.4.1.5,o1.4.1.4,o1.4.1.10,o1.4.1.11,o1.4.1.9,o1.4.1.8,o1.4.1.1,o1.4.1.2,o1.4.2.6,o1.4.1.3,o1.4.4.4,o1.4.4.2,o1.4.2.2,o1.4.2.1,o1.2.3.2,o1.3.2.1,o1.3.2.2,o1.3.2.3,o1.2.2.1,o1.1.1.3,o1.1.1.4,o1.1.1.2,o1.1.1.5,o1.1.1.1"
+      "ref": "#o1.3.3.1,o1.3.3.2,o1.3.3.3,o1.3.1.1,o1.3.1.2,o1.3.1.3,o1.3.5.1,o1.4.3.1,o1.4.3.2,o1.4.4.5,o1.4.2.3,o1.4.2.5,o1.4.4.3,o1.4.4.1,o1.4.2.7,o1.4.2.4,o1.4.1.6,o1.4.1.7,o1.4.1.5,o1.4.1.4,o1.4.1.10,o1.4.1.11,o1.4.1.9,o1.4.1.8,o1.4.1.1,o1.4.1.2,o1.4.2.6,o1.4.1.3,o1.4.4.4,o1.4.4.2,o1.4.2.2,o1.4.2.1,o1.2.3.4,o1.3.2.1,o1.3.2.2,o1.3.2.3,o1.2.2.1,o1.1.1.3,o1.1.1.4,o1.1.1.2,o1.1.1.5,o1.1.1.1,o1.2.3.2"
     },
     "frame_P": {
-      "ref": "#o1.4.5.3,o1.4.7.3,o1.4.7.4,o1.4.7.1,o1.4.7.2,o1.4.7.5,o1.4.5.4,o1.4.5.1,o1.4.5.2,o1.4.5.5,o1.4.5.6,o1.2.2.2,o1.1.2.3,o1.1.2.2,o1.1.2.1,o1.2.1.2,o1.3.4.1,o1.3.4.2,o1.3.4.3"
+      "ref": "#o1.4.5.3,o1.4.7.3,o1.4.7.4,o1.4.7.1,o1.4.7.2,o1.4.7.5,o1.4.5.4,o1.4.5.1,o1.4.5.2,o1.4.5.5,o1.4.5.6,o1.2.2.2,o1.1.2.3,o1.1.2.2,o1.1.2.1,o1.2.3.3,o1.2.1.2,o1.3.4.1,o1.3.4.2,o1.3.4.3"
     },
     "frame_Y": {
       "ref": "#o1.3.6.3,o1.4.6.1,o1.4.6.2,o1.4.8.3,o1.4.8.1,o1.4.8.2,o1.2.2.3,o1.1.3.1,o1.1.3.2,o1.2.1.3,o1.3.6.1,o1.3.6.2"
@@ -88,7 +88,7 @@ export default {manifest:{
       "ref": "#o1.4"
     },
     "fov": {
-      "ref": "#o1.2.3.2"
+      "ref": "#o1.2.3.4"
     },
     "shell": {
       "names": [
@@ -110,7 +110,7 @@ export default {manifest:{
 update({params,effects}) {
  const r={rotate:{axis:[1,0,0],origin:[0,axes.roll_y,axes.roll_z],angleDeg:clamp(params.roll_deg,-18,18)}};
  const p={rotate:{axis:[0,1,0],origin:[axes.pitch_x,0,axes.pitch_z],angleDeg:clamp(params.pitch_deg,-22,40)}};
- const y={rotate:{axis:[0,0,1],origin:[axes.pitch_x,0,-40.0],angleDeg:clamp(params.yaw_deg,-55,55)}};
+ const y={rotate:{axis:[0,0,1],origin:[axes.pitch_x,0,-49.5],angleDeg:clamp(params.yaw_deg,-55,55)}};
  effects.transform('frame_R',{transforms:[r,p,y]});
  effects.transform('frame_P',{transforms:[p,y]});
  effects.transform('frame_Y',y);

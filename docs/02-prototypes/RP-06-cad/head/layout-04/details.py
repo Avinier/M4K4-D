@@ -101,7 +101,7 @@ def detail_parts(out):
         for dy in [-9,9]:
             plate=plate-a(1.15,2,(x,m.ROLL_Y+dy,m.ROLL_Z))
             cartridge=cartridge-a(INSERT_R,3,(x+(-2 if x>-50 else 2),m.ROLL_Y+dy,m.ROLL_Z))
-        if x>-50:plate=plate-slot('x',10.5,.9,162,198,(x,m.ROLL_Y,m.ROLL_Z),2)
+        if x>-50:plate=plate-slot('x',10.5,.9,180+m.ROLL_STOP[0],180+m.ROLL_STOP[1],(x,m.ROLL_Y,m.ROLL_Z),2)
         add(f'roll_bearing_retainer_{abs(x):g}',plate,'P','M010-P','#c38a47')
         for dy in [-9,9]:
             sign=1 if x>-50 else -1
@@ -142,7 +142,12 @@ def detail_parts(out):
     # Pin root lug joins the pitch frame side arm.
     frame=out['connected_pitch_frame_roll_servo_saddle']['shape']
     lug=b(m.PITCH_X-11,m.PITCH_X-4,-51,-47,m.PITCH_Z-2,m.PITCH_Z+2)
-    setshape('connected_pitch_frame_roll_servo_saddle',(frame+lug)-out['pitch_hard_stop_pin']['shape'])
+    frame=(frame+lug)-out['pitch_hard_stop_pin']['shape']
+    # Roll stops at +/-21 swing the C2 castellated exit (R-frame, OD2 trial
+    # jacket) onto the lower rail; relieve the rail with 0.4 mm clearance.
+    c2_exit=a(1.4,30,(-50,-29,42))
+    for r in [19,20,21]:frame=frame-c2_exit.rotate(m.ROLL_AXIS,r)
+    setshape('connected_pitch_frame_roll_servo_saddle',frame)
     # Independent camera bracket: PCB Y-edge C-channels plus two rear-access M2
     # screws into long crown receivers. Boss centres clear the 25 mm board.
     face=out['front_bezel_integral_camera_crown']['shape']
