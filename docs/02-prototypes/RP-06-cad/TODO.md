@@ -60,7 +60,16 @@ Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gat
 - [ ] Resolve the RP-03 CAD-versus-safety issue:
   - the controller/safety design expects multiple direct stop-path sensors
   - current Layout 02 only packages one guarded rear TCRT channel and explicitly makes no full forward/lateral cliff-protection claim
+  - since the touch-cap skirt cut (`RP03-CAD-04`, 2026-09-24), floor objects below the GP2Y beam (Z 41), including `C12`, meet the ball's retaining lip with no contact signal; forward edges and low obstacles now rely on the camera, which is not a low-level stop channel
   - this must be reconciled before physical layout closure
+
+- [ ] Fix `_vertical_bore` in `body_chassis_model.py`: it builds a Z-centred cylinder, so every bore sits half its length too low (6 uses left). Switch them to `_z_cylinder`, then re-run the checks and review the keel, pads and locators.
+
+- [ ] Close the ball-nose touch cap on real parts: flexure stiffness, tact-switch force and over-travel stop, debounce, and the 3 mm travel.
+
+- [ ] Confirm the GP2Y 0.70 m/s look-ahead on real floors: charged to the nose front it needs 294.5 mm against the 300 mm rating.
+
+- [ ] Propagate `RP03-CAD-01`…`06` to the permanent RP-03 documents as one reviewed change set (sensor count, bump coverage, the fixed ball-only mount versus the required `D20` swap, CoM and motion restrictions).
 
 - [ ] Select the status LED and diffuser/optic.
 
@@ -102,3 +111,29 @@ Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gat
 - [ ] Verify current suppliers, landed costs, and substitutes.
 
 - [ ] Register and execute RP06-G01…G06.
+
+## CAD gaps and inefficiencies
+
+Running list of ways the current CAD falls short of a production design. Add to it as they turn up.
+
+- [ ] Layout 02 is a packaging and fit-check model, not a production design (noted 2026-09-24). Passing checks means no clashes and the clearances hold, not that the design is complete. Open causes:
+  - [ ] Pi 5 and active cooler have no retention: no standoffs, cooler push-pins or fasteners, and the compute tray is a plain 3 mm box. The cooler is only positioned (`PI_COOLER_TOP_Z`), and nothing ties it to the Pi
+  - [ ] Check underside clearance for the cooler push-pin tips and the Pi-to-tray standoff gap (currently an assumed ~16 mm)
+  - [ ] Check fan intake and airflow: only 10.5 mm of headroom over the cooler under the yaw stage
+  - [ ] Yaw-stage parts are packaging envelopes, not selected or load-rated parts
+  - [ ] Head-harness route is unresolved (see the Layout 02 README)
+
+- [ ] Wheel arches and trim have no attachment (noted 2026-09-24). `WHEEL_ARCH_POD_L/R` and the amber `WHEEL_ARCH_UPPER_TRIM_L/R` are separate solids under `BODY_PANELS`, not part of `BODY_SHELL`, and nothing fixes them in place: no screws, tabs, bosses or adhesive land, and no snap or bond for the trim on the arch.
+  - [ ] Decide the concept: integral flanges in the printed shell, or bolt-on fenders fixed to the chassis cheeks. The shell floor is open across the axle so the body lowers on from above, which rules out a simple bond
+  - [ ] The arches are X-centred on the axle (0.0), not on the body, so they don't follow `BODY_SHIFT_X` (16 mm). Confirm that's intended
+  - [ ] Measure the arch-to-shell overlap or gap, and whether the arch sits inside or outside the shell wall; it is part of the open panel-versus-shell clash sweep
+  - [ ] Add the fixing and its clearances to the checks
+
+- [ ] Fasteners are positions and bores, not engineered joints (noted 2026-09-24). `CON-P01` (`00-foundation/constraints.md`) makes screw-together construction a requirement for serviceability, and `brief.md` leaves "thread engagement, inserts, sealing/gasket detail, tolerances, material/process selection and structural proof" unresolved. The checks cover screw count, edge inset and ball-flange thread engagement (>= 2.5 mm), not load or stiffness. To do:
+  - [ ] List every joint (M4 body/chassis through-bolts and locating pins, M3 service panels, ball flange and pod, keel, axle flange, yaw stage, arches) with its screw, insert or nut, clamp stack, and load path
+  - [ ] Set thread engagement and boss geometry per joint: heat-set insert depth, boss wall, edge distance, pull-out margin
+  - [ ] Add clearance holes, counterbores, captive nuts or inserts, and washers where the joint needs them, so the CAD carries what would be bought and machined
+  - [ ] Size for preload, shear and stiffness on the load-bearing joints first: axle flange, body/chassis bolts, yaw plate and bearing
+  - [ ] Choose the material and process (printed, machined or moulded), then the tolerances and any gasket or seal
+  - [ ] Add per-joint checks: engagement, edge distance, tool access and service removal path
+  - [ ] Add a fastener schedule (BOM) to the generated outputs
