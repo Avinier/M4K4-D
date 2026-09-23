@@ -1,0 +1,411 @@
+{
+  "method": "Tessellated R/P solids (0.05 mm), no relief cuts; per-pitch roll limits at 0.25\u00b0 search, rounded toward zero.",
+  "sweep_floor_z_mm": -30.5,
+  "yaw_disc_top_z_mm": -34.5,
+  "clearance_to_disc_top_mm": 4.0,
+  "body_top_z_mm": -49.5,
+  "yaw_disc_proud_mm": 15.0,
+  "yaw_disc": {
+    "radius_mm": 61.5,
+    "thickness_mm": 14.0,
+    "bore_radius_mm": 7.0
+  },
+  "usable_travel": {
+    "roll_deg": [
+      -18.0,
+      18.0
+    ],
+    "pitch_deg": [
+      -22.0,
+      40.0
+    ]
+  },
+  "hard_stops": {
+    "roll_deg": [
+      -21.0,
+      21.0
+    ],
+    "pitch_deg": [
+      -25.0,
+      43.0
+    ]
+  },
+  "firmware_rule": "Hold commanded roll inside the narrower interval of the neighbouring whole-degree pitch rows.",
+  "rows": [
+    {
+      "pitch_deg": -25.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -24.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -23.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -22.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -21.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -20.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -19.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -18.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -17.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -16.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -15.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -14.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -13.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -12.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -11.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -10.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -9.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -8.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -7.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -6.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -5.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -4.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -3.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -2.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": -1.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 0.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 1.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 2.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 3.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 4.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 5.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 6.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 7.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 8.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 9.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 10.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 11.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 12.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 13.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 14.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 15.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 16.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 17.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 18.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 19.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 20.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 21.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 22.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 23.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 24.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 25.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 26.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 27.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 28.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 29.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 30.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 31.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 32.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 33.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 34.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 35.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 36.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 37.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 38.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 39.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 40.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 41.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 42.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    },
+    {
+      "pitch_deg": 43.0,
+      "roll_min_deg": -21,
+      "roll_max_deg": 21
+    }
+  ],
+  "verified_0p5deg_grid": {
+    "lowest_z_mm": -30.258,
+    "at_roll_pitch": [
+      -21.0,
+      -25.0
+    ],
+    "passed": true
+  },
+  "hard_stop_fault_case": {
+    "lowest_z_mm": -30.258,
+    "at_roll_pitch": [
+      -21.0,
+      -25.0
+    ],
+    "below_disc_top_mm": 0.0,
+    "note": "Per-axis hard-stop corner. When below_disc_top_mm is 0 the hard stops alone keep the head off the disc."
+  },
+  "overtravel_1deg_case": {
+    "lowest_z_mm": -31.496,
+    "at_roll_pitch": [
+      -22.0,
+      -26.0
+    ],
+    "clearance_to_disc_top_mm": 3.004
+  },
+  "hard_stops_alone_keep_4mm": true,
+  "pure_axis_lowest_z_mm": {
+    "pitch": -19.136,
+    "roll": -15.549
+  }
+}
