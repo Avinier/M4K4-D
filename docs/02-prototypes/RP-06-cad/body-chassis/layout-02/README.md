@@ -1,6 +1,6 @@
 # RP-06 integrated body/chassis Layout 02
 
-This is the active whole-body CAD path. It retains Layout 01's source-linked RP-01 Layout 03 head, compact two-wheel chassis, connected rear skid, fixed ball-transfer nose, internal packaging and purposeful review layers, while closing the first-pass integration questions:
+This is the active whole-body CAD path. It retains Layout 01's source-linked RP-01 head (now Layout 04), compact two-wheel chassis, connected rear skid, fixed ball-transfer nose, internal packaging and purposeful review layers, while closing the first-pass integration questions:
 
 - four M4 through-bolts and two locating pins now define the body-frame-to-chassis interface;
 - enlarged front and rear shell openings are the octagonal service-panel outlines offset inward by a constant 2 mm land; each panel's straight side edges are parallel to the corresponding shell edges (measured from the solids, not the constants); a separate internal frame behind each shell end wall carries four fused M3 bosses, with M3 × 8 screws seated on the panel face;
@@ -8,7 +8,7 @@ This is the active whole-body CAD path. It retains Layout 01's source-linked RP-
 - the front slat motif is now a functional open speaker grille over a provisional 50 mm basket/44 mm cone, amplifier envelope and acoustic cavity;
 - four body-mounted PDM microphone boards, acoustic ports and shell penetrations are allocated; exact audio SKUs remain an RP-05/RP-06 selection gate;
 - the front range sensor sits beside the battery at Y = +38 mm, Z = 68 mm, below the speaker grille, and looks through its own window in the front panel; and
-- a stationary neck cowl plus head-yaw-moving lower yoke shrouds visually shorten the U-shaped yoke while preserving the existing yaw and pitch axes.
+- the head now uses RP-01 Layout 04 at a 40 mm neck (was 60), with the spindle replaced by a turntable. Its yaw turntable disc stands 9.5 mm proud of the body top with a 1 mm running gap. Full roll/pitch motion is kept, and the hard stops alone keep the head at least 4 mm off the disc. The body carries a thin-section bearing and a clock-spring cable reserve above a Ø69 adapter plate, a ring gear with a skirt up to the disc, an off-axis pinion and an XC330-size yaw servo on +Y. Everything starts 10.5 mm above the Pi 5 cooler. A Ø90 shell opening passes the gear skirt. The earlier cowl and yaw-moving shrouds are removed.
 
 Per CAD-context decision [`RP03-CAD-01`](../../decisions.md#rp03-cad-01--rear-only-ground-reflectance-channel), the layout now uses one guarded rear TCRT5000 channel. Its optical patch is 27 mm behind the skid contact, its optical face is modeled 10 mm above ground, and its protective rails begin at 7 mm. The connected skid pad begins at 3.5 mm, so it contacts first. The front and lateral TCRT packages, mounts and cable reserves are removed.
 
@@ -27,9 +27,9 @@ Per CAD-context decision [`RP03-CAD-03`](../../decisions.md#rp03-cad-03--faceted
 - `generated/` — machine-readable and Markdown outputs.
 - `snapshots/` — required visual-review packet.
 
-The RP-01 head is a live source dependency. Changes in Layout 03 flow into this assembly on regeneration.
+The RP-01 head is a live source dependency. Changes in head Layout 04 flow into this assembly on regeneration; its yaw datum, A0, yaw-carried mass/CoM and turntable size are read from that layout's `axes.json`, `mass-placement.json` and `motion-envelope.json`.
 
-The neutral dimensional stack is 304 mm: 140 mm body/yaw datum + 60 mm neck allocation + 104 mm Layout 03 crown-inclusive head. The 300 mm system figure is therefore a rounded target, not a passed height envelope. The visible body is 110 mm tall with 30 mm ground clearance, matching the system baseline. The RP-01 yaw yoke remains live Layout 03 trial geometry; Layout 02's added shrouds are cosmetic/packaging parts, not evidence that the yoke is load-rated or fabrication-final.
+The neutral dimensional stack is 284 mm: 140 mm body/yaw datum + 40 mm neck + 104 mm crown-inclusive head. The yaw stage parts are packaging envelopes, not selected or load-rated parts. The body's vertical head-harness volume still passes through the battery, compute-tray and Pi-cooler envelopes, as it did before this change; its route is unresolved.
 
 ## Generation
 
@@ -49,7 +49,7 @@ The selected TCRT5000 breakout/comparator PCB and connector are still unresolved
 ## Validation note
 
 All Layout 02-authored mounts, fascia, panels, panel hardware, audio packaging,
-neck treatment, body, chassis, fixed ball-transfer, rear stinger tail, skid keel and rear
+yaw stage, body, chassis, fixed ball-transfer, rear stinger tail, skid keel and rear
 sensor geometry validates as closed, positive-volume BREP. Full-assembly
 validation still reports five
 inherited self-intersecting occurrences inside the frozen Raspberry Pi 5 vendor

@@ -3,13 +3,15 @@
 Coordinate frame: millimetres; origin on ground at the drive-axle line and
 robot centre plane; +X forward, +Y robot-left, +Z up.
 
-The RP-01 Layout 03 head is composed from its live Python source. Purchased
+The RP-01 Layout 04 head is composed from its live Python source; its yaw
+datum, A0, mass and turntable size are read from that layout's generated files. Purchased
 STEP geometry is imported through cadgen.step_scene.import_step.
 """
 
 from __future__ import annotations
 
 import importlib
+import json
 import math
 import sys
 from pathlib import Path
@@ -41,19 +43,19 @@ except ImportError:  # repository's older CAD venv compatibility for report scri
 
 HERE = Path(__file__).resolve().parent
 PURCHASED = HERE.parent / "layout-01" / "references" / "purchased"
-# `HERE` is .../RP-06-cad/body-chassis/layout-02; Layout 03 is a sibling of
-# body-chassis under the same RP-06 CAD root.
-HEAD_DIR = HERE.parents[1] / "head" / "layout-03"
+# `HERE` is .../RP-06-cad/body-chassis/layout-02; the head layouts are
+# siblings of body-chassis under the same RP-06 CAD root.
+HEAD_DIR = HERE.parents[1] / "head" / "layout-04"
 
 HEAD_MODEL = None
 
 
 def _load_head_model():
-    """Load RP-01 Layout 03 lazily from source for the actual CAD build.
+    """Load RP-01 Layout 04 lazily from source for the actual CAD build.
 
     Report/check scripts can import this module without paying the full head
     build dependency cost. During `gen`, the text-to-cad runtime supplies the
-    current cached STEP importer required by Layout 03.
+    current cached STEP importer required by Layout 04.
     """
     global HEAD_MODEL
     if HEAD_MODEL is not None:
@@ -62,6 +64,7 @@ def _load_head_model():
         sys.path.insert(0, str(HEAD_DIR))
     for module_name in (
         "layout_axes",
+        "motion_envelope",
         "layout_model",
         "details",
         "mass_layout",
@@ -127,11 +130,22 @@ BODY_WIDTH_LOWER = 174.0
 BODY_WIDTH_UPPER = 148.0
 SHELL_THICKNESS = 2.4
 
+# Layout 04 yaw stage (40 mm neck): the head's turntable disc stands proud of
+# the body top; the yaw datum is the body-top plane on the yaw axis. Head A0,
+# envelope, disc and yaw-carried mass are read from the head's generated files.
+HEAD_AXES = json.loads((HEAD_DIR / "axes.json").read_text())
+HEAD_ENVELOPE = json.loads((HEAD_DIR / "motion-envelope.json").read_text())
+_HEAD_YAW_MASS = json.loads((HEAD_DIR / "mass-placement.json").read_text())["working"]["yaw"]
 HEAD_YAW_DATUM = (0.0, 0.0, 140.0)
-HEAD_ORIGIN_IN_CHASSIS = (37.9645316623177, 0.0, 200.0)
-HEAD_LOCAL_YAW = (-37.9645316623177, 0.0, -60.0)
-HEAD_LOCAL_COM = (-39.55188359184538, 0.7458558252366899, 40.295971393290785)
-HEAD_MASS_G = 509.04
+HEAD_LOCAL_YAW = (HEAD_AXES["pitch_x"], 0.0, HEAD_ENVELOPE["body_top_z_mm"])
+HEAD_ORIGIN_IN_CHASSIS = tuple(HEAD_YAW_DATUM[i] - HEAD_LOCAL_YAW[i] for i in range(3))
+HEAD_LOCAL_COM = tuple(_HEAD_YAW_MASS["center_mm"])
+HEAD_MASS_G = _HEAD_YAW_MASS["mass_g"]
+HEAD_SWEEP_FLOOR_Z = HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_ENVELOPE["sweep_floor_z_mm"]
+YAW_DISC_RADIUS = HEAD_ENVELOPE["yaw_disc"]["radius_mm"]
+YAW_DISC_THICKNESS = HEAD_ENVELOPE["yaw_disc"]["thickness_mm"]
+YAW_DISC_TOP_Z = HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_ENVELOPE["yaw_disc_top_z_mm"]
+YAW_DISC_PLATE_BOTTOM_Z = YAW_DISC_TOP_Z - 3.0
 HEAD_CROWN_Z_LOCAL = 104.0
 OVERALL_PHYSICAL_HEIGHT = HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_CROWN_Z_LOCAL
 NECK_ALLOCATION = HEAD_ORIGIN_IN_CHASSIS[2] - BODY_Z_TOP
@@ -229,11 +243,23 @@ MICROPHONE_PORTS = (
     (-38.0, -70.0, 108.0, "REAR_R"),
 )
 
-# The yaw-axis height is unchanged. The stationary cowl visually absorbs the
-# lower spindle/bridge while retaining the 32 mm head-side motion allocation.
-NECK_COWL_HEIGHT = 24.0
-NECK_COWL_OUTER_RADIUS = 34.0
-NECK_COWL_INNER_RADIUS = 26.0
+# Head yaw stage under the proud disc. Nothing sits within PI_COOLER_HEADROOM
+# of the Pi 5 active cooler: the adapter plate, ring gear and pinion start at
+# 133.5; the bearing and clock-spring reserve sit above the plate, inside the
+# disc skirt. The shell opening only passes the ring-gear skirt.
+PI_COOLER_TOP_Z = 123.0
+PI_COOLER_HEADROOM = 10.5
+YAW_PLATE_Z = (PI_COOLER_TOP_Z + PI_COOLER_HEADROOM, PI_COOLER_TOP_Z + PI_COOLER_HEADROOM + 4.0)
+YAW_PLATE_RADIUS = 34.5
+YAW_BEARING_RADII = (26.0, 34.0)
+YAW_BEARING_Z = (YAW_PLATE_Z[1], YAW_PLATE_Z[1] + 7.0)
+YAW_RING_GEAR_RADII = (35.5, 43.0)
+YAW_RING_GEAR_SKIRT_RADII = (41.0, 43.0)
+YAW_RING_GEAR_PITCH_RADIUS = 39.0
+YAW_PINION_PITCH_RADIUS = 8.0
+YAW_PINION_CENTER = (0.0, YAW_RING_GEAR_PITCH_RADIUS + YAW_PINION_PITCH_RADIUS)
+YAW_CLOCKSPRING_RADII = (13.0, 25.0)
+YAW_OPENING_RADIUS = YAW_RING_GEAR_RADII[1] + 2.0
 
 PI_CENTER = (6.0, 0.0, 102.0)
 BATTERY_CENTER = (38.0, 0.0, 69.0)
@@ -324,7 +350,7 @@ FRAMES = {
 
 
 MASS_ROWS = [
-    ("RP01_HEAD_LAYOUT03", HEAD_MASS_G, (
+    ("RP01_HEAD_LAYOUT04", HEAD_MASS_G, (
         HEAD_ORIGIN_IN_CHASSIS[0] + HEAD_LOCAL_COM[0],
         HEAD_ORIGIN_IN_CHASSIS[1] + HEAD_LOCAL_COM[1],
         HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_LOCAL_COM[2],
@@ -342,6 +368,7 @@ MASS_ROWS = [
     ("CONTROL_POWER_SENSORS", 125.0, (6.0, 0.0, 80.0), "estimate; one rear TCRT channel"),
     ("BODY_AUDIO", 90.0, (48.0, 0.0, 102.0), "speaker, amplifier and four microphones; CAD estimate"),
     ("HARNESS_AND_FASTENERS", 95.0, (4.0, 0.0, 88.0), "estimate"),
+    ("BODY_YAW_STAGE", 97.0, (2.1, 12.6, 128.5), "E: 50 g thin-section bearing placeholder + 23 g XC330-size servo + 3 g pinion + 21 g PLA ring gear/clamp ring (CAD volume); no SKU"),
     ("REAR_SKID_KEEL", 12.0, (-55.9, 0.0, 20.4), "CAD volume: 15.4 cm3 keel body at ~45% effective PETG density, 12x10 mm shoe, guards, 4 M3 screws"),
 ]
 if REAR_TAIL_ENABLED:
@@ -826,7 +853,10 @@ def body_shell():
             microphone_ports.append(_axial_bore_y(1.5, -91.0, -66.0, x, z))
     slot_x0, slot_x1, slot_half = REAR_KEEL_SHELL_SLOT
     keel_slot = _block(slot_x0, slot_x1, -slot_half, slot_half, BODY_Z_BOTTOM - 1.0, BODY_Z_BOTTOM + SHELL_THICKNESS + 1.0)
-    shell = shell - [front_opening, rear_opening, *rail_notches, keel_slot, *microphone_ports, *_wheel_well_tools()]
+    # Head-yaw opening passes the rotating ring-gear skirt; the proud disc
+    # covers it with a 1 mm running gap above the body top.
+    yaw_opening = Cylinder(YAW_OPENING_RADIUS, 10.0).moved(Location((0.0, 0.0, BODY_Z_TOP)))
+    shell = shell - [front_opening, rear_opening, *rail_notches, keel_slot, yaw_opening, *microphone_ports, *_wheel_well_tools()]
     return _paint(shell, "BODY_SHELL", IVORY, 0.28)
 
 
@@ -1042,12 +1072,11 @@ def body_primary_frame():
         locator = locator - _vertical_bore(2.05, 55.0, 62.0, x, y)
         parts.append(_paint(locator, f"BODY_LOCATING_BOSS_{index}", SLATE_DARK, 1.0))
     parts.extend([
-        _box(10.0, 10.0, 72.0, (0.0, 31.0, 96.0), "HEAD_LOAD_POST_L", SLATE_DARK),
-        _box(10.0, 10.0, 72.0, (0.0, -31.0, 96.0), "HEAD_LOAD_POST_R", SLATE_DARK),
-        _box(72.0, 72.0, 5.0, (0.0, 0.0, 136.0), "HEAD_ADAPTER_PLATE", FRAME_BLUE),
-        _cylinder(20.0, 8.0, HEAD_YAW_DATUM, "HEAD_YAW_COLLAR", STEEL, 1.0),
-        _cylinder(6.0, 14.0, (0.0, 0.0, 145.0), "HEAD_CABLE_BORE_REFERENCE", AMBER, 0.40),
+        _box(10.0, 10.0, YAW_PLATE_Z[0] - 60.0, (0.0, 31.0, (YAW_PLATE_Z[0] + 60.0) / 2.0), "HEAD_LOAD_POST_L", SLATE_DARK),
+        _box(10.0, 10.0, YAW_PLATE_Z[0] - 60.0, (0.0, -31.0, (YAW_PLATE_Z[0] + 60.0) / 2.0), "HEAD_LOAD_POST_R", SLATE_DARK),
     ])
+    plate = _ring(9.0, YAW_PLATE_RADIUS, *YAW_PLATE_Z)
+    parts.append(_paint(plate, "HEAD_YAW_ADAPTER_PLATE", FRAME_BLUE))
     return Compound(label="BODY_PRIMARY_FRAME", children=parts)
 
 
@@ -1134,7 +1163,7 @@ def electronics():
     battery = _box(75.0, 48.0, 24.0, BATTERY_CENTER, "BATTERY_RP02_ENVELOPE", "#3159B8", 0.72)
     battery_tray = _box(84.0, 58.0, 3.0, (BATTERY_CENTER[0], 0.0, 55.5), "BATTERY_TRAY", "#7A858B", 1.0)
     pi_tray = _box(108.0, 76.0, 3.0, (PI_CENTER[0], 0.0, 86.0), "COMPUTE_TRAY", "#7A858B", 1.0)
-    cooler = _box(64.0, 44.0, 14.0, (PI_CENTER[0], PI_CENTER[1], 116.0), "PI5_ACTIVE_COOLER_ENVELOPE", "#7D878C", 0.78)
+    cooler = _box(64.0, 44.0, 14.0, (PI_CENTER[0], PI_CENTER[1], PI_COOLER_TOP_Z - 7.0), "PI5_ACTIVE_COOLER_ENVELOPE", "#7D878C", 0.78)
     devkit = _box(69.0, 25.4, 12.0, DEVKIT_CENTER, "C3_ESP32_S3_DEVKITC_N8", "#2D8C53", 0.86)
     driver_l = _box(20.0, 20.0, 12.0, (30.0, 40.0, 72.0), "DRV8874_LEFT_INSTALLED", "#3BAF69", 0.9)
     driver_r = _box(20.0, 20.0, 12.0, (30.0, -40.0, 72.0), "DRV8874_RIGHT_INSTALLED", "#3BAF69", 0.9)
@@ -1227,55 +1256,38 @@ def body_audio():
     return Compound(label="BODY_AUDIO", children=parts)
 
 
-def body_neck_cowl():
-    z0 = BODY_Z_TOP
-    outer = Cylinder(NECK_COWL_OUTER_RADIUS, NECK_COWL_HEIGHT).moved(Location((0.0, 0.0, z0)))
-    inner = Cylinder(NECK_COWL_INNER_RADIUS, NECK_COWL_HEIGHT + 2.0).moved(Location((0.0, 0.0, z0 - 1.0)))
-    cowl = _paint(outer - inner, "BODY_NECK_COWL_STATIONARY", IVORY, 0.96)
-    ribs = [
-        _box(18.0, 5.0, 12.0, (0.0, sign * 27.0, 148.0), f"BODY_NECK_COWL_RIB_{side}", SLATE)
-        for sign, side in ((1.0, "L"), (-1.0, "R"))
+def _ring(r0, r1, z0, z1):
+    return Cylinder(r1, z1 - z0).moved(Location((0.0, 0.0, (z0 + z1) / 2.0))) - Cylinder(
+        r0, z1 - z0 + 2.0
+    ).moved(Location((0.0, 0.0, (z0 + z1) / 2.0)))
+
+
+def body_yaw_stage():
+    """Stationary half of the head yaw stage: bearing race, pinion and servo."""
+    px, py = YAW_PINION_CENTER
+    z0 = YAW_PLATE_Z[0]
+    pinion = Cylinder(YAW_PINION_PITCH_RADIUS + 1.0, 3.5).moved(Location((px, py, z0 + 1.75)))
+    servo_top = z0 - 1.0
+    return Compound(label="BODY_YAW_STAGE", children=[
+        _paint(_ring(*YAW_BEARING_RADII, *YAW_BEARING_Z), "YAW_THIN_SECTION_BEARING_ENVELOPE", STEEL, 0.9),
+        _paint(pinion, "YAW_DRIVE_PINION", STEEL, 1.0),
+        _paint(_block(px - 8.0, px + 26.0, py - 10.0, py + 10.0, servo_top - 26.0, servo_top),
+               "YAW_SERVO_XC330_SIZE_ENVELOPE", "#A36F38", 0.85),
+        _cylinder(2.0, 1.0, (px, py, servo_top + 0.5), "YAW_SERVO_OUTPUT_SHAFT", STEEL, 1.0),
+    ])
+
+
+def yaw_drive_moving_local():
+    """Yaw-moving body-side parts, in head-local coordinates (move with head)."""
+    gear = _ring(*YAW_RING_GEAR_RADII, *YAW_PLATE_Z) + _ring(
+        *YAW_RING_GEAR_SKIRT_RADII, YAW_PLATE_Z[1], YAW_DISC_PLATE_BOTTOM_Z
+    )
+    parts = [
+        _paint(gear, "YAW_RING_GEAR_AND_SKIRT", SLATE_DARK, 1.0),
+        _paint(_ring(*YAW_BEARING_RADII, YAW_BEARING_Z[1], YAW_BEARING_Z[1] + 1.0), "YAW_BEARING_CLAMP_RING", SLATE_DARK, 1.0),
     ]
-    return Compound(label="BODY_NECK_COWL", children=[cowl, *ribs])
-
-
-def layout02_yoke_cladding_local():
-    """Head-yaw-moving lower shrouds that reduce the visual U-leg length."""
-    parts = []
-    profile = Plane.XZ * Polygon(
-        (-78.0, -37.0),
-        (-59.0, -37.0),
-        (-59.0, 2.0),
-        (-65.0, 12.0),
-        (-75.0, 5.0),
-        align=None,
-    )
-    for sign, side in ((1.0, "L"), (-1.0, "R")):
-        y0 = 51.0 if sign > 0.0 else -59.0
-        clad = extrude(profile, amount=8.0).moved(Location((0.0, y0, 0.0)))
-        parts.append(_paint(clad, f"YAW_YOKE_LOWER_SHROUD_{side}", SLATE_DARK, 0.98))
-    bridge = _box(20.0, 120.0, 10.0, (-68.0, 0.0, -32.0), "YAW_YOKE_BRIDGE_FAIRING", SLATE_DARK, 0.98)
-
-    # A hollow, yaw-moving central shroud fills the visual void without
-    # changing either joint axis. Its 24 mm lower radius clears the 26 mm
-    # bore of the stationary cowl by 2 mm all around.
-    yaw_x = HEAD_LOCAL_YAW[0]
-    lower = Cylinder(24.0, 30.0, align=(Align.CENTER, Align.CENTER, Align.CENTER)).moved(
-        Location((yaw_x, 0.0, -45.0))
-    )
-    transition = Cone(24.0, 19.0, 28.0, align=(Align.CENTER, Align.CENTER, Align.CENTER)).moved(
-        Location((yaw_x, 0.0, -16.0))
-    )
-    cable_bore = Cylinder(9.0, 62.0, align=(Align.CENTER, Align.CENTER, Align.CENTER)).moved(
-        Location((yaw_x, 0.0, -30.0))
-    )
-    moving_neck = _paint(
-        (lower + transition) - cable_bore,
-        "YAW_MOVING_HOLLOW_NECK_SHROUD",
-        SLATE_DARK,
-        0.96,
-    )
-    return Compound(label="LAYOUT02_YOKE_CLADDING", children=[bridge, *parts, moving_neck])
+    offset = Location(tuple(-v for v in HEAD_ORIGIN_IN_CHASSIS))
+    return Compound(label="BODY_YAW_DRIVE_MOVING", children=[part.moved(offset) for part in parts])
 
 
 def harness_routes():
@@ -1286,8 +1298,9 @@ def harness_routes():
         _box(12.0, 92.0, 10.0, (8.0, 0.0, 70.0), "HARNESS_MOTOR_BRANCH", "#D94A3A", 0.42),
         _box(82.0, 8.0, 8.0, (30.0, 26.0, 82.0), "HARNESS_SIGNAL_TRUNK", "#2FAFC2", 0.42),
         _box(82.0, 8.0, 8.0, (30.0, -26.0, 82.0), "HARNESS_SENSOR_TRUNK", "#44BDD0", 0.42),
-        _box(12.0, 12.0, 66.0, (0.0, 0.0, 111.0), "HARNESS_HEAD_VERTICAL", "#9566D9", 0.35),
-        _cylinder(16.0, 18.0, (0.0, 0.0, 149.0), "HARNESS_HEAD_YAW_SERVICE_LOOP", "#9566D9", 0.20),
+        _box(12.0, 12.0, YAW_PLATE_Z[0] - 78.0, (0.0, 0.0, (YAW_PLATE_Z[0] + 78.0) / 2.0), "HARNESS_HEAD_VERTICAL", "#9566D9", 0.35),
+        # Flat clock-spring loop under the disc takes the ±55° yaw twist.
+        _paint(_ring(*YAW_CLOCKSPRING_RADII, *YAW_BEARING_Z), "HARNESS_HEAD_YAW_CLOCKSPRING_RESERVE", "#9566D9", 0.20),
     ]
     return Compound(label="HARNESS_ROUTES", children=parts)
 
@@ -1325,7 +1338,7 @@ def rp01_head_groups():
         label="RP01_HEAD_LAYOUT03_LIVE",
         children=[
             by_label["physical"],
-            layout02_yoke_cladding_local(),
+            yaw_drive_moving_local(),
         ],
     )
     head = head.moved(Location(HEAD_ORIGIN_IN_CHASSIS))
@@ -1363,7 +1376,7 @@ def build_assembly():
     asm.add(body_shell(), "BODY_SHELL")
     asm.add(body_panels(), "BODY_PANELS")
     asm.add(panel_mount_hardware(), "PANEL_MOUNT_HARDWARE")
-    asm.add(body_neck_cowl(), "BODY_NECK_COWL")
+    asm.add(body_yaw_stage(), "BODY_YAW_STAGE")
     asm.add(head, "RP01_HEAD_LAYOUT03")
     asm.add(head_harness, "RP01_HEAD_HARNESS")
     asm.add(head_physics, "RP01_HEAD_PHYSICS")

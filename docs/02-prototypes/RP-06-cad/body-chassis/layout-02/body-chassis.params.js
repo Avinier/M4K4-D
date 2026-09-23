@@ -24,7 +24,7 @@ export default {
       },
       show_head: {
         type: "boolean",
-        label: "Show RP-01 Layout 03 head",
+        label: "Show RP-01 Layout 04 head",
         default: true
       },
       show_structure: {
@@ -109,7 +109,7 @@ export default {
       transforms: [{
         rotate: {
           axis: [0, 0, 1],
-          origin: [-37.9645316623177, 0, -60],
+          origin: [-38.18394130377561, 0, -40],
           angleDeg: clamp(params.head_yaw_deg, -55, 55)
         }
       }]
