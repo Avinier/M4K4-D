@@ -1,31 +1,31 @@
 {
   "layout_id": "RP03_BODY_CHASSIS_LAYOUT02",
-  "mass_g": 2456.54,
+  "mass_g": 2611.576898177598,
   "com_mm": [
-    9.677422054512943,
-    0.15455496319151515,
-    107.9010564770127
+    9.100061441070157,
+    0.614856412669105,
+    106.73242066520694
   ],
   "rows": [
     {
-      "id": "RP01_HEAD_LAYOUT03",
-      "mass_g": 509.04,
+      "id": "RP01_HEAD_LAYOUT04",
+      "mass_g": 540.0768981775982,
       "com_mm": [
-        -1.587351929527685,
-        0.7458558252366899,
-        240.29597139329078
+        -0.7561696674723137,
+        0.7101670230983698,
+        225.61162032107424
       ],
       "source": "RP-01 generated mass tree"
     },
     {
       "id": "BODY_SHELL_AND_PANELS",
-      "mass_g": 300.0,
+      "mass_g": 315.0,
       "com_mm": [
         4.0,
         0.0,
         96.0
       ],
-      "source": "Layout 02 CAD estimate"
+      "source": "Layout 02 CAD estimate; +15 g for the internal panel frames (+15.6 cm3 net printed volume, near-solid 2.4 mm walls)"
     },
     {
       "id": "BODY_PRIMARY_FRAME",
@@ -146,6 +146,26 @@
         88.0
       ],
       "source": "estimate"
+    },
+    {
+      "id": "BODY_YAW_STAGE",
+      "mass_g": 97.0,
+      "com_mm": [
+        2.1,
+        12.6,
+        128.5
+      ],
+      "source": "E: 50 g thin-section bearing placeholder + 23 g XC330-size servo + 3 g pinion + 21 g PLA ring gear/clamp ring (CAD volume); no SKU"
+    },
+    {
+      "id": "REAR_SKID_KEEL",
+      "mass_g": 12.0,
+      "com_mm": [
+        -55.9,
+        0.0,
+        20.4
+      ],
+      "source": "CAD volume: 15.4 cm3 keel body at ~45% effective PETG density, 12x10 mm shoe, guards, 4 M3 screws"
     }
   ],
   "warning": "Estimated/custom masses require measured replacement before release."

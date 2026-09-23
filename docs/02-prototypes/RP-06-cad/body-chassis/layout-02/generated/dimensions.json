@@ -56,48 +56,48 @@
   "body_mount_fastener": "M4 through-bolt, four places",
   "panel_overlap_mm": 2.0,
   "front_panel_width_bottom_top_mm": [
-    132.0,
-    106.99272727272727
+    128.0,
+    112.23454545454545
   ],
   "rear_panel_width_bottom_top_mm": [
     126.0,
-    101.53636363636363
+    106.32272727272726
   ],
   "panel_edge_intent": "front and rear panel side edges are parallel to their corresponding shell end-profile side edges",
   "front_panel_fasteners_mm": [
     [
       -53.0,
-      55.0
+      67.0
     ],
     [
       53.0,
-      55.0
+      67.0
     ],
     [
-      -45.0,
-      122.0
+      -46.0,
+      125.0
     ],
     [
-      45.0,
-      122.0
+      46.0,
+      125.0
     ]
   ],
   "rear_panel_fasteners_mm": [
     [
-      -50.0,
-      55.0
+      -52.0,
+      51.0
     ],
     [
-      50.0,
-      55.0
+      52.0,
+      51.0
     ],
     [
-      -43.0,
-      122.0
+      -44.0,
+      125.0
     ],
     [
-      43.0,
-      122.0
+      44.0,
+      125.0
     ]
   ],
   "speaker_center_mm": [
@@ -134,31 +134,34 @@
     ]
   ],
   "audio_status": "provisional requirement envelopes pending RP-05/RP-06 part selection",
-  "lower_mobility_belt_status": "physical removable fascia with four M3 side fasteners; not a moving belt",
   "head_yaw_datum_mm": [
     0.0,
     0.0,
     140.0
   ],
   "head_origin_in_chassis_mm": [
-    37.9645316623177,
+    38.18394130377561,
     0.0,
-    200.0
+    189.5
   ],
   "head_local_yaw_mm": [
-    -37.9645316623177,
+    -38.18394130377561,
     0.0,
-    -60.0
+    -49.5
   ],
-  "neck_allocation_mm": 60.0,
-  "neutral_overall_physical_height_mm": 304.0,
-  "overall_height_status": "304 mm neutral stack; 300 mm remains a rounded target, not a passed envelope",
-  "rp01_yoke_status": "live Layout 03 trial geometry with Layout 02 cosmetic lower shrouds; axis unchanged; not load-rated or fabrication-final",
+  "neck_allocation_mm": 49.5,
+  "neutral_overall_physical_height_mm": 293.5,
+  "overall_height_status": "294 mm neutral stack (Layout 04 head, 40 mm neck to the body top; was 304 mm)",
+  "head_motion_envelope": "RP-01 Layout 04 motion-envelope.json: full roll \u00b118 / pitch \u221222\u2026+40; hard stops alone keep \u22654 mm to the yaw disc (\u22652 mm at 1\u00b0 overtravel)",
+  "yaw_disc_top_z_mm": 155.0,
+  "pi_cooler_headroom_mm": 10.5,
+  "head_sweep_floor_z_mm": 159.0,
+  "rp01_yoke_status": "live Layout 04 straight legs on a flush yaw turntable; body-side bearing, ring gear, pinion and servo are packaging envelopes; not load-rated or fabrication-final",
   "tcrt_channels": [
     "REAR"
   ],
   "tcrt_rear_center_mm": [
-    -97.0,
+    -70.0,
     0.0,
     13.5
   ],
@@ -166,93 +169,133 @@
   "tcrt_guard_bottom_z_mm": 7.0,
   "tcrt_rear_contact_lookahead_mm": 27.0,
   "tcrt_coverage_note": "CAD-context choice: rear-only cliff channel; no front or lateral cliff-safety claim",
-  "rear_tail_style": "MULTI_LINK_FACETED_ARC",
+  "rear_tail_status": "parked accessory; geometry defined but excluded from the assembly",
+  "rear_keel_color_alpha": [
+    "#E3DDC9",
+    0.34
+  ],
+  "rear_tail_style": "FACETED_TELESCOPING_STINGER",
   "rear_tail_visible_color": "#E3DDC9",
-  "rear_tail_shell_alpha": 0.34,
-  "rear_tail_nominal_wall_mm": 2.0,
-  "rear_tail_group": "REAR_SKID_TCRT_MODULE",
-  "rear_tail_stations_mm": [
+  "rear_tail_hub_color": "#707D82",
+  "rear_tail_tip_color": "#B88636",
+  "rear_tail_group": "REAR_SKID_TCRT_MODULE/REAR_TAIL_STINGER",
+  "rear_tail_joints_x_z_width_height_mm": [
     [
-      -52.0,
-      10.5,
-      28.0,
-      46.0,
-      2.2
-    ],
-    [
-      -61.0,
-      9.6,
-      21.0,
-      36.0,
-      2.0
-    ],
-    [
-      -69.0,
-      8.8,
-      10.0,
-      24.0,
-      1.8
-    ],
-    [
-      -77.0,
-      8.0,
-      5.5,
-      18.0,
-      1.7
-    ],
-    [
-      -85.0,
-      7.4,
-      6.5,
+      -87.0,
+      92.0,
       19.0,
-      1.5
+      16.0
     ],
     [
-      -92.0,
-      7.2,
-      8.0,
-      21.0,
-      1.4
-    ],
-    [
-      -97.0,
-      7.5,
-      10.0,
-      22.5,
-      1.4
-    ],
-    [
-      -103.0,
-      6.8,
-      12.0,
-      24.0,
-      1.2
-    ],
-    [
-      -109.0,
-      5.4,
+      -100.0,
+      97.5,
       15.5,
-      26.0,
-      1.0
+      13.0
     ],
     [
-      -114.0,
-      3.5,
-      20.0,
-      27.0,
-      0.8
+      -110.0,
+      105.0,
+      12.5,
+      10.5
     ],
     [
-      -118.0,
-      1.8,
-      24.5,
-      28.5,
-      0.5
+      -117.0,
+      114.0,
+      9.5,
+      8.0
     ]
   ],
   "rear_tail_tip_mm": [
-    -118.0,
+    -121.0,
     0.0,
-    26.5
+    123.0
+  ],
+  "rear_tail_tip_section_w_h_mm": [
+    4.0,
+    2.0
+  ],
+  "rear_tail_root_screws_y_z_mm": [
+    [
+      -8.0,
+      86.0
+    ],
+    [
+      8.0,
+      86.0
+    ],
+    [
+      -5.0,
+      97.5
+    ],
+    [
+      5.0,
+      97.5
+    ]
+  ],
+  "rear_tail_role": "cosmetic, static; four M3 screws driven from inside the rear panel into heat-set inserts in the hub",
+  "rear_keel_group": "REAR_SKID_TCRT_MODULE/REAR_SKID_TCRT_KEEL",
+  "rear_keel_stations_mm": [
+    [
+      -33.0,
+      3.5,
+      14.0,
+      22.0,
+      0.8
+    ],
+    [
+      -37.0,
+      7.0,
+      6.0,
+      27.0,
+      1.5
+    ],
+    [
+      -44.0,
+      8.0,
+      6.0,
+      31.0,
+      1.8
+    ],
+    [
+      -48.0,
+      9.0,
+      6.0,
+      34.0,
+      2.0
+    ],
+    [
+      -54.0,
+      9.0,
+      6.0,
+      34.0,
+      2.0
+    ],
+    [
+      -64.0,
+      8.5,
+      10.0,
+      34.0,
+      1.8
+    ],
+    [
+      -78.0,
+      8.5,
+      10.0,
+      26.0,
+      1.6
+    ],
+    [
+      -83.0,
+      3.0,
+      14.0,
+      20.0,
+      0.8
+    ]
+  ],
+  "rear_keel_mount": "four M3 screws up into REAR_SKID_CROSSMEMBER underside",
+  "skid_pad_center_mm": [
+    -43.0,
+    0.0,
+    4.75
   ]
 }

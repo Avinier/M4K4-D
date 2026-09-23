@@ -1,6 +1,6 @@
 {
   "layout_id": "RP03_BODY_CHASSIS_LAYOUT02",
-  "ok": true,
+  "ok": false,
   "checks": [
     {
       "name": "concept_a_track",
@@ -163,7 +163,6 @@
           "CHASSIS_PRIMARY_FRAME",
           "BODY_PRIMARY_FRAME",
           "BODY_CHASSIS_MOUNT_HARDWARE",
-          "MOBILITY_BELT_MOUNT_HARDWARE",
           "WHEEL_L",
           "WHEEL_R",
           "MOTOR_L",
@@ -179,8 +178,7 @@
           "BODY_SHELL",
           "BODY_PANELS",
           "PANEL_MOUNT_HARDWARE",
-          "LOWER_MOBILITY_BELT",
-          "BODY_NECK_COWL",
+          "BODY_YAW_STAGE",
           "RP01_HEAD_LAYOUT03",
           "RP01_HEAD_HARNESS",
           "RP01_HEAD_PHYSICS",
@@ -192,18 +190,24 @@
       "name": "panel_openings_have_continuous_overlap",
       "ok": true,
       "evidence": {
-        "panel_overlap_mm": 2.0
+        "measured_land_mm": {
+          "FRONT": 2.0,
+          "REAR": 2.0
+        },
+        "target_mm": 2.0
       }
     },
     {
       "name": "front_panel_edges_parallel_front_shell_edges",
       "ok": true,
       "evidence": {
-        "panel_dy_per_dz": 0.13590909090909095,
-        "shell_dy_per_dz": 0.13590909090909092,
+        "measured_edge_angle_deg": {
+          "panel": 7.7396,
+          "shell": 7.7396
+        },
         "panel_widths_mm": [
-          132.0,
-          106.99272727272727
+          128.0,
+          112.235
         ]
       }
     },
@@ -211,12 +215,79 @@
       "name": "rear_panel_edges_parallel_rear_shell_edges",
       "ok": true,
       "evidence": {
-        "panel_dy_per_dz": 0.1329545454545455,
-        "shell_dy_per_dz": 0.13295454545454546,
+        "measured_edge_angle_deg": {
+          "panel": 7.5733,
+          "shell": 7.5733
+        },
         "panel_widths_mm": [
           126.0,
-          101.53636363636363
+          106.323
         ]
+      }
+    },
+    {
+      "name": "panel_fasteners_sit_inside_boss_inset",
+      "ok": true,
+      "evidence": {
+        "inset_to_panel_edge_mm": {
+          "FRONT": [
+            7.071,
+            7.071,
+            7.861,
+            7.861
+          ],
+          "REAR": [
+            7.071,
+            7.071,
+            7.185,
+            7.185
+          ]
+        },
+        "minimum_mm": 7.0
+      }
+    },
+    {
+      "name": "panel_frames_are_closed_rings_with_fused_bosses",
+      "ok": true,
+      "evidence": {
+        "frames": {
+          "FRONT": {
+            "solids": 1,
+            "bottom_bar": true,
+            "top_bar": true
+          },
+          "REAR": {
+            "solids": 1,
+            "bottom_bar": true,
+            "top_bar": true
+          }
+        }
+      }
+    },
+    {
+      "name": "panel_area_parts_do_not_interfere",
+      "ok": true,
+      "evidence": {
+        "clashes_mm3": {}
+      }
+    },
+    {
+      "name": "front_range_sensor_has_clear_window",
+      "ok": true,
+      "evidence": {
+        "blocked_volume_mm3": 0,
+        "sensor_y_z_mm": [
+          38.0,
+          68.0
+        ]
+      }
+    },
+    {
+      "name": "front_panel_lifts_off_forward",
+      "ok": true,
+      "evidence": {
+        "blockers_mm3": {},
+        "panel_bottom_z_mm": 58.0
       }
     },
     {
@@ -244,7 +315,6 @@
           "CHASSIS_PRIMARY_FRAME",
           "BODY_PRIMARY_FRAME",
           "BODY_CHASSIS_MOUNT_HARDWARE",
-          "MOBILITY_BELT_MOUNT_HARDWARE",
           "WHEEL_L",
           "WHEEL_R",
           "MOTOR_L",
@@ -260,8 +330,7 @@
           "BODY_SHELL",
           "BODY_PANELS",
           "PANEL_MOUNT_HARDWARE",
-          "LOWER_MOBILITY_BELT",
-          "BODY_NECK_COWL",
+          "BODY_YAW_STAGE",
           "RP01_HEAD_LAYOUT03",
           "RP01_HEAD_HARNESS",
           "RP01_HEAD_PHYSICS",
@@ -277,7 +346,6 @@
           "CHASSIS_PRIMARY_FRAME",
           "BODY_PRIMARY_FRAME",
           "BODY_CHASSIS_MOUNT_HARDWARE",
-          "MOBILITY_BELT_MOUNT_HARDWARE",
           "WHEEL_L",
           "WHEEL_R",
           "MOTOR_L",
@@ -293,8 +361,7 @@
           "BODY_SHELL",
           "BODY_PANELS",
           "PANEL_MOUNT_HARDWARE",
-          "LOWER_MOBILITY_BELT",
-          "BODY_NECK_COWL",
+          "BODY_YAW_STAGE",
           "RP01_HEAD_LAYOUT03",
           "RP01_HEAD_HARNESS",
           "RP01_HEAD_PHYSICS",
@@ -345,23 +412,84 @@
       "name": "front_range_sensor_is_below_speaker_grille",
       "ok": true,
       "evidence": {
-        "sensor_z_mm": 58.0,
+        "sensor_z_mm": 68.0,
         "speaker_center_z_mm": 99.0
       }
     },
     {
-      "name": "lower_belt_is_physical_removable_fascia",
+      "name": "head_sweep_floor_clears_disc_top",
       "ok": true,
       "evidence": {
-        "belt_children": 5
+        "sweep_floor_z_mm": 159.0,
+        "disc_top_z_mm": 155.0
       }
     },
     {
-      "name": "neck_cowl_preserves_yaw_datum",
+      "name": "hard_stops_alone_keep_head_off_disc",
       "ok": true,
       "evidence": {
-        "cowl_top_z_mm": 164.0,
-        "head_origin_z_mm": 200.0
+        "hard_stop_corner": {
+          "lowest_z_mm": -30.258,
+          "at_roll_pitch": [
+            -21.0,
+            -25.0
+          ],
+          "below_disc_top_mm": 0.0,
+          "note": "Per-axis hard-stop corner. When below_disc_top_mm is 0 the hard stops alone keep the head off the disc."
+        },
+        "overtravel_1deg": {
+          "lowest_z_mm": -31.496,
+          "at_roll_pitch": [
+            -22.0,
+            -26.0
+          ],
+          "clearance_to_disc_top_mm": 3.004
+        }
+      }
+    },
+    {
+      "name": "head_motion_is_full_range",
+      "ok": false,
+      "evidence": {
+        "rows": 69
+      }
+    },
+    {
+      "name": "pi_cooler_headroom_kept",
+      "ok": true,
+      "evidence": {
+        "headroom_mm": 10.5,
+        "yaw_parts_in_headroom_mm3": 0
+      }
+    },
+    {
+      "name": "yaw_disc_fits_flat_body_top",
+      "ok": true,
+      "evidence": {
+        "disc_radius_mm": 61.5,
+        "flat_top_half_width_mm": 64.0
+      }
+    },
+    {
+      "name": "yaw_stage_clears_frame_electronics_shell",
+      "ok": true,
+      "evidence": {
+        "overlap_volume_mm3": 0
+      }
+    },
+    {
+      "name": "yaw_disc_rim_has_running_gap",
+      "ok": true,
+      "evidence": {
+        "disc_rim_bottom_z_mm": 141.0,
+        "body_top_z_mm": 140.0
+      }
+    },
+    {
+      "name": "yaw_pinion_meshes_ring_gear",
+      "ok": true,
+      "evidence": {
+        "centre_distance_mm": 47.0
       }
     },
     {
@@ -395,18 +523,18 @@
       }
     },
     {
-      "name": "neutral_stack_is_documented_304_mm",
-      "ok": true,
+      "name": "neutral_stack_is_documented_284_mm",
+      "ok": false,
       "evidence": {
-        "overall_height_mm": 304.0,
+        "overall_height_mm": 293.5,
         "rounded_target_mm": 300.0
       }
     },
     {
-      "name": "neck_allocation_is_60_mm",
-      "ok": true,
+      "name": "neck_allocation_is_40_mm",
+      "ok": false,
       "evidence": {
-        "neck_allocation_mm": 60.0
+        "neck_allocation_mm": 49.5
       }
     },
     {
@@ -422,8 +550,8 @@
       "name": "rear_tcrt_has_contact_lookahead",
       "ok": true,
       "evidence": {
-        "sensor_x_mm": -97.0,
-        "skid_contact_x_mm": -70.0,
+        "sensor_x_mm": -70.0,
+        "skid_contact_x_mm": -43.0,
         "lookahead_mm": 27.0
       }
     },
@@ -450,53 +578,213 @@
       }
     },
     {
-      "name": "rear_skid_is_first_sacrificial_contact",
+      "name": "rear_pitch_contact_order_is_shoe_guard_keel_sensor",
       "ok": true,
       "evidence": {
-        "skid_bottom_z_mm": 3.5,
-        "sensor_guard_bottom_z_mm": 7.0
+        "first_contact_pitch_deg": {
+          "shoe": 4.086,
+          "guards": 5.128,
+          "keel_body": 6.34,
+          "tcrt": 7.585
+        }
       }
     },
     {
-      "name": "rear_skid_pad_is_below_connected_root",
+      "name": "rear_keel_seats_on_crossmember_without_interference",
       "ok": true,
       "evidence": {
-        "root_mm": [
-          -56.0,
-          0.0,
-          34.0
+        "overlap_volume_mm3": 0,
+        "gap_mm": 0.0
+      }
+    },
+    {
+      "name": "rear_keel_bolted_with_four_m3",
+      "ok": true,
+      "evidence": {
+        "hardware_solids": 8
+      }
+    },
+    {
+      "name": "rear_keel_shoe_fully_backed",
+      "ok": true,
+      "evidence": {
+        "shoe_top_z_mm": 6.0,
+        "keel_underside_z_mm": {
+          "-48.0,-4.0": 6.0,
+          "-48.0,0.0": 6.0,
+          "-48.0,4.0": 6.0,
+          "-43.0,-4.0": 6.0,
+          "-43.0,0.0": 6.0,
+          "-43.0,4.0": 6.0,
+          "-38.0,-4.0": 6.0,
+          "-38.0,0.0": 6.0,
+          "-38.0,4.0": 6.0
+        }
+      }
+    },
+    {
+      "name": "rear_keel_guards_seated_full_length",
+      "ok": true,
+      "evidence": {
+        "guard_top_z_mm": 10.5,
+        "keel_underside_z_mm": {
+          "-77.5": 10.0,
+          "-70.5": 10.0,
+          "-63.5": 9.72
+        }
+      }
+    },
+    {
+      "name": "rear_tcrt_package_clears_keel",
+      "ok": true,
+      "evidence": {
+        "collision_volume_mm3": 0
+      }
+    },
+    {
+      "name": "rear_keel_passes_shell_floor_slot",
+      "ok": true,
+      "evidence": {
+        "overlap_volume_mm3": 0
+      }
+    },
+    {
+      "name": "rear_tail_parked_out_of_assembly",
+      "ok": true,
+      "evidence": {
+        "enabled": false,
+        "module_children": [
+          "REAR_SKID_TCRT_KEEL"
+        ]
+      }
+    },
+    {
+      "name": "rear_keel_is_translucent_ivory",
+      "ok": true,
+      "evidence": {
+        "color": "#E3DDC9",
+        "alpha": 0.34
+      }
+    },
+    {
+      "name": "rear_tail_is_faceted_telescoping_stinger",
+      "ok": true,
+      "evidence": {
+        "style": "FACETED_TELESCOPING_STINGER",
+        "segment_labels": [
+          "REAR_TAIL_SEGMENT_01",
+          "REAR_TAIL_SEGMENT_02",
+          "REAR_TAIL_SEGMENT_03",
+          "REAR_TAIL_CHISEL_TIP"
+        ]
+      }
+    },
+    {
+      "name": "rear_tail_sweeps_progressively_upward",
+      "ok": true,
+      "evidence": {
+        "segment_rise_deg": [
+          22.93,
+          36.87,
+          52.13,
+          66.04
+        ]
+      }
+    },
+    {
+      "name": "rear_tail_segments_telescope",
+      "ok": true,
+      "evidence": {
+        "segment_start_end_widths_mm": [
+          [
+            19.0,
+            17.86
+          ],
+          [
+            15.5,
+            14.57
+          ],
+          [
+            12.5,
+            11.75
+          ],
+          [
+            9.5,
+            4.0
+          ]
+        ]
+      }
+    },
+    {
+      "name": "rear_tail_tip_is_blunt_chisel",
+      "ok": true,
+      "evidence": {
+        "tip_section_w_h_mm": [
+          4.0,
+          2.0
+        ]
+      }
+    },
+    {
+      "name": "rear_tail_inside_nose_spin_circle",
+      "ok": true,
+      "evidence": {
+        "tail_planar_radius_mm": 121.92,
+        "nose_planar_radius_mm": 128.0
+      }
+    },
+    {
+      "name": "rear_tail_below_body_top",
+      "ok": true,
+      "evidence": {
+        "tail_max_z_mm": 107.0,
+        "limit_z_mm": 130.0
+      }
+    },
+    {
+      "name": "rear_tail_clears_shell_and_panels",
+      "ok": true,
+      "evidence": {
+        "shell_overlap_mm3": 0,
+        "panel_overlap_mm3": 0
+      }
+    },
+    {
+      "name": "rear_tail_stays_above_body_ground_clearance",
+      "ok": true,
+      "evidence": {
+        "tail_min_z_mm": 77.0,
+        "body_bottom_z_mm": 30.0
+      }
+    },
+    {
+      "name": "rear_tail_root_has_four_hidden_m3",
+      "ok": true,
+      "evidence": {
+        "screw_points_y_z_mm": [
+          [
+            -8.0,
+            86.0
+          ],
+          [
+            8.0,
+            86.0
+          ],
+          [
+            -5.0,
+            97.5
+          ],
+          [
+            5.0,
+            97.5
+          ]
         ],
-        "pad_mm": [
-          -70.0,
-          0.0,
-          4.75
+        "head_min_x_mm": [
+          -71.6,
+          -71.6,
+          -71.6,
+          -71.6
         ]
-      }
-    },
-    {
-      "name": "rear_tail_is_multi_link_faceted_arc",
-      "ok": true,
-      "evidence": {
-        "style": "MULTI_LINK_FACETED_ARC",
-        "station_count": 11
-      }
-    },
-    {
-      "name": "rear_tail_terminal_links_are_short",
-      "ok": true,
-      "evidence": {
-        "terminal_link_lengths_mm": [
-          5.0,
-          4.0
-        ]
-      }
-    },
-    {
-      "name": "rear_tail_tip_is_pointed",
-      "ok": true,
-      "evidence": {
-        "tip_half_width_mm": 1.8,
-        "tip_height_mm": 4.0
       }
     },
     {
@@ -508,21 +796,6 @@
       }
     },
     {
-      "name": "rear_tail_shell_is_translucent",
-      "ok": true,
-      "evidence": {
-        "shell_alpha": 0.34
-      }
-    },
-    {
-      "name": "rear_tail_has_hollow_wall_definition",
-      "ok": true,
-      "evidence": {
-        "wall_mm": 2.0,
-        "inner_station_count": 9
-      }
-    },
-    {
       "name": "rear_skid_tcrt_is_separate_top_level_group",
       "ok": true,
       "evidence": {
@@ -530,7 +803,6 @@
           "CHASSIS_PRIMARY_FRAME",
           "BODY_PRIMARY_FRAME",
           "BODY_CHASSIS_MOUNT_HARDWARE",
-          "MOBILITY_BELT_MOUNT_HARDWARE",
           "WHEEL_L",
           "WHEEL_R",
           "MOTOR_L",
@@ -546,74 +818,12 @@
           "BODY_SHELL",
           "BODY_PANELS",
           "PANEL_MOUNT_HARDWARE",
-          "LOWER_MOBILITY_BELT",
-          "BODY_NECK_COWL",
+          "BODY_YAW_STAGE",
           "RP01_HEAD_LAYOUT03",
           "RP01_HEAD_HARNESS",
           "RP01_HEAD_PHYSICS",
           "PHYSICS_OVERLAYS"
         ]
-      }
-    },
-    {
-      "name": "rear_tail_root_overlaps_crossmember",
-      "ok": true,
-      "evidence": {
-        "overlap_volume_mm3": 1114.9955555609754
-      }
-    },
-    {
-      "name": "rear_tail_spine_enters_crossmember",
-      "ok": true,
-      "evidence": {
-        "overlap_volume_mm3": 135.37161035733826
-      }
-    },
-    {
-      "name": "rear_tail_shoe_is_attached",
-      "ok": true,
-      "evidence": {
-        "overlap_volume_mm3": 15.674113451232746
-      }
-    },
-    {
-      "name": "rear_tail_guards_are_attached",
-      "ok": true,
-      "evidence": {
-        "overlap_volumes_mm3": [
-          8.887289542654509,
-          8.887289542654504
-        ]
-      }
-    },
-    {
-      "name": "rear_tail_cap_is_attached",
-      "ok": true,
-      "evidence": {
-        "overlap_volume_mm3": 78.96169827511146
-      }
-    },
-    {
-      "name": "rear_tcrt_package_clears_shell",
-      "ok": true,
-      "evidence": {
-        "collision_volume_mm3": 0
-      }
-    },
-    {
-      "name": "rear_tail_tip_is_upturned",
-      "ok": true,
-      "evidence": {
-        "sensor_station_center_z_mm": 23.5,
-        "tip_center_z_mm": 26.5
-      }
-    },
-    {
-      "name": "rear_tail_cap_is_flush",
-      "ok": true,
-      "evidence": {
-        "cap_top_z_mm": 22.5,
-        "sensor_station_top_z_mm": 22.5
       }
     },
     {
@@ -642,35 +852,35 @@
       "name": "head_source_exists",
       "ok": true,
       "evidence": {
-        "path": "/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/head/layout-03/layout_model.py"
+        "path": "/private/tmp/claude-501/-Users-avinier-robotics-makad/4f908976-2497-4292-bea3-dfe25bda38be/scratchpad/wt/docs/02-prototypes/RP-06-cad/head/layout-04/layout_model.py"
       }
     },
     {
       "name": "pi_step_exists",
       "ok": true,
       "evidence": {
-        "path": "/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/body-chassis/layout-01/references/purchased/raspberry_pi_5.step"
+        "path": "/private/tmp/claude-501/-Users-avinier-robotics-makad/4f908976-2497-4292-bea3-dfe25bda38be/scratchpad/wt/docs/02-prototypes/RP-06-cad/body-chassis/layout-01/references/purchased/raspberry_pi_5.step"
       }
     },
     {
       "name": "bearing_step_exists",
       "ok": true,
       "evidence": {
-        "path": "/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/body-chassis/layout-01/references/purchased/bearing_608zz.step"
+        "path": "/private/tmp/claude-501/-Users-avinier-robotics-makad/4f908976-2497-4292-bea3-dfe25bda38be/scratchpad/wt/docs/02-prototypes/RP-06-cad/body-chassis/layout-01/references/purchased/bearing_608zz.step"
       }
     },
     {
       "name": "com_inside_support_x",
       "ok": true,
       "evidence": {
-        "com_x_mm": 9.677422054512943
+        "com_x_mm": 9.100061441070157
       }
     },
     {
       "name": "com_below_head_yaw",
       "ok": true,
       "evidence": {
-        "com_z_mm": 107.9010564770127
+        "com_z_mm": 106.73242066520694
       }
     }
   ]
