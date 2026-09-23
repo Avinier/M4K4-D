@@ -1,4 +1,4 @@
-# RP-03 integrated body/chassis Layout 02 — CAD brief
+# RP-06 integrated body/chassis Layout 02 — CAD brief
 
 - Model: labeled whole-body assembly combining the RP-03 body/chassis with the live RP-01 head Layout 03 source.
 - Task: resolve the first-pass body/chassis attachment, fascia, service-panel, audio-packaging and yaw-yoke appearance questions without changing the frozen drivetrain or head axes.
@@ -8,7 +8,7 @@
 - Head transform: Layout 03 head origin `(37.9645, 0, 200)` in the chassis frame, making its yaw datum `(0, 0, 140)`.
 - Drivetrain: 170 mm track, 42 mm loaded radius/axle height, frozen two-wheel Concept A, and a fixed non-interchangeable 1-inch ball-transfer module at `X=110`.
 - External body: compact faceted shell, pale upper body, a physical removable lower mobility fascia, enlarged octagonal front/rear service panels that repeat the shell silhouette, and a functional front speaker grille. Visual references control cosmetics only.
-- Structure: independent chassis rails, body posts and cross-members; four M4 body/chassis through-bolts and two locating pins; four M3 lower-fascia fasteners; front/rear continuous panel-overlap frames and four M3 fasteners per panel; a separately selectable eleven-station hollow faceted rear-tail module with visible internal load spine, replaceable shoe/guards and flush TCRT cartridge; compact fixed ball-transfer load collar and keeper clips with concealed tactile fascia; and the head-yaw load path.
+- Structure: independent chassis rails, body posts and cross-members; four M4 body/chassis through-bolts and two locating pins; four M3 lower-fascia fasteners; front/rear internal panel frames with fused bosses and four M3 fasteners per panel; a separately selectable eleven-station hollow faceted rear-tail module with visible internal load spine, replaceable shoe/guards and flush TCRT cartridge; compact fixed ball-transfer load collar and keeper clips with concealed tactile fascia; and the head-yaw load path.
 - Audio: provisional 50 mm speaker basket, 44 mm cone, 34 mm acoustic-cavity reservation, amplifier envelope, and four body-mounted PDM microphone boards/ports. Exact parts remain unselected.
 - Neck/yoke treatment: stationary annular neck cowl plus head-yaw-moving bridge fairing and lower-leg shrouds. Yaw/pitch datums and motion allocation remain unchanged.
 - Internal packaging: exact downloaded Raspberry Pi 5 STEP; exact downloaded 608ZZ STEP pair; documented envelopes for motor, ball transfer, battery, cooler, drivers, DevKitC, power/safety, sensors, and cables when exact STEP is unavailable.
@@ -32,12 +32,13 @@
 | Head-yaw body datum | `(0, 0, 140)` mm |
 | Shell nominal thickness | 2.4 mm |
 | Body/chassis attachment | Four M4 through-bolts + two 4 mm locating pins |
-| Service-panel land | 2 mm continuous overlap; four M3 screws per panel |
-| Service-panel edge alignment | Front and rear panel side slopes match their corresponding shell end-profile slopes |
+| Service-panel land | 2 mm constant-width overlap (inward offset of the panel outline); four M3 screws per panel |
+| Service-panel lower edge | Front Z = 58 mm (clears chassis deck and crossmember); rear Z = 42 mm |
+| Service-panel edge alignment | Front and rear panel straight side edges are parallel to their shell end-profile side edges |
 | Lower mobility fascia | Physical removable shell; four M3 side screws |
 | Speaker | 50 mm basket / 44 mm cone, centered at `(72, 0, 99)` mm |
 | Microphones | Four provisional body PDM ports; front/rear left/right |
-| Front range sensor | Center Z = 58 mm, below speaker grille |
+| Front range sensor | Face at `(84, 38, 68)` mm, beside the battery and below the speaker grille, behind its own panel window |
 | Visible body-shell height | 110 mm |
 | Neutral physical height stack | 304 mm; 300 mm remains a rounded target |
 | Rear skid-pad ground clearance | 3.5 mm nominal |

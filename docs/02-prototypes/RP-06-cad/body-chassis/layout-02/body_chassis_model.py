@@ -21,12 +21,14 @@ from build123d import (
     Compound,
     Cone,
     Cylinder,
+    Kind,
     Location,
     Plane,
     Polygon,
     Sphere,
     extrude,
     loft,
+    offset,
 )
 from cadgen import srgb
 from cadgen.assembly import AssemblyHelper
@@ -86,7 +88,6 @@ SLATE = "#87949A"
 SLATE_DARK = "#707D82"
 FRAME_BLUE = "#86A1A8"
 PANEL_WARM_GRAY = "#C5C0AD"
-MOBILITY_GRAY = "#7E8B8F"
 BRONZE = "#C38A47"
 AMBER = "#B88636"
 STEEL = "#B7BFC0"
@@ -152,35 +153,60 @@ BODY_FRAME_UPPER_Z = 132.0
 BODY_LOCATING_POINTS = ((-33.0, -42.0), (43.0, 42.0))
 BODY_MOUNT_POINTS = tuple((x, y) for x in BODY_MOUNT_X for y in BODY_MOUNT_Y)
 
-# Service-panel interface. The shell openings are smaller than the removable
-# panels, producing a continuous overlap rather than an uncovered rectangular
-# cutout.  The panel perimeter repeats the body shell's eight-sided end
-# profile, so the service breaks read as intentional facets rather than small
-# trapezoidal inserts. M3 bosses and front-access screws define removal
-# direction.
+# Service-panel interface. Each shell opening is the panel outline offset
+# inward by PANEL_OVERLAP, so the panel laps a constant-width land all round.
+# The panel perimeter repeats the body shell's eight-sided end profile, so
+# the service breaks read as intentional facets rather than small
+# trapezoidal inserts. Behind the shell end wall a separate internal frame
+# carries four fused M3 bosses; front-access screws define removal direction.
 PANEL_REVEAL = 1.0
 PANEL_OVERLAP = 2.0
 FRONT_SHELL_END_WIDTH_FACTOR = 0.92
 REAR_SHELL_END_WIDTH_FACTOR = 0.90
 SHELL_SIDE_EDGE_Z0 = BODY_Z_BOTTOM + 12.0
 SHELL_SIDE_EDGE_Z1 = BODY_Z_TOP - 10.0
-# The large panels retain a 12 mm lower and 6 mm upper shell margin.  Their
-# side slopes follow the corresponding body end section, while the four
-# clipped corners echo the octagonal shell silhouette.
-PANEL_Z0 = 42.0
+# The front panel starts above the chassis deck (top Z 56): the rails, deck
+# and front crossmember pass the front face below it, and the panel must lift
+# off forward over the crossmember. The rear panel keeps a 12 mm lower
+# margin. Both keep a 6 mm upper margin.
+FRONT_PANEL_Z0 = 58.0
+REAR_PANEL_Z0 = 42.0
 PANEL_Z1 = 134.0
 PANEL_LOWER_CORNER = 10.0
 PANEL_UPPER_CORNER = 8.0
-FRONT_PANEL_BOTTOM_WIDTH = 132.0
+FRONT_PANEL_BOTTOM_WIDTH = 128.0
 REAR_PANEL_BOTTOM_WIDTH = 126.0
-FRONT_PANEL_TOP_WIDTH = FRONT_PANEL_BOTTOM_WIDTH - 2.0 * (PANEL_Z1 - PANEL_Z0) * (
-    (BODY_WIDTH_LOWER - BODY_WIDTH_UPPER) * FRONT_SHELL_END_WIDTH_FACTOR / 2.0
-) / (SHELL_SIDE_EDGE_Z1 - SHELL_SIDE_EDGE_Z0)
-REAR_PANEL_TOP_WIDTH = REAR_PANEL_BOTTOM_WIDTH - 2.0 * (PANEL_Z1 - PANEL_Z0) * (
-    (BODY_WIDTH_LOWER - BODY_WIDTH_UPPER) * REAR_SHELL_END_WIDTH_FACTOR / 2.0
-) / (SHELL_SIDE_EDGE_Z1 - SHELL_SIDE_EDGE_Z0)
-FRONT_PANEL_FASTENERS = ((-53.0, 55.0), (53.0, 55.0), (-45.0, 122.0), (45.0, 122.0))
-REAR_PANEL_FASTENERS = ((-50.0, 55.0), (50.0, 55.0), (-43.0, 122.0), (43.0, 122.0))
+
+
+def _panel_top_width(width_bottom, z0, shell_width_factor):
+    """Top width whose straight side edge (between the clipped corners) is
+    parallel to the shell end profile's side edge."""
+    shell_slope = (BODY_WIDTH_LOWER - BODY_WIDTH_UPPER) * shell_width_factor / 2.0 / (
+        SHELL_SIDE_EDGE_Z1 - SHELL_SIDE_EDGE_Z0
+    )
+    side_edge_height = (PANEL_Z1 - PANEL_UPPER_CORNER) - (z0 + PANEL_LOWER_CORNER)
+    return width_bottom - 2.0 * side_edge_height * shell_slope
+
+
+FRONT_PANEL_TOP_WIDTH = _panel_top_width(FRONT_PANEL_BOTTOM_WIDTH, FRONT_PANEL_Z0, FRONT_SHELL_END_WIDTH_FACTOR)
+REAR_PANEL_TOP_WIDTH = _panel_top_width(REAR_PANEL_BOTTOM_WIDTH, REAR_PANEL_Z0, REAR_SHELL_END_WIDTH_FACTOR)
+# Screw centres sit at least 7 mm inside the panel outline, so the 4.5 mm
+# bosses clear the shell opening edge by 0.5 mm.
+PANEL_FASTENER_MIN_INSET = 7.0
+FRONT_PANEL_FASTENERS = ((-53.0, 67.0), (53.0, 67.0), (-46.0, 125.0), (46.0, 125.0))
+REAR_PANEL_FASTENERS = ((-52.0, 51.0), (52.0, 51.0), (-44.0, 125.0), (44.0, 125.0))
+# Internal frame: 2.4 mm plate behind the shell end wall, reaching 1 mm past
+# the panel outline and 12 mm inside it. Bosses run from the panel's inner
+# face through the frame and 2.6 mm beyond it for thread engagement.
+PANEL_FRAME_THICKNESS = 2.4
+PANEL_FRAME_OUTSET = 1.0
+PANEL_FRAME_FLANGE = 12.0
+PANEL_BOSS_RADIUS = 4.5
+PANEL_BOSS_TAIL = 2.6
+PANEL_SCREW_LENGTH = 8.0
+# Front shell notches: the chassis rails pass the lower front band, open to
+# the bottom edge so the body still lowers onto the chassis.
+FRONT_RAIL_NOTCH_CLEARANCE = 0.5
 
 # Provisional audio packaging. These are requirement envelopes pending the
 # RP-05/RP-06 driver, amplifier, PDM microphone and front-end selections.
@@ -189,17 +215,19 @@ SPEAKER_CONE_DIAMETER = 44.0
 SPEAKER_BASKET_DIAMETER = 50.0
 SPEAKER_DEPTH = 18.0
 SPEAKER_CAVITY_DEPTH = 34.0
-FRONT_RANGE_SENSOR_Z = 58.0
+# The GP2Y sits beside the battery, above the deck and outside the speaker
+# cavity, and looks forward through a window in the front service panel.
+FRONT_RANGE_SENSOR_Y = 38.0
+FRONT_RANGE_SENSOR_Z = 68.0
+FRONT_RANGE_SENSOR_SIZE = (30.0, 14.0, 14.0)
+FRONT_RANGE_SENSOR_FACE_X = 84.0  # 0.4 mm behind the panel's outer face
+FRONT_RANGE_WINDOW_CLEARANCE = 1.0
 MICROPHONE_PORTS = (
     (38.0, 70.0, 118.0, "FRONT_L"),
     (38.0, -70.0, 118.0, "FRONT_R"),
     (-38.0, 70.0, 108.0, "REAR_L"),
     (-38.0, -70.0, 108.0, "REAR_R"),
 )
-
-# Separately replaceable lower fascia fastening.
-BELT_MOUNT_X = (-48.0, 48.0)
-BELT_MOUNT_Z = 56.0
 
 # The yaw-axis height is unchanged. The stationary cowl visually absorbs the
 # lower spindle/bridge while retaining the 32 mm head-side motion allocation.
@@ -271,7 +299,7 @@ FRAMES = {
     "F_HEAD_YAW": HEAD_YAW_DATUM,
     "F_COMPUTE_TRAY": (PI_CENTER[0], PI_CENTER[1], 86.0),
     "F_POWER_BAY": BATTERY_CENTER,
-    "F_SENSOR_FRONT": (78.0, 0.0, 82.0),
+    "F_SENSOR_FRONT": (FRONT_RANGE_SENSOR_FACE_X, FRONT_RANGE_SENSOR_Y, FRONT_RANGE_SENSOR_Z),
 }
 
 
@@ -281,7 +309,7 @@ MASS_ROWS = [
         HEAD_ORIGIN_IN_CHASSIS[1] + HEAD_LOCAL_COM[1],
         HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_LOCAL_COM[2],
     ), "RP-01 generated mass tree"),
-    ("BODY_SHELL_AND_PANELS", 300.0, (4.0, 0.0, 96.0), "Layout 02 CAD estimate"),
+    ("BODY_SHELL_AND_PANELS", 315.0, (4.0, 0.0, 96.0), "Layout 02 CAD estimate; +15 g for the internal panel frames (+15.6 cm3 net printed volume, near-solid 2.4 mm walls)"),
     ("BODY_PRIMARY_FRAME", 335.0, (4.0, 0.0, 94.0), "Layout 02 CAD estimate incl. mounts"),
     ("CHASSIS_PRIMARY_FRAME", 230.0, (16.0, 0.0, 47.0), "CAD estimate"),
     ("WHEEL_L", 90.0, WHEEL_CENTER_L, "vendor/envelope"),
@@ -570,8 +598,13 @@ def _body_profile(x, inset=0.0, width_factor=1.0):
     return (Plane.YZ * Polygon(*points, align=None)).moved(Location((x, 0.0, 0.0)))
 
 
-def _panel_solid(x0, x1, width_bottom, width_top, z0, z1, lower_corner=PANEL_LOWER_CORNER, upper_corner=PANEL_UPPER_CORNER):
-    """Extrude an octagonal service-panel profile on the shell end face."""
+def _panel_solid(x0, x1, width_bottom, width_top, z0, z1, lower_corner=PANEL_LOWER_CORNER, upper_corner=PANEL_UPPER_CORNER, grow=0.0):
+    """Extrude an octagonal service-panel profile on the shell end face.
+
+    ``grow`` offsets the outline normal to every edge (negative shrinks),
+    keeping sharp chamfer corners, so an opening or frame stays a constant
+    distance from the panel edge all round.
+    """
     lb = width_bottom / 2.0
     lt = width_top / 2.0
     lower_corner = min(lower_corner, lb - 1.0, (z1 - z0) / 3.0)
@@ -587,7 +620,29 @@ def _panel_solid(x0, x1, width_bottom, width_top, z0, z1, lower_corner=PANEL_LOW
         (-lb, z0 + lower_corner),
     ]
     face = (Plane.YZ * Polygon(*points, align=None)).moved(Location((x0, 0.0, 0.0)))
+    if grow:
+        face = offset(face, grow, kind=Kind.INTERSECTION).faces()[0]
     return extrude(face, amount=x1 - x0)
+
+
+def _service_panel_outline(face, x0, x1, grow=0.0):
+    """Front or rear service-panel outline extruded between x0 and x1."""
+    if face == "FRONT":
+        return _panel_solid(x0, x1, FRONT_PANEL_BOTTOM_WIDTH, FRONT_PANEL_TOP_WIDTH, FRONT_PANEL_Z0, PANEL_Z1, grow=grow)
+    return _panel_solid(x0, x1, REAR_PANEL_BOTTOM_WIDTH, REAR_PANEL_TOP_WIDTH, REAR_PANEL_Z0, PANEL_Z1, grow=grow)
+
+
+def _front_range_window(clearance, x0, x1):
+    """Forward-looking clearance block around the GP2Y envelope's face."""
+    _, dy, dz = FRONT_RANGE_SENSOR_SIZE
+    return _block(
+        x0,
+        x1,
+        FRONT_RANGE_SENSOR_Y - dy / 2.0 - clearance,
+        FRONT_RANGE_SENSOR_Y + dy / 2.0 + clearance,
+        FRONT_RANGE_SENSOR_Z - dz / 2.0 - clearance,
+        FRONT_RANGE_SENSOR_Z + dz / 2.0 + clearance,
+    )
 
 
 def _panel(x0, x1, width_bottom, width_top, z0, z1, label, color, alpha):
@@ -631,39 +686,35 @@ def body_shell():
         ruled=True,
     )
     shell = outer - inner
-    # Openings repeat the panel taper and stop two millimetres inside each
-    # panel edge. This leaves a continuous sealing land rather than the
-    # Layout 01 rectangular corner gaps.
-    front_opening = _panel_solid(
-        76.0,
-        84.0,
-        FRONT_PANEL_BOTTOM_WIDTH - 2.0 * PANEL_OVERLAP,
-        FRONT_PANEL_TOP_WIDTH - 2.0 * PANEL_OVERLAP,
-        PANEL_Z0 + PANEL_OVERLAP,
-        PANEL_Z1 - PANEL_OVERLAP,
-    )
-    rear_opening = _panel_solid(
-        -79.0,
-        -68.0,
-        REAR_PANEL_BOTTOM_WIDTH - 2.0 * PANEL_OVERLAP,
-        REAR_PANEL_TOP_WIDTH - 2.0 * PANEL_OVERLAP,
-        PANEL_Z0 + PANEL_OVERLAP,
-        PANEL_Z1 - PANEL_OVERLAP,
-    )
+    # Openings are the panel outline offset inward by PANEL_OVERLAP: a
+    # constant-width sealing land on every edge and clipped corner.
+    front_opening = _service_panel_outline("FRONT", 76.0, 84.0, -PANEL_OVERLAP)
+    rear_opening = _service_panel_outline("REAR", -79.0, -68.0, -PANEL_OVERLAP)
+    # The chassis rails run forward through the lower front band to the ball
+    # nose; the notches are open at the bottom so the body lowers onto them.
+    rail_notches = [
+        _block(
+            BODY_X_FRONT - SHELL_THICKNESS - 1.0,
+            BODY_X_FRONT + 1.0,
+            sign * CHASSIS_RAIL_Y - 4.0 - FRONT_RAIL_NOTCH_CLEARANCE,
+            sign * CHASSIS_RAIL_Y + 4.0 + FRONT_RAIL_NOTCH_CLEARANCE,
+            BODY_Z_BOTTOM - 1.0,
+            53.0 + FRONT_RAIL_NOTCH_CLEARANCE,  # rail top
+        )
+        for sign in (1.0, -1.0)
+    ]
     microphone_ports = []
     for x, y, z, _name in MICROPHONE_PORTS:
         if y > 0.0:
             microphone_ports.append(_axial_bore_y(1.5, 66.0, 91.0, x, z))
         else:
             microphone_ports.append(_axial_bore_y(1.5, -91.0, -66.0, x, z))
-    shell = shell - [front_opening, rear_opening, *microphone_ports, *_wheel_well_tools()]
+    shell = shell - [front_opening, rear_opening, *rail_notches, *microphone_ports, *_wheel_well_tools()]
     return _paint(shell, "BODY_SHELL", IVORY, 0.28)
 
 
 def body_panels():
-    front_raw = _panel_solid(
-        82.0, 84.4, FRONT_PANEL_BOTTOM_WIDTH, FRONT_PANEL_TOP_WIDTH, PANEL_Z0, PANEL_Z1
-    )
+    front_raw = _service_panel_outline("FRONT", 82.0, 84.4)
     grille_slots = [
         _block(81.0, 86.0, y - 2.25, y + 2.25, 78.0, 116.0)
         for y in (-36.0, -24.0, -12.0, 0.0, 12.0, 24.0, 36.0)
@@ -671,15 +722,14 @@ def body_panels():
     front_bores = [
         _axial_bore_x(1.65, 80.0, 87.0, y, z) for y, z in FRONT_PANEL_FASTENERS
     ]
+    range_window = _front_range_window(FRONT_RANGE_WINDOW_CLEARANCE, 81.0, 86.0)
     front = _paint(
-        front_raw - [*grille_slots, *front_bores],
+        front_raw - [*grille_slots, *front_bores, range_window],
         "FRONT_SERVICE_PANEL_FUNCTIONAL_GRILLE",
         PANEL_WARM_GRAY,
         0.90,
     )
-    rear_raw = _panel_solid(
-        -76.4, -74.0, REAR_PANEL_BOTTOM_WIDTH, REAR_PANEL_TOP_WIDTH, PANEL_Z0, PANEL_Z1
-    )
+    rear_raw = _service_panel_outline("REAR", -76.4, -74.0)
     rear_bores = [
         _axial_bore_x(1.65, -79.0, -71.0, y, z) for y, z in REAR_PANEL_FASTENERS
     ]
@@ -689,7 +739,7 @@ def body_panels():
         IVORY,
         0.68,
     )
-    top_badge = _box(2.0, 30.0, 4.0, (85.1, 0.0, 124.0), "FRONT_BADGE_LAND", AMBER, 0.92)
+    top_badge = _box(2.0, 30.0, 4.0, (85.4, 0.0, 124.0), "FRONT_BADGE_LAND", AMBER, 0.92)
     wheel_arches = []
     for sign, side in ((1.0, "L"), (-1.0, "R")):
         yc = sign * TRACK / 2.0
@@ -708,69 +758,63 @@ def body_panels():
 
 
 def panel_mount_hardware():
-    """Internal overlap frames, bosses, and front-access M3 screws."""
-    front_outer = _panel_solid(
-        79.6, 82.0, FRONT_PANEL_BOTTOM_WIDTH + 4.0, FRONT_PANEL_TOP_WIDTH + 4.0, 46.0, 132.0
+    """Internal panel frames with fused bosses, and front-access M3 screws.
+
+    Each frame sits behind the shell end wall, laps PANEL_FRAME_OUTSET past
+    the panel outline and reaches PANEL_FRAME_FLANGE inside it. Its bosses
+    stand forward through the shell opening to the panel's inner face.
+    """
+    speaker_keep_out = _cylinder(
+        SPEAKER_BASKET_DIAMETER / 2.0 + 2.0,
+        SPEAKER_CAVITY_DEPTH,
+        (SPEAKER_CENTER[0] - 8.0, SPEAKER_CENTER[1], SPEAKER_CENTER[2]),
+        "SPEAKER_KEEP_OUT_TOOL",
+        SLATE,
+        1.0,
+        "x",
     )
-    front_inner = _panel_solid(
-        79.0,
-        83.0,
-        FRONT_PANEL_BOTTOM_WIDTH - 2.0 * PANEL_OVERLAP,
-        FRONT_PANEL_TOP_WIDTH - 2.0 * PANEL_OVERLAP,
-        PANEL_Z0 + PANEL_OVERLAP,
-        PANEL_Z1 - PANEL_OVERLAP,
-    )
-    rear_outer = _panel_solid(
-        -74.0, -71.6, REAR_PANEL_BOTTOM_WIDTH + 4.0, REAR_PANEL_TOP_WIDTH + 4.0, 46.0, 132.0
-    )
-    rear_inner = _panel_solid(
-        -75.0,
-        -71.0,
-        REAR_PANEL_BOTTOM_WIDTH - 2.0 * PANEL_OVERLAP,
-        REAR_PANEL_TOP_WIDTH - 2.0 * PANEL_OVERLAP,
-        PANEL_Z0 + PANEL_OVERLAP,
-        PANEL_Z1 - PANEL_OVERLAP,
-    )
-    parts = [
-        _paint(front_outer - front_inner, "FRONT_PANEL_CONTINUOUS_OVERLAP_FRAME", SLATE_DARK, 1.0),
-        _paint(rear_outer - rear_inner, "REAR_PANEL_CONTINUOUS_OVERLAP_FRAME", SLATE_DARK, 1.0),
-    ]
-    for face, x, positions in (
-        ("FRONT", 80.7, FRONT_PANEL_FASTENERS),
-        ("REAR", -72.8, REAR_PANEL_FASTENERS),
+    parts = []
+    for face, panel_x0, panel_x1, positions in (
+        ("FRONT", 82.0, 84.4, FRONT_PANEL_FASTENERS),
+        ("REAR", -74.0, -76.4, REAR_PANEL_FASTENERS),
     ):
+        inward = -1.0 if face == "FRONT" else 1.0
+        wall_inner_x = panel_x0 + inward * SHELL_THICKNESS
+        frame_back_x = wall_inner_x + inward * PANEL_FRAME_THICKNESS
+        boss_back_x = frame_back_x + inward * PANEL_BOSS_TAIL
+        fx0, fx1 = sorted((wall_inner_x, frame_back_x))
+        frame = _service_panel_outline(face, fx0, fx1, PANEL_FRAME_OUTSET) - _service_panel_outline(
+            face, fx0 - 1.0, fx1 + 1.0, -PANEL_FRAME_FLANGE
+        )
+        bx0, bx1 = sorted((panel_x0, boss_back_x))
+        for y, z in positions:
+            frame = frame + _cylinder(PANEL_BOSS_RADIUS, bx1 - bx0, ((bx0 + bx1) / 2.0, y, z), "BOSS", SLATE, 1.0, "x")
+        for y, z in positions:
+            frame = frame - _axial_bore_x(1.4, bx0 - 1.0, bx1 + 1.0, y, z)
+        if face == "FRONT":
+            frame = frame - [speaker_keep_out, _front_range_window(FRONT_RANGE_WINDOW_CLEARANCE, fx0 - 1.0, panel_x0 + 1.0)]
+        parts.append(_paint(frame, f"{face}_PANEL_INTERNAL_FRAME_WITH_BOSSES", SLATE_DARK, 1.0))
+        outer_face_x = panel_x1
         for index, (y, z) in enumerate(positions, start=1):
-            boss = _cylinder(4.5, 5.0, (x, y, z), f"{face}_PANEL_M3_BOSS_{index}", SLATE, 1.0, "x")
-            boss = boss - _axial_bore_x(1.4, x - 4.0, x + 4.0, y, z)
-            screw_x = 85.0 if face == "FRONT" else -77.0
-            direction = -1.0 if face == "FRONT" else 1.0
-            shank = _cylinder(1.35, 6.0, (screw_x + direction * 3.0, y, z), f"{face}_PANEL_M3_SHANK_{index}", STEEL, 1.0, "x")
-            head = _cylinder(2.8, 1.8, (screw_x, y, z), f"{face}_PANEL_M3_HEAD_{index}", STEEL, 1.0, "x")
-            parts.extend([boss, shank, head])
+            head = _cylinder(2.8, 1.8, (outer_face_x - inward * 0.9, y, z), f"{face}_PANEL_M3_HEAD_{index}", STEEL, 1.0, "x")
+            shank = _cylinder(
+                1.35,
+                PANEL_SCREW_LENGTH,
+                (outer_face_x + inward * PANEL_SCREW_LENGTH / 2.0, y, z),
+                f"{face}_PANEL_M3_SHANK_{index}",
+                STEEL,
+                1.0,
+                "x",
+            )
+            parts.extend([head, shank])
     return Compound(label="PANEL_MOUNT_HARDWARE", children=parts)
 
 
-def lower_mobility_belt():
-    outer = Box(148.0, 178.0, 28.0).moved(Location((8.0, 0.0, 45.0)))
-    inner_tool = Box(143.0, 164.0, 23.0).moved(Location((8.0, 0.0, 46.5)))
-    front_sensor_window = _block(75.0, 84.0, -18.0, 18.0, 49.0, 67.0)
-    fascia = _paint(
-        outer - [inner_tool, front_sensor_window, *_wheel_well_tools()],
-        "LOWER_MOBILITY_FASCIA_REMOVABLE",
-        MOBILITY_GRAY,
-        0.90,
-    )
-    tabs = []
-    for x in BELT_MOUNT_X:
-        for sign, side in ((1.0, "L"), (-1.0, "R")):
-            tab = Box(14.0, 8.0, 14.0).moved(Location((x, sign * 80.0, BELT_MOUNT_Z)))
-            tab = tab - _axial_bore_y(1.7, sign * 74.0, sign * 90.0, x, BELT_MOUNT_Z)
-            tabs.append(_paint(tab, f"BELT_M3_TAB_{'F' if x > 0 else 'R'}_{side}", SLATE_DARK, 1.0))
-    return Compound(label="LOWER_MOBILITY_BELT", children=[fascia, *tabs])
-
-
 def chassis_frame():
-    deck = Box(126.0, 112.0, 4.0).moved(Location((22.0, 0.0, DECK_Z)))
+    # The deck stops 0.6 mm inside the shell's front wall; only the rails
+    # pass the front face (through open-bottom notches) to the ball nose.
+    deck_x0, deck_x1 = -41.0, BODY_X_FRONT - SHELL_THICKNESS - 0.6
+    deck = Box(deck_x1 - deck_x0, 112.0, 4.0).moved(Location(((deck_x0 + deck_x1) / 2.0, 0.0, DECK_Z)))
     for x, y in BODY_MOUNT_POINTS:
         deck = deck - _vertical_bore(BODY_MOUNT_CLEARANCE_RADIUS, 50.0, 60.0, x, y)
     for x, y in BODY_LOCATING_POINTS:
@@ -896,21 +940,6 @@ def body_chassis_mount_hardware():
     return Compound(label="BODY_CHASSIS_MOUNT_HARDWARE", children=parts)
 
 
-def mobility_belt_mount_hardware():
-    parts = []
-    for x in BELT_MOUNT_X:
-        for sign, side in ((1.0, "L"), (-1.0, "R")):
-            bracket = Box(14.0, 22.0, 14.0).moved(Location((x, sign * 72.0, BELT_MOUNT_Z)))
-            bracket = bracket - _axial_bore_y(1.7, sign * 60.0, sign * 88.0, x, BELT_MOUNT_Z)
-            position = f"{'F' if x > 0 else 'R'}_{side}"
-            parts.extend([
-                _paint(bracket, f"BELT_FRAME_BRACKET_{position}", FRAME_BLUE, 1.0),
-                _cylinder(1.45, 16.0, (x, sign * 82.0, BELT_MOUNT_Z), f"BELT_M3_SHANK_{position}", STEEL, 1.0, "y"),
-                _cylinder(2.8, 2.0, (x, sign * 90.0, BELT_MOUNT_Z), f"BELT_M3_HEAD_{position}", STEEL, 1.0, "y"),
-            ])
-    return Compound(label="MOBILITY_BELT_MOUNT_HARDWARE", children=parts)
-
-
 def wheel_assembly(side: str):
     sign = 1.0 if side == "L" else -1.0
     yc = sign * TRACK / 2.0
@@ -1019,8 +1048,14 @@ def _tcrt_ski_cartridge(name, center):
 
 def sensors():
     parts = [
-        _box(30.0, 14.0, 14.0, (77.0, 0.0, FRONT_RANGE_SENSOR_Z), "GP2Y0A41SK0F_ENVELOPE", "#E7B62C", 0.85),
-        _cylinder(1.2, 42.0, (100.0, 0.0, FRONT_RANGE_SENSOR_Z), "GP2Y_OPTICAL_AXIS", "#EE4B3B", 0.70, "x"),
+        _box(
+            *FRONT_RANGE_SENSOR_SIZE,
+            (FRONT_RANGE_SENSOR_FACE_X - FRONT_RANGE_SENSOR_SIZE[0] / 2.0, FRONT_RANGE_SENSOR_Y, FRONT_RANGE_SENSOR_Z),
+            "GP2Y0A41SK0F_ENVELOPE",
+            "#E7B62C",
+            0.85,
+        ),
+        _cylinder(1.2, 42.0, (FRONT_RANGE_SENSOR_FACE_X + 21.0, FRONT_RANGE_SENSOR_Y, FRONT_RANGE_SENSOR_Z), "GP2Y_OPTICAL_AXIS", "#EE4B3B", 0.70, "x"),
         tactile_ball_nose(),
     ]
     return Compound(label="BODY_SENSORS", children=parts)
@@ -1050,7 +1085,7 @@ def body_audio():
     cone = _cylinder(
         SPEAKER_CONE_DIAMETER / 2.0,
         2.0,
-        (81.5, sy, sz),
+        (80.5, sy, sz),  # 0.5 mm behind the front panel's inner face
         "SPEAKER_44MM_CONE",
         "#252B2E",
         1.0,
@@ -1189,7 +1224,6 @@ def build_assembly():
     asm.add(chassis_frame(), "CHASSIS_PRIMARY_FRAME")
     asm.add(body_primary_frame(), "BODY_PRIMARY_FRAME")
     asm.add(body_chassis_mount_hardware(), "BODY_CHASSIS_MOUNT_HARDWARE")
-    asm.add(mobility_belt_mount_hardware(), "MOBILITY_BELT_MOUNT_HARDWARE")
     asm.add(wheel_assembly("L"), "WHEEL_L")
     asm.add(wheel_assembly("R"), "WHEEL_R")
     asm.add(motor_envelope("L"), "MOTOR_L")
@@ -1205,7 +1239,6 @@ def build_assembly():
     asm.add(body_shell(), "BODY_SHELL")
     asm.add(body_panels(), "BODY_PANELS")
     asm.add(panel_mount_hardware(), "PANEL_MOUNT_HARDWARE")
-    asm.add(lower_mobility_belt(), "LOWER_MOBILITY_BELT")
     asm.add(body_neck_cowl(), "BODY_NECK_COWL")
     asm.add(head, "RP01_HEAD_LAYOUT03")
     asm.add(head_harness, "RP01_HEAD_HARNESS")

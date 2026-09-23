@@ -70,37 +70,37 @@ export default {
     },
     features: {
       shell: {
-        ref: "#o1.17,o1.18,o1.19,o1.20"
+        ref: "#o1.16,o1.17,o1.18"
       },
       head: {
-        ref: "#o1.22"
+        ref: "#o1.20"
       },
       head_motion: {
-        ref: "#o1.22,o1.23,o1.24"
+        ref: "#o1.20,o1.21,o1.22"
       },
       structure: {
-        ref: "#o1.1,o1.2,o1.3,o1.4,o1.21"
+        ref: "#o1.1,o1.2,o1.3,o1.19"
       },
       drive: {
-        ref: "#o1.5,o1.6,o1.7,o1.8,o1.9,o1.10,o1.11"
+        ref: "#o1.4,o1.5,o1.6,o1.7,o1.8,o1.9,o1.10"
       },
       rear_tail: {
-        ref: "#o1.12"
+        ref: "#o1.11"
       },
       electronics: {
-        ref: "#o1.13"
+        ref: "#o1.12"
       },
       sensors: {
-        ref: "#o1.14"
+        ref: "#o1.13"
       },
       audio: {
-        ref: "#o1.15"
+        ref: "#o1.14"
       },
       harness: {
-        ref: "#o1.16,o1.23"
+        ref: "#o1.15,o1.21"
       },
       physics: {
-        ref: "#o1.24,o1.25"
+        ref: "#o1.22,o1.23"
       }
     }
   },

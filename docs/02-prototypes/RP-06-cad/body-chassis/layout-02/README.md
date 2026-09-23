@@ -1,13 +1,13 @@
-# RP-03 integrated body/chassis Layout 02
+# RP-06 integrated body/chassis Layout 02
 
 This is the active whole-body CAD path. It retains Layout 01's source-linked RP-01 Layout 03 head, compact two-wheel chassis, connected rear skid, fixed ball-transfer nose, internal packaging and purposeful review layers, while closing the first-pass integration questions:
 
 - four M4 through-bolts and two locating pins now define the body-frame-to-chassis interface;
-- the lower “mobility belt” is explicitly modeled as a removable physical fascia with four M3 side fasteners—not as a moving belt;
-- enlarged front and rear shell openings now repeat the octagonal service-panel profiles with a continuous 2 mm overlap, internal frames, bosses and four M3 screws per panel; each panel's side edges are parametrically parallel to the corresponding shell edges;
+- enlarged front and rear shell openings are the octagonal service-panel outlines offset inward by a constant 2 mm land; each panel's straight side edges are parallel to the corresponding shell edges (measured from the solids, not the constants); a separate internal frame behind each shell end wall carries four fused M3 bosses, with M3 × 8 screws seated on the panel face;
+- the front panel starts at Z = 58 mm, above the chassis deck, so it lifts off forward over the front crossmember; the chassis rails pass the lower front band through open-bottom shell notches, and the deck now stops inside the shell's front wall. The rear panel keeps its Z = 42 mm lower edge;
 - the front slat motif is now a functional open speaker grille over a provisional 50 mm basket/44 mm cone, amplifier envelope and acoustic cavity;
 - four body-mounted PDM microphone boards, acoustic ports and shell penetrations are allocated; exact audio SKUs remain an RP-05/RP-06 selection gate;
-- the front range sensor moves below the speaker to its own lower-fascia window; and
+- the front range sensor sits beside the battery at Y = +38 mm, Z = 68 mm, below the speaker grille, and looks through its own window in the front panel; and
 - a stationary neck cowl plus head-yaw-moving lower yoke shrouds visually shorten the U-shaped yoke while preserving the existing yaw and pitch axes.
 
 Per CAD-context decision [`RP03-CAD-01`](../../decisions.md#rp03-cad-01--rear-only-ground-reflectance-channel), the layout now uses one guarded rear TCRT5000 channel. Its optical patch is 27 mm behind the skid contact, its optical face is modeled 10 mm above ground, and its protective rails begin at 7 mm. The connected skid pad begins at 3.5 mm, so it contacts first. The front and lateral TCRT packages, mounts and cable reserves are removed.
@@ -33,7 +33,7 @@ The neutral dimensional stack is 304 mm: 140 mm body/yaw datum + 60 mm neck allo
 
 ## Generation
 
-Run from the repository root using the CAD environment already carried by RP-03 pass 1:
+Run from the repository root using the CAD environment carried by [`base/pass-01/`](../../base/pass-01/):
 
 ```text
 docs/02-prototypes/RP-06-cad/base/pass-01/.venv/bin/python \
@@ -53,5 +53,5 @@ neck treatment, body, chassis, fixed ball-transfer, faceted rear tail and rear
 sensor geometry validates as closed, positive-volume BREP. Full-assembly
 validation still reports five
 inherited self-intersecting occurrences inside the frozen Raspberry Pi 5 vendor
-STEP. None is part of this RP-03 Layout 02 revision; the exact SKU is retained
+STEP. None is part of this Layout 02 revision; the exact SKU is retained
 rather than replaced with a cosmetic placeholder.

@@ -93,10 +93,10 @@ solid.
 - [x] Provide a faceted, tapered outer body derived from the visual references without
   inheriting their obsolete internal layout.
 - [x] Make the shell intrinsically translucent and independently hideable.
-- [x] Separate the pale upper body, dark mobility belt, front panel/grille and rear
-  service panel into reviewable groups.
-- [x] Model the lower mobility belt as a physical removable fascia with four M3 side
-  fasteners; it is not a moving belt or drive element.
+- [x] Separate the pale upper body, front panel/grille and rear service panel into
+  reviewable groups.
+- [x] Remove the lower mobility belt. The dark lower fascia and its four M3 side
+  fasteners are deleted; the shell's own lower band is the outer surface there.
 - [x] Match front and rear shell openings to the trapezoidal panels with a continuous
   2 mm overlap, internal frames, bosses and four M3 screws per panel.
 - [x] Keep each service panel's trapezoid side edges parametrically parallel to the
