@@ -140,19 +140,20 @@
     140.0
   ],
   "head_origin_in_chassis_mm": [
-    38.18394130377561,
+    38.138946839609034,
     0.0,
     189.5
   ],
   "head_local_yaw_mm": [
-    -38.18394130377561,
+    -38.138946839609034,
     0.0,
     -49.5
   ],
   "neck_allocation_mm": 49.5,
   "neutral_overall_physical_height_mm": 293.5,
-  "overall_height_status": "294 mm neutral stack (Layout 04 head, 40 mm neck to the body top; was 304 mm)",
-  "head_motion_envelope": "RP-01 Layout 04 motion-envelope.json: full roll \u00b118 / pitch \u221222\u2026+40; hard stops alone keep \u22654 mm to the yaw disc (\u22652 mm at 1\u00b0 overtravel)",
+  "overall_height_status": "294 mm neutral stack (Layout 04 head, 49.5 mm neck to the body top; was 304 mm)",
+  "head_motion_envelope": "RP-01 Layout 04 motion-envelope.json: usable roll \u00b118 / pitch \u221222\u2026+40, hard stops roll \u00b121 / pitch \u221225\u2026+43; stops alone keep \u22654 mm to the yaw disc (\u22652 mm at 1\u00b0 overtravel)",
+  "yaw_drive": "XC330-M181 through a 1:1 spur pair",
   "yaw_disc_top_z_mm": 155.0,
   "pi_cooler_headroom_mm": 10.5,
   "head_sweep_floor_z_mm": 159.0,

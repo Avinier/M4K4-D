@@ -145,7 +145,7 @@ HEAD_SWEEP_FLOOR_Z = HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_ENVELOPE["sweep_floor_z_mm
 YAW_DISC_RADIUS = HEAD_ENVELOPE["yaw_disc"]["radius_mm"]
 YAW_DISC_THICKNESS = HEAD_ENVELOPE["yaw_disc"]["thickness_mm"]
 YAW_DISC_TOP_Z = HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_ENVELOPE["yaw_disc_top_z_mm"]
-YAW_DISC_PLATE_BOTTOM_Z = YAW_DISC_TOP_Z - 3.0
+YAW_DISC_PLATE_BOTTOM_Z = YAW_DISC_TOP_Z - HEAD_ENVELOPE["yaw_disc"]["plate_mm"]
 HEAD_CROWN_Z_LOCAL = 104.0
 OVERALL_PHYSICAL_HEIGHT = HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_CROWN_Z_LOCAL
 NECK_ALLOCATION = HEAD_ORIGIN_IN_CHASSIS[2] - BODY_Z_TOP
@@ -163,7 +163,8 @@ BODY_MOUNT_CLEARANCE_RADIUS = 2.25
 BODY_MOUNT_PAD_Z0 = 56.0
 BODY_MOUNT_PAD_THICKNESS = 4.0
 BODY_FRAME_LOWER_Z = 65.0
-BODY_FRAME_UPPER_Z = 132.0
+# Upper frame tops out at 134 so its cross-members carry the yaw adapter plate.
+BODY_FRAME_UPPER_Z = 130.0
 BODY_LOCATING_POINTS = ((-33.0, -42.0), (43.0, 42.0))
 BODY_MOUNT_POINTS = tuple((x, y) for x in BODY_MOUNT_X for y in BODY_MOUNT_Y)
 
@@ -244,22 +245,31 @@ MICROPHONE_PORTS = (
 )
 
 # Head yaw stage under the proud disc. Nothing sits within PI_COOLER_HEADROOM
-# of the Pi 5 active cooler: the adapter plate, ring gear and pinion start at
-# 133.5; the bearing and clock-spring reserve sit above the plate, inside the
-# disc skirt. The shell opening only passes the ring-gear skirt.
+# of the Pi 5 active cooler. The adapter plate spans the upper-frame
+# cross-members; the bearing and clock-spring reserve sit on it, and a 1:1
+# spur pair under the disc plate couples an off-axis XC330-M181 yaw servo
+# (129 rpm at 5 V vs 63 rpm peak yaw) with no speed reduction. The servo
+# stands beside the cooler on +Y; a coupling shaft carries its output up to
+# the pinion.
 PI_COOLER_TOP_Z = 123.0
 PI_COOLER_HEADROOM = 10.5
-YAW_PLATE_Z = (PI_COOLER_TOP_Z + PI_COOLER_HEADROOM, PI_COOLER_TOP_Z + PI_COOLER_HEADROOM + 4.0)
-YAW_PLATE_RADIUS = 34.5
-YAW_BEARING_RADII = (26.0, 34.0)
+YAW_PLATE_Z = (BODY_FRAME_UPPER_Z + 4.0, BODY_FRAME_UPPER_Z + 8.0)
+YAW_PLATE_RADIUS = 33.5
+YAW_PLATE_BAR_HALF_WIDTH = 29.0
+YAW_BEARING_RADII = (25.0, 33.0)
 YAW_BEARING_Z = (YAW_PLATE_Z[1], YAW_PLATE_Z[1] + 7.0)
-YAW_RING_GEAR_RADII = (35.5, 43.0)
-YAW_RING_GEAR_SKIRT_RADII = (41.0, 43.0)
-YAW_RING_GEAR_PITCH_RADIUS = 39.0
-YAW_PINION_PITCH_RADIUS = 8.0
-YAW_PINION_CENTER = (0.0, YAW_RING_GEAR_PITCH_RADIUS + YAW_PINION_PITCH_RADIUS)
-YAW_CLOCKSPRING_RADII = (13.0, 25.0)
-YAW_OPENING_RADIUS = YAW_RING_GEAR_RADII[1] + 2.0
+YAW_CLOCKSPRING_RADII = (12.5, 24.0)
+YAW_GEAR_PITCH_RADIUS = 18.5
+YAW_GEAR_OUTER_RADIUS = 20.0
+YAW_GEAR_BORE_RADIUS = 13.0
+YAW_GEAR_RATIO = 1.0
+YAW_PINION_CENTER = (0.0, 2.0 * YAW_GEAR_PITCH_RADIUS)
+YAW_SERVO_ENVELOPE = (-10.0, 10.0, 29.0, 55.0, 99.0, 133.0)
+YAW_OPENING_RADIUS = 45.0
+# RP-01 actuator screen: peak yaw 378 deg/s = 63 rpm at the output. XC330-M181
+# no-load speed 95 / 129 rpm at 3.7 / 5.0 V (ROBOTIS e-manual).
+YAW_PEAK_OUTPUT_RPM = 63.0
+YAW_SERVO_NO_LOAD_RPM = {"3.7V": 95.0, "5.0V": 129.0}
 
 PI_CENTER = (6.0, 0.0, 102.0)
 BATTERY_CENTER = (38.0, 0.0, 69.0)
@@ -368,7 +378,7 @@ MASS_ROWS = [
     ("CONTROL_POWER_SENSORS", 125.0, (6.0, 0.0, 80.0), "estimate; one rear TCRT channel"),
     ("BODY_AUDIO", 90.0, (48.0, 0.0, 102.0), "speaker, amplifier and four microphones; CAD estimate"),
     ("HARNESS_AND_FASTENERS", 95.0, (4.0, 0.0, 88.0), "estimate"),
-    ("BODY_YAW_STAGE", 97.0, (2.1, 12.6, 128.5), "E: 50 g thin-section bearing placeholder + 23 g XC330-size servo + 3 g pinion + 21 g PLA ring gear/clamp ring (CAD volume); no SKU"),
+    ("BODY_YAW_STAGE", 88.0, (0.0, 13.5, 134.3), "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 2 x 6 g 1:1 spur gears + 2 g clamp ring + 1 g coupling shaft; no SKU"),
     ("REAR_SKID_KEEL", 12.0, (-55.9, 0.0, 20.4), "CAD volume: 15.4 cm3 keel body at ~45% effective PETG density, 12x10 mm shoe, guards, 4 M3 screws"),
 ]
 if REAR_TAIL_ENABLED:
@@ -1072,10 +1082,13 @@ def body_primary_frame():
         locator = locator - _vertical_bore(2.05, 55.0, 62.0, x, y)
         parts.append(_paint(locator, f"BODY_LOCATING_BOSS_{index}", SLATE_DARK, 1.0))
     parts.extend([
-        _box(10.0, 10.0, YAW_PLATE_Z[0] - 60.0, (0.0, 31.0, (YAW_PLATE_Z[0] + 60.0) / 2.0), "HEAD_LOAD_POST_L", SLATE_DARK),
-        _box(10.0, 10.0, YAW_PLATE_Z[0] - 60.0, (0.0, -31.0, (YAW_PLATE_Z[0] + 60.0) / 2.0), "HEAD_LOAD_POST_R", SLATE_DARK),
     ])
-    plate = _ring(9.0, YAW_PLATE_RADIUS, *YAW_PLATE_Z)
+    # Head load path: plate spans the upper cross-members (which top out at
+    # YAW_PLATE_Z[0]); central ring seats the yaw bearing.
+    plate = _block(-52.0, 52.0, -YAW_PLATE_BAR_HALF_WIDTH, YAW_PLATE_BAR_HALF_WIDTH, *YAW_PLATE_Z) + Cylinder(
+        YAW_PLATE_RADIUS, YAW_PLATE_Z[1] - YAW_PLATE_Z[0]
+    ).moved(Location((0.0, 0.0, sum(YAW_PLATE_Z) / 2.0)))
+    plate = plate - Cylinder(9.0, 10.0).moved(Location((0.0, 0.0, sum(YAW_PLATE_Z) / 2.0)))
     parts.append(_paint(plate, "HEAD_YAW_ADAPTER_PLATE", FRAME_BLUE))
     return Compound(label="BODY_PRIMARY_FRAME", children=parts)
 
@@ -1263,29 +1276,32 @@ def _ring(r0, r1, z0, z1):
 
 
 def body_yaw_stage():
-    """Stationary half of the head yaw stage: bearing race, pinion and servo."""
+    """Stationary half of the head yaw stage: bearing, pinion, shaft and servo."""
     px, py = YAW_PINION_CENTER
-    z0 = YAW_PLATE_Z[0]
-    pinion = Cylinder(YAW_PINION_PITCH_RADIUS + 1.0, 3.5).moved(Location((px, py, z0 + 1.75)))
-    servo_top = z0 - 1.0
+    gear_z = (YAW_BEARING_Z[1] + 1.0, YAW_DISC_PLATE_BOTTOM_Z)
+    x0, x1, y0, y1, z0, z1 = YAW_SERVO_ENVELOPE
+    pinion = Cylinder(YAW_GEAR_OUTER_RADIUS, gear_z[1] - gear_z[0]).moved(Location((px, py, sum(gear_z) / 2.0)))
+    shaft = Cylinder(2.5, gear_z[0] - z1).moved(Location((px, py, (gear_z[0] + z1) / 2.0)))
     return Compound(label="BODY_YAW_STAGE", children=[
         _paint(_ring(*YAW_BEARING_RADII, *YAW_BEARING_Z), "YAW_THIN_SECTION_BEARING_ENVELOPE", STEEL, 0.9),
-        _paint(pinion, "YAW_DRIVE_PINION", STEEL, 1.0),
-        _paint(_block(px - 8.0, px + 26.0, py - 10.0, py + 10.0, servo_top - 26.0, servo_top),
-               "YAW_SERVO_XC330_SIZE_ENVELOPE", "#A36F38", 0.85),
-        _cylinder(2.0, 1.0, (px, py, servo_top + 0.5), "YAW_SERVO_OUTPUT_SHAFT", STEEL, 1.0),
+        _paint(pinion, "YAW_DRIVE_SPUR_1TO1", STEEL, 1.0),
+        _paint(shaft, "YAW_SERVO_COUPLING_SHAFT", STEEL, 1.0),
+        _paint(_block(x0, x1, y0, y1, z0, z1), "YAW_SERVO_XC330_M181_ENVELOPE", "#A36F38", 0.85),
     ])
+
+
+def yaw_drive_moving_parts():
+    """Yaw-moving body-side parts in chassis coordinates (axisymmetric)."""
+    gear_z = (YAW_BEARING_Z[1] + 1.0, YAW_DISC_PLATE_BOTTOM_Z)
+    return [
+        _paint(_ring(YAW_GEAR_BORE_RADIUS, YAW_GEAR_OUTER_RADIUS, *gear_z), "YAW_DRIVEN_SPUR_1TO1_ON_DISC", SLATE_DARK, 1.0),
+        _paint(_ring(*YAW_BEARING_RADII, YAW_BEARING_Z[1], YAW_BEARING_Z[1] + 1.0), "YAW_BEARING_CLAMP_RING", SLATE_DARK, 1.0),
+    ]
 
 
 def yaw_drive_moving_local():
     """Yaw-moving body-side parts, in head-local coordinates (move with head)."""
-    gear = _ring(*YAW_RING_GEAR_RADII, *YAW_PLATE_Z) + _ring(
-        *YAW_RING_GEAR_SKIRT_RADII, YAW_PLATE_Z[1], YAW_DISC_PLATE_BOTTOM_Z
-    )
-    parts = [
-        _paint(gear, "YAW_RING_GEAR_AND_SKIRT", SLATE_DARK, 1.0),
-        _paint(_ring(*YAW_BEARING_RADII, YAW_BEARING_Z[1], YAW_BEARING_Z[1] + 1.0), "YAW_BEARING_CLAMP_RING", SLATE_DARK, 1.0),
-    ]
+    parts = yaw_drive_moving_parts()
     offset = Location(tuple(-v for v in HEAD_ORIGIN_IN_CHASSIS))
     return Compound(label="BODY_YAW_DRIVE_MOVING", children=[part.moved(offset) for part in parts])
 

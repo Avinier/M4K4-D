@@ -32,18 +32,19 @@
 - [x] `speaker_and_front_range_sensor_do_not_overlap` — {'overlap_volume_mm3': 0}
 - [x] `front_range_sensor_is_below_speaker_grille` — {'sensor_z_mm': 68.0, 'speaker_center_z_mm': 99.0}
 - [x] `head_sweep_floor_clears_disc_top` — {'sweep_floor_z_mm': 159.0, 'disc_top_z_mm': 155.0}
-- [x] `hard_stops_alone_keep_head_off_disc` — {'hard_stop_corner': {'lowest_z_mm': -30.258, 'at_roll_pitch': [-21.0, -25.0], 'below_disc_top_mm': 0.0, 'note': 'Per-axis hard-stop corner. When below_disc_top_mm is 0 the hard stops alone keep the head off the disc.'}, 'overtravel_1deg': {'lowest_z_mm': -31.496, 'at_roll_pitch': [-22.0, -26.0], 'clearance_to_disc_top_mm': 3.004}}
-- [ ] `head_motion_is_full_range` — {'rows': 69}
+- [x] `hard_stops_alone_keep_head_off_disc` — {'hard_stop_corner': {'lowest_z_mm': -30.211, 'at_roll_pitch': [-21.0, -25.0], 'below_disc_top_mm': 0.0, 'note': 'Per-axis hard-stop corner. When below_disc_top_mm is 0 the hard stops alone keep the head off the disc.'}, 'overtravel_1deg': {'lowest_z_mm': -31.444, 'at_roll_pitch': [-22.0, -26.0], 'clearance_to_disc_top_mm': 3.056}}
+- [x] `head_motion_is_full_range_to_hard_stops` — {'rows': 69, 'hard_stops': {'roll_deg': [-21.0, 21.0], 'pitch_deg': [-25.0, 43.0]}, 'usable_travel': {'roll_deg': [-18.0, 18.0], 'pitch_deg': [-22.0, 40.0]}}
 - [x] `pi_cooler_headroom_kept` — {'headroom_mm': 10.5, 'yaw_parts_in_headroom_mm3': 0}
-- [x] `yaw_disc_fits_flat_body_top` — {'disc_radius_mm': 61.5, 'flat_top_half_width_mm': 64.0}
+- [x] `yaw_disc_fits_flat_body_top` — {'disc_radius_mm': 62.5, 'flat_top_half_width_mm': 64.0}
 - [x] `yaw_stage_clears_frame_electronics_shell` — {'overlap_volume_mm3': 0}
 - [x] `yaw_disc_rim_has_running_gap` — {'disc_rim_bottom_z_mm': 141.0, 'body_top_z_mm': 140.0}
-- [x] `yaw_pinion_meshes_ring_gear` — {'centre_distance_mm': 47.0}
+- [x] `yaw_spur_pair_meshes_1to1` — {'centre_distance_mm': 37.0, 'ratio': 1.0}
+- [x] `yaw_servo_speed_covers_peak_yaw_at_3v7` — {'output_no_load_rpm': {'3.7V': 95.0, '5.0V': 129.0}, 'peak_output_rpm': 63.0, 'required_margin': 1.3}
 - [x] `body_fits_track_width` — {'body_width_mm': 174.0, 'wheel_stance_mm': 194.0}
 - [x] `body_ground_clearance_in_baseline_band` — {'body_bottom_mm': 30.0, 'target_mm': [25.0, 35.0]}
 - [x] `visible_body_height_in_baseline_band` — {'body_height_mm': 110.0, 'target_mm': [105.0, 115.0]}
-- [ ] `neutral_stack_is_documented_284_mm` — {'overall_height_mm': 293.5, 'rounded_target_mm': 300.0}
-- [ ] `neck_allocation_is_40_mm` — {'neck_allocation_mm': 49.5}
+- [x] `neutral_stack_is_documented_293p5_mm` — {'overall_height_mm': 293.5, 'rounded_target_mm': 300.0}
+- [x] `neck_allocation_is_49p5_mm` — {'neck_allocation_mm': 49.5}
 - [x] `rear_tcrt_is_only_cliff_channel` — {'channels': ('REAR',)}
 - [x] `rear_tcrt_has_contact_lookahead` — {'sensor_x_mm': -70.0, 'skid_contact_x_mm': -43.0, 'lookahead_mm': 27.0}
 - [x] `rear_tcrt_optical_face_matches_raised_datum` — {'optical_face_z_mm': 10.0}
@@ -72,8 +73,8 @@
 - [x] `tactile_nose_precedes_ball_surface` — {'tactile_face_x_mm': 123.5, 'ball_front_x_mm': 122.7}
 - [x] `tactile_nose_has_bounded_travel` — {'travel_mm': 3.0}
 - [x] `battery_forward_of_axle` — {'battery_x_mm': 38.0}
-- [x] `head_source_exists` — {'path': '/private/tmp/claude-501/-Users-avinier-robotics-makad/4f908976-2497-4292-bea3-dfe25bda38be/scratchpad/wt/docs/02-prototypes/RP-06-cad/head/layout-04/layout_model.py'}
-- [x] `pi_step_exists` — {'path': '/private/tmp/claude-501/-Users-avinier-robotics-makad/4f908976-2497-4292-bea3-dfe25bda38be/scratchpad/wt/docs/02-prototypes/RP-06-cad/body-chassis/layout-01/references/purchased/raspberry_pi_5.step'}
-- [x] `bearing_step_exists` — {'path': '/private/tmp/claude-501/-Users-avinier-robotics-makad/4f908976-2497-4292-bea3-dfe25bda38be/scratchpad/wt/docs/02-prototypes/RP-06-cad/body-chassis/layout-01/references/purchased/bearing_608zz.step'}
-- [x] `com_inside_support_x` — {'com_x_mm': 9.100061441070157}
-- [x] `com_below_head_yaw` — {'com_z_mm': 106.73242066520694}
+- [x] `head_source_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/head/layout-04/layout_model.py'}
+- [x] `pi_step_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/body-chassis/layout-01/references/purchased/raspberry_pi_5.step'}
+- [x] `bearing_step_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/body-chassis/layout-01/references/purchased/bearing_608zz.step'}
+- [x] `com_inside_support_x` — {'com_x_mm': 8.994224685582811}
+- [x] `com_below_head_yaw` — {'com_z_mm': 106.96044776392628}

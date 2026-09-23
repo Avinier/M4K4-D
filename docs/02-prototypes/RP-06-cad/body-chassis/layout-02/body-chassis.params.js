@@ -109,7 +109,7 @@ export default {
       transforms: [{
         rotate: {
           axis: [0, 0, 1],
-          origin: [-38.18394130377561, 0, -40],
+          origin: [-38.138946839609034, 0, -49.5],
           angleDeg: clamp(params.head_yaw_deg, -55, 55)
         }
       }]

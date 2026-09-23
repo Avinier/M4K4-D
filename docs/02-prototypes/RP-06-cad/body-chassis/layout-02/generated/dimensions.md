@@ -16,7 +16,7 @@
 - Speaker: center `(72.0, 0.0, 99.0)` mm, 44.0 mm cone / 50.0 mm basket
 - Body microphones: four provisional PDM ports at `((38.0, 70.0, 118.0, 'FRONT_L'), (38.0, -70.0, 118.0, 'FRONT_R'), (-38.0, 70.0, 108.0, 'REAR_L'), (-38.0, -70.0, 108.0, 'REAR_R'))`
 - Head-yaw datum: `(0.0, 0.0, 140.0)` mm
-- RP-01 head origin in chassis: `(38.18394130377561, 0.0, 189.5)` mm
+- RP-01 head origin in chassis: `(38.138946839609034, 0.0, 189.5)` mm
 - Neutral physical height stack: 293.5 mm (50 mm neck; yaw disc top Z 155.0, 15.0 mm proud)
 - Head sweep floor at the hard stops: Z 159.0 mm, 4 mm above the yaw disc; Pi cooler headroom 10.5 mm
 - RP-01 yaw-yoke status: live Layout 04 turntable geometry; not load-rated or fabrication-final

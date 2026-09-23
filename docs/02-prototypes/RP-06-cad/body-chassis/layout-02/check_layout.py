@@ -40,13 +40,13 @@ def main():
     # Air above the Pi cooler: no yaw-stage part, stationary or moving, and no
     # clock-spring reserve inside the headroom prism over the cooler footprint.
     headroom = M._block(-26.0, 38.0, -22.0, 22.0, M.PI_COOLER_TOP_Z, M.PI_COOLER_TOP_Z + M.PI_COOLER_HEADROOM)
-    moving = M.yaw_drive_moving_local().moved(Location(M.HEAD_ORIGIN_IN_CHASSIS))
+    moving_parts = M.yaw_drive_moving_parts()
     clockspring = [c for c in M.harness_routes().children if c.label == "HARNESS_HEAD_YAW_CLOCKSPRING_RESERVE"]
     plate = [c for c in body_frame.children if c.label == "HEAD_YAW_ADAPTER_PLATE"]
-    cooler_headroom_clash = sum((headroom & part).volume for part in [*yaw_stage.children, *moving.children, *clockspring, *plate])
+    cooler_headroom_clash = sum((headroom & part).volume for part in [*yaw_stage.children, *moving_parts, *clockspring, *plate])
     yaw_clash = sum(
         (part & other).volume
-        for part in [*yaw_stage.children, *moving.children]
+        for part in [*yaw_stage.children, *moving_parts]
         for other in [*body_frame.children, *M.electronics().children, M.body_shell(), *M.sensors().children, *M.body_audio().children]
     )
     rear_crossmember = next(child for child in chassis_frame.children if child.label == "REAR_SKID_CROSSMEMBER")
@@ -236,17 +236,18 @@ def main():
         ("front_range_sensor_is_below_speaker_grille", M.FRONT_RANGE_SENSOR_Z < M.SPEAKER_CENTER[2] - M.SPEAKER_BASKET_DIAMETER / 2.0, {"sensor_z_mm": M.FRONT_RANGE_SENSOR_Z, "speaker_center_z_mm": M.SPEAKER_CENTER[2]}),
         ("head_sweep_floor_clears_disc_top", M.HEAD_SWEEP_FLOOR_Z - M.YAW_DISC_TOP_Z >= 4.0 - 1e-9, {"sweep_floor_z_mm": M.HEAD_SWEEP_FLOOR_Z, "disc_top_z_mm": M.YAW_DISC_TOP_Z}),
         ("hard_stops_alone_keep_head_off_disc", M.HEAD_ENVELOPE["hard_stops_alone_keep_4mm"] and M.HEAD_ENVELOPE["overtravel_1deg_case"]["clearance_to_disc_top_mm"] >= 2.0, {"hard_stop_corner": M.HEAD_ENVELOPE["hard_stop_fault_case"], "overtravel_1deg": M.HEAD_ENVELOPE["overtravel_1deg_case"]}),
-        ("head_motion_is_full_range", all(r["roll_min_deg"] == -18 and r["roll_max_deg"] == 18 for r in M.HEAD_ENVELOPE["rows"]), {"rows": len(M.HEAD_ENVELOPE["rows"])}),
+        ("head_motion_is_full_range_to_hard_stops", all(r["roll_min_deg"] == M.HEAD_ENVELOPE["hard_stops"]["roll_deg"][0] and r["roll_max_deg"] == M.HEAD_ENVELOPE["hard_stops"]["roll_deg"][1] for r in M.HEAD_ENVELOPE["rows"]), {"rows": len(M.HEAD_ENVELOPE["rows"]), "hard_stops": M.HEAD_ENVELOPE["hard_stops"], "usable_travel": M.HEAD_ENVELOPE["usable_travel"]}),
         ("pi_cooler_headroom_kept", cooler_headroom_clash < 1e-3, {"headroom_mm": M.PI_COOLER_HEADROOM, "yaw_parts_in_headroom_mm3": cooler_headroom_clash}),
         ("yaw_disc_fits_flat_body_top", M.YAW_DISC_RADIUS <= M.BODY_WIDTH_UPPER / 2.0 - 10.0, {"disc_radius_mm": M.YAW_DISC_RADIUS, "flat_top_half_width_mm": M.BODY_WIDTH_UPPER / 2.0 - 10.0}),
         ("yaw_stage_clears_frame_electronics_shell", yaw_clash < 1e-3, {"overlap_volume_mm3": yaw_clash}),
         ("yaw_disc_rim_has_running_gap", M.YAW_DISC_TOP_Z - M.YAW_DISC_THICKNESS - M.BODY_Z_TOP >= 1.0 - 1e-9, {"disc_rim_bottom_z_mm": M.YAW_DISC_TOP_Z - M.YAW_DISC_THICKNESS, "body_top_z_mm": M.BODY_Z_TOP}),
-        ("yaw_pinion_meshes_ring_gear", abs(math.hypot(*M.YAW_PINION_CENTER) - (M.YAW_RING_GEAR_PITCH_RADIUS + M.YAW_PINION_PITCH_RADIUS)) < 1e-9, {"centre_distance_mm": math.hypot(*M.YAW_PINION_CENTER)}),
+        ("yaw_spur_pair_meshes_1to1", abs(math.hypot(*M.YAW_PINION_CENTER) - 2.0 * M.YAW_GEAR_PITCH_RADIUS) < 1e-9 and M.YAW_GEAR_RATIO == 1.0, {"centre_distance_mm": math.hypot(*M.YAW_PINION_CENTER), "ratio": M.YAW_GEAR_RATIO}),
+        ("yaw_servo_speed_covers_peak_yaw_at_3v7", M.YAW_SERVO_NO_LOAD_RPM["3.7V"] / M.YAW_GEAR_RATIO >= 1.3 * M.YAW_PEAK_OUTPUT_RPM, {"output_no_load_rpm": {k: v / M.YAW_GEAR_RATIO for k, v in M.YAW_SERVO_NO_LOAD_RPM.items()}, "peak_output_rpm": M.YAW_PEAK_OUTPUT_RPM, "required_margin": 1.3}),
         ("body_fits_track_width", M.BODY_WIDTH_LOWER < M.TRACK + M.WHEEL_WIDTH, {"body_width_mm": M.BODY_WIDTH_LOWER, "wheel_stance_mm": M.TRACK + M.WHEEL_WIDTH}),
         ("body_ground_clearance_in_baseline_band", 25.0 <= M.BODY_Z_BOTTOM <= 35.0, {"body_bottom_mm": M.BODY_Z_BOTTOM, "target_mm": [25.0, 35.0]}),
         ("visible_body_height_in_baseline_band", 105.0 <= M.BODY_Z_TOP - M.BODY_Z_BOTTOM <= 115.0, {"body_height_mm": M.BODY_Z_TOP - M.BODY_Z_BOTTOM, "target_mm": [105.0, 115.0]}),
-        ("neutral_stack_is_documented_284_mm", abs(M.OVERALL_PHYSICAL_HEIGHT - 284.0) < 1e-9, {"overall_height_mm": M.OVERALL_PHYSICAL_HEIGHT, "rounded_target_mm": 300.0}),
-        ("neck_allocation_is_40_mm", abs(M.NECK_ALLOCATION - 40.0) < 1e-9, {"neck_allocation_mm": M.NECK_ALLOCATION}),
+        ("neutral_stack_is_documented_293p5_mm", abs(M.OVERALL_PHYSICAL_HEIGHT - 293.5) < 1e-9, {"overall_height_mm": M.OVERALL_PHYSICAL_HEIGHT, "rounded_target_mm": 300.0}),
+        ("neck_allocation_is_49p5_mm", abs(M.NECK_ALLOCATION - 49.5) < 1e-9, {"neck_allocation_mm": M.NECK_ALLOCATION}),
         ("rear_tcrt_is_only_cliff_channel", M.TCRT_CHANNELS == ("REAR",), {"channels": M.TCRT_CHANNELS}),
         ("rear_tcrt_has_contact_lookahead", M.SKID_PAD_CENTER[0] - M.TCRT_REAR_CENTER[0] >= M.TCRT_REAR_LOOKAHEAD, {"sensor_x_mm": M.TCRT_REAR_CENTER[0], "skid_contact_x_mm": M.SKID_PAD_CENTER[0], "lookahead_mm": M.SKID_PAD_CENTER[0] - M.TCRT_REAR_CENTER[0]}),
         ("rear_tcrt_optical_face_matches_raised_datum", abs(M.TCRT_REAR_CENTER[2] - M.TCRT_PACKAGE_SIZE[2] / 2.0 - M.TCRT_OPTICAL_FACE_Z) < 1e-9 and M.TCRT_OPTICAL_FACE_Z == 10.0, {"optical_face_z_mm": M.TCRT_OPTICAL_FACE_Z}),

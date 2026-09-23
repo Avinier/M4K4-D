@@ -8,7 +8,7 @@ This is the active whole-body CAD path. It retains Layout 01's source-linked RP-
 - the front slat motif is now a functional open speaker grille over a provisional 50 mm basket/44 mm cone, amplifier envelope and acoustic cavity;
 - four body-mounted PDM microphone boards, acoustic ports and shell penetrations are allocated; exact audio SKUs remain an RP-05/RP-06 selection gate;
 - the front range sensor sits beside the battery at Y = +38 mm, Z = 68 mm, below the speaker grille, and looks through its own window in the front panel; and
-- the head now uses RP-01 Layout 04 at a 40 mm neck (was 60), with the spindle replaced by a turntable. Its yaw turntable disc stands 9.5 mm proud of the body top with a 1 mm running gap. Full roll/pitch motion is kept, and the hard stops alone keep the head at least 4 mm off the disc. The body carries a thin-section bearing and a clock-spring cable reserve above a Ø69 adapter plate, a ring gear with a skirt up to the disc, an off-axis pinion and an XC330-size yaw servo on +Y. Everything starts 10.5 mm above the Pi 5 cooler. A Ø90 shell opening passes the gear skirt. The earlier cowl and yaw-moving shrouds are removed.
+- the head now uses RP-01 Layout 04 at a 49.5 mm neck (was 60), with the spindle replaced by a turntable. Its yaw disc stands 15 mm proud of the body top with a 1 mm running gap. Full roll/pitch motion is kept out to hard stops 3° beyond usable travel, and the stops alone keep the head at least 4.2 mm off the disc. A Ø67 adapter plate spans the lowered upper-frame cross-members (the head load posts are removed) and carries a thin-section bearing and a clock-spring cable reserve. An off-axis XC330-M181 yaw servo on +Y drives the disc through a 1:1 spur pair (pitch Ø37) via a coupling shaft. Everything starts 10.5 mm above the Pi 5 cooler. A Ø90 shell opening passes the stack. The earlier cowl and yaw-moving shrouds are removed.
 
 Per CAD-context decision [`RP03-CAD-01`](../../decisions.md#rp03-cad-01--rear-only-ground-reflectance-channel), the layout now uses one guarded rear TCRT5000 channel. Its optical patch is 27 mm behind the skid contact, its optical face is modeled 10 mm above ground, and its protective rails begin at 7 mm. The connected skid pad begins at 3.5 mm, so it contacts first. The front and lateral TCRT packages, mounts and cable reserves are removed.
 
@@ -29,7 +29,7 @@ Per CAD-context decision [`RP03-CAD-03`](../../decisions.md#rp03-cad-03--faceted
 
 The RP-01 head is a live source dependency. Changes in head Layout 04 flow into this assembly on regeneration; its yaw datum, A0, yaw-carried mass/CoM and turntable size are read from that layout's `axes.json`, `mass-placement.json` and `motion-envelope.json`.
 
-The neutral dimensional stack is 284 mm: 140 mm body/yaw datum + 40 mm neck + 104 mm crown-inclusive head. The yaw stage parts are packaging envelopes, not selected or load-rated parts. The body's vertical head-harness volume still passes through the battery, compute-tray and Pi-cooler envelopes, as it did before this change; its route is unresolved.
+The neutral dimensional stack is 293.5 mm: 140 mm body/yaw datum + 49.5 mm neck + 104 mm crown-inclusive head. The yaw stage parts are packaging envelopes, not selected or load-rated parts. The body's vertical head-harness volume still passes through the battery, compute-tray and Pi-cooler envelopes, as it did before this change; its route is unresolved.
 
 ## Generation
 
