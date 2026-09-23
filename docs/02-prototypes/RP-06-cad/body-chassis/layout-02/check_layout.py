@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
+
+from build123d import Axis, Compound, GeomType, Location, Vertex
 
 import body_chassis_model as M
 
@@ -18,37 +21,187 @@ def main():
     )
     wheel_l_y = tuple(M.wheel_assembly("L").children[0].bounding_box().center())[1]
     wheel_r_y = tuple(M.wheel_assembly("R").children[0].bounding_box().center())[1]
-    rear_tail = M.rear_skid_tcrt_module()
-    tail_shell, tail_internals, tail_floor, tail_cap = rear_tail.children
-    tail_spine, tail_cartridge, tail_cable = tail_internals.children
-    tail_shoe, tail_guard_l, tail_guard_r = tail_floor.children
-    tail_sensor_package = tail_cartridge.children[0]
+    rear_module = M.rear_skid_tcrt_module()
+    rear_keel = rear_module.children[-1]
+    # The tail is a parked accessory: check its geometry standalone so it stays
+    # valid for re-enabling, and check that it is really out of the assembly.
+    rear_tail = M.rear_tail()
+    module_labels = [child.label for child in rear_module.children]
+    tail_segments, tail_root = rear_tail.children
+    keel_body, keel_floor, keel_cartridge, keel_cable, keel_hardware = rear_keel.children
+    keel_shoe, keel_guard_l, keel_guard_r = keel_floor.children
+    keel_sensor_package = keel_cartridge.children[0]
     body_frame = M.body_primary_frame()
     chassis_frame = M.chassis_frame()
     frame_chassis_overlap = (body_frame & chassis_frame).volume
     audio_sensor_overlap = (M.body_audio() & M.sensors()).volume
-    panel_height = M.PANEL_Z1 - M.PANEL_Z0
-    shell_edge_height = M.SHELL_SIDE_EDGE_Z1 - M.SHELL_SIDE_EDGE_Z0
-    front_panel_side_slope = (M.FRONT_PANEL_BOTTOM_WIDTH - M.FRONT_PANEL_TOP_WIDTH) / 2.0 / panel_height
-    rear_panel_side_slope = (M.REAR_PANEL_BOTTOM_WIDTH - M.REAR_PANEL_TOP_WIDTH) / 2.0 / panel_height
-    front_shell_side_slope = (
-        (M.BODY_WIDTH_LOWER - M.BODY_WIDTH_UPPER) * M.FRONT_SHELL_END_WIDTH_FACTOR / 2.0 / shell_edge_height
+    # Stationary yaw stage against everything it could hit inside the body.
+    yaw_stage = M.body_yaw_stage()
+    # Air above the Pi cooler: no yaw-stage part, stationary or moving, and no
+    # clock-spring reserve inside the headroom prism over the cooler footprint.
+    headroom = M._block(-26.0, 38.0, -22.0, 22.0, M.PI_COOLER_TOP_Z, M.PI_COOLER_TOP_Z + M.PI_COOLER_HEADROOM)
+    moving = M.yaw_drive_moving_local().moved(Location(M.HEAD_ORIGIN_IN_CHASSIS))
+    clockspring = [c for c in M.harness_routes().children if c.label == "HARNESS_HEAD_YAW_CLOCKSPRING_RESERVE"]
+    plate = [c for c in body_frame.children if c.label == "HEAD_YAW_ADAPTER_PLATE"]
+    cooler_headroom_clash = sum((headroom & part).volume for part in [*yaw_stage.children, *moving.children, *clockspring, *plate])
+    yaw_clash = sum(
+        (part & other).volume
+        for part in [*yaw_stage.children, *moving.children]
+        for other in [*body_frame.children, *M.electronics().children, M.body_shell(), *M.sensors().children, *M.body_audio().children]
     )
-    rear_shell_side_slope = (
-        (M.BODY_WIDTH_LOWER - M.BODY_WIDTH_UPPER) * M.REAR_SHELL_END_WIDTH_FACTOR / 2.0 / shell_edge_height
-    )
-    rear_crossmember = M._box(16.0, 116.0, 14.0, (-56.0, 0.0, 41.0), "CHECK_REAR_CROSSMEMBER", M.FRAME_BLUE)
-    tail_root_overlap = (tail_shell & rear_crossmember).volume
-    tail_shoe_overlap = (tail_shell & tail_shoe).volume
-    tail_cap_overlap = (tail_shell & tail_cap).volume
-    tail_guard_overlaps = [(tail_shell & guard).volume for guard in (tail_guard_l, tail_guard_r)]
-    tail_sensor_shell_collision = (tail_shell & tail_sensor_package).volume
-    tail_spine_root_overlap = (tail_spine & rear_crossmember).volume
-    top_level_labels = [child.label for child in M.build_assembly().children]
-    terminal_link_lengths = [
-        abs(M.REAR_TAIL_STATIONS[index][0] - M.REAR_TAIL_STATIONS[index - 1][0])
-        for index in range(len(M.REAR_TAIL_STATIONS) - 2, len(M.REAR_TAIL_STATIONS))
+    rear_crossmember = next(child for child in chassis_frame.children if child.label == "REAR_SKID_CROSSMEMBER")
+    body_shell = M.body_shell()
+    body_panels = M.body_panels()
+
+    # Service panels, measured from the built solids rather than the
+    # constants that generated them.
+    panel_by_face = {
+        "FRONT": next(c for c in body_panels.children if c.label == "FRONT_SERVICE_PANEL_FUNCTIONAL_GRILLE"),
+        "REAR": next(c for c in body_panels.children if c.label == "REAR_SERVICE_PANEL_OCTAGONAL"),
+    }
+    panel_hardware = M.panel_mount_hardware()
+    frame_by_face = {face: next(c for c in panel_hardware.children if c.label == f"{face}_PANEL_INTERNAL_FRAME_WITH_BOSSES") for face in panel_by_face}
+    outer_face_x = {"FRONT": 84.4, "REAR": -76.4}
+    shell_face_x = {"FRONT": M.BODY_X_FRONT, "REAR": M.BODY_X_REAR}
+
+    def side_edge_slope(shape, x):
+        """|dy/dz| of the outermost straight, non-chamfer, +Y side edge in the plane X = x."""
+        best = None
+        for edge in shape.edges():
+            if edge.geom_type != GeomType.LINE:
+                continue
+            a, b = edge.start_point(), edge.end_point()
+            if abs(a.X - x) > 1e-6 or abs(b.X - x) > 1e-6 or min(a.Y, b.Y) <= 0.0:
+                continue
+            dy, dz = abs(b.Y - a.Y), abs(b.Z - a.Z)
+            if dy < 1e-6 or dz < 1e-6 or dy / dz > 0.5:
+                continue
+            if best is None or max(a.Y, b.Y) > best[0]:
+                best = (max(a.Y, b.Y), dy / dz)
+        return best[1]
+
+    panel_edge_angle_deg = {
+        face: {
+            "panel": round(math.degrees(math.atan(side_edge_slope(panel_by_face[face], outer_face_x[face]))), 4),
+            "shell": round(math.degrees(math.atan(side_edge_slope(body_shell, shell_face_x[face]))), 4),
+        }
+        for face in panel_by_face
+    }
+    # Land width = shell area under the panel outline / mean outline perimeter.
+    panel_land_mm = {}
+    for face, x in shell_face_x.items():
+        inward = -1.0 if face == "FRONT" else 1.0
+        slab = M._service_panel_outline(face, min(x, x + inward), max(x, x + inward))
+        land_area = (slab & body_shell).volume
+        outline = M._service_panel_outline(face, x, x + 1.0).faces().filter_by(Axis.X)[0]
+        opening = M._service_panel_outline(face, x, x + 1.0, -M.PANEL_OVERLAP).faces().filter_by(Axis.X)[0]
+        mean_perimeter = (sum(e.length for e in outline.outer_wire().edges()) + sum(e.length for e in opening.outer_wire().edges())) / 2.0
+        panel_land_mm[face] = round(land_area / mean_perimeter, 4)
+
+    def fastener_inset(face, y, z):
+        outline = M._service_panel_outline(face, 0.0, 1.0).faces().filter_by(Axis.X)[0]
+        return min(Vertex(0.0, y, z).distance_to(edge) for edge in outline.outer_wire().edges())
+
+    fastener_insets = {
+        face: [round(fastener_inset(face, y, z), 3) for y, z in points]
+        for face, points in (("FRONT", M.FRONT_PANEL_FASTENERS), ("REAR", M.REAR_PANEL_FASTENERS))
+    }
+
+    def probe_hits(shape, x0, x1, y, z):
+        return (shape & M._block(x0, x1, y - 0.5, y + 0.5, z - 0.25, z + 0.25)).volume > 1e-6
+
+    # Probe the frame plate on the centreline just inside its top and bottom edges.
+    frame_plate_x = {"FRONT": (78.0, 79.0), "REAR": (-71.0, -70.0)}
+    panel_z0 = {"FRONT": M.FRONT_PANEL_Z0, "REAR": M.REAR_PANEL_Z0}
+    frame_rings = {
+        face: {
+            "solids": len(frame.solids()),
+            "bottom_bar": probe_hits(frame, *frame_plate_x[face], 0.0, panel_z0[face] + 3.0),
+            "top_bar": probe_hits(frame, *frame_plate_x[face], 0.0, M.PANEL_Z1 - 3.0),
+        }
+        for face, frame in frame_by_face.items()
+    }
+    # Every panel-area part against the body, chassis and interior groups.
+    sensor_parts = [c for c in M.sensors().children if c.label != "GP2Y_OPTICAL_AXIS"]
+    optical_axis = next(c for c in M.sensors().children if c.label == "GP2Y_OPTICAL_AXIS")
+    panel_parts = [*body_panels.children[:3], *panel_hardware.children]
+    others = [body_shell, *chassis_frame.children, *body_frame.children, *M.electronics().children, *M.body_audio().children, *sensor_parts]
+    panel_clashes = {}
+    for part in panel_parts + [c for c in sensor_parts if c.label == "GP2Y0A41SK0F_ENVELOPE"]:
+        for other in others + panel_parts:
+            if other is part or "KEEP_OUT" in other.label:
+                continue
+            if not part.bounding_box().overlaps(other.bounding_box()):
+                continue
+            volume = (part & other).volume
+            if volume > 1e-3:
+                key = " x ".join(sorted((part.label, other.label)))
+                panel_clashes[key] = round(volume, 3)
+    range_window_blockage = sum((optical_axis & shape).volume for shape in [body_shell, *panel_parts, *chassis_frame.children])
+    removal_path = M._service_panel_outline("FRONT", 84.4, 130.0)
+    front_removal_blockers = {
+        shape.label: round((removal_path & shape).volume, 3)
+        for shape in [*chassis_frame.children, M.ball_transfer(), *sensor_parts]
+        if (removal_path & shape).volume > 1e-3
+    }
+
+    def keel_underside_z(x, y):
+        probe = M._block(x - 0.2, x + 0.2, y - 0.2, y + 0.2, 0.0, 40.0)
+        hit = keel_body & probe
+        return round(hit.bounding_box().min.Z, 4) if hit.volume > 1e-9 else None
+
+    shoe_top_z = M.SKID_SHOE_BOTTOM_Z + M.SKID_SHOE_SIZE[2]
+    shoe_x0 = M.SKID_PAD_CENTER[0] - M.SKID_SHOE_SIZE[0] / 2.0 + 1.0
+    shoe_x1 = M.SKID_PAD_CENTER[0] + M.SKID_SHOE_SIZE[0] / 2.0 - 1.0
+    shoe_backing = {
+        f"{x:.1f},{y:.1f}": keel_underside_z(x, y)
+        for x in (shoe_x0, M.SKID_PAD_CENTER[0], shoe_x1)
+        for y in (-M.SKID_SHOE_SIZE[1] / 2.0 + 1.0, 0.0, M.SKID_SHOE_SIZE[1] / 2.0 - 1.0)
+        if not any(abs(x - sx) < 3.0 and abs(y - sy) < 3.0 for sx in M.REAR_KEEL_SCREWS_X for sy in (-5.5, 5.5))
+    }
+    guard_top_z = M.TCRT_GUARD_BOTTOM_Z + M.REAR_KEEL_GUARD_HEIGHT
+    guard_backing = {
+        f"{x:.1f}": keel_underside_z(x, 5.6)
+        for x in (M.REAR_KEEL_GUARD_X[0] + 0.5, sum(M.REAR_KEEL_GUARD_X) / 2.0, M.REAR_KEEL_GUARD_X[1] - 0.5)
+    }
+
+    def first_contact_pitch_deg(shape):
+        angles = [math.degrees(math.atan2(v.Z, -v.X)) for v in shape.vertices() if v.X < 0.0]
+        return round(min(angles), 3)
+
+    pitch = {
+        "shoe": first_contact_pitch_deg(keel_shoe),
+        "guards": first_contact_pitch_deg(keel_guard_l),
+        "keel_body": first_contact_pitch_deg(keel_body),
+        "tcrt": first_contact_pitch_deg(keel_sensor_package),
+    }
+    tail_points = [joint[:2] for joint in M.REAR_TAIL_JOINTS] + [M.REAR_TAIL_TIP]
+    tail_rise_deg = [
+        round(math.degrees(math.atan2(b[1] - a[1], a[0] - b[0])), 2)
+        for a, b in zip(tail_points, tail_points[1:])
     ]
+    tail_sizes = M.rear_tail_segment_sizes()
+
+    def spin_radius(shape):
+        return max(math.hypot(v.X, v.Y) for v in shape.vertices())
+
+    tail_spin_radius = spin_radius(rear_tail)
+    nose_spin_radius = spin_radius(Compound(children=[M.ball_transfer(), M.tactile_ball_nose(), M.ball_nose_fairing()]))
+    tail_head_parts = [
+        child for child in tail_root.children if child.label.startswith("REAR_TAIL_ROOT_M3_HEAD")
+    ]
+    tail_shell_overlap = (rear_tail & body_shell).volume
+    # Parked, the rear panel carries no tail bores, so leave the M3 shanks out.
+    tail_body_parts = [tail_segments] + [
+        child for child in tail_root.children if M.REAR_TAIL_ENABLED or "_M3_" not in child.label
+    ]
+    tail_panel_overlap = (Compound(children=tail_body_parts) & body_panels).volume
+    keel_shell_overlap = (rear_keel & body_shell).volume
+    keel_crossmember_overlap = (keel_body & rear_crossmember).volume
+    keel_crossmember_gap = keel_body.distance_to(rear_crossmember)
+    tcrt_keel_collision = (keel_sensor_package & keel_body).volume
+    tail_bbox = rear_tail.bounding_box()
+    top_level_labels = [child.label for child in M.build_assembly().children]
     checks = [
         ("concept_a_track", M.TRACK == 170.0, {"actual_mm": M.TRACK}),
         ("wheel_geometry_mirrors_about_centerline", abs(wheel_l_y + wheel_r_y) < 1e-9, {"left_center_y_mm": wheel_l_y, "right_center_y_mm": wheel_r_y}),
@@ -66,9 +219,14 @@ def main():
         ("body_frame_has_two_locating_pins", len(M.BODY_LOCATING_POINTS) == 2, {"locating_points_mm": M.BODY_LOCATING_POINTS}),
         ("body_frame_no_longer_interpenetrates_chassis", frame_chassis_overlap < 1e-3, {"overlap_volume_mm3": frame_chassis_overlap}),
         ("body_mount_hardware_is_separate_top_level_group", "BODY_CHASSIS_MOUNT_HARDWARE" in top_level_labels, {"top_level_labels": top_level_labels}),
-        ("panel_openings_have_continuous_overlap", M.PANEL_OVERLAP >= 2.0, {"panel_overlap_mm": M.PANEL_OVERLAP}),
-        ("front_panel_edges_parallel_front_shell_edges", abs(front_panel_side_slope - front_shell_side_slope) < 1e-12, {"panel_dy_per_dz": front_panel_side_slope, "shell_dy_per_dz": front_shell_side_slope, "panel_widths_mm": [M.FRONT_PANEL_BOTTOM_WIDTH, M.FRONT_PANEL_TOP_WIDTH]}),
-        ("rear_panel_edges_parallel_rear_shell_edges", abs(rear_panel_side_slope - rear_shell_side_slope) < 1e-12, {"panel_dy_per_dz": rear_panel_side_slope, "shell_dy_per_dz": rear_shell_side_slope, "panel_widths_mm": [M.REAR_PANEL_BOTTOM_WIDTH, M.REAR_PANEL_TOP_WIDTH]}),
+        ("panel_openings_have_continuous_overlap", all(abs(width - M.PANEL_OVERLAP) < 0.02 for width in panel_land_mm.values()), {"measured_land_mm": panel_land_mm, "target_mm": M.PANEL_OVERLAP}),
+        ("front_panel_edges_parallel_front_shell_edges", abs(panel_edge_angle_deg["FRONT"]["panel"] - panel_edge_angle_deg["FRONT"]["shell"]) < 0.01, {"measured_edge_angle_deg": panel_edge_angle_deg["FRONT"], "panel_widths_mm": [M.FRONT_PANEL_BOTTOM_WIDTH, round(M.FRONT_PANEL_TOP_WIDTH, 3)]}),
+        ("rear_panel_edges_parallel_rear_shell_edges", abs(panel_edge_angle_deg["REAR"]["panel"] - panel_edge_angle_deg["REAR"]["shell"]) < 0.01, {"measured_edge_angle_deg": panel_edge_angle_deg["REAR"], "panel_widths_mm": [M.REAR_PANEL_BOTTOM_WIDTH, round(M.REAR_PANEL_TOP_WIDTH, 3)]}),
+        ("panel_fasteners_sit_inside_boss_inset", all(inset >= M.PANEL_FASTENER_MIN_INSET - 1e-6 for insets in fastener_insets.values() for inset in insets), {"inset_to_panel_edge_mm": fastener_insets, "minimum_mm": M.PANEL_FASTENER_MIN_INSET}),
+        ("panel_frames_are_closed_rings_with_fused_bosses", all(r["solids"] == 1 and r["bottom_bar"] and r["top_bar"] for r in frame_rings.values()), {"frames": frame_rings}),
+        ("panel_area_parts_do_not_interfere", not panel_clashes, {"clashes_mm3": panel_clashes}),
+        ("front_range_sensor_has_clear_window", range_window_blockage < 1e-3, {"blocked_volume_mm3": round(range_window_blockage, 3), "sensor_y_z_mm": [M.FRONT_RANGE_SENSOR_Y, M.FRONT_RANGE_SENSOR_Z]}),
+        ("front_panel_lifts_off_forward", not front_removal_blockers, {"blockers_mm3": front_removal_blockers, "panel_bottom_z_mm": M.FRONT_PANEL_Z0}),
         ("service_panels_repeat_eight_sided_shell_profile", M.PANEL_LOWER_CORNER > 0.0 and M.PANEL_UPPER_CORNER > 0.0, {"panel_vertex_count": 8, "lower_corner_mm": M.PANEL_LOWER_CORNER, "upper_corner_mm": M.PANEL_UPPER_CORNER}),
         ("front_and_rear_panels_have_four_fasteners_each", len(M.FRONT_PANEL_FASTENERS) == 4 and len(M.REAR_PANEL_FASTENERS) == 4, {"front_count": len(M.FRONT_PANEL_FASTENERS), "rear_count": len(M.REAR_PANEL_FASTENERS)}),
         ("panel_hardware_is_separate_top_level_group", "PANEL_MOUNT_HARDWARE" in top_level_labels, {"top_level_labels": top_level_labels}),
@@ -76,35 +234,44 @@ def main():
         ("four_body_microphones_are_allocated", len(M.MICROPHONE_PORTS) == 4, {"microphone_ports": M.MICROPHONE_PORTS}),
         ("speaker_and_front_range_sensor_do_not_overlap", audio_sensor_overlap < 1e-3, {"overlap_volume_mm3": audio_sensor_overlap}),
         ("front_range_sensor_is_below_speaker_grille", M.FRONT_RANGE_SENSOR_Z < M.SPEAKER_CENTER[2] - M.SPEAKER_BASKET_DIAMETER / 2.0, {"sensor_z_mm": M.FRONT_RANGE_SENSOR_Z, "speaker_center_z_mm": M.SPEAKER_CENTER[2]}),
-        ("lower_belt_is_physical_removable_fascia", len(M.lower_mobility_belt().children) == 5 and "MOBILITY_BELT_MOUNT_HARDWARE" in top_level_labels, {"belt_children": len(M.lower_mobility_belt().children)}),
-        ("neck_cowl_preserves_yaw_datum", M.BODY_Z_TOP + M.NECK_COWL_HEIGHT < M.HEAD_ORIGIN_IN_CHASSIS[2], {"cowl_top_z_mm": M.BODY_Z_TOP + M.NECK_COWL_HEIGHT, "head_origin_z_mm": M.HEAD_ORIGIN_IN_CHASSIS[2]}),
+        ("head_sweep_floor_clears_disc_top", M.HEAD_SWEEP_FLOOR_Z - M.YAW_DISC_TOP_Z >= 4.0 - 1e-9, {"sweep_floor_z_mm": M.HEAD_SWEEP_FLOOR_Z, "disc_top_z_mm": M.YAW_DISC_TOP_Z}),
+        ("hard_stops_alone_keep_head_off_disc", M.HEAD_ENVELOPE["hard_stops_alone_keep_4mm"] and M.HEAD_ENVELOPE["overtravel_1deg_case"]["clearance_to_disc_top_mm"] >= 2.0, {"hard_stop_corner": M.HEAD_ENVELOPE["hard_stop_fault_case"], "overtravel_1deg": M.HEAD_ENVELOPE["overtravel_1deg_case"]}),
+        ("head_motion_is_full_range", all(r["roll_min_deg"] == -18 and r["roll_max_deg"] == 18 for r in M.HEAD_ENVELOPE["rows"]), {"rows": len(M.HEAD_ENVELOPE["rows"])}),
+        ("pi_cooler_headroom_kept", cooler_headroom_clash < 1e-3, {"headroom_mm": M.PI_COOLER_HEADROOM, "yaw_parts_in_headroom_mm3": cooler_headroom_clash}),
+        ("yaw_disc_fits_flat_body_top", M.YAW_DISC_RADIUS <= M.BODY_WIDTH_UPPER / 2.0 - 10.0, {"disc_radius_mm": M.YAW_DISC_RADIUS, "flat_top_half_width_mm": M.BODY_WIDTH_UPPER / 2.0 - 10.0}),
+        ("yaw_stage_clears_frame_electronics_shell", yaw_clash < 1e-3, {"overlap_volume_mm3": yaw_clash}),
+        ("yaw_disc_rim_has_running_gap", M.YAW_DISC_TOP_Z - M.YAW_DISC_THICKNESS - M.BODY_Z_TOP >= 1.0 - 1e-9, {"disc_rim_bottom_z_mm": M.YAW_DISC_TOP_Z - M.YAW_DISC_THICKNESS, "body_top_z_mm": M.BODY_Z_TOP}),
+        ("yaw_pinion_meshes_ring_gear", abs(math.hypot(*M.YAW_PINION_CENTER) - (M.YAW_RING_GEAR_PITCH_RADIUS + M.YAW_PINION_PITCH_RADIUS)) < 1e-9, {"centre_distance_mm": math.hypot(*M.YAW_PINION_CENTER)}),
         ("body_fits_track_width", M.BODY_WIDTH_LOWER < M.TRACK + M.WHEEL_WIDTH, {"body_width_mm": M.BODY_WIDTH_LOWER, "wheel_stance_mm": M.TRACK + M.WHEEL_WIDTH}),
         ("body_ground_clearance_in_baseline_band", 25.0 <= M.BODY_Z_BOTTOM <= 35.0, {"body_bottom_mm": M.BODY_Z_BOTTOM, "target_mm": [25.0, 35.0]}),
         ("visible_body_height_in_baseline_band", 105.0 <= M.BODY_Z_TOP - M.BODY_Z_BOTTOM <= 115.0, {"body_height_mm": M.BODY_Z_TOP - M.BODY_Z_BOTTOM, "target_mm": [105.0, 115.0]}),
-        ("neutral_stack_is_documented_304_mm", abs(M.OVERALL_PHYSICAL_HEIGHT - 304.0) < 1e-9, {"overall_height_mm": M.OVERALL_PHYSICAL_HEIGHT, "rounded_target_mm": 300.0}),
-        ("neck_allocation_is_60_mm", abs(M.NECK_ALLOCATION - 60.0) < 1e-9, {"neck_allocation_mm": M.NECK_ALLOCATION}),
+        ("neutral_stack_is_documented_284_mm", abs(M.OVERALL_PHYSICAL_HEIGHT - 284.0) < 1e-9, {"overall_height_mm": M.OVERALL_PHYSICAL_HEIGHT, "rounded_target_mm": 300.0}),
+        ("neck_allocation_is_40_mm", abs(M.NECK_ALLOCATION - 40.0) < 1e-9, {"neck_allocation_mm": M.NECK_ALLOCATION}),
         ("rear_tcrt_is_only_cliff_channel", M.TCRT_CHANNELS == ("REAR",), {"channels": M.TCRT_CHANNELS}),
         ("rear_tcrt_has_contact_lookahead", M.SKID_PAD_CENTER[0] - M.TCRT_REAR_CENTER[0] >= M.TCRT_REAR_LOOKAHEAD, {"sensor_x_mm": M.TCRT_REAR_CENTER[0], "skid_contact_x_mm": M.SKID_PAD_CENTER[0], "lookahead_mm": M.SKID_PAD_CENTER[0] - M.TCRT_REAR_CENTER[0]}),
         ("rear_tcrt_optical_face_matches_raised_datum", abs(M.TCRT_REAR_CENTER[2] - M.TCRT_PACKAGE_SIZE[2] / 2.0 - M.TCRT_OPTICAL_FACE_Z) < 1e-9 and M.TCRT_OPTICAL_FACE_Z == 10.0, {"optical_face_z_mm": M.TCRT_OPTICAL_FACE_Z}),
         ("rear_tcrt_lookahead_remains_bounded", 25.0 <= M.TCRT_REAR_LOOKAHEAD <= 30.0, {"lookahead_mm": M.TCRT_REAR_LOOKAHEAD}),
         ("tcrt_guard_is_lower_than_optical_face", 0.0 < M.TCRT_GUARD_BOTTOM_Z < M.TCRT_OPTICAL_FACE_Z, {"guard_bottom_z_mm": M.TCRT_GUARD_BOTTOM_Z, "optical_face_z_mm": M.TCRT_OPTICAL_FACE_Z}),
-        ("rear_skid_is_first_sacrificial_contact", M.SKID_SHOE_BOTTOM_Z < M.TCRT_GUARD_BOTTOM_Z, {"skid_bottom_z_mm": M.SKID_SHOE_BOTTOM_Z, "sensor_guard_bottom_z_mm": M.TCRT_GUARD_BOTTOM_Z}),
-        ("rear_skid_pad_is_below_connected_root", M.SKID_PAD_CENTER[2] < M.SKID_ROOT_DATUM[2] and M.SKID_PAD_CENTER[0] < M.SKID_ROOT_DATUM[0], {"root_mm": M.SKID_ROOT_DATUM, "pad_mm": M.SKID_PAD_CENTER}),
-        ("rear_tail_is_multi_link_faceted_arc", M.REAR_TAIL_STYLE == "MULTI_LINK_FACETED_ARC" and len(M.REAR_TAIL_STATIONS) >= 10, {"style": M.REAR_TAIL_STYLE, "station_count": len(M.REAR_TAIL_STATIONS)}),
-        ("rear_tail_terminal_links_are_short", max(terminal_link_lengths) <= 7.0, {"terminal_link_lengths_mm": terminal_link_lengths}),
-        ("rear_tail_tip_is_pointed", M.REAR_TAIL_STATIONS[-1][1] <= 2.0 and M.REAR_TAIL_STATIONS[-1][3] - M.REAR_TAIL_STATIONS[-1][2] <= 4.0, {"tip_half_width_mm": M.REAR_TAIL_STATIONS[-1][1], "tip_height_mm": M.REAR_TAIL_STATIONS[-1][3] - M.REAR_TAIL_STATIONS[-1][2]}),
+        ("rear_pitch_contact_order_is_shoe_guard_keel_sensor", pitch["shoe"] < pitch["guards"] < min(pitch["keel_body"], pitch["tcrt"]), {"first_contact_pitch_deg": pitch}),
+        ("rear_keel_seats_on_crossmember_without_interference", keel_crossmember_overlap < 1e-6 and keel_crossmember_gap < 1e-6, {"overlap_volume_mm3": keel_crossmember_overlap, "gap_mm": keel_crossmember_gap}),
+        ("rear_keel_bolted_with_four_m3", len(keel_hardware.children) == 8, {"hardware_solids": len(keel_hardware.children)}),
+        ("rear_keel_shoe_fully_backed", all(z is not None and abs(z - shoe_top_z) < 1e-3 for z in shoe_backing.values()), {"shoe_top_z_mm": shoe_top_z, "keel_underside_z_mm": shoe_backing}),
+        ("rear_keel_guards_seated_full_length", all(z is not None and z < guard_top_z for z in guard_backing.values()), {"guard_top_z_mm": guard_top_z, "keel_underside_z_mm": guard_backing}),
+        ("rear_tcrt_package_clears_keel", tcrt_keel_collision < 1e-6, {"collision_volume_mm3": tcrt_keel_collision}),
+        ("rear_keel_passes_shell_floor_slot", keel_shell_overlap < 1e-6, {"overlap_volume_mm3": keel_shell_overlap}),
+        ("rear_tail_parked_out_of_assembly", M.REAR_TAIL_ENABLED or ("REAR_TAIL_STINGER" not in module_labels and all(row[0] != "REAR_TAIL_STINGER" for row in M.MASS_ROWS)), {"enabled": M.REAR_TAIL_ENABLED, "module_children": module_labels}),
+        ("rear_keel_is_translucent_ivory", M.REAR_KEEL_COLOR == M.IVORY and M.REAR_KEEL_ALPHA < 0.5, {"color": M.REAR_KEEL_COLOR, "alpha": M.REAR_KEEL_ALPHA}),
+        ("rear_tail_is_faceted_telescoping_stinger", M.REAR_TAIL_STYLE == "FACETED_TELESCOPING_STINGER" and len(tail_segments.children) == len(M.REAR_TAIL_JOINTS), {"style": M.REAR_TAIL_STYLE, "segment_labels": [child.label for child in tail_segments.children]}),
+        ("rear_tail_sweeps_progressively_upward", all(0.0 < a < b < 90.0 for a, b in zip(tail_rise_deg, tail_rise_deg[1:])), {"segment_rise_deg": tail_rise_deg}),
+        ("rear_tail_segments_telescope", all(end > nxt[0] for (_start, end), nxt in zip(tail_sizes, tail_sizes[1:])), {"segment_start_end_widths_mm": [[round(a, 2), round(b, 2)] for a, b in tail_sizes]}),
+        ("rear_tail_tip_is_blunt_chisel", min(M.REAR_TAIL_TIP_SECTION) >= 2.0, {"tip_section_w_h_mm": M.REAR_TAIL_TIP_SECTION}),
+        ("rear_tail_inside_nose_spin_circle", tail_spin_radius <= nose_spin_radius, {"tail_planar_radius_mm": round(tail_spin_radius, 2), "nose_planar_radius_mm": round(nose_spin_radius, 2)}),
+        ("rear_tail_below_body_top", tail_bbox.max.Z <= M.BODY_Z_TOP - 10.0, {"tail_max_z_mm": round(tail_bbox.max.Z, 2), "limit_z_mm": M.BODY_Z_TOP - 10.0}),
+        ("rear_tail_clears_shell_and_panels", tail_shell_overlap < 1e-6 and tail_panel_overlap < 1e-6, {"shell_overlap_mm3": tail_shell_overlap, "panel_overlap_mm3": tail_panel_overlap}),
+        ("rear_tail_stays_above_body_ground_clearance", tail_bbox.min.Z > M.BODY_Z_BOTTOM, {"tail_min_z_mm": tail_bbox.min.Z, "body_bottom_z_mm": M.BODY_Z_BOTTOM}),
+        ("rear_tail_root_has_four_hidden_m3", len(M.rear_tail_root_screw_points()) == 4 and all(head.bounding_box().min.X > M.BODY_X_REAR for head in tail_head_parts), {"screw_points_y_z_mm": M.rear_tail_root_screw_points(), "head_min_x_mm": [round(head.bounding_box().min.X, 2) for head in tail_head_parts]}),
         ("rear_tail_uses_head_ivory", M.REAR_TAIL_VISIBLE_COLOR == M.IVORY, {"tail_color": M.REAR_TAIL_VISIBLE_COLOR, "head_palette_ivory": M.IVORY}),
-        ("rear_tail_shell_is_translucent", 0.0 < M.REAR_TAIL_SHELL_ALPHA < 0.5, {"shell_alpha": M.REAR_TAIL_SHELL_ALPHA}),
-        ("rear_tail_has_hollow_wall_definition", 1.5 <= M.REAR_TAIL_WALL <= 3.0 and len(M.REAR_TAIL_INNER_STATIONS) >= 8, {"wall_mm": M.REAR_TAIL_WALL, "inner_station_count": len(M.REAR_TAIL_INNER_STATIONS)}),
         ("rear_skid_tcrt_is_separate_top_level_group", "REAR_SKID_TCRT_MODULE" in top_level_labels, {"top_level_labels": top_level_labels}),
-        ("rear_tail_root_overlaps_crossmember", tail_root_overlap > 0.0, {"overlap_volume_mm3": tail_root_overlap}),
-        ("rear_tail_spine_enters_crossmember", tail_spine_root_overlap > 0.0, {"overlap_volume_mm3": tail_spine_root_overlap}),
-        ("rear_tail_shoe_is_attached", tail_shoe_overlap > 0.0, {"overlap_volume_mm3": tail_shoe_overlap}),
-        ("rear_tail_guards_are_attached", all(value > 0.0 for value in tail_guard_overlaps), {"overlap_volumes_mm3": tail_guard_overlaps}),
-        ("rear_tail_cap_is_attached", tail_cap_overlap > 0.0, {"overlap_volume_mm3": tail_cap_overlap}),
-        ("rear_tcrt_package_clears_shell", tail_sensor_shell_collision < 1e-6, {"collision_volume_mm3": tail_sensor_shell_collision}),
-        ("rear_tail_tip_is_upturned", sum(M.REAR_TAIL_STATIONS[-1][2:4]) / 2.0 > sum(M.REAR_TAIL_STATIONS[-2][2:4]) / 2.0, {"sensor_station_center_z_mm": sum(M.REAR_TAIL_STATIONS[-2][2:4]) / 2.0, "tip_center_z_mm": sum(M.REAR_TAIL_STATIONS[-1][2:4]) / 2.0}),
-        ("rear_tail_cap_is_flush", abs(M.REAR_TAIL_CAP_TOP_Z - M.REAR_TAIL_STATIONS[6][3]) < 1e-9, {"cap_top_z_mm": M.REAR_TAIL_CAP_TOP_Z, "sensor_station_top_z_mm": M.REAR_TAIL_STATIONS[6][3]}),
         ("tactile_nose_precedes_ball_surface", M.TACTILE_NOSE_FACE_X > M.BALL_CONTACT[0] + M.BALL_DIAMETER / 2.0, {"tactile_face_x_mm": M.TACTILE_NOSE_FACE_X, "ball_front_x_mm": M.BALL_CONTACT[0] + M.BALL_DIAMETER / 2.0}),
         ("tactile_nose_has_bounded_travel", 2.0 <= M.TACTILE_NOSE_TRAVEL <= 4.0, {"travel_mm": M.TACTILE_NOSE_TRAVEL}),
         ("battery_forward_of_axle", M.BATTERY_CENTER[0] > 0.0, {"battery_x_mm": M.BATTERY_CENTER[0]}),

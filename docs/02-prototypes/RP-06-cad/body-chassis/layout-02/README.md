@@ -55,3 +55,11 @@ validation still reports five
 inherited self-intersecting occurrences inside the frozen Raspberry Pi 5 vendor
 STEP. None is part of this Layout 02 revision; the exact SKU is retained
 rather than replaced with a cosmetic placeholder.
+
+`check_layout.py` also measures the service panels from the built solids: the
+2 mm land, side-edge parallelism, fastener inset, single-solid frames, the
+GP2Y window, the front panel's forward lift-off path, and zero interference
+between panel-area parts and the shell, chassis, body frame, electronics,
+audio and sensors. That sweep does not cover the composed head: the RP-01
+head's `physical_*` layers currently overlap the body shell and rear panel,
+which is a head-composition issue outside the panel work.
