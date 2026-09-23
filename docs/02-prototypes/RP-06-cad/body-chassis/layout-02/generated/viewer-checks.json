@@ -1,0 +1,237 @@
+{
+  "passed": true,
+  "leaves": 1228,
+  "features": {
+    "frame_R": 703,
+    "frame_P": 35,
+    "frame_Y": 27,
+    "yaw_pinion": 1,
+    "wheel_L": 4,
+    "wheel_R": 4,
+    "shell": 26,
+    "head": 740,
+    "structure": 90,
+    "drive": 24,
+    "rear_tail": 18,
+    "electronics": 254,
+    "sensors": 9,
+    "audio": 17,
+    "harness": 22,
+    "physics": 28
+  },
+  "pivots_mm": {
+    "roll": [
+      54.1389,
+      -1.0934,
+      236.8562
+    ],
+    "pitch": [
+      16,
+      0,
+      235.4714
+    ],
+    "yaw": [
+      16,
+      0,
+      140
+    ],
+    "pinion": [
+      16,
+      37,
+      0
+    ],
+    "wheel_L": [
+      0,
+      85,
+      42
+    ],
+    "wheel_R": [
+      0,
+      -85,
+      42
+    ]
+  },
+  "checks": 35,
+  "failed": 0,
+  "detail": [
+    {
+      "name": "neutral pose is identity",
+      "passed": true
+    },
+    {
+      "name": "roll 18°: frame_R fixes its axis",
+      "passed": true
+    },
+    {
+      "name": "roll 18°: frame_P stays put",
+      "passed": true
+    },
+    {
+      "name": "roll 18°: frame_Y stays put",
+      "passed": true
+    },
+    {
+      "name": "pitch 40°: frame_R fixes its axis",
+      "passed": true
+    },
+    {
+      "name": "pitch 40°: frame_P fixes its axis",
+      "passed": true
+    },
+    {
+      "name": "pitch 40°: frame_Y stays put",
+      "passed": true
+    },
+    {
+      "name": "yaw 55°: frame_R fixes its axis",
+      "passed": true
+    },
+    {
+      "name": "yaw 55°: frame_P fixes its axis",
+      "passed": true
+    },
+    {
+      "name": "yaw 55°: frame_Y fixes its axis",
+      "passed": true
+    },
+    {
+      "name": "yaw 1:1 spur meshes without slip",
+      "passed": true,
+      "detail": {
+        "driven": [
+          15.999677114088398,
+          18.49999999718229,
+          150
+        ],
+        "pinion": [
+          15.999677114088396,
+          18.500000002817714,
+          150
+        ]
+      }
+    },
+    {
+      "name": "mesh point sits on both pitch circles",
+      "passed": true
+    },
+    {
+      "name": "wheel L spins about its hub",
+      "passed": true
+    },
+    {
+      "name": "wheel R spins about its hub",
+      "passed": true
+    },
+    {
+      "name": "L0.001 R0.001: wheel L contact does not slip",
+      "passed": true,
+      "detail": {
+        "slip_mm": 6.396966512164935e-9
+      }
+    },
+    {
+      "name": "L0.001 R0.001: wheel R contact does not slip",
+      "passed": true,
+      "detail": {
+        "slip_mm": 6.396966512164935e-9
+      }
+    },
+    {
+      "name": "L0.001 R0: wheel L contact does not slip",
+      "passed": true,
+      "detail": {
+        "slip_mm": 6.5892985476615715e-9
+      }
+    },
+    {
+      "name": "L0.001 R0: wheel R contact does not slip",
+      "passed": true,
+      "detail": {
+        "slip_mm": 0
+      }
+    },
+    {
+      "name": "L0 R0.001: wheel L contact does not slip",
+      "passed": true,
+      "detail": {
+        "slip_mm": 0
+      }
+    },
+    {
+      "name": "L0 R0.001: wheel R contact does not slip",
+      "passed": true,
+      "detail": {
+        "slip_mm": 6.5892985476615715e-9
+      }
+    },
+    {
+      "name": "L0.001 R-0.001: wheel L contact does not slip",
+      "passed": true,
+      "detail": {
+        "slip_mm": 7.135281289001929e-9
+      }
+    },
+    {
+      "name": "L0.001 R-0.001: wheel R contact does not slip",
+      "passed": true,
+      "detail": {
+        "slip_mm": 7.135281289001929e-9
+      }
+    },
+    {
+      "name": "one turn each drives one circumference forward",
+      "passed": true
+    },
+    {
+      "name": "opposed wheels spin in place, left turn positive",
+      "passed": true,
+      "detail": {
+        "heading_deg": 177.88235294117646
+      }
+    },
+    {
+      "name": "drive keeps everything on the floor plane",
+      "passed": true
+    },
+    {
+      "name": "head_roll_deg=-18 finite",
+      "passed": true
+    },
+    {
+      "name": "head_roll_deg=18 finite",
+      "passed": true
+    },
+    {
+      "name": "head_pitch_deg=-22 finite",
+      "passed": true
+    },
+    {
+      "name": "head_pitch_deg=40 finite",
+      "passed": true
+    },
+    {
+      "name": "head_yaw_deg=-55 finite",
+      "passed": true
+    },
+    {
+      "name": "head_yaw_deg=55 finite",
+      "passed": true
+    },
+    {
+      "name": "wheel_L_deg=-720 finite",
+      "passed": true
+    },
+    {
+      "name": "wheel_L_deg=720 finite",
+      "passed": true
+    },
+    {
+      "name": "wheel_R_deg=-720 finite",
+      "passed": true
+    },
+    {
+      "name": "wheel_R_deg=720 finite",
+      "passed": true
+    }
+  ]
+}
