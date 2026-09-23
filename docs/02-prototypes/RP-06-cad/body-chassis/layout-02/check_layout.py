@@ -39,7 +39,7 @@ def main():
     yaw_stage = M.body_yaw_stage()
     # Air above the Pi cooler: no yaw-stage part, stationary or moving, and no
     # clock-spring reserve inside the headroom prism over the cooler footprint.
-    headroom = M._block(-26.0, 38.0, -22.0, 22.0, M.PI_COOLER_TOP_Z, M.PI_COOLER_TOP_Z + M.PI_COOLER_HEADROOM)
+    headroom = M._block(-26.0 + M.BODY_SHIFT_X, 38.0 + M.BODY_SHIFT_X, -22.0, 22.0, M.PI_COOLER_TOP_Z, M.PI_COOLER_TOP_Z + M.PI_COOLER_HEADROOM)
     moving_parts = M.yaw_drive_moving_parts()
     clockspring = [c for c in M.harness_routes().children if c.label == "HARNESS_HEAD_YAW_CLOCKSPRING_RESERVE"]
     plate = [c for c in body_frame.children if c.label == "HEAD_YAW_ADAPTER_PLATE"]
@@ -61,7 +61,7 @@ def main():
     }
     panel_hardware = M.panel_mount_hardware()
     frame_by_face = {face: next(c for c in panel_hardware.children if c.label == f"{face}_PANEL_INTERNAL_FRAME_WITH_BOSSES") for face in panel_by_face}
-    outer_face_x = {"FRONT": 84.4, "REAR": -76.4}
+    outer_face_x = {"FRONT": M.BODY_X_FRONT + M.SHELL_THICKNESS, "REAR": M.BODY_X_REAR - M.SHELL_THICKNESS}
     shell_face_x = {"FRONT": M.BODY_X_FRONT, "REAR": M.BODY_X_REAR}
 
     def side_edge_slope(shape, x):
@@ -111,7 +111,7 @@ def main():
         return (shape & M._block(x0, x1, y - 0.5, y + 0.5, z - 0.25, z + 0.25)).volume > 1e-6
 
     # Probe the frame plate on the centreline just inside its top and bottom edges.
-    frame_plate_x = {"FRONT": (78.0, 79.0), "REAR": (-71.0, -70.0)}
+    frame_plate_x = {"FRONT": (M.BODY_X_FRONT - 4.0, M.BODY_X_FRONT - 3.0), "REAR": (M.BODY_X_REAR + 3.0, M.BODY_X_REAR + 4.0)}
     panel_z0 = {"FRONT": M.FRONT_PANEL_Z0, "REAR": M.REAR_PANEL_Z0}
     frame_rings = {
         face: {
@@ -127,7 +127,7 @@ def main():
     panel_parts = [*body_panels.children[:3], *panel_hardware.children]
     others = [body_shell, *chassis_frame.children, *body_frame.children, *M.electronics().children, *M.body_audio().children, *sensor_parts]
     panel_clashes = {}
-    for part in panel_parts + [c for c in sensor_parts if c.label == "GP2Y0A41SK0F_ENVELOPE"]:
+    for part in panel_parts + [c for c in sensor_parts if c.label == "GP2Y0A41SK0F_STEP"]:
         for other in others + panel_parts:
             if other is part or "KEEP_OUT" in other.label:
                 continue
@@ -137,8 +137,17 @@ def main():
             if volume > 1e-3:
                 key = " x ".join(sorted((part.label, other.label)))
                 panel_clashes[key] = round(volume, 3)
-    range_window_blockage = sum((optical_axis & shape).volume for shape in [body_shell, *panel_parts, *chassis_frame.children])
-    removal_path = M._service_panel_outline("FRONT", 84.4, 130.0)
+    range_window_blockage = sum(
+        (optical_axis & shape).volume
+        for shape in [
+            body_shell,
+            *panel_parts,
+            *chassis_frame.children,
+            *[c for c in sensor_parts if c.label == "BALL_NOSE_CONCEALED_CONTACT_MODULE"][0].children,
+        ]
+        if "TRAVEL_RESERVE" not in shape.label
+    )
+    removal_path = M._service_panel_outline("FRONT", M.BODY_X_FRONT + M.SHELL_THICKNESS, M.BODY_X_FRONT + 48.0)
     front_removal_blockers = {
         shape.label: round((removal_path & shape).volume, 3)
         for shape in [*chassis_frame.children, M.ball_transfer(), *sensor_parts]
@@ -185,8 +194,96 @@ def main():
     def spin_radius(shape):
         return max(math.hypot(v.X, v.Y) for v in shape.vertices())
 
+    # Ball nose (RP03-CAD-04), measured from the built solids.
+    def leaves(shape):
+        kids = getattr(shape, "children", None)
+        return [leaf for kid in kids for leaf in leaves(kid)] if kids else [shape]
+
+    def by_label(shapes, label):
+        return next(s for s in shapes if s.label == label)
+
+    ball_parts = leaves(M.ball_transfer())
+    pod_group = next(c for c in chassis_frame.children if c.label == "BALL_POD")
+    pod_parts = leaves(pod_group)
+    front_crossmember = next(c for c in chassis_frame.children if c.label == "FRONT_CROSSMEMBER")
+    nose_module = next(c for c in M.sensors().children if c.label == "BALL_NOSE_CONCEALED_CONTACT_MODULE")
+    nose_parts = leaves(nose_module)
+    gp2y_parts = [c for c in M.sensors().children if c.label.startswith("GP2Y") and c.label != "GP2Y_OPTICAL_AXIS"]
+    flange = by_label(ball_parts, "BALL_TRANSFER_PURCHASED_3HOLE_FLANGE")
+    housing = by_label(ball_parts, "BALL_TRANSFER_PURCHASED_HOUSING")
+    lip = by_label(ball_parts, "BALL_TRANSFER_RETAINING_LIP")
+    pod_seat = by_label(pod_parts, "BALL_POD_PRINTED_SEAT")
+    touch_cap = by_label(nose_parts, "BALL_NOSE_TOUCH_CAP")
+    travel_reserve = by_label(nose_parts, "BALL_NOSE_3MM_TRAVEL_RESERVE")
+    plunger = by_label(nose_parts, "BALL_NOSE_SWITCH_PLUNGER")
+    ball_seat = {
+        "flange_top_z_mm": round(flange.bounding_box().max.Z, 4),
+        "pod_seat_z_mm": round(pod_seat.bounding_box().min.Z, 4),
+        "gap_mm": round(flange.distance_to(pod_seat), 4),
+        "overlap_mm3": round((flange & pod_seat).volume, 4),
+    }
+    ball_stack_gaps = {
+        "housing_to_flange_mm": round(housing.distance_to(flange), 4),
+        "lip_to_housing_mm": round(lip.distance_to(housing), 4),
+    }
+    ball_screw_engagement = {
+        part.label: round(min(part.bounding_box().max.Z, flange.bounding_box().max.Z) - max(part.bounding_box().min.Z, flange.bounding_box().min.Z), 3)
+        for part in pod_parts
+        if part.label.startswith("BALL_M3_SHANK")
+    }
+
+    # Every nose solid against every other, except a screw inside its own insert.
+    nose_solids = [*ball_parts, *pod_parts, front_crossmember, *gp2y_parts, *[p for p in nose_parts if p is not travel_reserve]]
+    nose_clashes = {}
+    for i, a in enumerate(nose_solids):
+        for b in nose_solids[i + 1:]:
+            pair = {a.label.rsplit("_", 1)[0], b.label.rsplit("_", 1)[0]}
+            if pair == {"BALL_POD_M3_SHANK", "BALL_POD_HEATSET_INSERT"}:
+                continue
+            if not a.bounding_box().overlaps(b.bounding_box()):
+                continue
+            volume = (a & b).volume
+            if volume > 1e-3:
+                nose_clashes[" x ".join(sorted((a.label, b.label)))] = round(volume, 3)
+    travel_blockers = {
+        s.label: round((travel_reserve & s).volume, 3)
+        for s in [*ball_parts, *pod_parts, *gp2y_parts, *[p for p in nose_parts if p not in (travel_reserve, plunger)]]
+        if (travel_reserve & s).volume > 1e-3
+    }
+    rigid_nose = [*ball_parts, *pod_parts, *gp2y_parts]
+    rigid_front_x = max(s.bounding_box().max.X for s in rigid_nose)
+    # RP-03 C12: a 20 mm floor-level cube straight ahead. Since the skirt cut
+    # (RP03-CAD-04, 2026-09-24) it is not claimed for the cap; record what it meets.
+    # Sweep the cube's path rearward; the part whose hit face is furthest forward meets it first.
+    c12_path = M._block(0.0, 170.0, -10.0, 10.0, 0.0, 20.0)
+    c12_first = {}
+    for s in [*rigid_nose, touch_cap]:
+        hit = c12_path & s
+        if hit.volume > 1e-3:
+            c12_first[s.label] = round(hit.bounding_box().max.X, 3)
+    c12_first_label = max(c12_first, key=c12_first.get)
+    nose_front_x = touch_cap.bounding_box().max.X
+    face_ahead = M.FRONT_RANGE_SENSOR_FACE_X - M.BALL_CONTACT[0]
+    lookahead = {
+        case: {
+            "from_ball_contact_mm": required,
+            "needed_from_face_mm": round(required - face_ahead, 2),
+            "needed_from_face_if_charged_to_nose_front_mm": round(required + (nose_front_x - M.FRONT_RANGE_SENSOR_FACE_X), 2),
+        }
+        for case, required in M.FRONT_RANGE_REQUIRED_MM.items()
+    }
+    lookahead_ok = all(
+        row["needed_from_face_if_charged_to_nose_front_mm"] <= M.FRONT_RANGE_MAX_MM for row in lookahead.values()
+    )
+    nose_width = touch_cap.bounding_box().size.Y
+    # The pod's tongue passes the shell's front notch; the crossmember and rails stay inside.
+    pod_shell_overlap = {s.label: round((s & body_shell).volume, 3) for s in pod_parts if (s & body_shell).volume > 1e-3}
+    chassis_front_x = max(
+        c.bounding_box().max.X for c in chassis_frame.children if c.label != "BALL_POD"
+    )
+
     tail_spin_radius = spin_radius(rear_tail)
-    nose_spin_radius = spin_radius(Compound(children=[M.ball_transfer(), M.tactile_ball_nose(), M.ball_nose_fairing()]))
+    nose_spin_radius = spin_radius(Compound(children=[M.ball_transfer(), pod_group, nose_module]))
     tail_head_parts = [
         child for child in tail_root.children if child.label.startswith("REAR_TAIL_ROOT_M3_HEAD")
     ]
@@ -201,6 +298,71 @@ def main():
     keel_crossmember_gap = keel_body.distance_to(rear_crossmember)
     tcrt_keel_collision = (keel_sensor_package & keel_body).volume
     tail_bbox = rear_tail.bounding_box()
+
+    # Drivetrain fit (RP03-CAD-05), measured from the built solids. The wheel
+    # is axisymmetric about the axle, so its solids are its swept volume; every
+    # stationary solid must keep a running gap to them. Bearings bridge the
+    # stationary boss and the rotating stub by design, and the motor's output
+    # shaft turns with the stub, so both are left out of the static set.
+    chassis_static = leaves(Compound(children=[c for c in chassis_frame.children if c.label != "BALL_POD"]))
+    # Electronics stay at group level: the Pi 5 vendor STEP's sub-shapes lose
+    # their parent placement when walked as leaves.
+    body_static = [body_shell, *leaves(body_panels), *leaves(panel_hardware), *leaves(body_frame), *M.electronics().children]
+    def near(a, b, margin):
+        ba, bb = a.bounding_box(), b.bounding_box()
+        return all(
+            getattr(ba.min, k) - margin <= getattr(bb.max, k) and getattr(bb.min, k) - margin <= getattr(ba.max, k)
+            for k in ("X", "Y", "Z")
+        )
+
+    wheel_clearance = {}
+    drivetrain_clashes = {}
+    flange_seat = {}
+    for side in ("L", "R"):
+        rotating = M.wheel_assembly(side).children
+        motor = [c for c in M.motor_envelope(side).children if "OUTPUT_SHAFT" not in c.label]
+        static = [*chassis_static, *body_static, *motor]
+        nearest = min(
+            (round(r.distance_to(t), 3), r.label, t.label)
+            for r in rotating
+            for t in static
+            if near(r, t, 5.0)
+        )
+        wheel_clearance[side] = {"min_gap_mm": nearest[0], "between": nearest[1:]}
+        motor_solids = [c for c in motor if "PIGTAIL" not in c.label]
+        for part in motor:
+            for other in [*chassis_static, *body_static, *leaves(M.harness_routes())]:
+                if not part.bounding_box().overlaps(other.bounding_box()):
+                    continue
+                volume = (part & other).volume
+                if volume > 1e-3:
+                    drivetrain_clashes[f"{part.label} x {other.label}"] = round(volume, 3)
+        gearbox = next(c for c in motor_solids if c.label.endswith("GEARBOX"))
+        flange = by_label(chassis_static, f"AXLE_MOTOR_FLANGE_BEARING_BOSS_{side}")
+        flange_seat[side] = {"gap_mm": round(gearbox.distance_to(flange), 4), "overlap_mm3": round((gearbox & flange).volume, 4)}
+    bearings_in_boss = {}
+    for side in ("L", "R"):
+        boss = by_label(chassis_static, f"AXLE_MOTOR_FLANGE_BEARING_BOSS_{side}").bounding_box()
+        for bearing in M.bearing_pair(side).children:
+            bb = bearing.bounding_box()
+            bearings_in_boss[bearing.label] = boss.min.Y - 1e-6 <= bb.min.Y and bb.max.Y <= boss.max.Y + 1e-6
+    battery = by_label(M.electronics().children, "BATTERY_RP02_ENVELOPE")
+    battery_clashes = {
+        other.label: round((battery & other).volume, 3)
+        for other in [*chassis_static, *body_static, *leaves(M.harness_routes()), *leaves(M.body_audio()), *leaves(M.motor_envelope("L")), *leaves(M.motor_envelope("R"))]
+        if other.label != battery.label and battery.bounding_box().overlaps(other.bounding_box()) and (battery & other).volume > 1e-3
+    }
+    # The tub's walls and hatch pass through the shell floor opening.
+    tub_shell_overlap = {
+        part.label: round((part & body_shell).volume, 3)
+        for part in M.battery_tub().children
+        if (part & body_shell).volume > 1e-3
+    }
+    com = M.mass_properties()["com_mm"]
+    com_ratio = com[0] / com[2]
+    a_tip = 9.81 * com_ratio
+    ball_share = com[0] / M.BALL_CONTACT[0]
+    com_cross_pitch_deg = math.degrees(math.atan2(com[0], com[2]))
     top_level_labels = [child.label for child in M.build_assembly().children]
     checks = [
         ("concept_a_track", M.TRACK == 170.0, {"actual_mm": M.TRACK}),
@@ -208,12 +370,27 @@ def main():
         ("wheel_geometry_track_is_170", abs((wheel_l_y - wheel_r_y) - M.TRACK) < 1e-9, {"measured_track_mm": wheel_l_y - wheel_r_y}),
         ("loaded_radius_matches_axle_height", M.WHEEL_OD / 2.0 == M.AXLE_Z, {"radius_mm": M.WHEEL_OD / 2.0, "axle_z_mm": M.AXLE_Z}),
         ("wheel_well_has_radial_clearance", M.WHEEL_WELL_RADIAL_CLEARANCE >= 3.0, {"radial_clearance_mm": M.WHEEL_WELL_RADIAL_CLEARANCE}),
-        ("axle_crossmember_reaches_wheel_hubs", M.AXLE_CROSSMEMBER_WIDTH / 2.0 >= M.TRACK / 2.0 - M.WHEEL_WIDTH / 2.0, {"crossmember_half_width_mm": M.AXLE_CROSSMEMBER_WIDTH / 2.0, "wheel_inner_face_y_mm": M.TRACK / 2.0 - M.WHEEL_WIDTH / 2.0}),
+        ("wheel_running_clearance_to_static_parts", all(v["min_gap_mm"] >= M.WHEEL_RUNNING_CLEARANCE_MIN - 1e-6 for v in wheel_clearance.values()), {"minimum_mm": M.WHEEL_RUNNING_CLEARANCE_MIN, "sides": wheel_clearance}),
+        ("drivetrain_static_parts_do_not_interfere", not drivetrain_clashes, {"clashes_mm3": drivetrain_clashes}),
+        ("motor_face_seats_on_axle_flange", all(v["gap_mm"] < 1e-6 and v["overlap_mm3"] < 1e-3 for v in flange_seat.values()), flange_seat),
+        ("bearings_sit_inside_flange_boss", all(bearings_in_boss.values()), {"bearings": bearings_in_boss, "boss_end_y_mm": M.AXLE_BOSS_END_Y}),
+        ("battery_tub_is_clear", not battery_clashes and not tub_shell_overlap, {"battery_center_mm": M.BATTERY_CENTER, "battery_size_mm": M.BATTERY_SIZE, "clashes_mm3": battery_clashes, "tub_vs_shell_mm3": tub_shell_overlap}),
         ("ball_transfer_is_frozen_default", M.BALL_CONTACT == (110.0, 0.0, 0.0), {"contact_mm": M.BALL_CONTACT}),
         ("ball_mount_is_fixed_not_interchangeable", M.BALL_MOUNT_MODE == "FIXED_3HOLE_NON_INTERCHANGEABLE", {"mount_mode": M.BALL_MOUNT_MODE}),
-        ("ball_flange_seats_on_load_collar", abs(M.BALL_COLLAR_Z0 + M.BALL_COLLAR_HEIGHT - M.BALL_NATIVE_HEIGHT) < 1e-9, {"collar_top_z_mm": M.BALL_COLLAR_Z0 + M.BALL_COLLAR_HEIGHT, "flange_bottom_z_mm": M.BALL_NATIVE_HEIGHT}),
-        ("ball_housing_clears_load_collar", M.BALL_COLLAR_BORE_RADIUS > M.BALL_HOUSING_WIDTH / 2.0, {"collar_bore_radius_mm": M.BALL_COLLAR_BORE_RADIUS, "housing_radius_mm": M.BALL_HOUSING_WIDTH / 2.0}),
-        ("nose_rails_land_in_collar_wall", M.BALL_COLLAR_BORE_RADIUS < M.BALL_RAIL_OFFSET_Y < M.BALL_COLLAR_OUTER_RADIUS, {"rail_offset_y_mm": M.BALL_RAIL_OFFSET_Y, "collar_wall_mm": [M.BALL_COLLAR_BORE_RADIUS, M.BALL_COLLAR_OUTER_RADIUS]}),
+        ("ball_flange_seats_on_pod", ball_seat["gap_mm"] < 1e-6 and ball_seat["overlap_mm3"] < 1e-3 and abs(ball_seat["flange_top_z_mm"] - M.BALL_NATIVE_HEIGHT) < 1e-6, ball_seat),
+        ("ball_article_stack_is_connected", all(gap < 1e-6 for gap in ball_stack_gaps.values()), ball_stack_gaps),
+        ("ball_screws_engage_flange", len(ball_screw_engagement) == 3 and all(depth >= 2.5 for depth in ball_screw_engagement.values()), {"thread_engagement_mm": ball_screw_engagement}),
+        ("ball_nose_parts_do_not_interfere", not nose_clashes, {"clashes_mm3": nose_clashes}),
+        ("touch_cap_travel_reserve_is_clear", not travel_blockers, {"blockers_mm3": travel_blockers, "travel_mm": M.TACTILE_NOSE_TRAVEL}),
+        ("rigid_nose_stays_behind_cap_travel", rigid_front_x <= M.TACTILE_CAP_INNER_X - M.TACTILE_NOSE_TRAVEL + 1e-6, {"rigid_front_x_mm": round(rigid_front_x, 3), "cap_inner_x_mm": M.TACTILE_CAP_INNER_X}),
+        ("touch_cap_stops_at_pod_seat", abs(touch_cap.bounding_box().min.Z - M.BALL_POD_Z0) < 1e-3, {"cap_bottom_z_mm": round(touch_cap.bounding_box().min.Z, 3), "pod_seat_z_mm": M.BALL_POD_Z0, "housing_bottom_z_mm": round(housing.bounding_box().min.Z, 3)}),
+        ("c12_low_object_contact_not_claimed", c12_first_label != "BALL_NOSE_TOUCH_CAP", {"first_contact": c12_first_label, "hit_face_x_mm": c12_first}),
+        ("front_range_sensor_on_centreline", abs(M.FRONT_RANGE_SENSOR_Y) < 1e-9, {"sensor_y_mm": M.FRONT_RANGE_SENSOR_Y}),
+        ("front_range_face_ahead_of_ball_contact", face_ahead > 0.0, {"face_x_mm": M.FRONT_RANGE_SENSOR_FACE_X, "ball_contact_x_mm": M.BALL_CONTACT[0], "credited_mm": face_ahead}),
+        ("front_range_lookahead_within_rated_range", lookahead_ok, {"rated_max_mm": M.FRONT_RANGE_MAX_MM, "cases": lookahead}),
+        ("ball_pod_passes_shell_notch", not pod_shell_overlap, {"overlap_mm3": pod_shell_overlap}),
+        ("front_chassis_stays_inside_shell", chassis_front_x <= M.BODY_X_FRONT - M.SHELL_THICKNESS, {"chassis_front_x_mm": round(chassis_front_x, 3), "shell_inner_front_x_mm": M.BODY_X_FRONT - M.SHELL_THICKNESS}),
+        ("ball_nose_is_lean", nose_width <= 42.0, {"nose_width_mm": round(nose_width, 2), "previous_shroud_width_mm": 52.0, "nose_front_x_mm": round(nose_front_x, 2), "spin_radius_mm": round(nose_spin_radius, 2)}),
         ("rp01_yaw_transform_closes", all(abs(transformed_yaw[i] - M.HEAD_YAW_DATUM[i]) < 1e-9 for i in range(3)), {"transformed_mm": transformed_yaw, "datum_mm": M.HEAD_YAW_DATUM}),
         ("body_frame_has_four_m4_mounts", len(M.BODY_MOUNT_POINTS) == 4, {"mount_points_mm": M.BODY_MOUNT_POINTS}),
         ("body_frame_has_two_locating_pins", len(M.BODY_LOCATING_POINTS) == 2, {"locating_points_mm": M.BODY_LOCATING_POINTS}),
@@ -225,7 +402,7 @@ def main():
         ("panel_fasteners_sit_inside_boss_inset", all(inset >= M.PANEL_FASTENER_MIN_INSET - 1e-6 for insets in fastener_insets.values() for inset in insets), {"inset_to_panel_edge_mm": fastener_insets, "minimum_mm": M.PANEL_FASTENER_MIN_INSET}),
         ("panel_frames_are_closed_rings_with_fused_bosses", all(r["solids"] == 1 and r["bottom_bar"] and r["top_bar"] for r in frame_rings.values()), {"frames": frame_rings}),
         ("panel_area_parts_do_not_interfere", not panel_clashes, {"clashes_mm3": panel_clashes}),
-        ("front_range_sensor_has_clear_window", range_window_blockage < 1e-3, {"blocked_volume_mm3": round(range_window_blockage, 3), "sensor_y_z_mm": [M.FRONT_RANGE_SENSOR_Y, M.FRONT_RANGE_SENSOR_Z]}),
+        ("front_range_sensor_has_clear_window", range_window_blockage < 1e-3, {"blocked_volume_mm3": round(range_window_blockage, 3), "sensor_face_mm": [M.FRONT_RANGE_SENSOR_FACE_X, M.FRONT_RANGE_SENSOR_Y, M.FRONT_RANGE_SENSOR_Z]}),
         ("front_panel_lifts_off_forward", not front_removal_blockers, {"blockers_mm3": front_removal_blockers, "panel_bottom_z_mm": M.FRONT_PANEL_Z0}),
         ("service_panels_repeat_eight_sided_shell_profile", M.PANEL_LOWER_CORNER > 0.0 and M.PANEL_UPPER_CORNER > 0.0, {"panel_vertex_count": 8, "lower_corner_mm": M.PANEL_LOWER_CORNER, "upper_corner_mm": M.PANEL_UPPER_CORNER}),
         ("front_and_rear_panels_have_four_fasteners_each", len(M.FRONT_PANEL_FASTENERS) == 4 and len(M.REAR_PANEL_FASTENERS) == 4, {"front_count": len(M.FRONT_PANEL_FASTENERS), "rear_count": len(M.REAR_PANEL_FASTENERS)}),
@@ -233,7 +410,6 @@ def main():
         ("body_audio_is_separate_top_level_group", "BODY_AUDIO" in top_level_labels, {"top_level_labels": top_level_labels}),
         ("four_body_microphones_are_allocated", len(M.MICROPHONE_PORTS) == 4, {"microphone_ports": M.MICROPHONE_PORTS}),
         ("speaker_and_front_range_sensor_do_not_overlap", audio_sensor_overlap < 1e-3, {"overlap_volume_mm3": audio_sensor_overlap}),
-        ("front_range_sensor_is_below_speaker_grille", M.FRONT_RANGE_SENSOR_Z < M.SPEAKER_CENTER[2] - M.SPEAKER_BASKET_DIAMETER / 2.0, {"sensor_z_mm": M.FRONT_RANGE_SENSOR_Z, "speaker_center_z_mm": M.SPEAKER_CENTER[2]}),
         ("head_sweep_floor_clears_disc_top", M.HEAD_SWEEP_FLOOR_Z - M.YAW_DISC_TOP_Z >= 4.0 - 1e-9, {"sweep_floor_z_mm": M.HEAD_SWEEP_FLOOR_Z, "disc_top_z_mm": M.YAW_DISC_TOP_Z}),
         ("hard_stops_alone_keep_head_off_disc", M.HEAD_ENVELOPE["hard_stops_alone_keep_4mm"] and M.HEAD_ENVELOPE["overtravel_1deg_case"]["clearance_to_disc_top_mm"] >= 2.0, {"hard_stop_corner": M.HEAD_ENVELOPE["hard_stop_fault_case"], "overtravel_1deg": M.HEAD_ENVELOPE["overtravel_1deg_case"]}),
         ("head_motion_is_full_range_to_hard_stops", all(r["roll_min_deg"] == M.HEAD_ENVELOPE["hard_stops"]["roll_deg"][0] and r["roll_max_deg"] == M.HEAD_ENVELOPE["hard_stops"]["roll_deg"][1] for r in M.HEAD_ENVELOPE["rows"]), {"rows": len(M.HEAD_ENVELOPE["rows"]), "hard_stops": M.HEAD_ENVELOPE["hard_stops"], "usable_travel": M.HEAD_ENVELOPE["usable_travel"]}),
@@ -280,6 +456,9 @@ def main():
         ("pi_step_exists", (M.PURCHASED / "raspberry_pi_5.step").exists(), {"path": str(M.PURCHASED / "raspberry_pi_5.step")}),
         ("bearing_step_exists", (M.PURCHASED / "bearing_608zz.step").exists(), {"path": str(M.PURCHASED / "bearing_608zz.step")}),
         ("com_inside_support_x", 0.0 < M.mass_properties()["com_mm"][0] < M.BALL_CONTACT[0], {"com_x_mm": M.mass_properties()["com_mm"][0]}),
+        ("com_forward_of_physics_margin_line", com[0] >= 20.0, {"com_x_mm": round(com[0], 2), "com_h_mm": round(com[2], 2), "x_over_h": round(com_ratio, 4), "a_tip_m_s2": round(a_tip, 3), "baseline_target": {"x_mm": 25.0, "h_mm": 124.0, "x_over_h": 0.202}, "body_shift_x_mm": M.BODY_SHIFT_X, "rule": "RP-03 physics.md 2.5: a_peak 0.80-1.00 m/s2 has margin only when x_CoM >= +20 mm"}),
+        ("ball_share_above_spin_walk_flag", ball_share >= 0.09, {"ball_share": round(ball_share, 4), "flag_below": 0.09}),
+        ("rear_skid_catches_before_com_crosses_axle", pitch["shoe"] < com_cross_pitch_deg, {"shoe_first_contact_pitch_deg": pitch["shoe"], "com_over_axle_pitch_deg": round(com_cross_pitch_deg, 3)}),
         ("com_below_head_yaw", M.mass_properties()["com_mm"][2] < M.HEAD_YAW_DATUM[2], {"com_z_mm": M.mass_properties()["com_mm"][2]}),
     ]
     payload = {
