@@ -39,7 +39,7 @@ export default {
       },
       show_rear_tail: {
         type: "boolean",
-        label: "Show rear skid / TCRT module",
+        label: "Show rear skid/TCRT keel",
         default: true
       },
       show_electronics: {

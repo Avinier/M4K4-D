@@ -78,6 +78,18 @@ the tail rather than represented as boxes or an external gland. This is a packag
 the exact breakout, connector, shim stack and fastening details still require the
 selected SKU to be measured.
 
+**Layout 02 amendment (2026-09-23).** The floor-contact and sensing functions move
+into a compact faceted keel under `REAR_SKID_CROSSMEMBER`: wear shoe at `X=-43 mm`,
+TCRT at `X=-70 mm`, same 3.5/7/10 mm heights and 27 mm lookahead. The visible tail
+becomes a separate, purely cosmetic `REAR_TAIL_STINGER` on the rear service panel:
+a slate hub, three telescoping eight-sided ivory segments and a blunt amber chisel tip,
+fastened with hidden M3 screws into heat-set inserts. A longer drooping S-curve variant
+was rejected because it extended the spin-in-place radius from 128 mm to 164 mm at
+ankle/pet height, had no rear contact sensing, and ended in a needle point. The tail must
+stay inside the ball-nose spin circle and below the body top. It is currently parked as
+an optional accessory (`REAR_TAIL_ENABLED = False`), and the keel is translucent ivory
+so its internals remain reviewable.
+
 ## RP03-CAD-02 — Lean fixed ball nose with concealed contact
 
 The exposed full-width bumper bar was behind the existing ball-transfer projection,

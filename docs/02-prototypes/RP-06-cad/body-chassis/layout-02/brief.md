@@ -8,7 +8,7 @@
 - Head transform: Layout 03 head origin `(37.9645, 0, 200)` in the chassis frame, making its yaw datum `(0, 0, 140)`.
 - Drivetrain: 170 mm track, 42 mm loaded radius/axle height, frozen two-wheel Concept A, and a fixed non-interchangeable 1-inch ball-transfer module at `X=110`.
 - External body: compact faceted shell, pale upper body, a physical removable lower mobility fascia, enlarged octagonal front/rear service panels that repeat the shell silhouette, and a functional front speaker grille. Visual references control cosmetics only.
-- Structure: independent chassis rails, body posts and cross-members; four M4 body/chassis through-bolts and two locating pins; four M3 lower-fascia fasteners; front/rear internal panel frames with fused bosses and four M3 fasteners per panel; a separately selectable eleven-station hollow faceted rear-tail module with visible internal load spine, replaceable shoe/guards and flush TCRT cartridge; compact fixed ball-transfer load collar and keeper clips with concealed tactile fascia; and the head-yaw load path.
+- Structure: independent chassis rails, body posts and cross-members; four M4 body/chassis through-bolts and two locating pins; four M3 lower-fascia fasteners; front/rear internal panel frames with fused bosses and four M3 fasteners per panel; a separately selectable rear module made of a compact faceted skid/TCRT keel under the rear crossmember (replaceable shoe/guards, TCRT cartridge) and a parked (not assembled) cosmetic telescoping stinger tail accessory for the rear service panel; compact fixed ball-transfer load collar and keeper clips with concealed tactile fascia; and the head-yaw load path.
 - Audio: provisional 50 mm speaker basket, 44 mm cone, 34 mm acoustic-cavity reservation, amplifier envelope, and four body-mounted PDM microphone boards/ports. Exact parts remain unselected.
 - Neck/yoke treatment: stationary annular neck cowl plus head-yaw-moving bridge fairing and lower-leg shrouds. Yaw/pitch datums and motion allocation remain unchanged.
 - Internal packaging: exact downloaded Raspberry Pi 5 STEP; exact downloaded 608ZZ STEP pair; documented envelopes for motor, ball transfer, battery, cooler, drivers, DevKitC, power/safety, sensors, and cables when exact STEP is unavailable.
@@ -45,11 +45,15 @@
 | TCRT optical-face ground clearance | 10 mm nominal; must be calibrated on the target floor set |
 | TCRT protective-guard bottom | 7 mm |
 | TCRT channels | Rear only; CAD-context decision pending propagation |
-| Rear TCRT center | `(−97, 0, 13.5)` mm |
+| Rear skid-pad center | `(−43, 0, 4.75)` mm; replaceable shoe 12 × 10 × 2.5 mm |
+| Rear TCRT center | `(−70, 0, 13.5)` mm |
 | Rear TCRT contact lookahead | 27 mm behind skid contact |
-| Rear tail construction | Eleven straight ruled stations; no spline; tighter rise and pointed tip at X = −118 mm |
-| Rear tail visible finish | Translucent RP-01 Layout 03 ivory `#E3DDC9`, alpha 0.34 |
-| Rear tail assembly group | `REAR_SKID_TCRT_MODULE`; hollow shell with visible spine, cartridge and cable path |
+| Rear tail construction | Slate root hub + three telescoping eight-sided segments sweeping up 23°→37°→52° + 66° chisel tip; tip at X = −121, Z = 123 mm |
+| Rear tail footprint | Planar radius 121.9 mm, inside the 128 mm ball-nose spin circle; top 123.4 mm, below the 140 mm body top |
+| Rear tail finish | Opaque ivory `#E3DDC9` segments, `#707D82` hub, `#B88636` tip; no visible fasteners |
+| Rear tail status | Parked accessory; `REAR_TAIL_ENABLED = False` |
+| Rear keel finish | Translucent ivory `#E3DDC9`, alpha 0.34; cartridge, cable riser and M3 hardware visible |
+| Rear module assembly group | `REAR_SKID_TCRT_MODULE` = `REAR_SKID_TCRT_KEEL` (+ `REAR_TAIL_STINGER` when enabled) |
 | Tactile nose fascia | 42 mm wide; 3 mm nominal travel reserve |
 
 ## Assumptions still requiring measured closure
@@ -59,7 +63,7 @@
 - exact battery and body power-module geometries from RP-02;
 - exact ICM-42688-P breakout and selected TCRT5000 breakout/comparator and connector bodies; the modeled carrier is an adjustable guarded requirement envelope;
 - rear-only cliff sensing intentionally provides no dedicated forward or lateral coverage; level-floor operating restrictions and later propagation are tracked by `RP03-CAD-01`;
-- the skid/TCRT packaging is consolidated into a separate hollow faceted-tail assembly under `RP03-CAD-03`; its eleven straight ruled links, translucent shell and visible internal spine/cartridge make packaging review possible, while exact cartridge details remain provisional until the selected breakout and connector are measured;
+- the skid/TCRT functions live in a faceted keel under the rear crossmember and the visible tail is purely cosmetic (amending `RP03-CAD-03`); exact cartridge details remain provisional until the selected breakout and connector are measured, and the tail's heat-set insert engagement in the hub is unverified;
 - the prior exposed full-width bumper is removed; the compact ball-nose contact fascia has central-contact coverage only, pending propagation under `RP03-CAD-02`;
 - exact speaker, amplifier, PDM microphone and acoustic-mesh parts, plus acoustic testing and isolation details;
 - fastener thread engagement, inserts, sealing/gasket detail, tolerances, material/process selection and structural proof;

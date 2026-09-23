@@ -14,7 +14,7 @@ Per CAD-context decision [`RP03-CAD-01`](../../decisions.md#rp03-cad-01--rear-on
 
 Per CAD-context decision [`RP03-CAD-02`](../../decisions.md#rp03-cad-02--lean-fixed-ball-nose-with-concealed-contact), the non-functional stance-wide bumper and outboard switches are removed. The frozen ball datum is retained in a narrower load-bearing collar, paired flange keepers and compact shroud, with a 42 mm concealed-contact fascia and 3 mm travel reserve. These are CAD-first choices pending permanent propagation, not project-wide safety approval.
 
-Per CAD-context decision [`RP03-CAD-03`](../../decisions.md#rp03-cad-03--faceted-rear-tail-and-sensor-cartridge), the rear skid and TCRT packaging are consolidated into one eleven-station faceted arc. Its straight ruled links descend from the rear crossmember, form the skid belly, then rise more tightly toward a compact upturned point—there is no smooth spline. The module is a separate selectable top-level group with a genuinely hollow, 34%-opaque ivory shell, visible blue load spine, visible TCRT cartridge/cable path, replaceable 3.5 mm-clearance wear shoe, replaceable 7 mm-clearance protective lips and a translucent flush sensor cap. Layout 01.5 moves the sensor forward from X = −110 to −97 mm, raises its optical face from 8 to 10 mm, and shortens the root-to-tip projection from 84 to 66 mm.
+Per CAD-context decision [`RP03-CAD-03`](../../decisions.md#rp03-cad-03--faceted-rear-tail-and-sensor-cartridge), the rear skid and TCRT sit in one separately selectable rear module, now split by function. A compact faceted keel bolts under the rear crossmember with four M3 screws and carries the replaceable 3.5 mm-clearance 12 × 10 mm wear shoe at X = −43 mm, the replaceable 7 mm-clearance guard lips and the TCRT cartridge at X = −70 mm. The keel is translucent ivory (alpha 0.34) so the cartridge, cable riser and screws inside stay visible. The cosmetic tail is currently **parked**: `REAR_TAIL_ENABLED = False` keeps its geometry defined and checked but excludes it from the assembly, mass register and rear-panel bores. When enabled it is a short hard-surface stinger with a slate root hub, three telescoping eight-sided ivory segments that repeat the body end profile and sweep progressively upward (23° → 37° → 52°), and a blunt amber chisel tip. Four M3 screws are driven from inside the rear service panel into heat-set inserts in the hub, so no fasteners show. The tail stays inside the spin-in-place circle already set by the ball nose (121.9 vs 128 mm planar radius) and below the body top.
 
 ## Files
 
@@ -49,7 +49,7 @@ The selected TCRT5000 breakout/comparator PCB and connector are still unresolved
 ## Validation note
 
 All Layout 02-authored mounts, fascia, panels, panel hardware, audio packaging,
-neck treatment, body, chassis, fixed ball-transfer, faceted rear tail and rear
+neck treatment, body, chassis, fixed ball-transfer, rear stinger tail, skid keel and rear
 sensor geometry validates as closed, positive-volume BREP. Full-assembly
 validation still reports five
 inherited self-intersecting occurrences inside the frozen Raspberry Pi 5 vendor
