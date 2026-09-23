@@ -56,48 +56,48 @@
   "body_mount_fastener": "M4 through-bolt, four places",
   "panel_overlap_mm": 2.0,
   "front_panel_width_bottom_top_mm": [
-    110.0,
-    87.7109090909091
+    132.0,
+    106.99272727272727
   ],
   "rear_panel_width_bottom_top_mm": [
-    104.0,
-    82.19545454545454
+    126.0,
+    101.53636363636363
   ],
   "panel_edge_intent": "front and rear panel side edges are parallel to their corresponding shell end-profile side edges",
   "front_panel_fasteners_mm": [
     [
-      -43.0,
-      58.0
+      -53.0,
+      55.0
     ],
     [
-      43.0,
-      58.0
+      53.0,
+      55.0
     ],
     [
-      -36.0,
-      120.0
+      -45.0,
+      122.0
     ],
     [
-      36.0,
-      120.0
+      45.0,
+      122.0
     ]
   ],
   "rear_panel_fasteners_mm": [
     [
-      -40.0,
-      58.0
+      -50.0,
+      55.0
     ],
     [
-      40.0,
-      58.0
+      50.0,
+      55.0
     ],
     [
-      -34.0,
-      120.0
+      -43.0,
+      122.0
     ],
     [
-      34.0,
-      120.0
+      43.0,
+      122.0
     ]
   ],
   "speaker_center_mm": [

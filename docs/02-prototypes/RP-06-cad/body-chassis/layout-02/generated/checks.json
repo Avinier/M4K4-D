@@ -199,11 +199,11 @@
       "name": "front_panel_edges_parallel_front_shell_edges",
       "ok": true,
       "evidence": {
-        "panel_dy_per_dz": 0.13590909090909087,
+        "panel_dy_per_dz": 0.13590909090909095,
         "shell_dy_per_dz": 0.13590909090909092,
         "panel_widths_mm": [
-          110.0,
-          87.7109090909091
+          132.0,
+          106.99272727272727
         ]
       }
     },
@@ -214,9 +214,18 @@
         "panel_dy_per_dz": 0.1329545454545455,
         "shell_dy_per_dz": 0.13295454545454546,
         "panel_widths_mm": [
-          104.0,
-          82.19545454545454
+          126.0,
+          101.53636363636363
         ]
+      }
+    },
+    {
+      "name": "service_panels_repeat_eight_sided_shell_profile",
+      "ok": true,
+      "evidence": {
+        "panel_vertex_count": 8,
+        "lower_corner_mm": 10.0,
+        "upper_corner_mm": 8.0
       }
     },
     {

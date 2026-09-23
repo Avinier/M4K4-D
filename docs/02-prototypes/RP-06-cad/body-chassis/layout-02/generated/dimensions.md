@@ -11,8 +11,8 @@
 - Body width: 174.0 mm lower / 148.0 mm upper
 - Body/chassis interface: four M4 through-bolts at `((-38.0, -48.0), (-38.0, 48.0), (48.0, -48.0), (48.0, 48.0))` plus locating pins at `((-33.0, -42.0), (43.0, 42.0))`
 - Service-panel overlap: 2.0 mm; four M3 fasteners per panel
-- Front panel widths: 110.00 mm bottom / 87.71 mm top; sides parallel to front shell
-- Rear panel widths: 104.00 mm bottom / 82.20 mm top; sides parallel to rear shell
+- Front panel widths: 132.00 mm bottom / 106.99 mm top; sides parallel to front shell
+- Rear panel widths: 126.00 mm bottom / 101.54 mm top; sides parallel to rear shell
 - Speaker: center `(72.0, 0.0, 99.0)` mm, 44.0 mm cone / 50.0 mm basket
 - Body microphones: four provisional PDM ports at `((38.0, 70.0, 118.0, 'FRONT_L'), (38.0, -70.0, 118.0, 'FRONT_R'), (-38.0, 70.0, 108.0, 'REAR_L'), (-38.0, -70.0, 108.0, 'REAR_R'))`
 - Lower mobility belt: removable physical fascia, not a moving belt

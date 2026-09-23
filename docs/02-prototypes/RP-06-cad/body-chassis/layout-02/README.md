@@ -4,7 +4,7 @@ This is the active whole-body CAD path. It retains Layout 01's source-linked RP-
 
 - four M4 through-bolts and two locating pins now define the body-frame-to-chassis interface;
 - the lower “mobility belt” is explicitly modeled as a removable physical fascia with four M3 side fasteners—not as a moving belt;
-- front and rear shell openings now repeat the trapezoidal service-panel profiles with a continuous 2 mm overlap, internal frames, bosses and four M3 screws per panel; each panel's side edges are parametrically parallel to the corresponding shell edges;
+- enlarged front and rear shell openings now repeat the octagonal service-panel profiles with a continuous 2 mm overlap, internal frames, bosses and four M3 screws per panel; each panel's side edges are parametrically parallel to the corresponding shell edges;
 - the front slat motif is now a functional open speaker grille over a provisional 50 mm basket/44 mm cone, amplifier envelope and acoustic cavity;
 - four body-mounted PDM microphone boards, acoustic ports and shell penetrations are allocated; exact audio SKUs remain an RP-05/RP-06 selection gate;
 - the front range sensor moves below the speaker to its own lower-fascia window; and

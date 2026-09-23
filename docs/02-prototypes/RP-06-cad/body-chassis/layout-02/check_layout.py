@@ -69,6 +69,7 @@ def main():
         ("panel_openings_have_continuous_overlap", M.PANEL_OVERLAP >= 2.0, {"panel_overlap_mm": M.PANEL_OVERLAP}),
         ("front_panel_edges_parallel_front_shell_edges", abs(front_panel_side_slope - front_shell_side_slope) < 1e-12, {"panel_dy_per_dz": front_panel_side_slope, "shell_dy_per_dz": front_shell_side_slope, "panel_widths_mm": [M.FRONT_PANEL_BOTTOM_WIDTH, M.FRONT_PANEL_TOP_WIDTH]}),
         ("rear_panel_edges_parallel_rear_shell_edges", abs(rear_panel_side_slope - rear_shell_side_slope) < 1e-12, {"panel_dy_per_dz": rear_panel_side_slope, "shell_dy_per_dz": rear_shell_side_slope, "panel_widths_mm": [M.REAR_PANEL_BOTTOM_WIDTH, M.REAR_PANEL_TOP_WIDTH]}),
+        ("service_panels_repeat_eight_sided_shell_profile", M.PANEL_LOWER_CORNER > 0.0 and M.PANEL_UPPER_CORNER > 0.0, {"panel_vertex_count": 8, "lower_corner_mm": M.PANEL_LOWER_CORNER, "upper_corner_mm": M.PANEL_UPPER_CORNER}),
         ("front_and_rear_panels_have_four_fasteners_each", len(M.FRONT_PANEL_FASTENERS) == 4 and len(M.REAR_PANEL_FASTENERS) == 4, {"front_count": len(M.FRONT_PANEL_FASTENERS), "rear_count": len(M.REAR_PANEL_FASTENERS)}),
         ("panel_hardware_is_separate_top_level_group", "PANEL_MOUNT_HARDWARE" in top_level_labels, {"top_level_labels": top_level_labels}),
         ("body_audio_is_separate_top_level_group", "BODY_AUDIO" in top_level_labels, {"top_level_labels": top_level_labels}),

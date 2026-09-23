@@ -39,7 +39,9 @@ except ImportError:  # repository's older CAD venv compatibility for report scri
 
 HERE = Path(__file__).resolve().parent
 PURCHASED = HERE.parent / "layout-01" / "references" / "purchased"
-HEAD_DIR = HERE.parents[2] / "head" / "layout-03"
+# `HERE` is .../RP-06-cad/body-chassis/layout-02; Layout 03 is a sibling of
+# body-chassis under the same RP-06 CAD root.
+HEAD_DIR = HERE.parents[1] / "head" / "layout-03"
 
 HEAD_MODEL = None
 
@@ -152,25 +154,33 @@ BODY_MOUNT_POINTS = tuple((x, y) for x in BODY_MOUNT_X for y in BODY_MOUNT_Y)
 
 # Service-panel interface. The shell openings are smaller than the removable
 # panels, producing a continuous overlap rather than an uncovered rectangular
-# cutout. M3 bosses and front-access screws define removal direction.
+# cutout.  The panel perimeter repeats the body shell's eight-sided end
+# profile, so the service breaks read as intentional facets rather than small
+# trapezoidal inserts. M3 bosses and front-access screws define removal
+# direction.
 PANEL_REVEAL = 1.0
 PANEL_OVERLAP = 2.0
 FRONT_SHELL_END_WIDTH_FACTOR = 0.92
 REAR_SHELL_END_WIDTH_FACTOR = 0.90
 SHELL_SIDE_EDGE_Z0 = BODY_Z_BOTTOM + 12.0
 SHELL_SIDE_EDGE_Z1 = BODY_Z_TOP - 10.0
-PANEL_Z0 = 48.0
-PANEL_Z1 = 130.0
-FRONT_PANEL_BOTTOM_WIDTH = 110.0
-REAR_PANEL_BOTTOM_WIDTH = 104.0
+# The large panels retain a 12 mm lower and 6 mm upper shell margin.  Their
+# side slopes follow the corresponding body end section, while the four
+# clipped corners echo the octagonal shell silhouette.
+PANEL_Z0 = 42.0
+PANEL_Z1 = 134.0
+PANEL_LOWER_CORNER = 10.0
+PANEL_UPPER_CORNER = 8.0
+FRONT_PANEL_BOTTOM_WIDTH = 132.0
+REAR_PANEL_BOTTOM_WIDTH = 126.0
 FRONT_PANEL_TOP_WIDTH = FRONT_PANEL_BOTTOM_WIDTH - 2.0 * (PANEL_Z1 - PANEL_Z0) * (
     (BODY_WIDTH_LOWER - BODY_WIDTH_UPPER) * FRONT_SHELL_END_WIDTH_FACTOR / 2.0
 ) / (SHELL_SIDE_EDGE_Z1 - SHELL_SIDE_EDGE_Z0)
 REAR_PANEL_TOP_WIDTH = REAR_PANEL_BOTTOM_WIDTH - 2.0 * (PANEL_Z1 - PANEL_Z0) * (
     (BODY_WIDTH_LOWER - BODY_WIDTH_UPPER) * REAR_SHELL_END_WIDTH_FACTOR / 2.0
 ) / (SHELL_SIDE_EDGE_Z1 - SHELL_SIDE_EDGE_Z0)
-FRONT_PANEL_FASTENERS = ((-43.0, 58.0), (43.0, 58.0), (-36.0, 120.0), (36.0, 120.0))
-REAR_PANEL_FASTENERS = ((-40.0, 58.0), (40.0, 58.0), (-34.0, 120.0), (34.0, 120.0))
+FRONT_PANEL_FASTENERS = ((-53.0, 55.0), (53.0, 55.0), (-45.0, 122.0), (45.0, 122.0))
+REAR_PANEL_FASTENERS = ((-50.0, 55.0), (50.0, 55.0), (-43.0, 122.0), (43.0, 122.0))
 
 # Provisional audio packaging. These are requirement envelopes pending the
 # RP-05/RP-06 driver, amplifier, PDM microphone and front-end selections.
@@ -560,10 +570,22 @@ def _body_profile(x, inset=0.0, width_factor=1.0):
     return (Plane.YZ * Polygon(*points, align=None)).moved(Location((x, 0.0, 0.0)))
 
 
-def _panel_solid(x0, x1, width_bottom, width_top, z0, z1):
+def _panel_solid(x0, x1, width_bottom, width_top, z0, z1, lower_corner=PANEL_LOWER_CORNER, upper_corner=PANEL_UPPER_CORNER):
+    """Extrude an octagonal service-panel profile on the shell end face."""
     lb = width_bottom / 2.0
     lt = width_top / 2.0
-    points = [(-lb, z0), (lb, z0), (lt, z1), (-lt, z1)]
+    lower_corner = min(lower_corner, lb - 1.0, (z1 - z0) / 3.0)
+    upper_corner = min(upper_corner, lt - 1.0, (z1 - z0) / 3.0)
+    points = [
+        (-lb + lower_corner, z0),
+        (lb - lower_corner, z0),
+        (lb, z0 + lower_corner),
+        (lt, z1 - upper_corner),
+        (lt - upper_corner, z1),
+        (-lt + upper_corner, z1),
+        (-lt, z1 - upper_corner),
+        (-lb, z0 + lower_corner),
+    ]
     face = (Plane.YZ * Polygon(*points, align=None)).moved(Location((x0, 0.0, 0.0)))
     return extrude(face, amount=x1 - x0)
 
@@ -663,7 +685,7 @@ def body_panels():
     ]
     rear = _paint(
         rear_raw - rear_bores,
-        "REAR_SERVICE_PANEL_TRAPEZOID",
+        "REAR_SERVICE_PANEL_OCTAGONAL",
         IVORY,
         0.68,
     )
