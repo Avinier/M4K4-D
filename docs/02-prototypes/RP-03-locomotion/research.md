@@ -398,7 +398,7 @@ Telemetry only. Not researched as stop-path. Do not steal the GP2Y contact mount
 
 ## 5. CAD pass 1 — datum list
 
-Pretty geometry still waits on a gate freeze. Working CAD lives in [`RP-06-cad/`](../RP-06-cad/README.md); [`base/pass-01/`](../RP-06-cad/base/pass-01/) is the historical ugly envelope. Use this list, not napkin 110/14/21:
+Pretty geometry still waits on a gate freeze. Working CAD lives in [`RP-06-cad/`](../RP-06-cad/README.md). Use this list, not napkin 110/14/21:
 
 1. Ground plane; axle at **h = 42 mm**; track **170 mm**.
 2. Wheel envelope: **Ø80–85 × 10–35 mm** until `R-WHL` family is chosen; do not solid a fake 21 mm tyre. Hub is printed; tread is bought.

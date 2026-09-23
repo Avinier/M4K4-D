@@ -22,9 +22,7 @@ RP-01 and RP-03 keep mechanism, physics, gates and rigs; they link here for geom
 | [Body/chassis Layout 02](body-chassis/layout-02/README.md) | Active whole-robot assembly. Live-imports Layout 03 |
 | [Head decisions](head/decisions.md) | `HEAD-CAD-01…10` |
 | [Body/chassis CAD-context decisions](decisions.md) | `RP03-CAD-01…06` (CAD-first, not RP-03 safety approval) |
-| [Body/chassis closure plan](body-chassis-plan.md) | Packaging acceptance checklist for the integrated model |
 | [Prototype open items](../openitems.md) | Folder-wide remaining-open index |
-| `runs/` | Run records per [`run-record-convention.md`](../../01-system/run-record-convention.md) |
 
 ## CAD map
 
@@ -39,9 +37,7 @@ RP-06-cad/
 ├── body-chassis/
 │   ├── layout-02/         active whole-robot model
 │   └── layout-01/         previous body; shared purchased/ STEP
-├── base/pass-01/          historical ugly envelope (head lump, caster swap)
 ├── decisions.md           body CAD-context register
-├── body-chassis-plan.md
 ├── TODO.md
 └── checklist.md
 ```
@@ -51,7 +47,7 @@ Open Layout 03 in CAD Viewer from [`head/layout-03/README.md`](head/layout-03/RE
 | Head notes | Body notes |
 |---|---|
 | [Layout 03 brief](head/layout-03-brief.md) | [Layout 02 brief](body-chassis/layout-02/brief.md) |
-| [Layout 03 verification](head/layout-03/review/verification.md) | Historical envelope: [`base/pass-01/`](base/pass-01/) |
+| [Layout 03 verification](head/layout-03/review/verification.md) | |
 | [Packaging estimates](head/packaging-estimates.md) | [Layout 01 body](body-chassis/layout-01/README.md) (preserved) |
 | [Pre-layout brief](head/pre-layout-brief.md) | Purchased Pi 5 / 608ZZ STEP live locally under `body-chassis/layout-01/references/purchased/` (not in Git) |
 

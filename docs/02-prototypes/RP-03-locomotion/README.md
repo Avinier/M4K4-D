@@ -26,7 +26,7 @@ RP-01 is an object. RP-02 is a set of states and interfaces. **RP-03 is a vehicl
 | [Research](research.md) | Constraints, inventory, filled envelopes, print-vs-buy. CAD datums §5. Not a sourcing matrix, not a freeze, not a purchase | A |
 | [Folder plan](plan.md) | Construction record: layout, Part order, what each file may not contain | Retired into this README's organization record; file kept |
 | [Prototype open items](../openitems.md) | Folder-wide remaining-open index | — |
-| [CAD](../RP-06-cad/README.md) | Working body/chassis/head geometry moved to RP-06. Historical envelope in `base/pass-01/` | — |
+| [CAD](../RP-06-cad/README.md) | Working body/chassis/head geometry moved to RP-06. | — |
 | `runs/` | Run records per [`run-record-convention.md`](../../01-system/run-record-convention.md) | — |
 
 Namespaces (no glossary): `BM-` panels · `D` drivetrain · `S` sensing · `BC-` base-control rules · `F-3x` faults · `BD-` builder decisions · `RP03-P` paper gates · `RP03-G` physical gates · `RP03-P<n>-REG-<nn>` Part records.

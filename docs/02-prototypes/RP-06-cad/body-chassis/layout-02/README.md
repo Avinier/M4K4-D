@@ -35,7 +35,7 @@ The neutral dimensional stack is 293.5 mm: 140 mm body/yaw datum + 49.5 mm neck 
 
 ## Generation
 
-The model uses the cadgen 0.4 `gen_step()` contract. The `base/pass-01/.venv` carries cadgen 0.5.1, which cannot build it; use the text-to-cad 0.4.28 runtime. Run from the repository root:
+The model uses the cadgen 0.4 `gen_step()` contract. The venv cadgen 0.5.1 cannot build it; use the text-to-cad 0.4.28 runtime. Run from the repository root:
 
 ```text
 PY=~/.codex/runtimes/text-to-cad/0.4.28/venv/bin/python
