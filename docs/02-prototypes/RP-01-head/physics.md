@@ -35,7 +35,7 @@ RP-01 provisionally permits later rapid-profile changes up to `Cᵥ=2.0`, `Cₐ=
 
 A future rapid trajectory exceeding either coefficient or shortening an authored segment invalidates actuator sizing. Slow `MS7` motions are evaluated directly despite their higher coefficients because their durations are much longer. Final selection still uses the exported firmware trajectory plus torque, RMS/thermal, gravity and margin calculations.
 
-Current proposed best-case usable travel is pitch `-22°…+40°`, yaw `±55°`, roll `±18°`. Minimum-viable proposed usable travel is pitch `-15°…+32°`, yaw `±40°`, roll `±12°`. These include clearance beyond the authored poses but do not yet include final mechanical hard-stop, cable or forbidden-region margin.
+Current proposed best-case usable travel is pitch `-22°…+40°`, yaw `±55°`, roll `±18°`. Minimum-viable proposed usable travel is pitch `-15°…+32°`, yaw `±40°`, roll `±12°`. These include clearance beyond the authored poses. [Layout 04](../RP-06-cad/head/layout-04/README.md) places the mechanical hard stops 3° beyond best-case usable travel: pitch `-25°…+43°`, roll `±21°`. Cable and forbidden-region margins remain open.
 
 ## Preliminary physical load baseline
 
@@ -44,8 +44,8 @@ Current proposed best-case usable travel is pitch `-22°…+40°`, yaw `±55°`,
 | Input | Current value | How RP-01 uses it |
 |---|---:|---|
 | Complete moving-head envelope | **104 H × 150 W × 115 D mm**, crown/ears included; main core **86 H × 130 W × 115 D mm** | Layout 03 working geometry; crown is 104 mm. Manufacturing and body integration remain open. |
-| Neck allocation | **60 mm vertical** | Packaging boundary for yaw + pitch + roll; actuators may intrude into body/head |
-| Moving-head mass | **~362 / 436 / 509 g** roll / pitch / yaw (nominal 20 g C2 E); complete-yaw sensitivity **~499–524 g** for M008=10–35 g | Layout 03 D/E tree. Spreadsheet ~490 g was complete-head before C2; this tree already includes its nominal C2 allowance and two 23 g XC330-size reference packages. Recalculate per servo candidate and replace row-by-row with `W` evidence |
+| Neck allocation | **49.5 mm vertical** (Layout 04; was 60) | Head underside to body top. A 15 mm proud yaw turntable disc sits inside it; the stops alone keep the head ≥4.2 mm off the disc at every combined pose |
+| Moving-head mass | **~358 / 432 / 557 g** roll / pitch / yaw (nominal 20 g C2 E); complete-yaw sensitivity **~547–572 g** for M008=10–35 g | Layout 04 D/E tree (Layout 03: 362/436/509 g; the yaw increase is the 73 g turntable disc). Spreadsheet ~490 g was complete-head before C2; this tree already includes its nominal C2 allowance and two 23 g XC330-size reference packages. Recalculate per servo candidate and replace row-by-row with `W` evidence |
 | Historical system target | **~250 g — obsolete for RP-01 sizing** | Retained for audit history only; dimensional/mass baselines now carry the revised lower bound |
 | Preliminary head inertia | **~0.001 kg·m² — invalidated as a sizing input** | Recompute from revised per-axis geometry; mass alone is insufficient |
 | Preliminary neck peak torque | **~0.2 N·m — invalidated as a sizing input** | Historical sanity check only, not a per-axis threshold |

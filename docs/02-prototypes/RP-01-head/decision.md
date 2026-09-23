@@ -23,7 +23,7 @@
 | D-05 | Apply the complete nine-step finish system after a weighed 60 × 60 mm coupon validates coating mass and scale. |
 | D-06 | Keep cosmetic seams integral; create real splits only for demonstrated assembly/service access. |
 | D-07 | Model 0.3–0.5 mm panel height offsets in CAD. |
-| D-08 | The old 250 g target is infeasible. For current screening use Layout 03's nominal ~362/436/509 g roll/pitch/yaw D/E tree at M008=20 g, retain 10/20/35 g C2 sensitivity, and substitute each servo candidate before selection; physical M008/M900 remain unweighed. |
+| D-08 | The old 250 g target is infeasible. For current screening use the active layout's nominal D/E tree (Layout 04, 2026-09-23: ~358/432/557 g roll/pitch/yaw; Layout 03 was ~362/436/509 g) at M008=20 g, retain 10/20/35 g C2 sensitivity, and substitute each servo candidate before selection; physical M008/M900 remain unweighed. |
 
 The same record makes the full-width opaque window mask, display flashing path and separable yaw-plane harness boundary mandatory CAD requirements. Any departure from D-01…D-08 requires an explicit superseding decision and propagation through the mass register, physics, rig and gates.
 

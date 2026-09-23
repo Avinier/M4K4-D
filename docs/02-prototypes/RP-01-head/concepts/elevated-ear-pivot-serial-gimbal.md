@@ -5,7 +5,7 @@
 | Status | **Selected RP-01 mechanism path and modelled in Layout 03; actuator SKUs and physical gate evidence remain open** |
 | Authored | 2026-08-27 |
 | Joint order | Body-fixed yaw → pitch → head-fixed roll |
-| Physical baseline | Layout 03: 104 H × 150 W × 115 D mm; nominal ~362/436/509 g roll/pitch/yaw at M008=20 g E with ~499–524 g complete C2 sensitivity; 60 mm neck allocation |
+| Physical baseline | Layout 04: 104 H × 150 W × 115 D mm head; nominal ~358/432/557 g roll/pitch/yaw at M008=20 g E with ~547–572 g complete C2 sensitivity; 49.5 mm neck allocation |
 | Feeds | `comparison.md`, `../physics.md`, `../gates.md`, `../rig.md`; later head blockout/CAD |
 
 This note extracts only the credible topology from an unverified, generated-looking reference diagram. Its labels, scale, proportions, motor sizes and bearing sizes are not source data and must not enter CAD or the BOM.
@@ -99,7 +99,7 @@ The front assembly must include an opaque rear mask across the full window width
 The mechanical concept is incomplete without a harness model. Apply the evidence and H1/H2/H3 candidates in `../../../01-system/head-harness-routing-study.md`:
 
 - partition camera CSI, display/head-node, servo power/bus and local sensor/light branches instead of forcing one cable construction across every circuit;
-- for the first layout, route each moving branch beside the solid yaw spindle and give yaw a controlled external service loop; retain a hollow/open-centre route as a comparison if the initial layout fails its packaging or harness checks;
+- Layout 03 routed each moving branch beside a solid yaw spindle with an external service loop. [Layout 04](../../RP-06-cad/head/layout-04/README.md) takes the hollow/open-centre route instead: the branch passes through a Ø14 turntable bore to a body-side clock-spring reserve, and the yaw servo drives the disc off-axis through a 1:1 spur pair;
 - fix the downstream orientation at the yoke, approach pitch near an ear pivot and guide a predominantly single-plane rolling bend;
 - fix orientation again before a deliberate short roll loop or purpose-designed torsion section;
 - provide stationary- and moving-side strain relief plus service connectors only where access and signal integrity justify them;

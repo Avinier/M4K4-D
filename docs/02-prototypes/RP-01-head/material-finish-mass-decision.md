@@ -133,7 +133,7 @@ All values below are `E` evidence. They are a planning model only and never merg
 | M009 | Runtime head IMU | 0 g | Not installed for stationary RP-01; bench IMU is excluded from the ledger |
 | M010 | Roll cradle, provisional PLA | 25 g | Planning allowance |
 | M011 | Pitch yoke, provisional PLA | 35 g | Planning allowance |
-| M012 | Yaw moving interface, provisional PLA | 20 g | Planning allowance |
+| M012 | Yaw moving interface, provisional PLA | 73 g | Layout 04 turntable disc, CAD PLA volume (was 20 g allowance); solid skirt can be lightened |
 | M013–M015 | Actuator moving hardware | 35 g | Boundary-dependent allowance |
 | M016–M018 | Moving bearing portions | 22 g | Planning allowance |
 | M019c | Installed finished shell, 1.2 mm PLA, excluding visible M2 set | 148 g | 109 g shell + 29 g coating + 10 g inserts/magnets/retained adhesive |

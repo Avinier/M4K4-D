@@ -4,7 +4,7 @@
 |---|---|
 | Status | Paper-screen gates **v0.2** drafted 2026-09-13 after closure audit; physical gate registrations remain open. External rigid-body demand is complete, but structural, actuator-internal and CAD/hardware blockers prevent paper passage. Freeze before first scored run. |
 | Authority | Gate definitions and registration-record fields: `risk-prototype-plan.md` §RP-01. This file holds the registered numeric versions. |
-| Physical baseline | `dimensional-baseline.md` v1.10 + Layout 03: 104 × 150 × 115 mm; nominal D/E mass ~362/436/509 g roll/pitch/yaw at M008=20 g, with ~499–524 g complete C2 sensitivity. M008 and all accepted physical masses remain `U`; recalculate per servo candidate |
+| Physical baseline | `dimensional-baseline.md` v1.10 + Layout 04: 104 × 150 × 115 mm head, 49.5 mm neck; nominal D/E mass ~358/432/557 g roll/pitch/yaw at M008=20 g, with ~547–572 g complete C2 sensitivity. M008 and all accepted physical masses remain `U`; recalculate per servo candidate |
 
 Gates to register (from the plan):
 
@@ -23,7 +23,7 @@ This matrix prepares coverage from `storyboard.md`; it does **not** freeze a thr
 
 | Case | Storyboard input | Candidate gate coverage | What must eventually be measured |
 |---|---|---|---|
-| Representative head load and envelope | Layout 03 complete head **104 H × 150 W × 115 D mm**; nominal D/E tree **~362/436/509 g roll/pitch/yaw** at M008=20 g, complete sensitivity ~499–524 g for M008=10–35 g; selected Waveshare no-touch SKU 30493 display, Camera Module 3 Wide SC0874 and ESP32-S3-Zero C2 | G02–G06 | Before registration: substitute each servo candidate's mass/envelope, register the scored per-axis downstream tree, as-built/CAD CoM/inertia, M008 state, axis offsets, ballast revision, selected-component proxies and complete moving interconnect. The old 95 mm band, 250 g mass, generic `J≈0.001 kg·m²` and `~0.2 N·m` values are inadmissible. |
+| Representative head load and envelope | Layout 04 complete head **104 H × 150 W × 115 D mm**; nominal D/E tree **~358/432/557 g roll/pitch/yaw** at M008=20 g, complete sensitivity ~547–572 g for M008=10–35 g; selected Waveshare no-touch SKU 30493 display, Camera Module 3 Wide SC0874 and ESP32-S3-Zero C2 | G02–G06 | Before registration: substitute each servo candidate's mass/envelope, register the scored per-axis downstream tree, as-built/CAD CoM/inertia, M008 state, axis offsets, ballast revision, selected-component proxies and complete moving interconnect. The old 95 mm band, 250 g mass, generic `J≈0.001 kg·m²` and `~0.2 N·m` values are inadmissible. |
 | Finish-system mass and scale | 60 × 60 mm representative PLA coupon using the complete nine-step finish process | G05, G06 | bare/finished mass after ≥24 h cure, coating g/cm², exact products/passes and visual `PASS/ITERATE` for texture/chip/detail scale before M019a is coated |
 | PLA thermal/creep viability | M010–M012 representative structure under worst credible parked pitch/roll load at measured sealed-head temperature | G01, G03–G06 | preregistered dwell duration, load/moment, maximum in-dwell deflection, residual deformation and inspection method; failure selects the recorded PETG/ASA structural fallback rather than being waived |
 | CAD access and mass-boundary closure | Full-width opaque rear window mask; display flashing path; yaw-plane demateable connector/cut plane; minimal real service seams | G04–G06 | optical/interior concealment, flash/service demonstration, M020/M900 weighability without cutting, service access and no unowned/double-counted mass rows |

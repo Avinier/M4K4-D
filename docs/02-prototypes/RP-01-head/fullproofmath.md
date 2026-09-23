@@ -95,6 +95,8 @@ The current nominal mass tree uses a 20 g `E` allowance for the installed C2 ass
 
 These are D/E screening values. The inertia is an estimated axis inertia assembled from CAD/box intrinsic inertia and parallel-axis terms; it is not a measured tensor.
 
+**Layout 04 update, 2026-09-23 — rerun required.** The active tree is now ~358/432/557 g with estimated inertias 0.000635 / 0.000726 / 0.001180 kg·m² (roll/pitch/yaw). Yaw inertia rises about 9% from the 73 g turntable disc. The ~2% contributed by the body-side driven spur is not yet in the head tree. The yaw values in this document still use Layout 03's 0.001080 kg·m²; scale yaw inertial torques by about 1.09 until the workbook is rerun.
+
 The controlling authored motion values are:
 
 | Axis | Peak-speed case | Peak speed | Peak-acceleration case | Peak acceleration |
@@ -264,7 +266,7 @@ The ordinary sensitivity grid should use modest vertical errors, while the exist
 Yaw does not need a first-order gravity-offset grid, but it is sensitive to inertia and bearing load:
 
 - the pitch actuator is mounted one-sided at about `Y=+32 mm`;
-- most head mass is roughly 100 mm above the yaw interface;
+- most head mass is roughly 100 mm above the yaw interface (Layout 03; about 82 mm in Layout 04, lowering the overturning moment on the yaw bearing by about 18%);
 - a heavier pitch actuator can materially increase yaw inertia;
 - C2 and harness asymmetries affect bearing reactions and coupling.
 
