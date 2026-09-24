@@ -31,7 +31,7 @@ Ranges carry the current uncertainty. "Basis" states where the number comes from
 |---|---:|---:|---|---|
 | **Head** — shell, display + window, display renderer, separate C2 motion controller, central camera, status light/optics, moving actuator/bearing portions, joint structure, connectors and local wiring | `499 E` | TBD | Layout 03 analytical sweep is ~499/509/524 g at M008=10/20/35 g; 509 g is nominal, not measured. The selected Waveshare ESP32-S3-Zero installed assembly remains `U`, and servo candidates can exceed the XC330-size reference masses already included. Replace with candidate-specific trees and ultimately M900. Main Linux SBC, microphones, speaker and bench Nano/DevKitC-1/IMU are body-mounted or excluded. | RP-01 / RP-06 measured head |
 | **Body** — main structure, outer shell, internal frame, service panels | 400 | 900 | Printed polymer enclosure at the envelope above, single-room duty | RP-06 |
-| **Battery** — cells + holder/pack + protection | 150 | 500 | Low and forward of the drive axle; chemistry undecided (ADR-06) | RP-02 |
+| **Battery** — cells + holder/pack + protection | 150 | 500 | Low and forward of the drive axle; RP-02 working selection 2026-09-24: 2S1P Li-ion 18650, 110 g `E` (below the 150 g floor of this row; unregistered, unweighed) | RP-02 |
 | **Drive** — motors, gearing, Ø84 mm wheels, front ball transfer, mandatory rear skid, drive brackets | 200 | 600 | Two-wheel differential drive; 170 mm track, 110 mm axle-to-front-support target, ~70 mm rear skid reach at ≤14 mm floor height | RP-03 |
 | **Electronics** — compute board(s), motor/servo drivers, power distribution, regulators, connectors | 150 | 400 | SBC-class compute + driver boards per system-design-brief responsibilities | RP-02 |
 | **Wiring** — harness, connectors, strain relief across joints | 60 | 180 | Three-axis moving head harness + base runs; unknown ≠ 0 | RP-01 / RP-02 |
@@ -68,7 +68,7 @@ Body packaging must separately reserve four PDM MEMS microphones, the speaker an
 - [ ] Replace the reference actuators with every screened servo candidate other than C01 (already a mass match) and rerun mass, CoM, inertia and A0 sensitivity before selection.
 - [ ] Weigh the selected SKU 30493 sample without packaging and with its installed mount/harness; replace the 118 g listing evidence in the RP-01 model.
 - [ ] Weigh the selected Camera Module 3 Wide SC0874 sample, connector retention, mount and moving interconnect separately; record their CoM coordinates and per-axis downstream membership.
-- [ ] Replace battery row once chemistry is decided in ADR-06 (RP-02).
+- [ ] Replace battery row once chemistry is decided in ADR-06 (RP-02). Working selection made 2026-09-24 (110 g `E`); replace with a weighed pack.
 - [ ] Replace the drive mass range after RP-03 selects and measures the motors, transmissions, wheels, ball transfer, skid, and brackets.
 - [ ] Retire structural margin into real rows as subsystems firm up.
 

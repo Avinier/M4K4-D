@@ -197,6 +197,32 @@ The former 8.28 Wh high-case example is the **lossless-conversion** result: `5.3
 
 The present load-energy range implies 7.8–15.9 W average over 20 minutes. Every additional 1 W of true average load sustained for the full workload adds 0.333 Wh at the loads and, at 90% system efficiency with the same depth/reserve convention, 0.579 Wh to nominal pack energy. This is the direct recalculation rule if the selected Pi memory SKU or its measured workload changes.
 
+### 5.3 Working-selection pack check (2026-09-24, `E`)
+
+Builder direction of 2026-09-24 fixes 2S and a working pack of two Samsung INR18650-25R cells in series (2S1P) with a 2S 20 A balanced BMS. This section checks that pack against §5.2 and the historical source range. Cell figures are the manufacturer's as quoted by retailers; BMS and path values are assumptions. Nothing here is measured, and no gate is registered.
+
+| Quantity | Arithmetic | Result |
+|---|---|---|
+| Nominal energy | `2 cells × 2.5 Ah × 3.6 V` | **18.0 Wh** (7.2 V nominal, 6.0–8.4 V range) |
+| Requirement (§5.2, 90% efficiency, high case) | 9.20 Wh | Pack is **1.96×** the requirement |
+| Usable energy | `18.0 × 0.80 × 0.90` | 12.96 Wh |
+| Reserve on the 5.3 Wh high case | `12.96 / 5.3 − 1` | **+145%** against the 25% candidate reserve |
+| Runtime before reserve, high case (15.9 W average) | `12.96 / 15.9` | about 49 min |
+| Runtime before reserve, low case (7.8 W average) | `12.96 / 7.8` | about 100 min |
+| Peak current against the cell | `11.7 A / 20 A` | 59% of the 20 A continuous rating (one cell per series string) |
+| Pack resistance (`E`) | `2 × 18–22 mΩ` cells + BMS ≤ 30 mΩ + leads/connector 10 mΩ | about **80–100 mΩ** |
+| Drop at 4.8 A / 11.7 A | `I × R` | 0.38–0.48 V / 0.94–1.17 V |
+| Loaded voltage at 11.7 A, full pack (8.4 V open) | `8.4 − 1.17 … 0.94` | 7.2–7.5 V |
+| Loaded voltage at 11.7 A, near empty (about 3.3 V per cell, 6.6 V open) | `6.6 − 1.17 … 0.94` | **5.4–5.7 V**, below the 6.0 V low-line used for `PB-COMPUTE` evidence |
+
+Reading:
+
+- Energy is not the constraint; there is about twice the requirement. The 20 A cell rating also leaves headroom over the historical peak.
+- The peak is. At the historical 11.7 A source case a nearly empty pack sags to about 5.4–5.7 V, below the 6.0 V low-line at which `PB-COMPUTE` step/thermal/ripple evidence is required, and internal resistance rises further when cold and when aged. The value is an `E` estimate from unmeasured BMS and lead resistance, and 11.7 A is itself the historical case rather than a credible aligned peak (`CC-PEAK-01` is not measured). It must be measured before it is relied on either way.
+- Low-energy thresholds (`V_LOW_ASSERT/CLEAR`) still wait on loaded-sag data from this pack and cannot be set from this table.
+- The 20 A BMS class is quoted with conflicting continuous ratings: one listing gives 20 A continuous, another gives 13 A maximum operating and 20 A limiting. Use the datasheet of the specific board and keep 1.5× margin over the credible continuous current. The historical 11.7 A peak is 90% of 13 A.
+- Per-cell over-charge thresholds on the cheap boards are listed as 4.25–4.35 V. The Samsung 25R is rated 4.20 ± 0.05 V charge, so a board that trips at 4.35 V is not an acceptable backstop for the charger. Select a board whose over-charge threshold is 4.25 V or lower, and enumerate its thresholds as `power-architecture.md` requires.
+
 ## 6. Fuse and protection coordination
 
 ### 6.1 What the current numbers do and do not bound
@@ -286,5 +312,6 @@ The next update replaces one conditional term at a time. It must not overwrite a
 | C01 aligned reference | `3·1.80 = 5.40 A`; `5·5.40 = 27.0 W` |
 | `MD-01` average | `2.6/(1/3) = 7.8 W`; `5.3/(1/3) = 15.9 W` |
 | Lossless high pack example | `5.3·1.25/0.8 = 8.28125 Wh` |
+| §5.3 working pack | `2·2.5·3.6 = 18.0 Wh`; `18·0.8·0.9 = 12.96 Wh`; `12.96/5.3 = 2.445`; `12.96/15.9 = 0.815 h`; `2·22 + 30 + 10 = 84 mΩ` (range 80–100 mΩ); `11.7·0.084 = 0.98 V` |
 | 90%-efficient high pack example | `5.3·1.25/(0.8·0.9) = 9.201 Wh` |
 | Independent arithmetic check | Tables regenerated with a local calculation script on 2026-09-16; rounded only for presentation |

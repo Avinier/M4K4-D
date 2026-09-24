@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Status | **Accepted derived candidate screen v0.1, builder-reviewed 2026-09-16. No power component is selected and no purchase is authorized.** |
-| Date | 2026-09-16 |
+| Date | 2026-09-16 (addendum §9.2, 2026-09-24: battery working selection) |
 | Scope | Part-2 implementation candidates for conversion, protection, motor isolation/E-stop actuation, connectors, conductors and charging/power path |
 | Inputs | `RP02-P2-REG-01`, `RP02-P2-REG-02`, `power-branch-contracts.md` v0.4 and `power-calculation-ledger.md` v0.1 |
 | Evidence rule | Manufacturer documentation establishes `D`; distributor stock/price establishes only a dated sourcing snapshot; installed performance remains `W` |
@@ -199,6 +199,21 @@ The charger `SYS`/power-path output does not directly authorize normal robot ope
 | `PCD-CHG-05` | Undocumented “USB-C trigger” plus generic charger module | Missing controlled PD, cell-count, thermal, load-sharing and failure evidence | **Reject** |
 
 The external adapter itself remains open. Selection requires the eventual maximum charge power, Indian regulatory/plug requirements, cord geometry and the decision whether 15 V or 20 V is the preferred PDO. AC mains remains outside Makad.
+
+### 9.2 Battery pack — working selection 2026-09-24
+
+Builder direction of 2026-09-24 closed 2S, chose Li-ion NMC cylindrical cells and set two constraints: price, and fit in the RP-06 chassis tub (48 × 75 × 24 mm placeholder, now resized to the pack). This is a working selection, not a registered baseline; no purchase is authorized, and the workbench battery gate still defers pack fabrication. Prices are retailer listings seen on 2026-09-24 in INR including GST unless stated.
+
+| ID | Candidate and `D` facts | Fit and price | Disposition |
+|---|---|---|---|
+| `PCD-BAT-01` | Samsung **INR18650-25R**, 2500 mAh, 20 A continuous, 3.6 V, about 18–22 mΩ, Ø18.33 ± 0.07 × 64.85 ± 0.15 mm, 45 g, charge 4.20 ± 0.05 V, cut-off 2.5 V. [Robu SKU 63398](https://robu.in/product/samsung-inr18650-25r-2500mah-li-ion-battery/): the blue 25R2 is being replaced by the green 25R5 with lower resistance | Two cells side by side are 37 × 65 mm and 18.4 mm high. **₹449 each at Robu** (₹699 Batteryworks; ₹220–300 in quantity per one unverified article) | **Working selection** (2 per pack) |
+| `PCD-BAT-02` | Samsung **INR18650-30Q**, 3000 mAh, 15 A continuous, 23–26 mΩ, Ø18.4 × 65 mm, 48 g | Same footprint; 20% more energy, less current headroom. About ₹280–380 each per the same unverified article | Alternate |
+| `PCD-BAT-03` | 2S 20 A **balanced** protection board, 48 × 20 mm: [Robocraze](https://robocraze.com/products/2-string-20a-lithium-battery-protection-module-balanced-version) ₹67, [Robu SKU 618338](https://oldwp.robu.in/product/2s-8a-18650-7-4v-8-4v-lithium-battery-protection-board/) ₹126 (over-charge 4.25–4.35 V, over-discharge 2.5–3.0 V, 13 A operating, 20 A limiting), [Calcutta Electronics](https://calcuttaelectronics.com/product/2s-20a-bms-7-4v-8-4v-protection-board-with-balance/) ₹147.50 | Board thickness not listed; **4.5 mm assumed** in CAD, and 5 mm would clash with the deck top. No NTC is documented on these listings | **Working selection, SKU open.** Choose by datasheet: over-charge ≤ 4.25 V, real continuous current, NTC, on-resistance (see the ledger §5.3) |
+| `PCD-BAT-04` | Ready-made 2S packs: [Rytronics](https://www.rytronics.in/product/7-4v-3000mah-18650-2s-li-ion-battery-pack-with-bms/) ₹299 (65 × 35 × 18 mm, 2 A discharge, cells unnamed), [Robocraft](https://robocraftstore.com/product/7-4v-4000mah-2s2p-18650-lithium-ion-nmc-battery-pack-with-bms/) ₹399 (2S2P, 4 A continuous, size custom), [LiTech](https://litechpower.com/product/li-ion-2s2p-7-4v-1-6ah-battery-pack-lp2s2p1a2al004/) 11.8 Wh (2 A continuous, 3 A peak, 70 × 50 × 51 mm) | Cheap, but 2–4 A against a 4.8–11.7 A historical range, no named cells and no impedance or protection data | **Reject** as the pack; usable only as a form-factor reference |
+| `PCD-BAT-05` | 2S1P **21700** (about 4–5 Ah, 45 × 71 × 27 mm) and 2S2P 18650 (about 75 × 66 × 19 mm) | Neither fits the 48 × 75 × 24 mm tub envelope. | **Reject on fit** |
+| `PCD-BAT-06` | LiFePO4 (6.4 V nominal) and LiPo pouch | LFP sags toward 5 V under load and needs more volume for the same energy; pouch is fragile and swells | **Reject** for this body |
+
+Estimated cost of the working pack: cells about ₹900, board ₹67–147, strip, sleeve, wire and NTC about ₹150–300 (estimate, not a listing). About **₹1,200–1,600 excluding the pack connector**. The Anderson SBS Mini (`PCD-CON-01`) is still the lead connector and has not been priced. Fabrication route is open: an in-house spot-welded pack needs the written battery procedure and equipment required by `workbench.md`, otherwise a pack builder is needed.
 
 ## 10. Sourcing snapshot — 2026-09-16
 

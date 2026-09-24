@@ -80,7 +80,7 @@ G02 and G03 changed shape in plan v1.10. See `gates.md` §2 for what RP-02 recor
 | Servo family | **Unselected.** First named paper candidate is ROBOTIS **XC330-M288-T** (C01, SKU 902-0173-000), 5 V class, Dynamixel Protocol 2.0 TTL; paper approval OPEN; yaw fails the rapid envelope at the 3.7 V sensitivity endpoint. Layout 03 already uses 23 g XC330 housings, so C01 adds zero mass to the paper tree. Not a SKU freeze. eManual `D`: stall 1.80 A at 5.0 V | `../RP-01-head/actuator-screen-01.md`; RP-01 `gates.md` paper P01–P06 |
 | E-stop rule | System motor-arm plus dominant latching hardware E-stop cut the battery-only motor path, not safety supervision; retained-pack isolation remains separately accessible; exact switching device and connector are open | `power-architecture.md` PA-13/14; workbench.md |
 | PSU rule | Korad KA3005D: set current limit to expected draw plus margin before first power-up; **5 A ceiling** | workbench.md |
-| Battery placement and mass row | Low and forward of the drive axle; ledger row 150–500 g; chemistry undecided | mass ledger v0.13; dimensional baseline |
+| Battery placement and mass row | Low and forward of the drive axle; ledger row 150–500 g; working selection 2026-09-24: 2S1P Li-ion 18650, 110 g `E` (not registered) | mass ledger v0.13; dimensional baseline |
 | Harness partition | Camera CSI on its own controlled route; power + semantic link as a segmented branch; servo power/bus sized for peak and separated from camera strain relief; demateable boundary at yaw (CAD-05) | harness study |
 
 ## 5. Scope

@@ -45,7 +45,7 @@ Load-group codes are defined here once; `state-register.md`, `rig.md` and run-re
 
 | Branch/source | Parent source | Domain | Notes |
 |---|---|---|---|
-| `PB-MAIN` | Battery pack through integral protection, removable isolation and main fuse | Source | Pack construction and voltage open under PA-03/04. Historical 2S, 6.0–8.4 V is an `E` planning case only. |
+| `PB-MAIN` | Battery pack through integral protection, removable isolation and main fuse | Source | Pack construction and voltage open under PA-03/04. Historical 2S, 6.0–8.4 V is an `E` planning case only; working selection 2026-09-24 (builder direction, unregistered): 2S1P Li-ion 18650, about 18 Wh, checked in RP-02 `power-calculation-ledger.md` §5.3. |
 | `PB-CHARGE-IN` | External certified low-voltage adapter | Charge | Charger/adapter/connector unselected; AC mains remains outside Makad. |
 | `PB-CHARGE-LOGIC` | Charger/load-sharing output | Charge | May feed only `PB-SAFE-C2` minimum supervision and `PB-DISPLAY` charge profile. |
 | `PB-SAFE-C2` | Operating or restricted charge source through exclusive/bounded selection | Safety supervision | Own converter/protection/return; independent of display and base safety (`PA-11`). |

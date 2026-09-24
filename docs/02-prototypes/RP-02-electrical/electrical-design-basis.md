@@ -311,7 +311,7 @@ Source interfaces are not forced into the `LG-*` consumer namespace. Their stabl
 | Field | Requirement |
 |---|---|
 | Boundary / class | Pack output terminals through pack-integral protection as selected; source feeding all robot domains; pack monitoring contributes to `EC-Q` and safety policy |
-| Configuration | Chemistry, series/parallel count, cell form, protection construction and service model unselected. Existing 2S/18650 material is a working assumption only. |
+| Configuration | Chemistry, series/parallel count, cell form, protection construction and service model unselected in the registered basis. **Working selection 2026-09-24 (builder direction, not registered): 2S1P Li-ion NMC 18650 pack, two Samsung INR18650-25R cells + 2S 20 A balanced BMS, retained module with the SBS Mini lead.** Every contract row below still needs the measured values. |
 | Source contract | Full/nominal/depleted loaded voltage, permitted continuous/pulse current, pulse duration/recovery, internal impedance across state-of-charge/temperature/age, allowable reverse charge/regeneration, disconnect behavior and fault-current capability are all required; values remain `U/E/D/W` in the ledger. |
 | State behavior | Supplies untethered operation; supports `EN-02/03` detection above loss of controllability; cannot restore stored motion after replacement/reconnection; charging behavior follows `CC-15`. |
 | Protection / containment | Cell/pack protection functions and trip/recovery behavior must be enumerated, not inferred from “BMS/PCM.” A main fuse remains required unless the selected architecture proves an equivalent bounded path. Pack removal/isolation cannot be bypassed through charger, USB, programming or signal returns. |
