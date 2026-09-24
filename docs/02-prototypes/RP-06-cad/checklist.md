@@ -30,7 +30,7 @@ Evidence classes are unchanged: `W` measured on the named hardware, `D` manufact
 | Head envelope | 104 × 150 × 115 mm complete; 86 × 130 × 115 mm core | Planning geometry |
 | Robot envelope | 300 × 205 × 180 mm rounded target; **304 mm** current neutral stack | Accept 304 mm or recover 4 mm under G01 |
 | Placement | 140 mm body-top datum; 60 mm neck; body mics/speaker/battery/C0 | Locked |
-| Whole-robot CoM target | `x = +25 mm`, `h = 124 mm` | Placement target. Layout 02 currently +20.2 / 103.7 mm after the 16 mm body shift (`RP03-CAD-06`) |
+| Whole-robot CoM target | `x = +25 mm`, `h = 124 mm` | Placement target. Layout 02 currently +20.6 / 105.8 mm: +20.2 / 103.7 after the 16 mm body shift (`RP03-CAD-06`), +18.8 / 107.9 with the lighter 2S1P pack (`RP03-CAD-07`), restored by an 81.6 g ballast bar (`RP03-CAD-08`) |
 | Display | SKU **30493** | Locked; optical/animation tests remain |
 | Camera | **SC0874** | Locked; FOV/interconnect/contamination tests remain |
 | C0 / cooler / C2 / C3 proto | Pi 5 2 GB; official Active Cooler; ESP32-S3-Zero; DevKitC-1-N8 | Locked at stated layer |
@@ -49,8 +49,8 @@ CAD already: live head import; selected two-wheel / ball / skid; chassis and she
 | P-01 | Fit **actual** sourced articles, not only envelopes (display, camera, Pi 5, cooler, C2, C3, battery, drivers, speaker, mics, fasteners) | Partial — vendor STEP where downloaded; else envelopes | Open | Replace each envelope as the sample arrives; record SKU vs solid |
 | P-02 | 300 × 205 × 180 mm box vs sourced layout | Layout 02 body 174 mm lower width, 110 mm visible height, 30 mm clearance | Open | Pass in-box or revise the baseline explicitly |
 | P-03 | **304 mm stack: accept or recover 4 mm** through body/neck datums | Documented 304 mm; 300 mm still a rounded target | Open | Named decision in the baseline, not a quiet trim |
-| P-04 | Whole-robot CoM vs +25 / 124 mm | Layout 02 generated **X = +20.2 mm, Z = 103.7 mm, 2615 g modeled** (a_tip 1.91 m/s², x/h 0.195 vs 0.202) after the 16 mm body shift | Open | Close the last ~5 mm by geometry, or revise the baseline. Do not shrink `a_tip` to hide a miss |
-| P-05 | Battery low and **forward** of the axle | CAD battery in a chassis tub at X = +42, Z = 44 mm, bottom hatch | Open | Installed pack geometry from RP-02; hatch fastening and tub-to-body harness; HIGH_AFT remains forbidden |
+| P-04 | Whole-robot CoM vs +25 / 124 mm | Layout 02 generated **X = +20.6 mm, Z = 105.8 mm, 2526 g modeled** (a_tip 1.91 m/s², x/h 0.195 vs 0.202) after the body shift, the 110 g pack (`RP03-CAD-07`) and the 81.6 g ballast bar (`RP03-CAD-08`); 0.62 mm over the +20 mm line | Open | Close the last ~4.4 mm by geometry (about 376 g of ballast at this position would do it), or revise the baseline. Do not shrink `a_tip` to hide a miss |
+| P-05 | Battery low and **forward** of the axle | CAD 2S1P 18650 pack (`RP03-CAD-07`) in a chassis tub at X = +46.7, Z = 43.9 mm, bottom hatch | Open | Measured pack (BMS thickness, mass), lead and connector; hatch fastening, retention and tub-to-body harness; HIGH_AFT remains forbidden |
 | P-06 | Harness trunks, service loops, body-side yaw anchor | Reservations exist; production construction `U` | Open | Close with the harness study; body-side yaw clamp is RP-06 |
 | P-07 | Fastener / insert SKUs across head, body, chassis | Visible M2 locked on the head; internals `U` | Open | Trial coupon + landed row; populate the fastener mass row |
 | P-08 | Installed head mass / CoM / inertia vs RP-01 envelope | Nominal 509 g D/E tree | Open | M900 `W`; dummy must sit in 499–524 g until then |

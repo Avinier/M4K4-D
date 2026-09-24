@@ -4,7 +4,7 @@ This is the active whole-body CAD path. It retains Layout 01's source-linked RP-
 
 - four M4 through-bolts and two locating pins now define the body-frame-to-chassis interface;
 - the drivetrain physically fits (CAD-context decision [`RP03-CAD-05`](../../decisions.md#rp03-cad-05--axle-stack-that-lets-the-wheels-turn)). Each coaxial gearmotor bolts its output face to a chassis flange whose R15 boss carries the 608 pair and reaches into a pocket in a dished wheel. An 8 mm stub shaft runs in the bearings, takes the motor's D-shaft and drives the wheel web. The axle crossmember, square carriers and gussets are gone: they sat inside the motors and 11 mm into each wheel. Cheek plates carry the rails round the gearboxes, the deck has a relief over the motor cans, and the shell floor is slotted across the axle because the motors hang below it;
-- the body sits 16 mm forward on the chassis ([`RP03-CAD-06`](../../decisions.md#rp03-cad-06--body-forward-on-the-chassis-and-a-low-battery-tub)). Shell, panels, body frame, electronics, audio, harness, yaw stage and head all move; the wheels, ball, chassis and keel do not. The battery drops into a chassis tub under the deck, flush with the deck top, with a bottom hatch. The register CoM moves from x +9.4 / h 106.7 to **x +20.2 / h 103.7 mm** (a_tip 0.86 → 1.91 m/s², ball share 0.09 → 0.18). The +25 / 124 baseline target is still missed;
+- the body sits 16 mm forward on the chassis ([`RP03-CAD-06`](../../decisions.md#rp03-cad-06--body-forward-on-the-chassis-and-a-low-battery-tub)). Shell, panels, body frame, electronics, audio, harness, yaw stage and head all move; the wheels, ball, chassis and keel do not. The battery drops into a chassis tub under the deck, flush with the deck top, with a bottom hatch. The register CoM moved from x +9.4 / h 106.7 to x +20.2 / h 103.7 mm. The battery is now the 2S1P 18650 pack ([`RP03-CAD-07`](../../decisions.md#rp03-cad-07--2s1p-18650-battery-pack)): two Samsung 25R cells and a BMS, 37.6 × 67 × 23.8 mm and 110 g in a resized tub, which alone would put the CoM at x +18.8 / h 107.9 mm, under the +20 mm physics line. An 81.6 g steel ballast bar under the deck ahead of the tub ([`RP03-CAD-08`](../../decisions.md#rp03-cad-08--ballast-bar-ahead-of-the-battery-tub)) restores it: the register CoM is **x +20.6 / h 105.8 mm** (a_tip 1.91 m/s², ball share 0.19). The +25 / 124 baseline target is still missed;
 - enlarged front and rear shell openings are the octagonal service-panel outlines offset inward by a constant 2 mm land; each panel's straight side edges are parallel to the corresponding shell edges (measured from the solids, not the constants); a separate internal frame behind each shell end wall carries four fused M3 bosses, with M3 × 8 screws seated on the panel face;
 - the front panel starts at Z = 58 mm, above the chassis deck, so it lifts off forward over the ball pod. The deck, rails and front crossmember now stop inside the shell's front wall; only the pod's tongue passes the lower front band, through one open-bottom centre notch. The rear panel keeps its Z = 42 mm lower edge;
 - the front slat motif is now a functional open speaker grille over a provisional 50 mm basket/44 mm cone, amplifier envelope and acoustic cavity;
@@ -93,9 +93,8 @@ to them. The tightest gaps are the stub shaft to the gearbox face (1.5 mm), the
 boss end to the pocket floor and the tyre to the arch trim (2 mm each), and
 the boss to the pocket wall (3 mm). The motor envelopes do not interfere with the
 chassis, shell, body frame, electronics or harness volumes. Each gearbox face seats on its
-flange with zero gap. The 608 pairs lie inside the bosses, and the battery envelope
-clears everything around the tub. Three CoM checks read the hand-kept mass register, not the geometry:
-x ≥ +20 mm (the `physics.md` §2.5 margin line; currently +20.21, so borderline), ball share ≥ 0.09, and skid
+flange with zero gap. The 608 pairs lie inside the bosses, and the battery pack (two cells, two end straps and the BMS) and the ballast bar clear everything around the tub with at least 1.5 mm of retention gap at the sides and 0.5 mm below the deck top (0.2 mm counting the sleeve). Three CoM checks read the hand-kept mass register, not the geometry:
+x ≥ +20 mm (the `physics.md` §2.5 margin line; currently +20.62 with the `RP03-CAD-08` ballast bar; 0.62 mm of margin), ball share ≥ 0.09, and skid
 contact before the CoM crosses the axle.
 
 An all-group clash sweep on 2026-09-24 left these older body-side
@@ -105,3 +104,7 @@ rear dog-legs against the power and safety envelopes; the compute tray against
 the speaker magnet; the yaw adapter plate and upper rails against the shell;
 the PDM port boots against the shell; and the wheel-arch pods fused into the
 shell. They are listed in [`openitems.md`](../../../openitems.md).
+
+## 2026-09-24 nose rework: real caster and GP2Y
+
+The ball nose now carries the purchased Pololu 1" caster (2691; `build_ball_caster_step.py` authors it from the vendor drawing) and the real Sharp GP2Y0A41SK0F STEP. The old octagonal box pod and hood are replaced by a raked, faceted prow: the pod runs straight through the shell notch, swells to 49 mm around the sensor's mounting belt (slotted into the pod sides), sweeps in to a 36 mm nose that rakes down to the face, and the touch hood starts ahead of the belt so it stays 40.6 mm wide. The sensor looks through a 27 x 10.5 mm visor slit. The tact switch moved from the lid to the pod floor beside the lens line. The ball screw circle is O14.1 (radius 7.04); the earlier 12.2 mm radius was Pololu's hole spacing misread. The Pi Active Cooler, DevKitC-1, DRV8874 carriers, TCRT5000 and the XC330 yaw servo are also real STEPs now; the head's display and C2 are real STEPs in Layout 04.

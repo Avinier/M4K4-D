@@ -9,23 +9,26 @@
 - [x] `drivetrain_static_parts_do_not_interfere` — {'clashes_mm3': {}}
 - [x] `motor_face_seats_on_axle_flange` — {'L': {'gap_mm': 0.0, 'overlap_mm3': 0}, 'R': {'gap_mm': 0.0, 'overlap_mm3': 0}}
 - [x] `bearings_sit_inside_flange_boss` — {'bearings': {'BEARING_608ZZ_L_1': True, 'BEARING_608ZZ_L_2': True, 'BEARING_608ZZ_R_1': True, 'BEARING_608ZZ_R_2': True}, 'boss_end_y_mm': 86.0}
-- [x] `battery_tub_is_clear` — {'battery_center_mm': (42.0, 0.0, 44.0), 'battery_size_mm': (48.0, 75.0, 24.0), 'clashes_mm3': {}, 'tub_vs_shell_mm3': {}}
+- [x] `battery_pack_fits_tub_with_retention_gap` — {'rear_x_mm': 1.8, 'front_x_mm': 1.8, 'side_y_mm': 1.5, 'floor_z_mm': 0.3, 'below_deck_top_z_mm': 0.5}
+- [x] `ballast_bar_is_clear_and_seated` — {'clashes_mm3': {}, 'gaps': {'tub_front_wall_mm': 1.0, 'front_crossmember_mm': 1.5, 'deck_underside_mm': 0.0}, 'mass_g': 81.6}
+- [x] `battery_pack_is_2s1p_18650` — {'parts': ['BATTERY_CELL_A_SAMSUNG_25R_ENVELOPE', 'BATTERY_CELL_B_SAMSUNG_25R_ENVELOPE', 'BATTERY_END_STRAP_FRONT_Y', 'BATTERY_END_STRAP_REAR_Y', 'BATTERY_BMS_2S_20A_BALANCED']}
+- [x] `battery_tub_is_clear` — {'battery_center_mm': (46.7, 0.0, 43.9), 'battery_size_mm': (37.6, 67.0, 23.799999999999997), 'clashes_mm3': {}, 'tub_vs_shell_mm3': {}}
 - [x] `ball_transfer_is_frozen_default` — {'contact_mm': (110.0, 0.0, 0.0)}
 - [x] `ball_mount_is_fixed_not_interchangeable` — {'mount_mode': 'FIXED_3HOLE_NON_INTERCHANGEABLE'}
-- [x] `ball_flange_seats_on_pod` — {'flange_top_z_mm': 29.0, 'pod_seat_z_mm': 29.0, 'gap_mm': 0.0, 'overlap_mm3': 0}
-- [x] `ball_article_stack_is_connected` — {'housing_to_flange_mm': 0.0, 'lip_to_housing_mm': 0.0}
+- [x] `ball_flange_seats_on_pod` — {'flange_top_z_mm': 29.0, 'pod_seat_z_mm': 29.0, 'gap_mm': 0.0, 'overlap_mm3': 0.0}
+- [x] `ball_article_stack_is_connected` — {'housing_to_flange_mm': 0.0}
 - [x] `ball_screws_engage_flange` — {'thread_engagement_mm': {'BALL_M3_SHANK_1': 3.0, 'BALL_M3_SHANK_2': 3.0, 'BALL_M3_SHANK_3': 3.0}}
 - [x] `ball_nose_parts_do_not_interfere` — {'clashes_mm3': {}}
 - [x] `touch_cap_travel_reserve_is_clear` — {'blockers_mm3': {}, 'travel_mm': 3.0}
 - [x] `rigid_nose_stays_behind_cap_travel` — {'rigid_front_x_mm': 128.5, 'cap_inner_x_mm': 131.5}
-- [x] `touch_cap_stops_at_pod_seat` — {'cap_bottom_z_mm': 29.0, 'pod_seat_z_mm': 29.0, 'housing_bottom_z_mm': 9.5}
-- [x] `c12_low_object_contact_not_claimed` — {'first_contact': 'BALL_TRANSFER_RETAINING_LIP', 'hit_face_x_mm': {'BALL_TRANSFER_POM_BALL': 122.7, 'BALL_TRANSFER_PURCHASED_HOUSING': 126.0, 'BALL_TRANSFER_RETAINING_LIP': 126.8}}
+- [x] `touch_cap_stops_at_pod_seat` — {'cap_bottom_z_mm': 29.0, 'pod_seat_z_mm': 29.0, 'housing_bottom_z_mm': 8.5}
+- [x] `c12_low_object_contact_not_claimed` — {'first_contact': 'BALL_TRANSFER_PURCHASED_HOUSING', 'hit_face_x_mm': {'BALL_TRANSFER_POM_BALL': 122.7, 'BALL_TRANSFER_PURCHASED_HOUSING': 124.6, 'BALL_TRANSFER_ROLLER_1': 120.392, 'BALL_TRANSFER_ROLLER_2': 99.608, 'BALL_TRANSFER_ROLLER_3': 120.392}}
 - [x] `front_range_sensor_on_centreline` — {'sensor_y_mm': 0.0}
 - [x] `front_range_face_ahead_of_ball_contact` — {'face_x_mm': 128.0, 'ball_contact_x_mm': 110.0, 'credited_mm': 18.0}
 - [x] `front_range_lookahead_within_rated_range` — {'rated_max_mm': 300.0, 'cases': {'0.50 m/s level': {'from_ball_contact_mm': 179.0, 'needed_from_face_mm': 161.0, 'needed_from_face_if_charged_to_nose_front_mm': 184.5}, '0.50 m/s 2deg downhill': {'from_ball_contact_mm': 221.0, 'needed_from_face_mm': 203.0, 'needed_from_face_if_charged_to_nose_front_mm': 226.5}, '0.70 m/s level': {'from_ball_contact_mm': 289.0, 'needed_from_face_mm': 271.0, 'needed_from_face_if_charged_to_nose_front_mm': 294.5}}}
 - [x] `ball_pod_passes_shell_notch` — {'overlap_mm3': {}}
 - [x] `front_chassis_stays_inside_shell` — {'chassis_front_x_mm': 92.0, 'shell_inner_front_x_mm': 95.6}
-- [x] `ball_nose_is_lean` — {'nose_width_mm': 40.0, 'previous_shroud_width_mm': 52.0, 'nose_front_x_mm': 133.5, 'spin_radius_mm': 134.78}
+- [x] `ball_nose_is_lean` — {'nose_width_mm': 40.6, 'previous_shroud_width_mm': 52.0, 'nose_front_x_mm': 133.5, 'spin_radius_mm': 134.55}
 - [x] `rp01_yaw_transform_closes` — {'transformed_mm': (16.0, 0.0, 140.0), 'datum_mm': (16.0, 0.0, 140.0)}
 - [x] `body_frame_has_four_m4_mounts` — {'mount_points_mm': ((-22.0, -48.0), (-22.0, 48.0), (64.0, -48.0), (64.0, 48.0))}
 - [x] `body_frame_has_two_locating_pins` — {'locating_points_mm': ((-27.0, -42.0), (59.0, 42.0))}
@@ -37,7 +40,7 @@
 - [x] `panel_fasteners_sit_inside_boss_inset` — {'inset_to_panel_edge_mm': {'FRONT': [7.071, 7.071, 7.861, 7.861], 'REAR': [7.071, 7.071, 7.185, 7.185]}, 'minimum_mm': 7.0}
 - [x] `panel_frames_are_closed_rings_with_fused_bosses` — {'frames': {'FRONT': {'solids': 1, 'bottom_bar': True, 'top_bar': True}, 'REAR': {'solids': 1, 'bottom_bar': True, 'top_bar': True}}}
 - [x] `panel_area_parts_do_not_interfere` — {'clashes_mm3': {}}
-- [x] `front_range_sensor_has_clear_window` — {'blocked_volume_mm3': 0, 'sensor_face_mm': [128.0, 0.0, 41.0]}
+- [x] `front_range_sensor_has_clear_window` — {'blocked_volume_mm3': 0, 'sensor_face_mm': [128.0, 0.0, 40.3]}
 - [x] `front_panel_lifts_off_forward` — {'blockers_mm3': {}, 'panel_bottom_z_mm': 58.0}
 - [x] `service_panels_repeat_eight_sided_shell_profile` — {'panel_vertex_count': 8, 'lower_corner_mm': 10.0, 'upper_corner_mm': 8.0}
 - [x] `front_and_rear_panels_have_four_fasteners_each` — {'front_count': 4, 'rear_count': 4}
@@ -64,12 +67,12 @@
 - [x] `rear_tcrt_optical_face_matches_raised_datum` — {'optical_face_z_mm': 10.0}
 - [x] `rear_tcrt_lookahead_remains_bounded` — {'lookahead_mm': 27.0}
 - [x] `tcrt_guard_is_lower_than_optical_face` — {'guard_bottom_z_mm': 7.0, 'optical_face_z_mm': 10.0}
-- [x] `rear_pitch_contact_order_is_shoe_guard_keel_sensor` — {'first_contact_pitch_deg': {'shoe': 6.054, 'guards': 6.442, 'keel_body': 8.973, 'tcrt': 9.604}}
+- [x] `rear_pitch_contact_order_is_shoe_guard_keel_sensor` — {'first_contact_pitch_deg': {'shoe': 6.054, 'guards': 6.442, 'keel_body': 8.973, 'tcrt': 10.434}}
 - [x] `rear_keel_seats_on_crossmember_without_interference` — {'overlap_volume_mm3': 0, 'gap_mm': 0.0}
 - [x] `rear_keel_bolted_with_four_m3` — {'hardware_solids': 8}
 - [x] `rear_keel_shoe_fully_backed` — {'shoe_top_z_mm': 6.0, 'keel_underside_z_mm': {'-32.0,-4.0': 6.0, '-32.0,0.0': 6.0, '-32.0,4.0': 6.0, '-27.0,-4.0': 6.0, '-27.0,0.0': 6.0, '-27.0,4.0': 6.0, '-22.0,-4.0': 6.0, '-22.0,0.0': 6.0, '-22.0,4.0': 6.0}}
 - [x] `rear_keel_guards_seated_full_length` — {'guard_top_z_mm': 10.5, 'keel_underside_z_mm': {'-61.5': 10.0, '-54.5': 10.0, '-47.5': 9.72}}
-- [x] `rear_tcrt_package_clears_keel` — {'collision_volume_mm3': 0}
+- [x] `rear_tcrt_package_clears_keel` — {'collision_volume_mm3': 0.0}
 - [x] `rear_keel_passes_shell_floor_slot` — {'overlap_volume_mm3': 0}
 - [x] `rear_tail_parked_out_of_assembly` — {'enabled': False, 'module_children': ['REAR_SKID_TCRT_KEEL']}
 - [x] `rear_keel_is_translucent_ivory` — {'color': '#E3DDC9', 'alpha': 0.34}
@@ -77,7 +80,7 @@
 - [x] `rear_tail_sweeps_progressively_upward` — {'segment_rise_deg': [22.93, 36.87, 52.13, 66.04]}
 - [x] `rear_tail_segments_telescope` — {'segment_start_end_widths_mm': [[19.0, 17.86], [15.5, 14.57], [12.5, 11.75], [9.5, 4.0]]}
 - [x] `rear_tail_tip_is_blunt_chisel` — {'tip_section_w_h_mm': (4.0, 2.0)}
-- [x] `rear_tail_inside_nose_spin_circle` — {'tail_planar_radius_mm': 105.93, 'nose_planar_radius_mm': 134.78}
+- [x] `rear_tail_inside_nose_spin_circle` — {'tail_planar_radius_mm': 105.93, 'nose_planar_radius_mm': 134.55}
 - [x] `rear_tail_below_body_top` — {'tail_max_z_mm': 107.0, 'limit_z_mm': 130.0}
 - [x] `rear_tail_clears_shell_and_panels` — {'shell_overlap_mm3': 0, 'panel_overlap_mm3': 0}
 - [x] `rear_tail_stays_above_body_ground_clearance` — {'tail_min_z_mm': 77.0, 'body_bottom_z_mm': 30.0}
@@ -86,12 +89,12 @@
 - [x] `rear_skid_tcrt_is_separate_top_level_group` — {'top_level_labels': ['CHASSIS_PRIMARY_FRAME', 'BODY_PRIMARY_FRAME', 'BODY_CHASSIS_MOUNT_HARDWARE', 'WHEEL_L', 'WHEEL_R', 'MOTOR_L', 'MOTOR_R', 'BEARING_PAIR_L', 'BEARING_PAIR_R', 'BALL_TRANSFER', 'REAR_SKID_TCRT_MODULE', 'BODY_ELECTRONICS', 'BODY_SENSORS', 'BODY_AUDIO', 'HARNESS_ROUTES', 'BODY_SHELL', 'BODY_PANELS', 'PANEL_MOUNT_HARDWARE', 'BODY_YAW_STAGE', 'RP01_HEAD_LAYOUT03', 'RP01_HEAD_HARNESS', 'RP01_HEAD_PHYSICS', 'PHYSICS_OVERLAYS']}
 - [x] `tactile_nose_precedes_ball_surface` — {'tactile_face_x_mm': 133.5, 'ball_front_x_mm': 122.7}
 - [x] `tactile_nose_has_bounded_travel` — {'travel_mm': 3.0}
-- [x] `battery_forward_of_axle` — {'battery_x_mm': 42.0}
+- [x] `battery_forward_of_axle` — {'battery_x_mm': 46.7}
 - [x] `head_source_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/head/layout-04/layout_model.py'}
 - [x] `pi_step_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/body-chassis/layout-01/references/purchased/raspberry_pi_5.step'}
 - [x] `bearing_step_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/body-chassis/layout-01/references/purchased/bearing_608zz.step'}
-- [x] `com_inside_support_x` — {'com_x_mm': 20.206316954955636}
-- [x] `com_forward_of_physics_margin_line` — {'com_x_mm': 20.21, 'com_h_mm': 103.69, 'x_over_h': 0.1949, 'a_tip_m_s2': 1.912, 'baseline_target': {'x_mm': 25.0, 'h_mm': 124.0, 'x_over_h': 0.202}, 'body_shift_x_mm': 16.0, 'rule': 'RP-03 physics.md 2.5: a_peak 0.80-1.00 m/s2 has margin only when x_CoM >= +20 mm'}
-- [x] `ball_share_above_spin_walk_flag` — {'ball_share': 0.1837, 'flag_below': 0.09}
-- [x] `rear_skid_catches_before_com_crosses_axle` — {'shoe_first_contact_pitch_deg': 6.054, 'com_over_axle_pitch_deg': 11.027}
-- [x] `com_below_head_yaw` — {'com_z_mm': 103.69266450531815}
+- [x] `com_inside_support_x` — {'com_x_mm': 20.621239855848522}
+- [x] `com_forward_of_physics_margin_line` — {'com_x_mm': 20.62, 'com_h_mm': 105.79, 'x_over_h': 0.1949, 'a_tip_m_s2': 1.912, 'baseline_target': {'x_mm': 25.0, 'h_mm': 124.0, 'x_over_h': 0.202}, 'body_shift_x_mm': 16.0, 'rule': 'RP-03 physics.md 2.5: a_peak 0.80-1.00 m/s2 has margin only when x_CoM >= +20 mm'}
+- [x] `ball_share_above_spin_walk_flag` — {'ball_share': 0.1875, 'flag_below': 0.09}
+- [x] `rear_skid_catches_before_com_crosses_axle` — {'shoe_first_contact_pitch_deg': 6.054, 'com_over_axle_pitch_deg': 11.03}
+- [x] `com_below_head_yaw` — {'com_z_mm': 105.78975250120217}

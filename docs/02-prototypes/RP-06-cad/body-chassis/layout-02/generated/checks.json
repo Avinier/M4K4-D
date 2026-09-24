@@ -97,18 +97,55 @@
       }
     },
     {
+      "name": "battery_pack_fits_tub_with_retention_gap",
+      "ok": true,
+      "evidence": {
+        "rear_x_mm": 1.8,
+        "front_x_mm": 1.8,
+        "side_y_mm": 1.5,
+        "floor_z_mm": 0.3,
+        "below_deck_top_z_mm": 0.5
+      }
+    },
+    {
+      "name": "ballast_bar_is_clear_and_seated",
+      "ok": true,
+      "evidence": {
+        "clashes_mm3": {},
+        "gaps": {
+          "tub_front_wall_mm": 1.0,
+          "front_crossmember_mm": 1.5,
+          "deck_underside_mm": 0.0
+        },
+        "mass_g": 81.6
+      }
+    },
+    {
+      "name": "battery_pack_is_2s1p_18650",
+      "ok": true,
+      "evidence": {
+        "parts": [
+          "BATTERY_CELL_A_SAMSUNG_25R_ENVELOPE",
+          "BATTERY_CELL_B_SAMSUNG_25R_ENVELOPE",
+          "BATTERY_END_STRAP_FRONT_Y",
+          "BATTERY_END_STRAP_REAR_Y",
+          "BATTERY_BMS_2S_20A_BALANCED"
+        ]
+      }
+    },
+    {
       "name": "battery_tub_is_clear",
       "ok": true,
       "evidence": {
         "battery_center_mm": [
-          42.0,
+          46.7,
           0.0,
-          44.0
+          43.9
         ],
         "battery_size_mm": [
-          48.0,
-          75.0,
-          24.0
+          37.6,
+          67.0,
+          23.799999999999997
         ],
         "clashes_mm3": {},
         "tub_vs_shell_mm3": {}
@@ -139,15 +176,14 @@
         "flange_top_z_mm": 29.0,
         "pod_seat_z_mm": 29.0,
         "gap_mm": 0.0,
-        "overlap_mm3": 0
+        "overlap_mm3": 0.0
       }
     },
     {
       "name": "ball_article_stack_is_connected",
       "ok": true,
       "evidence": {
-        "housing_to_flange_mm": 0.0,
-        "lip_to_housing_mm": 0.0
+        "housing_to_flange_mm": 0.0
       }
     },
     {
@@ -190,18 +226,20 @@
       "evidence": {
         "cap_bottom_z_mm": 29.0,
         "pod_seat_z_mm": 29.0,
-        "housing_bottom_z_mm": 9.5
+        "housing_bottom_z_mm": 8.5
       }
     },
     {
       "name": "c12_low_object_contact_not_claimed",
       "ok": true,
       "evidence": {
-        "first_contact": "BALL_TRANSFER_RETAINING_LIP",
+        "first_contact": "BALL_TRANSFER_PURCHASED_HOUSING",
         "hit_face_x_mm": {
           "BALL_TRANSFER_POM_BALL": 122.7,
-          "BALL_TRANSFER_PURCHASED_HOUSING": 126.0,
-          "BALL_TRANSFER_RETAINING_LIP": 126.8
+          "BALL_TRANSFER_PURCHASED_HOUSING": 124.6,
+          "BALL_TRANSFER_ROLLER_1": 120.392,
+          "BALL_TRANSFER_ROLLER_2": 99.608,
+          "BALL_TRANSFER_ROLLER_3": 120.392
         }
       }
     },
@@ -264,10 +302,10 @@
       "name": "ball_nose_is_lean",
       "ok": true,
       "evidence": {
-        "nose_width_mm": 40.0,
+        "nose_width_mm": 40.6,
         "previous_shroud_width_mm": 52.0,
         "nose_front_x_mm": 133.5,
-        "spin_radius_mm": 134.78
+        "spin_radius_mm": 134.55
       }
     },
     {
@@ -457,7 +495,7 @@
         "sensor_face_mm": [
           128.0,
           0.0,
-          41.0
+          40.3
         ]
       }
     },
@@ -789,7 +827,7 @@
           "shoe": 6.054,
           "guards": 6.442,
           "keel_body": 8.973,
-          "tcrt": 9.604
+          "tcrt": 10.434
         }
       }
     },
@@ -842,7 +880,7 @@
       "name": "rear_tcrt_package_clears_keel",
       "ok": true,
       "evidence": {
-        "collision_volume_mm3": 0
+        "collision_volume_mm3": 0.0
       }
     },
     {
@@ -934,7 +972,7 @@
       "ok": true,
       "evidence": {
         "tail_planar_radius_mm": 105.93,
-        "nose_planar_radius_mm": 134.78
+        "nose_planar_radius_mm": 134.55
       }
     },
     {
@@ -1049,7 +1087,7 @@
       "name": "battery_forward_of_axle",
       "ok": true,
       "evidence": {
-        "battery_x_mm": 42.0
+        "battery_x_mm": 46.7
       }
     },
     {
@@ -1077,15 +1115,15 @@
       "name": "com_inside_support_x",
       "ok": true,
       "evidence": {
-        "com_x_mm": 20.206316954955636
+        "com_x_mm": 20.621239855848522
       }
     },
     {
       "name": "com_forward_of_physics_margin_line",
       "ok": true,
       "evidence": {
-        "com_x_mm": 20.21,
-        "com_h_mm": 103.69,
+        "com_x_mm": 20.62,
+        "com_h_mm": 105.79,
         "x_over_h": 0.1949,
         "a_tip_m_s2": 1.912,
         "baseline_target": {
@@ -1101,7 +1139,7 @@
       "name": "ball_share_above_spin_walk_flag",
       "ok": true,
       "evidence": {
-        "ball_share": 0.1837,
+        "ball_share": 0.1875,
         "flag_below": 0.09
       }
     },
@@ -1110,14 +1148,14 @@
       "ok": true,
       "evidence": {
         "shoe_first_contact_pitch_deg": 6.054,
-        "com_over_axle_pitch_deg": 11.027
+        "com_over_axle_pitch_deg": 11.03
       }
     },
     {
       "name": "com_below_head_yaw",
       "ok": true,
       "evidence": {
-        "com_z_mm": 103.69266450531815
+        "com_z_mm": 105.78975250120217
       }
     }
   ]

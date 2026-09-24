@@ -77,7 +77,7 @@ Open Layout 03 in CAD Viewer from [`head/layout-03/README.md`](head/layout-03/RE
 ## What to do next
 
 1. Keep editing **this** tree. Fit actual sourced articles into Layout 02 / Layout 03.
-2. **Accept or recover** the 304 mm stack. **Hit or revise** the +25 / 124 mm CoM target. Layout 02 currently reports +20.2 / 103.7 mm, after the 16 mm body shift in [`RP03-CAD-06`](decisions.md#rp03-cad-06--body-forward-on-the-chassis-and-a-low-battery-tub).
+2. **Accept or recover** the 304 mm stack. **Hit or revise** the +25 / 124 mm CoM target. Layout 02 currently reports +20.6 / 105.8 mm: +20.2 / 103.7 after the 16 mm body shift in [`RP03-CAD-06`](decisions.md#rp03-cad-06--body-forward-on-the-chassis-and-a-low-battery-tub), then the lighter 2S1P pack of [`RP03-CAD-07`](decisions.md#rp03-cad-07--2s1p-18650-battery-pack) took it to +18.8 / 107.9, and the ballast bar of [`RP03-CAD-08`](decisions.md#rp03-cad-08--ballast-bar-ahead-of-the-battery-tub) brought it back to +20.6 / 105.8 mm.
 3. Do not ballast the head to 250 g.
 4. Physical mock-up and G01–G06 registration wait on representative head, electrical, and acoustic evidence.
 

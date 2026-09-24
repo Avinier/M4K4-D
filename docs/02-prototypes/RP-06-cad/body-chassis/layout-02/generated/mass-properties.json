@@ -1,10 +1,10 @@
 {
   "layout_id": "RP03_BODY_CHASSIS_LAYOUT02",
-  "mass_g": 2614.68810923463,
+  "mass_g": 2525.9881092346295,
   "com_mm": [
-    20.206316954955636,
-    0.5972381991686315,
-    103.69266450531815
+    20.621239855848522,
+    0.6182102014011793,
+    105.78975250120217
   ],
   "rows": [
     {
@@ -19,13 +19,13 @@
     },
     {
       "id": "BODY_SHELL_AND_PANELS",
-      "mass_g": 287.8,
+      "mass_g": 290.4,
       "com_mm": [
         20.0,
         0.0,
         96.0
       ],
-      "source": "Layout 02 CAD estimate; +15 g for the internal panel frames (+15.6 cm3 net printed volume, near-solid 2.4 mm walls); -27.2 g for the -22.7 cm3 of shell floor opened over the motors, battery hatch and pod tongue (RP03-CAD-05/06) at ~1.2 g/cm3"
+      "source": "Layout 02 CAD estimate; +15 g for the internal panel frames (+15.6 cm3 net printed volume, near-solid 2.4 mm walls); -27.2 g for the -22.7 cm3 of shell floor opened over the motors, battery hatch and pod tongue (RP03-CAD-05/06) at ~1.2 g/cm3; +2.6 g for the ~0.9 cm2 x 2.4 mm of shell floor returned when the battery opening shrank to the 2S1P pack tub (RP03-CAD-07)"
     },
     {
       "id": "BODY_PRIMARY_FRAME",
@@ -39,13 +39,13 @@
     },
     {
       "id": "CHASSIS_PRIMARY_FRAME",
-      "mass_g": 173.3,
+      "mass_g": 172.1,
       "com_mm": [
         19.8,
         0.0,
         47.4
       ],
-      "source": "front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added"
+      "source": "front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"
     },
     {
       "id": "WHEEL_L",
@@ -108,14 +108,24 @@
       "source": "vendor"
     },
     {
-      "id": "BATTERY",
-      "mass_g": 280.0,
+      "id": "BALLAST_STEEL_BAR",
+      "mass_g": 81.6,
       "com_mm": [
-        42.0,
+        74.0,
         0.0,
-        44.0
+        42.5
       ],
-      "source": "RP-02 placeholder"
+      "source": "E: mild-steel bar 9 x 60 x 19 mm at 7.85 g/cm3 (less two M3 tapped holes) + two M3 screws; sized so the register CoM clears the physics.md 2.5 line after the 110 g pack (RP03-CAD-08)"
+    },
+    {
+      "id": "BATTERY",
+      "mass_g": 110.0,
+      "com_mm": [
+        46.7,
+        0.0,
+        43.9
+      ],
+      "source": "E: 2 x Samsung INR18650-25R (45 g max each) + 2S 20 A balanced BMS (~8 g) + sleeve, straps and leads (~12 g); working selection, no purchase or measured mass; was a 280 g RP-02 placeholder"
     },
     {
       "id": "RASPBERRY_PI5_AND_COOLER",
@@ -139,13 +149,13 @@
     },
     {
       "id": "BALL_NOSE_POD_SENSOR_CAP",
-      "mass_g": 17.6,
+      "mass_g": 15.9,
       "com_mm": [
         110.5,
         0.0,
         41.2
       ],
-      "source": "CAD volume: octagonal pod + lid 13.1 cm3 (X 92-128.5) and touch hood 3.6 cm3 (skirt cut at Z 29) at ~45% effective PETG density (7.5 + 2.0 g); 5 M3 screws + 2 heat-set inserts 4.6 g; GP2Y0A41SK0F 3.5 g E"
+      "source": "CAD volume: raked prow pod + lid 11.8 cm3 (X 92-128.5) and touch hood 1.8 cm3 (2026-09-24 prow rework) at ~45% effective PETG density (6.8 + 1.0 g); 5 M3 screws + 2 heat-set inserts 4.6 g; GP2Y0A41SK0F 3.5 g E"
     },
     {
       "id": "BODY_AUDIO",

@@ -43,30 +43,30 @@
   "body_shift_x_mm": 16.0,
   "body_axis_x_mm": 16.0,
   "battery_center_mm": [
-    42.0,
+    46.7,
     0.0,
-    44.0
+    43.9
   ],
   "battery_size_mm": [
-    48.0,
-    75.0,
-    24.0
+    37.6,
+    67.0,
+    23.799999999999997
   ],
   "battery_mount": "chassis tub under the deck, flush with the deck top; removable bottom hatch through a shell-floor opening",
   "ball_mount_mode": "FIXED_3HOLE_NON_INTERCHANGEABLE",
   "ball_mount": "vendor flange top face seats on the printed pod at Z 29; three M3 from inside the pod pocket; pod tied to FRONT_CROSSMEMBER by two M3 into heat-set inserts",
   "ball_screw_points_mm": [
     [
-      122.2,
+      117.04367328411344,
       0.0
     ],
     [
-      103.9,
-      10.56550992617015
+      106.47816335794329,
+      6.1000000000000005
     ],
     [
-      103.89999999999999,
-      -10.565509926170147
+      106.47816335794327,
+      -6.099999999999998
     ]
   ],
   "ball_pod_x_mm": [
@@ -78,13 +78,13 @@
   "touch_cap_half_width_mm": 20.0,
   "touch_cap_z_mm": [
     29.0,
-    56.6
+    53.6
   ],
   "touch_cap_travel_mm": 3.0,
   "front_range_sensor_face_mm": [
     128.0,
     0.0,
-    41.0
+    40.3
   ],
   "front_range_face_ahead_of_ball_contact_mm": 18.0,
   "front_range_required_from_ball_contact_mm": {

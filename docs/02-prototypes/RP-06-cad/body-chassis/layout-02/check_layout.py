@@ -10,6 +10,10 @@ from build123d import Axis, Compound, GeomType, Location, Vertex
 
 import body_chassis_model as M
 
+def _vol(shape):
+    """Volume of a boolean result; an empty intersection is None, meaning zero."""
+    return 0.0 if shape is None else shape.volume
+
 
 HERE = Path(__file__).resolve().parent
 
@@ -33,8 +37,8 @@ def main():
     keel_sensor_package = keel_cartridge.children[0]
     body_frame = M.body_primary_frame()
     chassis_frame = M.chassis_frame()
-    frame_chassis_overlap = (body_frame & chassis_frame).volume
-    audio_sensor_overlap = (M.body_audio() & M.sensors()).volume
+    frame_chassis_overlap = _vol(body_frame & chassis_frame)
+    audio_sensor_overlap = _vol(M.body_audio() & M.sensors())
     # Stationary yaw stage against everything it could hit inside the body.
     yaw_stage = M.body_yaw_stage()
     # Air above the Pi cooler: no yaw-stage part, stationary or moving, and no
@@ -43,9 +47,9 @@ def main():
     moving_parts = M.yaw_drive_moving_parts()
     clockspring = [c for c in M.harness_routes().children if c.label == "HARNESS_HEAD_YAW_CLOCKSPRING_RESERVE"]
     plate = [c for c in body_frame.children if c.label == "HEAD_YAW_ADAPTER_PLATE"]
-    cooler_headroom_clash = sum((headroom & part).volume for part in [*yaw_stage.children, *moving_parts, *clockspring, *plate])
+    cooler_headroom_clash = sum(_vol(headroom & part) for part in [*yaw_stage.children, *moving_parts, *clockspring, *plate])
     yaw_clash = sum(
-        (part & other).volume
+        _vol(part & other)
         for part in [*yaw_stage.children, *moving_parts]
         for other in [*body_frame.children, *M.electronics().children, M.body_shell(), *M.sensors().children, *M.body_audio().children]
     )
@@ -92,7 +96,7 @@ def main():
     for face, x in shell_face_x.items():
         inward = -1.0 if face == "FRONT" else 1.0
         slab = M._service_panel_outline(face, min(x, x + inward), max(x, x + inward))
-        land_area = (slab & body_shell).volume
+        land_area = _vol(slab & body_shell)
         outline = M._service_panel_outline(face, x, x + 1.0).faces().filter_by(Axis.X)[0]
         opening = M._service_panel_outline(face, x, x + 1.0, -M.PANEL_OVERLAP).faces().filter_by(Axis.X)[0]
         mean_perimeter = (sum(e.length for e in outline.outer_wire().edges()) + sum(e.length for e in opening.outer_wire().edges())) / 2.0
@@ -108,7 +112,7 @@ def main():
     }
 
     def probe_hits(shape, x0, x1, y, z):
-        return (shape & M._block(x0, x1, y - 0.5, y + 0.5, z - 0.25, z + 0.25)).volume > 1e-6
+        return _vol(shape & M._block(x0, x1, y - 0.5, y + 0.5, z - 0.25, z + 0.25)) > 1e-6
 
     # Probe the frame plate on the centreline just inside its top and bottom edges.
     frame_plate_x = {"FRONT": (M.BODY_X_FRONT - 4.0, M.BODY_X_FRONT - 3.0), "REAR": (M.BODY_X_REAR + 3.0, M.BODY_X_REAR + 4.0)}
@@ -133,12 +137,12 @@ def main():
                 continue
             if not part.bounding_box().overlaps(other.bounding_box()):
                 continue
-            volume = (part & other).volume
+            volume = _vol(part & other)
             if volume > 1e-3:
                 key = " x ".join(sorted((part.label, other.label)))
                 panel_clashes[key] = round(volume, 3)
     range_window_blockage = sum(
-        (optical_axis & shape).volume
+        _vol(optical_axis & shape)
         for shape in [
             body_shell,
             *panel_parts,
@@ -149,15 +153,15 @@ def main():
     )
     removal_path = M._service_panel_outline("FRONT", M.BODY_X_FRONT + M.SHELL_THICKNESS, M.BODY_X_FRONT + 48.0)
     front_removal_blockers = {
-        shape.label: round((removal_path & shape).volume, 3)
+        shape.label: round(_vol(removal_path & shape), 3)
         for shape in [*chassis_frame.children, M.ball_transfer(), *sensor_parts]
-        if (removal_path & shape).volume > 1e-3
+        if _vol(removal_path & shape) > 1e-3
     }
 
     def keel_underside_z(x, y):
         probe = M._block(x - 0.2, x + 0.2, y - 0.2, y + 0.2, 0.0, 40.0)
         hit = keel_body & probe
-        return round(hit.bounding_box().min.Z, 4) if hit.volume > 1e-9 else None
+        return round(hit.bounding_box().min.Z, 4) if _vol(hit) > 1e-9 else None
 
     shoe_top_z = M.SKID_SHOE_BOTTOM_Z + M.SKID_SHOE_SIZE[2]
     shoe_x0 = M.SKID_PAD_CENTER[0] - M.SKID_SHOE_SIZE[0] / 2.0 + 1.0
@@ -211,7 +215,6 @@ def main():
     gp2y_parts = [c for c in M.sensors().children if c.label.startswith("GP2Y") and c.label != "GP2Y_OPTICAL_AXIS"]
     flange = by_label(ball_parts, "BALL_TRANSFER_PURCHASED_3HOLE_FLANGE")
     housing = by_label(ball_parts, "BALL_TRANSFER_PURCHASED_HOUSING")
-    lip = by_label(ball_parts, "BALL_TRANSFER_RETAINING_LIP")
     pod_seat = by_label(pod_parts, "BALL_POD_PRINTED_SEAT")
     touch_cap = by_label(nose_parts, "BALL_NOSE_TOUCH_CAP")
     travel_reserve = by_label(nose_parts, "BALL_NOSE_3MM_TRAVEL_RESERVE")
@@ -220,11 +223,10 @@ def main():
         "flange_top_z_mm": round(flange.bounding_box().max.Z, 4),
         "pod_seat_z_mm": round(pod_seat.bounding_box().min.Z, 4),
         "gap_mm": round(flange.distance_to(pod_seat), 4),
-        "overlap_mm3": round((flange & pod_seat).volume, 4),
+        "overlap_mm3": round(_vol(flange & pod_seat), 4),
     }
     ball_stack_gaps = {
         "housing_to_flange_mm": round(housing.distance_to(flange), 4),
-        "lip_to_housing_mm": round(lip.distance_to(housing), 4),
     }
     ball_screw_engagement = {
         part.label: round(min(part.bounding_box().max.Z, flange.bounding_box().max.Z) - max(part.bounding_box().min.Z, flange.bounding_box().min.Z), 3)
@@ -242,13 +244,13 @@ def main():
                 continue
             if not a.bounding_box().overlaps(b.bounding_box()):
                 continue
-            volume = (a & b).volume
+            volume = _vol(a & b)
             if volume > 1e-3:
                 nose_clashes[" x ".join(sorted((a.label, b.label)))] = round(volume, 3)
     travel_blockers = {
-        s.label: round((travel_reserve & s).volume, 3)
+        s.label: round(_vol(travel_reserve & s), 3)
         for s in [*ball_parts, *pod_parts, *gp2y_parts, *[p for p in nose_parts if p not in (travel_reserve, plunger)]]
-        if (travel_reserve & s).volume > 1e-3
+        if _vol(travel_reserve & s) > 1e-3
     }
     rigid_nose = [*ball_parts, *pod_parts, *gp2y_parts]
     rigid_front_x = max(s.bounding_box().max.X for s in rigid_nose)
@@ -259,7 +261,7 @@ def main():
     c12_first = {}
     for s in [*rigid_nose, touch_cap]:
         hit = c12_path & s
-        if hit.volume > 1e-3:
+        if _vol(hit) > 1e-3:
             c12_first[s.label] = round(hit.bounding_box().max.X, 3)
     c12_first_label = max(c12_first, key=c12_first.get)
     nose_front_x = touch_cap.bounding_box().max.X
@@ -277,7 +279,7 @@ def main():
     )
     nose_width = touch_cap.bounding_box().size.Y
     # The pod's tongue passes the shell's front notch; the crossmember and rails stay inside.
-    pod_shell_overlap = {s.label: round((s & body_shell).volume, 3) for s in pod_parts if (s & body_shell).volume > 1e-3}
+    pod_shell_overlap = {s.label: round(_vol(s & body_shell), 3) for s in pod_parts if _vol(s & body_shell) > 1e-3}
     chassis_front_x = max(
         c.bounding_box().max.X for c in chassis_frame.children if c.label != "BALL_POD"
     )
@@ -287,16 +289,17 @@ def main():
     tail_head_parts = [
         child for child in tail_root.children if child.label.startswith("REAR_TAIL_ROOT_M3_HEAD")
     ]
-    tail_shell_overlap = (rear_tail & body_shell).volume
+    tail_shell_overlap = _vol(rear_tail & body_shell)
     # Parked, the rear panel carries no tail bores, so leave the M3 shanks out.
     tail_body_parts = [tail_segments] + [
         child for child in tail_root.children if M.REAR_TAIL_ENABLED or "_M3_" not in child.label
     ]
-    tail_panel_overlap = (Compound(children=tail_body_parts) & body_panels).volume
-    keel_shell_overlap = (rear_keel & body_shell).volume
-    keel_crossmember_overlap = (keel_body & rear_crossmember).volume
+    tail_panel_overlap = _vol(Compound(children=tail_body_parts) & body_panels)
+    keel_shell_overlap = _vol(rear_keel & body_shell)
+    keel_crossmember_overlap = _vol(keel_body & rear_crossmember)
     keel_crossmember_gap = keel_body.distance_to(rear_crossmember)
-    tcrt_keel_collision = (keel_sensor_package & keel_body).volume
+    _hit = keel_sensor_package & keel_body
+    tcrt_keel_collision = _hit.volume if _hit is not None else 0.0
     tail_bbox = rear_tail.bounding_box()
 
     # Drivetrain fit (RP03-CAD-05), measured from the built solids. The wheel
@@ -334,29 +337,57 @@ def main():
             for other in [*chassis_static, *body_static, *leaves(M.harness_routes())]:
                 if not part.bounding_box().overlaps(other.bounding_box()):
                     continue
-                volume = (part & other).volume
+                volume = _vol(part & other)
                 if volume > 1e-3:
                     drivetrain_clashes[f"{part.label} x {other.label}"] = round(volume, 3)
         gearbox = next(c for c in motor_solids if c.label.endswith("GEARBOX"))
         flange = by_label(chassis_static, f"AXLE_MOTOR_FLANGE_BEARING_BOSS_{side}")
-        flange_seat[side] = {"gap_mm": round(gearbox.distance_to(flange), 4), "overlap_mm3": round((gearbox & flange).volume, 4)}
+        flange_seat[side] = {"gap_mm": round(gearbox.distance_to(flange), 4), "overlap_mm3": round(_vol(gearbox & flange), 4)}
     bearings_in_boss = {}
     for side in ("L", "R"):
         boss = by_label(chassis_static, f"AXLE_MOTOR_FLANGE_BEARING_BOSS_{side}").bounding_box()
         for bearing in M.bearing_pair(side).children:
             bb = bearing.bounding_box()
             bearings_in_boss[bearing.label] = boss.min.Y - 1e-6 <= bb.min.Y and bb.max.Y <= boss.max.Y + 1e-6
-    battery = by_label(M.electronics().children, "BATTERY_RP02_ENVELOPE")
-    battery_clashes = {
-        other.label: round((battery & other).volume, 3)
-        for other in [*chassis_static, *body_static, *leaves(M.harness_routes()), *leaves(M.body_audio()), *leaves(M.motor_envelope("L")), *leaves(M.motor_envelope("R"))]
-        if other.label != battery.label and battery.bounding_box().overlaps(other.bounding_box()) and (battery & other).volume > 1e-3
+    battery = by_label(M.electronics().children, "BATTERY_2S1P_18650_PACK")
+    battery_parts = leaves(battery)
+    battery_clashes = {}
+    for other in [*chassis_static, *body_static, *leaves(M.harness_routes()), *leaves(M.body_audio()), *leaves(M.motor_envelope("L")), *leaves(M.motor_envelope("R"))]:
+        if other.label == battery.label:
+            continue
+        volume = sum(_vol(part & other) for part in battery_parts if part.bounding_box().overlaps(other.bounding_box()))
+        if volume > 1e-3:
+            battery_clashes[other.label] = round(volume, 3)
+    # The pack must sit inside the tub interior with retention clearance and
+    # stay below the deck top; the tub's hatch is its floor.
+    pack_bb = battery.bounding_box()
+    tub_inner = {
+        "x": (M.BATTERY_TUB_X[0] + M.BATTERY_TUB_WALL, M.BATTERY_TUB_X[1]),
+        "y": (-(M.BATTERY_TUB_HALF_Y - M.BATTERY_TUB_WALL), M.BATTERY_TUB_HALF_Y - M.BATTERY_TUB_WALL),
+    }
+    battery_tub_margin = {
+        "rear_x_mm": round(pack_bb.min.X - tub_inner["x"][0], 3),
+        "front_x_mm": round(tub_inner["x"][1] - pack_bb.max.X, 3),
+        "side_y_mm": round(min(pack_bb.min.Y - tub_inner["y"][0], tub_inner["y"][1] - pack_bb.max.Y), 3),
+        "floor_z_mm": round(pack_bb.min.Z - M.BATTERY_TUB_FLOOR_Z[1], 3),
+        "below_deck_top_z_mm": round((M.DECK_Z + 2.0) - pack_bb.max.Z, 3),
+    }
+    ballast_parts = [c for c in chassis_static if c.label.startswith("BALLAST_")]
+    ballast_clashes = {}
+    for other in [*(c for c in chassis_static if not c.label.startswith("BALLAST_")), *body_static, *leaves(M.harness_routes()), *leaves(M.body_audio()), *battery_parts, *leaves(M.motor_envelope("L")), *leaves(M.motor_envelope("R"))]:
+        volume = sum(_vol(part & other) for part in ballast_parts if part.bounding_box().overlaps(other.bounding_box()))
+        if volume > 1e-3:
+            ballast_clashes[other.label] = round(volume, 3)
+    ballast_gaps = {
+        "tub_front_wall_mm": round(M.BALLAST_X[0] - (M.BATTERY_TUB_X[1] + M.BATTERY_TUB_WALL), 3),
+        "front_crossmember_mm": round(M.FRONT_CROSSMEMBER_X[0] - M.BALLAST_X[1], 3),
+        "deck_underside_mm": round(M.DECK_Z - 2.0 - M.BALLAST_Z[1], 3),
     }
     # The tub's walls and hatch pass through the shell floor opening.
     tub_shell_overlap = {
-        part.label: round((part & body_shell).volume, 3)
+        part.label: round(_vol(part & body_shell), 3)
         for part in M.battery_tub().children
-        if (part & body_shell).volume > 1e-3
+        if _vol(part & body_shell) > 1e-3
     }
     com = M.mass_properties()["com_mm"]
     com_ratio = com[0] / com[2]
@@ -374,6 +405,9 @@ def main():
         ("drivetrain_static_parts_do_not_interfere", not drivetrain_clashes, {"clashes_mm3": drivetrain_clashes}),
         ("motor_face_seats_on_axle_flange", all(v["gap_mm"] < 1e-6 and v["overlap_mm3"] < 1e-3 for v in flange_seat.values()), flange_seat),
         ("bearings_sit_inside_flange_boss", all(bearings_in_boss.values()), {"bearings": bearings_in_boss, "boss_end_y_mm": M.AXLE_BOSS_END_Y}),
+        ("battery_pack_fits_tub_with_retention_gap", all(v >= 0.4 for k, v in battery_tub_margin.items() if k != "floor_z_mm") and -1e-6 <= battery_tub_margin["floor_z_mm"] <= M.BATTERY_WRAP_T + 1e-6, battery_tub_margin),
+        ("ballast_bar_is_clear_and_seated", not ballast_clashes and ballast_gaps["tub_front_wall_mm"] >= 0.5 and ballast_gaps["front_crossmember_mm"] >= 0.5 and abs(ballast_gaps["deck_underside_mm"]) < 1e-6, {"clashes_mm3": ballast_clashes, "gaps": ballast_gaps, "mass_g": round(M.BALLAST_BAR_G + M.BALLAST_SCREWS_G, 1)}),
+        ("battery_pack_is_2s1p_18650", sum("BATTERY_CELL_" in p.label for p in battery_parts) == 2 and any("BMS" in p.label for p in battery_parts), {"parts": [p.label for p in battery_parts]}),
         ("battery_tub_is_clear", not battery_clashes and not tub_shell_overlap, {"battery_center_mm": M.BATTERY_CENTER, "battery_size_mm": M.BATTERY_SIZE, "clashes_mm3": battery_clashes, "tub_vs_shell_mm3": tub_shell_overlap}),
         ("ball_transfer_is_frozen_default", M.BALL_CONTACT == (110.0, 0.0, 0.0), {"contact_mm": M.BALL_CONTACT}),
         ("ball_mount_is_fixed_not_interchangeable", M.BALL_MOUNT_MODE == "FIXED_3HOLE_NON_INTERCHANGEABLE", {"mount_mode": M.BALL_MOUNT_MODE}),
