@@ -9,10 +9,10 @@
 - [x] `drivetrain_static_parts_do_not_interfere` — {'clashes_mm3': {}}
 - [x] `motor_face_seats_on_axle_flange` — {'L': {'gap_mm': 0.0, 'overlap_mm3': 0}, 'R': {'gap_mm': 0.0, 'overlap_mm3': 0}}
 - [x] `bearings_sit_inside_flange_boss` — {'bearings': {'BEARING_608ZZ_L_1': True, 'BEARING_608ZZ_L_2': True, 'BEARING_608ZZ_R_1': True, 'BEARING_608ZZ_R_2': True}, 'boss_end_y_mm': 86.0}
-- [x] `battery_pack_fits_tub_with_retention_gap` — {'rear_x_mm': 1.8, 'front_x_mm': 1.8, 'side_y_mm': 1.5, 'floor_z_mm': 0.3, 'below_deck_top_z_mm': 0.5}
+- [x] `battery_pack_fits_tub_with_retention_gap` — {'rear_x_mm': 1.8, 'front_x_mm': 1.8, 'side_y_mm': 1.5, 'floor_z_mm': 0.3, 'below_deck_top_z_mm': 2.1}
 - [x] `ballast_bar_is_clear_and_seated` — {'clashes_mm3': {}, 'gaps': {'tub_front_wall_mm': 1.0, 'front_crossmember_mm': 1.5, 'deck_underside_mm': 0.0}, 'mass_g': 81.6}
-- [x] `battery_pack_is_2s1p_18650` — {'parts': ['BATTERY_CELL_A_SAMSUNG_25R_ENVELOPE', 'BATTERY_CELL_B_SAMSUNG_25R_ENVELOPE', 'BATTERY_END_STRAP_FRONT_Y', 'BATTERY_END_STRAP_REAR_Y', 'BATTERY_BMS_2S_20A_BALANCED']}
-- [x] `battery_tub_is_clear` — {'battery_center_mm': (46.7, 0.0, 43.9), 'battery_size_mm': (37.6, 67.0, 23.799999999999997), 'clashes_mm3': {}, 'tub_vs_shell_mm3': {}}
+- [x] `battery_pack_is_2s1p_18650` — {'parts': ['BATTERY_CELL_A_SAMSUNG_25R_ENVELOPE', 'BATTERY_CELL_B_SAMSUNG_25R_ENVELOPE', 'BATTERY_END_STRAP_FRONT_Y', 'BATTERY_END_STRAP_REAR_Y', 'BATTERY_BMS_PCB01_PACK_PROTECTION']}
+- [x] `battery_tub_is_clear` — {'battery_center_mm': (46.7, 0.0, 43.099999999999994), 'battery_size_mm': (37.6, 67.0, 22.199999999999996), 'clashes_mm3': {}, 'tub_vs_shell_mm3': {}}
 - [x] `ball_transfer_is_frozen_default` — {'contact_mm': (110.0, 0.0, 0.0)}
 - [x] `ball_mount_is_fixed_not_interchangeable` — {'mount_mode': 'FIXED_3HOLE_NON_INTERCHANGEABLE'}
 - [x] `ball_flange_seats_on_pod` — {'flange_top_z_mm': 29.0, 'pod_seat_z_mm': 29.0, 'gap_mm': 0.0, 'overlap_mm3': 0.0}
@@ -90,11 +90,21 @@
 - [x] `tactile_nose_precedes_ball_surface` — {'tactile_face_x_mm': 133.5, 'ball_front_x_mm': 122.7}
 - [x] `tactile_nose_has_bounded_travel` — {'travel_mm': 3.0}
 - [x] `battery_forward_of_axle` — {'battery_x_mm': 46.7}
+- [x] `power_boards_are_in_the_electronics_group` — {'children': ['PCB02_CHARGE_AND_SYSTEM_POWER', 'PCB03_MOTOR_GATE_AND_HEAD_RAIL', 'PCB04_BRANCH_CONVERTERS', 'PACK_ATOF_FUSE_HOLDER_ENVELOPE', 'ESTOP_XW1E_BV402M_R'], 'proposal': 'RP-02 board-specs.md sec 2, 2026-09-25'}
+- [x] `power_boards_clear_of_all_real_hardware` — {'clashes_mm3': {}, 'checked_against': 137, 'keep_outs_included': True}
+- [x] `power_boards_do_not_interfere_with_each_other` — {'clashes_mm3': {}}
+- [x] `power_boards_keep_running_gaps` — {'minimum_mm': 0.4, 'nearest': {'PCB02_CHARGE_AND_SYSTEM_POWER_PCB': {'nearest_mm': 5.381, 'to': 'REAR_PANEL_INTERNAL_FRAME_WITH_BOSSES'}, 'PCB02_CHARGE_AND_SYSTEM_POWER_PARTS_ENVELOPE': {'nearest_mm': 2.0, 'to': 'CHASSIS_DECK_WITH_BODY_INTERFACE'}, 'PCB03_MOTOR_GATE_AND_HEAD_RAIL_PCB': {'nearest_mm': 0.5, 'to': 'IMU_BREAKOUT_ENVELOPE'}, 'PCB03_MOTOR_GATE_AND_HEAD_RAIL_PARTS_ENVELOPE': {'nearest_mm': 1.0, 'to': 'BODY_LOWER_CROSS_FRONT'}, 'PCB04_BRANCH_CONVERTERS_PCB': {'nearest_mm': 0.5, 'to': 'IMU_BREAKOUT_ENVELOPE'}, 'PCB04_BRANCH_CONVERTERS_PARTS_ENVELOPE': {'nearest_mm': 0.9, 'to': 'C3_ESP32_S3_DEVKITC_STEP'}, 'PACK_ATOF_FUSE_HOLDER_ENVELOPE': {'nearest_mm': 1.3, 'to': 'CHASSIS_RAIL_L_FRONT'}}}
+- [x] `power_bay_gaps_are_about_1mm_and_have_no_slack` — {'gaps': {'pcb04_to_lower_cross_rear_mm': 1.0, 'pcb03_to_lower_cross_front_mm': 1.0, 'pcb04_to_pcb03_mm': 1.0, 'pcb03_to_drv8874_y_mm': 1.11, 'pcb04_top_to_head_harness_vertical_z_mm': 0.9, 'pcb04_top_to_compute_tray_z_mm': 7.4, 'pcb02_to_rear_panel_frame_x_mm': 1.0}, 'note': 'PCB-03 and PCB-04 use the whole free band under the tray: 44 + 1 + 41 mm between the lower cross-members; a larger board or the 3.3 mF hold-up footprint needs a different bay'}
+- [x] `power_boards_vs_harness_placeholders_open_and_unchanged` — {'status': 'OPEN: harness volumes are unresolved route placeholders; HARNESS_BATTERY_TRUNK and HARNESS_MOTOR_BRANCH pass through PCB-03 and PCB-04, the gap under the boards is 7 mm (Z 56-63)', 'overlaps_mm3': {'PCB03_MOTOR_GATE_AND_HEAD_RAIL_PCB x HARNESS_BATTERY_TRUNK': 656.0, 'PCB03_MOTOR_GATE_AND_HEAD_RAIL_PARTS_ENVELOPE x HARNESS_BATTERY_TRUNK': 984.0, 'PCB03_MOTOR_GATE_AND_HEAD_RAIL_PARTS_ENVELOPE x HARNESS_MOTOR_BRANCH': 7200.0, 'PCB04_BRANCH_CONVERTERS_PCB x HARNESS_BATTERY_TRUNK': 368.0, 'PCB04_BRANCH_CONVERTERS_PARTS_ENVELOPE x HARNESS_BATTERY_TRUNK': 552.0}}
+- [x] `power_board_footprints_recorded` — {'footprints': {'PCB03_mm2': 2460.0, 'PCB04_mm2': 3080.0, 'PCB02_board_mm2 (vertical)': 1800.0, 'PCB01_mm2 (on the pack)': 960.0, 'removed_placeholder_envelopes_mm2': 2904.0}, 'source': 'WS-H estimates from the part inventory; nothing is laid out'}
+- [x] `estop_operator_is_outside_the_rear_panel_and_keep_out_clears_the_pi` — {'head_min_x_mm': -80.4, 'head_max_x_mm': -60.4, 'panel_outer_face_x_mm': -60.4, 'keep_out_x_mm': [-58.0, -14.0], 'keep_out_z_mm': [99.65, 121.95], 'head_z_mm': [90.8, 130.8], 'rear_panel_top_z_mm': 134.0, 'head_vs_panel_mm3': 0, 'rear_panel_cut_out': 'not modelled: the rear panel is still uncut (open item)'}
+- [x] `pcb01_replaces_generic_bms_at_2p9mm` — {'pcb01_size_mm': [20.0, 48.0, 2.9], 'previous_bms_mm': [20.0, 48.0, 4.5]}
+- [x] `control_power_sensors_row_replaced_by_board_rows` — {'replaced_rows_g': 121.0, 'removed_row_g': 121.5, 'estop_g': 40.0, 'battery_g': 113.7, 'total_mass_g': 2567.8, 'note': 'hand-kept register: masses are RP-02 estimates, not derived from the solids'}
 - [x] `head_source_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/head/layout-04/layout_model.py'}
 - [x] `pi_step_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/body-chassis/layout-01/references/purchased/raspberry_pi_5.step'}
 - [x] `bearing_step_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/body-chassis/layout-01/references/purchased/bearing_608zz.step'}
-- [x] `com_inside_support_x` — {'com_x_mm': 20.621239855848522}
-- [x] `com_forward_of_physics_margin_line` — {'com_x_mm': 20.62, 'com_h_mm': 105.79, 'x_over_h': 0.1949, 'a_tip_m_s2': 1.912, 'baseline_target': {'x_mm': 25.0, 'h_mm': 124.0, 'x_over_h': 0.202}, 'body_shift_x_mm': 16.0, 'rule': 'RP-03 physics.md 2.5: a_peak 0.80-1.00 m/s2 has margin only when x_CoM >= +20 mm'}
-- [x] `ball_share_above_spin_walk_flag` — {'ball_share': 0.1875, 'flag_below': 0.09}
-- [x] `rear_skid_catches_before_com_crosses_axle` — {'shoe_first_contact_pitch_deg': 6.054, 'com_over_axle_pitch_deg': 11.03}
-- [x] `com_below_head_yaw` — {'com_z_mm': 105.78975250120217}
+- [x] `com_inside_support_x` — {'com_x_mm': 18.7670477850793}
+- [x] `com_forward_of_physics_margin_line` — {'com_x_mm': 18.77, 'com_h_mm': 105.05, 'x_over_h': 0.1786, 'a_tip_m_s2': 1.753, 'a_tip_min_m_s2': 1.582, 'equivalent_min_x_mm_at_this_h': 16.94, 'margin_over_a_peak_1p00': 1.753, 'baseline_target': {'x_mm': 25.0, 'h_mm': 124.0, 'x_over_h': 0.202}, 'body_shift_x_mm': 16.0, 'rule': 'RP-03 physics.md 2.5 margin is a_tip = g*x/h against a_peak 0.80-1.00 m/s2. The +20 mm line is that margin evaluated at h = 124 mm (a_tip 1.582); it is re-based 2026-09-25 (builder acceptance BA-06, decision RP03-CAD-09) to the same a_tip because the register CoM height is now about 105 mm. Neutral head only; head-pose corners are in RP03-CAD-09'}
+- [x] `ball_share_above_spin_walk_flag` — {'ball_share': 0.1706, 'flag_below': 0.09}
+- [x] `rear_skid_catches_before_com_crosses_axle` — {'shoe_first_contact_pitch_deg': 6.054, 'com_over_axle_pitch_deg': 10.129}
+- [x] `com_below_head_yaw` — {'com_z_mm': 105.05155182594508}

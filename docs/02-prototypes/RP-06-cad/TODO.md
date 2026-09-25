@@ -12,7 +12,8 @@ Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gat
 
 - [ ] Use the real Pi 5 cooler height: with the cooler seated on the SoC (top Z 107.5, not 123) the body's 10.5 mm cooler headroom has ~15 mm of slack. Re-derive the yaw stage / neck stack from `PI_SOC_TOP_Z` and see whether the 4 mm needed for the 300 mm target can be recovered (changes the head neck, the body-top datum and the CoM gap below).
 
-- [ ] Close the CoM gap: Layout 02 is at x +20.6 / h 105.8 mm (a_tip 1.91 m/s²) with the 81.6 g ballast bar (`RP03-CAD-08`) that offsets the lighter 110 g battery (`RP03-CAD-07`); the target is +25 / 124. The +20 mm `physics.md` §2.5 line clears by only 0.62 mm. Recover the rest by geometry or revise the baseline; the ballast screws' thread engagement in the deck and the bar's mass are unverified.
+- [x] Close the CoM gap (baseline revised, see below): Layout 02 is at x +20.6 / h 105.8 mm (a_tip 1.91 m/s²) with the 81.6 g ballast bar (`RP03-CAD-08`) that offsets the lighter 110 g battery (`RP03-CAD-07`); the target is +25 / 124. The +20 mm `physics.md` §2.5 line clears by only 0.62 mm. Recover the rest by geometry or revise the baseline; the ballast screws' thread engagement in the deck and the bar's mass are unverified.
+  - **Resolved 2026-09-25 (`RP03-CAD-09`, `BA-06`):** the builder accepted the layout-02 register with the power boards, x +18.77 / h 105.05 mm (a_tip 1.75 m/s²), as the working baseline instead of +25 / 124, with no added ballast. The `physics.md` §2.5 check is re-based from x ≥ +20 mm to the a_tip 1.582 m/s² that line encodes at h = 124 mm; 108/108 checks pass; the worst head pose is about 1.44 m/s² against the authored 1.00. Still open: a weighed robot (`W`) to replace the hand-kept register and head lumps
 
 - [ ] Close the new axle stack (`RP03-CAD-05`) on real parts: gearmotor face-screw pattern and shaft length, stub-to-web fixing and axial retention, bearing preload, deck/cheek stiffness.
 
@@ -83,7 +84,7 @@ Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gat
 
 - [ ] Select microphone front end, microphone boards, speaker, and amplifier.
 
-- [ ] Finish the battery selection and enough of the power hardware to verify actual packaging. Working selection made 2026-09-24 (2S1P Li-ion, 2 × Samsung 25R; RP-02 `decision.md`). Open: BMS SKU and thickness, pack lead and connector (Anderson SBS Mini lead), tub retention and hatch fastening, who builds the pack (workbench battery gate), and the rest of the power hardware.
+- [ ] Finish the battery selection and enough of the power hardware to verify actual packaging. Working selection made 2026-09-24 (2S1P Li-ion, 2 × Samsung 25R; RP-02 `decision.md`). Open: pack lead and connector (Anderson SBS Mini lead), tub retention and hatch fastening, who builds the pack (workbench battery gate). Update 2026-09-25: battery and power hardware are selected as working choices in `board-specs.md` (v0.16); packaging is pending the CAD volumes tracked under "Custom power and safety boards" below.
 
 - [ ] Obtain or fabricate representative articles and measure:
   - [ ] every relevant mass
@@ -145,3 +146,48 @@ Running list of ways the current CAD falls short of a production design. Add to 
   - [ ] Choose the material and process (printed, machined or moulded), then the tolerances and any gasket or seal
   - [ ] Add per-joint checks: engagement, edge distance, tool access and service removal path
   - [ ] Add a fastener schedule (BOM) to the generated outputs
+
+## Custom power and safety boards
+
+Spec: [`../RP-02-electrical/board-specs.md`](../RP-02-electrical/board-specs.md) v0.16, 2026-09-25 (working direction, **not registered**; decisions `BD-01…14`). Four custom PCBs plus a watchdog block: `PCB-01` pack protection, `PCB-02` charge and system power, `PCB-03` motor gate and head/drive distribution, `PCB-04` branch converters. Part choices, values and sizes on paper are done; schematic, layout, real CAD parts and every bench proof are open. Nothing here selects a SKU for purchase.
+
+- [x] Part choices on paper (working choices, 2026-09-25; each is a datasheet-derived proposal, none bench-proved):
+  - [x] `PCB-01`: `S-8252AAC` + `bq29200`, two `PSMN1R5-30YLC`, 5 mOhm Vishay `WSK2512` shunt, Bourns `AC72ABD` thermal cutoff
+  - [x] `PCB-02`: `BQ25798` in default mode (no host), `STUSB4500` (5/9/15 V at 1.5 A), `LTC2954-2` latch, `SYS` gate `TPS22810`
+  - [x] `PCB-03`: `LTC4368-1` + 3 mOhm shunt + two `PSMN1R0-30YLE`, `SMBJ10A` TVS; head rail `LTC3119` behind a latching `TPS259824`
+  - [x] `PCB-04`: `TPS630701` + `TPS259474L` per branch; Pi rail `LTC3119`
+  - [x] Watchdog: `TPS3436CFDBEDDFRQ1` per C2/C3 carrier
+- [ ] Decisions waiting on the builder (details in `board-specs.md` section 10): Pi setpoint 5.10 V vs 5.15 V; `PA-14` wording for the 43-100 uA `OFF` draw; servo family (XC330 5 V vs STS3215, whose 8.4 V maximum is 0.65% below the charger's 8.455 V worst case); brownout threshold registration; purchase.
+
+- [ ] Draw the schematics (start with `PCB-01`), then layouts:
+  - [ ] Heavy copper and a short loop for the gate, shunt and drive feed on `PCB-03`; motor return straight to the star point
+  - [ ] Keep the charge-logic net away from `PCB-03`; keep noisy converters away from C2/base converters and sense lines
+  - [ ] Test points on every rail, branch current, gate state and each `MOTOR_PERMIT` term
+  - [ ] `PCB-01` FET land pattern and an assembly route if the chip-scale alternate is used (the selected LFPAK56 parts are hand-solderable)
+
+- [ ] Give the boards real CAD volumes (sizes are estimates from an unlaid-out part inventory, `board-specs.md` section 2):
+  - [ ] Sizes need about 2.5-2.8x the reserved footprint (about 7300 mm2 against 2900 mm2): `PCB-01` 48 x 20 x 2.9, `PCB-02` 50 x 36 (60 x 40 with the pack interface), `PCB-03` 56 x 44, `PCB-04` 70 x 44
+  - [ ] Placement proposals: `PCB-03` above the battery tub, `PCB-04` under the compute tray, `PCB-02` standing on the rear-panel frame; run an interference sweep (PCB-03 vs the DRV carriers by about 3 mm, PCB-04 vs the harness volumes, PCB-02 vs the rear-panel bosses)
+  - [ ] Pack-interface tile (SBS Mini + ATOF holder) beside the tub so the main fuse stays source-adjacent (`PA-02`); at the rear it would be about 100 mm from the pack
+  - [ ] The rear-panel E-stop (IDEC XW1E, 48 mm deep, about 6 mm of overlap with the Pi region at Z 93-109, head overhang about 4 mm) and the charge inlet are not modelled in the CAD today
+  - [ ] Replace the `CONTROL_POWER_SENSORS` mass row (121.5 g, estimate) with one row per board: about 111 g plus 40 g for the E-stop; battery row about 114 g
+  - [ ] CoM effect: register CoM moves from x +20.6 to about +19.1 mm against the +25 target, widening the open CoM gap above
+  - [ ] Recheck `PCB-04` height: the sizing assumed 1 mF hold-up capacitors, the proposal is 3.3 mF each
+
+- [ ] Real STEP parts for the new power hardware (none is wired into the model; fetch with the `step-parts` skill or the vendor's own STEP, then verify the outline): `LTC3119` (TSSOP-28 FE), Nexperia `PSMN1R5-30YLC` and `PSMN1R0-30YLE` (LFPAK56), `TPS630701RNMR`, `TPS259474L`/`TPS259824`, `BQ25798RQMR`, a USB-C receptacle, Anderson SBS Mini `B02265G1` housing, ATO FLR fuse holder `178.6165.0001`, IDEC `XW1E-BV402M-R` (22 mm panel), Bourns `AC72ABD`, the Vishay `WSK2512` and Bourns `CSS2H-2512` shunts, the Coilcraft `XAL5030-332ME` inductor, the DRV8874 carrier (`pololu_drv8874_carrier.step`, see "Bring boxed body-chassis" above).
+
+- [ ] Resolve the head-servo dependency: RP-01 has not frozen the family. The head rail is designed for the 5 V XC330 case (M181 yaw, M288 pitch/roll); a 7.4 V-class servo would be direct-fed, change the bus to Feetech half-duplex TTL, and runs into the 8.4 V versus charger worst-case conflict above. A 12 V variant would force 3S and reopen the pack, tub and charger.
+
+- [ ] Yaw cable across the joint (`board-specs.md` section 9):
+  - [ ] Confirm loop length, cycle targets and the life assumption (placeholders: 1 m loop, 3 years); the sideband list grew to about 14-20 AWG28 conductors
+  - [ ] CSI FFC vs the O14 mm disc bore: the Camera Module 3's 15-pin FFC is 16.0 mm wide and does not pass flat; order the Raspberry Pi PCN-36 revision of the 15-to-22-pin cable (11.5 mm wide, 1.25 mm per side), and check its bend life in the clock-spring
+  - [ ] Route it in CAD as a clock-spring (bending, not a straight twist; a straight bundle needs about 288 mm free length for +-55 deg at 1% strain)
+  - [ ] Build and run the qualification: 10^6 cycles at +-15 deg, 10^5 at +-40 deg, 10^4 at +-55 deg plus over-travel at 378 deg/s, logging loop resistance, CSI, UART and servo-bus errors
+
+- [ ] Drive stage (`BD-02`): pin the gearmotor SKU (recommended 34-35:1 in the 8500 rpm family, 6 V; about 211 rpm loaded at 6.0 V for the 159 rpm needed on an 84 mm wheel; the 6000 rpm 35:1 fails loaded); resolve the stall-current (0.9 A vs 2.6 A) and shaft-length (10-12 mm vs the 9.5 mm in the CAD) discrepancies between sources; read the DRV8874 carrier's current-limit resistor (the Pololu page gives both 3.5 A and 4.4 A); set the C3 duty clamp (about 71% at 8.4 V).
+
+- [ ] **Regeneration limit (new hard requirement, `board-specs.md` sections 5.2.4 and 5.3):** the cells' maximum charge is 4 A, so the drive stage must hold regeneration into the bus to 3 A or less and to zero below 0 degC (brake, not coast). Nothing enforces it yet; it belongs to the DRV8874 current limit and the C3 braking policy (RP-03).
+
+- [ ] Measure before relying on any number: pack loaded sag against state of charge (cold and aged), a measured 25R voltage curve, real head and drive currents, `LTC3119` output current at 5.4 V and thermal at 3 A, converter behaviour at the low line, brownout thresholds, hold-up capacitance and discharge time.
+
+- [ ] Promote `board-specs.md` decisions (`BD-01…14`) to the registered RP-02 documents only after the above closes, and fix the candidate-screen outcome table where it still describes items superseded by addenda.

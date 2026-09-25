@@ -45,12 +45,12 @@
   "battery_center_mm": [
     46.7,
     0.0,
-    43.9
+    43.099999999999994
   ],
   "battery_size_mm": [
     37.6,
     67.0,
-    23.799999999999997
+    22.199999999999996
   ],
   "battery_mount": "chassis tub under the deck, flush with the deck top; removable bottom hatch through a shell-floor opening",
   "ball_mount_mode": "FIXED_3HOLE_NON_INTERCHANGEABLE",

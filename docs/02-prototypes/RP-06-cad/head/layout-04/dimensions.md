@@ -14,14 +14,14 @@ Visible yoke 34.5 mm above a Ø125 flush turntable; pitch axis to disc top 80.47
 | `window_opaque_mask_110mm` | R | -1.900 × 0.000 × 40.000 | 1.500 × 110.000 × 64.000 |
 | `window_clear_optical_area` | R | -1.900 × 0.000 × 40.000 | 1.500 × 99.000 × 58.000 |
 | `active_display_95_04x53_86` | R | -3.650 × 0.000 × 40.000 | 0.200 × 95.040 × 53.860 |
-| `display_module_1to1_envelope` | R | -9.100 × 0.000 × 40.000 | 10.600 × 106.100 × 68.000 |
+| `display_module_1to1_envelope` | R | -12.250 × 0.000 × 40.002 | 16.900 × 106.100 × 68.261 |
 | `display_connector_and_flashing_access_reserve` | R | -16.200 × 0.000 × 40.000 | 3.600 × 106.100 × 68.000 |
 | `camera_module_3_wide_1to1` | R | -7.700 × 0.000 × 88.931 | 11.400 × 25.000 × 23.862 |
 | `camera_CSI_exit_and_bend_reserve` | R | -19.250 × 0.000 × 81.000 | 9.500 × 22.000 × 12.000 |
 | `removable_camera_edge_bracket_trial` | R | -13.400 × 0.000 × 89.000 | 7.200 × 34.400 × 26.000 |
 | `addressable_status_LED_package_reserve` | R | -6.500 × 15.200 × 91.800 | 3.000 × 5.000 × 5.000 |
 | `crown_status_light_diffuser` | R | -3.550 × 15.200 × 91.800 | 2.900 × 3.400 × 3.400 |
-| `C2_ESP32_S3_Zero_23_5x18_footprint` | R | -25.800 × -29.000 × 39.750 | 1.600 × 18.000 × 23.500 |
+| `C2_ESP32_S3_Zero_23_5x18_footprint` | R | -25.972 × -29.000 × 39.750 | 1.941 × 18.017 × 23.517 |
 | `C2_installed_components_reserve` | R | -30.300 × -29.000 × 39.750 | 7.400 × 16.000 × 23.500 |
 | `C2_USB_C_withdrawal_BOOT_RESET_service_reserve` | R | -28.500 × -29.000 × 71.500 | 9.000 × 12.000 × 20.000 |
 | `connected_rolling_cradle_flange_ear_stalks` | R | -27.500 × 0.000 × 39.250 | 25.000 × 141.000 × 73.500 |
@@ -41,8 +41,6 @@ Visible yoke 34.5 mm above a Ø125 flush turntable; pitch axis to disc top 80.47
 | `pitch_servo_to_yoke_adapter_trial` | Y | -49.139 × 37.500 × 46.971 | 30.000 × 41.000 × 24.000 |
 | `ear_-1_M2_1` | R | -25.322 × -71.090 × 59.678 | 3.500 × 7.181 × 3.500 |
 | `ear_-1_M2_2` | R | -60.678 × -71.090 × 59.678 | 3.500 × 7.181 × 3.500 |
-| `ear_-1_M2_3` | R | -60.678 × -71.090 × 24.322 | 3.500 × 7.181 × 3.500 |
-| `ear_-1_M2_4` | R | -25.322 × -71.090 × 24.322 | 3.500 × 7.181 × 3.500 |
 | `ear_-1_hidden_mount_M2_-4` | R | -20.500 × -69.190 × 38.000 | 3.500 × 7.181 × 3.500 |
 | `ear_-1_hidden_mount_M2_4` | R | -20.500 × -69.190 × 46.000 | 3.500 × 7.181 × 3.500 |
 | `ear_-1_ridged_inner_mount` | R | -43.000 × -68.550 × 51.194 | 60.000 × 7.100 × 41.612 |
@@ -51,8 +49,6 @@ Visible yoke 34.5 mm above a Ø125 flush turntable; pitch axis to disc top 80.47
 | `ear_-1_dark_centre` | R | -43.000 × -74.675 × 42.000 | 42.000 × 0.150 × 42.000 |
 | `ear_1_M2_1` | R | -25.322 × 71.090 × 59.678 | 3.500 × 7.181 × 3.500 |
 | `ear_1_M2_2` | R | -60.678 × 71.090 × 59.678 | 3.500 × 7.181 × 3.500 |
-| `ear_1_M2_3` | R | -60.678 × 71.090 × 24.322 | 3.500 × 7.181 × 3.500 |
-| `ear_1_M2_4` | R | -25.322 × 71.090 × 24.322 | 3.500 × 7.181 × 3.500 |
 | `ear_1_hidden_mount_M2_-4` | R | -20.500 × 69.190 × 38.000 | 3.500 × 7.181 × 3.500 |
 | `ear_1_hidden_mount_M2_4` | R | -20.500 × 69.190 × 46.000 | 3.500 × 7.181 × 3.500 |
 | `ear_1_ridged_inner_mount` | R | -43.000 × 68.550 × 51.560 | 60.000 × 7.100 × 40.880 |

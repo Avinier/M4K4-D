@@ -1,19 +1,19 @@
 {
   "layout_id": "RP03_BODY_CHASSIS_LAYOUT02",
-  "mass_g": 2525.9881092346295,
+  "mass_g": 2567.7881092444595,
   "com_mm": [
-    20.621239855848522,
-    0.6182102014011793,
-    105.78975250120217
+    18.7670477850793,
+    1.000624470318403,
+    105.05155182594508
   ],
   "rows": [
     {
       "id": "RP01_HEAD_LAYOUT04",
-      "mass_g": 556.5881092346298,
+      "mass_g": 555.1881092444594,
       "com_mm": [
-        15.25702136401344,
-        0.6712173895713552,
-        222.59303575003995
+        15.267405780149609,
+        0.6729099749831485,
+        222.61515255529284
       ],
       "source": "RP-01 generated mass tree"
     },
@@ -119,13 +119,13 @@
     },
     {
       "id": "BATTERY",
-      "mass_g": 110.0,
+      "mass_g": 113.7,
       "com_mm": [
         46.7,
         0.0,
-        43.9
+        43.099999999999994
       ],
-      "source": "E: 2 x Samsung INR18650-25R (45 g max each) + 2S 20 A balanced BMS (~8 g) + sleeve, straps and leads (~12 g); working selection, no purchase or measured mass; was a 280 g RP-02 placeholder"
+      "source": "E: 2 x Samsung INR18650-25R (45 g max each = 90 g) + RP-02 PCB-01 pack-protection assembly (~5 g: 48 x 20 mm board 3.7 g + parts 1.3 g) + Bourns AC72ABD thermal cutoff and NTC (~0.7 g) + nickel straps, sleeve and AWG14 leads (~12 g) + pack-side SBS Mini housing (~6 g, U: dimension sheet not read); working selection, no purchase or measured mass; was 110 g with a generic ~8 g BMS (RP-02 board-specs.md sec 3, 2026-09-25)"
     },
     {
       "id": "RASPBERRY_PI5_AND_COOLER",
@@ -138,14 +138,94 @@
       "source": "vendor + estimate"
     },
     {
-      "id": "CONTROL_POWER_SENSORS",
-      "mass_g": 121.5,
+      "id": "PCB02_CHARGE_AND_SYSTEM_POWER",
+      "mass_g": 18.0,
       "com_mm": [
-        22.0,
+        -43.8,
         0.0,
-        80.0
+        76.0
       ],
-      "source": "estimate; one rear TCRT channel; GP2Y (3.5 g) moved to BALL_NOSE_POD_SENSOR_CAP"
+      "source": "E (proposal): 50 x 36 mm board 6.8 g + USB-C 1.2 + connectors 3 + inductor 2 + capacitors 3 + ICs 0.6 + misc 1; vertical on the rear-panel frame"
+    },
+    {
+      "id": "PACK_INTERFACE_SBS_MINI_AND_FUSE",
+      "mass_g": 14.0,
+      "com_mm": [
+        42.0,
+        43.7,
+        41.0
+      ],
+      "source": "E: SBS Mini receptacle housing + contacts ~6 g (U; no modelled home, 13 mm wide against an 11.3 mm channel) + ATOF 15 A holder and fuse ~6 g + ~2 g; placed at the fuse holder"
+    },
+    {
+      "id": "PCB03_MOTOR_GATE_AND_HEAD_RAIL",
+      "mass_g": 24.0,
+      "com_mm": [
+        38.5,
+        0.0,
+        69.0
+      ],
+      "source": "E (proposal): 2460 mm2 board 9.4 g + 4 x Micro-Fit+ 8 + inductor 3 + capacitors 2 + FETs, shunt, TVS, misc 1.6"
+    },
+    {
+      "id": "PCB04_BRANCH_CONVERTERS",
+      "mass_g": 45.0,
+      "com_mm": [
+        -5.0,
+        0.0,
+        70.05
+      ],
+      "source": "E (proposal): WS-H 35 g (3080 mm2 board 11.7 g + inductors 5.4 + connectors 8 + ICs 1 + polymer/ceramics ~1) with the hold-up raised from 4 x 1 mF (~8 g) to 2 x 3.3 mF (~9 g each, \u00d812.5 x 20 lying) per board-specs.md sec 8.1: +10 g; the board footprint is NOT enlarged (no slack in the bay)"
+    },
+    {
+      "id": "C3_DEVKITC_N8",
+      "mass_g": 9.0,
+      "com_mm": [
+        -8.0,
+        44.0,
+        80.8
+      ],
+      "source": "E: ESP32-S3-DevKitC-1-N8 board"
+    },
+    {
+      "id": "DRV8874_CARRIERS_X2",
+      "mass_g": 6.0,
+      "com_mm": [
+        46.0,
+        0.0,
+        67.4
+      ],
+      "source": "E: 2 x Pololu 4035 at ~3 g (weight not read); symmetric about the centre plane"
+    },
+    {
+      "id": "IMU_BREAKOUT",
+      "mass_g": 2.0,
+      "com_mm": [
+        16.0,
+        0.0,
+        60.0
+      ],
+      "source": "E"
+    },
+    {
+      "id": "TCRT5000_BREAKOUT_AND_CABLE",
+      "mass_g": 3.0,
+      "com_mm": [
+        -54.0,
+        0.0,
+        13.5
+      ],
+      "source": "E: breakout, comparator and cable in the rear keel cartridge; was inside the old CONTROL_POWER_SENSORS row at the body centre"
+    },
+    {
+      "id": "ESTOP_XW1E_BV402M_R",
+      "mass_g": 40.0,
+      "com_mm": [
+        -48.9,
+        0.0,
+        110.8
+      ],
+      "source": "E (not in the register before 2026-09-25): IDEC XW1E-BV402M-R operator \u00d840 + two contact blocks + terminal cover; ~15 g outside the rear panel, ~25 g inside"
     },
     {
       "id": "BALL_NOSE_POD_SENSOR_CAP",

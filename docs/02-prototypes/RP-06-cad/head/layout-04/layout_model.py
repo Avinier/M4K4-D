@@ -120,6 +120,33 @@ def clean_catalog(path):
             solids.append(s)
     return Compound(label=path.stem,children=solids)
 
+# Waveshare ESP32-S3-LCD-4.3 (SKU 30493 is the non-touch board; the Touch STEP,
+# 106.1 x 68.3 mm, is used as the conservative outline). STEP local X/Y/Z map to
+# head +Y/+Z/+X (rotate 120 deg about (1,1,1)); glass front on X -3.8 (the 0.2 mm active-area sheet sits ahead of it), outline
+# centred on Z 40. Body behind the PCB stops 12.5 mm behind the glass except one
+# 5 mm connector strip on the -Y edge (STEP X -52.4...-47.4, Y -12.5...19.1) that
+# reaches 16.9 mm.
+DISPLAY_FRONT_X, DISPLAY_CENTER_Z=-3.8,40.
+
+def _flat(shape,label):
+    # Flatten after transforms so booleans read world-placed solids.
+    return Compound(label=label,children=list(shape.solids()))
+
+def display_fit_proxy():
+    slab=block(DISPLAY_FRONT_X-12.5,DISPLAY_FRONT_X,-53.05,53.05,DISPLAY_CENTER_Z-34.15,DISPLAY_CENTER_Z+34.15)
+    strip=block(DISPLAY_FRONT_X-16.9,DISPLAY_FRONT_X-12.4,-52.4,-47.4,29.85,61.45)
+    return slab+strip
+
+def display_catalog():
+    d=clean_catalog(CATALOG/'waveshare_esp32_s3_touch_lcd_4_3.stp').rotate(Axis((0,0,0),(1,1,1)),120)
+    return _flat(d.moved(Location((DISPLAY_FRONT_X-4.8,-0.05,DISPLAY_CENTER_Z+2.35))),'display_module_1to1_envelope')
+
+# Waveshare ESP32-S3-Zero V2 (bare PCB, no USB-C solid in the STEP): STEP X/Y/Z map
+# to head -Y/+Z/-X so the components face -X; PCB front face on X -25.
+def c2_catalog():
+    c=clean_catalog(CATALOG/'waveshare_esp32_s3_zero_v2.step').rotate(Axis((0,0,0),(1,1,1)),120).rotate(Axis.Z,180)
+    return _flat(c.moved(Location((-25.8,-20.,28.))),'C2_ESP32_S3_Zero_23_5x18_footprint')
+
 # Imported Module 3 Wide groups after the existing Y−90 placement, mm.
 # PCB X −10.775…−10.104 × Y±12.5 × Z77…100.862; lens toward +X; shield/components −X.
 CAMERA_PCB_X=(-10.775,-10.104)
@@ -215,7 +242,7 @@ def build_parts(catalog=True,reliefs=True):
     add('window_clear_optical_area',prism(99,11,69,3,-2.65,-1.15),'R','#8b9a9d',alpha=.12,owner='M003')
     # Transparent glazing is represented by its perimeter, with image surface.
     add('active_display_95_04x53_86',block(-3.75,-3.55,-47.52,47.52,13.07,66.93),'R','#111f24',owner='M002')
-    add('display_module_1to1_envelope',block(-14.4,-3.8,-53.05,53.05,6,74),'R','#245967',owner='M002')
+    add('display_module_1to1_envelope',display_catalog() if catalog else display_fit_proxy(),'R','#245967',owner='M002')
     add('display_connector_and_flashing_access_reserve',block(-18,-14.4,-53.05,53.05,6,74),'R','#49adbe','reserve',.25)
     if catalog:
         camera=clean_catalog(CATALOG/'camera-module-3-wide.step').rotate(Axis.Y,-90).moved(Location((-10.805,-12.5,CAMERA_BOTTOM)))
@@ -226,7 +253,7 @@ def build_parts(catalog=True,reliefs=True):
     add('addressable_status_LED_package_reserve',block(-8,-5,LED_Y-2.5,LED_Y+2.5,LED_Z-2.5,LED_Z+2.5),'R','#d3922d','reserve',.7,owner='M007')
     add('crown_status_light_diffuser',axial(1.7,2.9,(-3.55,LED_Y,LED_Z)),'R','#e4b35b',owner='M007')
     # C2 footprint is exact; installed height/USB socket are clearly reserved.
-    add('C2_ESP32_S3_Zero_23_5x18_footprint',block(-26.6,-25,-38,-20,28,51.5),'R','#67559a',owner='M008')
+    add('C2_ESP32_S3_Zero_23_5x18_footprint',c2_catalog() if catalog else block(-26.6,-25,-38,-20,28,51.5),'R','#67559a',owner='M008')
     add('C2_installed_components_reserve',block(-34,-26.6,-37,-21,28,51.5),'R','#a58ac4','reserve',.35)
     add('C2_USB_C_withdrawal_BOOT_RESET_service_reserve',block(-33,-24,-35,-23,51.5,81.5),'R','#a58ac4','reserve',.18)
     # One connected rolling cradle: perimeter rails + cross + 4 flange struts.
@@ -332,9 +359,10 @@ def build_parts(catalog=True,reliefs=True):
         cap=cap-hollow
         # Recessed centre leaves a 1.2 mm back wall, not an enormous solid disc.
         cap=cap-axial(22.5,.8,(EAR_X,sign*75,EAR_Z),'y')
-        # Four actual cap screws and thickened receiving pads, cut after unions.
+        # Two top cap screws and thickened receiving pads, cut after unions.
+        # The lower pair had nothing to bite into and is omitted.
         screw_positions=[]
-        for angle in [45,135,225,315]:
+        for angle in [45,135]:
             a=math.radians(angle);xx=EAR_X+25*math.cos(a);zz=EAR_Z+25*math.sin(a)
             screw_positions.append((xx,zz))
             cap=cap+axial(2.6,3,(xx,sign*73.1,zz),'y')

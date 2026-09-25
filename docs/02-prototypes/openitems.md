@@ -118,6 +118,22 @@ This is the class that prompted this index. Architecture and calculation method 
 | Numeric `LP-*` waveforms | Vocabulary frozen; bindings wait on real or admissible substitutes | Frozen run configuration | `load-model.md`; `state-register.md` | Scored G02/G03 |
 | Energy thresholds, grace, fixtures, rates | Explicitly approved as open | Freeze before the scored run that uses them | `state-register.md` “Approved open parameters” | Any scored RP-02 case |
 
+### Power-distro and watchdog working choices (recorded 2026-09-25, not registered)
+
+Working part choices, values and sizes for the custom power and safety boards and the watchdog block are in [`RP-02-electrical/board-specs.md`](RP-02-electrical/board-specs.md) (v0.16); its section 10 is the detailed open list. Nothing there registers a decision, freezes a SKU or authorizes a purchase. The decision-level items that still need the builder or a registration:
+
+| Item | Why it is open | Home |
+|---|---|---|
+| Pi 5 supply setpoint 5.15 V vs the registered 5.10 V | 5.10 V fails the 200 mV transient allowance in the worst corner | `board-specs.md` 5.4.2; `power-implementation-basis.md` 5.4 |
+| `PA-14` wording for the `OFF` draw | About 43 uA typical, up to about 100 uA (charger, latch and gate controller); the text says pack protection only | `board-specs.md` 4.2; `power-architecture.md` `PA-14` |
+| Servo family and the STS3215 conflict | If STS3215 C046 is chosen, its 8.4 V maximum is 0.65% below the charger's 8.455 V worst case and the charger has no trim in default mode | `board-specs.md` 5.4.3; RP-01 |
+| Brownout threshold registration | Proposals (`V_SRC_SAFE` 4.6 V, `ENERGY_OK` 5.7/6.4 V, `UV` 4.9 V, 3.3 mF hold-up) rest on estimated pack resistance and a generic voltage curve | `board-specs.md` 8.1; `brownout-restart-contract.md` |
+| Drive-stage regeneration at or below 3 A, zero below 0 degC | New hard requirement from the cells' 4 A charge limit; nothing enforces it | `board-specs.md` 5.3; RP-03 |
+| `SYSTEM_ARM` clears on any permit-term loss | A `UV` fault recovers on its own after 32 ms, so the arm latch must force a fresh arm | `board-specs.md` 5.1, 7 |
+| Watchdog `TPS3436CFDBEDDFRQ1` sourcing | Out of stock at TI and no India listing found; `CCCBGD` is the fallback (needs a 10 ms feed) | `board-specs.md` 7 |
+
+**Update 2026-09-25:** the builder accepted the recommendations for the items above (Pi setpoint 5.15 V, `OFF` draw, XC330 servo family, brownout proposals) as working decisions; they are recorded as `BA-01…09` in `board-specs.md` §1.1. Nothing is registered: the `PB-COMPUTE` 5.1 V and `PA-14` wording still need supersession records.
+
 ### Selected but still open (do not treat as closed)
 
 | Item | What is already true | What remains open | Home |

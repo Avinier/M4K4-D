@@ -9,7 +9,7 @@
     "pitch_z": 45.97142158129681
   },
   "source_sha256": {
-    "layout_model.py": "23dd51ff9b75024929f1d206f1218acdb9ccc04bef171801addc5d25c14a1816",
+    "layout_model.py": "27459e27588aece593387e8a985636454d31faafe5cc84985d6d50f42e546d72",
     "details.py": "0eaf9171f70f902cf57010be6531fc6c5a22beff7f08d2c56c552bd5186cd52e",
     "layout_axes.py": "2fdcb3a5a1b852c461e49ddf0be9d30a54fcdef500278abcb63af783267d7d87",
     "harness.py": "363605797b042621d9f5ca44af729841933995c091db728bd7932b30ade85639",
@@ -398,7 +398,7 @@
     "display_module_1to1_envelope": {
       "valid": true,
       "solids": 1,
-      "volume": 76476.88
+      "volume": 91278.07500000001
     },
     "display_connector_and_flashing_access_reserve": {
       "valid": true,

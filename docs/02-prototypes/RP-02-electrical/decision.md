@@ -112,6 +112,8 @@ Candidates are recorded so selection happens from evidence. **Selected compute/c
 | C3 `BASE_*` ICD | **Semantics registered `RP02-P4-REG-02`.** Byte layouts, type numbers and baud remain open. Candidate TTL 200 ms / `duration+250 ms`, heartbeat 150 ms, queue depth 2 named and unregistered | Framing, expiry-at-execution, latest-wins, fresh-arm, unknown-is-inhibit inherited from C0↔C2 | Phase A byte layouts; measured timeouts; G05 |
 | Coordination fields on the ICD | **Semantics registered `RP02-P4-REG-03`.** Cue identity, `start_at_us`, face/light reports, extra `NACK` values. Packed widths and lateness window open | UART/COBS unchanged | Schema/codec revision; G04 NACK discrimination; `BASE_STATE` packed size |
 
+**Working choices, 2026-09-25 (unregistered).** The candidate rows above are unchanged. The working part choices made since (`LTC3119` head and Pi rails, `TPS259824`/`TPS259474L` protectors, `LTC4368-1` motor gate with its FETs and shunt, the `S-8252AAC`/`bq29200` pack protection, the `BQ25798` in default mode with `STUSB4500`, and the `TPS3436CFDBEDDFRQ1` watchdog) are recorded in [`board-specs.md`](board-specs.md) (v0.16) as an unregistered working design. They do not select, register or freeze anything here, authorize a purchase, or change any registered status; candidate rows above that name a different lead (for example the Murata OKL for `PB-COMPUTE`) are superseded only by the dated addenda in `power-component-candidate-screen.md`.
+
 ## Conclusion
 
 *(per ADR: pass / iterate / reject; selected candidates; budget rows updated with measured value, uncertainty and margin; downstream assumptions changed; re-run obligations created)*

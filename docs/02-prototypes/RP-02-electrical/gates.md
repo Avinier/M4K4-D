@@ -115,3 +115,5 @@ Per `fault-matrix.md` §3: time-to-`BRAKE` ≤ 200 ms (heartbeat-mediated) or �
 ## 4. Registered gates
 
 *(none yet)*
+
+*Pointer, 2026-09-25:* the per-board designs in [`board-specs.md`](board-specs.md) (v0.16, unregistered) carry evidence lists for G01 (protection), G04 (fault containment, incl. F-25/F-26 watchdog injections), G05 and G06 (serviceability). They register no gate and set no threshold.

@@ -40,7 +40,7 @@
 | Service-panel edge alignment | Front and rear panel straight side edges are parallel to their shell end-profile side edges |
 | Speaker | 50 mm basket / 44 mm cone, centered at `(88, 0, 99)` mm |
 | Battery | 2S1P 18650 pack, 37.6 × 67 × 23.8 mm at `(46.7, 0, 43.9)` mm: two Samsung 25R cells (Ø18.4 × 65, axes along Y) + 2S 20 A BMS (48 × 20 × 4.5, assumed thickness) on top, 110 g E; chassis tub with 1.5 mm gaps; bottom hatch through the shell floor |
-| Whole-robot CoM (register) | 2526 g at x +20.6, h 105.8 mm: x/h 0.195, a_tip 1.91 m/s², ball share 0.19 (target +25 / 124, x/h 0.202); 0.62 mm over the +20 mm `physics.md` §2.5 line |
+| Whole-robot CoM (register) | 2568 g at x +18.77, h 105.05 mm: x/h 0.179, a_tip 1.75 m/s² (worst head pose about 1.44), ball share 0.17. Baseline revised from +25 / 124 by the builder on 2026-09-25 (`RP03-CAD-09`); the +20 mm line is re-based to the a_tip 1.582 it encodes at h = 124 |
 | Ballast | 81.6 g mild-steel bar 9 × 60 × 19 mm at X 69.5–78.5, Z 33–52 under the deck, between the battery tub and the front crossmember; two M3 screws from the deck top at (74, ±20) (`RP03-CAD-08`) |
 | Microphones | Four provisional body PDM ports; front/rear left/right |
 | Front range sensor | GP2Y0A41SK0F face at `(128, 0, 41)` mm: on the centreline in the ball pod, 18 mm ahead of the ball contact, behind a window in the touch cap |

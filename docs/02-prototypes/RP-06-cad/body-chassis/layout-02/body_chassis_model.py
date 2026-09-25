@@ -375,7 +375,7 @@ BATTERY_CELL_DIAMETER = 18.4  # 25R body max 18.33 +/- 0.07 plus sleeve
 BATTERY_CELL_LENGTH = 65.0  # 25R height 64.85 +/- 0.15 mm
 BATTERY_CELL_PITCH = 18.6  # 0.2 mm sleeve gap between the two cells
 BATTERY_END_STRAP_T = 1.0  # nickel strap, insulation cap and solder at each cell end
-BATTERY_BMS_SIZE = (20.0, 48.0, 4.5)  # 2S 20 A balanced module: 48 x 20 mm listed, thickness assumed
+BATTERY_BMS_SIZE = (20.0, 48.0, 2.9)  # RP-02 PCB-01 pack-protection board (board-specs.md sec 3): 48 x 20 mm, 1.6 mm PCB + 1.3 mm parts (proposal); was a 4.5 mm generic 2S 20 A module
 BATTERY_WRAP_T = 0.3  # heat-shrink sleeve under the cells and over the BMS
 BATTERY_SIZE = (
     BATTERY_CELL_PITCH + BATTERY_CELL_DIAMETER + 2.0 * BATTERY_WRAP_T,
@@ -413,6 +413,33 @@ BALLAST_BAR_G = (
     - 2.0 * math.pi * 1.5**2 * BALLAST_SCREW_THREAD_DEPTH
 ) / 1000.0 * BALLAST_DENSITY_G_CM3
 BALLAST_SCREWS_G = 2.0 * math.pi * (2.9**2 * 1.9 + 1.5**2 * (2.0 + BALLAST_SCREW_THREAD_DEPTH)) / 1000.0 * BALLAST_DENSITY_G_CM3
+# Power distribution boards (RP-02 board-specs.md sec 2; PROPOSAL 2026-09-25).
+# Placeholder envelopes for the four custom power/safety PCBs, the main-fuse
+# holder and the E-stop. Sizes come from the RP-02 part inventory (nothing is
+# laid out); positions are a proposal that the WS-H sizing notes could not fit
+# as first drawn, so they are re-packed here against the measured model:
+# PCB-04 and PCB-03 share the free band under the compute tray (X -27..59,
+# Z 63..77, between the body's lower cross-members) and keep 1 mm gaps to the
+# cross-members, each other and the DRV8874 carriers. The band has no slack:
+# 44 x 70 + 41 x 60 mm are the WS-H areas (3080 and 2460 mm2, reshaped from
+# 70 x 44 and 56 x 44). Boxes are (x0, x1, y0, y1, z0, z1).
+PCB_THICKNESS = 1.6
+PCB02_BOX = (-49.6, -38.0, -25.0, 25.0, 58.0, 94.0)  # vertical, parts face +X; 50 x 36 mm board on the rear-panel frame
+PCB03_BOX = (18.0, 59.0, -30.0, 30.0, 63.0, 75.0)  # motor gate, head rail, drive feed: 41 x 60 x 12
+PCB04_BOX = (-27.0, 17.0, -35.0, 35.0, 63.0, 77.1)  # branch converters: 44 x 70 x 14.1 (1 mF-class hold-up caps 12.5 tall)
+# ATOF main-fuse holder lying in the 11.3 mm channel between the tub wall and the
+# chassis rail, at the pack's +Y terminal end (PA-02: source-adjacent). The
+# Anderson SBS Mini pair (22 x 13 x 14, dimension sheet not fetched) is 13 mm wide
+# and does not fit that channel; it has no modelled home yet (open item).
+PACK_FUSE_HOLDER_BOX = (30.0, 54.0, 38.7, 48.7, 36.0, 46.0)
+ESTOP_CENTER_Z = 110.8  # IDEC XW1E on the rear panel, centre Y = 0; WS-H's Z 106 hit the Pi and cooler (449 + 33 mm3); the window between the Pi's rear parts (Z 99.55) and the panel frame's top bar (Z 122.0) is 22.45 mm
+ESTOP_REAR_OUTER_X = BODY_X_REAR - 2.4  # rear panel outer face (= BODY_X_REAR - SHELL_THICKNESS)
+ESTOP_DEPTH_BEHIND_PANEL = 46.4  # IDEC minimum, from the panel outer face; 47-49 with the terminal cover
+ESTOP_HEAD_DIAMETER = 40.0
+ESTOP_HEAD_LENGTH = 20.0  # operator height outside the panel (assumed)
+ESTOP_KEEP_OUT = (BODY_X_REAR, ESTOP_REAR_OUTER_X + ESTOP_DEPTH_BEHIND_PANEL, -14.7, 14.7, ESTOP_CENTER_Z - 11.15, ESTOP_CENTER_Z + 11.15)  # 29.4 wide x 22.3 tall (WS-H 30 x 24); trimmed to clear the Pi cooler corner (Y -14.78) and the frame bar
+REAR_USBC_WINDOW = (BODY_X_REAR, BODY_X_REAR + 8.0, -6.0, 6.0, 61.0, 67.0)  # plug corridor from the panel's rear face to PCB-02 (9 x 3.4 mm receptacle); the rear panel itself is not cut yet
+
 # Floor-contact functions live in a compact faceted keel bolted under the rear
 # crossmember, so the visible tail is free to be purely cosmetic. The rear
 # crossmember and keel move forward with the body's rear wall (RP03-CAD-06).
@@ -534,9 +561,20 @@ MASS_ROWS = [
     ("MOTOR_R", 110.0, (0.0, -52.0, AXLE_Z), "vendor"),
     ("BALL_TRANSFER", 16.5, (BALL_CONTACT[0], 0.0, 14.0), "vendor"),
     ("BALLAST_STEEL_BAR", round(BALLAST_BAR_G + BALLAST_SCREWS_G, 1), (sum(BALLAST_X) / 2.0, 0.0, sum(BALLAST_Z) / 2.0), "E: mild-steel bar 9 x 60 x 19 mm at 7.85 g/cm3 (less two M3 tapped holes) + two M3 screws; sized so the register CoM clears the physics.md 2.5 line after the 110 g pack (RP03-CAD-08)"),
-    ("BATTERY", 110.0, BATTERY_CENTER, "E: 2 x Samsung INR18650-25R (45 g max each) + 2S 20 A balanced BMS (~8 g) + sleeve, straps and leads (~12 g); working selection, no purchase or measured mass; was a 280 g RP-02 placeholder"),
+    ("BATTERY", 113.7, BATTERY_CENTER, "E: 2 x Samsung INR18650-25R (45 g max each = 90 g) + RP-02 PCB-01 pack-protection assembly (~5 g: 48 x 20 mm board 3.7 g + parts 1.3 g) + Bourns AC72ABD thermal cutoff and NTC (~0.7 g) + nickel straps, sleeve and AWG14 leads (~12 g) + pack-side SBS Mini housing (~6 g, U: dimension sheet not read); working selection, no purchase or measured mass; was 110 g with a generic ~8 g BMS (RP-02 board-specs.md sec 3, 2026-09-25)"),
     ("RASPBERRY_PI5_AND_COOLER", 76.0, PI_CENTER, "vendor + estimate"),
-    ("CONTROL_POWER_SENSORS", 121.5, (6.0 + BODY_SHIFT_X, 0.0, 80.0), "estimate; one rear TCRT channel; GP2Y (3.5 g) moved to BALL_NOSE_POD_SENSOR_CAP"),
+    # Replaces the single CONTROL_POWER_SENSORS row (121.5 g at (22, 0, 80), 2026-09-25). Masses are the RP-02
+    # board-specs.md sec 2 / WS-H estimates (PCB 1.6 mm FR4 with copper about 3.8 g per 1000 mm2 plus the parts
+    # inventory), not measurements; positions are the centres of the proposal boxes.
+    ("PCB02_CHARGE_AND_SYSTEM_POWER", 18.0, ((PCB02_BOX[0] + PCB02_BOX[1]) / 2.0, 0.0, (PCB02_BOX[4] + PCB02_BOX[5]) / 2.0), "E (proposal): 50 x 36 mm board 6.8 g + USB-C 1.2 + connectors 3 + inductor 2 + capacitors 3 + ICs 0.6 + misc 1; vertical on the rear-panel frame"),
+    ("PACK_INTERFACE_SBS_MINI_AND_FUSE", 14.0, (sum(PACK_FUSE_HOLDER_BOX[0:2]) / 2.0, sum(PACK_FUSE_HOLDER_BOX[2:4]) / 2.0, sum(PACK_FUSE_HOLDER_BOX[4:6]) / 2.0), "E: SBS Mini receptacle housing + contacts ~6 g (U; no modelled home, 13 mm wide against an 11.3 mm channel) + ATOF 15 A holder and fuse ~6 g + ~2 g; placed at the fuse holder"),
+    ("PCB03_MOTOR_GATE_AND_HEAD_RAIL", 24.0, (sum(PCB03_BOX[0:2]) / 2.0, 0.0, sum(PCB03_BOX[4:6]) / 2.0), "E (proposal): 2460 mm2 board 9.4 g + 4 x Micro-Fit+ 8 + inductor 3 + capacitors 2 + FETs, shunt, TVS, misc 1.6"),
+    ("PCB04_BRANCH_CONVERTERS", 45.0, (sum(PCB04_BOX[0:2]) / 2.0, 0.0, sum(PCB04_BOX[4:6]) / 2.0), "E (proposal): WS-H 35 g (3080 mm2 board 11.7 g + inductors 5.4 + connectors 8 + ICs 1 + polymer/ceramics ~1) with the hold-up raised from 4 x 1 mF (~8 g) to 2 x 3.3 mF (~9 g each, Ø12.5 x 20 lying) per board-specs.md sec 8.1: +10 g; the board footprint is NOT enlarged (no slack in the bay)"),
+    ("C3_DEVKITC_N8", 9.0, (-8.0, 44.0, 80.8), "E: ESP32-S3-DevKitC-1-N8 board"),
+    ("DRV8874_CARRIERS_X2", 6.0, (30.0 + BODY_SHIFT_X, 0.0, 67.4), "E: 2 x Pololu 4035 at ~3 g (weight not read); symmetric about the centre plane"),
+    ("IMU_BREAKOUT", 2.0, (BODY_AXIS_X, 0.0, 60.0), "E"),
+    ("TCRT5000_BREAKOUT_AND_CABLE", 3.0, TCRT_REAR_CENTER, "E: breakout, comparator and cable in the rear keel cartridge; was inside the old CONTROL_POWER_SENSORS row at the body centre"),
+    ("ESTOP_XW1E_BV402M_R", 40.0, ((15.0 * (ESTOP_REAR_OUTER_X - ESTOP_HEAD_LENGTH / 2.0) + 25.0 * (BODY_X_REAR + ESTOP_KEEP_OUT[1]) / 2.0) / 40.0, 0.0, ESTOP_CENTER_Z), "E (not in the register before 2026-09-25): IDEC XW1E-BV402M-R operator Ø40 + two contact blocks + terminal cover; ~15 g outside the rear panel, ~25 g inside"),
     ("BALL_NOSE_POD_SENSOR_CAP", 15.9, (110.5, 0.0, 41.2), "CAD volume: raked prow pod + lid 11.8 cm3 (X 92-128.5) and touch hood 1.8 cm3 (2026-09-24 prow rework) at ~45% effective PETG density (6.8 + 1.0 g); 5 M3 screws + 2 heat-set inserts 4.6 g; GP2Y0A41SK0F 3.5 g E"),
     ("BODY_AUDIO", 90.0, (48.0 + BODY_SHIFT_X, 0.0, 102.0), "speaker, amplifier and four microphones; CAD estimate"),
     ("HARNESS_AND_FASTENERS", 95.0, (4.0 + BODY_SHIFT_X, 0.0, 88.0), "estimate"),
@@ -1306,7 +1344,7 @@ def battery_pack():
         for tag, sign in (("FRONT_Y", 1.0), ("REAR_Y", -1.0))
     ]
     bms_z0 = z0 + BATTERY_WRAP_T + BATTERY_CELL_DIAMETER + BATTERY_WRAP_T
-    bms = _box(*BATTERY_BMS_SIZE, (bx, by, bms_z0 + BATTERY_BMS_SIZE[2] / 2.0), "BATTERY_BMS_2S_20A_BALANCED", "#1E6B45", 1.0)
+    bms = _box(*BATTERY_BMS_SIZE, (bx, by, bms_z0 + BATTERY_BMS_SIZE[2] / 2.0), "BATTERY_BMS_PCB01_PACK_PROTECTION", "#1E6B45", 1.0)
     return Compound(label="BATTERY_2S1P_18650_PACK", children=[*cells, *straps, bms])
 
 
@@ -1593,6 +1631,43 @@ def raspberry_pi5():
     return pi
 
 
+def power_distribution_boards():
+    """RP-02 custom power/safety board envelopes, main-fuse holder and E-stop (proposal).
+
+    Each board is a 1.6 mm PCB plate plus a translucent parts envelope up to the
+    stated total height. The E-stop keep-out and the rear USB-C window are
+    reserved volumes, not solids that belong to a part. The panel cut-outs are
+    not modelled: the rear panel is still uncut.
+    """
+    def board(name, box, color, pcb_at_top=False):
+        x0, x1, y0, y1, z0, z1 = box
+        parts = []
+        if name == "PCB02_CHARGE_AND_SYSTEM_POWER":
+            # Vertical board: the PCB plate is the -X face, parts stand out toward +X.
+            parts.append(_paint(_block(x0, x0 + PCB_THICKNESS, y0, y1, z0, z1), f"{name}_PCB", PCB_GREEN, 1.0))
+            parts.append(_paint(_block(x0 + PCB_THICKNESS, x1, y0, y1, z0, z1), f"{name}_PARTS_ENVELOPE", color, 0.55))
+        else:
+            parts.append(_paint(_block(x0, x1, y0, y1, z0, z0 + PCB_THICKNESS), f"{name}_PCB", PCB_GREEN, 1.0))
+            parts.append(_paint(_block(x0, x1, y0, y1, z0 + PCB_THICKNESS, z1), f"{name}_PARTS_ENVELOPE", color, 0.55))
+        return Compound(label=name, children=parts)
+
+    ex0, ex1, ey0, ey1, ez0, ez1 = ESTOP_KEEP_OUT
+    head_x = ESTOP_REAR_OUTER_X - ESTOP_HEAD_LENGTH / 2.0
+    estop = Compound(label="ESTOP_XW1E_BV402M_R", children=[
+        _cylinder(ESTOP_HEAD_DIAMETER / 2.0, ESTOP_HEAD_LENGTH, (head_x, 0.0, ESTOP_CENTER_Z), "ESTOP_XW1E_OPERATOR_HEAD_D40", "#D8352A", 1.0, "x"),
+        _paint(_block(ex0, ex1, ey0, ey1, ez0, ez1), "ESTOP_XW1E_BEHIND_PANEL_KEEP_OUT", "#D8352A", 0.18),
+        _paint(_block(*REAR_USBC_WINDOW), "REAR_PANEL_USBC_WINDOW_KEEP_OUT", "#79C4CB", 0.30),
+    ])
+    parts = [
+        board("PCB02_CHARGE_AND_SYSTEM_POWER", PCB02_BOX, "#D38132"),
+        board("PCB03_MOTOR_GATE_AND_HEAD_RAIL", PCB03_BOX, "#D38132"),
+        board("PCB04_BRANCH_CONVERTERS", PCB04_BOX, "#D38132"),
+        _paint(_block(*PACK_FUSE_HOLDER_BOX), "PACK_ATOF_FUSE_HOLDER_ENVELOPE", "#C55842", 0.74),
+        estop,
+    ]
+    return Compound(label="POWER_DISTRIBUTION_BOARDS", children=parts)
+
+
 def electronics():
     # The battery lives in the chassis tub (RP03-CAD-06); it stays in this
     # group so the viewer's electronics toggle still shows it.
@@ -1617,8 +1692,7 @@ def electronics():
         drv = _purchased_step("pololu_drv8874_carrier.step", f"DRV8874_{side}_INSTALLED")
         drivers.append(_place(drv, 30.0 + BODY_SHIFT_X, y, 66.0, ref={"Z": "min"}))
     driver_l, driver_r = drivers
-    power = _box(48.0, 36.0, 18.0, (-35.0 + BODY_SHIFT_X, -35.0, 75.0), "POWER_DISTRIBUTION_RP02_ENVELOPE", "#D38132", 0.74)
-    safety = _box(42.0, 28.0, 14.0, (-34.0 + BODY_SHIFT_X, 35.0, 75.0), "SAFETY_AND_WATCHDOG_ENVELOPE", "#C55842", 0.74)
+    # The old power-distribution and safety envelopes are replaced by the RP-02 boards (power_distribution_boards).
     imu = _box(25.0, 25.0, 5.0, (BODY_AXIS_X, 0.0, 60.0), "IMU_BREAKOUT_ENVELOPE", "#39BBD3", 0.80)
     return Compound(label="BODY_ELECTRONICS", children=[
         battery,
@@ -1628,8 +1702,7 @@ def electronics():
         devkit,
         driver_l,
         driver_r,
-        power,
-        safety,
+        power_distribution_boards(),
         imu,
     ])
 

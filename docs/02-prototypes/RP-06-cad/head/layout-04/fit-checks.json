@@ -111,18 +111,18 @@
     },
     "display_module_1to1_envelope": {
       "min": [
-        -14.4,
+        -20.7,
         -53.05,
-        6.0
+        5.849999999999994
       ],
       "max": [
-        -3.799999999999999,
+        -3.8000000000000007,
         53.05,
-        74.0
+        74.15
       ],
       "solids": 1,
       "valid": true,
-      "volume": 76476.88
+      "volume": 91278.07500000001
     },
     "display_connector_and_flashing_access_reserve": {
       "min": [

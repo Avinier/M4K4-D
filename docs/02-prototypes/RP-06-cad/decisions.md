@@ -20,6 +20,7 @@ chassis CAD is accepted, each retained choice must be propagated deliberately to
 | `RP03-CAD-06` | **Fixed in CAD context — pending permanent propagation** | Move every body-side part 16 mm forward of the drive axle and put the battery in a low chassis tub, to bring the register CoM from x +9.4 to +20.0 mm. The skid moves forward with the body's rear wall to 27 mm behind the axle. |
 | `RP03-CAD-07` | **Fixed in CAD context — pending permanent propagation** | Replace the 48 × 75 × 24 mm, 280 g battery placeholder with the RP-02 working selection: a 2S1P pack of two Samsung INR18650-25R cells with a 2S 20 A balanced BMS on top (37.6 × 67 × 23.8 mm, 110 g), and shrink the tub to it. This alone drops the register CoM to x +18.8 / h 107.9 mm, under the `physics.md` §2.5 line; `RP03-CAD-08` restores it. |
 | `RP03-CAD-08` | **Fixed in CAD context — pending permanent propagation** | Add an 81.6 g mild-steel ballast bar under the deck between the battery tub and the front crossmember to bring the register CoM back over the `physics.md` §2.5 +20 mm line after the lighter pack. Register CoM +20.6 / 105.8 mm; the +25 / 124 target is still missed. |
+| `RP03-CAD-09` | **Fixed in CAD context — pending permanent propagation** | Accept the register CoM that results from the RP-02 power boards (x +18.77 / h 105.05 mm, 2568 g, a_tip 1.75 m/s²) as the working baseline instead of +25 / 124, add no ballast, and re-base the `physics.md` §2.5 check from "x ≥ +20 mm" to the same tip acceleration it encodes at the 124 mm baseline (a_tip ≥ 1.582 m/s²). Builder acceptance 2026-09-25 (`BA-06`). |
 
 ## RP03-CAD-01 — Rear-only ground-reflectance channel
 
@@ -366,6 +367,44 @@ about 376 g of ballast at this position or a change of geometry. The pack plus b
 192 g against the old 280 g placeholder, so the robot is 89 g lighter overall than the
 placeholder assumed. The ballast position was chosen for the free space, not optimised: a bar
 further forward is not possible without moving the crossmember.
+
+## RP03-CAD-09 — CoM baseline revised for the power boards
+
+The RP-02 power boards (`board-specs.md` v0.18, layout 02 as of 2026-09-25) replaced the 121.5 g
+`CONTROL_POWER_SENSORS` row with per-board rows (121.0 g), added the 40 g E-stop, and raised the
+pack row to 113.7 g. The register moved from x +20.63 / h 105.73 mm to **x +18.77 / h 105.05 mm**
+(2524.6 → 2567.8 g). The builder accepted that result on 2026-09-25 rather than adding ballast
+(about 59 g at X 74 would restore +20 mm, and the ballast slot cannot take it) or moving weight.
+
+**What the "+20 mm line" is.** `physics.md` §2.5 gives the margin as `a_tip = g·x/h` against the
+authored `a_peak` 0.80–1.00 m/s², evaluated at the baseline height h = 124 mm: `9.81 · 20 / 124 =
+1.582 m/s²`. The check tested the x value alone. The register height has since fallen to about
+105 mm, so the same 1.582 m/s² is reached at **x = +16.94 mm**. The check now tests the tip
+acceleration (`a_tip ≥ 1.582`), which is the quantity the line was written to protect. This is a
+re-basing on the accepted baseline, not a relaxation of the margin: a_tip is 1.753 m/s², 1.11×
+the 1.582 floor and 1.75× the authored `a_peak` of 1.00.
+
+**Other loading cases (`E`, `physics.md` §2.6, §2.8 with the register CoM and the head lump
+geometry of §2.8, head mass 509–557 g, lever 52 mm).**
+
+| Case | x / h (mm) | a_tip |
+|---|---|---:|
+| Neutral head | 18.77 / 105.05 | 1.753 m/s² |
+| `HP-PITCH-FWD` (+35° nose down) | 24.7–25.2 / 103.0–103.2 | 2.35–2.40 m/s² |
+| `HP-PITCH-AFT` (−18° look up), the worst head pose | 15.3–15.6 / 104.5 | **1.44–1.46 m/s²** |
+| Forward brake / reverse launch, spin | unchanged in kind | far above the authored 1.20 m/s² (`physics.md` §2.6) |
+
+The worst head pose stays above the authored `a_peak` 1.00 (1.44×), where `physics.md` §2.8 had it
+below 1.00 for the Layout 03 lumps. The rear-skid check (`rear_skid_catches_before_com_crosses_axle`)
+and the ball share (≥ 0.09) pass at the new CoM.
+
+**What this does not change.** The +25 / 124 target is still missed (x/h 0.179 vs 0.202) and the
+`a_tip ≈ 2.0 m/s²` planning value is not reached; per `physics.md` §2.5 the dimensional baseline is
+revised, and RP-03 must not read the commanded `a_peak` as re-approved. The mass register is
+hand-kept and the head lumps in §2.8 are `E`; a weighed robot (`W`) replaces both.
+
+Result: 108 of 108 checks pass after the re-base (the geometry is unchanged from the run with one
+failure). Propagation to the permanent RP-03 documents stays on hold with the other `RP03-CAD` items.
 
 ## Propagation hold
 
