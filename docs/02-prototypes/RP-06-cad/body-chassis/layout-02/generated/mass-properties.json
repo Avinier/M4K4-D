@@ -1,31 +1,31 @@
 {
   "layout_id": "RP03_BODY_CHASSIS_LAYOUT02",
-  "mass_g": 2614.68810923463,
+  "mass_g": 2601.9794811320767,
   "com_mm": [
-    20.206316954955636,
-    0.5972381991686315,
-    103.69266450531815
+    18.73211048993571,
+    0.9617313267926241,
+    106.54676247090502
   ],
   "rows": [
     {
       "id": "RP01_HEAD_LAYOUT04",
-      "mass_g": 556.5881092346298,
+      "mass_g": 588.3794811320766,
       "com_mm": [
-        15.25702136401344,
-        0.6712173895713552,
-        222.59303575003995
+        15.315026138868518,
+        0.4981566966142055,
+        222.54574459056465
       ],
       "source": "RP-01 generated mass tree"
     },
     {
       "id": "BODY_SHELL_AND_PANELS",
-      "mass_g": 287.8,
+      "mass_g": 290.4,
       "com_mm": [
         20.0,
         0.0,
         96.0
       ],
-      "source": "Layout 02 CAD estimate; +15 g for the internal panel frames (+15.6 cm3 net printed volume, near-solid 2.4 mm walls); -27.2 g for the -22.7 cm3 of shell floor opened over the motors, battery hatch and pod tongue (RP03-CAD-05/06) at ~1.2 g/cm3"
+      "source": "Layout 02 CAD estimate; +15 g for the internal panel frames (+15.6 cm3 net printed volume, near-solid 2.4 mm walls); -27.2 g for the -22.7 cm3 of shell floor opened over the motors, battery hatch and pod tongue (RP03-CAD-05/06) at ~1.2 g/cm3; +2.6 g for the ~0.9 cm2 x 2.4 mm of shell floor returned when the battery opening shrank to the 2S1P pack tub (RP03-CAD-07)"
     },
     {
       "id": "BODY_PRIMARY_FRAME",
@@ -39,13 +39,13 @@
     },
     {
       "id": "CHASSIS_PRIMARY_FRAME",
-      "mass_g": 173.3,
+      "mass_g": 172.1,
       "com_mm": [
         19.8,
         0.0,
         47.4
       ],
-      "source": "front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added"
+      "source": "front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"
     },
     {
       "id": "WHEEL_L",
@@ -108,14 +108,24 @@
       "source": "vendor"
     },
     {
-      "id": "BATTERY",
-      "mass_g": 280.0,
+      "id": "BALLAST_STEEL_BAR",
+      "mass_g": 81.6,
       "com_mm": [
-        42.0,
+        74.0,
         0.0,
-        44.0
+        42.5
       ],
-      "source": "RP-02 placeholder"
+      "source": "E: mild-steel bar 9 x 60 x 19 mm at 7.85 g/cm3 (less two M3 tapped holes) + two M3 screws; sized so the register CoM clears the physics.md 2.5 line after the 110 g pack (RP03-CAD-08)"
+    },
+    {
+      "id": "BATTERY",
+      "mass_g": 113.7,
+      "com_mm": [
+        46.7,
+        0.0,
+        43.099999999999994
+      ],
+      "source": "E: 2 x Samsung INR18650-25R (45 g max each = 90 g) + RP-02 PCB-01 pack-protection assembly (~5 g: 48 x 20 mm board 3.7 g + parts 1.3 g) + Bourns AC72ABD thermal cutoff and NTC (~0.7 g) + nickel straps, sleeve and AWG14 leads (~12 g) + pack-side SBS Mini housing (~6 g, U: dimension sheet not read); working selection, no purchase or measured mass; was 110 g with a generic ~8 g BMS (RP-02 board-specs.md sec 3, 2026-09-25)"
     },
     {
       "id": "RASPBERRY_PI5_AND_COOLER",
@@ -128,24 +138,104 @@
       "source": "vendor + estimate"
     },
     {
-      "id": "CONTROL_POWER_SENSORS",
-      "mass_g": 121.5,
+      "id": "PCB02_CHARGE_AND_SYSTEM_POWER",
+      "mass_g": 18.0,
       "com_mm": [
-        22.0,
+        -43.8,
         0.0,
-        80.0
+        76.0
       ],
-      "source": "estimate; one rear TCRT channel; GP2Y (3.5 g) moved to BALL_NOSE_POD_SENSOR_CAP"
+      "source": "E (proposal): 50 x 36 mm board 6.8 g + USB-C 1.2 + connectors 3 + inductor 2 + capacitors 3 + ICs 0.6 + misc 1; vertical on the rear-panel frame"
+    },
+    {
+      "id": "PACK_INTERFACE_SBS_MINI_AND_FUSE",
+      "mass_g": 14.0,
+      "com_mm": [
+        42.0,
+        43.7,
+        41.0
+      ],
+      "source": "E: SBS Mini receptacle housing + contacts ~6 g (U; no modelled home, 13 mm wide against an 11.3 mm channel) + ATOF 15 A holder and fuse ~6 g + ~2 g; placed at the fuse holder"
+    },
+    {
+      "id": "PCB03_MOTOR_GATE_AND_HEAD_RAIL",
+      "mass_g": 24.0,
+      "com_mm": [
+        38.5,
+        0.0,
+        69.0
+      ],
+      "source": "E (proposal): 2460 mm2 board 9.4 g + 4 x Micro-Fit+ 8 + inductor 3 + capacitors 2 + FETs, shunt, TVS, misc 1.6"
+    },
+    {
+      "id": "PCB04_BRANCH_CONVERTERS",
+      "mass_g": 45.0,
+      "com_mm": [
+        -5.0,
+        0.0,
+        70.05
+      ],
+      "source": "E (proposal): WS-H 35 g (3080 mm2 board 11.7 g + inductors 5.4 + connectors 8 + ICs 1 + polymer/ceramics ~1) with the hold-up raised from 4 x 1 mF (~8 g) to 2 x 3.3 mF (~9 g each, \u00d812.5 x 20 lying) per board-specs.md sec 8.1: +10 g; the board footprint is NOT enlarged (no slack in the bay)"
+    },
+    {
+      "id": "C3_DEVKITC_N8",
+      "mass_g": 9.0,
+      "com_mm": [
+        -8.0,
+        44.0,
+        80.8
+      ],
+      "source": "E: ESP32-S3-DevKitC-1-N8 board"
+    },
+    {
+      "id": "DRV8874_CARRIERS_X2",
+      "mass_g": 6.0,
+      "com_mm": [
+        46.0,
+        0.0,
+        67.4
+      ],
+      "source": "E: 2 x Pololu 4035 at ~3 g (weight not read); symmetric about the centre plane"
+    },
+    {
+      "id": "IMU_BREAKOUT",
+      "mass_g": 2.0,
+      "com_mm": [
+        16.0,
+        0.0,
+        60.0
+      ],
+      "source": "E"
+    },
+    {
+      "id": "TCRT5000_BREAKOUT_AND_CABLE",
+      "mass_g": 3.0,
+      "com_mm": [
+        -54.0,
+        0.0,
+        13.5
+      ],
+      "source": "E: breakout, comparator and cable in the rear keel cartridge; was inside the old CONTROL_POWER_SENSORS row at the body centre"
+    },
+    {
+      "id": "ESTOP_XW1E_BV402M_R",
+      "mass_g": 40.0,
+      "com_mm": [
+        -48.9,
+        0.0,
+        110.8
+      ],
+      "source": "E (not in the register before 2026-09-25): IDEC XW1E-BV402M-R operator \u00d840 + two contact blocks + terminal cover; ~15 g outside the rear panel, ~25 g inside"
     },
     {
       "id": "BALL_NOSE_POD_SENSOR_CAP",
-      "mass_g": 17.6,
+      "mass_g": 15.9,
       "com_mm": [
         110.5,
         0.0,
         41.2
       ],
-      "source": "CAD volume: octagonal pod + lid 13.1 cm3 (X 92-128.5) and touch hood 3.6 cm3 (skirt cut at Z 29) at ~45% effective PETG density (7.5 + 2.0 g); 5 M3 screws + 2 heat-set inserts 4.6 g; GP2Y0A41SK0F 3.5 g E"
+      "source": "CAD volume: raked prow pod + lid 11.8 cm3 (X 92-128.5) and touch hood 1.8 cm3 (2026-09-24 prow rework) at ~45% effective PETG density (6.8 + 1.0 g); 5 M3 screws + 2 heat-set inserts 4.6 g; GP2Y0A41SK0F 3.5 g E"
     },
     {
       "id": "BODY_AUDIO",
@@ -169,13 +259,13 @@
     },
     {
       "id": "BODY_YAW_STAGE",
-      "mass_g": 88.0,
+      "mass_g": 89.0,
       "com_mm": [
         16.0,
         13.5,
         134.3
       ],
-      "source": "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 2 x 6 g 1:1 spur gears + 2 g clamp ring + 1 g coupling shaft; no SKU"
+      "source": "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 6 g driven spur + 6 g scissor pinion (two 2.4 mm halves) + 1 g torsion spring and retaining clip (2026-09-25) + 2 g clamp ring + 1 g coupling shaft; no SKU"
     },
     {
       "id": "REAR_SKID_KEEL",

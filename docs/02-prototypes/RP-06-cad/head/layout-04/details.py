@@ -5,6 +5,19 @@ import layout_model as m
 
 INSERT_R,INSERT_DEPTH=1.6,3.0
 INSERT_BREAKTHROUGH=0.4
+# Roll bearings: 696-2Z (ISO 619/6-2Z), d6 x D15 x B5, a stock deep-groove
+# size. Seats are D + 0.1 mm diametral trial slip fit, B + 0.2 mm long;
+# retention is the end plates, preload is a printed-fit item for the bench.
+ROLL_BEARING=dict(sku='696-2Z (ISO 619/6-2Z)',d=6.,D=15.,B=5.)
+BEARING_SEAT_R=ROLL_BEARING['D']/2+.05
+BEARING_SEAT_L=ROLL_BEARING['B']+.2
+# Hard-stop pins: ISO 8734 hardened steel dowels, press fit in printed bores.
+ROLL_STOP_PIN=dict(d=2.,l=5.)
+PITCH_STOP_PIN=dict(d=2.,l=8.)
+# Front retainer screw heads ride under the rolling flange: swept pockets
+# cover the stop travel plus 1 deg overtravel and 0.5 mm radial clearance.
+FLANGE_POCKET_CLEAR=.5
+FLANGE_POCKET_BACK_X=-37.3
 # Boss/receiver insertion faces from layout_model axial seats; open the Ø3.2 pocket through.
 FRONT_INSERT_FACE_X=-8.8
 REAR_INSERT_FACE_X=-112.3
@@ -88,12 +101,12 @@ def detail_parts(out):
     # Split the former single corridor into installed plug and withdrawal.
     setshape('C2_USB_C_withdrawal_BOOT_RESET_service_reserve',b(-33,-24,-35,-23,61.5,81.5))
     add('C2_BOOT_RESET_rear_tool_access_reserve',b(-114,-34,-36,-22,33,49),owner=None,kind='reserve',color='#b58ed0',alpha=.12)
-    # Bearing cartridge: Ø16.2 trial seats, 6 mm long, 22 mm apart;
-    # Ø12 central clearance leaves shoulders supporting only the outer race.
+    # Bearing cartridge: two 696-2Z seats 22 mm apart; the Ø12 central
+    # clearance leaves shoulders on the outer race only.
     cartridge=b(-69,-39,m.ROLL_Y-12,m.ROLL_Y+12,m.ROLL_Z-12,m.ROLL_Z+12)-a(6,32,(-54,m.ROLL_Y,m.ROLL_Z))
-    for x in [-43,-65]:cartridge=cartridge-a(8.1,6.2,(x,m.ROLL_Y,m.ROLL_Z))
+    for x in [-43,-65]:cartridge=cartridge-a(BEARING_SEAT_R,BEARING_SEAT_L,(x,m.ROLL_Y,m.ROLL_Z))
     # End counterbores and split removable plates give axial assembly access.
-    cartridge=cartridge-a(8.1,3,(-39.5,m.ROLL_Y,m.ROLL_Z))-a(8.1,3,(-68.5,m.ROLL_Y,m.ROLL_Z))
+    cartridge=cartridge-a(BEARING_SEAT_R,3,(-39.5,m.ROLL_Y,m.ROLL_Z))-a(BEARING_SEAT_R,3,(-68.5,m.ROLL_Y,m.ROLL_Z))
     for x in [-39.5,-68.5]:
         plate=a(10,.8,(x,m.ROLL_Y,m.ROLL_Z))-a(6,2,(x,m.ROLL_Y,m.ROLL_Z))
         # Housing relieved for the separate retainer; centre boss does not grab shaft.
@@ -101,7 +114,7 @@ def detail_parts(out):
         for dy in [-9,9]:
             plate=plate-a(1.15,2,(x,m.ROLL_Y+dy,m.ROLL_Z))
             cartridge=cartridge-a(INSERT_R,3,(x+(-2 if x>-50 else 2),m.ROLL_Y+dy,m.ROLL_Z))
-        if x>-50:plate=plate-slot('x',10.5,.9,180+m.ROLL_STOP[0],180+m.ROLL_STOP[1],(x,m.ROLL_Y,m.ROLL_Z),2)
+        if x>-50:plate=plate-slot('x',10.5,ROLL_STOP_PIN['d']/2,180+m.ROLL_STOP[0],180+m.ROLL_STOP[1],(x,m.ROLL_Y,m.ROLL_Z),2)
         add(f'roll_bearing_retainer_{abs(x):g}',plate,'P','M010-P','#c38a47')
         for dy in [-9,9]:
             sign=1 if x>-50 else -1
@@ -119,12 +132,22 @@ def detail_parts(out):
     hub=out['coaxial_coupling_trial']['shape']
     for x in [-74.5,-71.5]:hub=hub-a(1.25,7,(x,m.ROLL_Y+4,m.ROLL_Z),'y')
     setshape('coaxial_coupling_trial',hub)
-    # Roll pin protrudes from the existing flange into a sector slot in the
-    # cartridge front wall at radius 10.5; neutral points toward +Z.
-    R=10.5;pr=.9
-    pin=a(pr,2,(-39.8,m.ROLL_Y,m.ROLL_Z+R))
+    # Roll pin: Ø2 x 5 dowel pressed through the whole 3 mm flange, its tip in
+    # a sector slot in the cartridge front wall at radius 10.5; neutral +Z.
+    R=10.5;pr=ROLL_STOP_PIN['d']/2
+    pin=a(pr,ROLL_STOP_PIN['l'],(-40.8+ROLL_STOP_PIN['l']/2,m.ROLL_Y,m.ROLL_Z+R))
     add('roll_hard_stop_pin',pin,owner='M016-18-R',color='#cc5750')
     setshape('connected_rolling_cradle_flange_ear_stalks',out['connected_rolling_cradle_flange_ear_stalks']['shape']-pin)
+    # Swept pockets in the flange's back face for the two front retainer screw
+    # heads (radius 9 on +/-Y; local angle 90 is +Y after the Y rotation).
+    # This removes the Layout 03 audit's 5.53 mm3 screw/flange overlaps.
+    sweep=m.ROLL_STOP[1]+1
+    head_r=1.75+FLANGE_POCKET_CLEAR
+    x0=-39.6;length=FLANGE_POCKET_BACK_X-x0
+    cradle=out['connected_rolling_cradle_flange_ear_stalks']['shape']
+    for centre in [90,270]:
+        cradle=cradle-slot('x',9,head_r,centre-sweep,centre+sweep,(x0+length/2,m.ROLL_Y,m.ROLL_Z),length)
+    setshape('connected_rolling_cradle_flange_ear_stalks',cradle)
     cartridge=out['bearing_cartridge_trial']['shape']
     # local angle 180 places the radial centre on +Z after the Y rotation.
     # Slot ends are the roll hard stops, 3 deg beyond usable travel.
@@ -138,10 +161,11 @@ def detail_parts(out):
     ring=ring-slot('y',10,1,*pitch_slot,(m.PITCH_X,-53,m.PITCH_Z),4)
     leg=out['yaw_yoke_leg_-55']['shape']
     setshape('yaw_yoke_leg_-55',(leg+ring)-slot('y',10,1,*pitch_slot,(m.PITCH_X,-53,m.PITCH_Z),4))
-    add('pitch_hard_stop_pin',a(1,4,(m.PITCH_X-10,-52,m.PITCH_Z),'y'),'P','M016-18-P','#cc5750')
+    # Ø2 x 8 dowel: 2 mm in the yoke slot ring, 5 mm pressed into the root lug.
+    add('pitch_hard_stop_pin',a(PITCH_STOP_PIN['d']/2,PITCH_STOP_PIN['l'],(m.PITCH_X-10,-54+PITCH_STOP_PIN['l']/2,m.PITCH_Z),'y'),'P','M016-18-P','#cc5750')
     # Pin root lug joins the pitch frame side arm.
     frame=out['connected_pitch_frame_roll_servo_saddle']['shape']
-    lug=b(m.PITCH_X-11,m.PITCH_X-4,-51,-47,m.PITCH_Z-2,m.PITCH_Z+2)
+    lug=b(m.PITCH_X-11,m.PITCH_X-4,-51,-46,m.PITCH_Z-2,m.PITCH_Z+2)
     frame=(frame+lug)-out['pitch_hard_stop_pin']['shape']
     # Roll stops at +/-21 swing the C2 castellated exit (R-frame, OD2 trial
     # jacket) onto the lower rail; relieve the rail with 0.4 mm clearance.
@@ -179,3 +203,82 @@ def detail_parts(out):
     # trial OD2 jacket 0.4 mm diametral clearance and is open in both directions.
     guide=b(-49,-45,-4,4,78.6,84.8)-a(1.2,6,(-47,0,80))
     add('CSI_roof_straight_exit_guide',guide,'R','M010','#678c81')
+    stiffen_and_trim(out,add,setshape)
+
+# Structure revision 2026-09-25 (RP-01 P07). The Layout 03 audit screened the
+# open pitch frame at 1.1-2.5 N*m/rad: pitch torque from the +Y trunnion ran
+# through 4 x 4 mm rails in bending and a 5 x 4 mm rear rail in torsion. It now
+# runs trunnion arm -> deep side web -> hollow rear torsion box -> cartridge
+# slab and saddle. The roll servo also bolts its case to the box through the
+# two lower front-face M2 holes of the official ROBOTIS drawing (16 mm apart,
+# 22.5 mm below the output axis), so roll reaction no longer twists the open
+# saddle. Stiffness is a hand screen in RP-01 fullproofmath.md sec. 12.1.
+BOX_X=(-80.5,-68.)          # rear wall on the servo case face; front clear of the pitch servo sweep
+BOX_DZ=(-26.5,-12.5)        # below ROLL_Z; top clears the cartridge by 0.5 mm
+BOX_HALF_Y=51.
+BOX_WALL=3.
+WEB_T=4.
+KEEL_X=(-69.,-39.)          # the cartridge slab's X span; overlaps the box front wall by 1 mm
+KEEL_HALF_Y=12.
+CASE_SCREW_DY,CASE_SCREW_DZ=8.,-22.5
+C2_NOTCH_Y=(-37.,-21.)      # C2 BOOT/RESET rear tool corridor is Y -36..-22, Z >= 33
+C2_NOTCH_TOP_Z=32.7          # absolute, as the reserve is
+# Balance trim (RP-01 P08): removable mass at three seats. Ear caps carry
+# tungsten Ø12 slugs (roll, lever ~71 mm); the rear cover carries brass Ø20
+# washers on the roll axis (pitch, lever ~70 mm; coaxial, so no roll effect).
+EAR_SLUG=dict(r=6.,max_len=4.,density=19.3e-3)
+REAR_STACK=dict(r=10.,max_len=3.,density=8.5e-3)
+TRIM_NOMINAL_FRACTION=.5
+
+def trim_capacity():
+    ear=math.pi*EAR_SLUG['r']**2*EAR_SLUG['max_len']*EAR_SLUG['density']
+    rear=math.pi*REAR_STACK['r']**2*REAR_STACK['max_len']*REAR_STACK['density']
+    return dict(ear_slug_max_g=ear,rear_stack_max_g=rear)
+
+def stiffen_and_trim(out,add,setshape):
+    b,a=m.block,m.axial
+    rz,ry=m.ROLL_Z,m.ROLL_Y
+    n='connected_pitch_frame_roll_servo_saddle';frame=out[n]['shape']
+    z0,z1=rz+BOX_DZ[0],rz+BOX_DZ[1]
+    box=b(BOX_X[0],BOX_X[1],-BOX_HALF_Y,BOX_HALF_Y,z0,z1)
+    webs=[b(BOX_X[0],m.PITCH_X+4,s*(BOX_HALF_Y-WEB_T/2)-WEB_T/2,s*(BOX_HALF_Y-WEB_T/2)+WEB_T/2,z0,m.PITCH_Z-6) for s in (-1,1)]
+    frame=frame+box
+    for w in webs:frame=frame+w
+    w=BOX_WALL
+    # Local 2.5 mm step down under the C2 BOOT/RESET rear tool corridor
+    # (Y -36..-22 from Z 33). It is on the passive -Y side, outside the +Y
+    # trunnion -> centre torque path, and the section stays closed.
+    ny0,ny1,nz=C2_NOTCH_Y[0],C2_NOTCH_Y[1],C2_NOTCH_TOP_Z
+    cavity=b(BOX_X[0]+w,BOX_X[1]-w,-BOX_HALF_Y+w,BOX_HALF_Y-w,z0+w,z1-w)-b(BOX_X[0],BOX_X[1],ny0-w,ny1+w,nz-w,z1)
+    frame=frame-cavity-b(BOX_X[0]-.1,BOX_X[1]+.1,ny0,ny1,nz,z1+.1)
+    # Hollow keel under the cartridge slab, fused to the box's front wall over
+    # its full height. FEA put 51% of the pitch twist in the 1 mm box-to-slab
+    # strip and the 4 mm slab; |Y| < 17 here is clear of every Y-frame part.
+    kx0,kx1=KEEL_X
+    frame=frame+b(kx0,kx1,ry-KEEL_HALF_Y,ry+KEEL_HALF_Y,z0,rz-16)
+    frame=frame-b(kx0+w,kx1-w,ry-KEEL_HALF_Y+w,ry+KEEL_HALF_Y-w,z0+w,rz-16)
+    zc=rz+CASE_SCREW_DZ
+    for dy in (-CASE_SCREW_DY,CASE_SCREW_DY):
+        y=ry+dy
+        frame=frame-a(1.15,w+2,(BOX_X[0]+w/2,y,zc))          # M2 clearance, rear wall
+        frame=frame-a(2.25,w+2,(BOX_X[1]-w/2,y,zc))          # Ø4.5 driver access, front wall
+        add(f'roll_servo_case_M2_{dy:g}',m.button_screw(BOX_X[0]+w,y,zc,'x',1),'P','M021-P','#555b5a')
+    setshape(n,frame)
+    # Ear-cap trim seats: M2 insert boss on the cap's inner back wall; slug
+    # stack envelope at full capacity is a physical part so the motion grid
+    # checks it.
+    for sign in (-1,1):
+        cn=f'ear_{sign}_hollow_removable_cap';cap=out[cn]['shape']
+        c=(m.EAR_X,sign*72.4,m.EAR_Z)
+        cap=cap+a(3.5,2,c,'y')
+        cap=cap-a(INSERT_R,3,(m.EAR_X,sign*72.9,m.EAR_Z),'y')
+        setshape(cn,cap)
+        slug=a(EAR_SLUG['r'],EAR_SLUG['max_len'],(m.EAR_X,sign*(71.4-EAR_SLUG['max_len']/2),m.EAR_Z),'y')
+        add(f'ear_{sign}_trim_slug_stack_max',slug,'R','M022-R','#8d8f93')
+    # Rear-cover seat on the roll axis: M3 insert boss, brass washer stack.
+    cn='removable_octagonal_rear_cover';cover=out[cn]['shape']
+    cover=cover+a(4.5,2.5,(-112.15,ry,rz))
+    cover=cover-a(2.,3.5,(-112.65,ry,rz))
+    setshape(cn,cover)
+    stack=a(REAR_STACK['r'],REAR_STACK['max_len'],(-110.9+REAR_STACK['max_len']/2,ry,rz))
+    add('rear_pitch_trim_washer_stack_max',stack,'R','M022-R','#b88636')

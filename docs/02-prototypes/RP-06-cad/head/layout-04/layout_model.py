@@ -120,6 +120,33 @@ def clean_catalog(path):
             solids.append(s)
     return Compound(label=path.stem,children=solids)
 
+# Waveshare ESP32-S3-LCD-4.3 (SKU 30493 is the non-touch board; the Touch STEP,
+# 106.1 x 68.3 mm, is used as the conservative outline). STEP local X/Y/Z map to
+# head +Y/+Z/+X (rotate 120 deg about (1,1,1)); glass front on X -3.8 (the 0.2 mm active-area sheet sits ahead of it), outline
+# centred on Z 40. Body behind the PCB stops 12.5 mm behind the glass except one
+# 5 mm connector strip on the -Y edge (STEP X -52.4...-47.4, Y -12.5...19.1) that
+# reaches 16.9 mm.
+DISPLAY_FRONT_X, DISPLAY_CENTER_Z=-3.8,40.
+
+def _flat(shape,label):
+    # Flatten after transforms so booleans read world-placed solids.
+    return Compound(label=label,children=list(shape.solids()))
+
+def display_fit_proxy():
+    slab=block(DISPLAY_FRONT_X-12.5,DISPLAY_FRONT_X,-53.05,53.05,DISPLAY_CENTER_Z-34.15,DISPLAY_CENTER_Z+34.15)
+    strip=block(DISPLAY_FRONT_X-16.9,DISPLAY_FRONT_X-12.4,-52.4,-47.4,29.85,61.45)
+    return slab+strip
+
+def display_catalog():
+    d=clean_catalog(CATALOG/'waveshare_esp32_s3_touch_lcd_4_3.stp').rotate(Axis((0,0,0),(1,1,1)),120)
+    return _flat(d.moved(Location((DISPLAY_FRONT_X-4.8,-0.05,DISPLAY_CENTER_Z+2.35))),'display_module_1to1_envelope')
+
+# Waveshare ESP32-S3-Zero V2 (bare PCB, no USB-C solid in the STEP): STEP X/Y/Z map
+# to head -Y/+Z/-X so the components face -X; PCB front face on X -25.
+def c2_catalog():
+    c=clean_catalog(CATALOG/'waveshare_esp32_s3_zero_v2.step').rotate(Axis((0,0,0),(1,1,1)),120).rotate(Axis.Z,180)
+    return _flat(c.moved(Location((-25.8,-20.,28.))),'C2_ESP32_S3_Zero_23_5x18_footprint')
+
 # Imported Module 3 Wide groups after the existing Y−90 placement, mm.
 # PCB X −10.775…−10.104 × Y±12.5 × Z77…100.862; lens toward +X; shield/components −X.
 CAMERA_PCB_X=(-10.775,-10.104)
@@ -215,7 +242,7 @@ def build_parts(catalog=True,reliefs=True):
     add('window_clear_optical_area',prism(99,11,69,3,-2.65,-1.15),'R','#8b9a9d',alpha=.12,owner='M003')
     # Transparent glazing is represented by its perimeter, with image surface.
     add('active_display_95_04x53_86',block(-3.75,-3.55,-47.52,47.52,13.07,66.93),'R','#111f24',owner='M002')
-    add('display_module_1to1_envelope',block(-14.4,-3.8,-53.05,53.05,6,74),'R','#245967',owner='M002')
+    add('display_module_1to1_envelope',display_catalog() if catalog else display_fit_proxy(),'R','#245967',owner='M002')
     add('display_connector_and_flashing_access_reserve',block(-18,-14.4,-53.05,53.05,6,74),'R','#49adbe','reserve',.25)
     if catalog:
         camera=clean_catalog(CATALOG/'camera-module-3-wide.step').rotate(Axis.Y,-90).moved(Location((-10.805,-12.5,CAMERA_BOTTOM)))
@@ -226,7 +253,7 @@ def build_parts(catalog=True,reliefs=True):
     add('addressable_status_LED_package_reserve',block(-8,-5,LED_Y-2.5,LED_Y+2.5,LED_Z-2.5,LED_Z+2.5),'R','#d3922d','reserve',.7,owner='M007')
     add('crown_status_light_diffuser',axial(1.7,2.9,(-3.55,LED_Y,LED_Z)),'R','#e4b35b',owner='M007')
     # C2 footprint is exact; installed height/USB socket are clearly reserved.
-    add('C2_ESP32_S3_Zero_23_5x18_footprint',block(-26.6,-25,-38,-20,28,51.5),'R','#67559a',owner='M008')
+    add('C2_ESP32_S3_Zero_23_5x18_footprint',c2_catalog() if catalog else block(-26.6,-25,-38,-20,28,51.5),'R','#67559a',owner='M008')
     add('C2_installed_components_reserve',block(-34,-26.6,-37,-21,28,51.5),'R','#a58ac4','reserve',.35)
     add('C2_USB_C_withdrawal_BOOT_RESET_service_reserve',block(-33,-24,-35,-23,51.5,81.5),'R','#a58ac4','reserve',.18)
     # One connected rolling cradle: perimeter rails + cross + 4 flange struts.
@@ -259,8 +286,9 @@ def build_parts(catalog=True,reliefs=True):
     skin_style=out['main_octagonal_skin']
     skin_style['shape']=tint(skin,'main_octagonal_skin',skin_style['color'],skin_style['alpha'])
     add('rolling_spindle_6mm',axial(3,32,(-56,ROLL_Y,ROLL_Z)),'R','#b7bfc0',owner='M016-18-R')
+    # 696-2Z (ISO 619/6-2Z) d6 x D15 x B5; details.py owns the seats.
     for i,x in enumerate([-43,-65]):
-        add(f'roll_bearing_{i+1}_16x6_reserve',axial(8,6,(x,ROLL_Y,ROLL_Z))-axial(3.1,8,(x,ROLL_Y,ROLL_Z)),'P','#acb5b9',owner='M016-18-P')
+        add(f'roll_bearing_{i+1}_696_2Z',axial(7.5,5,(x,ROLL_Y,ROLL_Z))-axial(3.1,7,(x,ROLL_Y,ROLL_Z)),'P','#acb5b9',owner='M016-18-P')
     cartridge=block(-69,-39,ROLL_Y-12,ROLL_Y+12,ROLL_Z-12,ROLL_Z+12)-axial(8.3,32,(-54,ROLL_Y,ROLL_Z))
     add('bearing_cartridge_trial',cartridge,'P','#c38a47',owner='M010-P')
     add('coaxial_coupling_trial',axial(6,8.5,(-73.25,ROLL_Y,ROLL_Z))-axial(3.1,10,(-73.25,ROLL_Y,ROLL_Z)),'R','#b7bfc0',owner='M013-15-R')
@@ -269,7 +297,11 @@ def build_parts(catalog=True,reliefs=True):
         roll=servo.rotate(Axis.X,90).rotate(Axis.Z,90).moved(Location((-84,ROLL_Y,ROLL_Z)))
         pitch=servo.rotate(Axis.X,-90).rotate(Axis.Y,270).moved(Location((PITCH_X,40,PITCH_Z)))
     else:
-        roll=block(-106.5,-77.5,ROLL_Y-10,ROLL_Y+10,ROLL_Z-24.5,ROLL_Z+9.5)
+        # Case 23 mm (X -103.5..-80.5) plus the Ø16 x 3 horn on each face, per
+        # the official ROBOTIS drawing; the old single box filled the air
+        # round the front horn where the mounting bulkhead now sits.
+        roll=block(-103.5,-80.5,ROLL_Y-10,ROLL_Y+10,ROLL_Z-24.5,ROLL_Z+9.5)
+        roll=roll+axial(8,3,(-79,ROLL_Y,ROLL_Z))+axial(8,3,(-105,ROLL_Y,ROLL_Z))
         pitch=block(PITCH_X-24.5,PITCH_X+9.5,17.5,46.5,PITCH_Z-10,PITCH_Z+10)
     add('roll_XC330_1to1_reference',roll,'P','#a36f38',owner='M013-15-roll')
     add('pitch_XC330_1to1_reference',pitch,'Y','#a36f38',owner='M013-15-pitch')
@@ -284,7 +316,8 @@ def build_parts(catalog=True,reliefs=True):
     saddle=block(-108,-75,ROLL_Y-12,ROLL_Y+12,ROLL_Z-27.5,ROLL_Z-24.8)
     for off in [-11.5,11.5]:
         saddle=saddle+block(-107,-74,ROLL_Y+off-1.3,ROLL_Y+off+1.3,ROLL_Z-26,ROLL_Z-12)
-    saddle=saddle+block(-77,-70,ROLL_Y-13,ROLL_Y+13,ROLL_Z-25,ROLL_Z-16)
+    # The saddle's old front block is replaced by the rear torsion box and
+    # case-screw wall in details.py.
     frame=frame+saddle
     # Open the positive-Y front crossbar below the fixed pitch servo's sweep;
     # the rear crossbar, side arms and central cartridge seat remain connected.
@@ -332,9 +365,10 @@ def build_parts(catalog=True,reliefs=True):
         cap=cap-hollow
         # Recessed centre leaves a 1.2 mm back wall, not an enormous solid disc.
         cap=cap-axial(22.5,.8,(EAR_X,sign*75,EAR_Z),'y')
-        # Four actual cap screws and thickened receiving pads, cut after unions.
+        # Two top cap screws and thickened receiving pads, cut after unions.
+        # The lower pair had nothing to bite into and is omitted.
         screw_positions=[]
-        for angle in [45,135,225,315]:
+        for angle in [45,135]:
             a=math.radians(angle);xx=EAR_X+25*math.cos(a);zz=EAR_Z+25*math.sin(a)
             screw_positions.append((xx,zz))
             cap=cap+axial(2.6,3,(xx,sign*73.1,zz),'y')

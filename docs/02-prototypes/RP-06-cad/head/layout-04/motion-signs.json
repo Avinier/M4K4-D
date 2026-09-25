@@ -1,0 +1,24 @@
+{
+  "convention": "cad_angle = sign * storyboard_angle; head frame +X forward, +Y robot-left, +Z up; CAD angles right-hand about +Y pitch, +Z yaw, +X roll",
+  "storyboard_positive": {
+    "pitch": "chin down",
+    "yaw": "robot-right",
+    "roll": "robot-left side lowers"
+  },
+  "sign": {
+    "pitch": 1,
+    "yaw": -1,
+    "roll": -1
+  },
+  "derived_from_geometry": {
+    "pitch": 1,
+    "yaw": -1,
+    "roll": -1
+  },
+  "passed": true,
+  "consumers": [
+    "C2 motion firmware public command interface",
+    "signed gravity/cable/asymmetric-pose screens",
+    "viewer pose sliders (raw CAD angles)"
+  ]
+}

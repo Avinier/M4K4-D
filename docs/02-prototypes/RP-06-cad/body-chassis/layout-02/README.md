@@ -4,7 +4,7 @@ This is the active whole-body CAD path. It retains Layout 01's source-linked RP-
 
 - four M4 through-bolts and two locating pins now define the body-frame-to-chassis interface;
 - the drivetrain physically fits (CAD-context decision [`RP03-CAD-05`](../../decisions.md#rp03-cad-05--axle-stack-that-lets-the-wheels-turn)). Each coaxial gearmotor bolts its output face to a chassis flange whose R15 boss carries the 608 pair and reaches into a pocket in a dished wheel. An 8 mm stub shaft runs in the bearings, takes the motor's D-shaft and drives the wheel web. The axle crossmember, square carriers and gussets are gone: they sat inside the motors and 11 mm into each wheel. Cheek plates carry the rails round the gearboxes, the deck has a relief over the motor cans, and the shell floor is slotted across the axle because the motors hang below it;
-- the body sits 16 mm forward on the chassis ([`RP03-CAD-06`](../../decisions.md#rp03-cad-06--body-forward-on-the-chassis-and-a-low-battery-tub)). Shell, panels, body frame, electronics, audio, harness, yaw stage and head all move; the wheels, ball, chassis and keel do not. The battery drops into a chassis tub under the deck, flush with the deck top, with a bottom hatch. The register CoM moves from x +9.4 / h 106.7 to **x +20.2 / h 103.7 mm** (a_tip 0.86 → 1.91 m/s², ball share 0.09 → 0.18). The +25 / 124 baseline target is still missed;
+- the body sits 16 mm forward on the chassis ([`RP03-CAD-06`](../../decisions.md#rp03-cad-06--body-forward-on-the-chassis-and-a-low-battery-tub)). Shell, panels, body frame, electronics, audio, harness, yaw stage and head all move; the wheels, ball, chassis and keel do not. The battery drops into a chassis tub under the deck, flush with the deck top, with a bottom hatch. The register CoM moved from x +9.4 / h 106.7 to x +20.2 / h 103.7 mm. The battery is now the 2S1P 18650 pack ([`RP03-CAD-07`](../../decisions.md#rp03-cad-07--2s1p-18650-battery-pack)): two Samsung 25R cells and a BMS, 37.6 × 67 × 23.8 mm and 110 g in a resized tub, which alone would put the CoM at x +18.8 / h 107.9 mm, under the +20 mm physics line. An 81.6 g steel ballast bar under the deck ahead of the tub ([`RP03-CAD-08`](../../decisions.md#rp03-cad-08--ballast-bar-ahead-of-the-battery-tub)) restores it: the register CoM is **x +20.6 / h 105.8 mm** (a_tip 1.91 m/s², ball share 0.19). The +25 / 124 baseline target is still missed;
 - enlarged front and rear shell openings are the octagonal service-panel outlines offset inward by a constant 2 mm land; each panel's straight side edges are parallel to the corresponding shell edges (measured from the solids, not the constants); a separate internal frame behind each shell end wall carries four fused M3 bosses, with M3 × 8 screws seated on the panel face;
 - the front panel starts at Z = 58 mm, above the chassis deck, so it lifts off forward over the ball pod. The deck, rails and front crossmember now stop inside the shell's front wall; only the pod's tongue passes the lower front band, through one open-bottom centre notch. The rear panel keeps its Z = 42 mm lower edge;
 - the front slat motif is now a functional open speaker grille over a provisional 50 mm basket/44 mm cone, amplifier envelope and acoustic cavity;
@@ -93,15 +93,54 @@ to them. The tightest gaps are the stub shaft to the gearbox face (1.5 mm), the
 boss end to the pocket floor and the tyre to the arch trim (2 mm each), and
 the boss to the pocket wall (3 mm). The motor envelopes do not interfere with the
 chassis, shell, body frame, electronics or harness volumes. Each gearbox face seats on its
-flange with zero gap. The 608 pairs lie inside the bosses, and the battery envelope
-clears everything around the tub. Three CoM checks read the hand-kept mass register, not the geometry:
-x ≥ +20 mm (the `physics.md` §2.5 margin line; currently +20.21, so borderline), ball share ≥ 0.09, and skid
+flange with zero gap. The 608 pairs lie inside the bosses, and the battery pack (two cells, two end straps and the BMS) and the ballast bar clear everything around the tub with at least 1.5 mm of retention gap at the sides and 0.5 mm below the deck top (0.2 mm counting the sleeve). Three CoM checks read the hand-kept mass register, not the geometry:
+a_tip ≥ 1.582 m/s² (the `physics.md` §2.5 margin, which the +20 mm line encodes at h = 124 mm; re-based 2026-09-25 by `RP03-CAD-09`: a_tip 1.753 at x +18.77 / h 105.05, was +20.62 / 105.73 with the `RP03-CAD-08` ballast bar), ball share ≥ 0.09, and skid
 contact before the CoM crosses the axle.
 
 An all-group clash sweep on 2026-09-24 left these older body-side
 overlaps, which no check covers yet: harness volumes against the
 Pi cooler, compute tray, IMU and lower front cross; the rear lower cross and
-rear dog-legs against the power and safety envelopes; the compute tray against
+rear dog-legs against the power and safety envelopes (**gone with the envelopes since 2026-09-25**); the compute tray against
 the speaker magnet; the yaw adapter plate and upper rails against the shell;
 the PDM port boots against the shell; and the wheel-arch pods fused into the
 shell. They are listed in [`openitems.md`](../../../openitems.md).
+
+## 2026-09-24 nose rework: real caster and GP2Y
+
+The ball nose now carries the purchased Pololu 1" caster (2691; `build_ball_caster_step.py` authors it from the vendor drawing) and the real Sharp GP2Y0A41SK0F STEP. The old octagonal box pod and hood are replaced by a raked, faceted prow: the pod runs straight through the shell notch, swells to 49 mm around the sensor's mounting belt (slotted into the pod sides), sweeps in to a 36 mm nose that rakes down to the face, and the touch hood starts ahead of the belt so it stays 40.6 mm wide. The sensor looks through a 27 x 10.5 mm visor slit. The tact switch moved from the lid to the pod floor beside the lens line. The ball screw circle is O14.1 (radius 7.04); the earlier 12.2 mm radius was Pololu's hole spacing misread. The Pi Active Cooler, DevKitC-1, DRV8874 carriers, TCRT5000 and the XC330 yaw servo are also real STEPs now; the head's display and C2 are real STEPs in Layout 04.
+
+## 2026-09-25 RP-02 power-distribution boards (proposal)
+
+The old `POWER_DISTRIBUTION_RP02_ENVELOPE` (48 × 36 × 18) and `SAFETY_AND_WATCHDOG_ENVELOPE` (42 × 28 × 14) are replaced by named envelopes for the RP-02 custom boards, the main-fuse holder and the E-stop (`power_distribution_boards()` in `body_chassis_model.py`, group `POWER_DISTRIBUTION_BOARDS` inside `BODY_ELECTRONICS`). Sizes come from `RP-02-electrical/board-specs.md` §2 (part inventory, nothing laid out); positions are a proposal that is **not** the WS-H first draft, which did not fit the measured model (PCB-03 and PCB-04 overlapped each other by 16 mm and both hit the body's lower cross-members).
+
+| Item | Box X / Y / Z (mm) | Size | Note |
+|---|---|---|---|
+| `PCB-01` | on the pack (X 36.7–56.7, Y ±24) | 48 × 20 × **2.9** (was a 4.5 mm generic BMS) | pack is 1.6 mm shorter, top Z 53.9 |
+| `PCB-02` | X −49.6…−38.0, Y ±25, Z 58…94 | 50 × 36 board, vertical, parts face +X | rear-panel frame; USB-C plug corridor X −58…−50, Y ±6, Z 61…67 |
+| `PCB-03` | X 18…59, Y ±30, Z 63…75 | 41 × 60 × 12 (WS-H 56 × 44, same 2460 mm²) | above the tub; 1 mm to the front lower cross, 1.1 mm to the DRV8874 carriers |
+| `PCB-04` | X −27…17, Y ±35, Z 63…77.1 | 44 × 70 × 14.1 (WS-H 70 × 44) | 1 mm to the rear lower cross, 0.9 mm under the head-harness vertical |
+| ATOF fuse holder | X 30…54, Y 38.7…48.7, Z 36…46 | 24 × 10 × 10 | under the deck, in the 11.3 mm channel at the pack's +Y end |
+| E-stop XW1E | head Ø40 × 20 outside the rear panel; keep-out X −58…−14, Y ±14.7, Z 99.65…121.95 | 22.3 mm tall keep-out | centre Z 110.8 |
+
+Why the E-stop moved from WS-H's Z 106: that height put the 48 mm-deep keep-out through the Pi's rear parts (449 mm³) and the cooler (33 mm³). The window between the Pi's rear parts (Z 99.55) and the panel frame's top bar (Z 122.0) is 22.45 mm, so the keep-out is 22.3 mm tall and 29.4 mm wide (WS-H 24 × 30). The rear panel is still not cut for the Ø22.3 barrel or the USB-C window.
+
+**Checks.** Ten new checks; 107 of 108 pass (the one failure is the existing CoM margin line, below). The boards, fuse holder, operator and keep-outs have zero interference with every real solid (137 checked: chassis, shell, panels, body frame, audio, yaw stage, sensors, electronics, motors, wheels, tub) and with each other; running gaps are at least 0.5 mm (PCB-03 to the IMU) and the bay gaps are 1.0 mm by construction, so **the bay has no slack**. The 3.3 mF hold-up capacitors of `board-specs.md` §8.1 (2 × Ø12.5 × 20 mm lying) add about 100 mm² of components that PCB-04's 3080 mm² cannot absorb; it needs a different bay or a second level. The guarded, still-open overlaps are the **harness placeholders**: `HARNESS_BATTERY_TRUNK` passes through PCB-03 (1640 mm³) and PCB-04 (920 mm³) and `HARNESS_MOTOR_BRANCH` through PCB-03 (7200 mm³); the gap under the boards is 7 mm (Z 56–63), too thin for the 10 mm volumes, so the routes need re-planning. Removing the old envelopes also closed the two older rear-cross overlaps.
+
+**Mass and CoM (hand-kept register, `E`).** `CONTROL_POWER_SENSORS` (121.5 g at (22, 0, 80)) is replaced by per-board rows (121.0 g) plus a new `ESTOP_XW1E_BV402M_R` (40 g); `BATTERY` goes from 110 g to 113.7 g. Total 2524.6 → **2567.8 g** and CoM x +20.63 → **+18.77 mm**, h 105.73 → **105.05 mm**, y +0.62 → +1.00 mm (fuse holder and DevKitC on +Y), against the +25 / 124 target (gap 4.4 → 6.2 mm; a_tip 1.91 → 1.75 m/s²). The 2526.0 g / +20.62 in the earlier generated report was stale by 1.4 g of head mass (Layout 04 rework), so the before figures above use the current head. **`com_forward_of_physics_margin_line` (x ≥ +20) now fails by 1.23 mm.** It was not weakened. Restoring it needs about 59 g more at X 74; the ballast slot (X 69.5–78.5, 11.5 mm between the tub and the front cross-member) cannot take that, so it needs a builder decision (forward-shift the pack or Pi, move the E-stop or a board forward, or a new ballast position).
+
+**Open items.** SBS Mini pair (22 × 13 × 14, dimension sheet not read) is 13 mm wide against the 11.3 mm fuse channel and has no modelled home; the fuse under the deck is not serviceable without removing the body. Rear-panel cut-outs (E-stop barrel, USB-C window) are not modelled. Harness routes must be re-planned around PCB-03 and PCB-04. The IMU's 0.5 mm gap under PCB-03 leaves no room for standoffs at X 18–28.5. Nothing here is laid out or load-checked.
+
+`check_layout.py` now takes about 7 minutes with the new sweeps. Regenerated 2026-09-25 with the 0.4.28 runtime: STEP (`gen`), `write_outputs.py`, `write_viewer_params.py`, `check_viewer.mjs` (40 checks, 0 failed) and the snapshot packet (`*_20260924T200830Z.png`, copied over the un-suffixed PNGs).
+
+## Builder acceptance of the power-board CoM (2026-09-25)
+
+The builder accepted the centre of mass with the power boards, x +18.77 / h 105.05 mm, as the working baseline in place of +25 / 124 mm, with no added ballast (`BA-06` in `../../../RP-02-electrical/board-specs.md` §1.1, decision `RP03-CAD-09`). The check `com_forward_of_physics_margin_line` now tests a_tip ≥ 1.582 m/s², the tip acceleration the old +20 mm line encodes at the 124 mm baseline height; a_tip is 1.753 and 108 of 108 checks pass. Open: harness placeholders overlapping `PCB-03`/`PCB-04`, the pack-interface tile (SBS Mini pair and ATOF holder), the rear-panel E-stop and USB-C cut-outs.
+
+## Head revision and yaw scissor pinion (2026-09-25)
+
+RP-01 head Layout 04 was revised for the RP-01 CAD blockers: a stiffened pitch frame, the roll servo bolted to a torsion box, 696-2Z bearings, steel stop dowels and balance-trim seats (see its README). This layout picks the head up from the head's generated files. The yaw-carried head is now 588.4 g (was 555.2) and the pitch axis 1.98 mm further back. Total **2602.0 g**, CoM **x +18.73 / y +0.96 / h 106.55 mm**, a_tip 1.72 m/s² against the 1.582 line; the `BA-06` baseline was x +18.77 / h 105.05.
+
+The yaw pinion is now a **scissor gear** (RP-01 gate P09). The 1:1 spur mesh is outside the M181's position loop, so plain lash (0.05–0.10 mm, i.e. 0.15–0.31°) would reach the head one-for-one against the ≤0.25° best-case hysteresis target. The pair is module 1 × 37 teeth. The pinion is two 2.4 mm halves 0.2 mm apart, filling the 5 mm gear band; a torsion spring turns the loose half against the fixed one with **0.22 N·m** preload. That is ≥ 1.5× the yaw peak external torque, 0.130 N·m, scaled from the RP-01 screen by the head's current yaw inertia, and below the M181's 0.30 N·m Current Limit torque. The new check `yaw_pinion_is_lash_free_scissor_gear` verifies it. `BODY_YAW_STAGE` is 89 g (+1 g for the spring and clip). The spring SKU, the preload friction and the tooth strength of the 2.4 mm halves (brass recommended) are open; bench test B4 measures the remaining lash.
+
+**Checks.** 109 of 109 pass. Regenerated with the 0.4.28 runtime: STEP (`gen`), `write_outputs.py`, `check_layout.py` and the snapshot packet (`*_20260925T115055Z.png`, copied over the un-suffixed PNGs).
+

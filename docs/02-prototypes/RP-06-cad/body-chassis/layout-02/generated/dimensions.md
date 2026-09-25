@@ -7,10 +7,10 @@
 - Ball contact: `(110.0, 0.0, 0.0)` mm
 - Axle stack (RP03-CAD-05): motor face at |Y| 69 bolts to a flange (|Y| 69…71); R15 boss to |Y| 86.0 carries 608 pair at |Y| (74.0, 81.5); Ø8 stub shaft |Y| 70.5…95.0; dished wheel pocket R18 to |Y| 88.0; no axle crossmember; minimum running gap 1.5 mm
 - Body placement (RP03-CAD-06): body and head sit 16 mm forward of the drive axle; yaw axis X 16
-- Battery: 48 × 75 × 24 mm at `(42.0, 0.0, 44.0)` mm in a chassis tub; bottom hatch
+- Battery: 38 × 67 × 22 mm at `(46.7, 0.0, 43.099999999999994)` mm in a chassis tub; bottom hatch
 - Ball mount: `FIXED_3HOLE_NON_INTERCHANGEABLE`; flange seats on the printed pod at Z 29; pod X 92.0…128.5, 35 mm wide
-- Touch cap: face X 133.5, 40 mm wide, Z 29…57, 3 mm travel
-- Front range sensor (GP2Y0A41SK0F): face `(128.0, 0.0, 41.0)` mm, on the centreline, 18 mm ahead of the ball contact
+- Touch cap: face X 133.5, 40 mm wide, Z 29…54, 3 mm travel
+- Front range sensor (GP2Y0A41SK0F): face `(128.0, 0.0, 40.3)` mm, on the centreline, 18 mm ahead of the ball contact
 - Body shell: X -58.0…98.0 mm; Z 30.0…140.0 mm
 - Visible body height: 110.0 mm
 - Body width: 174.0 mm lower / 148.0 mm upper
@@ -21,7 +21,7 @@
 - Speaker: center `(88.0, 0.0, 99.0)` mm, 44.0 mm cone / 50.0 mm basket
 - Body microphones: four provisional PDM ports at `((54.0, 70.0, 118.0, 'FRONT_L'), (54.0, -70.0, 118.0, 'FRONT_R'), (-22.0, 70.0, 108.0, 'REAR_L'), (-22.0, -70.0, 108.0, 'REAR_R'))`
 - Head-yaw datum: `(16.0, 0.0, 140.0)` mm
-- RP-01 head origin in chassis: `(54.138946839609034, 0.0, 189.5)` mm
+- RP-01 head origin in chassis: `(56.122066107057826, 0.0, 189.5)` mm
 - Neutral physical height stack: 293.5 mm (50 mm neck; yaw disc top Z 155.0, 15.0 mm proud)
 - Head sweep floor at the hard stops: Z 159.0 mm, 4 mm above the yaw disc; Pi cooler headroom 10.5 mm
 - RP-01 yaw-yoke status: live Layout 04 turntable geometry; not load-rated or fabrication-final

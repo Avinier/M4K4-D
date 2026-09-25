@@ -380,7 +380,7 @@
     }
   ],
   "verified_0p5deg_grid": {
-    "lowest_z_mm": -30.211,
+    "lowest_z_mm": -29.455,
     "at_roll_pitch": [
       -21.0,
       -25.0
@@ -388,7 +388,7 @@
     "passed": true
   },
   "hard_stop_fault_case": {
-    "lowest_z_mm": -30.211,
+    "lowest_z_mm": -29.455,
     "at_roll_pitch": [
       -21.0,
       -25.0
@@ -397,16 +397,16 @@
     "note": "Per-axis hard-stop corner. When below_disc_top_mm is 0 the hard stops alone keep the head off the disc."
   },
   "overtravel_1deg_case": {
-    "lowest_z_mm": -31.444,
+    "lowest_z_mm": -30.665,
     "at_roll_pitch": [
       -22.0,
       -26.0
     ],
-    "clearance_to_disc_top_mm": 3.056
+    "clearance_to_disc_top_mm": 3.835
   },
   "hard_stops_alone_keep_4mm": true,
   "pure_axis_lowest_z_mm": {
-    "pitch": -19.113,
-    "roll": -15.523
+    "pitch": -18.357,
+    "roll": -15.524
   }
 }

@@ -120,6 +120,8 @@ The rail architecture accepts an admissible pack envelope rather than selecting 
 
 The previous 2S protected-18650 holder is retained only as an `E` planning case in the ledger. It is not the preferred or selected construction. A keyed, protected, mechanically retained pack module is the architectural expectation unless evidence supports another service model.
 
+**Working selection, 2026-09-24 (builder direction; not a registered baseline and not part of `RP02-P2-REG-01`).** The architecture above is unchanged. For sizing, packaging and CAD, the working pack is a 2S1P Li-ion NMC module of two Samsung INR18650-25R cells with a 2S 20 A balanced BMS, as one retained pack with the SBS Mini lead. It stays a pack module, not a loose-cell holder. Candidates and prices are in `power-component-candidate-screen.md` §9.2 and the check against `MD-01` is in `power-calculation-ledger.md` §5.3. It can be superseded without changing `PA-01…16`; a change to 3S or to a pouch or 21700 construction reopens the pack, the BMS, the BQ25798 settings and the RP-06 tub.
+
 ### `PA-04` — Pack and head-servo voltage remain coupled
 
 | Servo family outcome | Head-actuator source consequence | Pack consequence |

@@ -1,0 +1,130 @@
+{
+  "date": "2026-09-25",
+  "method": "fea/README.md: P2 tets, pure couple on the loaded faces; pitch = +Y trunnion clamped, couple on the cartridge seat; roll = both trunnions clamped, couple on the servo-case interfaces",
+  "frames": {
+    "old": "git parent of the 2026-09-25 revision (Layout 04 as of 2026-09-23)",
+    "new": "Layout 04 revision 2026-09-25: side webs, 3 mm hollow rear torsion box, keel, servo case screws"
+  },
+  "frequency_note": "f = sqrt(k/J)/2pi, frame spring only; the servo gear train, horn, coupling and joints are U and in series",
+  "targets_Hz": {
+    "pitch": [
+      30,
+      40
+    ],
+    "roll": [
+      25,
+      30
+    ]
+  },
+  "runs": [
+    {
+      "frame": "new",
+      "case": "pitch",
+      "E_MPa": 3500.0,
+      "mesh_h_mm": 1.4,
+      "tets": 68149,
+      "k_Nm_per_rad": 51.44,
+      "carried_inertia_kg_m2": 0.0007791,
+      "single_dof_frequency_Hz": 40.9
+    },
+    {
+      "frame": "new",
+      "case": "pitch",
+      "E_MPa": 3500.0,
+      "mesh_h_mm": 1.0,
+      "tets": 165978,
+      "k_Nm_per_rad": 51.35,
+      "carried_inertia_kg_m2": 0.0007791,
+      "single_dof_frequency_Hz": 40.9
+    },
+    {
+      "frame": "new",
+      "case": "pitch",
+      "E_MPa": 2300.0,
+      "mesh_h_mm": 1.4,
+      "tets": 68149,
+      "k_Nm_per_rad": 33.81,
+      "carried_inertia_kg_m2": 0.0007791,
+      "single_dof_frequency_Hz": 33.2
+    },
+    {
+      "frame": "new",
+      "case": "roll",
+      "E_MPa": 3500.0,
+      "mesh_h_mm": 1.4,
+      "tets": 68149,
+      "k_Nm_per_rad": 187.53,
+      "carried_inertia_kg_m2": 0.0006751,
+      "single_dof_frequency_Hz": 83.9
+    },
+    {
+      "frame": "new",
+      "case": "roll",
+      "E_MPa": 3500.0,
+      "mesh_h_mm": 1.0,
+      "tets": 165978,
+      "k_Nm_per_rad": 198.58,
+      "carried_inertia_kg_m2": 0.0006751,
+      "single_dof_frequency_Hz": 86.3
+    },
+    {
+      "frame": "new",
+      "case": "roll",
+      "E_MPa": 2300.0,
+      "mesh_h_mm": 1.4,
+      "tets": 68149,
+      "k_Nm_per_rad": 123.23,
+      "carried_inertia_kg_m2": 0.0006751,
+      "single_dof_frequency_Hz": 68.0
+    },
+    {
+      "frame": "old",
+      "case": "pitch",
+      "E_MPa": 3500.0,
+      "mesh_h_mm": 1.0,
+      "tets": 79686,
+      "k_Nm_per_rad": 0.98,
+      "carried_inertia_kg_m2": 0.0007254,
+      "single_dof_frequency_Hz": 5.8
+    },
+    {
+      "frame": "old",
+      "case": "pitch",
+      "E_MPa": 2300.0,
+      "mesh_h_mm": 1.4,
+      "tets": 35976,
+      "k_Nm_per_rad": 0.65,
+      "carried_inertia_kg_m2": 0.0007254,
+      "single_dof_frequency_Hz": 4.8
+    },
+    {
+      "frame": "old",
+      "case": "roll",
+      "E_MPa": 3500.0,
+      "mesh_h_mm": 1.0,
+      "tets": 79686,
+      "k_Nm_per_rad": 17.84,
+      "carried_inertia_kg_m2": 0.000627,
+      "single_dof_frequency_Hz": 26.8
+    },
+    {
+      "frame": "old",
+      "case": "roll",
+      "E_MPa": 2300.0,
+      "mesh_h_mm": 1.4,
+      "tets": 35976,
+      "k_Nm_per_rad": 11.76,
+      "carried_inertia_kg_m2": 0.000627,
+      "single_dof_frequency_Hz": 21.8
+    }
+  ],
+  "pitch_path_breakdown_new_E3500": {
+    "note": "rotation reached at each station as a fraction of the loaded-face rotation",
+    "arm_top": 0.01,
+    "web_front": 0.31,
+    "web_rear": 0.46,
+    "box_y25": 0.73,
+    "box_y0": 0.92,
+    "slab": 0.99
+  }
+}

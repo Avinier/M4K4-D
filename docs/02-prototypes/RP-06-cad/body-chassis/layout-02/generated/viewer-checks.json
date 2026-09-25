@@ -6,35 +6,35 @@
     "spin_turn",
     "head_look_around"
   ],
-  "leaves": 1266,
+  "leaves": 2016,
   "features": {
-    "frame_R": 703,
-    "frame_P": 35,
+    "frame_R": 1428,
+    "frame_P": 37,
     "frame_Y": 27,
-    "yaw_pinion": 1,
+    "yaw_pinion": 2,
     "wheel_L": 5,
     "wheel_R": 5,
     "shell": 26,
-    "head": 740,
-    "structure": 84,
-    "drive": 26,
+    "head": 1467,
+    "structure": 90,
+    "drive": 28,
     "rear_tail": 18,
-    "electronics": 296,
-    "sensors": 9,
+    "electronics": 308,
+    "sensors": 12,
     "audio": 17,
     "harness": 22,
     "physics": 28
   },
   "pivots_mm": {
     "roll": [
-      54.1389,
-      -1.0934,
-      236.8562
+      56.1221,
+      -1.0695,
+      236.7174
     ],
     "pitch": [
       16,
       0,
-      235.4714
+      234.5945
     ],
     "yaw": [
       16,

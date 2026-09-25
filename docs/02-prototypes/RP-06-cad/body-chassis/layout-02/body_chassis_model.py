@@ -140,12 +140,16 @@ WHEEL_INDEX_DEPTH = 0.8  # flush inlay: cut into the rim face, no added width
 
 BALL_CONTACT = (110.0, 0.0, 0.0)
 BALL_DIAMETER = 25.4
-BALL_HOUSING_RADIUS = 16.0
+# Pololu ball caster 1" (item 2691 rollers / 2692 bearings; India: Fab.to.Lab, MG Super Labs).
+# Drawing 2691: O34 base 8.8 thick, 29 mm overall, O3.2 holes 12.2 mm apart (an equilateral
+# triangle, so the bolt circle is 12.2/sqrt(3) = O14.1). STEP: build_ball_caster_step.py.
+BALL_HOUSING_RADIUS = 14.25
 BALL_NATIVE_HEIGHT = 29.0  # floor to the vendor flange's top (seating) face
-BALL_HOLE_RADIUS = 12.2  # Pololu "hole span" read as a radius; confirm on the vendor drawing
+BALL_HOLE_RADIUS = 12.2 / math.sqrt(3.0)  # bolt-circle radius, 7.04 mm
 BALL_HOLE_ANGLES_DEG = (0.0, 120.0, 240.0)  # clocked so every screw head sits inside the pod pocket
-BALL_FLANGE_OD = 36.0
-BALL_FLANGE_THICKNESS = 4.0
+BALL_FLANGE_OD = 34.0
+BALL_FLANGE_THICKNESS = 8.8
+BALL_CASTER_STEP = "pololu_ball_caster_1in_2691.step"
 BALL_MOUNT_MODE = "FIXED_3HOLE_NON_INTERCHANGEABLE"
 
 # Lean ball pod (RP03-CAD-04): one printed block seats directly on the
@@ -156,12 +160,27 @@ BALL_MOUNT_MODE = "FIXED_3HOLE_NON_INTERCHANGEABLE"
 # the shell's lower front band through one open-bottom notch to the front
 # crossmember, which sits inside the shell.
 BALL_POD_X = (92.0, 128.5)  # rear face on the front crossmember = flange rear edge, front face
-BALL_POD_HALF_WIDTH = 17.5
+BALL_POD_HALF_WIDTH = 17.5  # at the shell notch (x 92-104); the prow swells ahead of it
 BALL_POD_LOWER_CHAMFER = 2.5
 BALL_POD_UPPER_CHAMFER = 6.0
 BALL_POD_Z0 = BALL_NATIVE_HEIGHT  # seat face = vendor flange top
 BALL_POD_SEAT_THICKNESS = 3.0
-BALL_POD_LID_Z = (48.5, 54.0)  # lid bottom, lid top
+BALL_POD_LID_Z = (49.0, 51.0)  # lid bottom, lid top over the sensor belt (the lid rakes down ahead of it)
+# Prow plan: (x, half width, top Z, upper chamfer). Straight through the shell notch, swelling to
+# 49 mm across the GP2Y's mounting belt (x 111.8-119.4), sweeping in to a 36 mm nose that rakes down to the face.
+# The touch hood starts ahead of the belt (x 124), so the hood itself stays under 42 mm wide.
+BALL_POD_STATIONS = (
+    (92.0, 17.5, 51.0, 6.0),
+    (104.0, 17.5, 51.0, 6.0),
+    (110.5, 24.5, 51.0, 9.0),
+    (119.8, 24.5, 51.0, 9.0),
+    (123.5, 17.8, 49.6, 7.0),
+    (126.0, 17.8, 48.2, 7.0),
+    (128.5, 16.0, 47.0, 6.5),
+)
+# Lid underside in XZ: level over the belt, stepping down over the lens hood.
+BALL_POD_LID_UNDERSIDE = ((80.0, 49.0), (119.8, 49.0), (121.6, 46.8), (129.0, 44.9))
+BALL_POD_EAR_SLOT = (111.4, 119.8, 14.6, 22.9)  # x0, x1, |y| inner, |y| outer: the sensor's belt
 BALL_POD_POCKET = (BALL_POD_X[0] + 3.0, 15.5)  # pocket rear x, half-width; open front and top
 BALL_POD_SCREWS_YZ = ((10.0, 42.0), (-10.0, 42.0))  # M3 into crossmember inserts, driven from the pocket
 
@@ -292,9 +311,15 @@ SPEAKER_CAVITY_DEPTH = 34.0
 # physics.md §6 credits look-ahead from the leading (ball) contact, so a face
 # ahead of it is credited and a face behind it is charged.
 FRONT_RANGE_SENSOR_Y = 0.0
-FRONT_RANGE_SENSOR_Z = 41.0
-FRONT_RANGE_SENSOR_SIZE = (13.5, 29.5, 13.0)  # GP2Y0A41SK0F depth, width, height
-FRONT_RANGE_SENSOR_FACE_X = 128.0  # 0.5 mm inside the pod front face
+FRONT_RANGE_SENSOR_BOTTOM_Z = 35.0  # rests on pod rails just above the ball-screw heads
+FRONT_RANGE_SENSOR_Z = 40.3  # optical axis: lens centre (STEP Z 5.3 above the seating plane)
+# Sharp STEP: 29.6 wide x 11.5 tall body with a 7.2 mm-deep belt out to 44.4 mm wide x 13.5 tall
+# (STEP y -3.6..3.6); lens hood 6.4 mm ahead of the body's front face. Depth is to the lens tip.
+FRONT_RANGE_SENSOR_SIZE = (18.9, 29.6, 11.5)
+FRONT_RANGE_SENSOR_FACE_X = 128.0  # lens tip, 0.5 mm inside the pod front face
+FRONT_RANGE_BELT_X = (111.8, 119.4)  # world x of the belt (STEP y -3.6..3.6 -> lens tip - 12.4 + y)
+FRONT_RANGE_BODY_FRONT_X = 122.1  # low front section (STEP y -6.5: Z 0-7.2) starts here
+FRONT_RANGE_WINDOW_SIZE = (27.0, 10.5)  # visor slit in the cap: width, height (full-round ends)
 FRONT_RANGE_CONNECTOR_DEPTH = 6.5
 FRONT_RANGE_MAX_MM = 300.0  # GP2Y0A41SK0F rated range 40-300 mm
 FRONT_RANGE_WINDOW_CLEARANCE = 1.0
@@ -314,7 +339,8 @@ MICROPHONE_PORTS = (
 # (129 rpm at 5 V vs 63 rpm peak yaw) with no speed reduction. The servo
 # stands beside the cooler on +Y; a coupling shaft carries its output up to
 # the pinion.
-PI_COOLER_TOP_Z = 123.0
+PI_COOLER_TOP_Z = 123.0  # headroom datum only; the real cooler now tops out near Z 109 (see PI_SOC_TOP_Z)
+PI_SOC_TOP_Z = 97.7  # tallest package under the cooler plate on the Pi 5 STEP (BCM2712 96.65, RAM 97.7; PCB top 95.4)
 PI_COOLER_HEADROOM = 10.5
 YAW_PLATE_Z = (BODY_FRAME_UPPER_Z + 4.0, BODY_FRAME_UPPER_Z + 8.0)
 YAW_PLATE_RADIUS = 33.5
@@ -327,6 +353,26 @@ YAW_GEAR_OUTER_RADIUS = 20.0
 YAW_GEAR_BORE_RADIUS = 13.0
 YAW_GEAR_RATIO = 1.0
 YAW_PINION_CENTER = (0.0, 2.0 * YAW_GEAR_PITCH_RADIUS)  # offset from the yaw axis
+# Spur pair: module 1, 37 teeth each (pitch Ø37), 20 deg pressure angle. The
+# mesh is outside the M181's position loop, so plain lash reaches the head
+# one-for-one: 0.05-0.10 mm at r 18.5 is 0.15-0.31 deg against the <=0.25 deg
+# best-case hysteresis target (RP-01 gates.md P09). The pinion is therefore a
+# scissor (split) gear: two 2.4 mm halves, the loose half turned against the
+# fixed one by a torsion spring, so both flanks of the driven gear's teeth are
+# always in contact until the transmitted torque exceeds the preload.
+YAW_GEAR_MODULE = 1.0
+YAW_GEAR_TEETH = 37
+YAW_SCISSOR_HALF_FACE = 2.4
+YAW_SCISSOR_GAP = 0.2
+# Preload vs demand: the RP-01 screen's yaw peak external torque (0.1099 N*m
+# at Layout 03's 0.001080 kg*m2) scales with the head's current yaw inertia and
+# needs >= 1.5x margin; the M181 Current Limit (0.9 A x 0.333 N*m/A = 0.30 N*m)
+# is the most it can ever drive. 0.22 N*m keeps the mesh lash-free over the
+# whole motion envelope; above it (only past the design envelope, e.g. a
+# collision) the halves part and lash returns.
+YAW_SCISSOR_PRELOAD_NM = 0.22
+YAW_PEAK_EXTERNAL_TORQUE_NM = 0.1099 * _HEAD_YAW_MASS["estimated_inertia_kg_m2"] / 0.001080
+YAW_SERVO_CURRENT_LIMIT_TORQUE_NM = 0.9 * 0.333
 YAW_SERVO_ENVELOPE = (-10.0 + BODY_AXIS_X, 10.0 + BODY_AXIS_X, 29.0, 55.0, 99.0, 133.0)
 YAW_OPENING_RADIUS = 45.0
 # RP-01 actuator screen: peak yaw 378 deg/s = 63 rpm at the output. XC330-M181
@@ -335,16 +381,85 @@ YAW_PEAK_OUTPUT_RPM = 63.0
 YAW_SERVO_NO_LOAD_RPM = {"3.7V": 95.0, "5.0V": 129.0}
 
 PI_CENTER = (6.0 + BODY_SHIFT_X, 0.0, 102.0)
+# Pi 5 cooler-post holes (STEP PCB), from the Pi's bounding-box corner: 58 x 37 mm apart.
+PI_COOLER_HOLE_A = (PI_CENTER[0] - 45.0 + 5.25, PI_CENTER[1] - 28.8 + 11.1)
 DEVKIT_CENTER = (-24.0 + BODY_SHIFT_X, 44.0, 84.0)
-# Battery (RP03-CAD-06): low in a chassis tub under the deck, forward of the
-# motors, long side across the robot. It sits flush with the deck top and
-# drops out downward through a bottom hatch; the shell floor is open under it.
-BATTERY_SIZE = (48.0, 75.0, 24.0)
-BATTERY_CENTER = (42.0, 0.0, 44.0)  # X 18-66, Z 32-56
-BATTERY_TUB_X = (16.5, 67.0)  # rear wall outer face, front wall inner face
-BATTERY_TUB_HALF_Y = 39.0
+# Battery (RP03-CAD-06; RP03-CAD-07 for the pack): low in a chassis tub under
+# the deck, forward of the motors, long side across the robot. It sits under the
+# deck top and drops out downward through a bottom hatch; the shell floor is
+# open under it. The pack is the RP-02 working selection of 2026-09-24: a 2S1P
+# of two Samsung INR18650-25R cells lying side by side with a 2S 20 A balanced
+# BMS board on top. Cell and BMS sizes are datasheet/listing values, not a
+# vendor STEP; the BMS thickness is unverified.
+BATTERY_CELL_DIAMETER = 18.4  # 25R body max 18.33 +/- 0.07 plus sleeve
+BATTERY_CELL_LENGTH = 65.0  # 25R height 64.85 +/- 0.15 mm
+BATTERY_CELL_PITCH = 18.6  # 0.2 mm sleeve gap between the two cells
+BATTERY_END_STRAP_T = 1.0  # nickel strap, insulation cap and solder at each cell end
+BATTERY_BMS_SIZE = (20.0, 48.0, 2.9)  # RP-02 PCB-01 pack-protection board (board-specs.md sec 3): 48 x 20 mm, 1.6 mm PCB + 1.3 mm parts (proposal); was a 4.5 mm generic 2S 20 A module
+BATTERY_WRAP_T = 0.3  # heat-shrink sleeve under the cells and over the BMS
+BATTERY_SIZE = (
+    BATTERY_CELL_PITCH + BATTERY_CELL_DIAMETER + 2.0 * BATTERY_WRAP_T,
+    BATTERY_CELL_LENGTH + 2.0 * BATTERY_END_STRAP_T,
+    BATTERY_CELL_DIAMETER + BATTERY_BMS_SIZE[2] + 3.0 * BATTERY_WRAP_T,
+)  # 37.6 x 67.0 x 23.5 mm envelope
 BATTERY_TUB_FLOOR_Z = (30.5, 32.0)
 BATTERY_TUB_WALL = 1.5
+BATTERY_TUB_CLEARANCE = 1.5  # foam/retention gap between the pack and each tub wall
+BATTERY_TUB_FRONT_X = 67.0  # front wall inner face; the pack sits against the front of the tub
+BATTERY_TUB_X = (
+    BATTERY_TUB_FRONT_X - BATTERY_SIZE[0] - 2.0 * BATTERY_TUB_CLEARANCE - BATTERY_TUB_WALL,
+    BATTERY_TUB_FRONT_X,
+)  # rear wall outer face, front wall inner face
+BATTERY_TUB_HALF_Y = BATTERY_SIZE[1] / 2.0 + BATTERY_TUB_CLEARANCE + BATTERY_TUB_WALL
+BATTERY_CENTER = (
+    BATTERY_TUB_FRONT_X - BATTERY_TUB_CLEARANCE - BATTERY_SIZE[0] / 2.0,
+    0.0,
+    BATTERY_TUB_FLOOR_Z[1] + BATTERY_SIZE[2] / 2.0,
+)  # X 27.9-65.5, Z 32-55.5
+# Ballast (RP03-CAD-08): a mild-steel bar clamped under the deck between the
+# battery tub's front wall and the front crossmember, hung from two M3
+# countersunk-style screws from the deck top. It restores the register CoM to
+# the physics.md 2.5 line after the lighter RP03-CAD-07 pack.
+BALLAST_X = (69.5, 78.5)  # 1.0 mm off the tub front wall (X 68.5), 1.5 mm off the crossmember (X 80)
+BALLAST_HALF_Y = 30.0
+BALLAST_Z = (33.0, 52.0)  # top face against the deck underside (Z 52)
+BALLAST_SCREW_Y = (-20.0, 20.0)
+BALLAST_SCREW_X = 74.0
+BALLAST_DENSITY_G_CM3 = 7.85
+BALLAST_SCREW_HEAD_Z = (54.1, 56.0)  # 1.9 mm head sunk in a counterbore in the 4 mm deck
+BALLAST_SCREW_THREAD_DEPTH = 8.0
+BALLAST_BAR_G = (
+    (BALLAST_X[1] - BALLAST_X[0]) * 2.0 * BALLAST_HALF_Y * (BALLAST_Z[1] - BALLAST_Z[0])
+    - 2.0 * math.pi * 1.5**2 * BALLAST_SCREW_THREAD_DEPTH
+) / 1000.0 * BALLAST_DENSITY_G_CM3
+BALLAST_SCREWS_G = 2.0 * math.pi * (2.9**2 * 1.9 + 1.5**2 * (2.0 + BALLAST_SCREW_THREAD_DEPTH)) / 1000.0 * BALLAST_DENSITY_G_CM3
+# Power distribution boards (RP-02 board-specs.md sec 2; PROPOSAL 2026-09-25).
+# Placeholder envelopes for the four custom power/safety PCBs, the main-fuse
+# holder and the E-stop. Sizes come from the RP-02 part inventory (nothing is
+# laid out); positions are a proposal that the WS-H sizing notes could not fit
+# as first drawn, so they are re-packed here against the measured model:
+# PCB-04 and PCB-03 share the free band under the compute tray (X -27..59,
+# Z 63..77, between the body's lower cross-members) and keep 1 mm gaps to the
+# cross-members, each other and the DRV8874 carriers. The band has no slack:
+# 44 x 70 + 41 x 60 mm are the WS-H areas (3080 and 2460 mm2, reshaped from
+# 70 x 44 and 56 x 44). Boxes are (x0, x1, y0, y1, z0, z1).
+PCB_THICKNESS = 1.6
+PCB02_BOX = (-49.6, -38.0, -25.0, 25.0, 58.0, 94.0)  # vertical, parts face +X; 50 x 36 mm board on the rear-panel frame
+PCB03_BOX = (18.0, 59.0, -30.0, 30.0, 63.0, 75.0)  # motor gate, head rail, drive feed: 41 x 60 x 12
+PCB04_BOX = (-27.0, 17.0, -35.0, 35.0, 63.0, 77.1)  # branch converters: 44 x 70 x 14.1 (1 mF-class hold-up caps 12.5 tall)
+# ATOF main-fuse holder lying in the 11.3 mm channel between the tub wall and the
+# chassis rail, at the pack's +Y terminal end (PA-02: source-adjacent). The
+# Anderson SBS Mini pair (22 x 13 x 14, dimension sheet not fetched) is 13 mm wide
+# and does not fit that channel; it has no modelled home yet (open item).
+PACK_FUSE_HOLDER_BOX = (30.0, 54.0, 38.7, 48.7, 36.0, 46.0)
+ESTOP_CENTER_Z = 110.8  # IDEC XW1E on the rear panel, centre Y = 0; WS-H's Z 106 hit the Pi and cooler (449 + 33 mm3); the window between the Pi's rear parts (Z 99.55) and the panel frame's top bar (Z 122.0) is 22.45 mm
+ESTOP_REAR_OUTER_X = BODY_X_REAR - 2.4  # rear panel outer face (= BODY_X_REAR - SHELL_THICKNESS)
+ESTOP_DEPTH_BEHIND_PANEL = 46.4  # IDEC minimum, from the panel outer face; 47-49 with the terminal cover
+ESTOP_HEAD_DIAMETER = 40.0
+ESTOP_HEAD_LENGTH = 20.0  # operator height outside the panel (assumed)
+ESTOP_KEEP_OUT = (BODY_X_REAR, ESTOP_REAR_OUTER_X + ESTOP_DEPTH_BEHIND_PANEL, -14.7, 14.7, ESTOP_CENTER_Z - 11.15, ESTOP_CENTER_Z + 11.15)  # 29.4 wide x 22.3 tall (WS-H 30 x 24); trimmed to clear the Pi cooler corner (Y -14.78) and the frame bar
+REAR_USBC_WINDOW = (BODY_X_REAR, BODY_X_REAR + 8.0, -6.0, 6.0, 61.0, 67.0)  # plug corridor from the panel's rear face to PCB-02 (9 x 3.4 mm receptacle); the rear panel itself is not cut yet
+
 # Floor-contact functions live in a compact faceted keel bolted under the rear
 # crossmember, so the visible tail is free to be purely cosmetic. The rear
 # crossmember and keel move forward with the body's rear wall (RP03-CAD-06).
@@ -353,7 +468,7 @@ SKID_ROOT_DATUM = (-56.0 + REAR_CHASSIS_SHIFT_X, 0.0, 34.0)
 SKID_SHOE_SIZE = (12.0, 10.0, 2.5)  # anti-tip contact only; sized for wear, not load spreading
 SKID_SHOE_BOTTOM_Z = 3.5
 SKID_PAD_CENTER = (-43.0 + REAR_CHASSIS_SHIFT_X, 0.0, SKID_SHOE_BOTTOM_Z + SKID_SHOE_SIZE[2] / 2.0)
-TCRT_PACKAGE_SIZE = (10.2, 5.8, 7.0)
+TCRT_PACKAGE_SIZE = (10.2, 7.1, 7.0)  # Vishay STEP body incl. lens shoulders; was 5.8 wide
 TCRT_OPTICAL_FACE_Z = 10.0
 TCRT_GUARD_BOTTOM_Z = 7.0
 TCRT_REAR_LOOKAHEAD = 27.0
@@ -424,7 +539,7 @@ TACTILE_NOSE_TRAVEL = 3.0
 TACTILE_CAP_INNER_X = BALL_POD_X[1] + TACTILE_NOSE_TRAVEL
 TACTILE_CAP_WALL = 2.0
 TACTILE_NOSE_FACE_X = TACTILE_CAP_INNER_X + TACTILE_CAP_WALL
-TACTILE_CAP_ARM_X0 = 116.0
+TACTILE_CAP_ARM_X0 = 124.0
 TACTILE_CAP_CLEARANCE = 0.5  # to the pod sides; ~0.55 normal on the chamfers
 TACTILE_CAP_INNER_HALF_WIDTH = BALL_POD_HALF_WIDTH + TACTILE_CAP_CLEARANCE
 TACTILE_CAP_INNER_TOP_Z = BALL_POD_LID_Z[1] + 0.6
@@ -456,22 +571,34 @@ MASS_ROWS = [
         HEAD_ORIGIN_IN_CHASSIS[1] + HEAD_LOCAL_COM[1],
         HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_LOCAL_COM[2],
     ), "RP-01 generated mass tree"),
-    ("BODY_SHELL_AND_PANELS", 287.8, (4.0 + BODY_SHIFT_X, 0.0, 96.0), "Layout 02 CAD estimate; +15 g for the internal panel frames (+15.6 cm3 net printed volume, near-solid 2.4 mm walls); -27.2 g for the -22.7 cm3 of shell floor opened over the motors, battery hatch and pod tongue (RP03-CAD-05/06) at ~1.2 g/cm3"),
+    ("BODY_SHELL_AND_PANELS", 290.4, (4.0 + BODY_SHIFT_X, 0.0, 96.0), "Layout 02 CAD estimate; +15 g for the internal panel frames (+15.6 cm3 net printed volume, near-solid 2.4 mm walls); -27.2 g for the -22.7 cm3 of shell floor opened over the motors, battery hatch and pod tongue (RP03-CAD-05/06) at ~1.2 g/cm3; +2.6 g for the ~0.9 cm2 x 2.4 mm of shell floor returned when the battery opening shrank to the 2S1P pack tub (RP03-CAD-07)"),
     ("BODY_PRIMARY_FRAME", 335.0, (4.0 + BODY_SHIFT_X, 0.0, 94.0), "Layout 02 CAD estimate incl. mounts"),
-    ("CHASSIS_PRIMARY_FRAME", 173.3, (19.8, 0.0, 47.4), "front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added"),
+    ("CHASSIS_PRIMARY_FRAME", 172.1, (19.8, 0.0, 47.4), "front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"),
     ("WHEEL_L", 90.0, WHEEL_CENTER_L, "custom dished wheel envelope; the 13.7 cm3 pocket roughly offsets the stub shaft now listed separately"),
     ("WHEEL_R", 90.0, WHEEL_CENTER_R, "custom dished wheel envelope; the 13.7 cm3 pocket roughly offsets the stub shaft now listed separately"),
     ("AXLE_BEARINGS_AND_STUB_SHAFTS", 65.4, (0.0, 0.0, AXLE_Z), "E: four 608ZZ at ~12 g (not in the register before 2026-09-24) + two 8 mm steel stub shafts at ~8.7 g; symmetric about the centre plane"),
     ("MOTOR_L", 110.0, (0.0, 52.0, AXLE_Z), "vendor"),
     ("MOTOR_R", 110.0, (0.0, -52.0, AXLE_Z), "vendor"),
     ("BALL_TRANSFER", 16.5, (BALL_CONTACT[0], 0.0, 14.0), "vendor"),
-    ("BATTERY", 280.0, BATTERY_CENTER, "RP-02 placeholder"),
+    ("BALLAST_STEEL_BAR", round(BALLAST_BAR_G + BALLAST_SCREWS_G, 1), (sum(BALLAST_X) / 2.0, 0.0, sum(BALLAST_Z) / 2.0), "E: mild-steel bar 9 x 60 x 19 mm at 7.85 g/cm3 (less two M3 tapped holes) + two M3 screws; sized so the register CoM clears the physics.md 2.5 line after the 110 g pack (RP03-CAD-08)"),
+    ("BATTERY", 113.7, BATTERY_CENTER, "E: 2 x Samsung INR18650-25R (45 g max each = 90 g) + RP-02 PCB-01 pack-protection assembly (~5 g: 48 x 20 mm board 3.7 g + parts 1.3 g) + Bourns AC72ABD thermal cutoff and NTC (~0.7 g) + nickel straps, sleeve and AWG14 leads (~12 g) + pack-side SBS Mini housing (~6 g, U: dimension sheet not read); working selection, no purchase or measured mass; was 110 g with a generic ~8 g BMS (RP-02 board-specs.md sec 3, 2026-09-25)"),
     ("RASPBERRY_PI5_AND_COOLER", 76.0, PI_CENTER, "vendor + estimate"),
-    ("CONTROL_POWER_SENSORS", 121.5, (6.0 + BODY_SHIFT_X, 0.0, 80.0), "estimate; one rear TCRT channel; GP2Y (3.5 g) moved to BALL_NOSE_POD_SENSOR_CAP"),
-    ("BALL_NOSE_POD_SENSOR_CAP", 17.6, (110.5, 0.0, 41.2), "CAD volume: octagonal pod + lid 13.1 cm3 (X 92-128.5) and touch hood 3.6 cm3 (skirt cut at Z 29) at ~45% effective PETG density (7.5 + 2.0 g); 5 M3 screws + 2 heat-set inserts 4.6 g; GP2Y0A41SK0F 3.5 g E"),
+    # Replaces the single CONTROL_POWER_SENSORS row (121.5 g at (22, 0, 80), 2026-09-25). Masses are the RP-02
+    # board-specs.md sec 2 / WS-H estimates (PCB 1.6 mm FR4 with copper about 3.8 g per 1000 mm2 plus the parts
+    # inventory), not measurements; positions are the centres of the proposal boxes.
+    ("PCB02_CHARGE_AND_SYSTEM_POWER", 18.0, ((PCB02_BOX[0] + PCB02_BOX[1]) / 2.0, 0.0, (PCB02_BOX[4] + PCB02_BOX[5]) / 2.0), "E (proposal): 50 x 36 mm board 6.8 g + USB-C 1.2 + connectors 3 + inductor 2 + capacitors 3 + ICs 0.6 + misc 1; vertical on the rear-panel frame"),
+    ("PACK_INTERFACE_SBS_MINI_AND_FUSE", 14.0, (sum(PACK_FUSE_HOLDER_BOX[0:2]) / 2.0, sum(PACK_FUSE_HOLDER_BOX[2:4]) / 2.0, sum(PACK_FUSE_HOLDER_BOX[4:6]) / 2.0), "E: SBS Mini receptacle housing + contacts ~6 g (U; no modelled home, 13 mm wide against an 11.3 mm channel) + ATOF 15 A holder and fuse ~6 g + ~2 g; placed at the fuse holder"),
+    ("PCB03_MOTOR_GATE_AND_HEAD_RAIL", 24.0, (sum(PCB03_BOX[0:2]) / 2.0, 0.0, sum(PCB03_BOX[4:6]) / 2.0), "E (proposal): 2460 mm2 board 9.4 g + 4 x Micro-Fit+ 8 + inductor 3 + capacitors 2 + FETs, shunt, TVS, misc 1.6"),
+    ("PCB04_BRANCH_CONVERTERS", 45.0, (sum(PCB04_BOX[0:2]) / 2.0, 0.0, sum(PCB04_BOX[4:6]) / 2.0), "E (proposal): WS-H 35 g (3080 mm2 board 11.7 g + inductors 5.4 + connectors 8 + ICs 1 + polymer/ceramics ~1) with the hold-up raised from 4 x 1 mF (~8 g) to 2 x 3.3 mF (~9 g each, Ø12.5 x 20 lying) per board-specs.md sec 8.1: +10 g; the board footprint is NOT enlarged (no slack in the bay)"),
+    ("C3_DEVKITC_N8", 9.0, (-8.0, 44.0, 80.8), "E: ESP32-S3-DevKitC-1-N8 board"),
+    ("DRV8874_CARRIERS_X2", 6.0, (30.0 + BODY_SHIFT_X, 0.0, 67.4), "E: 2 x Pololu 4035 at ~3 g (weight not read); symmetric about the centre plane"),
+    ("IMU_BREAKOUT", 2.0, (BODY_AXIS_X, 0.0, 60.0), "E"),
+    ("TCRT5000_BREAKOUT_AND_CABLE", 3.0, TCRT_REAR_CENTER, "E: breakout, comparator and cable in the rear keel cartridge; was inside the old CONTROL_POWER_SENSORS row at the body centre"),
+    ("ESTOP_XW1E_BV402M_R", 40.0, ((15.0 * (ESTOP_REAR_OUTER_X - ESTOP_HEAD_LENGTH / 2.0) + 25.0 * (BODY_X_REAR + ESTOP_KEEP_OUT[1]) / 2.0) / 40.0, 0.0, ESTOP_CENTER_Z), "E (not in the register before 2026-09-25): IDEC XW1E-BV402M-R operator Ø40 + two contact blocks + terminal cover; ~15 g outside the rear panel, ~25 g inside"),
+    ("BALL_NOSE_POD_SENSOR_CAP", 15.9, (110.5, 0.0, 41.2), "CAD volume: raked prow pod + lid 11.8 cm3 (X 92-128.5) and touch hood 1.8 cm3 (2026-09-24 prow rework) at ~45% effective PETG density (6.8 + 1.0 g); 5 M3 screws + 2 heat-set inserts 4.6 g; GP2Y0A41SK0F 3.5 g E"),
     ("BODY_AUDIO", 90.0, (48.0 + BODY_SHIFT_X, 0.0, 102.0), "speaker, amplifier and four microphones; CAD estimate"),
     ("HARNESS_AND_FASTENERS", 95.0, (4.0 + BODY_SHIFT_X, 0.0, 88.0), "estimate"),
-    ("BODY_YAW_STAGE", 88.0, (BODY_AXIS_X, 13.5, 134.3), "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 2 x 6 g 1:1 spur gears + 2 g clamp ring + 1 g coupling shaft; no SKU"),
+    ("BODY_YAW_STAGE", 89.0, (BODY_AXIS_X, 13.5, 134.3), "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 6 g driven spur + 6 g scissor pinion (two 2.4 mm halves) + 1 g torsion spring and retaining clip (2026-09-25) + 2 g clamp ring + 1 g coupling shaft; no SKU"),
     ("REAR_SKID_KEEL", 12.0, (-55.9 + REAR_CHASSIS_SHIFT_X, 0.0, 20.4), "CAD volume: 15.4 cm3 keel body at ~45% effective PETG density, 12x10 mm shoe, guards, 4 M3 screws"),
 ]
 if REAR_TAIL_ENABLED:
@@ -550,6 +677,11 @@ def _purchased_step(filename, label, rotations=()):
     part = import_step(str(PURCHASED / filename))
     for axis, angle in rotations:
         part = part.rotate(axis, angle)
+    solids = list(part.solids())
+    if len(solids) > 1:
+        # Booleans on a nested imported assembly can read child placements as
+        # local (false clashes); flat world-located solids intersect correctly.
+        part = Compound(label=label, children=solids)
     part.label = label
     return part
 
@@ -560,9 +692,14 @@ def _place(shape, x=None, y=None, z=None, ref="center"):
     delta = []
     for axis, target in zip("XYZ", (x, y, z)):
         lo, hi = getattr(box.min, axis), getattr(box.max, axis)
-        current = {"center": (lo + hi) / 2.0, "min": lo, "max": hi}[ref if not isinstance(ref, dict) else ref.get(axis, "center")]
+        current = {"center": (lo + hi) / 2.0, "min": lo, "max": hi, "origin": 0.0}[ref if not isinstance(ref, dict) else ref.get(axis, "center")]
         delta.append(0.0 if target is None else target - current)
-    return shape.moved(Location(tuple(delta)))
+    moved = shape.moved(Location(tuple(delta)))
+    solids = list(moved.solids())
+    if len(solids) > 1:
+        # Re-flatten after the move so each solid carries its world placement.
+        moved = Compound(label=shape.label, children=solids)
+    return moved
 
 
 def _beam_xz(x0, z0, x1, z1, width, thickness, label, color):
@@ -619,19 +756,23 @@ def _octagon_profile(x, half_width, z0, z1, lower_chamfer, upper_chamfer):
     return (Plane.YZ * Polygon(*points, align=None)).moved(Location((x, 0.0, 0.0)))
 
 
+def _pod_face(x, hw, top_z, upper_chamfer, grow=0.0):
+    """Octagonal prow section at X; `grow` offsets every edge (cap cavity and skin)."""
+    face = _octagon_profile(x, hw, BALL_POD_Z0, top_z, BALL_POD_LOWER_CHAMFER, upper_chamfer)
+    if grow:
+        face = offset(face, grow, kind=Kind.INTERSECTION).faces()[0]
+    return face
+
+
 def _ball_pod_solid():
-    """Pod + lid outer solid: one octagonal section from the crossmember to the front."""
-    x0, x1 = BALL_POD_X
-    section = _octagon_profile(
-        x0, BALL_POD_HALF_WIDTH, BALL_POD_Z0, BALL_POD_LID_Z[1], BALL_POD_LOWER_CHAMFER, BALL_POD_UPPER_CHAMFER
-    )
-    return extrude(section, amount=x1 - x0)
+    """Pod + lid outer solid: a ruled loft of the prow stations, crossmember to face."""
+    return loft([_pod_face(*station) for station in BALL_POD_STATIONS], ruled=True)
 
 
-def _touch_cap_cavity_profile(x):
-    return _octagon_profile(
-        x, TACTILE_CAP_INNER_HALF_WIDTH, TACTILE_CAP_Z[0] - 1.0, TACTILE_CAP_INNER_TOP_Z, 0.0, TACTILE_CAP_INNER_UPPER_CHAMFER
-    )
+def _lid_below():
+    """Everything under the lid underside (level over the belt, stepped down over the lens)."""
+    points = list(BALL_POD_LID_UNDERSIDE) + [(BALL_POD_LID_UNDERSIDE[-1][0], 20.0), (BALL_POD_LID_UNDERSIDE[0][0], 20.0)]
+    return extrude(Plane.XZ * Polygon(*points, align=None), amount=80.0).moved(Location((0.0, -40.0, 0.0)))
 
 
 def _z_cylinder(radius, z0, z1, x, y):
@@ -653,16 +794,20 @@ def ball_pod():
     """Printed pod: seats on the vendor flange, bolts to the front crossmember."""
     x0, x1 = BALL_POD_X
     z0 = BALL_POD_Z0
-    z1 = BALL_POD_LID_Z[0]
     floor_z = z0 + BALL_POD_SEAT_THICKNESS
-    pod = _ball_pod_solid() & _block(x0 - 1.0, x1 + 1.0, -50.0, 50.0, z0 - 1.0, z1)
+    pod = _ball_pod_solid() & _lid_below()
     pocket_x0, pocket_hw = BALL_POD_POCKET
-    pod = pod - _block(pocket_x0, x1 + 1.0, -pocket_hw, pocket_hw, floor_z, z1 + 1.0)
-    # Two rails carry the GP2Y just above the ball-screw heads.
-    sensor_x0 = FRONT_RANGE_SENSOR_FACE_X - FRONT_RANGE_SENSOR_SIZE[0]
-    sensor_z0 = FRONT_RANGE_SENSOR_Z - FRONT_RANGE_SENSOR_SIZE[2] / 2.0
+    pod = pod - _block(pocket_x0, FRONT_RANGE_BODY_FRONT_X + 0.2, -pocket_hw, pocket_hw, floor_z, BALL_POD_LID_Z[1] + 1.0)
+    # Ahead of the sensor body only the lens hood and the tact switch need room.
+    pod = pod - _block(FRONT_RANGE_BODY_FRONT_X, x1 + 1.0, -14.0, 14.0, floor_z, BALL_POD_LID_Z[1] + 1.0)
+    # The sensor's belt (44 mm across, x 111.8-119.4) sits in side slots under the lid.
+    ex0, ex1, ey0, ey1 = BALL_POD_EAR_SLOT
     for sign in (1.0, -1.0):
-        pod = pod + _block(sensor_x0, x1, *sorted((sign * 13.5, sign * pocket_hw)), floor_z, sensor_z0)
+        pod = pod - _block(ex0, ex1, *sorted((sign * ey0, sign * ey1)), FRONT_RANGE_SENSOR_BOTTOM_Z, BALL_POD_LID_Z[0])
+    # Two rails carry the GP2Y body just above the ball-screw heads.
+    sensor_x0 = FRONT_RANGE_SENSOR_FACE_X - FRONT_RANGE_SENSOR_SIZE[0]
+    for sign in (1.0, -1.0):
+        pod = pod + _block(sensor_x0, FRONT_RANGE_BODY_FRONT_X - 0.6, *sorted((sign * 10.5, sign * pocket_hw)), floor_z, FRONT_RANGE_SENSOR_BOTTOM_Z)
     for x, y in ball_screw_points():
         pod = pod - _z_cylinder(1.65, z0 - 1.0, floor_z + 1.0, x, y)
     for y, z in BALL_POD_SCREWS_YZ:
@@ -671,20 +816,15 @@ def ball_pod():
 
 
 def ball_pod_lid():
-    x0, x1 = BALL_POD_X
-    lid_z0, lid_z1 = BALL_POD_LID_Z
-    lid = _ball_pod_solid() & _block(x0 - 1.0, x1 + 1.0, -50.0, 50.0, lid_z0, lid_z1 + 1.0)
-    switch = _tactile_switch_block(0.2).bounding_box()
-    plunger_bore = _axial_bore_x(1.2, switch.max.X - 1.0, x1 + 1.0, 0.0, switch.center().Z)
-    lid = lid - [_tactile_switch_block(0.2), plunger_bore]
+    lid = _ball_pod_solid() - _lid_below()
     return _paint(lid, "BALL_POD_SENSOR_LID", SLATE, 1.0)
 
 
 def _tactile_switch_block(grow=0.0):
-    # Side-actuated micro tact switch (~6 x 6 x 3.5 mm) in the lid front.
-    x1 = BALL_POD_X[1] - 1.5
-    z0 = BALL_POD_LID_Z[0] + 0.5
-    return _block(x1 - 6.0 - grow, x1 + grow, -3.0 - grow, 3.0 + grow, z0 - grow, z0 + 3.5 + grow)
+    # Side-actuated micro tact switch (~6 x 6 x 3.5 mm) on the pod floor, off the sensor's lens line.
+    x1 = 128.1
+    z0 = BALL_POD_Z0 + BALL_POD_SEAT_THICKNESS
+    return _block(x1 - 6.0 - grow, x1 + grow, 7.0 - grow, 13.0 + grow, z0, z0 + 3.5 + grow)
 
 
 def ball_pod_hardware():
@@ -823,7 +963,7 @@ def rear_skid_tcrt_keel():
         ruled=True,
     )
     px, py, pz = TCRT_PACKAGE_SIZE
-    sensor_pocket = _block(tx - 6.0, tx + 6.0, -5.1, 5.1, TCRT_OPTICAL_FACE_Z - 1.0, tz + 5.2)
+    sensor_pocket = _block(tx - 6.0, tx + 6.0, -5.1, 5.1, TCRT_OPTICAL_FACE_Z - 1.0, TCRT_OPTICAL_FACE_Z + 10.8)  # 10.5 mm real part incl. leads
     connector_channel = _block(tx + 4.0, tx + 17.0, -3.5, 3.5, tz + 2.0, tz + 7.0)
     cable_x = tx + 13.0
     cable_bore = _vertical_bore(3.0, tz + 2.0, REAR_KEEL_TOP_Z + 1.0, cable_x, 0.0)
@@ -900,27 +1040,44 @@ def rear_ski_keel():
     return rear_skid_tcrt_module()
 
 
+def _station_at(x):
+    """Linear interpolation of the prow stations at X (half width, top Z, upper chamfer)."""
+    st = BALL_POD_STATIONS
+    for (xa, *va), (xb, *vb) in zip(st, st[1:]):
+        if xa - 1e-9 <= x <= xb + 1e-9:
+            t = (x - xa) / (xb - xa)
+            return (x, *[a + (b - a) * t for a, b in zip(va, vb)])
+    raise ValueError(x)
+
+
+def _cap_sections(x_first, grow):
+    """Prow stations ahead of the cap's rear edge, grown by `grow` (cap cavity or skin)."""
+    stations = [_station_at(x_first)] + [st for st in BALL_POD_STATIONS if st[0] > x_first + 1e-6]
+    return [_pod_face(*st, grow=grow) for st in stations]
+
+
 def tactile_ball_nose():
-    """Octagonal touch hood over the pod front, from the pod seat to above the lid."""
-    z0, z1 = TACTILE_CAP_Z
-    hw = TACTILE_CAP_HALF_WIDTH
+    """Raked touch hood over the prow front: pod seat up to the lid, with a visor-slit window."""
     inner_x = TACTILE_CAP_INNER_X
     face_x = TACTILE_NOSE_FACE_X
-    lower, upper = TACTILE_CAP_LOWER_CHAMFER, TACTILE_CAP_UPPER_CHAMFER
-    outer = loft([
-        _octagon_profile(TACTILE_CAP_ARM_X0, hw, z0, z1, lower, upper),
-        _octagon_profile(inner_x, hw, z0, z1, lower, upper),
-        _octagon_profile(face_x, hw - 1.5, z0 + 1.0, z1 - 1.0, lower - 0.5, upper - 0.5),
-    ], ruled=True)
-    cavity = extrude(_touch_cap_cavity_profile(TACTILE_CAP_ARM_X0 - 1.0), amount=inner_x - TACTILE_CAP_ARM_X0 + 1.0)
+    arm_x0 = TACTILE_CAP_ARM_X0
+    gap = TACTILE_CAP_CLEARANCE
+    skin = gap + TACTILE_CAP_WALL
+    front = BALL_POD_STATIONS[-1]
+    outer = loft(_cap_sections(arm_x0, skin), ruled=True)
+    outer = outer + extrude(_pod_face(front[0], *front[1:], grow=skin), amount=inner_x - front[0])
+    outer = outer + loft([_pod_face(inner_x, *front[1:], grow=skin), _pod_face(face_x, *front[1:], grow=0.8)], ruled=True)
+    outer = outer & _block(arm_x0 - 1.0, face_x + 1.0, -60.0, 60.0, BALL_POD_Z0, 80.0)
+    cavity = loft(_cap_sections(arm_x0 - 1.0, gap), ruled=True)
+    cavity = cavity + extrude(_pod_face(front[0], *front[1:], grow=gap), amount=inner_x - front[0])
     cap = outer - cavity
     cap = cap - _front_range_window(FRONT_RANGE_WINDOW_CLEARANCE, inner_x - 1.0, face_x + 1.0)
     cap = _paint(cap, "BALL_NOSE_TOUCH_CAP", IVORY, TACTILE_CAP_ALPHA)
     # Compliant anchors tie each side arm to the pod; they are the cap's only support.
-    gap_y = (BALL_POD_HALF_WIDTH, TACTILE_CAP_INNER_HALF_WIDTH)
+    hw_rear = _station_at(arm_x0)[1]  # constant from x 123.5 to 126, so the anchors sit flush
     flexures = [
         _paint(
-            _block(TACTILE_CAP_ARM_X0, TACTILE_CAP_ARM_X0 + 4.0, *sorted((sign * gap_y[0], sign * gap_y[1])), 36.0, 46.0),
+            _block(arm_x0, BALL_POD_STATIONS[-2][0], *sorted((sign * hw_rear, sign * (hw_rear + gap))), 33.5, 40.5),
             f"BALL_NOSE_FLEXURE_{side}",
             FRAME_BLUE,
             1.0,
@@ -930,14 +1087,14 @@ def tactile_ball_nose():
     switch = _paint(_tactile_switch_block(), "BALL_NOSE_TACT_SWITCH", "#7A4A21", 0.92)
     sb = _tactile_switch_block().bounding_box()
     plunger_x0 = sb.max.X
-    plunger = _cylinder(1.0, inner_x - plunger_x0, ((plunger_x0 + inner_x) / 2.0, 0.0, sb.center().Z), "BALL_NOSE_SWITCH_PLUNGER", STEEL, 1.0, "x")
+    plunger = _cylinder(1.0, inner_x - plunger_x0, ((plunger_x0 + inner_x) / 2.0, sb.center().Y, sb.center().Z), "BALL_NOSE_SWITCH_PLUNGER", STEEL, 1.0, "x")
     travel = _paint(
-        extrude(_touch_cap_cavity_profile(BALL_POD_X[1]), amount=TACTILE_NOSE_TRAVEL)
-        & _block(BALL_POD_X[1] - 1.0, inner_x + 1.0, -hw, hw, z0, z1),
+        extrude(_pod_face(front[0], *front[1:], grow=gap), amount=inner_x - front[0]),
         "BALL_NOSE_3MM_TRAVEL_RESERVE",
         "#D95FC5",
         0.14,
     )
+    travel = travel & _block(BALL_POD_X[1], inner_x + 1.0, -60.0, 60.0, BALL_POD_Z0 - 2.0, 80.0)
     return Compound(label="BALL_NOSE_CONCEALED_CONTACT_MODULE", children=[cap, *flexures, switch, plunger, travel])
 
 
@@ -996,16 +1153,16 @@ def _service_panel_outline(face, x0, x1, grow=0.0):
 
 
 def _front_range_window(clearance, x0, x1):
-    """Forward-looking clearance block around the GP2Y envelope's face."""
-    _, dy, dz = FRONT_RANGE_SENSOR_SIZE
-    return _block(
-        x0,
-        x1,
-        FRONT_RANGE_SENSOR_Y - dy / 2.0 - clearance,
-        FRONT_RANGE_SENSOR_Y + dy / 2.0 + clearance,
-        FRONT_RANGE_SENSOR_Z - dz / 2.0 - clearance,
-        FRONT_RANGE_SENSOR_Z + dz / 2.0 + clearance,
-    )
+    """Visor slit through the cap: a full-round-ended slot centred on the lens axis."""
+    width, height = FRONT_RANGE_WINDOW_SIZE
+    width, height = width + 2.0 * (clearance - 1.0), height + 2.0 * (clearance - 1.0)
+    r = height / 2.0
+    half = width / 2.0 - r
+    zc = FRONT_RANGE_SENSOR_Z
+    slot = _block(x0, x1, FRONT_RANGE_SENSOR_Y - half, FRONT_RANGE_SENSOR_Y + half, zc - r, zc + r)
+    for sign in (1.0, -1.0):
+        slot = slot + _axial_bore_x(r, x0, x1, FRONT_RANGE_SENSOR_Y + sign * half, zc)
+    return slot
 
 
 def _panel(x0, x1, width_bottom, width_top, z0, z1, label, color, alpha):
@@ -1187,6 +1344,42 @@ def panel_mount_hardware():
     return Compound(label="PANEL_MOUNT_HARDWARE", children=parts)
 
 
+def battery_pack():
+    """2S1P of two 18650 cells lying across the robot, BMS board on top.
+
+    Cell axes run along Y. Straps and insulation are one plate at each cell
+    end. The BMS lies on the cells with its long side along Y.
+    """
+    bx, by, bz = BATTERY_CENTER
+    z0 = bz - BATTERY_SIZE[2] / 2.0
+    r = BATTERY_CELL_DIAMETER / 2.0
+    cell_z = z0 + BATTERY_WRAP_T + r
+    cells = [
+        _cylinder(r, BATTERY_CELL_LENGTH, (bx + dx, by, cell_z), f"BATTERY_CELL_{name}_SAMSUNG_25R_ENVELOPE", "#3D9B62", 1.0, "y")
+        for name, dx in (("A", -BATTERY_CELL_PITCH / 2.0), ("B", BATTERY_CELL_PITCH / 2.0))
+    ]
+    strap_dx = BATTERY_CELL_PITCH + BATTERY_CELL_DIAMETER
+    straps = [
+        _box(strap_dx, BATTERY_END_STRAP_T, BATTERY_CELL_DIAMETER, (bx, by + sign * (BATTERY_CELL_LENGTH + BATTERY_END_STRAP_T) / 2.0, cell_z), f"BATTERY_END_STRAP_{tag}", STEEL, 1.0)
+        for tag, sign in (("FRONT_Y", 1.0), ("REAR_Y", -1.0))
+    ]
+    bms_z0 = z0 + BATTERY_WRAP_T + BATTERY_CELL_DIAMETER + BATTERY_WRAP_T
+    bms = _box(*BATTERY_BMS_SIZE, (bx, by, bms_z0 + BATTERY_BMS_SIZE[2] / 2.0), "BATTERY_BMS_PCB01_PACK_PROTECTION", "#1E6B45", 1.0)
+    return Compound(label="BATTERY_2S1P_18650_PACK", children=[*cells, *straps, bms])
+
+
+def ballast_bar():
+    """Steel bar under the deck, ahead of the battery tub (RP03-CAD-08)."""
+    bar = _block(*BALLAST_X, -BALLAST_HALF_Y, BALLAST_HALF_Y, *BALLAST_Z)
+    for y in BALLAST_SCREW_Y:
+        bar = bar - _z_cylinder(1.5, BALLAST_Z[1] - BALLAST_SCREW_THREAD_DEPTH, BALLAST_Z[1] + 0.5, BALLAST_SCREW_X, y)
+    parts = [_paint(bar, "BALLAST_STEEL_BAR", STEEL, 1.0)]
+    for tag, y in zip(("L", "R"), BALLAST_SCREW_Y):
+        parts.append(_paint(_z_cylinder(2.9, *BALLAST_SCREW_HEAD_Z, BALLAST_SCREW_X, y), f"BALLAST_M3_HEAD_{tag}", STEEL, 1.0))
+        parts.append(_paint(_z_cylinder(1.5, BALLAST_Z[1] - BALLAST_SCREW_THREAD_DEPTH, BALLAST_SCREW_HEAD_Z[0], BALLAST_SCREW_X, y), f"BALLAST_M3_SHANK_{tag}", STEEL, 1.0))
+    return Compound(label="BALLAST_BAR", children=parts)
+
+
 def battery_tub():
     """Chassis tub under the deck: thin walls and a removable bottom hatch.
 
@@ -1224,6 +1417,9 @@ def chassis_frame():
         deck = deck - _z_cylinder(BODY_MOUNT_CLEARANCE_RADIUS, DECK_Z - 3.0, DECK_Z + 3.0, x, y)
     for x, y in BODY_LOCATING_POINTS:
         deck = deck - _z_cylinder(2.05, DECK_Z - 3.0, DECK_Z + 3.0, x, y)
+    for y in BALLAST_SCREW_Y:
+        deck = deck - _z_cylinder(1.7, DECK_Z - 3.0, DECK_Z + 3.0, BALLAST_SCREW_X, y)
+        deck = deck - _z_cylinder(3.2, BALLAST_SCREW_HEAD_Z[0] - 0.1, DECK_Z + 3.0, BALLAST_SCREW_X, y)
     deck = _paint(deck, "CHASSIS_DECK_WITH_BODY_INTERFACE", FRAME_BLUE, 1.0)
     rail_parts = []
     for sign, side in ((1.0, "L"), (-1.0, "R")):
@@ -1254,6 +1450,7 @@ def chassis_frame():
         ),
         deck,
         battery_tub(),
+        ballast_bar(),
     ]
 
     # Axle stack (RP03-CAD-05). The wheel centres stay at the frozen 170 mm
@@ -1432,46 +1629,79 @@ def bearing_pair(side: str):
 
 
 def ball_transfer():
-    bx = BALL_CONTACT[0]
-    ball_center_z = BALL_DIAMETER / 2.0
-    ball = _sphere(BALL_DIAMETER / 2.0, (bx, 0.0, ball_center_z), "BALL_TRANSFER_POM_BALL", IVORY, 1.0)
-
-    # Every vendor solid is built from its base Z so the stack closes:
-    # lip 9.5-12.5, housing 9.5 up to the flange, flange up to the 29 mm seat.
-    ball_pocket = Sphere(BALL_DIAMETER / 2.0 + 0.45).moved(Location((bx, 0.0, ball_center_z)))
-    flange_z0 = BALL_NATIVE_HEIGHT - BALL_FLANGE_THICKNESS
-    cup = _z_cylinder(BALL_HOUSING_RADIUS, 9.5, flange_z0, bx, 0.0) - ball_pocket
-    cup = _paint(cup, "BALL_TRANSFER_PURCHASED_HOUSING", SLATE, 1.0)
-
-    lip = _z_cylinder(16.8, 9.5, 12.5, bx, 0.0) - _z_cylinder(BALL_HOUSING_RADIUS, 9.0, 13.0, bx, 0.0) - ball_pocket
-    lip = _paint(lip, "BALL_TRANSFER_RETAINING_LIP", STEEL, 1.0)
-
-    flange = _z_cylinder(BALL_FLANGE_OD / 2.0, flange_z0, BALL_NATIVE_HEIGHT, bx, 0.0) - ball_pocket
-    for hx, hy in ball_screw_points():
-        flange = flange - _z_cylinder(1.35, flange_z0 - 1.0, BALL_NATIVE_HEIGHT + 1.0, hx, hy)
-    flange = _paint(flange, "BALL_TRANSFER_PURCHASED_3HOLE_FLANGE", BRONZE, 1.0)
-
-    # Internal rollers and vendor fasteners are intentionally suppressed: the
-    # purchased transfer is represented as one serviceable SKU envelope.
-    return Compound(label="BALL_TRANSFER_PURCHASED_FIXED_MODULE", children=[ball, cup, lip, flange])
+    """Pololu 1" ball caster (2691) from its STEP, ball contact on BALL_CONTACT."""
+    part = import_step(str(PURCHASED / BALL_CASTER_STEP))
+    part = part.moved(Location((BALL_CONTACT[0], BALL_CONTACT[1], BALL_CONTACT[2])))
+    # STEP export order: ball, base (flange), shell (housing), three rollers. Flatten after the
+    # move so every solid carries its world placement.
+    ball, base, shell, *rollers = list(part.solids())
+    children = [
+        _paint(ball, "BALL_TRANSFER_POM_BALL", IVORY, 1.0),
+        _paint(base, "BALL_TRANSFER_PURCHASED_3HOLE_FLANGE", "#1B1E21", 1.0),
+        _paint(shell, "BALL_TRANSFER_PURCHASED_HOUSING", "#1B1E21", 1.0),
+    ]
+    children += [_paint(r, f"BALL_TRANSFER_ROLLER_{k}", "#E9ECEE", 1.0) for k, r in enumerate(rollers, start=1)]
+    return Compound(label="BALL_TRANSFER_PURCHASED_FIXED_MODULE", children=children)
 
 
 def raspberry_pi5():
     pi = import_step(str(PURCHASED / "raspberry_pi_5.step")).rotate(Axis.X, 90.0)
     pi = _center_at(pi, PI_CENTER)
-    pi.label = "C0_RASPBERRY_PI5_EXACT_STEP"
+    pi = Compound(label="C0_RASPBERRY_PI5_EXACT_STEP", children=list(pi.solids()))  # flat: see _purchased_step
     return pi
+
+
+def power_distribution_boards():
+    """RP-02 custom power/safety board envelopes, main-fuse holder and E-stop (proposal).
+
+    Each board is a 1.6 mm PCB plate plus a translucent parts envelope up to the
+    stated total height. The E-stop keep-out and the rear USB-C window are
+    reserved volumes, not solids that belong to a part. The panel cut-outs are
+    not modelled: the rear panel is still uncut.
+    """
+    def board(name, box, color, pcb_at_top=False):
+        x0, x1, y0, y1, z0, z1 = box
+        parts = []
+        if name == "PCB02_CHARGE_AND_SYSTEM_POWER":
+            # Vertical board: the PCB plate is the -X face, parts stand out toward +X.
+            parts.append(_paint(_block(x0, x0 + PCB_THICKNESS, y0, y1, z0, z1), f"{name}_PCB", PCB_GREEN, 1.0))
+            parts.append(_paint(_block(x0 + PCB_THICKNESS, x1, y0, y1, z0, z1), f"{name}_PARTS_ENVELOPE", color, 0.55))
+        else:
+            parts.append(_paint(_block(x0, x1, y0, y1, z0, z0 + PCB_THICKNESS), f"{name}_PCB", PCB_GREEN, 1.0))
+            parts.append(_paint(_block(x0, x1, y0, y1, z0 + PCB_THICKNESS, z1), f"{name}_PARTS_ENVELOPE", color, 0.55))
+        return Compound(label=name, children=parts)
+
+    ex0, ex1, ey0, ey1, ez0, ez1 = ESTOP_KEEP_OUT
+    head_x = ESTOP_REAR_OUTER_X - ESTOP_HEAD_LENGTH / 2.0
+    estop = Compound(label="ESTOP_XW1E_BV402M_R", children=[
+        _cylinder(ESTOP_HEAD_DIAMETER / 2.0, ESTOP_HEAD_LENGTH, (head_x, 0.0, ESTOP_CENTER_Z), "ESTOP_XW1E_OPERATOR_HEAD_D40", "#D8352A", 1.0, "x"),
+        _paint(_block(ex0, ex1, ey0, ey1, ez0, ez1), "ESTOP_XW1E_BEHIND_PANEL_KEEP_OUT", "#D8352A", 0.18),
+        _paint(_block(*REAR_USBC_WINDOW), "REAR_PANEL_USBC_WINDOW_KEEP_OUT", "#79C4CB", 0.30),
+    ])
+    parts = [
+        board("PCB02_CHARGE_AND_SYSTEM_POWER", PCB02_BOX, "#D38132"),
+        board("PCB03_MOTOR_GATE_AND_HEAD_RAIL", PCB03_BOX, "#D38132"),
+        board("PCB04_BRANCH_CONVERTERS", PCB04_BOX, "#D38132"),
+        _paint(_block(*PACK_FUSE_HOLDER_BOX), "PACK_ATOF_FUSE_HOLDER_ENVELOPE", "#C55842", 0.74),
+        estop,
+    ]
+    return Compound(label="POWER_DISTRIBUTION_BOARDS", children=parts)
 
 
 def electronics():
     # The battery lives in the chassis tub (RP03-CAD-06); it stays in this
     # group so the viewer's electronics toggle still shows it.
-    battery = _box(*BATTERY_SIZE, BATTERY_CENTER, "BATTERY_RP02_ENVELOPE", "#3159B8", 0.72)
+    battery = battery_pack()
     pi_tray = _box(108.0, 76.0, 3.0, (PI_CENTER[0], 0.0, 86.0), "COMPUTE_TRAY", "#7A858B", 1.0)
-    # Thin axis of the GrabCAD heatsink+fan STEP is Y; -90 deg about X puts it on Z
-    # with the base plate down. Top of the fan sits at PI_COOLER_TOP_Z.
-    cooler = _purchased_step("Heatsink+fan RPi-5.STEP", "PI5_ACTIVE_COOLER_STEP", [(Axis.X, -90.0)])
-    cooler = _place(cooler, PI_CENTER[0], PI_CENTER[1], PI_COOLER_TOP_Z, ref={"Z": "max"})
+    # GrabCAD heatsink+fan STEP: +90 deg about X (the Pi's own turn) puts the two spring posts,
+    # 58 x 37.6 mm apart, over the Pi's two cooler holes with the tips down; the -90 deg first used
+    # mirrored that diagonal. The heatsink plate then sits on the tallest package under it (Z 97.7).
+    cooler = _purchased_step("Heatsink+fan RPi-5.STEP", "PI5_ACTIVE_COOLER_STEP", [(Axis.X, 90.0)])
+    posts = sorted((sl for sl in cooler.solids() if 100.0 < sl.volume < 140.0), key=lambda sl: sl.bounding_box().center().X)
+    post_a = posts[0].bounding_box().center()
+    plate_z0 = max(cooler.solids(), key=lambda sl: sl.volume).bounding_box().min.Z
+    cooler = cooler.moved(Location((PI_COOLER_HOLE_A[0] - post_a.X, PI_COOLER_HOLE_A[1] - post_a.Y, PI_SOC_TOP_Z - plate_z0)))
+    cooler = Compound(label="PI5_ACTIVE_COOLER_STEP", children=list(cooler.solids()))
     # DevKitC: -90 deg about Z puts the USB end at the rear (-X); board bottom
     # sits on the old envelope floor (Z 78).
     devkit = _purchased_step("ESP32-S3-WROOM-1_devkit_2xUSBC_c.step", "C3_ESP32_S3_DEVKITC_STEP", [(Axis.Z, -90.0)])
@@ -1482,8 +1712,7 @@ def electronics():
         drv = _purchased_step("pololu_drv8874_carrier.step", f"DRV8874_{side}_INSTALLED")
         drivers.append(_place(drv, 30.0 + BODY_SHIFT_X, y, 66.0, ref={"Z": "min"}))
     driver_l, driver_r = drivers
-    power = _box(48.0, 36.0, 18.0, (-35.0 + BODY_SHIFT_X, -35.0, 75.0), "POWER_DISTRIBUTION_RP02_ENVELOPE", "#D38132", 0.74)
-    safety = _box(42.0, 28.0, 14.0, (-34.0 + BODY_SHIFT_X, 35.0, 75.0), "SAFETY_AND_WATCHDOG_ENVELOPE", "#C55842", 0.74)
+    # The old power-distribution and safety envelopes are replaced by the RP-02 boards (power_distribution_boards).
     imu = _box(25.0, 25.0, 5.0, (BODY_AXIS_X, 0.0, 60.0), "IMU_BREAKOUT_ENVELOPE", "#39BBD3", 0.80)
     return Compound(label="BODY_ELECTRONICS", children=[
         battery,
@@ -1493,8 +1722,7 @@ def electronics():
         devkit,
         driver_l,
         driver_r,
-        power,
-        safety,
+        power_distribution_boards(),
         imu,
     ])
 
@@ -1522,10 +1750,10 @@ def sensors():
     body_x0 = FRONT_RANGE_SENSOR_FACE_X - depth
     connector_x0 = body_x0 - FRONT_RANGE_CONNECTOR_DEPTH
     parts = [
-        # STEP lenses face -Y; +90 deg about Z points them along +X. Lens front on FACE_X.
+        # STEP lenses face -Y; +90 deg about Z points them along +X. Lens tip on FACE_X.
         _place(
             _purchased_step("sharp_gp2y0a41sk0f.step", "GP2Y0A41SK0F_STEP", [(Axis.Z, 90.0)]),
-            FRONT_RANGE_SENSOR_FACE_X, FRONT_RANGE_SENSOR_Y, FRONT_RANGE_SENSOR_Z, ref={"X": "max", "Z": "center"},
+            FRONT_RANGE_SENSOR_FACE_X, FRONT_RANGE_SENSOR_Y, FRONT_RANGE_SENSOR_BOTTOM_Z, ref={"X": "max", "Z": "min"},
         ),
         _paint(
             _block(connector_x0, body_x0, -5.0, 5.0, FRONT_RANGE_SENSOR_Z - 4.0, FRONT_RANGE_SENSOR_Z + 5.0),
@@ -1594,18 +1822,23 @@ def body_yaw_stage():
     px += BODY_AXIS_X
     gear_z = (YAW_BEARING_Z[1] + 1.0, YAW_DISC_PLATE_BOTTOM_Z)
     x0, x1, y0, y1, z0, z1 = YAW_SERVO_ENVELOPE
-    pinion = Cylinder(YAW_GEAR_OUTER_RADIUS, gear_z[1] - gear_z[0]).moved(Location((px, py, sum(gear_z) / 2.0)))
+    # Scissor pinion: fixed half (keyed to the shaft) below, spring-loaded
+    # loose half above, 0.2 mm apart; both engage the 5 mm driven gear face.
+    half = YAW_SCISSOR_HALF_FACE
+    pinion_fixed = Cylinder(YAW_GEAR_OUTER_RADIUS, half).moved(Location((px, py, gear_z[0] + half / 2.0)))
+    pinion_loose = Cylinder(YAW_GEAR_OUTER_RADIUS, half).moved(Location((px, py, gear_z[0] + half + YAW_SCISSOR_GAP + half / 2.0)))
     shaft = Cylinder(2.5, gear_z[0] - z1).moved(Location((px, py, (gear_z[0] + z1) / 2.0)))
     return Compound(label="BODY_YAW_STAGE", children=[
         _paint(_ring(*YAW_BEARING_RADII, *YAW_BEARING_Z), "YAW_THIN_SECTION_BEARING_ENVELOPE", STEEL, 0.9),
-        _paint(pinion, "YAW_DRIVE_SPUR_1TO1", STEEL, 1.0),
+        _paint(pinion_fixed, "YAW_DRIVE_SCISSOR_PINION_FIXED_HALF", STEEL, 1.0),
+        _paint(pinion_loose, "YAW_DRIVE_SCISSOR_PINION_SPRUNG_HALF", BRONZE, 1.0),
         _paint(shaft, "YAW_SERVO_COUPLING_SHAFT", STEEL, 1.0),
         # XC330 dummy assembly: output horn axis is STEP Z, body runs -24.5..+9.5 in STEP Y
-        # from that axis. +180 deg about Z sends the body toward +Y, clear of the Pi
-        # cooler, with the output axis on the pinion centre and the horn top at z1.
+        # from that axis. -90 deg about Z runs the body along X (+180 hit the left upper rail; both clear the Pi
+        # cooler), output axis on the pinion centre, horn top at z1.
         _place(
-            _purchased_step("robotis_xc330_dummy_assy.step", "YAW_SERVO_XC330_M181_STEP", [(Axis.Z, 180.0)]),
-            px, py, z1, ref={"X": "center", "Y": "center", "Z": "max"},
+            _purchased_step("robotis_xc330_dummy_assy.step", "YAW_SERVO_XC330_M181_STEP", [(Axis.Z, -90.0)]),
+            px, py, z1, ref={"X": "origin", "Y": "origin", "Z": "max"},
         ),
     ])
 

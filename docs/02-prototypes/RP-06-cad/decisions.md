@@ -18,6 +18,9 @@ chassis CAD is accepted, each retained choice must be propagated deliberately to
 | `RP03-CAD-04` | **Fixed in CAD context — pending permanent propagation** | Replace the `RP03-CAD-02` nose structure with one printed ball pod that seats on the vendor flange, and move the GP2Y obstacle sensor into it on the centreline, ahead of the ball contact. Keep the ball fixed at `X=110`. |
 | `RP03-CAD-05` | **Fixed in CAD context — pending permanent propagation** | Make the drivetrain physically fit: bolt each coaxial gearmotor's face to a chassis flange whose boss carries the 608 pair inside a pocket in a dished wheel, run the wheel on an 8 mm stub shaft, delete the axle crossmember, and carry the rails round the gearboxes. Keep track, wheel envelope and axle height frozen. |
 | `RP03-CAD-06` | **Fixed in CAD context — pending permanent propagation** | Move every body-side part 16 mm forward of the drive axle and put the battery in a low chassis tub, to bring the register CoM from x +9.4 to +20.0 mm. The skid moves forward with the body's rear wall to 27 mm behind the axle. |
+| `RP03-CAD-07` | **Fixed in CAD context — pending permanent propagation** | Replace the 48 × 75 × 24 mm, 280 g battery placeholder with the RP-02 working selection: a 2S1P pack of two Samsung INR18650-25R cells with a 2S 20 A balanced BMS on top (37.6 × 67 × 23.8 mm, 110 g), and shrink the tub to it. This alone drops the register CoM to x +18.8 / h 107.9 mm, under the `physics.md` §2.5 line; `RP03-CAD-08` restores it. |
+| `RP03-CAD-08` | **Fixed in CAD context — pending permanent propagation** | Add an 81.6 g mild-steel ballast bar under the deck between the battery tub and the front crossmember to bring the register CoM back over the `physics.md` §2.5 +20 mm line after the lighter pack. Register CoM +20.6 / 105.8 mm; the +25 / 124 target is still missed. |
+| `RP03-CAD-09` | **Fixed in CAD context — pending permanent propagation** | Accept the register CoM that results from the RP-02 power boards (x +18.77 / h 105.05 mm, 2568 g, a_tip 1.75 m/s²) as the working baseline instead of +25 / 124, add no ballast, and re-base the `physics.md` §2.5 check from "x ≥ +20 mm" to the same tip acceleration it encodes at the 124 mm baseline (a_tip ≥ 1.582 m/s²). Builder acceptance 2026-09-25 (`BA-06`). |
 
 ## RP03-CAD-01 — Rear-only ground-reflectance channel
 
@@ -286,6 +289,122 @@ Consequences to carry into propagation:
 - battery swap is from underneath (or by lifting the body);
 - the tub-to-body harness path is unrouted;
 - every CoM number depends on the manual mass register, not on the geometry.
+
+## RP03-CAD-07 — 2S1P 18650 battery pack
+
+RP-02 never fixed a chemistry or a construction; it held a 2S protected-18650 holder as an
+`E` planning case and left the rest to a ledger envelope of 2.6–5.3 Wh over the 20-minute
+`MD-01` workload. On 2026-09-24 the builder closed **2S**, chose Li-ion NMC cylindrical
+cells, and set price and CAD fit as the two constraints (see RP-02 `decision.md`). The
+pack that meets both is two Samsung INR18650-25R cells (2500 mAh, 20 A continuous, about
+18–22 mΩ, Ø18.33 × 64.85 mm, 45 g) in series, with a 2S 20 A balanced protection board.
+That is about 18 Wh nominal, about twice the 9.2 Wh high-case requirement.
+
+What changed in the model:
+
+- **Pack.** `battery_pack()` builds two cells (Ø18.4 × 65 mm, axes along Y, 18.6 mm pitch),
+  a strap-and-insulation plate at each cell end (1 mm) and a 48 × 20 × 4.5 mm BMS board lying on top of the cells.
+  Envelope 37.6 × 67.0 × 23.8 mm at X 27.9–65.5, Z 32–55.8, 0.2 mm under the deck top.
+  The replaced placeholder was 48 × 75 × 24 mm at X 18–66.
+- **Tub.** The tub is now derived from the pack: 1.5 mm retention gap on each side, front
+  wall inner face unchanged at X 67, rear wall moved forward from X 16.5 to 24.9, half-width
+  39 → 36.5 mm. The deck cut-out and the shell-floor opening follow. Tub volume −2.1 cm³;
+  the register moves −1.2 g on the chassis row and +2.6 g on the shell row (floor returned).
+- **Mass.** `BATTERY` row 280 → 110 g (2 × 45 g + about 8 g board + about 12 g sleeve, straps
+  and leads), all `E`, no purchase or weighing.
+
+Result (hand-kept register):
+
+| | Before | After |
+|---|---:|---:|
+| Mass | 2615 g | 2444 g |
+| CoM x / h | +20.2 / 103.7 mm | **+18.8 / 107.9 mm** |
+| x/h | 0.195 | 0.175 |
+| a_tip = g·x/h | 1.91 m/s² | **1.71 m/s²** |
+| Ball share | 0.18 | 0.17 |
+
+A 170 g lighter pack takes forward mass out of the robot. Height rises toward the 124 mm
+target, but x falls 1.4 mm away from +25 and under the `physics.md` §2.5 line of +20 mm
+(by 1.16 mm), so `com_forward_of_physics_margin_line` failed with this change alone.
+`RP03-CAD-06` had rejected nose ballast, so the builder chose the ballast option on
+2026-09-24 and it is recorded as `RP03-CAD-08`.
+
+Still open on the pack: the BMS board thickness (4.5 mm assumed, 0.2 mm of deck-top margin
+is left), the sleeve and pack tolerance, tub retention (foam or straps), the hatch
+fastening, the lead and connector (Anderson SBS Mini is RP-02's lead, unchosen), the NTC
+position, and the tub-to-body harness. No vendor STEP was used; the cells and the board are
+datasheet and listing envelopes.
+
+## RP03-CAD-08 — Ballast bar ahead of the battery tub
+
+The lighter 2S1P pack (`RP03-CAD-07`) took 170 g of forward mass out of the robot and left the
+register CoM at x +18.8 mm, 1.16 mm under the `physics.md` §2.5 line. The builder chose ballast
+(over moving other weight or revising the line) on 2026-09-24.
+
+- **Part.** A mild-steel bar, 9 × 60 × 19 mm (X 69.5–78.5, Y ±30, Z 33–52), 7.85 g/cm³, 79.7 g
+  after two tapped holes, plus two M3 screws (1.9 g): **81.6 g** in the register, centred at
+  (74, 0, 42.5) mm. It is not a nose weight: it sits under the deck, inside the shell.
+- **Place.** It fills the free 11.5 mm between the tub's front wall (X 68.5) and the front
+  crossmember (X 80), with 1.0 mm and 1.5 mm of clearance and its top face against the deck
+  underside. The battery still drops out through the bottom hatch; the bar does not block it.
+- **Fixing.** Two M3 screws from the deck top at (74, ±20), with the heads sunk in counterbores
+  in the 4 mm deck and 8 mm of thread in the bar. Thread engagement and pull-out in the printed
+  deck are unverified.
+
+Result (hand-kept register):
+
+| | Before (`RP03-CAD-06`) | After `RP03-CAD-07` | After `RP03-CAD-08` |
+|---|---:|---:|---:|
+| Mass | 2615 g | 2444 g | **2526 g** |
+| CoM x / h | +20.2 / 103.7 mm | +18.8 / 107.9 mm | **+20.6 / 105.8 mm** |
+| x/h | 0.195 | 0.175 | **0.195** |
+| a_tip = g·x/h | 1.91 m/s² | 1.71 m/s² | **1.91 m/s²** |
+| Ball share | 0.18 | 0.17 | 0.19 |
+
+All 98 checks pass. The +20 mm margin is **0.62 mm**, so a small register change can flip it
+again. The +25 / 124 target is still missed (x/h 0.195 vs 0.202); reaching +25 mm would need
+about 376 g of ballast at this position or a change of geometry. The pack plus ballast weighs
+192 g against the old 280 g placeholder, so the robot is 89 g lighter overall than the
+placeholder assumed. The ballast position was chosen for the free space, not optimised: a bar
+further forward is not possible without moving the crossmember.
+
+## RP03-CAD-09 — CoM baseline revised for the power boards
+
+The RP-02 power boards (`board-specs.md` v0.18, layout 02 as of 2026-09-25) replaced the 121.5 g
+`CONTROL_POWER_SENSORS` row with per-board rows (121.0 g), added the 40 g E-stop, and raised the
+pack row to 113.7 g. The register moved from x +20.63 / h 105.73 mm to **x +18.77 / h 105.05 mm**
+(2524.6 → 2567.8 g). The builder accepted that result on 2026-09-25 rather than adding ballast
+(about 59 g at X 74 would restore +20 mm, and the ballast slot cannot take it) or moving weight.
+
+**What the "+20 mm line" is.** `physics.md` §2.5 gives the margin as `a_tip = g·x/h` against the
+authored `a_peak` 0.80–1.00 m/s², evaluated at the baseline height h = 124 mm: `9.81 · 20 / 124 =
+1.582 m/s²`. The check tested the x value alone. The register height has since fallen to about
+105 mm, so the same 1.582 m/s² is reached at **x = +16.94 mm**. The check now tests the tip
+acceleration (`a_tip ≥ 1.582`), which is the quantity the line was written to protect. This is a
+re-basing on the accepted baseline, not a relaxation of the margin: a_tip is 1.753 m/s², 1.11×
+the 1.582 floor and 1.75× the authored `a_peak` of 1.00.
+
+**Other loading cases (`E`, `physics.md` §2.6, §2.8 with the register CoM and the head lump
+geometry of §2.8, head mass 509–557 g, lever 52 mm).**
+
+| Case | x / h (mm) | a_tip |
+|---|---|---:|
+| Neutral head | 18.77 / 105.05 | 1.753 m/s² |
+| `HP-PITCH-FWD` (+35° nose down) | 24.7–25.2 / 103.0–103.2 | 2.35–2.40 m/s² |
+| `HP-PITCH-AFT` (−18° look up), the worst head pose | 15.3–15.6 / 104.5 | **1.44–1.46 m/s²** |
+| Forward brake / reverse launch, spin | unchanged in kind | far above the authored 1.20 m/s² (`physics.md` §2.6) |
+
+The worst head pose stays above the authored `a_peak` 1.00 (1.44×), where `physics.md` §2.8 had it
+below 1.00 for the Layout 03 lumps. The rear-skid check (`rear_skid_catches_before_com_crosses_axle`)
+and the ball share (≥ 0.09) pass at the new CoM.
+
+**What this does not change.** The +25 / 124 target is still missed (x/h 0.179 vs 0.202) and the
+`a_tip ≈ 2.0 m/s²` planning value is not reached; per `physics.md` §2.5 the dimensional baseline is
+revised, and RP-03 must not read the commanded `a_peak` as re-approved. The mass register is
+hand-kept and the head lumps in §2.8 are `E`; a weighed robot (`W`) replaces both.
+
+Result: 108 of 108 checks pass after the re-base (the geometry is unchanged from the run with one
+failure). Propagation to the permanent RP-03 documents stays on hold with the other `RP03-CAD` items.
 
 ## Propagation hold
 

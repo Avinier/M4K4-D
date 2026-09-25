@@ -42,25 +42,25 @@ These sit above RP-01 through RP-07. Scored physical runs wait here even when pa
 
 ## RP-01 Head
 
-**Current outcome:** ITERATE. Concept A and Layout 03 external rigid-body demand are retained. Paper approval, fabrication release, actuator freeze and scored gates remain OPEN.
+**Current outcome:** ITERATE. Concept A and Layout 03 external rigid-body demand are retained. Working actuator family `ACT-01` recorded 2026-09-25 (XC330-M181-T yaw, XC330-M288-T pitch/roll, 5 V). Its paper items are bounded (`gates.md` v0.3). Paper approval, fabrication release, actuator freeze and scored gates remain OPEN.
 
 ### Mechanism and paper screen
 
 | Item | Why it is open | Waiting on | Home | Blocks |
 |---|---|---|---|---|
-| Actuator family / SKU | C01 (XC330-M288-T) is a named comparison only; paper approval OPEN | Close or bound P01–P08, then freeze | `RP-01-head/actuator-screen-01.md`; `gates.md` P01–P08; `decision.md` | PA-04 servo rail; Phase B real head load; ADR-02 |
-| Actuator-internal inertia / acceleration current | Payload-side `Jα` is not complete electromechanical demand | Official rotor/gear inertia **or** unloaded-vs-loaded characterization | `fullproofmath.md` §12; `actuator-screen-01.md`; P03/P05 | Complete paper pass; operating current for RP-02 |
-| Pitch-frame stiffness | Screen ~6–9 Hz vs 30/40 Hz laugh targets | Stiffen, then FEA or loaded tap / ring-down | `fullproofmath.md` §12; `gates.md` P07 | Pitch/roll C01 credibility; G03 modal cases |
-| Roll-saddle stiffness | Screen ~21 Hz vs 25/30 Hz | Same as pitch | same | Roll wobble cases |
-| Two retainer-screw collisions | Fasteners overlap rolling-cradle flange/ear stalk (~5.53 mm³ each) | Geometry fix + fastener-inclusive motion grid | `RP-06-cad/head/layout-03/review/verification.md`; P08 | Fabrication; CAD freeze |
-| Hard stops vs usable travel | CAD contact equals provisional usable limits; storyboard requires margin beyond | Move stops; check pin/load path (~30–35 MPa first-order shear is unresolved) | Layout 03 README; `storyboard.md`; P08 | Usable-range proof; G01 rest |
-| Bearing SKU | Ø16.2 × 6.2 mm trial seats only | Select real bearing, then seat/preload/retention | Layout 03; `RP-06-cad/head/decisions.md` HEAD-CAD-02 | Purchased-fit; P08 |
-| Storyboard ↔ CAD/firmware signs | Yaw and roll positives oppose raw CAD right-hand; pitch agrees | Document multipliers at the public motion interface | `fullproofmath.md` §12; `gates.md` P08 | Signed load/firmware |
-| Physical balance trim | A0 residuals are solver output, not millimetre fabrication | Measured trim/adjustment path | `fullproofmath.md` §12; HEAD-CAD-07 | Hold torque; candidate substitution |
+| Actuator family freeze | **Working choice `ACT-01` (2026-09-25):** XC330-M181-T yaw, M288-T pitch/roll at 5 V, matching RP-02 `BA-03`. Paper P02–P05 bounded; not frozen | Bench tests B1–B6 below, P08 trial fits, then dated builder approval | `RP-01-head/decision.md` `ACT-01`; `gates.md` v0.3 | Phase B real head load; ADR-02 |
+| Actuator-internal inertia / acceleration current | **Bounded on paper (`E`):** 0.11–0.25 g·cm² motor-side, 1.3–3.2× the carried pitch/roll inertia. All axes still clear; yaw margin 8% after the 2026-09-25 head revision (yaw inertia +19%) | B1 measurement replaces the bound | `actuator-screen-01.md` §Paper-closure pass; P03/P05 | Freeze; measured head current for RP-02 |
+| Pitch-frame stiffness | **Redesigned 2026-09-25:** side webs, rear torsion box and keel. Frame FEA 0.98 → 51.4 N·m/rad (about 6 → 41 Hz; 33 Hz at E = 2.3 GPa). Servo, horn and joint compliance are `U` | Loaded tap/ring-down test B6 | `RP-06-cad/head/layout-04/fea/`; `gates.md` P07 | G03 modal cases |
+| Roll-saddle stiffness | **Redesigned 2026-09-25:** servo case bolted to the torsion box. FEA 17.9 → 187.5 N·m/rad (about 27 → 84 Hz) | B6 | same | Roll wobble cases |
+| ~~Two retainer-screw collisions~~ | **Closed 2026-09-25:** flange pockets give 0.51 mm clearance; all 30 fasteners are in the 56-pose motion grid, 0 hits | — | `RP-06-cad/head/layout-04/revision-checks.json` | — |
+| Hard stops vs usable travel | Stops 3° past usable travel (2026-09-23); Ø2 steel dowels with full root engagement (2026-09-25). Under the `BD-13` limits: shear 9–13 MPa, PLA bearing 9–10 MPa | Stop impact at speed (bench) | Layout 04 README; P08 | G01 rest |
+| Bearing SKU | **696-2Z (ISO 619/6-2Z) selected 2026-09-25**; seats Ø15.1 × 5.2 mm | Trial fit and preload on printed seats | Layout 04 README; P08 | Purchased-fit |
+| ~~Storyboard ↔ CAD/firmware signs~~ | **Closed 2026-09-25:** derived from geometry; `motion-signs.json` (pitch +1, yaw −1, roll −1) is the firmware interface record | — | `RP-06-cad/head/layout-04/motion_signs.py` | — |
+| Physical balance trim | **Trim path modelled 2026-09-25:** tungsten slugs in the ear caps (±1.69 mm roll-Y), brass washers on the rear cover (±0.60 mm pitch-X); no Z trim | Weigh and trim on the built head | Layout 04 README; HEAD-CAD-07/11 | Hold torque |
 | Bearing reactions, spindle bending, yaw-yoke stiffness | Not in the paper record | Calculation or representative test | `fullproofmath.md` §12 | Support-layout credibility |
-| C01 5 V sag floor and speed-source conflict | Proposed 5 V; 3.7 V is a sensitivity endpoint; ROBOTIS 65 vs 81 rpm unresolved | Rail budget + labelled curve/source; later servo-terminal logging | P02; `actuator-screen-01.md` | Yaw envelope; PA-04 collapse |
-| C01 thermal / RMS as measured | 0.186 N·m manufacturer estimate is a screen, not enclosure duty | Duty/ambient/mounting evidence | P04 | Family freeze |
-| Faster yaw comparison (XC330-M181-T) | Named only if 5 V floor or speed conflict cannot be resolved | Same paper gates as C01 | `actuator-screen-01.md`; RP-02 candidate register | Optional family path |
+| Servo voltage floor and curve source | **Paper-bounded:** minimum terminal voltage 4.74 V from the regulated `PB-HEAD` rail (3.7 V is a fault case only); the graph is 5 V by consistency (`E`); the 65 vs 81 rpm conflict controls no axis | B2 speed–torque sweep, B5 terminal logging | P02; `actuator-screen-01.md` | Freeze |
+| Servo thermal / RMS as measured | Estimate screen passes with internal inertia (2.5× pitch, 4.4× roll, 2.9× yaw under ROBOTIS's 20%-of-stall figures, at the revised head's inertia); not enclosure duty | B3 | P04 | Freeze |
+| Yaw spur-pair lash (P09) | **Scissor pinion added 2026-09-25** (module 1 × 37, two 2.4 mm halves, 0.22 N·m preload ≥ 1.5× the 0.130 N·m peak). Spring SKU and preload friction open | B4 | `gates.md` P09; body Layout 02 README | G03 hysteresis |
 
 ### Mass, material, CAD and harness
 
@@ -84,13 +84,26 @@ These sit above RP-01 through RP-07. Scored physical runs wait here even when pa
 
 | Item | Why it is open | Waiting on | Home | Blocks |
 |---|---|---|---|---|
-| Paper gates P01–P08 | Draft v0.2; builder freeze pending | Dated approval after blockers above | `RP-01-head/gates.md` | Honest C01 paper pass |
+| Paper gates P01–P09 | Draft v0.3 (P09 lash added 2026-09-25); builder freeze pending | Dated approval after blockers above | `RP-01-head/gates.md` | Honest `ACT-01` paper pass |
 | Physical gates RP01-G01…G06 | None registered | Configuration, thresholds, instruments, repetitions, freeze **before** inspecting scored data | `gates.md`; `decision.md` | RP-01 closure |
 | Rig | Not started | Workbench gate + named servo load + registered gates | `RP-01-head/rig.md` | Scored motion |
 | Storyboard thresholds | Authored kinematics, not pass/fail | Builder review + `gates.md` freeze | `storyboard.md`; `intent.md` | G02/G03 cases |
 | Eye/audio placeholders | RP-01 does not require them | RP-04 / later | `intent.md` | Coordination only |
 | Passive rest / unpowered settle | SD-02 requires a safe down rest; gearbox ratio is not evidence | HM-00 measurement | `physics.md`; `gates.md`; RP-02 SD-02 | Sleep load model |
-| Servo bus protocol, rate, homing | Follows family freeze | Selected SKU | CTRL-04; link-contract out-of-scope note | C2 firmware; G05 servo bus |
+| Servo bus rate, homing | Protocol follows `ACT-01`: Dynamixel 2.0 over TTL half-duplex. Rate and homing are open | Firmware design against the chosen family | CTRL-04; link-contract out-of-scope note | C2 firmware; G05 servo bus |
+
+### Bench tests to freeze the actuator family
+
+Paper items are bounded (`actuator-screen-01.md` §Paper-closure pass). These measurements replace the bounds (B6 needs the built head). B1–B5 need one XC330-M181-T and one XC330-M288-T; a bench purchase is allowed without freezing the family. Register each threshold in `gates.md` before inspecting scored data.
+
+| ID | Test | Closes | Home |
+|---|---|---|---|
+| B1 | Internal inertia and friction: output free, then with a known flywheel; step the goal current, log position and present current, and fit reflected inertia and friction | P03/P05 bound; RP-02 head current (below) | `actuator-screen-01.md`; P03/P05 |
+| B2 | Speed–torque sweep on the real `LTC3119` rail at 5.0 V and 4.74 V (brake or torque arm) | P02 graph voltage and derate; 65 vs 81 rpm | P02 |
+| B3 | BC-60 busy minute repeated inside a representative head enclosure; log current, input voltage and servo temperature to a pre-registered equilibrium criterion | P04 thermal | P04; `rig.md` |
+| B4 | Loaded reversal hysteresis at the servo horn, then through the yaw spur pair | P09 lash budget | P09 |
+| B5 | Servo-terminal voltage during simultaneous three-axis motion (`HM-15` startle) | P02 minimum-voltage claim | P02; RP-02 `PB-HEAD` |
+| B6 | Loaded tap test and commanded ring-down of the built head, per axis, with the real servos and joints | P07 modal targets (the frame FEA excludes servo, horn and joint compliance) | P07; `RP-06-cad/head/layout-04/fea/` |
 | Concept B | Explicitly waived 2026-09-09 | Do not reopen without a new decision | `decision.md` | — |
 
 ---
@@ -106,17 +119,34 @@ This is the class that prompted this index. Architecture and calculation method 
 | Item | Why it is open | Waiting on | Home | Blocks |
 |---|---|---|---|---|
 | **Final wire, fuse, converter and pack ratings** | Equations, sensitivity tables and `PCD-*` candidate screen exist; installed path, protection curves, converter maps and pack impedance do not | Candidate-screen evidence list, then one conditional term at a time | `RP-02-electrical/power-calculation-ledger.md` §8; `power-component-candidate-screen.md` §12 | G01; ADR-06 architecture evidence |
-| Battery chemistry, S-count, pack construction | PA-03/04 and `PB-MAIN` admit the servo/drive outcome; 2S 6.0–8.4 V is an `E` planning case only | RP-01 family + RP-03 drive envelope + handling | `electrical-design-basis.md` §8; `decision.md` | Charge path; G03; ADR-06 sizing |
+| Battery chemistry, S-count, pack construction | **Working selection 2026-09-24 (builder direction, not registered):** 2S1P Li-ion 18650, two Samsung 25R + 2S 20 A balanced BMS (18 Wh, 110 g `E`). Still open: BMS SKU and thresholds (over-charge ≤ 4.25 V, real continuous rating, NTC), measured sag against the 6.0 V low line (ledger §5.3 estimates 5.4–5.7 V near-empty at the historical 11.7 A), pack connector and who builds the pack. 3S reopens the choice if RP-01 picks a 12 V servo | RP-01 family + RP-03 drive envelope + handling | `electrical-design-basis.md` §8; `decision.md` | Charge path; G03; ADR-06 sizing |
 | Charger, adapter, keyed charge connector | STUSB4500QTR + BQ25798 is the screened architecture lead, not selected; adapter/settings/body inlet open; AC stays outside Makad | Chemistry, charge power, PDO and body layout | `power-component-candidate-screen.md` §9; `power-branch-contracts.md` `PB-CHARGE-*` | `CC-15`; G06 |
 | Charge-insertion motor-arm timing | Conservative bench rule is immediate motor-arm removal; the selected circuit may instead allow a short supervised brake before `CHARGE` is accepted | Source-selector/charger circuit plus a registered stop timing | `power-implementation-basis.md` §8.4; `CC-15`; F-18 | Charge-mode G01/G04 configuration |
 | Motor-arm, source-selector, E-stop switching devices | IDEC XW1E operator and LTC4368-1/external-FET approach are screened leads, not a selected safety subsystem | Fault-current, FET SOA, regeneration and interruption calc | `power-component-candidate-screen.md` §6; `power-architecture.md` PA-13/14 | G01 demonstration |
-| Servo-rail conversion (direct vs motor-domain buck) | Coupled to family; C01 implies regulated 5 V from a 2S planning case | RP-01 freeze (PA-04) | `decision.md`; `power-implementation-basis.md` | Head conductor/fuse |
+| Servo-rail conversion (direct vs motor-domain buck) | Working: 5 V `LTC3119` buck-boost (`BD-04`/`BD-05`), matching RP-01 `ACT-01` | RP-01 freeze (PA-04) | `decision.md`; `power-implementation-basis.md`; `board-specs.md` §5.4 | Head conductor/fuse |
+| Head current vs `BD-13` limits (from RP-01, updated 2026-09-25) | With internal inertia and graph current, and the heavier revised head (yaw inertia +19%), the high-bound peaks are about 0.64 A pitch, 0.44 A roll and **0.87 A yaw, 3% under its 0.9 A Current Limit**. The coincident sum, about 1.96 A, nearly fills the 2 A `PB-HEAD` allowance. `board-specs.md` §5.4.1's torque-derived 0.62 A understates the load | Review the yaw limit and the allowance now; confirm with RP-01 B1 | `board-specs.md` §5.4.1, §5.4.3; `RP-01-head/actuator-screen-01.md` | `BD-13`; `PB-HEAD` sizing |
 | Drive conversion and regeneration sink | RP-03 hardware absent | Drive `W` profiles | `PB-DRIVE*`; ledger `LG-04` | `CC-09/10/11`, `CC-PEAK-01`, G03 |
 | Connector families, pinouts, shield terms, gauges | SBS Mini, Micro-Fit 3.0/Micro-Fit+ and gauge classes are screened; exact assemblies and moving cable are not selected | Path lengths, exact terminals and current/flex envelopes | `power-component-candidate-screen.md` §§7–8; `power-implementation-basis.md` §§3–5 | Harness buy; G01 |
 | Branch-local capacitance / hold-up / UVLO numbers | `BR-*` policy and calculation method are issued; numeric inputs are not | Selected converter/controller minima, stop/gate/discharge timing and load/source transients | `brownout-restart-contract.md` §§4, 6, 9; G02 candidate | Reset immunity claims |
 | Brownout thresholds, debounce and stable-clear dwell | Ownership/order are defined, but chemistry, path impedance, monitor accuracy and safe-stop reserve are not measured | Selected pack and power path plus `CC-13H/13D/14`, fast-collapse and rebound captures | `brownout-restart-contract.md` §§4, 8, 9 | `EN-02/03` scored configuration; ADR-06 low-energy evidence |
 | Numeric `LP-*` waveforms | Vocabulary frozen; bindings wait on real or admissible substitutes | Frozen run configuration | `load-model.md`; `state-register.md` | Scored G02/G03 |
 | Energy thresholds, grace, fixtures, rates | Explicitly approved as open | Freeze before the scored run that uses them | `state-register.md` “Approved open parameters” | Any scored RP-02 case |
+
+### Power-distro and watchdog working choices (recorded 2026-09-25, not registered)
+
+Working part choices, values and sizes for the custom power and safety boards and the watchdog block are in [`RP-02-electrical/board-specs.md`](RP-02-electrical/board-specs.md) (v0.16); its section 10 is the detailed open list. Nothing there registers a decision, freezes a SKU or authorizes a purchase. The decision-level items that still need the builder or a registration:
+
+| Item | Why it is open | Home |
+|---|---|---|
+| Pi 5 supply setpoint 5.15 V vs the registered 5.10 V | 5.10 V fails the 200 mV transient allowance in the worst corner | `board-specs.md` 5.4.2; `power-implementation-basis.md` 5.4 |
+| `PA-14` wording for the `OFF` draw | About 43 uA typical, up to about 100 uA (charger, latch and gate controller); the text says pack protection only | `board-specs.md` 4.2; `power-architecture.md` `PA-14` |
+| Servo family and the STS3215 conflict | If STS3215 C046 is chosen, its 8.4 V maximum is 0.65% below the charger's 8.455 V worst case and the charger has no trim in default mode | `board-specs.md` 5.4.3; RP-01 |
+| Brownout threshold registration | Proposals (`V_SRC_SAFE` 4.6 V, `ENERGY_OK` 5.7/6.4 V, `UV` 4.9 V, 3.3 mF hold-up) rest on estimated pack resistance and a generic voltage curve | `board-specs.md` 8.1; `brownout-restart-contract.md` |
+| Drive-stage regeneration at or below 3 A, zero below 0 degC | New hard requirement from the cells' 4 A charge limit; nothing enforces it | `board-specs.md` 5.3; RP-03 |
+| `SYSTEM_ARM` clears on any permit-term loss | A `UV` fault recovers on its own after 32 ms, so the arm latch must force a fresh arm | `board-specs.md` 5.1, 7 |
+| Watchdog `TPS3436CFDBEDDFRQ1` sourcing | Out of stock at TI and no India listing found; `CCCBGD` is the fallback (needs a 10 ms feed) | `board-specs.md` 7 |
+
+**Update 2026-09-25:** the builder accepted the recommendations for the items above (Pi setpoint 5.15 V, `OFF` draw, XC330 servo family, brownout proposals) as working decisions; they are recorded as `BA-01…09` in `board-specs.md` §1.1. Nothing is registered: the `PB-COMPUTE` 5.1 V and `PA-14` wording still need supersession records.
 
 ### Selected but still open (do not treat as closed)
 
@@ -247,10 +277,10 @@ Canonical remaining-work list: [`RP-06-cad/TODO.md`](RP-06-cad/TODO.md). Detail:
 | Item | Why it is open | Waiting on | Home | Blocks |
 |---|---|---|---|---|
 | 304 mm stack accept-or-recover | 300 mm is a rounded target; CAD documents 304 mm | Named baseline decision | `dimensional-baseline.md`; checklist P-03 | G01; system height |
-| Whole-robot CoM vs +25 / 124 mm | 2026-09-24 (`RP03-CAD-06`): body moved 16 mm forward and battery into a chassis tub. Register CoM +20.2 / 103.7 mm (was +9.4 / 106.7), a_tip 1.91 m/s², x/h 0.195 vs 0.202, after the forward `RP03-CAD-04` crossmember. Clears the `physics.md` §2.5 +20 mm line by 0.21 mm; still misses the target | Recover the last ~5 mm by geometry or revise the baseline; installed pack, then M900 | Layout 02 mass properties; `RP-06-cad/decisions.md` `RP03-CAD-06`; checklist P-04 | G04; `a_tip` placement target |
+| Whole-robot CoM vs +25 / 124 mm | 2026-09-24 (`RP03-CAD-06`): body moved 16 mm forward and battery into a chassis tub. Register CoM +20.2 / 103.7 mm (was +9.4 / 106.7), a_tip 1.91 m/s², after the forward `RP03-CAD-04` crossmember. **Then `RP03-CAD-07` (2S1P pack, 110 g instead of the 280 g placeholder) moved it to +18.8 / 107.9 mm, and `RP03-CAD-08` (81.6 g steel ballast bar ahead of the tub) restored it to +20.6 / 105.8 mm, a_tip 1.91 m/s², x/h 0.195 vs 0.202: 0.62 mm over the `physics.md` §2.5 +20 mm line, still short of the target** | Recover the last ~4.4 mm by geometry (about 376 g of ballast at the bar position would do it) or revise the baseline; weigh the installed pack and ballast, then M900 | Layout 02 mass properties; `RP-06-cad/decisions.md` `RP03-CAD-06`; checklist P-04 | G04; `a_tip` placement target |
 | Axle stack on real parts | 2026-09-24 (`RP03-CAD-05`): wheels could not turn as drawn (carriers and crossmember inside the wheels and motors). Now a motor-face flange, bearing boss in a dished-wheel pocket, 8 mm stub shaft; running gaps ≥ 1.5 mm measured | Gearmotor face-screw pattern and D-shaft length; stub-to-web fixing and ≥ 3 N axial retention; bearing preload; deck/cheek stiffness | `RP-06-cad/decisions.md` `RP03-CAD-05`; RP-03 `drivetrain-screen-01.md` P06 | Fabrication; RP-03 reference unit |
 | Body-side static clashes | The 2026-09-24 all-group sweep found overlaps no check covers: harness trunks vs Pi cooler, compute tray, IMU and lower front cross; rear lower cross and dog-legs vs power/safety envelopes; compute tray vs speaker magnet; yaw plate and upper rails vs shell; PDM boots vs shell; wheel-arch pods fused into the shell | Re-place the envelopes or add an all-group clash check | Layout 02 README validation note | Honest packaging closure |
-| Battery service path | Battery now drops out through a bottom hatch in the chassis tub (`RP03-CAD-06`); hatch fastening and tub-to-body harness are unrouted | Selected pack + connector; RP-02 harness | `RP-06-cad/decisions.md` `RP03-CAD-06`; checklist P-05 | G06 service; RP-02 `PB-*` routing |
+| Battery service path | Battery now drops out through a bottom hatch in the chassis tub (`RP03-CAD-06`), resized to the 2S1P pack in `RP03-CAD-07`; hatch fastening, tub retention (1.5 mm foam gap) and tub-to-body harness are unrouted | Measured pack (BMS thickness) + connector; RP-02 harness | `RP-06-cad/decisions.md` `RP03-CAD-06`; checklist P-05 | G06 service; RP-02 `PB-*` routing |
 | Mass register vs geometry | The four 608 bearings (~48 g) were missing until 2026-09-24; all CoM numbers still come from a hand-kept table, so geometry changes can leave them stale with every check green | Derive masses from CAD volumes, or weigh parts | Layout 02 `MASS_ROWS` | Every CoM claim |
 | Sourced-article fit | Envelopes and some vendor STEP; not all installed SKUs | Samples + envelope replacement | checklist P-01 / H-* | G01 |
 | Display optical/animation | SKU locked; smoked window and fps unproven | Window samples + 30-minute UART-active run | display study; checklist D-* | G02/G03 |

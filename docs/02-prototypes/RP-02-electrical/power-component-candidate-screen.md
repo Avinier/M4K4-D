@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Status | **Accepted derived candidate screen v0.1, builder-reviewed 2026-09-16. No power component is selected and no purchase is authorized.** |
-| Date | 2026-09-16 |
+| Date | 2026-09-16 (addendum §9.2, 2026-09-24: battery working selection) |
 | Scope | Part-2 implementation candidates for conversion, protection, motor isolation/E-stop actuation, connectors, conductors and charging/power path |
 | Inputs | `RP02-P2-REG-01`, `RP02-P2-REG-02`, `power-branch-contracts.md` v0.4 and `power-calculation-ledger.md` v0.1 |
 | Evidence rule | Manufacturer documentation establishes `D`; distributor stock/price establishes only a dated sourcing snapshot; installed performance remains `W` |
@@ -17,7 +17,7 @@ The following parts or families are worth carrying into schematic and bench work
 
 | Function | Lead carried forward | Present disposition |
 |---|---|---|
-| `PB-COMPUTE` conversion | Murata `OKL-T/6-W12P-C`; `OKR-T/6-W12-C` as a through-hole comparison | **Lead, conditional** — correct 5.1 V programmability and 6 A class; low-line transient and thermal proof remain |
+| `PB-COMPUTE` conversion | ADI `LTC3119` buck-boost (`PCD-CVT-10`), TI `TPS55288` fallback; the Murata `OKL-T/6-W12P-C` / `OKR-T/6-W12-C` are on **Hold** (2026-09-24 addendum, §4.1: cannot regulate 5.1 V below about 6.4 V input) | **Lead, conditional** — `LTC3119` regulates through the 2S sag; output current at 5.4 V input, thermal at 3 A and the setpoint margin remain |
 | `PB-SAFE-C2` production conversion | TI `TPS630701` fixed 5 V implementation | **Lead, conditional** — enable, power-good and load disconnect are stronger than a three-pin hobby module; requires a custom PCB |
 | `PB-SAFE-C2` bench conversion | Pololu `S13V10F5` | **Bench-only lead** — wide-input fixed 5 V and 1 A class, but no enable, power-good or reverse protection |
 | `PB-DISPLAY` bench conversion | Pololu `S13V15F5` | **Bench-only lead** — 1.5 A class with margin over the 0.70 A planning peak; same control limitations as above |
@@ -87,6 +87,10 @@ The selected Raspberry Pi 5 requires a dedicated 5.1 V nominal branch capable of
 | `PCD-CVT-03` | Pololu [`D42V55F5`](https://www.pololu.com/product/5571): fixed 5 V; catalogued 6 A typical maximum is specified at 42 V input and the input-dependent graph governs | Practical prebuilt module, but it does not implement the registered 5.1 V converter target and low-line dropout/thermal behavior must be read at 6.0 V. It may characterize a restricted 3 A Pi configuration only if the power-entry policy is recorded | **Bench-only** |
 | `PCD-CVT-04` | Pololu [`D42V55F5.3`](https://www.pololu.com/product/5572/specs): fixed 5.3 V nominal, 6 A class | Its ±3% output family tolerance can reach about 5.46 V before transient/ripple. No official Pi input-maximum proof was found that makes this safe | **Reject for direct Pi power** |
 | `PCD-CVT-05` | Murata [`MYLSM00502ERPL`](https://www.murata.com/products/productdata/8807034880030/MYLSM00502ERPL.pdf): 4.5–17 V input, programmable through 5.25 V, 2.5 A output | Cannot satisfy the registered 5 A-capable interface | **Reject for `PB-COMPUTE`** |
+| `PCD-CVT-10` | ADI [`LTC3119`](https://www.analog.com/media/en/technical-documentation/data-sheets/3119fb.pdf) (datasheet 3119fb read 2026-09-24): 2.5–18 V input, 0.8–18 V output, 5 A in buck mode for Vin > 6 V and 3 A at Vin = 3.6 V for 5 V out, four 30 mΩ switches, 7–8 A inductor limit, RUN-pin enable with programmable UVLO, PGOOD, zero-current detection (does not sink), 28-lead QFN or TSSOP | Regulates through the 2S sag; hardware-only enable and analog configuration. No hiccup or latch, no adjustable current limit, no regeneration sink. Output current at 5.4 V input is not stated (about 4.5 A by linear interpolation, `E`); continuous use above about 3 A is thermally limited | **Lead for `PB-COMPUTE` and `PB-HEAD`, conditional** (`board-specs.md` `BD-05`) |
+| `PCD-CVT-11` | TI [`TPS55288`](https://www.ti.com/product/TPS55288) (datasheet SLVSF01B read 2026-09-24): 2.7–36 V input, 0.8–22 V output, boost-side switches 7.1 / 7.6 mΩ, programmable output limit to 6.35 A, output-current monitor, FPWM lets the inductor current reverse, hiccup default on, VQFN-HR 4.0 × 3.5 mm | Lower loss and a programmable limit, but the output stays off until an I2C write sets `OE`, the OVP is 22.5–24.5 V, and the sink magnitude is unspecified | **Fallback**, conditional |
+
+**Addendum 2026-09-24 (`D`, Murata OKL-T/6-W12/W5 datasheet, "Voltage Range Graph": the limits "apply at all output currents").** The lower input limit for a 5.0–5.1 V output is about 6.3–6.4 V (graph read, ±0.2 V), so `PCD-CVT-01` and, by the same family, `PCD-CVT-02` cannot regulate from the 6.0 V low line this screen requires evidence at, and cannot from the 5.4–5.7 V near-empty sag in the ledger §5.3. The datasheet's own low-line row (6.2 V in, 5 V out, 6 A → 4.54 A) implies 30 W out from 28 W in and conflicts with its graph; settle it at the bench. The outputs are also "not intended to sink appreciable reverse current" and the module hiccup-retries on a short. Disposition: **demoted from "Lead, conditional" to "Hold"**, in favour of `PCD-CVT-10` (`LTC3119`) for `PB-COMPUTE` and `PB-HEAD`, with `PCD-CVT-11` as fallback (`board-specs.md` §5.4.2). Not a registered change.
 
 `PCD-CVT-01` and `-02` satisfy the existing “two candidates minimum” requirement. `PCD-CVT-03` is not counted as an equivalent installed candidate because it changes the registered output and Pi power-entry assumptions.
 
@@ -100,6 +104,8 @@ The selected Raspberry Pi 5 requires a dedicated 5.1 V nominal branch capable of
 | `PCD-CVT-09` | Pololu [`S9V11E2A`](https://www.pololu.com/product/5719): adjustable 2.5–9 V output, potentiometer, enable | Electrical range is attractive but an exposed trim is an avoidable single-adjustment configuration hazard on the safety branch | **Reject for installed `PB-SAFE-C2`** |
 
 Using the same converter IC on C2 and display does not merge the branches: they require separate devices, protection, returns and enable/control paths.
+
+**Addendum 2026-09-25 (`D`, TPS63070 family SLVSC58B and TPS25947 SLVSFC9C read).** `TPS630701` is the fixed-5 V member of the `TPS63070` family (`TPS630701RNMR`); its "1 A startup limit" is an input-current limit that applies while `PG` is low, not a load current. For the C2, base, display and audio branches the `PCD-PRO-02` part is the `TPS259474L` circuit-breaker latch-off variant: the other `TPS25947` variants regulate current and never latch (`board-specs.md` §6). For the two `LTC3119` rails (`PB-HEAD` trunk and `PB-COMPUTE`) the `PCD-PRO-01` part is the latching `TPS259824ONRGE` at about 7 A, not the `TPS25982` family generically (`board-specs.md` §5.4.2).
 
 ### 4.3 Head, drive and audio conversion
 
@@ -151,6 +157,8 @@ The calculations reject use cases, not entire components. `TPS25947` remains a s
 
 The E-stop contacts do **not** carry `PB-MOTOR`. They carry a low-energy, fail-open control loop. The power stage is normally off, requires both the closed E-stop loop and a fresh system-arm permission, and cannot re-arm merely because the mushroom is released. `brownout-restart-contract.md` fixes the release/restart policy; exact timing remains evidence-gated.
 
+**Addendum 2026-09-25 (`D`, `LTC4368` datasheet Rev. C read in full).** `SHDN` turns the FETs off with only a 90 µA pull-down (150–575 µs for a 2.2 nF gate, about 1–2 ms for the two-FET gate load), while the `UV` and `OV` comparators use a 60 mA fast pull-down (2–6 µs). The statement above that a broken E-stop loop deasserts `SHDN` is therefore superseded: the permit acts on `UV`, and `SHDN` carries `SYSTEM_ARM` (`board-specs.md` §5.2). The forward-overcurrent latch is available (`RETRY` grounded) and clears on a `SHDN` toggle.
+
 For scale only, a 3 mΩ `LTC4368-1` shunt would set approximately ±16.7 A nominal breaker thresholds from ±50 mV. At the historical 11.7 A source sensitivity it would drop 35.1 mV and dissipate 0.411 W. Tolerance, trip timing, actual credible current and regeneration decide the real value; 3 mΩ is not selected.
 
 ## 7. Connector candidates
@@ -190,6 +198,8 @@ The moving-yaw cable selection requires four inputs before any SKU can pass: ins
 
 The charger `SYS`/power-path output does not directly authorize normal robot operation. Separate hardware gating must make only `PB-CHARGE-LOGIC` reachable in `OM-06`; compute, camera, audio and motor branches remain off even when the charger can power a system with a depleted or absent pack.
 
+**Addendum 2026-09-25 (`D`, `BQ25798` datasheet Rev. C, June 2026).** The `BQ25798` completes charge cycles autonomously in its power-up default mode without a host (2S: 8.4 V, 1 A, 120 mA pre-charge, JEITA on a 103AT-2 thermistor, `VSYSMIN` 7 V, ADC off, 17–24 µA battery-only quiescent). The design uses that mode (`board-specs.md` `BD-09`), so no I2C master is required; `VREG` cannot be trimmed from 8.4 V without one. In battery-only mode `SYS` is powered from the battery, so anything fed from `SYS` needs an adapter-present gate.
+
 | ID | Candidate and `D` facts | Screen | Disposition |
 |---|---|---|---|
 | `PCD-CHG-01` | ST [`STUSB4500QTR`](https://www.st.com/en/interfaces-and-transceivers/stusb4500.html): active QFN variant; standalone sink negotiation to 20 V/5 A, three NVM PDO profiles, dead-battery mode, VBUS monitoring/discharge and external PMOS drivers | Removes MCU dependency from establishing the input contract. NVM image, receptacle protection, cable/source capabilities and negotiated-power telemetry must be configuration controlled | **Lead PD sink** |
@@ -199,6 +209,23 @@ The charger `SYS`/power-path output does not directly authorize normal robot ope
 | `PCD-CHG-05` | Undocumented “USB-C trigger” plus generic charger module | Missing controlled PD, cell-count, thermal, load-sharing and failure evidence | **Reject** |
 
 The external adapter itself remains open. Selection requires the eventual maximum charge power, Indian regulatory/plug requirements, cord geometry and the decision whether 15 V or 20 V is the preferred PDO. AC mains remains outside Makad.
+
+### 9.2 Battery pack — working selection 2026-09-24
+
+Builder direction of 2026-09-24 closed 2S, chose Li-ion NMC cylindrical cells and set two constraints: price, and fit in the RP-06 chassis tub (48 × 75 × 24 mm placeholder, now resized to the pack). This is a working selection, not a registered baseline; no purchase is authorized, and the workbench battery gate still defers pack fabrication. Prices are retailer listings seen on 2026-09-24 in INR including GST unless stated.
+
+| ID | Candidate and `D` facts | Fit and price | Disposition |
+|---|---|---|---|
+| `PCD-BAT-01` | Samsung **INR18650-25R**, 2500 mAh, 20 A continuous, 3.6 V, about 18–22 mΩ, Ø18.33 ± 0.07 × 64.85 ± 0.15 mm, 45 g, charge 4.20 ± 0.05 V, cut-off 2.5 V. [Robu SKU 63398](https://robu.in/product/samsung-inr18650-25r-2500mah-li-ion-battery/): the blue 25R2 is being replaced by the green 25R5 with lower resistance | Two cells side by side are 37 × 65 mm and 18.4 mm high. **₹449 each at Robu** (₹699 Batteryworks; ₹220–300 in quantity per one unverified article) | **Working selection** (2 per pack) |
+| `PCD-BAT-02` | Samsung **INR18650-30Q**, 3000 mAh, 15 A continuous, 23–26 mΩ, Ø18.4 × 65 mm, 48 g | Same footprint; 20% more energy, less current headroom. About ₹280–380 each per the same unverified article | Alternate |
+| `PCD-BAT-03` | 2S 20 A **balanced** protection board, 48 × 20 mm: [Robocraze](https://robocraze.com/products/2-string-20a-lithium-battery-protection-module-balanced-version) ₹67, [Robu SKU 618338](https://oldwp.robu.in/product/2s-8a-18650-7-4v-8-4v-lithium-battery-protection-board/) ₹126 (over-charge 4.25–4.35 V, over-discharge 2.5–3.0 V, 13 A operating, 20 A limiting), [Calcutta Electronics](https://calcuttaelectronics.com/product/2s-20a-bms-7-4v-8-4v-protection-board-with-balance/) ₹147.50 | Board thickness not listed; **4.5 mm assumed** in CAD, and 5 mm would clash with the deck top. No NTC is documented on these listings | **Working selection, SKU open.** Choose by datasheet: over-charge ≤ 4.25 V, real continuous current, NTC, on-resistance (see the ledger §5.3) |
+| `PCD-BAT-04` | Ready-made 2S packs: [Rytronics](https://www.rytronics.in/product/7-4v-3000mah-18650-2s-li-ion-battery-pack-with-bms/) ₹299 (65 × 35 × 18 mm, 2 A discharge, cells unnamed), [Robocraft](https://robocraftstore.com/product/7-4v-4000mah-2s2p-18650-lithium-ion-nmc-battery-pack-with-bms/) ₹399 (2S2P, 4 A continuous, size custom), [LiTech](https://litechpower.com/product/li-ion-2s2p-7-4v-1-6ah-battery-pack-lp2s2p1a2al004/) 11.8 Wh (2 A continuous, 3 A peak, 70 × 50 × 51 mm) | Cheap, but 2–4 A against a 4.8–11.7 A historical range, no named cells and no impedance or protection data | **Reject** as the pack; usable only as a form-factor reference |
+| `PCD-BAT-05` | 2S1P **21700** (about 4–5 Ah, 45 × 71 × 27 mm) and 2S2P 18650 (about 75 × 66 × 19 mm) | Neither fits the 48 × 75 × 24 mm tub envelope. | **Reject on fit** |
+| `PCD-BAT-06` | LiFePO4 (6.4 V nominal) and LiPo pouch | LFP sags toward 5 V under load and needs more volume for the same energy; pouch is fragile and swells | **Reject** for this body |
+
+Estimated cost of the working pack: cells about ₹900, board ₹67–147, strip, sleeve, wire and NTC about ₹150–300 (estimate, not a listing). About **₹1,200–1,600 excluding the pack connector**. The Anderson SBS Mini (`PCD-CON-01`) is still the lead connector and has not been priced. Fabrication route is open: an in-house spot-welded pack needs the written battery procedure and equipment required by `workbench.md`, otherwise a pack builder is needed.
+
+**Addendum 2026-09-25 (`board-specs.md` `BD-03`, `BD-06`, `BD-08`).** The generic 2S 20 A balanced protection board in `PCD-BAT-03` is superseded as the pack protection: the listings state no overcharge threshold, protection IC, thickness or temperature support, so `PCB-01` is a custom pack-end board (`S-8252AAC` primary, `bq29200` secondary and balancer, two `PSMN1R5-30YLC` FETs with a 5 mΩ shunt, `AC72ABD` thermal cutoff). Cell facts from the Samsung SDI specification: maximum charge current 4 A (standard 1.25 A), DC impedance typically 22 mΩ (30 mΩ maximum), 2.5 V cut-off; the charger runs in its default mode at 8.4 V rather than a trimmed voltage (`BD-09`). The pack-cost estimate above excludes the custom protection board and its FETs.
 
 ## 10. Sourcing snapshot — 2026-09-16
 
