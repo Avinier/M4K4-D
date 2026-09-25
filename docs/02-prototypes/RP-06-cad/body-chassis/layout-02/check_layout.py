@@ -131,7 +131,7 @@ def main():
     # Every panel-area part against the body, chassis and interior groups.
     sensor_parts = [c for c in M.sensors().children if c.label != "GP2Y_OPTICAL_AXIS"]
     optical_axis = next(c for c in M.sensors().children if c.label == "GP2Y_OPTICAL_AXIS")
-    panel_parts = [*body_panels.children[:3], *panel_hardware.children]
+    panel_parts = [*(c for c in body_panels.children if not c.label.startswith("WHEEL_ARCH")), *panel_hardware.children]
     others = [body_shell, *chassis_frame.children, *body_frame.children, *M.electronics().children, *M.body_audio().children, *sensor_parts]
     panel_clashes = {}
     for part in panel_parts + [c for c in sensor_parts if c.label == "GP2Y0A41SK0F_STEP"]:
@@ -429,7 +429,9 @@ def main():
                 if volume > 1e-3:
                     power_clashes[f"{part.label} x {other.label}"] = round(volume, 3)
                     continue
-            if "KEEP_OUT" not in part.label and "OPERATOR_HEAD" not in part.label and near(part, other, 5.0):
+            # The E-stop clamps on its well floor, so it touches the well by design.
+            mounted = part.label.startswith("ESTOP_XA1E") and other.label == "REAR_PANEL_ESTOP_WELL"
+            if "KEEP_OUT" not in part.label and not mounted and near(part, other, 5.0):
                 distance = part.distance_to(other)
                 if best is None or distance < best[0]:
                     best = (round(distance, 3), other.label)
@@ -440,6 +442,8 @@ def main():
         for b in power_parts[i + 1:]:
             if a.label.split("_PCB")[0].split("_PARTS")[0] == b.label.split("_PCB")[0].split("_PARTS")[0]:
                 continue  # a board's own plate and parts envelope touch by design
+            if a.label.startswith("ESTOP_XA1E") and b.label.startswith("ESTOP_XA1E"):
+                continue  # the switch body sits inside its own behind-panel keep-out
             if a.bounding_box().overlaps(b.bounding_box()) and _vol(a & b) > 1e-3:
                 power_self_clashes[f"{a.label} x {b.label}"] = round(_vol(a & b), 3)
     power_harness_overlaps = {}
@@ -474,8 +478,11 @@ def main():
         "PCB01_mm2 (on the pack)": round(M.BATTERY_BMS_SIZE[0] * M.BATTERY_BMS_SIZE[1], 1),
         "removed_placeholder_envelopes_mm2": round(48.0 * 36.0 + 42.0 * 28.0, 1),
     }
-    estop_head = by_label(power_parts, "ESTOP_XW1E_OPERATOR_HEAD_D40")
-    estop_keep_out = by_label(power_parts, "ESTOP_XW1E_BEHIND_PANEL_KEEP_OUT")
+    estop_head = by_label(power_parts, "ESTOP_XA1E_MUSHROOM_D29")
+    estop_keep_out = by_label(power_parts, "ESTOP_XA1E_BEHIND_PANEL_KEEP_OUT")
+    estop_well = next(c for c in body_panels.children if c.label == "REAR_PANEL_ESTOP_WELL")
+    rear_frame = next(c for c in panel_hardware.children if c.label == "REAR_PANEL_INTERNAL_FRAME_WITH_BOSSES")
+    pcb02_parts = [by_label(power_parts, n) for n in ("PCB02_CHARGE_AND_SYSTEM_POWER_PCB", "PCB02_CHARGE_AND_SYSTEM_POWER_PARTS_ENVELOPE")]
     rear_panel_solid = panel_by_face["REAR"]
     estop_geometry = {
         "head_min_x_mm": round(estop_head.bounding_box().min.X, 3),
@@ -486,7 +493,11 @@ def main():
         "head_z_mm": [round(estop_head.bounding_box().min.Z, 3), round(estop_head.bounding_box().max.Z, 3)],
         "rear_panel_top_z_mm": round(rear_panel_solid.bounding_box().max.Z, 3),
         "head_vs_panel_mm3": round(_vol(estop_head & rear_panel_solid), 3),
-        "rear_panel_cut_out": "not modelled: the rear panel is still uncut (open item)",
+        "head_proud_of_panel_mm": round(M.ESTOP_REAR_OUTER_X - estop_head.bounding_box().min.X, 3),
+        "well_vs_frame_mm3": round(_vol(estop_well & rear_frame), 3),
+        "well_gap_to_frame_mm": round(estop_well.distance_to(rear_frame), 3),
+        "keep_out_vs_pcb02_mm3": round(sum(_vol(estop_keep_out & p) for p in pcb02_parts), 3),
+        "rear_panel_cut_out": "octagonal well with a Ø16.2 floor cut-out (IDEC XA)",
     }
     pcb01 = by_label(battery_parts, "BATTERY_BMS_PCB01_PACK_PROTECTION")
     power_mass_ids = [
@@ -600,16 +611,16 @@ def main():
         ("tactile_nose_precedes_ball_surface", M.TACTILE_NOSE_FACE_X > M.BALL_CONTACT[0] + M.BALL_DIAMETER / 2.0, {"tactile_face_x_mm": M.TACTILE_NOSE_FACE_X, "ball_front_x_mm": M.BALL_CONTACT[0] + M.BALL_DIAMETER / 2.0}),
         ("tactile_nose_has_bounded_travel", 2.0 <= M.TACTILE_NOSE_TRAVEL <= 4.0, {"travel_mm": M.TACTILE_NOSE_TRAVEL}),
         ("battery_forward_of_axle", M.BATTERY_CENTER[0] > 0.0, {"battery_x_mm": M.BATTERY_CENTER[0]}),
-        ("power_boards_are_in_the_electronics_group", {c.label for c in power_group.children} >= {"PCB02_CHARGE_AND_SYSTEM_POWER", "PCB03_MOTOR_GATE_AND_HEAD_RAIL", "PCB04_BRANCH_CONVERTERS", "PACK_ATOF_FUSE_HOLDER_ENVELOPE", "ESTOP_XW1E_BV402M_R"} and not any(c.label in ("POWER_DISTRIBUTION_RP02_ENVELOPE", "SAFETY_AND_WATCHDOG_ENVELOPE") for c in M.electronics().children), {"children": [c.label for c in power_group.children], "proposal": "RP-02 board-specs.md sec 2, 2026-09-25"}),
+        ("power_boards_are_in_the_electronics_group", {c.label for c in power_group.children} >= {"PCB02_CHARGE_AND_SYSTEM_POWER", "PCB03_MOTOR_GATE_AND_HEAD_RAIL", "PCB04_BRANCH_CONVERTERS", "PACK_ATOF_FUSE_HOLDER_ENVELOPE", "ESTOP_XA1E_BV3U02KT_R"} and not any(c.label in ("POWER_DISTRIBUTION_RP02_ENVELOPE", "SAFETY_AND_WATCHDOG_ENVELOPE") for c in M.electronics().children), {"children": [c.label for c in power_group.children], "proposal": "RP-02 board-specs.md sec 2, 2026-09-25"}),
         ("power_boards_clear_of_all_real_hardware", not power_clashes, {"clashes_mm3": power_clashes, "checked_against": len(power_hardware), "keep_outs_included": True}),
         ("power_boards_do_not_interfere_with_each_other", not power_self_clashes, {"clashes_mm3": power_self_clashes}),
         ("power_boards_keep_running_gaps", all(v["nearest_mm"] >= 0.4 for v in power_gaps.values()), {"minimum_mm": 0.4, "nearest": power_gaps}),
         ("power_bay_gaps_are_about_1mm_and_have_no_slack", all(v >= 0.89 for v in bay_gaps.values()) and abs(bay_gaps["pcb04_to_pcb03_mm"] - 1.0) < 1e-6, {"gaps": bay_gaps, "note": "PCB-03 and PCB-04 use the whole free band under the tray: 44 + 1 + 41 mm between the lower cross-members; a larger board or the 3.3 mF hold-up footprint needs a different bay"}),
         ("power_boards_vs_harness_placeholders_open_and_unchanged", set(power_harness_overlaps) == power_harness_recorded, {"status": "OPEN: harness volumes are unresolved route placeholders; HARNESS_BATTERY_TRUNK and HARNESS_MOTOR_BRANCH pass through PCB-03 and PCB-04, the gap under the boards is 7 mm (Z 56-63)", "overlaps_mm3": power_harness_overlaps}),
         ("power_board_footprints_recorded", footprints["PCB03_mm2"] >= 2460.0 - 1.0 and footprints["PCB04_mm2"] >= 3080.0 - 1.0, {"footprints": footprints, "source": "WS-H estimates from the part inventory; nothing is laid out"}),
-        ("estop_operator_is_outside_the_rear_panel_and_keep_out_clears_the_pi", estop_geometry["head_max_x_mm"] <= M.ESTOP_REAR_OUTER_X + 1e-6 and estop_geometry["head_z_mm"][1] <= estop_geometry["rear_panel_top_z_mm"] and estop_geometry["head_vs_panel_mm3"] < 1e-3, estop_geometry),
+        ("estop_operator_is_outside_the_rear_panel_and_keep_out_clears_the_pi", estop_geometry["head_max_x_mm"] <= M.ESTOP_REAR_OUTER_X + 1e-6 and estop_geometry["head_z_mm"][1] <= estop_geometry["rear_panel_top_z_mm"] and estop_geometry["head_vs_panel_mm3"] < 1e-3 and estop_geometry["well_vs_frame_mm3"] < 1e-3 and estop_geometry["keep_out_vs_pcb02_mm3"] < 1e-3, estop_geometry),
         ("pcb01_replaces_generic_bms_at_2p9mm", abs(pcb01.bounding_box().size.Z - 2.9) < 1e-6 and abs(pcb01.bounding_box().size.X - 20.0) < 1e-6 and abs(pcb01.bounding_box().size.Y - 48.0) < 1e-6, {"pcb01_size_mm": [round(pcb01.bounding_box().size.X, 3), round(pcb01.bounding_box().size.Y, 3), round(pcb01.bounding_box().size.Z, 3)], "previous_bms_mm": [20.0, 48.0, 4.5]}),
-        ("control_power_sensors_row_replaced_by_board_rows", "CONTROL_POWER_SENSORS" not in mass_by_id and all(i in mass_by_id for i in power_mass_ids) and "ESTOP_XW1E_BV402M_R" in mass_by_id, {"replaced_rows_g": replaced_row_g, "removed_row_g": 121.5, "estop_g": mass_by_id["ESTOP_XW1E_BV402M_R"], "battery_g": mass_by_id["BATTERY"], "total_mass_g": round(M.mass_properties()["mass_g"], 1), "note": "hand-kept register: masses are RP-02 estimates, not derived from the solids"}),
+        ("control_power_sensors_row_replaced_by_board_rows", "CONTROL_POWER_SENSORS" not in mass_by_id and all(i in mass_by_id for i in power_mass_ids) and "ESTOP_XA1E_BV3U02KT_R" in mass_by_id, {"replaced_rows_g": replaced_row_g, "removed_row_g": 121.5, "estop_g": mass_by_id["ESTOP_XA1E_BV3U02KT_R"], "battery_g": mass_by_id["BATTERY"], "total_mass_g": round(M.mass_properties()["mass_g"], 1), "note": "hand-kept register: masses are RP-02 estimates, not derived from the solids"}),
         ("head_source_exists", (M.HEAD_DIR / "layout_model.py").exists(), {"path": str(M.HEAD_DIR / "layout_model.py")}),
         ("pi_step_exists", (M.PURCHASED / "raspberry_pi_5.step").exists(), {"path": str(M.PURCHASED / "raspberry_pi_5.step")}),
         ("bearing_step_exists", (M.PURCHASED / "bearing_608zz.step").exists(), {"path": str(M.PURCHASED / "bearing_608zz.step")}),

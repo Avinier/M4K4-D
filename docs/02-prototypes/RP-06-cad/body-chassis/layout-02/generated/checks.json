@@ -1,6 +1,6 @@
 {
   "layout_id": "RP03_BODY_CHASSIS_LAYOUT02",
-  "ok": true,
+  "ok": false,
   "checks": [
     {
       "name": "concept_a_track",
@@ -998,10 +998,10 @@
     },
     {
       "name": "rear_tail_clears_shell_and_panels",
-      "ok": true,
+      "ok": false,
       "evidence": {
         "shell_overlap_mm3": 0,
-        "panel_overlap_mm3": 0
+        "panel_overlap_mm3": 220.21846899762676
       }
     },
     {
@@ -1112,7 +1112,7 @@
           "PCB03_MOTOR_GATE_AND_HEAD_RAIL",
           "PCB04_BRANCH_CONVERTERS",
           "PACK_ATOF_FUSE_HOLDER_ENVELOPE",
-          "ESTOP_XW1E_BV402M_R"
+          "ESTOP_XA1E_BV3U02KT_R"
         ],
         "proposal": "RP-02 board-specs.md sec 2, 2026-09-25"
       }
@@ -1122,7 +1122,7 @@
       "ok": true,
       "evidence": {
         "clashes_mm3": {},
-        "checked_against": 138,
+        "checked_against": 140,
         "keep_outs_included": true
       }
     },
@@ -1140,8 +1140,8 @@
         "minimum_mm": 0.4,
         "nearest": {
           "PCB02_CHARGE_AND_SYSTEM_POWER_PCB": {
-            "nearest_mm": 5.381,
-            "to": "REAR_PANEL_INTERNAL_FRAME_WITH_BOSSES"
+            "nearest_mm": 0.8,
+            "to": "REAR_PANEL_ESTOP_WELL"
           },
           "PCB02_CHARGE_AND_SYSTEM_POWER_PARTS_ENVELOPE": {
             "nearest_mm": 2.0,
@@ -1166,6 +1166,30 @@
           "PACK_ATOF_FUSE_HOLDER_ENVELOPE": {
             "nearest_mm": 1.3,
             "to": "CHASSIS_RAIL_L_FRONT"
+          },
+          "ESTOP_XA1E_MUSHROOM_D29": {
+            "nearest_mm": 4.519,
+            "to": "REAR_PANEL_ESTOP_AMBER_BEZEL"
+          },
+          "ESTOP_XA1E_OPERATOR_COLLAR": {
+            "nearest_mm": 6.5,
+            "to": "REAR_PANEL_INTERNAL_FRAME_WITH_BOSSES"
+          },
+          "ESTOP_XA1E_UNIBODY_CONTACT_BLOCK": {
+            "nearest_mm": 8.006,
+            "to": "REAR_PANEL_INTERNAL_FRAME_WITH_BOSSES"
+          },
+          "ESTOP_XA1E_TAB_1": {
+            "nearest_mm": 6.181,
+            "to": "C0_RASPBERRY_PI5_EXACT_STEP"
+          },
+          "ESTOP_XA1E_TAB_2": {
+            "nearest_mm": 6.938,
+            "to": "C0_RASPBERRY_PI5_EXACT_STEP"
+          },
+          "ESTOP_XA1E_TAB_3": {
+            "nearest_mm": 12.799,
+            "to": "C0_RASPBERRY_PI5_EXACT_STEP"
           }
         }
       }
@@ -1218,24 +1242,28 @@
       "name": "estop_operator_is_outside_the_rear_panel_and_keep_out_clears_the_pi",
       "ok": true,
       "evidence": {
-        "head_min_x_mm": -80.4,
-        "head_max_x_mm": -60.4,
+        "head_min_x_mm": -73.0,
+        "head_max_x_mm": -63.5,
         "panel_outer_face_x_mm": -60.4,
         "keep_out_x_mm": [
-          -58.0,
-          -14.0
+          -50.4,
+          -26.5
         ],
         "keep_out_z_mm": [
-          99.65,
-          121.95
+          94.5,
+          116.5
         ],
         "head_z_mm": [
-          90.8,
-          130.8
+          91.0,
+          120.0
         ],
         "rear_panel_top_z_mm": 134.0,
         "head_vs_panel_mm3": 0,
-        "rear_panel_cut_out": "not modelled: the rear panel is still uncut (open item)"
+        "head_proud_of_panel_mm": 12.6,
+        "well_vs_frame_mm3": 0,
+        "well_gap_to_frame_mm": 0.268,
+        "keep_out_vs_pcb02_mm3": 0,
+        "rear_panel_cut_out": "octagonal well with a \u00d816.2 floor cut-out (IDEC XA)"
       }
     },
     {
@@ -1260,9 +1288,9 @@
       "evidence": {
         "replaced_rows_g": 121.0,
         "removed_row_g": 121.5,
-        "estop_g": 40.0,
+        "estop_g": 14.0,
         "battery_g": 113.7,
-        "total_mass_g": 2602.0,
+        "total_mass_g": 2576.0,
         "note": "hand-kept register: masses are RP-02 estimates, not derived from the solids"
       }
     },
@@ -1291,20 +1319,20 @@
       "name": "com_inside_support_x",
       "ok": true,
       "evidence": {
-        "com_x_mm": 18.73211048993571
+        "com_x_mm": 19.412234258611218
       }
     },
     {
       "name": "com_forward_of_physics_margin_line",
       "ok": true,
       "evidence": {
-        "com_x_mm": 18.73,
-        "com_h_mm": 106.55,
-        "x_over_h": 0.1758,
-        "a_tip_m_s2": 1.725,
+        "com_x_mm": 19.41,
+        "com_h_mm": 106.48,
+        "x_over_h": 0.1823,
+        "a_tip_m_s2": 1.789,
         "a_tip_min_m_s2": 1.582,
-        "equivalent_min_x_mm_at_this_h": 17.18,
-        "margin_over_a_peak_1p00": 1.725,
+        "equivalent_min_x_mm_at_this_h": 17.17,
+        "margin_over_a_peak_1p00": 1.789,
         "baseline_target": {
           "x_mm": 25.0,
           "h_mm": 124.0,
@@ -1318,7 +1346,7 @@
       "name": "ball_share_above_spin_walk_flag",
       "ok": true,
       "evidence": {
-        "ball_share": 0.1703,
+        "ball_share": 0.1765,
         "flag_below": 0.09
       }
     },
@@ -1327,14 +1355,14 @@
       "ok": true,
       "evidence": {
         "shoe_first_contact_pitch_deg": 6.054,
-        "com_over_axle_pitch_deg": 9.971
+        "com_over_axle_pitch_deg": 10.333
       }
     },
     {
       "name": "com_below_head_yaw",
       "ok": true,
       "evidence": {
-        "com_z_mm": 106.54676247090502
+        "com_z_mm": 106.4750289120355
       }
     }
   ]
