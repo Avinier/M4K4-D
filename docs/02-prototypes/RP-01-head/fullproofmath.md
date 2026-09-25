@@ -95,7 +95,7 @@ The current nominal mass tree uses a 20 g `E` allowance for the installed C2 ass
 
 These are D/E screening values. The inertia is an estimated axis inertia assembled from CAD/box intrinsic inertia and parallel-axis terms; it is not a measured tensor.
 
-**Layout 04 update, 2026-09-23 — rerun required.** The active tree is now ~358/432/557 g with estimated inertias 0.000635 / 0.000726 / 0.001180 kg·m² (roll/pitch/yaw). Yaw inertia rises about 9% from the 73 g turntable disc. The ~2% contributed by the body-side driven spur is not yet in the head tree. The yaw values in this document still use Layout 03's 0.001080 kg·m²; scale yaw inertial torques by about 1.09 until the workbook is rerun.
+**Layout 04 update, 2026-09-23, revised 2026-09-25 — rerun required.** After the 2026-09-25 structure revision (stiffened pitch frame, torsion box, trim seats, official servo mass properties) the active tree is ~370/464/588 g with estimated inertias 0.000675 / 0.000779 / 0.001282 kg·m² (roll/pitch/yaw): +3 / +7 / +19 % against the values below. The ~2% contributed by the body-side driven spur is not yet in the head tree. This document still uses Layout 03's values; `actuator-screen-01.md` scales each axis by its ratio until the workbook is rerun.
 
 The controlling authored motion values are:
 
@@ -315,6 +315,8 @@ $$
 For a simple reduction `N`, a first-order rotor contribution reflected to the output is `J_rotor N²`; equivalent comparisons may instead refer the payload to the motor as `J_load/N²`. Use one side consistently. The present workbook does **not** include this term because XC330 rotor and gear inertias are not available in the retained evidence. Its torque peaks must therefore be labelled external/output-load demand, not total motor demand. Manufacturer steady-state torque-speed curves include internal losses at steady speed but do not prove the extra current needed to accelerate the internal rotating train.
 
 For the M288 nominal ratio `N=288` and current pitch payload inertia `J_load=0.000728 kg·m²`, equality occurs at approximately `J_rotor=8.78×10⁻⁹ kg·m² = 0.0878 g·cm²`. This is a sensitivity threshold, not a claim about the actual actuator. Until an official inertia value or a defensible unloaded-acceleration current test exists, internal acceleration demand remains `U` and the magnitude multiplier is unknown.
+
+**Update 2026-09-25.** No official value exists, so the term is now bounded as an `E` estimate from comparable coreless motors: 0.11–0.25 g·cm² motor-side, i.e. 0.92–2.08 × 10⁻³ kg·m² at the M288 output (1.3–3.2× the carried pitch or roll inertia) and 0.36–0.82 × 10⁻³ kg·m² at the M181 yaw output. Every axis still clears the moving curve. The derivation and checks are in [actuator-screen-01.md §Paper-closure pass](actuator-screen-01.md#paper-closure-pass--v03-2026-09-25). Bench test B1 replaces the bound.
 
 CAD cannot accurately predict bearing preload, printed-part rubbing, misalignment, cable bending stiffness, torsion, connector forces or strain-relief forces.
 
@@ -947,6 +949,20 @@ An independent review of the calculation and Layout-03 source produced the follo
 | Roll bearings | **Unresolved trial geometry.** CAD reserves Ø16.2 × 6.2 mm seats without a frozen bearing SKU. | Select the real bearing, then update seat, preload and retention. Do not claim that no specialty 6 × 16 × 6 bearing exists; only the current SKU evidence is absent. |
 | Sign convention | **Confirmed interface mismatch.** Storyboard positive pitch matches the CAD right-hand pitch rotation; storyboard positive yaw and roll are opposite the raw CAD right-hand rotations. | Preserve storyboard signs at the public motion interface and document explicit CAD/firmware sign multipliers. Magnitude-only screens are unaffected; signed loads are not. |
 | Bearing loads, spindle bending and yaw-yoke stiffness | **Not demonstrated by the current paper record.** | Keep open until supported by calculations or representative tests. |
+
+**Follow-up, 2026-09-25 (head Layout 04 revision; details in its README and `fea/`).**
+
+| Audit item | Status now |
+|---|---|
+| Pitch-frame stiffness | Linear FEA of the P-frame part, with a pure couple on the cartridge seat and the +Y trunnion clamped. **Old frame: 0.98 N·m/rad, about 6 Hz**, which confirms this audit. After the redesign (side webs, hollow rear torsion box, keel under the slab): **51.4 N·m/rad, about 41 Hz** at 0.000779 kg·m², or 33 Hz at E = 2.3 GPa. The frame screen now passes; the servo, horn and bolted joints are `U` and are covered by tap test B6. |
+| Roll-servo saddle stiffness | FEA: **old 17.9 N·m/rad, about 27 Hz**. The servo case is now bolted to the box through its two lower front-face M2 holes (official drawing): **187.5 N·m/rad, about 84 Hz**. |
+| Actuator rotor/gear inertia | Bounded at 0.11–0.25 g·cm² motor-side (`E`, from comparable coreless motors), with the effect set out in `actuator-screen-01.md`. ROBOTIS publishes only whole-housing mass properties, which are now used in the mass tree. |
+| Cross-frame fasteners | Fixed: swept pockets in the rolling flange clear the screw heads by 0.51 mm at every roll angle. All 30 fasteners are in the 56-pose cross-frame grid (1,228 pairs per pose, 0 hits). |
+| A0 micron residuals | Physical trim path: tungsten slugs in the ear caps (±1.69 mm roll-Y) and brass washers on the rear cover (±0.60 mm pitch-X). |
+| Mechanical hard stops | 3° beyond usable travel since 2026-09-23. Both pins are now Ø2 hardened steel dowels with full root engagement. Under the `BD-13` Current Limits: pin shear 9–13 MPa, PLA bearing 9–10 MPa. At a fault stall: 28–30 and 23–28 MPa. Impact is a bench item. |
+| Roll bearings | 696-2Z (ISO 619/6-2Z, 6 × 15 × 5) selected; seats Ø15.1 × 5.2 mm. |
+| Sign convention | Derived from geometry and recorded in `RP-06-cad/head/layout-04/motion-signs.json` (pitch +1, yaw −1, roll −1). |
+| Bearing loads, spindle bending and yaw-yoke stiffness | Still not demonstrated. |
 
 This audit changes the label on the result, not the already checked arithmetic: **the payload-side rigid-body math is sound; the complete physical/electromechanical proof is incomplete.**
 

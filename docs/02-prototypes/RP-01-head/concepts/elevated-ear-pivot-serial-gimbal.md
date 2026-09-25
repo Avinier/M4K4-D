@@ -5,7 +5,7 @@
 | Status | **Selected RP-01 mechanism path and modelled in Layout 03; actuator SKUs and physical gate evidence remain open** |
 | Authored | 2026-08-27 |
 | Joint order | Body-fixed yaw → pitch → head-fixed roll |
-| Physical baseline | Layout 04: 104 H × 150 W × 115 D mm head; nominal ~358/432/557 g roll/pitch/yaw at M008=20 g E with ~547–572 g complete C2 sensitivity; 49.5 mm neck allocation |
+| Physical baseline | Layout 04: 104 H × 150 W × 115 D mm head; nominal ~370/464/588 g roll/pitch/yaw at M008=20 g E with ~578–603 g complete C2 sensitivity; 49.5 mm neck allocation |
 | Feeds | `comparison.md`, `../physics.md`, `../gates.md`, `../rig.md`; later head blockout/CAD |
 
 This note extracts only the credible topology from an unverified, generated-looking reference diagram. Its labels, scale, proportions, motor sizes and bearing sizes are not source data and must not enter CAD or the BOM.
