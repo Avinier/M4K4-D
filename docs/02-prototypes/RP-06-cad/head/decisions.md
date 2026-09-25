@@ -1,6 +1,6 @@
 # Head CAD decisions
 
-Recorded: **2026-09-07**. Revised: **2026-09-12**. Scope: **RP-01 Layout 03 planning architecture and retained hardware-specific gaps**.
+Recorded: **2026-09-07**. Revised: **2026-09-25**. Scope: **RP-01 Layout 03 planning architecture and retained hardware-specific gaps**.
 
 This is the current record of the head fitting discussion. **Fixed for first layout** means use the choice when laying out the head; it does not mean the mechanism has passed RP-01, an actuator has been selected, or manufacturing dimensions have been frozen. Estimates remain in [packaging-estimates.md](packaging-estimates.md), and inherited geometric requirements remain in [requirements.md](requirements.md).
 
@@ -18,6 +18,7 @@ This is the current record of the head fitting discussion. **Fixed for first lay
 | HEAD-CAD-08 | **Builder selected after Layout 01 review** | Restore the octagonal head with crisp perimeter facets, a slim inner octagonal opening, coordinated bezel/crown height reduction, visible real screw points and larger hollow rolling ears |
 | HEAD-CAD-09 | **Modelled in Layout 03; hardware-specific gaps remain** | Layered/tapered head: feasibility first vs Layout 02, reject only if way worse; yoke length by engineering judgment; **no shroud**; keep **modular service splits** (easy disassembly / module removal); 3 mm camera gap; C2 tray; inserts/bearings/coupling/stops; **look into vignetting**. Intended last RP-01 packaging/detailing pass |
 | HEAD-CAD-10 | **Modelled in Layout 03; hardware-specific gaps remain** | Labelled viewer tree: physical subgroups; separate physics overlays (axes, CoM, gravity); separate trial harness; per-component global XYZ and size annotations, all hideable |
+| HEAD-CAD-11 | **Modelled in Layout 04 (2026-09-25); bench evidence remains** | Close the 2026-09-13 audit's CAD blockers: pitch torque path of side webs, hollow rear torsion box and keel; roll-servo case bolted to the box; 696-2Z roll bearings; Ø2 steel stop dowels; flange pockets for the retainer screws, with fasteners in the motion grid; ear and rear-cover balance-trim seats; geometry-derived sign multipliers; official XC330 mass properties |
 
 These choices develop the existing body → yaw → pitch → roll candidate. They do not change joint order or close the [RP-01 mechanism decision](../../RP-01-head/decision.md).
 
@@ -175,3 +176,4 @@ When a fixed first-layout choice changes, record the affected HEAD-CAD ID, reaso
 | 2026-09-09 | Helmet refinement after review of that conservative 122 mm stern: 104 mm rear (Z10…84), 24 mm upper shoulders, rear M2 lands at Y±44 / Z26/65, and a clipped pitch-servo adapter corner for combined roll/look-up. 56-pose grid, jackets, optics, hard stops and C2/camera extraction pass. Not a fabrication release. |
 | 2026-09-10 | Closed three Layout 03 detailing gaps without changing the 104 mm packaging: camera PCB edge clamp (0.10 mm to imported module), C2 tray edge/top keepers, front/rear insert pockets opened through the insertion faces. Display, servo, shaft and harness retention remain open. |
 | 2026-09-13 | Closure audit narrowed the previous pass claim to non-fastener packaging. Confirmed two X≈39.5 bearing-retainer screw collisions; hard-stop/usable-range conflict; high pitch and secondary roll-saddle stiffness risks; trial bearing SKU, physical A0 trim, sign mapping, bearing loads, spindle bending and yaw-yoke stiffness remain open. Layout 03 stays the packaging direction but is not a fabrication release. |
+| 2026-09-25 | HEAD-CAD-11 in Layout 04. Frame FEA: pitch 0.98 → 51.4 N·m/rad (about 6 → 41 Hz), roll mount 17.9 → 187.5 N·m/rad (about 27 → 84 Hz). 56-pose grid with 30 fasteners: 0 hits. Head nominal 358/432/557 → 370/464/588 g; A0 pitch axis 1.98 mm back and 0.88 mm down. Repo XC330 STEPs verified byte-identical to the ROBOTIS download. The body's yaw pinion became a scissor gear (RP-01 P09). Open: purchased-part trial fits, stop impact, measured trim, loaded tap test B6, yaw lash B4 |

@@ -5,12 +5,19 @@ HERE=Path(__file__).resolve().parent
 CLI=Path('/Users/avinier/.codex/plugins/cache/text-to-cad/cad/0.4.28/skills/cad/scripts')
 target=HERE/'head-layout.step.py'
 a=json.loads((HERE/'__cadgen__/models/head-layout.step.py/assembly.json').read_text())
-authored=[o['id'] for o in a['occurrences'] if not o['name'].startswith(('camera-module-3-wide_solid_','xc330_solid_'))]
+# Vendor catalog solids are not authored: the camera and servo keep their STEP
+# solid names; the Waveshare display (693 solids) and C2 boards are flattened
+# under their part names. One display solid self-intersects in the vendor file.
+VENDOR=('camera-module-3-wide_solid_','xc330_solid_','display_module_1to1_envelope','C2_ESP32_S3_Zero_23_5x18_footprint')
+authored=[o['id'] for o in a['occurrences'] if not o['name'].startswith(VENDOR)]
+# Measure by occurrence id looked up by name: the name selector does not
+# resolve '..._696_2Z'.
+occ={o['name']:o['id'] for o in a['occurrences']}
 commands=[
  ('refs-final.json',['refs',str(target),'--facts','--planes','--positioning']),
  ('validate-authored.json',['validate',str(target),'--refs',','.join(authored)]),
  ('validate-all-topology.json',['validate',str(target),'--skip-self-intersection']),
- ('bearing-spacing.json',['measure',str(target),'--from','#roll_bearing_1_16x6_reserve','--to','#roll_bearing_2_16x6_reserve','--axis','x']),
+ ('bearing-spacing.json',['measure',str(target),'--from','#'+occ['roll_bearing_1_696_2Z'],'--to','#'+occ['roll_bearing_2_696_2Z'],'--axis','x']),
 ]
 for filename,args in commands:
     result=subprocess.run(['rtk','proxy',sys.executable,str(CLI/'inspect'),*args],capture_output=True,text=True)

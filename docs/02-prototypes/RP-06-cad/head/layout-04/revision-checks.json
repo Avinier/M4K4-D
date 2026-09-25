@@ -3,17 +3,18 @@
   "motion_poses_executed_this_run": 56,
   "C2_extraction_path": "Neutral service pose; unplug and unfasten, lift 27mm in +Z, then withdraw rearward in -X with rear cover removed. PCB stay-with-tray keepers are integral to the tray.",
   "axes": {
-    "roll_y": -1.0933907025623506,
-    "roll_z": 47.35624991063,
-    "pitch_x": -38.138946839609034,
-    "pitch_z": 45.97142158129681
+    "roll_y": -1.069468547736451,
+    "roll_z": 47.21735927337164,
+    "pitch_x": -40.122066107057826,
+    "pitch_z": 45.094467249988796
   },
   "source_sha256": {
-    "layout_model.py": "27459e27588aece593387e8a985636454d31faafe5cc84985d6d50f42e546d72",
-    "details.py": "0eaf9171f70f902cf57010be6531fc6c5a22beff7f08d2c56c552bd5186cd52e",
-    "layout_axes.py": "2fdcb3a5a1b852c461e49ddf0be9d30a54fcdef500278abcb63af783267d7d87",
+    "layout_model.py": "9cd91ce67aab70c3e0a2dc2f3278d17e594aed7d3c2adf15ab96845be64c985f",
+    "details.py": "50b5ac8ba16add84b78569a686d417349834baa7905cdbfe0d135862b08de66b",
+    "layout_axes.py": "06f2ae49211e00e4b1bd015cc53c4a434df43a778c855f71c61c6ec7af7a27e8",
     "harness.py": "363605797b042621d9f5ca44af729841933995c091db728bd7932b30ade85639",
-    "optics.py": "94185c1fd76a8727f90995de3ce8225a6b3498d9c08c3f2e1a598d8c3f233f3a"
+    "optics.py": "94185c1fd76a8727f90995de3ce8225a6b3498d9c08c3f2e1a598d8c3f233f3a",
+    "mass_layout.py": "d2f71f97a83662139d2b6bebcc37b5c85885facff28830576e22a3495f685d09"
   },
   "service_extraction_hits": [],
   "retention_misses": [],
@@ -26,8 +27,40 @@
   ],
   "poses": 56,
   "motion_envelope": "motion-envelope.json (A+ firmware limit; per-axis hard stops alone do not enforce it)",
-  "mechanism_pairs_per_pose": 454,
-  "jacket_pairs_per_pose": 205,
+  "mechanism_pairs_per_pose": 1228,
+  "jacket_pairs_per_pose": 370,
+  "fasteners_in_motion_grid": [
+    "C2_tray_M2_-19",
+    "C2_tray_M2_-39",
+    "bearing_retainer_M2_39.5_-9",
+    "bearing_retainer_M2_39.5_9",
+    "bearing_retainer_M2_68.5_-9",
+    "bearing_retainer_M2_68.5_9",
+    "camera_bracket_M2_-15",
+    "camera_bracket_M2_15",
+    "coupling_M3_radial_grub_71.5",
+    "coupling_M3_radial_grub_74.5",
+    "ear_-1_M2_1",
+    "ear_-1_M2_2",
+    "ear_-1_hidden_mount_M2_-4",
+    "ear_-1_hidden_mount_M2_4",
+    "ear_1_M2_1",
+    "ear_1_M2_2",
+    "ear_1_hidden_mount_M2_-4",
+    "ear_1_hidden_mount_M2_4",
+    "front_M2x10_1",
+    "front_M2x10_2",
+    "front_M2x10_3",
+    "front_M2x10_4",
+    "front_M2x10_5",
+    "front_M2x10_6",
+    "rear_M2x6_1",
+    "rear_M2x6_2",
+    "rear_M2x6_3",
+    "rear_M2x6_4",
+    "roll_servo_case_M2_-8",
+    "roll_servo_case_M2_8"
+  ],
   "same_frame_hits": [],
   "motion_hits": [],
   "harness_pinches": [],
@@ -317,7 +350,7 @@
       "axis": "roll",
       "angle": -22.0,
       "at_limit": false,
-      "overlap_mm3": 0.5438348378005529,
+      "overlap_mm3": 0.6065711986014642,
       "distance_mm": 0.0
     },
     {
@@ -331,7 +364,7 @@
       "axis": "roll",
       "angle": 22.0,
       "at_limit": false,
-      "overlap_mm3": 0.5438348378004839,
+      "overlap_mm3": 0.606571198601457,
       "distance_mm": 0.0
     },
     {
@@ -345,7 +378,7 @@
       "axis": "pitch",
       "angle": -26.0,
       "at_limit": false,
-      "overlap_mm3": 0.6972357625537792,
+      "overlap_mm3": 0.6972357625536476,
       "distance_mm": 0.0
     },
     {
@@ -359,7 +392,7 @@
       "axis": "pitch",
       "angle": 44.0,
       "at_limit": false,
-      "overlap_mm3": 0.6972357625535772,
+      "overlap_mm3": 0.6972357625535942,
       "distance_mm": 0.0
     }
   ],
@@ -373,12 +406,12 @@
     "main_octagonal_skin": {
       "valid": true,
       "solids": 1,
-      "volume": 36053.123784945594
+      "volume": 36525.97592233884
     },
     "removable_octagonal_rear_cover": {
       "valid": true,
       "solids": 1,
-      "volume": 12069.161908861772
+      "volume": 12184.222739799488
     },
     "window_opaque_mask_110mm": {
       "valid": true,
@@ -448,42 +481,42 @@
     "connected_rolling_cradle_flange_ear_stalks": {
       "valid": true,
       "solids": 1,
-      "volume": 10216.440395642494
+      "volume": 10130.908569660778
     },
     "rolling_spindle_6mm": {
       "valid": true,
       "solids": 1,
       "volume": 904.7786842338605
     },
-    "roll_bearing_1_16x6_reserve": {
+    "roll_bearing_1_696_2Z": {
       "valid": true,
       "solids": 1,
-      "volume": 1025.2273465724932
+      "volume": 732.6194068171396
     },
-    "roll_bearing_2_16x6_reserve": {
+    "roll_bearing_2_696_2Z": {
       "valid": true,
       "solids": 1,
-      "volume": 1025.2273465724932
+      "volume": 732.6194068171396
     },
     "bearing_cartridge_trial": {
       "valid": true,
       "solids": 1,
-      "volume": 11807.969160578785
+      "volume": 12186.379096177772
     },
     "coaxial_coupling_trial": {
       "valid": true,
       "solids": 1,
-      "volume": 675.923146007646
+      "volume": 675.9231460135569
     },
     "roll_XC330_1to1_reference": {
       "valid": true,
       "solids": 1,
-      "volume": 19720.0
+      "volume": 16846.371578978484
     },
     "pitch_XC330_1to1_reference": {
       "valid": true,
       "solids": 1,
-      "volume": 19720.0
+      "volume": 19720.000000000004
     },
     "pitch_trunnion_-49": {
       "valid": true,
@@ -498,27 +531,27 @@
     "connected_pitch_frame_roll_servo_saddle": {
       "valid": true,
       "solids": 1,
-      "volume": 14991.288153629803
+      "volume": 30528.583746978948
     },
     "yaw_yoke_leg_-55": {
       "valid": true,
       "solids": 1,
-      "volume": 5243.436376396954
+      "volume": 5201.3425684941785
     },
     "yaw_yoke_leg_55": {
       "valid": true,
       "solids": 1,
-      "volume": 4453.181029776882
+      "volume": 4411.087221874098
     },
     "yaw_turntable_disc_flush": {
       "valid": true,
       "solids": 1,
-      "volume": 58706.15017865027
+      "volume": 58706.150178650256
     },
     "pitch_servo_to_yoke_adapter_trial": {
       "valid": true,
       "solids": 1,
-      "volume": 2907.600000000001
+      "volume": 2907.6000000000017
     },
     "ear_-1_M2_1": {
       "valid": true,
@@ -529,16 +562,6 @@
       "valid": true,
       "solids": 1,
       "volume": 25.32544429234549
-    },
-    "ear_-1_M2_3": {
-      "valid": true,
-      "solids": 1,
-      "volume": 25.3254442923455
-    },
-    "ear_-1_M2_4": {
-      "valid": true,
-      "solids": 1,
-      "volume": 25.325444292345505
     },
     "ear_-1_hidden_mount_M2_-4": {
       "valid": true,
@@ -553,12 +576,12 @@
     "ear_-1_ridged_inner_mount": {
       "valid": true,
       "solids": 1,
-      "volume": 1282.9738992468365
+      "volume": 1297.3669478774748
     },
     "ear_-1_hollow_removable_cap": {
       "valid": true,
       "solids": 1,
-      "volume": 2997.0201101057623
+      "volume": 3063.4854906411506
     },
     "ear_-1_amber_inlay": {
       "valid": true,
@@ -580,16 +603,6 @@
       "solids": 1,
       "volume": 25.325444292345487
     },
-    "ear_1_M2_3": {
-      "valid": true,
-      "solids": 1,
-      "volume": 25.325444292345505
-    },
-    "ear_1_M2_4": {
-      "valid": true,
-      "solids": 1,
-      "volume": 25.325444292345505
-    },
     "ear_1_hidden_mount_M2_-4": {
       "valid": true,
       "solids": 1,
@@ -603,12 +616,12 @@
     "ear_1_ridged_inner_mount": {
       "valid": true,
       "solids": 1,
-      "volume": 1270.126743965042
+      "volume": 1285.3373674358074
     },
     "ear_1_hollow_removable_cap": {
       "valid": true,
       "solids": 1,
-      "volume": 2964.7100953266286
+      "volume": 3031.1981454034194
     },
     "ear_1_amber_inlay": {
       "valid": true,
@@ -683,7 +696,7 @@
     "C2_removable_open_rear_tray": {
       "valid": true,
       "solids": 1,
-      "volume": 2083.9100041008705
+      "volume": 2083.9100041008687
     },
     "C2_USB_C_installed_plug_reserve": {
       "valid": true,
@@ -698,7 +711,7 @@
     "roll_bearing_retainer_39.5": {
       "valid": true,
       "solids": 1,
-      "volume": 151.77169540921875
+      "volume": 151.063086609707
     },
     "bearing_retainer_M2_39.5_-9": {
       "valid": true,
@@ -713,12 +726,12 @@
     "roll_bearing_retainer_68.5": {
       "valid": true,
       "solids": 1,
-      "volume": 154.39673805142462
+      "volume": 154.39673805142482
     },
     "bearing_retainer_M2_68.5_-9": {
       "valid": true,
       "solids": 1,
-      "volume": 25.325444292345487
+      "volume": 25.325444292345484
     },
     "bearing_retainer_M2_68.5_9": {
       "valid": true,
@@ -728,12 +741,12 @@
     "roll_hard_stop_pin": {
       "valid": true,
       "solids": 1,
-      "volume": 5.08938009881547
+      "volume": 15.707963267948967
     },
     "pitch_hard_stop_pin": {
       "valid": true,
       "solids": 1,
-      "volume": 12.566370614359169
+      "volume": 25.132741228718324
     },
     "camera_bracket_M2_-15": {
       "valid": true,
@@ -748,22 +761,47 @@
     "removable_roll_servo_saddle_strap": {
       "valid": true,
       "solids": 1,
-      "volume": 615.9936008638688
+      "volume": 615.9936008638687
     },
     "coupling_M3_radial_grub_74.5": {
       "valid": true,
       "solids": 1,
-      "volume": 21.205750411731106
+      "volume": 21.20575041173111
     },
     "coupling_M3_radial_grub_71.5": {
       "valid": true,
       "solids": 1,
-      "volume": 21.205750411731106
+      "volume": 21.20575041173111
     },
     "CSI_roof_straight_exit_guide": {
       "valid": true,
       "solids": 1,
       "volume": 180.30442631532284
+    },
+    "roll_servo_case_M2_-8": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.3254442923455
+    },
+    "roll_servo_case_M2_8": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.325444292345498
+    },
+    "ear_-1_trim_slug_stack_max": {
+      "valid": true,
+      "solids": 1,
+      "volume": 452.38934211693015
+    },
+    "ear_1_trim_slug_stack_max": {
+      "valid": true,
+      "solids": 1,
+      "volume": 452.38934211693015
+    },
+    "rear_pitch_trim_washer_stack_max": {
+      "valid": true,
+      "solids": 1,
+      "volume": 942.4777960769378
     }
   },
   "harness_gaps": [
@@ -801,8 +839,8 @@
       "branch": "servo_bus",
       "from_point_mm": [
         -100,
-        -45.09339070256235,
-        38.35624991063
+        -45.06946854773645,
+        38.21735927337164
       ],
       "frame": "P",
       "reason": "Stop at labelled keep-out: connector exit drawing and dynamic cable radius/FFC orientation unselected; roll/pitch transition is not qualified."

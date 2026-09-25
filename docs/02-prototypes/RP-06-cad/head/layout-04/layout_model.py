@@ -286,8 +286,9 @@ def build_parts(catalog=True,reliefs=True):
     skin_style=out['main_octagonal_skin']
     skin_style['shape']=tint(skin,'main_octagonal_skin',skin_style['color'],skin_style['alpha'])
     add('rolling_spindle_6mm',axial(3,32,(-56,ROLL_Y,ROLL_Z)),'R','#b7bfc0',owner='M016-18-R')
+    # 696-2Z (ISO 619/6-2Z) d6 x D15 x B5; details.py owns the seats.
     for i,x in enumerate([-43,-65]):
-        add(f'roll_bearing_{i+1}_16x6_reserve',axial(8,6,(x,ROLL_Y,ROLL_Z))-axial(3.1,8,(x,ROLL_Y,ROLL_Z)),'P','#acb5b9',owner='M016-18-P')
+        add(f'roll_bearing_{i+1}_696_2Z',axial(7.5,5,(x,ROLL_Y,ROLL_Z))-axial(3.1,7,(x,ROLL_Y,ROLL_Z)),'P','#acb5b9',owner='M016-18-P')
     cartridge=block(-69,-39,ROLL_Y-12,ROLL_Y+12,ROLL_Z-12,ROLL_Z+12)-axial(8.3,32,(-54,ROLL_Y,ROLL_Z))
     add('bearing_cartridge_trial',cartridge,'P','#c38a47',owner='M010-P')
     add('coaxial_coupling_trial',axial(6,8.5,(-73.25,ROLL_Y,ROLL_Z))-axial(3.1,10,(-73.25,ROLL_Y,ROLL_Z)),'R','#b7bfc0',owner='M013-15-R')
@@ -296,7 +297,11 @@ def build_parts(catalog=True,reliefs=True):
         roll=servo.rotate(Axis.X,90).rotate(Axis.Z,90).moved(Location((-84,ROLL_Y,ROLL_Z)))
         pitch=servo.rotate(Axis.X,-90).rotate(Axis.Y,270).moved(Location((PITCH_X,40,PITCH_Z)))
     else:
-        roll=block(-106.5,-77.5,ROLL_Y-10,ROLL_Y+10,ROLL_Z-24.5,ROLL_Z+9.5)
+        # Case 23 mm (X -103.5..-80.5) plus the Ø16 x 3 horn on each face, per
+        # the official ROBOTIS drawing; the old single box filled the air
+        # round the front horn where the mounting bulkhead now sits.
+        roll=block(-103.5,-80.5,ROLL_Y-10,ROLL_Y+10,ROLL_Z-24.5,ROLL_Z+9.5)
+        roll=roll+axial(8,3,(-79,ROLL_Y,ROLL_Z))+axial(8,3,(-105,ROLL_Y,ROLL_Z))
         pitch=block(PITCH_X-24.5,PITCH_X+9.5,17.5,46.5,PITCH_Z-10,PITCH_Z+10)
     add('roll_XC330_1to1_reference',roll,'P','#a36f38',owner='M013-15-roll')
     add('pitch_XC330_1to1_reference',pitch,'Y','#a36f38',owner='M013-15-pitch')
@@ -311,7 +316,8 @@ def build_parts(catalog=True,reliefs=True):
     saddle=block(-108,-75,ROLL_Y-12,ROLL_Y+12,ROLL_Z-27.5,ROLL_Z-24.8)
     for off in [-11.5,11.5]:
         saddle=saddle+block(-107,-74,ROLL_Y+off-1.3,ROLL_Y+off+1.3,ROLL_Z-26,ROLL_Z-12)
-    saddle=saddle+block(-77,-70,ROLL_Y-13,ROLL_Y+13,ROLL_Z-25,ROLL_Z-16)
+    # The saddle's old front block is replaced by the rear torsion box and
+    # case-screw wall in details.py.
     frame=frame+saddle
     # Open the positive-Y front crossbar below the fixed pitch servo's sweep;
     # the rear crossbar, side arms and central cartridge seat remain connected.

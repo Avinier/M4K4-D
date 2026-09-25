@@ -15,6 +15,27 @@ HERE=Path(__file__).parent
 # connectors + assigned local harness are weighed together.
 C2_NOMINAL_G=20.0
 C2_SENSITIVITY_G=(10.0,20.0,35.0)
+# ROBOTIS "XL330, XC330 Moment of Inertia" sheet (Feb 2023, reference only;
+# layout-01/parts/robotis_xl_xc330_moment_of_inertia.pdf): whole-servo
+# rigid-body CoG and tensor in the official STEP frame. M181 and M288 agree
+# to 0.02 mm and 0.3%; the M288 values are used for both.
+XC330_MASS_G=23.0
+XC330_COG_STEP=(-0.23138703,-7.5535115,-11.165635)
+XC330_INERTIA_STEP=((3528.6560,-23.270802,-25.249287),(-23.270802,1801.7452,-457.15800),(-25.249287,-457.15800,2977.4326))
+
+def _rot(axis,deg):
+    import numpy as np
+    c,s=math.cos(math.radians(deg)),math.sin(math.radians(deg))
+    return {'x':np.array([[1,0,0],[0,c,-s],[0,s,c]]),'y':np.array([[c,0,s],[0,1,0],[-s,0,c]]),'z':np.array([[c,-s,0],[s,c,0],[0,0,1]])}[axis]
+
+def xc330_placed(rotations,origin):
+    """Official CoG and inertia diagonal after the same rotations as layout_model."""
+    import numpy as np
+    R=np.eye(3)
+    for axis,deg in rotations:R=_rot(axis,deg)@R
+    centre=R@np.array(XC330_COG_STEP)+np.array(origin)
+    inertia=R@np.array(XC330_INERTIA_STEP)@R.T
+    return [float(v) for v in centre],[float(inertia[i][i]) for i in range(3)]
 def rows_for(parts,c2=C2_NOMINAL_G):
     rows=[]
     def add(owner,name,frame,mass,centre,size=(0,0,0),shape=None,basis='D/E allocation; uniform bounding-box inertia approximation'):
@@ -41,8 +62,18 @@ def rows_for(parts,c2=C2_NOMINAL_G):
     add('M006','CSI cable + strain relief','R',8,(-30,10,65),(20,20,20))
     add('M007','addressable LED installed allowance','R',5,(-6,m.LED_Y,m.LED_Z),(5,5,5))
     add('M008','C2 installed allowance','R',c2,(-29.5,-29,39.75),(9,18,23.5))
-    add('M013-15-roll','XC330 roll reference','P',23,(-92,m.ROLL_Y,m.ROLL_Z-7.5),(29,20,34))
-    add('M013-15-pitch','XC330 pitch reference','Y',23,(m.PITCH_X-7.5,32,m.PITCH_Z),(34,29,20))
+    # Servos: official ROBOTIS CoG and tensor, placed with layout_model's rotations.
+    for owner,name,frame,rotations,origin in [
+        ('M013-15-roll','XC330-M288-T roll (ACT-01)','P',[('x',90),('z',90)],(-84,m.ROLL_Y,m.ROLL_Z)),
+        ('M013-15-pitch','XC330-M288-T pitch (ACT-01)','Y',[('x',-90),('y',270)],(m.PITCH_X,40,m.PITCH_Z))]:
+        centre,diag=xc330_placed(rotations,origin)
+        rows.append(dict(owner=owner,name=name,frame=frame,mass_g=XC330_MASS_G,center_mm=centre,intrinsic_diagonal_g_mm2=diag,basis='D: ROBOTIS XC330 mass-property sheet (reference only), rotated into the head frame'))
+    # Balance trim at half capacity, so it can be added or removed (details.py).
+    from details import trim_capacity,TRIM_NOMINAL_FRACTION,EAR_SLUG,REAR_STACK
+    cap=trim_capacity();f=TRIM_NOMINAL_FRACTION
+    for sign in (-1,1):
+        add('M022-R',f'ear {sign} tungsten trim slugs (nominal half)','R',cap['ear_slug_max_g']*f,(m.EAR_X,sign*(71.4-EAR_SLUG['max_len']*f/2),m.EAR_Z),(12,EAR_SLUG['max_len']*f,12),basis='E: half the Ø12 x 4 mm tungsten seat capacity at 19.3 g/cm3')
+    add('M022-R','rear-cover brass trim washers (nominal half)','R',cap['rear_stack_max_g']*f,(-110.9+REAR_STACK['max_len']*f/2,m.ROLL_Y,m.ROLL_Z),(REAR_STACK['max_len']*f,20,20),basis='E: half the Ø20 x 3 mm brass seat capacity at 8.5 g/cm3')
     add('M013-15-R','rolling hub/coupling allowance','R',4,(-73.25,m.ROLL_Y,m.ROLL_Z),(8.5,12,12))
     add('M013-15-P','pitch horn allowance','P',2,(m.PITCH_X,49,m.PITCH_Z),(8,5,8))
     add('M016-18-R','rotating shaft portions','R',6,(-55,m.ROLL_Y,m.ROLL_Z),(32,6,6))
