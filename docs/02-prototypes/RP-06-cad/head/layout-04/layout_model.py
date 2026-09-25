@@ -180,6 +180,35 @@ def camera_edge_clamp():
         clamp=clamp+block(-10.90,-9.95,y0,y1,100.96,102.0)
     return clamp
 
+# Crown roof cap: a three-faced hip behind the crown. Its base is the crown's
+# rear trapezoid (Y +/-23 at the roof, +/-17 at the crown top) butted against
+# the crown's rear face (X-24), with no seam gap. The top edge runs back to a
+# short end edge on the roof (CROWN_CAP_END_W wide), so the top face is a
+# trapezoid (about 18 deg pitch);
+# each slanted edge runs to one end of that edge, so the two sides are
+# triangles. The end edge lands on the roof's rear-taper crease (X-78), the
+# last X where the roof is flat at Z86. The top face carries a 0.4 mm recessed
+# panel, like the skin's side lands. Hollow hood, open to the crown and to the
+# roof it is fused into.
+CROWN_CAP_X0=-24.
+CROWN_CAP_END_X=HELMET_REAR_TAPER_START_X
+CROWN_CAP_END_W=6.
+CROWN_CAP_WALL=1.6
+CROWN_CAP_PANEL_INSET,CROWN_CAP_PANEL_DEPTH=3.,.4
+
+def crown_roof_cap():
+    from build123d import Face, Wire, Shell, Solid, Vector, offset, Kind
+    x0,x1,w,zb=CROWN_CAP_X0,CROWN_CAP_END_X,CROWN_CAP_END_W/2,MAIN_H-1.
+    face=lambda pts:Face(Wire.make_polygon([Vector(*p) for p in pts],close=True))
+    fl,fr,tr,tl=(x0,-23,zb),(x0,23,zb),(x0,17,CROWN_H),(x0,-17,CROWN_H)
+    el,er=(x1,-w,zb),(x1,w,zb)
+    solid=Solid(Shell([face([fl,fr,tr,tl]),face([fl,el,er,fr]),face([fr,er,tr]),face([tr,er,el,tl]),face([tl,el,fl])]))
+    front=solid.faces().sort_by(Axis.X)[-1];bottom=solid.faces().sort_by(Axis.Z)[0]
+    hood=offset(solid,amount=-CROWN_CAP_WALL,openings=[front,bottom],kind=Kind.INTERSECTION)
+    top=[f for f in solid.faces() if abs(f.normal_at().Y)<1e-6 and f.normal_at().Z>.3][0]
+    n=top.normal_at();panel=offset(top,amount=-CROWN_CAP_PANEL_INSET,kind=Kind.INTERSECTION)
+    return hood-extrude(panel.moved(Location(tuple(n))),amount=1+CROWN_CAP_PANEL_DEPTH,dir=-n)
+
 def build_parts(catalog=True,reliefs=True):
     out={}
     def add(n,s,f,color='#e3ddc9',kind='physical',alpha=1,owner=None):
@@ -226,6 +255,8 @@ def build_parts(catalog=True,reliefs=True):
         bridge=block(-15.8,-9, min(y,math.copysign(64.5,y))-1,max(y,math.copysign(64.5,y))+1,z-2,z+2) if abs(y)>50 else block(-15.8,-9,y-2,y+2,z,85.2)
         bridge=bridge & prism(130,0,86,14,-16,-8)
         skin=skin+boss+bridge
+    # Hipped roof cap behind the crown (appearance, 2026-09-25).
+    skin=skin+crown_roof_cap()
     rear=stern(-115,-113.4)
     for y,z in REAR_SCREWS:
         # cover local reinforcement + receivers attached to shell sidewall
