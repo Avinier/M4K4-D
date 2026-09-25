@@ -20,14 +20,14 @@ Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gat
 - [ ] Resolve the older body-side clashes the 2026-09-24 sweep found (harness volumes against electronics, rear frame against power/safety envelopes, yaw plate and upper rails against the shell); see `openitems.md`.
 
 - [ ] Resolve inherited RP-01 blockers:
-  - [ ] two screw collisions
-  - [ ] pitch-frame stiffness
-  - [ ] roll-saddle stiffness
-  - [ ] hard-stop margin
-  - [ ] bearing SKU
-  - [ ] balance trim
-  - [ ] CAD/firmware sign mapping
-  - [ ] actuator family
+  - [x] two screw collisions (closed 2026-09-25 in head Layout 04: 0.51 mm clearance, 30 fasteners in the 56-pose grid, 0 hits)
+  - [ ] pitch-frame stiffness (redesigned 2026-09-25, FEA about 41 Hz; loaded tap/ring-down B6 open)
+  - [ ] roll-saddle stiffness (redesigned 2026-09-25, FEA about 84 Hz; B6 open)
+  - [ ] hard-stop margin (stops 3 deg past usable travel, Ø2 steel dowels; stop impact at speed is a bench item)
+  - [x] bearing SKU (696-2Z selected 2026-09-25; trial fit and preload on printed seats open)
+  - [ ] balance trim (trim path modelled 2026-09-25; weigh and trim on the built head)
+  - [x] CAD/firmware sign mapping (closed 2026-09-25: `head/layout-04/motion-signs.json`, pitch +1, yaw -1, roll -1)
+  - [x] actuator family: working choice `ACT-01` (2026-09-25), XC330-M181-T yaw, XC330-M288-T pitch/roll at 5 V (RP-01 `decision.md`). Not frozen: bench tests B1-B6 and dated builder approval remain
   - [ ] production camera interconnect
 
 - [ ] Replace remaining CAD envelopes with exact vendor or measured geometry:
@@ -157,7 +157,7 @@ Spec: [`../RP-02-electrical/board-specs.md`](../RP-02-electrical/board-specs.md)
   - [x] `PCB-03`: `LTC4368-1` + 3 mOhm shunt + two `PSMN1R0-30YLE`, `SMBJ10A` TVS; head rail `LTC3119` behind a latching `TPS259824`
   - [x] `PCB-04`: `TPS630701` + `TPS259474L` per branch; Pi rail `LTC3119`
   - [x] Watchdog: `TPS3436CFDBEDDFRQ1` per C2/C3 carrier
-- [ ] Decisions waiting on the builder (details in `board-specs.md` section 10): Pi setpoint 5.10 V vs 5.15 V; `PA-14` wording for the 43-100 uA `OFF` draw; servo family (XC330 5 V vs STS3215, whose 8.4 V maximum is 0.65% below the charger's 8.455 V worst case); brownout threshold registration; purchase.
+- [ ] Decisions waiting on the builder (details in `board-specs.md` section 10): Pi setpoint 5.10 V vs 5.15 V; `PA-14` wording for the 43-100 uA `OFF` draw; ~~servo family~~ (settled 2026-09-25: XC330 at 5 V, RP-01 `ACT-01`); brownout threshold registration; purchase.
 
 - [ ] Draw the schematics (start with `PCB-01`), then layouts:
   - [ ] Heavy copper and a short loop for the gate, shunt and drive feed on `PCB-03`; motor return straight to the star point
@@ -176,7 +176,7 @@ Spec: [`../RP-02-electrical/board-specs.md`](../RP-02-electrical/board-specs.md)
 
 - [ ] Real STEP parts for the new power hardware (none is wired into the model; fetch with the `step-parts` skill or the vendor's own STEP, then verify the outline): `LTC3119` (TSSOP-28 FE), Nexperia `PSMN1R5-30YLC` and `PSMN1R0-30YLE` (LFPAK56), `TPS630701RNMR`, `TPS259474L`/`TPS259824`, `BQ25798RQMR`, a USB-C receptacle, Anderson SBS Mini `B02265G1` housing, ATO FLR fuse holder `178.6165.0001`, IDEC `XW1E-BV402M-R` (22 mm panel), Bourns `AC72ABD`, the Vishay `WSK2512` and Bourns `CSS2H-2512` shunts, the Coilcraft `XAL5030-332ME` inductor, the DRV8874 carrier (`pololu_drv8874_carrier.step`, see "Bring boxed body-chassis" above).
 
-- [ ] Resolve the head-servo dependency: RP-01 has not frozen the family. The head rail is designed for the 5 V XC330 case (M181 yaw, M288 pitch/roll); a 7.4 V-class servo would be direct-fed, change the bus to Feetech half-duplex TTL, and runs into the 8.4 V versus charger worst-case conflict above. A 12 V variant would force 3S and reopen the pack, tub and charger.
+- [x] Resolve the head-servo dependency. **Resolved 2026-09-25 as working choice `ACT-01`** (RP-01 `decision.md`): XC330-M181-T yaw, XC330-M288-T pitch/roll on the 5 V `PB-HEAD` rail, Dynamixel 2.0 over TTL half-duplex; 7.4 V and 12 V classes rejected for V1. The family is not frozen until bench tests B1-B6 pass. Original note: RP-01 had not frozen the family. The head rail is designed for the 5 V XC330 case (M181 yaw, M288 pitch/roll); a 7.4 V-class servo would be direct-fed, change the bus to Feetech half-duplex TTL, and runs into the 8.4 V versus charger worst-case conflict above. A 12 V variant would force 3S and reopen the pack, tub and charger.
 
 - [ ] Yaw cable across the joint (`board-specs.md` section 9):
   - [ ] Confirm loop length, cycle targets and the life assumption (placeholders: 1 m loop, 3 years); the sideband list grew to about 14-20 AWG28 conductors
