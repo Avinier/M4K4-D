@@ -353,6 +353,26 @@ YAW_GEAR_OUTER_RADIUS = 20.0
 YAW_GEAR_BORE_RADIUS = 13.0
 YAW_GEAR_RATIO = 1.0
 YAW_PINION_CENTER = (0.0, 2.0 * YAW_GEAR_PITCH_RADIUS)  # offset from the yaw axis
+# Spur pair: module 1, 37 teeth each (pitch Ø37), 20 deg pressure angle. The
+# mesh is outside the M181's position loop, so plain lash reaches the head
+# one-for-one: 0.05-0.10 mm at r 18.5 is 0.15-0.31 deg against the <=0.25 deg
+# best-case hysteresis target (RP-01 gates.md P09). The pinion is therefore a
+# scissor (split) gear: two 2.4 mm halves, the loose half turned against the
+# fixed one by a torsion spring, so both flanks of the driven gear's teeth are
+# always in contact until the transmitted torque exceeds the preload.
+YAW_GEAR_MODULE = 1.0
+YAW_GEAR_TEETH = 37
+YAW_SCISSOR_HALF_FACE = 2.4
+YAW_SCISSOR_GAP = 0.2
+# Preload vs demand: the RP-01 screen's yaw peak external torque (0.1099 N*m
+# at Layout 03's 0.001080 kg*m2) scales with the head's current yaw inertia and
+# needs >= 1.5x margin; the M181 Current Limit (0.9 A x 0.333 N*m/A = 0.30 N*m)
+# is the most it can ever drive. 0.22 N*m keeps the mesh lash-free over the
+# whole motion envelope; above it (only past the design envelope, e.g. a
+# collision) the halves part and lash returns.
+YAW_SCISSOR_PRELOAD_NM = 0.22
+YAW_PEAK_EXTERNAL_TORQUE_NM = 0.1099 * _HEAD_YAW_MASS["estimated_inertia_kg_m2"] / 0.001080
+YAW_SERVO_CURRENT_LIMIT_TORQUE_NM = 0.9 * 0.333
 YAW_SERVO_ENVELOPE = (-10.0 + BODY_AXIS_X, 10.0 + BODY_AXIS_X, 29.0, 55.0, 99.0, 133.0)
 YAW_OPENING_RADIUS = 45.0
 # RP-01 actuator screen: peak yaw 378 deg/s = 63 rpm at the output. XC330-M181
@@ -578,7 +598,7 @@ MASS_ROWS = [
     ("BALL_NOSE_POD_SENSOR_CAP", 15.9, (110.5, 0.0, 41.2), "CAD volume: raked prow pod + lid 11.8 cm3 (X 92-128.5) and touch hood 1.8 cm3 (2026-09-24 prow rework) at ~45% effective PETG density (6.8 + 1.0 g); 5 M3 screws + 2 heat-set inserts 4.6 g; GP2Y0A41SK0F 3.5 g E"),
     ("BODY_AUDIO", 90.0, (48.0 + BODY_SHIFT_X, 0.0, 102.0), "speaker, amplifier and four microphones; CAD estimate"),
     ("HARNESS_AND_FASTENERS", 95.0, (4.0 + BODY_SHIFT_X, 0.0, 88.0), "estimate"),
-    ("BODY_YAW_STAGE", 88.0, (BODY_AXIS_X, 13.5, 134.3), "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 2 x 6 g 1:1 spur gears + 2 g clamp ring + 1 g coupling shaft; no SKU"),
+    ("BODY_YAW_STAGE", 89.0, (BODY_AXIS_X, 13.5, 134.3), "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 6 g driven spur + 6 g scissor pinion (two 2.4 mm halves) + 1 g torsion spring and retaining clip (2026-09-25) + 2 g clamp ring + 1 g coupling shaft; no SKU"),
     ("REAR_SKID_KEEL", 12.0, (-55.9 + REAR_CHASSIS_SHIFT_X, 0.0, 20.4), "CAD volume: 15.4 cm3 keel body at ~45% effective PETG density, 12x10 mm shoe, guards, 4 M3 screws"),
 ]
 if REAR_TAIL_ENABLED:
@@ -1802,11 +1822,16 @@ def body_yaw_stage():
     px += BODY_AXIS_X
     gear_z = (YAW_BEARING_Z[1] + 1.0, YAW_DISC_PLATE_BOTTOM_Z)
     x0, x1, y0, y1, z0, z1 = YAW_SERVO_ENVELOPE
-    pinion = Cylinder(YAW_GEAR_OUTER_RADIUS, gear_z[1] - gear_z[0]).moved(Location((px, py, sum(gear_z) / 2.0)))
+    # Scissor pinion: fixed half (keyed to the shaft) below, spring-loaded
+    # loose half above, 0.2 mm apart; both engage the 5 mm driven gear face.
+    half = YAW_SCISSOR_HALF_FACE
+    pinion_fixed = Cylinder(YAW_GEAR_OUTER_RADIUS, half).moved(Location((px, py, gear_z[0] + half / 2.0)))
+    pinion_loose = Cylinder(YAW_GEAR_OUTER_RADIUS, half).moved(Location((px, py, gear_z[0] + half + YAW_SCISSOR_GAP + half / 2.0)))
     shaft = Cylinder(2.5, gear_z[0] - z1).moved(Location((px, py, (gear_z[0] + z1) / 2.0)))
     return Compound(label="BODY_YAW_STAGE", children=[
         _paint(_ring(*YAW_BEARING_RADII, *YAW_BEARING_Z), "YAW_THIN_SECTION_BEARING_ENVELOPE", STEEL, 0.9),
-        _paint(pinion, "YAW_DRIVE_SPUR_1TO1", STEEL, 1.0),
+        _paint(pinion_fixed, "YAW_DRIVE_SCISSOR_PINION_FIXED_HALF", STEEL, 1.0),
+        _paint(pinion_loose, "YAW_DRIVE_SCISSOR_PINION_SPRUNG_HALF", BRONZE, 1.0),
         _paint(shaft, "YAW_SERVO_COUPLING_SHAFT", STEEL, 1.0),
         # XC330 dummy assembly: output horn axis is STEP Z, body runs -24.5..+9.5 in STEP Y
         # from that axis. -90 deg about Z runs the body along X (+180 hit the left upper rail; both clear the Pi

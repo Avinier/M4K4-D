@@ -87,7 +87,7 @@ def main():
     frames["Y"].append(_one(by_name, "BODY_YAW_DRIVE_MOVING"))
 
     features = {f"frame_{k}": _ref(v) for k, v in frames.items()}
-    features["yaw_pinion"] = _ref([_one(by_name, "YAW_DRIVE_SPUR_1TO1")])
+    features["yaw_pinion"] = _ref([_one(by_name, "YAW_DRIVE_SCISSOR_PINION_FIXED_HALF"), _one(by_name, "YAW_DRIVE_SCISSOR_PINION_SPRUNG_HALF")])
     for side in "LR":
         features[f"wheel_{side}"] = _ref([top[f"WHEEL_{side}"], _one(by_name, f"MOTOR_{side}_OUTPUT_SHAFT")])
     groups = {

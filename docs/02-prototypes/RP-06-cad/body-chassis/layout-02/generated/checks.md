@@ -49,13 +49,14 @@
 - [x] `four_body_microphones_are_allocated` — {'microphone_ports': ((54.0, 70.0, 118.0, 'FRONT_L'), (54.0, -70.0, 118.0, 'FRONT_R'), (-22.0, 70.0, 108.0, 'REAR_L'), (-22.0, -70.0, 108.0, 'REAR_R'))}
 - [x] `speaker_and_front_range_sensor_do_not_overlap` — {'overlap_volume_mm3': 0}
 - [x] `head_sweep_floor_clears_disc_top` — {'sweep_floor_z_mm': 159.0, 'disc_top_z_mm': 155.0}
-- [x] `hard_stops_alone_keep_head_off_disc` — {'hard_stop_corner': {'lowest_z_mm': -30.211, 'at_roll_pitch': [-21.0, -25.0], 'below_disc_top_mm': 0.0, 'note': 'Per-axis hard-stop corner. When below_disc_top_mm is 0 the hard stops alone keep the head off the disc.'}, 'overtravel_1deg': {'lowest_z_mm': -31.444, 'at_roll_pitch': [-22.0, -26.0], 'clearance_to_disc_top_mm': 3.056}}
+- [x] `hard_stops_alone_keep_head_off_disc` — {'hard_stop_corner': {'lowest_z_mm': -29.455, 'at_roll_pitch': [-21.0, -25.0], 'below_disc_top_mm': 0.0, 'note': 'Per-axis hard-stop corner. When below_disc_top_mm is 0 the hard stops alone keep the head off the disc.'}, 'overtravel_1deg': {'lowest_z_mm': -30.665, 'at_roll_pitch': [-22.0, -26.0], 'clearance_to_disc_top_mm': 3.835}}
 - [x] `head_motion_is_full_range_to_hard_stops` — {'rows': 69, 'hard_stops': {'roll_deg': [-21.0, 21.0], 'pitch_deg': [-25.0, 43.0]}, 'usable_travel': {'roll_deg': [-18.0, 18.0], 'pitch_deg': [-22.0, 40.0]}}
 - [x] `pi_cooler_headroom_kept` — {'headroom_mm': 10.5, 'yaw_parts_in_headroom_mm3': 0}
 - [x] `yaw_disc_fits_flat_body_top` — {'disc_radius_mm': 62.5, 'flat_top_half_width_mm': 64.0}
 - [x] `yaw_stage_clears_frame_electronics_shell` — {'overlap_volume_mm3': 0}
 - [x] `yaw_disc_rim_has_running_gap` — {'disc_rim_bottom_z_mm': 141.0, 'body_top_z_mm': 140.0}
 - [x] `yaw_spur_pair_meshes_1to1` — {'centre_distance_mm': 37.0, 'ratio': 1.0}
+- [x] `yaw_pinion_is_lash_free_scissor_gear` — {'module': 1.0, 'teeth': 37, 'half_face_mm': 2.4, 'gap_mm': 0.2, 'preload_nm': 0.22, 'peak_external_nm': 0.1304, 'servo_current_limit_torque_nm': 0.3}
 - [x] `yaw_servo_speed_covers_peak_yaw_at_3v7` — {'output_no_load_rpm': {'3.7V': 95.0, '5.0V': 129.0}, 'peak_output_rpm': 63.0, 'required_margin': 1.3}
 - [x] `body_fits_track_width` — {'body_width_mm': 174.0, 'wheel_stance_mm': 194.0}
 - [x] `body_ground_clearance_in_baseline_band` — {'body_bottom_mm': 30.0, 'target_mm': [25.0, 35.0]}
@@ -91,7 +92,7 @@
 - [x] `tactile_nose_has_bounded_travel` — {'travel_mm': 3.0}
 - [x] `battery_forward_of_axle` — {'battery_x_mm': 46.7}
 - [x] `power_boards_are_in_the_electronics_group` — {'children': ['PCB02_CHARGE_AND_SYSTEM_POWER', 'PCB03_MOTOR_GATE_AND_HEAD_RAIL', 'PCB04_BRANCH_CONVERTERS', 'PACK_ATOF_FUSE_HOLDER_ENVELOPE', 'ESTOP_XW1E_BV402M_R'], 'proposal': 'RP-02 board-specs.md sec 2, 2026-09-25'}
-- [x] `power_boards_clear_of_all_real_hardware` — {'clashes_mm3': {}, 'checked_against': 137, 'keep_outs_included': True}
+- [x] `power_boards_clear_of_all_real_hardware` — {'clashes_mm3': {}, 'checked_against': 138, 'keep_outs_included': True}
 - [x] `power_boards_do_not_interfere_with_each_other` — {'clashes_mm3': {}}
 - [x] `power_boards_keep_running_gaps` — {'minimum_mm': 0.4, 'nearest': {'PCB02_CHARGE_AND_SYSTEM_POWER_PCB': {'nearest_mm': 5.381, 'to': 'REAR_PANEL_INTERNAL_FRAME_WITH_BOSSES'}, 'PCB02_CHARGE_AND_SYSTEM_POWER_PARTS_ENVELOPE': {'nearest_mm': 2.0, 'to': 'CHASSIS_DECK_WITH_BODY_INTERFACE'}, 'PCB03_MOTOR_GATE_AND_HEAD_RAIL_PCB': {'nearest_mm': 0.5, 'to': 'IMU_BREAKOUT_ENVELOPE'}, 'PCB03_MOTOR_GATE_AND_HEAD_RAIL_PARTS_ENVELOPE': {'nearest_mm': 1.0, 'to': 'BODY_LOWER_CROSS_FRONT'}, 'PCB04_BRANCH_CONVERTERS_PCB': {'nearest_mm': 0.5, 'to': 'IMU_BREAKOUT_ENVELOPE'}, 'PCB04_BRANCH_CONVERTERS_PARTS_ENVELOPE': {'nearest_mm': 0.9, 'to': 'C3_ESP32_S3_DEVKITC_STEP'}, 'PACK_ATOF_FUSE_HOLDER_ENVELOPE': {'nearest_mm': 1.3, 'to': 'CHASSIS_RAIL_L_FRONT'}}}
 - [x] `power_bay_gaps_are_about_1mm_and_have_no_slack` — {'gaps': {'pcb04_to_lower_cross_rear_mm': 1.0, 'pcb03_to_lower_cross_front_mm': 1.0, 'pcb04_to_pcb03_mm': 1.0, 'pcb03_to_drv8874_y_mm': 1.11, 'pcb04_top_to_head_harness_vertical_z_mm': 0.9, 'pcb04_top_to_compute_tray_z_mm': 7.4, 'pcb02_to_rear_panel_frame_x_mm': 1.0}, 'note': 'PCB-03 and PCB-04 use the whole free band under the tray: 44 + 1 + 41 mm between the lower cross-members; a larger board or the 3.3 mF hold-up footprint needs a different bay'}
@@ -99,12 +100,12 @@
 - [x] `power_board_footprints_recorded` — {'footprints': {'PCB03_mm2': 2460.0, 'PCB04_mm2': 3080.0, 'PCB02_board_mm2 (vertical)': 1800.0, 'PCB01_mm2 (on the pack)': 960.0, 'removed_placeholder_envelopes_mm2': 2904.0}, 'source': 'WS-H estimates from the part inventory; nothing is laid out'}
 - [x] `estop_operator_is_outside_the_rear_panel_and_keep_out_clears_the_pi` — {'head_min_x_mm': -80.4, 'head_max_x_mm': -60.4, 'panel_outer_face_x_mm': -60.4, 'keep_out_x_mm': [-58.0, -14.0], 'keep_out_z_mm': [99.65, 121.95], 'head_z_mm': [90.8, 130.8], 'rear_panel_top_z_mm': 134.0, 'head_vs_panel_mm3': 0, 'rear_panel_cut_out': 'not modelled: the rear panel is still uncut (open item)'}
 - [x] `pcb01_replaces_generic_bms_at_2p9mm` — {'pcb01_size_mm': [20.0, 48.0, 2.9], 'previous_bms_mm': [20.0, 48.0, 4.5]}
-- [x] `control_power_sensors_row_replaced_by_board_rows` — {'replaced_rows_g': 121.0, 'removed_row_g': 121.5, 'estop_g': 40.0, 'battery_g': 113.7, 'total_mass_g': 2567.8, 'note': 'hand-kept register: masses are RP-02 estimates, not derived from the solids'}
+- [x] `control_power_sensors_row_replaced_by_board_rows` — {'replaced_rows_g': 121.0, 'removed_row_g': 121.5, 'estop_g': 40.0, 'battery_g': 113.7, 'total_mass_g': 2602.0, 'note': 'hand-kept register: masses are RP-02 estimates, not derived from the solids'}
 - [x] `head_source_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/head/layout-04/layout_model.py'}
 - [x] `pi_step_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/body-chassis/layout-01/references/purchased/raspberry_pi_5.step'}
 - [x] `bearing_step_exists` — {'path': '/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/body-chassis/layout-01/references/purchased/bearing_608zz.step'}
-- [x] `com_inside_support_x` — {'com_x_mm': 18.7670477850793}
-- [x] `com_forward_of_physics_margin_line` — {'com_x_mm': 18.77, 'com_h_mm': 105.05, 'x_over_h': 0.1786, 'a_tip_m_s2': 1.753, 'a_tip_min_m_s2': 1.582, 'equivalent_min_x_mm_at_this_h': 16.94, 'margin_over_a_peak_1p00': 1.753, 'baseline_target': {'x_mm': 25.0, 'h_mm': 124.0, 'x_over_h': 0.202}, 'body_shift_x_mm': 16.0, 'rule': 'RP-03 physics.md 2.5 margin is a_tip = g*x/h against a_peak 0.80-1.00 m/s2. The +20 mm line is that margin evaluated at h = 124 mm (a_tip 1.582); it is re-based 2026-09-25 (builder acceptance BA-06, decision RP03-CAD-09) to the same a_tip because the register CoM height is now about 105 mm. Neutral head only; head-pose corners are in RP03-CAD-09'}
-- [x] `ball_share_above_spin_walk_flag` — {'ball_share': 0.1706, 'flag_below': 0.09}
-- [x] `rear_skid_catches_before_com_crosses_axle` — {'shoe_first_contact_pitch_deg': 6.054, 'com_over_axle_pitch_deg': 10.129}
-- [x] `com_below_head_yaw` — {'com_z_mm': 105.05155182594508}
+- [x] `com_inside_support_x` — {'com_x_mm': 18.73211048993571}
+- [x] `com_forward_of_physics_margin_line` — {'com_x_mm': 18.73, 'com_h_mm': 106.55, 'x_over_h': 0.1758, 'a_tip_m_s2': 1.725, 'a_tip_min_m_s2': 1.582, 'equivalent_min_x_mm_at_this_h': 17.18, 'margin_over_a_peak_1p00': 1.725, 'baseline_target': {'x_mm': 25.0, 'h_mm': 124.0, 'x_over_h': 0.202}, 'body_shift_x_mm': 16.0, 'rule': 'RP-03 physics.md 2.5 margin is a_tip = g*x/h against a_peak 0.80-1.00 m/s2. The +20 mm line is that margin evaluated at h = 124 mm (a_tip 1.582); it is re-based 2026-09-25 (builder acceptance BA-06, decision RP03-CAD-09) to the same a_tip because the register CoM height is now about 105 mm. Neutral head only; head-pose corners are in RP03-CAD-09'}
+- [x] `ball_share_above_spin_walk_flag` — {'ball_share': 0.1703, 'flag_below': 0.09}
+- [x] `rear_skid_catches_before_com_crosses_axle` — {'shoe_first_contact_pitch_deg': 6.054, 'com_over_axle_pitch_deg': 9.971}
+- [x] `com_below_head_yaw` — {'com_z_mm': 106.54676247090502}

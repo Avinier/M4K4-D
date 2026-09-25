@@ -1,19 +1,19 @@
 {
   "layout_id": "RP03_BODY_CHASSIS_LAYOUT02",
-  "mass_g": 2567.7881092444595,
+  "mass_g": 2601.9794811320767,
   "com_mm": [
-    18.7670477850793,
-    1.000624470318403,
-    105.05155182594508
+    18.73211048993571,
+    0.9617313267926241,
+    106.54676247090502
   ],
   "rows": [
     {
       "id": "RP01_HEAD_LAYOUT04",
-      "mass_g": 555.1881092444594,
+      "mass_g": 588.3794811320766,
       "com_mm": [
-        15.267405780149609,
-        0.6729099749831485,
-        222.61515255529284
+        15.315026138868518,
+        0.4981566966142055,
+        222.54574459056465
       ],
       "source": "RP-01 generated mass tree"
     },
@@ -259,13 +259,13 @@
     },
     {
       "id": "BODY_YAW_STAGE",
-      "mass_g": 88.0,
+      "mass_g": 89.0,
       "com_mm": [
         16.0,
         13.5,
         134.3
       ],
-      "source": "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 2 x 6 g 1:1 spur gears + 2 g clamp ring + 1 g coupling shaft; no SKU"
+      "source": "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 6 g driven spur + 6 g scissor pinion (two 2.4 mm halves) + 1 g torsion spring and retaining clip (2026-09-25) + 2 g clamp ring + 1 g coupling shaft; no SKU"
     },
     {
       "id": "REAR_SKID_KEEL",

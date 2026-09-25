@@ -638,7 +638,7 @@
       "ok": true,
       "evidence": {
         "hard_stop_corner": {
-          "lowest_z_mm": -30.211,
+          "lowest_z_mm": -29.455,
           "at_roll_pitch": [
             -21.0,
             -25.0
@@ -647,12 +647,12 @@
           "note": "Per-axis hard-stop corner. When below_disc_top_mm is 0 the hard stops alone keep the head off the disc."
         },
         "overtravel_1deg": {
-          "lowest_z_mm": -31.444,
+          "lowest_z_mm": -30.665,
           "at_roll_pitch": [
             -22.0,
             -26.0
           ],
-          "clearance_to_disc_top_mm": 3.056
+          "clearance_to_disc_top_mm": 3.835
         }
       }
     },
@@ -720,6 +720,19 @@
       "evidence": {
         "centre_distance_mm": 37.0,
         "ratio": 1.0
+      }
+    },
+    {
+      "name": "yaw_pinion_is_lash_free_scissor_gear",
+      "ok": true,
+      "evidence": {
+        "module": 1.0,
+        "teeth": 37,
+        "half_face_mm": 2.4,
+        "gap_mm": 0.2,
+        "preload_nm": 0.22,
+        "peak_external_nm": 0.1304,
+        "servo_current_limit_torque_nm": 0.3
       }
     },
     {
@@ -1109,7 +1122,7 @@
       "ok": true,
       "evidence": {
         "clashes_mm3": {},
-        "checked_against": 137,
+        "checked_against": 138,
         "keep_outs_included": true
       }
     },
@@ -1249,7 +1262,7 @@
         "removed_row_g": 121.5,
         "estop_g": 40.0,
         "battery_g": 113.7,
-        "total_mass_g": 2567.8,
+        "total_mass_g": 2602.0,
         "note": "hand-kept register: masses are RP-02 estimates, not derived from the solids"
       }
     },
@@ -1278,20 +1291,20 @@
       "name": "com_inside_support_x",
       "ok": true,
       "evidence": {
-        "com_x_mm": 18.7670477850793
+        "com_x_mm": 18.73211048993571
       }
     },
     {
       "name": "com_forward_of_physics_margin_line",
       "ok": true,
       "evidence": {
-        "com_x_mm": 18.77,
-        "com_h_mm": 105.05,
-        "x_over_h": 0.1786,
-        "a_tip_m_s2": 1.753,
+        "com_x_mm": 18.73,
+        "com_h_mm": 106.55,
+        "x_over_h": 0.1758,
+        "a_tip_m_s2": 1.725,
         "a_tip_min_m_s2": 1.582,
-        "equivalent_min_x_mm_at_this_h": 16.94,
-        "margin_over_a_peak_1p00": 1.753,
+        "equivalent_min_x_mm_at_this_h": 17.18,
+        "margin_over_a_peak_1p00": 1.725,
         "baseline_target": {
           "x_mm": 25.0,
           "h_mm": 124.0,
@@ -1305,7 +1318,7 @@
       "name": "ball_share_above_spin_walk_flag",
       "ok": true,
       "evidence": {
-        "ball_share": 0.1706,
+        "ball_share": 0.1703,
         "flag_below": 0.09
       }
     },
@@ -1314,14 +1327,14 @@
       "ok": true,
       "evidence": {
         "shoe_first_contact_pitch_deg": 6.054,
-        "com_over_axle_pitch_deg": 10.129
+        "com_over_axle_pitch_deg": 9.971
       }
     },
     {
       "name": "com_below_head_yaw",
       "ok": true,
       "evidence": {
-        "com_z_mm": 105.05155182594508
+        "com_z_mm": 106.54676247090502
       }
     }
   ]

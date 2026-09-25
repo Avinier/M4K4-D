@@ -135,3 +135,12 @@ Why the E-stop moved from WS-H's Z 106: that height put the 48 mm-deep keep-out 
 ## Builder acceptance of the power-board CoM (2026-09-25)
 
 The builder accepted the centre of mass with the power boards, x +18.77 / h 105.05 mm, as the working baseline in place of +25 / 124 mm, with no added ballast (`BA-06` in `../../../RP-02-electrical/board-specs.md` §1.1, decision `RP03-CAD-09`). The check `com_forward_of_physics_margin_line` now tests a_tip ≥ 1.582 m/s², the tip acceleration the old +20 mm line encodes at the 124 mm baseline height; a_tip is 1.753 and 108 of 108 checks pass. Open: harness placeholders overlapping `PCB-03`/`PCB-04`, the pack-interface tile (SBS Mini pair and ATOF holder), the rear-panel E-stop and USB-C cut-outs.
+
+## Head revision and yaw scissor pinion (2026-09-25)
+
+RP-01 head Layout 04 was revised for the RP-01 CAD blockers: a stiffened pitch frame, the roll servo bolted to a torsion box, 696-2Z bearings, steel stop dowels and balance-trim seats (see its README). This layout picks the head up from the head's generated files. The yaw-carried head is now 588.4 g (was 555.2) and the pitch axis 1.98 mm further back. Total **2602.0 g**, CoM **x +18.73 / y +0.96 / h 106.55 mm**, a_tip 1.72 m/s² against the 1.582 line; the `BA-06` baseline was x +18.77 / h 105.05.
+
+The yaw pinion is now a **scissor gear** (RP-01 gate P09). The 1:1 spur mesh is outside the M181's position loop, so plain lash (0.05–0.10 mm, i.e. 0.15–0.31°) would reach the head one-for-one against the ≤0.25° best-case hysteresis target. The pair is module 1 × 37 teeth. The pinion is two 2.4 mm halves 0.2 mm apart, filling the 5 mm gear band; a torsion spring turns the loose half against the fixed one with **0.22 N·m** preload. That is ≥ 1.5× the yaw peak external torque, 0.130 N·m, scaled from the RP-01 screen by the head's current yaw inertia, and below the M181's 0.30 N·m Current Limit torque. The new check `yaw_pinion_is_lash_free_scissor_gear` verifies it. `BODY_YAW_STAGE` is 89 g (+1 g for the spring and clip). The spring SKU, the preload friction and the tooth strength of the 2.4 mm halves (brass recommended) are open; bench test B4 measures the remaining lash.
+
+**Checks.** 109 of 109 pass. Regenerated with the 0.4.28 runtime: STEP (`gen`), `write_outputs.py`, `check_layout.py` and the snapshot packet (`*_20260925T115055Z.png`, copied over the un-suffixed PNGs).
+

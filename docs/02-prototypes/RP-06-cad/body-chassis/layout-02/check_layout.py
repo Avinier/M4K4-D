@@ -558,6 +558,14 @@ def main():
         ("yaw_stage_clears_frame_electronics_shell", yaw_clash < 1e-3, {"overlap_volume_mm3": yaw_clash}),
         ("yaw_disc_rim_has_running_gap", M.YAW_DISC_TOP_Z - M.YAW_DISC_THICKNESS - M.BODY_Z_TOP >= 1.0 - 1e-9, {"disc_rim_bottom_z_mm": M.YAW_DISC_TOP_Z - M.YAW_DISC_THICKNESS, "body_top_z_mm": M.BODY_Z_TOP}),
         ("yaw_spur_pair_meshes_1to1", abs(math.hypot(*M.YAW_PINION_CENTER) - 2.0 * M.YAW_GEAR_PITCH_RADIUS) < 1e-9 and M.YAW_GEAR_RATIO == 1.0, {"centre_distance_mm": math.hypot(*M.YAW_PINION_CENTER), "ratio": M.YAW_GEAR_RATIO}),
+        ("yaw_pinion_is_lash_free_scissor_gear", (
+            abs(M.YAW_GEAR_MODULE * M.YAW_GEAR_TEETH - 2.0 * M.YAW_GEAR_PITCH_RADIUS) < 1e-9
+            and abs(2.0 * M.YAW_SCISSOR_HALF_FACE + M.YAW_SCISSOR_GAP - (M.YAW_DISC_PLATE_BOTTOM_Z - M.YAW_BEARING_Z[1] - 1.0)) < 1e-9
+            and M.YAW_SCISSOR_PRELOAD_NM >= 1.5 * M.YAW_PEAK_EXTERNAL_TORQUE_NM
+            and {"YAW_DRIVE_SCISSOR_PINION_FIXED_HALF", "YAW_DRIVE_SCISSOR_PINION_SPRUNG_HALF"} <= {c.label for c in M.body_yaw_stage().children}
+        ), {"module": M.YAW_GEAR_MODULE, "teeth": M.YAW_GEAR_TEETH, "half_face_mm": M.YAW_SCISSOR_HALF_FACE, "gap_mm": M.YAW_SCISSOR_GAP,
+            "preload_nm": M.YAW_SCISSOR_PRELOAD_NM, "peak_external_nm": round(M.YAW_PEAK_EXTERNAL_TORQUE_NM, 4),
+            "servo_current_limit_torque_nm": round(M.YAW_SERVO_CURRENT_LIMIT_TORQUE_NM, 3)}),
         ("yaw_servo_speed_covers_peak_yaw_at_3v7", M.YAW_SERVO_NO_LOAD_RPM["3.7V"] / M.YAW_GEAR_RATIO >= 1.3 * M.YAW_PEAK_OUTPUT_RPM, {"output_no_load_rpm": {k: v / M.YAW_GEAR_RATIO for k, v in M.YAW_SERVO_NO_LOAD_RPM.items()}, "peak_output_rpm": M.YAW_PEAK_OUTPUT_RPM, "required_margin": 1.3}),
         ("body_fits_track_width", M.BODY_WIDTH_LOWER < M.TRACK + M.WHEEL_WIDTH, {"body_width_mm": M.BODY_WIDTH_LOWER, "wheel_stance_mm": M.TRACK + M.WHEEL_WIDTH}),
         ("body_ground_clearance_in_baseline_band", 25.0 <= M.BODY_Z_BOTTOM <= 35.0, {"body_bottom_mm": M.BODY_Z_BOTTOM, "target_mm": [25.0, 35.0]}),
