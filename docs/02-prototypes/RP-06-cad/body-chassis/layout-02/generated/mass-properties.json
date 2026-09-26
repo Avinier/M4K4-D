@@ -1,10 +1,10 @@
 {
   "layout_id": "RP03_BODY_CHASSIS_LAYOUT02",
-  "mass_g": 2601.9794811320767,
+  "mass_g": 2575.9794811320767,
   "com_mm": [
-    18.73211048993571,
-    0.9617313267926241,
-    106.54676247090502
+    19.412234258611218,
+    0.9714383196781494,
+    106.4750289120355
   ],
   "rows": [
     {
@@ -218,14 +218,14 @@
       "source": "E: breakout, comparator and cable in the rear keel cartridge; was inside the old CONTROL_POWER_SENSORS row at the body centre"
     },
     {
-      "id": "ESTOP_XW1E_BV402M_R",
-      "mass_g": 40.0,
+      "id": "ESTOP_XA1E_BV3U02KT_R",
+      "mass_g": 14.0,
       "com_mm": [
-        -48.9,
+        -49.36071428571428,
         0.0,
-        110.8
+        105.5
       ],
-      "source": "E (not in the register before 2026-09-25): IDEC XW1E-BV402M-R operator \u00d840 + two contact blocks + terminal cover; ~15 g outside the rear panel, ~25 g inside"
+      "source": "D: IDEC XA unibody \u00d829 mushroom 14 g (XA datasheet); ~5 g mushroom and collar outside the well floor, ~9 g contact block behind it. Replaced the XW1E-BV402M-R row (40 g) on 2026-09-25. The rear-panel well and bezel add a net 0.14 cm3 (~0.2 g) of print, not booked"
     },
     {
       "id": "BALL_NOSE_POD_SENSOR_CAP",

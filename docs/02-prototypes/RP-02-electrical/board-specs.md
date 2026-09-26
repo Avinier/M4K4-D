@@ -57,7 +57,7 @@ The builder accepted the recommendations listed in the reviews of 2026-09-25 ("y
 | `PCB-03` | Motor gate and head/drive distribution board | `PB-MOTOR`, `PB-HEAD`, `PB-DRIVE` distribution | Above the tub, X 24…68, Y ±28, Z 60…74 | **56 × 44 mm**, parts to about 12 mm |
 | `PCB-04` | Branch converter board | `PB-SAFE-C2`, `PB-SAFE-BASE`, `PB-COMPUTE`, `PB-DISPLAY`, `PB-AUDIO-OUT` | Centre under the compute tray, X −30…40, Y ±22, Z 60…77 | **70 × 44 mm**, parts to about 14 mm (the 3.3 mF hold-up capacitors set the height; the sizing assumed 1 mF, so recheck) |
 | — | Safety-carrier watchdog block | External window watchdog and hardware `READY` | On each C2 and C3 carrier | Within the carrier |
-| — | E-stop (IDEC XW1E) | Hardware E-stop operator | Rear panel, Ø22.3 mm cut-out, 48 mm deep keep-out X −64…−14, Z 100…124 | Operator Ø40 mm, about 40 g |
+| — | E-stop (IDEC `XA1E-BV3U02KT-R`, Ø16 unibody, 2NC; was XW1E-BV402M-R until 2026-09-25) | Hardware E-stop operator | Rear panel, on the floor of an 8 mm octagonal well: Ø16.2 mm cut-out, keep-out X −50.4…−26.5, Y ±11, Z 94.5…116.5 (23.9 mm behind the floor) | Mushroom Ø29 mm, 12.6 mm proud of the panel, 14 g (`D`, XA datasheet) |
 
 Total board footprint is about 7300 mm² against 2900 mm² reserved by the placeholder envelopes (2.5–2.8×). Positions are a proposal that has not been through an interference sweep. The CAD replaces the `CONTROL_POWER_SENSORS` mass row (121.5 g): the new rows total about 111 g plus 40 g for the E-stop, and the register CoM moves from x +20.6 to about +19.1 mm (target +25). Two boards may merge if CAD shows a single carrier fits better; the **functions and separations** in §3–§7 may not.
 
@@ -347,7 +347,7 @@ The registered permission is `MOTOR_PERMIT = E_STOP_OK ∧ SYSTEM_ARM ∧ CHARGE
 
 | Input | Source | Board treatment |
 |---|---|---|
-| `E_STOP_OK` | IDEC XW1E NC loop (`PCD-EST-01`) | Low-energy series loop in the permit chain (§5.2.3) with a local pull-down so an open or broken wire deasserts. It acts on the gate's **UV pin** (fast turn-off), not on `SHDN` (slow, §5.2.2). The second NC contact goes to C2 as independent status. **The E-stop contacts never carry motor current** |
+| `E_STOP_OK` | IDEC XA1E NC loop (`PCD-EST-01` family change, see §2) | Low-energy series loop in the permit chain (§5.2.3) with a local pull-down so an open or broken wire deasserts. It acts on the gate's **UV pin** (fast turn-off), not on `SHDN` (slow, §5.2.2). The second NC contact goes to C2 as independent status. **The E-stop contacts never carry motor current** |
 | `SYSTEM_ARM` | `PCB-02` latch and C2 fresh-arm request | Latched, **cleared by E-stop assertion and by the loss of any other permit term** (a `UV` fault recovers on its own after 32 ms, so the arm latch, not the LTC4368, must force a fresh arm); release alone cannot re-arm (F-13, `power-implementation-basis.md` §8.3) |
 | `CHARGE_ABSENT` | `PCB-02` charge-present detect | Hardware, not software |
 | `ENERGY_OK` | `PCB-02` comparator | Hardware; its falling threshold (5.7 V, minimum 5.53 V) must sit above the LTC4368 `UV` release maximum (5.36 V) so `ENERGY_OK` acts first |
@@ -390,7 +390,7 @@ The registered permission is `MOTOR_PERMIT = E_STOP_OK ∧ SYSTEM_ARM ∧ CHARGE
 `5 V (PB-SAFE-C2) → R_pu 470 Ω → E-stop NC contact 1 → Q_ARM → Q_CHG → Q_EN → Q_C2H → Q_C2L → Q_BASE (or jumper) → PERMIT node → R_pd 1 kΩ → 0 V`
 
 - **Devices.** Each `Q` is a small-signal logic-level N-FET (BSS138 or 2N7002 class, `VGS(th)` at most 1.5 V, to verify at schematic) whose gate is its term signal (`SYSTEM_ARM`, `CHARGE_ABSENT`, `ENERGY_OK`, `C2_READY_H`, `BASE_READY`, all 3.3 V logic); `Q_C2L` is a P-FET on the active-low `C2_READY_L`, so a stuck wire cannot assert the C2 term (§7). Six stages add about 18 Ω (E).
-- **Loop current (`E_STOP_OK`).** With 470 Ω in, 1 kΩ to ground and the chain, the loop current is `5 V / (0.47 + 1 + 0.018 kΩ) ≈ 3.4 mA` and the permit node sits at about 3.4 V (E). That meets the XW1E "minimum applicable load 5 V, 1 mA" (`D`, reference value) with a factor of 3.4 and gives the permit node headroom over `Q_P`'s gate threshold. Contact 2 goes to C2 as status through its own 1 kΩ pull-up, not into this chain. The loop supply must be 5 V: 3.3 V is below the contact's reference test voltage.
+- **Loop current (`E_STOP_OK`).** With 470 Ω in, 1 kΩ to ground and the chain, the loop current is `5 V / (0.47 + 1 + 0.018 kΩ) ≈ 3.4 mA` and the permit node sits at about 3.4 V (E). That meets the XA (and XW1E) "minimum applicable load 5 V, 1 mA" (`D`, reference value) with a factor of 3.4 and gives the permit node headroom over `Q_P`'s gate threshold. Contact 2 goes to C2 as status through its own 1 kΩ pull-up, not into this chain. The loop supply must be 5 V: 3.3 V is below the contact's reference test voltage.
 - **`Q_P`, `Q_UV`, `Q_dis` default-on network.** `PERMIT` drives the gate of `Q_P` (N-FET). Two default-on nodes are pulled high by resistors and pulled low by `Q_P`:
   - `N1`: 470 kΩ to `VIN` (pack side, `BATBUS`), gate of `Q_UV`, whose drain is the LTC4368 `UV` pin and whose source is ground.
   - `N2`: 470 kΩ to `VOUT` (motor bus), gate of `Q_dis` (§5.2.6).
@@ -706,7 +706,7 @@ Signals cross `PCB-02`, `PCB-03`, `PCB-04` and the two carriers. Every hardware 
 | `PWR_BTN`, `HOLD` | button / C2 ↔ `PCB-02` | Logic | Off |
 | `CHARGE_ABSENT` | `PCB-02` → `PCB-03` | Logic | Inactive |
 | `ENERGY_OK` | `PCB-02` → `PCB-03`, C2 | Logic | Inactive |
-| `E_STOP_OK`, `E_STOP_STATUS` | XW1E → `PCB-03`, C2 | Loop / logic | Inactive when open |
+| `E_STOP_OK`, `E_STOP_STATUS` | XA1E → `PCB-03`, C2 | Loop / logic | Inactive when open |
 | `SYSTEM_ARM` | C2 → `PCB-03` (latched) | Logic | Inactive |
 | `C2_READY_H`, `C2_READY_L` | C2 carrier → `PCB-03`, across the yaw joint as a complementary pair | Logic | Inactive |
 | `C3_READY` (`BASE_READY`) | C3 carrier → `PCB-03` | Logic | Inactive |

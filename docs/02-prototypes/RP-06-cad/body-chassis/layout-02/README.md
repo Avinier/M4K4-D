@@ -134,7 +134,18 @@ Why the E-stop moved from WS-H's Z 106: that height put the 48 mm-deep keep-out 
 
 ## Builder acceptance of the power-board CoM (2026-09-25)
 
-The builder accepted the centre of mass with the power boards, x +18.77 / h 105.05 mm, as the working baseline in place of +25 / 124 mm, with no added ballast (`BA-06` in `../../../RP-02-electrical/board-specs.md` §1.1, decision `RP03-CAD-09`). The check `com_forward_of_physics_margin_line` now tests a_tip ≥ 1.582 m/s², the tip acceleration the old +20 mm line encodes at the 124 mm baseline height; a_tip is 1.753 and 108 of 108 checks pass. Open: harness placeholders overlapping `PCB-03`/`PCB-04`, the pack-interface tile (SBS Mini pair and ATOF holder), the rear-panel E-stop and USB-C cut-outs.
+The builder accepted the centre of mass with the power boards, x +18.77 / h 105.05 mm, as the working baseline in place of +25 / 124 mm, with no added ballast (`BA-06` in `../../../RP-02-electrical/board-specs.md` §1.1, decision `RP03-CAD-09`). The check `com_forward_of_physics_margin_line` now tests a_tip ≥ 1.582 m/s², the tip acceleration the old +20 mm line encodes at the 124 mm baseline height; a_tip is 1.753 and 108 of 108 checks pass. Open: harness placeholders overlapping `PCB-03`/`PCB-04`, the pack-interface tile (SBS Mini pair and ATOF holder), the rear-panel USB-C cut-out (the E-stop well is modelled, see below).
+
+## Rear E-stop redesign (2026-09-25)
+
+The Ø40 × 20 mm XW1E operator stood off the flat rear panel like a bolted-on puck. It is replaced by the IDEC **`XA1E-BV3U02KT-R`**: the Ø16 unibody XA with a Ø29 mushroom and 2NC (one contact to the permit loop, one to C2), 14 g, 23.9 mm behind the mounting face. Its datasheet gives a Ø16.2 cut-out, 0.8–4.5 mm panel and a mushroom top 20.6 mm above the mounting face.
+
+- **Well.** A tapered octagonal socket printed with the rear panel (`REAR_PANEL_ESTOP_WELL`, slate) takes the switch on its 2 mm floor, 8 mm in from the panel face. The mouth is 34 mm across flats and the throat 26 mm (45° walls), so the socket repeats the panel's octagon and the mushroom rises **12.6 mm** out of it instead of 20 mm off a flat wall.
+- **Bezel.** A 1.2 mm amber octagonal land (`REAR_PANEL_ESTOP_AMBER_BEZEL`, 42 mm across flats) rings the mouth. It is the ISO 13850 yellow background, in the droid's amber lifted toward yellow, and pairs with the ear inlays and arch trims.
+- **Placement.** Centre Z 105.5 (was 110.8). The well clears the panel frame's top bar by 0.27 mm, and the 22 mm keep-out (X −50.4…−26.5, Z 94.5…116.5) clears PCB-02 by 0.5 mm and the Pi's rear parts (X ≥ −23) by 3.5 mm. The old keep-out ran 46.4 mm deep, to X −14.
+- **Mass.** `ESTOP_XA1E_BV3U02KT_R` 14 g (`D`) replaces the 40 g `E` row. The well and bezel add a net 0.14 cm³ of print to the panel (not booked). Total 2602.0 → **2576.0 g**, CoM x +18.73 → **+19.41 mm**, h 106.55 → 106.48 mm, a_tip 1.72 → 1.79 m/s².
+- **Checks.** 108 of 109 pass; viewer checks 40 of 40. The E-stop check now also requires zero well-to-frame and keep-out-to-PCB-02 volume. The switch is exempt only from its own well (it clamps on the floor) and its own keep-out. **`rear_tail_clears_shell_and_panels` now fails (220 mm³):** the parked tail's root flange (Z 79–105 on the panel centre line) lands on the well, so the tail and the E-stop cannot share the panel as drawn. The tail is not in the assembly; re-enabling it needs the root moved or the E-stop moved.
+- **Still open.** The mushroom's skirt and dome heights are an envelope (the datasheet gives only its Ø and top height). The rear USB-C window is not cut. The RP-02 candidate screen and `decision.md` still name the XW1E as `PCD-EST-01`; `board-specs.md` now carries the XA as the working part.
 
 ## Head revision and yaw scissor pinion (2026-09-25)
 

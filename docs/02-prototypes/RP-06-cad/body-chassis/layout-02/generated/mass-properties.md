@@ -1,9 +1,9 @@
 # RP-03 Layout 02 generated mass properties
 
-- Total modeled mass: 2602.0 g
-- Whole-robot CoM: X=18.73, Y=0.96, Z=106.55 mm
-- Static ball share (x/L): 0.170 of weight; RP-03 physics.md §3.6 flags < 0.09 as a spin-walk risk
-- Forward-launch ball lift (a_tip = g·x/h): 1.72 m/s² vs compiled a_max ≤ 0.80 m/s²
+- Total modeled mass: 2576.0 g
+- Whole-robot CoM: X=19.41, Y=0.97, Z=106.48 mm
+- Static ball share (x/L): 0.176 of weight; RP-03 physics.md §3.6 flags < 0.09 as a spin-walk risk
+- Forward-launch ball lift (a_tip = g·x/h): 1.79 m/s² vs compiled a_max ≤ 0.80 m/s²
 
 | Item | Mass (g) | CoM (mm) | Source |
 |---|---:|---|---|
@@ -28,7 +28,7 @@
 | `DRV8874_CARRIERS_X2` | 6.00 | (46.00, 0.00, 67.40) | E: 2 x Pololu 4035 at ~3 g (weight not read); symmetric about the centre plane |
 | `IMU_BREAKOUT` | 2.00 | (16.00, 0.00, 60.00) | E |
 | `TCRT5000_BREAKOUT_AND_CABLE` | 3.00 | (-54.00, 0.00, 13.50) | E: breakout, comparator and cable in the rear keel cartridge; was inside the old CONTROL_POWER_SENSORS row at the body centre |
-| `ESTOP_XW1E_BV402M_R` | 40.00 | (-48.90, 0.00, 110.80) | E (not in the register before 2026-09-25): IDEC XW1E-BV402M-R operator Ø40 + two contact blocks + terminal cover; ~15 g outside the rear panel, ~25 g inside |
+| `ESTOP_XA1E_BV3U02KT_R` | 14.00 | (-49.36, 0.00, 105.50) | D: IDEC XA unibody Ø29 mushroom 14 g (XA datasheet); ~5 g mushroom and collar outside the well floor, ~9 g contact block behind it. Replaced the XW1E-BV402M-R row (40 g) on 2026-09-25. The rear-panel well and bezel add a net 0.14 cm3 (~0.2 g) of print, not booked |
 | `BALL_NOSE_POD_SENSOR_CAP` | 15.90 | (110.50, 0.00, 41.20) | CAD volume: raked prow pod + lid 11.8 cm3 (X 92-128.5) and touch hood 1.8 cm3 (2026-09-24 prow rework) at ~45% effective PETG density (6.8 + 1.0 g); 5 M3 screws + 2 heat-set inserts 4.6 g; GP2Y0A41SK0F 3.5 g E |
 | `BODY_AUDIO` | 90.00 | (64.00, 0.00, 102.00) | speaker, amplifier and four microphones; CAD estimate |
 | `HARNESS_AND_FASTENERS` | 95.00 | (20.00, 0.00, 88.00) | estimate |

@@ -169,7 +169,8 @@ Spec: [`../RP-02-electrical/board-specs.md`](../RP-02-electrical/board-specs.md)
   - [ ] Sizes need about 2.5-2.8x the reserved footprint (about 7300 mm2 against 2900 mm2): `PCB-01` 48 x 20 x 2.9, `PCB-02` 50 x 36 (60 x 40 with the pack interface), `PCB-03` 56 x 44, `PCB-04` 70 x 44
   - [ ] Placement proposals: `PCB-03` above the battery tub, `PCB-04` under the compute tray, `PCB-02` standing on the rear-panel frame; run an interference sweep (PCB-03 vs the DRV carriers by about 3 mm, PCB-04 vs the harness volumes, PCB-02 vs the rear-panel bosses)
   - [ ] Pack-interface tile (SBS Mini + ATOF holder) beside the tub so the main fuse stays source-adjacent (`PA-02`); at the rear it would be about 100 mm from the pack
-  - [ ] The rear-panel E-stop (IDEC XW1E, 48 mm deep, about 6 mm of overlap with the Pi region at Z 93-109, head overhang about 4 mm) and the charge inlet are not modelled in the CAD today
+  - [x] The rear-panel E-stop is modelled: IDEC XA1E-BV3U02KT-R (Ø29 mushroom, 23.9 mm deep) in an 8 mm octagonal well with an amber bezel, replacing the Ø40 XW1E (2026-09-25)
+  - [ ] The charge inlet (rear USB-C window) is not cut in the rear panel
   - [ ] Replace the `CONTROL_POWER_SENSORS` mass row (121.5 g, estimate) with one row per board: about 111 g plus 40 g for the E-stop; battery row about 114 g
   - [ ] CoM effect: register CoM moves from x +20.6 to about +19.1 mm against the +25 target, widening the open CoM gap above
   - [ ] Recheck `PCB-04` height: the sizing assumed 1 mF hold-up capacitors, the proposal is 3.3 mF each

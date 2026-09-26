@@ -452,13 +452,40 @@ PCB04_BOX = (-27.0, 17.0, -35.0, 35.0, 63.0, 77.1)  # branch converters: 44 x 70
 # Anderson SBS Mini pair (22 x 13 x 14, dimension sheet not fetched) is 13 mm wide
 # and does not fit that channel; it has no modelled home yet (open item).
 PACK_FUSE_HOLDER_BOX = (30.0, 54.0, 38.7, 48.7, 36.0, 46.0)
-ESTOP_CENTER_Z = 110.8  # IDEC XW1E on the rear panel, centre Y = 0; WS-H's Z 106 hit the Pi and cooler (449 + 33 mm3); the window between the Pi's rear parts (Z 99.55) and the panel frame's top bar (Z 122.0) is 22.45 mm
-ESTOP_REAR_OUTER_X = BODY_X_REAR - 2.4  # rear panel outer face (= BODY_X_REAR - SHELL_THICKNESS)
-ESTOP_DEPTH_BEHIND_PANEL = 46.4  # IDEC minimum, from the panel outer face; 47-49 with the terminal cover
-ESTOP_HEAD_DIAMETER = 40.0
-ESTOP_HEAD_LENGTH = 20.0  # operator height outside the panel (assumed)
-ESTOP_KEEP_OUT = (BODY_X_REAR, ESTOP_REAR_OUTER_X + ESTOP_DEPTH_BEHIND_PANEL, -14.7, 14.7, ESTOP_CENTER_Z - 11.15, ESTOP_CENTER_Z + 11.15)  # 29.4 wide x 22.3 tall (WS-H 30 x 24); trimmed to clear the Pi cooler corner (Y -14.78) and the frame bar
-REAR_USBC_WINDOW = (BODY_X_REAR, BODY_X_REAR + 8.0, -6.0, 6.0, 61.0, 67.0)  # plug corridor from the panel's rear face to PCB-02 (9 x 3.4 mm receptacle); the rear panel itself is not cut yet
+# E-stop: IDEC XA1E-BV3U02KT-R, the Ø16 unibody XA with a Ø29 mushroom and 2NC
+# (one to the permit loop, one to C2), 14 g. IDEC XA datasheet: Ø16.2 cut-out,
+# 0.8-4.5 mm panel, mushroom top 20.6 mm above the mounting face, 23.9 mm behind
+# it. It replaces the Ø40 XW1E (20 mm proud, 46.4 mm deep, 40 g). The switch
+# mounts on the floor of a tapered octagonal well printed with the rear panel,
+# so the mushroom rises 12.6 mm out of a socket that repeats the panel outline
+# instead of standing 20 mm off a flat wall. An amber octagonal bezel land round
+# the well is the ISO 13850 yellow background and matches the ear inlays and
+# arch trims. The well fits between PCB-02 (X >= -49.6 below Z 94) and the panel
+# frame's top bar (X -55.6...-53.2, Z >= 122); the Pi's rear parts start at X -23.
+ESTOP_CENTER_Z = 105.5
+ESTOP_REAR_OUTER_X = BODY_X_REAR - SHELL_THICKNESS  # rear panel outer face
+ESTOP_WELL_DEPTH = 8.0  # panel face to the mounting face on the well floor
+ESTOP_WELL_FLOOR = 2.0
+ESTOP_WELL_MOUTH = 34.0  # inner across-flats at the panel face: 2.5 mm round the mushroom
+ESTOP_WELL_THROAT = 26.0  # inner across-flats at the floor (45 deg taper)
+ESTOP_WELL_WALL = 1.6
+ESTOP_BEZEL_ACROSS_FLATS = 42.0
+ESTOP_BEZEL_PROUD = 1.2
+ESTOP_CUTOUT_DIAMETER = 16.2
+ESTOP_MUSHROOM_DIAMETER = 29.0
+ESTOP_MUSHROOM_TOP_ABOVE_MOUNT = 20.6
+ESTOP_MUSHROOM_SKIRT = 4.5  # skirt + dome envelope; the datasheet gives only the Ø and top height
+ESTOP_MUSHROOM_DOME = 5.0
+ESTOP_OPERATOR_BEZEL = (20.0, 2.1)  # Ø x height of the operator collar on the mounting face
+ESTOP_STEM_DIAMETER = 12.0
+ESTOP_DEPTH_BEHIND_PANEL = 23.9  # unibody, solder/tab #110; taken from the floor's back face
+ESTOP_BODY_DIAMETER = 18.0
+ESTOP_MOUNT_X = ESTOP_REAR_OUTER_X + ESTOP_WELL_DEPTH
+ESTOP_FLOOR_BACK_X = ESTOP_MOUNT_X + ESTOP_WELL_FLOOR
+ESTOP_KEEP_OUT = (ESTOP_FLOOR_BACK_X, ESTOP_FLOOR_BACK_X + ESTOP_DEPTH_BEHIND_PANEL, -11.0, 11.0, ESTOP_CENTER_Z - 11.0, ESTOP_CENTER_Z + 11.0)  # contact block, three #110 tabs and wiring
+ESTOP_RED = "#C62F28"
+ESTOP_AMBER = "#D39F36"  # the droid's amber, lifted toward safety yellow for the background
+REAR_USBC_WINDOW = (BODY_X_REAR, BODY_X_REAR + 8.0, -6.0, 6.0, 61.0, 67.0)  # plug corridor from the panel's rear face to PCB-02 (9 x 3.4 mm receptacle); the rear panel is not cut for it yet
 
 # Floor-contact functions live in a compact faceted keel bolted under the rear
 # crossmember, so the visible tail is free to be purely cosmetic. The rear
@@ -594,7 +621,7 @@ MASS_ROWS = [
     ("DRV8874_CARRIERS_X2", 6.0, (30.0 + BODY_SHIFT_X, 0.0, 67.4), "E: 2 x Pololu 4035 at ~3 g (weight not read); symmetric about the centre plane"),
     ("IMU_BREAKOUT", 2.0, (BODY_AXIS_X, 0.0, 60.0), "E"),
     ("TCRT5000_BREAKOUT_AND_CABLE", 3.0, TCRT_REAR_CENTER, "E: breakout, comparator and cable in the rear keel cartridge; was inside the old CONTROL_POWER_SENSORS row at the body centre"),
-    ("ESTOP_XW1E_BV402M_R", 40.0, ((15.0 * (ESTOP_REAR_OUTER_X - ESTOP_HEAD_LENGTH / 2.0) + 25.0 * (BODY_X_REAR + ESTOP_KEEP_OUT[1]) / 2.0) / 40.0, 0.0, ESTOP_CENTER_Z), "E (not in the register before 2026-09-25): IDEC XW1E-BV402M-R operator Ø40 + two contact blocks + terminal cover; ~15 g outside the rear panel, ~25 g inside"),
+    ("ESTOP_XA1E_BV3U02KT_R", 14.0, ((5.0 * (ESTOP_MOUNT_X - ESTOP_MUSHROOM_TOP_ABOVE_MOUNT + 4.0) + 9.0 * (ESTOP_KEEP_OUT[0] + ESTOP_KEEP_OUT[1]) / 2.0) / 14.0, 0.0, ESTOP_CENTER_Z), "D: IDEC XA unibody Ø29 mushroom 14 g (XA datasheet); ~5 g mushroom and collar outside the well floor, ~9 g contact block behind it. Replaced the XW1E-BV402M-R row (40 g) on 2026-09-25. The rear-panel well and bezel add a net 0.14 cm3 (~0.2 g) of print, not booked"),
     ("BALL_NOSE_POD_SENSOR_CAP", 15.9, (110.5, 0.0, 41.2), "CAD volume: raked prow pod + lid 11.8 cm3 (X 92-128.5) and touch hood 1.8 cm3 (2026-09-24 prow rework) at ~45% effective PETG density (6.8 + 1.0 g); 5 M3 screws + 2 heat-set inserts 4.6 g; GP2Y0A41SK0F 3.5 g E"),
     ("BODY_AUDIO", 90.0, (48.0 + BODY_SHIFT_X, 0.0, 102.0), "speaker, amplifier and four microphones; CAD estimate"),
     ("HARNESS_AND_FASTENERS", 95.0, (4.0 + BODY_SHIFT_X, 0.0, 88.0), "estimate"),
@@ -1268,7 +1295,7 @@ def body_panels():
         for y, z in (*REAR_PANEL_FASTENERS, *(rear_tail_root_screw_points() if REAR_TAIL_ENABLED else ()))
     ]
     rear = _paint(
-        rear_raw - rear_bores,
+        rear_raw - rear_bores - _estop_well_outer(),
         "REAR_SERVICE_PANEL_OCTAGONAL",
         IVORY,
         SHELL_ALPHA,
@@ -1288,7 +1315,7 @@ def body_panels():
         trim = trim_outer - trim_inner - _block(-56.0, 56.0, -105.0, 105.0, -10.0, AXLE_Z)
         trim = _paint(trim, f"WHEEL_ARCH_UPPER_TRIM_{side}", AMBER, 0.92)
         wheel_arches.append(Compound(label=f"WHEEL_ARCH_{side}", children=[pod, trim]))
-    return Compound(label="BODY_PANELS", children=[front, rear, top_badge, *wheel_arches])
+    return Compound(label="BODY_PANELS", children=[front, rear, *rear_panel_estop_well(), top_badge, *wheel_arches])
 
 
 def panel_mount_hardware():
@@ -1651,13 +1678,80 @@ def raspberry_pi5():
     return pi
 
 
+def _estop_octagon(x, across_flats):
+    """Regular octagon in the YZ plane at X, flats horizontal, on the E-stop axis."""
+    r = across_flats / 2.0 / math.cos(math.pi / 8.0)
+    points = [
+        (r * math.cos(math.pi / 8.0 + k * math.pi / 4.0), ESTOP_CENTER_Z + r * math.sin(math.pi / 8.0 + k * math.pi / 4.0))
+        for k in range(8)
+    ]
+    return (Plane.YZ * Polygon(*points, align=None)).moved(Location((x, 0.0, 0.0)))
+
+
+def _estop_well_outer():
+    """Outer skin of the rear-panel E-stop well: tapered socket plus the floor plate."""
+    wall = 2.0 * ESTOP_WELL_WALL
+    socket = loft([
+        _estop_octagon(ESTOP_REAR_OUTER_X, ESTOP_WELL_MOUTH + wall),
+        _estop_octagon(ESTOP_MOUNT_X, ESTOP_WELL_THROAT + wall),
+    ], ruled=True)
+    floor = extrude(_estop_octagon(ESTOP_MOUNT_X, ESTOP_WELL_THROAT + wall), amount=ESTOP_WELL_FLOOR)
+    return socket + floor
+
+
+def rear_panel_estop_well():
+    """Tapered octagonal well printed with the rear panel, and its amber bezel land."""
+    cavity = loft([
+        _estop_octagon(ESTOP_REAR_OUTER_X - 0.01, ESTOP_WELL_MOUTH),
+        _estop_octagon(ESTOP_MOUNT_X, ESTOP_WELL_THROAT),
+    ], ruled=True)
+    cutout = _axial_bore_x(ESTOP_CUTOUT_DIAMETER / 2.0, ESTOP_MOUNT_X - 1.0, ESTOP_FLOOR_BACK_X + 1.0, 0.0, ESTOP_CENTER_Z)
+    well = _estop_well_outer() - cavity - cutout
+    bezel = extrude(_estop_octagon(ESTOP_REAR_OUTER_X - ESTOP_BEZEL_PROUD, ESTOP_BEZEL_ACROSS_FLATS), amount=ESTOP_BEZEL_PROUD)
+    bezel = bezel - extrude(_estop_octagon(ESTOP_REAR_OUTER_X - ESTOP_BEZEL_PROUD - 1.0, ESTOP_WELL_MOUTH + 2.0 * ESTOP_WELL_WALL), amount=ESTOP_BEZEL_PROUD + 2.0)
+    return [
+        _paint(well, "REAR_PANEL_ESTOP_WELL", SLATE_DARK, 1.0),
+        _paint(bezel, "REAR_PANEL_ESTOP_AMBER_BEZEL", ESTOP_AMBER, 1.0),
+    ]
+
+
+def estop_switch():
+    """IDEC XA1E-BV3U02KT-R: Ø29 domed mushroom, operator collar and unibody contact block."""
+    top_x = ESTOP_MOUNT_X - ESTOP_MUSHROOM_TOP_ABOVE_MOUNT
+    skirt_x1 = top_x + ESTOP_MUSHROOM_DOME + ESTOP_MUSHROOM_SKIRT
+    r = ESTOP_MUSHROOM_DIAMETER / 2.0
+    dome_r = (r * r + ESTOP_MUSHROOM_DOME ** 2) / (2.0 * ESTOP_MUSHROOM_DOME)
+    # Trim the cap at the origin, then turn +Z to -X: trimming the placed sphere
+    # returns the whole sphere in this OCC build.
+    dome = Sphere(dome_r) & Box(2.0 * r, 2.0 * r, ESTOP_MUSHROOM_DOME + 1.0, align=(Align.CENTER, Align.CENTER, Align.MAX)).moved(Location((0.0, 0.0, dome_r + 1.0)))
+    dome = dome.rotate(Axis.Y, -90.0).moved(Location((top_x + dome_r, 0.0, ESTOP_CENTER_Z)))
+    skirt = _axial_bore_x(r, top_x + ESTOP_MUSHROOM_DOME, skirt_x1, 0.0, ESTOP_CENTER_Z)
+    # A shallow grip groove round the skirt reads as the real cap's rim.
+    skirt = skirt - (_axial_bore_x(r + 1.0, skirt_x1 - 2.2, skirt_x1 - 1.4, 0.0, ESTOP_CENTER_Z) - _axial_bore_x(r - 0.5, skirt_x1 - 3.0, skirt_x1, 0.0, ESTOP_CENTER_Z))
+    collar_d, collar_h = ESTOP_OPERATOR_BEZEL
+    collar = _axial_bore_x(collar_d / 2.0, ESTOP_MOUNT_X - collar_h, ESTOP_MOUNT_X, 0.0, ESTOP_CENTER_Z)
+    stem = _axial_bore_x(ESTOP_STEM_DIAMETER / 2.0, skirt_x1, ESTOP_MOUNT_X - collar_h, 0.0, ESTOP_CENTER_Z)
+    barrel = _axial_bore_x(ESTOP_CUTOUT_DIAMETER / 2.0 - 0.3, ESTOP_MOUNT_X, ESTOP_FLOOR_BACK_X, 0.0, ESTOP_CENTER_Z)
+    body = _axial_bore_x(ESTOP_BODY_DIAMETER / 2.0, ESTOP_FLOOR_BACK_X, ESTOP_FLOOR_BACK_X + ESTOP_DEPTH_BEHIND_PANEL - 3.0, 0.0, ESTOP_CENTER_Z)
+    tabs = [
+        _block(ESTOP_FLOOR_BACK_X + ESTOP_DEPTH_BEHIND_PANEL - 3.0, ESTOP_FLOOR_BACK_X + ESTOP_DEPTH_BEHIND_PANEL, y - 3.2, y + 3.2, ESTOP_CENTER_Z + dz - 0.4, ESTOP_CENTER_Z + dz + 0.4)
+        for y, dz in ((-5.5, -3.0), (5.5, -3.0), (0.0, 5.5))
+    ]
+    return [
+        _paint(dome + skirt, "ESTOP_XA1E_MUSHROOM_D29", ESTOP_RED, 1.0),
+        _paint(stem + collar + barrel, "ESTOP_XA1E_OPERATOR_COLLAR", "#3A4044", 1.0),
+        _paint(body, "ESTOP_XA1E_UNIBODY_CONTACT_BLOCK", "#2E3336", 1.0),
+        *[_paint(tab, f"ESTOP_XA1E_TAB_{i}", STEEL, 1.0) for i, tab in enumerate(tabs, start=1)],
+    ]
+
+
 def power_distribution_boards():
     """RP-02 custom power/safety board envelopes, main-fuse holder and E-stop (proposal).
 
     Each board is a 1.6 mm PCB plate plus a translucent parts envelope up to the
     stated total height. The E-stop keep-out and the rear USB-C window are
-    reserved volumes, not solids that belong to a part. The panel cut-outs are
-    not modelled: the rear panel is still uncut.
+    reserved volumes, not solids that belong to a part. The E-stop's well and
+    bezel belong to the rear panel (body_panels); the USB-C window is still uncut.
     """
     def board(name, box, color, pcb_at_top=False):
         x0, x1, y0, y1, z0, z1 = box
@@ -1671,11 +1765,9 @@ def power_distribution_boards():
             parts.append(_paint(_block(x0, x1, y0, y1, z0 + PCB_THICKNESS, z1), f"{name}_PARTS_ENVELOPE", color, 0.55))
         return Compound(label=name, children=parts)
 
-    ex0, ex1, ey0, ey1, ez0, ez1 = ESTOP_KEEP_OUT
-    head_x = ESTOP_REAR_OUTER_X - ESTOP_HEAD_LENGTH / 2.0
-    estop = Compound(label="ESTOP_XW1E_BV402M_R", children=[
-        _cylinder(ESTOP_HEAD_DIAMETER / 2.0, ESTOP_HEAD_LENGTH, (head_x, 0.0, ESTOP_CENTER_Z), "ESTOP_XW1E_OPERATOR_HEAD_D40", "#D8352A", 1.0, "x"),
-        _paint(_block(ex0, ex1, ey0, ey1, ez0, ez1), "ESTOP_XW1E_BEHIND_PANEL_KEEP_OUT", "#D8352A", 0.18),
+    estop = Compound(label="ESTOP_XA1E_BV3U02KT_R", children=[
+        *estop_switch(),
+        _paint(_block(*ESTOP_KEEP_OUT), "ESTOP_XA1E_BEHIND_PANEL_KEEP_OUT", ESTOP_RED, 0.18),
         _paint(_block(*REAR_USBC_WINDOW), "REAR_PANEL_USBC_WINDOW_KEEP_OUT", "#79C4CB", 0.30),
     ])
     parts = [

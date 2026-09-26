@@ -6,7 +6,7 @@
     "spin_turn",
     "head_look_around"
   ],
-  "leaves": 2016,
+  "leaves": 2023,
   "features": {
     "frame_R": 1428,
     "frame_P": 37,
@@ -14,12 +14,12 @@
     "yaw_pinion": 2,
     "wheel_L": 5,
     "wheel_R": 5,
-    "shell": 26,
+    "shell": 28,
     "head": 1467,
     "structure": 90,
     "drive": 28,
     "rear_tail": 18,
-    "electronics": 308,
+    "electronics": 313,
     "sensors": 12,
     "audio": 17,
     "harness": 22,
