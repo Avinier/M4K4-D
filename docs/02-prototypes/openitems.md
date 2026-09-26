@@ -78,7 +78,7 @@ These sit above RP-01 through RP-07. Scored physical runs wait here even when pa
 | Live harness (H1/H2/H3) | Jackets illustrative; roll/pitch transitions open | Real cables, radii, CSI orientation, endurance | Layout 03 verification; harness study | G04 wiring; restoring torque |
 | Camera FPC vs production interconnect | 200 mm sample is bench hardware | Production moving CSI | `payload-mass-capture.md` | Camera `W` and G04 |
 | Optical certification | Flared aperture clears a conservative envelope | Entrance-pupil measurement | Layout 03 optics | Camera usability claim |
-| Body integration / 304 mm stack | Head envelope only | RP-06 | Layout 03 README | System height |
+| Body integration / 293.5 mm stack | Integrated in RP-06 (2026-09-26) | RP-06 | Layout 03 README | System height |
 
 ### RP-01 process remaining
 
@@ -166,9 +166,9 @@ Working part choices, values and sizes for the custom power and safety boards an
 
 | Item | Notes | Home |
 |---|---|---|
-| Status light | Display row selected; light is not | `LG-05` |
-| Microphone front end (`LG-07`) | Pi 5 has no native 4-ch PDM; `AP-TDM` vs `AP-USB` vs `AP-USB-IO` compared, **none selected** | `RP-05-interaction/audio-path.md`; `decision.md` `BD-A04` |
-| Speaker + amplifier (`LG-08`) | Envelope reserved; SKU and family open | `RP-05-interaction/decision.md` `BD-A06`; `PB-AUDIO-OUT` |
+| Status light | **Working-selected 2026-09-26:** WS2812B-2020 on `PCB-08`, D1 GPIO6; brightness at 3.3 V and camera stray light are bench items | `LG-05`; [`RP-06-cad/peripheral-selection.md`](RP-06-cad/peripheral-selection.md) §3 |
+| Microphone front end (`LG-07`) | **Working-selected 2026-09-26:** `AP-TDM` as two I²S lanes, 2 × ADAU7002 + 4 × IM73D122V01; needs `CA-06` CR-01 (GPIO22/23) and a Pi 5 bench proof | `RP-05-interaction/decision.md` `BD-A04`/`A05`; [`RP-06-cad/peripheral-selection.md`](RP-06-cad/peripheral-selection.md) §2 |
+| Speaker + amplifier (`LG-08`) | **Working-selected 2026-09-26:** Visaton K 50 WP 8 Ω + MAX98357A on `PCB-05` | `RP-05-interaction/decision.md` `BD-A06`; `PB-AUDIO-OUT` |
 | Base motor driver and safety sensors (`LG-04/LG-10`) | C3 selected; **leads named** (D02, DRV8874-class, S01/S04/S06/S07) — not a freeze, not purchased | `PB-DRIVE*`; RP-03 screens |
 | Pi storage exact SKU | Official Pi 32 GB A2 is the cost-down lead; SanDisk High Endurance 32 GB is the low-cost endurance comparison; official Pi 64 GB is capacity fallback; no selection | `compute-control-component-screen.md` `CCD-STO-*` |
 | Differential transceiver/watchdog exact suffix and carriers | Families/topology selected; component suffixes and PCBs await measured conditions | `compute-control-component-screen.md` `CCD-LNK/WDG/HDL-*` |
@@ -257,9 +257,9 @@ Remaining slice order (do not skip registration): (1) accept `BD-A01`…`A03` an
 | Item | Why it is open | Waiting on | Home | Blocks |
 |---|---|---|---|---|
 | Builder accept `BD-A01`…`A03` | Slice boundary, no-Core-DOA, USB-not-banned are proposed. A content review is not a registration | Dated accept plus a registration ID in `RP-05-interaction/decision.md` | `RP-05-interaction/decision.md` | Treating `AR-*` as registered design-definition |
-| Capture/playback family `AP-*` | Compared only; kernel vs USB-clock vs duplex still unproven | Later selection slice against `AR-*` §3 reject rules | `audio-path.md`; `BD-A04` | `LG-07`/`LG-08` selection; `PB-AUDIO-IN` source; GPIO18–21 use vs idle |
-| Microphone capsule SKU | Four body PDM ports are a reservation | Family, then capsule, then RP-06 port freeze | `BD-A05` | CAD mesh/port acoustics |
-| Speaker + amplifier SKU | 50 mm / cavity / grille reserved | Family + authored level, then RP-06 | `BD-A06` | `PB-AUDIO-OUT` ratings; enclosure vibration |
+| Capture/playback family `AP-*` | **Working selection 2026-09-26: `AP-TDM`** as two I²S lanes on one Pi 5 clock; kernel overlay, lane map and duplex still unproven on the bench | Later selection slice against `AR-*` §3 reject rules | `audio-path.md`; `BD-A04` | `LG-07`/`LG-08` selection; `PB-AUDIO-IN` source; GPIO18–21 use vs idle |
+| Microphone capsule SKU | **IM73D122V01 working-selected 2026-09-26**; four `PCB-06` boards at the unchanged ports | Family, then capsule, then RP-06 port freeze | `BD-A05` | CAD mesh/port acoustics |
+| Speaker + amplifier SKU | **Visaton K 50 WP + MAX98357A working-selected 2026-09-26**; fits the reserved 50 mm / cavity / grille | Family + authored level, then RP-06 | `BD-A06` | `PB-AUDIO-OUT` ratings; enclosure vibration |
 | Wake-word / ASR / NLU engines | Explicitly out of `RP05-A` | Corpus slice, then engine slice | `BD-A07`; plan §RP-05 | ADR-10 |
 | Astromech assets | `A-*` IDs exist in RP-01; no files | Asset production after playback path exists | `BD-A08`; SC-TBD-13 | SC-07 quality; ADR-11 close |
 | Utterance / acoustic matrix | Plan procedure exists; no versioned corpus | Later RP-05 slices | plan §RP-05; `inherited.md` §3 | G01/G02 freeze |
@@ -277,10 +277,10 @@ Canonical remaining-work list: [`RP-06-cad/TODO.md`](RP-06-cad/TODO.md). Detail:
 
 | Item | Why it is open | Waiting on | Home | Blocks |
 |---|---|---|---|---|
-| 304 mm stack accept-or-recover | 300 mm is a rounded target; CAD documents 304 mm | Named baseline decision | `dimensional-baseline.md`; checklist P-03 | G01; system height |
+| 293.5 mm stack registration | CAD stack is 293.5 mm (49.5 mm turntable neck), under the 300 mm target; the 304 mm figure is superseded | Register the 293.5 mm figure in `dimensional-baseline.md` | `dimensional-baseline.md`; checklist P-03 | G01; system height |
 | Whole-robot CoM vs +25 / 124 mm | 2026-09-24 (`RP03-CAD-06`): body moved 16 mm forward and battery into a chassis tub. Register CoM +20.2 / 103.7 mm (was +9.4 / 106.7), a_tip 1.91 m/s², after the forward `RP03-CAD-04` crossmember. **Then `RP03-CAD-07` (2S1P pack, 110 g instead of the 280 g placeholder) moved it to +18.8 / 107.9 mm, and `RP03-CAD-08` (81.6 g steel ballast bar ahead of the tub) restored it to +20.6 / 105.8 mm, a_tip 1.91 m/s², x/h 0.195 vs 0.202: 0.62 mm over the `physics.md` §2.5 +20 mm line, still short of the target** | Recover the last ~4.4 mm by geometry (about 376 g of ballast at the bar position would do it) or revise the baseline; weigh the installed pack and ballast, then M900 | Layout 02 mass properties; `RP-06-cad/decisions.md` `RP03-CAD-06`; checklist P-04 | G04; `a_tip` placement target |
 | Axle stack on real parts | 2026-09-24 (`RP03-CAD-05`): wheels could not turn as drawn (carriers and crossmember inside the wheels and motors). Now a motor-face flange, bearing boss in a dished-wheel pocket, 8 mm stub shaft; running gaps ≥ 1.5 mm measured | Gearmotor face-screw pattern and D-shaft length; stub-to-web fixing and ≥ 3 N axial retention; bearing preload; deck/cheek stiffness | `RP-06-cad/decisions.md` `RP03-CAD-05`; RP-03 `drivetrain-screen-01.md` P06 | Fabrication; RP-03 reference unit |
-| Body-side static clashes | The 2026-09-24 all-group sweep found overlaps no check covers: harness trunks vs Pi cooler, compute tray, IMU and lower front cross; rear lower cross and dog-legs vs power/safety envelopes; compute tray vs speaker magnet; yaw plate and upper rails vs shell; PDM boots vs shell; wheel-arch pods fused into the shell | Re-place the envelopes or add an all-group clash check | Layout 02 README validation note | Honest packaging closure |
+| Body-side static clashes | The 2026-09-24 all-group sweep found overlaps no check covers: harness trunks vs Pi cooler, compute tray, IMU and lower front cross (**power trunk and branch re-routed clear 2026-09-26**; signal/sensor trunks not re-swept); rear lower cross and dog-legs vs power/safety envelopes; compute tray vs speaker magnet; yaw plate and upper rails vs shell; PDM boots vs shell; wheel-arch pods fused into the shell | Re-place the envelopes or add an all-group clash check | Layout 02 README validation note | Honest packaging closure |
 | Battery service path | Battery now drops out through a bottom hatch in the chassis tub (`RP03-CAD-06`), resized to the 2S1P pack in `RP03-CAD-07`; hatch fastening, tub retention (1.5 mm foam gap) and tub-to-body harness are unrouted | Measured pack (BMS thickness) + connector; RP-02 harness | `RP-06-cad/decisions.md` `RP03-CAD-06`; checklist P-05 | G06 service; RP-02 `PB-*` routing |
 | Mass register vs geometry | The four 608 bearings (~48 g) were missing until 2026-09-24; all CoM numbers still come from a hand-kept table, so geometry changes can leave them stale with every check green | Derive masses from CAD volumes, or weigh parts | Layout 02 `MASS_ROWS` | Every CoM claim |
 | Sourced-article fit | Envelopes and some vendor STEP; not all installed SKUs | Samples + envelope replacement | checklist P-01 / H-* | G01 |
@@ -332,7 +332,7 @@ Canonical remaining-work list: [`RP-06-cad/TODO.md`](RP-06-cad/TODO.md). Detail:
 | RP-04 software budgets ↔ RP-01/RP-03 models | `E` budgets; virtual P-01 wait language closed | `W` G01; ADR-05 |
 | RP-04 audio/eyes ↔ RP-06 | Semantic `A-*`/`E-*` timing | Quality/artwork |
 | RP-04 architecture ↔ research | Family closed (`CS-HYBRID`); P-02 cue list validated; experiment spec software items closed | Physical G01–G05; `BD-08`; Phase B/C |
-| RP-06 CAD ↔ physical mock-up | Layout 03 + Layout 02 already exist as the working article; checklist opened | Every `W` row, G01–G06 registration, 304 mm accept-or-recover, CoM hit-or-revise |
+| RP-06 CAD ↔ physical mock-up | Layout 03 + Layout 02 already exist as the working article; checklist opened | Every `W` row, G01–G06 registration, 293.5 mm stack registration, CoM hit-or-revise |
 | RP-05 audio path ↔ SKU | `AR-*` and `AP-*` comparison can proceed on paper | Family/SKU, duplex `W`, ADR-11 |
 | RP-05 wake engine ↔ corpus | Engine not required to write `AR-20`…`AR-24` | Versioned utterance set before engine freeze |
 | RP-04 audio stand-in ↔ RP-05 | Timing/identity/stop can use `BD-03` stand-in | Acoustic quality, echo, contamination wait on `RP05-A` hardware |

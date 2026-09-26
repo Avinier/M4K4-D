@@ -33,7 +33,7 @@ def routes():
         gaps.append(dict(branch=branch,from_point_mm=q,frame=frame,reason='Stop at labelled keep-out: connector exit drawing and dynamic cable radius/FFC orientation unselected; roll/pitch transition is not qualified.'))
     # LED requires a turn before the 30 mm straight reserve clears the crown.
     put('LED_30mm_exit_UNROUTED',m.block(-38,-8,12.7,17.7,89.3,94.3),'R','led_local','keepout','#d6a647')
-    gaps.append(dict(branch='led_local',reason='Crown depth cannot accept a 30 mm rearward straight exit. Keep-out only until the on-hand LED exit drawing permits a shorter or differently oriented lead.'))
+    gaps.append(dict(branch='led_local',reason='HEAD-CAD-12: the selected WS2812B-2020 carrier takes 3 x AWG30 PTFE leads (3V3, GND, DIN) on its back pads, turned 90 deg within 2 mm, so no 30 mm straight exit is needed; the route from the crown to D1 GPIO6 (Sensor-AD PH2.0) is not yet drawn, so this keep-out stays.'))
     # Layout 04: the yaw branch drops through the turntable centre bore into the
     # body-side clock-spring reserve (RP-06). On the Y side it lies flush in the
     # disc-top groove and stops at a keep-out below the +Y leg; the riser to the

@@ -110,6 +110,7 @@ The Pi 5 RP1 exposes five PL011 UARTs. The initial, conflict-aware allocation is
 | Base link | UART2, GPIO4 TX / GPIO5 RX | `uart2-pi5` overlay; routed through the base differential transceiver |
 | Power/housekeeping | I²C1, GPIO2/3 | Local body PCB only; never crosses a joint |
 | Audio TDM/I²S reservation | GPIO18–21 | Preserved for RP-05 microphone/playback decisions |
+| Audio second capture lane + amp enable (**change request CR-01, 2026-09-26, not yet accepted**) | GPIO22 `i2s0` SDI1; GPIO23 plain output `AMP_SD`, default low | RP-05 `BD-A04`: RP1 has no true TDM, so four mics need two stereo lanes ([evidence](../RP-06-cad/peripheral-selection.md) §2.6). No UART/I²C/SPI collision |
 | SPI/service reservation | GPIO8–11 or later conflict-free set | Must be audited against any final HAT/carrier before PCB freeze |
 
 The exact device names are discovered by stable udev aliases, never hard-coded `/dev/ttyAMA*` enumeration. A boot self-test records the active pin mux and refuses arm if the expected links are absent or mapped differently.

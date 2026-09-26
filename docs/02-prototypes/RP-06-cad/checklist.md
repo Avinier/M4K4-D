@@ -28,7 +28,7 @@ Evidence classes are unchanged: `W` measured on the named hardware, `D` manufact
 | Head mass | **~499–524 g complete D/E; nominal 509 g at M008=20 g** | Use. Former ~250 g target is historical only |
 | Head inertia | Layout 03 D/E ~0.000656 / 0.000728 / 0.001080 kg·m² roll / pitch / yaw at M008=20 g | Screening input; replace servo references per candidate |
 | Head envelope | 104 × 150 × 115 mm complete; 86 × 130 × 115 mm core | Planning geometry |
-| Robot envelope | 300 × 205 × 180 mm rounded target; **304 mm** current neutral stack | Accept 304 mm or recover 4 mm under G01 |
+| Robot envelope | 300 × 205 × 180 mm rounded target; **293.5 mm** current neutral stack (met, 2026-09-26) | Nothing to recover; register under G01 |
 | Placement | 140 mm body-top datum; 60 mm neck; body mics/speaker/battery/C0 | Locked |
 | Whole-robot CoM target | `x = +25 mm`, `h = 124 mm` | Placement target. Layout 02 currently +20.6 / 105.8 mm: +20.2 / 103.7 after the 16 mm body shift (`RP03-CAD-06`), +18.8 / 107.9 with the lighter 2S1P pack (`RP03-CAD-07`), restored by an 81.6 g ballast bar (`RP03-CAD-08`) |
 | Display | SKU **30493** | Locked; optical/animation tests remain |
@@ -48,7 +48,7 @@ CAD already: live head import; selected two-wheel / ball / skid; chassis and she
 |---|---|---|---|---|
 | P-01 | Fit **actual** sourced articles, not only envelopes (display, camera, Pi 5, cooler, C2, C3, battery, drivers, speaker, mics, fasteners) | Partial — vendor STEP where downloaded; else envelopes | Open | Replace each envelope as the sample arrives; record SKU vs solid |
 | P-02 | 300 × 205 × 180 mm box vs sourced layout | Layout 02 body 174 mm lower width, 110 mm visible height, 30 mm clearance | Open | Pass in-box or revise the baseline explicitly |
-| P-03 | **304 mm stack: accept or recover 4 mm** through body/neck datums | Documented 304 mm; 300 mm still a rounded target | Open | Named decision in the baseline, not a quiet trim |
+| P-03 | **Neutral stack ≤ 300 mm** through body/neck datums | 293.5 mm (140 + 49.5 + 104; Layout 04 turntable neck, `neutral_stack_is_documented_293p5_mm`) | Closed in CAD, register under G01 | Named decision in the baseline, not a quiet trim |
 | P-04 | Whole-robot CoM vs +25 / 124 mm | Layout 02 generated **X = +18.77 mm, Z = 105.05 mm, 2568 g modeled** with the RP-02 power boards (a_tip 1.75 m/s², x/h 0.179 vs 0.202); the builder accepted this as the working baseline on 2026-09-25 (`RP03-CAD-09`) and the `physics.md` §2.5 check is re-based to a_tip ≥ 1.582 m/s² | Open (baseline revised) | Replace the register with a weighed robot (`W`); re-check the head-pose corners at the real head mass. Do not shrink `a_tip` to hide a miss |
 | P-05 | Battery low and **forward** of the axle | CAD 2S1P 18650 pack (`RP03-CAD-07`) in a chassis tub at X = +46.7, Z = 43.9 mm, bottom hatch | Open | Measured pack (BMS thickness, mass), lead and connector; hatch fastening, retention and tub-to-body harness; HIGH_AFT remains forbidden |
 | P-06 | Harness trunks, service loops, body-side yaw anchor | Reservations exist; production construction `U` | Open | Close with the harness study; body-side yaw clamp is RP-06 |
@@ -57,7 +57,7 @@ CAD already: live head import; selected two-wheel / ball / skid; chassis and she
 
 - [ ] P-01 sourced-part fit, not envelope-only
 - [ ] P-02 bounding box held or baseline revised
-- [ ] P-03 304 mm accepted or 4 mm recovered
+- [x] P-03 stack 293.5 mm, under the 300 mm target (CAD; not yet registered)
 - [ ] P-04 CoM hit or baseline revised
 - [ ] P-05 forward-low battery on the installed pack
 - [ ] P-06 body-side yaw anchor and trunks
@@ -75,7 +75,7 @@ CAD already: display envelope; camera envelope and flared aperture; C2 pocket/tr
 | H-01 | Display SKU 30493 in the carrier, non-contact mount, connector clearance | Envelope + Layout 03 aperture 99 × 58 mm, window 110 × 64 mm | Open | Weigh installed module; confirm hidden 106.1 × 67.8 mm clearance on the article |
 | H-02 | Smoked window + black mask + air gap | Window/mask solids exist | Open | Start at **60–70% visible-transmission** neutral smoke ([display study](../../01-system/display-candidate-study.md)) |
 | H-03 | Camera SC0874, aperture, crown, moving interconnect | Flared aperture clears a conservative FOV envelope; 200 mm FPC is bench-only | Open | Entrance-pupil measurement; H1/H2/H3 production route |
-| H-04 | Status light + optics beside camera | LED branch is a keep-out pending the on-hand package | Open | Select optic; prove no destructive crown clash |
+| H-04 | Status light + optics beside camera | WS2812B-2020 on a 5 × 5 carrier modelled inside the reserve behind the Ø3.4 light pipe (`HEAD-CAD-12`, 2026-09-26); lead route to D1 still a keep-out | Part selected; route open | Route the three AWG30 leads to D1; bench brightness and camera stray light |
 | H-05 | C2 Zero in the rolling-cradle tray; USB/BOOT service | Pocket and lift path authored | Open | Installed M008 `W`; flashing with cover on (CAD-04 / CAD-04a) |
 | H-06 | Servos, bearings, structure, cables, connectors | Trial Ø16.2 × 6.2 mm seats; two retainer-screw collisions still open | Open | Bearing SKU; collision repair is an RP-01 blocker that RP-06 must not paper over |
 | H-07 | Final installed head mass and CoM | D/E tree 362/436/509 g roll/pitch/yaw at M008=20 g | Open | Per-axis `W` after print/kit; dummy = current tree, not 250 g |
@@ -195,7 +195,7 @@ Canonical rows: [`candidate-sourcing-matrix.md`](../../01-system/candidate-sourc
 | Class | Locked / lead | Still open for G05 |
 |---|---|---|
 | Display, camera, C2, Pi 5, Active Cooler, C3 proto | Selected at stated layer | Sample receipt, repeat stock, landed cost on the paid invoice |
-| Smoked window, status light, speaker, mics, mic front end | Candidates / unselected | Exact SKU, availability, lead, substitute |
+| Smoked window, status light, speaker, mics, mic front end | Status light, speaker, amp, mics and front end working-selected 2026-09-26 ([`peripheral-selection.md`](peripheral-selection.md)); smoked window unselected | Quotes, lead times and substitutes for each; smoked window SKU |
 | Servos, bearings, battery, drivers, production CSI, inserts | Unselected or paper-only | Do not treat C01 / D02 / DRV-B as a freeze |
 | Structure / print stock | PLA for RP-01; body material open | Fabrication process and tools per row |
 
@@ -230,7 +230,7 @@ Numeric thresholds, lighting/distance matrix, cycle-life, service-time bar and a
 
 | Destination | What RP-06 may write |
 |---|---|
-| `dimensional-baseline.md` | Explicit revision if 304 mm, box, or +25/124 cannot be met |
+| `dimensional-baseline.md` | Explicit revision if 293.5 mm stack, box, or +25/124 cannot be met |
 | `mass-envelope-ledger.md` | Body, fastener, and measured-head rows |
 | `candidate-sourcing-matrix.md` | Rechecked G05 fields |
 | Next head-CAD iteration | Installed articles, window, interconnect, service proven on the mock-up |

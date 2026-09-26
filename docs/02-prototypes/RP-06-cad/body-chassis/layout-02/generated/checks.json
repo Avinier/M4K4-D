@@ -49,14 +49,14 @@
             "min_gap_mm": 1.5,
             "between": [
               "WHEEL_L_STUB_SHAFT_8MM",
-              "MOTOR_L_GEARBOX"
+              "AXLE_MOTOR_FLANGE_BEARING_BOSS_L"
             ]
           },
           "R": {
             "min_gap_mm": 1.5,
             "between": [
               "WHEEL_R_STUB_SHAFT_8MM",
-              "MOTOR_R_GEARBOX"
+              "AXLE_MOTOR_FLANGE_BEARING_BOSS_R"
             ]
           }
         }
@@ -75,12 +75,51 @@
       "evidence": {
         "L": {
           "gap_mm": 0.0,
-          "overlap_mm3": 0
+          "overlap_mm3": 0.0
         },
         "R": {
           "gap_mm": 0.0,
-          "overlap_mm3": 0
+          "overlap_mm3": 0.0
         }
+      }
+    },
+    {
+      "name": "motor_face_joint_is_engaged",
+      "ok": true,
+      "evidence": {
+        "sides": {
+          "L": {
+            "screw_count": 2,
+            "screw_insertion_mm": [
+              4.0,
+              4.0
+            ],
+            "thread_engaged_in_faceplate_mm": [
+              2.85,
+              2.85
+            ],
+            "hole_depth_mm": 6.0,
+            "shaft_engaged_in_stub_mm": 8.5,
+            "shaft_stub_overlap_mm3": 0,
+            "screw_head_to_inner_bearing_mm": 0.5
+          },
+          "R": {
+            "screw_count": 2,
+            "screw_insertion_mm": [
+              4.0,
+              4.0
+            ],
+            "thread_engaged_in_faceplate_mm": [
+              2.85,
+              2.85
+            ],
+            "hole_depth_mm": 6.0,
+            "shaft_engaged_in_stub_mm": 8.5,
+            "shaft_stub_overlap_mm3": 0,
+            "screw_head_to_inner_bearing_mm": 0.5
+          }
+        },
+        "rule": "M3 thread in the tapped faceplate >= 2.5 mm, insertion <= hole depth - 0.5; shaft >= 8 mm in the stub; heads >= 0.4 mm off the bearing"
       }
     },
     {
@@ -93,7 +132,7 @@
           "BEARING_608ZZ_R_1": true,
           "BEARING_608ZZ_R_2": true
         },
-        "boss_end_y_mm": 86.0
+        "boss_end_y_mm": 88.0
       }
     },
     {
@@ -626,6 +665,69 @@
       }
     },
     {
+      "name": "selected_audio_and_imu_parts_are_clear",
+      "ok": true,
+      "evidence": {
+        "clashes_mm3": {},
+        "self_clashes_mm3": {},
+        "harness_volume_overlaps_OPEN_mm3": {
+          "SPEAKER_ACOUSTIC_CAVITY_KEEP_OUT x HARNESS_SIGNAL_TRUNK": 23.0,
+          "SPEAKER_ACOUSTIC_CAVITY_KEEP_OUT x HARNESS_SENSOR_TRUNK": 23.0
+        },
+        "parts": 26
+      }
+    },
+    {
+      "name": "speaker_is_k50wp_outline_behind_front_panel",
+      "ok": true,
+      "evidence": {
+        "depth_mm": 18.0,
+        "diameter_mm": 50.0,
+        "frame_face_x_mm": 97.5,
+        "front_panel_inner_face_x_mm": 98.0,
+        "vendor": "Visaton K 50 WP 8 ohm: \u00d850 x 18 mm, \u00d846 cutout, 48 g"
+      }
+    },
+    {
+      "name": "mic_packages_on_port_axes_against_boots",
+      "ok": true,
+      "evidence": {
+        "FRONT_L": {
+          "package_off_axis_mm": 0.0,
+          "board_outer_abs_y_mm": 70.0
+        },
+        "FRONT_R": {
+          "package_off_axis_mm": 0.0,
+          "board_outer_abs_y_mm": 70.0
+        },
+        "REAR_L": {
+          "package_off_axis_mm": 0.0,
+          "board_outer_abs_y_mm": 70.0
+        },
+        "REAR_R": {
+          "package_off_axis_mm": 0.0,
+          "board_outer_abs_y_mm": 70.0
+        }
+      }
+    },
+    {
+      "name": "imu_board_seated_on_deck_with_both_screws_in_material",
+      "ok": true,
+      "evidence": {
+        "board_bottom_z_mm": 56.0,
+        "deck_top_z_mm": 56.0,
+        "shank_in_deck_mm3": {
+          "IMU_M2_SCREW_SHANK_L": 12.566,
+          "IMU_M2_SCREW_SHANK_R": 12.566
+        },
+        "board_vs_deck_mm3": 0,
+        "board_x_mm": [
+          13.0,
+          29.0
+        ]
+      }
+    },
+    {
       "name": "head_sweep_floor_clears_disc_top",
       "ok": true,
       "evidence": {
@@ -1122,7 +1224,7 @@
       "ok": true,
       "evidence": {
         "clashes_mm3": {},
-        "checked_against": 140,
+        "checked_against": 152,
         "keep_outs_included": true
       }
     },
@@ -1148,8 +1250,8 @@
             "to": "CHASSIS_DECK_WITH_BODY_INTERFACE"
           },
           "PCB03_MOTOR_GATE_AND_HEAD_RAIL_PCB": {
-            "nearest_mm": 0.5,
-            "to": "IMU_BREAKOUT_ENVELOPE"
+            "nearest_mm": 1.0,
+            "to": "BODY_LOWER_CROSS_FRONT"
           },
           "PCB03_MOTOR_GATE_AND_HEAD_RAIL_PARTS_ENVELOPE": {
             "nearest_mm": 1.0,
@@ -1157,7 +1259,7 @@
           },
           "PCB04_BRANCH_CONVERTERS_PCB": {
             "nearest_mm": 0.5,
-            "to": "IMU_BREAKOUT_ENVELOPE"
+            "to": "MOTOR_L_PIGTAIL_RESERVE"
           },
           "PCB04_BRANCH_CONVERTERS_PARTS_ENVELOPE": {
             "nearest_mm": 0.9,
@@ -1211,17 +1313,11 @@
       }
     },
     {
-      "name": "power_boards_vs_harness_placeholders_open_and_unchanged",
+      "name": "power_boards_clear_of_harness_power_routes",
       "ok": true,
       "evidence": {
-        "status": "OPEN: harness volumes are unresolved route placeholders; HARNESS_BATTERY_TRUNK and HARNESS_MOTOR_BRANCH pass through PCB-03 and PCB-04, the gap under the boards is 7 mm (Z 56-63)",
-        "overlaps_mm3": {
-          "PCB03_MOTOR_GATE_AND_HEAD_RAIL_PCB x HARNESS_BATTERY_TRUNK": 656.0,
-          "PCB03_MOTOR_GATE_AND_HEAD_RAIL_PARTS_ENVELOPE x HARNESS_BATTERY_TRUNK": 984.0,
-          "PCB03_MOTOR_GATE_AND_HEAD_RAIL_PARTS_ENVELOPE x HARNESS_MOTOR_BRANCH": 7200.0,
-          "PCB04_BRANCH_CONVERTERS_PCB x HARNESS_BATTERY_TRUNK": 368.0,
-          "PCB04_BRANCH_CONVERTERS_PARTS_ENVELOPE x HARNESS_BATTERY_TRUNK": 552.0
-        }
+        "overlaps_mm3": {},
+        "note": "HARNESS_BATTERY_TRUNK (Y +18, Z 57.5-62.5) and HARNESS_MOTOR_BRANCH (X 30-42, Z 56.5-62.5) run in the 7 mm slot under PCB-03/04 (Z 56-63) and clear the IMU; still route-volume placeholders, not a wire-by-wire harness"
       }
     },
     {
@@ -1286,11 +1382,11 @@
       "name": "control_power_sensors_row_replaced_by_board_rows",
       "ok": true,
       "evidence": {
-        "replaced_rows_g": 121.0,
+        "replaced_rows_g": 121.5,
         "removed_row_g": 121.5,
         "estop_g": 14.0,
         "battery_g": 113.7,
-        "total_mass_g": 2576.0,
+        "total_mass_g": 2529.4,
         "note": "hand-kept register: masses are RP-02 estimates, not derived from the solids"
       }
     },
@@ -1319,20 +1415,20 @@
       "name": "com_inside_support_x",
       "ok": true,
       "evidence": {
-        "com_x_mm": 19.412234258611218
+        "com_x_mm": 19.379155045241752
       }
     },
     {
       "name": "com_forward_of_physics_margin_line",
       "ok": true,
       "evidence": {
-        "com_x_mm": 19.41,
-        "com_h_mm": 106.48,
-        "x_over_h": 0.1823,
-        "a_tip_m_s2": 1.789,
+        "com_x_mm": 19.38,
+        "com_h_mm": 106.96,
+        "x_over_h": 0.1812,
+        "a_tip_m_s2": 1.777,
         "a_tip_min_m_s2": 1.582,
-        "equivalent_min_x_mm_at_this_h": 17.17,
-        "margin_over_a_peak_1p00": 1.789,
+        "equivalent_min_x_mm_at_this_h": 17.25,
+        "margin_over_a_peak_1p00": 1.777,
         "baseline_target": {
           "x_mm": 25.0,
           "h_mm": 124.0,
@@ -1346,7 +1442,7 @@
       "name": "ball_share_above_spin_walk_flag",
       "ok": true,
       "evidence": {
-        "ball_share": 0.1765,
+        "ball_share": 0.1762,
         "flag_below": 0.09
       }
     },
@@ -1355,14 +1451,14 @@
       "ok": true,
       "evidence": {
         "shoe_first_contact_pitch_deg": 6.054,
-        "com_over_axle_pitch_deg": 10.333
+        "com_over_axle_pitch_deg": 10.27
       }
     },
     {
       "name": "com_below_head_yaw",
       "ok": true,
       "evidence": {
-        "com_z_mm": 106.4750289120355
+        "com_z_mm": 106.95828828707945
       }
     }
   ]

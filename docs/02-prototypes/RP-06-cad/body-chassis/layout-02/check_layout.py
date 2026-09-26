@@ -340,12 +340,41 @@ def main():
             for other in [*chassis_static, *body_static, *leaves(M.harness_routes())]:
                 if not part.bounding_box().overlaps(other.bounding_box()):
                     continue
+                if other.label.startswith(f"AXLE_MOTOR_SCREW_M3X8_{side}_"):
+                    continue  # threads in the tapped faceplate; measured in motor_joint below
                 volume = _vol(part & other)
                 if volume > 1e-3:
                     drivetrain_clashes[f"{part.label} x {other.label}"] = round(volume, 3)
         gearbox = next(c for c in motor_solids if c.label.endswith("GEARBOX"))
         flange = by_label(chassis_static, f"AXLE_MOTOR_FLANGE_BEARING_BOSS_{side}")
         flange_seat[side] = {"gap_mm": round(gearbox.distance_to(flange), 4), "overlap_mm3": round(_vol(gearbox & flange), 4)}
+    # Motor face joint (Pololu #4804): M3 x 8 countersunk screws through the
+    # flange plate and diaphragm into the 6 mm blind face holes; the O4 shaft
+    # engages the stub bore; the flush heads stay clear of the inner bearing.
+    motor_joint = {}
+    for side in ("L", "R"):
+        screws = [c for c in chassis_static if c.label.startswith(f"AXLE_MOTOR_SCREW_M3X8_{side}_")]
+        insertion = [round(M.MOTOR_FACE_Y - min(abs(sc.bounding_box().min.Y), abs(sc.bounding_box().max.Y)), 3) for sc in screws]
+        # The vendor STEP taps only the faceplate (O2.5 minor diameter), with a
+        # clearance cavity behind; the screw's overlap with it is the thread.
+        gearbox = next(c for c in M.motor_envelope(side).children if c.label.endswith("GEARBOX"))
+        engage = []
+        for sc in screws:
+            thread = sc & gearbox
+            engage.append(0.0 if thread is None or thread.volume < 1e-3 else round(thread.bounding_box().size.Y, 3))
+        shaft = next(c for c in M.motor_envelope(side).children if "OUTPUT_SHAFT" in c.label)
+        stub = next(c for c in M.wheel_assembly(side).children if "STUB_SHAFT" in c.label)
+        shaft_in_stub = round(abs(shaft.bounding_box().max.Y if side == "L" else shaft.bounding_box().min.Y) - M.STUB_SHAFT_Y[0], 3)
+        inner_bearing = M.bearing_pair(side).children[0]
+        motor_joint[side] = {
+            "screw_count": len(screws),
+            "screw_insertion_mm": insertion,
+            "thread_engaged_in_faceplate_mm": engage,
+            "hole_depth_mm": M.MOTOR_SCREW_HOLE_DEPTH,
+            "shaft_engaged_in_stub_mm": shaft_in_stub,
+            "shaft_stub_overlap_mm3": round(_vol(shaft & stub), 4),
+            "screw_head_to_inner_bearing_mm": round(min(sc.distance_to(inner_bearing) for sc in screws), 3),
+        }
     bearings_in_boss = {}
     for side in ("L", "R"):
         boss = by_label(chassis_static, f"AXLE_MOTOR_FLANGE_BEARING_BOSS_{side}").bounding_box()
@@ -454,13 +483,6 @@ def main():
         for volume_shape in harness_volumes:
             if part.bounding_box().overlaps(volume_shape.bounding_box()) and _vol(part & volume_shape) > 1e-3:
                 power_harness_overlaps[f"{part.label} x {volume_shape.label}"] = round(_vol(part & volume_shape), 1)
-    power_harness_recorded = {
-        "PCB03_MOTOR_GATE_AND_HEAD_RAIL_PARTS_ENVELOPE x HARNESS_BATTERY_TRUNK",
-        "PCB03_MOTOR_GATE_AND_HEAD_RAIL_PARTS_ENVELOPE x HARNESS_MOTOR_BRANCH",
-        "PCB03_MOTOR_GATE_AND_HEAD_RAIL_PCB x HARNESS_BATTERY_TRUNK",
-        "PCB04_BRANCH_CONVERTERS_PARTS_ENVELOPE x HARNESS_BATTERY_TRUNK",
-        "PCB04_BRANCH_CONVERTERS_PCB x HARNESS_BATTERY_TRUNK",
-    }
     board_box = {c.label: c.bounding_box() for c in power_group.children}
     bay_gaps = {
         "pcb04_to_lower_cross_rear_mm": round(board_box["PCB04_BRANCH_CONVERTERS"].min.X - by_label(leaves(body_frame), "BODY_LOWER_CROSS_REAR").bounding_box().max.X, 3),
@@ -499,10 +521,74 @@ def main():
         "keep_out_vs_pcb02_mm3": round(sum(_vol(estop_keep_out & p) for p in pcb02_parts), 3),
         "rear_panel_cut_out": "octagonal well with a Ø16.2 floor cut-out (IDEC XA)",
     }
+    # RP03-CAD-11 selected peripherals (../../peripheral-selection.md), measured from the
+    # built solids: speaker, PCB-05, four PCB-06 mic boards and the PCB-07 IMU board must
+    # clear every real part; the ports and boots pass the shell bores by design.
+    audio_group = M.body_audio()
+    imu_group = M.imu_board()
+    audio_leaves = leaves(audio_group)
+    imu_leaves = leaves(imu_group)
+    selected_parts = [p for p in audio_leaves + imu_leaves if not any(k in p.label for k in ("ACOUSTIC_PORT", "PORT_BOOT"))]
+    deck = by_label(chassis_static, "CHASSIS_DECK_WITH_BODY_INTERFACE")
+    imu_shanks = [p for p in imu_leaves if p.label.startswith("IMU_M2_SCREW_SHANK")]
+    selected_others = [
+        *chassis_static, body_shell, *leaves(body_panels), *leaves(panel_hardware), *leaves(body_frame),
+        *power_parts, *[c for c in M.electronics().children if c.label not in ("POWER_DISTRIBUTION_BOARDS", "IMU_PCB07")],
+        *sensor_parts, *leaves(M.body_yaw_stage()), *M.yaw_drive_moving_parts(),
+        *leaves(M.motor_envelope("L")), *leaves(M.motor_envelope("R")), *leaves(M.battery_tub()),
+    ]
+    selected_clashes = {}
+    for part in selected_parts:
+        for other in selected_others:
+            if part in imu_shanks and other.label == deck.label:
+                continue  # the M2 shank thread-forms into the deck by design
+            if part.bounding_box().overlaps(other.bounding_box()):
+                volume = _vol(part & other)
+                if volume > 1e-3:
+                    selected_clashes[f"{part.label} x {other.label}"] = round(volume, 3)
+    # Within the group only the speaker in its own cavity, and screws through their board, touch by design.
+    selected_self_clashes = {}
+    for i, a in enumerate(selected_parts):
+        for b in selected_parts[i + 1:]:
+            if "CAVITY_KEEP_OUT" in a.label + b.label and "SPEAKER_K50WP" in a.label + b.label:
+                continue
+            if "IMU_M2_SCREW" in a.label + b.label and "IMU_PCB07_BOARD" in a.label + b.label:
+                continue
+            if a.bounding_box().overlaps(b.bounding_box()) and _vol(a & b) > 1e-3:
+                selected_self_clashes[f"{a.label} x {b.label}"] = round(_vol(a & b), 3)
+    selected_harness_overlaps = {}
+    for part in selected_parts:
+        for volume_shape in harness_volumes:
+            if part.bounding_box().overlaps(volume_shape.bounding_box()) and _vol(part & volume_shape) > 1e-3:
+                selected_harness_overlaps[f"{part.label} x {volume_shape.label}"] = round(_vol(part & volume_shape), 1)
+    speaker_box = by_label(audio_group.children, "SPEAKER_VISATON_K50WP_8OHM").bounding_box()
+    speaker_outline = {
+        "depth_mm": round(speaker_box.max.X - speaker_box.min.X, 3),
+        "diameter_mm": round(speaker_box.max.Y - speaker_box.min.Y, 3),
+        "frame_face_x_mm": round(speaker_box.max.X, 3),
+        "front_panel_inner_face_x_mm": M.BODY_X_FRONT,
+        "vendor": "Visaton K 50 WP 8 ohm: Ø50 x 18 mm, Ø46 cutout, 48 g",
+    }
+    mic_axis = {}
+    for x, y, z, name in M.MICROPHONE_PORTS:
+        package = by_label(audio_leaves, f"PDM_MIC_{name}_IM73D122").bounding_box()
+        board = by_label(audio_leaves, f"PDM_MIC_{name}_PCB06").bounding_box()
+        mic_axis[name] = {
+            "package_off_axis_mm": round(math.hypot(package.center().X - x, package.center().Z - z), 3),
+            "board_outer_abs_y_mm": round(max(abs(board.min.Y), abs(board.max.Y)), 3),
+        }
+    imu_board_box = by_label(imu_leaves, "IMU_PCB07_BOARD").bounding_box()
+    imu_seat = {
+        "board_bottom_z_mm": round(imu_board_box.min.Z, 3),
+        "deck_top_z_mm": round(deck.bounding_box().max.Z, 3),
+        "shank_in_deck_mm3": {s.label: round(_vol(s & deck), 3) for s in imu_shanks},
+        "board_vs_deck_mm3": round(_vol(by_label(imu_leaves, "IMU_PCB07_BOARD") & deck), 3),
+        "board_x_mm": [round(imu_board_box.min.X, 3), round(imu_board_box.max.X, 3)],
+    }
     pcb01 = by_label(battery_parts, "BATTERY_BMS_PCB01_PACK_PROTECTION")
     power_mass_ids = [
         "PCB02_CHARGE_AND_SYSTEM_POWER", "PACK_INTERFACE_SBS_MINI_AND_FUSE", "PCB03_MOTOR_GATE_AND_HEAD_RAIL",
-        "PCB04_BRANCH_CONVERTERS", "C3_DEVKITC_N8", "DRV8874_CARRIERS_X2", "IMU_BREAKOUT", "TCRT5000_BREAKOUT_AND_CABLE",
+        "PCB04_BRANCH_CONVERTERS", "C3_DEVKITC_N8", "DRV8874_CARRIERS_X2", "IMU_PCB07", "TCRT5000_BREAKOUT_AND_CABLE",
     ]
     mass_by_id = {row[0]: row[1] for row in M.MASS_ROWS}
     replaced_row_g = round(sum(mass_by_id[i] for i in power_mass_ids), 1)
@@ -521,6 +607,7 @@ def main():
         ("wheel_running_clearance_to_static_parts", all(v["min_gap_mm"] >= M.WHEEL_RUNNING_CLEARANCE_MIN - 1e-6 for v in wheel_clearance.values()), {"minimum_mm": M.WHEEL_RUNNING_CLEARANCE_MIN, "sides": wheel_clearance}),
         ("drivetrain_static_parts_do_not_interfere", not drivetrain_clashes, {"clashes_mm3": drivetrain_clashes}),
         ("motor_face_seats_on_axle_flange", all(v["gap_mm"] < 1e-6 and v["overlap_mm3"] < 1e-3 for v in flange_seat.values()), flange_seat),
+        ("motor_face_joint_is_engaged", all(v["screw_count"] == 2 and all(e >= 2.5 for e in v["thread_engaged_in_faceplate_mm"]) and all(i <= v["hole_depth_mm"] - 0.5 for i in v["screw_insertion_mm"]) and v["shaft_engaged_in_stub_mm"] >= 8.0 and v["shaft_stub_overlap_mm3"] < 1e-3 and v["screw_head_to_inner_bearing_mm"] >= 0.4 for v in motor_joint.values()), {"sides": motor_joint, "rule": "M3 thread in the tapped faceplate >= 2.5 mm, insertion <= hole depth - 0.5; shaft >= 8 mm in the stub; heads >= 0.4 mm off the bearing"}),
         ("bearings_sit_inside_flange_boss", all(bearings_in_boss.values()), {"bearings": bearings_in_boss, "boss_end_y_mm": M.AXLE_BOSS_END_Y}),
         ("battery_pack_fits_tub_with_retention_gap", all(v >= 0.4 for k, v in battery_tub_margin.items() if k != "floor_z_mm") and -1e-6 <= battery_tub_margin["floor_z_mm"] <= M.BATTERY_WRAP_T + 1e-6, battery_tub_margin),
         ("ballast_bar_is_clear_and_seated", not ballast_clashes and ballast_gaps["tub_front_wall_mm"] >= 0.5 and ballast_gaps["front_crossmember_mm"] >= 0.5 and abs(ballast_gaps["deck_underside_mm"]) < 1e-6, {"clashes_mm3": ballast_clashes, "gaps": ballast_gaps, "mass_g": round(M.BALLAST_BAR_G + M.BALLAST_SCREWS_G, 1)}),
@@ -561,6 +648,10 @@ def main():
         ("body_audio_is_separate_top_level_group", "BODY_AUDIO" in top_level_labels, {"top_level_labels": top_level_labels}),
         ("four_body_microphones_are_allocated", len(M.MICROPHONE_PORTS) == 4, {"microphone_ports": M.MICROPHONE_PORTS}),
         ("speaker_and_front_range_sensor_do_not_overlap", audio_sensor_overlap < 1e-3, {"overlap_volume_mm3": audio_sensor_overlap}),
+        ("selected_audio_and_imu_parts_are_clear", not selected_clashes and not selected_self_clashes, {"clashes_mm3": selected_clashes, "self_clashes_mm3": selected_self_clashes, "harness_volume_overlaps_OPEN_mm3": selected_harness_overlaps, "parts": len(selected_parts)}),
+        ("speaker_is_k50wp_outline_behind_front_panel", abs(speaker_outline["depth_mm"] - 18.0) < 0.01 and abs(speaker_outline["diameter_mm"] - 50.0) < 0.01 and M.BODY_X_FRONT - speaker_box.max.X >= 0.4, speaker_outline),
+        ("mic_packages_on_port_axes_against_boots", all(v["package_off_axis_mm"] < 0.01 and abs(v["board_outer_abs_y_mm"] - M.MIC_BOARD_OUTER_Y) < 0.01 for v in mic_axis.values()), mic_axis),
+        ("imu_board_seated_on_deck_with_both_screws_in_material", abs(imu_seat["board_bottom_z_mm"] - imu_seat["deck_top_z_mm"]) < 0.01 and imu_seat["board_vs_deck_mm3"] < 1e-3 and all(v >= 0.95 * math.pi * 1.0 ** 2 * 4.0 for v in imu_seat["shank_in_deck_mm3"].values()), imu_seat),
         ("head_sweep_floor_clears_disc_top", M.HEAD_SWEEP_FLOOR_Z - M.YAW_DISC_TOP_Z >= 4.0 - 1e-9, {"sweep_floor_z_mm": M.HEAD_SWEEP_FLOOR_Z, "disc_top_z_mm": M.YAW_DISC_TOP_Z}),
         ("hard_stops_alone_keep_head_off_disc", M.HEAD_ENVELOPE["hard_stops_alone_keep_4mm"] and M.HEAD_ENVELOPE["overtravel_1deg_case"]["clearance_to_disc_top_mm"] >= 2.0, {"hard_stop_corner": M.HEAD_ENVELOPE["hard_stop_fault_case"], "overtravel_1deg": M.HEAD_ENVELOPE["overtravel_1deg_case"]}),
         ("head_motion_is_full_range_to_hard_stops", all(r["roll_min_deg"] == M.HEAD_ENVELOPE["hard_stops"]["roll_deg"][0] and r["roll_max_deg"] == M.HEAD_ENVELOPE["hard_stops"]["roll_deg"][1] for r in M.HEAD_ENVELOPE["rows"]), {"rows": len(M.HEAD_ENVELOPE["rows"]), "hard_stops": M.HEAD_ENVELOPE["hard_stops"], "usable_travel": M.HEAD_ENVELOPE["usable_travel"]}),
@@ -616,7 +707,7 @@ def main():
         ("power_boards_do_not_interfere_with_each_other", not power_self_clashes, {"clashes_mm3": power_self_clashes}),
         ("power_boards_keep_running_gaps", all(v["nearest_mm"] >= 0.4 for v in power_gaps.values()), {"minimum_mm": 0.4, "nearest": power_gaps}),
         ("power_bay_gaps_are_about_1mm_and_have_no_slack", all(v >= 0.89 for v in bay_gaps.values()) and abs(bay_gaps["pcb04_to_pcb03_mm"] - 1.0) < 1e-6, {"gaps": bay_gaps, "note": "PCB-03 and PCB-04 use the whole free band under the tray: 44 + 1 + 41 mm between the lower cross-members; a larger board or the 3.3 mF hold-up footprint needs a different bay"}),
-        ("power_boards_vs_harness_placeholders_open_and_unchanged", set(power_harness_overlaps) == power_harness_recorded, {"status": "OPEN: harness volumes are unresolved route placeholders; HARNESS_BATTERY_TRUNK and HARNESS_MOTOR_BRANCH pass through PCB-03 and PCB-04, the gap under the boards is 7 mm (Z 56-63)", "overlaps_mm3": power_harness_overlaps}),
+        ("power_boards_clear_of_harness_power_routes", not power_harness_overlaps, {"overlaps_mm3": power_harness_overlaps, "note": "HARNESS_BATTERY_TRUNK (Y +18, Z 57.5-62.5) and HARNESS_MOTOR_BRANCH (X 30-42, Z 56.5-62.5) run in the 7 mm slot under PCB-03/04 (Z 56-63) and clear the IMU; still route-volume placeholders, not a wire-by-wire harness"}),
         ("power_board_footprints_recorded", footprints["PCB03_mm2"] >= 2460.0 - 1.0 and footprints["PCB04_mm2"] >= 3080.0 - 1.0, {"footprints": footprints, "source": "WS-H estimates from the part inventory; nothing is laid out"}),
         ("estop_operator_is_outside_the_rear_panel_and_keep_out_clears_the_pi", estop_geometry["head_max_x_mm"] <= M.ESTOP_REAR_OUTER_X + 1e-6 and estop_geometry["head_z_mm"][1] <= estop_geometry["rear_panel_top_z_mm"] and estop_geometry["head_vs_panel_mm3"] < 1e-3 and estop_geometry["well_vs_frame_mm3"] < 1e-3 and estop_geometry["keep_out_vs_pcb02_mm3"] < 1e-3, estop_geometry),
         ("pcb01_replaces_generic_bms_at_2p9mm", abs(pcb01.bounding_box().size.Z - 2.9) < 1e-6 and abs(pcb01.bounding_box().size.X - 20.0) < 1e-6 and abs(pcb01.bounding_box().size.Y - 48.0) < 1e-6, {"pcb01_size_mm": [round(pcb01.bounding_box().size.X, 3), round(pcb01.bounding_box().size.Y, 3), round(pcb01.bounding_box().size.Z, 3)], "previous_bms_mm": [20.0, 48.0, 4.5]}),

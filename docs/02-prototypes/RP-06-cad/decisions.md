@@ -21,6 +21,8 @@ chassis CAD is accepted, each retained choice must be propagated deliberately to
 | `RP03-CAD-07` | **Fixed in CAD context — pending permanent propagation** | Replace the 48 × 75 × 24 mm, 280 g battery placeholder with the RP-02 working selection: a 2S1P pack of two Samsung INR18650-25R cells with a 2S 20 A balanced BMS on top (37.6 × 67 × 23.8 mm, 110 g), and shrink the tub to it. This alone drops the register CoM to x +18.8 / h 107.9 mm, under the `physics.md` §2.5 line; `RP03-CAD-08` restores it. |
 | `RP03-CAD-08` | **Fixed in CAD context — pending permanent propagation** | Add an 81.6 g mild-steel ballast bar under the deck between the battery tub and the front crossmember to bring the register CoM back over the `physics.md` §2.5 +20 mm line after the lighter pack. Register CoM +20.6 / 105.8 mm; the +25 / 124 target is still missed. |
 | `RP03-CAD-09` | **Fixed in CAD context — pending permanent propagation** | Accept the register CoM that results from the RP-02 power boards (x +18.77 / h 105.05 mm, 2568 g, a_tip 1.75 m/s²) as the working baseline instead of +25 / 124, add no ballast, and re-base the `physics.md` §2.5 check from "x ≥ +20 mm" to the same tip acceleration it encodes at the 124 mm baseline (a_tip ≥ 1.582 m/s²). Builder acceptance 2026-09-25 (`BA-06`). |
+| `RP03-CAD-10` | **Fixed in CAD context — pending permanent propagation** | Model the drive gearmotor as the preferred candidate Pololu #4804 (25D HP 6 V 34:1, 48 CPR) from its official STEP, and rebuild the axle stack around its face: a 2 mm diaphragm in the flange boss takes two countersunk M3 × 8 face screws, the O7 bushing boss pilots in the flange, bearings, boss end, wheel pocket and stub move 3 mm outboard, and the motor is clocked so its radial encoder leads exit rearward. Track, wheel envelope, axle height and motor face stay frozen. The SKU lock itself stays open (`gearmotor-sku-decision.md`). |
+| `RP03-CAD-11` | **Fixed in CAD context — pending permanent propagation** | Replace the audio and IMU envelopes with the parts selected in [`peripheral-selection.md`](peripheral-selection.md): a Visaton K 50 WP speaker with its sealed cavity cut from 34 to 20 mm (X 77–97) to clear the compute tray and Pi 5, `PCB-05` (MAX98357A + 2 × ADAU7002) moved from inside the Pi 5 to flat above its front end, four `PCB-06` IM73D122V01 boards behind the unchanged ports, and a `PCB-07` ICM-42688-P board screwed flat to the chassis deck crossbar. |
 
 ## RP03-CAD-01 — Rear-only ground-reflectance channel
 
@@ -234,7 +236,8 @@ New checks measure this from solids:
 
 The wheel is axisymmetric, so its own solids are its swept volume.
 
-Still open: the gearmotor's face-screw pattern and shaft length, the stub-to-web
+Still open: the gearmotor's face-screw pattern and shaft length (closed in CAD by
+`RP03-CAD-10` for Pololu #4804; the |Y| figures above are superseded there), the stub-to-web
 fixing and axial retention (RP-03 P06 ≥ 3 N axial), the bearing preload/spacing,
 the wheel's printed mass, and whether a two-plate deck plus cheeks is stiff enough.
 That last one needs a structural check, not a packaging one.
@@ -405,6 +408,84 @@ hand-kept and the head lumps in §2.8 are `E`; a weighed robot (`W`) replaces bo
 
 Result: 108 of 108 checks pass after the re-base (the geometry is unchanged from the run with one
 failure). Propagation to the permanent RP-03 documents stays on hold with the other `RP03-CAD` items.
+
+## RP03-CAD-10 — Axle stack rebuilt for the Pololu #4804 face
+
+The layout modelled a JGA25-370 envelope (Ø25 × 21 gearbox, Ø30.8 × 32 can, Ø28 × 12
+encoder, 9.5 mm D-shaft) with no face-screw holes, because no SKU had been chosen.
+RP-03 now names Pololu #4804 as the preferred candidate. Pololu's official 25D
+dimension diagram (2019) and 3D model (`25d-metal-gearmotor-34-47-encoder.step`,
+copied to `layout-01/references/purchased/pololu_25d_34-47_encoder.step`) give:
+
+- faceplate to encoder cap 66.5 mm: gearbox 21 (34:1), can Ø24.4 × 30.8, cap Ø25 × 14.7;
+- a Ø7 × 2.5 mm bushing boss on the face, and the Ø4 D-shaft ending 12.5 mm from the faceplate;
+- 2 × M3 face holes at ±8.5 mm on the lead-exit axis, 6 mm deep; the STEP taps only
+  the faceplate (Ø2.5 for 2.85 mm) with a clearance cavity behind;
+- leads leaving the cap radially, 200 mm long, on a 1 × 6 0.1" header.
+
+**Two conflicts with the `RP03-CAD-05` stack.** The face screws sit at R8.5, inside
+the flange's R11.25 608 seat, so a flange bored for the bearing has nothing for the
+screws to clamp; and screw heads there would sit where the inner bearing is. The
+Ø7 boss stands 2.5 mm proud, into the stub, which started 1.5 mm off the face.
+
+**Stack now (|Y| from the centre plane):**
+
+| Item | Before | Now |
+|---|---|---|
+| Motor face / flange plate | 69 / 69–71 | unchanged; plate carries a Ø7.5 pilot for the bushing boss |
+| Diaphragm | — | 71–73 inside the R15 boss, Ø11 hole (1.5 mm radial to the stub) |
+| Face screws | none | 2 × ISO 10642 M3 × 8, countersunk flush at 73; 4 mm insertion in the 6 mm holes, 2.85 mm of thread in the faceplate |
+| 608 pair centres | 74 / 81.5 | 77 / 84, faces touching; 0.5 mm off the flush heads |
+| Boss end | 86 | 88 |
+| Wheel pocket floor | 88 | 90 (web 90–97, was 88–97) |
+| Stub shaft | 70.5–95 | 73–96 (1.5 mm off the bushing boss; 6 mm in the web, was 7) |
+| Motor shaft in stub | 8 mm (9.5 mm assumed) | 8.5 mm (73–81.5) |
+
+**Encoder leads.** Clocked up, the lead stubs reach Z 60.25 and cut the IMU envelope
+and the battery harness trunk. The motor is turned −90° about Y so they exit at −X,
+toward the pigtail reserve behind the axle; front and down also clear. The face
+screws then sit at X ±8.5 on the axle line, inside the flange plate.
+
+**Other effects.** The two encoder caps are 5.1 mm apart on the centre plane (8 mm
+before); no clash. The can is Ø24.4, not Ø30.8, so the cheek plates gain radial room.
+Mass register: motors 110 → 101 g each (`D`), chassis +3.9 g (diaphragm print and
+four screws), wheels −1.1 g each, stubs −0.5 g each. Register CoM x +18.73 → +18.89 mm,
+h 106.55 → 106.98 mm, a_tip 1.725 → 1.732 m/s² (floor 1.582).
+
+New check `motor_face_joint_is_engaged`: two screws per side, thread in the faceplate
+≥ 2.5 mm, insertion ≤ hole depth − 0.5, shaft ≥ 8 mm in the stub, heads ≥ 0.4 mm off
+the bearing. The screw's overlap with the tapped faceplate is excluded from the
+static-clash check and measured here instead. Result: 110 of 110 checks pass.
+
+**Still open.** The drawing is Pololu's, not a measured article; confirm the tapped
+length, bushing-boss height and shaft protrusion on received samples before cutting a
+flange. 2.85 mm of M3 thread (about 1 d) is adequate in a steel plate but leaves no
+margin for a shorter tapped length. The 2 mm printed diaphragm is the clamp for
+the motor's reaction torque and needs a stiffness/creep look (PETG under screw
+preload). The 0.5 mm head-to-bearing gap depends on the heads seating flush. The
+stub-to-web fixing, axial retention (P06 ≥ 3 N) and bearing preload stay open.
+
+## RP03-CAD-11 — Selected audio parts and base IMU board
+
+Parts and evidence: [`peripheral-selection.md`](peripheral-selection.md) (working selection 2026-09-26; RP-05 `BD-A04`…`A06`, RP-03 base-IMU row).
+
+| Item | Before | Now |
+|---|---|---|
+| Speaker | Ø50 × 18 basket envelope at X 79–97 plus a Ø28 × 10 magnet envelope behind it at X 69–79 | Visaton K 50 WP outline: Ø50 × 2.5 frame flange, basket tapering Ø46 → Ø30 over 9 mm, Ø26 magnet to X 79.5; frame face X 97.5, 0.5 mm behind the front panel. Only the Ø50 × 18 outline and Ø46 cutout are vendor data |
+| Sealed cavity | Ø54 × 34, X 63–97 | Ø54 × 20, X 77–97 (about 46 cm³ gross) |
+| Amplifier / front end | 38 × 30 × 9 box at (49, 0, 103) | `PCB-05`, 30 × 38 × 1.6 board + parts reserve to 9 mm, X 45–75, Y ±19, Z 114–123 |
+| Mics | 12 × 2 × 8 boxes centred on \|Y\| 70 | `PCB-06` 12 × 8 × 1.0 at \|Y\| 69–70, IM73D122 on the port axis, JST-SH 4-pin below; ports and boots unchanged |
+| IMU | 25 × 25 × 5 box at (16, 0, 60) | `PCB-07` 16 × 20 × 1.0 on the deck top at X 13–29, ICM-42688-P at (21, 0), JST-SH 8-pin facing −X, two M2 × 5 at (22, ±7.5) |
+
+**Two reservations were never clear.** With real parts in place the new clash check found that the amplifier box sat inside the Pi 5 (2296 mm³) and its cooler (764 mm³), and the 34 mm cavity ran through the compute tray (1844 mm³) and the Pi 5 (903 mm³). Nothing measured these before; the 2026-09-24 sweep had flagged only "compute tray against the speaker magnet". `PCB-05` moved above the Pi's front end, forward of the cooler headroom, and the cavity was cut to what is free in front of the tray. The smaller back volume raises the sealed-box resonance of a 300 Hz driver; its effect on music is a bench measurement.
+
+**IMU seat.** Under the IMU the deck is open over the motors (X < 17.5) and the battery (X > 26.5); only the crossbar between carries material, so both M2 screws sit on it at X 22 and the board spans the openings.
+
+New checks: `selected_audio_and_imu_parts_are_clear`, `speaker_is_k50wp_outline_behind_front_panel`, `mic_packages_on_port_axes_against_boots`, `imu_board_seated_on_deck_with_both_screws_in_material`. Result: 113 of 114 pass; the failure, `rear_tail_clears_shell_and_panels`, was already failing at HEAD.
+
+Mass register: `BODY_AUDIO` 90 → 60 g, `IMU_BREAKOUT` 2 g → `IMU_PCB07` 2.5 g. Total 2558.9 → 2529.4 g, CoM x +18.89 → +19.38 mm, h 106.98 → 106.96 mm, a_tip 1.732 → 1.777 m/s² (floor 1.582). All `E`.
+
+**Still open.** Board schematics and layouts (`PCB-05…08`); how the mic boards and `PCB-05` fix to the body frame; the speaker's flange bond, grille mesh and cavity walls (the cavity is a keep-out, not a printed box); M2 thread-forming in the printed deck; the LED lead route in the head.
 
 ## Propagation hold
 

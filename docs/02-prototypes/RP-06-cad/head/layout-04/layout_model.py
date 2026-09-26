@@ -282,6 +282,10 @@ def build_parts(catalog=True,reliefs=True):
     add('camera_CSI_exit_and_bend_reserve',block(-24,-14.5,-11,11,75,87),'R','#61a384','reserve',.3)
     add('removable_camera_edge_bracket_trial',camera_edge_clamp(),'R','#8c9e9a',owner='M005')
     add('addressable_status_LED_package_reserve',block(-8,-5,LED_Y-2.5,LED_Y+2.5,LED_Z-2.5,LED_Z+2.5),'R','#d3922d','reserve',.7,owner='M007')
+    # HEAD-CAD-12: selected WS2812B-2020-V6 on a 5 x 5 x 0.8 mm carrier (PCB-08) inside the reserve,
+    # emitting +X into the diffuser; 1.36 mm air gap to the diffuser's rear face at X -5.
+    add('status_LED_PCB08_carrier_5x5',block(-8,-7.2,LED_Y-2.5,LED_Y+2.5,LED_Z-2.5,LED_Z+2.5),'R','#2d8c53',owner='M007')
+    add('status_LED_WS2812B_2020',block(-7.2,-6.36,LED_Y-1,LED_Y+1,LED_Z-1,LED_Z+1),'R','#f2f0e6',owner='M007')
     add('crown_status_light_diffuser',axial(1.7,2.9,(-3.55,LED_Y,LED_Z)),'R','#e4b35b',owner='M007')
     # C2 footprint is exact; installed height/USB socket are clearly reserved.
     add('C2_ESP32_S3_Zero_23_5x18_footprint',c2_catalog() if catalog else block(-26.6,-25,-38,-20,28,51.5),'R','#67559a',owner='M008')

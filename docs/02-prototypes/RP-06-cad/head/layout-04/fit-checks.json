@@ -43,11 +43,11 @@
       "max": [
         -8.799999899999998,
         65.0000001,
-        86.0000001
+        104.0
       ],
       "solids": 1,
       "valid": true,
-      "volume": 36525.97592233884
+      "volume": 39399.11662835393
     },
     "removable_octagonal_rear_cover": {
       "min": [
@@ -198,6 +198,36 @@
       "solids": 1,
       "valid": true,
       "volume": 75.0
+    },
+    "status_LED_PCB08_carrier_5x5": {
+      "min": [
+        -8.0,
+        12.7,
+        89.3
+      ],
+      "max": [
+        -7.2,
+        17.7,
+        94.3
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 20.0
+    },
+    "status_LED_WS2812B_2020": {
+      "min": [
+        -7.2,
+        14.2,
+        90.8
+      ],
+      "max": [
+        -6.36,
+        16.2,
+        92.8
+      ],
+      "solids": 1,
+      "valid": true,
+      "volume": 3.359999999999999
     },
     "crown_status_light_diffuser": {
       "min": [

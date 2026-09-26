@@ -9,10 +9,10 @@
     "pitch_z": 45.094467249988796
   },
   "source_sha256": {
-    "layout_model.py": "9cd91ce67aab70c3e0a2dc2f3278d17e594aed7d3c2adf15ab96845be64c985f",
+    "layout_model.py": "cf247c4e35e5137d556aead038f6974bb532ecf768576a89d10830100980093e",
     "details.py": "50b5ac8ba16add84b78569a686d417349834baa7905cdbfe0d135862b08de66b",
     "layout_axes.py": "06f2ae49211e00e4b1bd015cc53c4a434df43a778c855f71c61c6ec7af7a27e8",
-    "harness.py": "363605797b042621d9f5ca44af729841933995c091db728bd7932b30ade85639",
+    "harness.py": "477426cf681161793f04a21c9aa6dc4003b485a8c28344598361b9f3d9f83c81",
     "optics.py": "94185c1fd76a8727f90995de3ce8225a6b3498d9c08c3f2e1a598d8c3f233f3a",
     "mass_layout.py": "d2f71f97a83662139d2b6bebcc37b5c85885facff28830576e22a3495f685d09"
   },
@@ -27,8 +27,8 @@
   ],
   "poses": 56,
   "motion_envelope": "motion-envelope.json (A+ firmware limit; per-axis hard stops alone do not enforce it)",
-  "mechanism_pairs_per_pose": 1228,
-  "jacket_pairs_per_pose": 370,
+  "mechanism_pairs_per_pose": 1272,
+  "jacket_pairs_per_pose": 380,
   "fasteners_in_motion_grid": [
     "C2_tray_M2_-19",
     "C2_tray_M2_-39",
@@ -406,7 +406,7 @@
     "main_octagonal_skin": {
       "valid": true,
       "solids": 1,
-      "volume": 36525.97592233884
+      "volume": 39399.11662835393
     },
     "removable_octagonal_rear_cover": {
       "valid": true,
@@ -457,6 +457,16 @@
       "valid": true,
       "solids": 1,
       "volume": 75.0
+    },
+    "status_LED_PCB08_carrier_5x5": {
+      "valid": true,
+      "solids": 1,
+      "volume": 20.0
+    },
+    "status_LED_WS2812B_2020": {
+      "valid": true,
+      "solids": 1,
+      "volume": 3.359999999999999
     },
     "crown_status_light_diffuser": {
       "valid": true,
@@ -847,7 +857,7 @@
     },
     {
       "branch": "led_local",
-      "reason": "Crown depth cannot accept a 30 mm rearward straight exit. Keep-out only until the on-hand LED exit drawing permits a shorter or differently oriented lead."
+      "reason": "HEAD-CAD-12: the selected WS2812B-2020 carrier takes 3 x AWG30 PTFE leads (3V3, GND, DIN) on its back pads, turned 90 deg within 2 mm, so no 30 mm straight exit is needed; the route from the crown to D1 GPIO6 (Sensor-AD PH2.0) is not yet drawn, so this keep-out stays."
     },
     {
       "branch": "yaw_service_loop",
