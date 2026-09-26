@@ -5,7 +5,7 @@
 - Wheel: 84.0 × 24.0 mm
 - Axle height: 42.0 mm
 - Ball contact: `(110.0, 0.0, 0.0)` mm
-- Axle stack (RP03-CAD-05): motor face at |Y| 69 bolts to a flange (|Y| 69…71); R15 boss to |Y| 86.0 carries 608 pair at |Y| (74.0, 81.5); Ø8 stub shaft |Y| 70.5…95.0; dished wheel pocket R18 to |Y| 88.0; no axle crossmember; minimum running gap 1.5 mm
+- Axle stack (RP03-CAD-05): motor face at |Y| 69 bolts to a flange (|Y| 69…71); R15 boss to |Y| 88.0 carries 608 pair at |Y| (77.0, 84.0); Ø8 stub shaft |Y| 73.0…96.0; dished wheel pocket R18 to |Y| 90.0; no axle crossmember; minimum running gap 1.5 mm
 - Body placement (RP03-CAD-06): body and head sit 16 mm forward of the drive axle; yaw axis X 16
 - Battery: 38 × 67 × 22 mm at `(46.7, 0.0, 43.099999999999994)` mm in a chassis tub; bottom hatch
 - Ball mount: `FIXED_3HOLE_NON_INTERCHANGEABLE`; flange seats on the printed pod at Z 29; pod X 92.0…128.5, 35 mm wide

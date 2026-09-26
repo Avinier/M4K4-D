@@ -9,7 +9,7 @@ Visible yoke 34.5 mm above a Ø125 flush turntable; pitch axis to disc top 79.59
 | Named component | Frame | Centre global XYZ (mm) | ΔX × ΔY × ΔZ (mm) |
 |---|:---:|---|---|
 | `front_bezel_integral_camera_crown` | R | -12.000 × 0.000 × 52.000 | 24.000 × 130.000 × 104.000 |
-| `main_octagonal_skin` | R | -60.700 × 0.000 × 43.000 | 103.800 × 130.000 × 86.000 |
+| `main_octagonal_skin` | R | -60.700 × 0.000 × 52.000 | 103.800 × 130.000 × 104.000 |
 | `removable_octagonal_rear_cover` | R | -112.950 × 0.000 × 46.827 | 4.100 × 105.124 × 74.519 |
 | `window_opaque_mask_110mm` | R | -1.900 × 0.000 × 40.000 | 1.500 × 110.000 × 64.000 |
 | `window_clear_optical_area` | R | -1.900 × 0.000 × 40.000 | 1.500 × 99.000 × 58.000 |
@@ -20,6 +20,8 @@ Visible yoke 34.5 mm above a Ø125 flush turntable; pitch axis to disc top 79.59
 | `camera_CSI_exit_and_bend_reserve` | R | -19.250 × 0.000 × 81.000 | 9.500 × 22.000 × 12.000 |
 | `removable_camera_edge_bracket_trial` | R | -13.400 × 0.000 × 89.000 | 7.200 × 34.400 × 26.000 |
 | `addressable_status_LED_package_reserve` | R | -6.500 × 15.200 × 91.800 | 3.000 × 5.000 × 5.000 |
+| `status_LED_PCB08_carrier_5x5` | R | -7.600 × 15.200 × 91.800 | 0.800 × 5.000 × 5.000 |
+| `status_LED_WS2812B_2020` | R | -6.780 × 15.200 × 91.800 | 0.840 × 2.000 × 2.000 |
 | `crown_status_light_diffuser` | R | -3.550 × 15.200 × 91.800 | 2.900 × 3.400 × 3.400 |
 | `C2_ESP32_S3_Zero_23_5x18_footprint` | R | -25.972 × -29.000 × 39.750 | 1.941 × 18.017 × 23.517 |
 | `C2_installed_components_reserve` | R | -30.300 × -29.000 × 39.750 | 7.400 × 16.000 × 23.500 |

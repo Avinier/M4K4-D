@@ -71,4 +71,6 @@ Onboard USB DOA is **not** a reason to prefer `AP-USB` for Core. It is a reason 
 
 ## 5. Disposition
 
-No `AP-*` is selected. No purchase is implied. RP-02's candidate register stays unselected. A later slice may pick a family by applying §3 to measured or datasheet evidence; this file will then record the pick in [`decision.md`](decision.md), not by rewriting the table into a winner.
+**Updated 2026-09-26:** `AP-TDM` is the working selection, recorded in [`decision.md`](decision.md) `BD-A04` with evidence in [`../RP-06-cad/peripheral-selection.md`](../RP-06-cad/peripheral-selection.md) §2. One correction to the table above: the Pi 5 RP1 has no true TDM (one stereo pair per data lane), so `AP-TDM` here means **two synchronous I²S capture lanes plus one playback lane on one clock**, which needs GPIO22 beyond the GPIO18–21 reservation (`CA-06` CR-01). No purchase is implied.
+
+Original 2026-09-21 text: No `AP-*` is selected. No purchase is implied. RP-02's candidate register stays unselected. A later slice may pick a family by applying §3 to measured or datasheet evidence; this file will then record the pick in [`decision.md`](decision.md), not by rewriting the table into a winner.

@@ -222,6 +222,8 @@ C3, watchdog, link PHY, E-stop **operator**, motor-arm **stage**, and pack chemi
 
 #### `R-MTR` — two encoder gearmotors (lead `D02`)
 
+**2026-09-26 decision update:** This 2026-09-19 capture is the reference-class screen. [Pololu #4804](gearmotor-sku-decision.md) is the preferred prototype candidate: HP 6 V / 34.014:1 / encoder, 290 rpm no-load and 6 A extrapolated stall. Fab.to.Lab lists it in India, but exact-variant stock is unverified; **no SKU is locked**. NFP `-EN-0685` remains a comparison with no verified India source. The 176 rpm / 0.9 A `D02` table below is a different winding; do not use those values for either candidate. Current-limit, geometry and bench proof remain open.
+
 | Capture | Finding | Class |
 |---|---|---|
 | Envelope | Gearbox **Ø25 mm**, length **21 mm** at 35:1 / 34:1 / 45:1. Motor can **~30.8 mm** + gearbox (`D`, NFP). Total length along axis **~52 + L mm** (Bringsmart) → **~73 mm** at L=21 **before** encoder cap. Encoder cap **+10–15 mm `E`**. CAD keep-out cylinder **Ø28 × 90 mm** including cable pigtail | `D` / `E` |

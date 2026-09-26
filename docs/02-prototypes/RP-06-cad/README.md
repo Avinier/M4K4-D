@@ -22,6 +22,7 @@ RP-01 and RP-03 keep mechanism, physics, gates and rigs; they link here for geom
 | [Body/chassis Layout 02](body-chassis/layout-02/README.md) | Active whole-robot assembly. Live-imports Layout 03 |
 | [Head decisions](head/decisions.md) | `HEAD-CAD-01…10` |
 | [Body/chassis CAD-context decisions](decisions.md) | `RP03-CAD-01…06` (CAD-first, not RP-03 safety approval) |
+| [Peripheral selection](peripheral-selection.md) | Audio path, mics, speaker/amp, status LED and base IMU working selections (2026-09-26) with evidence |
 | [Prototype open items](../openitems.md) | Folder-wide remaining-open index |
 
 ## CAD map
@@ -57,7 +58,7 @@ Open Layout 03 in CAD Viewer from [`head/layout-03/README.md`](head/layout-03/RE
 |---|---|---|
 | Moving-head load | Layout 03 D/E **~499–524 g complete, nominal 509 g at M008=20 g**. Former ~250 g target is inadmissible | [`dimensional-baseline.md`](../../01-system/dimensional-baseline.md) |
 | Head envelope | **104 × 150 × 115 mm** crown-inclusive | same |
-| Neutral stack | **304 mm**. 300 mm is a rounded target. Accept or recover 4 mm | same |
+| Neutral stack | **293.5 mm** (140 body + 49.5 neck + 104 head, head Layout 04 turntable). Meets the 300 mm rounded target with 6.5 mm to spare; closed 2026-09-26 | same |
 | Display / camera / C2 / C0 | SKU 30493; SC0874; ESP32-S3-Zero; Pi 5 2 GB + official Active Cooler | component studies; RP-02 |
 | Drive topology | Two-wheel + Ø1″ ball + rear skid | baseline v1.12 |
 
@@ -77,7 +78,7 @@ Open Layout 03 in CAD Viewer from [`head/layout-03/README.md`](head/layout-03/RE
 ## What to do next
 
 1. Keep editing **this** tree. Fit actual sourced articles into Layout 02 / Layout 03.
-2. **Accept or recover** the 304 mm stack. **Hit or revise** the +25 / 124 mm CoM target. Layout 02 currently reports +20.6 / 105.8 mm: +20.2 / 103.7 after the 16 mm body shift in [`RP03-CAD-06`](decisions.md#rp03-cad-06--body-forward-on-the-chassis-and-a-low-battery-tub), then the lighter 2S1P pack of [`RP03-CAD-07`](decisions.md#rp03-cad-07--2s1p-18650-battery-pack) took it to +18.8 / 107.9, and the ballast bar of [`RP03-CAD-08`](decisions.md#rp03-cad-08--ballast-bar-ahead-of-the-battery-tub) brought it back to +20.6 / 105.8 mm.
+2. ~~Accept or recover the 304 mm stack~~ — closed: the neck is 49.5 mm, the stack 293.5 mm. **CoM target:** the +25 / 124 mm target was revised by [`RP03-CAD-09`](decisions.md) to the working baseline x +18.77 / h 105.05 mm with the power boards. History: Layout 02 reported +20.6 / 105.8 mm: +20.2 / 103.7 after the 16 mm body shift in [`RP03-CAD-06`](decisions.md#rp03-cad-06--body-forward-on-the-chassis-and-a-low-battery-tub), then the lighter 2S1P pack of [`RP03-CAD-07`](decisions.md#rp03-cad-07--2s1p-18650-battery-pack) took it to +18.8 / 107.9, and the ballast bar of [`RP03-CAD-08`](decisions.md#rp03-cad-08--ballast-bar-ahead-of-the-battery-tub) brought it back to +20.6 / 105.8 mm.
 3. Do not ballast the head to 250 g.
 4. Physical mock-up and G01–G06 registration wait on representative head, electrical, and acoustic evidence.
 

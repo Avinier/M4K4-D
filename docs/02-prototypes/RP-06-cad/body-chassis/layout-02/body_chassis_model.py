@@ -115,21 +115,45 @@ WHEEL_INNER_FACE_Y = TRACK / 2.0 - WHEEL_WIDTH / 2.0
 # and is fixed to the wheel web at its outboard end. There is no axle
 # crossmember: coaxial motors fill the axle line, so cheek plates carry each
 # rail round its gearbox to the flange instead.
+# Gearmotor: Pololu #4804 (25D HP 6 V 34:1, 48 CPR encoder), preferred candidate,
+# SKU not locked (RP-03 gearmotor-sku-decision.md). Pololu dimension diagram
+# (2019): faceplate to encoder cap 66.5 mm (gearbox 21, can O24.4 x 30.8,
+# encoder cap O25 x 14.7), O7 x 2.5 bushing boss, O4 D-shaft 12.5 mm from the
+# faceplate, 2 x M3 at +-8.5 mm on the lead-exit axis, 6 mm deep. Leads exit
+# radially from the cap; clocked up they reach Z 60 into the IMU and battery
+# trunk, so the motor is turned to send them rearward (-X), toward the pigtail
+# reserve behind the axle. The face screws then sit at X +-8.5 on the axle.
+MOTOR_STEP = "pololu_25d_34-47_encoder.step"  # official Pololu 3D model, 34:1/47:1 body
 MOTOR_FACE_Y = 69.0
 MOTOR_SHAFT_RADIUS = 2.0
-MOTOR_SHAFT_LENGTH = 9.5  # JGA25-370 D-shaft past the face; measure the selected unit
+MOTOR_SHAFT_LENGTH = 12.5  # Pololu drawing, from the faceplate
+MOTOR_PILOT_RADIUS = 3.5  # O7 bushing boss locates the motor in the flange
+MOTOR_PILOT_LENGTH = 2.5
+MOTOR_CLOCK_DEG = -90.0  # turn about Y from leads-up; -90 sends the leads to -X
+MOTOR_SCREW_OFFSET = 8.5  # face M3 holes, on the lead-exit axis
+MOTOR_SCREW_XZ = ((-MOTOR_SCREW_OFFSET, 0.0), (MOTOR_SCREW_OFFSET, 0.0))  # (X, Z - AXLE_Z) after the clock turn
+MOTOR_SCREW_HOLE_DEPTH = 6.0
+MOTOR_SCREW_LENGTH = 8.0  # ISO 10642 M3 x 8 countersunk, head flush in the diaphragm
+MOTOR_SCREW_HEAD_RADIUS = 3.0
 AXLE_FLANGE_Y = (MOTOR_FACE_Y, 71.0)
 AXLE_FLANGE_HALF_X = 17.0
 AXLE_FLANGE_Z = (27.0, 57.0)
+# The face screws sit at R8.5, inside the 608 seat (R11.25), so the boss closes
+# over them with a 2 mm diaphragm: the screws clamp plate + diaphragm (4 mm),
+# heads countersunk flush on its outboard face, and the bearing seat starts
+# there. The diaphragm's own hole clears the stub by the running gap.
+AXLE_DIAPHRAGM_Y = (71.0, 73.0)
+AXLE_PILOT_HOLE_RADIUS = 3.75  # 0.25 mm radial on the O7 boss
+AXLE_DIAPHRAGM_HOLE_RADIUS = 5.5  # 1.5 mm radial to the O8 stub
 AXLE_BOSS_RADIUS = 15.0  # 608 OD 22 in an 11.25 bore, ~3.75 mm wall
-AXLE_BOSS_END_Y = 86.0
+AXLE_BOSS_END_Y = 88.0
 AXLE_BORE_RADIUS = 11.25
-BEARING_608_Y = (74.0, 81.5)  # bearing centres; inner races on the stub
+BEARING_608_Y = (77.0, 84.0)  # bearing centres, faces touching; 0.5 mm off the flush screw heads
 WHEEL_POCKET_RADIUS = 18.0  # 3 mm radial running gap to the boss
-WHEEL_POCKET_FLOOR_Y = 88.0  # 2 mm end gap past the boss
+WHEEL_POCKET_FLOOR_Y = 90.0  # 2 mm end gap past the boss; web 90-97
 WHEEL_HUB_BORE_RADIUS = 4.0
 STUB_SHAFT_RADIUS = 4.0
-STUB_SHAFT_Y = (70.5, 95.0)  # 1.5 mm off the motor face
+STUB_SHAFT_Y = (73.0, 96.0)  # 1.5 mm off the motor's bushing boss; 6 mm into the web
 AXLE_CHEEK_X = (13.5, 17.0)  # |X| span; 1 mm off the gearbox, clear of the can
 AXLE_CHEEK_Y = (50.0, MOTOR_FACE_Y)  # rail inner face to the flange
 MOTOR_RELIEF_HALF_X = 17.0  # deck relief and shell-floor slot over the motors
@@ -299,13 +323,47 @@ PANEL_SCREW_LENGTH = 8.0
 # to the bottom edge so the body still lowers onto the chassis.
 FRONT_POD_NOTCH_CLEARANCE = 0.5
 
-# Provisional audio packaging. These are requirement envelopes pending the
-# RP-05/RP-06 driver, amplifier, PDM microphone and front-end selections.
+# Audio parts selected 2026-09-26 (RP03-CAD-11, ../../peripheral-selection.md): Visaton
+# K 50 WP 8 ohm speaker, PCB-05 (MAX98357A + 2 x ADAU7002) and four PCB-06 boards with
+# an Infineon IM73D122V01 each. The speaker's Ø50 x 18 mm outline and Ø46 cutout are
+# Visaton's; its internal frame/basket/magnet split is estimated (no drawing read).
 SPEAKER_CENTER = (72.0 + BODY_SHIFT_X, 0.0, 99.0)
 SPEAKER_CONE_DIAMETER = 44.0
 SPEAKER_BASKET_DIAMETER = 50.0
 SPEAKER_DEPTH = 18.0
-SPEAKER_CAVITY_DEPTH = 34.0
+# Sealed back cavity: was 34 mm (X 63-97), which ran through the compute tray (X max 76) and
+# the Pi 5 (X max 67), unchecked until RP03-CAD-11. Now X 77-97: 1 mm off the tray, ~46 cm3 gross.
+SPEAKER_CAVITY_X = (77.0, 97.0)
+SPEAKER_CAVITY_DEPTH = SPEAKER_CAVITY_X[1] - SPEAKER_CAVITY_X[0]
+SPEAKER_CAVITY_CENTER_X = sum(SPEAKER_CAVITY_X) / 2.0
+SPEAKER_FRONT_X = BODY_X_FRONT - 0.5  # frame face 0.5 mm behind the front panel's inner face
+SPEAKER_CUTOUT_DIAMETER = 46.0
+SPEAKER_FLANGE_DEPTH = 2.5
+SPEAKER_BASKET_DEPTH = 9.0
+SPEAKER_BASKET_REAR_DIAMETER = 30.0
+SPEAKER_MAGNET_DIAMETER = 26.0
+# PCB-05: 30 x 38 mm board plus parts reserve, 9 mm total, flat above the Pi 5's front end
+# (Pi top Z 111.9) and forward of the cooler headroom, under the front upper cross (Z 126).
+# The old 38 x 30 x 9 amplifier reservation at (49, 0, 103) sat inside the Pi 5 and cooler.
+PCB05_CENTER = (60.0, 0.0, 118.5)
+PCB05_SIZE = (30.0, 38.0, 9.0)
+PCB05_BOARD_THICKNESS = 1.6
+# PCB-06 mic boards: 12 x 8 x 1.0 mm, outer face on |Y| 70 against the port boot; the
+# IM73D122 (4 x 3 x 1.2) sits on the port axis on the inboard face and a JST-SH 4-pin
+# side-entry header (7 x 4.25 footprint, 2.95 tall) below it.
+MIC_BOARD_OUTER_Y = 70.0
+MIC_BOARD_SIZE = (12.0, 1.0, 8.0)
+MIC_PACKAGE_SIZE = (4.0, 1.2, 3.0)
+MIC_CONNECTOR_SIZE = (7.0, 2.95, 4.25)
+# PCB-07 IMU board: ICM-42688-P on 16 x 20 x 1.0 mm FR4, flat on the chassis deck crossbar
+# (deck material X ~17.5-26.5 here; open over the motors and the battery on either side).
+# Two M2 x 5 thread-forming screws at (IMU_SCREW_X, +-IMU_SCREW_HALF_Y) into the 4 mm deck.
+IMU_BOARD_CENTER = (21.0, 0.0, DECK_Z + 2.0 + 0.5)
+IMU_BOARD_SIZE = (16.0, 20.0, 1.0)
+IMU_CHIP_SIZE = (3.0, 2.5, 0.91)
+IMU_CONNECTOR_SIZE = (4.25, 11.0, 2.95)  # JST-SH 8-pin side entry, facing -X
+IMU_SCREW_X = 22.0
+IMU_SCREW_HALF_Y = 7.5
 # The GP2Y sits on the centreline in the ball pod, its face ahead of the ball
 # contact, and looks forward through a window in the touch cap. RP-03
 # physics.md §6 credits look-ahead from the leading (ball) contact, so a face
@@ -600,12 +658,12 @@ MASS_ROWS = [
     ), "RP-01 generated mass tree"),
     ("BODY_SHELL_AND_PANELS", 290.4, (4.0 + BODY_SHIFT_X, 0.0, 96.0), "Layout 02 CAD estimate; +15 g for the internal panel frames (+15.6 cm3 net printed volume, near-solid 2.4 mm walls); -27.2 g for the -22.7 cm3 of shell floor opened over the motors, battery hatch and pod tongue (RP03-CAD-05/06) at ~1.2 g/cm3; +2.6 g for the ~0.9 cm2 x 2.4 mm of shell floor returned when the battery opening shrank to the 2S1P pack tub (RP03-CAD-07)"),
     ("BODY_PRIMARY_FRAME", 335.0, (4.0 + BODY_SHIFT_X, 0.0, 94.0), "Layout 02 CAD estimate incl. mounts"),
-    ("CHASSIS_PRIMARY_FRAME", 172.1, (19.8, 0.0, 47.4), "front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"),
-    ("WHEEL_L", 90.0, WHEEL_CENTER_L, "custom dished wheel envelope; the 13.7 cm3 pocket roughly offsets the stub shaft now listed separately"),
-    ("WHEEL_R", 90.0, WHEEL_CENTER_R, "custom dished wheel envelope; the 13.7 cm3 pocket roughly offsets the stub shaft now listed separately"),
-    ("AXLE_BEARINGS_AND_STUB_SHAFTS", 65.4, (0.0, 0.0, AXLE_Z), "E: four 608ZZ at ~12 g (not in the register before 2026-09-24) + two 8 mm steel stub shafts at ~8.7 g; symmetric about the centre plane"),
-    ("MOTOR_L", 110.0, (0.0, 52.0, AXLE_Z), "vendor"),
-    ("MOTOR_R", 110.0, (0.0, -52.0, AXLE_Z), "vendor"),
+    ("CHASSIS_PRIMARY_FRAME", 176.0, (19.8, 0.0, 47.4), "+2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"),
+    ("WHEEL_L", 89.0, WHEEL_CENTER_L, "custom dished wheel envelope; -1.1 g for the pocket 2 mm deeper (floor |Y| 90, 2026-09-26); the 13.7 cm3 pocket roughly offsets the stub shaft now listed separately"),
+    ("WHEEL_R", 89.0, WHEEL_CENTER_R, "custom dished wheel envelope; -1.1 g for the pocket 2 mm deeper (floor |Y| 90, 2026-09-26); the 13.7 cm3 pocket roughly offsets the stub shaft now listed separately"),
+    ("AXLE_BEARINGS_AND_STUB_SHAFTS", 64.4, (0.0, 0.0, AXLE_Z), "E: four 608ZZ at ~12 g (not in the register before 2026-09-24) + two 8 mm steel stub shafts at ~8.2 g (23 mm long since 2026-09-26, was 24.5); symmetric about the centre plane"),
+    ("MOTOR_L", 101.0, (0.0, 39.2, AXLE_Z), "D: Pololu #4804 spec 101 g; Y is the official STEP volume centroid (uniform density, E); was 110 g JGA25 at Y 52"),
+    ("MOTOR_R", 101.0, (0.0, -39.2, AXLE_Z), "D: Pololu #4804 spec 101 g; Y is the official STEP volume centroid (uniform density, E); was 110 g JGA25 at Y -52"),
     ("BALL_TRANSFER", 16.5, (BALL_CONTACT[0], 0.0, 14.0), "vendor"),
     ("BALLAST_STEEL_BAR", round(BALLAST_BAR_G + BALLAST_SCREWS_G, 1), (sum(BALLAST_X) / 2.0, 0.0, sum(BALLAST_Z) / 2.0), "E: mild-steel bar 9 x 60 x 19 mm at 7.85 g/cm3 (less two M3 tapped holes) + two M3 screws; sized so the register CoM clears the physics.md 2.5 line after the 110 g pack (RP03-CAD-08)"),
     ("BATTERY", 113.7, BATTERY_CENTER, "E: 2 x Samsung INR18650-25R (45 g max each = 90 g) + RP-02 PCB-01 pack-protection assembly (~5 g: 48 x 20 mm board 3.7 g + parts 1.3 g) + Bourns AC72ABD thermal cutoff and NTC (~0.7 g) + nickel straps, sleeve and AWG14 leads (~12 g) + pack-side SBS Mini housing (~6 g, U: dimension sheet not read); working selection, no purchase or measured mass; was 110 g with a generic ~8 g BMS (RP-02 board-specs.md sec 3, 2026-09-25)"),
@@ -619,11 +677,11 @@ MASS_ROWS = [
     ("PCB04_BRANCH_CONVERTERS", 45.0, (sum(PCB04_BOX[0:2]) / 2.0, 0.0, sum(PCB04_BOX[4:6]) / 2.0), "E (proposal): WS-H 35 g (3080 mm2 board 11.7 g + inductors 5.4 + connectors 8 + ICs 1 + polymer/ceramics ~1) with the hold-up raised from 4 x 1 mF (~8 g) to 2 x 3.3 mF (~9 g each, Ø12.5 x 20 lying) per board-specs.md sec 8.1: +10 g; the board footprint is NOT enlarged (no slack in the bay)"),
     ("C3_DEVKITC_N8", 9.0, (-8.0, 44.0, 80.8), "E: ESP32-S3-DevKitC-1-N8 board"),
     ("DRV8874_CARRIERS_X2", 6.0, (30.0 + BODY_SHIFT_X, 0.0, 67.4), "E: 2 x Pololu 4035 at ~3 g (weight not read); symmetric about the centre plane"),
-    ("IMU_BREAKOUT", 2.0, (BODY_AXIS_X, 0.0, 60.0), "E"),
+    ("IMU_PCB07", 2.5, (IMU_BOARD_CENTER[0], 0.0, IMU_BOARD_CENTER[2] + 1.0), "E: PCB-07 16 x 20 x 1.0 mm FR4 ~0.6 g + ICM-42688-P and JST-SH 8-pin ~0.3 g + two M2 x 5 ~0.6 g + 8-way AWG30 lead to C3 ~1 g (RP03-CAD-11); was a 2 g breakout estimate at (16, 0, 60)"),
     ("TCRT5000_BREAKOUT_AND_CABLE", 3.0, TCRT_REAR_CENTER, "E: breakout, comparator and cable in the rear keel cartridge; was inside the old CONTROL_POWER_SENSORS row at the body centre"),
     ("ESTOP_XA1E_BV3U02KT_R", 14.0, ((5.0 * (ESTOP_MOUNT_X - ESTOP_MUSHROOM_TOP_ABOVE_MOUNT + 4.0) + 9.0 * (ESTOP_KEEP_OUT[0] + ESTOP_KEEP_OUT[1]) / 2.0) / 14.0, 0.0, ESTOP_CENTER_Z), "D: IDEC XA unibody Ø29 mushroom 14 g (XA datasheet); ~5 g mushroom and collar outside the well floor, ~9 g contact block behind it. Replaced the XW1E-BV402M-R row (40 g) on 2026-09-25. The rear-panel well and bezel add a net 0.14 cm3 (~0.2 g) of print, not booked"),
     ("BALL_NOSE_POD_SENSOR_CAP", 15.9, (110.5, 0.0, 41.2), "CAD volume: raked prow pod + lid 11.8 cm3 (X 92-128.5) and touch hood 1.8 cm3 (2026-09-24 prow rework) at ~45% effective PETG density (6.8 + 1.0 g); 5 M3 screws + 2 heat-set inserts 4.6 g; GP2Y0A41SK0F 3.5 g E"),
-    ("BODY_AUDIO", 90.0, (48.0 + BODY_SHIFT_X, 0.0, 102.0), "speaker, amplifier and four microphones; CAD estimate"),
+    ("BODY_AUDIO", 60.0, (77.9, 0.0, 101.9), "RP03-CAD-11: Visaton K 50 WP 48 g (D) with its centroid at the magnet end, X ~85 + PCB-05 30 x 38 mm board and parts ~6 g (E) at (60, 0, 116) + four PCB-06 mic boards ~0.5 g each (E) + speaker leads and mic cables ~4 g (E); was 90 g at (64, 0, 102) for unselected parts"),
     ("HARNESS_AND_FASTENERS", 95.0, (4.0 + BODY_SHIFT_X, 0.0, 88.0), "estimate"),
     ("BODY_YAW_STAGE", 89.0, (BODY_AXIS_X, 13.5, 134.3), "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 6 g driven spur + 6 g scissor pinion (two 2.4 mm halves) + 1 g torsion spring and retaining clip (2026-09-25) + 2 g clamp ring + 1 g coupling shaft; no SKU"),
     ("REAR_SKID_KEEL", 12.0, (-55.9 + REAR_CHASSIS_SHIFT_X, 0.0, 20.4), "CAD volume: 15.4 cm3 keel body at ~45% effective PETG density, 12x10 mm shoe, guards, 4 M3 screws"),
@@ -1328,7 +1386,7 @@ def panel_mount_hardware():
     speaker_keep_out = _cylinder(
         SPEAKER_BASKET_DIAMETER / 2.0 + 2.0,
         SPEAKER_CAVITY_DEPTH,
-        (SPEAKER_CENTER[0] - 8.0, SPEAKER_CENTER[1], SPEAKER_CENTER[2]),
+        (SPEAKER_CAVITY_CENTER_X, SPEAKER_CENTER[1], SPEAKER_CENTER[2]),
         "SPEAKER_KEEP_OUT_TOOL",
         SLATE,
         1.0,
@@ -1490,8 +1548,19 @@ def chassis_frame():
         flange = _block(-AXLE_FLANGE_HALF_X, AXLE_FLANGE_HALF_X, *sorted((sign * fy0, sign * fy1)), *AXLE_FLANGE_Z)
         boss_length = AXLE_BOSS_END_Y - fy1
         boss = _cylinder(AXLE_BOSS_RADIUS, boss_length, (0.0, sign * (fy1 + boss_length / 2.0), AXLE_Z), "BOSS", FRAME_BLUE, 1.0, "y")
-        bore = _axial_bore_y(AXLE_BORE_RADIUS, sign * (fy0 - 1.0), sign * (AXLE_BOSS_END_Y + 1.0), 0.0, AXLE_Z)
-        parts.append(_paint(flange + boss - bore, f"AXLE_MOTOR_FLANGE_BEARING_BOSS_{side}", FRAME_BLUE, 1.0))
+        dy1 = AXLE_DIAPHRAGM_Y[1]
+        cuts = [
+            _axial_bore_y(AXLE_BORE_RADIUS, sign * dy1, sign * (AXLE_BOSS_END_Y + 1.0), 0.0, AXLE_Z),
+            _axial_bore_y(AXLE_PILOT_HOLE_RADIUS, sign * (fy0 - 1.0), sign * (fy1 + 0.01), 0.0, AXLE_Z),
+            _axial_bore_y(AXLE_DIAPHRAGM_HOLE_RADIUS, sign * fy1, sign * (dy1 + 0.01), 0.0, AXLE_Z),
+        ]
+        for x_off, z_off in MOTOR_SCREW_XZ:
+            cuts.append(_axial_bore_y(1.7, sign * (fy0 - 1.0), sign * dy1, x_off, AXLE_Z + z_off))
+            # 90 deg countersink, flush with the diaphragm's outboard face
+            sink = Cone(0.0, MOTOR_SCREW_HEAD_RADIUS + 0.2, MOTOR_SCREW_HEAD_RADIUS + 0.2, align=(Align.CENTER, Align.CENTER, Align.MAX))
+            cuts.append(sink.rotate(Axis.X, -90.0 * sign).moved(Location((x_off, sign * (dy1 + 0.01), AXLE_Z + z_off))))
+        parts.append(_paint(flange + boss - cuts, f"AXLE_MOTOR_FLANGE_BEARING_BOSS_{side}", FRAME_BLUE, 1.0))
+        parts.append(motor_face_screws(side))
         for x_sign in (1.0, -1.0):
             cheek = _block(
                 *sorted((x_sign * AXLE_CHEEK_X[0], x_sign * AXLE_CHEEK_X[1])),
@@ -1622,25 +1691,71 @@ def wheel_assembly(side: str):
     ])
 
 
-def motor_envelope(side: str):
-    sign = 1.0 if side == "L" else -1.0
-    face_y = sign * MOTOR_FACE_Y
-    gearbox = _cylinder(12.5, 21.0, (0.0, face_y - sign * 10.5, AXLE_Z), f"MOTOR_{side}_GEARBOX", BRONZE, 1.0, "y")
-    can = _cylinder(15.4, 32.0, (0.0, face_y - sign * (21.0 + 16.0), AXLE_Z), f"MOTOR_{side}_CAN", "#A8693D", 1.0, "y")
-    encoder = _cylinder(14.0, 12.0, (0.0, face_y - sign * (21.0 + 32.0 + 6.0), AXLE_Z), f"MOTOR_{side}_ENCODER", SLATE_DARK, 1.0, "y")
-    shaft = _cylinder(
-        MOTOR_SHAFT_RADIUS, MOTOR_SHAFT_LENGTH, (0.0, face_y + sign * MOTOR_SHAFT_LENGTH / 2.0, AXLE_Z),
-        f"MOTOR_{side}_OUTPUT_SHAFT", STEEL, 1.0, "y",
+def _pololu_motor_solids():
+    """Official Pololu 25D 34:1 encoder STEP, axis on Z, faceplate at Z 0.
+
+    Split at the faceplate so the output shaft (which turns with the stub)
+    is separate from the stationary gearbox, can, bushing boss and cap.
+    """
+    source = import_step(str(PURCHASED / MOTOR_STEP))
+    solids = sorted(source.solids(), key=lambda s: s.volume)
+    cap, main = solids[0], solids[-1]
+    reach = MOTOR_SHAFT_LENGTH + 1.0
+    front = Cylinder(MOTOR_PILOT_RADIUS + 0.5, reach, align=(Align.CENTER, Align.CENTER, Align.MIN))
+    shaft_core = Cylinder(MOTOR_SHAFT_RADIUS + 0.05, reach, align=(Align.CENTER, Align.CENTER, Align.MIN)).moved(
+        Location((0.0, 0.0, MOTOR_PILOT_LENGTH + 0.01))
     )
-    # Encoder leads leave the rear end; the reserve sits over the encoder,
-    # behind the axle, in the deck's motor relief.
+    shaft = (main & front) & (shaft_core + Cylinder(MOTOR_SHAFT_RADIUS + 0.05, MOTOR_PILOT_LENGTH + 0.02, align=(Align.CENTER, Align.CENTER, Align.MIN)))
+    body = main - shaft
+    return body, cap, shaft
+
+
+def motor_envelope(side: str):
+    """Pololu #4804 from its official STEP, output face on the flange at |Y| 69.
+
+    Leads (STEP +Y) are clocked to -X (MOTOR_CLOCK_DEG), which puts the face
+    M3 holes at X +- 8.5 on the axle.
+    """
+    sign = 1.0 if side == "L" else -1.0
+    body, cap, shaft = _pololu_motor_solids()
+
+    def place(shape, label, color):
+        shape = shape.rotate(Axis.X, 90.0)  # STEP +Z (shaft) to -Y, STEP +Y (leads) to +Z
+        if sign > 0:
+            shape = shape.rotate(Axis.Z, 180.0)
+        shape = shape.rotate(Axis.Y, MOTOR_CLOCK_DEG)
+        shape = shape.moved(Location((0.0, sign * MOTOR_FACE_Y, AXLE_Z)))
+        return _paint(shape, label, color, 1.0)
+
+    gearbox = place(body, f"MOTOR_{side}_POLOLU_4804_GEARBOX", BRONZE)
+    encoder = place(cap, f"MOTOR_{side}_ENCODER_CAP", SLATE_DARK)
+    output = place(shaft, f"MOTOR_{side}_OUTPUT_SHAFT", STEEL)
+    # The 200 mm leads leave the cap radially (rearward) and end in a 1 x 6
+    # header; they turn up into the reserve over the cap, behind the axle, in
+    # the deck's motor relief.
     pigtail = _paint(
         _block(-13.0, -1.0, *sorted((sign * 6.0, sign * 18.0)), 56.5, 62.5),
         f"MOTOR_{side}_PIGTAIL_RESERVE",
         "#EF8A3D",
         0.34,
     )
-    return Compound(label=f"MOTOR_{side}", children=[gearbox, can, encoder, shaft, pigtail])
+    return Compound(label=f"MOTOR_{side}", children=[gearbox, encoder, output, pigtail])
+
+
+def motor_face_screws(side: str):
+    """Two ISO 10642 M3 x 8 countersunk screws, flange into the gearbox face."""
+    sign = 1.0 if side == "L" else -1.0
+    dy1 = AXLE_DIAPHRAGM_Y[1]
+    children = []
+    for index, (x_off, z_off) in enumerate(MOTOR_SCREW_XZ, start=1):
+        head_h = MOTOR_SCREW_HEAD_RADIUS - 1.5  # 90 deg head from O6 down to the O3 shank
+        head = Cone(1.5, MOTOR_SCREW_HEAD_RADIUS, head_h, align=(Align.CENTER, Align.CENTER, Align.MAX))
+        shank = Cylinder(1.5, MOTOR_SCREW_LENGTH - head_h, align=(Align.CENTER, Align.CENTER, Align.MAX)).moved(
+            Location((0.0, 0.0, -head_h))
+        )
+        screw = (head + shank).rotate(Axis.X, -90.0 * sign).moved(Location((x_off, sign * dy1, AXLE_Z + z_off)))
+        children.append(_paint(screw, f"AXLE_MOTOR_SCREW_M3X8_{side}_{index}", STEEL, 1.0))
+    return Compound(label=f"AXLE_MOTOR_SCREWS_{side}", children=children)
 
 
 def bearing_pair(side: str):
@@ -1805,7 +1920,7 @@ def electronics():
         drivers.append(_place(drv, 30.0 + BODY_SHIFT_X, y, 66.0, ref={"Z": "min"}))
     driver_l, driver_r = drivers
     # The old power-distribution and safety envelopes are replaced by the RP-02 boards (power_distribution_boards).
-    imu = _box(25.0, 25.0, 5.0, (BODY_AXIS_X, 0.0, 60.0), "IMU_BREAKOUT_ENVELOPE", "#39BBD3", 0.80)
+    imu = imu_board()
     return Compound(label="BODY_ELECTRONICS", children=[
         battery,
         pi_tray,
@@ -1859,45 +1974,87 @@ def sensors():
     return Compound(label="BODY_SENSORS", children=parts)
 
 
+def imu_board():
+    """PCB-07: ICM-42688-P on its own board, screwed flat to the chassis deck crossbar."""
+    cx, cy, cz = IMU_BOARD_CENTER
+    bx, by, bz = IMU_BOARD_SIZE
+    top = cz + bz / 2.0
+    board = _box(bx, by, bz, IMU_BOARD_CENTER, "IMU_PCB07_BOARD", PCB_GREEN, 1.0)
+    for sign in (1.0, -1.0):
+        board = board - _z_cylinder(1.1, cz - bz, top + 1.0, IMU_SCREW_X, sign * IMU_SCREW_HALF_Y)
+    chip = _box(*IMU_CHIP_SIZE, (cx, cy, top + IMU_CHIP_SIZE[2] / 2.0), "IMU_ICM42688P_PACKAGE", "#1E2426", 1.0)
+    cxs, cys, czs = IMU_CONNECTOR_SIZE
+    connector = _box(cxs, cys, czs, (cx - bx / 2.0 + cxs / 2.0, cy, top + czs / 2.0), "IMU_JST_SH_8P_CONNECTOR", "#E9E3D0", 1.0)
+    parts = [_paint(board, "IMU_PCB07_BOARD", PCB_GREEN, 1.0), chip, connector]
+    for sign, side in ((1.0, "L"), (-1.0, "R")):
+        # M2 x 5 pan head (Ø3.8 x 1.3) on the board; the shank thread-forms 4 mm into the deck.
+        head = _paint(_z_cylinder(1.9, top, top + 1.3, IMU_SCREW_X, sign * IMU_SCREW_HALF_Y), f"IMU_M2_SCREW_HEAD_{side}", STEEL, 1.0)
+        shank = _paint(_z_cylinder(1.0, top - 5.0, top, IMU_SCREW_X, sign * IMU_SCREW_HALF_Y), f"IMU_M2_SCREW_SHANK_{side}", STEEL, 1.0)
+        parts.extend([head, shank])
+    return Compound(label="IMU_PCB07", children=parts)
+
+
+def _mic_board(x, y, z, name):
+    """PCB-06: one IM73D122V01 on the port axis, inboard face, JST-SH 4-pin below it."""
+    sign = 1.0 if y > 0.0 else -1.0
+    wx, wy, wz = MIC_BOARD_SIZE
+    board_y = sign * (MIC_BOARD_OUTER_Y - wy / 2.0)
+    board_z = z - 2.0  # board spans z - 6 .. z + 2: mic on the axis, connector below
+    board = _box(wx, wy, wz, (x, board_y, board_z), f"PDM_MIC_{name}_PCB06", PCB_GREEN, 0.94)
+    # Ø0.8 acoustic hole through the board on the port axis (Infineon footprint note).
+    board = board - _cylinder(0.4, wy + 1.0, (x, board_y, z), "hole", PCB_GREEN, 1.0, "y")
+    inboard = sign * (MIC_BOARD_OUTER_Y - wy)
+    px, py, pz = MIC_PACKAGE_SIZE
+    mic = _box(px, py, pz, (x, inboard - sign * py / 2.0, z), f"PDM_MIC_{name}_IM73D122", "#C9CDD0", 1.0)
+    kx, ky, kz = MIC_CONNECTOR_SIZE
+    connector = _box(kx, ky, kz, (x, inboard - sign * ky / 2.0, board_z - wz / 2.0 + kz / 2.0 + 0.25), f"PDM_MIC_{name}_JST_SH_4P", "#E9E3D0", 1.0)
+    return [_paint(board, f"PDM_MIC_{name}_PCB06", PCB_GREEN, 0.94), mic, connector]
+
+
 def body_audio():
-    """Provisional speaker, amplifier, and four body-microphone envelopes."""
+    """Selected speaker (K 50 WP), PCB-05 front end and four PCB-06 microphone boards."""
     sx, sy, sz = SPEAKER_CENTER
     cavity = _cylinder(
         SPEAKER_BASKET_DIAMETER / 2.0 + 2.0,
         SPEAKER_CAVITY_DEPTH,
-        (sx - 8.0, sy, sz),
+        (SPEAKER_CAVITY_CENTER_X, sy, sz),
         "SPEAKER_ACOUSTIC_CAVITY_KEEP_OUT",
         "#59B7D6",
         0.16,
         "x",
     )
-    basket = _cylinder(
-        SPEAKER_BASKET_DIAMETER / 2.0,
-        SPEAKER_DEPTH,
-        SPEAKER_CENTER,
-        "SPEAKER_50MM_BASKET_ENVELOPE",
-        SLATE_DARK,
-        0.92,
-        "x",
-    )
-    cone = _cylinder(
-        SPEAKER_CONE_DIAMETER / 2.0,
-        2.0,
-        (BODY_X_FRONT - 1.5, sy, sz),  # 0.5 mm behind the front panel's inner face
-        "SPEAKER_44MM_CONE",
-        "#252B2E",
-        1.0,
-        "x",
-    )
-    magnet = _cylinder(14.0, 10.0, (58.0 + BODY_SHIFT_X, sy, sz), "SPEAKER_MAGNET_ENVELOPE", BRONZE, 1.0, "x")
-    amplifier = _box(38.0, 30.0, 9.0, (33.0 + BODY_SHIFT_X, 0.0, 103.0), "SPEAKER_AMPLIFIER_ENVELOPE", PCB_GREEN, 0.86)
-    parts = [cavity, basket, cone, magnet, amplifier]
+    # Visaton K 50 WP: Ø50 frame flange at the front, basket tapering back to the magnet;
+    # 18 mm overall from the frame face. Only the outline is vendor data.
+    front = SPEAKER_FRONT_X
+    flange_x1 = front - SPEAKER_FLANGE_DEPTH
+    basket_x1 = flange_x1 - SPEAKER_BASKET_DEPTH
+    rear = front - SPEAKER_DEPTH
+    flange = _cylinder(SPEAKER_BASKET_DIAMETER / 2.0, SPEAKER_FLANGE_DEPTH, ((front + flange_x1) / 2.0, sy, sz), "flange", SLATE_DARK, 1.0, "x")
+    flange = flange - _cylinder(SPEAKER_CONE_DIAMETER / 2.0, SPEAKER_FLANGE_DEPTH + 1.0, ((front + flange_x1) / 2.0, sy, sz), "cut", SLATE_DARK, 1.0, "x")
+    # build123d Cone runs bottom (-Z) to top (+Z); -90 deg about Y puts the wide end forward (+X).
+    basket = Cone(SPEAKER_CUTOUT_DIAMETER / 2.0, SPEAKER_BASKET_REAR_DIAMETER / 2.0, SPEAKER_BASKET_DEPTH).rotate(Axis.Y, -90.0)
+    basket = basket.moved(Location(((flange_x1 + basket_x1) / 2.0, sy, sz)))
+    cone = _cylinder(SPEAKER_CONE_DIAMETER / 2.0, 1.0, (front - 0.5, sy, sz), "SPEAKER_K50WP_CONE", "#252B2E", 1.0, "x")
+    magnet = _cylinder(SPEAKER_MAGNET_DIAMETER / 2.0, basket_x1 - rear, ((basket_x1 + rear) / 2.0, sy, sz), "SPEAKER_K50WP_MAGNET", BRONZE, 1.0, "x")
+    speaker = Compound(label="SPEAKER_VISATON_K50WP_8OHM", children=[
+        _paint(flange, "SPEAKER_K50WP_FRAME_FLANGE", SLATE_DARK, 0.92),
+        _paint(basket, "SPEAKER_K50WP_BASKET", SLATE_DARK, 0.92),
+        cone,
+        magnet,
+    ])
+    px, py, pz = PCB05_CENTER
+    wx, wy, wz = PCB05_SIZE
+    board_z0 = pz - wz / 2.0
+    pcb05 = Compound(label="PCB05_AUDIO_FRONT_END", children=[
+        _box(wx, wy, PCB05_BOARD_THICKNESS, (px, py, board_z0 + PCB05_BOARD_THICKNESS / 2.0), "PCB05_AUDIO_FRONT_END_PCB", PCB_GREEN, 1.0),
+        _box(wx, wy, wz - PCB05_BOARD_THICKNESS, (px, py, board_z0 + PCB05_BOARD_THICKNESS + (wz - PCB05_BOARD_THICKNESS) / 2.0), "PCB05_AUDIO_FRONT_END_PARTS_RESERVE", PCB_GREEN, 0.30),
+    ])
+    parts = [cavity, speaker, pcb05]
     for x, y, z, name in MICROPHONE_PORTS:
         sign = 1.0 if y > 0.0 else -1.0
-        board = _box(12.0, 2.0, 8.0, (x, sign * 70.0, z), f"PDM_MIC_{name}_BOARD_ENVELOPE", PCB_GREEN, 0.94)
         port = _cylinder(1.25, 8.0, (x, sign * 74.0, z), f"PDM_MIC_{name}_ACOUSTIC_PORT", "#252B2E", 1.0, "y")
         boot = _cylinder(3.0, 5.0, (x, sign * 72.5, z), f"PDM_MIC_{name}_PORT_BOOT", RUBBER, 0.90, "y")
-        parts.extend([board, port, boot])
+        parts.append(Compound(label=f"PDM_MIC_{name}", children=[*_mic_board(x, y, z, name), port, boot]))
     return Compound(label="BODY_AUDIO", children=parts)
 
 
@@ -1955,8 +2112,11 @@ def harness_routes():
     # Routed-volume representation: orange high current, red motor power,
     # cyan signal, and violet head link. Volumes include bend/strain reserve.
     parts = [
-        _box(76.0, 10.0, 10.0, (16.0 + BODY_SHIFT_X, 0.0, 62.0), "HARNESS_BATTERY_TRUNK", "#F28C28", 0.42),
-        _box(12.0, 92.0, 10.0, (8.0 + BODY_SHIFT_X, 0.0, 70.0), "HARNESS_MOTOR_BRANCH", "#D94A3A", 0.42),
+        # Power routes stay in the 7 mm slot under the PCB-03/04 plates (Z 56.5-63) and beside the IMU
+        # (X 3.5-28.5, Y +-12.5): the trunk runs at Y +18 and the branch crosses aft of the IMU. The
+        # motor-can top (Z 57.4 at Y >= 16) and the Y 6-18 pigtail reserve (X -13..-1) set the trunk's floor and rear end.
+        _box(42.0, 10.0, 5.0, (21.0, 18.0, 60.0), "HARNESS_BATTERY_TRUNK", "#F28C28", 0.42),
+        _box(12.0, 92.0, 6.0, (36.0, 0.0, 59.5), "HARNESS_MOTOR_BRANCH", "#D94A3A", 0.42),
         _box(82.0, 8.0, 8.0, (30.0 + BODY_SHIFT_X, 26.0, 82.0), "HARNESS_SIGNAL_TRUNK", "#2FAFC2", 0.42),
         _box(82.0, 8.0, 8.0, (30.0 + BODY_SHIFT_X, -26.0, 82.0), "HARNESS_SENSOR_TRUNK", "#44BDD0", 0.42),
         _box(12.0, 12.0, YAW_PLATE_Z[0] - 78.0, (BODY_AXIS_X, 0.0, (YAW_PLATE_Z[0] + 78.0) / 2.0), "HARNESS_HEAD_VERTICAL", "#9566D9", 0.35),

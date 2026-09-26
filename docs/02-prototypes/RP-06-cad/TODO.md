@@ -8,16 +8,16 @@
 
 Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gate.
 
-- [ ] Decide whether to accept the 304 mm neutral stack or recover 4 mm to meet the rounded 300 mm target.
+- [x] Neutral stack: **closed 2026-09-26.** Head Layout 04 cut the neck from 60 to 49.5 mm (turntable in place of the spindle), so the stack is 140 + 49.5 + 104 = **293.5 mm**, under the 300 mm target (`neutral_stack_is_documented_293p5_mm`, `neck_allocation_is_49p5_mm`). Still to do in the permanent docs: register 293.5 mm in `dimensional-baseline.md`.
 
-- [ ] Use the real Pi 5 cooler height: with the cooler seated on the SoC (top Z 107.5, not 123) the body's 10.5 mm cooler headroom has ~15 mm of slack. Re-derive the yaw stage / neck stack from `PI_SOC_TOP_Z` and see whether the 4 mm needed for the 300 mm target can be recovered (changes the head neck, the body-top datum and the CoM gap below).
+- [x] (superseded by the item above; the target is met without it) Use the real Pi 5 cooler height: with the cooler seated on the SoC (top Z 107.5, not 123) the body's 10.5 mm cooler headroom has ~15 mm of slack. Re-derive the yaw stage / neck stack from `PI_SOC_TOP_Z` and see whether the 4 mm needed for the 300 mm target can be recovered (changes the head neck, the body-top datum and the CoM gap below).
 
 - [x] Close the CoM gap (baseline revised, see below): Layout 02 is at x +20.6 / h 105.8 mm (a_tip 1.91 m/s²) with the 81.6 g ballast bar (`RP03-CAD-08`) that offsets the lighter 110 g battery (`RP03-CAD-07`); the target is +25 / 124. The +20 mm `physics.md` §2.5 line clears by only 0.62 mm. Recover the rest by geometry or revise the baseline; the ballast screws' thread engagement in the deck and the bar's mass are unverified.
   - **Resolved 2026-09-25 (`RP03-CAD-09`, `BA-06`):** the builder accepted the layout-02 register with the power boards, x +18.77 / h 105.05 mm (a_tip 1.75 m/s²), as the working baseline instead of +25 / 124, with no added ballast. The `physics.md` §2.5 check is re-based from x ≥ +20 mm to the a_tip 1.582 m/s² that line encodes at h = 124 mm; 108/108 checks pass; the worst head pose is about 1.44 m/s² against the authored 1.00. Still open: a weighed robot (`W`) to replace the hand-kept register and head lumps
 
-- [ ] Close the new axle stack (`RP03-CAD-05`) on real parts: gearmotor face-screw pattern and shaft length, stub-to-web fixing and axial retention, bearing preload, deck/cheek stiffness.
+- [ ] Close the new axle stack (`RP03-CAD-05`) on real parts: ~~gearmotor face-screw pattern and shaft length~~ (in CAD from Pololu's drawing and STEP, `RP03-CAD-10`, 2026-09-26; confirm tapped length 2.85 mm, bushing boss and shaft on received #4804 samples), stub-to-web fixing and axial retention, bearing preload, deck/cheek stiffness, and the 2 mm printed diaphragm that now carries the motor face screws (stiffness and PETG creep under preload).
 
-- [ ] Resolve the older body-side clashes the 2026-09-24 sweep found (harness volumes against electronics, rear frame against power/safety envelopes, yaw plate and upper rails against the shell); see `openitems.md`.
+- [ ] Resolve the older body-side clashes the 2026-09-24 sweep found (harness power volumes against electronics: re-routed clear 2026-09-26; rear frame against power/safety envelopes, yaw plate and upper rails against the shell); see `openitems.md`.
 
 - [ ] Resolve inherited RP-01 blockers:
   - [x] two screw collisions (closed 2026-09-25 in head Layout 04: 0.51 mm clearance, 30 fasteners in the 56-pose grid, 0 hits)
@@ -31,14 +31,14 @@ Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gat
   - [ ] production camera interconnect
 
 - [ ] Replace remaining CAD envelopes with exact vendor or measured geometry:
-  - [ ] motors and gearboxes
+  - [ ] motors and gearboxes (vendor STEP for Pololu #4804 in since `RP03-CAD-10`; measured article pending the SKU lock)
   - [ ] wheels and hubs
   - [ ] ball-transfer article
   - [ ] battery: 2S1P Samsung 25R + BMS is modeled as datasheet envelopes (`RP03-CAD-07`); replace with the measured pack and the real BMS board
   - [ ] power modules
   - [ ] motor drivers
-  - [ ] sensors
-  - [ ] audio hardware
+  - [ ] sensors (IMU now `PCB-07` from its datasheet, 2026-09-26; TCRT breakout and comparator still an envelope)
+  - [ ] audio hardware (parts selected 2026-09-26 and modelled from datasheet outlines; measured articles pending)
   - [ ] connectors and cable exits
 
 - [ ] Bring boxed body-chassis Layout 02 parts in as real STEP (audit 2026-09-24; only the Pi 5 and 608ZZ are real imports today):
@@ -52,7 +52,7 @@ Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gat
     - [x] ESP32-S3-DevKitC-1-N8: Digi-Key model page 15295894 (the listing is N8R8; the model uses N8, confirm the board outline matches). File `ESP32-S3-WROOM-1_devkit_2xUSBC_c.step` is 28.3 x 64.1 x 5.5 mm (no headers), wider than the old 25.4 mm envelope; USB end rearward; confirm it is the N8 board
   - [ ] CAD not found, use a vendor drawing or measure:
     - [ ] Pololu ball caster 1" with plastic rollers (item 2691): no STEP, dimension PDF only; use it to settle the "12.2 mm read as a radius" hole pattern in `brief.md`
-    - [ ] JGA25-370 gearmotor with encoder: only a community STEP on Printables (`ga25-370-gear-motor-w-encoder`, model 1350984); verify the variant, or select a Pololu 25D motor, which has an official STEP
+    - [x] Gearmotor: switched to the preferred Pololu #4804 and wired in its official STEP (`pololu_25d_34-47_encoder.step`, 2026-09-26, `RP03-CAD-10`); axle stack rebuilt round its face, leads clocked rearward, 110/110 checks pass. The JGA25-370 community STEP is no longer needed
   - [x] Head STEPs wired into head Layout 04 (2026-09-24); files in `head/layout-01/parts/`; head checks pass, dimensions and assembly reports regenerated:
     - [x] `waveshare_esp32_s3_touch_lcd_4_3.stp` for the display. SKU 30493 is the non-touch board (105.4 x 67.1 mm); the Touch STEP (106.1 x 68.3 x 16.9 mm) is used as the conservative outline, glass front on X -3.8. Fit checks use a slab plus connector-strip proxy (12.5 mm deep, 16.9 mm over one 5 mm strip on the -Y edge). Still open: replace with the non-touch model if Waveshare publishes one
     - [x] `waveshare_esp32_s3_zero_v2.step` for C2 (18.0 x 23.5 x 1.9 mm, bare PCB: the STEP has no USB-C shell or headers, so the authored USB reserves stay). Components face -X
@@ -60,9 +60,9 @@ Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gat
   - [ ] Fasteners are authored cylinders; real STEPs exist on step.parts (ISO 4762 M3/M4/M2, ISO 7380, M3 heat-set insert bosses, M3 nuts). Only worth swapping once head/body fastener SKUs are chosen (P-07)
   - [ ] Ball caster form check: the CAD is a form match to the Pololu photo (dome shoulder, roller windows, rim notch, snap slits), built from the vendor drawing, not a scan. When a sample 2691/2692 arrives, caliper the base O.D., roller-window positions, notch width, slit positions and the real bolt circle, then update `build_ball_caster_step.py`. Note the photo shows the 2692 bearing version; the model uses plain rollers.
   - [ ] SKU not chosen, so nothing to download yet:
-    - [ ] ICM-42688-P IMU breakout
+    - [x] ICM-42688-P IMU: own `PCB-07` board screwed to the chassis deck crossbar, modelled (`RP03-CAD-11`); bench article any SPI+INT1 breakout, MIKROE-4237 where stocked ([`peripheral-selection.md`](peripheral-selection.md) §4)
     - [ ] yaw thin-section bearing (50 g placeholder in `MASS_ROWS`)
-    - [ ] speaker, amplifier and four PDM microphones (already listed under audio selection below)
+    - [x] speaker, amplifier and four PDM microphones: selected and modelled from vendor outlines (2026-09-26); no vendor STEP read, the speaker's internal profile is estimated
     - [ ] power-distribution and safety/watchdog boards (RP-02); the battery is working-selected (2 × Samsung INR18650-25R + 2S 20 A balanced BMS), with no STEP for the BMS board
     - [ ] harness: modeled as volumes, not parts; needs a route
 
@@ -80,11 +80,18 @@ Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gat
 
 - [ ] Propagate `RP03-CAD-01`…`08` to the permanent RP-03 documents as one reviewed change set (sensor count, bump coverage, the fixed ball-only mount versus the required `D20` swap, CoM and motion restrictions).
 
-- [ ] Select the status LED and diffuser/optic.
+- [x] Select the status LED and diffuser/optic. **Working selection 2026-09-26** ([`peripheral-selection.md`](peripheral-selection.md) §3, `HEAD-CAD-12`): Worldsemi WS2812B-2020-V6 on a 5 × 5 mm carrier (`PCB-08`) behind the unchanged Ø3.4 × 2.9 light pipe (clear resin or PMMA, frosted face), D1 GPIO6 at 3.3 V. Still open: route the three leads from the crown to D1, bench brightness at 3.3 V and camera stray light (G03).
 
-- [ ] Select microphone front end, microphone boards, speaker, and amplifier.
+- [x] Select microphone front end, microphone boards, speaker, and amplifier. **Working selection 2026-09-26** ([`peripheral-selection.md`](peripheral-selection.md) §2, RP-05 `BD-A04`…`A06`, `RP03-CAD-11`): `AP-TDM` as two I²S lanes on the Pi 5 (RP1 has no true TDM), 2 × ADAU7002 and a MAX98357A on `PCB-05`, four Infineon IM73D122V01 on `PCB-06` boards at the unchanged ports, Visaton K 50 WP 8 Ω. Modelling them showed the old amplifier box sat inside the Pi 5 and the 34 mm cavity ran through the compute tray, so `PCB-05` moved above the Pi's front end and the cavity is now 20 mm (X 77–97). Still open: `CA-06` CR-01 (GPIO22 SDI1, GPIO23 `AMP_SD`), the Pi 5 overlay and duplex bench proof, mic-board fixing to the body frame, speaker flange bond and grille, acoustic tests.
 
 - [ ] Finish the battery selection and enough of the power hardware to verify actual packaging. Working selection made 2026-09-24 (2S1P Li-ion, 2 × Samsung 25R; RP-02 `decision.md`). Open: pack lead and connector (Anderson SBS Mini lead), tub retention and hatch fastening, who builds the pack (workbench battery gate). Update 2026-09-25: battery and power hardware are selected as working choices in `board-specs.md` (v0.16); packaging is pending the CAD volumes tracked under "Custom power and safety boards" below.
+
+- [ ] Design the small boards the 2026-09-26 selections created ([`peripheral-selection.md`](peripheral-selection.md)); none has a schematic:
+  - [ ] `PCB-05` audio front end (2 × ADAU7002 WLCSP, MAX98357A TQFN, 100 Ω series on the amp inputs, JST-SH mic inputs); JLCPCB assembly because of the WLCSP
+  - [ ] `PCB-06` mic board ×4 (IM73D122V01, Ø0.8 port hole, LR strap per position, JST-SH 4-pin) and its fixing to the body frame
+  - [ ] `PCB-07` IMU board (ICM-42688-P, JST-SH 8-pin, two M2 holes 15 mm apart)
+  - [ ] `PCB-08` LED carrier (WS2812B-2020, three pads)
+  - [ ] Raise `CA-06` CR-01 in RP-02 (GPIO22 `i2s0` SDI1, GPIO23 `AMP_SD`) and prove the custom `simple-audio-card` overlay: 4-channel capture on SDI0+SDI1 with 2-channel playback on SDO0 at 48 kHz, lane order, and whether RP1 forces symmetric channel counts
 
 - [ ] Obtain or fabricate representative articles and measure:
   - [ ] every relevant mass
@@ -185,7 +192,7 @@ Spec: [`../RP-02-electrical/board-specs.md`](../RP-02-electrical/board-specs.md)
   - [ ] Route it in CAD as a clock-spring (bending, not a straight twist; a straight bundle needs about 288 mm free length for +-55 deg at 1% strain)
   - [ ] Build and run the qualification: 10^6 cycles at +-15 deg, 10^5 at +-40 deg, 10^4 at +-55 deg plus over-travel at 378 deg/s, logging loop resistance, CSI, UART and servo-bus errors
 
-- [ ] Drive stage (`BD-02`): pin the gearmotor SKU (recommended 34-35:1 in the 8500 rpm family, 6 V; about 211 rpm loaded at 6.0 V for the 159 rpm needed on an 84 mm wheel; the 6000 rpm 35:1 fails loaded); resolve the stall-current (0.9 A vs 2.6 A) and shaft-length (10-12 mm vs the 9.5 mm in the CAD) discrepancies between sources; read the DRV8874 carrier's current-limit resistor (the Pololu page gives both 3.5 A and 4.4 A); set the C3 duty clamp (about 71% at 8.4 V).
+- [ ] Drive stage (`BD-02`): [gearmotor SKU lock remains open](../RP-03-locomotion/gearmotor-sku-decision.md). Pololu #4804, HP 6 V / 34.014:1 / encoder is the preferred prototype candidate (290 rpm no-load, 240 rpm at 0.127 N·m maximum-efficiency point, 6 A extrapolated stall). Fab.to.Lab lists #4804 in India, but exact-variant stock and quantity need confirmation. ~~Reconcile the 12.5 mm shaft and 67 mm body with the CAD~~ (done 2026-09-26, `RP03-CAD-10`). Get a written Fab.to.Lab quote naming the current #4804 revision: their page carries older figures (280 rpm, 6.5 A) and a wrong CPR. Proposed DRV8874 limit about 3 A (about 0.30 N·m, and it also caps regeneration at 3 A). Read the DRV8874 carrier's current-limit resistor (the Pololu page gives both 3.5 A and 4.4 A); set and verify a launch-compatible limit before bench power, then verify C3 motor-terminal voltage/speed clamp on the 8.4 V bus.
 
 - [ ] **Regeneration limit (new hard requirement, `board-specs.md` sections 5.2.4 and 5.3):** the cells' maximum charge is 4 A, so the drive stage must hold regeneration into the bus to 3 A or less and to zero below 0 degC (brake, not coast). Nothing enforces it yet; it belongs to the DRV8874 current limit and the C3 braking policy (RP-03).
 

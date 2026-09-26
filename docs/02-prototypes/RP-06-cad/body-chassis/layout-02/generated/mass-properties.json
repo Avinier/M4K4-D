@@ -1,10 +1,10 @@
 {
   "layout_id": "RP03_BODY_CHASSIS_LAYOUT02",
-  "mass_g": 2575.9794811320767,
+  "mass_g": 2529.3794811320768,
   "com_mm": [
-    19.412234258611218,
-    0.9714383196781494,
-    106.4750289120355
+    19.379155045241752,
+    0.9893356047769992,
+    106.95828828707945
   ],
   "rows": [
     {
@@ -39,63 +39,63 @@
     },
     {
       "id": "CHASSIS_PRIMARY_FRAME",
-      "mass_g": 172.1,
+      "mass_g": 176.0,
       "com_mm": [
         19.8,
         0.0,
         47.4
       ],
-      "source": "front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"
+      "source": "+2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"
     },
     {
       "id": "WHEEL_L",
-      "mass_g": 90.0,
+      "mass_g": 89.0,
       "com_mm": [
         0.0,
         85.0,
         42.0
       ],
-      "source": "custom dished wheel envelope; the 13.7 cm3 pocket roughly offsets the stub shaft now listed separately"
+      "source": "custom dished wheel envelope; -1.1 g for the pocket 2 mm deeper (floor |Y| 90, 2026-09-26); the 13.7 cm3 pocket roughly offsets the stub shaft now listed separately"
     },
     {
       "id": "WHEEL_R",
-      "mass_g": 90.0,
+      "mass_g": 89.0,
       "com_mm": [
         0.0,
         -85.0,
         42.0
       ],
-      "source": "custom dished wheel envelope; the 13.7 cm3 pocket roughly offsets the stub shaft now listed separately"
+      "source": "custom dished wheel envelope; -1.1 g for the pocket 2 mm deeper (floor |Y| 90, 2026-09-26); the 13.7 cm3 pocket roughly offsets the stub shaft now listed separately"
     },
     {
       "id": "AXLE_BEARINGS_AND_STUB_SHAFTS",
-      "mass_g": 65.4,
+      "mass_g": 64.4,
       "com_mm": [
         0.0,
         0.0,
         42.0
       ],
-      "source": "E: four 608ZZ at ~12 g (not in the register before 2026-09-24) + two 8 mm steel stub shafts at ~8.7 g; symmetric about the centre plane"
+      "source": "E: four 608ZZ at ~12 g (not in the register before 2026-09-24) + two 8 mm steel stub shafts at ~8.2 g (23 mm long since 2026-09-26, was 24.5); symmetric about the centre plane"
     },
     {
       "id": "MOTOR_L",
-      "mass_g": 110.0,
+      "mass_g": 101.0,
       "com_mm": [
         0.0,
-        52.0,
+        39.2,
         42.0
       ],
-      "source": "vendor"
+      "source": "D: Pololu #4804 spec 101 g; Y is the official STEP volume centroid (uniform density, E); was 110 g JGA25 at Y 52"
     },
     {
       "id": "MOTOR_R",
-      "mass_g": 110.0,
+      "mass_g": 101.0,
       "com_mm": [
         0.0,
-        -52.0,
+        -39.2,
         42.0
       ],
-      "source": "vendor"
+      "source": "D: Pololu #4804 spec 101 g; Y is the official STEP volume centroid (uniform density, E); was 110 g JGA25 at Y -52"
     },
     {
       "id": "BALL_TRANSFER",
@@ -198,14 +198,14 @@
       "source": "E: 2 x Pololu 4035 at ~3 g (weight not read); symmetric about the centre plane"
     },
     {
-      "id": "IMU_BREAKOUT",
-      "mass_g": 2.0,
+      "id": "IMU_PCB07",
+      "mass_g": 2.5,
       "com_mm": [
-        16.0,
+        21.0,
         0.0,
-        60.0
+        57.5
       ],
-      "source": "E"
+      "source": "E: PCB-07 16 x 20 x 1.0 mm FR4 ~0.6 g + ICM-42688-P and JST-SH 8-pin ~0.3 g + two M2 x 5 ~0.6 g + 8-way AWG30 lead to C3 ~1 g (RP03-CAD-11); was a 2 g breakout estimate at (16, 0, 60)"
     },
     {
       "id": "TCRT5000_BREAKOUT_AND_CABLE",
@@ -239,13 +239,13 @@
     },
     {
       "id": "BODY_AUDIO",
-      "mass_g": 90.0,
+      "mass_g": 60.0,
       "com_mm": [
-        64.0,
+        77.9,
         0.0,
-        102.0
+        101.9
       ],
-      "source": "speaker, amplifier and four microphones; CAD estimate"
+      "source": "RP03-CAD-11: Visaton K 50 WP 48 g (D) with its centroid at the magnet end, X ~85 + PCB-05 30 x 38 mm board and parts ~6 g (E) at (60, 0, 116) + four PCB-06 mic boards ~0.5 g each (E) + speaker leads and mic cables ~4 g (E); was 90 g at (64, 0, 102) for unselected parts"
     },
     {
       "id": "HARNESS_AND_FASTENERS",

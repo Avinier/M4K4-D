@@ -20,18 +20,18 @@
       71.0
     ],
     "boss_radius_mm": 15.0,
-    "boss_end_y_mm": 86.0,
+    "boss_end_y_mm": 88.0,
     "bearing_608_centre_y_mm": [
-      74.0,
-      81.5
+      77.0,
+      84.0
     ],
     "stub_shaft_radius_mm": 4.0,
     "stub_shaft_y_mm": [
-      70.5,
-      95.0
+      73.0,
+      96.0
     ],
     "wheel_pocket_radius_mm": 18.0,
-    "wheel_pocket_floor_y_mm": 88.0,
+    "wheel_pocket_floor_y_mm": 90.0,
     "cheek_abs_x_mm": [
       13.5,
       17.0

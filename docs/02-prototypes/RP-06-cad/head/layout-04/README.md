@@ -105,3 +105,7 @@ Use `/Users/avinier/.codex/runtimes/text-to-cad/0.4.28/venv/bin/python` and the 
 6. `validate_geometry.py` checks exported references and solid validity. Matching `scripts/snapshot --job …/review/snapshot-job.json` creates the review packet. `check_viewer.mjs` checks the actual viewer feature resolver and switches.
 
 Results are in `fit-checks.json`, `revision-checks.json` and `motion-envelope.json`; snapshots in `review/`. The Layout 03 [verification](../layout-03/review/verification.md) still covers the unchanged helmet, service and optics evidence.
+
+## 2026-09-26 status light (`HEAD-CAD-12`)
+
+The selected WS2812B-2020-V6 on a 5 × 5 × 0.8 mm carrier (`PCB-08`) is modelled inside the existing `M007` reserve (`status_LED_PCB08_carrier_5x5`, `status_LED_WS2812B_2020`), 1.36 mm behind the unchanged diffuser ([`../../peripheral-selection.md`](../../peripheral-selection.md) §3). No aperture or mass change. Rerun 2026-09-26: `check_revision.py` passes, `check_layout.py` 56 poses × 159 pairs with 0 hits, `write_dimensions.py`. The gitignored head STEP was not regenerated; the body Layout 02 STEP composes this source live and was.

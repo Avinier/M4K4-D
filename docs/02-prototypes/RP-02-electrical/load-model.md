@@ -46,10 +46,10 @@ A profile may occupy several classes: music has `TB-2` crests inside a `TB-3` RM
 | `LG-02` | C2 + servo-bus transceiver | ESP32-S3-Zero selected; installed power unmeasured |
 | `LG-03Y/P/R` | Head servo branches, separately observable | Family unselected; C01 is paper comparison only |
 | `LG-04` | Drive motors + driver | Unselected; RP-03 owns real profiles |
-| `LG-05` | Display + status light | Display selected; light unselected |
+| `LG-05` | Display + status light | Display selected; light working-selected 2026-09-26: WS2812B-2020 on D1 3.3 V, ≤ 36 mA full white (`D`) ([selection](../RP-06-cad/peripheral-selection.md) §3) |
 | `LG-06` | Camera via SBC port | Camera Module 3 Wide selected; current unmeasured |
-| `LG-07` | Mics + audio front end | Unselected |
-| `LG-08` | Speaker + amplifier | Unselected |
+| `LG-07` | Mics + audio front end | Working-selected 2026-09-26: 4 × IM73D122V01 + 2 × ADAU7002 from the Pi header 3.3 V, ≈ 20 mW `E` (RP-05 `BD-A04`/`A05`) |
+| `LG-08` | Speaker + amplifier | Working-selected 2026-09-26: MAX98357A + Visaton K 50 WP 8 Ω on `PB-AUDIO-OUT` 5 V; idle ≈ 14 mW, peak ≈ 2.1 W `E` (RP-05 `BD-A06`) |
 | `LG-09` | Conversion/distribution loss | Derived residual; never commanded |
 | `LG-10` | Selected ESP32-S3-DevKitC-1-N8 C3 prototype + obstacle/edge sensing | Controller identity fixed by `RP02-P3-REG-01/02`; RP-03 owns sensor binding and measured profiles |
 
