@@ -100,6 +100,7 @@ def main():
         "sensors": ["BODY_SENSORS"],
         "audio": ["BODY_AUDIO"],
         "harness": ["HARNESS_ROUTES", "RP01_HEAD_HARNESS"],
+        "connectors": ["CONNECTORS_AND_EXITS"],
         "physics": ["RP01_HEAD_PHYSICS", "PHYSICS_OVERLAYS"],
     }
     for key, names in groups.items():
@@ -146,6 +147,7 @@ def main():
         ("sensors", "Show sensors", True),
         ("audio", "Show speaker and microphones", True),
         ("harness", "Show harness routes", True),
+        ("connectors", "Show connector and cable-exit reserves", True),
         ("physics", "Show physics overlays", False),
     ]:
         parameters[f"show_{key}"] = dict(type="boolean", label=label, default=default)
@@ -252,7 +254,7 @@ export default {
     effects.transform("wheel_R", rot([0, 1, 0], geo.pivots.wheel_R, wr));
     if (params.drive_on_floor !== false) effects.transform("*", drivePose(wl, wr));
 
-    for (const key of ["shell", "head", "structure", "drive", "rear_tail", "electronics", "sensors", "audio", "harness", "physics"]) {
+    for (const key of ["shell", "head", "structure", "drive", "rear_tail", "electronics", "sensors", "audio", "harness", "connectors", "physics"]) {
       effects.visible(key, params[`show_${key}`] !== false);
     }
   }

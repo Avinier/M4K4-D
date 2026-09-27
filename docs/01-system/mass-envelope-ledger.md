@@ -3,15 +3,15 @@
 | Field | Value |
 |---|---|
 | Status | **Living — dimensional baseline active; remaining mass values provisional.** |
-| Version | 0.16 |
+| Version | 0.17 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
-| Last reviewed | 2026-09-19 |
+| Last reviewed | 2026-09-26 |
 | Governed by | `risk-prototype-plan.md` §"Continuous sourcing and data workstream" (deliverable 2) |
 | Consumes | `dimensional-baseline.md`, foundation scale class (`workbench.md`), `system-design-brief.md` responsibility set |
 | Feeds | RP-01 (representative head load), RP-06 (integrated layout), head-CAD, engineering budgets |
 
-This ledger is the canonical system mass/envelope roll-up. `dimensional-baseline.md` supplies committed target geometry and component placement; RP-01 now supplies a **Layout 03 D/E tree** with a nominal ~509 g complete head at M008=20 g and a ~499–524 g C2 sensitivity. It is not an accepted complete-head mass. The tree already contains two 23 g XC330-size housings; the first named paper candidate XC330-M288-T (C01) matches those housings, so substituting C01 adds zero mass. Other families still replace those rows. Complete-head `W` still waits on M008. Other mass values remain first-pass planning estimates from the approved scale class — *table-liftable, one-person, single-room, follow ≤ 0.5 m/s* — not sourced measurements. They are replaced by measured values as RP-01…RP-07 close (decision-closeout step 6). Do not let a component's absence from a row mean it weighs nothing.
+This ledger tracks the system mass and envelope. `dimensional-baseline.md` supplies target geometry; RP-01 Layout 04 supplies the current **~588 g `D/E` yaw-carried head tree** at M008=20 g, and RP-06 Layout 02 supplies the current **2,551.9 g `E` whole-robot register**. Neither is a measured acceptance. The range table below is the earlier scale-class planning budget and is retained as history; it is not a current part-by-part BOM. Complete-head `W`, the pack mass and the whole-robot CoM still require measurement. Do not let a component's absence from a row mean it weighs nothing.
 
 ## Scale-class anchors (from approved foundation)
 
@@ -19,13 +19,13 @@ This ledger is the canonical system mass/envelope roll-up. `dimensional-baseline
 - "Compact enough to remain approachable" without size minimization (vision).
 - Single household room; following capped at **0.5 m/s** (CON-19).
 - Powered three-axis head carrying the display, any unavoidable lightweight display/head-node electronics, central camera, status light, structure, and local wiring (SCOPE-02/03/17, AD-02/AD-06). RP-01 has no installed runtime head IMU; bench instrumentation is not robot mass.
-- Two independently powered wheels, a **front ball transfer**, and a mandatory rear anti-tip skid (`dimensional-baseline.md` v1.12). A swivel caster is the RP-03 comparison swap only.
+- Two independently powered wheels, a **front ball transfer**, and a mandatory rear anti-tip skid (`dimensional-baseline.md` v1.13). A swivel caster is the RP-03 comparison swap only.
 
 Current target bounding box: **300 H × 205 W × 180 D mm**. RP-06 validates this baseline against sourced envelopes; it does not silently replace it.
 
-## Mass ledger
+## Historical planning mass range
 
-Ranges carry the current uncertainty. "Basis" states where the number comes from so a later measurement can replace it cleanly.
+These early ranges show the scale-class budget and its assumptions; use the current Layout 02 mass-properties report for the working per-part register. "Basis" records what informed each historical row.
 
 | Subsystem | Low (g) | High (g) | Basis / assumption | Measured by |
 |---|---:|---:|---|---|
@@ -39,7 +39,7 @@ Ranges carry the current uncertainty. "Basis" states where the number comes from
 | **Structural / integration margin** (design reserve) | 150 | 400 | ~15–20% reserve against integration growth (AD-08 concurrent-load risk) | Retired as rows firm up |
 | **TOTAL (rolled up)** | **~1649** | **`3100 + M_head`** | Non-head low planning rows plus the 499 g analytical head case; final upper head mass remains open and this is not a tolerance claim | — |
 
-The current first-pass whole-robot roll-up has a **minimum analytical value of approximately 1.65 kg** using the 499 g head sensitivity case. Its upper bound remains open until the complete head mass `M_head` and candidate servo set are established; the other subsystem high rows sum to approximately 3.10 kg before the head. If a later measured roll-up trends above ~4 kg, revisit `workbench.md` hazard notes (its own instruction).
+The historical first-pass roll-up had a **minimum analytical value of approximately 1.65 kg** using the Layout 03 499 g head sensitivity case. Its upper bound was left open; the other subsystem high rows summed to approximately 3.10 kg before the head. The current Layout 02 register is 2.5519 kg `E`, with a different Layout 04 head and component breakdown. If a measured roll-up trends above ~4 kg, revisit `workbench.md` hazard notes (its own instruction).
 
 ## Head envelope detail (RP-01 / head-CAD input)
 
@@ -47,19 +47,19 @@ The head is the first mechanical risk (AD-02) and the CAD blocker, so it gets it
 
 | Element | Envelope allowance | Notes |
 |---|---|---|
-| Complete head including integrated side pods/pivots | **104 H × 150 W × 115 D mm — Layout 03** | Current moving-head planning envelope from selected component geometry; manufacturing and RP-06 integrated fit remain open |
-| Head core excluding crown/side pods | **86 H × 130 W × 115 D mm — Layout 03** | Space for display, camera, brackets, lightweight electronics, connector/service clearance and neck intrusion |
+| Complete head including integrated side pods/pivots | **104 H × 150 W × 115 D mm — Layout 04** | Current moving-head planning envelope from selected component geometry; manufacturing and RP-06 integrated fit remain open |
+| Head core excluding crown/side pods | **86 H × 130 W × 115 D mm — Layout 04** | Space for display, camera, brackets, lightweight electronics, connector/service clearance and neck intrusion |
 | Face display active area | 95.04 W × 53.86 H mm nominal (4.3-inch 800×480 IPS) | Selected no-touch Waveshare ESP32-S3-LCD-4.3, SKU 30493 |
 | Face aperture / bezel | ~94–95 W × 53–54 H mm optical aperture within ~110–115 W × 60–65 H mm bezel/window treatment; ≥68 mm hidden module clearance | Selected module body is approximately 106.1 × 67.8 mm; listed 118 g is an unverified product value, not yet a mass-ledger measurement |
-| Integrated side pods / pivot covers | Layout 03 Ø60 mm hollow rolling ears; complete width 150 mm | No microphones. Ears attach to the rolling face; inner yoke/frame carries joint loads and all bearing/yoke mass remains in the head roll-up. |
+| Integrated side pods / pivot covers | Layout 04 Ø60 mm hollow rolling ears; complete width 150 mm | No microphones. Ears attach to the rolling face; inner yoke/frame carries joint loads and all bearing/yoke mass remains in the head roll-up. |
 | Camera | selected Raspberry Pi Camera Module 3 Wide, visible-light/IR-cut, SC0874; 25 W × 24 H × 12.4 D mm | Moves with head (AD-06). Seller-reported mass is not accepted; weigh module, connector retention, mount and the moving portion of the selected interconnect separately. |
 | Status light + optics | LED beside camera (SCOPE-17) | Placement coupled to camera per AD-06 |
-| Roll/pitch/yaw mechanism | 3 axes in a 60 mm vertical neck allocation; **body yaw → elevated pitch → coaxial supported roll** is the RP-01 path | Layout 03 models Concept A with A0 estimated balance and 23 g XC330 housings. C01 (XC330-M288-T) matches those housings. Concept B is waived; servo SKU, purchased interfaces and physical evidence remain open. |
+| Roll/pitch/yaw mechanism | 3 axes in a 49.5 mm vertical neck allocation; **body yaw → elevated pitch → coaxial supported roll** is the RP-01 path | Layout 04 models Concept A with A0 estimated balance and XC330 working choices (M181 yaw, M288 pitch/roll). Concept B is waived; actuator freeze, purchased interfaces and physical evidence remain open. |
 | Cable bundle + service clearance | bend radius across 3 moving axes | Cable movement is an RP-01 measured item |
 
-**Representative RP-01 planning load: nominal ~509 g complete at M008=20 g, with ~499–524 g C2 sensitivity in the current Layout 03 D/E tree.** M008 remains `U` as physical evidence. C01 (XC330-M288-T) matches the tree's 23 g housings; other families still substitute. This is not a target or accepted measurement. The former ~250 g target, generic ~0.001 kg·m² inertia proxy and ~0.2 N·m neck-torque estimate are obsolete for RP-01 sizing. Candidate-specific centre of mass/inertia and axis calculations precede actuator freeze; the scored rig load is registered from the representative as-built/CAD configuration.
+**Representative RP-01 planning load: about 588 g yaw-carried in the current Layout 04 D/E tree.** M008 remains `U` as physical evidence; XC330-M181 yaw and M288 pitch/roll are working choices, not bench-frozen actuators. This is not a target or accepted measurement. The Layout 03 ~509 g nominal / 499–524 g sensitivity and the former ~250 g target are historical. Candidate-specific centre of mass/inertia and axis calculations precede actuator freeze; the scored rig load is registered from the representative as-built/CAD configuration.
 
-Body packaging must separately reserve four PDM MEMS microphones, the speaker and its acoustic cavity, the battery **low and forward of the drive axle**, and primary electronics. Integrated layout targets `x_CoM=+25 mm` forward of the axle and `h_CoM=124 mm` above the floor; none of these body subsystems belongs in moving-head ballast under the current baseline.
+Body packaging must separately reserve four PDM MEMS microphones, the speaker and its acoustic cavity, the battery **low and forward of the drive axle**, and primary electronics. The current Layout 02 hand-kept register is 2,551.9 g at `x_CoM=+19.46 mm`, `h_CoM=107.27 mm`, including the retained 81.6 g `RP03-CAD-08` bar; `RP03-CAD-09` accepts the re-based `a_tip ≥ 1.582 m/s²` screen. These are estimates pending whole-robot measurement. None of the body subsystems belongs in moving-head ballast.
 
 ## Open items
 
@@ -68,7 +68,7 @@ Body packaging must separately reserve four PDM MEMS microphones, the speaker an
 - [ ] Replace the reference actuators with every screened servo candidate other than C01 (already a mass match) and rerun mass, CoM, inertia and A0 sensitivity before selection.
 - [ ] Weigh the selected SKU 30493 sample without packaging and with its installed mount/harness; replace the 118 g listing evidence in the RP-01 model.
 - [ ] Weigh the selected Camera Module 3 Wide SC0874 sample, connector retention, mount and moving interconnect separately; record their CoM coordinates and per-axis downstream membership.
-- [ ] Replace battery row once chemistry is decided in ADR-06 (RP-02). Working selection made 2026-09-24 (110 g `E`); replace with a weighed pack.
+- [ ] Replace the historical battery planning row with a weighed 2S1P Samsung 25R pack, including BMS, connector and retention.
 - [ ] Replace the drive mass range after RP-03 selects and measures the motors, transmissions, wheels, ball transfer, skid, and brackets.
 - [ ] Retire structural margin into real rows as subsystems firm up.
 
@@ -92,3 +92,4 @@ Body packaging must separately reserve four PDM MEMS microphones, the speaker an
 | 2026-09-13 | 0.14 | Recorded that C01 (XC330-M288-T) matches the existing 23 g housings, so substituting that candidate adds zero mass. Family still unselected; M008 still `U`; no `W` evidence. |
 | 2026-09-17 | 0.15 | RP-03 `physics.md` (`RP03-P2-REG-01`) reviewed the drive row and **does not move** the 200–600 g bound. D02 JGA25-class is a reference-unit lead, not a freeze, not `W`. |
 | 2026-09-19 | 0.16 | Front support in the drive row is the **ball transfer** (`dimensional-baseline.md` v1.12). Bound 200–600 g unchanged. Not `W`. |
+| 2026-09-26 | 0.17 | Identified the earlier range table as planning history and linked the current Layout 04 ~588 g head tree and Layout 02 2,551.9 g robot register. No `W` evidence added. |

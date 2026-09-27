@@ -45,7 +45,7 @@
 | Microphones | Four IM73D122V01 on `PCB-06` boards, outer face \|Y\| 70 against the port boots; ports `FRONT_L/R` (54, ±70, 118), `REAR_L/R` (−22, ±70, 108) mm; `FRONT_*` on ADAU7002 #1 (I²S SDI0), `REAR_*` on #2 (SDI1) |
 | Audio front end | `PCB-05` 30 × 38 × 1.6 mm at X 45–75, Y ±19, Z 114 (parts reserve to Z 123), above the Pi 5's front end and forward of the cooler headroom: MAX98357A, 2 × ADAU7002 |
 | Speaker back cavity | Ø54 × 20 mm sealed, X 77–97 (was 34 mm, X 63–97, through the compute tray and Pi 5); about 46 cm³ gross |
-| Base IMU | `PCB-07` 16 × 20 × 1.0 mm on the chassis deck top (Z 56) at X 13–29, Y ±10; ICM-42688-P at (21, 0); two M2 × 5 at (22, ±7.5) into the deck crossbar; JST-SH 8-pin facing −X |
+| Base IMU | `PCB-07` 16 × 20 × 1.0 mm on the chassis deck top (Z 56) at X 13–29, Y ±10; ICM-42688-P at (21, 0); two M2 × 5 at (22, ±7.5) into the deck crossbar; JST GH SM08B-GHS-TB facing −X (`CN-01`, [`../../connector-schedule.md`](../../connector-schedule.md)) |
 | Front range sensor | GP2Y0A41SK0F face at `(128, 0, 41)` mm: on the centreline in the ball pod, 18 mm ahead of the ball contact, behind a window in the touch cap |
 | Front range look-ahead | Needed from the face: 161 / 203 / 271 mm at 0.50 level / 0.50 on 2° downhill / 0.70 m/s (`physics.md` §6, §10), or 184.5 / 226.5 / 294.5 mm if charged to the nose front; all inside the 300 mm rated range. The GP2Y's 40 mm minimum range is covered by the touch cap |
 | Ball pod | Printed, octagonal section, X 92–128.5 (flange footprint), 35 mm wide, Z 29–54; its rear passes a shell notch to the front crossmember at X 80–92 inside the shell; vendor flange seats at Z 29; three M3 from inside the pocket; two M3 into crossmember heat-set inserts |

@@ -6,7 +6,7 @@
 | Owner | Project builder |
 | Created | 2026-09-21 |
 | Governing plan | [`risk-prototype-plan.md`](../../01-system/risk-prototype-plan.md) v1.15 §RP-06 |
-| Working CAD | [Layout 03](head/layout-03/README.md); [body/chassis Layout 02](body-chassis/layout-02/README.md) |
+| Working CAD | [Head Layout 04](head/layout-04/README.md); [body/chassis Layout 02](body-chassis/layout-02/README.md) |
 
 This is the compact remaining-work list. Canonical numbers stay in the cited files. Checking a row here does not freeze a SKU, promote `E` to `W`, or register a gate.
 
@@ -15,28 +15,28 @@ Evidence classes are unchanged: `W` measured on the named hardware, `D` manufact
 ## How to use this file
 
 1. Phase A (now): replace envelopes with sourced geometry; keep every checkbox honest.
-2. Physical mock-up: run the plan's mock-up procedure against the current **~499–524 g / nominal 509 g** head baseline, not 250 g.
+2. Physical mock-up: run the plan's mock-up procedure against the current **~588 g `D/E` yaw-carried Layout 04** head tree, then replace it with M900 `W`.
 3. Register `RP06-G01`…`G06` numeric thresholds **before** inspecting scored data.
 4. Keep binding envelopes in this CAD tree, the dimensional baseline, and the mass ledger.
 
 ---
 
-## 0. Locked inputs (do not re-shop)
+## 0. Current inputs and locked choices
 
 | Input | Current value | Status |
 |---|---|---|
-| Head mass | **~499–524 g complete D/E; nominal 509 g at M008=20 g** | Use. Former ~250 g target is historical only |
-| Head inertia | Layout 03 D/E ~0.000656 / 0.000728 / 0.001080 kg·m² roll / pitch / yaw at M008=20 g | Screening input; replace servo references per candidate |
+| Head mass | **~588 g yaw-carried Layout 04 `D/E` at M008=20 g** | Working screen; M008 and M900 remain physically unknown. Layout 03's 499–524 g range is historical |
+| Head inertia | Layout 04 `D/E` ~0.000675 / 0.000779 / 0.001282 kg·m² roll / pitch / yaw at M008=20 g | Screening input; remeasure the installed head |
 | Head envelope | 104 × 150 × 115 mm complete; 86 × 130 × 115 mm core | Planning geometry |
 | Robot envelope | 300 × 205 × 180 mm rounded target; **293.5 mm** current neutral stack (met, 2026-09-26) | Nothing to recover; register under G01 |
-| Placement | 140 mm body-top datum; 60 mm neck; body mics/speaker/battery/C0 | Locked |
-| Whole-robot CoM target | `x = +25 mm`, `h = 124 mm` | Placement target. Layout 02 currently +20.6 / 105.8 mm: +20.2 / 103.7 after the 16 mm body shift (`RP03-CAD-06`), +18.8 / 107.9 with the lighter 2S1P pack (`RP03-CAD-07`), restored by an 81.6 g ballast bar (`RP03-CAD-08`) |
+| Placement | 140 mm body-top datum; 49.5 mm Layout 04 neck; body mics/speaker/battery/C0 | Working integrated CAD |
+| Whole-robot CoM screen | Current `E` register +19.46 / 107.27 mm with 81.6 g ballast, a_tip 1.78 m/s² | `RP03-CAD-09` accepted a_tip ≥ 1.582 m/s² in place of the earlier +25 / 124 planning target; physical CoM and lift onset remain open |
 | Display | SKU **30493** | Locked; optical/animation tests remain |
 | Camera | **SC0874** | Locked; FOV/interconnect/contamination tests remain |
 | C0 / cooler / C2 / C3 proto | Pi 5 2 GB; official Active Cooler; ESP32-S3-Zero; DevKitC-1-N8 | Locked at stated layer |
 | Drive | Two-wheel differential; Ø1″ ball; rear skid | Topology locked; SKUs open |
 
-M008 remains physically `U`. The nominal tree still carries two 23 g XC330-size housings; substitute any non-C01 servo before treating 509 g as the installed dummy.
+M008 remains physically `U`. The Layout 04 tree includes the working XC330 actuator choices; match the installed dummy to the current ~588 g yaw-carried tree and replace it with measured M900.
 
 ---
 
@@ -49,15 +49,15 @@ CAD already: live head import; selected two-wheel / ball / skid; chassis and she
 | P-01 | Fit **actual** sourced articles, not only envelopes (display, camera, Pi 5, cooler, C2, C3, battery, drivers, speaker, mics, fasteners) | Partial — vendor STEP where downloaded; else envelopes | Open | Replace each envelope as the sample arrives; record SKU vs solid |
 | P-02 | 300 × 205 × 180 mm box vs sourced layout | Layout 02 body 174 mm lower width, 110 mm visible height, 30 mm clearance | Open | Pass in-box or revise the baseline explicitly |
 | P-03 | **Neutral stack ≤ 300 mm** through body/neck datums | 293.5 mm (140 + 49.5 + 104; Layout 04 turntable neck, `neutral_stack_is_documented_293p5_mm`) | Closed in CAD, register under G01 | Named decision in the baseline, not a quiet trim |
-| P-04 | Whole-robot CoM vs +25 / 124 mm | Layout 02 generated **X = +18.77 mm, Z = 105.05 mm, 2568 g modeled** with the RP-02 power boards (a_tip 1.75 m/s², x/h 0.179 vs 0.202); the builder accepted this as the working baseline on 2026-09-25 (`RP03-CAD-09`) and the `physics.md` §2.5 check is re-based to a_tip ≥ 1.582 m/s² | Open (baseline revised) | Replace the register with a weighed robot (`W`); re-check the head-pose corners at the real head mass. Do not shrink `a_tip` to hide a miss |
+| P-04 | Whole-robot CoM vs +25 / 124 mm | Current Layout 02 hand-kept register: **2,551.9 g, X = +19.46 mm, Z = 107.27 mm, a_tip = 1.78 m/s²**, including the 81.6 g `RP03-CAD-08` bar (`generated/mass-properties.md`). `RP03-CAD-09` accepted an earlier register snapshot of 2,568 g, +18.77 / 105.05 mm; it authorized no additional ballast and re-based the `physics.md` §2.5 check to a_tip ≥ 1.582 m/s² | Open (baseline revised) | Replace the register with a weighed robot (`W`); re-check the head-pose corners at the real head mass. Do not shrink `a_tip` to hide a miss |
 | P-05 | Battery low and **forward** of the axle | CAD 2S1P 18650 pack (`RP03-CAD-07`) in a chassis tub at X = +46.7, Z = 43.9 mm, bottom hatch | Open | Measured pack (BMS thickness, mass), lead and connector; hatch fastening, retention and tub-to-body harness; HIGH_AFT remains forbidden |
 | P-06 | Harness trunks, service loops, body-side yaw anchor | Reservations exist; production construction `U` | Open | Close with the harness study; body-side yaw clamp is RP-06 |
 | P-07 | Fastener / insert SKUs across head, body, chassis | Visible M2 locked on the head; internals `U` | Open | Trial coupon + landed row; populate the fastener mass row |
-| P-08 | Installed head mass / CoM / inertia vs RP-01 envelope | Nominal 509 g D/E tree | Open | M900 `W`; dummy must sit in 499–524 g until then |
+| P-08 | Installed head mass / CoM / inertia vs RP-01 envelope | Nominal ~588 g Layout 04 D/E yaw-carried tree | Open | M900 `W`; dummy must match the current tree until then |
 
 - [ ] P-01 sourced-part fit, not envelope-only
 - [ ] P-02 bounding box held or baseline revised
-- [x] P-03 stack 293.5 mm, under the 300 mm target (CAD; not yet registered)
+- [x] P-03 stack 293.5 mm, under the 300 mm target and registered in dimensional baseline v1.13 (CAD; physical G01 open)
 - [ ] P-04 CoM hit or baseline revised
 - [ ] P-05 forward-low battery on the installed pack
 - [ ] P-06 body-side yaw anchor and trunks
@@ -72,13 +72,13 @@ CAD already: display envelope; camera envelope and flared aperture; C2 pocket/tr
 
 | # | Item | CAD/paper | Physical | Remaining |
 |---|---|---|---|---|
-| H-01 | Display SKU 30493 in the carrier, non-contact mount, connector clearance | Envelope + Layout 03 aperture 99 × 58 mm, window 110 × 64 mm | Open | Weigh installed module; confirm hidden 106.1 × 67.8 mm clearance on the article |
+| H-01 | Display SKU 30493 in the carrier, non-contact mount, connector clearance | Envelope + Layout 04 retained aperture 99 × 58 mm, window 110 × 64 mm | Open | Weigh installed module; confirm hidden 106.1 × 67.8 mm clearance on the article |
 | H-02 | Smoked window + black mask + air gap | Window/mask solids exist | Open | Start at **60–70% visible-transmission** neutral smoke ([display study](../../01-system/display-candidate-study.md)) |
 | H-03 | Camera SC0874, aperture, crown, moving interconnect | Flared aperture clears a conservative FOV envelope; 200 mm FPC is bench-only | Open | Entrance-pupil measurement; H1/H2/H3 production route |
 | H-04 | Status light + optics beside camera | WS2812B-2020 on a 5 × 5 carrier modelled inside the reserve behind the Ø3.4 light pipe (`HEAD-CAD-12`, 2026-09-26); lead route to D1 still a keep-out | Part selected; route open | Route the three AWG30 leads to D1; bench brightness and camera stray light |
 | H-05 | C2 Zero in the rolling-cradle tray; USB/BOOT service | Pocket and lift path authored | Open | Installed M008 `W`; flashing with cover on (CAD-04 / CAD-04a) |
 | H-06 | Servos, bearings, structure, cables, connectors | Trial Ø16.2 × 6.2 mm seats; two retainer-screw collisions still open | Open | Bearing SKU; collision repair is an RP-01 blocker that RP-06 must not paper over |
-| H-07 | Final installed head mass and CoM | D/E tree 362/436/509 g roll/pitch/yaw at M008=20 g | Open | Per-axis `W` after print/kit; dummy = current tree, not 250 g |
+| H-07 | Final installed head mass and CoM | Layout 04 D/E tree ~370/464/588 g roll/pitch/yaw at M008=20 g | Open | Per-axis `W` after print/kit; dummy = current tree |
 
 - [ ] H-01 display installed and weighed
 - [ ] H-02 smoked window stack chosen
@@ -218,7 +218,7 @@ CON-TBD-13 (first complete project cost range) is fed by this audit; RP-06 does 
 | **RP06-G01** Physical viability | P-*, H-*, T-01/T-02, S-01 | One layout fits Core head functions with assembly, motion, connector, cooling and service clearances plus explicit margin |
 | **RP06-G02** Perception/display | D-01…D-05, C-01…C-04 | Face legibility and camera coverage pass the registered environment/geometry matrix through the head workspace |
 | **RP06-G03** Optical/acoustic | D-03, C-05, A-*, T-04 | Status light and display do not unacceptably corrupt camera evidence; speaker/mechanism and mic capture meet the registered bars |
-| **RP06-G04** Dynamic compatibility | P-04, P-08, H-07, C-06 | Measured/estimated mass and CoM stay inside the RP-01 envelope, or RP-01 is rerun with the revised load. Dummy uses **499–524 g / 509 g**, never 250 g |
+| **RP06-G04** Dynamic compatibility | P-04, P-08, H-07, C-06 | Measured/estimated mass and CoM stay inside the RP-01 envelope, or RP-01 is rerun with the revised load. Dummy matches the current **~588 g Layout 04 yaw-carried tree** until M900 `W` is available |
 | **RP06-G05** Sourcing | §8 | Architecture-critical parts: verified source, landed cost, substitute or accepted single-source risk |
 | **RP06-G06** Serviceability | S-* | Named high-risk replacements without destructive disassembly or unrelated structural removal |
 

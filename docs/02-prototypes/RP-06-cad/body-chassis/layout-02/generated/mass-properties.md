@@ -1,8 +1,8 @@
 # RP-03 Layout 02 generated mass properties
 
-- Total modeled mass: 2529.4 g
-- Whole-robot CoM: X=19.38, Y=0.99, Z=106.96 mm
-- Static ball share (x/L): 0.176 of weight; RP-03 physics.md §3.6 flags < 0.09 as a spin-walk risk
+- Total modeled mass: 2551.9 g
+- Whole-robot CoM: X=19.46, Y=0.16, Z=107.27 mm
+- Static ball share (x/L): 0.177 of weight; RP-03 physics.md §3.6 flags < 0.09 as a spin-walk risk
 - Forward-launch ball lift (a_tip = g·x/h): 1.78 m/s² vs compiled a_max ≤ 0.80 m/s²
 
 | Item | Mass (g) | CoM (mm) | Source |
@@ -18,13 +18,16 @@
 | `MOTOR_R` | 101.00 | (0.00, -39.20, 42.00) | D: Pololu #4804 spec 101 g; Y is the official STEP volume centroid (uniform density, E); was 110 g JGA25 at Y -52 |
 | `BALL_TRANSFER` | 16.50 | (110.00, 0.00, 14.00) | vendor |
 | `BALLAST_STEEL_BAR` | 81.60 | (74.00, 0.00, 42.50) | E: mild-steel bar 9 x 60 x 19 mm at 7.85 g/cm3 (less two M3 tapped holes) + two M3 screws; sized so the register CoM clears the physics.md 2.5 line after the 110 g pack (RP03-CAD-08) |
-| `BATTERY` | 113.70 | (46.70, 0.00, 43.10) | E: 2 x Samsung INR18650-25R (45 g max each = 90 g) + RP-02 PCB-01 pack-protection assembly (~5 g: 48 x 20 mm board 3.7 g + parts 1.3 g) + Bourns AC72ABD thermal cutoff and NTC (~0.7 g) + nickel straps, sleeve and AWG14 leads (~12 g) + pack-side SBS Mini housing (~6 g, U: dimension sheet not read); working selection, no purchase or measured mass; was 110 g with a generic ~8 g BMS (RP-02 board-specs.md sec 3, 2026-09-25) |
+| `BATTERY` | 108.20 | (46.70, 0.00, 43.10) | E: 2 x Samsung INR18650-25R (45 g max each = 90 g) + RP-02 PCB-01 pack-protection assembly (~5 g: 48 x 20 mm board 3.7 g + parts 1.3 g) + Bourns AC72ABD thermal cutoff and NTC (~0.7 g) + nickel straps, sleeve and AWG16 leads (~11 g) + pack-side Micro-Fit+ 1x2 half with terminals (~1.5 g, CN-05; was a ~6 g SBS Mini half); working selection, no purchase or measured mass; was 110 g with a generic ~8 g BMS (RP-02 board-specs.md sec 3, 2026-09-25) |
 | `RASPBERRY_PI5_AND_COOLER` | 76.00 | (22.00, 0.00, 102.00) | vendor + estimate |
 | `PCB02_CHARGE_AND_SYSTEM_POWER` | 18.00 | (-43.80, 0.00, 76.00) | E (proposal): 50 x 36 mm board 6.8 g + USB-C 1.2 + connectors 3 + inductor 2 + capacitors 3 + ICs 0.6 + misc 1; vertical on the rear-panel frame |
-| `PACK_INTERFACE_SBS_MINI_AND_FUSE` | 14.00 | (42.00, 43.70, 41.00) | E: SBS Mini receptacle housing + contacts ~6 g (U; no modelled home, 13 mm wide against an 11.3 mm channel) + ATOF 15 A holder and fuse ~6 g + ~2 g; placed at the fuse holder |
+| `PACK_INTERFACE_MICROFIT_PLUS_AND_FUSE` | 11.00 | (56.18, 43.69, 41.27) | E: Micro-Fit+ 1x2 wire-to-wire pair with terminals ~3 g + ATOF 15 A holder and fuse ~6 g + ~2 g; was 14 g with an unplaced SBS Mini (CN-05) |
 | `PCB03_MOTOR_GATE_AND_HEAD_RAIL` | 24.00 | (38.50, 0.00, 69.00) | E (proposal): 2460 mm2 board 9.4 g + 4 x Micro-Fit+ 8 + inductor 3 + capacitors 2 + FETs, shunt, TVS, misc 1.6 |
 | `PCB04_BRANCH_CONVERTERS` | 45.00 | (-5.00, 0.00, 70.05) | E (proposal): WS-H 35 g (3080 mm2 board 11.7 g + inductors 5.4 + connectors 8 + ICs 1 + polymer/ceramics ~1) with the hold-up raised from 4 x 1 mF (~8 g) to 2 x 3.3 mF (~9 g each, Ø12.5 x 20 lying) per board-specs.md sec 8.1: +10 g; the board footprint is NOT enlarged (no slack in the bay) |
-| `C3_DEVKITC_N8` | 9.00 | (-8.00, 44.00, 80.80) | E: ESP32-S3-DevKitC-1-N8 board |
+| `C3_DEVKITC_N8` | 9.00 | (21.00, -51.55, 110.35) | E: ESP32-S3-DevKitC-1-N8 board; moved 2026-09-26 onto the PCB-10 carrier on the -Y side wall |
+| `C3_CARRIER_PCB10` | 20.00 | (21.00, -59.40, 103.75) | E (proposal): 70 x 43.5 mm board ~8.5 g + THVD1451, TPS3436, READY logic, SLEEP FETs ~1 g + 2 x 22-pin headers ~3 g + 10 GH and 1 Micro-Fit 3.0 header ~3 g + four M2.5 screws and inserts ~1 g; two printed uprights on the -Y rails ~3.5 g |
+| `YAW_JUNCTION_PCB08` | 4.00 | (-6.00, -33.50, 116.00) | E: 32 x 21 mm board ~2 g + Micro-Fit+ 2x3 and three GH headers ~2 g |
+| `C0_LINK_ADAPTER_PCB09` | 7.00 | (30.00, 32.00, 107.50) | E: strip-and-wide board ~3 g + 2 x 20 socket ~2 g + 2 x THVD1451 and three GH headers ~2 g |
 | `DRV8874_CARRIERS_X2` | 6.00 | (46.00, 0.00, 67.40) | E: 2 x Pololu 4035 at ~3 g (weight not read); symmetric about the centre plane |
 | `IMU_PCB07` | 2.50 | (21.00, 0.00, 57.50) | E: PCB-07 16 x 20 x 1.0 mm FR4 ~0.6 g + ICM-42688-P and JST-SH 8-pin ~0.3 g + two M2 x 5 ~0.6 g + 8-way AWG30 lead to C3 ~1 g (RP03-CAD-11); was a 2 g breakout estimate at (16, 0, 60) |
 | `TCRT5000_BREAKOUT_AND_CABLE` | 3.00 | (-54.00, 0.00, 13.50) | E: breakout, comparator and cable in the rear keel cartridge; was inside the old CONTROL_POWER_SENSORS row at the body centre |

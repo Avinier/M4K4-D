@@ -13,6 +13,30 @@ import body_chassis_model as M
 # physics.md 2.5: the +20 mm margin line is a_tip = g*20/124 at the 124 mm baseline CoM height.
 PHYSICS_MARGIN_A_TIP_MIN = 9.81 * 20.0 / 124.0
 
+_BOX_CACHE = {}
+
+
+def _box(shape):
+    """Keep each topology-heavy bounding box for this immutable check run."""
+    key = id(shape)
+    cached = _BOX_CACHE.get(key)
+    if cached is None or cached[0] is not shape:
+        cached = (shape, shape.bounding_box())
+        _BOX_CACHE[key] = cached
+    return cached[1]
+
+def _boxes_meet(a, b, tol=1e-6):
+    """True when the bounding boxes share interior volume, containment included.
+
+    build123d's BoundBox.overlaps() returns False when one box contains the
+    other, so used as a pre-filter it silently skipped every part lying wholly
+    inside another's bounding box (found 2026-09-26).
+    """
+    p, q = _box(a), _box(b)
+    return (p.min.X < q.max.X - tol and q.min.X < p.max.X - tol and p.min.Y < q.max.Y - tol
+            and q.min.Y < p.max.Y - tol and p.min.Z < q.max.Z - tol and q.min.Z < p.max.Z - tol)
+
+
 def _vol(shape):
     """Volume of a boolean result; an empty intersection is None, meaning zero."""
     return 0.0 if shape is None else shape.volume
@@ -55,6 +79,7 @@ def main():
         _vol(part & other)
         for part in [*yaw_stage.children, *moving_parts]
         for other in [*body_frame.children, *M.electronics().children, M.body_shell(), *M.sensors().children, *M.body_audio().children]
+        if _boxes_meet(part, other)
     )
     rear_crossmember = next(child for child in chassis_frame.children if child.label == "REAR_SKID_CROSSMEMBER")
     body_shell = M.body_shell()
@@ -138,7 +163,7 @@ def main():
         for other in others + panel_parts:
             if other is part or "KEEP_OUT" in other.label:
                 continue
-            if not part.bounding_box().overlaps(other.bounding_box()):
+            if not _boxes_meet(part, other):
                 continue
             volume = _vol(part & other)
             if volume > 1e-3:
@@ -245,7 +270,7 @@ def main():
             pair = {a.label.rsplit("_", 1)[0], b.label.rsplit("_", 1)[0]}
             if pair == {"BALL_POD_M3_SHANK", "BALL_POD_HEATSET_INSERT"}:
                 continue
-            if not a.bounding_box().overlaps(b.bounding_box()):
+            if not _boxes_meet(a, b):
                 continue
             volume = _vol(a & b)
             if volume > 1e-3:
@@ -338,7 +363,7 @@ def main():
         motor_solids = [c for c in motor if "PIGTAIL" not in c.label]
         for part in motor:
             for other in [*chassis_static, *body_static, *leaves(M.harness_routes())]:
-                if not part.bounding_box().overlaps(other.bounding_box()):
+                if not _boxes_meet(part, other):
                     continue
                 if other.label.startswith(f"AXLE_MOTOR_SCREW_M3X8_{side}_"):
                     continue  # threads in the tapped faceplate; measured in motor_joint below
@@ -387,7 +412,7 @@ def main():
     for other in [*chassis_static, *body_static, *leaves(M.harness_routes()), *leaves(M.body_audio()), *leaves(M.motor_envelope("L")), *leaves(M.motor_envelope("R"))]:
         if other.label == battery.label:
             continue
-        volume = sum(_vol(part & other) for part in battery_parts if part.bounding_box().overlaps(other.bounding_box()))
+        volume = sum(_vol(part & other) for part in battery_parts if _boxes_meet(part, other))
         if volume > 1e-3:
             battery_clashes[other.label] = round(volume, 3)
     # The pack must sit inside the tub interior with retention clearance and
@@ -407,7 +432,7 @@ def main():
     ballast_parts = [c for c in chassis_static if c.label.startswith("BALLAST_")]
     ballast_clashes = {}
     for other in [*(c for c in chassis_static if not c.label.startswith("BALLAST_")), *body_static, *leaves(M.harness_routes()), *leaves(M.body_audio()), *battery_parts, *leaves(M.motor_envelope("L")), *leaves(M.motor_envelope("R"))]:
-        volume = sum(_vol(part & other) for part in ballast_parts if part.bounding_box().overlaps(other.bounding_box()))
+        volume = sum(_vol(part & other) for part in ballast_parts if _boxes_meet(part, other))
         if volume > 1e-3:
             ballast_clashes[other.label] = round(volume, 3)
     ballast_gaps = {
@@ -453,7 +478,7 @@ def main():
         for other in power_hardware:
             if other.label == part.label:
                 continue
-            if part.bounding_box().overlaps(other.bounding_box()):
+            if _boxes_meet(part, other):
                 volume = _vol(part & other)
                 if volume > 1e-3:
                     power_clashes[f"{part.label} x {other.label}"] = round(volume, 3)
@@ -473,7 +498,7 @@ def main():
                 continue  # a board's own plate and parts envelope touch by design
             if a.label.startswith("ESTOP_XA1E") and b.label.startswith("ESTOP_XA1E"):
                 continue  # the switch body sits inside its own behind-panel keep-out
-            if a.bounding_box().overlaps(b.bounding_box()) and _vol(a & b) > 1e-3:
+            if _boxes_meet(a, b) and _vol(a & b) > 1e-3:
                 power_self_clashes[f"{a.label} x {b.label}"] = round(_vol(a & b), 3)
     power_harness_overlaps = {}
     harness_volumes = leaves(M.harness_routes())
@@ -481,7 +506,7 @@ def main():
         if "KEEP_OUT" in part.label:
             continue
         for volume_shape in harness_volumes:
-            if part.bounding_box().overlaps(volume_shape.bounding_box()) and _vol(part & volume_shape) > 1e-3:
+            if _boxes_meet(part, volume_shape) and _vol(part & volume_shape) > 1e-3:
                 power_harness_overlaps[f"{part.label} x {volume_shape.label}"] = round(_vol(part & volume_shape), 1)
     board_box = {c.label: c.bounding_box() for c in power_group.children}
     bay_gaps = {
@@ -489,7 +514,6 @@ def main():
         "pcb03_to_lower_cross_front_mm": round(by_label(leaves(body_frame), "BODY_LOWER_CROSS_FRONT").bounding_box().min.X - board_box["PCB03_MOTOR_GATE_AND_HEAD_RAIL"].max.X, 3),
         "pcb04_to_pcb03_mm": round(board_box["PCB03_MOTOR_GATE_AND_HEAD_RAIL"].min.X - board_box["PCB04_BRANCH_CONVERTERS"].max.X, 3),
         "pcb03_to_drv8874_y_mm": round(min(by_label(electronics_others, "DRV8874_LEFT_INSTALLED").bounding_box().min.Y, -by_label(electronics_others, "DRV8874_RIGHT_INSTALLED").bounding_box().max.Y) - board_box["PCB03_MOTOR_GATE_AND_HEAD_RAIL"].max.Y, 3),
-        "pcb04_top_to_head_harness_vertical_z_mm": round(by_label(harness_volumes, "HARNESS_HEAD_VERTICAL").bounding_box().min.Z - board_box["PCB04_BRANCH_CONVERTERS"].max.Z, 3),
         "pcb04_top_to_compute_tray_z_mm": round(by_label(electronics_others, "COMPUTE_TRAY").bounding_box().min.Z - board_box["PCB04_BRANCH_CONVERTERS"].max.Z, 3),
         "pcb02_to_rear_panel_frame_x_mm": round(board_box["PCB02_CHARGE_AND_SYSTEM_POWER"].min.X - by_label(leaves(panel_hardware), "REAR_PANEL_INTERNAL_FRAME_WITH_BOSSES").bounding_box().max.X, 3),
     }
@@ -542,7 +566,7 @@ def main():
         for other in selected_others:
             if part in imu_shanks and other.label == deck.label:
                 continue  # the M2 shank thread-forms into the deck by design
-            if part.bounding_box().overlaps(other.bounding_box()):
+            if _boxes_meet(part, other):
                 volume = _vol(part & other)
                 if volume > 1e-3:
                     selected_clashes[f"{part.label} x {other.label}"] = round(volume, 3)
@@ -554,12 +578,12 @@ def main():
                 continue
             if "IMU_M2_SCREW" in a.label + b.label and "IMU_PCB07_BOARD" in a.label + b.label:
                 continue
-            if a.bounding_box().overlaps(b.bounding_box()) and _vol(a & b) > 1e-3:
+            if _boxes_meet(a, b) and _vol(a & b) > 1e-3:
                 selected_self_clashes[f"{a.label} x {b.label}"] = round(_vol(a & b), 3)
     selected_harness_overlaps = {}
     for part in selected_parts:
         for volume_shape in harness_volumes:
-            if part.bounding_box().overlaps(volume_shape.bounding_box()) and _vol(part & volume_shape) > 1e-3:
+            if _boxes_meet(part, volume_shape) and _vol(part & volume_shape) > 1e-3:
                 selected_harness_overlaps[f"{part.label} x {volume_shape.label}"] = round(_vol(part & volume_shape), 1)
     speaker_box = by_label(audio_group.children, "SPEAKER_VISATON_K50WP_8OHM").bounding_box()
     speaker_outline = {
@@ -585,9 +609,111 @@ def main():
         "board_vs_deck_mm3": round(_vol(by_label(imu_leaves, "IMU_PCB07_BOARD") & deck), 3),
         "board_x_mm": [round(imu_board_box.min.X, 3), round(imu_board_box.max.X, 3)],
     }
+    # Connectors and cable exits (../../connector-schedule.md), measured from the
+    # built reserves. _OPEN reserves are known clashes, reported, not pass/fail.
+    connector_leaves = leaves(M.connectors_and_exits())
+    slide_path = by_label(connector_leaves, "PACK_DISCONNECT_SERVICE_SLIDE_PATH_KEEP_OUT")
+    is_reserve = lambda label: "RESERVE" in label or "KEEP_OUT" in label
+    connector_reserves = [p for p in connector_leaves if is_reserve(p.label) and p is not slide_path]
+    connector_bodies = [p for p in connector_leaves if not is_reserve(p.label)]
+    connector_open = [p for p in connector_leaves if p.label.endswith("_OPEN")]
+    connector_others = [
+        *selected_others, *audio_leaves, *imu_leaves, *leaves(rear_module), *leaves(M.ball_transfer()),
+        *leaves(M.wheel_assembly("L")), *leaves(M.wheel_assembly("R")), *leaves(M.body_chassis_mount_hardware()),
+        *leaves(M.bearing_pair("L")), *leaves(M.bearing_pair("R")),
+    ]
+
+    def clash_map(parts, others):
+        found = {}
+        for part in parts:
+            for other in others:
+                if _boxes_meet(part, other):
+                    volume = _vol(part & other)
+                    if volume > 1e-3:
+                        found[f"{part.label} x {other.label}"] = round(volume, 2)
+        return found
+
+    connector_clashes = clash_map(connector_reserves, connector_others)
+    connector_open_clashes = clash_map(connector_open, connector_others)
+    # Real connector bodies and the PCB-08/PCB-09 boards: clear of all hardware and of
+    # each other. PCB-05's edge headers stand inside PCB-05's own parts reserve by design.
+    body_clashes = {
+        k: v for k, v in clash_map(connector_bodies, connector_others).items()
+        if not (k.startswith("PCB05_J") and k.endswith("PCB05_AUDIO_FRONT_END_PARTS_RESERVE"))
+    }
+    body_self_clashes = {}
+    for i, a in enumerate(connector_bodies):
+        for b in connector_bodies[i + 1:]:
+            if _boxes_meet(a, b) and _vol(a & b) > 1e-3:
+                body_self_clashes[f"{a.label} x {b.label}"] = round(_vol(a & b), 2)
+    plugs_outside_reserve = {}
+    for plug in [p for p in connector_bodies if "MATED_PLUG" in p.label or "MATED_PAIR" in p.label]:
+        inside = max((_vol(plug & r) for r in connector_reserves if _boxes_meet(plug, r)), default=0.0)
+        if inside < 0.98 * plug.volume:
+            plugs_outside_reserve[plug.label] = round(1.0 - inside / plug.volume, 3)
+    connector_self_clashes = {}
+    for i, a in enumerate(connector_reserves):
+        for b in connector_reserves[i + 1:]:
+            if _boxes_meet(a, b) and _vol(a & b) > 1e-3:
+                connector_self_clashes[f"{a.label} x {b.label}"] = round(_vol(a & b), 2)
+    edge_fit = {}
+    for name, strip in M.CONNECTOR_EDGE_STRIPS.items():
+        widths = [round(M.connector_width(fam, n), 2) for _cid, fam, n, _what in strip["connectors"]]
+        needed = sum(widths) + M.CONNECTOR_GAP * (len(widths) - 1)
+        span = strip["span"][1] - strip["span"][0]
+        edge_fit[name] = {"needed_mm": round(needed, 2), "free_edge_mm": span, "margin_mm": round(span - needed, 2),
+                          "connectors": {c[0]: f"{c[1]} {c[2]}p, {w} mm" for c, w in zip(strip["connectors"], widths)}}
+    head_route = [p for p in harness_volumes if p.label.startswith(("HARNESS_HEAD_TRUNK", "HARNESS_HEAD_RISER", "HARNESS_CSI"))]
+    head_route_blockers = clash_map(head_route, [
+        by_label(electronics_others, "COMPUTE_TRAY"), *leaves(M.raspberry_pi5()),
+        *[p for p in electronics_others if p.label == "PI5_ACTIVE_COOLER_STEP"], *leaves(M.body_yaw_stage()),
+        *M.yaw_drive_moving_parts(), *leaves(body_frame), *audio_leaves, *power_parts, body_shell,
+    ])
+    # Pack disconnect service: with the pack out, the mated pair slides through the
+    # tub window into the empty tub. Only the pack itself may occupy the path.
+    pack_like = lambda label: label.startswith("BATTERY_") and not label.startswith("BATTERY_TUB")
+    slide_blockers = clash_map([slide_path], [o for o in connector_others if not pack_like(o.label)] + list(leaves(M.battery_tub())))
+    pair = by_label(power_parts, "PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE")
+    fuse = by_label(power_parts, "PACK_ATOF_FUSE_HOLDER_ENVELOPE")
+    pack_interface = {
+        "slide_path_blockers_mm3": slide_blockers,
+        "pair_x_mm": [round(pair.bounding_box().min.X, 2), round(pair.bounding_box().max.X, 2)],
+        "fuse_x_mm": [round(fuse.bounding_box().min.X, 2), round(fuse.bounding_box().max.X, 2)],
+        "pair_to_fuse_gap_mm": round(fuse.bounding_box().min.X - pair.bounding_box().max.X, 2),
+        "window_mm": M.TUB_SERVICE_WINDOW,
+    }
+    # C3 carrier (PCB-10) with the DevKitC soldered on: clear of everything else.
+    c3_group = by_label(M.electronics().children, "C3_CARRIER_PCB10_WITH_DEVKITC")
+    c3_leaves = leaves(c3_group)
+    c3_others = [o for o in connector_others if o.label != c3_group.label] + [r for r in connector_reserves if not r.label.startswith("C3_CARRIER")] + connector_bodies
+    c3_clashes = clash_map(c3_leaves, c3_others)
+    designed = lambda a, b: "M25_SCREW" in a + b and any(k in a + b for k in ("C3_CARRIER_PCB10_BOARD", "C3_CARRIER_UPRIGHT"))
+    c3_internal = {}
+    c3_parts = list(c3_group.children)  # the DevKitC vendor STEP counts as one part (its own solids overlap)
+    for i, a in enumerate(c3_parts):
+        for b in c3_parts[i + 1:]:
+            if designed(a.label, b.label):
+                continue
+            if _boxes_meet(a, b) and _vol(a & b) > 1e-3:
+                c3_internal[f"{a.label} x {b.label}"] = round(_vol(a & b), 2)
+    c3_plug_layer = [r for r in connector_reserves if r.label.startswith("C3_CARRIER")]
+    c3_plugs_out = {
+        p.label: round(1.0 - max((_vol(p & r) for r in c3_plug_layer), default=0.0) / p.volume, 3)
+        for p in c3_leaves if "MATED_PLUG" in p.label and max((_vol(p & r) for r in c3_plug_layer), default=0.0) < 0.98 * p.volume
+    }
+    c3_widths = [M.connector_width("GH", n) for row in M.C3_GH_ROWS.values() for _cid, n, _x in row]
+    c3_band = {
+        "gh_headers": len(c3_widths),
+        "needed_mm": round(sum(c3_widths) + M.CONNECTOR_GAP * (len(c3_widths) - 2), 2),
+        "two_rows_mm": round(2 * (M.C3_CARRIER_BOARD[1] - M.C3_CARRIER_BOARD[0]), 2),
+        "band_height_mm": round(M.C3_DEVKIT_Z[0] - M.C3_CARRIER_BOARD[4], 2),
+    }
+    devkit_box = by_label(c3_parts, "C3_ESP32_S3_DEVKITC_STEP").bounding_box()
+    rear_panel_in_inlet = _vol(panel_by_face["REAR"] & M._block(M.BODY_X_REAR - M.SHELL_THICKNESS - 0.5, M.BODY_X_REAR + 0.5, -6.0, 6.0, 61.0, 67.0))
+    signal_header_labels = [p.label for p in audio_leaves + imu_leaves if "JST" in p.label]
     pcb01 = by_label(battery_parts, "BATTERY_BMS_PCB01_PACK_PROTECTION")
     power_mass_ids = [
-        "PCB02_CHARGE_AND_SYSTEM_POWER", "PACK_INTERFACE_SBS_MINI_AND_FUSE", "PCB03_MOTOR_GATE_AND_HEAD_RAIL",
+        "PCB02_CHARGE_AND_SYSTEM_POWER", "PACK_INTERFACE_MICROFIT_PLUS_AND_FUSE", "C3_CARRIER_PCB10", "PCB03_MOTOR_GATE_AND_HEAD_RAIL",
         "PCB04_BRANCH_CONVERTERS", "C3_DEVKITC_N8", "DRV8874_CARRIERS_X2", "IMU_PCB07", "TCRT5000_BREAKOUT_AND_CABLE",
     ]
     mass_by_id = {row[0]: row[1] for row in M.MASS_ROWS}
@@ -712,7 +838,18 @@ def main():
         ("estop_operator_is_outside_the_rear_panel_and_keep_out_clears_the_pi", estop_geometry["head_max_x_mm"] <= M.ESTOP_REAR_OUTER_X + 1e-6 and estop_geometry["head_z_mm"][1] <= estop_geometry["rear_panel_top_z_mm"] and estop_geometry["head_vs_panel_mm3"] < 1e-3 and estop_geometry["well_vs_frame_mm3"] < 1e-3 and estop_geometry["keep_out_vs_pcb02_mm3"] < 1e-3, estop_geometry),
         ("pcb01_replaces_generic_bms_at_2p9mm", abs(pcb01.bounding_box().size.Z - 2.9) < 1e-6 and abs(pcb01.bounding_box().size.X - 20.0) < 1e-6 and abs(pcb01.bounding_box().size.Y - 48.0) < 1e-6, {"pcb01_size_mm": [round(pcb01.bounding_box().size.X, 3), round(pcb01.bounding_box().size.Y, 3), round(pcb01.bounding_box().size.Z, 3)], "previous_bms_mm": [20.0, 48.0, 4.5]}),
         ("control_power_sensors_row_replaced_by_board_rows", "CONTROL_POWER_SENSORS" not in mass_by_id and all(i in mass_by_id for i in power_mass_ids) and "ESTOP_XA1E_BV3U02KT_R" in mass_by_id, {"replaced_rows_g": replaced_row_g, "removed_row_g": 121.5, "estop_g": mass_by_id["ESTOP_XA1E_BV3U02KT_R"], "battery_g": mass_by_id["BATTERY"], "total_mass_g": round(M.mass_properties()["mass_g"], 1), "note": "hand-kept register: masses are RP-02 estimates, not derived from the solids"}),
-        ("head_source_exists", (M.HEAD_DIR / "layout_model.py").exists(), {"path": str(M.HEAD_DIR / "layout_model.py")}),
+        ("connector_reserves_clear_of_real_hardware", not connector_clashes, {"clashes_mm3": connector_clashes, "reserves": len(connector_reserves), "checked_against": len(connector_others), "open_known_clashes_mm3": connector_open_clashes, "note": "mated plug + first lead bend; the pack-disconnect slide path is checked separately (the pack occupies it until removed). The Pi GPIO socket clears the yaw servo by 0.6 mm and the PCB-09 strip over it by 0.1 mm"}),
+        ("connector_reserves_do_not_overlap_each_other", not connector_self_clashes, {"overlaps_mm3": connector_self_clashes}),
+        ("edge_power_connectors_fit_free_board_edges", all(v["margin_mm"] >= 0.0 for v in edge_fit.values()), {"strips": edge_fit, "rule": "right-angle Micro-Fit power connectors on free board edges; signal headers are top-entry inside the board. GH and Micro-Fit 3.0 widths D, Micro-Fit+ and EH widths E; heights not checked"}),
+        ("head_trunk_and_csi_avoid_tray_pi_cooler_and_yaw_stage", not head_route_blockers, {"blockers_mm3": head_route_blockers, "route": [p.label for p in head_route], "replaces": "HARNESS_HEAD_VERTICAL (through the compute tray and the Pi cooler)"}),
+        ("charge_inlet_is_cut_through_rear_panel", rear_panel_in_inlet < 1e-3, {"panel_in_plug_path_mm3": round(rear_panel_in_inlet, 3), "cutout_mm": M.CHARGE_INLET_CUTOUT, "receptacle_box_mm": M.CHARGE_INLET_RECEPTACLE}),
+        ("pack_disconnect_is_placed_and_serviceable_through_tub_window", not slide_blockers and pack_interface["pair_to_fuse_gap_mm"] >= 0.5, {**pack_interface, "rule": "CN-05: Micro-Fit+ 1x2 wire-to-wire pair beside the tub, fuse next after it (PA-02); with the hatch open and the pack out the pair slides through the +Y tub window into the empty tub"}),
+        ("c3_carrier_holds_devkitc_clear_of_everything", not c3_clashes, {"clashes_mm3": c3_clashes, "parts": [p.label for p in c3_leaves], "devkitc_box_mm": [round(v, 2) for v in (devkit_box.min.X, devkit_box.max.X, devkit_box.min.Y, devkit_box.max.Y, devkit_box.min.Z, devkit_box.max.Z)], "note": "PCB-10 per RP-02 CCD-HDL-03; replaces the bare DevKitC whose header pins sat in PCB-04"}),
+        ("c3_carrier_gh_headers_fit_two_rows", c3_band["needed_mm"] <= c3_band["two_rows_mm"] and c3_band["band_height_mm"] >= 12.0 and not c3_internal and not c3_plugs_out, {**c3_band, "internal_overlaps_mm3": c3_internal, "plugs_outside_plug_layer": c3_plugs_out, "rule": "real BM top-entry GH headers in two rows, clear of the four M2.5 screws, the DevKitC and each other; mated plugs inside the carrier plug layer"}),
+        ("connector_bodies_clear_of_hardware_and_each_other", not body_clashes and not body_self_clashes, {"clashes_mm3": body_clashes, "self_overlaps_mm3": body_self_clashes, "bodies": len(connector_bodies), "note": "PCB-08 and PCB-09 boards, PCB-05 edge headers, mated Micro-Fit plugs and motor pairs; PCB-05 headers inside PCB-05's own parts reserve are by design"}),
+        ("mated_plugs_sit_inside_their_reserves", not plugs_outside_reserve, {"fraction_outside": plugs_outside_reserve}),
+        ("signal_connectors_are_latching_jst_gh", bool(signal_header_labels) and all("JST_GH" in label for label in signal_header_labels), {"headers": signal_header_labels, "rule": "installed signal connectors latch (user decision 2026-09-26); JST-SH was friction-only"}),
+        ("head_source_exists",(M.HEAD_DIR / "layout_model.py").exists(), {"path": str(M.HEAD_DIR / "layout_model.py")}),
         ("pi_step_exists", (M.PURCHASED / "raspberry_pi_5.step").exists(), {"path": str(M.PURCHASED / "raspberry_pi_5.step")}),
         ("bearing_step_exists", (M.PURCHASED / "bearing_608zz.step").exists(), {"path": str(M.PURCHASED / "bearing_608zz.step")}),
         ("com_inside_support_x", 0.0 < M.mass_properties()["com_mm"][0] < M.BALL_CONTACT[0], {"com_x_mm": M.mass_properties()["com_mm"][0]}),

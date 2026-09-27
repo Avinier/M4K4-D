@@ -166,6 +166,11 @@ export default {
       "label": "Show harness routes",
       "default": true
     },
+    "show_connectors": {
+      "type": "boolean",
+      "label": "Show connector and cable-exit reserves",
+      "default": true
+    },
     "show_physics": {
       "type": "boolean",
       "label": "Show physics overlays",
@@ -174,16 +179,16 @@ export default {
   },
   "features": {
     "frame_R": {
-      "ref": "#o1.20.1.1,o1.22.1.2.1,o1.22.1.3.2,o1.22.1.3.4,o1.21.1.1.1,o1.21.1.1.2,o1.21.1.1.3,o1.21.1.2.1,o1.21.1.2.2,o1.21.1.2.3,o1.21.1.3.1,o1.21.1.3.2,o1.21.1.3.3,o1.21.1.5.1"
+      "ref": "#o1.21.1.1,o1.23.1.2.1,o1.23.1.3.2,o1.23.1.3.4,o1.22.1.1.1,o1.22.1.1.2,o1.22.1.1.3,o1.22.1.2.1,o1.22.1.2.2,o1.22.1.2.3,o1.22.1.3.1,o1.22.1.3.2,o1.22.1.3.3,o1.22.1.5.1"
     },
     "frame_P": {
-      "ref": "#o1.20.1.2,o1.22.1.1.2,o1.22.1.2.2,o1.22.1.3.3,o1.21.1.4.1,o1.21.1.4.2,o1.21.1.4.3"
+      "ref": "#o1.21.1.2,o1.23.1.1.2,o1.23.1.2.2,o1.23.1.3.3,o1.22.1.4.1,o1.22.1.4.2,o1.22.1.4.3"
     },
     "frame_Y": {
-      "ref": "#o1.20.1.3,o1.22.1.1.3,o1.22.1.2.3,o1.22.1.1.4,o1.21.1.6.1,o1.21.1.6.2,o1.21.1.6.3,o1.20.2"
+      "ref": "#o1.21.1.3,o1.23.1.1.3,o1.23.1.2.3,o1.23.1.1.4,o1.22.1.6.1,o1.22.1.6.2,o1.22.1.6.3,o1.21.2"
     },
     "yaw_pinion": {
-      "ref": "#o1.19.2,o1.19.3"
+      "ref": "#o1.20.2,o1.20.3"
     },
     "wheel_L": {
       "ref": "#o1.4,o1.6.3"
@@ -192,13 +197,13 @@ export default {
       "ref": "#o1.5,o1.7.3"
     },
     "shell": {
-      "ref": "#o1.16,o1.17,o1.18"
+      "ref": "#o1.17,o1.18,o1.19"
     },
     "head": {
-      "ref": "#o1.20"
+      "ref": "#o1.21"
     },
     "structure": {
-      "ref": "#o1.1,o1.2,o1.3,o1.19"
+      "ref": "#o1.1,o1.2,o1.3,o1.20"
     },
     "drive": {
       "ref": "#o1.4,o1.5,o1.6,o1.7,o1.8,o1.9,o1.10"
@@ -216,10 +221,13 @@ export default {
       "ref": "#o1.14"
     },
     "harness": {
-      "ref": "#o1.15,o1.21"
+      "ref": "#o1.15,o1.22"
+    },
+    "connectors": {
+      "ref": "#o1.16"
     },
     "physics": {
-      "ref": "#o1.22,o1.23"
+      "ref": "#o1.23,o1.24"
     }
   }
 }, animations },
@@ -244,7 +252,7 @@ export default {
     effects.transform("wheel_R", rot([0, 1, 0], geo.pivots.wheel_R, wr));
     if (params.drive_on_floor !== false) effects.transform("*", drivePose(wl, wr));
 
-    for (const key of ["shell", "head", "structure", "drive", "rear_tail", "electronics", "sensors", "audio", "harness", "physics"]) {
+    for (const key of ["shell", "head", "structure", "drive", "rear_tail", "electronics", "sensors", "audio", "harness", "connectors", "physics"]) {
       effects.visible(key, params[`show_${key}`] !== false);
     }
   }

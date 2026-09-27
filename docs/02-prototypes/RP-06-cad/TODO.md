@@ -2,18 +2,41 @@
 
 | Field | Value |
 |---|---|
-| Status | **Open.** Working CAD is Layout 03 + body/chassis Layout 02. Physical validation 0% |
+| Status | **Open.** Working CAD is head Layout 04 + body/chassis Layout 02. Physical validation 0% |
 | Home | [`README.md`](README.md) |
 | Detail | [`checklist.md`](checklist.md) |
 
 Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gate.
 
-- [x] Neutral stack: **closed 2026-09-26.** Head Layout 04 cut the neck from 60 to 49.5 mm (turntable in place of the spindle), so the stack is 140 + 49.5 + 104 = **293.5 mm**, under the 300 mm target (`neutral_stack_is_documented_293p5_mm`, `neck_allocation_is_49p5_mm`). Still to do in the permanent docs: register 293.5 mm in `dimensional-baseline.md`.
+## CAD progress and largest remaining gaps (audit 2026-09-27)
+
+Layout 02 is an integrated packaging model, not a fabrication release. The latest `body-chassis.step` and visual snapshots were generated after the 2026-09-26 source edits. The saved `generated/checks.json` is older: **118/120** pass in that report, not necessarily in the latest model. Targeted checks on the later source cleared both 3 mm³ PCB-03/motor connector-reserve overlaps; the parked tail still intersects the rear panel/E-stop well by **220.218 mm³**. The saved viewer report has **40/40** checks passing but also predates the latest source. The 2,551.9 g / X +19.46 / Z 107.27 mm mass and CoM figures come from a hand-kept register generated before the latest source edit; they are not measured hardware.
+
+Completed at the CAD packaging level:
+
+- [x] Compose the active Layout 04 head with the body, chassis, wheels, motors, fixed ball nose, rear keel, shell, service panels, electronics, yaw stage, and inspection layers in one buildable STEP; regenerate the visual snapshot packet.
+- [x] Establish the nominal 170 mm track, 84 mm wheels, 16 mm forward body shift, four-M4/two-pin body interface, service-panel outlines, and 293.5 mm neutral height. These are modeled dimensions, not as-built measurements.
+- [x] Model the Pololu #4804-based motor face, flange, 608 bearing pair, stub shaft, dished-wheel clearance, battery tub, ball caster, front range sensor, speaker cavity, E-stop well, charge cut-out, and pack-disconnect service window.
+- [x] Allocate working CAD positions and connector exits for the Pi 5/cooler, power boards, C3 carrier, audio boards, IMU, yaw junction, and head trunk. The custom boards and cables are still estimated envelopes or route volumes.
+- [x] Clear the two previously reported PCB-03/motor connector-reserve overlaps in targeted checks of the later source. A completed full-suite run is still required below.
+
+Largest gaps, in order of impact on CAD closure:
+
+1. [ ] **Prove the latest assembled geometry.** Complete the full Layout 02 suite and an all-group clash sweep, including the composed head, signal/sensor harness, yaw plate/upper rails, microphone boots, and wheel arches. Resolve unintended overlaps. Keep the optional tail parked until its E-stop-well interference is redesigned and checked. The inherited Pi 5 vendor STEP also has five self-intersecting occurrences, so distinguish vendor topology defects from authored geometry. See the detailed check item and `openitems.md`.
+2. [ ] **Reconcile the safety geometry with RP-03.** The current rear-only TCRT leaves no dedicated forward/lateral cliff channel, and objects below the GP2Y beam can reach the ball housing without a touch signal. Decide the sensing/contact coverage and operating limits, then propagate `RP03-CAD-01…08` into the permanent locomotion baseline before physical layout closure.
+3. [ ] **Engineer the load-bearing and service joints.** Close the wheel-to-stub fixing and axial retention, motor-face diaphragm and chassis stiffness, bearing preload, yaw bearing/gear load path, Pi/cooler retention, wheel-arch attachment, battery hatch/retention, and fastener/insert stacks. Add material, tolerances, tool access, and joint checks; details are in “CAD gaps and inefficiencies” below.
+4. [ ] **Replace envelopes with buildable boards and sourced parts.** Complete PCB-01…10 schematics/layouts where applicable, fit the real pack/BMS, power components, connector bodies, sensor breakout, audio hardware, and purchased yaw bearing. PCB-03/04 consume the available bay, and the working `PCB-03` connector-edge margin is only 0.4 mm; rerun fit checks against laid-out boards and measured articles.
+5. [ ] **Complete and qualify the installed harness.** Convert route reserves to a wire/connector build with lengths, bend radii, strain relief, demate paths, pinouts, and the moving yaw/CSI clock-spring construction. Check cooler airflow and service access with the harness installed.
+6. [ ] **Replace paper mass and fit with physical evidence.** Weigh the robot and head, recompute the neutral and head-pose CoM/lift margins, fit sourced parts, then register and execute RP06-G01…G06. The project currently records **0% physical validation**.
+
+---
+
+- [x] Neutral stack: **closed 2026-09-26.** Head Layout 04 cut the neck from 60 to 49.5 mm (turntable in place of the spindle), so the stack is 140 + 49.5 + 104 = **293.5 mm**, under the 300 mm target (`neutral_stack_is_documented_293p5_mm`, `neck_allocation_is_49p5_mm`). Registered in `dimensional-baseline.md` v1.13; physical height remains a G01 measurement.
 
 - [x] (superseded by the item above; the target is met without it) Use the real Pi 5 cooler height: with the cooler seated on the SoC (top Z 107.5, not 123) the body's 10.5 mm cooler headroom has ~15 mm of slack. Re-derive the yaw stage / neck stack from `PI_SOC_TOP_Z` and see whether the 4 mm needed for the 300 mm target can be recovered (changes the head neck, the body-top datum and the CoM gap below).
 
 - [x] Close the CoM gap (baseline revised, see below): Layout 02 is at x +20.6 / h 105.8 mm (a_tip 1.91 m/s²) with the 81.6 g ballast bar (`RP03-CAD-08`) that offsets the lighter 110 g battery (`RP03-CAD-07`); the target is +25 / 124. The +20 mm `physics.md` §2.5 line clears by only 0.62 mm. Recover the rest by geometry or revise the baseline; the ballast screws' thread engagement in the deck and the bar's mass are unverified.
-  - **Resolved 2026-09-25 (`RP03-CAD-09`, `BA-06`):** the builder accepted the layout-02 register with the power boards, x +18.77 / h 105.05 mm (a_tip 1.75 m/s²), as the working baseline instead of +25 / 124, with no added ballast. The `physics.md` §2.5 check is re-based from x ≥ +20 mm to the a_tip 1.582 m/s² that line encodes at h = 124 mm; 108/108 checks pass; the worst head pose is about 1.44 m/s² against the authored 1.00. Still open: a weighed robot (`W`) to replace the hand-kept register and head lumps
+  - **Resolved 2026-09-25 (`RP03-CAD-09`, `BA-06`):** the builder accepted the then-current layout-02 register with the power boards, x +18.77 / h 105.05 mm (a_tip 1.75 m/s²), instead of +25 / 124. The 81.6 g `RP03-CAD-08` bar stays; no additional ballast was added. The `physics.md` §2.5 check is re-based from x ≥ +20 mm to the a_tip 1.582 m/s² that line encodes at h = 124 mm. The latest generated mass register is 2,551.9 g, x +19.46 / h 107.27 mm, a_tip 1.78 m/s²; saved checks are older and need regeneration. The earlier worst-head-pose figure of about 1.44 m/s² also needs recalculation against this register. Still open: a weighed robot (`W`) to replace the hand-kept register and head lumps
 
 - [ ] Close the new axle stack (`RP03-CAD-05`) on real parts: ~~gearmotor face-screw pattern and shaft length~~ (in CAD from Pololu's drawing and STEP, `RP03-CAD-10`, 2026-09-26; confirm tapped length 2.85 mm, bushing boss and shaft on received #4804 samples), stub-to-web fixing and axial retention, bearing preload, deck/cheek stiffness, and the 2 mm printed diaphragm that now carries the motor face screws (stiffness and PETG creep under preload).
 
@@ -39,9 +62,9 @@ Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gat
   - [ ] motor drivers
   - [ ] sensors (IMU now `PCB-07` from its datasheet, 2026-09-26; TCRT breakout and comparator still an envelope)
   - [ ] audio hardware (parts selected 2026-09-26 and modelled from datasheet outlines; measured articles pending)
-  - [ ] connectors and cable exits
+  - [ ] connectors and cable exits: schedule and layout rule set 2026-09-26 in [`connector-schedule.md`](connector-schedule.md) (JST GH signals, Micro-Fit power on free board edges, re-crimped #4804 leads, USB-C Pi pigtail, rear charge-inlet cut-out, head trunk re-routed via a -Y yaw junction, Micro-Fit+ pack disconnect `CN-05`, C3 carrier `PCB-10` on the -Y wall `CN-06`). Open: Micro-Fit+ drawings, pin-outs, vertical USB-C inlet part, bench fit of the 0.1 mm Pi-header adapter strip
 
-- [ ] Bring boxed body-chassis Layout 02 parts in as real STEP (audit 2026-09-24; only the Pi 5 and 608ZZ are real imports today):
+- [ ] Replace remaining boxed body-chassis Layout 02 parts with exact STEP or measured geometry (several vendor STEPs have been integrated since the 2026-09-24 audit; the detailed entries below distinguish imported parts from estimates):
   - [x] Wired into `body_chassis_model.py` from `layout-01/references/purchased/` (2026-09-24; 95/95 checks pass; STEP rebuilt, snapshots refreshed):
     - [x] `pololu_drv8874_carrier.step` (Pololu 4035; bare board 15.2 x 17.8 x 2.8 mm, no headers) replaces the 20 x 20 x 12 DRV8874 boxes; sits flat with its bottom on the old envelope floor (Z 66), mounting unspecified
     - [x] `vishay_tcrt5000.step` (10.2 x 7.1 x 10.5 mm incl. leads) replaces the 10.2 x 5.8 x 7.0 package box; keel sensor pocket and `TCRT_PACKAGE_SIZE` Y widened to fit (7.1 wide, 10.5 tall)
@@ -51,8 +74,8 @@ Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gat
     - [x] Raspberry Pi 5 active cooler: GrabCAD `raspberry-pi-5-active-cooler-1` / `raspberry-pi-5-stock-active-cooler-1`; official mechanical drawing PDF on Olimex RPi5-ACOOL resources. File `Heatsink+fan RPi-5.STEP` (64.8 x 14.2 x 43.5 mm). Seated 2026-09-24: spring posts in the Pi's two cooler holes (58 x 37 mm apart; the first -90 deg turn mirrored them), plate on the tallest package under it (Z 97.7), top at Z 107.5. The old envelope floated the cooler 11 mm too high, so the 10.5 mm yaw headroom datum (`PI_COOLER_TOP_Z` 123) is now ~15 mm conservative
     - [x] ESP32-S3-DevKitC-1-N8: Digi-Key model page 15295894 (the listing is N8R8; the model uses N8, confirm the board outline matches). File `ESP32-S3-WROOM-1_devkit_2xUSBC_c.step` is 28.3 x 64.1 x 5.5 mm (no headers), wider than the old 25.4 mm envelope; USB end rearward; confirm it is the N8 board
   - [ ] CAD not found, use a vendor drawing or measure:
-    - [ ] Pololu ball caster 1" with plastic rollers (item 2691): no STEP, dimension PDF only; use it to settle the "12.2 mm read as a radius" hole pattern in `brief.md`
-    - [x] Gearmotor: switched to the preferred Pololu #4804 and wired in its official STEP (`pololu_25d_34-47_encoder.step`, 2026-09-26, `RP03-CAD-10`); axle stack rebuilt round its face, leads clocked rearward, 110/110 checks pass. The JGA25-370 community STEP is no longer needed
+    - [x] Pololu ball caster 1" with plastic rollers (item 2691): no vendor STEP; authored from the dimension drawing with Ø14.1 mm bolt circle after correcting the 12.2 mm hole-spacing misread. Measured fit, screws and ABS thread engagement remain open below.
+    - [x] Gearmotor: switched to the preferred Pololu #4804 and wired in its official STEP (`pololu_25d_34-47_encoder.step`, 2026-09-26, `RP03-CAD-10`); axle stack rebuilt round its face, leads clocked rearward. The 110/110 pass was a historical run, before later connector changes; rerun the current model. The JGA25-370 community STEP is no longer needed
   - [x] Head STEPs wired into head Layout 04 (2026-09-24); files in `head/layout-01/parts/`; head checks pass, dimensions and assembly reports regenerated:
     - [x] `waveshare_esp32_s3_touch_lcd_4_3.stp` for the display. SKU 30493 is the non-touch board (105.4 x 67.1 mm); the Touch STEP (106.1 x 68.3 x 16.9 mm) is used as the conservative outline, glass front on X -3.8. Fit checks use a slab plus connector-strip proxy (12.5 mm deep, 16.9 mm over one 5 mm strip on the -Y edge). Still open: replace with the non-touch model if Waveshare publishes one
     - [x] `waveshare_esp32_s3_zero_v2.step` for C2 (18.0 x 23.5 x 1.9 mm, bare PCB: the STEP has no USB-C shell or headers, so the authored USB reserves stay). Components face -X
@@ -64,7 +87,7 @@ Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gat
     - [ ] yaw thin-section bearing (50 g placeholder in `MASS_ROWS`)
     - [x] speaker, amplifier and four PDM microphones: selected and modelled from vendor outlines (2026-09-26); no vendor STEP read, the speaker's internal profile is estimated
     - [ ] power-distribution and safety/watchdog boards (RP-02); the battery is working-selected (2 × Samsung INR18650-25R + 2S 20 A balanced BMS), with no STEP for the BMS board
-    - [ ] harness: modeled as volumes, not parts; needs a route
+    - [ ] harness: modeled as volumes, not parts. Head trunk re-routed 2026-09-26 (plate bore, -Y junction `PCB-08`, -Y riser; CSI FFC beside the cooler); [`connector-schedule.md`](connector-schedule.md) now lists wire IDs, functions, conductors and tentative lengths, but final lengths, pinouts, bend/strain relief and moving-cable construction remain open.
 
 - [ ] Resolve the RP-03 CAD-versus-safety issue:
   - the controller/safety design expects multiple direct stop-path sensors
@@ -72,7 +95,9 @@ Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gat
   - since the touch-cap skirt cut (`RP03-CAD-04`, 2026-09-24), floor objects below the GP2Y beam (Z 41), including `C12`, meet the ball's retaining lip with no contact signal; forward edges and low obstacles now rely on the camera, which is not a low-level stop channel
   - this must be reconciled before physical layout closure
 
-- [ ] Fix `_vertical_bore` in `body_chassis_model.py`: it builds a Z-centred cylinder, so every bore sits half its length too low (6 uses left). Switch them to `_z_cylinder`, then re-run the checks and review the keel, pads and locators.
+- [ ] Complete the full Layout 02 geometry suite and resolve all active failures. The saved 2026-09-26 16:46 report has 118/120 passing. Targeted later-source checks on 2026-09-26 found **0 mm³** for each former PCB-03/motor Micro-Fit reserve overlap, while the parked tail still overlaps the rear panel/E-stop well by **220.218 mm³**. The full suite did not finish on this revision, so the saved pass count is stale. Include an all-group sweep of the composed head and body-side groups; the optional tail must be redesigned or left parked with its interference recorded.
+
+- [x] Replace the six misplaced `_vertical_bore` calls with bottom-aligned `_z_cylinder` (2026-09-26). Targeted cylinder extent checks pass; the STEP was rebuilt and the visual snapshot packet refreshed. Full-assembly check completion remains tracked above.
 
 - [ ] Close the ball-nose touch cap on real parts: flexure stiffness, tact-switch force and over-travel stop, debounce, and the 3 mm travel.
 
@@ -84,12 +109,12 @@ Checking a box here does not freeze a SKU, promote `E` to `W`, or register a gat
 
 - [x] Select microphone front end, microphone boards, speaker, and amplifier. **Working selection 2026-09-26** ([`peripheral-selection.md`](peripheral-selection.md) §2, RP-05 `BD-A04`…`A06`, `RP03-CAD-11`): `AP-TDM` as two I²S lanes on the Pi 5 (RP1 has no true TDM), 2 × ADAU7002 and a MAX98357A on `PCB-05`, four Infineon IM73D122V01 on `PCB-06` boards at the unchanged ports, Visaton K 50 WP 8 Ω. Modelling them showed the old amplifier box sat inside the Pi 5 and the 34 mm cavity ran through the compute tray, so `PCB-05` moved above the Pi's front end and the cavity is now 20 mm (X 77–97). Still open: `CA-06` CR-01 (GPIO22 SDI1, GPIO23 `AMP_SD`), the Pi 5 overlay and duplex bench proof, mic-board fixing to the body frame, speaker flange bond and grille, acoustic tests.
 
-- [ ] Finish the battery selection and enough of the power hardware to verify actual packaging. Working selection made 2026-09-24 (2S1P Li-ion, 2 × Samsung 25R; RP-02 `decision.md`). Open: pack lead and connector (Anderson SBS Mini lead), tub retention and hatch fastening, who builds the pack (workbench battery gate). Update 2026-09-25: battery and power hardware are selected as working choices in `board-specs.md` (v0.16); packaging is pending the CAD volumes tracked under "Custom power and safety boards" below.
+- [ ] Finish the battery and power-hardware selection against real parts. The 2S1P Samsung 25R pack, Micro-Fit+ 1×2 disconnect, fuse tile and estimated board envelopes are working CAD choices. Open: exact connector/terminal drawings and ratings, pack retention and hatch fastening, board layouts, and who builds the pack (workbench battery gate). The power-board spec is v0.17; estimated CAD envelopes cannot prove the laid-out boards fit.
 
 - [ ] Design the small boards the 2026-09-26 selections created ([`peripheral-selection.md`](peripheral-selection.md)); none has a schematic:
-  - [ ] `PCB-05` audio front end (2 × ADAU7002 WLCSP, MAX98357A TQFN, 100 Ω series on the amp inputs, JST-SH mic inputs); JLCPCB assembly because of the WLCSP
-  - [ ] `PCB-06` mic board ×4 (IM73D122V01, Ø0.8 port hole, LR strap per position, JST-SH 4-pin) and its fixing to the body frame
-  - [ ] `PCB-07` IMU board (ICM-42688-P, JST-SH 8-pin, two M2 holes 15 mm apart)
+  - [ ] `PCB-05` audio front end (2 × ADAU7002 WLCSP, MAX98357A TQFN, 100 Ω series on the amp inputs, JST GH mic inputs (`CN-01`)); JLCPCB assembly because of the WLCSP
+  - [ ] `PCB-06` mic board ×4 (IM73D122V01, Ø0.8 port hole, LR strap per position, JST GH 4-pin, board 12 x 9.5 mm; `CN-01`) and its fixing to the body frame
+  - [ ] `PCB-07` IMU board (ICM-42688-P, JST GH 8-pin (`CN-01`), two M2 holes 15 mm apart)
   - [ ] `PCB-08` LED carrier (WS2812B-2020, three pads)
   - [ ] Raise `CA-06` CR-01 in RP-02 (GPIO22 `i2s0` SDI1, GPIO23 `AMP_SD`) and prove the custom `simple-audio-card` overlay: 4-channel capture on SDI0+SDI1 with 2-channel playback on SDO0 at 48 kHz, lane order, and whether RP1 forces symmetric channel counts
 
@@ -137,7 +162,7 @@ Running list of ways the current CAD falls short of a production design. Add to 
   - [ ] Check underside clearance for the cooler push-pin tips and the Pi-to-tray standoff gap (currently an assumed ~16 mm)
   - [ ] Check fan intake and airflow: only 10.5 mm of headroom over the cooler under the yaw stage
   - [ ] Yaw-stage parts are packaging envelopes, not selected or load-rated parts
-  - [ ] Head-harness route is unresolved (see the Layout 02 README)
+  - [ ] Head-harness route: no longer through the compute tray and cooler (2026-09-26, check `head_trunk_and_csi_avoid_tray_pi_cooler_and_yaw_stage`); the clock-spring, `PCB-08` junction and cable qualification remain open
 
 - [ ] Wheel arches and trim have no attachment (noted 2026-09-24). `WHEEL_ARCH_POD_L/R` and the amber `WHEEL_ARCH_UPPER_TRIM_L/R` are separate solids under `BODY_PANELS`, not part of `BODY_SHELL`, and nothing fixes them in place: no screws, tabs, bosses or adhesive land, and no snap or bond for the trim on the arch.
   - [ ] Decide the concept: integral flanges in the printed shell, or bolt-on fenders fixed to the chassis cheeks. The shell floor is open across the axle so the body lowers on from above, which rules out a simple bond
@@ -156,7 +181,7 @@ Running list of ways the current CAD falls short of a production design. Add to 
 
 ## Custom power and safety boards
 
-Spec: [`../RP-02-electrical/board-specs.md`](../RP-02-electrical/board-specs.md) v0.16, 2026-09-25 (working direction, **not registered**; decisions `BD-01…14`). Four custom PCBs plus a watchdog block: `PCB-01` pack protection, `PCB-02` charge and system power, `PCB-03` motor gate and head/drive distribution, `PCB-04` branch converters. Part choices, values and sizes on paper are done; schematic, layout, real CAD parts and every bench proof are open. Nothing here selects a SKU for purchase.
+Spec: [`../RP-02-electrical/board-specs.md`](../RP-02-electrical/board-specs.md) v0.17, 2026-09-25 (working direction, **not registered**; decisions `BD-01…14`). Four custom PCBs plus a watchdog block: `PCB-01` pack protection, `PCB-02` charge and system power, `PCB-03` motor gate and head/drive distribution, `PCB-04` branch converters. Part choices, values and estimated packaging envelopes are in CAD; schematics, layouts, selected connector parts and bench proof are open. Nothing here selects a SKU for purchase.
 
 - [x] Part choices on paper (working choices, 2026-09-25; each is a datasheet-derived proposal, none bench-proved):
   - [x] `PCB-01`: `S-8252AAC` + `bq29200`, two `PSMN1R5-30YLC`, 5 mOhm Vishay `WSK2512` shunt, Bourns `AC72ABD` thermal cutoff
@@ -164,6 +189,8 @@ Spec: [`../RP-02-electrical/board-specs.md`](../RP-02-electrical/board-specs.md)
   - [x] `PCB-03`: `LTC4368-1` + 3 mOhm shunt + two `PSMN1R0-30YLE`, `SMBJ10A` TVS; head rail `LTC3119` behind a latching `TPS259824`
   - [x] `PCB-04`: `TPS630701` + `TPS259474L` per branch; Pi rail `LTC3119`
   - [x] Watchdog: `TPS3436CFDBEDDFRQ1` per C2/C3 carrier
+- [x] Place C3 carrier `PCB-10` in CAD (`CN-06`, 2026-09-26): 70 × 43.5 mm, vertical on the -Y side wall, DevKitC soldered on, ten installed GH headers plus one Micro-Fit 3.0, and four M2.5 screws into printed uprights on the -Y rails. `J10-9` was dropped when the touch switch joined `J10-8`.
+- [ ] Finish `PCB-10` for fabrication: schematic after the RP-03 pin map freeze, real board layout, upright/insert strength, exact connector fit, and harness lengths.
 - [ ] Decisions waiting on the builder (details in `board-specs.md` section 10): Pi setpoint 5.10 V vs 5.15 V; `PA-14` wording for the 43-100 uA `OFF` draw; ~~servo family~~ (settled 2026-09-25: XC330 at 5 V, RP-01 `ACT-01`); brownout threshold registration; purchase.
 
 - [ ] Draw the schematics (start with `PCB-01`), then layouts:
@@ -172,17 +199,15 @@ Spec: [`../RP-02-electrical/board-specs.md`](../RP-02-electrical/board-specs.md)
   - [ ] Test points on every rail, branch current, gate state and each `MOTOR_PERMIT` term
   - [ ] `PCB-01` FET land pattern and an assembly route if the chip-scale alternate is used (the selected LFPAK56 parts are hand-solderable)
 
-- [ ] Give the boards real CAD volumes (sizes are estimates from an unlaid-out part inventory, `board-specs.md` section 2):
-  - [ ] Sizes need about 2.5-2.8x the reserved footprint (about 7300 mm2 against 2900 mm2): `PCB-01` 48 x 20 x 2.9, `PCB-02` 50 x 36 (60 x 40 with the pack interface), `PCB-03` 56 x 44, `PCB-04` 70 x 44
-  - [ ] Placement proposals: `PCB-03` above the battery tub, `PCB-04` under the compute tray, `PCB-02` standing on the rear-panel frame; run an interference sweep (PCB-03 vs the DRV carriers by about 3 mm, PCB-04 vs the harness volumes, PCB-02 vs the rear-panel bosses)
-  - [ ] Pack-interface tile (SBS Mini + ATOF holder) beside the tub so the main fuse stays source-adjacent (`PA-02`); at the rear it would be about 100 mm from the pack
+- [x] Give the boards estimated CAD volumes from the unlaid-out part inventory (`board-specs.md` section 2): `PCB-01` on the pack, `PCB-02` on the rear-panel frame, `PCB-03` above the battery tub, `PCB-04` under the compute tray. The connector and harness revisions moved the original clashes. Replace these envelopes with actual laid-out boards and rerun the fit sweep before release.
+  - [ ] Check the `PCB-04` hold-up capacitors and connector exits in a real layout; the bay has little slack.
+  - [x] Pack interface placed 2026-09-26 (`CN-05`, [`connector-schedule.md`](connector-schedule.md)): Micro-Fit+ 1×2 wire-to-wire pair beside the tub (X 27–49), ATOF holder moved next after it (X 51–75), service window in the +Y tub wall. Open: Molex outline and terminal rating, the bench service move, the pack NTC break
   - [x] The rear-panel E-stop is modelled: IDEC XA1E-BV3U02KT-R (Ø29 mushroom, 23.9 mm deep) in an 8 mm octagonal well with an amber bezel, replacing the Ø40 XW1E (2026-09-25)
-  - [ ] The charge inlet (rear USB-C window) is not cut in the rear panel
-  - [ ] Replace the `CONTROL_POWER_SENSORS` mass row (121.5 g, estimate) with one row per board: about 111 g plus 40 g for the E-stop; battery row about 114 g
-  - [ ] CoM effect: register CoM moves from x +20.6 to about +19.1 mm against the +25 target, widening the open CoM gap above
-  - [ ] Recheck `PCB-04` height: the sizing assumed 1 mF hold-up capacitors, the proposal is 3.3 mF each
+  - [x] Rear-panel USB-C charge-inlet window is cut as a 13.2 × 7.2 mm envelope; select the actual receptacle and check tool/plug access.
+  - [x] `CONTROL_POWER_SENSORS` was split into per-board mass rows, the E-stop changed to the 14 g XA1E, and the battery row was revised for the pack-side Micro-Fit+ half. The current hand-kept total is 2,551.9 g; verify on weighed hardware.
+  - [x] The accepted CoM screen is a_tip ≥ 1.582 m/s², with the RP03-CAD-08 bar retained. Current estimate is x +19.46 / h 107.27 mm, a_tip 1.78 m/s². Recheck the pose corners and weigh the robot.
 
-- [ ] Real STEP parts for the new power hardware (none is wired into the model; fetch with the `step-parts` skill or the vendor's own STEP, then verify the outline): `LTC3119` (TSSOP-28 FE), Nexperia `PSMN1R5-30YLC` and `PSMN1R0-30YLE` (LFPAK56), `TPS630701RNMR`, `TPS259474L`/`TPS259824`, `BQ25798RQMR`, a USB-C receptacle, Anderson SBS Mini `B02265G1` housing, ATO FLR fuse holder `178.6165.0001`, IDEC `XW1E-BV402M-R` (22 mm panel), Bourns `AC72ABD`, the Vishay `WSK2512` and Bourns `CSS2H-2512` shunts, the Coilcraft `XAL5030-332ME` inductor, the DRV8874 carrier (`pololu_drv8874_carrier.step`, see "Bring boxed body-chassis" above).
+- [ ] Replace estimated power-hardware geometry with selected part drawings, vendor STEP and laid-out PCB geometry: `LTC3119`, `PSMN1R5-30YLC`/`PSMN1R0-30YLE`, `TPS630701RNMR`, `TPS259474L`/`TPS259824`, `BQ25798RQMR`, vertical USB-C receptacle, Micro-Fit+ pack disconnect and board connectors, ATO FLR fuse holder `178.6165.0001`, IDEC `XA1E-BV3U02KT-R`, `AC72ABD`, `WSK2512`/`CSS2H-2512`, and `XAL5030-332ME`. The DRV8874 carrier STEP is already imported.
 
 - [x] Resolve the head-servo dependency. **Resolved 2026-09-25 as working choice `ACT-01`** (RP-01 `decision.md`): XC330-M181-T yaw, XC330-M288-T pitch/roll on the 5 V `PB-HEAD` rail, Dynamixel 2.0 over TTL half-duplex; 7.4 V and 12 V classes rejected for V1. The family is not frozen until bench tests B1-B6 pass. Original note: RP-01 had not frozen the family. The head rail is designed for the 5 V XC330 case (M181 yaw, M288 pitch/roll); a 7.4 V-class servo would be direct-fed, change the bus to Feetech half-duplex TTL, and runs into the 8.4 V versus charger worst-case conflict above. A 12 V variant would force 3S and reopen the pack, tub and charger.
 

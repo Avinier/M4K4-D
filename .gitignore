@@ -2,3 +2,7 @@
 *.inspect.ndjson
 __pycache__/
 *.pyc
+
+# Reproducible CAD workspace outputs; canonical exported artifacts are tracked.
+__cadgen__/
+docs/02-prototypes/RP-06-cad/body-chassis/layout-02/snapshots/*_20??????T??????Z.png

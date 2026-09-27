@@ -2,6 +2,8 @@
 
 This is the active whole-body CAD path. It retains Layout 01's source-linked RP-01 head (now Layout 04), compact two-wheel chassis, connected rear skid, fixed ball-transfer nose, internal packaging and purposeful review layers, while closing the first-pass integration questions:
 
+**Current state (2026-09-26).** Neutral height is 293.5 mm. The hand-kept mass register is 2,551.9 g with the 81.6 g `RP03-CAD-08` ballast bar, CoM X +19.46 / Z 107.27 mm and a_tip 1.78 m/s². `RP03-CAD-09` accepted an older register with that bar retained and no *additional* ballast. The saved `generated/checks.md` is older than the mass report and has 118/120 passing. Targeted checks of the current source found both former connector-reserve overlaps cleared (0 mm³ each) and confirmed the parked tail still overlaps the rear panel/E-stop well by 220.218 mm³. The full check did not complete on this revision; the STEP and snapshots were regenerated. The dated sections below record the sequence of CAD changes; their earlier masses, check counts and open-item statements are historical.
+
 - four M4 through-bolts and two locating pins now define the body-frame-to-chassis interface;
 - the drivetrain physically fits (CAD-context decision [`RP03-CAD-05`](../../decisions.md#rp03-cad-05--axle-stack-that-lets-the-wheels-turn)). Each coaxial gearmotor bolts its output face to a chassis flange whose R15 boss carries the 608 pair and reaches into a pocket in a dished wheel. An 8 mm stub shaft runs in the bearings, takes the motor's D-shaft and drives the wheel web. The axle crossmember, square carriers and gussets are gone: they sat inside the motors and 11 mm into each wheel. Cheek plates carry the rails round the gearboxes, the deck has a relief over the motor cans, and the shell floor is slotted across the axle because the motors hang below it;
 - the gearmotor is the official Pololu #4804 STEP (preferred candidate, SKU not locked; [`RP03-CAD-10`](../../decisions.md#rp03-cad-10--axle-stack-rebuilt-for-the-pololu-4804-face)). A 2 mm diaphragm in each flange boss takes two countersunk M3 × 8 face screws, the Ø7 bushing boss pilots in the flange, the 608 pair, boss end, wheel pocket and stub move 3 mm outboard, and the motor is clocked so its radial encoder leads exit rearward, clear of the IMU and battery trunk;
@@ -33,7 +35,7 @@ Per CAD-context decision [`RP03-CAD-03`](../../decisions.md#rp03-cad-03--faceted
 
 The RP-01 head is a live source dependency. Changes in head Layout 04 flow into this assembly on regeneration; its yaw datum, A0, yaw-carried mass/CoM and turntable size are read from that layout's `axes.json`, `mass-placement.json` and `motion-envelope.json`.
 
-The neutral dimensional stack is 293.5 mm: 140 mm body/yaw datum + 49.5 mm neck + 104 mm crown-inclusive head. The yaw stage parts are packaging envelopes, not selected or load-rated parts. The body's vertical head-harness volume still passes through the compute-tray and Pi-cooler envelopes; its route is unresolved. The battery no longer sits in that path since it moved to the chassis tub.
+The neutral dimensional stack is 293.5 mm: 140 mm body/yaw datum + 49.5 mm neck + 104 mm crown-inclusive head. The yaw stage parts are packaging envelopes, not selected or load-rated parts. The head trunk no longer drops through the compute tray and Pi cooler. It runs down the plate's Ø18 bore, along the plate underside to the −Y yaw junction (`PCB-08`), then down a −Y riser to `PCB-03`/`PCB-04`; the CSI FFC drops beside the cooler to the Pi's rear FPC socket. See the connector section below.
 
 ## Generation
 
@@ -163,3 +165,26 @@ The yaw pinion is now a **scissor gear** (RP-01 gate P09). The 1:1 spur mesh is 
 The speaker, audio front end, mic boards and IMU are now the working-selected parts from [`../../peripheral-selection.md`](../../peripheral-selection.md), modelled from datasheet outlines. The new clash check showed that two Layout 02 reservations had always overlapped: the amplifier box sat inside the Pi 5 and cooler, and the 34 mm speaker cavity ran through the compute tray and Pi 5. `PCB-05` now lies above the Pi's front end (X 45–75, Z 114–123) and the cavity is X 77–97. Four new checks; 113 of 114 pass (the parked-tail failure predates this). Register mass 2558.9 → 2529.4 g, CoM x +19.38 / h 106.96 mm, a_tip 1.777 m/s². Details in [`RP03-CAD-11`](../../decisions.md#rp03-cad-11--selected-audio-parts-and-base-imu-board).
 
 Regenerated 2026-09-26 with the 0.4.28 runtime: `check_layout.py`, STEP (`gen`, twice around `write_viewer_params.py`), `write_outputs.py` and the snapshot packet (`*_20260926T060928Z.png`, copied over the un-suffixed PNGs).
+
+## 2026-09-26 connectors, cable exits, pack disconnect and C3 carrier (`RP03-CAD-12`)
+
+Schedule and decisions `CN-01…06`: [`../../connector-schedule.md`](../../connector-schedule.md). New top-level group `CONNECTORS_AND_EXITS`, with its own viewer toggle.
+
+- **Signals** are JST GH (latching). The mic boards (`PCB-06`, now 12 × 9.5 mm) and the IMU (`PCB-07`) carry real GH SM04B/SM08B STEPs. Board signal headers are top-entry, plugging up into reserved layers over `PCB-02/03/04`.
+- **Power** connectors are right-angle Micro-Fit+ / Micro-Fit 3.0 on the free board edges. `edge_power_connectors_fit_free_board_edges` compares the widths with the free edge; `PCB-03` has 0.4 mm to spare on an estimated Micro-Fit+ width.
+- **Charge inlet:** a vertical USB-C receptacle envelope on `PCB-02`'s back face, a 13.2 × 7.2 mm cut-out in the rear panel, and an outside plug corridor.
+- **Pi 5 power:** a right-angle USB-C plug on the Pi's −Y edge and a pigtail down to `PCB-04` `J4-1`.
+- **Motors:** the #4804 leads are re-crimped; a Micro-Fit 3.0 wire-to-wire pair sits outboard of each DRV8874 carrier.
+- **Head trunk:** no longer through the compute tray and cooler. It runs down the plate's Ø18 bore to the −Y yaw junction `PCB-08`, then down a −Y riser (X −28…−16). The CSI FFC drops beside the cooler to the Pi's rear FPC socket.
+- **C0 link adapter `PCB-09`:** beside the yaw servo, fed by a 2 × 20 socket on the Pi header. The socket clears the servo by 0.6 mm and the adapter's strip over the socket by 0.1 mm, which needs a bench fit.
+- **Pack disconnect (`CN-05`):** a Micro-Fit+ 1×2 wire-to-wire pair in the channel beside the tub (X 27–49). The ATOF holder moved forward from X 30–54 to X 51–75. A 22.6 × 10 mm window in the +Y tub wall lets the pair slide into the empty tub for unplugging.
+- **C3 carrier `PCB-10` (`CN-06`):** 70 × 43.5 mm, vertical on the −Y side wall (X −14…56, Y −58.4…−56.8, Z 82…125.5), with the DevKitC soldered to its +Y face. It has four lugs on the −Y rails, 11 GH headers in the band below the DevKitC and a Micro-Fit 3.0 on the front edge. The bare DevKitC that floated over `PCB-04`, with its unmodelled header pins 8.5 mm inside `PCB-04`'s parts envelope, is gone. A free-volume scan for a 70 × 46 × 14 mm envelope found only this wall and the air over the Pi cooler.
+- **Connector bodies (second pass, same day).** These are real parts, not just reserves:
+  - `PCB-08` yaw junction, a 32 × 21 mm plate carrying a Micro-Fit+ 2×3 and three GH top-entry headers.
+  - `PCB-09` C0 link adapter, a single board of strip, bridge and wide part, with the 2 × 20 socket, two THVD1451 SOIC-14 and three GH headers. It now reaches X 56, under `PCB-05`.
+  - `PCB-05`'s seven connectors: GH 4 × 4, GH 2 and GH 10 side entry, plus a Micro-Fit 3.0.
+  - Mated Micro-Fit plugs at every `PCB-02/03/04` edge connector, and the two motor wire-to-wire pairs.
+  - On the C3 carrier: ten real JST BM top-entry headers with their plugs, the `J10-1` Micro-Fit 3.0, and four M2.5 screws into two printed uprights between the −Y rails. The uprights replace the 1.6 mm lugs, which were too thin to hold a screw.
+
+  The touch-cap switch now shares the GP2Y cable at `J10-8` (GH 5). Two checks were added: bodies clear of hardware and of each other, and every mated plug inside its reserve.
+- **Mass:** register 2529.4 → 2551.9 g (+20 g carrier with uprights, +4 g `PCB-08`, +7 g `PCB-09`, −3 g pack interface, −5.5 g battery row now carrying the pack-side Micro-Fit+ half instead of the SBS Mini). CoM x +19.46 / h 107.27 mm, a_tip 1.78 m/s².

@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Paper envelope v0.2 — ranges, not a freeze.** No motor, sensor or caster selected. No single `a_tip`. No pass threshold. No purchase. v0.2 adds slope, repeated-phrase heat, low-voltage torque, caster flutter/start/360°, support-triangle load share, and head-pose CoM extras |
+| Status | **Historical paper envelope v0.2 — not a scored configuration.** The Layout 03 / 304 mm / 70 mm-skid calculations below precede the 2026-09-26 Layout 04 and body Layout 02 baseline. Use the current-interface note immediately below before any gate calculation |
 | Created | 2026-09-17 |
 | Last updated | 2026-09-18 |
 | Owner | Project builder |
@@ -12,7 +12,13 @@
 | Feeds | `concepts/`; `drivetrain-screen-01.md`; `sensing-screen-01.md`; `gates.md`; ledger `LG-04`/`LG-10` `E` refresh |
 | Does not claim | A measured CoM, a measured lift onset, a selected drivetrain, a selected sensor, a frozen footprint, a frozen `a_tip`, or any gate pass |
 
-This file recomputes the locomotion envelope as **ranges**. Every numeric input carries `W`/`D`/`E`/`U`. An `E` value is not a target, not a measurement, and not a freeze. The dimensional-baseline figure `a_tip ≈ 1.98 m/s²` is a **placement target** at `x_CoM = +25 mm`, `h_CoM = 124 mm`. It is not a property of the Layout 03 mass roll-up.
+This file originally computed the locomotion envelope as **ranges**. Every numeric input carries `W`/`D`/`E`/`U`. An `E` value is not a target, not a measurement, and not a freeze. The older `a_tip ≈ 1.98 m/s²` figure belongs to the historical +25 / 124 mm planning target. It is not a property of the current robot.
+
+## Current CAD interface — 2026-09-26, not physical evidence
+
+`dimensional-baseline.md` v1.13 and RP-06 `RP03-CAD-06/08/09/10` supersede the inputs in §1.3 for the working article: head Layout 04; 293.5 mm neutral stack; body 16 mm forward; ball contact 110 mm ahead of the axle; skid contact 27 mm behind at 3.5 mm height; preferred but unlocked Pololu #4804 motor; and an 81.6 g ballast bar retained under the deck. The current hand-kept Layout 02 mass register is 2,551.9 g at x +19.46 / h 107.27 mm, so its neutral `a_tip = g·x/h` is about 1.78 m/s². `RP03-CAD-09` accepts the re-based **1.582 m/s² paper screen**, not a physical lift-onset pass. The old +25 / 124 mm and 70 / 14 mm pair is historical.
+
+The detailed §2–§10 load, head-pose, skid, motor and stopping calculations below have **not** been recomputed for these current inputs. Do that and freeze the gate configuration before using them for a scored run; measure CoM and lift onset on the rig. Layout 02 packages one rear TCRT, leaves forward edges without a direct stop channel, and gives no contact signal for low objects that reach the ball housing. Those sensing gaps remain open in `openitems.md` and are not waived by this note.
 
 ## 1. Assumption register
 

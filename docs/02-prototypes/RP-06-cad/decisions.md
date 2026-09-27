@@ -20,9 +20,10 @@ chassis CAD is accepted, each retained choice must be propagated deliberately to
 | `RP03-CAD-06` | **Fixed in CAD context — pending permanent propagation** | Move every body-side part 16 mm forward of the drive axle and put the battery in a low chassis tub, to bring the register CoM from x +9.4 to +20.0 mm. The skid moves forward with the body's rear wall to 27 mm behind the axle. |
 | `RP03-CAD-07` | **Fixed in CAD context — pending permanent propagation** | Replace the 48 × 75 × 24 mm, 280 g battery placeholder with the RP-02 working selection: a 2S1P pack of two Samsung INR18650-25R cells with a 2S 20 A balanced BMS on top (37.6 × 67 × 23.8 mm, 110 g), and shrink the tub to it. This alone drops the register CoM to x +18.8 / h 107.9 mm, under the `physics.md` §2.5 line; `RP03-CAD-08` restores it. |
 | `RP03-CAD-08` | **Fixed in CAD context — pending permanent propagation** | Add an 81.6 g mild-steel ballast bar under the deck between the battery tub and the front crossmember to bring the register CoM back over the `physics.md` §2.5 +20 mm line after the lighter pack. Register CoM +20.6 / 105.8 mm; the +25 / 124 target is still missed. |
-| `RP03-CAD-09` | **Fixed in CAD context — pending permanent propagation** | Accept the register CoM that results from the RP-02 power boards (x +18.77 / h 105.05 mm, 2568 g, a_tip 1.75 m/s²) as the working baseline instead of +25 / 124, add no ballast, and re-base the `physics.md` §2.5 check from "x ≥ +20 mm" to the same tip acceleration it encodes at the 124 mm baseline (a_tip ≥ 1.582 m/s²). Builder acceptance 2026-09-25 (`BA-06`). |
+| `RP03-CAD-09` | **Fixed in CAD context — pending permanent propagation** | Accept the then-current register CoM after the RP-02 power boards (x +18.77 / h 105.05 mm, 2568 g, a_tip 1.75 m/s²) as the working baseline instead of +25 / 124. Keep the 81.6 g `RP03-CAD-08` bar; add no additional ballast. Re-base the `physics.md` §2.5 check from "x ≥ +20 mm" to the same tip acceleration it encodes at the 124 mm baseline (a_tip ≥ 1.582 m/s²). Builder acceptance 2026-09-25 (`BA-06`). The current hand-kept register is in `body-chassis/layout-02/generated/mass-properties.md`. |
 | `RP03-CAD-10` | **Fixed in CAD context — pending permanent propagation** | Model the drive gearmotor as the preferred candidate Pololu #4804 (25D HP 6 V 34:1, 48 CPR) from its official STEP, and rebuild the axle stack around its face: a 2 mm diaphragm in the flange boss takes two countersunk M3 × 8 face screws, the O7 bushing boss pilots in the flange, bearings, boss end, wheel pocket and stub move 3 mm outboard, and the motor is clocked so its radial encoder leads exit rearward. Track, wheel envelope, axle height and motor face stay frozen. The SKU lock itself stays open (`gearmotor-sku-decision.md`). |
 | `RP03-CAD-11` | **Fixed in CAD context — pending permanent propagation** | Replace the audio and IMU envelopes with the parts selected in [`peripheral-selection.md`](peripheral-selection.md): a Visaton K 50 WP speaker with its sealed cavity cut from 34 to 20 mm (X 77–97) to clear the compute tray and Pi 5, `PCB-05` (MAX98357A + 2 × ADAU7002) moved from inside the Pi 5 to flat above its front end, four `PCB-06` IM73D122V01 boards behind the unchanged ports, and a `PCB-07` ICM-42688-P board screwed flat to the chassis deck crossbar. |
+| `RP03-CAD-12` | **Fixed in CAD context — pending permanent propagation** | Connectors and cable exits per [`connector-schedule.md`](connector-schedule.md): JST GH for installed signals, Micro-Fit+ / Micro-Fit 3.0 right-angle power connectors on free board edges with signal headers top-entry inside the board, the #4804 leads re-crimped, a USB-C pigtail for the Pi 5, a rear-panel charge-inlet cut-out, the head trunk re-routed through a −Y yaw junction instead of the compute tray and cooler, a Micro-Fit+ pack disconnect beside the tub with a tub-wall service window (`CN-05`), and the C3 carrier `PCB-10` on the −Y side wall (`CN-06`). |
 
 ## RP03-CAD-01 — Rear-only ground-reflectance channel
 
@@ -376,7 +377,7 @@ further forward is not possible without moving the crossmember.
 The RP-02 power boards (`board-specs.md` v0.18, layout 02 as of 2026-09-25) replaced the 121.5 g
 `CONTROL_POWER_SENSORS` row with per-board rows (121.0 g), added the 40 g E-stop, and raised the
 pack row to 113.7 g. The register moved from x +20.63 / h 105.73 mm to **x +18.77 / h 105.05 mm**
-(2524.6 → 2567.8 g). The builder accepted that result on 2026-09-25 rather than adding ballast
+(2524.6 → 2567.8 g). The 81.6 g `RP03-CAD-08` bar is present in both states. The builder accepted that result on 2026-09-25 rather than adding additional ballast
 (about 59 g at X 74 would restore +20 mm, and the ballast slot cannot take it) or moving weight.
 
 **What the "+20 mm line" is.** `physics.md` §2.5 gives the margin as `a_tip = g·x/h` against the
@@ -494,3 +495,24 @@ When Layout 01 is accepted, propagate the retained choices and their consequence
 one reviewed change set: sensor/BOM count, GPIO allocation, electrical stop path,
 motion restrictions, receiving/calibration tests and safety claims. Permanent RP-03
 documents must replace the prior full-width bumper requirement only after that review.
+
+## RP03-CAD-12 — Connectors and cable exits
+
+Builder decisions `CN-01`…`CN-04` (2026-09-26) and the full schedule are in [`connector-schedule.md`](connector-schedule.md).
+
+| Item | Before | Now |
+|---|---|---|
+| Mic and IMU connectors | JST-SH 4/8 boxes (friction only) | JST GH SM04B / SM08B STEPs (latching); `PCB-06` grows from 12 × 8 to 12 × 9.5 mm so the header clears the mic |
+| Board connectors | Not modelled | Right-angle Micro-Fit edge reserves on `PCB-02` −Y, `PCB-03` ±Y and `PCB-04` ±Y; top-entry signal plug layers over `PCB-02/03/04` |
+| Charge inlet | Uncut keep-out window | Vertical USB-C receptacle envelope on `PCB-02`'s back face, 13.2 × 7.2 mm rear-panel cut-out, outside plug corridor |
+| Pi 5 power | Not modelled | Right-angle USB-C plug and pigtail drop to `PCB-04` `J4-1` |
+| Motor leads | 0.1" header in the pigtail reserve | Micro-Fit 3.0 1×2 wire-to-wire pair outboard of each DRV8874 carrier |
+| Head trunk | `HARNESS_HEAD_VERTICAL` through the compute tray and the Pi cooler | Plate bore → −Y yaw junction `PCB-08` → −Y riser; CSI FFC beside the cooler to the Pi's rear FPC socket |
+| C0 link | Not modelled | `PCB-09` beside the yaw servo, on a 2 × 20 socket; 0.6 / 0.1 mm clearances to the servo |
+| Pack disconnect | SBS Mini, unplaced (13 mm wide against an 11.3 mm channel) | Micro-Fit+ 1×2 wire-to-wire pair at X 27–49 in the channel; ATOF holder moved from X 30–54 to X 51–75; 22.6 × 10 mm service window in the +Y tub wall (`CN-05`, builder 2026-09-26) |
+| C3 controller | Bare DevKitC at (−8, 44, 81) over `PCB-04`, its header pins 8.5 mm inside `PCB-04`'s parts envelope (836 mm³), no carrier | `PCB-10` carrier, 70 × 43.5 mm, vertical on the −Y side wall (X −14…56, Z 82…125.5), with the DevKitC soldered on (+Y face) and four lugs on the −Y rails (`CN-06`). A free-volume scan for a 70 × 46 × 14 mm envelope found only this wall and the air over the Pi cooler |
+| Head riser | X −22…−2 | X −28…−16 (out of the carrier's way) |
+| Connector bodies | Reserves only | `PCB-08` and `PCB-09` modelled as boards with their headers and transceivers; `PCB-05`'s seven edge connectors; mated Micro-Fit plugs on every power-board edge; motor wire-to-wire pairs; real GH top-entry headers, screws and two printed uprights on the C3 carrier |
+
+
+Mass: the pack-interface row falls from 14 to 11 g, and the DevKitC row moves to the carrier. New rows: `C3_CARRIER_PCB10` 20 g, `YAW_JUNCTION_PCB08` 4 g, `C0_LINK_ADAPTER_PCB09` 7 g. The battery row falls from 113.7 to 108.2 g (Micro-Fit+ half instead of a 6 g SBS Mini half, AWG16 leads). Register total 2529.4 → 2551.9 g, CoM x +19.46 / h 107.27 mm, a_tip 1.78 m/s². The connectors themselves stay inside the existing board and `HARNESS_AND_FASTENERS` rows.

@@ -1,6 +1,6 @@
 # Makad / M4K4-D
 
-> **Current project overview** — last reconciled **21 September 2026**
+> **Current project overview** — last reconciled **26 September 2026**
 >
 > Foundation approved: **14 August 2026** · V1 deadline: **5 December 2026**
 
@@ -20,9 +20,9 @@ This README orients the repository around the current design, current build stat
 
 M4 is a battery-powered floor droid with a three-axis head, an animated face, a camera-side status light, body-mounted hearing and speech, and a two-wheel base. The head carries the display, camera, status light, C2 motion controller, and local structure. The body carries four PDM microphones, the speaker, battery, and main compute. Floor mode is primary; tabletop mode inhibits locomotion by default.
 
-The current physical target is **300 × 205 × 180 mm**, with Layout 03 producing a provisional **304 mm** neutral stack (140 mm body-top datum + 60 mm neck + 104 mm crown-inclusive head). Drive geometry is Ø84 mm wheels, 170 mm track, 110 mm axle-to-front-support, and a mandatory rear anti-tip skid. Front support is a Ø1″ ball transfer; a swivel caster remains a comparison article on the same mount.
+The current physical target is **300 × 205 × 180 mm**. Head Layout 04 and body/chassis Layout 02 give a **293.5 mm** neutral stack (140 mm body-top datum + 49.5 mm neck + 104 mm crown-inclusive head). Drive geometry is Ø84 mm wheels, 170 mm track, 110 mm axle-to-front-support, and a mandatory rear anti-tip skid. Front support is a Ø1″ ball transfer; a swivel caster remains a comparison article on a rig, while the present CAD mount is ball-only.
 
-Working geometry lives in [`docs/02-prototypes/RP-06-cad/`](docs/02-prototypes/RP-06-cad/README.md): head [Layout 03](docs/02-prototypes/RP-06-cad/head/layout-03/README.md) and body/chassis [Layout 02](docs/02-prototypes/RP-06-cad/body-chassis/layout-02/README.md).
+Working geometry lives in [`docs/02-prototypes/RP-06-cad/`](docs/02-prototypes/RP-06-cad/README.md): head [Layout 04](docs/02-prototypes/RP-06-cad/head/layout-04/README.md) and body/chassis [Layout 02](docs/02-prototypes/RP-06-cad/body-chassis/layout-02/README.md).
 
 ### Selected components
 
@@ -38,19 +38,19 @@ Working geometry lives in [`docs/02-prototypes/RP-06-cad/`](docs/02-prototypes/R
 | Head construction | PLA structure and skin (provisional beyond first head), real M2 button-heads, nine-step weathered finish | [`material-finish-mass-decision.md`](docs/02-prototypes/RP-01-head/material-finish-mass-decision.md) |
 | Head layout | Serial body→yaw→pitch→roll; coaxial direct roll on a supported spindle; ears roll with the face; trapezoidal camera crown; external yaw cable loop; C2 on the rolling cradle; A0 balance target | [`head/decisions.md`](docs/02-prototypes/RP-06-cad/head/decisions.md) |
 
-Still open: servos, battery, drive motors/drivers, production camera interconnect, harness/carriers, storage, audio SKUs, status-LED optic, and most power hardware. XC330-M288-T is a paper candidate (C01), not a selected servo.
+Working choices now cover XC330-M181-T yaw and XC330-M288-T pitch/roll at 5 V, a two-cell Samsung 25R pack with custom protection, Pololu #4804 as the preferred drive-motor candidate, the audio and status-light parts, and the four-board power architecture. These are not purchased or bench-frozen. Motor SKU lock, production camera interconnect, moving harness, storage, board schematics and layouts, and power/safety proof remain open.
 
 ## Current build state
 
 The design is far ahead of the physical robot. Head and body CAD exist; electrical and locomotion behaviour are specified on paper; no integrated article has been built, weighed, or run.
 
-| Area | State (2026-09-21) |
+| Area | State (2026-09-26) |
 |---|---|
 | Foundation | Approved. Some numeric thresholds remain open. |
-| Geometry | Head Layout 03 is the 1:1 packaging direction (104 × 150 × 115 mm; ~499–524 g complete D/E tree, nominal 509 g). Body/chassis Layout 02 live-imports that head. Two retainer-screw collisions, hard-stop margin, pitch/roll stiffness, bearing SKU, balance trim, and CAD/firmware sign mapping are still open. Not a fabrication release. |
-| Head mechanism | Concept A (elevated-ear serial gimbal) is the path. External rigid-body demand is calculated; nothing is weighed; actuator-internal inertia is not included. |
+| Geometry | Head Layout 04 is the working 1:1 model; body/chassis Layout 02 live-imports it. Neutral height is 293.5 mm. Screw collisions and sign mapping are closed in CAD; stiffness, hard-stop impact, bearing fit and balance trim await hardware. The body layout still has unresolved connector, joint and safety details. Not a fabrication release. |
+| Head mechanism | Concept A (elevated-ear serial gimbal) is the path. The XC330 family is a working choice, with internal inertia bounded on paper. Nothing is weighed; actuator B1–B6 tests remain. |
 | Electrical / control | States, power topology, compute split, and C0↔C2 message/recovery design are written. Host codec work is exploratory. Pack sizing still needs drive measurements. |
-| Locomotion | Two-wheel + ball + skid is the V1 type. Concept A chassis/sensing is retained; caster is the comparison swap. Motors, hubs, drivers, and sensors are not frozen. Layout 02 currently packages one guarded rear TCRT channel, which does not yet match the fuller stop-path sensing in the control design. |
+| Locomotion | Two-wheel + ball + skid is the V1 type. Pololu #4804 is the preferred motor candidate and its official STEP is in CAD; SKU lock, hubs, axle proof and drive tests remain. Layout 02 packages one guarded rear TCRT channel, short of the fuller stop-path sensing in the control design. |
 | Interaction / following | Audio-path requirements and following architecture are documented. No SKU, corpus, or physical test. |
 | Software / firmware | Timebase, link contract, C2/C3 firmware, and C0 behaviour are specified more than implemented. |
 | Physical hardware | Selected display, camera, C2, Pi 5, and cooler are locked on paper. First weigh-ins wait on samples. No head, chassis, or electrical rig has been built. |
@@ -61,9 +61,9 @@ The design is far ahead of the physical robot. Head and body CAD exist; electric
 
 Sourcing, CAD, software, and hardware proceed together. The useful next work is:
 
-- **Finish the current head CAD** so it can be printed: remove the two retainer-screw collisions; stiffen or verify the pitch frame and roll saddle; move hard stops beyond usable travel; select a bearing; add physical balance trim and explicit CAD/firmware sign mapping.
+- **Verify the current head design on hardware:** measure pitch/roll stiffness, hard-stop impact and balance trim; trial-fit the 696-2Z bearings and XC330 actuators.
 - **Choose and source remaining parts** as packaging needs them — head servos, wheels/hubs/motors, ball transfer, battery and power hardware, audio, status LED, connectors — and replace CAD envelopes with real geometry.
-- **Keep the whole-robot model current** in RP-06: accept or recover the 4 mm stack over 300 mm; reconcile Layout 02's rear-only cliff channel with the base safety design.
+- **Keep the whole-robot model current** in RP-06: the 293.5 mm stack is closed in CAD; reconcile Layout 02's rear-only cliff channel and low-object contact gap with the base safety design.
 - **Implement firmware and software** on the same timeline: C2/C3, C0 behaviour and perception, the serial link and timebase, and face rendering on the display.
 - **Build and measure** as parts arrive: weigh display, camera, C2, prints, and finish coupons; print the head and chassis; stand up a protected bench and start moving hardware.
 
@@ -80,7 +80,7 @@ Sourcing, CAD, software, and hardware proceed together. The useful next work is:
 ### Current engineering
 
 - [Dimensional and packaging baseline](docs/01-system/dimensional-baseline.md)
-- Working CAD: [RP-06-cad](docs/02-prototypes/RP-06-cad/README.md) — [head Layout 03](docs/02-prototypes/RP-06-cad/head/layout-03/README.md), [body/chassis Layout 02](docs/02-prototypes/RP-06-cad/body-chassis/layout-02/README.md)
+- Working CAD: [RP-06-cad](docs/02-prototypes/RP-06-cad/README.md) — [head Layout 04](docs/02-prototypes/RP-06-cad/head/layout-04/README.md), [body/chassis Layout 02](docs/02-prototypes/RP-06-cad/body-chassis/layout-02/README.md)
 - Ledgers: [mass/envelope](docs/01-system/mass-envelope-ledger.md), [power/energy/thermal](docs/01-system/power-energy-ledger.md), [candidate sourcing](docs/01-system/candidate-sourcing-matrix.md)
 - Studies: [control topology](docs/01-system/control-topology-options.md), [display](docs/01-system/display-candidate-study.md), [camera](docs/01-system/camera-candidate-study.md), [head harness](docs/01-system/head-harness-routing-study.md)
 

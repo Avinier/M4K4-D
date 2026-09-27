@@ -352,16 +352,14 @@ PCB05_BOARD_THICKNESS = 1.6
 # IM73D122 (4 x 3 x 1.2) sits on the port axis on the inboard face and a JST-SH 4-pin
 # side-entry header (7 x 4.25 footprint, 2.95 tall) below it.
 MIC_BOARD_OUTER_Y = 70.0
-MIC_BOARD_SIZE = (12.0, 1.0, 8.0)
+MIC_BOARD_SIZE = (12.0, 1.0, 9.5)  # 9.5 tall (was 8) so the 4.96 mm GH header clears the mic package
 MIC_PACKAGE_SIZE = (4.0, 1.2, 3.0)
-MIC_CONNECTOR_SIZE = (7.0, 2.95, 4.25)
 # PCB-07 IMU board: ICM-42688-P on 16 x 20 x 1.0 mm FR4, flat on the chassis deck crossbar
 # (deck material X ~17.5-26.5 here; open over the motors and the battery on either side).
 # Two M2 x 5 thread-forming screws at (IMU_SCREW_X, +-IMU_SCREW_HALF_Y) into the 4 mm deck.
 IMU_BOARD_CENTER = (21.0, 0.0, DECK_Z + 2.0 + 0.5)
 IMU_BOARD_SIZE = (16.0, 20.0, 1.0)
 IMU_CHIP_SIZE = (3.0, 2.5, 0.91)
-IMU_CONNECTOR_SIZE = (4.25, 11.0, 2.95)  # JST-SH 8-pin side entry, facing -X
 IMU_SCREW_X = 22.0
 IMU_SCREW_HALF_Y = 7.5
 # The GP2Y sits on the centreline in the ball pod, its face ahead of the ball
@@ -441,7 +439,6 @@ YAW_SERVO_NO_LOAD_RPM = {"3.7V": 95.0, "5.0V": 129.0}
 PI_CENTER = (6.0 + BODY_SHIFT_X, 0.0, 102.0)
 # Pi 5 cooler-post holes (STEP PCB), from the Pi's bounding-box corner: 58 x 37 mm apart.
 PI_COOLER_HOLE_A = (PI_CENTER[0] - 45.0 + 5.25, PI_CENTER[1] - 28.8 + 11.1)
-DEVKIT_CENTER = (-24.0 + BODY_SHIFT_X, 44.0, 84.0)
 # Battery (RP03-CAD-06; RP03-CAD-07 for the pack): low in a chassis tub under
 # the deck, forward of the motors, long side across the robot. It sits under the
 # deck top and drops out downward through a bottom hatch; the shell floor is
@@ -505,11 +502,18 @@ PCB_THICKNESS = 1.6
 PCB02_BOX = (-49.6, -38.0, -25.0, 25.0, 58.0, 94.0)  # vertical, parts face +X; 50 x 36 mm board on the rear-panel frame
 PCB03_BOX = (18.0, 59.0, -30.0, 30.0, 63.0, 75.0)  # motor gate, head rail, drive feed: 41 x 60 x 12
 PCB04_BOX = (-27.0, 17.0, -35.0, 35.0, 63.0, 77.1)  # branch converters: 44 x 70 x 14.1 (1 mF-class hold-up caps 12.5 tall)
-# ATOF main-fuse holder lying in the 11.3 mm channel between the tub wall and the
-# chassis rail, at the pack's +Y terminal end (PA-02: source-adjacent). The
-# Anderson SBS Mini pair (22 x 13 x 14, dimension sheet not fetched) is 13 mm wide
-# and does not fit that channel; it has no modelled home yet (open item).
-PACK_FUSE_HOLDER_BOX = (30.0, 54.0, 38.7, 48.7, 36.0, 46.0)
+# Pack interface in the 11.3 mm channel between the tub's +Y wall and the chassis
+# rail (connector-schedule.md CN-05, 2026-09-26). The Anderson SBS Mini (13 mm
+# wide) fits nowhere near the tub, so the pack disconnect is a Molex Micro-Fit+
+# 1x2 wire-to-wire pair (mated envelope E, drawing not fetched), mated only in
+# OFF. It lies beside the tub behind a service window in the tub wall: with the
+# hatch open and the pack lowered, the pair slides into the empty tub and is
+# unplugged there. The ATOF main-fuse holder moved forward to make room; it is the
+# first thing after the disconnect (PA-02: source-adjacent).
+PACK_DISCONNECT_PAIR_BOX = (27.0, 49.0, 39.5, 47.8, 37.0, 47.0)
+PACK_FUSE_HOLDER_BOX = (51.0, 75.0, 38.7, 48.7, 36.0, 46.0)
+TUB_SERVICE_WINDOW = (26.9, 49.5, 37.0, 47.0)  # x0, x1, z0, z1 through the +Y tub wall
+PACK_DISCONNECT_SLIDE_PATH = (27.0, 49.0, 30.0, 39.5, 37.0, 47.0)  # into the emptied tub
 # E-stop: IDEC XA1E-BV3U02KT-R, the Ø16 unibody XA with a Ø29 mushroom and 2NC
 # (one to the permit loop, one to C2), 14 g. IDEC XA datasheet: Ø16.2 cut-out,
 # 0.8-4.5 mm panel, mushroom top 20.6 mm above the mounting face, 23.9 mm behind
@@ -543,7 +547,155 @@ ESTOP_FLOOR_BACK_X = ESTOP_MOUNT_X + ESTOP_WELL_FLOOR
 ESTOP_KEEP_OUT = (ESTOP_FLOOR_BACK_X, ESTOP_FLOOR_BACK_X + ESTOP_DEPTH_BEHIND_PANEL, -11.0, 11.0, ESTOP_CENTER_Z - 11.0, ESTOP_CENTER_Z + 11.0)  # contact block, three #110 tabs and wiring
 ESTOP_RED = "#C62F28"
 ESTOP_AMBER = "#D39F36"  # the droid's amber, lifted toward safety yellow for the background
-REAR_USBC_WINDOW = (BODY_X_REAR, BODY_X_REAR + 8.0, -6.0, 6.0, 61.0, 67.0)  # plug corridor from the panel's rear face to PCB-02 (9 x 3.4 mm receptacle); the rear panel is not cut for it yet
+
+# Connectors and cable exits (../../connector-schedule.md, 2026-09-26). Rule:
+# power connectors (Molex Micro-Fit+ / Micro-Fit 3.0, right-angle) sit on the
+# free board edges and exit sideways; signal connectors (JST GH, and the XC330's
+# JST EH) are top-entry headers inside the board outline and plug up into the
+# layer between the board parts envelopes and the compute tray. Widths: JST GH
+# from the JST catalogue (D) and Micro-Fit 3.0 from the Molex drawing via the
+# KiCad fab outline (D); Micro-Fit+, JST EH, every height and every plug
+# protrusion are estimates (E). Boxes are (x0, x1, y0, y1, z0, z1).
+CONNECTOR_GAP = 1.0  # between neighbouring housings on one edge (E)
+
+
+def connector_width(family, circuits):
+    """Housing width along the board edge, mm."""
+    cols = math.ceil(circuits / 2.0)
+    return {
+        "GH": 1.25 * circuits + 3.25,  # D: JST GH SMT header, dimension B
+        "MF3": 3.0 * cols + 4.26,  # D: Molex 43045 dual row (43045-0200 7.26, -0400 10.26)
+        "MF+": 3.0 * cols + 5.3,  # E: Micro-Fit+ dual row, drawing not fetched
+        "EH": 2.5 * circuits + 2.5,  # E: JST EH (XC330 B3B-EH-A)
+    }[family]
+
+
+# Right-angle power connectors on the free board edges. "span" is the free
+# length along the edge; the box is the mated plug plus the lead's first bend.
+CONNECTOR_EDGE_STRIPS = {
+    "PCB03_PY": {"box": (19.0, 37.0, 30.0, 50.0, 64.6, 75.0), "span": (19.0, 37.0), "connectors": [
+        ("J3-2", "MF+", 2, "PB-DRIVE-L to the left DRV8874 carrier"),
+        ("J3-1", "MF+", 2, "BATBUS in from PCB-02 J2-2"),
+    ]},
+    "PCB03_NY": {"box": (19.0, 37.0, -50.0, -30.0, 64.6, 75.0), "span": (19.0, 37.0), "connectors": [
+        ("J3-3", "MF+", 2, "PB-DRIVE-R to the right DRV8874 carrier"),
+        ("J3-4", "MF+", 2, "PB-HEAD pitch/roll trunk to the yaw junction"),
+    ]},
+    "PCB04_NY": {"box": (-14.0, 15.0, -51.0, -35.0, 64.6, 77.0), "span": (-14.0, 15.0), "connectors": [
+        ("J4-1", "MF+", 2, "PB-COMPUTE to the Pi 5 USB-C pigtail"),
+        ("J4-2", "MF3", 4, "PB-SAFE-C2 and PB-DISPLAY to the yaw junction"),
+        ("J4-4", "MF3", 2, "PB-SAFE-BASE to the C3 carrier J10-1"),
+    ]},
+    "PCB04_PY": {"box": (-14.0, 15.0, 35.0, 51.0, 64.6, 77.0), "span": (-14.0, 15.0), "connectors": [
+        ("J4-3", "MF+", 4, "OPBUS and CHGBUS in from PCB-02 J2-3"),
+        ("J4-5", "MF3", 2, "PB-AUDIO-OUT to PCB-05"),
+    ]},
+    # PCB-02 stands vertical: this edge runs along Z and the plugs exit -Y.
+    "PCB02_NY": {"box": (-48.0, -38.0, -41.0, -25.0, 60.0, 94.0), "span": (60.0, 94.0), "connectors": [
+        ("J2-1", "MF+", 2, "pack in from the fuse and SBS Mini"),
+        ("J2-2", "MF+", 2, "BATBUS out to PCB-03 J3-1"),
+        ("J2-3", "MF+", 4, "OPBUS and CHGBUS out to PCB-04 J4-3"),
+    ]},
+}
+# Top-entry signal headers plug up into these layers (reserve = plugs + first bend).
+CONNECTOR_TOP_LAYERS = {
+    "PCB03": {"box": (19.0, 58.0, -29.0, 29.0, 75.0, 84.3), "connectors": [
+        ("J3-5", "EH", 3, "XC330 yaw servo: VDD, GND, bus DATA"),
+        ("J3-6", "GH", 6, "PCB-02 logic: CHARGE_ABSENT, ENERGY_OK, SYSTEM_ARM, MOTOR_PRESENT, 2 x GND"),
+        ("J3-7", "GH", 4, "E-stop NC1 loop and NC2 status"),
+        ("J3-8", "GH", 8, "head sideband from the yaw junction"),
+        ("J3-9", "GH", 4, "C3_READY, MOTOR_PRESENT to C3, 2 x GND (C3 carrier J10-12)"),
+    ]},
+    "PCB04": {"box": (-26.0, 16.0, -34.0, 29.0, 77.1, 84.3), "connectors": [
+        ("J4-6", "GH", 10, "EN_* / PG_* and the sequencing latch to PCB-02 J2-4"),
+    ]},
+    # PCB-02's parts face is +X, so its top-entry headers plug in along +X.
+    "PCB02": {"box": (-38.0, -31.0, -24.0, 24.0, 69.5, 84.0), "connectors": [
+        ("J2-4", "GH", 10, "EN_* / PG_* to PCB-04 J4-6"),
+        ("J2-5", "GH", 6, "logic to PCB-03 J3-6"),
+        ("J2-6", "GH", 8, "head sideband: STAT, INT_PB, KILL, V_PACK_ANA, CHG_ABSENT_3V3"),
+        ("J2-7", "GH", 2, "pack NTC (103AT-2) to the BQ25798 TS input"),
+    ]},
+}
+
+# Charge inlet (PCD-CON-05): a vertical-mount 16-pin USB-C receptacle on the back
+# (-X) face of PCB-02, mouth 1.05 mm behind the rear panel's inner face, and a
+# 13.2 x 7.2 mm plug cut-out through the panel. Envelope only; part number open.
+CHARGE_INLET_CENTER_YZ = (0.0, 64.0)
+CHARGE_INLET_RECEPTACLE = (-56.95, PCB02_BOX[0], -4.47, 4.47, 62.37, 65.63)
+CHARGE_INLET_CUTOUT = (13.2, 7.2)
+CHARGE_INLET_OUTSIDE_CORRIDOR = (BODY_X_REAR - SHELL_THICKNESS - 27.0, BODY_X_REAR - SHELL_THICKNESS, -6.5, 6.5, 60.5, 67.5)
+
+# Pi 5 power: right-angle USB-C plug on the Pi's -Y edge (the port is at X -10.1,
+# Z 96.2) and its pigtail down past the compute tray to PCB-04 J4-1.
+PI_POWER_PLUG_RESERVE = (-16.2, -4.0, -44.0, -28.6, 92.2, 100.2)
+PI_POWER_PIGTAIL_DROP = (-13.0, -7.0, -46.0, -39.0, 77.0, 92.2)  # lands on the PCB04_NY edge reserve (J4-1)
+
+# Motor leads: the Pololu 0.1" header is cut off; the motor pair is re-crimped to
+# a Micro-Fit 3.0 1x2 wire-to-wire pair outboard of each DRV8874 carrier.
+MOTOR_INLINE_RESERVE_L = (37.5, 58.0, 49.5, 59.0, 69.0, 82.0)  # starts past PCB03_PY's edge reserve (X 37)
+
+# Yaw service break: the clock-spring's stationary end lands on a small
+# junction board (PCB-08) under the adapter plate on -Y, clear of the cooler
+# headroom prism; its body-side cables drop down a -Y riser to PCB-03/04.
+YAW_JUNCTION_BOX = (-22.0, 10.0, -44.0, -23.0, 112.0, 125.5)
+# PCB-08: 32 x 21 x 1.6 mm plate at the bottom of the junction reserve. The
+# clock-spring flex is soldered to it; body-side connectors: J8-1 Micro-Fit+
+# 2x3 right-angle on the -X edge (exits -X, then down the riser) and three GH
+# top-entry headers (J8-3/J8-5 sideband GH 8 x 2, J8-4 head link GH 6).
+YAW_JUNCTION_PLATE_Z = (112.0, 113.6)
+YAW_JUNCTION_MF_PLUG_RESERVE = (-40.0, -22.0, -41.0, -26.0, 113.6, 124.0)
+YAW_JUNCTION_GH = (("J8-3", 8, -42.0), ("J8-5", 8, -35.5), ("J8-4", 6, -29.0))  # id, circuits, y0 (x0 -10)
+# C0 link adapter (PCB-09): THVD1451 x 2 and the GH link/audio headers beside
+# the yaw servo, fed from the Pi header by a 2 x 20 socket (8.5 mm, top Z 106.4,
+# 0.6 mm under the XC330) and a 4.6 mm strip of the same board over it that
+# stays inboard of the servo (Y <= 26.9, 0.1 mm clear): tight, measured, not
+# yet bench-fitted. The bridge joins the strip to the wide part past the servo.
+C0_GPIO_SOCKET = (-14.7, 37.1, 22.3, 28.3, 104.1, 106.4)  # socket body above the pin tips; the part round the pins is the header's own volume
+C0_LINK_ADAPTER_STRIP = (-14.7, 26.0, 22.3, 26.9, 106.4, 108.2)
+C0_LINK_ADAPTER_BRIDGE = (26.0, 37.1, 22.3, 28.5, 106.4, 108.2)
+C0_LINK_ADAPTER_BOX = (26.0, 56.0, 28.5, 45.0, 104.0, 112.0)
+C0_LINK_ADAPTER_PLATE_Z = (106.4, 108.0)
+C0_LINK_ADAPTER_TOP_PLUGS = (36.0, 54.0, 29.0, 42.0, 112.0, 116.0)
+C0_LINK_ADAPTER_SIDE_PLUG = (26.0, 38.0, 45.0, 54.0, 108.0, 112.5)
+# C3 carrier (PCB-10, RP-02 CCD-HDL-03: DevKitC backplane with the base-link
+# THVD1451, the TPS3436 window watchdog, READY logic, the DRV8874 SLEEP gating,
+# driver/sensor connectors and test points). Nothing modelled it, and the bare
+# DevKitC floated over PCB-04 with its header pins in PCB-04's parts envelope.
+# A free-volume scan found one home: standing vertical on the -Y side wall
+# between the lower and upper rails, outboard of the Pi, components facing +Y.
+# The DevKitC is soldered onto it through its own pin headers (2.5 mm plastic
+# gap), so the C3 module is one replaceable part held by four M2.5 screws into
+# lugs printed on the -Y rails. Signal headers are top-entry GH in the band
+# below the DevKitC; power is one right-angle Micro-Fit 3.0 on the front edge.
+C3_CARRIER_BOARD = (-14.0, 56.0, -58.4, -56.8, 82.0, 125.5)  # x0, x1, y0, y1, z0, z1 (board plate)
+C3_DEVKIT_STANDOFF = 2.5  # header plastic between carrier and DevKitC
+C3_DEVKIT_Z = (96.2, 124.5)  # DevKitC 28.3 mm board edge span
+C3_GH_PLUG_LAYER = (-14.0, 56.0, -56.8, -46.0, 82.0, 95.2)
+C3_POWER_PLUG_RESERVE = (56.0, 74.0, -56.8, -46.5, 84.0, 95.0)
+C3_DEVKIT_USB_CORRIDOR = (-40.0, -11.5, -54.3, -48.8, 99.0, 122.0)  # service only, rear panel off
+# Two 8 x 7.6 mm printed uprights between the -Y lower and upper rails carry
+# M2.5 heat-set inserts; the carrier screws to them at four points.
+C3_CARRIER_UPRIGHTS = ((-12.0, -4.0), (20.0, 28.0))  # x spans; Y -66..-58.4, Z 69..126
+C3_CARRIER_SCREWS = ((-8.0, 86.0), (-8.0, 116.0), (24.0, 86.0), (24.0, 116.0))  # (x, z)
+# Top-entry GH headers in two rows below the DevKitC: (id, circuits, x0).
+C3_GH_ROWS = {
+    86.0: (("J10-2", 6, -4.5), ("J10-5", 6, 7.25), ("J10-6", 6, 27.25), ("J10-8", 5, 39.0)),
+    92.0: (("J10-7", 8, -13.0), ("J10-3", 4, 1.25), ("J10-4", 4, 10.5), ("J10-10", 4, 19.75), ("J10-12", 4, 29.0), ("J10-11", 3, 38.25)),
+}
+C3_CARRIER_CONNECTORS = [
+    ("J10-1", "MF3", 2, "PB-SAFE-BASE from PCB-04 J4-4 (front edge, right-angle)"),
+    ("J10-2", "GH", 6, "base link RS-422 to PCB-09 J9-2"),
+    ("J10-3", "GH", 4, "encoder L"),
+    ("J10-4", "GH", 4, "encoder R"),
+    ("J10-5", "GH", 6, "DRV8874 L logic"),
+    ("J10-6", "GH", 6, "DRV8874 R logic"),
+    ("J10-7", "GH", 8, "IMU PCB-07 (SPI)"),
+    ("J10-8", "GH", 5, "nose pod: GP2Y0A41SK0F (Vcc, GND, Vo) + touch-cap switch pair, one cable"),
+    ("J10-10", "GH", 4, "rear TCRT cartridge"),
+    ("J10-11", "GH", 3, "E-stop status (GPIO3 input) from PCB-03"),
+    ("J10-12", "GH", 4, "C3_READY, MOTOR_PRESENT to PCB-03 J3-9"),
+]
 
 # Floor-contact functions live in a compact faceted keel bolted under the rear
 # crossmember, so the visible tail is free to be purely cosmetic. The rear
@@ -666,16 +818,19 @@ MASS_ROWS = [
     ("MOTOR_R", 101.0, (0.0, -39.2, AXLE_Z), "D: Pololu #4804 spec 101 g; Y is the official STEP volume centroid (uniform density, E); was 110 g JGA25 at Y -52"),
     ("BALL_TRANSFER", 16.5, (BALL_CONTACT[0], 0.0, 14.0), "vendor"),
     ("BALLAST_STEEL_BAR", round(BALLAST_BAR_G + BALLAST_SCREWS_G, 1), (sum(BALLAST_X) / 2.0, 0.0, sum(BALLAST_Z) / 2.0), "E: mild-steel bar 9 x 60 x 19 mm at 7.85 g/cm3 (less two M3 tapped holes) + two M3 screws; sized so the register CoM clears the physics.md 2.5 line after the 110 g pack (RP03-CAD-08)"),
-    ("BATTERY", 113.7, BATTERY_CENTER, "E: 2 x Samsung INR18650-25R (45 g max each = 90 g) + RP-02 PCB-01 pack-protection assembly (~5 g: 48 x 20 mm board 3.7 g + parts 1.3 g) + Bourns AC72ABD thermal cutoff and NTC (~0.7 g) + nickel straps, sleeve and AWG14 leads (~12 g) + pack-side SBS Mini housing (~6 g, U: dimension sheet not read); working selection, no purchase or measured mass; was 110 g with a generic ~8 g BMS (RP-02 board-specs.md sec 3, 2026-09-25)"),
+    ("BATTERY", 108.2, BATTERY_CENTER, "E: 2 x Samsung INR18650-25R (45 g max each = 90 g) + RP-02 PCB-01 pack-protection assembly (~5 g: 48 x 20 mm board 3.7 g + parts 1.3 g) + Bourns AC72ABD thermal cutoff and NTC (~0.7 g) + nickel straps, sleeve and AWG16 leads (~11 g) + pack-side Micro-Fit+ 1x2 half with terminals (~1.5 g, CN-05; was a ~6 g SBS Mini half); working selection, no purchase or measured mass; was 110 g with a generic ~8 g BMS (RP-02 board-specs.md sec 3, 2026-09-25)"),
     ("RASPBERRY_PI5_AND_COOLER", 76.0, PI_CENTER, "vendor + estimate"),
     # Replaces the single CONTROL_POWER_SENSORS row (121.5 g at (22, 0, 80), 2026-09-25). Masses are the RP-02
     # board-specs.md sec 2 / WS-H estimates (PCB 1.6 mm FR4 with copper about 3.8 g per 1000 mm2 plus the parts
     # inventory), not measurements; positions are the centres of the proposal boxes.
     ("PCB02_CHARGE_AND_SYSTEM_POWER", 18.0, ((PCB02_BOX[0] + PCB02_BOX[1]) / 2.0, 0.0, (PCB02_BOX[4] + PCB02_BOX[5]) / 2.0), "E (proposal): 50 x 36 mm board 6.8 g + USB-C 1.2 + connectors 3 + inductor 2 + capacitors 3 + ICs 0.6 + misc 1; vertical on the rear-panel frame"),
-    ("PACK_INTERFACE_SBS_MINI_AND_FUSE", 14.0, (sum(PACK_FUSE_HOLDER_BOX[0:2]) / 2.0, sum(PACK_FUSE_HOLDER_BOX[2:4]) / 2.0, sum(PACK_FUSE_HOLDER_BOX[4:6]) / 2.0), "E: SBS Mini receptacle housing + contacts ~6 g (U; no modelled home, 13 mm wide against an 11.3 mm channel) + ATOF 15 A holder and fuse ~6 g + ~2 g; placed at the fuse holder"),
+    ("PACK_INTERFACE_MICROFIT_PLUS_AND_FUSE", 11.0, tuple((3.0 * (PACK_DISCONNECT_PAIR_BOX[2 * i] + PACK_DISCONNECT_PAIR_BOX[2 * i + 1]) / 2.0 + 8.0 * (PACK_FUSE_HOLDER_BOX[2 * i] + PACK_FUSE_HOLDER_BOX[2 * i + 1]) / 2.0) / 11.0 for i in range(3)), "E: Micro-Fit+ 1x2 wire-to-wire pair with terminals ~3 g + ATOF 15 A holder and fuse ~6 g + ~2 g; was 14 g with an unplaced SBS Mini (CN-05)"),
     ("PCB03_MOTOR_GATE_AND_HEAD_RAIL", 24.0, (sum(PCB03_BOX[0:2]) / 2.0, 0.0, sum(PCB03_BOX[4:6]) / 2.0), "E (proposal): 2460 mm2 board 9.4 g + 4 x Micro-Fit+ 8 + inductor 3 + capacitors 2 + FETs, shunt, TVS, misc 1.6"),
     ("PCB04_BRANCH_CONVERTERS", 45.0, (sum(PCB04_BOX[0:2]) / 2.0, 0.0, sum(PCB04_BOX[4:6]) / 2.0), "E (proposal): WS-H 35 g (3080 mm2 board 11.7 g + inductors 5.4 + connectors 8 + ICs 1 + polymer/ceramics ~1) with the hold-up raised from 4 x 1 mF (~8 g) to 2 x 3.3 mF (~9 g each, Ø12.5 x 20 lying) per board-specs.md sec 8.1: +10 g; the board footprint is NOT enlarged (no slack in the bay)"),
-    ("C3_DEVKITC_N8", 9.0, (-8.0, 44.0, 80.8), "E: ESP32-S3-DevKitC-1-N8 board"),
+    ("C3_DEVKITC_N8", 9.0, (sum(C3_CARRIER_BOARD[0:2]) / 2.0, C3_CARRIER_BOARD[3] + C3_DEVKIT_STANDOFF + 2.75, C3_DEVKIT_Z[0] + 14.15), "E: ESP32-S3-DevKitC-1-N8 board; moved 2026-09-26 onto the PCB-10 carrier on the -Y side wall"),
+    ("C3_CARRIER_PCB10", 20.0, (sum(C3_CARRIER_BOARD[0:2]) / 2.0, C3_CARRIER_BOARD[2] - 1.0, sum(C3_CARRIER_BOARD[4:6]) / 2.0), "E (proposal): 70 x 43.5 mm board ~8.5 g + THVD1451, TPS3436, READY logic, SLEEP FETs ~1 g + 2 x 22-pin headers ~3 g + 10 GH and 1 Micro-Fit 3.0 header ~3 g + four M2.5 screws and inserts ~1 g; two printed uprights on the -Y rails ~3.5 g"),
+    ("YAW_JUNCTION_PCB08", 4.0, (sum(YAW_JUNCTION_BOX[0:2]) / 2.0, sum(YAW_JUNCTION_BOX[2:4]) / 2.0, 116.0), "E: 32 x 21 mm board ~2 g + Micro-Fit+ 2x3 and three GH headers ~2 g"),
+    ("C0_LINK_ADAPTER_PCB09", 7.0, (30.0, 32.0, 107.5), "E: strip-and-wide board ~3 g + 2 x 20 socket ~2 g + 2 x THVD1451 and three GH headers ~2 g"),
     ("DRV8874_CARRIERS_X2", 6.0, (30.0 + BODY_SHIFT_X, 0.0, 67.4), "E: 2 x Pololu 4035 at ~3 g (weight not read); symmetric about the centre plane"),
     ("IMU_PCB07", 2.5, (IMU_BOARD_CENTER[0], 0.0, IMU_BOARD_CENTER[2] + 1.0), "E: PCB-07 16 x 20 x 1.0 mm FR4 ~0.6 g + ICM-42688-P and JST-SH 8-pin ~0.3 g + two M2 x 5 ~0.6 g + 8-way AWG30 lead to C3 ~1 g (RP03-CAD-11); was a 2 g breakout estimate at (16, 0, 60)"),
     ("TCRT5000_BREAKOUT_AND_CABLE", 3.0, TCRT_REAR_CENTER, "E: breakout, comparator and cable in the rear keel cartridge; was inside the old CONTROL_POWER_SENSORS row at the body centre"),
@@ -787,6 +942,31 @@ def _place(shape, x=None, y=None, z=None, ref="center"):
     return moved
 
 
+def _gh_header(circuits, label, rotations=(), top_entry=False):
+    """JST GH header (step.parts, KiCad-derived STEP).
+
+    Side entry SMxxB-GHS-TB: width along X, mating face on -Y, 4.25 tall.
+    Top entry BMxxB-GHS-TBT: width along X, 4.96 deep in Y, 4.2 tall, mates from +Z.
+    Board plane at Z 0 in both.
+    """
+    name = (f"jst_gh_bm{circuits:02d}b_ghs_tbt_1x{circuits:02d}_1mp_p1_25mm_vertical.step" if top_entry
+            else f"jst_gh_sm{circuits:02d}b_ghs_tb_1x{circuits:02d}_1mp_p1_25mm_horizontal.step")
+    part = _purchased_step(name, label, rotations)
+    return _paint(part, label, "#E9E3D0", 1.0)
+
+
+GH_PLUG_THICKNESS = 4.15  # GHR housing (D)
+GH_PLUG_PROUD = 3.2  # housing beyond the header face when mated (E)
+
+
+def gh_plug_width(circuits):
+    return 1.25 * circuits + 1.25  # GHR-xxV-S dimension B (D)
+
+
+def _cid(cid):
+    return cid.replace("-", "_")
+
+
 def _beam_xz(x0, z0, x1, z1, width, thickness, label, color):
     """Rectangular structural member centred between two XZ datum points."""
     dx = x1 - x0
@@ -796,10 +976,6 @@ def _beam_xz(x0, z0, x1, z1, width, thickness, label, color):
     beam = Box(length, width, thickness).rotate(Axis.Y, angle)
     beam = beam.moved(Location(((x0 + x1) / 2.0, 0.0, (z0 + z1) / 2.0)))
     return _paint(beam, label, color, 1.0)
-
-
-def _vertical_bore(radius, z0, z1, x, y):
-    return Cylinder(radius, z1 - z0).moved(Location((x, y, z0)))
 
 
 def _axial_bore_x(radius, x0, x1, y, z):
@@ -1051,14 +1227,14 @@ def rear_skid_tcrt_keel():
     sensor_pocket = _block(tx - 6.0, tx + 6.0, -5.1, 5.1, TCRT_OPTICAL_FACE_Z - 1.0, TCRT_OPTICAL_FACE_Z + 10.8)  # 10.5 mm real part incl. leads
     connector_channel = _block(tx + 4.0, tx + 17.0, -3.5, 3.5, tz + 2.0, tz + 7.0)
     cable_x = tx + 13.0
-    cable_bore = _vertical_bore(3.0, tz + 2.0, REAR_KEEL_TOP_Z + 1.0, cable_x, 0.0)
+    cable_bore = _z_cylinder(3.0, tz + 2.0, REAR_KEEL_TOP_Z + 1.0, cable_x, 0.0)
     screw_bores = []
     screws = []
     screw_points = [(x, sign * 5.5) for x in REAR_KEEL_SCREWS_X for sign in (1.0, -1.0)]
     for index, (x, y) in enumerate(screw_points, start=1):
-        screw_bores.append(_vertical_bore(1.7, 0.0, REAR_KEEL_TOP_Z + 1.0, x, y))
+        screw_bores.append(_z_cylinder(1.7, 0.0, REAR_KEEL_TOP_Z + 1.0, x, y))
         forward_pair = x > -54.0 + REAR_CHASSIS_SHIFT_X
-        screw_bores.append(_vertical_bore(2.9, 0.0, SKID_SHOE_BOTTOM_Z + 2.5 + 3.0 if forward_pair else 12.0, x, y))
+        screw_bores.append(_z_cylinder(2.9, 0.0, SKID_SHOE_BOTTOM_Z + 2.5 + 3.0 if forward_pair else 12.0, x, y))
         head_z0 = SKID_SHOE_BOTTOM_Z + 2.5 + 1.0 if forward_pair else 10.0
         screws.append(_paint(Cylinder(2.8, 1.8, align=(Align.CENTER, Align.CENTER, Align.MIN)).moved(Location((x, y, head_z0))), f"REAR_KEEL_M3_HEAD_{index}", STEEL, 1.0))
         screws.append(_paint(Cylinder(1.35, 44.0 - head_z0 - 1.8, align=(Align.CENTER, Align.CENTER, Align.MIN)).moved(Location((x, y, head_z0 + 1.8))), f"REAR_KEEL_M3_SHANK_{index}", STEEL, 1.0))
@@ -1352,8 +1528,11 @@ def body_panels():
         _axial_bore_x(1.65, BODY_X_REAR - 5.0, BODY_X_REAR + 3.0, y, z)
         for y, z in (*REAR_PANEL_FASTENERS, *(rear_tail_root_screw_points() if REAR_TAIL_ENABLED else ()))
     ]
+    cw, ch = CHARGE_INLET_CUTOUT
+    cy, cz = CHARGE_INLET_CENTER_YZ
+    inlet_cutout = _block(BODY_X_REAR - SHELL_THICKNESS - 1.0, BODY_X_REAR + 1.0, cy - cw / 2.0, cy + cw / 2.0, cz - ch / 2.0, cz + ch / 2.0)
     rear = _paint(
-        rear_raw - rear_bores - _estop_well_outer(),
+        rear_raw - rear_bores - _estop_well_outer() - inlet_cutout,
         "REAR_SERVICE_PANEL_OCTAGONAL",
         IVORY,
         SHELL_ALPHA,
@@ -1481,6 +1660,10 @@ def battery_tub():
     walls = _block(x0, x0 + w, -hw, hw, fz1, top) + _block(x1, x1 + w, -hw, hw, fz1, top)
     for sign in (1.0, -1.0):
         walls = walls + _block(x0 + w, x1 + w, *sorted((sign * (hw - w), sign * hw)), fz1, top)
+    # Service window in the +Y wall: the pack disconnect slides through it into
+    # the emptied tub (connector-schedule.md CN-05).
+    wx0, wx1, wz0, wz1 = TUB_SERVICE_WINDOW
+    walls = walls - _block(wx0, wx1, hw - w - 1.0, hw + 1.0, wz0, wz1)
     return Compound(label="BATTERY_TUB", children=[hatch, _paint(walls, "BATTERY_TUB_WALLS", FRAME_BLUE, 1.0)])
 
 
@@ -1528,7 +1711,7 @@ def chassis_frame():
         ),
         _paint(
             Box(16.0, 116.0, 14.0).moved(Location((SKID_ROOT_DATUM[0], 0.0, 41.0)))
-            - _vertical_bore(3.0, 33.0, 49.0, TCRT_REAR_CENTER[0] + 13.0, 0.0),
+            - _z_cylinder(3.0, 33.0, 49.0, TCRT_REAR_CENTER[0] + 13.0, 0.0),
             "REAR_SKID_CROSSMEMBER",
             FRAME_BLUE,
             1.0,
@@ -1606,7 +1789,7 @@ def body_primary_frame():
         pad = Box(20.0, 18.0, BODY_MOUNT_PAD_THICKNESS).moved(
             Location((mount_x, mount_y, BODY_MOUNT_PAD_Z0 + BODY_MOUNT_PAD_THICKNESS / 2.0))
         )
-        pad = pad - _vertical_bore(
+        pad = pad - _z_cylinder(
             BODY_MOUNT_CLEARANCE_RADIUS,
             BODY_MOUNT_PAD_Z0 - 1.0,
             BODY_MOUNT_PAD_Z0 + BODY_MOUNT_PAD_THICKNESS + 1.0,
@@ -1632,7 +1815,7 @@ def body_primary_frame():
         locator = Cylinder(5.0, 5.0, align=(Align.CENTER, Align.CENTER, Align.CENTER)).moved(
             Location((x, y, 58.5))
         )
-        locator = locator - _vertical_bore(2.05, 55.0, 62.0, x, y)
+        locator = locator - _z_cylinder(2.05, 55.0, 62.0, x, y)
         parts.append(_paint(locator, f"BODY_LOCATING_BOSS_{index}", SLATE_DARK, 1.0))
     parts.extend([
     ])
@@ -1864,9 +2047,10 @@ def power_distribution_boards():
     """RP-02 custom power/safety board envelopes, main-fuse holder and E-stop (proposal).
 
     Each board is a 1.6 mm PCB plate plus a translucent parts envelope up to the
-    stated total height. The E-stop keep-out and the rear USB-C window are
-    reserved volumes, not solids that belong to a part. The E-stop's well and
-    bezel belong to the rear panel (body_panels); the USB-C window is still uncut.
+    stated total height. The E-stop keep-out is a reserved volume, not a solid
+    that belongs to a part. The E-stop's well and bezel and the charge-inlet
+    cut-out belong to the rear panel (body_panels); the inlet receptacle and its
+    plug corridor are in connectors_and_exits().
     """
     def board(name, box, color, pcb_at_top=False):
         x0, x1, y0, y1, z0, z1 = box
@@ -1883,13 +2067,13 @@ def power_distribution_boards():
     estop = Compound(label="ESTOP_XA1E_BV3U02KT_R", children=[
         *estop_switch(),
         _paint(_block(*ESTOP_KEEP_OUT), "ESTOP_XA1E_BEHIND_PANEL_KEEP_OUT", ESTOP_RED, 0.18),
-        _paint(_block(*REAR_USBC_WINDOW), "REAR_PANEL_USBC_WINDOW_KEEP_OUT", "#79C4CB", 0.30),
     ])
     parts = [
         board("PCB02_CHARGE_AND_SYSTEM_POWER", PCB02_BOX, "#D38132"),
         board("PCB03_MOTOR_GATE_AND_HEAD_RAIL", PCB03_BOX, "#D38132"),
         board("PCB04_BRANCH_CONVERTERS", PCB04_BOX, "#D38132"),
         _paint(_block(*PACK_FUSE_HOLDER_BOX), "PACK_ATOF_FUSE_HOLDER_ENVELOPE", "#C55842", 0.74),
+        _paint(_block(*PACK_DISCONNECT_PAIR_BOX), "PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE", "#E7A95B", 0.85),
         estop,
     ]
     return Compound(label="POWER_DISTRIBUTION_BOARDS", children=parts)
@@ -1909,10 +2093,7 @@ def electronics():
     plate_z0 = max(cooler.solids(), key=lambda sl: sl.volume).bounding_box().min.Z
     cooler = cooler.moved(Location((PI_COOLER_HOLE_A[0] - post_a.X, PI_COOLER_HOLE_A[1] - post_a.Y, PI_SOC_TOP_Z - plate_z0)))
     cooler = Compound(label="PI5_ACTIVE_COOLER_STEP", children=list(cooler.solids()))
-    # DevKitC: -90 deg about Z puts the USB end at the rear (-X); board bottom
-    # sits on the old envelope floor (Z 78).
-    devkit = _purchased_step("ESP32-S3-WROOM-1_devkit_2xUSBC_c.step", "C3_ESP32_S3_DEVKITC_STEP", [(Axis.Z, -90.0)])
-    devkit = _place(devkit, DEVKIT_CENTER[0], DEVKIT_CENTER[1], DEVKIT_CENTER[2] - 6.0, ref={"Z": "min"})
+    c3 = c3_carrier()
     # Pololu carrier lies flat; bottom on the old 12 mm envelope floor (Z 66).
     drivers = []
     for side, y in (("LEFT", 40.0), ("RIGHT", -40.0)):
@@ -1926,12 +2107,51 @@ def electronics():
         pi_tray,
         raspberry_pi5(),
         cooler,
-        devkit,
+        c3,
         driver_l,
         driver_r,
         power_distribution_boards(),
         imu,
     ])
+
+
+def c3_carrier():
+    """PCB-10 C3 carrier on the -Y side wall with the DevKitC soldered on (+Y face)."""
+    x0, x1, y0, y1, z0, z1 = C3_CARRIER_BOARD
+    board = _paint(_block(*C3_CARRIER_BOARD), "C3_CARRIER_PCB10_BOARD", PCB_GREEN, 1.0)
+    # DevKitC: -90 deg about Z puts the USB end at the rear (-X); -90 deg about X
+    # then turns its component side to +Y, off the carrier.
+    devkit = _purchased_step("ESP32-S3-WROOM-1_devkit_2xUSBC_c.step", "C3_ESP32_S3_DEVKITC_STEP", [(Axis.Z, -90.0), (Axis.X, -90.0)])
+    devkit = _place(devkit, (x0 + x1) / 2.0, y1 + C3_DEVKIT_STANDOFF, C3_DEVKIT_Z[0], ref={"X": "center", "Y": "min", "Z": "min"})
+    # The DevKitC's two 22-pin male headers, soldered through the carrier.
+    rows = [
+        _paint(_block((x0 + x1) / 2.0 - 27.94, (x0 + x1) / 2.0 + 27.94, y1, y1 + C3_DEVKIT_STANDOFF, z - 1.27, z + 1.27), f"C3_DEVKIT_HEADER_ROW_{k}", "#2E3336", 1.0)
+        for k, z in ((1, C3_DEVKIT_Z[0] + 1.6), (2, C3_DEVKIT_Z[1] - 1.6))
+    ]
+    uprights = [
+        _paint(_block(ux0, ux1, -66.0, y0, BODY_FRAME_LOWER_Z + 4.0, BODY_FRAME_UPPER_Z - 4.0), f"BODY_FRAME_C3_CARRIER_UPRIGHT_{k}", FRAME_BLUE, 1.0)
+        for k, (ux0, ux1) in enumerate(C3_CARRIER_UPRIGHTS, start=1)
+    ]
+    screws = []
+    for k, (sx, sz) in enumerate(C3_CARRIER_SCREWS, start=1):
+        head = _cylinder(2.25, 1.8, (sx, y1 + 0.9, sz), f"C3_CARRIER_M25_SCREW_HEAD_{k}", STEEL, 1.0, "y")
+        shank = _cylinder(1.25, 6.0, (sx, y1 - 3.0, sz), f"C3_CARRIER_M25_SCREW_SHANK_{k}", STEEL, 1.0, "y")
+        screws += [head, shank]
+    # Top-entry GH headers: -90 deg about X turns the STEP's +Z (mating) to +Y.
+    headers = []
+    for zc, row in C3_GH_ROWS.items():
+        for cid, n, hx0 in row:
+            hdr = _place(_gh_header(n, f"C3_{_cid(cid)}_JST_GH_BM{n:02d}B_HEADER", [(Axis.X, -90.0)], top_entry=True), hx0, y1, zc, ref={"X": "min", "Y": "min", "Z": "center"})
+            top = hdr.bounding_box().max.Y
+            hc = (hdr.bounding_box().min.X + hdr.bounding_box().max.X) / 2.0
+            plug = _box(gh_plug_width(n), GH_PLUG_PROUD, GH_PLUG_THICKNESS, (hc, top + GH_PLUG_PROUD / 2.0, zc), f"C3_{_cid(cid)}_GHR{n:02d}_MATED_PLUG", "#F4F1E6", 1.0)
+            headers += [hdr, plug]
+    # J10-1: Micro-Fit 3.0 2x1 right-angle on the front edge, mating +X.
+    w = connector_width("MF3", 2)
+    pz = (C3_POWER_PLUG_RESERVE[4] + C3_POWER_PLUG_RESERVE[5]) / 2.0
+    headers.append(_paint(_block(x1 - 7.0, x1, y1, y1 + 10.0, pz - w / 2.0, pz + w / 2.0), "C3_J10_1_MICROFIT3_2P_RA_HEADER", "#2E3336", 1.0))
+    headers.append(_paint(_block(x1, x1 + 12.0, y1, y1 + 10.0, pz - w / 2.0, pz + w / 2.0), "C3_J10_1_MICROFIT3_2P_MATED_PLUG", "#3A4044", 1.0))
+    return Compound(label="C3_CARRIER_PCB10_WITH_DEVKITC", children=[board, devkit, *rows, *uprights, *screws, *headers])
 
 
 def _tcrt_ski_cartridge(name, center):
@@ -1947,7 +2167,7 @@ def _tcrt_ski_cartridge(name, center):
         _box(11.5, 1.2, 7.5, (x, y - 4.45, z + 0.5), f"TCRT_{name}_INTERNAL_GUIDE_R", FRAME_BLUE, 1.0),
         _box(11.5, 1.2, 7.5, (x, y + 4.45, z + 0.5), f"TCRT_{name}_INTERNAL_GUIDE_L", FRAME_BLUE, 1.0),
         _box(11.0, 7.0, 1.0, (x, y, z + 4.25), f"TCRT_{name}_HEIGHT_SHIM", STEEL, 0.78),
-        _box(12.0, 6.5, 4.0, (x + 11.0, y, z + 4.5), f"TCRT_{name}_INTERNAL_CONNECTOR_RESERVE", "#79C4CB", 0.18),
+        _box(12.0, 6.5, 4.0, (x + 11.0, y, z + 4.5), f"TCRT_{name}_GH4_PLUG_RESERVE", "#79C4CB", 0.18),
     ]
     return Compound(label=f"TCRT_{name}_REAR_TAIL_CARTRIDGE", children=parts)
 
@@ -1964,7 +2184,7 @@ def sensors():
         ),
         _paint(
             _block(connector_x0, body_x0, -5.0, 5.0, FRONT_RANGE_SENSOR_Z - 4.0, FRONT_RANGE_SENSOR_Z + 5.0),
-            "GP2Y_CONNECTOR_RESERVE",
+            "GP2Y_JST_PH3_PLUG_RESERVE",  # vendor S3B-PH header on the sensor; PHR-3 plug and lead exit
             "#79C4CB",
             0.30,
         ),
@@ -1983,8 +2203,12 @@ def imu_board():
     for sign in (1.0, -1.0):
         board = board - _z_cylinder(1.1, cz - bz, top + 1.0, IMU_SCREW_X, sign * IMU_SCREW_HALF_Y)
     chip = _box(*IMU_CHIP_SIZE, (cx, cy, top + IMU_CHIP_SIZE[2] / 2.0), "IMU_ICM42688P_PACKAGE", "#1E2426", 1.0)
-    cxs, cys, czs = IMU_CONNECTOR_SIZE
-    connector = _box(cxs, cys, czs, (cx - bx / 2.0 + cxs / 2.0, cy, top + czs / 2.0), "IMU_JST_SH_8P_CONNECTOR", "#E9E3D0", 1.0)
+    # JST GH SM08B-GHS-TB side entry, mating face on the board's -X edge
+    # (STEP mating face is -Y: -90 deg about Z turns it to -X).
+    connector = _place(
+        _gh_header(8, "IMU_JST_GH_SM08B_HEADER", [(Axis.Z, -90.0)]),
+        cx - bx / 2.0, cy, top, ref={"X": "min", "Y": "center", "Z": "min"},
+    )
     parts = [_paint(board, "IMU_PCB07_BOARD", PCB_GREEN, 1.0), chip, connector]
     for sign, side in ((1.0, "L"), (-1.0, "R")):
         # M2 x 5 pan head (Ø3.8 x 1.3) on the board; the shank thread-forms 4 mm into the deck.
@@ -1995,19 +2219,25 @@ def imu_board():
 
 
 def _mic_board(x, y, z, name):
-    """PCB-06: one IM73D122V01 on the port axis, inboard face, JST-SH 4-pin below it."""
+    """PCB-06: one IM73D122V01 on the port axis, inboard face, JST GH 4-pin below it."""
     sign = 1.0 if y > 0.0 else -1.0
     wx, wy, wz = MIC_BOARD_SIZE
     board_y = sign * (MIC_BOARD_OUTER_Y - wy / 2.0)
-    board_z = z - 2.0  # board spans z - 6 .. z + 2: mic on the axis, connector below
+    board_z = z + 2.0 - wz / 2.0  # board top 2 mm over the mic axis; the GH header fills the rest below
     board = _box(wx, wy, wz, (x, board_y, board_z), f"PDM_MIC_{name}_PCB06", PCB_GREEN, 0.94)
     # Ø0.8 acoustic hole through the board on the port axis (Infineon footprint note).
     board = board - _cylinder(0.4, wy + 1.0, (x, board_y, z), "hole", PCB_GREEN, 1.0, "y")
     inboard = sign * (MIC_BOARD_OUTER_Y - wy)
     px, py, pz = MIC_PACKAGE_SIZE
     mic = _box(px, py, pz, (x, inboard - sign * py / 2.0, z), f"PDM_MIC_{name}_IM73D122", "#C9CDD0", 1.0)
-    kx, ky, kz = MIC_CONNECTOR_SIZE
-    connector = _box(kx, ky, kz, (x, inboard - sign * ky / 2.0, board_z - wz / 2.0 + kz / 2.0 + 0.25), f"PDM_MIC_{name}_JST_SH_4P", "#E9E3D0", 1.0)
+    # JST GH SM04B-GHS-TB on the inboard face, mating face on the board's bottom
+    # edge so the plug enters from below: STEP -Y (mating) to -Z, STEP +Z (height)
+    # inboard. The right-hand board is the same header turned 180 deg about Z.
+    turns = [(Axis.X, 90.0)] if sign > 0 else [(Axis.X, 90.0), (Axis.Z, 180.0)]
+    connector = _place(
+        _gh_header(4, f"PDM_MIC_{name}_JST_GH_SM04B_HEADER", turns),
+        x, inboard, board_z - wz / 2.0, ref={"X": "center", "Y": "max" if sign > 0 else "min", "Z": "min"},
+    )
     return [_paint(board, f"PDM_MIC_{name}_PCB06", PCB_GREEN, 0.94), mic, connector]
 
 
@@ -2119,11 +2349,186 @@ def harness_routes():
         _box(12.0, 92.0, 6.0, (36.0, 0.0, 59.5), "HARNESS_MOTOR_BRANCH", "#D94A3A", 0.42),
         _box(82.0, 8.0, 8.0, (30.0 + BODY_SHIFT_X, 26.0, 82.0), "HARNESS_SIGNAL_TRUNK", "#2FAFC2", 0.42),
         _box(82.0, 8.0, 8.0, (30.0 + BODY_SHIFT_X, -26.0, 82.0), "HARNESS_SENSOR_TRUNK", "#44BDD0", 0.42),
-        _box(12.0, 12.0, YAW_PLATE_Z[0] - 78.0, (BODY_AXIS_X, 0.0, (YAW_PLATE_Z[0] + 78.0) / 2.0), "HARNESS_HEAD_VERTICAL", "#9566D9", 0.35),
         # Flat clock-spring loop under the disc takes the ±55° yaw twist.
         _paint(_ring(*YAW_CLOCKSPRING_RADII, *YAW_BEARING_Z), "HARNESS_HEAD_YAW_CLOCKSPRING_RESERVE", "#9566D9", 0.20),
+        # Head trunk (connector-schedule.md): down the plate's Ø18 bore, along the
+        # plate underside to the -Y yaw junction, then down a -Y riser to PCB-03/04,
+        # so it no longer passes through the compute tray and the Pi cooler.
+        _paint(_block(BODY_AXIS_X - 6.0, BODY_AXIS_X + 6.0, -24.0, 6.0, 127.0, YAW_PLATE_Z[0] - 0.5), "HARNESS_HEAD_TRUNK_UNDER_PLATE", "#9566D9", 0.35),
+        _paint(_block(-22.0, -2.0, -40.0, -23.0, 100.0, 126.0), "HARNESS_HEAD_RISER_UPPER", "#9566D9", 0.35),
+        _paint(_block(-28.0, -16.0, -50.0, -40.0, 75.0, 112.0), "HARNESS_HEAD_RISER_LOWER", "#9566D9", 0.35),
+        # CSI (PCN-36 15-to-22 FFC, 11.5 mm wide): straight down the axis bore and
+        # beside the cooler into the Pi 5's rear FPC socket; demated at the Pi.
+        _paint(_block(BODY_AXIS_X, 30.0, -26.5, -11.0, 127.0, YAW_PLATE_Z[0] - 0.5), "HARNESS_CSI_FFC_UNDER_PLATE", "#65A584", 0.35),
+        _paint(_block(26.0, 29.0, -26.5, -11.0, 99.6, 127.0), "HARNESS_CSI_FFC_DROP_TO_PI_CAM", "#65A584", 0.35),
     ]
     return Compound(label="HARNESS_ROUTES", children=parts)
+
+
+MATED_POWER_PLUG_LENGTH = 12.0  # Micro-Fit receptacle housing beyond the header face (E)
+MATED_POWER_PLUG_HEIGHT = 10.0  # (E)
+
+
+def _yaw_junction_board():
+    """PCB-08: clock-spring stator board with the body-side connectors."""
+    x0, x1, y0, y1, _z0, _z1 = YAW_JUNCTION_BOX
+    pz0, pz1 = YAW_JUNCTION_PLATE_Z
+    parts = [_paint(_block(x0, x1, y0, y1, pz0, pz1), "YAW_JUNCTION_PCB08_BOARD", PCB_GREEN, 1.0)]
+    # J8-1 Micro-Fit+ 2x3 right-angle on the -X edge, mating -X.
+    w = connector_width("MF+", 6)
+    yc = (YAW_JUNCTION_MF_PLUG_RESERVE[2] + YAW_JUNCTION_MF_PLUG_RESERVE[3]) / 2.0
+    parts.append(_paint(_block(x0, x0 + 10.0, yc - w / 2.0, yc + w / 2.0, pz1, pz1 + MATED_POWER_PLUG_HEIGHT), "YAW_JUNCTION_J8_1_MICROFIT_PLUS_6P_RA_HEADER", "#2E3336", 1.0))
+    parts.append(_paint(_block(x0 - MATED_POWER_PLUG_LENGTH, x0, yc - w / 2.0, yc + w / 2.0, pz1, pz1 + MATED_POWER_PLUG_HEIGHT), "YAW_JUNCTION_J8_1_MICROFIT_PLUS_6P_MATED_PLUG", "#3A4044", 1.0))
+    for cid, n, gy0 in YAW_JUNCTION_GH:
+        hdr = _place(_gh_header(n, f"YAW_JUNCTION_{_cid(cid)}_JST_GH_BM{n:02d}B_HEADER", top_entry=True), -10.0, gy0, pz1, ref={"X": "min", "Y": "min", "Z": "min"})
+        b = hdr.bounding_box()
+        parts.append(hdr)
+        parts.append(_box(gh_plug_width(n), GH_PLUG_THICKNESS, GH_PLUG_PROUD, ((b.min.X + b.max.X) / 2.0, (b.min.Y + b.max.Y) / 2.0, b.max.Z + GH_PLUG_PROUD / 2.0), f"YAW_JUNCTION_{_cid(cid)}_GHR{n:02d}_MATED_PLUG", "#F4F1E6", 1.0))
+    return Compound(label="YAW_JUNCTION_PCB08", children=parts)
+
+
+def _c0_link_adapter():
+    """PCB-09: 2 x 20 socket on the Pi header, strip over it, two THVD1451, GH headers."""
+    z0, z1 = C0_LINK_ADAPTER_PLATE_Z
+    sx0, sx1, sy0, sy1, _a, _b = C0_LINK_ADAPTER_STRIP
+    bx0, bx1, by0, by1, _a, _b = C0_LINK_ADAPTER_BRIDGE
+    wx0, wx1, wy0, wy1, _a, _b = C0_LINK_ADAPTER_BOX
+    plate = _block(sx0, sx1, sy0, sy1, z0, z1) + _block(bx0, bx1, by0, by1, z0, z1) + _block(wx0, wx1, wy0, wy1, z0, z1)
+    parts = [
+        _paint(plate, "C0_LINK_ADAPTER_PCB09_BOARD", PCB_GREEN, 1.0),
+        _paint(_block(*C0_GPIO_SOCKET), "C0_GPIO_2X20_SOCKET_BODY", "#2E3336", 1.0),
+        # THVD1451D SOIC-14 (8.65 x 6.0 incl. leads x 1.75): head link on the bridge, base link on the wide part.
+        _paint(_block(27.0, 35.65, 22.5, 28.5, z1, z1 + 1.75), "C0_THVD1451_HEAD_LINK_SOIC14", "#1E2426", 1.0),
+        _paint(_block(27.0, 35.65, 30.0, 36.0, z1, z1 + 1.75), "C0_THVD1451_BASE_LINK_SOIC14", "#1E2426", 1.0),
+    ]
+    tops = (("J9-2", 6, 37.0, 30.0), ("J9-3", 10, 37.0, 36.5))  # id, circuits, x0, y0
+    for cid, n, gx0, gy0 in tops:
+        hdr = _place(_gh_header(n, f"C0_{_cid(cid)}_JST_GH_BM{n:02d}B_HEADER", top_entry=True), gx0, gy0, z1, ref={"X": "min", "Y": "min", "Z": "min"})
+        b = hdr.bounding_box()
+        parts.append(hdr)
+        parts.append(_box(gh_plug_width(n), GH_PLUG_THICKNESS, GH_PLUG_PROUD, ((b.min.X + b.max.X) / 2.0, (b.min.Y + b.max.Y) / 2.0, b.max.Z + GH_PLUG_PROUD / 2.0), f"C0_{_cid(cid)}_GHR{n:02d}_MATED_PLUG", "#F4F1E6", 1.0))
+    # J9-1 GH 6 side entry on the +Y edge, mating +Y (STEP -Y turned 180 deg about Z).
+    hdr = _place(_gh_header(6, "C0_J9_1_JST_GH_SM06B_HEADER", [(Axis.Z, 180.0)]), 26.2, wy1, z1, ref={"X": "min", "Y": "max", "Z": "min"})
+    b = hdr.bounding_box()
+    parts.append(hdr)
+    parts.append(_box(gh_plug_width(6), GH_PLUG_PROUD, GH_PLUG_THICKNESS, ((b.min.X + b.max.X) / 2.0, wy1 + GH_PLUG_PROUD / 2.0, z1 + GH_PLUG_THICKNESS / 2.0), "C0_J9_1_GHR06_MATED_PLUG", "#F4F1E6", 1.0))
+    return Compound(label="C0_LINK_ADAPTER_PCB09", children=parts)
+
+
+def _pcb05_connectors():
+    """Side-entry GH headers and the Micro-Fit 3.0 power header on PCB-05's edges."""
+    px, py, pz = PCB05_CENTER
+    wx, wy, wz = PCB05_SIZE
+    x0, x1, y0, y1 = px - wx / 2.0, px + wx / 2.0, py - wy / 2.0, py + wy / 2.0
+    top = pz - wz / 2.0 + PCB05_BOARD_THICKNESS
+    parts = []
+    edges = {
+        "PY": ([(Axis.Z, 180.0)], (("J5-2", 4, 46.0), ("J5-3", 4, 55.25), ("J5-6", 2, 64.5))),
+        "NY": ([], (("J5-4", 4, 46.0), ("J5-5", 4, 55.25))),
+    }
+    for edge, (turns, row) in edges.items():
+        sign = 1.0 if edge == "PY" else -1.0
+        ey = y1 if edge == "PY" else y0
+        for cid, n, hx0 in row:
+            hdr = _place(_gh_header(n, f"PCB05_{_cid(cid)}_JST_GH_SM{n:02d}B_HEADER", turns), hx0, ey, top, ref={"X": "min", "Y": "max" if sign > 0 else "min", "Z": "min"})
+            b = hdr.bounding_box()
+            parts.append(hdr)
+            parts.append(_box(gh_plug_width(n), GH_PLUG_PROUD, GH_PLUG_THICKNESS, ((b.min.X + b.max.X) / 2.0, ey + sign * GH_PLUG_PROUD / 2.0, top + GH_PLUG_THICKNESS / 2.0), f"PCB05_{_cid(cid)}_GHR{n:02d}_MATED_PLUG", "#F4F1E6", 1.0))
+    # J5-1 host GH 10 on the rear edge, mating -X.
+    hdr = _place(_gh_header(10, "PCB05_J5_1_JST_GH_SM10B_HEADER", [(Axis.Z, -90.0)]), x0, py, top, ref={"X": "min", "Y": "center", "Z": "min"})
+    parts.append(hdr)
+    parts.append(_box(GH_PLUG_PROUD, gh_plug_width(10), GH_PLUG_THICKNESS, (x0 - GH_PLUG_PROUD / 2.0, py, top + GH_PLUG_THICKNESS / 2.0), "PCB05_J5_1_GHR10_MATED_PLUG", "#F4F1E6", 1.0))
+    # J5-7 PB-AUDIO-OUT: Micro-Fit 3.0 2x1 right-angle on the -Y edge.
+    w = connector_width("MF3", 2)
+    parts.append(_paint(_block(64.5, 64.5 + w, y0, y0 + 10.0, top, top + MATED_POWER_PLUG_HEIGHT), "PCB05_J5_7_MICROFIT3_2P_RA_HEADER", "#2E3336", 1.0))
+    parts.append(_paint(_block(64.5, 64.5 + w, y0 - MATED_POWER_PLUG_LENGTH, y0, top, top + MATED_POWER_PLUG_HEIGHT), "PCB05_J5_7_MICROFIT3_2P_MATED_PLUG", "#3A4044", 1.0))
+    return Compound(label="PCB05_CONNECTORS", children=parts)
+
+
+def _edge_power_plugs():
+    """Mated Micro-Fit plugs on the PCB-02/03/04 edges, spread inside each edge reserve."""
+    boards = {"PCB03": PCB03_BOX, "PCB04": PCB04_BOX}
+    parts = []
+    for name, strip in CONNECTOR_EDGE_STRIPS.items():
+        widths = [connector_width(fam, n) for _cid, fam, n, _w in strip["connectors"]]
+        s0, s1 = strip["span"]
+        pos = s0 + (s1 - s0 - sum(widths) - CONNECTOR_GAP * (len(widths) - 1)) / 2.0
+        for (cid, fam, n, _what), w in zip(strip["connectors"], widths):
+            label = f"{_cid(cid)}_{'MICROFIT_PLUS' if fam == 'MF+' else 'MICROFIT3'}_{n}P_MATED_PLUG"
+            if name == "PCB02_NY":
+                bx0 = PCB02_BOX[0] + PCB_THICKNESS
+                box = (bx0, bx0 + MATED_POWER_PLUG_HEIGHT, PCB02_BOX[2] - MATED_POWER_PLUG_LENGTH, PCB02_BOX[2], pos, pos + w)
+            else:
+                b = boards[name[:5]]
+                ztop = b[4] + PCB_THICKNESS
+                if name.endswith("PY"):
+                    box = (pos, pos + w, b[3], b[3] + MATED_POWER_PLUG_LENGTH, ztop, ztop + MATED_POWER_PLUG_HEIGHT)
+                else:
+                    box = (pos, pos + w, b[2] - MATED_POWER_PLUG_LENGTH, b[2], ztop, ztop + MATED_POWER_PLUG_HEIGHT)
+            parts.append(_paint(_block(*box), label, "#3A4044", 1.0))
+            pos += w + CONNECTOR_GAP
+    # Motor pairs: Micro-Fit 3.0 1x2 wire-to-wire, mated (43640 plug + 43645 receptacle, E).
+    x0, x1, y0, y1, z0, z1 = MOTOR_INLINE_RESERVE_L
+    for side, sy in (("L", 1.0), ("R", -1.0)):
+        ys = sorted((sy * (y0 + 1.0), sy * (y0 + 8.0)))
+        parts.append(_paint(_block(x0 + 0.5, x0 + 19.5, ys[0], ys[1], z0 + 1.0, z0 + 11.0), f"MOTOR_{side}_MICROFIT3_1X2_WIRE_TO_WIRE_MATED_PAIR", "#3A4044", 1.0))
+    return Compound(label="EDGE_AND_INLINE_POWER_PLUGS", children=parts)
+
+
+def connectors_and_exits():
+    """Mated-connector and cable-exit reserves (connector-schedule.md).
+
+    Reserves are translucent keep-outs for the mated plug plus the lead's first
+    bend; they touch their own board but must clear every real part. Labels
+    ending in _OPEN are known clashes recorded for follow-up, not placements.
+    """
+    reserve = "#79C4CB"
+    power = "#E7A95B"
+    parts = []
+    for name, strip in CONNECTOR_EDGE_STRIPS.items():
+        ids = "_".join(c[0].replace("-", "") for c in strip["connectors"])
+        parts.append(_paint(_block(*strip["box"]), f"{name}_EDGE_CONNECTORS_{ids}_RESERVE", power, 0.30))
+    for name, layer in CONNECTOR_TOP_LAYERS.items():
+        parts.append(_paint(_block(*layer["box"]), f"{name}_TOP_ENTRY_SIGNAL_PLUG_LAYER_RESERVE", reserve, 0.14))
+    parts += [
+        _paint(_block(*CHARGE_INLET_RECEPTACLE), "CHARGE_INLET_USBC_VERTICAL_RECEPTACLE_ENVELOPE", "#B7BFC0", 1.0),
+        _paint(_block(*CHARGE_INLET_OUTSIDE_CORRIDOR), "CHARGE_INLET_OUTSIDE_PLUG_CORRIDOR_KEEP_OUT", reserve, 0.20),
+        _paint(_block(*PI_POWER_PLUG_RESERVE), "PI5_POWER_USBC_RIGHT_ANGLE_PLUG_RESERVE", power, 0.35),
+        _paint(_block(*PI_POWER_PIGTAIL_DROP), "PI5_POWER_PIGTAIL_DROP_RESERVE", power, 0.30),
+        _paint(_block(*YAW_JUNCTION_BOX), "YAW_JUNCTION_PCB08_WITH_CONNECTORS_RESERVE", "#9566D9", 0.30),
+        _paint(_block(*C0_LINK_ADAPTER_BOX), "C0_LINK_ADAPTER_PCB09_RESERVE", reserve, 0.30),
+    ]
+    x0, x1, y0, y1, z0, z1 = MOTOR_INLINE_RESERVE_L
+    parts += [
+        _paint(_block(x0, x1, y0, y1, z0, z1), "MOTOR_L_INLINE_MICROFIT3_1X2_RESERVE", power, 0.30),
+        _paint(_block(x0, x1, -y1, -y0, z0, z1), "MOTOR_R_INLINE_MICROFIT3_1X2_RESERVE", power, 0.30),
+    ]
+    parts += [
+        _paint(_block(*C3_GH_PLUG_LAYER), "C3_CARRIER_TOP_ENTRY_SIGNAL_PLUG_LAYER_RESERVE", reserve, 0.14),
+        _paint(_block(*C3_POWER_PLUG_RESERVE), "C3_CARRIER_EDGE_CONNECTOR_J101_RESERVE", power, 0.30),
+        _paint(_block(*C3_DEVKIT_USB_CORRIDOR), "C3_DEVKITC_USB_SERVICE_CORRIDOR_KEEP_OUT", reserve, 0.12),
+        _paint(_block(*PACK_DISCONNECT_SLIDE_PATH), "PACK_DISCONNECT_SERVICE_SLIDE_PATH_KEEP_OUT", reserve, 0.12),
+        _paint(_block(*YAW_JUNCTION_MF_PLUG_RESERVE), "YAW_JUNCTION_J81_PLUG_RESERVE", power, 0.30),
+        _paint(_block(*C0_LINK_ADAPTER_TOP_PLUGS), "C0_LINK_ADAPTER_TOP_ENTRY_PLUG_RESERVE", reserve, 0.20),
+        _paint(_block(*C0_LINK_ADAPTER_SIDE_PLUG), "C0_LINK_ADAPTER_J91_PLUG_RESERVE", reserve, 0.20),
+        _paint(_block(45.0, 75.0, 19.0, 28.0, 115.6, 120.0), "PCB05_PY_EDGE_PLUG_RESERVE", reserve, 0.20),
+        _paint(_block(45.0, 75.0, -31.0, -19.0, 115.6, 125.6), "PCB05_NY_EDGE_PLUG_RESERVE", reserve, 0.20),
+        _paint(_block(36.0, 45.0, -9.0, 9.0, 115.6, 120.0), "PCB05_REAR_EDGE_PLUG_RESERVE", reserve, 0.20),
+    ]
+    parts += [_yaw_junction_board(), _c0_link_adapter(), _pcb05_connectors(), _edge_power_plugs()]
+    # GH plug and lead reserves in front of the IMU and microphone headers.
+    ix, iy, iz = IMU_BOARD_CENTER
+    top = iz + IMU_BOARD_SIZE[2] / 2.0
+    w = connector_width("GH", 8)
+    parts.append(_paint(_block(ix - IMU_BOARD_SIZE[0] / 2.0 - 9.0, ix - IMU_BOARD_SIZE[0] / 2.0, iy - w / 2.0, iy + w / 2.0, top, top + 4.5), "IMU_GH8_PLUG_RESERVE", reserve, 0.30))
+    for x, y, z, name in MICROPHONE_PORTS:
+        sign = 1.0 if y > 0.0 else -1.0
+        inboard = sign * (MIC_BOARD_OUTER_Y - MIC_BOARD_SIZE[1])
+        bottom = z + 2.0 - MIC_BOARD_SIZE[2]
+        w = connector_width("GH", 4)
+        ys = sorted((inboard, inboard - sign * 4.5))
+        parts.append(_paint(_block(x - w / 2.0, x + w / 2.0, ys[0], ys[1], bottom - 9.0, bottom), f"PDM_MIC_{name}_GH4_PLUG_RESERVE", reserve, 0.30))
+    return Compound(label="CONNECTORS_AND_EXITS", children=parts)
 
 
 def physics_overlays():
@@ -2194,6 +2599,7 @@ def build_assembly():
     asm.add(sensors(), "BODY_SENSORS")
     asm.add(body_audio(), "BODY_AUDIO")
     asm.add(harness_routes(), "HARNESS_ROUTES")
+    asm.add(connectors_and_exits(), "CONNECTORS_AND_EXITS")
     asm.add(body_shell(), "BODY_SHELL")
     asm.add(body_panels(), "BODY_PANELS")
     asm.add(panel_mount_hardware(), "PANEL_MOUNT_HARDWARE")

@@ -430,6 +430,7 @@
           "BODY_SENSORS",
           "BODY_AUDIO",
           "HARNESS_ROUTES",
+          "CONNECTORS_AND_EXITS",
           "BODY_SHELL",
           "BODY_PANELS",
           "PANEL_MOUNT_HARDWARE",
@@ -583,6 +584,7 @@
           "BODY_SENSORS",
           "BODY_AUDIO",
           "HARNESS_ROUTES",
+          "CONNECTORS_AND_EXITS",
           "BODY_SHELL",
           "BODY_PANELS",
           "PANEL_MOUNT_HARDWARE",
@@ -614,6 +616,7 @@
           "BODY_SENSORS",
           "BODY_AUDIO",
           "HARNESS_ROUTES",
+          "CONNECTORS_AND_EXITS",
           "BODY_SHELL",
           "BODY_PANELS",
           "PANEL_MOUNT_HARDWARE",
@@ -1172,6 +1175,7 @@
           "BODY_SENSORS",
           "BODY_AUDIO",
           "HARNESS_ROUTES",
+          "CONNECTORS_AND_EXITS",
           "BODY_SHELL",
           "BODY_PANELS",
           "PANEL_MOUNT_HARDWARE",
@@ -1305,7 +1309,6 @@
           "pcb03_to_lower_cross_front_mm": 1.0,
           "pcb04_to_pcb03_mm": 1.0,
           "pcb03_to_drv8874_y_mm": 1.11,
-          "pcb04_top_to_head_harness_vertical_z_mm": 0.9,
           "pcb04_top_to_compute_tray_z_mm": 7.4,
           "pcb02_to_rear_panel_frame_x_mm": 1.0
         },
@@ -1388,6 +1391,134 @@
         "battery_g": 113.7,
         "total_mass_g": 2529.4,
         "note": "hand-kept register: masses are RP-02 estimates, not derived from the solids"
+      }
+    },
+    {
+      "name": "connector_reserves_clear_of_real_hardware",
+      "ok": true,
+      "evidence": {
+        "clashes_mm3": {},
+        "reserves": 21,
+        "checked_against": 214,
+        "open_known_clashes_mm3": {
+          "C3_DEVKIT_HEADER_PINS_NY_OPEN x PCB04_BRANCH_CONVERTERS_PARTS_ENVELOPE": 836.0,
+          "C3_DEVKIT_HEADER_PINS_PY_OPEN x BODY_MOUNT_DOGLEG_R_L": 27.5
+        },
+        "note": "mated plug + first lead bend; _OPEN reserves are recorded clashes (DevKitC header pins into PCB-04, Pi GPIO socket under the yaw servo), not placements"
+      }
+    },
+    {
+      "name": "connector_reserves_do_not_overlap_each_other",
+      "ok": false,
+      "evidence": {
+        "overlaps_mm3": {
+          "PCB03_PY_EDGE_CONNECTORS_J32_J31_RESERVE x MOTOR_L_INLINE_MICROFIT3_1X2_RESERVE": 3.0,
+          "PCB03_NY_EDGE_CONNECTORS_J33_J34_RESERVE x MOTOR_R_INLINE_MICROFIT3_1X2_RESERVE": 3.0
+        }
+      }
+    },
+    {
+      "name": "edge_power_connectors_fit_free_board_edges",
+      "ok": true,
+      "evidence": {
+        "strips": {
+          "PCB03_PY": {
+            "needed_mm": 17.6,
+            "free_edge_mm": 18.0,
+            "margin_mm": 0.4,
+            "connectors": {
+              "J3-2": "MF+ 2p, 8.3 mm",
+              "J3-1": "MF+ 2p, 8.3 mm"
+            }
+          },
+          "PCB03_NY": {
+            "needed_mm": 17.6,
+            "free_edge_mm": 18.0,
+            "margin_mm": 0.4,
+            "connectors": {
+              "J3-3": "MF+ 2p, 8.3 mm",
+              "J3-4": "MF+ 2p, 8.3 mm"
+            }
+          },
+          "PCB04_NY": {
+            "needed_mm": 27.82,
+            "free_edge_mm": 29.0,
+            "margin_mm": 1.18,
+            "connectors": {
+              "J4-1": "MF+ 2p, 8.3 mm",
+              "J4-2": "MF3 4p, 10.26 mm",
+              "J4-5": "MF3 2p, 7.26 mm"
+            }
+          },
+          "PCB04_PY": {
+            "needed_mm": 19.56,
+            "free_edge_mm": 29.0,
+            "margin_mm": 9.44,
+            "connectors": {
+              "J4-3": "MF+ 4p, 11.3 mm",
+              "J4-4": "MF3 2p, 7.26 mm"
+            }
+          },
+          "PCB02_NY": {
+            "needed_mm": 29.9,
+            "free_edge_mm": 34.0,
+            "margin_mm": 4.1,
+            "connectors": {
+              "J2-1": "MF+ 2p, 8.3 mm",
+              "J2-2": "MF+ 2p, 8.3 mm",
+              "J2-3": "MF+ 4p, 11.3 mm"
+            }
+          }
+        },
+        "rule": "right-angle Micro-Fit power connectors on free board edges; signal headers are top-entry inside the board. GH and Micro-Fit 3.0 widths D, Micro-Fit+ and EH widths E; heights not checked"
+      }
+    },
+    {
+      "name": "head_trunk_and_csi_avoid_tray_pi_cooler_and_yaw_stage",
+      "ok": true,
+      "evidence": {
+        "blockers_mm3": {},
+        "route": [
+          "HARNESS_HEAD_TRUNK_UNDER_PLATE",
+          "HARNESS_HEAD_RISER_UPPER",
+          "HARNESS_HEAD_RISER_LOWER",
+          "HARNESS_CSI_FFC_UNDER_PLATE",
+          "HARNESS_CSI_FFC_DROP_TO_PI_CAM"
+        ],
+        "replaces": "HARNESS_HEAD_VERTICAL (through the compute tray and the Pi cooler)"
+      }
+    },
+    {
+      "name": "charge_inlet_is_cut_through_rear_panel",
+      "ok": true,
+      "evidence": {
+        "panel_in_plug_path_mm3": 0,
+        "cutout_mm": [
+          13.2,
+          7.2
+        ],
+        "receptacle_box_mm": [
+          -56.95,
+          -49.6,
+          -4.47,
+          4.47,
+          62.37,
+          65.63
+        ]
+      }
+    },
+    {
+      "name": "signal_connectors_are_latching_jst_gh",
+      "ok": true,
+      "evidence": {
+        "headers": [
+          "PDM_MIC_FRONT_L_JST_GH_SM04B_HEADER",
+          "PDM_MIC_FRONT_R_JST_GH_SM04B_HEADER",
+          "PDM_MIC_REAR_L_JST_GH_SM04B_HEADER",
+          "PDM_MIC_REAR_R_JST_GH_SM04B_HEADER",
+          "IMU_JST_GH_SM08B_HEADER"
+        ],
+        "rule": "installed signal connectors latch (user decision 2026-09-26); JST-SH was friction-only"
       }
     },
     {
