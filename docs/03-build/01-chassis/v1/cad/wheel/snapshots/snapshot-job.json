@@ -1,0 +1,96 @@
+[
+ {
+  "input": "docs/03-build/01-chassis/v1/cad/wheel/wheel.step.py",
+  "mode": "view",
+  "theme": {
+   "projection": "perspective",
+   "grid": {
+    "visible": false
+   }
+  },
+  "render": {
+   "viewLabels": false,
+   "padding": 0.1,
+   "sizeProfile": "assembly"
+  },
+  "outputs": [
+   {
+    "path": "docs/03-build/01-chassis/v1/cad/wheel/snapshots/outboard.png",
+    "camera": {
+     "direction": [
+      0.3,
+      1,
+      0.35
+     ]
+    }
+   },
+   {
+    "path": "docs/03-build/01-chassis/v1/cad/wheel/snapshots/tread.png",
+    "camera": {
+     "direction": [
+      1,
+      0.55,
+      0.5
+     ]
+    }
+   },
+   {
+    "path": "docs/03-build/01-chassis/v1/cad/wheel/snapshots/face-on.png",
+    "camera": {
+     "direction": [
+      0,
+      1,
+      0
+     ]
+    }
+   },
+   {
+    "path": "docs/03-build/01-chassis/v1/cad/wheel/snapshots/inboard.png",
+    "camera": {
+     "direction": [
+      -0.35,
+      -1,
+      0.35
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "input": "docs/03-build/01-chassis/v1/cad/wheel/wheel-pair.step.py",
+  "mode": "view",
+  "theme": {
+   "projection": "perspective",
+   "grid": {
+    "visible": false
+   }
+  },
+  "render": {
+   "viewLabels": false,
+   "padding": 0.08,
+   "sizeProfile": "assembly"
+  },
+  "outputs": [
+   {
+    "path": "docs/03-build/01-chassis/v1/cad/wheel/snapshots/pair-top.png",
+    "camera": {
+     "direction": [
+      0.15,
+      0.1,
+      1
+     ]
+    }
+   },
+   {
+    "path": "docs/03-build/01-chassis/v1/cad/wheel/snapshots/pair-front.png",
+    "camera": {
+     "direction": [
+      1,
+      0.25,
+      0.35
+     ]
+    }
+   }
+  ]
+ }
+]

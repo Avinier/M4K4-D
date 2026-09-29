@@ -1,0 +1,342 @@
+[
+  {
+    "check": "swept_wheel_parts_clear_L",
+    "pass": true,
+    "value": {
+      "minimum_mm": 1.5,
+      "worst": {
+        "part": "WHEEL_L_STUB_SHAFT_8MM",
+        "min_gap_mm": 1.5,
+        "to": "AXLE_BEARING_CAP_L",
+        "inner_r_mm": null
+      },
+      "parts_swept": 26
+    },
+    "detail": {
+      "WHEEL_L_STUB_SHAFT_8MM": {
+        "min_gap_mm": 1.5,
+        "to": "AXLE_BEARING_CAP_L",
+        "inner_r_mm": null
+      },
+      "WHEEL_L_SET_SCREW_M3X2_5": {
+        "min_gap_mm": 1.531,
+        "to": "AXLE_MOTOR_SCREW_M3X6_L_1",
+        "inner_r_mm": 1.5
+      },
+      "WHEEL_L_CLAMP_RING_PETG": {
+        "min_gap_mm": 3.624,
+        "to": "WHEEL_ARCH_UPPER_TRIM_L",
+        "inner_r_mm": 31.7
+      },
+      "WHEEL_L_HUB_CAP_PETG": {
+        "min_gap_mm": 7.65,
+        "to": "AXLE_CAP_SCREW_M3X18_L_1",
+        "inner_r_mm": 0.0
+      },
+      "WHEEL_L_TYRE_TPU95A_L": {
+        "min_gap_mm": 3.606,
+        "to": "WHEEL_ARCH_UPPER_TRIM_L",
+        "inner_r_mm": 37.0
+      },
+      "WHEEL_L_RING_SCREW_M3X8_1": {
+        "min_gap_mm": 7.279,
+        "to": "WHEEL_ARCH_UPPER_TRIM_L",
+        "inner_r_mm": 31.15
+      },
+      "WHEEL_L_RING_INSERT_M3_1": {
+        "min_gap_mm": 8.665,
+        "to": "WHEEL_ARCH_UPPER_TRIM_L",
+        "inner_r_mm": 32.0
+      },
+      "WHEEL_L_CAP_SCREW_M2X6_1": {
+        "min_gap_mm": 4.65,
+        "to": "AXLE_CAP_SCREW_M3X18_L_1",
+        "inner_r_mm": 11.15
+      },
+      "WHEEL_L_RING_SCREW_M3X8_2": {
+        "min_gap_mm": 7.15,
+        "to": "WHEEL_ARCH_UPPER_TRIM_L",
+        "inner_r_mm": 31.15
+      },
+      "WHEEL_L_RING_INSERT_M3_2": {
+        "min_gap_mm": 8.544,
+        "to": "WHEEL_ARCH_UPPER_TRIM_L",
+        "inner_r_mm": 32.0
+      },
+      "WHEEL_L_CAP_SCREW_M2X6_2": {
+        "min_gap_mm": 4.65,
+        "to": "AXLE_CAP_SCREW_M3X18_L_1",
+        "inner_r_mm": 11.15
+      },
+      "WHEEL_L_RING_SCREW_M3X8_3": {
+        "min_gap_mm": 7.15,
+        "to": "WHEEL_ARCH_UPPER_TRIM_L",
+        "inner_r_mm": 31.15
+      },
+      "WHEEL_L_RING_INSERT_M3_3": {
+        "min_gap_mm": 8.544,
+        "to": "WHEEL_ARCH_UPPER_TRIM_L",
+        "inner_r_mm": 32.0
+      },
+      "WHEEL_L_CAP_SCREW_M2X6_3": {
+        "min_gap_mm": 4.65,
+        "to": "AXLE_CAP_SCREW_M3X18_L_1",
+        "inner_r_mm": 11.15
+      },
+      "WHEEL_L_RING_SCREW_M3X8_4": {
+        "min_gap_mm": 7.279,
+        "to": "WHEEL_ARCH_UPPER_TRIM_L",
+        "inner_r_mm": 31.15
+      },
+      "WHEEL_L_RING_INSERT_M3_4": {
+        "min_gap_mm": 8.665,
+        "to": "WHEEL_ARCH_UPPER_TRIM_L",
+        "inner_r_mm": 32.0
+      },
+      "WHEEL_L_CAP_SCREW_M2X6_4": {
+        "min_gap_mm": 4.65,
+        "to": "AXLE_CAP_SCREW_M3X18_L_1",
+        "inner_r_mm": 11.15
+      },
+      "WHEEL_L_RING_SCREW_M3X8_5": {
+        "min_gap_mm": 7.15,
+        "to": "WHEEL_ARCH_UPPER_TRIM_L",
+        "inner_r_mm": 31.15
+      },
+      "WHEEL_L_RING_INSERT_M3_5": {
+        "min_gap_mm": 8.544,
+        "to": "WHEEL_ARCH_UPPER_TRIM_L",
+        "inner_r_mm": 32.0
+      },
+      "WHEEL_L_CAP_SCREW_M2X6_5": {
+        "min_gap_mm": 4.65,
+        "to": "AXLE_CAP_SCREW_M3X18_L_1",
+        "inner_r_mm": 11.15
+      },
+      "WHEEL_L_RING_SCREW_M3X8_6": {
+        "min_gap_mm": 7.15,
+        "to": "WHEEL_ARCH_UPPER_TRIM_L",
+        "inner_r_mm": 31.15
+      },
+      "WHEEL_L_RING_INSERT_M3_6": {
+        "min_gap_mm": 8.544,
+        "to": "WHEEL_ARCH_UPPER_TRIM_L",
+        "inner_r_mm": 32.0
+      },
+      "WHEEL_L_CAP_SCREW_M2X6_6": {
+        "min_gap_mm": 4.65,
+        "to": "AXLE_CAP_SCREW_M3X18_L_1",
+        "inner_r_mm": 11.15
+      },
+      "WHEEL_L_SCREW_M3X6_1": {
+        "min_gap_mm": 1.65,
+        "to": "AXLE_CAP_SCREW_M3X18_L_1",
+        "inner_r_mm": 5.15
+      },
+      "WHEEL_L_SCREW_M3X6_2": {
+        "min_gap_mm": 1.65,
+        "to": "AXLE_CAP_SCREW_M3X18_L_1",
+        "inner_r_mm": 5.15
+      },
+      "WHEEL_L_SCREW_M3X6_3": {
+        "min_gap_mm": 1.65,
+        "to": "AXLE_CAP_SCREW_M3X18_L_1",
+        "inner_r_mm": 5.15
+      }
+    }
+  },
+  {
+    "check": "rim_clear_through_60deg_L",
+    "pass": true,
+    "value": {
+      "minimum_mm": 1.5,
+      "min_gap_mm": 3.048,
+      "to": "AXLE_BEARING_CAP_L",
+      "at_deg": 0.0,
+      "static_parts_checked": 22
+    }
+  },
+  {
+    "check": "wheel_on_stub_L",
+    "pass": true,
+    "value": {
+      "wheel_screws": 3,
+      "thread_in_flange_mm": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "internal_overlap_mm3": 0
+    }
+  },
+  {
+    "check": "swept_wheel_parts_clear_R",
+    "pass": true,
+    "value": {
+      "minimum_mm": 1.5,
+      "worst": {
+        "part": "WHEEL_R_STUB_SHAFT_8MM",
+        "min_gap_mm": 1.5,
+        "to": "AXLE_BEARING_CAP_R",
+        "inner_r_mm": null
+      },
+      "parts_swept": 26
+    },
+    "detail": {
+      "WHEEL_R_STUB_SHAFT_8MM": {
+        "min_gap_mm": 1.5,
+        "to": "AXLE_BEARING_CAP_R",
+        "inner_r_mm": null
+      },
+      "WHEEL_R_SET_SCREW_M3X2_5": {
+        "min_gap_mm": 1.531,
+        "to": "AXLE_MOTOR_SCREW_M3X6_R_1",
+        "inner_r_mm": 1.5
+      },
+      "WHEEL_R_CLAMP_RING_PETG": {
+        "min_gap_mm": 3.624,
+        "to": "WHEEL_ARCH_UPPER_TRIM_R",
+        "inner_r_mm": 31.7
+      },
+      "WHEEL_R_HUB_CAP_PETG": {
+        "min_gap_mm": 7.65,
+        "to": "AXLE_CAP_SCREW_M3X18_R_1",
+        "inner_r_mm": 0.0
+      },
+      "WHEEL_R_TYRE_TPU95A_R": {
+        "min_gap_mm": 3.606,
+        "to": "WHEEL_ARCH_UPPER_TRIM_R",
+        "inner_r_mm": 37.0
+      },
+      "WHEEL_R_RING_SCREW_M3X8_1": {
+        "min_gap_mm": 7.279,
+        "to": "WHEEL_ARCH_UPPER_TRIM_R",
+        "inner_r_mm": 31.15
+      },
+      "WHEEL_R_RING_INSERT_M3_1": {
+        "min_gap_mm": 8.665,
+        "to": "WHEEL_ARCH_UPPER_TRIM_R",
+        "inner_r_mm": 32.0
+      },
+      "WHEEL_R_CAP_SCREW_M2X6_1": {
+        "min_gap_mm": 4.65,
+        "to": "AXLE_CAP_SCREW_M3X18_R_1",
+        "inner_r_mm": 11.15
+      },
+      "WHEEL_R_RING_SCREW_M3X8_2": {
+        "min_gap_mm": 7.15,
+        "to": "WHEEL_ARCH_UPPER_TRIM_R",
+        "inner_r_mm": 31.15
+      },
+      "WHEEL_R_RING_INSERT_M3_2": {
+        "min_gap_mm": 8.544,
+        "to": "WHEEL_ARCH_UPPER_TRIM_R",
+        "inner_r_mm": 32.0
+      },
+      "WHEEL_R_CAP_SCREW_M2X6_2": {
+        "min_gap_mm": 4.65,
+        "to": "AXLE_CAP_SCREW_M3X18_R_1",
+        "inner_r_mm": 11.15
+      },
+      "WHEEL_R_RING_SCREW_M3X8_3": {
+        "min_gap_mm": 7.15,
+        "to": "WHEEL_ARCH_UPPER_TRIM_R",
+        "inner_r_mm": 31.15
+      },
+      "WHEEL_R_RING_INSERT_M3_3": {
+        "min_gap_mm": 8.544,
+        "to": "WHEEL_ARCH_UPPER_TRIM_R",
+        "inner_r_mm": 32.0
+      },
+      "WHEEL_R_CAP_SCREW_M2X6_3": {
+        "min_gap_mm": 4.65,
+        "to": "AXLE_CAP_SCREW_M3X18_R_1",
+        "inner_r_mm": 11.15
+      },
+      "WHEEL_R_RING_SCREW_M3X8_4": {
+        "min_gap_mm": 7.279,
+        "to": "WHEEL_ARCH_UPPER_TRIM_R",
+        "inner_r_mm": 31.15
+      },
+      "WHEEL_R_RING_INSERT_M3_4": {
+        "min_gap_mm": 8.665,
+        "to": "WHEEL_ARCH_UPPER_TRIM_R",
+        "inner_r_mm": 32.0
+      },
+      "WHEEL_R_CAP_SCREW_M2X6_4": {
+        "min_gap_mm": 4.65,
+        "to": "AXLE_CAP_SCREW_M3X18_R_1",
+        "inner_r_mm": 11.15
+      },
+      "WHEEL_R_RING_SCREW_M3X8_5": {
+        "min_gap_mm": 7.15,
+        "to": "WHEEL_ARCH_UPPER_TRIM_R",
+        "inner_r_mm": 31.15
+      },
+      "WHEEL_R_RING_INSERT_M3_5": {
+        "min_gap_mm": 8.544,
+        "to": "WHEEL_ARCH_UPPER_TRIM_R",
+        "inner_r_mm": 32.0
+      },
+      "WHEEL_R_CAP_SCREW_M2X6_5": {
+        "min_gap_mm": 4.65,
+        "to": "AXLE_CAP_SCREW_M3X18_R_1",
+        "inner_r_mm": 11.15
+      },
+      "WHEEL_R_RING_SCREW_M3X8_6": {
+        "min_gap_mm": 7.15,
+        "to": "WHEEL_ARCH_UPPER_TRIM_R",
+        "inner_r_mm": 31.15
+      },
+      "WHEEL_R_RING_INSERT_M3_6": {
+        "min_gap_mm": 8.544,
+        "to": "WHEEL_ARCH_UPPER_TRIM_R",
+        "inner_r_mm": 32.0
+      },
+      "WHEEL_R_CAP_SCREW_M2X6_6": {
+        "min_gap_mm": 4.65,
+        "to": "AXLE_CAP_SCREW_M3X18_R_1",
+        "inner_r_mm": 11.15
+      },
+      "WHEEL_R_SCREW_M3X6_1": {
+        "min_gap_mm": 1.65,
+        "to": "AXLE_CAP_SCREW_M3X18_R_1",
+        "inner_r_mm": 5.15
+      },
+      "WHEEL_R_SCREW_M3X6_2": {
+        "min_gap_mm": 1.65,
+        "to": "AXLE_CAP_SCREW_M3X18_R_1",
+        "inner_r_mm": 5.15
+      },
+      "WHEEL_R_SCREW_M3X6_3": {
+        "min_gap_mm": 1.65,
+        "to": "AXLE_CAP_SCREW_M3X18_R_1",
+        "inner_r_mm": 5.15
+      }
+    }
+  },
+  {
+    "check": "rim_clear_through_60deg_R",
+    "pass": true,
+    "value": {
+      "minimum_mm": 1.5,
+      "min_gap_mm": 3.048,
+      "to": "AXLE_BEARING_CAP_R",
+      "at_deg": 0.0,
+      "static_parts_checked": 23
+    }
+  },
+  {
+    "check": "wheel_on_stub_R",
+    "pass": true,
+    "value": {
+      "wheel_screws": 3,
+      "thread_in_flange_mm": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "internal_overlap_mm3": 0
+    }
+  }
+]
