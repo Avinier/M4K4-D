@@ -250,70 +250,10 @@
   "tcrt_guard_bottom_z_mm": 7.0,
   "tcrt_rear_contact_lookahead_mm": 27.0,
   "tcrt_coverage_note": "CAD-context choice: rear-only cliff channel; no front or lateral cliff-safety claim",
-  "rear_tail_status": "parked accessory; geometry defined but excluded from the assembly",
   "rear_keel_color_alpha": [
     "#E3DDC9",
     0.34
   ],
-  "rear_tail_style": "FACETED_TELESCOPING_STINGER",
-  "rear_tail_visible_color": "#E3DDC9",
-  "rear_tail_hub_color": "#707D82",
-  "rear_tail_tip_color": "#B88636",
-  "rear_tail_group": "REAR_SKID_TCRT_MODULE/REAR_TAIL_STINGER",
-  "rear_tail_joints_x_z_width_height_mm": [
-    [
-      -71.0,
-      92.0,
-      19.0,
-      16.0
-    ],
-    [
-      -84.0,
-      97.5,
-      15.5,
-      13.0
-    ],
-    [
-      -94.0,
-      105.0,
-      12.5,
-      10.5
-    ],
-    [
-      -101.0,
-      114.0,
-      9.5,
-      8.0
-    ]
-  ],
-  "rear_tail_tip_mm": [
-    -105.0,
-    0.0,
-    123.0
-  ],
-  "rear_tail_tip_section_w_h_mm": [
-    4.0,
-    2.0
-  ],
-  "rear_tail_root_screws_y_z_mm": [
-    [
-      -8.0,
-      86.0
-    ],
-    [
-      8.0,
-      86.0
-    ],
-    [
-      -5.0,
-      97.5
-    ],
-    [
-      5.0,
-      97.5
-    ]
-  ],
-  "rear_tail_role": "cosmetic, static; four M3 screws driven from inside the rear panel into heat-set inserts in the hub",
   "rear_keel_group": "REAR_SKID_TCRT_MODULE/REAR_SKID_TCRT_KEEL",
   "rear_keel_stations_mm": [
     [

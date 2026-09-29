@@ -141,7 +141,7 @@ export default {
       "label": "Show drivetrain",
       "default": true
     },
-    "show_rear_tail": {
+    "show_rear_skid": {
       "type": "boolean",
       "label": "Show rear skid/TCRT keel",
       "default": true
@@ -208,7 +208,7 @@ export default {
     "drive": {
       "ref": "#o1.4,o1.5,o1.6,o1.7,o1.8,o1.9,o1.10"
     },
-    "rear_tail": {
+    "rear_skid": {
       "ref": "#o1.11"
     },
     "electronics": {
@@ -252,7 +252,7 @@ export default {
     effects.transform("wheel_R", rot([0, 1, 0], geo.pivots.wheel_R, wr));
     if (params.drive_on_floor !== false) effects.transform("*", drivePose(wl, wr));
 
-    for (const key of ["shell", "head", "structure", "drive", "rear_tail", "electronics", "sensors", "audio", "harness", "connectors", "physics"]) {
+for (const key of ["shell", "head", "structure", "drive", "rear_skid", "electronics", "sensors", "audio", "harness", "connectors", "physics"]) {
       effects.visible(key, params[`show_${key}`] !== false);
     }
   }

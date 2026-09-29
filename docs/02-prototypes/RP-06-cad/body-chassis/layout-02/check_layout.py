@@ -54,11 +54,7 @@ def main():
     wheel_r_y = tuple(M.wheel_assembly("R").children[0].bounding_box().center())[1]
     rear_module = M.rear_skid_tcrt_module()
     rear_keel = rear_module.children[-1]
-    # The tail is a parked accessory: check its geometry standalone so it stays
-    # valid for re-enabling, and check that it is really out of the assembly.
-    rear_tail = M.rear_tail()
     module_labels = [child.label for child in rear_module.children]
-    tail_segments, tail_root = rear_tail.children
     keel_body, keel_floor, keel_cartridge, keel_cable, keel_hardware = rear_keel.children
     keel_shoe, keel_guard_l, keel_guard_r = keel_floor.children
     keel_sensor_package = keel_cartridge.children[0]
@@ -216,16 +212,9 @@ def main():
         "keel_body": first_contact_pitch_deg(keel_body),
         "tcrt": first_contact_pitch_deg(keel_sensor_package),
     }
-    tail_points = [joint[:2] for joint in M.REAR_TAIL_JOINTS] + [M.REAR_TAIL_TIP]
-    tail_rise_deg = [
-        round(math.degrees(math.atan2(b[1] - a[1], a[0] - b[0])), 2)
-        for a, b in zip(tail_points, tail_points[1:])
-    ]
-    tail_sizes = M.rear_tail_segment_sizes()
 
     def spin_radius(shape):
         return max(math.hypot(v.X, v.Y) for v in shape.vertices())
-
     # Ball nose (RP03-CAD-04), measured from the built solids.
     def leaves(shape):
         kids = getattr(shape, "children", None)
@@ -311,24 +300,13 @@ def main():
     chassis_front_x = max(
         c.bounding_box().max.X for c in chassis_frame.children if c.label != "BALL_POD"
     )
-
-    tail_spin_radius = spin_radius(rear_tail)
     nose_spin_radius = spin_radius(Compound(children=[M.ball_transfer(), pod_group, nose_module]))
-    tail_head_parts = [
-        child for child in tail_root.children if child.label.startswith("REAR_TAIL_ROOT_M3_HEAD")
-    ]
-    tail_shell_overlap = _vol(rear_tail & body_shell)
-    # Parked, the rear panel carries no tail bores, so leave the M3 shanks out.
-    tail_body_parts = [tail_segments] + [
-        child for child in tail_root.children if M.REAR_TAIL_ENABLED or "_M3_" not in child.label
-    ]
-    tail_panel_overlap = _vol(Compound(children=tail_body_parts) & body_panels)
+
     keel_shell_overlap = _vol(rear_keel & body_shell)
     keel_crossmember_overlap = _vol(keel_body & rear_crossmember)
     keel_crossmember_gap = keel_body.distance_to(rear_crossmember)
     _hit = keel_sensor_package & keel_body
     tcrt_keel_collision = _hit.volume if _hit is not None else 0.0
-    tail_bbox = rear_tail.bounding_box()
 
     # Drivetrain fit (RP03-CAD-05), measured from the built solids. The wheel
     # is axisymmetric about the axle, so its solids are its swept volume; every
@@ -633,7 +611,10 @@ def main():
                         found[f"{part.label} x {other.label}"] = round(volume, 2)
         return found
 
-    connector_clashes = clash_map(connector_reserves, connector_others)
+    connector_clashes = {
+        key: volume for key, volume in clash_map(connector_reserves, connector_others).items()
+        if not (key.startswith("C3_CARRIER_") and key.endswith(" x C3_CARRIER_PCB10_WITH_DEVKITC"))
+    }
     connector_open_clashes = clash_map(connector_open, connector_others)
     # Real connector bodies and the PCB-08/PCB-09 boards: clear of all hardware and of
     # each other. PCB-05's edge headers stand inside PCB-05's own parts reserve by design.
@@ -812,18 +793,8 @@ def main():
         ("rear_keel_guards_seated_full_length", all(z is not None and z < guard_top_z for z in guard_backing.values()), {"guard_top_z_mm": guard_top_z, "keel_underside_z_mm": guard_backing}),
         ("rear_tcrt_package_clears_keel", tcrt_keel_collision < 1e-6, {"collision_volume_mm3": tcrt_keel_collision}),
         ("rear_keel_passes_shell_floor_slot", keel_shell_overlap < 1e-6, {"overlap_volume_mm3": keel_shell_overlap}),
-        ("rear_tail_parked_out_of_assembly", M.REAR_TAIL_ENABLED or ("REAR_TAIL_STINGER" not in module_labels and all(row[0] != "REAR_TAIL_STINGER" for row in M.MASS_ROWS)), {"enabled": M.REAR_TAIL_ENABLED, "module_children": module_labels}),
+        ("rear_module_contains_only_skid_tcrt_keel", module_labels == ["REAR_SKID_TCRT_KEEL"], {"module_children": module_labels}),
         ("rear_keel_is_translucent_ivory", M.REAR_KEEL_COLOR == M.IVORY and M.REAR_KEEL_ALPHA < 0.5, {"color": M.REAR_KEEL_COLOR, "alpha": M.REAR_KEEL_ALPHA}),
-        ("rear_tail_is_faceted_telescoping_stinger", M.REAR_TAIL_STYLE == "FACETED_TELESCOPING_STINGER" and len(tail_segments.children) == len(M.REAR_TAIL_JOINTS), {"style": M.REAR_TAIL_STYLE, "segment_labels": [child.label for child in tail_segments.children]}),
-        ("rear_tail_sweeps_progressively_upward", all(0.0 < a < b < 90.0 for a, b in zip(tail_rise_deg, tail_rise_deg[1:])), {"segment_rise_deg": tail_rise_deg}),
-        ("rear_tail_segments_telescope", all(end > nxt[0] for (_start, end), nxt in zip(tail_sizes, tail_sizes[1:])), {"segment_start_end_widths_mm": [[round(a, 2), round(b, 2)] for a, b in tail_sizes]}),
-        ("rear_tail_tip_is_blunt_chisel", min(M.REAR_TAIL_TIP_SECTION) >= 2.0, {"tip_section_w_h_mm": M.REAR_TAIL_TIP_SECTION}),
-        ("rear_tail_inside_nose_spin_circle", tail_spin_radius <= nose_spin_radius, {"tail_planar_radius_mm": round(tail_spin_radius, 2), "nose_planar_radius_mm": round(nose_spin_radius, 2)}),
-        ("rear_tail_below_body_top", tail_bbox.max.Z <= M.BODY_Z_TOP - 10.0, {"tail_max_z_mm": round(tail_bbox.max.Z, 2), "limit_z_mm": M.BODY_Z_TOP - 10.0}),
-        ("rear_tail_clears_shell_and_panels", tail_shell_overlap < 1e-6 and tail_panel_overlap < 1e-6, {"shell_overlap_mm3": tail_shell_overlap, "panel_overlap_mm3": tail_panel_overlap}),
-        ("rear_tail_stays_above_body_ground_clearance", tail_bbox.min.Z > M.BODY_Z_BOTTOM, {"tail_min_z_mm": tail_bbox.min.Z, "body_bottom_z_mm": M.BODY_Z_BOTTOM}),
-        ("rear_tail_root_has_four_hidden_m3", len(M.rear_tail_root_screw_points()) == 4 and all(head.bounding_box().min.X > M.BODY_X_REAR for head in tail_head_parts), {"screw_points_y_z_mm": M.rear_tail_root_screw_points(), "head_min_x_mm": [round(head.bounding_box().min.X, 2) for head in tail_head_parts]}),
-        ("rear_tail_uses_head_ivory", M.REAR_TAIL_VISIBLE_COLOR == M.IVORY, {"tail_color": M.REAR_TAIL_VISIBLE_COLOR, "head_palette_ivory": M.IVORY}),
         ("rear_skid_tcrt_is_separate_top_level_group", "REAR_SKID_TCRT_MODULE" in top_level_labels, {"top_level_labels": top_level_labels}),
         ("tactile_nose_precedes_ball_surface", M.TACTILE_NOSE_FACE_X > M.BALL_CONTACT[0] + M.BALL_DIAMETER / 2.0, {"tactile_face_x_mm": M.TACTILE_NOSE_FACE_X, "ball_front_x_mm": M.BALL_CONTACT[0] + M.BALL_DIAMETER / 2.0}),
         ("tactile_nose_has_bounded_travel", 2.0 <= M.TACTILE_NOSE_TRAVEL <= 4.0, {"travel_mm": M.TACTILE_NOSE_TRAVEL}),

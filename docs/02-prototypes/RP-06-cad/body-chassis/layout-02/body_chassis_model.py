@@ -395,7 +395,7 @@ MICROPHONE_PORTS = (
 # (129 rpm at 5 V vs 63 rpm peak yaw) with no speed reduction. The servo
 # stands beside the cooler on +Y; a coupling shaft carries its output up to
 # the pinion.
-PI_COOLER_TOP_Z = 123.0  # headroom datum only; the real cooler now tops out near Z 109 (see PI_SOC_TOP_Z)
+PI_COOLER_TOP_Z = 123.0  # conservative headroom datum; seated vendor STEP tops at Z 108.568 (see PI_SOC_TOP_Z)
 PI_SOC_TOP_Z = 97.7  # tallest package under the cooler plate on the Pi 5 STEP (BCM2712 96.65, RAM 97.7; PCB top 95.4)
 PI_COOLER_HEADROOM = 10.5
 YAW_PLATE_Z = (BODY_FRAME_UPPER_Z + 4.0, BODY_FRAME_UPPER_Z + 8.0)
@@ -698,8 +698,8 @@ C3_CARRIER_CONNECTORS = [
 ]
 
 # Floor-contact functions live in a compact faceted keel bolted under the rear
-# crossmember, so the visible tail is free to be purely cosmetic. The rear
-# crossmember and keel move forward with the body's rear wall (RP03-CAD-06).
+# crossmember. The crossmember and keel move forward with the body's rear wall
+# (RP03-CAD-06).
 REAR_CHASSIS_SHIFT_X = BODY_SHIFT_X
 SKID_ROOT_DATUM = (-56.0 + REAR_CHASSIS_SHIFT_X, 0.0, 34.0)
 SKID_SHOE_SIZE = (12.0, 10.0, 2.5)  # anti-tip contact only; sized for wear, not load spreading
@@ -725,42 +725,10 @@ REAR_KEEL_STATIONS = (
 )
 REAR_KEEL_SCREWS_X = (-52.5 + REAR_CHASSIS_SHIFT_X, -61.5 + REAR_CHASSIS_SHIFT_X)  # forward pair counterbores clear the shoe
 REAR_KEEL_SHELL_SLOT = (-73.0 + REAR_CHASSIS_SHIFT_X, -40.0 + REAR_CHASSIS_SHIFT_X, 10.5)  # x0, x1, half-width of the floor pass-through
-REAR_KEEL_GUARD_X = (TCRT_REAR_CENTER[0] - 8.0, TCRT_REAR_CENTER[0] + 7.0)
+REAR_KEEL_GUARD_X = (TCRT_REAR_CENTER[0] - 8.0, TCRT_REAR_CENTER[0] + 5.0)  # stop before the keel belly rises; 0.1 mm shy of the TCRT front
 REAR_KEEL_GUARD_WIDTH = 2.5
 REAR_KEEL_GUARD_HEIGHT = TCRT_OPTICAL_FACE_Z - TCRT_GUARD_BOTTOM_Z + 0.5  # 0.5 mm seated in the keel
 
-# Cosmetic tail: a short, static, hard-surface stinger. A slate root hub on the
-# rear service panel carries three telescoping ivory segments and an amber
-# chisel tip. Every section repeats the body's eight-sided end profile; each
-# segment starts smaller than its predecessor ends, so the joints read as
-# nested sleeves, and each one sweeps further upward. Each joint is
-# (x, z, section width, section height); the tail stays inside the
-# spin-in-place circle already set by the ball nose and below the body top.
-# Parked accessory: the geometry stays defined and checked, but is left out of
-# the assembly (and the rear panel carries no tail bores) until re-enabled.
-REAR_TAIL_ENABLED = False
-REAR_TAIL_STYLE = "FACETED_TELESCOPING_STINGER"
-REAR_TAIL_VISIBLE_COLOR = IVORY
-REAR_TAIL_HUB_COLOR = SLATE_DARK
-REAR_TAIL_TIP_COLOR = AMBER
-REAR_TAIL_ALPHA = 1.0
-REAR_TAIL_ROOT_FACE_X = -78.4 + BODY_SHIFT_X  # outer face of the root flange
-REAR_TAIL_ROOT_Z = 92.0
-REAR_TAIL_HUB = (-87.0 + BODY_SHIFT_X, (26.0, 22.0), (23.0, 19.5))  # hub end x, root and end section (w, h)
-REAR_TAIL_JOINTS = (
-    (-87.0 + BODY_SHIFT_X, REAR_TAIL_ROOT_Z, 19.0, 16.0),  # leaves the hub, 23 deg upsweep
-    (-100.0 + BODY_SHIFT_X, 97.5, 15.5, 13.0),             # 37 deg
-    (-110.0 + BODY_SHIFT_X, 105.0, 12.5, 10.5),            # 52 deg
-    (-117.0 + BODY_SHIFT_X, 114.0, 9.5, 8.0),              # amber tip segment starts, 66 deg
-)
-REAR_TAIL_TIP = (-121.0 + BODY_SHIFT_X, 123.0)
-REAR_TAIL_TIP_SECTION = (4.0, 2.0)  # blunt chisel, not a needle point
-REAR_TAIL_SEGMENT_END_SCALE = 0.94  # each sleeve narrows slightly toward its end
-REAR_TAIL_ROOT_FLANGE = (30.0, 26.0, 2.0)  # width, height, thickness on the rear panel
-# Four M3 screws are driven from inside the body, through the backer, panel
-# and flange, into heat-set inserts in the hub: no fastener heads show outside.
-REAR_TAIL_ROOT_SCREWS = ((-8.0, 86.0), (8.0, 86.0), (-5.0, 97.5), (5.0, 97.5))
-REAR_TAIL_INSERT = (2.0, 6.0)  # heat-set insert pocket radius and depth
 # The keel is translucent ivory so the TCRT cartridge, cable riser and M3
 # hardware inside it stay visible for packaging review.
 REAR_KEEL_COLOR = IVORY
@@ -841,10 +809,6 @@ MASS_ROWS = [
     ("BODY_YAW_STAGE", 89.0, (BODY_AXIS_X, 13.5, 134.3), "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 6 g driven spur + 6 g scissor pinion (two 2.4 mm halves) + 1 g torsion spring and retaining clip (2026-09-25) + 2 g clamp ring + 1 g coupling shaft; no SKU"),
     ("REAR_SKID_KEEL", 12.0, (-55.9 + REAR_CHASSIS_SHIFT_X, 0.0, 20.4), "CAD volume: 15.4 cm3 keel body at ~45% effective PETG density, 12x10 mm shoe, guards, 4 M3 screws"),
 ]
-if REAR_TAIL_ENABLED:
-    MASS_ROWS.append(("REAR_TAIL_STINGER", 10.0, (-93.5 + BODY_SHIFT_X, 0.0, 95.9), "CAD volume: 10.4 cm3 printed segments/hub/flange + 2.2 cm3 backer at ~45% effective PETG density, 4 M3 screws + heat-set inserts"))
-
-
 def mass_properties():
     total = sum(row[1] for row in MASS_ROWS)
     com = tuple(sum(row[1] * row[2][axis] for row in MASS_ROWS) / total for axis in range(3))
@@ -1102,120 +1066,6 @@ def ball_pod_hardware():
     return Compound(label="BALL_POD_HARDWARE", children=parts)
 
 
-def _tail_section(point, direction, width, height):
-    """Eight-sided tail section echoing the body end profile, narrower on top."""
-    x, z = point
-    dx, dz = direction
-    plane = Plane(origin=(x, 0.0, z), x_dir=(0.0, -1.0, 0.0), z_dir=(dx, 0.0, dz))
-    lower = width / 2.0
-    upper = 0.78 * lower
-    lower_corner = 0.22 * min(width, height)
-    upper_corner = 0.30 * min(width, height)
-    h = height / 2.0
-    points = [
-        (-lower + lower_corner, -h),
-        (lower - lower_corner, -h),
-        (lower, -h + lower_corner),
-        (upper, h - upper_corner),
-        (upper - upper_corner, h),
-        (-upper + upper_corner, h),
-        (-upper, h - upper_corner),
-        (-lower, -h + lower_corner),
-    ]
-    return plane * Polygon(*points, align=None)
-
-
-def _unit_xz(a, b):
-    dx, dz = b[0] - a[0], b[1] - a[1]
-    length = math.hypot(dx, dz)
-    return dx / length, dz / length
-
-
-def _tail_mitre_directions():
-    """Per-joint section normals: -X at the hub face, bisectors inside, axis at the tip."""
-    points = [joint[:2] for joint in REAR_TAIL_JOINTS] + [REAR_TAIL_TIP]
-    segments = [_unit_xz(points[i], points[i + 1]) for i in range(len(points) - 1)]
-    mitres = [(-1.0, 0.0)]  # first section lies flat on the hub end face
-    for before, after in zip(segments, segments[1:]):
-        bx, bz = before[0] + after[0], before[1] + after[1]
-        length = math.hypot(bx, bz)
-        mitres.append((bx / length, bz / length))
-    return segments, mitres
-
-
-def rear_tail_segment_sizes():
-    """(start width, end width) of each segment, root to tip."""
-    joints = REAR_TAIL_JOINTS
-    sizes = [(w, w * REAR_TAIL_SEGMENT_END_SCALE) for _x, _z, w, _h in joints[:-1]]
-    sizes.append((joints[-1][2], REAR_TAIL_TIP_SECTION[0]))
-    return sizes
-
-
-def rear_tail_segments():
-    """Telescoping mitred sleeves plus the amber chisel tip."""
-    segments = []
-    joints = REAR_TAIL_JOINTS
-    directions, mitres = _tail_mitre_directions()
-    for index, (x0, z0, w0, h0) in enumerate(joints):
-        if index + 1 < len(joints):
-            x1, z1 = joints[index + 1][:2]
-            end = ((x1, z1), mitres[index + 1], w0 * REAR_TAIL_SEGMENT_END_SCALE, h0 * REAR_TAIL_SEGMENT_END_SCALE)
-            label, color = f"REAR_TAIL_SEGMENT_{index + 1:02}", REAR_TAIL_VISIBLE_COLOR
-        else:
-            end = (REAR_TAIL_TIP, directions[-1], *REAR_TAIL_TIP_SECTION)
-            label, color = "REAR_TAIL_CHISEL_TIP", REAR_TAIL_TIP_COLOR
-        segment = loft([_tail_section((x0, z0), mitres[index], w0, h0), _tail_section(*end)], ruled=True)
-        segments.append(_paint(segment, label, color, REAR_TAIL_ALPHA))
-    return Compound(label="REAR_TAIL_SEGMENTS", children=segments)
-
-
-def rear_tail_root_screw_points():
-    return list(REAR_TAIL_ROOT_SCREWS)
-
-
-def rear_tail_root_mount():
-    """Slate hub on a slim flange, clamped from inside the body through an inner backer."""
-    width, height, thickness = REAR_TAIL_ROOT_FLANGE
-    zc = REAR_TAIL_ROOT_Z
-    panel_face_x = BODY_X_REAR - SHELL_THICKNESS
-    flange = loft(
-        [
-            _tail_section((panel_face_x, zc), (-1.0, 0.0), width, height),
-            _tail_section((REAR_TAIL_ROOT_FACE_X, zc), (-1.0, 0.0), width, height),
-        ],
-        ruled=True,
-    )
-    backer = _panel_solid(BODY_X_REAR, BODY_X_REAR + SHELL_THICKNESS, width + 4.0, width, zc - height / 2.0 - 2.0, zc + height / 2.0 + 2.0, 4.0, 4.0)
-    hub_x1, hub_root, hub_end = REAR_TAIL_HUB
-    hub = loft(
-        [
-            _tail_section((REAR_TAIL_ROOT_FACE_X, zc), (-1.0, 0.0), *hub_root),
-            _tail_section((hub_x1, zc), (-1.0, 0.0), *hub_end),
-        ],
-        ruled=True,
-    )
-    insert_radius, insert_depth = REAR_TAIL_INSERT
-    screws = []
-    for index, (y, z) in enumerate(rear_tail_root_screw_points(), start=1):
-        flange = flange - _axial_bore_x(1.65, REAR_TAIL_ROOT_FACE_X - 1.0, panel_face_x + 1.0, y, z)
-        hub = hub - _axial_bore_x(insert_radius, REAR_TAIL_ROOT_FACE_X - insert_depth, REAR_TAIL_ROOT_FACE_X + 1.0, y, z)
-        backer = backer - _axial_bore_x(1.65, BODY_X_REAR - 1.0, BODY_X_REAR + 4.0, y, z)
-        backer_inner_x = BODY_X_REAR + SHELL_THICKNESS
-        head = _cylinder(2.8, 1.8, (backer_inner_x + 0.9, y, z), f"REAR_TAIL_ROOT_M3_HEAD_{index}", STEEL, 1.0, "x")
-        shank_x1 = REAR_TAIL_ROOT_FACE_X - insert_depth + 1.0
-        shank = _cylinder(1.35, backer_inner_x - shank_x1, ((backer_inner_x + shank_x1) / 2.0, y, z), f"REAR_TAIL_ROOT_M3_SHANK_{index}", STEEL, 1.0, "x")
-        screws.extend([head, shank])
-    return Compound(
-        label="REAR_TAIL_ROOT_MOUNT",
-        children=[
-            _paint(hub, "REAR_TAIL_ROOT_HUB", REAR_TAIL_HUB_COLOR, 1.0),
-            _paint(flange, "REAR_TAIL_ROOT_FLANGE", REAR_TAIL_HUB_COLOR, 1.0),
-            _paint(backer, "REAR_TAIL_ROOT_INNER_BACKER", SLATE, 1.0),
-            *screws,
-        ],
-    )
-
-
 def rear_skid_tcrt_keel():
     """Compact faceted keel under the rear crossmember: skid shoe + TCRT."""
     tx, ty, tz = TCRT_REAR_CENTER
@@ -1286,14 +1136,9 @@ def rear_skid_tcrt_keel():
     )
 
 
-def rear_tail():
-    return Compound(label="REAR_TAIL_STINGER", children=[rear_tail_segments(), rear_tail_root_mount()])
-
-
 def rear_skid_tcrt_module():
-    """Selectable rear group: the under-body skid/TCRT keel, plus the stinger tail when enabled."""
-    children = [rear_tail()] if REAR_TAIL_ENABLED else []
-    return Compound(label="REAR_SKID_TCRT_MODULE", children=[*children, rear_skid_tcrt_keel()])
+    """Selectable rear group containing the under-body skid and TCRT keel."""
+    return Compound(label="REAR_SKID_TCRT_MODULE", children=[rear_skid_tcrt_keel()])
 
 
 def rear_ski_keel():
@@ -1526,7 +1371,7 @@ def body_panels():
     rear_raw = _service_panel_outline("REAR", BODY_X_REAR - SHELL_THICKNESS, BODY_X_REAR)
     rear_bores = [
         _axial_bore_x(1.65, BODY_X_REAR - 5.0, BODY_X_REAR + 3.0, y, z)
-        for y, z in (*REAR_PANEL_FASTENERS, *(rear_tail_root_screw_points() if REAR_TAIL_ENABLED else ()))
+        for y, z in REAR_PANEL_FASTENERS
     ]
     cw, ch = CHARGE_INLET_CUTOUT
     cy, cz = CHARGE_INLET_CENTER_YZ
@@ -2155,7 +2000,7 @@ def c3_carrier():
 
 
 def _tcrt_ski_cartridge(name, center):
-    """Compact sensor cartridge hidden inside the faceted rear tail."""
+    """Compact sensor cartridge housed inside the faceted rear keel."""
     x, y, z = center
     package_x, package_y, package_z = TCRT_PACKAGE_SIZE
     parts = [
@@ -2169,7 +2014,7 @@ def _tcrt_ski_cartridge(name, center):
         _box(11.0, 7.0, 1.0, (x, y, z + 4.25), f"TCRT_{name}_HEIGHT_SHIM", STEEL, 0.78),
         _box(12.0, 6.5, 4.0, (x + 11.0, y, z + 4.5), f"TCRT_{name}_GH4_PLUG_RESERVE", "#79C4CB", 0.18),
     ]
-    return Compound(label=f"TCRT_{name}_REAR_TAIL_CARTRIDGE", children=parts)
+    return Compound(label=f"TCRT_{name}_REAR_KEEL_CARTRIDGE", children=parts)
 
 
 def sensors():

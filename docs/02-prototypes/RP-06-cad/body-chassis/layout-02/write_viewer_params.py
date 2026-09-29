@@ -95,7 +95,7 @@ def main():
         "head": ["RP01_HEAD_LAYOUT03"],
         "structure": ["CHASSIS_PRIMARY_FRAME", "BODY_PRIMARY_FRAME", "BODY_CHASSIS_MOUNT_HARDWARE", "BODY_YAW_STAGE"],
         "drive": ["WHEEL_L", "WHEEL_R", "MOTOR_L", "MOTOR_R", "BEARING_PAIR_L", "BEARING_PAIR_R", "BALL_TRANSFER"],
-        "rear_tail": ["REAR_SKID_TCRT_MODULE"],
+        "rear_skid": ["REAR_SKID_TCRT_MODULE"],
         "electronics": ["BODY_ELECTRONICS"],
         "sensors": ["BODY_SENSORS"],
         "audio": ["BODY_AUDIO"],
@@ -142,7 +142,7 @@ def main():
         ("head", "Show RP-01 Layout 04 head", True),
         ("structure", "Show body/chassis structure", True),
         ("drive", "Show drivetrain", True),
-        ("rear_tail", "Show rear skid/TCRT keel", True),
+        ("rear_skid", "Show rear skid/TCRT keel", True),
         ("electronics", "Show electronics", True),
         ("sensors", "Show sensors", True),
         ("audio", "Show speaker and microphones", True),
@@ -254,7 +254,7 @@ export default {
     effects.transform("wheel_R", rot([0, 1, 0], geo.pivots.wheel_R, wr));
     if (params.drive_on_floor !== false) effects.transform("*", drivePose(wl, wr));
 
-    for (const key of ["shell", "head", "structure", "drive", "rear_tail", "electronics", "sensors", "audio", "harness", "connectors", "physics"]) {
+for (const key of ["shell", "head", "structure", "drive", "rear_skid", "electronics", "sensors", "audio", "harness", "connectors", "physics"]) {
       effects.visible(key, params[`show_${key}`] !== false);
     }
   }

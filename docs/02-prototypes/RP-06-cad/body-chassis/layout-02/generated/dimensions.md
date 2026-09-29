@@ -28,10 +28,7 @@
 - TCRT channels: `('REAR',)`; rear center `(-54.0, 0.0, 13.5)` mm
 - TCRT optical face / sacrificial guard bottom: 10.0 / 7.0 mm above ground
 - Rear contact lookahead: 27.0 mm
-- Rear tail status: parked accessory, excluded from the assembly
 - Rear keel finish: translucent `#E3DDC9` alpha 0.34
-- Rear tail (when enabled): `FACETED_TELESCOPING_STINGER`, `#707D82` root hub + 3 telescoping `#E3DDC9` segments + `#B88636` chisel tip; cosmetic, panel-mounted with hidden M3 screws
-- Rear tail hub face / tip: X=-62.4 Z=92.0; tip X=-105.0 Z=123.0 mm; tip section 4.0 × 2.0 mm
 - Skid/TCRT keel: under `REAR_SKID_CROSSMEMBER`, X -67.0 to -17.0 mm; skid pad center `(-27.0, 0.0, 4.75)` mm
 - Coverage: rear-only CAD-context choice; no front or lateral cliff-safety claim (forward edges are left to camera perception, which is not a low-level stop channel)
 

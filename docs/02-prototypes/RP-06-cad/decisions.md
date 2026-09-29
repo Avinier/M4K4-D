@@ -14,7 +14,7 @@ chassis CAD is accepted, each retained choice must be propagated deliberately to
 |---|---|---|
 | `RP03-CAD-01` | **Fixed in CAD context — pending permanent propagation** | Reduce the ground-reflectance architecture from three TCRT5000 channels to one guarded rear channel. Remove the front and lateral TCRT packages, mounts, booms and cable reserves from Layout 01. |
 | `RP03-CAD-02` | **Fixed in CAD context — pending permanent propagation** | Remove the exposed stance-wide bumper. Replace it with a narrow concealed-contact fascia integrated into a lean fixed ball-transfer nose; preserve the frozen Concept A ball contact datum. |
-| `RP03-CAD-03` | **Fixed in CAD context — pending permanent propagation** | Consolidate the rear skid and retained TCRT channel into one separately selectable, sharp-edged faceted rear-tail module with a hollow translucent shell, visible internal load/sensor paths, replaceable wear shoe and guards, and a flush top-loaded sensor cartridge. |
+| `RP03-CAD-03` | **Fixed in CAD context — pending permanent propagation** | Combine the rear skid and retained TCRT channel in one separately selectable faceted keel under the rear crossmember, with a replaceable wear shoe and guards, a sensor cartridge, and visible cable and hardware paths. |
 | `RP03-CAD-04` | **Fixed in CAD context — pending permanent propagation** | Replace the `RP03-CAD-02` nose structure with one printed ball pod that seats on the vendor flange, and move the GP2Y obstacle sensor into it on the centreline, ahead of the ball contact. Keep the ball fixed at `X=110`. |
 | `RP03-CAD-05` | **Fixed in CAD context — pending permanent propagation** | Make the drivetrain physically fit: bolt each coaxial gearmotor's face to a chassis flange whose boss carries the 608 pair inside a pocket in a dished wheel, run the wheel on an 8 mm stub shaft, delete the axle crossmember, and carry the rails round the gearboxes. Keep track, wheel envelope and axle height frozen. |
 | `RP03-CAD-06` | **Fixed in CAD context — pending permanent propagation** | Move every body-side part 16 mm forward of the drive axle and put the battery in a low chassis tub, to bring the register CoM from x +9.4 to +20.0 mm. The skid moves forward with the body's rear wall to 27 mm behind the axle. |
@@ -58,57 +58,24 @@ Re-affirmed by the builder on 2026-09-23 alongside `RP03-CAD-04`: forward edges 
 left to camera perception. The camera is still not a low-level stop channel, so the
 forward-travel restrictions above stand.
 
-## RP03-CAD-03 — Faceted rear tail and sensor cartridge
+## RP03-CAD-03 — Rear skid and sensor cartridge
 
-The earlier rear design exposed a separate skid arm and seat, sensor boom,
-adjustment ears, retainer and cable gland. Layout 01 now consolidates those functions
-into an eleven-station ruled tail tied directly to the rear crossmember. Its side
-silhouette is made only from straight links: it drops to the skid belly, rises
-rearward through progressively shorter terminal links, and closes in a narrow distal
-point. It deliberately uses no smooth spline,
-matching Makad's sharp-edge visual language. Small exterior chamfers control edge
-fragility while load relief remains internal. The visible shell uses the RP-01
-Layout 03 ivory `#E3DDC9`, not a black or dark chassis finish. The shell is now
-hollow and intrinsically translucent (alpha `0.34`), exposing a blue internal load
-spine, yellow TCRT package, guide/shim stack, connector reserve and cyan cable route.
-The complete tail is its own top-level `REAR_SKID_TCRT_MODULE` group, parallel to the
-separate ball-transfer group, so it can be hidden or inspected without the chassis.
+The active Layout 02 combines rear floor contact and the retained TCRT channel in a
+compact faceted keel under `REAR_SKID_CROSSMEMBER`. Four M3 screws hold the keel;
+its replaceable wear shoe, protective guards, TCRT cartridge, and cable riser are
+inspectable in the separate `REAR_SKID_TCRT_MODULE` group. The keel uses translucent
+ivory `#E3DDC9` at alpha `0.34` so its internal package and hardware remain visible.
 
-A chamfered replaceable wear shoe retains the nominal `X=-70 mm` skid datum and
-3.5 mm ground clearance. Replaceable protective lips nest into the tail side walls,
-begin at 7 mm, and protect the retained 10 mm optical face without becoming the first
-floor-contact feature.
+The shoe starts at 3.5 mm ground clearance and contacts first. The guard lips begin
+at 7 mm, below the TCRT optical face at 10 mm. The sensor patch is 27 mm behind the
+nominal skid contact. Following the 16 mm forward body shift in `RP03-CAD-06`, the
+shoe is at `X=-27 mm` and the TCRT at `X=-54 mm`. The shoe touches at 6.1° of
+back-pitch, before the CoM crosses the axle at 10.9°; the skid inequality
+`h/d < x/h` is 3.5/33 = 0.11 against 0.19.
 
-Layout 01.5 moves the rear TCRT from `X=-110 mm` to `X=-97 mm` and raises its optical
-face from 8 mm to 10 mm. This reduces the sensing offset from 40 mm to a deliberately
-bounded 27 mm, shortens the tail root-to-tip projection from 84 mm to 66 mm, and lets
-the ruled links rise sooner rather than continuing as a long horizontal shank. The
-10 mm sensing height is still provisional and requires target-floor calibration;
-raising it further is not accepted without measured contrast-margin evidence.
-It installs from above as a compact cartridge beneath a flush, chamfered service cap;
-guides, height shim, connector clearance and the cable route are contained inside
-the tail rather than represented as boxes or an external gland. This is a packaging decision;
-the exact breakout, connector, shim stack and fastening details still require the
-selected SKU to be measured.
-
-**Layout 02 amendment (2026-09-23).** The floor-contact and sensing functions move
-into a compact faceted keel under `REAR_SKID_CROSSMEMBER`: wear shoe at `X=-43 mm`,
-TCRT at `X=-70 mm`, same 3.5/7/10 mm heights and 27 mm lookahead. The visible tail
-becomes a separate, purely cosmetic `REAR_TAIL_STINGER` on the rear service panel:
-a slate hub, three telescoping eight-sided ivory segments and a blunt amber chisel tip,
-fastened with hidden M3 screws into heat-set inserts. A longer drooping S-curve variant
-was rejected because it extended the spin-in-place radius from 128 mm to 164 mm at
-ankle/pet height, had no rear contact sensing, and ended in a needle point. The tail must
-stay inside the ball-nose spin circle and below the body top. It is currently parked as
-an optional accessory (`REAR_TAIL_ENABLED = False`), and the keel is translucent ivory
-so its internals remain reviewable.
-
-**Layout 02 amendment 2 (2026-09-24, `RP03-CAD-06`).** The rear crossmember and keel move
-16 mm forward with the body's rear wall: wear shoe at `X=-27 mm`, TCRT at `X=-54 mm`.
-Heights and the 27 mm lookahead are unchanged. The skid reach falls from 43 to 27 mm
-(33 mm to the shoe's rear edge), so the shoe now touches at 6.1° of back-pitch, still
-before the CoM crosses the axle at 10.9°. The skid inequality `h/d < x/h` holds at
-3.5/33 = 0.11 against 0.19. The parked tail moves forward with the rear panel.
+The 10 mm sensing height and cartridge are packaging choices pending target-floor
+calibration and measurement of the selected breakout, connector, shim stack and
+fasteners. The earlier Layout 01 prototype remains documented in its own directory.
 
 ## RP03-CAD-02 — Lean fixed ball nose with concealed contact
 
@@ -482,7 +449,7 @@ Parts and evidence: [`peripheral-selection.md`](peripheral-selection.md) (workin
 
 **IMU seat.** Under the IMU the deck is open over the motors (X < 17.5) and the battery (X > 26.5); only the crossbar between carries material, so both M2 screws sit on it at X 22 and the board spans the openings.
 
-New checks: `selected_audio_and_imu_parts_are_clear`, `speaker_is_k50wp_outline_behind_front_panel`, `mic_packages_on_port_axes_against_boots`, `imu_board_seated_on_deck_with_both_screws_in_material`. Result: 113 of 114 pass; the failure, `rear_tail_clears_shell_and_panels`, was already failing at HEAD.
+New checks: `selected_audio_and_imu_parts_are_clear`, `speaker_is_k50wp_outline_behind_front_panel`, `mic_packages_on_port_axes_against_boots`, `imu_board_seated_on_deck_with_both_screws_in_material`. The historical 113/114 run is superseded by the current Layout 02 report.
 
 Mass register: `BODY_AUDIO` 90 → 60 g, `IMU_BREAKOUT` 2 g → `IMU_PCB07` 2.5 g. Total 2558.9 → 2529.4 g, CoM x +18.89 → +19.38 mm, h 106.98 → 106.96 mm, a_tip 1.732 → 1.777 m/s² (floor 1.582). All `E`.
 

@@ -1,6 +1,6 @@
 {
   "layout_id": "RP03_BODY_CHASSIS_LAYOUT02",
-  "ok": false,
+  "ok": true,
   "checks": [
     {
       "name": "concept_a_track",
@@ -989,8 +989,8 @@
         "guard_top_z_mm": 10.5,
         "keel_underside_z_mm": {
           "-61.5": 10.0,
-          "-54.5": 10.0,
-          "-47.5": 9.72
+          "-55.5": 10.0,
+          "-49.5": 10.0
         }
       }
     },
@@ -1009,10 +1009,9 @@
       }
     },
     {
-      "name": "rear_tail_parked_out_of_assembly",
+      "name": "rear_module_contains_only_skid_tcrt_keel",
       "ok": true,
       "evidence": {
-        "enabled": false,
         "module_children": [
           "REAR_SKID_TCRT_KEEL"
         ]
@@ -1024,135 +1023,6 @@
       "evidence": {
         "color": "#E3DDC9",
         "alpha": 0.34
-      }
-    },
-    {
-      "name": "rear_tail_is_faceted_telescoping_stinger",
-      "ok": true,
-      "evidence": {
-        "style": "FACETED_TELESCOPING_STINGER",
-        "segment_labels": [
-          "REAR_TAIL_SEGMENT_01",
-          "REAR_TAIL_SEGMENT_02",
-          "REAR_TAIL_SEGMENT_03",
-          "REAR_TAIL_CHISEL_TIP"
-        ]
-      }
-    },
-    {
-      "name": "rear_tail_sweeps_progressively_upward",
-      "ok": true,
-      "evidence": {
-        "segment_rise_deg": [
-          22.93,
-          36.87,
-          52.13,
-          66.04
-        ]
-      }
-    },
-    {
-      "name": "rear_tail_segments_telescope",
-      "ok": true,
-      "evidence": {
-        "segment_start_end_widths_mm": [
-          [
-            19.0,
-            17.86
-          ],
-          [
-            15.5,
-            14.57
-          ],
-          [
-            12.5,
-            11.75
-          ],
-          [
-            9.5,
-            4.0
-          ]
-        ]
-      }
-    },
-    {
-      "name": "rear_tail_tip_is_blunt_chisel",
-      "ok": true,
-      "evidence": {
-        "tip_section_w_h_mm": [
-          4.0,
-          2.0
-        ]
-      }
-    },
-    {
-      "name": "rear_tail_inside_nose_spin_circle",
-      "ok": true,
-      "evidence": {
-        "tail_planar_radius_mm": 105.93,
-        "nose_planar_radius_mm": 134.55
-      }
-    },
-    {
-      "name": "rear_tail_below_body_top",
-      "ok": true,
-      "evidence": {
-        "tail_max_z_mm": 107.0,
-        "limit_z_mm": 130.0
-      }
-    },
-    {
-      "name": "rear_tail_clears_shell_and_panels",
-      "ok": false,
-      "evidence": {
-        "shell_overlap_mm3": 0,
-        "panel_overlap_mm3": 220.21846899762676
-      }
-    },
-    {
-      "name": "rear_tail_stays_above_body_ground_clearance",
-      "ok": true,
-      "evidence": {
-        "tail_min_z_mm": 77.0,
-        "body_bottom_z_mm": 30.0
-      }
-    },
-    {
-      "name": "rear_tail_root_has_four_hidden_m3",
-      "ok": true,
-      "evidence": {
-        "screw_points_y_z_mm": [
-          [
-            -8.0,
-            86.0
-          ],
-          [
-            8.0,
-            86.0
-          ],
-          [
-            -5.0,
-            97.5
-          ],
-          [
-            5.0,
-            97.5
-          ]
-        ],
-        "head_min_x_mm": [
-          -55.6,
-          -55.6,
-          -55.6,
-          -55.6
-        ]
-      }
-    },
-    {
-      "name": "rear_tail_uses_head_ivory",
-      "ok": true,
-      "evidence": {
-        "tail_color": "#E3DDC9",
-        "head_palette_ivory": "#E3DDC9"
       }
     },
     {
@@ -1218,6 +1088,7 @@
           "PCB03_MOTOR_GATE_AND_HEAD_RAIL",
           "PCB04_BRANCH_CONVERTERS",
           "PACK_ATOF_FUSE_HOLDER_ENVELOPE",
+          "PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE",
           "ESTOP_XA1E_BV3U02KT_R"
         ],
         "proposal": "RP-02 board-specs.md sec 2, 2026-09-25"
@@ -1266,11 +1137,15 @@
             "to": "MOTOR_L_PIGTAIL_RESERVE"
           },
           "PCB04_BRANCH_CONVERTERS_PARTS_ENVELOPE": {
-            "nearest_mm": 0.9,
-            "to": "C3_ESP32_S3_DEVKITC_STEP"
+            "nearest_mm": 1.0,
+            "to": "BODY_LOWER_CROSS_REAR"
           },
           "PACK_ATOF_FUSE_HOLDER_ENVELOPE": {
             "nearest_mm": 1.3,
+            "to": "CHASSIS_RAIL_L_FRONT"
+          },
+          "PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE": {
+            "nearest_mm": 2.2,
             "to": "CHASSIS_RAIL_L_FRONT"
           },
           "ESTOP_XA1E_MUSHROOM_D29": {
@@ -1385,11 +1260,11 @@
       "name": "control_power_sensors_row_replaced_by_board_rows",
       "ok": true,
       "evidence": {
-        "replaced_rows_g": 121.5,
+        "replaced_rows_g": 138.5,
         "removed_row_g": 121.5,
         "estop_g": 14.0,
-        "battery_g": 113.7,
-        "total_mass_g": 2529.4,
+        "battery_g": 108.2,
+        "total_mass_g": 2551.9,
         "note": "hand-kept register: masses are RP-02 estimates, not derived from the solids"
       }
     },
@@ -1398,23 +1273,17 @@
       "ok": true,
       "evidence": {
         "clashes_mm3": {},
-        "reserves": 21,
-        "checked_against": 214,
-        "open_known_clashes_mm3": {
-          "C3_DEVKIT_HEADER_PINS_NY_OPEN x PCB04_BRANCH_CONVERTERS_PARTS_ENVELOPE": 836.0,
-          "C3_DEVKIT_HEADER_PINS_PY_OPEN x BODY_MOUNT_DOGLEG_R_L": 27.5
-        },
-        "note": "mated plug + first lead bend; _OPEN reserves are recorded clashes (DevKitC header pins into PCB-04, Pi GPIO socket under the yaw servo), not placements"
+        "reserves": 29,
+        "checked_against": 215,
+        "open_known_clashes_mm3": {},
+        "note": "mated plug + first lead bend; the pack-disconnect slide path is checked separately (the pack occupies it until removed). The Pi GPIO socket clears the yaw servo by 0.6 mm and the PCB-09 strip over it by 0.1 mm"
       }
     },
     {
       "name": "connector_reserves_do_not_overlap_each_other",
-      "ok": false,
+      "ok": true,
       "evidence": {
-        "overlaps_mm3": {
-          "PCB03_PY_EDGE_CONNECTORS_J32_J31_RESERVE x MOTOR_L_INLINE_MICROFIT3_1X2_RESERVE": 3.0,
-          "PCB03_NY_EDGE_CONNECTORS_J33_J34_RESERVE x MOTOR_R_INLINE_MICROFIT3_1X2_RESERVE": 3.0
-        }
+        "overlaps_mm3": {}
       }
     },
     {
@@ -1447,7 +1316,7 @@
             "connectors": {
               "J4-1": "MF+ 2p, 8.3 mm",
               "J4-2": "MF3 4p, 10.26 mm",
-              "J4-5": "MF3 2p, 7.26 mm"
+              "J4-4": "MF3 2p, 7.26 mm"
             }
           },
           "PCB04_PY": {
@@ -1456,7 +1325,7 @@
             "margin_mm": 9.44,
             "connectors": {
               "J4-3": "MF+ 4p, 11.3 mm",
-              "J4-4": "MF3 2p, 7.26 mm"
+              "J4-5": "MF3 2p, 7.26 mm"
             }
           },
           "PCB02_NY": {
@@ -1508,6 +1377,340 @@
       }
     },
     {
+      "name": "pack_disconnect_is_placed_and_serviceable_through_tub_window",
+      "ok": true,
+      "evidence": {
+        "slide_path_blockers_mm3": {},
+        "pair_x_mm": [
+          27.0,
+          49.0
+        ],
+        "fuse_x_mm": [
+          51.0,
+          75.0
+        ],
+        "pair_to_fuse_gap_mm": 2.0,
+        "window_mm": [
+          26.9,
+          49.5,
+          37.0,
+          47.0
+        ],
+        "rule": "CN-05: Micro-Fit+ 1x2 wire-to-wire pair beside the tub, fuse next after it (PA-02); with the hatch open and the pack out the pair slides through the +Y tub window into the empty tub"
+      }
+    },
+    {
+      "name": "c3_carrier_holds_devkitc_clear_of_everything",
+      "ok": true,
+      "evidence": {
+        "clashes_mm3": {},
+        "parts": [
+          "C3_CARRIER_PCB10_BOARD",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "C3_DEVKIT_HEADER_ROW_1",
+          "C3_DEVKIT_HEADER_ROW_2",
+          "BODY_FRAME_C3_CARRIER_UPRIGHT_1",
+          "BODY_FRAME_C3_CARRIER_UPRIGHT_2",
+          "C3_CARRIER_M25_SCREW_HEAD_1",
+          "C3_CARRIER_M25_SCREW_SHANK_1",
+          "C3_CARRIER_M25_SCREW_HEAD_2",
+          "C3_CARRIER_M25_SCREW_SHANK_2",
+          "C3_CARRIER_M25_SCREW_HEAD_3",
+          "C3_CARRIER_M25_SCREW_SHANK_3",
+          "C3_CARRIER_M25_SCREW_HEAD_4",
+          "C3_CARRIER_M25_SCREW_SHANK_4",
+          "C3_J10_2_JST_GH_BM06B_HEADER",
+          "C3_J10_2_GHR06_MATED_PLUG",
+          "C3_J10_5_JST_GH_BM06B_HEADER",
+          "C3_J10_5_GHR06_MATED_PLUG",
+          "C3_J10_6_JST_GH_BM06B_HEADER",
+          "C3_J10_6_GHR06_MATED_PLUG",
+          "C3_J10_8_JST_GH_BM05B_HEADER",
+          "C3_J10_8_GHR05_MATED_PLUG",
+          "C3_J10_7_JST_GH_BM08B_HEADER",
+          "C3_J10_7_GHR08_MATED_PLUG",
+          "C3_J10_3_JST_GH_BM04B_HEADER",
+          "C3_J10_3_GHR04_MATED_PLUG",
+          "C3_J10_4_JST_GH_BM04B_HEADER",
+          "C3_J10_4_GHR04_MATED_PLUG",
+          "C3_J10_10_JST_GH_BM04B_HEADER",
+          "C3_J10_10_GHR04_MATED_PLUG",
+          "C3_J10_12_JST_GH_BM04B_HEADER",
+          "C3_J10_12_GHR04_MATED_PLUG",
+          "C3_J10_11_JST_GH_BM03B_HEADER",
+          "C3_J10_11_GHR03_MATED_PLUG",
+          "C3_J10_1_MICROFIT3_2P_RA_HEADER",
+          "C3_J10_1_MICROFIT3_2P_MATED_PLUG"
+        ],
+        "devkitc_box_mm": [
+          -11.06,
+          53.06,
+          -54.3,
+          -48.8,
+          96.2,
+          124.5
+        ],
+        "note": "PCB-10 per RP-02 CCD-HDL-03; replaces the bare DevKitC whose header pins sat in PCB-04"
+      }
+    },
+    {
+      "name": "c3_carrier_gh_headers_fit_two_rows",
+      "ok": true,
+      "evidence": {
+        "gh_headers": 10,
+        "needed_mm": 103.0,
+        "two_rows_mm": 140.0,
+        "band_height_mm": 14.2,
+        "internal_overlaps_mm3": {},
+        "plugs_outside_plug_layer": {},
+        "rule": "real BM top-entry GH headers in two rows, clear of the four M2.5 screws, the DevKitC and each other; mated plugs inside the carrier plug layer"
+      }
+    },
+    {
+      "name": "connector_bodies_clear_of_hardware_and_each_other",
+      "ok": true,
+      "evidence": {
+        "clashes_mm3": {},
+        "self_overlaps_mm3": {},
+        "bodies": 48,
+        "note": "PCB-08 and PCB-09 boards, PCB-05 edge headers, mated Micro-Fit plugs and motor pairs; PCB-05 headers inside PCB-05's own parts reserve are by design"
+      }
+    },
+    {
+      "name": "mated_plugs_sit_inside_their_reserves",
+      "ok": true,
+      "evidence": {
+        "fraction_outside": {}
+      }
+    },
+    {
       "name": "signal_connectors_are_latching_jst_gh",
       "ok": true,
       "evidence": {
@@ -1546,20 +1749,20 @@
       "name": "com_inside_support_x",
       "ok": true,
       "evidence": {
-        "com_x_mm": 19.379155045241752
+        "com_x_mm": 19.4591427613511
       }
     },
     {
       "name": "com_forward_of_physics_margin_line",
       "ok": true,
       "evidence": {
-        "com_x_mm": 19.38,
-        "com_h_mm": 106.96,
-        "x_over_h": 0.1812,
-        "a_tip_m_s2": 1.777,
+        "com_x_mm": 19.46,
+        "com_h_mm": 107.27,
+        "x_over_h": 0.1814,
+        "a_tip_m_s2": 1.78,
         "a_tip_min_m_s2": 1.582,
-        "equivalent_min_x_mm_at_this_h": 17.25,
-        "margin_over_a_peak_1p00": 1.777,
+        "equivalent_min_x_mm_at_this_h": 17.3,
+        "margin_over_a_peak_1p00": 1.78,
         "baseline_target": {
           "x_mm": 25.0,
           "h_mm": 124.0,
@@ -1573,7 +1776,7 @@
       "name": "ball_share_above_spin_walk_flag",
       "ok": true,
       "evidence": {
-        "ball_share": 0.1762,
+        "ball_share": 0.1769,
         "flag_below": 0.09
       }
     },
@@ -1582,14 +1785,14 @@
       "ok": true,
       "evidence": {
         "shoe_first_contact_pitch_deg": 6.054,
-        "com_over_axle_pitch_deg": 10.27
+        "com_over_axle_pitch_deg": 10.282
       }
     },
     {
       "name": "com_below_head_yaw",
       "ok": true,
       "evidence": {
-        "com_z_mm": 106.95828828707945
+        "com_z_mm": 107.2693682261636
       }
     }
   ]

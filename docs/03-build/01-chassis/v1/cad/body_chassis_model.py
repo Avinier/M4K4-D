@@ -177,7 +177,7 @@ AXLE_HOUSING_Y = (74.0, 86.35)  # bolt-on printed bearing housing; bearings stan
 AXLE_HOUSING_RADIUS = 16.0  # 2.0 mm radial to the wheel pocket; 2.3 mm wall outside the screw holes
 AXLE_HOUSING_SCREW_R = 12.0
 AXLE_HOUSING_SCREW_ANGLES = (45.0, 135.0, 225.0, 315.0)  # degrees in XZ from +X; diagonals keep the inserts >= 4.5 mm off the plate edges
-AXLE_HOUSING_INNER_RADIUS = 6.25  # inboard cavity and outer-ring shoulder (O12.5), 74-76.5
+AXLE_HOUSING_INNER_RADIUS = 6.25  # inboard cavity and outer-ring shoulder (O12.5), 74-76.51
 AXLE_KEY_HOLE_RADIUS = 1.3  # O2.6 axial key access to the face screws, opened into the bearing bore as a slot (0/180 deg, off the vertical load line)
 AXLE_WINDOW_RADIUS = 1.7  # O3.4 radial set-screw slot at +Z, open to the housing base so the screw can be fitted
 AXLE_CAP_Y = (86.51, 87.71)  # 1.2 mm aluminium retaining cap on the outer rings
@@ -189,7 +189,7 @@ BEARING_OD_RADIUS = 8.0
 BEARING_WIDTH = 5.0
 BEARING_Y = (79.01, 84.01)  # bearing centres: 76.51-81.51 and 81.51-86.51, faces touching
 BEARING_SEAT_Y = (76.51, 86.51)
-SET_SCREW_Y = 74.8  # DIN 916 M3 x 2.5 cup point on the D-flat (+Z); tap-drill edge stays 0.45 mm from the first 688ZZ face
+SET_SCREW_Y = 74.8  # DIN 916 M3 x 2.5 cup point on the D-flat (+Z); tap-drill edge stays 0.46 mm from the first 688ZZ face
 SET_SCREW_LENGTH = 2.5
 # Stub: one turned EN8 part. Ø8 through the bearings, Ø9.5 shoulder, Ø24
 # flange carrying three tapped M3 for the wheel, Ø10 spigot centring the wheel.
