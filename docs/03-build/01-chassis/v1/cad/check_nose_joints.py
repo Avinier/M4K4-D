@@ -19,7 +19,7 @@ gp2y=[c for c in sens.children if c.label.startswith("GP2Y") and c.label!="GP2Y_
 flange=by_label(ball_parts,"BALL_TRANSFER_PURCHASED_3HOLE_FLANGE"); pod_seat=by_label(pod_parts,"BALL_POD_PRINTED_SEAT")
 cap=by_label(nose_parts,"BALL_NOSE_TOUCH_CAP"); travel=by_label(nose_parts,"BALL_NOSE_3MM_TRAVEL_RESERVE")
 springs=[p for p in nose_parts if p.label.startswith("BALL_NOSE_RETURN_SPRING")]
-hall=by_label(nose_parts,"BALL_NOSE_HALL_DRV5055A3_SOT23"); magnet=by_label(nose_parts,"BALL_NOSE_MAGNET_D2X1_N35")
+hall=by_label(nose_parts,"BALL_NOSE_HALL_DRV5055A3_SOT23"); magnet=by_label(nose_parts,"BALL_NOSE_MAGNET_D3X1P5_N35")
 R={}
 # J07 thread
 eng={}

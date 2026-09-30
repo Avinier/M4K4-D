@@ -1,0 +1,69 @@
+{
+ "battery_pack_is_clear": {},
+ "cell_gap_mm": 1.1,
+ "tub_margin_mm": {
+  "rear_x": 1.8,
+  "front_x": 1.8,
+  "side_y": 1.5,
+  "floor_z": 0.3,
+  "below_deck_top_z": 2.1
+ },
+ "tub_clashes": {},
+ "tub_open": {
+  "BATTERY_TUB_BOTTOM_HATCH x BODY_SHELL": {
+   "mm3": 1689.275,
+   "note": "hatch flange (tub X -3/+4, Y +/-10) is larger than the shell floor opening (X -1/+2.5, Y +/-1); unresolved"
+  },
+  "CHASSIS_DECK_WITH_BODY_INTERFACE x BODY_SHELL": {
+   "mm3": 38.619,
+   "note": "shell-to-deck interface overlap; unresolved"
+  },
+  "CHASSIS_DECK_WITH_BODY_INTERFACE x POWER_DISTRIBUTION_BOARDS": {
+   "mm3": 178.4,
+   "note": "proposal board envelopes and keep-outs; unresolved"
+  },
+  "CHASSIS_DECK_WITH_BODY_INTERFACE x IMU_PCB07": {
+   "mm3": 25.133,
+   "note": "IMU M2 screws thread-form into the deck by design"
+  }
+ },
+ "ballast_is_clear": {},
+ "ballast_self": {},
+ "csk_heads_seated": {
+  "BALLAST_M3_CSK_HEAD_L": {
+   "gap_to_deck_mm": 0.0,
+   "top_below_deck_top_mm": 0.1
+  },
+  "BALLAST_M3_CSK_HEAD_R": {
+   "gap_to_deck_mm": 0.0,
+   "top_below_deck_top_mm": 0.1
+  }
+ },
+ "shank_clear_of_deck_mm": {
+  "BALLAST_M3_SHANK_L": 0.2,
+  "BALLAST_M3_SHANK_R": 0.2
+ },
+ "screw_length_mm": 12.0,
+ "engagement_mm": 8.1,
+ "tip_to_hole_floor_mm": 0.9,
+ "mass_g": 2605.0,
+ "com_mm": [
+  19.03,
+  0.16,
+  105.87
+ ],
+ "a_tip_m_s2": 1.763,
+ "a_tip_min_m_s2": 1.582,
+ "pass": {
+  "battery_pack_is_clear": true,
+  "cells_more_than_1mm_apart": true,
+  "pack_fits_tub": true,
+  "tub_has_no_new_clashes": true,
+  "ballast_is_clear": true,
+  "ballast_self_clear": true,
+  "csk_heads_seated_flush_or_below": true,
+  "screw_is_12mm": true,
+  "tip_clears_hole_floor": true,
+  "com_forward_of_physics_margin_line": true
+ }
+}

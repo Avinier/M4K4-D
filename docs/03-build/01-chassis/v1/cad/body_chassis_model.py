@@ -10,6 +10,7 @@ STEP geometry is imported through cadgen.step_scene.import_step.
 
 from __future__ import annotations
 
+import functools
 import importlib
 import json
 import math
@@ -48,6 +49,11 @@ HERE = Path(__file__).resolve().parent
 # Layout 04 head. Keep these explicit until the chassis-only CAD is separated.
 PROTOTYPE_CAD_ROOT = HERE.parents[3] / "02-prototypes" / "RP-06-cad"
 PURCHASED = PROTOTYPE_CAD_ROOT / "body-chassis" / "layout-01" / "references" / "purchased"
+# Vendor or vendor-derived STEPs added in 03-build (see purchased/README.md).
+V1_PURCHASED = HERE / "purchased"
+# Adafruit #3297 leaves in adafruit_3297_drv8833.step export order.
+ADAFRUIT_3297_LEAVES = ("PCB", "U1_HTSSOP16", "U1_LEADS_A", "U1_LEADS_B", "R1_1206", "R2_1206",
+                        "C1_0805", "C2_0805", "C3_0805", "C4_0805", "Q1_SOT23", "J1_TERMINAL_BLOCK")
 HEAD_DIR = PROTOTYPE_CAD_ROOT / "head" / "layout-04"
 # Drive wheel (D-008, D-009): rim, handed TPU tyres, clamp ring, hub cap and their
 # hardware are modelled once in wheel/wheel_model.py; wheel_assembly() places them
@@ -156,7 +162,7 @@ MOTOR_SCREW_OFFSET = 8.5  # face M3 holes (unverified), on the axle line
 MOTOR_SCREW_XZ = ((-MOTOR_SCREW_OFFSET, 0.0), (MOTOR_SCREW_OFFSET, 0.0))  # (X, Z - AXLE_Z)
 MOTOR_SCREW_TAP_RADIUS = 1.25  # M3 tap drill
 MOTOR_SCREW_HOLE_DEPTH = 5.0  # assumed; not published
-# Axle stack (D-007, 03-build/01-chassis/v1/axle-stack.md), |Y| from the
+# Axle stack (D-007, 03-build/01-chassis/v1/research/axle-stack.md), |Y| from the
 # centre plane. The motor floats on its face screws until it has aligned to
 # the stub, then they are tightened through key holes in the housing.
 MOTOR_SCREW_LENGTH = 6.0  # DIN 7984 M3 x 6 low head: 2.8 mm clamp + 3.2 mm thread
@@ -257,12 +263,14 @@ BALL_POD_STATIONS = (
     (104.0, 17.5, 51.0, 6.0),
     (110.5, 24.5, 51.0, 9.0),
     (121.0, 24.5, 51.0, 9.0),  # belt held 1.2 mm past the ear slot's front end
-    (122.5, 17.8, 49.0, 2.0),
-    (128.5, 17.8, 49.0, 2.0),
+    (122.5, 17.8, 51.0, 2.0),  # nose top at the lid top: the real GP2Y body runs level to its lens face (Z 48)
+    (128.5, 17.8, 51.0, 2.0),
 )
 BALL_POD_NOSE_X0 = BALL_POD_STATIONS[-2][0]  # start of the constant nose section
-# Lid underside in XZ: level over the belt, stepping down over the lens hood.
-BALL_POD_LID_UNDERSIDE = ((80.0, 49.0), (121.0, 49.0), (122.2, 46.8), (129.0, 44.9))  # step starts at the belt end (D-011): no wedge at the ear slot's front corner
+# Lid underside in XZ: level at Z 49, 1 mm over the GP2Y body to the pod face. (The D-011
+# step down over a "lens hood" came from the misread A41 placement.)
+BALL_POD_LID_UNDERSIDE = ((80.0, 49.0), (129.0, 49.0))
+# Vestigial since the GP2Y ears are trimmed (D-027); kept so the pod print is unchanged.
 # The GP2Y's ear flange (|y| 22.25, Z 35-36.6) must lift straight out, so its slots
 # (x0, x1, |y| inner, |y| outer, z0, z1) run up to the lid and open through the upper chamfer
 # as a window. D-011 holds the belt's full width 1.2 mm past the slot's front end (x 121.0);
@@ -286,7 +294,7 @@ POD_SWITCH_GROOVE = (100.0, 126.6, 9.5, 12.5, 33.5, 35.0)  # x0, x1, y0, y1, z0,
 # countersunk thread-former holds the front. Removal: cap off, screw out, slide forward, lift.
 LID_TONGUE = (93.5, 95.0, -6.0, 6.0, 47.0, 49.0)
 LID_TONGUE_CLEARANCE = 0.2
-LID_SCREW_XY = (124.6, -11.8)
+LID_SCREW_XY = (111.8, -11.8)  # behind the GP2Y body (X 114.5), boss fused to the -Y pocket wall
 LID_SCREW_LENGTH = 8.0
 LID_SCREW_HEAD_RADIUS = 1.9  # M2 countersunk O3.8, 90 deg
 LID_BOSS_RADIUS = 2.2
@@ -302,6 +310,7 @@ NOSE_CABLE_BORE_RADIUS = 2.5
 # x +9.4 to about +21 mm (x/h ~0.20). Body-side X values below are written as
 # their pre-shift value + BODY_SHIFT_X; BODY_AXIS_X is the body/yaw centre.
 BODY_SHIFT_X = 16.0
+DRIVER_CENTER_X = 28.5 + BODY_SHIFT_X  # Adafruit #3297 boards; 1.5 mm behind the old centre so the PCB corner clears the front body-mount doglegs (X 58)
 BODY_AXIS_X = BODY_SHIFT_X
 BODY_X_REAR = -74.0 + BODY_SHIFT_X
 BODY_X_FRONT = 82.0 + BODY_SHIFT_X
@@ -455,16 +464,28 @@ IMU_SCREW_HALF_Y = 7.5
 # ahead of it is credited and a face behind it is charged.
 FRONT_RANGE_SENSOR_Y = 0.0
 FRONT_RANGE_SENSOR_BOTTOM_Z = 35.0  # rests on the 6 mm pod seat (D-011); was on rails over the old screw heads
-FRONT_RANGE_SENSOR_Z = 40.3  # optical axis: lens centre (STEP Z 5.3 above the seating plane)
-# Sharp STEP: 29.6 wide x 11.5 tall body with a 7.2 mm-deep belt out to 44.4 mm wide x 13.5 tall
-# (STEP y -3.6..3.6); lens hood 6.4 mm ahead of the body's front face. Depth is to the lens tip.
-FRONT_RANGE_SENSOR_SIZE = (18.9, 29.6, 11.5)
+# Sharp datasheet E4-A00201EN: the lenses and the two O3.2 flange holes face the
+# same way, the package is 13.5 deep along the optical axis, and the 13 mm body
+# plus the S3B-PH connector on one edge make 18.9. The sensor lies lenses forward
+# with the connector up; the lens centres are 6.5 above the body bottom. (The
+# Layout 02 A41 placement read the connector as the front.)
+FRONT_RANGE_LENS_ABOVE_BOTTOM = 6.5
+FRONT_RANGE_SENSOR_Z = FRONT_RANGE_SENSOR_BOTTOM_Z + FRONT_RANGE_LENS_ABOVE_BOTTOM  # optical axis, Z 41.5
+FRONT_RANGE_SENSOR_SIZE = (13.5, 44.5, 18.9)  # depth along the axis, flange width, height with connector
+FRONT_RANGE_EAR_TRIM_HALF_WIDTH = 14.8  # D-027: both mounting ears cut off at the 29.5 mm body
+FRONT_RANGE_POCKET_HALF_WIDTH = 15.0  # pod pocket ahead of X 122.1 (was 14.0 for the misread body)
+FRONT_RANGE_LEAD_RESERVE_H = 3.0  # D-027: J10-8 wires soldered to the S3B-PH pins, bend above the header
+FRONT_RANGE_HUMP_CLEARANCE = 0.5
+FRONT_RANGE_HUMP_WALL = 1.2
+FRONT_RANGE_HUMP_REAR_RUN = 11.5  # lid slides 11 mm forward before it lifts (D-011); the lead runs back and down behind the sensor here
 FRONT_RANGE_SENSOR_FACE_X = 128.0  # lens tip, 0.5 mm inside the pod front face
-FRONT_RANGE_BELT_X = (111.8, 119.4)  # world x of the belt (STEP y -3.6..3.6 -> lens tip - 12.4 + y)
-FRONT_RANGE_BODY_FRONT_X = 122.1  # low front section (STEP y -6.5: Z 0-7.2) starts here
+FRONT_RANGE_BODY_FRONT_X = 122.1  # start of the pod's narrow front pocket
 FRONT_RANGE_WINDOW_SIZE = (27.0, 10.5)  # visor slit in the cap: width, height (full-round ends)
-FRONT_RANGE_CONNECTOR_DEPTH = 6.5
-FRONT_RANGE_MAX_MM = 300.0  # GP2Y0A41SK0F rated range 40-300 mm
+FRONT_RANGE_MIN_MM = 100.0
+FRONT_RANGE_MAX_MM = 800.0  # GP2Y0A21YK0F rated range 100-800 mm
+FRONT_RANGE_CYCLE_MS = 38.3
+FRONT_RANGE_CYCLE_TOLERANCE_MS = 9.6
+FRONT_RANGE_STOP_PATH_LIMIT_MS = 50.0
 FRONT_RANGE_WINDOW_CLEARANCE = 1.0
 # physics.md §6.2 / §10.2 required look-ahead from the ball contact.
 FRONT_RANGE_REQUIRED_MM = {"0.50 m/s level": 179.0, "0.50 m/s 2deg downhill": 221.0, "0.70 m/s level": 289.0}
@@ -535,15 +556,15 @@ PI_COOLER_HOLE_A = (PI_CENTER[0] - 45.0 + 5.25, PI_CENTER[1] - 28.8 + 11.1)
 # vendor STEP; the BMS thickness is unverified.
 BATTERY_CELL_DIAMETER = 18.4  # 25R body max 18.33 +/- 0.07 plus sleeve
 BATTERY_CELL_LENGTH = 65.0  # 25R height 64.85 +/- 0.15 mm
-BATTERY_CELL_PITCH = 18.6  # 0.2 mm sleeve gap between the two cells
+BATTERY_CELL_PITCH = 19.5  # 1.1 mm between the two cells at 18.4 max; Samsung asks for more than 1 mm
 BATTERY_END_STRAP_T = 1.0  # nickel strap, insulation cap and solder at each cell end
-BATTERY_BMS_SIZE = (20.0, 48.0, 2.9)  # RP-02 PCB-01 pack-protection board (board-specs.md sec 3): 48 x 20 mm, 1.6 mm PCB + 1.3 mm parts (proposal); was a 4.5 mm generic 2S 20 A module
+BATTERY_BMS_SIZE = (20.0, 48.0, 2.9)  # selected Robocraze module listing gives 48 x 20 mm only; 2.9 mm is a stale proposal placeholder, not a measured height
 BATTERY_WRAP_T = 0.3  # heat-shrink sleeve under the cells and over the BMS
 BATTERY_SIZE = (
     BATTERY_CELL_PITCH + BATTERY_CELL_DIAMETER + 2.0 * BATTERY_WRAP_T,
     BATTERY_CELL_LENGTH + 2.0 * BATTERY_END_STRAP_T,
     BATTERY_CELL_DIAMETER + BATTERY_BMS_SIZE[2] + 3.0 * BATTERY_WRAP_T,
-)  # 37.6 x 67.0 x 23.5 mm envelope
+)  # 38.5 x 67.0 x 23.5 mm envelope
 BATTERY_TUB_FLOOR_Z = (30.5, 32.0)
 BATTERY_TUB_WALL = 1.5
 BATTERY_TUB_CLEARANCE = 1.5  # foam/retention gap between the pack and each tub wall
@@ -557,10 +578,10 @@ BATTERY_CENTER = (
     BATTERY_TUB_FRONT_X - BATTERY_TUB_CLEARANCE - BATTERY_SIZE[0] / 2.0,
     0.0,
     BATTERY_TUB_FLOOR_Z[1] + BATTERY_SIZE[2] / 2.0,
-)  # X 27.9-65.5, Z 32-55.5
+)  # X 27.0-65.5, Z 32-55.5
 # Ballast (RP03-CAD-08): a mild-steel bar clamped under the deck between the
 # battery tub's front wall and the front crossmember, hung from two M3
-# countersunk-style screws from the deck top. It restores the register CoM to
+# countersunk screws (CH-038) from the deck top. It restores the register CoM to
 # the physics.md 2.5 line after the lighter RP03-CAD-07 pack.
 BALLAST_X = (69.5, 78.5)  # 1.0 mm off the tub front wall (X 68.5), 1.5 mm off the crossmember (X 80)
 BALLAST_HALF_Y = 30.0
@@ -568,13 +589,28 @@ BALLAST_Z = (33.0, 52.0)  # top face against the deck underside (Z 52)
 BALLAST_SCREW_Y = (-20.0, 20.0)
 BALLAST_SCREW_X = 74.0
 BALLAST_DENSITY_G_CM3 = 7.85
-BALLAST_SCREW_HEAD_Z = (54.1, 56.0)  # 1.9 mm head sunk in a counterbore in the 4 mm deck
+# CH-038 is an M3 x 12 Phillips countersunk screw (ISO 7046-1): 90 deg head,
+# theoretical O6.3, actual rim O5.5 max, k 1.65. The deck carries a 90 deg
+# countersink opened to O6.5, so the head seats 0.1 mm below the deck top.
+BALLAST_SCREW_HEAD = (6.3, 5.5, 1.65)  # theoretical dk, actual dk max, k max
+BALLAST_SCREW_SEAT_D = 6.5  # countersink diameter at the deck top (Z 56)
+BALLAST_SCREW_LENGTH = 12.0  # overall, head included
+BALLAST_SCREW_HEAD_TOP_Z = DECK_Z + 2.0 - (BALLAST_SCREW_SEAT_D - BALLAST_SCREW_HEAD[0]) / 2.0  # Z 55.9
+BALLAST_SCREW_HEAD_Z = (BALLAST_SCREW_HEAD_TOP_Z - BALLAST_SCREW_HEAD[2], BALLAST_SCREW_HEAD_TOP_Z)  # Z 54.25-55.9
+BALLAST_SCREW_TIP_Z = BALLAST_SCREW_HEAD_TOP_Z - BALLAST_SCREW_LENGTH  # Z 43.9: 8.1 mm in the bar
 BALLAST_SCREW_THREAD_DEPTH = 8.0
+BALLAST_SCREW_HOLE_DEPTH = 9.0  # tapped hole runs 1 mm past the thread so the tip does not bottom
+_BALLAST_HEAD_CONE_H = (BALLAST_SCREW_HEAD[1] - 3.0) / 2.0  # 90 deg cone from O3 to the O5.5 rim
+BALLAST_SCREW_VOLUME = (
+    math.pi * _BALLAST_HEAD_CONE_H / 3.0 * (1.5**2 + 1.5 * BALLAST_SCREW_HEAD[1] / 2.0 + (BALLAST_SCREW_HEAD[1] / 2.0) ** 2)
+    + math.pi * (BALLAST_SCREW_HEAD[1] / 2.0) ** 2 * (BALLAST_SCREW_HEAD[2] - _BALLAST_HEAD_CONE_H)
+    + math.pi * 1.5**2 * (BALLAST_SCREW_LENGTH - BALLAST_SCREW_HEAD[2])
+)  # mm3, recess ignored
 BALLAST_BAR_G = (
     (BALLAST_X[1] - BALLAST_X[0]) * 2.0 * BALLAST_HALF_Y * (BALLAST_Z[1] - BALLAST_Z[0])
-    - 2.0 * math.pi * 1.5**2 * BALLAST_SCREW_THREAD_DEPTH
+    - 2.0 * math.pi * 1.5**2 * BALLAST_SCREW_HOLE_DEPTH
 ) / 1000.0 * BALLAST_DENSITY_G_CM3
-BALLAST_SCREWS_G = 2.0 * math.pi * (2.9**2 * 1.9 + 1.5**2 * (2.0 + BALLAST_SCREW_THREAD_DEPTH)) / 1000.0 * BALLAST_DENSITY_G_CM3
+BALLAST_SCREWS_G = 2.0 * BALLAST_SCREW_VOLUME / 1000.0 * BALLAST_DENSITY_G_CM3
 # Power distribution boards (RP-02 board-specs.md sec 2; PROPOSAL 2026-09-25).
 # Placeholder envelopes for the four custom power/safety PCBs, the main-fuse
 # holder and the E-stop. Sizes come from the RP-02 part inventory (nothing is
@@ -582,7 +618,7 @@ BALLAST_SCREWS_G = 2.0 * math.pi * (2.9**2 * 1.9 + 1.5**2 * (2.0 + BALLAST_SCREW
 # as first drawn, so they are re-packed here against the measured model:
 # PCB-04 and PCB-03 share the free band under the compute tray (X -27..59,
 # Z 63..77, between the body's lower cross-members) and keep 1 mm gaps to the
-# cross-members, each other and the DRV8874 carriers. The band has no slack:
+# cross-members, each other and the Adafruit DRV8833 carriers. The band has no slack:
 # 44 x 70 + 41 x 60 mm are the WS-H areas (3080 and 2460 mm2, reshaped from
 # 70 x 44 and 56 x 44). Boxes are (x0, x1, y0, y1, z0, z1).
 PCB_THICKNESS = 1.6
@@ -661,11 +697,11 @@ def connector_width(family, circuits):
 # length along the edge; the box is the mated plug plus the lead's first bend.
 CONNECTOR_EDGE_STRIPS = {
     "PCB03_PY": {"box": (19.0, 37.0, 30.0, 50.0, 64.6, 75.0), "span": (19.0, 37.0), "connectors": [
-        ("J3-2", "MF+", 2, "PB-DRIVE-L to the left DRV8874 carrier"),
+        ("J3-2", "MF+", 2, "PB-DRIVE-L to the left DRV8833 carrier"),
         ("J3-1", "MF+", 2, "BATBUS in from PCB-02 J2-2"),
     ]},
     "PCB03_NY": {"box": (19.0, 37.0, -50.0, -30.0, 64.6, 75.0), "span": (19.0, 37.0), "connectors": [
-        ("J3-3", "MF+", 2, "PB-DRIVE-R to the right DRV8874 carrier"),
+        ("J3-3", "MF+", 2, "PB-DRIVE-R to the right DRV8833 carrier"),
         ("J3-4", "MF+", 2, "PB-HEAD pitch/roll trunk to the yaw junction"),
     ]},
     "PCB04_NY": {"box": (-14.0, 15.0, -51.0, -35.0, 64.6, 77.0), "span": (-14.0, 15.0), "connectors": [
@@ -719,7 +755,7 @@ PI_POWER_PLUG_RESERVE = (-16.2, -4.0, -44.0, -28.6, 92.2, 100.2)
 PI_POWER_PIGTAIL_DROP = (-13.0, -7.0, -46.0, -39.0, 77.0, 92.2)  # lands on the PCB04_NY edge reserve (J4-1)
 
 # Motor leads: the MOT3001 ships with a 6-pin cable; its motor pair is cut out and
-# re-crimped to a Micro-Fit 3.0 1x2 wire-to-wire pair outboard of each DRV8874 carrier.
+# re-crimped to a Micro-Fit 3.0 1x2 wire-to-wire pair outboard of each DRV8833 carrier.
 MOTOR_INLINE_RESERVE_L = (37.5, 58.0, 49.5, 59.0, 69.0, 82.0)  # starts past PCB03_PY's edge reserve (X 37)
 
 # Yaw service break: the clock-spring's stationary end lands on a small
@@ -746,7 +782,7 @@ C0_LINK_ADAPTER_PLATE_Z = (106.4, 108.0)
 C0_LINK_ADAPTER_TOP_PLUGS = (36.0, 54.0, 29.0, 42.0, 112.0, 116.0)
 C0_LINK_ADAPTER_SIDE_PLUG = (26.0, 38.0, 45.0, 54.0, 108.0, 112.5)
 # C3 carrier (PCB-10, RP-02 CCD-HDL-03: DevKitC backplane with the base-link
-# THVD1451, the TPS3436 window watchdog, READY logic, the DRV8874 SLEEP gating,
+# THVD1451, the TPS3436 window watchdog, READY logic, the driver enable gating; DRV8833 input/control mapping TBD,
 # driver/sensor connectors and test points). Nothing modelled it, and the bare
 # DevKitC floated over PCB-04 with its header pins in PCB-04's parts envelope.
 # A free-volume scan found one home: standing vertical on the -Y side wall
@@ -775,10 +811,10 @@ C3_CARRIER_CONNECTORS = [
     ("J10-2", "GH", 6, "base link RS-422 to PCB-09 J9-2"),
     ("J10-3", "GH", 4, "encoder L"),
     ("J10-4", "GH", 4, "encoder R"),
-    ("J10-5", "GH", 6, "DRV8874 L logic"),
-    ("J10-6", "GH", 6, "DRV8874 R logic"),
+    ("J10-5", "GH", 6, "left DRV8833 input logic; mapping TBD"),
+    ("J10-6", "GH", 6, "right DRV8833 input logic; mapping TBD"),
     ("J10-7", "GH", 8, "IMU PCB-07 (SPI)"),
-    ("J10-8", "GH", 5, "nose pod, one cable (D-013): +5V and Vo for the GP2Y0A41SK0F, GND, +3V3 and OUT for the DRV5055 Hall board"),
+    ("J10-8", "GH", 5, "nose pod, one cable (D-013): +5V and Vo for the GP2Y0A21YK0F, GND, +3V3 and OUT for the DRV5055 Hall board"),
     ("J10-10", "GH", 4, "rear TCRT cartridge"),
     ("J10-11", "GH", 3, "E-stop status (GPIO3 input) from PCB-03"),
     ("J10-12", "GH", 4, "C3_READY, MOTOR_PRESENT to PCB-03 J3-9"),
@@ -843,7 +879,7 @@ REAR_TCRT_FIX_POINTS = ((_TX, -5.6), (_TX, 5.6))  # M2 x 10 ISO 7380 screw, O1.8
 REAR_KEEL_GUARD_X = (_TX - 7.5, _TX + 5.0)
 REAR_KEEL_GUARD_WIDTH = 2.5
 REAR_KEEL_GUARD_HEIGHT = TCRT_OPTICAL_FACE_Z - REAR_TCRT_BEZEL_T - TCRT_GUARD_BOTTOM_Z  # lip under the bezel plate
-# Rear TCRT lead (CH-020, 01-chassis/v1/rear-tcrt-lead.md, D-016): no board.
+# Rear TCRT lead (CH-020, 01-chassis/v1/research/rear-tcrt-lead.md, D-016): no board.
 # A 4-core GH pigtail is soldered to the TCRT's 3.5 mm leads under heat-shrink
 # and leaves straight up through the pocket, which runs out through the keel
 # top; the only connector is the GH plug at C3 J10-10. The LED switch and the
@@ -894,11 +930,12 @@ TACTILE_SNAP_HOOK_TIP_Y = 17.0  # |y|; the pod flank is at 17.8
 TACTILE_SNAP_SLOT = (TACTILE_SNAP_HOOK_X[0] - TACTILE_NOSE_TRAVEL - 0.3, TACTILE_SNAP_HOOK_X[2], 16.8, 32.7, 34.9)  # x0, x1, |y| floor, z0, z1
 # Nose contact sensing (D-013, CH-019/064/065/066): contactless. A TI DRV5055A3 linear Hall sensor
 # (SOT-23, 3.3 V: 15 mV/mT, +-88 mT linear, 20 kHz, 10 us) on a 6.0 x 4.6 x 0.8 board standing in a
-# slot in the seat's front face, facing +X, reads an axially magnetised O2 x 1 N35 magnet in the cap
-# wall, below the window slit. C3 firmware trips at rest + 5 mT (about 0.8 mm of cap travel) and
-# releases at rest + 3 mT, with the rest value taken at boot. Nothing mechanical bottoms, so the cap
-# keeps its full 3 mm to the pod-face stop. Two O3 x 10 mm stainless compression springs in seat
-# pockets return the cap against the snap hooks. The ESE22MV21 of D-011 is dropped: its full travel
+# slot in the seat's front face, facing +X, reads a selected axially magnetised O3 x 1.5 N35 magnet in the cap
+# wall, below the window slit. +12 mT is only a bench starting threshold; measure before choosing
+# released firmware values. Nothing mechanical bottoms, so the cap
+# keeps its full 3 mm to the pod-face stop. Two selected RS PRO 821245 springs return the cap against
+# the snap hooks; their higher preload/stop force and unsupported-length behavior need physical checks.
+# The ESE22MV21 of D-011 is dropped: its full travel
 # is 2.05 mm, not 3.
 NOSE_HALL_BOARD = (126.6, 127.4, 7.0, 13.0, 30.4, BALL_POD_Z0 + BALL_POD_SEAT_THICKNESS)  # x0, x1, y0, y1, z0, z1
 NOSE_HALL_SLOT_CLEARANCE = 0.1
@@ -906,10 +943,10 @@ NOSE_HALL_PACKAGE = (1.0, 2.92, 1.3, 2.37)  # SOT-23 body height (x), length (y)
 NOSE_HALL_CENTER_YZ = (10.0, 32.6)
 NOSE_HALL_ELEMENT_DEPTH = 0.65  # Hall plate below the package top; confirm on the TI mechanical drawing
 NOSE_HALL_NOTCH = (8.3, 11.7, 31.2)  # y0, y1, z0 of the sensor notch through the seat's front face
-NOSE_MAGNET = (1.0, 1.0)  # radius, length (O2 x 1 N35, axial, south pole toward the sensor)
+NOSE_MAGNET = (1.5, 1.5)  # radius, length (selected Ø3 x 1.5 mm N35, axial; polarity to bench-check)
 NOSE_SPRING_YZ = ((3.0, 32.0), (-3.0, 32.0))
 NOSE_SPRING_POCKET = (1.65, 122.5)  # radius, pocket floor x (6 mm deep in the seat front face)
-NOSE_SPRING = (1.5, 0.25, 10.0)  # outer radius, wire, free length: 9.0 installed, 6.0 at full travel
+NOSE_SPRING = (1.375, 0.25, 15.7)  # RS PRO 821245 selected; OD 2.75, wire 0.25, free 15.7; modeled installed gap remains 9/6 pending load and buckling tests
 TACTILE_CAP_INNER_HALF_WIDTH = BALL_POD_HALF_WIDTH + TACTILE_CAP_CLEARANCE
 TACTILE_CAP_INNER_TOP_Z = BALL_POD_LID_Z[1] + 0.6
 TACTILE_CAP_INNER_UPPER_CHAMFER = 6.9
@@ -963,11 +1000,11 @@ MASS_ROWS = [
     ("C3_CARRIER_PCB10", 20.0, (sum(C3_CARRIER_BOARD[0:2]) / 2.0, C3_CARRIER_BOARD[2] - 1.0, sum(C3_CARRIER_BOARD[4:6]) / 2.0), "E (proposal): 70 x 43.5 mm board ~8.5 g + THVD1451, TPS3436, READY logic, SLEEP FETs ~1 g + 2 x 22-pin headers ~3 g + 10 GH and 1 Micro-Fit 3.0 header ~3 g + four M2.5 screws and inserts ~1 g; two printed uprights on the -Y rails ~3.5 g"),
     ("YAW_JUNCTION_PCB08", 4.0, (sum(YAW_JUNCTION_BOX[0:2]) / 2.0, sum(YAW_JUNCTION_BOX[2:4]) / 2.0, 116.0), "E: 32 x 21 mm board ~2 g + Micro-Fit+ 2x3 and three GH headers ~2 g"),
     ("C0_LINK_ADAPTER_PCB09", 7.0, (30.0, 32.0, 107.5), "E: strip-and-wide board ~3 g + 2 x 20 socket ~2 g + 2 x THVD1451 and three GH headers ~2 g"),
-    ("DRV8874_CARRIERS_X2", 6.0, (30.0 + BODY_SHIFT_X, 0.0, 67.4), "E: 2 x Pololu 4035 at ~3 g (weight not read); symmetric about the centre plane"),
+    ("ADAFRUIT_DRV8833_CARRIERS_X2", 6.0, (DRIVER_CENTER_X, 0.0, 68.5), "E: 2 x Adafruit #3297 boards, 25.4 x 17.8 mm board-file outline with the 3.5 mm terminal block fitted (10.1 mm tall), 3 g each; mass unmeasured"),
     ("IMU_PCB07", 2.5, (IMU_BOARD_CENTER[0], 0.0, IMU_BOARD_CENTER[2] + 1.0), "E: PCB-07 16 x 20 x 1.0 mm FR4 ~0.6 g + ICM-42688-P and JST-SH 8-pin ~0.3 g + two M2 x 5 ~0.6 g + 8-way AWG30 lead to C3 ~1 g (RP03-CAD-11); was a 2 g breakout estimate at (16, 0, 60)"),
-    ("TCRT5000_BREAKOUT_AND_CABLE", 3.0, TCRT_REAR_CENTER, "E: TCRT5000 with a soldered ~300 mm 4-core J10-10 GH pigtail and heat-shrink (D-016) (most of it rises to the C3 carrier; lumped at the sensor); was inside the old CONTROL_POWER_SENSORS row at the body centre"),
+    ("TCRT5000_BREAKOUT_AND_CABLE", 3.0, TCRT_REAR_CENTER, "E: TCRT5000 with a soldered 350 mm 4-core J10-10 GH lead (CH-020) and heat-shrink (D-016) (most of it rises to the C3 carrier; lumped at the sensor); was inside the old CONTROL_POWER_SENSORS row at the body centre"),
     ("ESTOP_XA1E_BV3U02KT_R", 14.0, ((5.0 * (ESTOP_MOUNT_X - ESTOP_MUSHROOM_TOP_ABOVE_MOUNT + 4.0) + 9.0 * (ESTOP_KEEP_OUT[0] + ESTOP_KEEP_OUT[1]) / 2.0) / 14.0, 0.0, ESTOP_CENTER_Z), "D: IDEC XA unibody Ø29 mushroom 14 g (XA datasheet); ~5 g mushroom and collar outside the well floor, ~9 g contact block behind it. Replaced the XW1E-BV402M-R row (40 g) on 2026-09-25. The rear-panel well and bezel add a net 0.14 cm3 (~0.2 g) of print, not booked"),
-    ("BALL_NOSE_POD_SENSOR_CAP", 18.7, (111.4, 0.0, 37.9), "D-011 (2026-09-29), measured from the solids: pod 12.44 cm3 (6 mm seat, constant nose, neck), lid 2.45 cm3 and snap-finger cap 2.03 cm3 at ~45% effective PETG density (0.571 g/cm3) = 9.7 g; five ISO 7380 M3 x 8 (3 caster from below, 2 pod-to-crossmember) 3.2 g, five CNC Kitchen M3 x 5.7 inserts ~1.7 g E, M2 x 8 lid screw 0.2 g; DRV5055 board, magnet and two springs ~0.3 g E (D-013); GP2Y0A41SK0F 3.5 g E. Was 15.9 g at (110.5, 0, 41.2)"),
+    ("BALL_NOSE_POD_SENSOR_CAP", 18.9, (111.4, 0.0, 37.9), "D-027: +0.2 g for the lid lead hump, raised nose top and wider front pocket (pod 12.45, lid 2.62, cap 2.12 cm3 measured, was 12.44/2.45/2.03, at ~0.571 g/cm3); earlier estimate predates the selected A21 sensor (3.6 g datasheet, ears trimmed), custom Hall carrier and O3 x 1.5 magnet; weigh received parts"),
     ("BODY_AUDIO", 60.0, (77.9, 0.0, 101.9), "RP03-CAD-11: Visaton K 50 WP 48 g (D) with its centroid at the magnet end, X ~85 + PCB-05 30 x 38 mm board and parts ~6 g (E) at (60, 0, 116) + four PCB-06 mic boards ~0.5 g each (E) + speaker leads and mic cables ~4 g (E); was 90 g at (64, 0, 102) for unselected parts"),
     ("HARNESS_AND_FASTENERS", 95.0, (4.0 + BODY_SHIFT_X, 0.0, 88.0), "estimate"),
     ("BODY_YAW_STAGE", 89.0, (BODY_AXIS_X, 13.5, 134.3), "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 6 g driven spur + 6 g scissor pinion (two 2.4 mm halves) + 1 g torsion spring and retaining clip (2026-09-25) + 2 g clamp ring + 1 g coupling shaft; no SKU"),
@@ -1040,9 +1077,9 @@ def _center_at(shape, center):
     return shape.moved(Location((center[0] - c[0], center[1] - c[1], center[2] - c[2])))
 
 
-def _purchased_step(filename, label, rotations=()):
+def _purchased_step(filename, label, rotations=(), folder=PURCHASED):
     """Import a vendor STEP from the purchased folder and apply (axis, deg) turns."""
-    part = import_step(str(PURCHASED / filename))
+    part = import_step(str(folder / filename))
     for axis, angle in rotations:
         part = part.rotate(axis, angle)
     solids = list(part.solids())
@@ -1196,7 +1233,8 @@ def ball_pod():
     )
     pod = pod - extrude(neck.moved(Location((pocket_x0, 0.0, 0.0))), amount=BALL_POD_NECK_X1 - pocket_x0 + 0.01)
     # Ahead of the sensor body only the lens hood needs room.
-    pod = pod - _block(FRONT_RANGE_BODY_FRONT_X, x1 + 1.0, -14.0, 14.0, floor_z, BALL_POD_LID_Z[1] + 1.0)
+    fw = FRONT_RANGE_POCKET_HALF_WIDTH
+    pod = pod - _block(FRONT_RANGE_BODY_FRONT_X, x1 + 1.0, -fw, fw, floor_z, BALL_POD_LID_Z[1] + 1.0)
     # The sensor's belt (44 mm across its ear flange, x 111.8-119.4) sits in stepped side slots.
     for ex0, ex1, ey0, ey1, ez0, ez1 in BALL_POD_EAR_SLOTS:
         for sign in (1.0, -1.0):
@@ -1239,7 +1277,7 @@ def ball_pod():
     # Front lid-screw boss, fused to the -Y wall, with an M2 thread-forming pilot.
     lx, ly = LID_SCREW_XY
     boss_top = _lid_underside_z(lx)
-    boss = _z_cylinder(LID_BOSS_RADIUS, floor_z - 0.5, boss_top, lx, ly) + _block(lx - LID_BOSS_RADIUS, lx + LID_BOSS_RADIUS, -14.5, ly, floor_z - 0.5, boss_top)
+    boss = _z_cylinder(LID_BOSS_RADIUS, floor_z - 0.5, boss_top, lx, ly) + _block(lx - LID_BOSS_RADIUS, lx + LID_BOSS_RADIUS, -(pocket_hw + 0.5), ly, floor_z - 0.5, boss_top)
     pod = pod + (boss & _lid_below())
     pod = pod - _z_cylinder(0.8, floor_z + 1.0, boss_top + 0.01, lx, ly)
     # Snap slots for the touch cap's fingers.
@@ -1259,6 +1297,9 @@ def _lid_underside_z(x):
 
 def ball_pod_lid():
     lid = _ball_pod_solid() - _lid_below()
+    # D-027: hump over the GP2Y header and its soldered J10-8 lead.
+    outer, cavity = _gp2y_lead_hump()
+    lid = lid + outer - cavity
     lid = lid + _block(*LID_TONGUE)
     lx, ly = LID_SCREW_XY
     top = BALL_POD_STATIONS[-1][2]
@@ -1283,7 +1324,7 @@ def _nose_sensing_parts():
     sensor += _block(bx1, bx1 + 0.3, yc - length / 2.0 + 0.3, yc + length / 2.0 - 0.3, zc - span / 2.0, zc + span / 2.0)
     sensor = _paint(sensor, "BALL_NOSE_HALL_DRV5055A3_SOT23", "#2B2B2B", 1.0)
     mr, ml = NOSE_MAGNET
-    magnet = _paint(_axial_bore_x(mr, TACTILE_CAP_INNER_X, TACTILE_CAP_INNER_X + ml, yc, zc), "BALL_NOSE_MAGNET_D2X1_N35", "#9A9FA6", 1.0)
+    magnet = _paint(_axial_bore_x(mr, TACTILE_CAP_INNER_X, TACTILE_CAP_INNER_X + ml, yc, zc), "BALL_NOSE_MAGNET_D3X1P5_N35", "#9A9FA6", 1.0)
     r_out, wire, _free = NOSE_SPRING
     springs = [
         _paint(_axial_bore_x(r_out, NOSE_SPRING_POCKET[1], TACTILE_CAP_INNER_X, y, z) - _axial_bore_x(r_out - wire, NOSE_SPRING_POCKET[1] - 0.1, TACTILE_CAP_INNER_X + 0.1, y, z),
@@ -1483,6 +1524,9 @@ def tactile_ball_nose():
     cavity = cavity + extrude(_pod_face(front[0], *front[1:], grow=gap), amount=inner_x - front[0])
     cap = outer - cavity
     cap = cap - _front_range_window(FRONT_RANGE_WINDOW_CLEARANCE, inner_x - 1.0, face_x + 1.0)
+    # D-027: top notch from the cap's rear edge so the lid's lead hump clears the 3 mm travel.
+    hump = _gp2y_lead_hump()[0].bounding_box()
+    cap = cap - _block(arm_x0 - 1.0, hump.max.X + TACTILE_NOSE_TRAVEL + gap, hump.min.Y - gap, hump.max.Y + gap, BALL_POD_LID_Z[1], 80.0)
     # Snap fingers (D-011): a slit ahead of each finger frees it from the open bottom up to
     # Z 45.5; the cap's open rear edge bounds it behind. Hooks ride in the pod's flank slots.
     fx0, fx1 = TACTILE_SNAP_FINGER_X
@@ -1786,11 +1830,16 @@ def ballast_bar():
     """Steel bar under the deck, ahead of the battery tub (RP03-CAD-08)."""
     bar = _block(*BALLAST_X, -BALLAST_HALF_Y, BALLAST_HALF_Y, *BALLAST_Z)
     for y in BALLAST_SCREW_Y:
-        bar = bar - _z_cylinder(1.5, BALLAST_Z[1] - BALLAST_SCREW_THREAD_DEPTH, BALLAST_Z[1] + 0.5, BALLAST_SCREW_X, y)
+        bar = bar - _z_cylinder(1.5, BALLAST_Z[1] - BALLAST_SCREW_HOLE_DEPTH, BALLAST_Z[1] + 0.5, BALLAST_SCREW_X, y)
     parts = [_paint(bar, "BALLAST_STEEL_BAR", STEEL, 1.0)]
+    rim_r = BALLAST_SCREW_HEAD[1] / 2.0
+    z0, z1 = BALLAST_SCREW_HEAD_Z
     for tag, y in zip(("L", "R"), BALLAST_SCREW_Y):
-        parts.append(_paint(_z_cylinder(2.9, *BALLAST_SCREW_HEAD_Z, BALLAST_SCREW_X, y), f"BALLAST_M3_HEAD_{tag}", STEEL, 1.0))
-        parts.append(_paint(_z_cylinder(1.5, BALLAST_Z[1] - BALLAST_SCREW_THREAD_DEPTH, BALLAST_SCREW_HEAD_Z[0], BALLAST_SCREW_X, y), f"BALLAST_M3_SHANK_{tag}", STEEL, 1.0))
+        # CH-038 CSK head: 90 deg cone to the O5.5 rim, then the rim up to the head top.
+        cone = Cone(1.5, rim_r, _BALLAST_HEAD_CONE_H, align=(Align.CENTER, Align.CENTER, Align.MIN)).moved(Location((BALLAST_SCREW_X, y, z0)))
+        head = cone + _z_cylinder(rim_r, z0 + _BALLAST_HEAD_CONE_H, z1, BALLAST_SCREW_X, y)
+        parts.append(_paint(head, f"BALLAST_M3_CSK_HEAD_{tag}", STEEL, 1.0))
+        parts.append(_paint(_z_cylinder(1.5, BALLAST_SCREW_TIP_Z, z0, BALLAST_SCREW_X, y), f"BALLAST_M3_SHANK_{tag}", STEEL, 1.0))
     return Compound(label="BALLAST_BAR", children=parts)
 
 
@@ -1875,7 +1924,10 @@ def frame_deck(region: str):
             shape -= _z_cylinder(1.7, DECK_Z - 3.0, DECK_Z + 3.0, -25.0, y)
     for y in BALLAST_SCREW_Y:
         if region == "FRONT":
-            shape -= _z_cylinder(3.2, BALLAST_SCREW_HEAD_Z[0] - 0.1, DECK_Z + 3.0, BALLAST_SCREW_X, y)
+            # 90 deg countersink for the CH-038 head, carried 1 mm above the deck top.
+            seat_r = BALLAST_SCREW_SEAT_D / 2.0
+            seat_z0 = DECK_Z + 2.0 - (seat_r - 1.7)
+            shape -= Cone(1.7, seat_r + 1.0, seat_r - 1.7 + 1.0, align=(Align.CENTER, Align.CENTER, Align.MIN)).moved(Location((BALLAST_SCREW_X, y, seat_z0)))
     if region == "FRONT":
         shape -= _z_cylinder(NOSE_CABLE_BORE_RADIUS, DECK_Z - 3.0, DECK_Z + 3.0, *NOSE_CABLE_RISER_XY)
     return _paint(shape, "CHASSIS_DECK_WITH_BODY_INTERFACE", FRAME_BLUE, 1.0)
@@ -2470,11 +2522,19 @@ def electronics():
     cooler = cooler.moved(Location((PI_COOLER_HOLE_A[0] - post_a.X, PI_COOLER_HOLE_A[1] - post_a.Y, PI_SOC_TOP_Z - plate_z0)))
     cooler = Compound(label="PI5_ACTIVE_COOLER_STEP", children=list(cooler.solids()))
     c3 = c3_carrier()
-    # Pololu carrier lies flat; bottom on the old 12 mm envelope floor (Z 66).
+    # Adafruit #3297 board proxies; dimensions are nominal envelopes pending measurement.
     drivers = []
     for side, y in (("LEFT", 40.0), ("RIGHT", -40.0)):
-        drv = _purchased_step("pololu_drv8874_carrier.step", f"DRV8874_{side}_INSTALLED")
-        drivers.append(_place(drv, 30.0 + BODY_SHIFT_X, y, 66.0, ref={"Z": "min"}))
+        # Board file-derived STEP (purchased/README.md); long side along X, J1 terminal block forward.
+        drv = _place(
+            _purchased_step("adafruit_3297_drv8833.step", f"ADAFRUIT_3297_DRV8833_{side}", [(Axis.Z, -90.0)], folder=V1_PURCHASED),
+            DRIVER_CENTER_X, y, 66.0, ref={"Z": "min"},
+        )
+        leaves_ = list(drv.solids())
+        assert len(leaves_) == len(ADAFRUIT_3297_LEAVES), len(leaves_)
+        for leaf, name in zip(leaves_, ADAFRUIT_3297_LEAVES):
+            _paint(leaf, f"DRV8833_{side}_{name}", "#16204A" if name == "PCB" else "#2D6338" if name.startswith("J1") else "#1E2426", 1.0)
+        drivers.append(Compound(label=f"ADAFRUIT_3297_DRV8833_{side}", children=leaves_))
     driver_l, driver_r = drivers
     # The old power-distribution and safety envelopes are replaced by the RP-02 boards (power_distribution_boards).
     imu = imu_board()
@@ -2544,19 +2604,46 @@ def _tcrt_ski_cartridge(name, center):
     return Compound(label=f"TCRT_{name}_REAR_KEEL_CARTRIDGE", children=parts)
 
 
+@functools.lru_cache(maxsize=None)
+def _gp2y_package():
+    """Sharp GP2Y0A21YK0F vendor STEP, ears trimmed (D-027), lenses +X, connector up."""
+    # STEP frame: lenses +Z, width X, connector +Y. X 90 then Z 90 turns the
+    # lenses to +X, the width to Y and the connector up.
+    package = _place(
+        _purchased_step("sharp_gp2y0a21yk0f.step", "GP2Y0A21YK0F_STEP", [(Axis.X, 90.0), (Axis.Z, 90.0)], folder=V1_PURCHASED),
+        FRONT_RANGE_SENSOR_FACE_X, FRONT_RANGE_SENSOR_Y, FRONT_RANGE_SENSOR_BOTTOM_Z, ref={"X": "max", "Z": "min"},
+    )
+    t = FRONT_RANGE_EAR_TRIM_HALF_WIDTH
+    package = package & _block(FRONT_RANGE_SENSOR_FACE_X - 30.0, FRONT_RANGE_SENSOR_FACE_X + 1.0, -t, t, 0.0, 80.0)
+    return _paint(package, "GP2Y0A21YK0F_STEP", "#252525", 1.0)
+
+
+@functools.lru_cache(maxsize=None)
+def _gp2y_header_box():
+    """Bounding box of the S3B-PH header: the part of the package above the 13 mm body."""
+    z0 = FRONT_RANGE_SENSOR_BOTTOM_Z + 13.0
+    return (_gp2y_package() & _block(0.0, 200.0, -30.0, 30.0, z0, z0 + 10.0)).bounding_box()
+
+
+def _gp2y_lead_hump():
+    """Lid hump over the header and lead (outer, cavity); the cap's top notch passes it."""
+    hb = _gp2y_header_box()
+    c, w = FRONT_RANGE_HUMP_CLEARANCE, FRONT_RANGE_HUMP_WALL
+    top = hb.max.Z + FRONT_RANGE_LEAD_RESERVE_H + c
+    x0 = hb.min.X - c - FRONT_RANGE_HUMP_REAR_RUN
+    cavity = _block(x0, hb.max.X + c, hb.min.Y - c, hb.max.Y + c, BALL_POD_LID_Z[0] - 0.1, top)
+    outer = _block(x0 - w, hb.max.X + c + w, hb.min.Y - c - w, hb.max.Y + c + w, BALL_POD_LID_Z[0], top + w)
+    return outer, cavity
+
+
 def sensors():
-    depth = FRONT_RANGE_SENSOR_SIZE[0]
-    body_x0 = FRONT_RANGE_SENSOR_FACE_X - depth
-    connector_x0 = body_x0 - FRONT_RANGE_CONNECTOR_DEPTH
+    package = _gp2y_package()
+    hb = _gp2y_header_box()
     parts = [
-        # STEP lenses face -Y; +90 deg about Z points them along +X. Lens tip on FACE_X.
-        _place(
-            _purchased_step("sharp_gp2y0a41sk0f.step", "GP2Y0A41SK0F_STEP", [(Axis.Z, 90.0)]),
-            FRONT_RANGE_SENSOR_FACE_X, FRONT_RANGE_SENSOR_Y, FRONT_RANGE_SENSOR_BOTTOM_Z, ref={"X": "max", "Z": "min"},
-        ),
+        package,
         _paint(
-            _block(connector_x0, body_x0, -5.0, 5.0, FRONT_RANGE_SENSOR_Z - 4.0, FRONT_RANGE_SENSOR_Z + 5.0),
-            "GP2Y_JST_PH3_PLUG_RESERVE",  # vendor S3B-PH header on the sensor; PHR-3 plug and lead exit
+            _block(hb.min.X, hb.max.X, hb.min.Y, hb.max.Y, hb.max.Z, hb.max.Z + FRONT_RANGE_LEAD_RESERVE_H),
+            "GP2Y_J10_8_SOLDERED_LEAD_RESERVE",  # D-027: wires soldered to the S3B-PH pins, no plug
             "#79C4CB",
             0.30,
         ),
@@ -3004,10 +3091,10 @@ def build_chassis_v1():
         ball_transfer(),
         rear_skid_tcrt_module(),
         electronics_parts["BATTERY_2S1P_18650_PACK"],
-        electronics_parts["DRV8874_LEFT_INSTALLED"],
-        electronics_parts["DRV8874_RIGHT_INSTALLED"],
+        electronics_parts["ADAFRUIT_3297_DRV8833_LEFT"],
+        electronics_parts["ADAFRUIT_3297_DRV8833_RIGHT"],
         electronics_parts["IMU_PCB07"],
-        sensor_parts["GP2Y0A41SK0F_STEP"],
+        sensor_parts["GP2Y0A21YK0F_STEP"],
         sensor_parts["BALL_NOSE_CONCEALED_CONTACT_MODULE"],
     ])
     for part in assembly.children:

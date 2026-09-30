@@ -102,10 +102,11 @@ def main():
                                            shape_fn=lambda s: s.moved(Location((11.0, 0.0, 0.0)))),
         "lid_up_in_place": lambda: sweep(lambda l: l.endswith("BALL_POD_SENSOR_LID"), (0.0, 0.0, 1.0), 4, removed=("BALL_NOSE_TOUCH_CAP", "BALL_POD_LID_M2X8")),
         # Sensor and switch: lid and cap off, lift out.
-        "sensor_up": lambda: sweep(lambda l: "GP2Y0A41SK0F_STEP" in l or "GP2Y_JST_PH3_PLUG_RESERVE" in l, (0.0, 0.0, 1.0), 40,
+        "sensor_up": lambda: sweep(lambda l: "GP2Y0A21YK0F_STEP" in l or "GP2Y_J10_8_SOLDERED_LEAD_RESERVE" in l, (0.0, 0.0, 1.0), 40,
                            removed=("BALL_NOSE_TOUCH_CAP", "BALL_POD_SENSOR_LID", "BALL_POD_LID_M2X8")),
+        # D-027: the real GP2Y body stands over the Hall slot, so the sensor comes out first.
         "hall_board_up": lambda: sweep(lambda l: any(k in l for k in ("HALL_CARRIER_PCB", "HALL_DRV5055")), (0.0, 0.0, 1.0), 40,
-                               removed=("BALL_NOSE_TOUCH_CAP", "BALL_POD_SENSOR_LID", "BALL_POD_LID_M2X8")),
+                               removed=("BALL_NOSE_TOUCH_CAP", "BALL_POD_SENSOR_LID", "BALL_POD_LID_M2X8", "GP2Y0A21YK0F_STEP", "GP2Y_J10_8_SOLDERED_LEAD_RESERVE")),
     }
     results = {k: run() for k, run in paths.items() if not only or k in only}
     # Tool paths. 2 mm hex key (O2.3 over corners) up into each caster screw from below with the

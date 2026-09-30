@@ -126,8 +126,8 @@
   },
   "sensor_up": {
    "moving": [
-    "GP2Y0A41SK0F_STEP",
-    "GP2Y_JST_PH3_PLUG_RESERVE"
+    "GP2Y0A21YK0F_STEP",
+    "GP2Y_J10_8_SOLDERED_LEAD_RESERVE"
    ],
    "removed_first": [
     "BALL_NOSE_TOUCH_CAP",
@@ -150,7 +150,9 @@
    "removed_first": [
     "BALL_NOSE_TOUCH_CAP",
     "BALL_POD_SENSOR_LID",
-    "BALL_POD_LID_M2X8"
+    "BALL_POD_LID_M2X8",
+    "GP2Y0A21YK0F_STEP",
+    "GP2Y_J10_8_SOLDERED_LEAD_RESERVE"
    ],
    "vector": [
     0.0,

@@ -140,7 +140,7 @@ def main():
         f"- Battery: {M.BATTERY_SIZE[0]:.0f} × {M.BATTERY_SIZE[1]:.0f} × {M.BATTERY_SIZE[2]:.0f} mm at `{M.BATTERY_CENTER}` mm in a chassis tub; bottom hatch",
         f"- Ball mount: `{M.BALL_MOUNT_MODE}`; flange seats on the printed pod at Z {M.BALL_NATIVE_HEIGHT:.0f}; pod X {M.BALL_POD_X[0]:.1f}…{M.BALL_POD_X[1]:.1f}, {2 * M.BALL_POD_HALF_WIDTH:.0f} mm wide",
         f"- Touch cap: face X {M.TACTILE_NOSE_FACE_X:.1f}, {2 * M.TACTILE_CAP_HALF_WIDTH:.0f} mm wide, Z {M.TACTILE_CAP_Z[0]:.0f}…{M.TACTILE_CAP_Z[1]:.0f}, {M.TACTILE_NOSE_TRAVEL:.0f} mm travel",
-        f"- Front range sensor (GP2Y0A41SK0F): face `({M.FRONT_RANGE_SENSOR_FACE_X:.1f}, {M.FRONT_RANGE_SENSOR_Y:.1f}, {M.FRONT_RANGE_SENSOR_Z:.1f})` mm, on the centreline, {M.FRONT_RANGE_SENSOR_FACE_X - M.BALL_CONTACT[0]:.0f} mm ahead of the ball contact",
+        f"- Front range sensor (GP2Y0A21YK0F): face `({M.FRONT_RANGE_SENSOR_FACE_X:.1f}, {M.FRONT_RANGE_SENSOR_Y:.1f}, {M.FRONT_RANGE_SENSOR_Z:.1f})` mm, on the centreline, {M.FRONT_RANGE_SENSOR_FACE_X - M.BALL_CONTACT[0]:.0f} mm ahead of the ball contact",
         f"- Body shell: X {M.BODY_X_REAR:.1f}…{M.BODY_X_FRONT:.1f} mm; Z {M.BODY_Z_BOTTOM:.1f}…{M.BODY_Z_TOP:.1f} mm",
         f"- Visible body height: {M.BODY_Z_TOP - M.BODY_Z_BOTTOM:.1f} mm",
         f"- Body width: {M.BODY_WIDTH_LOWER:.1f} mm lower / {M.BODY_WIDTH_UPPER:.1f} mm upper",
