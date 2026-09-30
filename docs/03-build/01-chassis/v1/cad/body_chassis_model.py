@@ -806,15 +806,63 @@ REAR_KEEL_STATIONS = (
     (-44.0 + REAR_CHASSIS_SHIFT_X, 8.0, SKID_SHOE_BOTTOM_Z + 2.5, 31.0, 1.8),
     (-48.0 + REAR_CHASSIS_SHIFT_X, 9.0, SKID_SHOE_BOTTOM_Z + 2.5, REAR_KEEL_TOP_Z, 2.0),  # crossmember seat
     (-54.0 + REAR_CHASSIS_SHIFT_X, 9.0, SKID_SHOE_BOTTOM_Z + 2.5, REAR_KEEL_TOP_Z, 2.0),  # seat rear
-    (-64.0 + REAR_CHASSIS_SHIFT_X, 8.5, TCRT_OPTICAL_FACE_Z, REAR_KEEL_TOP_Z, 1.8),       # sensor flat
-    (-78.0 + REAR_CHASSIS_SHIFT_X, 8.5, TCRT_OPTICAL_FACE_Z, 26.0, 1.6),
+    (-62.0 + REAR_CHASSIS_SHIFT_X, 9.4, 12.0, REAR_KEEL_TOP_Z, 1.8),       # sensor flat starts ahead of the shim stack
+    (-64.0 + REAR_CHASSIS_SHIFT_X, 9.5, 12.0, REAR_KEEL_TOP_Z, 1.8),       # sensor flat: belly at the shim-stack seat
+    (-78.0 + REAR_CHASSIS_SHIFT_X, 9.5, 12.0, 26.0, 1.6),                  # 9.5 half-width: >= 3.9 mm pocket wall at the chamfer
     (-83.0 + REAR_CHASSIS_SHIFT_X, 3.0, 14.0, 20.0, 0.8),                   # sharp heel
 )
-REAR_KEEL_SCREWS_X = (-52.5 + REAR_CHASSIS_SHIFT_X, -61.5 + REAR_CHASSIS_SHIFT_X)  # forward pair counterbores clear the shoe
+# J09A: four ISO 4762 M3 x 30 (CH-034) up through the keel into CNC Kitchen
+# M3 x 5.7 inserts in the crossmember underside. The rear pair sits 1.5 mm
+# forward of the old X -45.5 so the insert keeps a 1.7 mm wall to the
+# crossmember's rear face (X -48). Heads sit in O6.5 counterbores.
+REAR_KEEL_SCREWS_X = (-52.5 + REAR_CHASSIS_SHIFT_X, -60.0 + REAR_CHASSIS_SHIFT_X)  # forward pair counterbores clear the shoe
+REAR_KEEL_SCREW_Y = 5.5
+REAR_KEEL_SCREW_LENGTH = 30.0
+REAR_KEEL_SCREW_HEAD = (2.75, 3.0)  # ISO 4762 M3 head radius, height
+REAR_KEEL_COUNTERBORE_RADIUS = 3.25
+REAR_KEEL_HEAD_SEAT_Z = (9.5, 12.0)  # forward, rear pair: 0.5 / 0.6 mm recessed from the belly
+REAR_KEEL_INSERT_Z = (REAR_KEEL_TOP_Z, REAR_KEEL_TOP_Z + M3_INSERT_LENGTH)
 REAR_KEEL_SHELL_SLOT = (-73.0 + REAR_CHASSIS_SHIFT_X, -40.0 + REAR_CHASSIS_SHIFT_X, 10.5)  # x0, x1, half-width of the floor pass-through
-REAR_KEEL_GUARD_X = (TCRT_REAR_CENTER[0] - 8.0, TCRT_REAR_CENTER[0] + 5.0)  # stop before the keel belly rises; 0.1 mm shy of the TCRT front
+# J09B: the TCRT drops into its pocket from below, leads into a 4-way
+# low-profile socket on the breakout (CH-020, custom PCB reserve). A printed
+# bezel carries both guard lips (J10B) and holds the sensor on 0.6 mm end
+# ledges; one M2 screw plus one moulded pin fix it through the height shims.
+# Optical height (J09) = keel belly (Z 12) - shims: 0-4 x 1 mm gives Z 12-8;
+# the nominal stack is two shims (Z 10).
+_TX = TCRT_REAR_CENTER[0]  # X -54
+REAR_TCRT_POCKET = (_TX - 5.4, _TX + 5.4, -3.8, 3.8)  # x0, x1, y0, y1: 0.3 / 0.25 mm about the 10.2 x 7.1 package
+REAR_TCRT_BELLY_Z = 12.0
+REAR_TCRT_SHIM_T = 1.0
+REAR_TCRT_SHIMS_NOMINAL = 2
+REAR_TCRT_SHIMS_RANGE = (0, 4)  # optical face Z 12 .. 8
+REAR_TCRT_BEZEL_T = 1.5
+REAR_TCRT_BEZEL_X = (_TX - 7.5, _TX + 6.5)  # front end clears the rear counterbores
+REAR_TCRT_BEZEL_HALF_Y = 7.5
+REAR_TCRT_BEZEL_WINDOW_X = (_TX - 4.5, _TX + 4.5)  # 0.6 mm ledges under the package ends
+REAR_TCRT_FIX_POINTS = ((_TX, -5.6), (_TX, 5.6))  # M2 x 10 ISO 7380 screw, O1.8 moulded pin
+REAR_KEEL_GUARD_X = (_TX - 7.5, _TX + 5.0)
 REAR_KEEL_GUARD_WIDTH = 2.5
-REAR_KEEL_GUARD_HEIGHT = TCRT_OPTICAL_FACE_Z - TCRT_GUARD_BOTTOM_Z + 0.5  # 0.5 mm seated in the keel
+REAR_KEEL_GUARD_HEIGHT = TCRT_OPTICAL_FACE_Z - REAR_TCRT_BEZEL_T - TCRT_GUARD_BOTTOM_Z  # lip under the bezel plate
+# Rear TCRT lead (CH-020, 01-chassis/v1/rear-tcrt-lead.md, D-016): no board.
+# A 4-core GH pigtail is soldered to the TCRT's 3.5 mm leads under heat-shrink
+# and leaves straight up through the pocket, which runs out through the keel
+# top; the only connector is the GH plug at C3 J10-10. The LED switch and the
+# phototransistor load live on PCB-10.
+REAR_TCRT_LEAD_JOINTS = (_TX - 3.7, _TX + 3.7, -2.3, 2.3, TCRT_OPTICAL_FACE_Z + TCRT_PACKAGE_SIZE[2] + 0.5, 24.0)
+REAR_TCRT_PIGTAIL_XY = (_TX + 2.0, 0.0)  # 0.5 mm clear of the shell rear wall (X -55.6)
+REAR_TCRT_PIGTAIL_RADIUS = 1.4  # 4 x AWG28 pre-crimped GH leads, sleeved
+# The J10-10 cable leaves the plug upward behind the crossmember (X -55.6 to
+# -48 between shell wall and crossmember), so neither the crossmember nor the
+# deck is bored. A 30 mm slack loop lets the keel drop to unplug at the keel.
+REAR_TCRT_CABLE_RISER = (-55.2, -51.2, -34.0, -26.0)  # beside PCB-02 (Y +-25)
+REAR_TCRT_CABLE_RUN_Z = (78.0, 84.0)  # over PCB-04 (Z 77.1), under the compute tray (Z 84.5)
+REAR_CROSSMEMBER_TIE_LUG = (-51.0, -48.0, -33.0, -27.0, 36.0, 44.0)
+# J10A: the shoe slides in from the front on a dovetail tongue and is held by
+# one M2 x 6 thread-forming screw driven across the tongue from the keel's +Y
+# side: clearance in the keel wall, threads in the (replaceable) shoe.
+REAR_KEEL_SHOE_TONGUE = (2.0, 3.0, 2.5)  # half-width at the shoe top, at the tongue top, height
+REAR_KEEL_SHOE_GROOVE_CLEARANCE = 0.15
+REAR_KEEL_SHOE_SCREW_SEAT_Y = 5.3  # head seat in a side counterbore; tip at Y -0.7
 
 # The keel is translucent ivory so the TCRT cartridge, cable riser and M3
 # hardware inside it stay visible for packaging review.
@@ -917,13 +965,13 @@ MASS_ROWS = [
     ("C0_LINK_ADAPTER_PCB09", 7.0, (30.0, 32.0, 107.5), "E: strip-and-wide board ~3 g + 2 x 20 socket ~2 g + 2 x THVD1451 and three GH headers ~2 g"),
     ("DRV8874_CARRIERS_X2", 6.0, (30.0 + BODY_SHIFT_X, 0.0, 67.4), "E: 2 x Pololu 4035 at ~3 g (weight not read); symmetric about the centre plane"),
     ("IMU_PCB07", 2.5, (IMU_BOARD_CENTER[0], 0.0, IMU_BOARD_CENTER[2] + 1.0), "E: PCB-07 16 x 20 x 1.0 mm FR4 ~0.6 g + ICM-42688-P and JST-SH 8-pin ~0.3 g + two M2 x 5 ~0.6 g + 8-way AWG30 lead to C3 ~1 g (RP03-CAD-11); was a 2 g breakout estimate at (16, 0, 60)"),
-    ("TCRT5000_BREAKOUT_AND_CABLE", 3.0, TCRT_REAR_CENTER, "E: breakout, comparator and cable in the rear keel cartridge; was inside the old CONTROL_POWER_SENSORS row at the body centre"),
+    ("TCRT5000_BREAKOUT_AND_CABLE", 3.0, TCRT_REAR_CENTER, "E: TCRT5000 with a soldered ~300 mm 4-core J10-10 GH pigtail and heat-shrink (D-016) (most of it rises to the C3 carrier; lumped at the sensor); was inside the old CONTROL_POWER_SENSORS row at the body centre"),
     ("ESTOP_XA1E_BV3U02KT_R", 14.0, ((5.0 * (ESTOP_MOUNT_X - ESTOP_MUSHROOM_TOP_ABOVE_MOUNT + 4.0) + 9.0 * (ESTOP_KEEP_OUT[0] + ESTOP_KEEP_OUT[1]) / 2.0) / 14.0, 0.0, ESTOP_CENTER_Z), "D: IDEC XA unibody Ø29 mushroom 14 g (XA datasheet); ~5 g mushroom and collar outside the well floor, ~9 g contact block behind it. Replaced the XW1E-BV402M-R row (40 g) on 2026-09-25. The rear-panel well and bezel add a net 0.14 cm3 (~0.2 g) of print, not booked"),
     ("BALL_NOSE_POD_SENSOR_CAP", 18.7, (111.4, 0.0, 37.9), "D-011 (2026-09-29), measured from the solids: pod 12.44 cm3 (6 mm seat, constant nose, neck), lid 2.45 cm3 and snap-finger cap 2.03 cm3 at ~45% effective PETG density (0.571 g/cm3) = 9.7 g; five ISO 7380 M3 x 8 (3 caster from below, 2 pod-to-crossmember) 3.2 g, five CNC Kitchen M3 x 5.7 inserts ~1.7 g E, M2 x 8 lid screw 0.2 g; DRV5055 board, magnet and two springs ~0.3 g E (D-013); GP2Y0A41SK0F 3.5 g E. Was 15.9 g at (110.5, 0, 41.2)"),
     ("BODY_AUDIO", 60.0, (77.9, 0.0, 101.9), "RP03-CAD-11: Visaton K 50 WP 48 g (D) with its centroid at the magnet end, X ~85 + PCB-05 30 x 38 mm board and parts ~6 g (E) at (60, 0, 116) + four PCB-06 mic boards ~0.5 g each (E) + speaker leads and mic cables ~4 g (E); was 90 g at (64, 0, 102) for unselected parts"),
     ("HARNESS_AND_FASTENERS", 95.0, (4.0 + BODY_SHIFT_X, 0.0, 88.0), "estimate"),
     ("BODY_YAW_STAGE", 89.0, (BODY_AXIS_X, 13.5, 134.3), "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 6 g driven spur + 6 g scissor pinion (two 2.4 mm halves) + 1 g torsion spring and retaining clip (2026-09-25) + 2 g clamp ring + 1 g coupling shaft; no SKU"),
-    ("REAR_SKID_KEEL", 12.0, (-55.9 + REAR_CHASSIS_SHIFT_X, 0.0, 20.4), "CAD volume: 15.4 cm3 keel body at ~45% effective PETG density, 12x10 mm shoe, guards, 4 M3 screws"),
+    ("REAR_SKID_KEEL", 20.0, (-40.5, 0.0, 22.7), "J09/J10 rework 2026-09-30 (D-014, D-016), measured from the solids: keel body 14.64 cm3 at ~0.571 g/cm3 = 8.4 g at (-39.7, 0, 20.4) (D-016 closed the board cavity back to the sensor pocket); shoe 0.40, bezel with guard lips 0.30 and two 1 mm shims 0.24 cm3 printed solid at ~1.27 g/cm3 = 1.2 g; four ISO 4762 M3 x 30 ~8.4 g; four CNC Kitchen M3 x 5.7 crossmember inserts ~1.4 g; M2 x 10 and M2 x 6 screws ~0.6 g (the M2 x 5 board screw was dropped by D-015). Was 12.0 g at (-39.9, 0, 20.4); rear-crossmember cable bore closed and tie lug added (<0.1 g, left in the frame row)"),
 ]
 def mass_properties():
     total = sum(row[1] for row in MASS_ROWS)
@@ -1282,67 +1330,115 @@ def rear_skid_tcrt_keel():
         [_nose_profile(x, half_width, z0, z1, chamfer) for x, half_width, z0, z1, chamfer in REAR_KEEL_STATIONS],
         ruled=True,
     )
-    px, py, pz = TCRT_PACKAGE_SIZE
-    sensor_pocket = _block(tx - 6.0, tx + 6.0, -5.1, 5.1, TCRT_OPTICAL_FACE_Z - 1.0, TCRT_OPTICAL_FACE_Z + 10.8)  # 10.5 mm real part incl. leads
-    connector_channel = _block(tx + 4.0, tx + 17.0, -3.5, 3.5, tz + 2.0, tz + 7.0)
-    cable_x = tx + 13.0
-    cable_bore = _z_cylinder(3.0, tz + 2.0, REAR_KEEL_TOP_Z + 1.0, cable_x, 0.0)
-    screw_bores = []
+    belly = REAR_TCRT_BELLY_Z
+    face_z = belly - REAR_TCRT_SHIMS_NOMINAL * REAR_TCRT_SHIM_T
+    assert abs(face_z - TCRT_OPTICAL_FACE_Z) < 1e-9, "nominal shim stack must set the optical datum"
+    px0, px1, py0, py1 = REAR_TCRT_POCKET
+    (fsx, fsy), (fpx, fpy) = REAR_TCRT_FIX_POINTS
+    cuts = [
+        # Sensor pocket, open below the belly so the TCRT drops out from
+        # below, and up through the keel top for the soldered lead.
+        _block(px0, px1, py0, py1, belly - 1.0, REAR_KEEL_TOP_Z + 1.0),
+        _z_cylinder(0.8, belly - 1.0, 20.5, fsx, fsy),  # bezel M2 pilot, deep enough for zero shims
+        _z_cylinder(1.0, belly - 1.0, 18.5, fpx, fpy),  # O2.0 hole for the O1.8 bezel pin
+    ]
     screws = []
-    screw_points = [(x, sign * 5.5) for x in REAR_KEEL_SCREWS_X for sign in (1.0, -1.0)]
+    screw_points = rear_keel_screw_points()
+    head_r, head_h = REAR_KEEL_SCREW_HEAD
     for index, (x, y) in enumerate(screw_points, start=1):
-        screw_bores.append(_z_cylinder(1.7, 0.0, REAR_KEEL_TOP_Z + 1.0, x, y))
-        forward_pair = x > -54.0 + REAR_CHASSIS_SHIFT_X
-        screw_bores.append(_z_cylinder(2.9, 0.0, SKID_SHOE_BOTTOM_Z + 2.5 + 3.0 if forward_pair else 12.0, x, y))
-        head_z0 = SKID_SHOE_BOTTOM_Z + 2.5 + 1.0 if forward_pair else 10.0
-        screws.append(_paint(Cylinder(2.8, 1.8, align=(Align.CENTER, Align.CENTER, Align.MIN)).moved(Location((x, y, head_z0))), f"REAR_KEEL_M3_HEAD_{index}", STEEL, 1.0))
-        screws.append(_paint(Cylinder(1.35, 44.0 - head_z0 - 1.8, align=(Align.CENTER, Align.CENTER, Align.MIN)).moved(Location((x, y, head_z0 + 1.8))), f"REAR_KEEL_M3_SHANK_{index}", STEEL, 1.0))
-    keel = _paint(
-        keel - [sensor_pocket, connector_channel, cable_bore, *screw_bores],
-        "REAR_KEEL_FACETED_BODY",
-        REAR_KEEL_COLOR,
-        REAR_KEEL_ALPHA,
-    )
+        seat = REAR_KEEL_HEAD_SEAT_Z[0 if x == REAR_KEEL_SCREWS_X[0] else 1]
+        cuts.append(_z_cylinder(1.7, seat - 0.1, REAR_KEEL_TOP_Z + 1.0, x, y))
+        cuts.append(_z_cylinder(REAR_KEEL_COUNTERBORE_RADIUS, 0.0, seat, x, y))
+        screw = _z_cylinder(head_r, seat - head_h, seat, x, y) + _z_cylinder(1.25, seat, seat + REAR_KEEL_SCREW_LENGTH, x, y)
+        screws.append(_paint(screw, f"REAR_KEEL_M3X30_SCREW_{index}", STEEL, 1.0))
 
-    # Replaceable wear shoe, fully backed by the flat keel belly, just ahead
-    # of the recessed forward keel screws.
+    # J10A wear shoe: slides in from the front on a dovetail, stops on the
+    # groove end and is held by one M2 across the tongue.
     sx, sy, sz = SKID_SHOE_SIZE
     x0 = SKID_PAD_CENTER[0] - sx / 2.0
     x1 = SKID_PAD_CENTER[0] + sx / 2.0
     y0 = -sy / 2.0
     y1 = sy / 2.0
     c = 2.5
+    shoe_top = SKID_SHOE_BOTTOM_Z + sz
+    tongue_w0, tongue_w1, tongue_h = REAR_KEEL_SHOE_TONGUE
+    gc = REAR_KEEL_SHOE_GROOVE_CLEARANCE
+
+    def dovetail(xa, xb, grow):
+        profile = Plane.YZ * Polygon(
+            (-(tongue_w0 + grow), shoe_top - 0.01), (tongue_w0 + grow, shoe_top - 0.01),
+            (tongue_w1 + grow, shoe_top + tongue_h + grow), (-(tongue_w1 + grow), shoe_top + tongue_h + grow),
+            align=None,
+        )
+        return extrude(profile.moved(Location((xa, 0.0, 0.0))), amount=xb - xa)
+
     shoe_face = Plane.XY * Polygon(
         (x0 + c, y0), (x1 - c, y0), (x1, y0 + c), (x1, y1 - c),
         (x1 - c, y1), (x0 + c, y1), (x0, y1 - c), (x0, y0 + c),
         align=None,
     )
-    shoe = extrude(shoe_face.moved(Location((0.0, 0.0, SKID_SHOE_BOTTOM_Z))), amount=sz)
+    shoe = extrude(shoe_face.moved(Location((0.0, 0.0, SKID_SHOE_BOTTOM_Z))), amount=sz) + dovetail(x0 + 1.0, x1, 0.0)
+    screw_z = shoe_top + tongue_h / 2.0
+    screw_x = SKID_PAD_CENTER[0]
+    seat_y = REAR_KEEL_SHOE_SCREW_SEAT_Y
+    shoe = shoe - _axial_bore_y(0.8, -tongue_w1 - 0.1, tongue_w1 + 0.1, screw_x, screw_z)
     shoe = _paint(shoe, "REAR_KEEL_REPLACEABLE_WEAR_SHOE", IVORY, 1.0)
-
-    # Replaceable guard lips seat 0.5 mm into the flat sensor belly along
-    # their full length, below the optical face and above the shoe.
-    gx0, gx1 = REAR_KEEL_GUARD_X
-    guards = [
-        _box(
-            gx1 - gx0,
-            REAR_KEEL_GUARD_WIDTH,
-            REAR_KEEL_GUARD_HEIGHT,
-            ((gx0 + gx1) / 2.0, sign * 5.6, TCRT_GUARD_BOTTOM_Z + REAR_KEEL_GUARD_HEIGHT / 2.0),
-            f"REAR_KEEL_REPLACEABLE_GUARD_{side}",
-            IVORY,
-        )
-        for sign, side in ((1.0, "L"), (-1.0, "R"))
+    cuts += [
+        dovetail(x0 + 1.0 - gc, x1 + 8.0, gc),  # open at the front, where the belly rises
+        _axial_bore_y(1.1, 0.0, seat_y, screw_x, screw_z),
+        _axial_bore_y(1.9, seat_y, 12.0, screw_x, screw_z),
     ]
+    shoe_screw = _axial_bore_y(1.75, seat_y, seat_y + 1.1, screw_x, screw_z) + _axial_bore_y(0.8, seat_y - 6.0, seat_y, screw_x, screw_z)
+    screws.append(_paint(shoe_screw, "REAR_KEEL_SHOE_M2X6_SCREW", STEEL, 1.0))
+
+    keel = _paint(keel - cuts, "REAR_KEEL_FACETED_BODY", REAR_KEEL_COLOR, REAR_KEEL_ALPHA)
+
+    # J09B/J10B: bezel with both guard lips, over the nominal shim stack.
+    bx0, bx1 = REAR_TCRT_BEZEL_X
+    hy = REAR_TCRT_BEZEL_HALF_Y
+    wx0, wx1 = REAR_TCRT_BEZEL_WINDOW_X
+    bezel = _block(bx0, bx1, -hy, hy, face_z - REAR_TCRT_BEZEL_T, face_z) - _block(wx0, wx1, py0, py1, 0.0, face_z + 1.0)
+    gx0, gx1 = REAR_KEEL_GUARD_X
+    for sign in (1.0, -1.0):
+        gy = sign * 5.6
+        bezel += _block(gx0, gx1, gy - REAR_KEEL_GUARD_WIDTH / 2.0, gy + REAR_KEEL_GUARD_WIDTH / 2.0, TCRT_GUARD_BOTTOM_Z, face_z - REAR_TCRT_BEZEL_T + 0.01)
+    bezel += _z_cylinder(0.9, face_z, face_z + 6.0, fpx, fpy)  # moulded locating pin
+    bezel -= _z_cylinder(1.1, 0.0, face_z + 0.1, fsx, fsy)
+    bezel -= _z_cylinder(1.9, 0.0, face_z - REAR_TCRT_BEZEL_T, fsx, fsy)  # button head recess through the lip
+    bezel = _paint(bezel, "REAR_TCRT_BEZEL_WITH_GUARDS", IVORY, 1.0)
+    shims = []
+    for index in range(REAR_TCRT_SHIMS_NOMINAL):
+        z0 = face_z + index * REAR_TCRT_SHIM_T
+        shim = _block(bx0, bx1, -hy, hy, z0, z0 + REAR_TCRT_SHIM_T) - _block(px0, px1, py0, py1, 0.0, belly + 1.0)
+        shim -= [_z_cylinder(1.1, 0.0, belly + 1.0, x, y) for x, y in REAR_TCRT_FIX_POINTS]
+        shims.append(_paint(shim, f"REAR_TCRT_HEIGHT_SHIM_{index + 1}", STEEL, 0.78))
+    bezel_screw = _z_cylinder(1.75, face_z - REAR_TCRT_BEZEL_T - 1.1, face_z - REAR_TCRT_BEZEL_T, fsx, fsy) + _z_cylinder(
+        0.8, face_z - REAR_TCRT_BEZEL_T, face_z - REAR_TCRT_BEZEL_T + 10.0, fsx, fsy
+    )
+    screws.append(_paint(bezel_screw, "REAR_TCRT_BEZEL_M2X10_SCREW", STEEL, 1.0))
 
     cartridge = _tcrt_ski_cartridge("REAR", TCRT_REAR_CENTER)
-    cable = _box(4.5, 4.5, 49.0 - (tz + 2.5), (cable_x, 0.0, (tz + 2.5 + 49.0) / 2.0), "TCRT_REAR_CABLE_RISER", "#79C4CB", 0.9)
-    floor_interface = Compound(label="REAR_KEEL_FLOOR_INTERFACE", children=[shoe, *guards])
-    hardware = Compound(label="REAR_KEEL_M3_HARDWARE", children=screws)
+    lz1 = REAR_TCRT_LEAD_JOINTS[5]
+    cable = _paint(_z_cylinder(REAR_TCRT_PIGTAIL_RADIUS, lz1, 35.0, *REAR_TCRT_PIGTAIL_XY), "TCRT_REAR_J10_10_PIGTAIL", "#79C4CB", 0.9)
+    floor_interface = Compound(label="REAR_KEEL_FLOOR_INTERFACE", children=[shoe, bezel, *shims])
+    hardware = Compound(label="REAR_KEEL_HARDWARE", children=screws)
     return Compound(
         label="REAR_SKID_TCRT_KEEL",
         children=[keel, floor_interface, cartridge, cable, hardware],
     )
+
+
+def rear_keel_screw_points():
+    return [(x, sign * REAR_KEEL_SCREW_Y) for x in REAR_KEEL_SCREWS_X for sign in (1.0, -1.0)]
+
+
+def rear_crossmember_inserts():
+    """J09A: four CNC Kitchen M3 x 5.7 inserts, pressed in from the crossmember underside."""
+    z0, z1 = REAR_KEEL_INSERT_Z
+    return Compound(label="REAR_CROSSMEMBER_KEEL_INSERTS", children=[
+        _paint(_z_cylinder(M3_INSERT_OD_RADIUS, z0, z1, x, y) - _z_cylinder(1.25, z0 - 0.1, z1 + 0.1, x, y), f"REAR_KEEL_HEATSET_INSERT_{index}", BRONZE, 1.0)
+        for index, (x, y) in enumerate(rear_keel_screw_points(), start=1)
+    ])
 
 
 def rear_skid_tcrt_module():
@@ -1837,7 +1933,14 @@ def frame_crossmember(region: str):
         shape -= _z_cylinder(NOSE_CABLE_BORE_RADIUS, 34.0, 52.0, *NOSE_CABLE_RISER_XY)
         return _paint(shape, "FRONT_CROSSMEMBER", FRAME_BLUE, 1.0)
     shape = Box(16.0, 132.0, 14.0).moved(Location((SKID_ROOT_DATUM[0], 0.0, 41.0)))
-    shape -= _z_cylinder(3.0, 33.0, 49.0, TCRT_REAR_CENTER[0] + 13.0, 0.0)
+    # J09A receivers: insert bores from below, clearance above for the M3 x 30 tips.
+    for x, y in rear_keel_screw_points():
+        shape -= _z_cylinder(M3_INSERT_BORE_RADIUS, REAR_KEEL_TOP_Z - 1.0, REAR_KEEL_INSERT_Z[1] + 0.8, x, y)
+        shape -= _z_cylinder(1.7, REAR_KEEL_TOP_Z - 1.0, REAR_KEEL_TOP_Z + 9.5, x, y)
+    # Strain-relief lug on the rear face: a zip tie through the Y slot holds
+    # the J10-10 cable at the foot of its riser.
+    lx0, lx1, ly0, ly1, lz0, lz1 = REAR_CROSSMEMBER_TIE_LUG
+    shape += _block(lx0, lx1 + 0.01, ly0, ly1, lz0, lz1) - _block(lx0 + 0.8, lx1 - 0.8, ly0 - 0.1, ly1 + 0.1, 38.5, 41.5)
     for side in ("L", "R"):
         y = 58.5 if side == "L" else -58.5
         shape -= _block(-35.2, -32.0, y - 3.4, y + 3.4, 35.0, 47.2)
@@ -1855,6 +1958,7 @@ def chassis_frame():
         *[frame_rail(region, side) for region in ("REAR", "FRONT") for side in ("L", "R")],
         frame_crossmember("FRONT"),
         frame_crossmember("REAR"),
+        rear_crossmember_inserts(),
         Compound(label="CHASSIS_DECK_WITH_BODY_INTERFACE", children=[frame_deck("REAR"), frame_deck("FRONT")]),
         battery_tub(include_walls=False),
         ballast_bar(),
@@ -2427,19 +2531,15 @@ def c3_carrier():
 
 
 def _tcrt_ski_cartridge(name, center):
-    """Compact sensor cartridge housed inside the faceted rear keel."""
+    """TCRT5000 on its bezel with the J10-10 pigtail soldered to its leads (D-016)."""
     x, y, z = center
-    package_x, package_y, package_z = TCRT_PACKAGE_SIZE
     parts = [
-        # Optical face down (flip 180 deg about X); face plane at TCRT_OPTICAL_FACE_Z, leads point up into the cartridge.
+        # Optical face down (flip 180 deg about X); face plane at TCRT_OPTICAL_FACE_Z, leads point up.
         _place(
             _purchased_step("vishay_tcrt5000.step", f"TCRT5000_{name}_STEP", [(Axis.X, 180.0)]),
             x, y, TCRT_OPTICAL_FACE_Z, ref={"Z": "min"},
         ),
-        _box(11.5, 1.2, 7.5, (x, y - 4.45, z + 0.5), f"TCRT_{name}_INTERNAL_GUIDE_R", FRAME_BLUE, 1.0),
-        _box(11.5, 1.2, 7.5, (x, y + 4.45, z + 0.5), f"TCRT_{name}_INTERNAL_GUIDE_L", FRAME_BLUE, 1.0),
-        _box(11.0, 7.0, 1.0, (x, y, z + 4.25), f"TCRT_{name}_HEIGHT_SHIM", STEEL, 0.78),
-        _box(12.0, 6.5, 4.0, (x + 11.0, y, z + 4.5), f"TCRT_{name}_GH4_PLUG_RESERVE", "#79C4CB", 0.18),
+        _paint(_block(*REAR_TCRT_LEAD_JOINTS), f"TCRT_{name}_LEAD_JOINTS_HEATSHRINK", "#2E3336", 0.6),
     ]
     return Compound(label=f"TCRT_{name}_REAR_KEEL_CARTRIDGE", children=parts)
 
@@ -2640,6 +2740,19 @@ def harness_routes():
         _paint(_z_cylinder(2.0, 34.9, DECK_Z + 2.0, *NOSE_CABLE_RISER_XY), "HARNESS_NOSE_J10_8_CROSSMEMBER_BORE", "#44BDD0", 0.42),
         _paint(_block(NOSE_CABLE_RISER_XY[0] - 3.0, NOSE_CABLE_RISER_XY[0] + 3.0, NOSE_CABLE_RISER_XY[1] - 3.0, NOSE_CABLE_RISER_XY[1] + 3.0, DECK_Z + 2.0, 78.0), "HARNESS_NOSE_J10_8_RISER", "#44BDD0", 0.42),
         _paint(_block(40.0, 46.0, -46.0, -30.0, 78.0, 84.0), "HARNESS_NOSE_J10_8_DROP_TO_C3", "#44BDD0", 0.42),
+    ]
+    # Rear TCRT J10-10 pigtail: up out of the keel top behind the rear
+    # crossmember, a 30 mm slack loop (the keel and sensor drop for the J09
+    # shims and service), zip-tied at the crossmember lug, up beside PCB-02, forward over
+    # PCB-04 and under the compute tray, then out to the C3 carrier header.
+    rx0, rx1, ry0, ry1 = REAR_TCRT_CABLE_RISER
+    rz0, rz1 = REAR_TCRT_CABLE_RUN_Z
+    parts += [
+        _paint(_block(rx0, -49.0, ry1, 3.0, 35.0, 44.0), "HARNESS_REAR_TCRT_J10_10_SERVICE_LOOP", "#44BDD0", 0.42),
+        _paint(_block(rx0, rx1, ry0, ry1, 35.0, rz1), "HARNESS_REAR_TCRT_J10_10_RISER", "#44BDD0", 0.42),
+        _paint(_block(rx1, 27.0, ry0, ry1, rz0, rz1), "HARNESS_REAR_TCRT_J10_10_RUN_OVER_PCB04", "#44BDD0", 0.42),
+        _paint(_block(21.0, 27.0, -49.4, ry0, rz0, rz1), "HARNESS_REAR_TCRT_J10_10_DROP_TO_C3", "#44BDD0", 0.42),
+        _paint(_block(21.0, 27.0, -49.4, -44.0, rz1, 94.1), "HARNESS_REAR_TCRT_J10_10_RISE_TO_PLUG", "#44BDD0", 0.42),
     ]
     return Compound(label="HARNESS_ROUTES", children=parts)
 

@@ -15,9 +15,10 @@ The model basis is [chassis-v1.step.py](cad/chassis-v1.step.py) and [body_chassi
 | CH-005 | Tyre: printed TPU 95A chevron, clamped; one left, one right ([D-009](../../decisions.md#d-009)) | 2 | DESIGN |
 | CH-058 | Wheel hub cap, dark PETG ([D-008](../../decisions.md#d-008)) | 2 | DESIGN |
 | CH-007 | Touch cap with two snap fingers and magnet pocket (D-011, D-013) | 1 | DESIGN |
-| CH-008 | Rear skid and TCRT keel | 1 | DESIGN |
-| CH-009 | Replaceable wear shoe | 1 | OPEN |
-| CH-010 | Replaceable TCRT guards | 2 | OPEN |
+| CH-008 | Rear skid and TCRT keel ([D-014](../../decisions.md#d-014)) | 1 | DESIGN |
+| CH-009 | Replaceable dovetail wear shoe, PETG recommended ([D-017](../../decisions.md#d-017)) | 1 | DESIGN |
+| CH-010 | TCRT bezel with both guard lips, PETG recommended (D-014, D-017) | 1 | DESIGN |
+| CH-068 | 1 mm TCRT height shim, two fitted for the nominal Z 10 (D-014) | 2 | DESIGN |
 | CH-011 | Battery tub bottom hatch | 1 | OPEN |
 | CH-012 | Turned steel stub: bearing seats, D-shaft bore, flange and spigot ([D-007](../../decisions.md#d-007)) | 2 | DESIGN |
 | CH-013 | 9 × 60 × 19 mm steel ballast bar | 1 | DESIGN |
@@ -41,7 +42,7 @@ The purchased **Pololu #2691 caster** is a separate row (CH-016). It includes th
 | CH-064 | Nose Hall board, 6.0 × 4.6 × 0.8 mm | 1 | DESIGN |
 | CH-065 | N35 Ø2 × 1 mm cap magnet | 1 | CANDIDATE |
 | CH-066 | Ø3 × 10 mm cap return spring | 2 | CANDIDATE |
-| CH-020 | Rear TCRT5000 cartridge and breakout | 1 assembly | HOLD |
+| CH-020 | Rear TCRT5000 with a soldered 350 mm GH4 lead to J10-10 ([spec](rear-tcrt-lead.md), D-016) | 1 assembly | CANDIDATE |
 | CH-021 | ICM-42688-P base IMU PCB-07 | 1 assembly | HOLD |
 | CH-022 | Samsung INR18650-25R cell | 2 | CANDIDATE |
 | CH-023 | Pack protection PCB-01 | 1 assembly | HOLD |
@@ -70,7 +71,7 @@ The drive gearmotor is the **ThinkRobotics MOT3001-6V230RPM** ([product page](ht
 | CH-031 | ISO 7380 M3 × 8 caster screw, from below (D-011) | 3 | CANDIDATE |
 | CH-032 | ISO 7380 M3 × 8 pod-to-crossmember screw (D-011) | 2 | CANDIDATE |
 | CH-033 | CNC Kitchen M3 × 5.7 front-crossmember insert for ball pod (D-011) | 2 | CANDIDATE |
-| CH-034 | M3 rear keel mounting screw, length open | 4 | HOLD |
+| CH-034 | ISO 4762 M3 × 30 rear keel screw (D-014) | 4 | CANDIDATE |
 | CH-035 | M4 body to chassis through bolt, length open | 4 | HOLD |
 | CH-036 | M4 body to chassis nut | 4 | HOLD |
 | CH-037 | Ø4 × 8 mm body locating pin | 2 | HOLD |
@@ -88,6 +89,10 @@ The drive gearmotor is the **ThinkRobotics MOT3001-6V230RPM** ([product page](ht
 | CH-061 | M3, 6 mm axial heat-set J04 rail insert | 8 | CANDIDATE |
 | CH-062 | M2 × 8 countersunk thread-forming pod lid screw (D-011) | 1 | CANDIDATE |
 | CH-063 | CNC Kitchen M3 × 5.7 pod-seat insert for caster (D-011) | 3 | CANDIDATE |
+| CH-067 | CNC Kitchen M3 × 5.7 rear-crossmember insert for the keel (D-014) | 4 | CANDIDATE |
+| CH-069 | M2 × 10 thread-forming TCRT bezel screw (D-014) | 1 | CANDIDATE |
+| CH-070 | M2 × 6 thread-forming wear-shoe screw (D-014) | 1 | CANDIDATE |
+| CH-072 | 2.5 mm zip tie, J10-10 strain relief (D-014) | 1 | CANDIDATE |
 
 Counts above come from modeled positions; heads and shanks in the CAD are one screw each. Choose exact fasteners, receivers, engagement, and tool access after the printed joint stack is defined. The axle-stack hardware (CH-053 to CH-057) is selected in [D-007](../../decisions.md#d-007) and the [axle stack](axle-stack.md), but it is not yet proven on a coupon or the axle rig.
 

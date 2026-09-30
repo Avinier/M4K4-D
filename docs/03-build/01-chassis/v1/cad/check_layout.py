@@ -56,7 +56,7 @@ def main():
     rear_keel = rear_module.children[-1]
     module_labels = [child.label for child in rear_module.children]
     keel_body, keel_floor, keel_cartridge, keel_cable, keel_hardware = rear_keel.children
-    keel_shoe, keel_guard_l, keel_guard_r = keel_floor.children
+    keel_shoe, keel_bezel, *keel_shims = keel_floor.children
     keel_sensor_package = keel_cartridge.children[0]
     body_frame = M.body_primary_frame()
     chassis_frame = M.chassis_frame()
@@ -193,10 +193,12 @@ def main():
     shoe_backing = {
         f"{x:.1f},{y:.1f}": keel_underside_z(x, y)
         for x in (shoe_x0, M.SKID_PAD_CENTER[0], shoe_x1)
-        for y in (-M.SKID_SHOE_SIZE[1] / 2.0 + 1.0, 0.0, M.SKID_SHOE_SIZE[1] / 2.0 - 1.0)
+        for y in (-M.SKID_SHOE_SIZE[1] / 2.0 + 1.0, M.SKID_SHOE_SIZE[1] / 2.0 - 1.0)  # Y 0 is the dovetail groove
         if not any(abs(x - sx) < 3.0 and abs(y - sy) < 3.0 for sx in M.REAR_KEEL_SCREWS_X for sy in (-5.5, 5.5))
     }
-    guard_top_z = M.TCRT_GUARD_BOTTOM_Z + M.REAR_KEEL_GUARD_HEIGHT
+    # J10B: the guard lips hang from the bezel, which bears on the shim stack
+    # and the flat sensor belly (Z 12) along the whole lip length.
+    guard_top_z = M.REAR_TCRT_BELLY_Z + 1e-3
     guard_backing = {
         f"{x:.1f}": keel_underside_z(x, 5.6)
         for x in (M.REAR_KEEL_GUARD_X[0] + 0.5, sum(M.REAR_KEEL_GUARD_X) / 2.0, M.REAR_KEEL_GUARD_X[1] - 0.5)
@@ -208,7 +210,7 @@ def main():
 
     pitch = {
         "shoe": first_contact_pitch_deg(keel_shoe),
-        "guards": first_contact_pitch_deg(keel_guard_l),
+        "guards": first_contact_pitch_deg(keel_bezel),
         "keel_body": first_contact_pitch_deg(keel_body),
         "tcrt": first_contact_pitch_deg(keel_sensor_package),
     }
@@ -349,6 +351,14 @@ def main():
     keel_shell_overlap = _vol(rear_keel & body_shell)
     keel_crossmember_overlap = _vol(keel_body & rear_crossmember)
     keel_crossmember_gap = keel_body.distance_to(rear_crossmember)
+    keel_screws = [c for c in keel_hardware.children if c.label.startswith("REAR_KEEL_M3X30_SCREW_")]
+    keel_inserts = [c for c in chassis_frame.children if c.label == "REAR_CROSSMEMBER_KEEL_INSERTS"][0].children
+    keel_screw_clash = sum(_vol(s & o) for s in keel_screws for o in (keel_body, rear_crossmember))
+    keel_screw_engagement = {}
+    for s in keel_screws:
+        sb = s.bounding_box()
+        ib = min(keel_inserts, key=lambda i: (i.bounding_box().center() - sb.center()).length).bounding_box()
+        keel_screw_engagement[s.label] = round(min(sb.max.Z, ib.max.Z) - max(sb.min.Z, ib.min.Z), 2)
     _hit = keel_sensor_package & keel_body
     tcrt_keel_collision = _hit.volume if _hit is not None else 0.0
 
@@ -881,7 +891,7 @@ def main():
         ("tcrt_guard_is_lower_than_optical_face", 0.0 < M.TCRT_GUARD_BOTTOM_Z < M.TCRT_OPTICAL_FACE_Z, {"guard_bottom_z_mm": M.TCRT_GUARD_BOTTOM_Z, "optical_face_z_mm": M.TCRT_OPTICAL_FACE_Z}),
         ("rear_pitch_contact_order_is_shoe_guard_keel_sensor", pitch["shoe"] < pitch["guards"] < min(pitch["keel_body"], pitch["tcrt"]), {"first_contact_pitch_deg": pitch}),
         ("rear_keel_seats_on_crossmember_without_interference", keel_crossmember_overlap < 1e-6 and keel_crossmember_gap < 1e-6, {"overlap_volume_mm3": keel_crossmember_overlap, "gap_mm": keel_crossmember_gap}),
-        ("rear_keel_bolted_with_four_m3", len(keel_hardware.children) == 8, {"hardware_solids": len(keel_hardware.children)}),
+        ("rear_keel_bolted_with_four_m3_into_inserts", len(keel_screws) == 4 and all(v >= 5.0 for v in keel_screw_engagement.values()) and keel_screw_clash < 1e-3, {"engagement_mm": keel_screw_engagement, "screw_clash_mm3": keel_screw_clash}),
         ("rear_keel_shoe_fully_backed", all(z is not None and abs(z - shoe_top_z) < 1e-3 for z in shoe_backing.values()), {"shoe_top_z_mm": shoe_top_z, "keel_underside_z_mm": shoe_backing}),
         ("rear_keel_guards_seated_full_length", all(z is not None and z < guard_top_z for z in guard_backing.values()), {"guard_top_z_mm": guard_top_z, "keel_underside_z_mm": guard_backing}),
         ("rear_tcrt_package_clears_keel", tcrt_keel_collision < 1e-6, {"collision_volume_mm3": tcrt_keel_collision}),
