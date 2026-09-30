@@ -12,7 +12,7 @@ Before detailing chassis v1, check and freeze the whole-robot spatial baseline: 
 
 The [project BOM](BOM.csv) is the single parts register. The [chassis v1 BOM](01-chassis/v1/BOM.md) is its dated working snapshot for one chassis; it is not yet a fabrication release.
 
-In the register, `DESIGN` means custom geometry exists, `CANDIDATE` means a part or family is proposed, `OPEN` means the design needs a choice before release, and `HOLD` means do not order or fabricate until its blocker is resolved. `supplier_candidate` is a lead to verify, not a stock claim. Update `procurement` and `received_measurements` with order and caliper evidence; do not infer receipt from CAD or an old availability check. Refresh a version snapshot deliberately after a BOM change.
+In the register, `DESIGN` means custom geometry exists, `CANDIDATE` means a part or family is proposed, `SELECTED` means the build choice is settled with receiving and physical verification still separate, `OPEN` means the design needs a choice before release, and `HOLD` means do not order or fabricate until its blocker is resolved. `supplier_candidate` is a lead to verify, not a stock claim. Update `procurement` and `received_measurements` with order and caliper evidence; do not infer receipt from CAD or an old availability check. Refresh a version snapshot deliberately after a BOM change.
 
 ## Build order
 
@@ -20,6 +20,8 @@ In the register, `DESIGN` means custom geometry exists, `CANDIDATE` means a part
 2. [Body](02-body/) — load-bearing frame, packaging, power and wiring, access, cooling, and the head support. Recheck its effect on the chassis.
 3. [Head](03-head/) — build and test the mechanism on its real body support. Part selection and isolated joint tests can start earlier.
 4. [Full droid](fulldroid/) — assemble the subsystems and rerun whole-robot motion, power, thermal, fault, and interaction tests.
+
+Custom schematic, layout and board validation work has a separate [04-custom-pcb work area](04-custom-pcb/README.md). Its unreleased assemblies do not universally block isolated chassis fit or controlled external-supply tests.
 
 Work can overlap. Freeze only the interfaces needed for the next release; record changes that affect another subsystem. The integrated [Layout 02 CAD](../02-prototypes/RP-06-cad/body-chassis/layout-02/) is the starting geometry, not a fabrication release or physical proof.
 

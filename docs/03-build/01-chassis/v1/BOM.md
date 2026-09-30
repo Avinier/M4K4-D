@@ -1,6 +1,6 @@
 # Chassis v1 bill of materials — working snapshot
 
-Captured 2026-09-28 from the [project BOM](../../BOM.csv) for **one rolling chassis**. Quantities are installed quantities, with no spare or scrap allowance. This is a procurement and design worklist, **not a released order or fabrication package**. `DESIGN` means custom geometry exists; `CANDIDATE` means a part family or SKU is proposed; `HOLD` means do not order or fabricate until the blocker is resolved; `OPEN` means the design still needs a choice before release. No row is marked received or measured.
+Reviewed 2026-09-30 from the [project BOM](../../BOM.csv) for **one rolling chassis**. Quantities are installed quantities, with no spare or scrap allowance. This is a procurement and design worklist, **not a released order or fabrication package**. `DESIGN` means custom geometry exists; `CANDIDATE` means a part family or SKU is proposed; `SELECTED` means the build choice is settled, with receipt and test checks tracked separately; `HOLD` means do not order or fabricate until the blocker is resolved; `OPEN` means the design still needs a choice before release. No row is marked received or measured.
 
 The model basis is [chassis-v1.step.py](cad/chassis-v1.step.py) and [body_chassis_model.py](cad/body_chassis_model.py). Its scoped export includes the frame, wheels, motors, bearings, ball caster, battery pack, drivers, IMU, front range sensor, nose contact, and rear keel. The CAD README describes the [scope and exclusions](cad/README.md). The project BOM carries the detailed specification, source, and release check for every ID below. Shared electrical parts are counted once in that project BOM; the separate section below records whole-robot integration dependencies and does not imply that every board is needed for a bench rolling test.
 
@@ -25,7 +25,7 @@ The model basis is [chassis-v1.step.py](cad/chassis-v1.step.py) and [body_chassi
 | CH-051 | Printed bearing housing ([D-007](../../decisions.md#d-007)) | 2 | DESIGN |
 | CH-052 | 1.2 mm aluminium bearing retaining cap | 2 | DESIGN |
 
-`CH-001` is a **design set**, not a claim that all frame parts are one print. The main CAD now models two deck prints, four rails, two crossmembers, the tub/hatch, and one keyed plate-and-cheek carrier per side. J04 uses separate rail modules with M3 inserts and screws; the material/process, calibrated fits and physical strength still need proof. The guards and wear shoe are modeled as separate objects but have no attachment detail. The wheel is designed in the standalone [wheel CAD](cad/wheel/README.md) ([D-005](../../decisions.md#d-005), [D-008](../../decisions.md#d-008)): a printed TPU tyre clamped by CH-048/CH-049, and a hub cap (CH-058, CH-059) over the D-007 wheel screws. The spin index (formerly CH-006) is removed. The O-ring fallback is recorded in D-005, with no BOM row. The hatch has no retention hardware; its eventual screws or latch must be added to this BOM.
+`CH-001` is a **design set**, not a claim that all frame parts are one print. The main CAD now models two deck prints, four rails, two crossmembers, the tub/hatch, and one keyed plate-and-cheek carrier per side. J04 uses separate rail modules with M3 inserts and screws; the material/process, calibrated fits and physical strength still need proof. The bezel and wear shoe have defined retention and service paths under D-014; their physical retention and floor tests remain open. The wheel is designed in the standalone [wheel CAD](cad/wheel/README.md) ([D-005](../../decisions.md#d-005), [D-008](../../decisions.md#d-008)): a printed TPU tyre clamped by CH-048/CH-049, and a hub cap (CH-058, CH-059) over the D-007 wheel screws. The spin index (formerly CH-006) is removed. The O-ring fallback is recorded in D-005, with no BOM row. The hatch has no retention hardware; its eventual screws or latch must be added to this BOM.
 
 The purchased **Pololu #2691 caster** is a separate row (CH-016). It includes the 1-inch / 25.4 mm plastic ball, plastic rollers, and two-piece housing. The custom printed pod seats its three-hole flange on the chassis crossmember and provides the pocket for the front range sensor; it is a mount, not a second ball or replacement caster. Pololu lists a 29 mm assembled height and says this caster is intended as a third support for differential-drive robots up to about 10 lb. The CAD mass register estimates the complete robot at 2.55 kg (5.6 lb) and assigns about 18% of static weight to the ball, roughly 0.45 kg. That makes the size/load choice plausible for static support. Pololu gives general guidance, not a load rating; the printed pod strength, impacts, floor gaps, and threshold climbing still need physical tests. [CAD mass estimate](cad/generated/mass-properties.md) · [Pololu #2691 specs](https://www.pololu.com/product/2691/specs) · [dimension drawing](https://www.pololu.com/file/0J895/2691-dimensions.pdf).
 
@@ -33,72 +33,84 @@ The purchased **Pololu #2691 caster** is a separate row (CH-016). It includes th
 
 | ID | Part | Qty | State |
 |---|---|---:|---|
-| CH-014 | [ThinkRobotics MOT3001-6V230RPM encoder gearmotor](https://thinkrobotics.com/products/25mm-encoder-dc-metal-gearmotors) ([D-003](../../decisions.md#d-003)) | 2 | HOLD |
-| CH-015 | [OnlyScrews 688 ZZ bearing](https://onlyscrews.in/products/688-zz-deep-groove-ball-bearing-8x16x5), 8 × 16 × 5 (D-012) | 4 | CANDIDATE; listing says sold out |
-| CH-016 | Pololu #2691 1-inch plastic ball with plastic rollers (not #2692) | 1 | CANDIDATE |
-| CH-017 | Pololu #4035 DRV8874 carrier | 2 | CANDIDATE |
-| CH-018 | Sharp GP2Y0A41SK0F front range sensor | 1 | CANDIDATE |
-| CH-019 | TI DRV5055A3 linear Hall sensor (D-013) | 1 | CANDIDATE |
-| CH-064 | Nose Hall board, 6.0 × 4.6 × 0.8 mm | 1 | DESIGN |
-| CH-065 | N35 Ø2 × 1 mm cap magnet | 1 | CANDIDATE |
-| CH-066 | Ø3 × 10 mm cap return spring | 2 | CANDIDATE |
-| CH-020 | Rear TCRT5000 with a soldered 350 mm GH4 lead to J10-10 ([spec](research/rear-tcrt-lead.md), D-016) | 1 assembly | CANDIDATE |
-| CH-021 | ICM-42688-P base IMU PCB-07 | 1 assembly | HOLD |
-| CH-022 | Samsung INR18650-25R cell | 2 | CANDIDATE |
-| CH-023 | Pack protection PCB-01 | 1 assembly | HOLD |
+| CH-014 | [ThinkRobotics MOT3001-6V230RPM encoder gearmotor](https://thinkrobotics.com/products/25mm-encoder-dc-metal-gearmotors) ([D-003](../../decisions.md#d-003)) | 2 | SELECTED |
+| CH-015 | [OnlyScrews 688 ZZ bearing](https://onlyscrews.in/products/688-zz-deep-groove-ball-bearing-8x16x5), 8 × 16 × 5 (D-012) | 4 | CANDIDATE; page reports in stock |
+| CH-016 | [Pololu #2691 1-inch plastic ball with plastic rollers](https://www.mgsuperlabs.co.in/estore/Pololu-Ball-Caster-with-1-Plastic-Ball) (not #2692) | 1 | SELECTED |
+| CH-017 | [Adafruit #3297 DRV8833 breakout](https://www.adafruit.com/product/3297); one board per motor, both bridges paralleled within each board | 2 | SELECTED |
+| CH-018 | [Robocraze Sharp GP2Y0A21YK0F](https://robocraze.com/products/robocraze-sharp-gp2y0a21yk0f-distance-sensor) | 1 | SELECTED |
+| CH-019 | [TI DRV5055A3QDBZR bare linear Hall sensor](https://evelta.com/drv5055a3qdbzr-ratiometric-linear-hall-effect-sensor-with-analog-output-sot-23-3/) ([datasheet](https://www.ti.com/lit/ds/symlink/drv5055.pdf)) | 1 | SELECTED |
+| CH-064 | Custom nose Hall carrier, 6.0 × 4.6 × 0.8 mm, for TI DRV5055A3 and filter | 1 | DESIGN |
+| CH-065 | N35 Ø3 × 1.5 mm cap magnet | 1 | SELECTED |
+| CH-066 | [Industrybuying RS PRO 821245 stainless compression spring](https://www.industrybuying.com/compression-spring-rs-pro-OFF.STO.223805403), pack of 10 listing; OD 2.75 × 0.25 wire × 15.7 free, 0.18 N/mm | 2 | SELECTED |
+| CH-020 | Vishay TCRT5000 bare sensor with a soldered 350 mm GH4 lead to J10-10 ([spec](research/rear-tcrt-lead.md), D-016/D-021) | 1 assembly | SELECTED |
+| CH-021 | Proposed ICM-42688-P custom PCB-07; [Robokits MPU6050 ₹173 bench alternative](https://robokits.co.in/sensors/accelerometer-and-magnetometer/triple-axis-accelerometer-gyro-mpu-6050-breakout) | 1 assembly | HOLD on final runtime interface/mount |
+| CH-022 | Samsung INR18650-25R cell, finalized by builder | 2 | SELECTED |
+| CH-023 | [Robocraze balanced 2S protection module TIFPS0629](https://robocraze.com/products/2-string-20a-lithium-battery-protection-module-balanced-version) | 1 assembly | SELECTED |
 | CH-024 | Bourns AC72ABD resettable thermal breaker | 1 | HOLD |
 | CH-025 | SEMITEC 103AT-2 10 kΩ NTC thermistor | 1 | HOLD |
 | CH-026 | Cell straps, insulation, heat-shrink sleeve, and AWG16 pack leads | 1 lot | HOLD |
 | CH-027 | Micro-Fit+ 1×2 pack disconnect with terminals | 1 pair | HOLD |
 | CH-028 | ATOF main fuse holder | 1 | HOLD |
-| CH-029 | ATOF 15 A main fuse | 1 | HOLD |
+| CH-029 | ATOF fuse: final rating open; [5 A 0287005.PXCN test candidate](https://in.element14.com/littelfuse/0287005-pxcn/automotive-fuse-5a-32v/dp/2137127) | 1 | HOLD on final rating |
 
-The tact switch is a small button mounted sideways inside the pod. When the flexible nose cap is pushed rearward by contact, it presses the switch plunger; the CAD reserves 3 mm of cap travel. Its exact switch and actuation force are not selected, so contact behaviour is still open.
+The nose cap uses a selected Ø3 × 1.5 mm N35 magnet and TI linear Hall sensor under D-013. Cap movement changes the analog voltage; firmware detects contact before the 3 mm mechanical stop. The former side-actuated tact switch is superseded. **CH-064 remains a tiny custom carrier**, because the bare SOT-23 sensor and its filter need a mechanically located, wired assembly in the 6.0 × 4.6 × 0.8 mm nose slot. A bench adapter can prove the circuit, but it does not replace the final nose carrier. PCB layout, startup/fault diagnostics, calibrated contact thresholds and physical fit remain release gates.
 
-The battery parts are different functions: two 18650 cells store energy; PCB-01 protects the pack electrically; the **AC72ABD** is a resettable, cell-mounted thermal/current breaker that opens the pack circuit on excessive heat or current (72 °C ± 5 °C trip); the **103AT-2** is a temperature sensor mounted against a cell and wired to the charger’s temperature input so charging can respond to cell temperature. It does not interrupt current by itself. Bourns describes the AC part as a mini-breaker; SEMITEC lists the 103AT-2 as a 10 kΩ thermistor. [Bourns AC series datasheet](https://bourns.com/docs/product-datasheets/ac.pdf) · [SEMITEC AT thermistors](https://www.semitec.co.jp/products/thermistor_at/).
+The motor-driver selection is two Adafruit #3297 boards, one per motor, with both DRV8833 bridges on each board paralleled to share that motor load. This is a reasonable test choice for the selected 6 V motor at its stated running load, conditional on current-sharing, temperature, stall/launch and braking tests. Treat 2 A as the nominal combined current-limit setting, not an unconditional continuous board rating. Do not connect outputs from separate driver boards together.
+
+The selected A21 sensor has a 100 mm minimum range and a 38.3 ± 9.6 ms measurement cycle. At the worst-case cycle, it exceeds the existing 50 ms stop-path budget once scan and control-loop delays are included. Keep the user's sensor selection and hold autonomous stop-path release until timing and stopping distance are reworked and demonstrated. The CAD now uses the vendor STEP, checked against the Sharp outline drawing, with the mounting ears trimmed and the lead soldered ([D-027](../../decisions.md#d-027)). Check the received unit against it.
+
+The selected Robocraze 2S balanced protection module is intended for purchase. Its listed 48 × 20 mm footprint does not confirm the model's provisional 2.9 mm thickness. Check received dimensions, protection thresholds, balancing, reset behavior, current/thermal limits, wiring and regeneration interaction before use with cells. Selection does not mean ordered, received or qualified.
+
+The builder selected two Industrybuying RS PRO 821245 springs from a pack-of-10 listing for CH-066. Their 2.75 mm OD fits the existing spring pockets, but the 15.7 mm free length creates a predicted 2.41 N pair preload at the current 9 mm rest gap and 3.49 N at the 6 mm full-travel gap. Measure actual force, check spring stability/return and prove cap push force and snap-hook retention before declaring the nose mechanism passed. See [D-020](../../decisions.md#d-020).
+
+The battery parts have separate functions: two 18650 cells store energy; PCB-01 protects the pack electrically; the **AC72ABD** is a resettable, cell-mounted thermal/current breaker that opens the pack circuit on excessive heat or current (72 °C ± 5 °C trip); the **103AT-2** is a temperature sensor mounted against a cell and wired to the charger’s temperature input so charging can respond to cell temperature. It does not interrupt current by itself. The AC72ABD has reset and leakage behaviour to account for; its upper trip tolerance is 77 °C, so a nominal 72 °C label does not establish the assembled cell-temperature limit. Bourns describes the AC part as a mini-breaker; SEMITEC lists the 103AT-2 as a 10 kΩ thermistor. [Bourns AC series datasheet](https://bourns.com/docs/product-datasheets/ac.pdf) · [SEMITEC AT thermistors](https://www.semitec.co.jp/products/thermistor_at/).
+
+The selected Samsung cells form a **2S1P pack: 7.2 V nominal, 8.4 V full, 2500 mAh, about 18 Wh**. They are rated 20 A continuous per cell (8C), which is not a released assembled-pack rating. The CAD now spaces the cells at a 19.5 mm pitch, leaving 1.1 mm between them at the 18.4 mm maximum diameter; Samsung recommends more than 1 mm ([D-026](../../decisions.md#d-026)). The pack builder must hold that gap with a spacer or holder. The PCB-01 height in CAD is still a 2.9 mm placeholder until the module is measured. Pack construction remains open.
 
 The cell straps connect the cells in the 2S series arrangement; insulation separates conductive tabs and cell surfaces to prevent shorts; the heat-shrink sleeve holds and protects the pack assembly; AWG16 leads carry pack power to the disconnect. The CAD mass estimate includes these as a roughly 11 g pack-build allowance, not as a finished purchased pack. The pack construction and electrical checks remain open.
 
-**ATOF** is Littelfuse’s automotive blade-fuse family. The proposed 15 A ATOF fuse (CH-029) and its holder (CH-028) protect the pack feed against overcurrent. Electrically, the fuse goes after the pack disconnect and before PCB-02, close to the battery source. The current CAD reserves a holder envelope in the +Y channel beside the tub (X 51–75 mm); the electrical spec describes a PCB-mount holder on PCB-02. Those placement descriptions do not yet agree, so the exact holder mounting and service method are still open. [Littelfuse ATOF datasheet](https://www.littelfuse.com/assetdocs/littelfuse-datasheet-287-atof?assetguid=43dcdce8-8ca2-426f-8998-7e566f048d40).
+**ATOF** is Littelfuse’s automotive blade-fuse family. The proposed 15 A ATOF fuse (CH-029) and its holder (CH-028) protect the pack feed against overcurrent. Electrically, the fuse goes after the pack disconnect and before PCB-02, close to the battery source. The current CAD reserves a holder envelope in the +Y channel beside the tub (X 51–75 mm); the electrical spec describes a PCB-mount holder on PCB-02. Those placement descriptions do not yet agree, so the exact holder mounting and service method are still open. The available 5 A 0287005.PXCN is a chassis-test candidate, not a finalized whole-robot replacement; BF-013A blade compatibility remains unverified. Account for the fuse’s 18.8 mm overall height including blades. [Littelfuse ATOF datasheet](https://www.littelfuse.com/assetdocs/littelfuse-datasheet-287-atof?assetguid=43dcdce8-8ca2-426f-8998-7e566f048d40).
 
-The drive gearmotor is the **ThinkRobotics MOT3001-6V230RPM** ([product page](https://thinkrobotics.com/products/25mm-encoder-dc-metal-gearmotors); pick the 6V / 230RPM variant) (a generic JGA25-370, 6 V, about 26:1, 11 PPR Hall encoder, ₹1,180), chosen on cost and in-India availability in [decision D-003](../../decisions.md#d-003). It does **not** meet the RP-03 0.70 m/s heavy-launch gate: estimated 0.47 m/s at the launch load and about 0.20 N·m stall. Chassis v1 therefore runs a reduced drive envelope until bench measurements set it. The screw pattern, tapped depth and gearbox length in the CAD are assumptions until a unit is measured. Fallbacks are the Pololu #4803 and the DFRobot FIT0521. The battery board and other custom electronics are proposed envelopes, not released boards.
+The drive gearmotor is the **ThinkRobotics MOT3001-6V230RPM** ([product page](https://thinkrobotics.com/products/25mm-encoder-dc-metal-gearmotors); pick the 6V / 230RPM variant) (a generic JGA25-370, 6 V, about 26:1, 11 PPR Hall encoder, ₹1,180), chosen on cost and in-India availability in [decision D-003](../../decisions.md#d-003). It does **not** meet the RP-03 0.70 m/s heavy-launch gate: estimated 0.47 m/s at the launch load and about 0.20 N·m stall. Chassis v1 therefore runs a reduced drive envelope until bench measurements set it. The screw pattern, tapped depth and gearbox length in the CAD are assumptions until a unit is measured. Fallbacks are the Pololu #4803 and the DFRobot FIT0521. The battery board and other custom electronics are proposed envelopes, not released boards. Their separate design work belongs in [04-custom-pcb](../../04-custom-pcb/README.md).
+
+The canonical [project BOM](../../BOM.csv) and this chassis snapshot are the source of truth for procurement status, supplier links, quantities and release checks. Availability observations are dated; no order or receipt is inferred.
 
 ## Fasteners and locating hardware
 
 | ID | Joint hardware | Qty | State |
 |---|---|---:|---|
-| CH-030 | DIN 7984 M3 × 6 low-head motor face screw | 4 | CANDIDATE |
-| CH-031 | ISO 7380 M3 × 8 caster screw, from below (D-011) | 3 | CANDIDATE |
-| CH-032 | ISO 7380 M3 × 8 pod-to-crossmember screw (D-011) | 2 | CANDIDATE |
+| CH-030 | DIN 7984 M3 × 6 low-head motor face screw | 4 | OPEN — exact size/standard unconfirmed |
+| CH-031 | [ISO 7380 M3 × 8 caster screw, from below (D-011)](https://onlyscrews.in/products/hex-allen-button-head-m3-x-8-screw-pack-of-20) | 3 | CANDIDATE |
+| CH-032 | [ISO 7380 M3 × 8 pod-to-crossmember screw (D-011)](https://onlyscrews.in/products/hex-allen-button-head-m3-x-8-screw-pack-of-20) | 2 | CANDIDATE |
 | CH-033 | CNC Kitchen M3 × 5.7 front-crossmember insert for ball pod (D-011) | 2 | CANDIDATE |
-| CH-034 | ISO 4762 M3 × 30 rear keel screw (D-014) | 4 | CANDIDATE |
-| CH-035 | M4 body to chassis through bolt, length open | 4 | HOLD |
-| CH-036 | M4 body to chassis nut | 4 | HOLD |
-| CH-037 | Ø4 × 8 mm body locating pin | 2 | HOLD |
-| CH-038 | M3 ballast mounting screw, length open | 2 | HOLD |
+| CH-034 | [ISO 4762 M3 × 30 rear keel screw (D-014)](https://onlyscrews.in/products/m3-x-30mm-hex-allen-socket-head-ss-304-screw-dia-3mm-length-30mm) | 4 | CANDIDATE |
+| CH-035 | [M4 × 12 hex-socket button-head SS304 screw](https://onlyscrews.in/products/hex-allen-button-head-m4-x-12-screw-pack-of-20), reported available | 4 | CANDIDATE |
+| CH-036 | [M4 SS304 plain hex nut](https://onlyscrews.in/products/m4-nut-ss-304), accessible from below | 4 | CANDIDATE |
+| CH-037 | [Ø4 × 8 mm hardened body locating pin](https://onlyscrews.in/products/m4-x-8mm-hard-dowel-pins-dia-4mm-length-8mm) | 2 | CANDIDATE |
+| CH-038 | M3 × 12 Phillips CSK mild-steel black-oxide ballast screw, reported available | 2 | CANDIDATE |
 | CH-039 | M2 × 5 IMU screw | 2 | CANDIDATE |
-| CH-048 | ISO 7380 M3 × 8 tyre clamp-ring screw | 12 | CANDIDATE |
-| CH-049 | M3 × ~4 mm rim heat-set insert | 12 | CANDIDATE |
+| CH-048 | [ISO 7380 M3 × 8 tyre clamp-ring screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-8-screw-pack-of-20) | 12 | CANDIDATE |
+| CH-049 | [M3 × ~4 mm rim heat-set insert](https://onlyscrews.in/products/m3-x-4mm-3d-printing-brass-threaded-inserts-dia-3mm-length-4mm) | 12 | CANDIDATE |
 | CH-053 | ISO 7380 M3 × 18 bearing housing and cap screw | 8 | CANDIDATE |
-| CH-054 | M3 × 4 mm motor plate heat-set insert | 8 | CANDIDATE |
-| CH-055 | DIN 916 M3 × 2.5 cup-point stub set screw | 2 | CANDIDATE |
-| CH-056 | ISO 7380 M3 × 6 wheel-to-stub screw | 6 | CANDIDATE |
-| CH-057 | Loctite 222 and 641 | 1 lot | CANDIDATE |
+| CH-054 | [M3 × 4 mm motor plate heat-set insert](https://onlyscrews.in/products/m3-x-4mm-3d-printing-brass-threaded-inserts-dia-3mm-length-4mm) | 8 | CANDIDATE |
+| CH-055 | DIN 916 M3 × 2.5 cup-point stub set screw | 2 | OPEN — exact length unconfirmed |
+| CH-056 | [ISO 7380 M3 × 6 wheel-to-stub screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-6-screw-pack-of-20) | 6 | CANDIDATE |
+| CH-057 | [Loctite 222 and 641](https://onlyscrews.in/products/loctite%C2%AE-222-low-strength-thread-sealant-50-ml) | 1 lot | CANDIDATE |
 | CH-059 | M2 × 6 thread-forming hub cap screw | 12 | CANDIDATE |
-| CH-060 | DIN 7984 M3 × 8 low-head J04 carrier-to-rail screw | 8 | CANDIDATE |
-| CH-061 | M3, 6 mm axial heat-set J04 rail insert | 8 | CANDIDATE |
+| CH-060 | DIN 7984 M3 × 8 low-head J04 carrier-to-rail screw | 8 | OPEN — exact size/standard unconfirmed |
+| CH-061 | [M3, 6 mm axial heat-set J04 rail insert](https://onlyscrews.in/products/m3-x-6mm-3d-printing-brass-threaded-inserts-dia-3mm-length-6mm) | 8 | CANDIDATE |
 | CH-062 | M2 × 8 countersunk thread-forming pod lid screw (D-011) | 1 | CANDIDATE |
 | CH-063 | CNC Kitchen M3 × 5.7 pod-seat insert for caster (D-011) | 3 | CANDIDATE |
 | CH-067 | CNC Kitchen M3 × 5.7 rear-crossmember insert for the keel (D-014) | 4 | CANDIDATE |
 | CH-069 | M2 × 10 thread-forming TCRT bezel screw (D-014) | 1 | CANDIDATE |
 | CH-070 | M2 × 6 thread-forming wear-shoe screw (D-014) | 1 | CANDIDATE |
-| CH-072 | 2.5 mm zip tie, J10-10 strain relief (D-014) | 1 | CANDIDATE |
+| CH-072 | 2.5 × 100 mm nylon zip tie, J10-10 strain relief (D-014) | 1 | CANDIDATE |
 
-Counts above come from modeled positions; heads and shanks in the CAD are one screw each. Choose exact fasteners, receivers, engagement, and tool access after the printed joint stack is defined. The axle-stack hardware (CH-053 to CH-057) is selected in [D-007](../../decisions.md#d-007) and the [axle stack](research/axle-stack.md), but it is not yet proven on a coupon or the axle rig.
+Supplier leads, stock observations, dimensions, standards, materials and fit qualifications are recorded in the fastener rows of the [project BOM](../../BOM.csv). CH-035 and CH-038 lengths are derived from the current modeled joint stacks and still need received-hardware checks. The pictured mixed M3/M4/M5 Phillips-CSK assortment includes M3 × 12 screws, a possible CH-038 source, but its material/grade and head-seat dimensions are not identified in the image. Its M4 × 12 screws are countersunk and do not replace CH-035's button-head screws. Counts above come from modeled positions; heads and shanks in the CAD are one screw each. The axle-stack hardware specifications (CH-053 to CH-057) are defined in [D-007](../../decisions.md#d-007) and the [axle stack](research/axle-stack.md), but the parts are not yet proven on a coupon or the axle rig.
 
 ## Full-system electrical parts outside the chassis v1 CAD
 
-These rows were included as if all were required for a powered chassis test. That was too broad. They are the **full-system electrical architecture** shown in the whole-robot CAD and electrical plan; they are excluded from [the chassis v1 scoped export](cad/README.md), and are not all prerequisites for a bench motor/rolling test. A temporary current-limited supply, a test controller, the two included DRV8874 carriers, and a simple test harness may be enough for that test, but the exact bench setup has not been specified. Keep the shared board rows in the project register for full integration; do not treat them as parts to print with or procure specifically for the chassis until the chosen test setup requires them.
+These rows describe the **full-system electrical architecture** shown in whole-robot CAD and the electrical plan. PCB-02, PCB-03, PCB-04 and PCB-10 are excluded from [the chassis v1 scoped export](cad/README.md), and are not all prerequisites for a supply-powered chassis bench test. The selected Adafruit driver boards and a temporary controller/harness can support that earlier test if current limits, encoder interface, default disable, physical stop and braking/transient behavior are verified. Keep these shared board rows for full-system integration; their presence here does not make them a chassis-test fabrication requirement. See the test-stage summary below and the release checks in the project BOM.
 
 | ID | Part | Qty | State |
 |---|---|---:|---|
@@ -113,9 +125,13 @@ These rows were included as if all were required for a powered chassis test. Tha
 
 `PCB-02` manages charge and system power; `PCB-03` provides motor gating and power distribution; `PCB-04` supplies protected voltage rails; `PCB-10` carries the C3 controller. The separate ESP32-S3 DevKit and E-stop are part of that integrated electrical system. The [connector and wire schedule](../../../02-prototypes/RP-06-cad/connector-schedule.md) describes the full-system harness, not a minimal bench harness. Board positions appear in the full Layout 02 model, but not in the chassis v1 filtered STEP. Body and head mass stand-ins are test fixtures and are excluded from installed quantities.
 
-## Release blockers
+## Release blockers by stage
 
-1. For provisional CAD and fit prints, document the supplier-derived motor assumptions and keep the motor plate/coupling replaceable under [D-005](../../decisions.md#d-005); no motor is currently on hand. Before a powered rolling chassis is marked passed, assemble the selected MOT3001-6V230RPM units, confirm physical fit and run the [D-003](../../decisions.md#d-003) bench tests to set the drive envelope. Verify other purchased interfaces against their actual parts as they become available; update dependent geometry if a fit fails.
-2. Resolve every load-bearing joint: print split/material, wheel and stub retention, bearing preload, body M4 clamp stack, caster and pod screw engagement, keel receiver, hatch retention, and wear-piece attachment. Add any resulting parts to the project BOM and refresh this snapshot.
-3. Release the custom PCBs and harness from electrical schematics, layouts, exact connector part numbers, pinouts, and bench checks. Specify a safe pack builder and electrical test.
-4. Rerun chassis-specific CAD and physical fit checks, then set and pass the [build tests](../../README.md). Record supplier, order, receipt, measured dimensions, and any approved substitute in the project BOM before marking this snapshot released.
+Pololu #4804 is not the chosen caster and is not a current blocker; the selected caster is #2691. No physical PASS is recorded. Remaining blockers are stage-specific: final joint/fabrication details, purchased-part measurement, nose/rear physical proof, controlled driver commissioning, A21 stop-path timing and range validation, and protected-pack qualification before battery operation.
+
+1. **Provisional coupons and fit prints:** proceed under D-005 with documented motor/interface assumptions and replaceable parts. Choose a trial print process and obtain the hardware relevant to each coupon. Selected parts may be bought to resolve receiving and test gates.
+2. **Final fabrication:** complete J05/J06/J16 frame hardware; J11 hatch and pack restraint; J12 ballast screw; J13 body clamp/pin fits; J15 board mounts and cable restraint. Release the turned stub drawing/quote, exact unmatched fasteners, print split/material/settings, calibrated fits, per-part exports and assembly/service instructions. Nose and rear retention architecture is defined; its physical proof remains open. Reconcile the Samsung cell spacing and finished-pack envelope before releasing the battery enclosure.
+3. **Controlled powered tests:** receive and characterize the selected MOT3001 motors; verify the documented 6 V bench rig, deliberate driver limits, encoder/logic interfaces, retained harness, default disable, physical stop and braking/transient handling. Use secured inert pack/body/head ballast when the cells are disconnected. Record axle fit/retention/runout, loaded clearance, traction, turns, support behaviour, braking/tipping and temperature against defined limits.
+4. **Contact/cliff/IMU and autonomous claims:** qualify actual nose springs/magnet/Hall carrier, startup and wire-fault handling, ADC calibration, front-range timing/blind zone, bare-TCRT real-floor/ambient response and motor noise. Resolve the budget IMU runtime interface and mount if adopted. Final PCB-10 fabrication may wait when equivalent temporary interfaces are used; later boards require their own integration checks.
+5. **Battery and full-system operation:** qualify the protected 2S pack, insulation/restraint, disconnect/fuse/holder, thermal and charging behaviour, 8.4 V versus 6 V motor control and protection/regeneration interaction. Release only the custom boards/harness actually used in that scope. Their pending design does not block an independent supply-powered test.
+6. **Current verification and evidence:** rerun chassis/layout, wheel and affected nose/rear checks using the compatible pinned CAD runtime; the saved full-layout baseline predates the current source/checker. Record the revision, failures/exceptions and physical test results before release. Update supplier/order/receipt/measurements in the project BOM; do not infer any from CAD or stock listings.

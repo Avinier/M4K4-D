@@ -25,8 +25,8 @@
 | J10B | TCRT guards to keel | CAD defined in the J09B bezel (D-014) | Floor-strike and sensor-protection test |
 | J11A | Battery hatch to tub | Provisional geometry | Add screw/insert BOM items; retention test |
 | J11B | Battery pack to tub | Not fully defined | Restraint, isolation, access and safe removal |
-| J12 | Ballast bar to deck | Geometry modeled | Screw standard/length, receiver and tool/load check |
-| J13 | Body frame to chassis deck | Geometry modeled | M4 clamp stack, pin fits, nut access and lift-off |
+| J12 | Ballast bar to deck | M3 × 12 CSK candidate modeled with a 90° seat (D-026) | Verify received head against the seat, tool/load check |
+| J13 | Body frame to chassis deck | M4 × 12/plain nut candidate stack defined | Verify head seat, pin fits, nut access and lift-off |
 | J14 | TPU tyre to wheel rim | Designed in wheel CAD | Material/process fit, clamp, creep and runout |
 | J15A | IMU board to deck | Modeled | Board-hole confirmation and screw fit |
 | J15B | Drivers/boards/cable restraints | Incomplete | Mount hardware, strain relief, access and service |
@@ -48,7 +48,7 @@
 - **Location/joint:** Ø8 k5 stub seats at |Y| 76.51–86.51; Ø9.5 shoulder locates inner rings. Housing outer seat Ø16 × 10 mm is coupon-tuned; outer rings captured between housing shoulder and cap. Cap Ø12.5 land must contact outer ring only. No preload intended. Set-screw station is |Y| 74.8 so its Ø2.5 tap drill clears the first bearing face by 0.46 mm; verify the actual turned hole edge and bearing-land transition before release. A shared 0.01 mm axial datum offset avoids a degenerate mirrored housing boolean and is far below process tolerance.
 - **Hardware/clamp:** 4 × ISO 7380 M3 × 18 screws and four M3 × 4 heat-set inserts per side (CH-053/054; eight each total). Outward inner-ring retention is Ø8 k5 plus Loctite 641; no circlip modeled. Loctite 222 proposed on screws/set screw (CH-057).
 - **Material/fit/access/service:** housing is a candidate structural print; process/material unselected; cap 1.2 mm aluminium. Coupon housing seat at Ø15.90–16.10 mm in 0.05 mm steps and verify actual bearing/stub. Replace by removing wheel, set screw, four cap screws, then slide housing/cartridge outboard; press bearings off via inner rings.
-- **Proof/state:** D-012 selects the OnlyScrews 688 ZZ listing, but its page currently says sold out and omits maker, drawing and load rating. Confirm the supplied lot; check fit, shield contact, race drag, runout, endplay ≤0.10 mm target and the 0.46 mm set-screw-hole edge margin. Pull inner-ring/stub joint to 100 N for 10 s with <0.10 mm relative motion. **Designed; procurement, physical fit and retention open.**
+- **Proof/state:** D-012 selects the OnlyScrews 688 ZZ listing, with stock observed on 2026-09-30 and recorded in the [project BOM](../../BOM.csv); the page still omits maker, drawing and load rating. Confirm the supplied lot; check fit, shield contact, race drag, runout, endplay ≤0.10 mm target and the 0.46 mm set-screw-hole edge margin. Pull inner-ring/stub joint to 100 N for 10 s with <0.10 mm relative motion. **Designed; procurement, physical fit and retention open.**
 
 ### J03 L/R — motor shaft to stub to wheel
 
@@ -109,14 +109,14 @@
 
 ### J08A — front range sensor to pod
 
-- **Parts/load path:** the GP2Y0A41SK0F sits directly on the pod floor (Z 35). Its ear flange sits in full-height side slots.
-- **Location/joint:** the slots locate it in X/Y. The lid underside (Z 49) caps the sensor top (Z 48.5) with 0.5 mm, so the lid screw retains the sensor as well. No separate clip.
-- **Access/service:** J08B cap off, then J08C lid off; lift the sensor straight up and unplug the PH3 lead. The lead and the switch pair leave as one J10-8 cable:
+- **Parts/load path:** the GP2Y0A21YK0F (CH-018), modeled from its vendor STEP ([D-027](../../decisions.md#d-027)), sits directly on the pod floor (Z 35) with its lenses forward and its connector up. Both mounting ears are trimmed off at the 29.5 mm body at assembly. The side slots that used to take the ears are now vestigial.
+- **Location/joint:** the pocket walls locate the body in Y. It has 0.25 mm per side ahead of X 122.1 (±15.0) and 0.7 mm per side behind (±15.5). The lid underside (Z 49) is 1 mm over the body top (Z 48) and 0.5 mm over the connector, with its hump, so the lid retains the sensor as well. No separate clip. The J10-8 wires are soldered to the S3B-PH pins with no plug. They run rearward inside the lid hump, then down behind the sensor (X 109–114.5) to the floor channel.
+- **Access/service:** J08B cap off, then J08C lid off. Lift the sensor straight up with its soldered lead. The Hall board (J08B) can only come out after the sensor, whose body stands over its slot. The lead and the Hall pair leave as one J10-8 cable:
   - through a round-cornered slot in the pod's back wall (Z 32–35, 1 mm flared mouth);
   - under the crossmember;
   - up a Ø5 bore through the crossmember and deck at (86, −31);
   - into the sensor trunk, and on to C3 J10-8.
-- **Proof/state:** CAD defined; the removal path is swept in `nose-service.md`. **Open:** vibration retention and lens alignment on the print.
+- **Proof/state:** CAD defined; the removal path is swept in `nose-service.md` (subset C, D-027). **Open:** fit of the received unit against the vendor STEP; ear trim quality and lead strain relief; vibration retention; lens alignment on the print.
 
 ### J08B — nose touch cap and contact sensing to pod
 
@@ -141,7 +141,8 @@
 - **Location/joint:**
   - a rear 12 × 1.5 × 2 mm tongue drops into a pod-wall groove that is open forward;
   - the shell band overhangs the lid top by 0.5 mm with the body on;
-  - one M2 × 8 countersunk thread-forming screw (CH-062) goes into a pod boss at (124.6, −11.8).
+  - one M2 × 8 countersunk thread-forming screw (CH-062) goes into a pod boss at (111.8, −11.8), behind the sensor body (D-027; it was at X 124.6, inside the real sensor's footprint);
+  - a hump over the sensor header (to Z 58.6), open 11.5 mm rearward so the lid can make its 11 mm forward slide; the cap has a matching top notch that clears the hump through its 3 mm travel.
 - **Access/service:** cap off, screw out, slide forward 11 mm, lift. With the body off, the rear is held only by the tongue.
 - **Print:** on its side (3.4 % support area).
 - **Proof/state:** CAD defined. **Open:** dry-fit, removal cycles, and screw strip torque in PETG.
@@ -190,18 +191,18 @@
 ### J12 — ballast bar to front deck
 
 - **Parts/load path:** 9 × 60 × 19 mm steel bar under deck; two screws transfer ballast inertia to front deck.
-- **Location/joint:** flat face seats on deck underside; two axes at X = 74, Y = ±20. Counterbores modeled from above.
-- **Hardware/clamp:** 2 × M3 screws (CH-038) into 8 mm-deep tapped holes in bar. CAD represents countersunk-style heads, but screw standard/length and exact head-seat geometry are not selected. Verify thread engagement and avoid bottoming.
+- **Location/joint:** flat face seats on deck underside; two axes at X = 74, Y = ±20. 90° countersinks, Ø6.5 at the deck top, modeled from above (D-026).
+- **Hardware/clamp:** 2 × M3 × 12 countersunk screws (CH-038, modeled to ISO 7046-1: Ø6.3 theoretical head, k 1.65) into 9 mm-deep tapped holes in the bar. The head seats 0.1 mm below the deck top, giving 8.1 mm of engagement and 0.9 mm of tip clearance to the hole floor (`cad/check_battery_ballast.py`). Confirm the received head angle and diameter against the seat before release.
 - **Material/access/service:** steel bar, candidate printed deck. Access from deck top before packaging closes the area; check narrow gap to tub and front crossmember.
-- **Proof/state:** specify screw/torque and tool access; test loosening, deck crushing/cracking under vibration/impact. **Geometry modeled; hardware/proof open.**
+- **Proof/state:** confirm received screw head fit, torque and tool access; test loosening and deck crushing/cracking under vibration/impact. **Hardware candidate defined; fit/proof open.**
 
 ### J13 — body frame to chassis deck
 
 - **Parts/load path:** body-frame feet/pads to split decks. Four M4 bolts clamp; two diagonal pins carry repeatable lateral location/shear.
 - **Location/joint:** four Ø4.5 clearance holes at modeled points; two Ø4 pins in Ø4.1 nominal holes; pins establish XY datum, bolts clamp pads to deck.
-- **Hardware/clamp:** 4 × M4 through-bolts/nuts (CH-035/036) and 2 × Ø4 × 8 mm pins (CH-037). Bolt length, washers/head seat, nut standard and clamp thickness open. CAD envelopes show ~12 mm shank/3.2 mm nut but do not select a standard stack.
+- **Hardware/clamp:** candidate stack is 4 × M4 × 12 button-head through-bolts and four accessible M4 plain hex nuts (CH-035/036), plus 2 × Ø4 × 8 mm pins (CH-037). Current modeled clamp stack is 4 mm frame foot + 4 mm deck + 3.2 mm nut = 11.2 mm, leaving about 0.8 mm nominal thread projection without washers. Confirm actual head seat, nut height, stack, and projection on the received parts; add washers only if the resulting stack is rechecked.
 - **Material/access/service:** printed frame candidates. Bolt heads from above; nuts held from below through rail socket paths. Remove bolts and lift body vertically off pins. Verify slim-socket access with tub/rails/shell installed.
-- **Proof/state:** check pin/hole fit and foot coplanarity; dry-run access/lift-off; test clamp retention, deck crushing and body shear under representative mass. **Positions modeled; stack/proof open.**
+- **Proof/state:** check pin/hole fit and foot coplanarity; dry-run access/lift-off; test clamp retention, deck crushing and body shear under representative mass. **Candidate stack defined; fit/proof open.**
 
 ### J14 — TPU tyre to wheel rim
 

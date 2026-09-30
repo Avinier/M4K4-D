@@ -24,6 +24,14 @@ The central record of every decision and change made during the build phase. New
 | [D-015](#d-015) | 2026-09-30 | Chassis / rear TCRT (CH-020, J09B) | Custom passive TCRT board that floats on the seated sensor; J10-10 becomes +3V3, GND, TCRT_OUT (ADC), LED_EN | SUPERSEDED by D-016 |
 | [D-016](#d-016) | 2026-09-30 | Chassis / rear TCRT (CH-020, J09B) | No board: TCRT soldered to a GH4 lead that plugs into C3 J10-10; LED switch and load on PCB-10 | ACTIVE; HOLD on the PCB-10 J10-10 change and bench item 20 |
 | [D-017](#d-017) | 2026-09-30 | Chassis / rear keel wear parts (CH-009, CH-010) | Recommendation: PETG for the wear shoe and the TCRT bezel; UHMW-PE tape on the shoe as an optional upgrade | RECOMMENDED; confirm after the item 20–22 tests |
+| [D-020](#d-020) | 2026-09-30 | Chassis / nose springs (CH-066) | Industrybuying RS PRO 821245 selected for purchase; retain 9/6 mm installed gaps pending force and guidance tests | SELECTED; higher preload, cap force, buckling and hook retention unverified |
+| [D-021](#d-021) | 2026-09-30 | Chassis / rear floor sensor (CH-020) | Bare Vishay TCRT5000 selected; Robu comparator module excluded from the designed keel interface | SENSOR SELECTED; supplier provenance, assembly fit and floor/cliff validation open |
+| [D-022](#d-022) | 2026-09-30 | Chassis / fastener sourcing | Use best available supplier candidates after OnlyScrews checks; define J12/J13 nominal screw stacks | Superseded in part by D-023 |
+| [D-023](#d-023) | 2026-09-30 | Chassis / fastener availability update | CH-035 and CH-038 reported available; CH-030/055/060 remain unsourced | Superseded in part by D-024 |
+| [D-024](#d-024) | 2026-09-30 | Chassis / remaining fastener source leads | ACME low-head screw family and Dalloyed grub-screw family added as Indian quote/sample leads | OPEN; exact size/stock still to confirm |
+| [D-025](#d-025) | 2026-09-30 | Chassis / mixed CSK fastener assortment | Mixed M3/M4/M5 kit may cover CH-038; M4 CSK does not fit CH-035 | CANDIDATE; kit source/material and fit unverified |
+| [D-026](#d-026) | 2026-09-30 | Chassis / battery and ballast CAD (CH-022, CH-038, J12) | BOM and CAD reconciled: 1.1 mm cell gap, countersunk CH-038 seat, 350 mm TCRT mass note; chassis-v1.step rebuilt | ACTIVE; PCB-01 height, received-screw fit and full `check_layout.py` rerun open |
+| [D-027](#d-027) | 2026-09-30 | Chassis / purchased-part models (CH-017, CH-018; J08A/J08C) | Vendor STEP for the A21 and a board-file STEP for the #3297 replace boxes; A21 ears trimmed, lead soldered, nose lid/cap reworked for the real package | ACTIVE; received-unit fit, ear trim and lead strain relief open |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -656,3 +664,172 @@ The mass row is unchanged at about 0.3 g for the sensing parts.
 **Changed:** CH-009 goes from OPEN to DESIGN, and CH-010's release check names PETG. J10A and J10B record the material. No CAD change.
 
 **Open:** retention, abrasion, floor-strike and snag tests (items 21–22); revisit after the tests.
+
+---
+
+## D-018
+
+**2026-09-30 · Chassis procurement and release scope · ACTIVE; receiving, fabrication and physical validation remain open**
+
+**Decision:** record the user's settled **Pololu #2691 plastic-roller caster** and **Samsung INR18650-25R cells** as SELECTED. Correct the current motor row to SELECTED under D-003/D-005; purchasing the motor enables its receiving and load checks. SELECTED does not mean ordered, received, fitted or passed. Supplier-page stock and physical release checks are separate fields.
+
+The canonical [BOM](BOM.csv) and [chassis snapshot](01-chassis/v1/BOM.md) contain the current supplier candidates, exact-match qualifications, and release checks.
+
+**Recommendations, not new installed substitutions:** retain two DRV8874 carriers and the Sharp A41 for the current design; reject the OD8/free15/wire1 return spring; sample MISUMI C-UR3-10 if its quote is acceptable; buy the bare TCRT specified by D-016; consider Robokits MPU6050 for budget bench use. Ø3 × 1.5 mm N35, the purchased balanced 2S module and 5 A ATOF are conditional alternatives. Magnet pocket/threshold, IMU interface/mount, protection thickness and fuse/holder/current requirements must be resolved before adopting those changes. BF-013A compatibility is not established. No corresponding CAD substitution was made.
+
+**Sourcing correction:** OnlyScrews BB688ZZ now shows in stock, superseding D-012's dated sold-out observation. Its maker/grade/load evidence, received fit and retention remain open. Common matched-size hardware and dowel links are recorded; DIN 7984 low heads, M3 × 18 button heads, M3 × 2.5 cup-point set screws, plastic thread-forming screws, selected 5.7 mm inserts and Loctite 641 retain exact-source work. Nearby articles are not approved substitutions.
+
+**Test scope:** regulated supply-powered chassis tests may use a documented development controller, driver carriers, temporary harness and relevant sensor circuits before final system PCB fabrication. Verify intentional voltage/current limits, encoder logic, default disable, physical stop and braking/transient behaviour. Keep cells disconnected and use secured inert ballast for that scope. Battery-powered tests retain protected-pack construction, fuse/disconnect, thermal/charging and 8.4 V motor-control gates.
+
+**Genuine new findings:** Samsung recommends >1 mm cell spacing against the current 0.2 mm CAD gap. The nose Hall note now treats trip values as predictions and records startup-pressed, missing-magnet and wire-break checks; shared 3.3 V supply does not make the ESP32-S3 ADC ratiometric. Define and verify diagnostic bias, ADC calibration and contact thresholds before functional release. These documentation corrections do not claim implementation or a passed test.
+
+**Release audit:** nose/rear joint architecture is defined under D-011/D-013/D-014/D-016, while physical proof is open. Remaining detail gaps include J05/J06/J16, J11A/B, J12/J13 and J15A/B; purchased interfaces/stub drawing and print/process release are also pending. The saved full-layout baseline predates current source/checker changes. Stage gates are summarized in the chassis BOM; #4804 is superseded, not a current variant blocker.
+
+**Custom PCB work:** a separate [04-custom-pcb folder](04-custom-pcb/README.md) now records the unreleased board work packages. No schematic, Gerbers or fabricated-board result is implied. Pre-existing edits to the chassis checker and engineering checklist were preserved. A malformed comma-delimited CH-012 release-check field was repaired while updating the BOM; installed quantities are unchanged.
+
+**Verification:** thirteen review reports produced; supplier observations and documentation audited. No hardware purchase, receipt, CAD regeneration or physical PASS was performed in this review. Final CAD checks require the compatible pinned runtime and the release revision.
+
+## D-019
+
+**2026-09-30 · Chassis user selections: drivers, front range, nose magnet and pack protection · SELECTED; receiving and system validation open**
+
+**Selected by the builder:** two Adafruit #3297 DRV8833 boards, one per motor, with both bridges paralleled within each individual board; Sharp GP2Y0A21YK0F from Robocraze; N35 Ø3 × 1.5 mm nose magnet; and Robocraze TIFPS0629 balanced 2S protection module, which the builder intends to buy. The builder reports the Sharp sensor is in stock and the only possible source/choice. These selections supersede prior alternatives and recommendations recorded in D-018 and the point reports.
+
+**CH-064 conclusion:** retain the 6.0 × 4.6 × 0.8 mm custom nose Hall carrier. Its job is to hold the bare TI DRV5055A3, decoupling/filter parts and three-wire interface in the seat's specific slot. An adapter board can test the circuit on a bench but cannot satisfy the installed envelope. Layout/fabrication and contact/fault validation remain open.
+
+**Engineering gates:** Adafruit/TI documentation supports the proposed bridge-parallel arrangement, but not an unconditional chassis current or thermal pass. Commission at a regulated 6 V supply with measured motor current, board temperature and braking/transient checks. The A21's 100 mm minimum range and 38.3 ± 9.6 ms measurement cycle do not satisfy the existing 50 ms stop-path budget once scan/control delay is included; revise and demonstrate the system timing/stopping distance while retaining the selected sensor. Measure actual A21 mounting datums before fit release. The 3 mm magnet changes the CAD pocket; check cap wall, pole, air gap and calibrated contact trip on the physical assembly. Robocraze's module listing gives a 48 × 20 mm footprint but does not establish its thickness or protection behavior; measure and qualify the received board before connecting cells. SELECTED or intended to buy does not mean ordered, received, fitted or passed.
+
+**CAD and BOM:** update the source model, CAD checker names and project/chassis BOM to these choices. The model represents the A21 and Adafruit boards as nominal envelopes until received parts are measured. Generated STEP and reports are stale until the pinned compatible CAD runtime is restored and the affected checks are rerun. The 2.9 mm BMS height remains an unverified legacy placeholder, not a measured module dimension.
+
+## D-020
+
+**2026-09-30 · Chassis / nose return springs (CH-066) · SELECTED for purchase; installed behavior unverified**
+
+**Decision:** the builder selected the Industrybuying listing for RS PRO 821245 stainless compression springs (pack of 10), with two required for the chassis. Published listing/datasheet values are OD 2.75 mm, 0.25 mm wire, 15.7 mm free length, 0.18 N/mm rate and 5 mm minimum working length. The builder said they are getting them; an order or receipt is not recorded.
+
+**Geometry and force:** OD fits the current Ø3.3 mm pockets. Leave the seat floor and 9 mm rest / 6 mm full-travel gaps unchanged for the sample test. At those gaps, nominal pair force is approximately 2.41 N at rest, 2.67 N near the 0.71 mm Hall trip and 3.49 N at the 3 mm stop. At the stop, nominal length is 1 mm above the catalog minimum working length; tolerate as a limit to verify, not a proven coil-bind margin. The free spring is 15.7 mm and the seated gap is much shorter, so check seating, unsupported coil behavior/buckling, cap push force, return from intermediate positions and printed snap-hook retention. High force may make the nose less compliant than planned.
+
+**CAD/BOM:** CH-066 is now SELECTED and the source spring envelope uses the actual 2.75 mm OD and 15.7 mm free-length data. The displayed model remains in its installed 9/6 mm envelope. No seat-floor redesign is made before sample measurements. Generated STEP and check reports remain stale pending the compatible pinned CAD runtime. Keep nose release gated on actual load and 3 mm stroke tests.
+
+## D-021
+
+**2026-09-30 · Chassis / rear floor sensor (CH-020) · SENSOR TYPE SELECTED; sourcing and physical validation open**
+
+**Decision:** use a **bare Vishay TCRT5000 reflective sensor with its four individual leads** in the rear keel assembly. Solder the specified 350 mm AWG28 JST GH4 lead to the sensor under heat-shrink and connect it to J10-10. Do not use the Robu TCRT5000 IR Reflex Tracking Sensor Module (SKU 699619) as CH-020: it is a 5 V comparator/digital-output PCB with a different mechanical and electrical interface. D-016's no-board-in-the-keel design remains in force.
+
+**Reason:** the bare sensor is the part envelope and pin-level interface specified by the existing keel CAD and D-016 lead assembly. The Robu module listing describes a 35 × 10 mm PCB and digital comparator output; it cannot fit the 7.6 mm sensor service pocket or connect directly to the four-wire analog/LED-drive interface.
+
+**Procurement distinction:** the sensor type is settled, but no supplier order or receipt is recorded. The Robocraze pack-of-five listing remains a sourcing candidate; confirm that delivered parts are separate four-lead TCRT5000 packages and verify Vishay manufacturer provenance before representing them as genuine Vishay parts. A seller's generic TCRT5000 listing alone does not establish that provenance.
+
+**Release checks remain open:** receive and measure the part, assemble and fit the sleeved lead in the real keel, then complete the documented 8/10/12 mm floor/edge, ambient-light, motor-running-noise and unplugged-fault checks. Selection does not mean the optical cliff function has passed; the nominal 10 mm floor gap remains a test risk because the datasheet's peak response is at 2.5 mm.
+
+## D-022
+
+**2026-09-30 · Chassis / fastener sourcing and J12/J13 stacks · CANDIDATES; supplier confirmation and fit qualification open**
+
+**Decision:** when OnlyScrews did not show a suitable exact item, record the best next-source candidate or a supplier quote request in the canonical BOM. Do not represent a family listing or a near size as confirmed stock or a drop-in part.
+
+**Joint stack candidates:** J12 / CH-038 uses an M3 × 12 hex-socket countersunk screw candidate, based on the modeled 4 mm deck and 8 mm tapped engagement. J13 / CH-035–037 uses M4 × 12 button-head bolts, accessible plain M4 hex nuts and the existing Ø4 × 8 dowel candidate. The modeled J13 stack is 11.2 mm, leaving 0.8 mm nominal bolt projection without washers. The BOM and [joint register](01-chassis/v1/joint-register.md) now record these choices and the needed seat, engagement, clearance, access and fit checks.
+
+**Other source decisions:** seek DIN 7984 low-head screws from Royal Fasteners; use the Desertcart M3 × 5.7 × 4.6 insert variant only if the exact option is confirmed and coupons pass; use JCPlas B4B66/B4B67 plastic thread-formers as quote/sample candidates for M2 joints; use UAVstore's M3 × 18 button screw option as a sample candidate; and ask Royal Fasteners whether it can supply the still-unconfirmed M3 × 2.5 DIN 916 cup-point set screw. Industrybuying's Loctite 641 is the source candidate for bearing retention, separate from Loctite 222 threadlocker. Probots is the primary candidate for exact 2.5 × 100 mm cable ties, with RoboComp as a backup. CH-061 remains an OnlyScrews candidate with a marginal 0.05 mm nominal radial interference in its current pilot and requires a coupon.
+
+**Status and limits:** source pages and stock were reviewed on 2026-09-30; availability may change. No suppliers were contacted and no fasteners ordered or received. CH-030/060 exact stock and head dimensions, CH-055's 2.5 mm availability, plastic-screw geometry/pilot, and all physical fit/proof checks remain open. No CAD geometry changed under this decision.
+
+
+## D-023
+
+**2026-09-30 · Chassis / fastener availability update · CH-035 and CH-038 reported available; CH-030/055/060 unsourced**
+
+**Builder-reported availability:** CH-035, M4 × 12 mm hex-socket button-head SS304, is available from OnlyScrews. CH-038, M3 × 12 mm Phillips CSK mild-steel black-oxide, is available. The CH-038 product URL was not supplied, and the previously inspected OnlyScrews page showed a different SS304 item with conflicting stock text; confirm the received part's identity and countersink fit. Neither report records an order or receipt.
+
+**Open sourcing:** the builder could not find a buyable match from the Royal Fasteners leads. CH-030 DIN 7984 M3 × 6 low head, CH-060 DIN 7984 M3 × 8 low head, and CH-055 DIN 916 M3 × 2.5 cup-point remain unsourced. No near-size substitute is approved.
+
+**Image kit:** the pictured assortment contains M5 screws, M5 washers and M5 nuts. It does not match the chassis fastener sizes and is not needed for the listed M3/M4 joints; do not buy it for this BOM.
+
+**Changed:** updated the BOM availability notes, chassis snapshot and fastener sourcing review. No CAD change. J12/J13 received-part fit checks remain open.
+
+
+## D-024
+
+**2026-09-30 · Chassis / remaining fastener source leads · OPEN; exact size and availability to confirm**
+
+**New leads:** for CH-030 DIN 7984 M3 × 6 and CH-060 DIN 7984 M3 × 8, request exact standard/length and samples from ACME Fasteners through its [TradeIndia low-head socket screw listing](https://www.tradeindia.com/products/low-head-socket-cap-screw-din-7984-or-din-6912-5649111.html). The page is marked in stock and says samples are available, but it does not show the exact M3 lengths or clarify whether its inventory is DIN 7984 versus DIN 6912. Confirm dimensions and standard before treating it as a match.
+
+For CH-055 DIN 916 / ISO 4029 M3 × 2.5 cup-point, [Dalloyed Fasteners](https://www.dalloyedfasteners.com/grub-screw.html) is an Indian manufacturer lead for the ISO 4029/DIN 916 family and M3 grub screws. Its published page does not list a buyable M3 × 2.5 item; ask whether it can supply this short length and provide a sample. The M3 × 3 OnlyScrews item remains an unapproved alternate because it is 0.5 mm longer.
+
+**Changed:** BOM and sourcing review now record the new supplier leads. No supplier was contacted and no purchase or physical fit is recorded. The three exact fastener rows remain open pending source confirmation and received-part fit.
+
+## D-025
+
+**2026-09-30 · Chassis / mixed Phillips-CSK fastener assortment · CANDIDATE; source and fit unverified**
+
+**Correction:** the later assortment image contains M3, M4 and M5 Phillips countersunk screws, plus matching M3/M4/M5 nuts and washers; it is not an M5-only kit. The M3 × 12 compartment is a possible source for CH-038, pending seller confirmation of material/grade and measured countersink dimensions. The M4 × 12 compartment is countersunk and does not replace the selected M4 × 12 button-head candidate for CH-035. The earlier separate image was an M5 button-head assortment and does not match the chassis fastener sizes.
+
+**Changed:** clarified the chassis BOM and fastener sourcing review. No kit link, purchase, receipt or fit check is recorded.
+
+## D-026
+
+**2026-09-30 · Chassis / battery and ballast CAD (CH-022, CH-038, J12) · ACTIVE; PCB-01 height and received-part fit open**
+
+**Why:** an audit found the CAD out of step with the BOM. The two 25R cells were 0.2 mm apart, but the BOM notes Samsung asks for more than 1 mm. CH-038 is a countersunk screw, but the CAD modeled a cylinder head in a flat counterbore. The TCRT mass note said ~300 mm, but CH-020 specifies a 350 mm lead. `chassis-v1.step` also predated the latest source edits.
+
+**Changed in `01-chassis/v1/cad/body_chassis_model.py`:**
+- **Cells:** `BATTERY_CELL_PITCH` went from 18.6 to 19.5 mm, giving a 1.1 mm gap at the 18.4 mm maximum cell diameter. The pack envelope grows to 38.5 × 67.0 × 23.5 mm. The tub front wall stays at X 67, so the rear wall moves 0.9 mm back to X 24.0 and the pack centre to X 46.25. The hatch, deck opening and shell floor opening follow from the same constants.
+- **CH-038 / J12:** the ISO 7046-1 M3 × 12 head is modeled as a 90° cone to the Ø5.5 rim with k 1.65. It sits in a 90° deck countersink, Ø6.5 at the deck top, 0.1 mm below flush. The bar's tapped holes deepen from 8 to 9 mm, giving 8.1 mm engagement with 0.9 mm tip clearance; before, the tip reached the hole floor. The screw mass now comes from the modeled head.
+- **TCRT mass note** now says 350 mm (CH-020). The mass is unchanged.
+
+**Mass register:** the ballast row went from 81.6 to 81.1 g (lighter CSK heads, deeper holes). The battery row centroid moves −0.45 mm in X. Total mass went from 2605.5 to 2605.0 g and CoM X from +19.05 to +19.03 mm (h 105.87 mm). a_tip is 1.763 m/s², against a 1.582 minimum. Measured printed-volume changes (hatch +126, tub walls +52, front deck −134, shell −162 mm³) come to less than 0.2 g, so those rows were not edited.
+
+**Checks:** the new `cad/check_battery_ballast.py` (about 10 min) passes all ten rows and writes `generated/battery-ballast-checks.json`. Those rows cover pack clashes, cell gap, tub margins (1.8 mm front/rear, 1.5 mm side), ballast clashes, head seat, screw length, tip clearance and the CoM margin line. It reports four overlaps as OPEN. They are identical, or differ only by the lengthened hatch, in a copy of the model with this change reversed:
+- **Hatch flange × shell floor:** 1689 mm³ (1665 mm³ before). The flange is wider than the shell opening. This is a real, unresolved interface issue that the Sep 27 saved report does not show.
+- **Front deck × shell:** 39 mm³.
+- **Front deck × power-board proposal envelopes:** 178 mm³.
+- **Front deck × IMU screws:** 25 mm³, by design.
+
+The full `check_layout.py` was not rerun. `chassis-v1.step` was rebuilt from the current source. Its product list also reflects earlier source changes: the DRV8833 and GP2Y0A21 envelopes and the Ø3 × 1.5 magnet.
+
+**Changed docs:** the chassis BOM battery note, the CH-022 and CH-038 rows in `BOM.csv`, joint-register J12 and the CAD README.
+
+**Open:** the PCB-01 height is still a 2.9 mm placeholder, pending measurement. The pack build must hold the 1.1 mm cell gap. The received CH-038 head angle and diameter must be checked against the seat. The hatch/shell interface is unresolved. A full `check_layout.py` rerun is needed before release.
+
+## D-027
+
+**2026-09-30 · Chassis / purchased-part models (CH-017, CH-018; J08A, J08C) · ACTIVE; received-unit fit open**
+
+**Why:** the builder asked why the Adafruit driver was only a box, and for other boxed modules to be found and fixed. Two purchased modules in the chassis v1 export were boxes: the Adafruit #3297 driver and the GP2Y0A21YK0F.
+
+**Sources** (details in [purchased/README.md](01-chassis/v1/cad/purchased/README.md)):
+- **step.parts:** has neither part (searched 2026-09-30).
+- **Sharp:** a community STEP of the A21 sits byte-identical in two unrelated GitHub repositories. It matches the Sharp datasheet outline (E4-A00201EN) to 0.05 mm.
+- **Adafruit:** no STEP exists. `purchased/adafruit_3297_drv8833.py` builds one from Adafruit's own Eagle board file: outline, corner radii, holes and part placements. Package bodies are nominal, and the terminal-block height is estimated.
+
+**What the real sensor showed:** the model had the package wrong, and Layout 02 had it wrong with the A41 STEP too. It read the connector as the lens face, so the A41 in Layout 02 was looking upward.
+- The lenses and the Ø3.2 ear holes face the same way.
+- The package is 13.5 mm deep along the optical axis, and 18.9 mm tall because the connector sits on one edge.
+- The ears span 44.5 mm, but the pod is 35 mm wide.
+
+**Builder decisions (2026-09-30):** trim both ears to the 29.5 mm body and clamp the body between seat and lid. Solder the J10-8 wires to the S3B-PH pins, with no plug.
+
+**Changed in CAD (`body_chassis_model.py`):**
+- **Sensor:** the STEP (ears trimmed in the model) sits lenses +X, connector up, face at X 128, on the Z 35 seat. The optical axis moves from Z 40.3 to Z 41.5 (lens 6.5 above the body bottom), and the window follows.
+- **Pod:** the nose top rises from Z 49 to Z 51. The lid underside is level at Z 49 all the way to the face, replacing the step down over a "lens hood". The front pocket is ±15.0, up from ±14.0. The lid screw moves to (111.8, −11.8), behind the sensor, from (124.6, −11.8), which was inside the real sensor.
+- **Lid hump:** the lid has a hump over the header and a 3 mm soldered-lead reserve, 1.2 mm walls, top at Z 58.6. It runs 11.5 mm rearward so the D-011 11 mm forward slide still works, and it gives the lead a path back and down behind the sensor.
+- **Cap:** the cap has a top notch so the hump clears its 3 mm travel. The ear slots stay, now vestigial.
+- **Drivers:** the #3297 boards lie flat at Z 66 with their long side along X and the terminal block forward, 10.1 mm tall. They are centred 1.5 mm further back, at X 44.5. The real PCB corner otherwise reaches 0.7 mm into the front body-mount doglegs; the old box overlapped them by about 20 mm³.
+
+**Mass:** the nose row goes from 18.7 to 18.9 g (measured pod/lid/cap volume +0.27 cm³). The driver row moves to X 44.5. The register total is 2605.2 g, with CoM (+19.03, 0.16, 105.86) and a_tip 1.763 m/s² against 1.582.
+
+**Checks:**
+- `check_nose_joints.py`: all 12 rows pass.
+- Nose clash sweep: pod, lid, sensor, cap at rest and at 3 mm, against the body, frame, electronics and harness. Only the designed insert interference shows, and the optical axis is unobstructed. The sensor has 0.5 mm to the lid and 0.5 mm to the cap at full travel.
+- Driver sweep: no clashes, 0.8 mm to the dogleg.
+- `check_nose_service.py` subset C: cap, lid, sensor and lid-screw paths are clear.
+  - `hall_board_up` now needs the sensor removed first (the sweep was updated); the old order hit the sensor at 3 mm.
+  - The subset run overwrote the full report, so I restored the committed full report and merged the rerun rows (§) into it.
+- `chassis-v1.step` rebuilt. The full `check_layout.py` was not rerun.
+
+**Changed docs:** `purchased/` with its README, the CH-018 row in `BOM.csv`, the chassis BOM A21 note, joint-register J08A/J08C (J08A still named the A41), the CAD README and `check_layout.py` labels.
+
+**Still boxes:** the PCB-01 protection module has no drawing or model and an unmeasured height. The custom boards (PCB-07, the Hall carrier, the power-board proposals) are the project's own designs.
+
+**Open:** check the received A21 and #3297 against the STEPs; ear-trim quality; soldered-lead strain relief; hump and cap-notch print and dust ingress; bench-check the stop-path timing (unchanged).
