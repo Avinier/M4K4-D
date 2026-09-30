@@ -30,6 +30,17 @@ The [frame print-split study](frame-split/README.md) remains a separate review v
 - **Lid:** a rear tongue sits under the shell band, and one M2 × 8 countersunk screw holds the front.
 - **J10-8 cable:** it leaves through a round-cornered slot in the pod's back wall and rises through a Ø5 bore in the crossmember and deck at (86, −31).
 
+**Rear TCRT keel ([D-014](../../../decisions.md#d-014)):** covers joints J09 and J10.
+
+- **Keel:** four ISO 4762 M3 × 30 screws, driven from below into CNC Kitchen M3 × 5.7 inserts in the rear crossmember.
+- **Sensor:** the TCRT sits on a screwed bezel that also carries the guard lips. It swaps from below with the keel on.
+- **Height:** 1 mm shims set the optical height: two give Z 10, zero to four give 12 to 8.
+- **Wear shoe:** it slides in on a dovetail and is held by one M2 screw.
+- **J10-10 cable:** it rises out of the keel top behind the crossmember with a 30 mm slack loop and a zip-tie lug, and runs to the C3 carrier.
+- **Lead:** there is no board in the keel. The TCRT is soldered to a 4-wire GH lead that plugs into C3 J10-10 ([spec](../rear-tcrt-lead.md), [D-016](../../../decisions.md#d-016)); the keel only comes off after the sensor is pulled out below.
+
+After a keel change, run `check_rear_keel.py` (about 2 min). It writes `generated/rear-keel-checks.json`.
+
 After a nose change, run `check_nose_joints.py` (about 30 s, the J07/J08 rows of `check_layout.py`), then `check_nose_service.py` (about an hour; pass sweep names to run a subset). It sweeps the caster, cap, lid, sensor and switch removal paths and the tool paths with the body installed, and writes `generated/nose-service.md`. The full `check_layout.py` carries the J07/J08 geometry checks.
 
 ## Chassis boundary for v1

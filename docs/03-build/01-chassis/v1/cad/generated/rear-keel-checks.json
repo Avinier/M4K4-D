@@ -1,0 +1,182 @@
+{
+  "keel_stack_has_no_clashes": {
+    "pass": true,
+    "detail": [
+      {}
+    ]
+  },
+  "keel_seats_on_crossmember": {
+    "pass": true,
+    "detail": []
+  },
+  "keel_stack_clears_shell": {
+    "pass": true,
+    "detail": [
+      {}
+    ]
+  },
+  "keel_screws_engage_inserts_5mm": {
+    "pass": true,
+    "detail": [
+      {
+        "REAR_KEEL_M3X30_SCREW_1": 5.5,
+        "REAR_KEEL_M3X30_SCREW_2": 5.5,
+        "REAR_KEEL_M3X30_SCREW_3": 5.7,
+        "REAR_KEEL_M3X30_SCREW_4": 5.7
+      }
+    ]
+  },
+  "keel_screw_tips_inside_clearance": {
+    "pass": true,
+    "detail": [
+      {
+        "REAR_KEEL_M3X30_SCREW_1": 39.5,
+        "REAR_KEEL_M3X30_SCREW_2": 39.5,
+        "REAR_KEEL_M3X30_SCREW_3": 42.0,
+        "REAR_KEEL_M3X30_SCREW_4": 42.0
+      }
+    ]
+  },
+  "crossmember_insert_wall_ge_1p5": {
+    "pass": true,
+    "detail": [
+      {
+        "REAR_KEEL_HEATSET_INSERT_1": 2.2,
+        "REAR_KEEL_HEATSET_INSERT_2": 2.2,
+        "REAR_KEEL_HEATSET_INSERT_3": 1.7,
+        "REAR_KEEL_HEATSET_INSERT_4": 1.7
+      }
+    ]
+  },
+  "keel_screws_drivable_from_below_keel_on": {
+    "pass": true,
+    "detail": [
+      {
+        "REAR_KEEL_M3X30_SCREW_1": {},
+        "REAR_KEEL_M3X30_SCREW_2": {},
+        "REAR_KEEL_M3X30_SCREW_3": {},
+        "REAR_KEEL_M3X30_SCREW_4": {}
+      }
+    ]
+  },
+  "height_shims_clear_tcrt": {
+    "pass": true,
+    "detail": [
+      {
+        "REAR_TCRT_HEIGHT_SHIM_1": 0,
+        "REAR_TCRT_HEIGHT_SHIM_2": 0
+      }
+    ]
+  },
+  "tcrt_face_on_bezel_ledge": {
+    "pass": true,
+    "detail": [
+      10.0,
+      4.296
+    ]
+  },
+  "j09_height_range_pm2": {
+    "pass": true,
+    "detail": [
+      [
+        12.0,
+        11.0,
+        10.0,
+        9.0,
+        8.0
+      ]
+    ]
+  },
+  "sensor_stack_clears_keel_across_j09_range": {
+    "pass": true,
+    "detail": [
+      {
+        "8.0": 0.0,
+        "12.0": 0.0
+      }
+    ]
+  },
+  "guard_lips_below_face_above_shoe": {
+    "pass": true,
+    "detail": [
+      7.0
+    ]
+  },
+  "sensor_and_lead_drop_out_below_keel_on": {
+    "pass": true,
+    "detail": [
+      0.0,
+      0.0
+    ]
+  },
+  "shoe_slides_out_forward": {
+    "pass": true,
+    "detail": [
+      0.0
+    ]
+  },
+  "keel_drops_30mm_clear": {
+    "pass": true,
+    "detail": [
+      0.0
+    ]
+  },
+  "pigtail_leaves_through_keel_top": {
+    "pass": true,
+    "detail": [
+      0
+    ]
+  },
+  "j10_10_route_modelled": {
+    "pass": true,
+    "detail": [
+      [
+        "HARNESS_REAR_TCRT_J10_10_SERVICE_LOOP",
+        "HARNESS_REAR_TCRT_J10_10_RISER",
+        "HARNESS_REAR_TCRT_J10_10_RUN_OVER_PCB04",
+        "HARNESS_REAR_TCRT_J10_10_DROP_TO_C3",
+        "HARNESS_REAR_TCRT_J10_10_RISE_TO_PLUG"
+      ]
+    ]
+  },
+  "service_loop_ge_30mm": {
+    "pass": true,
+    "detail": [
+      47.0
+    ]
+  },
+  "j10_10_route_clear": {
+    "pass": true,
+    "detail": [
+      {}
+    ]
+  },
+  "strain_relief_lug_beside_riser": {
+    "pass": true,
+    "detail": [
+      0.2
+    ]
+  },
+  "_volumes_cm3": {
+    "pass": true,
+    "detail": [
+      {
+        "REAR_KEEL_FACETED_BODY": 14.643,
+        "REAR_KEEL_REPLACEABLE_WEAR_SHOE": 0.396,
+        "REAR_TCRT_BEZEL_WITH_GUARDS": 0.303,
+        "REAR_TCRT_HEIGHT_SHIM_1": 0.12,
+        "REAR_TCRT_HEIGHT_SHIM_2": 0.12
+      }
+    ]
+  },
+  "_keel_body_centroid": {
+    "pass": true,
+    "detail": [
+      [
+        -39.73,
+        -0.01,
+        20.35
+      ]
+    ]
+  }
+}

@@ -20,6 +20,10 @@ The central record of every decision and change made during the build phase. New
 | [D-011](#d-011) | 2026-09-30 | Chassis / nose (J07, J08) | Ball-transfer nose closed in CAD: caster screwed from below into seat inserts, sliding snap-retained touch cap on a constant nose, ESE22MV21 switch, screwed lid, J10-8 cable exit | ACTIVE; switch superseded by D-013; HOLD on received-caster measurement, coupons and physical tests |
 | [D-012](#d-012) | 2026-09-30 | Chassis / axle | Select 688 ZZ, 8 × 16 × 5, from the OnlyScrews listing; revise paired-bearing seats | ACTIVE; HOLD on supplier stock/lot evidence, drawing/load data, fit coupons, clearance rerun and retention test |
 | [D-013](#d-013) | 2026-09-30 | Chassis / nose (J08) | Nose contact sensing: DRV5055 linear Hall sensor and cap magnet, firmware trip at about 0.7 mm; replaces the D-011 ESE22MV21 switch; cap return springs | ACTIVE; HOLD on bench trip-point check and the PCB-10 J10-8 pin change |
+| [D-014](#d-014) | 2026-09-30 | Chassis / rear keel (J09, J10) | Rear TCRT keel closed in CAD: M3 × 30 into crossmember inserts, bezel-and-shim TCRT retention with ±2 mm height, dovetail shoe, J10-10 disconnect at the keel with a route behind the crossmember | ACTIVE; HOLD on CH-020 breakout, CH-009/CH-010 materials, coupons and physical tests |
+| [D-015](#d-015) | 2026-09-30 | Chassis / rear TCRT (CH-020, J09B) | Custom passive TCRT board that floats on the seated sensor; J10-10 becomes +3V3, GND, TCRT_OUT (ADC), LED_EN | SUPERSEDED by D-016 |
+| [D-016](#d-016) | 2026-09-30 | Chassis / rear TCRT (CH-020, J09B) | No board: TCRT soldered to a GH4 lead that plugs into C3 J10-10; LED switch and load on PCB-10 | ACTIVE; HOLD on the PCB-10 J10-10 change and bench item 20 |
+| [D-017](#d-017) | 2026-09-30 | Chassis / rear keel wear parts (CH-009, CH-010) | Recommendation: PETG for the wear shoe and the TCRT bezel; UHMW-PE tape on the shoe as an optional upgrade | RECOMMENDED; confirm after the item 20–22 tests |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -487,3 +491,168 @@ The mass row is unchanged at about 0.3 g for the sensing parts.
 - the Hall plate depth from TI's package drawing;
 - the PCB-10 J10-8 pin change and the C3 firmware threshold;
 - magnet polarity at assembly.
+
+---
+
+## D-014
+
+**2026-09-30 · Chassis / rear keel (CH-008, CH-009, CH-010, CH-020, CH-034, CH-067 to CH-072; J09A/B, J10A/B) · ACTIVE; HOLD on the CH-020 breakout, CH-009/CH-010 materials, coupons and physical tests**
+
+**Decision:** close the rear TCRT keel's attachment, cartridge, cable and wear-part joints in CAD (to-do sections A–D). Joint details are in the [joint register](01-chassis/v1/joint-register.md#j09a--rear-keel-to-rear-crossmember).
+
+**Why:** the keel screws ran into solid crossmember plastic, and the TCRT had no retention. The cable's Ø6 holes would not pass the 6.5 mm GH plug, and the old riser clipped them. The height shim overlapped the leads, and the shoe and guards were only fused to the keel.
+
+**CAD** ([`body_chassis_model.py`](01-chassis/v1/cad/body_chassis_model.py)):
+
+- **J09A, keel to crossmember:**
+  - Four ISO 4762 M3 × 30 screws go into CNC Kitchen M3 × 5.7 inserts, fitted from below. Engagement is 5.5 / 5.7 mm; the insert length caps it below the 6–8 mm first asked for.
+  - The rear pair moves from X −45.5 to −44.0. At −45.5 the insert left 0.2 mm of wall to the crossmember's rear face; the wall is now 1.7 mm (2.2 mm at the front face).
+  - The counterbores are Ø6.5, and the crossmember's Ø6 cable bore is closed.
+- **J09B, TCRT to keel:**
+  - The pocket is open below the keel. The TCRT sits face down on the 0.6 mm end ledges of a printed bezel.
+  - The leads go into a pass-through socket on the breakout, which sits in an open-top cavity behind the crossmember.
+  - The height is set by 1 mm shims between the bezel and the keel belly (Z 12): two shims give Z 10, and zero to four give 12 to 8.
+  - One M2 × 10 and a moulded pin fix the bezel. The old steel shim that overlapped the leads is removed.
+- **Keel section:** the sensor flat widens to a 9.5 mm half-width, and a station at X −46 keeps the belly flat over the shim stack. The pocket wall at the chamfered edge goes from about 1.6 to 3.9 mm (to-do 15). The keel still has 1.0 mm of clearance in the 10.5 mm shell slot.
+- **J10A, wear shoe:** it has a 2.5 mm dovetail tongue in a groove open at the front, held by one M2 × 6 thread-forming screw across the tongue.
+- **J10B, guards:** both guard lips are now part of the bezel.
+- **J10-10 cable:**
+  - The disconnect is a top-entry GH4 on the breakout, so the keel comes off with four screws and one plug.
+  - The cable leaves upward behind the crossmember, in the 7.6 mm gap to the shell wall, so neither the crossmember nor the deck needs a hole.
+  - `harness_routes()` gains a 30 mm slack loop, a riser beside PCB-02 and a run over PCB-04, under the compute tray, to C3 J10-10.
+  - A zip tie through a new lug on the crossmember's rear face gives the strain relief.
+- **Breakout (CH-020):** still unselected. It is modelled as a 12.3 × 13 mm custom-PCB reserve; the 32 × 14 mm LM393 module does not fit.
+
+**Mass:** REAR_SKID_KEEL goes from 12.0 g at (−39.9, 0, 20.4) to 19.6 g at (−40.2, 0, 22.4), with volumes measured from the solids. The model now reports 2605.1 g with the CoM at (19.07, 0.16, 105.87). The margin line needs X ≥ 17.08.
+
+**BOM:** CH-008, CH-009, CH-010 (now one bezel), CH-020 and CH-034 are updated. New rows: CH-067 inserts (4), CH-068 shims (2), CH-069 to CH-071 M2 screws, CH-072 zip tie.
+
+**Verification (2026-09-30):**
+
+- New `cad/check_rear_keel.py` (about 2 min): 21 of 21 checks pass. It writes [rear-keel-checks.json](01-chassis/v1/cad/generated/rear-keel-checks.json). It covers:
+  - no clashes in the keel stack;
+  - screws in clear holes, with at least 5 mm of engagement;
+  - hex-key paths from below;
+  - shims clear of the TCRT;
+  - the ±2 mm range;
+  - sensor swap from below with the keel on;
+  - the shoe sliding out forward;
+  - the keel dropping 30 mm;
+  - the board lifting out;
+  - the J10-10 route clear of the frame, shell, electronics, body frame, panels, audio and sensors.
+- `check_layout.py` keel rows are updated: the count-only screw row is replaced, and the shoe/guard backing rows follow the new parts. The pitch order (shoe 6.05°, guards 6.49°, keel 8.97°, sensor 10.43°), backing and CoM rows were run on their own and pass.
+- `chassis-v1.step` is rebuilt.
+- The full `check_layout.py` has not been rerun.
+
+**Open:**
+
+- to-do 8: select the CH-020 breakout and socket;
+- to-do 12: choose the wear-shoe and bezel materials;
+- E (print orientation and exports) and the rest of F;
+- G (optical height on real floors, service timing, tip order).
+
+---
+
+## D-015
+
+**2026-09-30 · Chassis / rear TCRT (CH-020, CH-071; J09B) · SUPERSEDED by [D-016](#d-016)**
+
+**Decision:** CH-020 is a custom passive board. Its spec was removed by D-016. The TCRT5000 plugs into two 1 × 2 female headers underneath the board, and a top-entry GH4 on top is the J10-10 disconnect. The board has no comparator: the C3 node pulses the LED through a MOSFET and reads the phototransistor on an ADC1 pin. It subtracts ambient light, and any fault reads as a cliff.
+
+**Why:** the builder asked for an off-the-shelf board first, and none fits the keel cavity of about 13 × 14.8 mm:
+
+- the LM393 modules are 35 × 10 mm;
+- the Soldered breakout is 22 × 22 mm;
+- the Pololu QTR-1A fits, but carries a QRE1113 rated to 6 mm, against our 10 mm optical height, and cannot be swapped from below.
+
+**Changes to D-014:**
+
+- **Floating board:** the TCRT5000's standard 3.5 mm leads cannot stay engaged over ±2 mm in a socket on a fixed board. The board now rides on the fully seated sensor and moves with the shims (Z 20–25.6). A ledge at Z 19.8 only catches it while the sensor is out. The M2 × 5 board screw (CH-071) is dropped.
+- **Socket:** the datasheet lead pitch is 5.5 × 2.54 mm, so the D-014 4-way block becomes two 1 × 2 strips, with the package's mounting clips between them.
+- **Board size:** the GH4 moves to +Y 4.6 to clear the strips' solder joints. The board grows to 14.2 mm in Y, and the cavity to ±7.4 (keel side wall 2.1 mm).
+
+**Interface change:** J10-10 changes from 5 V / GND / analog / digital to +3V3 / GND / TCRT_OUT / LED_EN. PCB-10 must provide an ADC1 pin with a 100 kΩ pull-up (fail-safe when unplugged) and a spare GPIO.
+
+**CAD:** in `body_chassis_model.py`:
+
+- the board, the two header strips and the moved GH4 are modelled;
+- the cavity is widened and has a new ledge;
+- the J10-10 service loop is widened to Y +7;
+- the REAR_SKID_KEEL row goes from 19.6 to 19.4 g, without the M2 × 5 screw.
+
+**Verification (2026-09-30):**
+
+- `check_rear_keel.py` passes 23 of 23. The new rows cover:
+  - the sensor stack clearing the keel at both ends of the J09 range;
+  - the board sitting 0.2 mm above the ledge at the lowest setting;
+  - the board riding on the seated sensor.
+- `chassis-v1.step` is rebuilt.
+- The full `check_layout.py` has not been rerun.
+
+**Open:**
+
+- confirm the emitter end against the placed STEP;
+- check JST's BM04B land pattern against the 14.2 mm board edge;
+- confirm a 5.0 mm dual-leaf header part;
+- make the PCB-10 J10-10 change;
+- bench item 20, which sets R2 and checks the fail-safe.
+
+---
+
+## D-016
+
+**2026-09-30 · Chassis / rear TCRT (CH-020; J09B) · ACTIVE; HOLD on the PCB-10 J10-10 change and bench item 20**
+
+**Decision:** there is no board in the keel. The TCRT5000's legs are soldered to a JST GH 4-way pre-crimped lead (AWG28, 350 mm) under heat-shrink, and the lead plugs into C3 J10-10. The LED resistor, the LED switch MOSFET, the gate pull-down and the phototransistor load/pull-up go on PCB-10. Spec: [rear-tcrt-lead.md](01-chassis/v1/rear-tcrt-lead.md). Supersedes [D-015](#d-015).
+
+**Why:** the builder asked why a board was needed. Electrically it isn't: the D-015 board only carried a connector and a socket. The builder chose the simpler build over the two things the board gave:
+
+- **Keel removal** now needs the sensor pulled out first, and J10-10 unplugged at PCB-10.
+- **A sensor swap** replaces the sensor and its lead together.
+
+**Changes from D-015:**
+
+- **Keel:** the board cavity and ledge are removed, and the sensor pocket runs straight out through the keel top. This restores the full side walls. Keel body 14.64 cm³; the REAR_SKID_KEEL row is now 20.0 g at (−40.5, 0, 22.7).
+- **CAD:** a heat-shrink joint envelope and the lead are modelled, and the slack loop goes back to Y −26 to 3.
+- **J10-10:** pins are LED_A, LED_K, TCRT_OUT and GND. It is still a GH 4-way header, now wired to the PCB-10 circuit in the spec.
+- **Fail-safe:** an open lead or dead LED reads high through the PCB-10 pull-up, which is a cliff.
+
+**BOM:** CH-020 becomes the sensor and lead (CANDIDATE). CH-071 stays DROPPED.
+
+**Verification (2026-09-30):**
+
+- `check_rear_keel.py` passes 20 of 20.
+- The new rows cover:
+  - the sensor and lead dropping out below with the keel on;
+  - the lead leaving through the keel top without touching it;
+  - the stack clearing the keel across the J09 range.
+- `chassis-v1.step` is rebuilt.
+- The full `check_layout.py` has not been rerun.
+
+**Open:**
+
+- the PCB-10 J10-10 circuit;
+- bench item 20 (sets R2, includes a motors-running pickup check);
+- the joint sleeve fitting the 7.6 mm pocket on the real part.
+
+---
+
+## D-017
+
+**2026-09-30 · Chassis / rear keel wear parts (CH-009, CH-010; J10A/B) · RECOMMENDED; confirm after the physical tests**
+
+**Recommendation:** print the wear shoe and the TCRT bezel (with its guard lips) in **PETG**. The builder asked for a recommendation and delegated the choice.
+
+**Why PETG over PLA:**
+
+- **Impact:** the 1.5 mm guard lips and the shoe take floor strikes on a tip. PETG bends where PLA snaps.
+- **Screws:** both parts carry thread-forming M2 screws (CH-069, CH-070), and PLA tends to crack around them.
+- **Heat:** PLA softens around 55–60 °C and creeps under the screw clamp; PETG holds to about 75 °C.
+- **Same print:** the keel is already a PETG candidate, so all the keel parts print in one material.
+- TPU is excluded: its friction would grab the floor.
+
+**Optional upgrade, not modelled:** if the shoe wears fast or drags on carpet or tile, add UHMW-PE tape (about 0.25 mm) to its sole, and thin the shoe by the same amount so the floor clearance and tip order stay unchanged. Nylon (PA) is the better printed wear material, if a printer that can run it becomes available.
+
+**Changed:** CH-009 goes from OPEN to DESIGN, and CH-010's release check names PETG. J10A and J10B record the material. No CAD change.
+
+**Open:** retention, abrasion, floor-strike and snag tests (items 21–22); revisit after the tests.

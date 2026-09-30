@@ -19,10 +19,10 @@
 | J08A | Range sensor to pod | Defined in CAD (D-011) | Vibration retention and lens alignment |
 | J08B | Nose cap/snap fingers/Hall sensing to pod | Defined in CAD (D-011, D-013) | Bench trip point, spring return, finger fatigue, removal cycles |
 | J08C | Sensor lid to pod | Defined in CAD (D-011) | Dry-fit, removal cycles, screw strip torque |
-| J09A | Rear keel to rear crossmember | Incomplete/mismatched CAD | Add matching receivers; prove skid load path |
-| J09B | Rear TCRT cartridge to keel | Seat geometry only | Retention, optical height and cable strain relief |
-| J10A | Wear shoe to keel | No attachment modeled | Retention and floor-clearance test |
-| J10B | TCRT guards to keel | No attachment modeled | Retention and sensor-protection test |
+| J09A | Rear keel to rear crossmember | CAD defined (D-014) | Insert coupon; skid load and impact test |
+| J09B | Rear TCRT cartridge to keel | CAD defined (D-014, D-016); soldered lead, no board | PCB-10 J10-10 change; optical height on real floors |
+| J10A | Wear shoe to keel | CAD defined (D-014); PETG recommended (D-017) | Retention and abrasion test |
+| J10B | TCRT guards to keel | CAD defined in the J09B bezel (D-014) | Floor-strike and sensor-protection test |
 | J11A | Battery hatch to tub | Provisional geometry | Add screw/insert BOM items; retention test |
 | J11B | Battery pack to tub | Not fully defined | Restraint, isolation, access and safe removal |
 | J12 | Ballast bar to deck | Geometry modeled | Screw standard/length, receiver and tool/load check |
@@ -148,30 +148,30 @@
 
 ### J09A — rear keel to rear crossmember
 
-- **Parts/load path:** printed keel/skid seats against rear crossmember; intended skid load transfers to crossmember and both rails.
-- **Location/joint:** keel top is modeled at crossmember underside. Four vertical keel screw bores/screws are shown at two X stations and Y = ±5.5 mm.
-- **Hardware/clamp:** CH-034 lists four M3 screws, length open. Rear crossmember CAD has no matching vertical receiver bores/inserts at those four locations; its represented openings are rail-end joints and cable bore. Receiver/clamp path is undefined.
-- **Material/access/service:** candidate structural print; screws appear driven from underside with counterbores partly near shoe. Verify driver reach and head exposure after shoe installation.
-- **Proof/state:** add matching receivers in CAD and define screw length/engagement before calling it a joint. Then test skid impact, bending and retention. **Open; receiver geometry missing.**
+- **Parts/load path:** printed keel (CH-008) seats flat on the rear crossmember underside at Z 34; skid load goes through four screws into the crossmember and on to both rails.
+- **Location/joint:** four vertical screws at X −36.5 / −44.0, Y ±5.5. The rear pair moved 1.5 mm forward of the old X −45.5 so the insert keeps a wall to the crossmember's rear face.
+- **Hardware/clamp:** four ISO 4762 M3 × 30 (CH-034) into CNC Kitchen M3 × 5.7 inserts (CH-067) pressed from below; engagement 5.5 mm (front pair) and 5.7 mm (rear pair), limited by the insert length. Heads sit in Ø6.5 counterbores, recessed 0.5 and 1.5 mm. The old Ø6 cable bore through the crossmember is closed.
+- **Material/access/service:** screws drive from below with the keel, shoe and bezel fitted (hex-key paths clear in CAD). Keel removal: pull the sensor and its lead out below (J09B), then undo four screws.
+- **Proof/state:** CAD defined ([D-014](../../decisions.md#d-014)); `cad/check_rear_keel.py` passes. **Open:** insert pull-out coupon, strip torque, skid impact and bending test.
 
 ### J09B — rear TCRT cartridge to keel
 
-- **Parts/load path:** TCRT5000 cartridge sits in downward-facing keel pocket; guides/shim establish optical height; lead exits via cable channel/riser.
-- **Location/joint:** pocket, guides and 1 mm shim are modeled; no screw/clip/door retains the cartridge.
-- **Hardware/access/service:** breakout PCB is unselected; cable needs strain relief. Extraction direction and service access are undefined.
-- **Proof/state:** select PCB, retention and optical standoff; verify height, guard clearance, cable bend and replacement. **Open.**
+- **Parts/load path:** the TCRT5000 sits in a pocket open below the keel belly, face down on 0.6 mm end ledges of a printed bezel (CH-010). A 4-wire GH lead is soldered to its legs under heat-shrink (CH-020, [spec](rear-tcrt-lead.md), D-016) and leaves straight up through the pocket, which runs out through the keel top.
+- **Location/joint:** optical height = keel belly (Z 12) minus 1 mm shims (CH-068): two shims give the nominal Z 10; zero to four give Z 12 to 8 (±2 mm). The shims have a window, so nothing bears on the leads; the flexible lead and its slack loop take up the travel.
+- **Hardware/access/service:** one M2 × 10 thread-forming screw (CH-069) and a moulded Ø1.8 pin fix bezel and shims. Sensor swap from below with the keel on: screw out, bezel and shims off, unplug J10-10 at PCB-10 (rear panel off), cut the zip tie, and pull the sensor and lead down through the pocket. The keel comes off only after that; there is no disconnect at the keel. The lead rises behind the crossmember, with a 30 mm slack loop, a zip tie (CH-072) at a lug on the crossmember's rear face, and a route beside PCB-02 and over PCB-04 to C3 J10-10.
+- **Proof/state:** CAD defined (D-014). **Open:** PCB-10 J10-10 circuit, optical height on real floors, joint sleeve and lead bend in hardware.
 
 ### J10A — wear shoe to keel
 
-- **Parts/load path:** separate 12 × 10 × 2.5 mm shoe against keel belly, intended as replaceable floor-contact surface.
-- **Location/joint:** flat-backed shoe is modeled; no locator, fastener, bond or clip retains it against shear/snag.
-- **Material/access/proof:** wear material unselected (CH-009 OPEN). Define removal tool and floor gap; test abrasion, snag and retention. **Open; no attachment detail.**
+- **Parts/load path:** 12 × 10 × 2.5 mm shoe (CH-009) backed by the flat keel belly; a 2.5 mm dovetail tongue on its top runs in a groove open at the keel's front.
+- **Location/joint:** the shoe slides in from the front and stops on the groove end. One M2 × 6 thread-forming screw (CH-070) crosses the tongue from the keel's +Y side, with clearance in the keel and threads in the shoe.
+- **Material/access/proof:** PETG recommended ([D-017](../../decisions.md#d-017)). Swap: screw out, slide forward. **Open:** retention and abrasion test.
 
 ### J10B — TCRT guards to keel
 
-- **Parts/load path:** two separate guards protect optical face while preserving field of view.
-- **Location/joint:** CAD lips seat about 0.5 mm into keel belly; this is not positive retention.
-- **Hardware/access/proof:** no fastener/material selected (CH-010 OPEN). Define replaceable retention; confirm optical field/height; test floor strike and snag. **Open; no attachment detail.**
+- **Parts/load path:** both guard lips (Z 7.0–8.5) are part of the J09B bezel, so they are retained by its screw and pin and seat on the shim stack along their full length.
+- **Location/joint:** lips at Y ±5.6, X −61.5 to −49. They move with the sensor across the J09 height range, so the lip-to-face offset is constant (3 mm below the face).
+- **Hardware/access/proof:** as J09B; bezel in PETG (D-017). **Open:** floor-strike, snag and optical-field test.
 
 ### J11A — battery hatch to tub
 
@@ -234,7 +234,7 @@
 
 ## Release actions
 
-1. Close CAD receiver gaps: add J09A keel-to-crossmember receivers and positive retainers for J09B and J10A/B (J07/J08 closed in CAD by D-011). Confirm the J07B crossmember insert fit and screw engagement with the real hardware.
+1. CAD receiver gaps are closed: J07/J08 by D-011, J09A/B and J10A/B by D-014. Confirm the J07B and J09A crossmember insert fit and screw engagement with the real hardware.
 2. Add BOM rows for J05, J06, J11A and J16 hardware; select J12 screw and complete J13 clamp stack.
 3. Select printer/nozzle/material/orientation and insert articles. Print coupons for bearing fits, insert orientations, keys/tongues and thin walls; record dimensions and pull-out results.
 4. Update J01/J03 using measured motor/stub hardware when received. Build axle rig and record test results separately from CAD checks.
