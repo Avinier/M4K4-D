@@ -2,7 +2,7 @@
 
 **Status:** D-007 axle stack accepted and modelled; J04 carrier-to-frame architecture added to CAD on 2026-09-29. Neither is physically proven: the motor is not on hand, parts have not been printed or assembled, and the stub has not been quoted. This page records the selected design plus the remaining coupon and test gates.
 
-The motor is the **ThinkRobotics MOT3001-6V230RPM** ([D-003](../../decisions.md#d-003)). No unit is on hand ([D-005, motor interface](../../decisions.md#d-005)). Every motor-facing dimension is therefore a supplier-drawing or CAD assumption, listed in §7. The [motor interface sheet](motor-interface-sheet.md) is parked for later fit evidence.
+The motor is the **ThinkRobotics MOT3001-6V230RPM** ([D-003](../../../decisions.md#d-003)). No unit is on hand ([D-005, motor interface](../../../decisions.md#d-005)). Every motor-facing dimension is therefore a supplier-drawing or CAD assumption, listed in §7. The [motor interface sheet](motor-interface-sheet.md) is parked for later fit evidence.
 
 All positions are **|Y| from the robot centre plane**, the same convention as the CAD. The fixed constraints are the 170 mm track (wheel mid-plane |Y| 85), the Ø84 × 24 mm wheel (|Y| 73–97) and the motor faceplate at |Y| 69.
 
@@ -21,11 +21,11 @@ All positions are **|Y| from the robot centre plane**, the same convention as th
 
 | Case | Value | Basis |
 |---|---:|---|
-| Static radial load per wheel | 10.4 N | 2.570 kg × (1 − 0.176 ball share) ÷ 2, from the [mass register](cad/generated/mass-properties.md) before D-007 |
+| Static radial load per wheel | 10.4 N | 2.570 kg × (1 − 0.176 ball share) ÷ 2, from the [mass register](../cad/generated/mass-properties.md) before D-007 |
 | Bump/drop radial load | 31 N | 3 g on the static load |
 | Lateral scrub at the tyre | 8.3 N at r 42 → 350 N·mm | μ 0.8 on the static load |
 | Combined moment at the bearing pair | ≈ 459 N·mm | 350 N·mm + 31 N × 3.5 mm from the wheel plane to the revised pair centre |
-| Drive torque, design value | 0.40 N·m | 2 × the estimated 0.20 N·m stall ([D-003](../../decisions.md#d-003)) |
+| Drive torque, design value | 0.40 N·m | 2 × the estimated 0.20 N·m stall ([D-003](../../../decisions.md#d-003)) |
 | Outward axial hold, design value | 100 N | About 4× the load of lifting the robot by one wheel |
 
 ## 3. The stack
@@ -51,7 +51,7 @@ face |            | stub ━━━━━━━┿━━━━━━━━━━�
 | 86.51–87.71 | **Retaining cap** ×2 | CH-052 | 1.2 mm aluminium | ID Ø12.5 bears on the outer ring only. OD Ø32. 4 × Ø3.4 at R 12; 2 × Ø2.6 key holes at R 8.5. |
 | 69.7–89.35 | **Cap screws** ×8 | CH-053 | ISO 7380 M3 × 18 | Through cap and housing into the plate inserts; they clamp the housing and hold the outer rings outboard. |
 | 70.0–74.0 | **Inserts** ×8 | CH-054 | M3 × 4 brass heat-set | In the plate. |
-| 93.0–97.0 | **Wheel web** | CH-004 | PETG print | Pocket R 18 to 93; the stub flange turns inside it. Ø10 H7 bore through, 3 × Ø3.4 at PCD 16, flat seats for the heads. Adopted by the handed left/right [wheel model](cad/wheel/README.md) and imported into the chassis assembly. |
+| 93.0–97.0 | **Wheel web** | CH-004 | PETG print | Pocket R 18 to 93; the stub flange turns inside it. Ø10 H7 bore through, 3 × Ø3.4 at PCD 16, flat seats for the heads. Adopted by the handed left/right [wheel model](../cad/wheel/README.md) and imported into the chassis assembly. |
 | 91.0–98.65 | **Wheel screws** ×6 | CH-056 | ISO 7380 M3 × 6 | Through the web into the flange. The full 2 mm flange is threaded, with the tip flush at 91. Overall width over the heads is 197.3 mm, inside the 205 mm target. |
 
 **Load paths.**

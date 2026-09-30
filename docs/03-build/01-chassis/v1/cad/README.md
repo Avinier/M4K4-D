@@ -8,7 +8,7 @@ Copied from the Layout 02 working tree on 2026-09-27. STEP SHA-256: `73c63c29f7f
 
 **Changed after the copy:** the drive gearmotors are now the ThinkRobotics MOT3001-6V230RPM (a generic JGA25-370 with encoder). No vendor STEP exists, so they are modelled parametrically from the seller's drawing. The face screw pattern, tapped depth and gearbox length are assumptions until a unit is measured. See [decision D-003](../../../decisions.md#d-003) in the build ledger, which records every CAD change made in `03-build/`.
 
-The axle stack was rebuilt per [D-007](../../../decisions.md#d-007) and the bearing selection superseded by [D-012](../../../decisions.md#d-012) ([axle-stack.md](../axle-stack.md)): 5 mm motor plate, bolt-on printed housing for two 688 ZZ (8 × 16 × 5) bearings per side, aluminium cap, and turned stub with a set screw, flange and spigot. D-010 integrates the plate and front/rear cheeks into one keyed carrier per side, bolted to the split rails. The wheel bolts to the stub flange. The 608 pair, 2 mm diaphragm and countersunk face screws are gone. The supplier listing is currently sold out; maker, rating data, fits, stiffness, print tolerances and the physical axle rig remain open.
+The axle stack was rebuilt per [D-007](../../../decisions.md#d-007) and the bearing selection superseded by [D-012](../../../decisions.md#d-012) ([axle-stack.md](../research/axle-stack.md)): 5 mm motor plate, bolt-on printed housing for two 688 ZZ (8 × 16 × 5) bearings per side, aluminium cap, and turned stub with a set screw, flange and spigot. D-010 integrates the plate and front/rear cheeks into one keyed carrier per side, bolted to the split rails. The wheel bolts to the stub flange. The 608 pair, 2 mm diaphragm and countersunk face screws are gone. The supplier listing is currently sold out; maker, rating data, fits, stiffness, print tolerances and the physical axle rig remain open.
 
 The copied model still reads purchased STEP references and the Layout 04 head from `02-prototypes/RP-06-cad`. Those external paths are explicit in `body_chassis_model.py`. This is **not** a chassis-only model or a print release yet. Separate the chassis parts, resolve their joints and print settings, and rerun the checks before releasing v1.
 
@@ -26,7 +26,7 @@ The [frame print-split study](frame-split/README.md) remains a separate review v
 **Ball-transfer nose ([D-011](../../../decisions.md#d-011)):** covers joints J07 and J08.
 
 - **Caster:** the three caster screws are ISO 7380 M3 × 8, driven from below into CNC Kitchen M3 × 5.7 inserts in a 6 mm pod seat. Unsnap the housing and ball first to reach them.
-- **Touch cap:** it slides 3 mm on a constant-section nose, is held by two snap fingers, and is returned by two springs. Contact is sensed contactlessly by a DRV5055 Hall sensor reading a magnet in the cap ([D-013](../../../decisions.md#d-013), [board spec](../nose-hall-board.md)).
+- **Touch cap:** it slides 3 mm on a constant-section nose, is held by two snap fingers, and is returned by two springs. Contact is sensed contactlessly by a DRV5055 Hall sensor reading a magnet in the cap ([D-013](../../../decisions.md#d-013), [board spec](../research/nose-hall-board.md)).
 - **Lid:** a rear tongue sits under the shell band, and one M2 × 8 countersunk screw holds the front.
 - **J10-8 cable:** it leaves through a round-cornered slot in the pod's back wall and rises through a Ø5 bore in the crossmember and deck at (86, −31).
 
@@ -37,7 +37,7 @@ The [frame print-split study](frame-split/README.md) remains a separate review v
 - **Height:** 1 mm shims set the optical height: two give Z 10, zero to four give 12 to 8.
 - **Wear shoe:** it slides in on a dovetail and is held by one M2 screw.
 - **J10-10 cable:** it rises out of the keel top behind the crossmember with a 30 mm slack loop and a zip-tie lug, and runs to the C3 carrier.
-- **Lead:** there is no board in the keel. The TCRT is soldered to a 4-wire GH lead that plugs into C3 J10-10 ([spec](../rear-tcrt-lead.md), [D-016](../../../decisions.md#d-016)); the keel only comes off after the sensor is pulled out below.
+- **Lead:** there is no board in the keel. The TCRT is soldered to a 4-wire GH lead that plugs into C3 J10-10 ([spec](../research/rear-tcrt-lead.md), [D-016](../../../decisions.md#d-016)); the keel only comes off after the sensor is pulled out below.
 
 After a keel change, run `check_rear_keel.py` (about 2 min). It writes `generated/rear-keel-checks.json`.
 
@@ -56,4 +56,4 @@ The body shell/frame beyond its mounting interface, Pi 5 and audio, yaw stage, h
 
 The scoped export includes the first three rows: 2 gearmotors, 2 DRV8874 drivers, 2 wheels, 2 bearing pairs, the frame and body mount hardware, ball transfer/pod, rear skid/TCRT keel, battery pack, deck IMU, front range sensor, and nose touch assembly. It leaves out the C3 controller, power-distribution boards, E-stop, Pi, shell, body frame, audio, yaw stage, head, and cosmetic tail.
 
-**Open boundary decisions:** proof of the D-007/D-010 axle carrier (fits, insert retention, deflection, outward bearing retention and alignment); motor driver hardware; battery and harness mounting; rear-only cliff sensing and low-object contact coverage. The J04 geometry and test limits are recorded in [axle-stack §9](../axle-stack.md#9-j04-carrier-and-test-plan). Use the [RP-06 open items](../../../../02-prototypes/RP-06-cad/TODO.md) and [RP-03 gates](../../../../02-prototypes/RP-03-locomotion/gates.md) before setting the v1 release.
+**Open boundary decisions:** proof of the D-007/D-010 axle carrier (fits, insert retention, deflection, outward bearing retention and alignment); motor driver hardware; battery and harness mounting; rear-only cliff sensing and low-object contact coverage. The J04 geometry and test limits are recorded in [axle-stack §9](../research/axle-stack.md#9-j04-carrier-and-test-plan). Use the [RP-06 open items](../../../../02-prototypes/RP-06-cad/TODO.md) and [RP-03 gates](../../../../02-prototypes/RP-03-locomotion/gates.md) before setting the v1 release.

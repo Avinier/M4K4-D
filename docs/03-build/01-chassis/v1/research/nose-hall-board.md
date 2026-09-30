@@ -1,6 +1,6 @@
 # Nose Hall board (CH-064) and contact trip point
 
-**Status:** design, not ordered or built. Decision [D-013](../../decisions.md#d-013). CAD: `NOSE_HALL_*` and `NOSE_MAGNET` in [`body_chassis_model.py`](cad/body_chassis_model.py).
+**Status:** design, not ordered or built. Decision [D-013](../../../decisions.md#d-013). CAD: `NOSE_HALL_*` and `NOSE_MAGNET` in [`body_chassis_model.py`](../cad/body_chassis_model.py).
 
 The touch cap carries a magnet. A linear Hall sensor on a small board in the pod seat reads it, and the C3 firmware decides when the cap counts as pressed. Nothing mechanical is struck, so the cap uses its full 3 mm stroke to the pod-face stop. The ESE22MV21 detector switch chosen in D-011 is dropped: it bottoms out at 2.05 mm.
 

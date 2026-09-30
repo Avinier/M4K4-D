@@ -122,7 +122,7 @@ DFRobot FIT0521 (6 V, 34:1, 3.2 A stall) was briefly the working choice on budge
 
 **Correction:** the builder has **no motor on hand**. A 6V170RPM unit had been mentioned as a possible bench stand-in, but it was not purchased or available for measurement. The 6V230RPM motor selection and reduced drive-envelope estimate remain the working choice; all motor fit and performance checks await receipt of hardware.
 
-**Design direction:** continue chassis engineering from the supplier drawing and clearly labeled CAD assumptions. Put the uncertain face-hole/pilot/shaft interface in replaceable or adjustable parts so a mismatch does not force a complete frame reprint. The [motor interface sheet](01-chassis/v1/motor-interface-sheet.md) is parked, and the [mechanical checklist](01-chassis/v1/engineering-checklist.md) no longer includes a motor-measurement task.
+**Design direction:** continue chassis engineering from the supplier drawing and clearly labeled CAD assumptions. Put the uncertain face-hole/pilot/shaft interface in replaceable or adjustable parts so a mismatch does not force a complete frame reprint. The [motor interface sheet](01-chassis/v1/research/motor-interface-sheet.md) is parked, and the [mechanical checklist](01-chassis/v1/research/engineering-checklist.md) no longer includes a motor-measurement task.
 
 **Limit:** an assumed interface can support a provisional CAD and fit print, but it is not evidence of physical motor fit, safe shaft coupling, or drive performance. Those remain unverified until actual hardware is assembled and tested. No motor-dependent part is marked physically passed by this decision.
 
@@ -189,7 +189,7 @@ Tyre, tread, rib keying and the O-ring fallback are unchanged from D-005.
 
 **2026-09-29 · Chassis / axle (CH-012, CH-015, CH-030, CH-051–CH-057; J01, J02, J03) · ACTIVE, HOLD on shop quote, fit coupons, axle rig and motor receipt**
 
-**Decision:** the builder accepted the [axle stack](01-chassis/v1/axle-stack.md) architecture and its three choices: the bearing change, the turned one-piece stub, and designing around an absent motor. Per side, the stack is:
+**Decision:** the builder accepted the [axle stack](01-chassis/v1/research/axle-stack.md) architecture and its three choices: the bearing change, the turned one-piece stub, and designing around an absent motor. Per side, the stack is:
 
 - **Stub.** One turned EN8 part carries torque and locates the wheel. It has Ø8 k5 bearing seats, a Ø4.05 bore on the motor's D-shaft (8 mm engagement), a DIN 916 M3 × 2.5 set screw on the flat, a Ø24 flange with three tapped M3, and a Ø10 spigot that centres the wheel.
 - **Bearings.** Two **MR148ZZ** (8 × 14 × 4) in a bolt-on printed housing, held between a housing shoulder and a 1.2 mm aluminium cap. Four M3 × 18 screws pass through cap and housing into heat-set inserts in a 5 mm motor plate.
@@ -198,7 +198,7 @@ Tyre, tread, rib keying and the O-ring fallback are unchanged from D-005.
 
 **Why:**
 
-- **The modelled stack was not buildable** ([axle-stack.md §1](01-chassis/v1/axle-stack.md#1-why-the-current-stack-cannot-be-built-as-modelled)): no torque path motor → stub → wheel, no bearing retention, an over-constrained motor, and screw heads buried behind the bearings.
+- **The modelled stack was not buildable** ([axle-stack.md §1](01-chassis/v1/research/axle-stack.md#1-why-the-previous-stack-could-not-be-built-as-modelled)): no torque path motor → stub → wheel, no bearing retention, an over-constrained motor, and screw heads buried behind the bearings.
 - **608ZZ does not fit.** A 608 pair is 14 mm wide, so it cannot sit inside the fixed Ø84 × 24 wheel together with a coupling and a flange.
 - **A 678ZZ is not a substitute.** It is 8 × 12 × 3.5, not 8 × 14 × 4.
 
@@ -440,7 +440,7 @@ The wheel model has not been changed by this entry.
 
 **2026-09-30 · Chassis / nose (CH-007, CH-019, CH-064, CH-065, CH-066; J08B) · ACTIVE; HOLD on bench trip-point check and the PCB-10 J10-8 pin change**
 
-**Decision:** replace the D-011 nose switch with contactless sensing. A TI DRV5055A3 linear Hall sensor on a small board in the pod seat reads a Ø2 × 1 N35 magnet in the touch cap, and the C3 firmware sets the trip point. Two small compression springs return the cap. Details: [nose-hall-board.md](01-chassis/v1/nose-hall-board.md).
+**Decision:** replace the D-011 nose switch with contactless sensing. A TI DRV5055A3 linear Hall sensor on a small board in the pod seat reads a Ø2 × 1 N35 magnet in the touch cap, and the C3 firmware sets the trip point. Two small compression springs return the cap. Details: [nose-hall-board.md](01-chassis/v1/research/nose-hall-board.md).
 
 **Why:** D-011 misread the Panasonic ESE22MV21 drawing. The "4.25 mm (2.05 mm)" figure means a full travel of **2.05 mm**; 4.25 is a height. The switch turns on at 1.5 ± 0.3 mm. A rigid 3 mm cap therefore either misses the switch or crushes it, with 0.25 mm of worst-case margin. Other options were considered and rejected:
 
@@ -603,7 +603,7 @@ The mass row is unchanged at about 0.3 g for the sensing parts.
 
 **2026-09-30 · Chassis / rear TCRT (CH-020; J09B) · ACTIVE; HOLD on the PCB-10 J10-10 change and bench item 20**
 
-**Decision:** there is no board in the keel. The TCRT5000's legs are soldered to a JST GH 4-way pre-crimped lead (AWG28, 350 mm) under heat-shrink, and the lead plugs into C3 J10-10. The LED resistor, the LED switch MOSFET, the gate pull-down and the phototransistor load/pull-up go on PCB-10. Spec: [rear-tcrt-lead.md](01-chassis/v1/rear-tcrt-lead.md). Supersedes [D-015](#d-015).
+**Decision:** there is no board in the keel. The TCRT5000's legs are soldered to a JST GH 4-way pre-crimped lead (AWG28, 350 mm) under heat-shrink, and the lead plugs into C3 J10-10. The LED resistor, the LED switch MOSFET, the gate pull-down and the phototransistor load/pull-up go on PCB-10. Spec: [rear-tcrt-lead.md](01-chassis/v1/research/rear-tcrt-lead.md). Supersedes [D-015](#d-015).
 
 **Why:** the builder asked why a board was needed. Electrically it isn't: the D-015 board only carried a connector and a socket. The builder chose the simpler build over the two things the board gave:
 

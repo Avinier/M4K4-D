@@ -126,7 +126,7 @@
 - **Sensing ([D-013](../../decisions.md#d-013)):** contactless, so nothing bottoms out.
   - A Ø2 × 1 N35 magnet (CH-065) sits in the cap wall.
   - A DRV5055A3 linear Hall sensor (CH-019) sits on a 6.0 × 4.6 mm board (CH-064) in a slot in the seat's front face. It clears the magnet by 3.1 mm at rest and 0.1 mm at the stop.
-  - C3 trips at rest + 5 mT: 0.71 mm of cap travel nominal, 0.50–0.95 mm across tolerances. See [nose-hall-board.md](nose-hall-board.md).
+  - C3 trips at rest + 5 mT: 0.71 mm of cap travel nominal, 0.50–0.95 mm across tolerances. See [nose-hall-board.md](research/nose-hall-board.md).
 - **Print:** nose face down (2.8 % support area).
 - **Proof/state:** CAD defined; `check_nose_joints.py` → `touch_cap_sweeps_3mm_rearward` (includes the magnet clearance at the stop), `touch_cap_running_clearance`. **Open:**
   - bench trip point 0.4–1.2 mm;
@@ -156,7 +156,7 @@
 
 ### J09B — rear TCRT cartridge to keel
 
-- **Parts/load path:** the TCRT5000 sits in a pocket open below the keel belly, face down on 0.6 mm end ledges of a printed bezel (CH-010). A 4-wire GH lead is soldered to its legs under heat-shrink (CH-020, [spec](rear-tcrt-lead.md), D-016) and leaves straight up through the pocket, which runs out through the keel top.
+- **Parts/load path:** the TCRT5000 sits in a pocket open below the keel belly, face down on 0.6 mm end ledges of a printed bezel (CH-010). A 4-wire GH lead is soldered to its legs under heat-shrink (CH-020, [spec](research/rear-tcrt-lead.md), D-016) and leaves straight up through the pocket, which runs out through the keel top.
 - **Location/joint:** optical height = keel belly (Z 12) minus 1 mm shims (CH-068): two shims give the nominal Z 10; zero to four give Z 12 to 8 (±2 mm). The shims have a window, so nothing bears on the leads; the flexible lead and its slack loop take up the travel.
 - **Hardware/access/service:** one M2 × 10 thread-forming screw (CH-069) and a moulded Ø1.8 pin fix bezel and shims. Sensor swap from below with the keel on: screw out, bezel and shims off, unplug J10-10 at PCB-10 (rear panel off), cut the zip tie, and pull the sensor and lead down through the pocket. The keel comes off only after that; there is no disconnect at the keel. The lead rises behind the crossmember, with a 30 mm slack loop, a zip tie (CH-072) at a lug on the crossmember's rear face, and a route beside PCB-02 and over PCB-04 to C3 J10-10.
 - **Proof/state:** CAD defined (D-014). **Open:** PCB-10 J10-10 circuit, optical height on real floors, joint sleeve and lead bend in hardware.

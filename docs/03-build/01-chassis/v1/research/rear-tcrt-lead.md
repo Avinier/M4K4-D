@@ -1,6 +1,6 @@
 # Rear TCRT lead (CH-020) and cliff reading
 
-**Status:** sensor type selected; assembly not built. Decision [D-016](../../decisions.md#d-016) defines the lead assembly and [D-021](../../decisions.md#d-021) selects the bare Vishay TCRT5000 over a Robu comparator-module board. CAD: `REAR_TCRT_LEAD_JOINTS` and `REAR_TCRT_PIGTAIL_*` in [`body_chassis_model.py`](cad/body_chassis_model.py), and `HARNESS_REAR_TCRT_J10_10_*` in `harness_routes()`. Checked by [`check_rear_keel.py`](cad/check_rear_keel.py). Supplier authenticity, receipt, lead assembly, fit, and floor/cliff performance remain unverified.
+**Status:** sensor type selected; assembly not built. Decision [D-016](../../../decisions.md#d-016) defines the lead assembly and [D-021](../../../decisions.md#d-021) selects the bare Vishay TCRT5000 over a Robu comparator-module board. CAD: `REAR_TCRT_LEAD_JOINTS` and `REAR_TCRT_PIGTAIL_*` in [`body_chassis_model.py`](../cad/body_chassis_model.py), and `HARNESS_REAR_TCRT_J10_10_*` in `harness_routes()`. Checked by [`check_rear_keel.py`](../cad/check_rear_keel.py). Supplier authenticity, receipt, lead assembly, fit, and floor/cliff performance remain unverified.
 
 There is no board in the keel. A 4-wire lead is soldered straight to the TCRT5000's legs, runs up out of the keel and through the body, and plugs into J10-10 on the controller carrier (PCB-10). The parts a breakout would carry sit on PCB-10 instead: the LED resistor, the LED switch and the load resistor.
 

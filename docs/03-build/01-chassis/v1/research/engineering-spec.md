@@ -1,20 +1,20 @@
 # Chassis v1 engineering specification — working brief
 
-**Status:** draft for decisions and measurement; not a fabrication release. This brief records inherited requirements and the choices needed to turn the current assembly CAD into printable parts. New build decisions belong in [`../../decisions.md`](../../decisions.md); purchased-part status belongs in [`../../BOM.csv`](../../BOM.csv).
+**Status:** draft for decisions and measurement; not a fabrication release. This brief records inherited requirements and the choices needed to turn the current assembly CAD into printable parts. New build decisions belong in [`../../decisions.md`](../../../decisions.md); purchased-part status belongs in [`../../BOM.csv`](../../../BOM.csv).
 
 ## Inherited design basis
 
 | Topic | Current basis | Evidence and status |
 |---|---|---|
-| Construction | Modular, screw-together, serviceable | [Foundation constraint CON-P01](../../../00-foundation/constraints.md); required |
-| Overall target | 300 H × 205 W × 180 D mm | [Dimensional baseline](../../../01-system/dimensional-baseline.md); rounded system target, not a part tolerance |
-| Drive geometry | Two powered wheels, Ø84 mm nominal, 170 mm track, axle Z 42 mm; front 1-inch ball contact X +110 mm | [Dimensional baseline](../../../01-system/dimensional-baseline.md) and [CAD dimensions](cad/generated/dimensions.md); preserve until an explicit revision |
-| Rear support | Anti-tip skid, 27 mm behind axle with 3.5 mm nominal floor gap | [Dimensional baseline](../../../01-system/dimensional-baseline.md); physical contact and stability proof open |
-| Body interface | Four M4 through-bolts and two Ø4 locating pins; body shifted +16 mm relative to axle | [CAD dimensions](cad/generated/dimensions.md); hole positions modeled, joint stack and receivers open |
-| Mass and stability | Whole-robot CAD estimate about 2.57 kg, CoM X +19.3 mm / Z 106.8 mm, static ball share about 18% | [Mass register](cad/generated/mass-properties.md); estimates only; verify with representative ballast and then measured assemblies |
-| Drive motor | ThinkRobotics MOT3001-6V230RPM | [Build decision D-003](../../decisions.md#d-003); selected with a reduced drive envelope; received dimensions and bench performance still on hold |
+| Construction | Modular, screw-together, serviceable | [Foundation constraint CON-P01](../../../../00-foundation/constraints.md); required |
+| Overall target | 300 H × 205 W × 180 D mm | [Dimensional baseline](../../../../01-system/dimensional-baseline.md); rounded system target, not a part tolerance |
+| Drive geometry | Two powered wheels, Ø84 mm nominal, 170 mm track, axle Z 42 mm; front 1-inch ball contact X +110 mm | [Dimensional baseline](../../../../01-system/dimensional-baseline.md) and [CAD dimensions](../cad/generated/dimensions.md); preserve until an explicit revision |
+| Rear support | Anti-tip skid, 27 mm behind axle with 3.5 mm nominal floor gap | [Dimensional baseline](../../../../01-system/dimensional-baseline.md); physical contact and stability proof open |
+| Body interface | Four M4 through-bolts and two Ø4 locating pins; body shifted +16 mm relative to axle | [CAD dimensions](../cad/generated/dimensions.md); hole positions modeled, joint stack and receivers open |
+| Mass and stability | Whole-robot CAD estimate about 2.57 kg, CoM X +19.3 mm / Z 106.8 mm, static ball share about 18% | [Mass register](../cad/generated/mass-properties.md); estimates only; verify with representative ballast and then measured assemblies |
+| Drive motor | ThinkRobotics MOT3001-6V230RPM | [Build decision D-003](../../../decisions.md#d-003); selected with a reduced drive envelope; received dimensions and bench performance still on hold |
 
-The [chassis CAD README](cad/README.md) defines the v1 boundary. The [BOM](BOM.md) lists the current design parts, candidates, and release holds. RP-03 and RP-06 documents are reference inputs; `03-build/` governs new decisions.
+The [chassis CAD README](../cad/README.md) defines the v1 boundary. The [BOM](../BOM.md) lists the current design parts, candidates, and release holds. RP-03 and RP-06 documents are reference inputs; `03-build/` governs new decisions.
 
 **Fabrication access known so far:** the builder can use a 3D lab. The printer model, usable volume, nozzle, enclosure and filament inventory are still unknown. Continue part splitting and joint design using this as a constraint to check, rather than assuming a specific machine.
 

@@ -42,7 +42,7 @@ The purchased **Pololu #2691 caster** is a separate row (CH-016). It includes th
 | CH-064 | Nose Hall board, 6.0 × 4.6 × 0.8 mm | 1 | DESIGN |
 | CH-065 | N35 Ø2 × 1 mm cap magnet | 1 | CANDIDATE |
 | CH-066 | Ø3 × 10 mm cap return spring | 2 | CANDIDATE |
-| CH-020 | Rear TCRT5000 with a soldered 350 mm GH4 lead to J10-10 ([spec](rear-tcrt-lead.md), D-016) | 1 assembly | CANDIDATE |
+| CH-020 | Rear TCRT5000 with a soldered 350 mm GH4 lead to J10-10 ([spec](research/rear-tcrt-lead.md), D-016) | 1 assembly | CANDIDATE |
 | CH-021 | ICM-42688-P base IMU PCB-07 | 1 assembly | HOLD |
 | CH-022 | Samsung INR18650-25R cell | 2 | CANDIDATE |
 | CH-023 | Pack protection PCB-01 | 1 assembly | HOLD |
@@ -94,7 +94,7 @@ The drive gearmotor is the **ThinkRobotics MOT3001-6V230RPM** ([product page](ht
 | CH-070 | M2 × 6 thread-forming wear-shoe screw (D-014) | 1 | CANDIDATE |
 | CH-072 | 2.5 mm zip tie, J10-10 strain relief (D-014) | 1 | CANDIDATE |
 
-Counts above come from modeled positions; heads and shanks in the CAD are one screw each. Choose exact fasteners, receivers, engagement, and tool access after the printed joint stack is defined. The axle-stack hardware (CH-053 to CH-057) is selected in [D-007](../../decisions.md#d-007) and the [axle stack](axle-stack.md), but it is not yet proven on a coupon or the axle rig.
+Counts above come from modeled positions; heads and shanks in the CAD are one screw each. Choose exact fasteners, receivers, engagement, and tool access after the printed joint stack is defined. The axle-stack hardware (CH-053 to CH-057) is selected in [D-007](../../decisions.md#d-007) and the [axle stack](research/axle-stack.md), but it is not yet proven on a coupon or the axle rig.
 
 ## Full-system electrical parts outside the chassis v1 CAD
 

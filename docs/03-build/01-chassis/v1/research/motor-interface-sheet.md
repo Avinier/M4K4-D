@@ -46,7 +46,7 @@ Take the **output faceplate** as Y = 0, with + toward the shaft tip. The **flat*
 | B7 | Lead length and wire gauge | — | | | |
 | B8 | Mass with the supplied lead | 110 g | | | Scale reading |
 
-## Performance (230RPM units only; bench test from [D-003](../../decisions.md#d-003))
+## Performance (230RPM units only; bench test from [D-003](../../../decisions.md#d-003))
 
 | # | Test | 230RPM #1 | 230RPM #2 |
 |---|---|---|---|
@@ -56,4 +56,4 @@ Take the **output faceplate** as Y = 0, with + toward the shaft tip. The **flat*
 | P4 | Speed at 0.063 N·m and 0.110 N·m | | |
 | P5 | Current-limited brief stall: current and torque | | |
 
-If physical-fit work later fills the ★ rows, update `MOTOR_*` in [`cad/body_chassis_model.py`](cad/body_chassis_model.py) and log the change in the [build ledger](../../decisions.md). This is a future verification record, not an active checklist item.
+If physical-fit work later fills the ★ rows, update `MOTOR_*` in [`cad/body_chassis_model.py`](../cad/body_chassis_model.py) and log the change in the [build ledger](../../../decisions.md). This is a future verification record, not an active checklist item.
