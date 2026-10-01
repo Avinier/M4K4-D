@@ -68,15 +68,15 @@
       "value": {
         "L": {
           "r_max_mm": 4.272,
-          "min_swept_gap_mm": 1.537,
-          "to": "AXLE_MOTOR_SCREW_M3X6_L_1",
+          "min_swept_gap_mm": 1.781,
+          "to": "AXLE_MOTOR_CARRIER_L",
           "on_shaft_flat_mm": 0.0,
           "proud_of_stub_mm": 0.0
         },
         "R": {
           "r_max_mm": 4.272,
-          "min_swept_gap_mm": 1.537,
-          "to": "AXLE_MOTOR_SCREW_M3X6_R_1",
+          "min_swept_gap_mm": 1.781,
+          "to": "AXLE_MOTOR_CARRIER_R",
           "on_shaft_flat_mm": 0.0,
           "proud_of_stub_mm": 0.0
         }
@@ -100,11 +100,11 @@
         },
         "AXLE_MOTOR_SCREW_M3X6_L_1": {
           "to_carrier_mm": 0.0,
-          "to_inner_bearing_mm": 3.06
+          "to_inner_bearing_mm": 3.08
         },
         "AXLE_MOTOR_SCREW_M3X6_L_2": {
           "to_carrier_mm": 0.0,
-          "to_inner_bearing_mm": 3.06
+          "to_inner_bearing_mm": 3.08
         },
         "J04_CARRIER_SCREW_M3X8_R_FRONT_38": {
           "to_carrier_mm": 0.0
@@ -120,11 +120,11 @@
         },
         "AXLE_MOTOR_SCREW_M3X6_R_1": {
           "to_carrier_mm": 0.0,
-          "to_inner_bearing_mm": 3.06
+          "to_inner_bearing_mm": 3.08
         },
         "AXLE_MOTOR_SCREW_M3X6_R_2": {
           "to_carrier_mm": 0.0,
-          "to_inner_bearing_mm": 3.06
+          "to_inner_bearing_mm": 3.08
         }
       }
     },
@@ -162,17 +162,17 @@
     }
   ],
   "accepted_overlaps": {
+    "CHASSIS_DECK_WITH_BODY_INTERFACE x IMU_M2_SCREW_SHANK_L": 12.566,
+    "AXLE_MOTOR_SCREW_M3X6_R_2 x MOTOR_R_MOT3001_6V230_GEARBOX": 6.912,
+    "FRONT_CROSSMEMBER x BALL_POD_HEATSET_INSERT_1": 23.1,
+    "REAR_SKID_CROSSMEMBER x REAR_KEEL_HEATSET_INSERT_4": 23.1,
+    "REAR_SKID_CROSSMEMBER x REAR_KEEL_HEATSET_INSERT_2": 23.1,
     "AXLE_MOTOR_SCREW_M3X6_R_1 x MOTOR_R_MOT3001_6V230_GEARBOX": 6.912,
-    "REAR_SKID_CROSSMEMBER x REAR_KEEL_HEATSET_INSERT_1": 23.1,
     "AXLE_MOTOR_SCREW_M3X6_L_1 x MOTOR_L_MOT3001_6V230_GEARBOX": 6.912,
+    "REAR_SKID_CROSSMEMBER x REAR_KEEL_HEATSET_INSERT_1": 23.1,
+    "REAR_SKID_CROSSMEMBER x REAR_KEEL_HEATSET_INSERT_3": 23.1,
     "AXLE_MOTOR_SCREW_M3X6_L_2 x MOTOR_L_MOT3001_6V230_GEARBOX": 6.912,
     "CHASSIS_DECK_WITH_BODY_INTERFACE x IMU_M2_SCREW_SHANK_R": 12.566,
-    "REAR_SKID_CROSSMEMBER x REAR_KEEL_HEATSET_INSERT_4": 23.1,
-    "FRONT_CROSSMEMBER x BALL_POD_HEATSET_INSERT_1": 23.1,
-    "REAR_SKID_CROSSMEMBER x REAR_KEEL_HEATSET_INSERT_2": 23.1,
-    "FRONT_CROSSMEMBER x BALL_POD_HEATSET_INSERT_2": 23.1,
-    "AXLE_MOTOR_SCREW_M3X6_R_2 x MOTOR_R_MOT3001_6V230_GEARBOX": 6.912,
-    "REAR_SKID_CROSSMEMBER x REAR_KEEL_HEATSET_INSERT_3": 23.1,
-    "CHASSIS_DECK_WITH_BODY_INTERFACE x IMU_M2_SCREW_SHANK_L": 12.566
+    "FRONT_CROSSMEMBER x BALL_POD_HEATSET_INSERT_2": 23.1
   }
 }

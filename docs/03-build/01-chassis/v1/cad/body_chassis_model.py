@@ -312,21 +312,26 @@ NOSE_CABLE_BORE_RADIUS = 2.5
 # x +9.4 to about +21 mm (x/h ~0.20). Body-side X values below are written as
 # their pre-shift value + BODY_SHIFT_X; BODY_AXIS_X is the body/yaw centre.
 BODY_SHIFT_X = 16.0
-DRIVER_CENTER_X = 23.5 + BODY_SHIFT_X  # Adafruit #3297 boards; D-030 moved them 5 mm back so the front posts clear the body M4 feet (X 54)
-DRIVER_Y = 40.0  # board centres at Y +/-40, PCB underside Z 66
+# Adafruit #3297 boards (D-031): long side along Y, so the 17.8 mm width fits
+# between the PCB-03 edge plugs (X 37) and the body-mount doglegs (X 58). Board X
+# 38.5-56.3, |Y| 31.3-56.9, PCB underside Z 66.
+DRIVER_CENTER_X = 31.4 + BODY_SHIFT_X
+DRIVER_Y = 44.2  # inner posts clear the PCB-03 edge (|Y| 30) by 0.5 mm
 DRIVER_PCB_Z = 66.0
-# J15B (D-030): each board's two plated O2.5 holes lie 2.54 mm in from one long
-# edge, 20.32 mm apart. Both boards turn that edge outboard (the left board is
-# turned 180 deg from D-027, so its terminal block faces rearward) and sit on
-# two printed posts on the front deck with M2.5 heat-set inserts.
+DRIVER_TURN = 180.0  # deg about Z from the STEP: hole edge rearward on both boards; terminal block inboard on the left, outboard on the right
+# J15B (D-030, D-031): each board's two plated O2.5 holes lie 2.54 mm in from one
+# long edge, 20.32 mm apart. That edge faces rearward, so the posts (X 41.05)
+# stay behind the body M4 feet (X 54). Each board sits on two printed posts on
+# the front deck with M2.5 heat-set inserts.
 DRIVER_HOLE_HALF_PITCH = 10.16
-DRIVER_HOLE_Y = DRIVER_Y + 8.89 - 2.54  # 46.35
+DRIVER_HOLE_X = DRIVER_CENTER_X - 8.89 + 2.54  # 41.05
 DRIVER_POST_RADIUS = 3.5
 DRIVER_INSERT = (1.95, 4.0)  # M2.5 x 4 brass insert, O3.9 OD, flush with the post top
 DRIVER_SCREW = (6.0, 2.35, 1.5)  # M2.5 x 6 low button head: length, head radius, head height
 # Motor-lead strain relief: one 2.5 mm tie bridge per side on the front deck,
 # behind the boards where the leads drop to the motors.
 DRIVER_TIE_LUG = (19.0, 24.0, 37.0, 43.0, 56.0, 59.0)  # x0, x1, |y0|, |y1|, z0, z1; tunnel along Y
+HARNESS_MOTOR_BRANCH_X = 33.5  # X 30-37: across the deck behind the driver posts to the tie bridges, clear of the IMU (X 29)
 BODY_AXIS_X = BODY_SHIFT_X
 BODY_X_REAR = -74.0 + BODY_SHIFT_X
 BODY_X_FRONT = 82.0 + BODY_SHIFT_X
@@ -490,7 +495,7 @@ FRONT_RANGE_SENSOR_Z = FRONT_RANGE_SENSOR_BOTTOM_Z + FRONT_RANGE_LENS_ABOVE_BOTT
 FRONT_RANGE_SENSOR_SIZE = (13.5, 44.5, 18.9)  # depth along the axis, flange width, height with connector
 FRONT_RANGE_EAR_TRIM_HALF_WIDTH = 14.8  # D-027: both mounting ears cut off at the 29.5 mm body
 FRONT_RANGE_POCKET_HALF_WIDTH = 15.0  # pod pocket ahead of X 122.1 (was 14.0 for the misread body)
-FRONT_RANGE_LEAD_RESERVE_H = 3.0  # D-027: J10-8 wires soldered to the S3B-PH pins, bend above the header
+FRONT_RANGE_LEAD_RESERVE_H = 2.0  # D-027: J10-8 wires soldered to the S3B-PH pins, bend above the header; 2.0 (was 3.0) keeps the lid hump (top Z 57.6) under the front panel's Z 58 lift-off path (D-029)
 FRONT_RANGE_HUMP_CLEARANCE = 0.5
 FRONT_RANGE_HUMP_WALL = 1.2
 FRONT_RANGE_HUMP_REAR_RUN = 11.5  # lid slides 11 mm forward before it lifts (D-011); the lead runs back and down behind the sensor here
@@ -827,7 +832,13 @@ PI_POWER_PIGTAIL_DROP = (-13.0, -7.0, -46.0, -39.0, 77.0, 92.2)  # lands on the 
 
 # Motor leads: the MOT3001 ships with a 6-pin cable; its motor pair is cut out and
 # re-crimped to a Micro-Fit 3.0 1x2 wire-to-wire pair outboard of each DRV8833 carrier.
-MOTOR_INLINE_RESERVE_L = (37.5, 58.0, 49.5, 59.0, 69.0, 82.0)  # starts past PCB03_PY's edge reserve (X 37)
+# D-031: the left pair lies along X over the board, 0.5 mm above the M2.5 screw
+# heads (Z 69.1). The right board's terminal block is outboard (to Z 76.1), so the
+# right pair stands along Y in front of it, between the block and the dogleg (X 58).
+MOTOR_INLINE_RESERVE = {
+    "L": (37.5, 58.0, 49.5, 59.0, 69.6, 82.0),  # starts past PCB03_PY's edge reserve (X 37)
+    "R": (50.9, 57.9, -59.5, -38.5, 69.6, 82.0),
+}
 
 # Yaw service break: the clock-spring's stationary end lands on a small
 # junction board (PCB-08) under the adapter plate on -Y, clear of the cooler
@@ -1958,8 +1969,12 @@ def battery_tub(include_walls: bool = True):
 
 
 def driver_mount_points():
-    """J15B post axes: two per board under the outboard plated holes (D-030)."""
-    return [(DRIVER_CENTER_X + dx, sy * DRIVER_HOLE_Y) for sy in (1.0, -1.0) for dx in (-DRIVER_HOLE_HALF_PITCH, DRIVER_HOLE_HALF_PITCH)]
+    """J15B post axes: two per board under its plated holes (D-030, D-031)."""
+    return [
+        (DRIVER_HOLE_X, sy * (DRIVER_Y + dy))
+        for sy in (1.0, -1.0)
+        for dy in (-DRIVER_HOLE_HALF_PITCH, DRIVER_HOLE_HALF_PITCH)
+    ]
 
 
 def _frame_insert_z(x, y, z0):
@@ -2515,9 +2530,15 @@ def motor_face_screws(side: str):
     sign = 1.0 if side == "L" else -1.0
     head_top = AXLE_FLANGE_Y[1] - (MOTOR_SCREW_CBORE[1] - MOTOR_SCREW_HEAD_HEIGHT)
     head_bottom = head_top - MOTOR_SCREW_HEAD_HEIGHT
+    # Domed head: a spherical cap dk 5.7 x k 1.65, not a cylinder. Trimmed at the
+    # origin, turned +Z to +/-Y, then placed. Its rim is what nears the set screw.
+    r, k = MOTOR_SCREW_HEAD_RADIUS, MOTOR_SCREW_HEAD_HEIGHT
+    rs = (r * r + k * k) / (2.0 * k)
+    cap = Sphere(rs).moved(Location((0.0, 0.0, k - rs))) & Box(2.0 * r + 1.0, 2.0 * r + 1.0, k, align=(Align.CENTER, Align.CENTER, Align.MIN))
+    cap = cap.rotate(Axis.X, -90.0 * sign)
     children = []
     for index, (x_off, z_off) in enumerate(MOTOR_SCREW_XZ, start=1):
-        screw = _axial_bore_y(MOTOR_SCREW_HEAD_RADIUS, sign * head_bottom, sign * head_top, x_off, AXLE_Z + z_off) + _axial_bore_y(
+        screw = cap.moved(Location((x_off, sign * head_bottom, AXLE_Z + z_off))) + _axial_bore_y(
             1.5, sign * (head_bottom - MOTOR_SCREW_LENGTH), sign * head_bottom, x_off, AXLE_Z + z_off
         )
         children.append(_paint(screw, f"AXLE_MOTOR_SCREW_M3X6_{side}_{index}", STEEL, 1.0))
@@ -2688,11 +2709,10 @@ def electronics():
     c3 = c3_carrier()
     # Adafruit #3297 board proxies; dimensions are nominal envelopes pending measurement.
     drivers = []
-    for side, y, turn in (("LEFT", DRIVER_Y, 90.0), ("RIGHT", -DRIVER_Y, -90.0)):
-        # Board file-derived STEP (purchased/README.md); long side along X, mounting-hole
-        # edge outboard (D-030): right terminal block forward, left rearward.
+    for side, y in (("LEFT", DRIVER_Y), ("RIGHT", -DRIVER_Y)):
+        # Board file-derived STEP (purchased/README.md); long side along Y, hole edge rearward (D-031).
         drv = _place(
-            _purchased_step("adafruit_3297_drv8833.step", f"ADAFRUIT_3297_DRV8833_{side}", [(Axis.Z, turn)], folder=V1_PURCHASED),
+            _purchased_step("adafruit_3297_drv8833.step", f"ADAFRUIT_3297_DRV8833_{side}", [(Axis.Z, DRIVER_TURN)], folder=V1_PURCHASED),
             DRIVER_CENTER_X, y, DRIVER_PCB_Z, ref={"Z": "min"},
         )
         leaves_ = list(drv.solids())
@@ -2970,7 +2990,7 @@ def harness_routes():
         # (X 3.5-28.5, Y +-12.5): the trunk runs at Y +18 and the branch crosses aft of the IMU. The
         # motor-can top (Z 57.4 at Y >= 16) and the Y 6-18 pigtail reserve (X -13..-1) set the trunk's floor and rear end.
         _box(42.0, 10.0, 5.0, (21.0, 18.0, 60.0), "HARNESS_BATTERY_TRUNK", "#F28C28", 0.42),
-        _box(12.0, 92.0, 6.0, (DRIVER_CENTER_X, 0.0, 59.5), "HARNESS_MOTOR_BRANCH", "#D94A3A", 0.42),  # between the driver posts (D-030)
+        _box(7.0, 92.0, 6.0, (HARNESS_MOTOR_BRANCH_X, 0.0, 59.5), "HARNESS_MOTOR_BRANCH", "#D94A3A", 0.42),  # behind the driver posts, toward the tie bridges (D-031)
         _box(82.0, 8.0, 8.0, (30.0 + BODY_SHIFT_X, 26.0, 82.0), "HARNESS_SIGNAL_TRUNK", "#2FAFC2", 0.42),
         _box(82.0, 8.0, 8.0, (30.0 + BODY_SHIFT_X, -26.0, 82.0), "HARNESS_SENSOR_TRUNK", "#44BDD0", 0.42),
         # Flat clock-spring loop under the disc takes the ±55° yaw twist.
@@ -3112,10 +3132,12 @@ def _edge_power_plugs():
             parts.append(_paint(_block(*box), label, "#3A4044", 1.0))
             pos += w + CONNECTOR_GAP
     # Motor pairs: Micro-Fit 3.0 1x2 wire-to-wire, mated (43640 plug + 43645 receptacle, E).
-    x0, x1, y0, y1, z0, z1 = MOTOR_INLINE_RESERVE_L
-    for side, sy in (("L", 1.0), ("R", -1.0)):
-        ys = sorted((sy * (y0 + 1.0), sy * (y0 + 8.0)))
-        parts.append(_paint(_block(x0 + 0.5, x0 + 19.5, ys[0], ys[1], z0 + 1.0, z0 + 11.0), f"MOTOR_{side}_MICROFIT3_1X2_WIRE_TO_WIRE_MATED_PAIR", "#3A4044", 1.0))
+    x0, x1, y0, y1, z0, z1 = MOTOR_INLINE_RESERVE["L"]
+    pairs = {"L": _block(x0 + 0.5, x0 + 19.5, y0 + 1.0, y0 + 8.0, z0 + 1.0, z0 + 11.0)}  # 19 x 7 x 10, along X
+    x0, x1, y0, y1, z0, z1 = MOTOR_INLINE_RESERVE["R"]
+    pairs["R"] = _block(x0, x1, y0 + 1.0, y0 + 20.0, z0 + 1.0, z0 + 11.0)  # 7 x 19 x 10, along Y
+    for side, pair in pairs.items():
+        parts.append(_paint(pair, f"MOTOR_{side}_MICROFIT3_1X2_WIRE_TO_WIRE_MATED_PAIR", "#3A4044", 1.0))
     return Compound(label="EDGE_AND_INLINE_POWER_PLUGS", children=parts)
 
 
@@ -3142,10 +3164,8 @@ def connectors_and_exits():
         _paint(_block(*YAW_JUNCTION_BOX), "YAW_JUNCTION_PCB08_WITH_CONNECTORS_RESERVE", "#9566D9", 0.30),
         _paint(_block(*C0_LINK_ADAPTER_BOX), "C0_LINK_ADAPTER_PCB09_RESERVE", reserve, 0.30),
     ]
-    x0, x1, y0, y1, z0, z1 = MOTOR_INLINE_RESERVE_L
     parts += [
-        _paint(_block(x0, x1, y0, y1, z0, z1), "MOTOR_L_INLINE_MICROFIT3_1X2_RESERVE", power, 0.30),
-        _paint(_block(x0, x1, -y1, -y0, z0, z1), "MOTOR_R_INLINE_MICROFIT3_1X2_RESERVE", power, 0.30),
+        _paint(_block(*MOTOR_INLINE_RESERVE[side]), f"MOTOR_{side}_INLINE_MICROFIT3_1X2_RESERVE", power, 0.30) for side in ("L", "R")
     ]
     parts += [
         _paint(_block(*C3_GH_PLUG_LAYER), "C3_CARRIER_TOP_ENTRY_SIGNAL_PLUG_LAYER_RESERVE", reserve, 0.14),

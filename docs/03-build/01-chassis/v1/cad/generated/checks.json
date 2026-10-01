@@ -1,6 +1,6 @@
 {
   "layout_id": "RP03_BODY_CHASSIS_LAYOUT02",
-  "ok": false,
+  "ok": true,
   "checks": [
     {
       "name": "concept_a_track",
@@ -69,8 +69,8 @@
         "minimum_mm": 1.5,
         "screws": {
           "WHEEL_L_SET_SCREW_M3X2_5": {
-            "min_gap_mm": 1.5,
-            "to": "AXLE_MOTOR_SCREW_M3X6_L_1"
+            "min_gap_mm": 1.75,
+            "to": "AXLE_MOTOR_CARRIER_L"
           },
           "WHEEL_L_RING_SCREW_M3X8_1": {
             "min_gap_mm": 15.205,
@@ -133,8 +133,8 @@
             "to": "AXLE_CAP_SCREW_M3X18_L_1"
           },
           "WHEEL_R_SET_SCREW_M3X2_5": {
-            "min_gap_mm": 1.5,
-            "to": "AXLE_MOTOR_SCREW_M3X6_R_1"
+            "min_gap_mm": 1.75,
+            "to": "AXLE_MOTOR_CARRIER_R"
           },
           "WHEEL_R_RING_SCREW_M3X8_1": {
             "min_gap_mm": 15.205,
@@ -239,7 +239,7 @@
             "hole_depth_mm": 5.0,
             "shaft_engaged_in_stub_mm": 8.0,
             "shaft_stub_overlap_mm3": 0,
-            "screw_head_to_inner_bearing_mm": 2.71
+            "screw_head_to_inner_bearing_mm": 3.08
           },
           "R": {
             "screw_count": 2,
@@ -254,7 +254,7 @@
             "hole_depth_mm": 5.0,
             "shaft_engaged_in_stub_mm": 8.0,
             "shaft_stub_overlap_mm3": 0,
-            "screw_head_to_inner_bearing_mm": 2.71
+            "screw_head_to_inner_bearing_mm": 3.08
           }
         },
         "rule": "M3 thread in the tapped faceplate >= 2.5 mm, insertion <= hole depth - 0.5; shaft >= 6 mm in the stub (set-screw coupling, D-007); heads >= 0.4 mm off the bearing"
@@ -572,7 +572,7 @@
       "name": "front_chassis_stays_inside_shell",
       "ok": true,
       "evidence": {
-        "chassis_front_x_mm": 92.0,
+        "chassis_front_x_mm": 93.65,
         "shell_inner_front_x_mm": 95.6
       }
     },
@@ -780,11 +780,9 @@
     },
     {
       "name": "front_panel_lifts_off_forward",
-      "ok": false,
+      "ok": true,
       "evidence": {
-        "blockers_mm3": {
-          "BALL_POD": 170.779
-        },
+        "blockers_mm3": {},
         "panel_bottom_z_mm": 58.0
       }
     },
@@ -1343,7 +1341,7 @@
       "ok": true,
       "evidence": {
         "clashes_mm3": {},
-        "checked_against": 236,
+        "checked_against": 276,
         "keep_outs_included": true
       }
     },
@@ -1369,12 +1367,12 @@
             "to": "CHASSIS_DECK_WITH_BODY_INTERFACE"
           },
           "PCB03_MOTOR_GATE_AND_HEAD_RAIL_PCB": {
-            "nearest_mm": 1.0,
-            "to": "BODY_LOWER_CROSS_FRONT"
+            "nearest_mm": 0.54,
+            "to": "CHASSIS_DECK_WITH_BODY_INTERFACE"
           },
           "PCB03_MOTOR_GATE_AND_HEAD_RAIL_PARTS_ENVELOPE": {
-            "nearest_mm": 1.0,
-            "to": "BODY_LOWER_CROSS_FRONT"
+            "nearest_mm": 0.54,
+            "to": "CHASSIS_DECK_WITH_BODY_INTERFACE"
           },
           "PCB04_BRANCH_CONVERTERS_PCB": {
             "nearest_mm": 0.5,
@@ -1427,7 +1425,7 @@
           "pcb04_to_lower_cross_rear_mm": 1.0,
           "pcb03_to_lower_cross_front_mm": 1.0,
           "pcb04_to_pcb03_mm": 1.0,
-          "pcb03_to_drv8874_y_mm": 1.11,
+          "pcb03_to_drv8874_y_mm": 1.5,
           "pcb04_top_to_compute_tray_z_mm": 7.4,
           "pcb02_to_rear_panel_frame_x_mm": 1.0
         },
@@ -1439,7 +1437,7 @@
       "ok": true,
       "evidence": {
         "overlaps_mm3": {},
-        "note": "HARNESS_BATTERY_TRUNK (Y +18, Z 57.5-62.5) and HARNESS_MOTOR_BRANCH (X 30-42, Z 56.5-62.5) run in the 7 mm slot under PCB-03/04 (Z 56-63) and clear the IMU; still route-volume placeholders, not a wire-by-wire harness"
+        "note": "HARNESS_BATTERY_TRUNK (Y +18, Z 57.5-62.5) and HARNESS_MOTOR_BRANCH (X 33.5-45.5 between the D-030 driver posts, Z 56.5-62.5) run in the 7 mm slot under PCB-03/04 (Z 56-63) and clear the IMU; still route-volume placeholders, not a wire-by-wire harness"
       }
     },
     {
@@ -1508,20 +1506,17 @@
         "removed_row_g": 121.5,
         "estop_g": 14.0,
         "battery_g": 108.2,
-        "total_mass_g": 2600.6,
+        "total_mass_g": 2626.1,
         "note": "hand-kept register: masses are RP-02 estimates, not derived from the solids"
       }
     },
     {
       "name": "connector_reserves_clear_of_real_hardware",
-      "ok": false,
+      "ok": true,
       "evidence": {
-        "clashes_mm3": {
-          "PCB03_PY_EDGE_CONNECTORS_J32_J31_RESERVE x ADAFRUIT_3297_DRV8833_LEFT": 140.02,
-          "PCB03_NY_EDGE_CONNECTORS_J33_J34_RESERVE x ADAFRUIT_3297_DRV8833_RIGHT": 140.02
-        },
+        "clashes_mm3": {},
         "reserves": 29,
-        "checked_against": 295,
+        "checked_against": 335,
         "open_known_clashes_mm3": {},
         "note": "mated plug + first lead bend; the pack-disconnect slide path is checked separately (the pack occupies it until removed). The Pi GPIO socket clears the yaw servo by 0.6 mm and the PCB-09 strip over it by 0.1 mm"
       }
@@ -1942,12 +1937,9 @@
     },
     {
       "name": "connector_bodies_clear_of_hardware_and_each_other",
-      "ok": false,
+      "ok": true,
       "evidence": {
-        "clashes_mm3": {
-          "J3_1_MICROFIT_PLUS_2P_MATED_PLUG x ADAFRUIT_3297_DRV8833_LEFT": 82.49,
-          "J3_4_MICROFIT_PLUS_2P_MATED_PLUG x ADAFRUIT_3297_DRV8833_RIGHT": 89.28
-        },
+        "clashes_mm3": {},
         "self_overlaps_mm3": {},
         "bodies": 48,
         "note": "PCB-08 and PCB-09 boards, PCB-05 edge headers, mated Micro-Fit plugs and motor pairs; PCB-05 headers inside PCB-05's own parts reserve are by design"
@@ -2009,20 +2001,20 @@
       "name": "com_inside_support_x",
       "ok": true,
       "evidence": {
-        "com_x_mm": 19.02689284911675
+        "com_x_mm": 19.165491941399598
       }
     },
     {
       "name": "com_forward_of_physics_margin_line",
       "ok": true,
       "evidence": {
-        "com_x_mm": 19.03,
-        "com_h_mm": 105.88,
-        "x_over_h": 0.1797,
-        "a_tip_m_s2": 1.763,
+        "com_x_mm": 19.17,
+        "com_h_mm": 105.3,
+        "x_over_h": 0.182,
+        "a_tip_m_s2": 1.785,
         "a_tip_min_m_s2": 1.582,
-        "equivalent_min_x_mm_at_this_h": 17.08,
-        "margin_over_a_peak_1p00": 1.763,
+        "equivalent_min_x_mm_at_this_h": 16.98,
+        "margin_over_a_peak_1p00": 1.785,
         "baseline_target": {
           "x_mm": 25.0,
           "h_mm": 124.0,
@@ -2036,7 +2028,7 @@
       "name": "ball_share_above_spin_walk_flag",
       "ok": true,
       "evidence": {
-        "ball_share": 0.173,
+        "ball_share": 0.1742,
         "flag_below": 0.09
       }
     },
@@ -2045,14 +2037,14 @@
       "ok": true,
       "evidence": {
         "shoe_first_contact_pitch_deg": 6.054,
-        "com_over_axle_pitch_deg": 10.187
+        "com_over_axle_pitch_deg": 10.315
       }
     },
     {
       "name": "com_below_head_yaw",
       "ok": true,
       "evidence": {
-        "com_z_mm": 105.88115138495307
+        "com_z_mm": 105.30048603522839
       }
     }
   ]

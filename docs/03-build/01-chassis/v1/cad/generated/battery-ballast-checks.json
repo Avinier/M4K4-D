@@ -37,11 +37,11 @@
  "tip_to_hole_floor_mm": 0.9,
  "mass_g": 2626.1,
  "com_mm": [
-  19.15,
+  19.17,
   0.16,
   105.3
  ],
- "a_tip_m_s2": 1.784,
+ "a_tip_m_s2": 1.785,
  "a_tip_min_m_s2": 1.582,
  "pass": {
   "battery_pack_is_clear": true,

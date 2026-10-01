@@ -143,7 +143,7 @@
   - a rear 12 × 1.5 × 2 mm tongue drops into a pod-wall groove that is open forward;
   - the shell band overhangs the lid top by 0.5 mm with the body on;
   - one M2 × 8 countersunk thread-forming screw (CH-062) goes into a pod boss at (111.8, −11.8), behind the sensor body (D-027; it was at X 124.6, inside the real sensor's footprint);
-  - a hump over the sensor header (to Z 58.6), open 11.5 mm rearward so the lid can make its 11 mm forward slide; the cap has a matching top notch that clears the hump through its 3 mm travel.
+  - a hump over the sensor header (to Z 57.6, under the front panel's Z 58 lift-off path; 2 mm soldered-lead reserve, [D-029](../../decisions.md#d-029)), open 11.5 mm rearward so the lid can make its 11 mm forward slide; the cap has a matching top notch that clears the hump through its 3 mm travel.
 - **Access/service:** cap off, screw out, slide forward 11 mm, lift. With the body off, the rear is held only by the tongue.
 - **Print:** on its side (3.4 % support area).
 - **Proof/state:** CAD defined. **Open:** dry-fit, removal cycles, and screw strip torque in PETG.
@@ -227,7 +227,7 @@
 ### J15B — driver boards and motor-lead restraint
 
 - **Parts/load path:** two Adafruit #3297 boards (CH-017) to the front deck. Board mass and harness pull go through posts and screws into the deck. Motor-lead pull goes into a deck tie, not the terminal block.
-- **Location/joint ([D-030](../../decisions.md#d-030)):** each board's two plated Ø2.5 holes lie 2.54 mm in from one long edge, 20.32 mm apart. Both boards now turn that edge outboard (the left board is turned 180° from D-027, so its terminal block faces rearward). Both moved 5 mm back to X 39.5, so the front posts clear the body M4 feet. Four Ø7 × 10 mm posts on the front deck at (29.34, ±46.35) and (49.66, ±46.35) carry the PCBs at Z 66. The motor-branch harness reserve moved to run between the posts.
+- **Location/joint ([D-030](../../decisions.md#d-030), [D-031](../../decisions.md#d-031)):** each board's two plated Ø2.5 holes lie 2.54 mm in from one long edge, 20.32 mm apart. The boards lie with their long side along Y at X 38.5–56.3, |Y| 31.3–56.9: the 17.8 mm width fits between the PCB-03 edge plugs (X 37) and the body-mount doglegs (X 58). The hole edge faces rearward on both, so the terminal block is inboard on the left board and outboard on the right. Four Ø7 × 10 mm posts on the front deck at (41.05, ±34.04) and (41.05, ±54.36) carry the PCBs at Z 66, behind the body M4 feet (X 54). The motor-branch harness reserve runs across the deck at X 30–37, behind the posts.
 - **Hardware/clamp:** 4 × M2.5 × 4 heat-set inserts (CH-080) flush with the post tops; 4 × M2.5 × 6 low button heads (CH-081) through the boards, 4 mm of thread. One 2.5 mm tie (CH-082) per side through a printed bridge at X 19–24, Y ±37–43 holds the motor leads where they drop to the motors.
 - **Access/service:** fit before the body. Remove the two screws and lift the board after unplugging its PCB-03 connectors and the terminal-block leads.
 - **Not covered:** the PCB-03/04 and C3 boards stay full-system proposals (CH-041–CH-047). Their mounts are not part of this chassis joint.

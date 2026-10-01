@@ -33,7 +33,9 @@ The central record of every decision and change made during the build phase. New
 | [D-026](#d-026) | 2026-09-30 | Chassis / battery and ballast CAD (CH-022, CH-038, J12) | BOM and CAD reconciled: 1.1 mm cell gap, countersunk CH-038 seat, 350 mm TCRT mass note; chassis-v1.step rebuilt | ACTIVE; PCB-01 height, received-screw fit and full `check_layout.py` rerun open |
 | [D-027](#d-027) | 2026-09-30 | Chassis / purchased-part models (CH-017, CH-018; J08A/J08C) | Vendor STEP for the A21 and a board-file STEP for the #3297 replace boxes; A21 ears trimmed, lead soldered, nose lid/cap reworked for the real package | ACTIVE; received-unit fit, ear trim and lead strain relief open |
 | [D-028](#d-028) | 2026-10-01 | Chassis / battery tub interfaces (J11A, CN-05) | Shell opening sized to the hatch; front hatch bosses moved onto the tub front wall; bosses cut to Z 39.5 and the pack disconnect lifted 3 mm; IMU screw overlap recorded as accepted | ACTIVE; `check_layout.py` 116/119 (three D-027 failures open); boss and insert fit unproven |
+| [D-029](#d-029) | 2026-10-01 | Chassis / nose lid (J08) | GP2Y soldered-lead reserve 3.0 to 2.0 mm, so the lid hump (top Z 57.6) clears the front panel's lift-off path | ACTIVE; lead bend in 2 mm to confirm at assembly |
 | [D-030](#d-030) | 2026-10-01 | Chassis / frame fasteners, pack restraint, driver mounts (J05, J06, J11A, J11B, J12, J13, J15B, J16; CH-030, CH-055, CH-060) | J05/J06 inserts moved into the rail tongues; all frame, hatch and driver hardware modeled and added (CH-073–CH-082); pack strapped to the hatch; DIN 7984 → ISO 7380; set screw = M3 × 3 faced to 2.5 | ACTIVE; HOLD on coupons, strap/foam source and physical tests |
+| [D-031](#d-031) | 2026-10-02 | Chassis / driver boards (J15B), inline motor pairs, motor face screws | #3297 boards turned long side along Y at X 38.5–56.3, posts at X 41.05; inline pairs re-placed; face-screw heads modelled as ISO 7380 domes; `check_layout.py` 119/119 | ACTIVE; supersedes the D-030 J15B layout; post coupon and received-board fit open |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -938,3 +940,45 @@ D-029 is reserved by a parallel session (lid hump), so this is D-030.
 - M2.5 head diameter;
 - tool access with the body on and lifted;
 - the driver move against the PCB-03 connector reserves that D-028 found failing in `check_layout.py`.
+
+## D-029
+
+**2026-10-01 · Chassis / nose lid (J08) · ACTIVE; lead bend to confirm at assembly**
+
+**Why:** `check_layout.py` row `front_panel_lifts_off_forward` failed after D-027. The lid's lead hump reached Z 58.6, but the front panel's bottom edge is Z 58.0, and the panel slides forward over the nose to come off (171 mm³ against `BALL_POD`).
+
+**Changed:** `FRONT_RANGE_LEAD_RESERVE_H` goes from 3.0 to 2.0 mm, so the hump top drops from Z 58.6 to Z 57.6, 0.4 mm under the panel's path. The 3.0 mm was a D-027 modelling allowance, not a builder decision. 2.0 mm still leaves room for a 90° bend in the AWG30 J10-8 lead (about 0.5 mm OD) at the solder joint. The cap's top notch follows the hump. The lid loses 0.077 cm³ (about 0.04 g), so the nose mass row is unchanged.
+
+**Checks:** `check_nose_joints.py` 12/12; `front_panel_lifts_off_forward` passes in the full `check_layout.py` (see D-031).
+
+**Changed docs:** joint-register J08 lid note.
+
+**Open:** confirm the soldered lead bends within 2 mm above the S3B-PH pins.
+
+## D-031
+
+**2026-10-02 · Chassis / driver boards (J15B), inline motor pairs, motor face screws · ACTIVE; supersedes the D-030 J15B layout**
+
+**Why:** the full `check_layout.py` failed four rows after D-030:
+- **Driver boards:** the #3297 boards overlapped the PCB-03 J31–J34 edge-connector reserves (up to 598 mm³) and the mated Micro-Fit+ plugs (up to 328 mm³). With the long side along X, a board needs 25.4 mm, but only 21 mm is free between the plugs (X 37) and the body-mount doglegs (X 58). D-030's 5 mm rearward move made it worse, and its posts and M2.5 screws also sat in the plug reserves.
+- **`rotating_screws_swept_clear`:** the axle set screw passed 1.4 mm from the motor face-screw head, against a 1.5 mm minimum. The model drew the D-030 ISO 7380 head as a full-radius cylinder.
+- **IMU row:** it read the deck top from the deck's bounding box, which the D-030 driver posts now raise to Z 66.
+
+**Changed in `01-chassis/v1/cad/body_chassis_model.py`:**
+- **Driver boards (J15B):** both turned 180° from the STEP, long side along Y, at X 38.5–56.3, |Y| 31.3–56.9 (`DRIVER_CENTER_X` 47.4, `DRIVER_Y` 44.2). The hole edge faces rearward on both. The terminal block is inboard on the left board and outboard on the right. The four D-030 posts, inserts and screws move to (41.05, ±34.04) and (41.05, ±54.36): through the plated holes (checked), 0.5 mm off the PCB-03 edge and behind the body M4 feet (X 54, which rule out front-edge posts).
+- **Inline motor pairs:** the reserves are now set per side (`MOTOR_INLINE_RESERVE`). The left pair stays along X over its board, raised 0.6 mm to clear the M2.5 heads (Z 69.1). The right pair stands along Y at X 50.9–57.9, between the outboard terminal block (0.4 mm) and the dogleg.
+- **Motor-lead harness branch:** narrows to 7 mm and runs across the deck at X 30–37, behind the posts and clear of the IMU.
+- **Motor face screws:** the heads are modelled as an ISO 7380 spherical cap (dk 5.7, k 1.65) instead of a cylinder. The set-screw sweep clears again.
+- **Mass register:** the driver row follows `DRIVER_CENTER_X`. Total 2626.1 g, CoM (+19.17, 0.16, 105.30), a_tip 1.786 m/s² against 1.582.
+
+**Changed in `check_layout.py`:** the IMU row takes the deck top from `DECK_Z + 2`.
+
+**Checks:**
+- Full `check_layout.py`: **119/119 pass** (16 min).
+- `check_frame_fasteners.py`: 9/9. `check_battery_ballast.py`: all pass. `check_nose_joints.py`: 12/12.
+- Driver sweep (boards, posts, inserts, screws, harness branch and inline pairs against the whole model): no clashes. The closest gaps are 0.4 mm (right terminal block to its inline reserve) and 0.5 mm (inner posts to PCB-03).
+- `chassis-v1.step` and `body-chassis.step` rebuilt.
+
+**Changed docs:** joint-register J15B.
+
+**Open:** post coupon (unchanged from D-030); the right board's outboard terminal block needs a lead path to its inline pair; confirm board hole positions on a received board; tug and vibration tests (D-030).

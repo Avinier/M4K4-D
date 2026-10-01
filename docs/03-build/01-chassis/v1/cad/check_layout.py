@@ -753,7 +753,7 @@ def main():
     imu_board_box = by_label(imu_leaves, "IMU_PCB07_BOARD").bounding_box()
     imu_seat = {
         "board_bottom_z_mm": round(imu_board_box.min.Z, 3),
-        "deck_top_z_mm": round(deck.bounding_box().max.Z, 3),
+        "deck_top_z_mm": round(M.DECK_Z + 2.0, 3),  # the plate top; D-030 driver posts stand above the deck bbox
         "shank_in_deck_mm3": {s.label: round(_vol(s & deck), 3) for s in imu_shanks},
         "board_vs_deck_mm3": round(_vol(by_label(imu_leaves, "IMU_PCB07_BOARD") & deck), 3),
         "board_x_mm": [round(imu_board_box.min.X, 3), round(imu_board_box.max.X, 3)],
