@@ -32,6 +32,7 @@ The central record of every decision and change made during the build phase. New
 | [D-025](#d-025) | 2026-09-30 | Chassis / mixed CSK fastener assortment | Mixed M3/M4/M5 kit may cover CH-038; M4 CSK does not fit CH-035 | CANDIDATE; kit source/material and fit unverified |
 | [D-026](#d-026) | 2026-09-30 | Chassis / battery and ballast CAD (CH-022, CH-038, J12) | BOM and CAD reconciled: 1.1 mm cell gap, countersunk CH-038 seat, 350 mm TCRT mass note; chassis-v1.step rebuilt | ACTIVE; PCB-01 height, received-screw fit and full `check_layout.py` rerun open |
 | [D-027](#d-027) | 2026-09-30 | Chassis / purchased-part models (CH-017, CH-018; J08A/J08C) | Vendor STEP for the A21 and a board-file STEP for the #3297 replace boxes; A21 ears trimmed, lead soldered, nose lid/cap reworked for the real package | ACTIVE; received-unit fit, ear trim and lead strain relief open |
+| [D-028](#d-028) | 2026-10-01 | Chassis / battery tub interfaces (J11A, CN-05) | Shell opening sized to the hatch; front hatch bosses moved onto the tub front wall; bosses cut to Z 39.5 and the pack disconnect lifted 3 mm; IMU screw overlap recorded as accepted | ACTIVE; `check_layout.py` 116/119 (three D-027 failures open); boss and insert fit unproven |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -833,3 +834,42 @@ The full `check_layout.py` was not rerun. `chassis-v1.step` was rebuilt from the
 **Still boxes:** the PCB-01 protection module has no drawing or model and an unmeasured height. The custom boards (PCB-07, the Hall carrier, the power-board proposals) are the project's own designs.
 
 **Open:** check the received A21 and #3297 against the STEPs; ear-trim quality; soldered-lead strain relief; hump and cap-notch print and dust ingress; bench-check the stop-path timing (unchanged).
+
+## D-028
+
+**2026-10-01 · Chassis / battery tub interfaces (J11A, CN-05) · ACTIVE; boss and insert fit unproven**
+
+**Why:** `check_battery_ballast.py` (D-026) reported four overlaps as OPEN. The builder asked for the hatch, deck and power-envelope overlaps to be fixed, and the IMU one recorded as accepted.
+
+**Root causes:**
+- **Hatch × shell (1689 mm³):** the hatch lies inside the shell floor's thickness (Z 30.5–32.0 in a Z 30.0–32.4 floor). The floor opening was the tub plus 1 mm, but the hatch flange is wider, so its screw holes sat in shell material.
+- **Front deck × shell (39 mm³):** four 0.4 mm slivers where the tub screw bosses (from Z 32) entered the shell floor outside the opening.
+- **Front deck × power envelopes (178 mm³):** the CN-05 fuse-holder and disconnect-pair envelopes share the 11.3 mm channel between the tub's +Y wall and the rail with the +Y bosses. Neither envelope can move sideways. Raising the fuse would hit body-mount nut 4 (Z 48.8).
+- **Front deck × IMU (25.133 mm³):** exactly the two M2 shanks, 4 mm into the deck (2·π·1²·4), by design.
+
+**Changed in `01-chassis/v1/cad/body_chassis_model.py`:**
+- **Shell opening:** now the hatch outline plus `BATTERY_HATCH_GAP` 0.5 mm, from new `BATTERY_HATCH_X` / `BATTERY_HATCH_HALF_Y` constants shared with the hatch.
+- **Bosses:** one constant, `TUB_BOSS_XY`, now used by both the tub and the front deck print. The rear pair stays at (28, ±39.5). The front pair moves from (64, ±39.5) onto the front wall's face at (71.5, ±34.35), midway between the ballast bar (|Y| 30) and the fuse holder (Y 38.7). All four stop at `TUB_BOSS_TOP_Z` 39.5, 1 mm over the unchanged Ø4.3 × 7 insert pilots (was Z 41).
+- **Hatch:** grows forward from X 71 to X 75 to carry the front screws, leaving 3.5 mm to the edge (M3 washer radius). Its Y extent is unchanged.
+- **Pack interface (CN-05):** the disconnect pair, its tub-wall service window and slide path move from Z 37–47 to Z 40–50, clear of the rear +Y boss. The fuse holder is unchanged.
+
+**Mass register (measured against the committed model):** shell −4.04 cm³, so `BODY_SHELL_AND_PANELS` goes from 290.4 to 285.6 g. Frame +0.29 cm³ at 0.571 g/cm³, so `CHASSIS_PRIMARY_FRAME` goes from 206.8 to 207.0 g. The register total is 2600.6 g, CoM (+19.03, 0.16, 105.88), a_tip 1.763 m/s² against 1.582.
+
+**Checks:**
+- `check_battery_ballast.py`: all ten rows pass with no OPEN overlaps. The IMU overlap is in a new ACCEPTED list and passes only at 25.133 mm³. Hatch/shell or deck/shell overlaps now fail instead of being reported.
+- Pack-interface sweep (pair, fuse, slide path against the whole model): no clashes. The window still opens through the wall.
+- `chassis-v1.step` and `body-chassis.step` rebuilt.
+- Full `check_layout.py`: 116 of 119 rows pass, in 14 min. All the tub, hatch, ballast, pack-disconnect and IMU rows pass. The window reads Z 40–50. The three failures are listed under **Found, not changed**.
+- **`check_layout.py` repaired so it completes** (first full run since Sep 27). Under the substitute runtime (OCC 7.9.3), whole-compound booleans against the C3/DevKitC compound ran away: the J33/J34 reserve reached 133 GB and macOS killed the run at about 37 min, twice.
+  - `_boxes_meet` now also needs a leaf of each compound to meet. That only drops pairs whose overlap must be zero.
+  - The C3 carrier's own plug reserves are skipped against the C3 compound before the boolean; their results were already discarded.
+  - The IMU deck row picked the first `CHASSIS_DECK_WITH_BODY_INTERFACE`, which since the frame split is the rear print. It now picks the print the IMU screws are in, and reads 12.566 mm³ per shank.
+
+**Found, not changed** (the three failing `check_layout.py` rows, all outside this change and likely from D-027):
+- `connector_reserves_clear_of_real_hardware`: the PCB-03 J31/J32 and J33/J34 edge-connector reserves overlap the #3297 driver boards by 140 mm³ each.
+- `connector_bodies_clear_of_hardware_and_each_other`: the J3_1 and J3_4 mated Micro-Fit plugs overlap the driver boards by 82 and 89 mm³.
+- `front_panel_lifts_off_forward`: the front panel's removal path hits `BALL_POD` by 171 mm³, which points to the D-027 nose rework (nose top Z 49 to 51).
+
+**Changed docs and scripts:** the CAD README, joint-register J11A, `check_battery_ballast.py`, `check_layout.py`, and the regenerated `generated/checks.md` and `checks.json`.
+
+**Open:** boss print quality with a 1 mm roof over the inserts; front-boss access with the ballast bar fitted; the J11A screw and insert BOM rows (unchanged); the three D-027 `check_layout.py` failures above.

@@ -177,7 +177,7 @@
 ### J11A — battery hatch to tub
 
 - **Parts/load path:** removable bottom hatch closes tub floor; pack weight bears on hatch and transfers to tub/deck bosses.
-- **Location/joint:** separate hatch and four external bosses are modeled; pack should drop downward after hatch removal.
+- **Location/joint:** separate hatch and four external bosses are modeled; pack should drop downward after hatch removal. Bosses are not a rectangle ([D-028](../../decisions.md#d-028)): the rear pair sits outside the side walls at (28, ±39.5), the front pair on the front wall's face at (71.5, ±34.35). All four stop at Z 39.5. The hatch sits in a shell floor opening 0.5 mm larger all round.
 - **Hardware/clamp:** frame-split study proposes 4 × M3 × 6 button-head screws from below into short M3 inserts in bosses; Ø4.3 × 6 mm pilots provisional. These four screw/insert items have **no dedicated chassis BOM IDs**. SKU, washer/head stack, engagement and boss edge margin open.
 - **Material/access/service:** candidate structural prints. Support robot, disconnect/isolate battery, then reach all four screws from below. Check pack/wire clearance and access.
 - **Proof/state:** add BOM rows, coupon insert fit/pull-out, cycle hatch, verify inversion/shock retention and safe removal. **Provisional; BOM incomplete.**

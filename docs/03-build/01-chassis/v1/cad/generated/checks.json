@@ -1,6 +1,6 @@
 {
   "layout_id": "RP03_BODY_CHASSIS_LAYOUT02",
-  "ok": true,
+  "ok": false,
   "checks": [
     {
       "name": "concept_a_track",
@@ -49,17 +49,155 @@
             "min_gap_mm": 1.5,
             "between": [
               "WHEEL_L_STUB_SHAFT_8MM",
-              "AXLE_MOTOR_FLANGE_BEARING_BOSS_L"
+              "AXLE_BEARING_CAP_L"
             ]
           },
           "R": {
             "min_gap_mm": 1.5,
             "between": [
               "WHEEL_R_STUB_SHAFT_8MM",
-              "AXLE_MOTOR_FLANGE_BEARING_BOSS_R"
+              "AXLE_BEARING_CAP_R"
             ]
           }
         }
+      }
+    },
+    {
+      "name": "rotating_screws_swept_clear",
+      "ok": true,
+      "evidence": {
+        "minimum_mm": 1.5,
+        "screws": {
+          "WHEEL_L_SET_SCREW_M3X2_5": {
+            "min_gap_mm": 1.5,
+            "to": "AXLE_MOTOR_SCREW_M3X6_L_1"
+          },
+          "WHEEL_L_RING_SCREW_M3X8_1": {
+            "min_gap_mm": 15.205,
+            "to": "AXLE_BEARING_CAP_L"
+          },
+          "WHEEL_L_CAP_SCREW_M2X6_1": {
+            "min_gap_mm": 2.0,
+            "to": "none within 2 mm"
+          },
+          "WHEEL_L_RING_SCREW_M3X8_2": {
+            "min_gap_mm": 15.205,
+            "to": "AXLE_BEARING_CAP_L"
+          },
+          "WHEEL_L_CAP_SCREW_M2X6_2": {
+            "min_gap_mm": 2.0,
+            "to": "none within 2 mm"
+          },
+          "WHEEL_L_RING_SCREW_M3X8_3": {
+            "min_gap_mm": 15.205,
+            "to": "AXLE_BEARING_CAP_L"
+          },
+          "WHEEL_L_CAP_SCREW_M2X6_3": {
+            "min_gap_mm": 2.0,
+            "to": "none within 2 mm"
+          },
+          "WHEEL_L_RING_SCREW_M3X8_4": {
+            "min_gap_mm": 15.205,
+            "to": "AXLE_BEARING_CAP_L"
+          },
+          "WHEEL_L_CAP_SCREW_M2X6_4": {
+            "min_gap_mm": 2.0,
+            "to": "none within 2 mm"
+          },
+          "WHEEL_L_RING_SCREW_M3X8_5": {
+            "min_gap_mm": 15.205,
+            "to": "AXLE_BEARING_CAP_L"
+          },
+          "WHEEL_L_CAP_SCREW_M2X6_5": {
+            "min_gap_mm": 2.0,
+            "to": "none within 2 mm"
+          },
+          "WHEEL_L_RING_SCREW_M3X8_6": {
+            "min_gap_mm": 15.205,
+            "to": "AXLE_BEARING_CAP_L"
+          },
+          "WHEEL_L_CAP_SCREW_M2X6_6": {
+            "min_gap_mm": 2.0,
+            "to": "none within 2 mm"
+          },
+          "WHEEL_L_SCREW_M3X6_1": {
+            "min_gap_mm": 1.64,
+            "to": "AXLE_CAP_SCREW_M3X18_L_1"
+          },
+          "WHEEL_L_SCREW_M3X6_2": {
+            "min_gap_mm": 1.64,
+            "to": "AXLE_CAP_SCREW_M3X18_L_1"
+          },
+          "WHEEL_L_SCREW_M3X6_3": {
+            "min_gap_mm": 1.64,
+            "to": "AXLE_CAP_SCREW_M3X18_L_1"
+          },
+          "WHEEL_R_SET_SCREW_M3X2_5": {
+            "min_gap_mm": 1.5,
+            "to": "AXLE_MOTOR_SCREW_M3X6_R_1"
+          },
+          "WHEEL_R_RING_SCREW_M3X8_1": {
+            "min_gap_mm": 15.205,
+            "to": "AXLE_BEARING_CAP_R"
+          },
+          "WHEEL_R_CAP_SCREW_M2X6_1": {
+            "min_gap_mm": 2.0,
+            "to": "none within 2 mm"
+          },
+          "WHEEL_R_RING_SCREW_M3X8_2": {
+            "min_gap_mm": 15.205,
+            "to": "AXLE_BEARING_CAP_R"
+          },
+          "WHEEL_R_CAP_SCREW_M2X6_2": {
+            "min_gap_mm": 2.0,
+            "to": "none within 2 mm"
+          },
+          "WHEEL_R_RING_SCREW_M3X8_3": {
+            "min_gap_mm": 15.205,
+            "to": "AXLE_BEARING_CAP_R"
+          },
+          "WHEEL_R_CAP_SCREW_M2X6_3": {
+            "min_gap_mm": 2.0,
+            "to": "none within 2 mm"
+          },
+          "WHEEL_R_RING_SCREW_M3X8_4": {
+            "min_gap_mm": 15.205,
+            "to": "AXLE_BEARING_CAP_R"
+          },
+          "WHEEL_R_CAP_SCREW_M2X6_4": {
+            "min_gap_mm": 2.0,
+            "to": "none within 2 mm"
+          },
+          "WHEEL_R_RING_SCREW_M3X8_5": {
+            "min_gap_mm": 15.205,
+            "to": "AXLE_BEARING_CAP_R"
+          },
+          "WHEEL_R_CAP_SCREW_M2X6_5": {
+            "min_gap_mm": 2.0,
+            "to": "none within 2 mm"
+          },
+          "WHEEL_R_RING_SCREW_M3X8_6": {
+            "min_gap_mm": 15.205,
+            "to": "AXLE_BEARING_CAP_R"
+          },
+          "WHEEL_R_CAP_SCREW_M2X6_6": {
+            "min_gap_mm": 2.0,
+            "to": "none within 2 mm"
+          },
+          "WHEEL_R_SCREW_M3X6_1": {
+            "min_gap_mm": 1.64,
+            "to": "AXLE_CAP_SCREW_M3X18_R_1"
+          },
+          "WHEEL_R_SCREW_M3X6_2": {
+            "min_gap_mm": 1.64,
+            "to": "AXLE_CAP_SCREW_M3X18_R_1"
+          },
+          "WHEEL_R_SCREW_M3X6_3": {
+            "min_gap_mm": 1.64,
+            "to": "AXLE_CAP_SCREW_M3X18_R_1"
+          }
+        },
+        "note": "each rotating screw swept as a full ring about the axle"
       }
     },
     {
@@ -75,11 +213,11 @@
       "evidence": {
         "L": {
           "gap_mm": 0.0,
-          "overlap_mm3": 0.0
+          "overlap_mm3": 0
         },
         "R": {
           "gap_mm": 0.0,
-          "overlap_mm3": 0.0
+          "overlap_mm3": 0
         }
       }
     },
@@ -91,48 +229,96 @@
           "L": {
             "screw_count": 2,
             "screw_insertion_mm": [
-              4.0,
-              4.0
+              3.2,
+              3.2
             ],
             "thread_engaged_in_faceplate_mm": [
-              2.85,
-              2.85
+              3.2,
+              3.2
             ],
-            "hole_depth_mm": 6.0,
-            "shaft_engaged_in_stub_mm": 8.5,
+            "hole_depth_mm": 5.0,
+            "shaft_engaged_in_stub_mm": 8.0,
             "shaft_stub_overlap_mm3": 0,
-            "screw_head_to_inner_bearing_mm": 0.5
+            "screw_head_to_inner_bearing_mm": 2.71
           },
           "R": {
             "screw_count": 2,
             "screw_insertion_mm": [
-              4.0,
-              4.0
+              3.2,
+              3.2
             ],
             "thread_engaged_in_faceplate_mm": [
-              2.85,
-              2.85
+              3.2,
+              3.2
             ],
-            "hole_depth_mm": 6.0,
-            "shaft_engaged_in_stub_mm": 8.5,
+            "hole_depth_mm": 5.0,
+            "shaft_engaged_in_stub_mm": 8.0,
             "shaft_stub_overlap_mm3": 0,
-            "screw_head_to_inner_bearing_mm": 0.5
+            "screw_head_to_inner_bearing_mm": 2.71
           }
         },
-        "rule": "M3 thread in the tapped faceplate >= 2.5 mm, insertion <= hole depth - 0.5; shaft >= 8 mm in the stub; heads >= 0.4 mm off the bearing"
+        "rule": "M3 thread in the tapped faceplate >= 2.5 mm, insertion <= hole depth - 0.5; shaft >= 6 mm in the stub (set-screw coupling, D-007); heads >= 0.4 mm off the bearing"
       }
     },
     {
-      "name": "bearings_sit_inside_flange_boss",
+      "name": "axle_stack_is_retained",
       "ok": true,
       "evidence": {
-        "bearings": {
-          "BEARING_608ZZ_L_1": true,
-          "BEARING_608ZZ_L_2": true,
-          "BEARING_608ZZ_R_1": true,
-          "BEARING_608ZZ_R_2": true
+        "sides": {
+          "L": {
+            "bearing_spans_abs_y_mm": [
+              [
+                76.51,
+                81.51
+              ],
+              [
+                81.51,
+                86.51
+              ]
+            ],
+            "inner_bearing_to_housing_shoulder_mm": 0.0,
+            "outer_bearing_to_cap_mm": 0.0,
+            "bearings_to_stub_mm": [
+              0.0,
+              0.0
+            ],
+            "bearing_stub_overlap_mm3": 0,
+            "housing_to_plate_mm": 0.0,
+            "set_screw_to_shaft_flat_mm": 0.0,
+            "wheel_screw_thread_in_flange_mm": [
+              2.0,
+              2.0,
+              2.0
+            ]
+          },
+          "R": {
+            "bearing_spans_abs_y_mm": [
+              [
+                76.51,
+                81.51
+              ],
+              [
+                81.51,
+                86.51
+              ]
+            ],
+            "inner_bearing_to_housing_shoulder_mm": 0.0,
+            "outer_bearing_to_cap_mm": 0.0,
+            "bearings_to_stub_mm": [
+              0.0,
+              0.0
+            ],
+            "bearing_stub_overlap_mm3": 0,
+            "housing_to_plate_mm": 0.0,
+            "set_screw_to_shaft_flat_mm": 0.0,
+            "wheel_screw_thread_in_flange_mm": [
+              2.0,
+              2.0,
+              2.0
+            ]
+          }
         },
-        "boss_end_y_mm": 88.0
+        "rule": "688 ZZ pair seated between the housing shoulder and the cap, on the stub; housing on the plate; set screw on the D-flat; three wheel screws with >= 2 mm thread in the flange"
       }
     },
     {
@@ -156,7 +342,7 @@
           "front_crossmember_mm": 1.5,
           "deck_underside_mm": 0.0
         },
-        "mass_g": 81.6
+        "mass_g": 81.1
       }
     },
     {
@@ -177,12 +363,12 @@
       "ok": true,
       "evidence": {
         "battery_center_mm": [
-          46.7,
+          46.25,
           0.0,
           43.099999999999994
         ],
         "battery_size_mm": [
-          37.6,
+          38.5,
           67.0,
           22.199999999999996
         ],
@@ -226,14 +412,67 @@
       }
     },
     {
-      "name": "ball_screws_engage_flange",
+      "name": "ball_screws_thread_into_seat_inserts",
       "ok": true,
       "evidence": {
         "thread_engagement_mm": {
-          "BALL_M3_SHANK_1": 3.0,
-          "BALL_M3_SHANK_2": 3.0,
-          "BALL_M3_SHANK_3": 3.0
-        }
+          "BALL_M3_SHANK_1": 5.3,
+          "BALL_M3_SHANK_2": 5.3,
+          "BALL_M3_SHANK_3": 5.3
+        },
+        "heads": {
+          "BALL_M3_HEAD_1": {
+            "to_ball_mm": 0.431,
+            "into_flange_mm3": 0
+          },
+          "BALL_M3_HEAD_2": {
+            "to_ball_mm": 0.431,
+            "into_flange_mm3": 0
+          },
+          "BALL_M3_HEAD_3": {
+            "to_ball_mm": 0.431,
+            "into_flange_mm3": 0
+          }
+        },
+        "rule": "J07 (D-011): ISO 7380 M3 x 8 from below, head in the vendor O6.3 counterbore >= 0.3 mm off the ball; >= 4.5 mm (1.5 d) of shank inside a coaxial heat-set insert in the pod seat"
+      }
+    },
+    {
+      "name": "heat_set_bores_give_interference",
+      "ok": true,
+      "evidence": {
+        "interference_mm3": {
+          "BALL_SEAT_HEATSET_INSERT_1": 23.1,
+          "BALL_SEAT_HEATSET_INSERT_2": 23.1,
+          "BALL_SEAT_HEATSET_INSERT_3": 23.1,
+          "BALL_POD_HEATSET_INSERT_1": 23.1,
+          "BALL_POD_HEATSET_INSERT_2": 23.1
+        },
+        "bore_mm": 4.0,
+        "insert_od_mm": 4.6
+      }
+    },
+    {
+      "name": "touch_cap_sweeps_3mm_rearward",
+      "ok": true,
+      "evidence": {
+        "first_contact_mm": {},
+        "hard_stop_at_mm": 3.0,
+        "retained_forward": true,
+        "magnet_to_hall_gap_mm": {
+          "rest": 3.1,
+          "at_stop": 0.1
+        },
+        "magnet_hits_at_stop_mm3": {}
+      }
+    },
+    {
+      "name": "touch_cap_running_clearance",
+      "ok": true,
+      "evidence": {
+        "measured_mm": 0.5,
+        "claimed_mm": 0.5,
+        "note": "snap hooks excluded; they bear on the slot front wall by design"
       }
     },
     {
@@ -265,7 +504,7 @@
       "evidence": {
         "cap_bottom_z_mm": 29.0,
         "pod_seat_z_mm": 29.0,
-        "housing_bottom_z_mm": 8.5
+        "housing_bottom_z_mm": 26.0
       }
     },
     {
@@ -302,7 +541,7 @@
       "name": "front_range_lookahead_within_rated_range",
       "ok": true,
       "evidence": {
-        "rated_max_mm": 300.0,
+        "rated_max_mm": 800.0,
         "cases": {
           "0.50 m/s level": {
             "from_ball_contact_mm": 179.0,
@@ -344,7 +583,7 @@
         "nose_width_mm": 40.6,
         "previous_shroud_width_mm": 52.0,
         "nose_front_x_mm": 133.5,
-        "spin_radius_mm": 134.55
+        "spin_radius_mm": 134.79
       }
     },
     {
@@ -535,15 +774,17 @@
         "sensor_face_mm": [
           128.0,
           0.0,
-          40.3
+          41.5
         ]
       }
     },
     {
       "name": "front_panel_lifts_off_forward",
-      "ok": true,
+      "ok": false,
       "evidence": {
-        "blockers_mm3": {},
+        "blockers_mm3": {
+          "BALL_POD": 170.779
+        },
         "panel_bottom_z_mm": 58.0
       }
     },
@@ -943,7 +1184,7 @@
       "evidence": {
         "first_contact_pitch_deg": {
           "shoe": 6.054,
-          "guards": 6.442,
+          "guards": 6.494,
           "keel_body": 8.973,
           "tcrt": 10.434
         }
@@ -958,10 +1199,16 @@
       }
     },
     {
-      "name": "rear_keel_bolted_with_four_m3",
+      "name": "rear_keel_bolted_with_four_m3_into_inserts",
       "ok": true,
       "evidence": {
-        "hardware_solids": 8
+        "engagement_mm": {
+          "REAR_KEEL_M3X30_SCREW_1": 5.5,
+          "REAR_KEEL_M3X30_SCREW_2": 5.5,
+          "REAR_KEEL_M3X30_SCREW_3": 5.7,
+          "REAR_KEEL_M3X30_SCREW_4": 5.7
+        },
+        "screw_clash_mm3": 0
       }
     },
     {
@@ -971,13 +1218,10 @@
         "shoe_top_z_mm": 6.0,
         "keel_underside_z_mm": {
           "-32.0,-4.0": 6.0,
-          "-32.0,0.0": 6.0,
           "-32.0,4.0": 6.0,
           "-27.0,-4.0": 6.0,
-          "-27.0,0.0": 6.0,
           "-27.0,4.0": 6.0,
           "-22.0,-4.0": 6.0,
-          "-22.0,0.0": 6.0,
           "-22.0,4.0": 6.0
         }
       }
@@ -986,11 +1230,11 @@
       "name": "rear_keel_guards_seated_full_length",
       "ok": true,
       "evidence": {
-        "guard_top_z_mm": 10.5,
+        "guard_top_z_mm": 12.001,
         "keel_underside_z_mm": {
-          "-61.5": 10.0,
-          "-55.5": 10.0,
-          "-49.5": 10.0
+          "-61.0": 12.0,
+          "-55.2": 12.0,
+          "-49.5": 12.0
         }
       }
     },
@@ -1076,7 +1320,7 @@
       "name": "battery_forward_of_axle",
       "ok": true,
       "evidence": {
-        "battery_x_mm": 46.7
+        "battery_x_mm": 46.25
       }
     },
     {
@@ -1099,7 +1343,7 @@
       "ok": true,
       "evidence": {
         "clashes_mm3": {},
-        "checked_against": 152,
+        "checked_against": 236,
         "keep_outs_included": true
       }
     },
@@ -1141,12 +1385,12 @@
             "to": "BODY_LOWER_CROSS_REAR"
           },
           "PACK_ATOF_FUSE_HOLDER_ENVELOPE": {
-            "nearest_mm": 1.3,
-            "to": "CHASSIS_RAIL_L_FRONT"
+            "nearest_mm": 0.85,
+            "to": "CHASSIS_DECK_WITH_BODY_INTERFACE"
           },
           "PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE": {
-            "nearest_mm": 2.2,
-            "to": "CHASSIS_RAIL_L_FRONT"
+            "nearest_mm": 0.5,
+            "to": "CHASSIS_DECK_WITH_BODY_INTERFACE"
           },
           "ESTOP_XA1E_MUSHROOM_D29": {
             "nearest_mm": 4.519,
@@ -1264,17 +1508,20 @@
         "removed_row_g": 121.5,
         "estop_g": 14.0,
         "battery_g": 108.2,
-        "total_mass_g": 2551.9,
+        "total_mass_g": 2600.6,
         "note": "hand-kept register: masses are RP-02 estimates, not derived from the solids"
       }
     },
     {
       "name": "connector_reserves_clear_of_real_hardware",
-      "ok": true,
+      "ok": false,
       "evidence": {
-        "clashes_mm3": {},
+        "clashes_mm3": {
+          "PCB03_PY_EDGE_CONNECTORS_J32_J31_RESERVE x ADAFRUIT_3297_DRV8833_LEFT": 140.02,
+          "PCB03_NY_EDGE_CONNECTORS_J33_J34_RESERVE x ADAFRUIT_3297_DRV8833_RIGHT": 140.02
+        },
         "reserves": 29,
-        "checked_against": 215,
+        "checked_against": 295,
         "open_known_clashes_mm3": {},
         "note": "mated plug + first lead bend; the pack-disconnect slide path is checked separately (the pack occupies it until removed). The Pi GPIO socket clears the yaw servo by 0.6 mm and the PCB-09 strip over it by 0.1 mm"
       }
@@ -1393,8 +1640,8 @@
         "window_mm": [
           26.9,
           49.5,
-          37.0,
-          47.0
+          40.0,
+          50.0
         ],
         "rule": "CN-05: Micro-Fit+ 1x2 wire-to-wire pair beside the tub, fuse next after it (PA-02); with the hatch open and the pack out the pair slides through the +Y tub window into the empty tub"
       }
@@ -1695,9 +1942,12 @@
     },
     {
       "name": "connector_bodies_clear_of_hardware_and_each_other",
-      "ok": true,
+      "ok": false,
       "evidence": {
-        "clashes_mm3": {},
+        "clashes_mm3": {
+          "J3_1_MICROFIT_PLUS_2P_MATED_PLUG x ADAFRUIT_3297_DRV8833_LEFT": 82.49,
+          "J3_4_MICROFIT_PLUS_2P_MATED_PLUG x ADAFRUIT_3297_DRV8833_RIGHT": 89.28
+        },
         "self_overlaps_mm3": {},
         "bodies": 48,
         "note": "PCB-08 and PCB-09 boards, PCB-05 edge headers, mated Micro-Fit plugs and motor pairs; PCB-05 headers inside PCB-05's own parts reserve are by design"
@@ -1739,30 +1989,40 @@
       }
     },
     {
-      "name": "bearing_step_exists",
+      "name": "bearing_model_is_688zz",
       "ok": true,
       "evidence": {
-        "path": "/Users/avinier/robotics/makad/docs/02-prototypes/RP-06-cad/body-chassis/layout-01/references/purchased/bearing_608zz.step"
+        "model": "688ZZ",
+        "seat_y_mm": [
+          76.51,
+          86.51
+        ],
+        "centres_y_mm": [
+          79.01,
+          84.01
+        ],
+        "tap_drill_to_bearing_face_mm": 0.46000000000000796,
+        "note": "parametric rings; supplier STEP/drawing not provided (D-012)"
       }
     },
     {
       "name": "com_inside_support_x",
       "ok": true,
       "evidence": {
-        "com_x_mm": 19.4591427613511
+        "com_x_mm": 19.02689284911675
       }
     },
     {
       "name": "com_forward_of_physics_margin_line",
       "ok": true,
       "evidence": {
-        "com_x_mm": 19.46,
-        "com_h_mm": 107.27,
-        "x_over_h": 0.1814,
-        "a_tip_m_s2": 1.78,
+        "com_x_mm": 19.03,
+        "com_h_mm": 105.88,
+        "x_over_h": 0.1797,
+        "a_tip_m_s2": 1.763,
         "a_tip_min_m_s2": 1.582,
-        "equivalent_min_x_mm_at_this_h": 17.3,
-        "margin_over_a_peak_1p00": 1.78,
+        "equivalent_min_x_mm_at_this_h": 17.08,
+        "margin_over_a_peak_1p00": 1.763,
         "baseline_target": {
           "x_mm": 25.0,
           "h_mm": 124.0,
@@ -1776,7 +2036,7 @@
       "name": "ball_share_above_spin_walk_flag",
       "ok": true,
       "evidence": {
-        "ball_share": 0.1769,
+        "ball_share": 0.173,
         "flag_below": 0.09
       }
     },
@@ -1785,14 +2045,14 @@
       "ok": true,
       "evidence": {
         "shoe_first_contact_pitch_deg": 6.054,
-        "com_over_axle_pitch_deg": 10.282
+        "com_over_axle_pitch_deg": 10.187
       }
     },
     {
       "name": "com_below_head_yaw",
       "ok": true,
       "evidence": {
-        "com_z_mm": 107.2693682261636
+        "com_z_mm": 105.88115138495307
       }
     }
   ]

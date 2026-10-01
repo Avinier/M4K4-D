@@ -9,24 +9,13 @@
   "below_deck_top_z": 2.1
  },
  "tub_clashes": {},
- "tub_open": {
-  "BATTERY_TUB_BOTTOM_HATCH x BODY_SHELL": {
-   "mm3": 1689.275,
-   "note": "hatch flange (tub X -3/+4, Y +/-10) is larger than the shell floor opening (X -1/+2.5, Y +/-1); unresolved"
-  },
-  "CHASSIS_DECK_WITH_BODY_INTERFACE x BODY_SHELL": {
-   "mm3": 38.619,
-   "note": "shell-to-deck interface overlap; unresolved"
-  },
-  "CHASSIS_DECK_WITH_BODY_INTERFACE x POWER_DISTRIBUTION_BOARDS": {
-   "mm3": 178.4,
-   "note": "proposal board envelopes and keep-outs; unresolved"
-  },
+ "tub_accepted": {
   "CHASSIS_DECK_WITH_BODY_INTERFACE x IMU_PCB07": {
    "mm3": 25.133,
-   "note": "IMU M2 screws thread-form into the deck by design"
+   "note": "IMU M2 screws thread-form 4 mm into the deck by design"
   }
  },
+ "tub_open": {},
  "ballast_is_clear": {},
  "ballast_self": {},
  "csk_heads_seated": {
@@ -46,11 +35,11 @@
  "screw_length_mm": 12.0,
  "engagement_mm": 8.1,
  "tip_to_hole_floor_mm": 0.9,
- "mass_g": 2605.0,
+ "mass_g": 2600.6,
  "com_mm": [
   19.03,
   0.16,
-  105.87
+  105.88
  ],
  "a_tip_m_s2": 1.763,
  "a_tip_min_m_s2": 1.582,

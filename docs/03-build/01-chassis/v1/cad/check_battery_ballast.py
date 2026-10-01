@@ -6,6 +6,7 @@ python check_battery_ballast.py
 Writes generated/battery-ballast-checks.json.
 """
 import json
+import math
 import os
 import sys
 
@@ -81,19 +82,22 @@ R["tub_margin_mm"] = {
 }
 
 # Tub (hatch, and the front deck print carrying the walls) against everything
-# outside the frame, and the hatch against the frame too. These pairs overlapped
-# before the 2026-09-30 cell-pitch change as well (hatch 1665, power 189 mm3);
-# they are OPEN, reported but not counted as a pass or fail.
-OPEN = {
-    "BATTERY_TUB_BOTTOM_HATCH x BODY_SHELL": "hatch flange (tub X -3/+4, Y +/-10) is larger than the shell floor opening (X -1/+2.5, Y +/-1); unresolved",
-    "CHASSIS_DECK_WITH_BODY_INTERFACE x BODY_SHELL": "shell-to-deck interface overlap; unresolved",
-    "CHASSIS_DECK_WITH_BODY_INTERFACE x POWER_DISTRIBUTION_BOARDS": "proposal board envelopes and keep-outs; unresolved",
-    "CHASSIS_DECK_WITH_BODY_INTERFACE x IMU_PCB07": "IMU M2 screws thread-form into the deck by design",
+# outside the frame, and the hatch against the frame too. ACCEPTED overlaps are
+# intended and pass only at their expected volume. OPEN overlaps are reported
+# but not counted as a pass or fail. Fixed on 2026-10-01: hatch/shell and
+# deck-boss/shell (shell opening sized to the hatch), and deck x power boards
+# (front bosses moved to the front wall, pair and window lifted over the rear boss).
+ACCEPTED = {
+    # Two M2 shanks (r 1.0) thread-form 4 mm into the deck: 2 * pi * 1^2 * 4.
+    "CHASSIS_DECK_WITH_BODY_INTERFACE x IMU_PCB07": (8.0 * math.pi, "IMU M2 screws thread-form 4 mm into the deck by design"),
 }
+OPEN = {}
 non_frame = [o for o in others if o not in frame_parts]
 tub = clash_map([hatch], [o for o in others if o is not hatch and o not in battery_parts])
 tub |= clash_map([deck_front], [o for o in non_frame if o not in battery_parts])
-R["tub_clashes"] = {k: v for k, v in tub.items() if k not in OPEN}
+accepted = {k: v for k, v in tub.items() if k in ACCEPTED and abs(v - ACCEPTED[k][0]) < 0.01}
+R["tub_clashes"] = {k: v for k, v in tub.items() if k not in OPEN and k not in accepted}
+R["tub_accepted"] = {k: {"mm3": v, "note": ACCEPTED[k][1]} for k, v in accepted.items()}
 R["tub_open"] = {k: {"mm3": v, "note": OPEN[k]} for k, v in tub.items() if k in OPEN}
 
 # Ballast: no clashes except the shanks in the bar's tapped holes (coincident radius).

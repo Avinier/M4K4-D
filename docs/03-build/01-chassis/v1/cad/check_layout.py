@@ -45,10 +45,34 @@ def _boxes_meet(a, b, tol=1e-6):
     build123d's BoundBox.overlaps() returns False when one box contains the
     other, so used as a pre-filter it silently skipped every part lying wholly
     inside another's bounding box (found 2026-09-26).
+    Compounds also need a leaf of each to meet. A whole-compound boolean whose
+    leaves are all clear can run away under OCC 7.9.3: the J33/J34 reserve
+    against the C3/DevKitC compound reached 133 GB (2026-10-01).
     """
+    if not _whole_boxes_meet(a, b, tol):
+        return False
+    la, lb = _leaf_list(a), _leaf_list(b)
+    if len(la) == 1 and len(lb) == 1:
+        return True
+    return any(_whole_boxes_meet(x, y, tol) for x in la for y in lb)
+
+
+def _whole_boxes_meet(a, b, tol=1e-6):
     p, q = _box(a), _box(b)
     return (p.min.X < q.max.X - tol and q.min.X < p.max.X - tol and p.min.Y < q.max.Y - tol
             and q.min.Y < p.max.Y - tol and p.min.Z < q.max.Z - tol and q.min.Z < p.max.Z - tol)
+
+
+_LEAF_CACHE = {}
+
+
+def _leaf_list(shape):
+    cached = _LEAF_CACHE.get(id(shape))
+    if cached is None or cached[0] is not shape:
+        kids = getattr(shape, "children", None)
+        cached = (shape, [l for c in kids for l in _leaf_list(c)] if kids else [shape])
+        _LEAF_CACHE[id(shape)] = cached
+    return cached[1]
 
 
 def _vol(shape):
@@ -673,8 +697,9 @@ def main():
     audio_leaves = leaves(audio_group)
     imu_leaves = leaves(imu_group)
     selected_parts = [p for p in audio_leaves + imu_leaves if not any(k in p.label for k in ("ACOUSTIC_PORT", "PORT_BOOT"))]
-    deck = by_label(chassis_static, "CHASSIS_DECK_WITH_BODY_INTERFACE")
     imu_shanks = [p for p in imu_leaves if p.label.startswith("IMU_M2_SCREW_SHANK")]
+    # Two deck prints share the label since the frame split; the IMU screws go into the front one.
+    deck = next(p for p in chassis_static if p.label == "CHASSIS_DECK_WITH_BODY_INTERFACE" and _boxes_meet(p, imu_shanks[0]))
     selected_others = [
         *chassis_static, body_shell, *leaves(body_panels), *leaves(panel_hardware), *leaves(body_frame),
         *power_parts, *[c for c in M.electronics().children if c.label not in ("POWER_DISTRIBUTION_BOARDS", "IMU_PCB07")],
@@ -748,22 +773,25 @@ def main():
         *leaves(M.bearing_pair("L")), *leaves(M.bearing_pair("R")),
     ]
 
-    def clash_map(parts, others):
+    def clash_map(parts, others, skip=lambda part, other: False):
         found = {}
         for part in parts:
             _stage(f"clash_map: {part.label}")
             for other in others:
-                if _boxes_meet(part, other):
+                if not skip(part, other) and _boxes_meet(part, other):
                     volume = _vol(part & other)
                     if volume > 1e-3:
                         found[f"{part.label} x {other.label}"] = round(volume, 2)
         return found
 
     _stage("connector_others built; starting connector clash maps")
-    connector_clashes = {
-        key: volume for key, volume in clash_map(connector_reserves, connector_others).items()
-        if not (key.startswith("C3_CARRIER_") and key.endswith(" x C3_CARRIER_PCB10_WITH_DEVKITC"))
-    }
+    # The C3 carrier's own plug reserves are checked by the C3 rows below. Skip
+    # them before the boolean: J101 against the whole DevKitC compound ran past
+    # 76 GB under OCC 7.9.3 (2026-10-01), only for the result to be discarded.
+    connector_clashes = clash_map(
+        connector_reserves, connector_others,
+        skip=lambda part, other: part.label.startswith("C3_CARRIER_") and other.label == "C3_CARRIER_PCB10_WITH_DEVKITC",
+    )
     connector_open_clashes = clash_map(connector_open, connector_others)
     # Real connector bodies and the PCB-08/PCB-09 boards: clear of all hardware and of
     # each other. PCB-05's edge headers stand inside PCB-05's own parts reserve by design.
