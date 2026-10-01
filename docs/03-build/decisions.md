@@ -33,6 +33,7 @@ The central record of every decision and change made during the build phase. New
 | [D-026](#d-026) | 2026-09-30 | Chassis / battery and ballast CAD (CH-022, CH-038, J12) | BOM and CAD reconciled: 1.1 mm cell gap, countersunk CH-038 seat, 350 mm TCRT mass note; chassis-v1.step rebuilt | ACTIVE; PCB-01 height, received-screw fit and full `check_layout.py` rerun open |
 | [D-027](#d-027) | 2026-09-30 | Chassis / purchased-part models (CH-017, CH-018; J08A/J08C) | Vendor STEP for the A21 and a board-file STEP for the #3297 replace boxes; A21 ears trimmed, lead soldered, nose lid/cap reworked for the real package | ACTIVE; received-unit fit, ear trim and lead strain relief open |
 | [D-028](#d-028) | 2026-10-01 | Chassis / battery tub interfaces (J11A, CN-05) | Shell opening sized to the hatch; front hatch bosses moved onto the tub front wall; bosses cut to Z 39.5 and the pack disconnect lifted 3 mm; IMU screw overlap recorded as accepted | ACTIVE; `check_layout.py` 116/119 (three D-027 failures open); boss and insert fit unproven |
+| [D-030](#d-030) | 2026-10-01 | Chassis / frame fasteners, pack restraint, driver mounts (J05, J06, J11A, J11B, J12, J13, J15B, J16; CH-030, CH-055, CH-060) | J05/J06 inserts moved into the rail tongues; all frame, hatch and driver hardware modeled and added (CH-073–CH-082); pack strapped to the hatch; DIN 7984 → ISO 7380; set screw = M3 × 3 faced to 2.5 | ACTIVE; HOLD on coupons, strap/foam source and physical tests |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -873,3 +874,67 @@ The full `check_layout.py` was not rerun. `chassis-v1.step` was rebuilt from the
 **Changed docs and scripts:** the CAD README, joint-register J11A, `check_battery_ballast.py`, `check_layout.py`, and the regenerated `generated/checks.md` and `checks.json`.
 
 **Open:** boss print quality with a 1 mm roof over the inserts; front-boss access with the ballast bar fitted; the J11A screw and insert BOM rows (unchanged); the three D-027 `check_layout.py` failures above.
+
+## D-030
+
+**2026-10-01 · Chassis / frame fasteners, pack restraint and driver mounts (J05, J06, J11A, J11B, J12, J13, J15B, J16; CH-011, CH-030, CH-038, CH-055, CH-060) · ACTIVE; coupons, strap/foam source and physical tests open**
+
+**Why:** the joint register still had open items: J05/J06 crossmembers and J16 deck-to-rail; J11A hatch screws and inserts with no BOM IDs and CH-011 OPEN; no J11B pack restraint; the J12 ballast screw, J13 clamp stack, and J15B board mounts and cable restraint; and CH-030, CH-055 and CH-060 with no exact source. The builder chose (2026-10-01):
+- CAD, BOM and docs together;
+- standard stocked screws in place of the three odd sizes;
+- the pack strapped to the hatch;
+- printed posts for the drivers.
+
+D-029 is reserved by a parallel session (lid hump), so this is D-030.
+
+**Found:** the J05/J06 receivers could not be assembled. Each rail's Ø4.3 insert pilot sat behind a Ø3.4 bore through the tongue, so the insert could not be pressed in. The J16 screws at (70, ±54) and (−25, ±58.5) sat under the body M4 feet. On the #3297 boards, the plated holes lie along one long edge. The left board's holes were over the battery opening, and the right board's were on a body foot.
+
+**Changed in `01-chassis/v1/cad/body_chassis_model.py`:**
+- **One frame insert:** M3 × 6, OD 4.4, in a Ø4.3 pilot with a Ø3.4 tip relief: CH-077, the same article as CH-061. Button heads seat straight on the printed faces, with no washers.
+- **J05/J06:** the inserts are pressed into the rail tongues' end faces. The tongues widen from ±3.2 to ±4.0 (1.85 mm of wall round the insert), and the pockets to ±4.2. The rear rail ends widen to X −23.
+  - J05: ISO 7380 M3 × 16 from X +92 (CH-073);
+  - J06: ISO 7380 M3 × 20 from X −48 (CH-074);
+  - both have 6 mm of thread.
+- **J16:** ISO 7380 M3 × 10 (CH-075) into inserts flush with the rail tops, 6 mm of thread. The axes are (30, ±54), (77.5, ±54) and (−27.5, ±61), each with a deck ear. Off the body feet, the heads clear by 0.65 and 1.15 mm.
+- **J11A:** ISO 7380 M3 × 6 (CH-076) through the hatch into boss inserts, 4.5 mm of thread. CH-011 becomes DESIGN.
+- **J11B:** two 10 × 1.2 mm hook-and-loop straps (CH-078) at Y ±29 loop under the hatch, through four hatch slots and over the cell tops, clear of the BMS. Two 1.5 mm foam pads (CH-079) sit on the Y-end walls; the +Y pad stops short of the service window. Pack and hatch drop out together.
+- **J15B:** the left board is turned 180° (terminal block now rearward) so both sets of holes are outboard. Both boards move 5 mm back to X 39.5. They sit on four Ø7 × 10 posts on the front deck with M2.5 × 4 inserts (CH-080) and M2.5 × 6 screws (CH-081). A tie bridge on each side at X 19–24 takes a motor-lead tie (CH-082). The `HARNESS_MOTOR_BRANCH` reserve moves to run between the posts.
+- **J01/J04:** DIN 7984 low heads become ISO 7380 button heads of the same length and key (CH-030, CH-060). The J04 recess goes from R2.9 to R2.95 for the Ø5.7 head.
+- **CH-055:** M3 × 2.5 is not a standard ISO 4029 length. The builder approved a stocked M3 × 3 faced down 0.5 mm at the hex end, so the model stays at 2.5.
+  - An unmodified M3 × 3 swept only **1.07 mm** past the face-screw heads (rule ≥ 1.5).
+  - Faced to 2.5 it sweeps **1.54 mm** (the old DIN heads gave 1.56).
+  - A plate-recess and housing-cavity enlargement tried for the M3 × 3 was reverted.
+- **J12:** the CH-038 source is the OnlyScrews M3 × 12 Phillips CSK, mild steel, black oxide, matching the builder's report. No geometry change.
+- **J13:** the stack stays M4 × 12, plain nut, no washer, leaving 0.8 mm past the nut. Loctite 222 (CH-057) on the nut is the locking method. No geometry change.
+
+**Mass register:**
+- `CHASSIS_PRIMARY_FRAME` goes from 207.0 to 229.1 g at (18.14, 0, 46.64):
+  - +21.4 g of new hardware, measured from the solids;
+  - +0.7 g for the measured +1.24 cm³ of printed volume.
+- New `BATTERY_RESTRAINT` row: 3.4 g.
+- The driver row follows `DRIVER_CENTER_X` to X 39.5.
+- The total goes from 2600.6 to **2626.1 g**, CoM (+19.15, 0.16, 105.30).
+
+**Checks:**
+- New `cad/check_frame_fasteners.py` (about 20 min): all nine rows pass. It writes `generated/frame-fastener-checks.json`.
+  - No clashes between the changed or new solids and the whole model. The only overlaps are the designed ones already recorded: insert knurls, motor-face threads and IMU shanks.
+  - Thread engagement: M3 ≥ 4.5 mm, M2.5 4 mm.
+  - Every insert can be pressed in from a free face.
+  - The set screw clears by ≥ 1.5 mm, turned about the axle in 3° steps.
+  - Heads sit on their seats; the boards sit on their posts.
+  - Straps and foam touch the pack without overlap; the pack cartridge drops 60 mm clear.
+- `wheel/check_wheel_on_chassis.py`: 6 of 6 rows pass (16 min). Its swept-ring envelope put the set screw 1.378 mm from the button heads. That ring puts the screw's maximum radius along its whole length, so the set screw is now swept by rotation, as above.
+- `check_battery_ballast.py`: all ten rows pass. The straps and foam add no overlaps. a_tip is 1.784 m/s², against a 1.582 minimum (was 1.763).
+- `chassis-v1.step` rebuilt. The full `check_layout.py` was not rerun; its set-screw label and harness note were updated.
+
+**Changed docs:** the joint register (J01, J03, J04, J05, J06, J11A, J11B, J12, J13, J15B, J16, release actions), `BOM.csv`, the chassis `BOM.md`, the CAD and frame-split READMEs, `research/axle-stack.md` and the engineering checklist.
+- `BOM.csv` rows: CH-011, CH-030, CH-036, CH-038, CH-055, CH-057 and CH-060 updated; CH-073 to CH-082 added.
+- The CH-030, CH-035 and CH-038 rows had unquoted commas that spilled into extra columns; they are repaired.
+
+**Open:**
+- coupons: tongue inserts (1.85 mm walls), tub-boss inserts (1.35 mm walls), driver posts;
+- strap and foam source; strap ≤ 1.5 mm thick; pack shock/inversion test;
+- facing the M3 × 3 set screws (cup intact, hex depth for the 1.5 mm key);
+- M2.5 head diameter;
+- tool access with the body on and lifted;
+- the driver move against the PCB-03 connector reserves that D-028 found failing in `check_layout.py`.

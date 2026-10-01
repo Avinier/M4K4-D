@@ -165,9 +165,9 @@ MOTOR_SCREW_HOLE_DEPTH = 5.0  # assumed; not published
 # Axle stack (D-007, 03-build/01-chassis/v1/research/axle-stack.md), |Y| from the
 # centre plane. The motor floats on its face screws until it has aligned to
 # the stub, then they are tightened through key holes in the housing.
-MOTOR_SCREW_LENGTH = 6.0  # DIN 7984 M3 x 6 low head: 2.8 mm clamp + 3.2 mm thread
-MOTOR_SCREW_HEAD_RADIUS = 2.75  # O5.5 x 2 low head
-MOTOR_SCREW_HEAD_HEIGHT = 2.0
+MOTOR_SCREW_LENGTH = 6.0  # ISO 7380 M3 x 6 button head (D-030; was DIN 7984 low head): 2.8 mm clamp + 3.2 mm thread
+MOTOR_SCREW_HEAD_RADIUS = 2.85  # O5.7 x 1.65 button head, seated on the counterbore floor
+MOTOR_SCREW_HEAD_HEIGHT = 1.65
 MOTOR_SCREW_CLEAR_RADIUS = 1.8  # O3.6: +-0.3 mm float for self-alignment
 MOTOR_SCREW_CBORE = (3.25, 2.2)  # O6.5 x 2.2 counterbore; head sits 0.2 below the plate face
 AXLE_FLANGE_Y = (MOTOR_FACE_Y, 74.0)  # 5 mm motor plate (was 2 mm + 2 mm diaphragm)
@@ -195,8 +195,8 @@ BEARING_OD_RADIUS = 8.0
 BEARING_WIDTH = 5.0
 BEARING_Y = (79.01, 84.01)  # bearing centres: 76.51-81.51 and 81.51-86.51, faces touching
 BEARING_SEAT_Y = (76.51, 86.51)
-SET_SCREW_Y = 74.8  # DIN 916 M3 x 2.5 cup point on the D-flat (+Z); tap-drill edge stays 0.46 mm from the first 688ZZ face
-SET_SCREW_LENGTH = 2.5
+SET_SCREW_Y = 74.8  # ISO 4029 M3 cup point on the D-flat (+Z); tap-drill edge stays 0.46 mm from the first 688ZZ face
+SET_SCREW_LENGTH = 2.5  # ISO 4029 M3 x 3 faced down 0.5 mm at the hex end (D-030; 2.5 is not a standard length); flush with the O8 stub, 1.54 mm swept to the face-screw heads
 # Stub: one turned EN8 part. Ø8 through the bearings, Ø9.5 shoulder, Ø24
 # flange carrying three tapped M3 for the wheel, Ø10 spigot centring the wheel.
 STUB_SHAFT_RADIUS = 4.0
@@ -213,6 +213,8 @@ WHEEL_POCKET_FLOOR_Y = 93.0  # web 93-97; the stub flange turns inside the pocke
 WHEEL_HUB_BORE_RADIUS = 5.0  # O10 H7 on the spigot
 AXLE_CHEEK_X = (13.5, 17.0)  # |X| span; 1 mm off the gearbox, clear of the can
 AXLE_CHEEK_Y = (50.0, MOTOR_FACE_Y)  # rail inner face to the flange
+J04_RECESS = (2.95, 2.1)  # radius, depth of the head recess in each cheek
+J04_SCREW_LENGTH = 8.0  # ISO 7380 M3 x 8 into the 6 mm rail insert (D-030; was DIN 7984)
 MOTOR_RELIEF_HALF_X = 17.0  # deck relief and shell-floor slot over the motors
 WHEEL_RUNNING_CLEARANCE_MIN = 1.5
 
@@ -310,7 +312,21 @@ NOSE_CABLE_BORE_RADIUS = 2.5
 # x +9.4 to about +21 mm (x/h ~0.20). Body-side X values below are written as
 # their pre-shift value + BODY_SHIFT_X; BODY_AXIS_X is the body/yaw centre.
 BODY_SHIFT_X = 16.0
-DRIVER_CENTER_X = 28.5 + BODY_SHIFT_X  # Adafruit #3297 boards; 1.5 mm behind the old centre so the PCB corner clears the front body-mount doglegs (X 58)
+DRIVER_CENTER_X = 23.5 + BODY_SHIFT_X  # Adafruit #3297 boards; D-030 moved them 5 mm back so the front posts clear the body M4 feet (X 54)
+DRIVER_Y = 40.0  # board centres at Y +/-40, PCB underside Z 66
+DRIVER_PCB_Z = 66.0
+# J15B (D-030): each board's two plated O2.5 holes lie 2.54 mm in from one long
+# edge, 20.32 mm apart. Both boards turn that edge outboard (the left board is
+# turned 180 deg from D-027, so its terminal block faces rearward) and sit on
+# two printed posts on the front deck with M2.5 heat-set inserts.
+DRIVER_HOLE_HALF_PITCH = 10.16
+DRIVER_HOLE_Y = DRIVER_Y + 8.89 - 2.54  # 46.35
+DRIVER_POST_RADIUS = 3.5
+DRIVER_INSERT = (1.95, 4.0)  # M2.5 x 4 brass insert, O3.9 OD, flush with the post top
+DRIVER_SCREW = (6.0, 2.35, 1.5)  # M2.5 x 6 low button head: length, head radius, head height
+# Motor-lead strain relief: one 2.5 mm tie bridge per side on the front deck,
+# behind the boards where the leads drop to the motors.
+DRIVER_TIE_LUG = (19.0, 24.0, 37.0, 43.0, 56.0, 59.0)  # x0, x1, |y0|, |y1|, z0, z1; tunnel along Y
 BODY_AXIS_X = BODY_SHIFT_X
 BODY_X_REAR = -74.0 + BODY_SHIFT_X
 BODY_X_FRONT = 82.0 + BODY_SHIFT_X
@@ -657,6 +673,41 @@ TUB_BOSS_XY = tuple(
     )
     for sign in (-1.0, 1.0)
 )
+# Frame joint hardware (D-030). One insert article everywhere in the frame: an
+# M3 x 6 brass heat-set insert (OD 4.4) in a O4.3 pilot, as J04 (CH-061). Button
+# heads seat straight on the printed faces; no washers.
+FRAME_INSERT_RADIUS = 2.15  # pilot and modeled insert envelope
+FRAME_INSERT_LENGTH = 6.0
+# J05/J06: the insert is pressed into the rail tongue's end face, which is the
+# only face it can enter (D-030; the old pilot sat behind a O3.4 tongue bore).
+RAIL_TONGUE_HALF_Y = 4.0  # was 3.2; 1.85 mm of wall either side of the insert
+RAIL_POCKET_HALF_Y = RAIL_TONGUE_HALF_Y + 0.2
+J05_TONGUE_FACE_X = 83.0
+J06_TONGUE_FACE_X = -35.0
+J05_SCREW = (16.0, 92.0)  # length, head seat X (front crossmember front face)
+J06_SCREW = (20.0, -48.0)  # rear crossmember rear face
+J05_J06_AXIS_Z = 41.0
+# J16: deck-to-rail screws, M3 x 10 from the deck top into rail inserts flush with
+# the rail top (Z 52). D-030 moved the outer pairs off the body M4 feet: front
+# X 70 -> 77.5, rear (-25, +/-58.5) -> (-27.5, +/-61).
+J16_POINTS = ((30.0, 54.0), (77.5, 54.0), (-27.5, 61.0))  # x, |y|
+J16_SCREW_LENGTH = 10.0
+# J11A: M3 x 6 from below through the 1.5 mm hatch into 6 mm boss inserts (4.5 mm thread).
+J11A_SCREW_LENGTH = 6.0
+# J11B (D-030): the pack is strapped to the hatch and both drop out together.
+# Two 10 mm hook-and-loop straps loop under the hatch, up through slots beside
+# the pack's X faces and over the cell tops, clear of the BMS (|Y| <= 24) and
+# the cell-end straps. 1.5 mm closed-cell foam pads fill the cell-end gaps; the
+# +Y pad stops short of the service window.
+PACK_STRAP_Y = 29.0  # strap centres, |Y|
+PACK_STRAP = (10.0, 1.2)  # width, thickness
+PACK_STRAP_X = (25.8, 66.7)  # outer faces of the two risers
+PACK_STRAP_Z = (29.3, 51.9)  # under the hatch to over the cell tops (cells top Z 50.7)
+PACK_STRAP_SLOT = (0.2, 0.5)  # slot clearance in X and Y round the strap
+PACK_FOAM_T = 1.5
+PACK_FOAM_Z = (33.0, 50.0)
+PACK_FOAM_X = {"-Y": (28.0, 64.0), "+Y": (50.5, 64.0)}
+
 # E-stop: IDEC XA1E-BV3U02KT-R, the Ø16 unibody XA with a Ø29 mushroom and 2NC
 # (one to the permit loop, one to C2), 14 g. IDEC XA datasheet: Ø16.2 cut-out,
 # 0.8-4.5 mm panel, mushroom top 20.6 mm above the mounting face, 23.9 mm behind
@@ -999,10 +1050,10 @@ MASS_ROWS = [
     ), "RP-01 generated mass tree"),
     ("BODY_SHELL_AND_PANELS", 285.6, (4.0 + BODY_SHIFT_X, 0.0, 96.0), "Layout 02 CAD estimate; +15 g for the internal panel frames (+15.6 cm3 net printed volume, near-solid 2.4 mm walls); -27.2 g for the -22.7 cm3 of shell floor opened over the motors, battery hatch and pod tongue (RP03-CAD-05/06) at ~1.2 g/cm3; +2.6 g for the ~0.9 cm2 x 2.4 mm of shell floor returned when the battery opening shrank to the 2S1P pack tub (RP03-CAD-07); -4.8 g for the measured -4.04 cm3 when the battery opening grew to clear the hatch flange and tub bosses (2026-10-01)"),
     ("BODY_PRIMARY_FRAME", 335.0, (4.0 + BODY_SHIFT_X, 0.0, 94.0), "Layout 02 CAD estimate incl. mounts"),
-    ("CHASSIS_PRIMARY_FRAME", 207.0, (16.82, 0.0, 46.61), "2026-10-01: +0.2 g for the measured +0.29 cm3 when the front hatch bosses moved to the front wall, the bosses were cut to Z 39.5 and the hatch grew 4 mm forward; D-011: -0.3 g for the O5 J10-8 cable bore through the front crossmember and deck at (86, -31); D-010 J04 adds two integrated plate-and-cheek carriers, keyed rail joints, eight modeled M3 x 8 screws and eight 6 mm inserts; estimated +10.2 g total (about +0.7 g printed cheek/key volume and +9.5 g steel/brass hardware, preliminary geometry-density estimate); previous 196.9 g centroid (17.7, 0, 46.8). D-007 axle stack (2026-09-29), +20.9 g at the axle (X 0, Z 42): printed plate + housing replace the flange/boss/diaphragm, +7.24 cm3 measured at ~0.571 g/cm3 (+4.1 g); two 1.2 mm aluminium caps 1.52 cm3 (+4.1 g); eight M3 x 18 cap screws (+10.6 g); eight M3 brass inserts (+1.5 g); face screws M3 x 8 CSK -> M3 x 6 low head (+0.6 g); before that 176.0 g at (19.8, 0, 47.4): +2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"),
+    ("CHASSIS_PRIMARY_FRAME", 229.1, (18.14, 0.0, 46.64), "D-030 (2026-10-01): +21.4 g of newly modeled hardware measured from the solids at 7.9/8.5 g/cm3, centroid (30.4, 0, 46.4): J05/J06/J16/J11A ISO 7380 screws and 14 M3 x 6 inserts, four M2.5 driver screws and inserts; +0.7 g for the measured +1.24 cm3 printed volume at 0.571 g/cm3 (driver posts and tie lugs, wider tongues and rear rail ends, moved J16 ears, hatch strap slots, wider J04 recesses; measured with the since-reverted set-screw recess/cavity growth, under 0.1 g), centroid about (35, 0, 64); was 207.0 g at (16.82, 0, 46.61). 2026-10-01: +0.2 g for the measured +0.29 cm3 when the front hatch bosses moved to the front wall, the bosses were cut to Z 39.5 and the hatch grew 4 mm forward; D-011: -0.3 g for the O5 J10-8 cable bore through the front crossmember and deck at (86, -31); D-010 J04 adds two integrated plate-and-cheek carriers, keyed rail joints, eight modeled M3 x 8 screws and eight 6 mm inserts; estimated +10.2 g total (about +0.7 g printed cheek/key volume and +9.5 g steel/brass hardware, preliminary geometry-density estimate); previous 196.9 g centroid (17.7, 0, 46.8). D-007 axle stack (2026-09-29), +20.9 g at the axle (X 0, Z 42): printed plate + housing replace the flange/boss/diaphragm, +7.24 cm3 measured at ~0.571 g/cm3 (+4.1 g); two 1.2 mm aluminium caps 1.52 cm3 (+4.1 g); eight M3 x 18 cap screws (+10.6 g); eight M3 brass inserts (+1.5 g); face screws M3 x 8 CSK -> M3 x 6 low head (+0.6 g); before that 176.0 g at (19.8, 0, 47.4): +2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"),
     ("WHEEL_L", 92.5, WHEEL_CENTER_L, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
     ("WHEEL_R", 92.5, WHEEL_CENTER_R, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
-    ("AXLE_BEARINGS_AND_STUB_SHAFTS", 51.4, (0.0, 0.0, AXLE_Z), "D-012 estimate: two turned EN8 stubs with flange and spigot 30.9 g; four 688 ZZ bearings estimated at 4.05 g each = 16.2 g (weigh on receipt); six M3 x 6 button wheel screws 4.0 g; two M3 x 2.5 set screws 0.3 g. Symmetric about the centre plane; all masses estimated except measured stub geometry"),
+    ("AXLE_BEARINGS_AND_STUB_SHAFTS", 51.4, (0.0, 0.0, AXLE_Z), "D-012 estimate: two turned EN8 stubs with flange and spigot 30.9 g; four 688 ZZ bearings estimated at 4.05 g each = 16.2 g (weigh on receipt); six M3 x 6 button wheel screws 4.0 g; two M3 set screws, ISO 4029 M3 x 3 faced to 2.5 (D-030), 0.3 g. Symmetric about the centre plane; all masses estimated except measured stub geometry"),
     ("MOTOR_L", 110.0, (0.0, 40.2, AXLE_Z), "E: ThinkRobotics MOT3001-6V230RPM (03-build D-003, 2026-09-28); 110 g is the NFP-JGA25-370-EN figure for the same platform, ThinkRobotics lists 130 g shipping weight, weigh on receipt; Y is the modelled static volume centroid (uniform density, E); was Pololu #4804 101 g at Y 39.2"),
     ("MOTOR_R", 110.0, (0.0, -40.2, AXLE_Z), "E: ThinkRobotics MOT3001-6V230RPM (03-build D-003, 2026-09-28); 110 g is the NFP-JGA25-370-EN figure for the same platform, ThinkRobotics lists 130 g shipping weight, weigh on receipt; Y is the modelled static volume centroid (uniform density, E); was Pololu #4804 101 g at Y -39.2"),
     ("BALL_TRANSFER", 16.5, (BALL_CONTACT[0], 0.0, 14.0), "vendor"),
@@ -1020,6 +1071,7 @@ MASS_ROWS = [
     ("C3_CARRIER_PCB10", 20.0, (sum(C3_CARRIER_BOARD[0:2]) / 2.0, C3_CARRIER_BOARD[2] - 1.0, sum(C3_CARRIER_BOARD[4:6]) / 2.0), "E (proposal): 70 x 43.5 mm board ~8.5 g + THVD1451, TPS3436, READY logic, SLEEP FETs ~1 g + 2 x 22-pin headers ~3 g + 10 GH and 1 Micro-Fit 3.0 header ~3 g + four M2.5 screws and inserts ~1 g; two printed uprights on the -Y rails ~3.5 g"),
     ("YAW_JUNCTION_PCB08", 4.0, (sum(YAW_JUNCTION_BOX[0:2]) / 2.0, sum(YAW_JUNCTION_BOX[2:4]) / 2.0, 116.0), "E: 32 x 21 mm board ~2 g + Micro-Fit+ 2x3 and three GH headers ~2 g"),
     ("C0_LINK_ADAPTER_PCB09", 7.0, (30.0, 32.0, 107.5), "E: strip-and-wide board ~3 g + 2 x 20 socket ~2 g + 2 x THVD1451 and three GH headers ~2 g"),
+    ("BATTERY_RESTRAINT", 3.4, (46.36, 0.0, 40.63), "D-030 J11B, measured from the solids: two 10 x 1.2 mm hook-and-loop strap loops at ~1.1 g/cm3 (3.3 g) and two 1.5 mm closed-cell foam pads at ~0.1 g/cm3 (0.05 g); estimate, not weighed"),
     ("ADAFRUIT_DRV8833_CARRIERS_X2", 6.0, (DRIVER_CENTER_X, 0.0, 68.5), "E: 2 x Adafruit #3297 boards, 25.4 x 17.8 mm board-file outline with the 3.5 mm terminal block fitted (10.1 mm tall), 3 g each; mass unmeasured"),
     ("IMU_PCB07", 2.5, (IMU_BOARD_CENTER[0], 0.0, IMU_BOARD_CENTER[2] + 1.0), "E: PCB-07 16 x 20 x 1.0 mm FR4 ~0.6 g + ICM-42688-P and JST-SH 8-pin ~0.3 g + two M2 x 5 ~0.6 g + 8-way AWG30 lead to C3 ~1 g (RP03-CAD-11); was a 2 g breakout estimate at (16, 0, 60)"),
     ("TCRT5000_BREAKOUT_AND_CABLE", 3.0, TCRT_REAR_CENTER, "E: TCRT5000 with a soldered 350 mm 4-core J10-10 GH lead (CH-020) and heat-shrink (D-016) (most of it rises to the C3 carrier; lumped at the sensor); was inside the old CONTROL_POWER_SENSORS row at the body centre"),
@@ -1893,10 +1945,89 @@ def battery_tub(include_walls: bool = True):
         walls = walls + _block(x - 3.5, x + 3.5, y - 3.5, y + 3.5, fz1, TUB_BOSS_TOP_Z)
         walls = walls - _z_cylinder(2.15, 31.5, 38.5, x, y)
         hatch = hatch - _z_cylinder(1.7, fz0 - 1.0, fz1 + 1.0, x, y)
+    # J11B strap slots beside the pack's X faces (D-030).
+    sw, st = PACK_STRAP
+    cx, cy = PACK_STRAP_SLOT
+    for y_abs in (PACK_STRAP_Y, -PACK_STRAP_Y):
+        for rx0, rx1 in ((PACK_STRAP_X[0], PACK_STRAP_X[0] + st), (PACK_STRAP_X[1] - st, PACK_STRAP_X[1])):
+            hatch = hatch - _block(rx0 - cx, rx1 + cx, y_abs - sw / 2.0 - cy, y_abs + sw / 2.0 + cy, fz0 - 1.0, fz1 + 1.0)
     children = [hatch]
     if include_walls:
         children.append(_paint(walls, "BATTERY_TUB_WALLS", FRAME_BLUE, 1.0))
     return Compound(label="BATTERY_TUB", children=children)
+
+
+def driver_mount_points():
+    """J15B post axes: two per board under the outboard plated holes (D-030)."""
+    return [(DRIVER_CENTER_X + dx, sy * DRIVER_HOLE_Y) for sy in (1.0, -1.0) for dx in (-DRIVER_HOLE_HALF_PITCH, DRIVER_HOLE_HALF_PITCH)]
+
+
+def _frame_insert_z(x, y, z0):
+    return _z_cylinder(FRAME_INSERT_RADIUS, z0, z0 + FRAME_INSERT_LENGTH, x, y) - _z_cylinder(1.5, z0 - 0.1, z0 + FRAME_INSERT_LENGTH + 0.1, x, y)
+
+
+def frame_joint_hardware():
+    """D-030: J05, J06, J16 and J11A screws and inserts (ISO 7380 button heads, M3 x 6 inserts)."""
+    parts = []
+    head_r, head_h = AXLE_BUTTON_HEAD
+    for joint, (length, seat_x), face_x, y_abs in (
+        ("J05", J05_SCREW, J05_TONGUE_FACE_X, 54.0),
+        ("J06", J06_SCREW, J06_TONGUE_FACE_X, 58.5),
+    ):
+        out = 1.0 if seat_x > 0 else -1.0  # head side
+        for side, sy in (("L", 1.0), ("R", -1.0)):
+            y, z = sy * y_abs, J05_J06_AXIS_Z
+            screw = _axial_bore_x(head_r, *sorted((seat_x, seat_x + out * head_h)), y, z) + _axial_bore_x(
+                1.5, *sorted((seat_x, seat_x - out * length)), y, z
+            )
+            parts.append(_paint(screw, f"{joint}_SCREW_M3X{int(length)}_{side}", STEEL, 1.0))
+            ix = sorted((face_x, face_x - out * FRAME_INSERT_LENGTH))  # into the rail, away from the head
+            insert = _axial_bore_x(FRAME_INSERT_RADIUS, *ix, y, z) - _axial_bore_x(1.5, ix[0] - 0.1, ix[1] + 0.1, y, z)
+            parts.append(_paint(insert, f"{joint}_RAIL_INSERT_M3_{side}", BRONZE, 1.0))
+    top = DECK_Z + 2.0
+    for k, (x, y_abs) in enumerate(J16_POINTS, start=1):
+        for side, sy in (("L", 1.0), ("R", -1.0)):
+            y = sy * y_abs
+            screw = _z_cylinder(head_r, top, top + head_h, x, y) + _z_cylinder(1.5, top - J16_SCREW_LENGTH, top, x, y)
+            parts.append(_paint(screw, f"J16_SCREW_M3X10_{k}_{side}", STEEL, 1.0))
+            parts.append(_paint(_frame_insert_z(x, y, 52.0 - FRAME_INSERT_LENGTH), f"J16_RAIL_INSERT_M3_{k}_{side}", BRONZE, 1.0))
+    fz0, fz1 = BATTERY_TUB_FLOOR_Z
+    for k, (x, y) in enumerate(TUB_BOSS_XY, start=1):
+        screw = _z_cylinder(head_r, fz0 - head_h, fz0, x, y) + _z_cylinder(1.5, fz0, fz0 + J11A_SCREW_LENGTH, x, y)
+        parts.append(_paint(screw, f"J11A_HATCH_SCREW_M3X6_{k}", STEEL, 1.0))
+        parts.append(_paint(_frame_insert_z(x, y, fz1), f"J11A_BOSS_INSERT_M3_{k}", BRONZE, 1.0))
+    return Compound(label="FRAME_JOINT_HARDWARE", children=parts)
+
+
+def battery_restraint():
+    """J11B (D-030): two hook-and-loop straps holding the pack to the hatch, and cell-end foam pads."""
+    sw, st = PACK_STRAP
+    x0, x1 = PACK_STRAP_X
+    z0, z1 = PACK_STRAP_Z
+    parts = []
+    for side, y_abs in (("L", PACK_STRAP_Y), ("R", -PACK_STRAP_Y)):
+        ya, yb = y_abs - sw / 2.0, y_abs + sw / 2.0
+        loop = _block(x0, x1, ya, yb, z0, z1) - _block(x0 + st, x1 - st, ya - 1.0, yb + 1.0, z0 + st, z1 - st)
+        parts.append(_paint(loop, f"PACK_STRAP_HOOK_LOOP_{side}", "#2B2F33", 1.0))
+    inner_y = BATTERY_TUB_HALF_Y - BATTERY_TUB_WALL
+    for tag, sy in (("+Y", 1.0), ("-Y", -1.0)):
+        fx0, fx1 = PACK_FOAM_X[tag]
+        y0, y1 = sorted((sy * (inner_y - PACK_FOAM_T), sy * inner_y))
+        parts.append(_paint(_block(fx0, fx1, y0, y1, *PACK_FOAM_Z), f"PACK_FOAM_PAD_{'L' if sy > 0 else 'R'}", "#4A4F57", 1.0))
+    return Compound(label="BATTERY_RESTRAINT", children=parts)
+
+
+def driver_mount_hardware():
+    """J15B (D-030): M2.5 inserts in the deck posts and M2.5 x 6 screws through the boards."""
+    length, head_r, head_h = DRIVER_SCREW
+    top = DRIVER_PCB_Z + PCB_THICKNESS
+    parts = []
+    for k, (x, y) in enumerate(driver_mount_points(), start=1):
+        z0 = DRIVER_PCB_Z - DRIVER_INSERT[1]
+        insert = _z_cylinder(DRIVER_INSERT[0], z0, DRIVER_PCB_Z, x, y) - _z_cylinder(1.25, z0 - 0.1, DRIVER_PCB_Z + 0.1, x, y)
+        screw = _z_cylinder(head_r, top, top + head_h, x, y) + _z_cylinder(1.25, top - length, top, x, y)
+        parts += [_paint(insert, f"DRIVER_POST_INSERT_M25_{k}", BRONZE, 1.0), _paint(screw, f"DRIVER_SCREW_M25X6_{k}", STEEL, 1.0)]
+    return Compound(label="DRIVER_MOUNT_HARDWARE", children=parts)
 
 
 def frame_deck(region: str):
@@ -1923,25 +2054,31 @@ def frame_deck(region: str):
         shape += walls
         for y in BALLAST_SCREW_Y:
             shape -= _z_cylinder(1.7, DECK_Z - 3.0, DECK_Z + 3.0, BALLAST_SCREW_X, y)
-        for x in (30.0, 70.0):
-            for y in (-54.0, 54.0):
+        # J15B: driver posts with M2.5 insert pilots, and motor-lead tie bridges.
+        for x, y in driver_mount_points():
+            shape += _z_cylinder(DRIVER_POST_RADIUS, DECK_Z + 1.99, DRIVER_PCB_Z, x, y)
+            shape -= _z_cylinder(DRIVER_INSERT[0], DRIVER_PCB_Z - DRIVER_INSERT[1] - 0.1, DRIVER_PCB_Z + 0.1, x, y)
+            shape -= _z_cylinder(1.35, DRIVER_PCB_Z - DRIVER_INSERT[1] - 2.5, DRIVER_PCB_Z - DRIVER_INSERT[1], x, y)
+        lx0, lx1, ly0, ly1, lz0, lz1 = DRIVER_TIE_LUG
+        for sign in (1.0, -1.0):
+            lug = _block(lx0, lx1, *sorted((sign * ly0, sign * ly1)), lz0 - 0.01, lz1)
+            lug -= _block(lx0 + 1.0, lx1 - 1.0, *sorted((sign * (ly0 - 0.1), sign * (ly1 + 0.1))), lz0 - 0.02, lz0 + 1.5)
+            shape += lug
+    # J16 deck ears: 8 x 8 mm lands round each deck-to-rail screw.
+    for x, y_abs in J16_POINTS:
+        if (x > 0) == (region == "FRONT"):
+            for y in (-y_abs, y_abs):
                 shape += _block(x - 4.0, x + 4.0, y - 4.0, y + 4.0, DECK_Z - 2.0, DECK_Z + 2.0)
-    else:
-        for y0, y1 in ((56.0, 64.0), (-64.0, -56.0)):
-            shape += _block(-29.0, -21.0, y0, y1, DECK_Z - 2.0, DECK_Z + 2.0)
     for x, y in BODY_MOUNT_POINTS:
         if x0 <= x <= x1:
             shape -= _z_cylinder(BODY_MOUNT_CLEARANCE_RADIUS, DECK_Z - 3.0, DECK_Z + 3.0, x, y)
     for x, y in BODY_LOCATING_POINTS:
         if x0 <= x <= x1:
             shape -= _z_cylinder(2.05, DECK_Z - 3.0, DECK_Z + 3.0, x, y)
-    if region == "FRONT":
-        for y in (-54.0, 54.0):
-            for x in (30.0, 70.0):
+    for x, y_abs in J16_POINTS:
+        if (x > 0) == (region == "FRONT"):
+            for y in (-y_abs, y_abs):
                 shape -= _z_cylinder(1.7, DECK_Z - 3.0, DECK_Z + 3.0, x, y)
-    else:
-        for y in (-58.5, 58.5):
-            shape -= _z_cylinder(1.7, DECK_Z - 3.0, DECK_Z + 3.0, -25.0, y)
     for y in BALLAST_SCREW_Y:
         if region == "FRONT":
             # 90 deg countersink for the CH-038 head, carried 1 mm above the deck top.
@@ -1963,16 +2100,22 @@ def frame_rail(region: str, side: str):
     shape += _block(max(x0, mount_x - 6.5), min(x1, mount_x + 6.5), *sorted((sign * 52.0, sign * 64.0)), 35.0, 51.0)
     joint_y = sign * (54.0 if region == "FRONT" else 58.5)
     if region == "REAR":
-        shape += _block(-32.0, -25.0, *sorted((sign * 50.0, sign * 66.0)), 35.0, 52.0)
-    tongue_x = (80.0, 83.0) if region == "FRONT" else (-35.0, -32.0)
-    shape += _block(*tongue_x, joint_y - 3.2, joint_y + 3.2, 37.0, 47.0)
-    clamp_xs = (30.0, 70.0) if region == "FRONT" else (-25.0,)
-    for x in clamp_xs:
-        shape -= _z_cylinder(2.15, 46.0, 53.0, x, joint_y)
+        # Widened end: J06 tongue and the J16 insert at (-27.5, +/-61), 2.35 mm walls (D-030: to X -23).
+        shape += _block(-32.0, -23.0, *sorted((sign * 50.0, sign * 66.0)), 35.0, 52.0)
+    tongue_x = (80.0, J05_TONGUE_FACE_X) if region == "FRONT" else (J06_TONGUE_FACE_X, -32.0)
+    shape += _block(*tongue_x, joint_y - RAIL_TONGUE_HALF_Y, joint_y + RAIL_TONGUE_HALF_Y, 37.0, 47.0)
+    # J16 inserts flush with the rail top, O3.4 tip relief below.
+    for x, y_abs in J16_POINTS:
+        if (x > 0) == (region == "FRONT"):
+            shape -= _z_cylinder(FRAME_INSERT_RADIUS, 52.0 - FRAME_INSERT_LENGTH - 0.1, 53.0, x, sign * y_abs)
+            shape -= _z_cylinder(1.7, 44.5, 46.0, x, sign * y_abs)
     shape -= _z_cylinder(5.2, 34.0, 53.0, mount_x, mount_y)
+    # J05/J06 insert pressed into the tongue end face, O3.4 tip relief beyond it.
+    face_x = J05_TONGUE_FACE_X if region == "FRONT" else J06_TONGUE_FACE_X
+    inward = -1.0 if region == "FRONT" else 1.0
+    shape -= _axial_bore_x(FRAME_INSERT_RADIUS, *sorted((face_x - inward * 0.1, face_x + inward * (FRAME_INSERT_LENGTH + 0.1))), joint_y, J05_J06_AXIS_Z)
+    shape -= _axial_bore_x(1.7, *sorted((face_x + inward * FRAME_INSERT_LENGTH, face_x + inward * 9.0)), joint_y, J05_J06_AXIS_Z)
     if region == "FRONT":
-        shape -= _axial_bore_x(2.15, 73.5, 80.1, joint_y, 41.0)
-        shape -= _axial_bore_x(1.7, 80.0, 83.1, joint_y, 41.0)
         # J04: two axial heat-set inserts receive the removable side carrier.
         for z in (38.0, 48.0):
             shape -= _axial_bore_x(2.15, 17.0, 23.1, joint_y, z)
@@ -1981,8 +2124,6 @@ def frame_rail(region: str, side: str):
         key_y = sign * 51.5
         shape -= _block(17.0, 20.2, *sorted((key_y - 1.2, key_y + 1.2)), 41.3, 44.7)
     else:
-        shape -= _axial_bore_x(2.15, -32.1, -25.5, joint_y, 41.0)
-        shape -= _axial_bore_x(1.7, -35.1, -32.0, joint_y, 41.0)
         # Rear carrier screws enter from the open motor bay; inserts are
         # installed into the X=-17 end before the carrier is fitted.
         for z in (38.0, 48.0):
@@ -1998,7 +2139,7 @@ def frame_crossmember(region: str):
         shape = _block(80.0, 92.0, -62.0, 62.0, 35.0, 51.0)
         for side in ("L", "R"):
             y = 54.0 if side == "L" else -54.0
-            shape -= _block(80.0, 83.2, y - 3.4, y + 3.4, 36.8, 47.2)
+            shape -= _block(80.0, 83.2, y - RAIL_POCKET_HALF_Y, y + RAIL_POCKET_HALF_Y, 36.8, 47.2)
             shape -= _axial_bore_x(1.7, 79.0, 93.0, y, 41.0)
         for y, z in BALL_POD_SCREWS_YZ:
             shape -= _axial_bore_x(M3_INSERT_BORE_RADIUS, 85.0, 93.0, y, z)
@@ -2015,7 +2156,7 @@ def frame_crossmember(region: str):
     shape += _block(lx0, lx1 + 0.01, ly0, ly1, lz0, lz1) - _block(lx0 + 0.8, lx1 - 0.8, ly0 - 0.1, ly1 + 0.1, 38.5, 41.5)
     for side in ("L", "R"):
         y = 58.5 if side == "L" else -58.5
-        shape -= _block(-35.2, -32.0, y - 3.4, y + 3.4, 35.0, 47.2)
+        shape -= _block(-35.2, -32.0, y - RAIL_POCKET_HALF_Y, y + RAIL_POCKET_HALF_Y, 35.0, 47.2)
         shape -= _axial_bore_x(1.7, -49.0, -31.0, y, 41.0)
     return _paint(shape, "REAR_SKID_CROSSMEMBER", FRAME_BLUE, 1.0)
 
@@ -2034,6 +2175,9 @@ def chassis_frame():
         Compound(label="CHASSIS_DECK_WITH_BODY_INTERFACE", children=[frame_deck("REAR"), frame_deck("FRONT")]),
         battery_tub(include_walls=False),
         ballast_bar(),
+        frame_joint_hardware(),
+        battery_restraint(),
+        driver_mount_hardware(),
     ]
 
     # Axle stack (D-007). The wheel centres stay at the frozen 170 mm track.
@@ -2065,22 +2209,22 @@ def chassis_frame():
             screw_y = sign * (54.0 if joint_region == "FRONT" else 58.5)
             for z in (38.0, 48.0):
                 cheek -= _axial_bore_x(1.7, cx0 - 0.1, cx1 + 0.1, screw_y, z)
-                # Recess the low-head screw from the motor-facing cheek face.
-                cbx = (cx0, cx0 + 2.1) if x_sign > 0 else (cx1 - 2.1, cx1)
-                cheek -= _axial_bore_x(2.9, *cbx, screw_y, z)
+                # Recess the button head from the motor-facing cheek face (D-030:
+                # ISO 7380, O5.7 head in a O5.9 x 2.1 recess).
+                cbx = (cx0, cx0 + J04_RECESS[1]) if x_sign > 0 else (cx1 - J04_RECESS[1], cx1)
+                cheek -= _axial_bore_x(J04_RECESS[0], *cbx, screw_y, z)
                 if joint_region == "FRONT":
                     insert_x = (17.0, 23.0)
-                    screw_center_x = cx1 + (8.0 - (cx1 - cx0)) / 2.0
                 else:
                     insert_x = (-23.0, -17.0)
-                    screw_center_x = cx0 - (8.0 - (cx1 - cx0)) / 2.0
+                seat_x = cbx[1] if x_sign > 0 else cbx[0]  # recess floor: the head's bearing face
                 insert = _axial_bore_x(2.15, *insert_x, screw_y, z) - _axial_bore_x(
                     1.5, insert_x[0] - 0.1, insert_x[1] + 0.1, screw_y, z
                 )
                 carrier_joint_parts.append(_paint(insert, f"J04_RAIL_INSERT_M3_{side}_{joint_region}_{int(z)}", BRONZE, 1.0))
-                head_x = (cx0 + 1.0) if x_sign > 0 else (cx1 - 1.0)
-                head = _cylinder(2.75, 2.0, (head_x, screw_y, z), "HEAD", STEEL, 1.0, "x")
-                shaft = _cylinder(1.5, 8.0, (screw_center_x, screw_y, z), "SHANK", STEEL, 1.0, "x")
+                head_r, head_h = AXLE_BUTTON_HEAD
+                head = _axial_bore_x(head_r, *sorted((seat_x, seat_x - x_sign * head_h)), screw_y, z)
+                shaft = _axial_bore_x(1.5, *sorted((seat_x, seat_x + x_sign * J04_SCREW_LENGTH)), screw_y, z)
                 carrier_joint_parts.append(_paint(head + shaft, f"J04_CARRIER_SCREW_M3X8_{side}_{joint_region}_{int(z)}", STEEL, 1.0))
             carrier = carrier + cheek
         parts.append(_paint(carrier, f"AXLE_MOTOR_CARRIER_{side}", FRAME_BLUE, 1.0))
@@ -2367,7 +2511,7 @@ def axle_housing_stack(side: str):
 
 
 def motor_face_screws(side: str):
-    """Two DIN 7984 M3 x 6 low-head screws, plate into the gearbox face, heads in counterbores."""
+    """Two ISO 7380 M3 x 6 button-head screws, plate into the gearbox face, heads in counterbores (D-030)."""
     sign = 1.0 if side == "L" else -1.0
     head_top = AXLE_FLANGE_Y[1] - (MOTOR_SCREW_CBORE[1] - MOTOR_SCREW_HEAD_HEIGHT)
     head_bottom = head_top - MOTOR_SCREW_HEAD_HEIGHT
@@ -2544,11 +2688,12 @@ def electronics():
     c3 = c3_carrier()
     # Adafruit #3297 board proxies; dimensions are nominal envelopes pending measurement.
     drivers = []
-    for side, y in (("LEFT", 40.0), ("RIGHT", -40.0)):
-        # Board file-derived STEP (purchased/README.md); long side along X, J1 terminal block forward.
+    for side, y, turn in (("LEFT", DRIVER_Y, 90.0), ("RIGHT", -DRIVER_Y, -90.0)):
+        # Board file-derived STEP (purchased/README.md); long side along X, mounting-hole
+        # edge outboard (D-030): right terminal block forward, left rearward.
         drv = _place(
-            _purchased_step("adafruit_3297_drv8833.step", f"ADAFRUIT_3297_DRV8833_{side}", [(Axis.Z, -90.0)], folder=V1_PURCHASED),
-            DRIVER_CENTER_X, y, 66.0, ref={"Z": "min"},
+            _purchased_step("adafruit_3297_drv8833.step", f"ADAFRUIT_3297_DRV8833_{side}", [(Axis.Z, turn)], folder=V1_PURCHASED),
+            DRIVER_CENTER_X, y, DRIVER_PCB_Z, ref={"Z": "min"},
         )
         leaves_ = list(drv.solids())
         assert len(leaves_) == len(ADAFRUIT_3297_LEAVES), len(leaves_)
@@ -2825,7 +2970,7 @@ def harness_routes():
         # (X 3.5-28.5, Y +-12.5): the trunk runs at Y +18 and the branch crosses aft of the IMU. The
         # motor-can top (Z 57.4 at Y >= 16) and the Y 6-18 pigtail reserve (X -13..-1) set the trunk's floor and rear end.
         _box(42.0, 10.0, 5.0, (21.0, 18.0, 60.0), "HARNESS_BATTERY_TRUNK", "#F28C28", 0.42),
-        _box(12.0, 92.0, 6.0, (36.0, 0.0, 59.5), "HARNESS_MOTOR_BRANCH", "#D94A3A", 0.42),
+        _box(12.0, 92.0, 6.0, (DRIVER_CENTER_X, 0.0, 59.5), "HARNESS_MOTOR_BRANCH", "#D94A3A", 0.42),  # between the driver posts (D-030)
         _box(82.0, 8.0, 8.0, (30.0 + BODY_SHIFT_X, 26.0, 82.0), "HARNESS_SIGNAL_TRUNK", "#2FAFC2", 0.42),
         _box(82.0, 8.0, 8.0, (30.0 + BODY_SHIFT_X, -26.0, 82.0), "HARNESS_SENSOR_TRUNK", "#44BDD0", 0.42),
         # Flat clock-spring loop under the disc takes the ±55° yaw twist.

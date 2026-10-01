@@ -19,13 +19,13 @@ The model basis is [chassis-v1.step.py](cad/chassis-v1.step.py) and [body_chassi
 | CH-009 | Replaceable dovetail wear shoe, PETG recommended ([D-017](../../decisions.md#d-017)) | 1 | DESIGN |
 | CH-010 | TCRT bezel with both guard lips, PETG recommended (D-014, D-017) | 1 | DESIGN |
 | CH-068 | 1 mm TCRT height shim, two fitted for the nominal Z 10 (D-014) | 2 | DESIGN |
-| CH-011 | Battery tub bottom hatch | 1 | OPEN |
+| CH-011 | Battery tub bottom hatch: four M3 screws, two strap slots ([D-030](../../decisions.md#d-030)) | 1 | DESIGN |
 | CH-012 | Turned steel stub: bearing seats, D-shaft bore, flange and spigot ([D-007](../../decisions.md#d-007)) | 2 | DESIGN |
 | CH-013 | 9 × 60 × 19 mm steel ballast bar | 1 | DESIGN |
 | CH-051 | Printed bearing housing ([D-007](../../decisions.md#d-007)) | 2 | DESIGN |
 | CH-052 | 1.2 mm aluminium bearing retaining cap | 2 | DESIGN |
 
-`CH-001` is a **design set**, not a claim that all frame parts are one print. The main CAD now models two deck prints, four rails, two crossmembers, the tub/hatch, and one keyed plate-and-cheek carrier per side. J04 uses separate rail modules with M3 inserts and screws; the material/process, calibrated fits and physical strength still need proof. The bezel and wear shoe have defined retention and service paths under D-014; their physical retention and floor tests remain open. The wheel is designed in the standalone [wheel CAD](cad/wheel/README.md) ([D-005](../../decisions.md#d-005), [D-008](../../decisions.md#d-008)): a printed TPU tyre clamped by CH-048/CH-049, and a hub cap (CH-058, CH-059) over the D-007 wheel screws. The spin index (formerly CH-006) is removed. The O-ring fallback is recorded in D-005, with no BOM row. The hatch has no retention hardware; its eventual screws or latch must be added to this BOM.
+`CH-001` is a **design set**, not a claim that all frame parts are one print. The main CAD now models two deck prints, four rails, two crossmembers, the tub/hatch, and one keyed plate-and-cheek carrier per side. J04 uses separate rail modules with M3 inserts and screws; the material/process, calibrated fits and physical strength still need proof. The bezel and wear shoe have defined retention and service paths under D-014; their physical retention and floor tests remain open. The wheel is designed in the standalone [wheel CAD](cad/wheel/README.md) ([D-005](../../decisions.md#d-005), [D-008](../../decisions.md#d-008)): a printed TPU tyre clamped by CH-048/CH-049, and a hub cap (CH-058, CH-059) over the D-007 wheel screws. The spin index (formerly CH-006) is removed. The O-ring fallback is recorded in D-005, with no BOM row. The hatch is held by four CH-076 screws into CH-077 inserts in the tub bosses. It also carries the pack: two CH-078 straps loop under it and over the cells, so hatch and pack come out together ([D-030](../../decisions.md#d-030)).
 
 The purchased **Pololu #2691 caster** is a separate row (CH-016). It includes the 1-inch / 25.4 mm plastic ball, plastic rollers, and two-piece housing. The custom printed pod seats its three-hole flange on the chassis crossmember and provides the pocket for the front range sensor; it is a mount, not a second ball or replacement caster. Pololu lists a 29 mm assembled height and says this caster is intended as a third support for differential-drive robots up to about 10 lb. The CAD mass register estimates the complete robot at 2.55 kg (5.6 lb) and assigns about 18% of static weight to the ball, roughly 0.45 kg. That makes the size/load choice plausible for static support. Pololu gives general guidance, not a load rating; the printed pod strength, impacts, floor gaps, and threshold climbing still need physical tests. [CAD mass estimate](cad/generated/mass-properties.md) · [Pololu #2691 specs](https://www.pololu.com/product/2691/specs) · [dimension drawing](https://www.pololu.com/file/0J895/2691-dimensions.pdf).
 
@@ -79,7 +79,7 @@ The canonical [project BOM](../../BOM.csv) and this chassis snapshot are the sou
 
 | ID | Joint hardware | Qty | State |
 |---|---|---:|---|
-| CH-030 | DIN 7984 M3 × 6 low-head motor face screw | 4 | OPEN — exact size/standard unconfirmed |
+| CH-030 | [ISO 7380 M3 × 6 button-head motor face screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-6-screw-pack-of-20) (D-030) | 4 | CANDIDATE |
 | CH-031 | [ISO 7380 M3 × 8 caster screw, from below (D-011)](https://onlyscrews.in/products/hex-allen-button-head-m3-x-8-screw-pack-of-20) | 3 | CANDIDATE |
 | CH-032 | [ISO 7380 M3 × 8 pod-to-crossmember screw (D-011)](https://onlyscrews.in/products/hex-allen-button-head-m3-x-8-screw-pack-of-20) | 2 | CANDIDATE |
 | CH-033 | CNC Kitchen M3 × 5.7 front-crossmember insert for ball pod (D-011) | 2 | CANDIDATE |
@@ -87,17 +87,17 @@ The canonical [project BOM](../../BOM.csv) and this chassis snapshot are the sou
 | CH-035 | [M4 × 12 hex-socket button-head SS304 screw](https://onlyscrews.in/products/hex-allen-button-head-m4-x-12-screw-pack-of-20), reported available | 4 | CANDIDATE |
 | CH-036 | [M4 SS304 plain hex nut](https://onlyscrews.in/products/m4-nut-ss-304), accessible from below | 4 | CANDIDATE |
 | CH-037 | [Ø4 × 8 mm hardened body locating pin](https://onlyscrews.in/products/m4-x-8mm-hard-dowel-pins-dia-4mm-length-8mm) | 2 | CANDIDATE |
-| CH-038 | M3 × 12 Phillips CSK mild-steel black-oxide ballast screw, reported available | 2 | CANDIDATE |
+| CH-038 | [M3 × 12 Phillips CSK mild-steel black-oxide ballast screw](https://onlyscrews.in/products/m3-x-12mm-phillips-countersunk-csk-mild-steel-black-oxide-screw-dia-3mm-length-12mm) | 2 | CANDIDATE |
 | CH-039 | M2 × 5 IMU screw | 2 | CANDIDATE |
 | CH-048 | [ISO 7380 M3 × 8 tyre clamp-ring screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-8-screw-pack-of-20) | 12 | CANDIDATE |
 | CH-049 | [M3 × ~4 mm rim heat-set insert](https://onlyscrews.in/products/m3-x-4mm-3d-printing-brass-threaded-inserts-dia-3mm-length-4mm) | 12 | CANDIDATE |
 | CH-053 | ISO 7380 M3 × 18 bearing housing and cap screw | 8 | CANDIDATE |
 | CH-054 | [M3 × 4 mm motor plate heat-set insert](https://onlyscrews.in/products/m3-x-4mm-3d-printing-brass-threaded-inserts-dia-3mm-length-4mm) | 8 | CANDIDATE |
-| CH-055 | DIN 916 M3 × 2.5 cup-point stub set screw | 2 | OPEN — exact length unconfirmed |
+| CH-055 | [ISO 4029 M3 × 3 cup-point set screw, SS304](https://onlyscrews.in/products/m3-x-3mm-grub-screw-ss304-dia-3mm-length-3mm), faced to 2.5 mm (D-030) | 2 | CANDIDATE |
 | CH-056 | [ISO 7380 M3 × 6 wheel-to-stub screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-6-screw-pack-of-20) | 6 | CANDIDATE |
 | CH-057 | [Loctite 222 and 641](https://onlyscrews.in/products/loctite%C2%AE-222-low-strength-thread-sealant-50-ml) | 1 lot | CANDIDATE |
 | CH-059 | M2 × 6 thread-forming hub cap screw | 12 | CANDIDATE |
-| CH-060 | DIN 7984 M3 × 8 low-head J04 carrier-to-rail screw | 8 | OPEN — exact size/standard unconfirmed |
+| CH-060 | [ISO 7380 M3 × 8 button-head J04 carrier-to-rail screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-8-screw-pack-of-20) (D-030) | 8 | CANDIDATE |
 | CH-061 | [M3, 6 mm axial heat-set J04 rail insert](https://onlyscrews.in/products/m3-x-6mm-3d-printing-brass-threaded-inserts-dia-3mm-length-6mm) | 8 | CANDIDATE |
 | CH-062 | M2 × 8 countersunk thread-forming pod lid screw (D-011) | 1 | CANDIDATE |
 | CH-063 | CNC Kitchen M3 × 5.7 pod-seat insert for caster (D-011) | 3 | CANDIDATE |
@@ -105,8 +105,24 @@ The canonical [project BOM](../../BOM.csv) and this chassis snapshot are the sou
 | CH-069 | M2 × 10 thread-forming TCRT bezel screw (D-014) | 1 | CANDIDATE |
 | CH-070 | M2 × 6 thread-forming wear-shoe screw (D-014) | 1 | CANDIDATE |
 | CH-072 | 2.5 × 100 mm nylon zip tie, J10-10 strain relief (D-014) | 1 | CANDIDATE |
+| CH-073 | [ISO 7380 M3 × 16 J05 front crossmember screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-16-screw-pack-of-20) (D-030) | 2 | CANDIDATE |
+| CH-074 | [ISO 7380 M3 × 20 J06 rear crossmember screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-20-screw-pack-of-20) (D-030) | 2 | CANDIDATE |
+| CH-075 | [ISO 7380 M3 × 10 J16 deck-to-rail screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-10-screw-pack-of-20) (D-030) | 6 | CANDIDATE |
+| CH-076 | [ISO 7380 M3 × 6 J11A hatch screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-6-screw-pack-of-20) (D-030) | 4 | CANDIDATE |
+| CH-077 | [M3 × 6 frame heat-set insert](https://onlyscrews.in/products/m3-x-6mm-3d-printing-brass-threaded-inserts-dia-3mm-length-6mm), as CH-061: J05/J06 tongues, J16 rails, J11A bosses (D-030) | 14 | CANDIDATE |
+| CH-078 | 10 mm hook-and-loop pack strap, J11B (D-030) | 2 | CANDIDATE |
+| CH-079 | 1.5 mm closed-cell foam cell-end pad, J11B (D-030) | 2 | CANDIDATE |
+| CH-080 | M2.5 × 4 heat-set insert in the driver posts, J15B (D-030) | 4 | CANDIDATE |
+| CH-081 | M2.5 × 6 low-head driver screw, J15B (D-030) | 4 | CANDIDATE |
+| CH-082 | 2.5 × 100 mm nylon zip tie, motor-lead strain relief, J15B (D-030) | 2 | CANDIDATE |
 
-Supplier leads, stock observations, dimensions, standards, materials and fit qualifications are recorded in the fastener rows of the [project BOM](../../BOM.csv). CH-035 and CH-038 lengths are derived from the current modeled joint stacks and still need received-hardware checks. The pictured mixed M3/M4/M5 Phillips-CSK assortment includes M3 × 12 screws, a possible CH-038 source, but its material/grade and head-seat dimensions are not identified in the image. Its M4 × 12 screws are countersunk and do not replace CH-035's button-head screws. Counts above come from modeled positions; heads and shanks in the CAD are one screw each. The axle-stack hardware specifications (CH-053 to CH-057) are defined in [D-007](../../decisions.md#d-007) and the [axle stack](research/axle-stack.md), but the parts are not yet proven on a coupon or the axle rig.
+Supplier leads, stock observations, dimensions, standards, materials and fit qualifications are recorded in the fastener rows of the [project BOM](../../BOM.csv).
+
+[D-030](../../decisions.md#d-030) replaces the three unsourceable sizes with stocked standard parts. The DIN 7984 low heads (CH-030, CH-060) become ISO 7380 button heads, with the same 2 mm key and length. The J04 cheek recess widens to Ø5.9 for the Ø5.7 head. The M3 × 2.5 set screw (CH-055) is not a standard length. It becomes a stocked ISO 4029 M3 × 3, faced down 0.5 mm at the hex end. Unmodified, it would stand 0.5 mm proud and sweep only 1.07 mm past the face-screw heads. Faced to 2.5 mm it sits flush and clears them by 1.54 mm.
+
+D-030 also adds all the hardware for J05, J06, J16, J11A and J15B. The frame uses one insert article throughout, the CH-061/CH-077 M3 × 6. There are no washers: the button heads seat directly on the printed faces, which keeps the modeled engagement. The OnlyScrews M3 washer (Ø7 × 0.5) can be added later if the stacks are rechecked. All the new screws and inserts have OnlyScrews listings. The strap and foam (CH-078, CH-079) still need a source.
+
+**J13 clamp stack (D-030):** the stack stays M4 × 12 button head, 4 mm body foot, 4 mm deck and a plain M4 nut, with no washer. That leaves 0.8 mm of thread past the nut, more than one 0.7 mm pitch. Loctite 222 (CH-057) on the nut thread is the locking method. A Nyloc would need a longer bolt, and the slim-socket access path was chosen for a plain nut. Head seat, pin fits, nut access and lift-off are still to be checked on received parts. CH-035 and CH-038 lengths are derived from the current modeled joint stacks and still need received-hardware checks. The pictured mixed M3/M4/M5 Phillips-CSK assortment includes M3 × 12 screws, a possible CH-038 source, but its material/grade and head-seat dimensions are not identified in the image. Its M4 × 12 screws are countersunk and do not replace CH-035's button-head screws. Counts above come from modeled positions; heads and shanks in the CAD are one screw each. The axle-stack hardware specifications (CH-053 to CH-057) are defined in [D-007](../../decisions.md#d-007) and the [axle stack](research/axle-stack.md), but the parts are not yet proven on a coupon or the axle rig.
 
 ## Full-system electrical parts outside the chassis v1 CAD
 
@@ -130,7 +146,7 @@ These rows describe the **full-system electrical architecture** shown in whole-r
 Pololu #4804 is not the chosen caster and is not a current blocker; the selected caster is #2691. No physical PASS is recorded. Remaining blockers are stage-specific: final joint/fabrication details, purchased-part measurement, nose/rear physical proof, controlled driver commissioning, A21 stop-path timing and range validation, and protected-pack qualification before battery operation.
 
 1. **Provisional coupons and fit prints:** proceed under D-005 with documented motor/interface assumptions and replaceable parts. Choose a trial print process and obtain the hardware relevant to each coupon. Selected parts may be bought to resolve receiving and test gates.
-2. **Final fabrication:** complete J05/J06/J16 frame hardware; J11 hatch and pack restraint; J12 ballast screw; J13 body clamp/pin fits; J15 board mounts and cable restraint. Release the turned stub drawing/quote, exact unmatched fasteners, print split/material/settings, calibrated fits, per-part exports and assembly/service instructions. Nose and rear retention architecture is defined; its physical proof remains open. Reconcile the Samsung cell spacing and finished-pack envelope before releasing the battery enclosure.
+2. **Final fabrication:** frame, hatch, pack-restraint and driver-mount hardware are defined by D-030. Their coupons, pull-out tests and dry runs remain, along with the J13 pin fits on received parts. Release the turned stub drawing/quote, exact unmatched fasteners, print split/material/settings, calibrated fits, per-part exports and assembly/service instructions. Nose and rear retention architecture is defined; its physical proof remains open. Reconcile the Samsung cell spacing and finished-pack envelope before releasing the battery enclosure.
 3. **Controlled powered tests:** receive and characterize the selected MOT3001 motors; verify the documented 6 V bench rig, deliberate driver limits, encoder/logic interfaces, retained harness, default disable, physical stop and braking/transient handling. Use secured inert pack/body/head ballast when the cells are disconnected. Record axle fit/retention/runout, loaded clearance, traction, turns, support behaviour, braking/tipping and temperature against defined limits.
 4. **Contact/cliff/IMU and autonomous claims:** qualify actual nose springs/magnet/Hall carrier, startup and wire-fault handling, ADC calibration, front-range timing/blind zone, bare-TCRT real-floor/ambient response and motor noise. Resolve the budget IMU runtime interface and mount if adopted. Final PCB-10 fabrication may wait when equivalent temporary interfaces are used; later boards require their own integration checks.
 5. **Battery and full-system operation:** qualify the protected 2S pack, insulation/restraint, disconnect/fuse/holder, thermal and charging behaviour, 8.4 V versus 6 V motor control and protection/regeneration interaction. Release only the custom boards/harness actually used in that scope. Their pending design does not block an independent supply-powered test.

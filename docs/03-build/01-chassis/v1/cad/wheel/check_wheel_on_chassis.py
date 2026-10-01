@@ -89,6 +89,14 @@ def main():
                 # D-007's turned stub is stepped and axisymmetric: test it as built,
                 # as check_layout.py does; its set screw is swept on its own.
                 env, inner = part, None
+            elif "_SET_SCREW_" in label:
+                # The set screw is short along Y but tall radially, so the full-radius
+                # ring overstates it next to the face-screw heads (D-030). Turn the
+                # screw itself about the axle in 3 deg steps instead.
+                candidates = [t for t in static if near(envelope(part)[0], t, 3.0)]
+                gap = min(((round(part.rotate(axle, a).distance_to(t), 3), t.label) for a in range(0, 360, 3) for t in candidates), default=(None, None))
+                swept[label] = {"min_gap_mm": gap[0], "to": gap[1], "inner_r_mm": None, "method": "rotated 3 deg steps"}
+                continue
             else:
                 env, inner = envelope(part)
             candidates = [t for t in static if near(env, t, 25.0)]

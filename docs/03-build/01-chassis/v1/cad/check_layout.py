@@ -485,7 +485,7 @@ def main():
         gearbox = next(c for c in motor_solids if c.label.endswith("GEARBOX"))
         flange = by_label(chassis_static, f"AXLE_MOTOR_CARRIER_{side}")
         flange_seat[side] = {"gap_mm": round(gearbox.distance_to(flange), 4), "overlap_mm3": round(_vol(gearbox & flange), 4)}
-    # Motor face joint (ThinkRobotics MOT3001 / JGA25-370, D-007): M3 x 6 low-head screws
+    # Motor face joint (ThinkRobotics MOT3001 / JGA25-370, D-007, D-030): ISO 7380 M3 x 6 button-head screws
     # through the 5 mm plate into the face holes (5 mm deep, assumed); the O4 shaft
     # engages the stub bore under the set screw; the heads stay clear of the inner bearing.
     _stage("drivetrain wheel/motor sweep done")
@@ -1006,7 +1006,7 @@ def main():
         ("power_boards_do_not_interfere_with_each_other", not power_self_clashes, {"clashes_mm3": power_self_clashes}),
         ("power_boards_keep_running_gaps", all(v["nearest_mm"] >= 0.4 for v in power_gaps.values()), {"minimum_mm": 0.4, "nearest": power_gaps}),
         ("power_bay_gaps_are_about_1mm_and_have_no_slack", all(v >= 0.89 for v in bay_gaps.values()) and abs(bay_gaps["pcb04_to_pcb03_mm"] - 1.0) < 1e-6, {"gaps": bay_gaps, "note": "PCB-03 and PCB-04 use the whole free band under the tray: 44 + 1 + 41 mm between the lower cross-members; a larger board or the 3.3 mF hold-up footprint needs a different bay"}),
-        ("power_boards_clear_of_harness_power_routes", not power_harness_overlaps, {"overlaps_mm3": power_harness_overlaps, "note": "HARNESS_BATTERY_TRUNK (Y +18, Z 57.5-62.5) and HARNESS_MOTOR_BRANCH (X 30-42, Z 56.5-62.5) run in the 7 mm slot under PCB-03/04 (Z 56-63) and clear the IMU; still route-volume placeholders, not a wire-by-wire harness"}),
+        ("power_boards_clear_of_harness_power_routes", not power_harness_overlaps, {"overlaps_mm3": power_harness_overlaps, "note": "HARNESS_BATTERY_TRUNK (Y +18, Z 57.5-62.5) and HARNESS_MOTOR_BRANCH (X 33.5-45.5 between the D-030 driver posts, Z 56.5-62.5) run in the 7 mm slot under PCB-03/04 (Z 56-63) and clear the IMU; still route-volume placeholders, not a wire-by-wire harness"}),
         ("power_board_footprints_recorded", footprints["PCB03_mm2"] >= 2460.0 - 1.0 and footprints["PCB04_mm2"] >= 3080.0 - 1.0, {"footprints": footprints, "source": "WS-H estimates from the part inventory; nothing is laid out"}),
         ("estop_operator_is_outside_the_rear_panel_and_keep_out_clears_the_pi", estop_geometry["head_max_x_mm"] <= M.ESTOP_REAR_OUTER_X + 1e-6 and estop_geometry["head_z_mm"][1] <= estop_geometry["rear_panel_top_z_mm"] and estop_geometry["head_vs_panel_mm3"] < 1e-3 and estop_geometry["well_vs_frame_mm3"] < 1e-3 and estop_geometry["keep_out_vs_pcb02_mm3"] < 1e-3, estop_geometry),
         ("pcb01_replaces_generic_bms_at_2p9mm", abs(pcb01.bounding_box().size.Z - 2.9) < 1e-6 and abs(pcb01.bounding_box().size.X - 20.0) < 1e-6 and abs(pcb01.bounding_box().size.Y - 48.0) < 1e-6, {"pcb01_size_mm": [round(pcb01.bounding_box().size.X, 3), round(pcb01.bounding_box().size.Y, 3), round(pcb01.bounding_box().size.Z, 3)], "previous_bms_mm": [20.0, 48.0, 4.5]}),
