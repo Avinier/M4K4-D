@@ -35,13 +35,13 @@
  "screw_length_mm": 12.0,
  "engagement_mm": 8.1,
  "tip_to_hole_floor_mm": 0.9,
- "mass_g": 2626.1,
+ "mass_g": 2626.9,
  "com_mm": [
-  19.17,
-  0.16,
-  105.3
+  19.19,
+  0.17,
+  105.43
  ],
- "a_tip_m_s2": 1.785,
+ "a_tip_m_s2": 1.786,
  "a_tip_min_m_s2": 1.582,
  "pass": {
   "battery_pack_is_clear": true,

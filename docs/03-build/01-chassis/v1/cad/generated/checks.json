@@ -1383,8 +1383,8 @@
             "to": "BODY_LOWER_CROSS_REAR"
           },
           "PACK_ATOF_FUSE_HOLDER_ENVELOPE": {
-            "nearest_mm": 0.85,
-            "to": "CHASSIS_DECK_WITH_BODY_INTERFACE"
+            "nearest_mm": 1.0,
+            "to": "COMPUTE_TRAY"
           },
           "PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE": {
             "nearest_mm": 0.5,
@@ -1506,7 +1506,7 @@
         "removed_row_g": 121.5,
         "estop_g": 14.0,
         "battery_g": 108.2,
-        "total_mass_g": 2626.1,
+        "total_mass_g": 2626.9,
         "note": "hand-kept register: masses are RP-02 estimates, not derived from the solids"
       }
     },
@@ -1628,10 +1628,10 @@
           49.0
         ],
         "fuse_x_mm": [
-          51.0,
-          75.0
+          52.0,
+          82.0
         ],
-        "pair_to_fuse_gap_mm": 2.0,
+        "pair_to_fuse_gap_mm": 3.0,
         "window_mm": [
           26.9,
           49.5,
@@ -2001,20 +2001,20 @@
       "name": "com_inside_support_x",
       "ok": true,
       "evidence": {
-        "com_x_mm": 19.165491941399598
+        "com_x_mm": 19.193114680458642
       }
     },
     {
       "name": "com_forward_of_physics_margin_line",
       "ok": true,
       "evidence": {
-        "com_x_mm": 19.17,
-        "com_h_mm": 105.3,
-        "x_over_h": 0.182,
-        "a_tip_m_s2": 1.785,
+        "com_x_mm": 19.19,
+        "com_h_mm": 105.43,
+        "x_over_h": 0.1821,
+        "a_tip_m_s2": 1.786,
         "a_tip_min_m_s2": 1.582,
-        "equivalent_min_x_mm_at_this_h": 16.98,
-        "margin_over_a_peak_1p00": 1.785,
+        "equivalent_min_x_mm_at_this_h": 17.0,
+        "margin_over_a_peak_1p00": 1.786,
         "baseline_target": {
           "x_mm": 25.0,
           "h_mm": 124.0,
@@ -2028,7 +2028,7 @@
       "name": "ball_share_above_spin_walk_flag",
       "ok": true,
       "evidence": {
-        "ball_share": 0.1742,
+        "ball_share": 0.1745,
         "flag_below": 0.09
       }
     },
@@ -2037,14 +2037,14 @@
       "ok": true,
       "evidence": {
         "shoe_first_contact_pitch_deg": 6.054,
-        "com_over_axle_pitch_deg": 10.315
+        "com_over_axle_pitch_deg": 10.318
       }
     },
     {
       "name": "com_below_head_yaw",
       "ok": true,
       "evidence": {
-        "com_z_mm": 105.30048603522839
+        "com_z_mm": 105.42579235915231
       }
     }
   ]

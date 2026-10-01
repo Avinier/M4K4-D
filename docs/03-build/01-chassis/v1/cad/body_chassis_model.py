@@ -656,25 +656,30 @@ PCB04_BOX = (-27.0, 17.0, -35.0, 35.0, 63.0, 77.1)  # branch converters: 44 x 70
 # 1x2 wire-to-wire pair (mated envelope E, drawing not fetched), mated only in
 # OFF. It lies beside the tub behind a service window in the tub wall: with the
 # hatch open and the pack lowered, the pair slides into the empty tub and is
-# unplugged there. The ATOF main-fuse holder moved forward to make room; it is the
-# first thing after the disconnect (PA-02: source-adjacent). The tub's rear +Y
-# screw boss shares the channel, so the bosses stop 1 mm over their insert
-# pilots and the pair, window and slide path start 0.5 mm above them. The fuse
-# cannot rise (body-mount nut 4 above it), so the front bosses moved off the side
-# walls onto the front wall, between the ballast bar and the fuse (2026-10-01).
+# unplugged there. The tub's rear +Y screw boss shares the channel, so the
+# bosses stop 1 mm over their insert pilots and the pair, window and slide path
+# start 0.5 mm above them (D-028).
+# Main fuse (CH-028/CH-029, D-032): no ATO fuse fits the channel (the fuse alone is
+# 19.1 x 18.8 mm across its blades; the channel is 11.3 x 19.6). The Littelfuse
+# 0FHA0001ZXJ inline holder (30 x 10 x 26 mm with the fuse) sits above the
+# channel, about 25 mm over the disconnect (PA-02: still source-adjacent), fuse
+# loading from the top. A printed bracket on the front deck carries it: a column
+# in front of the body M4 foot and a shelf under the holder.
 TUB_BOSS_TOP_Z = 39.5
 PACK_DISCONNECT_PAIR_BOX = (27.0, 49.0, 39.5, 47.8, 40.0, 50.0)
-PACK_FUSE_HOLDER_BOX = (51.0, 75.0, 38.7, 48.7, 36.0, 46.0)
+PACK_FUSE_HOLDER_BOX = (52.0, 82.0, 39.0, 49.0, 73.0, 99.0)  # wire axis along X
+FUSE_BRACKET_COLUMN = (75.0, 81.0, 40.0, 48.0)  # x0, x1, y0, y1; deck top to the shelf
+FUSE_BRACKET_SHELF = (52.0, 82.0, 39.0, 49.0, 71.0, 73.0)
 TUB_SERVICE_WINDOW = (26.9, 49.5, 40.0, 50.0)  # x0, x1, z0, z1 through the +Y tub wall
 PACK_DISCONNECT_SLIDE_PATH = (27.0, 49.0, 30.0, 39.5, 40.0, 50.0)  # into the emptied tub
 # 7 x 7 mm hatch-screw bosses, each lapping 0.5 mm onto a tub wall: two outside
 # the side walls at the rear, two on the front wall's face at Y +/-34.35, midway
-# between the ballast bar (|Y| 30) and the fuse holder (Y 38.7).
+# between the ballast bar (|Y| 30) and the channel (Y 38.7).
 TUB_BOSS_XY = tuple(
     (x, sign * y)
     for x, y in (
         (BATTERY_TUB_X[0] + 4.0, BATTERY_TUB_HALF_Y + 3.0),
-        (BATTERY_TUB_X[1] + BATTERY_TUB_WALL + 3.0, (BALLAST_HALF_Y + PACK_FUSE_HOLDER_BOX[2]) / 2.0),
+        (BATTERY_TUB_X[1] + BATTERY_TUB_WALL + 3.0, (BALLAST_HALF_Y + 38.7) / 2.0),
     )
     for sign in (-1.0, 1.0)
 )
@@ -1061,7 +1066,7 @@ MASS_ROWS = [
     ), "RP-01 generated mass tree"),
     ("BODY_SHELL_AND_PANELS", 285.6, (4.0 + BODY_SHIFT_X, 0.0, 96.0), "Layout 02 CAD estimate; +15 g for the internal panel frames (+15.6 cm3 net printed volume, near-solid 2.4 mm walls); -27.2 g for the -22.7 cm3 of shell floor opened over the motors, battery hatch and pod tongue (RP03-CAD-05/06) at ~1.2 g/cm3; +2.6 g for the ~0.9 cm2 x 2.4 mm of shell floor returned when the battery opening shrank to the 2S1P pack tub (RP03-CAD-07); -4.8 g for the measured -4.04 cm3 when the battery opening grew to clear the hatch flange and tub bosses (2026-10-01)"),
     ("BODY_PRIMARY_FRAME", 335.0, (4.0 + BODY_SHIFT_X, 0.0, 94.0), "Layout 02 CAD estimate incl. mounts"),
-    ("CHASSIS_PRIMARY_FRAME", 229.1, (18.14, 0.0, 46.64), "D-030 (2026-10-01): +21.4 g of newly modeled hardware measured from the solids at 7.9/8.5 g/cm3, centroid (30.4, 0, 46.4): J05/J06/J16/J11A ISO 7380 screws and 14 M3 x 6 inserts, four M2.5 driver screws and inserts; +0.7 g for the measured +1.24 cm3 printed volume at 0.571 g/cm3 (driver posts and tie lugs, wider tongues and rear rail ends, moved J16 ears, hatch strap slots, wider J04 recesses; measured with the since-reverted set-screw recess/cavity growth, under 0.1 g), centroid about (35, 0, 64); was 207.0 g at (16.82, 0, 46.61). 2026-10-01: +0.2 g for the measured +0.29 cm3 when the front hatch bosses moved to the front wall, the bosses were cut to Z 39.5 and the hatch grew 4 mm forward; D-011: -0.3 g for the O5 J10-8 cable bore through the front crossmember and deck at (86, -31); D-010 J04 adds two integrated plate-and-cheek carriers, keyed rail joints, eight modeled M3 x 8 screws and eight 6 mm inserts; estimated +10.2 g total (about +0.7 g printed cheek/key volume and +9.5 g steel/brass hardware, preliminary geometry-density estimate); previous 196.9 g centroid (17.7, 0, 46.8). D-007 axle stack (2026-09-29), +20.9 g at the axle (X 0, Z 42): printed plate + housing replace the flange/boss/diaphragm, +7.24 cm3 measured at ~0.571 g/cm3 (+4.1 g); two 1.2 mm aluminium caps 1.52 cm3 (+4.1 g); eight M3 x 18 cap screws (+10.6 g); eight M3 brass inserts (+1.5 g); face screws M3 x 8 CSK -> M3 x 6 low head (+0.6 g); before that 176.0 g at (19.8, 0, 47.4): +2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"),
+    ("CHASSIS_PRIMARY_FRAME", 229.9, (18.32, 0.14, 46.71), "D-032 (2026-10-02): +0.8 g for the main-fuse bracket on the front deck (column 0.72 + shelf 0.60 cm3 at 0.571 g/cm3, centroid (73.0, 44.0, 67.4)); D-030 (2026-10-01): +21.4 g of newly modeled hardware measured from the solids at 7.9/8.5 g/cm3, centroid (30.4, 0, 46.4): J05/J06/J16/J11A ISO 7380 screws and 14 M3 x 6 inserts, four M2.5 driver screws and inserts; +0.7 g for the measured +1.24 cm3 printed volume at 0.571 g/cm3 (driver posts and tie lugs, wider tongues and rear rail ends, moved J16 ears, hatch strap slots, wider J04 recesses; measured with the since-reverted set-screw recess/cavity growth, under 0.1 g), centroid about (35, 0, 64); was 207.0 g at (16.82, 0, 46.61). 2026-10-01: +0.2 g for the measured +0.29 cm3 when the front hatch bosses moved to the front wall, the bosses were cut to Z 39.5 and the hatch grew 4 mm forward; D-011: -0.3 g for the O5 J10-8 cable bore through the front crossmember and deck at (86, -31); D-010 J04 adds two integrated plate-and-cheek carriers, keyed rail joints, eight modeled M3 x 8 screws and eight 6 mm inserts; estimated +10.2 g total (about +0.7 g printed cheek/key volume and +9.5 g steel/brass hardware, preliminary geometry-density estimate); previous 196.9 g centroid (17.7, 0, 46.8). D-007 axle stack (2026-09-29), +20.9 g at the axle (X 0, Z 42): printed plate + housing replace the flange/boss/diaphragm, +7.24 cm3 measured at ~0.571 g/cm3 (+4.1 g); two 1.2 mm aluminium caps 1.52 cm3 (+4.1 g); eight M3 x 18 cap screws (+10.6 g); eight M3 brass inserts (+1.5 g); face screws M3 x 8 CSK -> M3 x 6 low head (+0.6 g); before that 176.0 g at (19.8, 0, 47.4): +2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"),
     ("WHEEL_L", 92.5, WHEEL_CENTER_L, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
     ("WHEEL_R", 92.5, WHEEL_CENTER_R, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
     ("AXLE_BEARINGS_AND_STUB_SHAFTS", 51.4, (0.0, 0.0, AXLE_Z), "D-012 estimate: two turned EN8 stubs with flange and spigot 30.9 g; four 688 ZZ bearings estimated at 4.05 g each = 16.2 g (weigh on receipt); six M3 x 6 button wheel screws 4.0 g; two M3 set screws, ISO 4029 M3 x 3 faced to 2.5 (D-030), 0.3 g. Symmetric about the centre plane; all masses estimated except measured stub geometry"),
@@ -2069,6 +2074,10 @@ def frame_deck(region: str):
         shape += walls
         for y in BALLAST_SCREW_Y:
             shape -= _z_cylinder(1.7, DECK_Z - 3.0, DECK_Z + 3.0, BALLAST_SCREW_X, y)
+        # D-032: main-fuse bracket, a column from the deck and a shelf under the holder.
+        fx0, fx1, fy0, fy1 = FUSE_BRACKET_COLUMN
+        shape += _block(fx0, fx1, fy0, fy1, DECK_Z + 1.99, FUSE_BRACKET_SHELF[4])
+        shape += _block(*FUSE_BRACKET_SHELF)
         # J15B: driver posts with M2.5 insert pilots, and motor-lead tie bridges.
         for x, y in driver_mount_points():
             shape += _z_cylinder(DRIVER_POST_RADIUS, DECK_Z + 1.99, DRIVER_PCB_Z, x, y)

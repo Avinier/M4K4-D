@@ -625,6 +625,8 @@ def main():
                     continue
             # The E-stop clamps on its well floor, so it touches the well by design.
             mounted = part.label.startswith("ESTOP_XA1E") and other.label == "REAR_PANEL_ESTOP_WELL"
+            # D-032: the fuse holder sits on its bracket shelf, part of the front deck print.
+            mounted = mounted or (part.label == "PACK_ATOF_FUSE_HOLDER_ENVELOPE" and other.label == "CHASSIS_DECK_WITH_BODY_INTERFACE")
             if "KEEP_OUT" not in part.label and not mounted and near(part, other, 5.0):
                 distance = part.distance_to(other)
                 if best is None or distance < best[0]:

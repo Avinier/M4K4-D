@@ -36,6 +36,7 @@ The central record of every decision and change made during the build phase. New
 | [D-029](#d-029) | 2026-10-01 | Chassis / nose lid (J08) | GP2Y soldered-lead reserve 3.0 to 2.0 mm, so the lid hump (top Z 57.6) clears the front panel's lift-off path | ACTIVE; lead bend in 2 mm to confirm at assembly |
 | [D-030](#d-030) | 2026-10-01 | Chassis / frame fasteners, pack restraint, driver mounts (J05, J06, J11A, J11B, J12, J13, J15B, J16; CH-030, CH-055, CH-060) | J05/J06 inserts moved into the rail tongues; all frame, hatch and driver hardware modeled and added (CH-073–CH-082); pack strapped to the hatch; DIN 7984 → ISO 7380; set screw = M3 × 3 faced to 2.5 | ACTIVE; HOLD on coupons, strap/foam source and physical tests |
 | [D-031](#d-031) | 2026-10-02 | Chassis / driver boards (J15B), inline motor pairs, motor face screws | #3297 boards turned long side along Y at X 38.5–56.3, posts at X 41.05; inline pairs re-placed; face-screw heads modelled as ISO 7380 domes; `check_layout.py` 119/119 | ACTIVE; supersedes the D-030 J15B layout; post coupon and received-board fit open |
+| [D-032](#d-032) | 2026-10-02 | Chassis / main fuse holder (CH-028) | Inline Littelfuse 0FHA0001ZXJ ATO holder on a printed front-deck bracket above the +Y channel; the old channel envelope could not hold any ATO fuse | ACTIVE; CH-028 HOLD for an India source |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -982,3 +983,29 @@ D-029 is reserved by a parallel session (lid hump), so this is D-030.
 **Changed docs:** joint-register J15B.
 
 **Open:** post coupon (unchanged from D-030); the right board's outboard terminal block needs a lead path to its inline pair; confirm board hole positions on a received board; tug and vibration tests (D-030).
+
+## D-032
+
+**2026-10-02 · Chassis / main fuse holder (CH-028, CH-029) · ACTIVE; CH-028 stays HOLD for an India source**
+
+**Why:** CH-028 was HOLD because the CAD (an envelope in the +Y channel beside the tub) and the BOM note (a PCB-mount holder on PCB-02) disagreed. `RP-02-electrical/board-specs.md` places the pack interface tile **beside the battery tub** (or on PCB-03's front edge) and requires the main fuse to be source-adjacent (PA-02). PCB-02 is on the rear panel, about 100 mm from the pack, so it is ruled out. The builder chose an inline holder beside the tub.
+
+**Found:** the D-028 channel envelope (24 × 10 × 10 mm) could never hold an ATO fuse. The fuse alone is 19.1 × 5.1 × 18.8 mm with its blades. The channel is 11.3 × 19.6 mm, so no ATO holder fits there in any orientation. A free-space search for the holder (30 × 10 × 26 mm, all six orientations, 0.5 mm clearance) found room only above the deck. The builder chose the spot above the +Y channel, on a deck bracket.
+
+**Changed in `body_chassis_model.py`:**
+- **Holder:** `PACK_FUSE_HOLDER_BOX` is now the Littelfuse 0FHA0001ZXJ inline ATO holder (16 AWG leads, 20 A at 32 VDC, 30 × 10 × 26 mm with the fuse, per the Littelfuse catalog). It sits at X 52–82, Y 39–49, Z 73–99: wire axis along X, fuse loading from the top, about 25 mm above the disconnect pair.
+- **Bracket:** on the front deck print, a 6 × 8 mm column at X 75–81 (in front of the body M4 foot, 1.0 mm clear) and a 2 mm shelf under the holder (`FUSE_BRACKET_COLUMN`, `FUSE_BRACKET_SHELF`).
+- **Bosses:** the front tub bosses no longer take their Y from the fuse box. It is fixed at 34.35 (unchanged).
+- **Mass register:** frame +0.8 g (bracket 1.32 cm³ at 0.571 g/cm³), now 229.9 g. The pack-interface row follows the holder box. Total 2626.9 g, CoM (+19.19, 0.17, 105.43), a_tip 1.786 m/s² against 1.582.
+
+**Changed in `check_layout.py`:** in the power running-gap sweep, the holder's contact with its own bracket shelf counts as mounted, like the E-stop on its well.
+
+**Checks:**
+- Full `check_layout.py`: 119/119.
+- `check_battery_ballast.py`: all pass. `check_frame_fasteners.py`: 9/9.
+- Holder and bracket sweep against the whole model: no clashes; 0.5 mm to the left inline motor-pair reserve, 1.0 mm from the column to the M4 foot.
+- STEPs rebuilt.
+
+**Changed docs:** `BOM.csv` CH-028 row, the chassis `BOM.md` fuse paragraph, the CAD README.
+
+**Open:** an India source for 0FHA0001ZXJ or an equivalent inline ATO holder; check the received body against the envelope; confirm 16 AWG leads for the 15 A fuse; how the holder is tied to the shelf; bracket print. Fuse access needs the body off.

@@ -19,8 +19,8 @@
         "inner_r_mm": null
       },
       "WHEEL_L_SET_SCREW_M3X2_5": {
-        "min_gap_mm": 1.537,
-        "to": "AXLE_MOTOR_SCREW_M3X6_L_1",
+        "min_gap_mm": 1.781,
+        "to": "AXLE_MOTOR_CARRIER_L",
         "inner_r_mm": null,
         "method": "rotated 3 deg steps"
       },
@@ -190,8 +190,8 @@
         "inner_r_mm": null
       },
       "WHEEL_R_SET_SCREW_M3X2_5": {
-        "min_gap_mm": 1.537,
-        "to": "AXLE_MOTOR_SCREW_M3X6_R_1",
+        "min_gap_mm": 1.781,
+        "to": "AXLE_MOTOR_CARRIER_R",
         "inner_r_mm": null,
         "method": "rotated 3 deg steps"
       },

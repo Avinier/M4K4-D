@@ -1,3 +1,4 @@
 __cadgen__/
 __pycache__/
 body-chassis.step
+generated/*.partial.json

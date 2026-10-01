@@ -29,7 +29,7 @@
 | J13 | Body frame to chassis deck | Stack defined: M4 × 12, plain nut, Loctite 222 (D-030) | Verify head seat, pin fits, nut access and lift-off |
 | J14 | TPU tyre to wheel rim | Designed in wheel CAD | Material/process fit, clamp, creep and runout |
 | J15A | IMU board to deck | Modeled | Board-hole confirmation and screw fit |
-| J15B | Driver boards and motor-lead restraint | CAD defined (D-030) | Insert coupon, tug/vibration test, service dry run |
+| J15B | Driver boards and motor-lead restraint | CAD defined (D-030, D-031) | Insert coupon, tug/vibration test, service dry run |
 | J16 | Split decks to rails | CAD defined (D-030) | Insert coupon, coplanarity, racking and tool access |
 
 ## Detailed interfaces
