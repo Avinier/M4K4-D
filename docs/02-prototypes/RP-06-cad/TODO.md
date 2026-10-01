@@ -106,7 +106,7 @@ Largest gaps, in order of impact on CAD closure:
 
 - [ ] Propagate `RP03-CAD-01`…`08` to the permanent RP-03 documents as one reviewed change set (sensor count, bump coverage, the fixed ball-only mount versus the required `D20` swap, CoM and motion restrictions).
 
-- [x] Select the status LED and diffuser/optic. **Working selection 2026-09-26** ([`peripheral-selection.md`](peripheral-selection.md) §3, `HEAD-CAD-12`): Worldsemi WS2812B-2020-V6 on a 5 × 5 mm carrier (`PCB-08`) behind the unchanged Ø3.4 × 2.9 light pipe (clear resin or PMMA, frosted face), D1 GPIO6 at 3.3 V. Still open: route the three leads from the crown to D1, bench brightness at 3.3 V and camera stray light (G03).
+- [x] Select the status LED and diffuser/optic. **Working selection 2026-09-26** ([`peripheral-selection.md`](peripheral-selection.md) §3, `HEAD-CAD-12`): Worldsemi WS2812B-2020-V6 on a 5 × 5 mm carrier (`PCB-11`) behind the unchanged Ø3.4 × 2.9 light pipe (clear resin or PMMA, frosted face), D1 GPIO6 at 3.3 V. Still open: route the three leads from the crown to D1, bench brightness at 3.3 V and camera stray light (G03).
 
 - [x] Select microphone front end, microphone boards, speaker, and amplifier. **Working selection 2026-09-26** ([`peripheral-selection.md`](peripheral-selection.md) §2, RP-05 `BD-A04`…`A06`, `RP03-CAD-11`): `AP-TDM` as two I²S lanes on the Pi 5 (RP1 has no true TDM), 2 × ADAU7002 and a MAX98357A on `PCB-05`, four Infineon IM73D122V01 on `PCB-06` boards at the unchanged ports, Visaton K 50 WP 8 Ω. Modelling them showed the old amplifier box sat inside the Pi 5 and the 34 mm cavity ran through the compute tray, so `PCB-05` moved above the Pi's front end and the cavity is now 20 mm (X 77–97). Still open: `CA-06` CR-01 (GPIO22 SDI1, GPIO23 `AMP_SD`), the Pi 5 overlay and duplex bench proof, mic-board fixing to the body frame, speaker flange bond and grille, acoustic tests.
 
@@ -116,7 +116,7 @@ Largest gaps, in order of impact on CAD closure:
   - [ ] `PCB-05` audio front end (2 × ADAU7002 WLCSP, MAX98357A TQFN, 100 Ω series on the amp inputs, JST GH mic inputs (`CN-01`)); JLCPCB assembly because of the WLCSP
   - [ ] `PCB-06` mic board ×4 (IM73D122V01, Ø0.8 port hole, LR strap per position, JST GH 4-pin, board 12 x 9.5 mm; `CN-01`) and its fixing to the body frame
   - [ ] `PCB-07` IMU board (ICM-42688-P, JST GH 8-pin (`CN-01`), two M2 holes 15 mm apart)
-  - [ ] `PCB-08` LED carrier (WS2812B-2020, three pads)
+  - [ ] `PCB-11` LED carrier (WS2812B-2020, three pads)
   - [ ] Raise `CA-06` CR-01 in RP-02 (GPIO22 `i2s0` SDI1, GPIO23 `AMP_SD`) and prove the custom `simple-audio-card` overlay: 4-channel capture on SDI0+SDI1 with 2-channel playback on SDO0 at 48 kHz, lane order, and whether RP1 forces symmetric channel counts
 
 - [ ] Obtain or fabricate representative articles and measure:

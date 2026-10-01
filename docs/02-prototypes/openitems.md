@@ -166,7 +166,7 @@ Working part choices, values and sizes for the custom power and safety boards an
 
 | Item | Notes | Home |
 |---|---|---|
-| Status light | **Working-selected 2026-09-26:** WS2812B-2020 on `PCB-08`, D1 GPIO6; brightness at 3.3 V and camera stray light are bench items | `LG-05`; [`RP-06-cad/peripheral-selection.md`](RP-06-cad/peripheral-selection.md) §3 |
+| Status light | **Working-selected 2026-09-26:** WS2812B-2020 on `PCB-11`, D1 GPIO6; brightness at 3.3 V and camera stray light are bench items | `LG-05`; [`RP-06-cad/peripheral-selection.md`](RP-06-cad/peripheral-selection.md) §3 |
 | Microphone front end (`LG-07`) | **Working-selected 2026-09-26:** `AP-TDM` as two I²S lanes, 2 × ADAU7002 + 4 × IM73D122V01; needs `CA-06` CR-01 (GPIO22/23) and a Pi 5 bench proof | `RP-05-interaction/decision.md` `BD-A04`/`A05`; [`RP-06-cad/peripheral-selection.md`](RP-06-cad/peripheral-selection.md) §2 |
 | Speaker + amplifier (`LG-08`) | **Working-selected 2026-09-26:** Visaton K 50 WP 8 Ω + MAX98357A on `PCB-05` | `RP-05-interaction/decision.md` `BD-A06`; `PB-AUDIO-OUT` |
 | Base motor driver and safety sensors (`LG-04/LG-10`) | C3 selected; **leads named** (D02, DRV8874-class, S01/S04/S06/S07) — not a freeze, not purchased | `PB-DRIVE*`; RP-03 screens |

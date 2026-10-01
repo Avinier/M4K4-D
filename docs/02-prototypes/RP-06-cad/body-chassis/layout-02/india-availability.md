@@ -21,7 +21,7 @@ Checked with Exa web search against the SKUs named in `body_chassis_model.py`, `
 | **MAX98357A** (amp) | Available | Common as Adafruit #3006-class breakouts in Indian stores (bench); the installed TQFN part goes on `PCB-05` via LCSC/JLCPCB |
 | **ADAU7002ACBZ-R7** (PDM→I²S) | Import (PCBA) | LCSC C481886, 8-ball WLCSP, about 147 in stock at US$4.10; JLCPCB-assembled only, no Indian breakout found |
 | **Infineon IM73D122V01** (mics) | Import | Infineon "active and preferred"; `KIT_IM73D122V01_FLEX` DigiKey US$75.19, 0 in stock, restock 2026-10-19 (standard lead 97 weeks); reels are 5000, so buy cut tape via DigiKey/Mouser India or let JLCPCB source it |
-| **Worldsemi WS2812B-2020** (status LED) | Import (PCBA) | LCSC C965555; for the 5 × 5 mm `PCB-08` carrier |
+| **Worldsemi WS2812B-2020** (status LED) | Import (PCBA) | LCSC C965555; for the 5 × 5 mm `PCB-11` carrier |
 | **ICM-42688-P** (IMU, bare) | Available | Robu ₹314 (bare LGA, for `PCB-07`); RS India ₹755 each in a pack of 2. MIKROE-4237 bench board: MikroE and DigiKey out of stock, TME US$36.25, RS UK restocking |
 | **NFP-JGA25-370-EN-0685 gearmotor** | No India source | This matches `gearmotor-sku-decision.md`: the lock is open and no India stock is verified. |
 

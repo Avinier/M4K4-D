@@ -124,7 +124,7 @@ The overlay is a custom `simple-audio-card` on `i2s_clk_producer` with pins 18�
 | Item | Selection | Key facts |
 |---|---|---|
 | LED | **Worldsemi WS2812B-2020-V6** (LCSC C965555) | 2.0 × 2.0 × 0.84 mm addressable RGB, **3.3–5.5 V**, 12 mA per colour, 8-bit per colour, **2 kHz PWM**, built-in capacitor, reverse-polarity tolerant, < 1 µA static, 800 kbit/s single-wire (`D`) |
-| Carrier | **`PCB-08`**, 5 × 5 × 0.8 mm FR4, LED on the front face, three pads on the back | Fits the head's existing 3 × 5 × 5 reserve: board X −8…−7.2, LED −7.2…−6.36, **1.36 mm air gap** to the diffuser's rear face at X −5 |
+| Carrier | **`PCB-11`**, 5 × 5 × 0.8 mm FR4, LED on the front face, three pads on the back | Fits the head's existing 3 × 5 × 5 reserve: board X −8…−7.2, LED −7.2…−6.36, **1.36 mm air gap** to the diffuser's rear face at X −5 |
 | Optic | **Ø3.4 × 2.9 mm clear light pipe** (the existing `crown_status_light_diffuser` geometry), SLA clear resin or turned from Ø4 mm PMMA rod, exit face bead-blasted, UV-bonded in the Ø3.6 crown bore | No head aperture change, so the Layout 03/04 optics verification stands |
 | Driver | **D1 GPIO6** on its Sensor-AD PH2.0 header, RMT peripheral; LED powered from that header's 3.3 V | D1 executes `LIGHT_STATE` (C2-relayed, `CA-04`); RMT gives the `LIGHT_REPORT` onset stamp at frame latch (+280 µs reset) |
 | Wiring | 3 × AWG30 PTFE (3V3, GND, DIN) soldered to the back pads, turned 90° within 2 mm | Replaces the 30 mm straight rearward exit the crown could not hold; the routed path to D1 is still a keep-out (§5) |
