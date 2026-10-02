@@ -1,0 +1,529 @@
+{
+  "scope": "body-v1 source geometry and whole-robot estimated mass register; neutral head pose",
+  "assumptions": {
+    "petg_skin_and_frame_g_cm3": 1.2,
+    "petg_arch_effective_g_cm3": 0.571,
+    "steel_g_cm3": 7.85,
+    "brass_g_cm3": 8.5,
+    "mass_is_estimated_not_weighed": true
+  },
+  "shell_and_panels": {
+    "mass_g": 249.3444452848622,
+    "com_mm": [
+      19.87527956890283,
+      4.584697736318269e-05,
+      92.59095479708346
+    ],
+    "yaw_inertia_about_ground_origin_g_mm2": 1987372.2304176758,
+    "components": [
+      {
+        "name": "BODY_SHELL",
+        "mass_g": 139.72552502888155,
+        "com_mm": [
+          24.251402693492917,
+          7.767957877274878e-05,
+          96.37530034887529
+        ]
+      },
+      {
+        "name": "FRONT_SERVICE_PANEL_FUNCTIONAL_GRILLE",
+        "mass_g": 29.818320968862082,
+        "com_mm": [
+          96.39105139975547,
+          -5.874043586888939e-11,
+          95.55004886483196
+        ]
+      },
+      {
+        "name": "REAR_SERVICE_PANEL_OCTAGONAL",
+        "mass_g": 31.361933443378863,
+        "com_mm": [
+          -56.46199685045199,
+          1.8404133597258312e-05,
+          87.72224406165665
+        ]
+      },
+      {
+        "name": "REAR_PANEL_ESTOP_AMBER_BEZEL",
+        "mass_g": 0.30844528901909724,
+        "com_mm": [
+          -60.60000000000009,
+          1.7691851374976596e-15,
+          105.49999999999999
+        ]
+      },
+      {
+        "name": "FRONT_BADGE_LAND",
+        "mass_g": 0.288,
+        "com_mm": [
+          92.10588235294118,
+          -3.895032444726591e-16,
+          124.0
+        ]
+      },
+      {
+        "name": "WHEEL_ARCH_L",
+        "mass_g": 10.483255923987468,
+        "com_mm": [
+          1.6215021429787021e-15,
+          86.27515400410682,
+          73.051009568045
+        ]
+      },
+      {
+        "name": "WHEEL_ARCH_R",
+        "mass_g": 10.483255923987468,
+        "com_mm": [
+          8.30923433077083e-16,
+          -86.27515400410687,
+          73.05100956804512
+        ]
+      },
+      {
+        "name": "FRONT_PANEL_INTERNAL_FRAME_WITH_BOSSES",
+        "mass_g": 12.776152569379578,
+        "com_mm": [
+          90.86189573098778,
+          1.089936411160879e-08,
+          94.2920893315176
+        ]
+      },
+      {
+        "name": "FRONT_PANEL_M3_WEDGE_WASHER_1",
+        "mass_g": 0.016140546498098336,
+        "com_mm": [
+          103.31837258651261,
+          -53.00000002948916,
+          66.21958587647968
+        ]
+      },
+      {
+        "name": "FRONT_PANEL_M3_WEDGE_WASHER_2",
+        "mass_g": 0.016140546498098342,
+        "com_mm": [
+          103.31837258651262,
+          52.999999970510835,
+          66.21958587647967
+        ]
+      },
+      {
+        "name": "FRONT_PANEL_M3_WEDGE_WASHER_3",
+        "mass_g": 0.021676512660299827,
+        "com_mm": [
+          91.24559697010964,
+          -45.9999999719363,
+          125.74832920726874
+        ]
+      },
+      {
+        "name": "FRONT_PANEL_M3_WEDGE_WASHER_4",
+        "mass_g": 0.021676512660299786,
+        "com_mm": [
+          91.24559697010962,
+          46.0000000280637,
+          125.74832920726875
+        ]
+      },
+      {
+        "name": "REAR_PANEL_INTERNAL_FRAME_WITH_BOSSES",
+        "mass_g": 13.951095075373516,
+        "com_mm": [
+          -50.76069944790384,
+          3.8941679539117326e-08,
+          86.12772481618953
+        ]
+      },
+      {
+        "name": "REAR_PANEL_M3_WEDGE_WASHER_1",
+        "mass_g": 0.014736959908077196,
+        "com_mm": [
+          -61.52884014326886,
+          -51.9999999942129,
+          50.37680289113594
+        ]
+      },
+      {
+        "name": "REAR_PANEL_M3_WEDGE_WASHER_2",
+        "mass_g": 0.014736959908077196,
+        "com_mm": [
+          -61.52884014326885,
+          52.00000000578709,
+          50.37680289113594
+        ]
+      },
+      {
+        "name": "REAR_PANEL_M3_WEDGE_WASHER_3",
+        "mass_g": 0.0216765119298051,
+        "com_mm": [
+          -51.24559699410741,
+          -44.00000002806456,
+          125.748329231497
+        ]
+      },
+      {
+        "name": "REAR_PANEL_M3_WEDGE_WASHER_4",
+        "mass_g": 0.02167651192980513,
+        "com_mm": [
+          -51.245596994107416,
+          43.99999997193544,
+          125.74832923149701
+        ]
+      }
+    ]
+  },
+  "printed_frame_only": {
+    "mass_g": 146.63385556420658,
+    "com_mm": [
+      10.558645319982832,
+      -0.05727686027244642,
+      99.57398674563011
+    ],
+    "yaw_inertia_about_ground_origin_g_mm2": 631439.4089598928,
+    "components": [
+      {
+        "name": "BODY_FRAME_MAIN_PRINT",
+        "mass_g": 141.65736214790576,
+        "com_mm": [
+          8.622046684703198,
+          -1.799246700001071,
+          100.88182277606872
+        ]
+      },
+      {
+        "name": "BODY_FRAME_FRONT_LEFT_FOOT_CASSETTE",
+        "mass_g": 4.976493416300827,
+        "com_mm": [
+          65.68450026723342,
+          49.52841165463232,
+          62.346045965666946
+        ]
+      }
+    ]
+  },
+  "frame_and_joints": {
+    "mass_g": 170.8954976164053,
+    "com_mm": [
+      12.52850046960753,
+      0.9901155566025095,
+      94.90415129608492
+    ],
+    "yaw_inertia_about_ground_origin_g_mm2": 772321.9228239099,
+    "components": [
+      {
+        "name": "BODY_FRAME_MAIN_PRINT",
+        "mass_g": 141.65736214790576,
+        "com_mm": [
+          8.622046684703198,
+          -1.799246700001071,
+          100.88182277606872
+        ]
+      },
+      {
+        "name": "BODY_FRAME_FRONT_LEFT_FOOT_CASSETTE",
+        "mass_g": 4.976493416300827,
+        "com_mm": [
+          65.68450026723342,
+          49.52841165463232,
+          62.346045965666946
+        ]
+      },
+      {
+        "name": "BODY_CHASSIS_M4_SHANK_1",
+        "mass_g": 1.068336280965052,
+        "com_mm": [
+          -22.0,
+          -48.0,
+          56.0
+        ]
+      },
+      {
+        "name": "BODY_CHASSIS_M4_HEAD_1",
+        "mass_g": 0.9470016894981071,
+        "com_mm": [
+          -22.0,
+          -48.0,
+          61.2
+        ]
+      },
+      {
+        "name": "BODY_CHASSIS_M4_NUT_1",
+        "mass_g": 1.4364366921861684,
+        "com_mm": [
+          -22.0,
+          -48.0,
+          50.4
+        ]
+      },
+      {
+        "name": "BODY_CHASSIS_M4_SHANK_2",
+        "mass_g": 1.068336280965052,
+        "com_mm": [
+          -22.0,
+          48.0,
+          56.0
+        ]
+      },
+      {
+        "name": "BODY_CHASSIS_M4_HEAD_2",
+        "mass_g": 0.9470016894981071,
+        "com_mm": [
+          -22.0,
+          48.0,
+          61.2
+        ]
+      },
+      {
+        "name": "BODY_CHASSIS_M4_NUT_2",
+        "mass_g": 1.4364366921861684,
+        "com_mm": [
+          -22.0,
+          48.0,
+          50.4
+        ]
+      },
+      {
+        "name": "BODY_CHASSIS_M4_SHANK_3",
+        "mass_g": 1.0683362809650518,
+        "com_mm": [
+          64.0,
+          -48.0,
+          56.0
+        ]
+      },
+      {
+        "name": "BODY_CHASSIS_M4_HEAD_3",
+        "mass_g": 0.9470016894981073,
+        "com_mm": [
+          64.0,
+          -48.0,
+          61.2
+        ]
+      },
+      {
+        "name": "BODY_CHASSIS_M4_NUT_3",
+        "mass_g": 1.4364366921861684,
+        "com_mm": [
+          64.0,
+          -48.0,
+          50.4
+        ]
+      },
+      {
+        "name": "BODY_CHASSIS_M4_SHANK_4",
+        "mass_g": 1.0683362809650518,
+        "com_mm": [
+          64.0,
+          48.0,
+          58.0
+        ]
+      },
+      {
+        "name": "BODY_CHASSIS_M4_HEAD_4",
+        "mass_g": 0.9470016894981069,
+        "com_mm": [
+          64.0,
+          48.0,
+          50.8
+        ]
+      },
+      {
+        "name": "BODY_CHASSIS_M4_NUT_4",
+        "mass_g": 1.1879235822695,
+        "com_mm": [
+          64.0,
+          48.0,
+          61.6
+        ]
+      },
+      {
+        "name": "BODY_CHASSIS_LOCATING_PIN_1",
+        "mass_g": 0.789168074581756,
+        "com_mm": [
+          -27.0,
+          -42.0,
+          56.0
+        ]
+      },
+      {
+        "name": "BODY_CHASSIS_LOCATING_PIN_2",
+        "mass_g": 0.7891680745817562,
+        "com_mm": [
+          59.0,
+          42.0,
+          56.0
+        ]
+      },
+      {
+        "name": "BODY_CASSETTE_INSERT_M3_1",
+        "mass_g": 0.28038714433288875,
+        "com_mm": [
+          60.99999999999999,
+          57.00000000000001,
+          65.00000000000001
+        ]
+      },
+      {
+        "name": "BODY_CASSETTE_SCREW_M3X16_1",
+        "mass_g": 1.2403995827262062,
+        "com_mm": [
+          60.99999999999999,
+          63.5156261804879,
+          65.0
+        ]
+      },
+      {
+        "name": "BODY_CASSETTE_INSERT_M3_2",
+        "mass_g": 0.28038714433288875,
+        "com_mm": [
+          68.0,
+          57.00000000000001,
+          65.00000000000001
+        ]
+      },
+      {
+        "name": "BODY_CASSETTE_SCREW_M3X16_2",
+        "mass_g": 1.2403995827262062,
+        "com_mm": [
+          68.0,
+          63.515626180487914,
+          65.0
+        ]
+      },
+      {
+        "name": "SHELL_FRAME_INSERT_M3_R_R",
+        "mass_g": 0.2803871443328885,
+        "com_mm": [
+          -32.00000000000001,
+          -66.0,
+          94.99999999999999
+        ]
+      },
+      {
+        "name": "SHELL_FRAME_SCREW_M3X16_R_R",
+        "mass_g": 1.240399582726206,
+        "com_mm": [
+          -31.999999999999993,
+          -74.61562618048788,
+          95.0
+        ]
+      },
+      {
+        "name": "SHELL_FRAME_INSERT_M3_R_L",
+        "mass_g": 0.2803871443328885,
+        "com_mm": [
+          -32.00000000000001,
+          66.00000000000001,
+          94.99999999999999
+        ]
+      },
+      {
+        "name": "SHELL_FRAME_SCREW_M3X16_R_L",
+        "mass_g": 1.2403995827262062,
+        "com_mm": [
+          -32.0,
+          74.6156261804879,
+          95.0
+        ]
+      },
+      {
+        "name": "SHELL_FRAME_INSERT_M3_F_R",
+        "mass_g": 0.2803871443328886,
+        "com_mm": [
+          64.0,
+          -66.0,
+          94.99999999999999
+        ]
+      },
+      {
+        "name": "SHELL_FRAME_SCREW_M3X16_F_R",
+        "mass_g": 1.2403995827262058,
+        "com_mm": [
+          64.0,
+          -74.61562618048788,
+          95.0
+        ]
+      },
+      {
+        "name": "SHELL_FRAME_INSERT_M3_F_L",
+        "mass_g": 0.2803871443328886,
+        "com_mm": [
+          64.0,
+          66.00000000000001,
+          94.99999999999999
+        ]
+      },
+      {
+        "name": "SHELL_FRAME_SCREW_M3X16_F_L",
+        "mass_g": 1.2403995827262062,
+        "com_mm": [
+          63.99999999999998,
+          74.61562618048787,
+          94.99999999999997
+        ]
+      }
+    ]
+  },
+  "whole_robot": {
+    "mass_g": 2425.6794811320765,
+    "com_mm": [
+      18.481264932904264,
+      0.2408006429620004,
+      105.91813045738452
+    ],
+    "forward_tip_acceleration_m_s2": 1.7117108110658752,
+    "forward_tip_screen_min_m_s2": 1.5822580645161293,
+    "ball_static_share": 0.16801149939003876,
+    "com_over_axle_pitch_deg": 9.8976859514244,
+    "rear_skid_first_contact_pitch_deg": 6.054191894114834,
+    "reverse_launch_or_forward_brake_tip_acceleration_m_s2": 8.476346656906228,
+    "axle_line_lateral_tip_proxy_m_s2": 7.850287218080068,
+    "neutral_spin_centripetal_at_220_deg_s_m_s2": 0.27247821753158435,
+    "head_pose_conservative_tip_acceleration_m_s2": 1.708064166746461,
+    "head_yaw_com_offset_from_axis_mm": 0.8469647482717024,
+    "head_pitch_carried_com_offset_from_axis_mm": 0.00013665226662536165,
+    "head_roll_carried_com_offset_from_axis_mm": 5.112737170499328e-05,
+    "printed_enclosure_yaw_inertia_about_drive_axis_kg_m2": 0.0026188116393775687,
+    "unweighed_harness_fastener_allowance_g": 95.0,
+    "allowance_assumed_x_mm": 20.0,
+    "allowance_min_x_for_pose_screen_mm": -14.682715527562685,
+    "allowance_if_at_x_minus20_a_tip_m_s2": 1.562970450390425
+  },
+  "axes": {
+    "head_yaw_datum_mm": [
+      16.0,
+      0.0,
+      140.0
+    ],
+    "head_sweep_floor_z_mm": 159.0,
+    "head_sweep_to_shell_clearance_mm": 19.0,
+    "yaw_shell_clashes_mm3": {}
+  },
+  "envelope": {
+    "shell_x_mm": [
+      -61.1,
+      101.1
+    ],
+    "shell_width_max_mm": 182.2,
+    "shell_z_mm": [
+      30.0,
+      140.0
+    ]
+  },
+  "checks": {
+    "shell_and_panels_match_mass_register": true,
+    "frame_and_joints_match_mass_register": true,
+    "shell_symmetric_about_y": true,
+    "head_yaw_axis_unchanged": true,
+    "head_sweep_above_shell": true,
+    "yaw_stage_and_moving_parts_clear_shell": true,
+    "mount_pattern_unchanged": true,
+    "body_width_within_205_mm_baseline": true,
+    "com_between_axle_and_ball": true,
+    "forward_tip_margin_screen": true,
+    "head_pose_tip_margin_screen": true,
+    "ball_share_above_spin_walk_flag": true,
+    "skid_contacts_before_com_crosses_axle": true,
+    "com_below_head_yaw": true
+  },
+  "ok": true
+}

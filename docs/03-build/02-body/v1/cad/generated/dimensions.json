@@ -1,0 +1,219 @@
+{
+  "layout_id": "RP03_BODY_V1",
+  "layout_revision": "body-v1.0",
+  "units": "mm",
+  "coordinate_convention": "+X forward, +Y robot-left, +Z up; origin on ground at the drive axle",
+  "body_shell_x_mm": [
+    -61.1,
+    101.1
+  ],
+  "body_shell_z_mm": [
+    30.0,
+    140.0
+  ],
+  "body_width_lower_upper_mm": [
+    150.0,
+    132.0
+  ],
+  "body_width_shoulder_z42_mm": 174.0,
+  "body_width_max_mm": 182.2,
+  "body_shell_stations_z_rear_front_halfwidth_mm": [
+    [
+      30.0,
+      -58.0,
+      94.0,
+      75.0
+    ],
+    [
+      42.0,
+      -58.0,
+      98.0,
+      87.0
+    ],
+    [
+      62.0,
+      -60.0,
+      100.0,
+      90.0
+    ],
+    [
+      70.0,
+      -61.1,
+      101.1,
+      91.1
+    ],
+    [
+      82.0,
+      -58.5,
+      98.5,
+      86.0
+    ],
+    [
+      88.0,
+      -55.0,
+      95.0,
+      80.0
+    ],
+    [
+      94.0,
+      -54.0,
+      94.0,
+      79.0
+    ],
+    [
+      128.0,
+      -48.0,
+      88.0,
+      75.0
+    ],
+    [
+      140.0,
+      -44.0,
+      84.0,
+      66.0
+    ]
+  ],
+  "shell_thickness_mm": 2.4,
+  "body_mount_points_xy_mm": [
+    [
+      -22.0,
+      -48.0
+    ],
+    [
+      -22.0,
+      48.0
+    ],
+    [
+      64.0,
+      -48.0
+    ],
+    [
+      64.0,
+      48.0
+    ]
+  ],
+  "body_locating_points_xy_mm": [
+    [
+      -27.0,
+      -42.0
+    ],
+    [
+      59.0,
+      42.0
+    ]
+  ],
+  "panel_overlap_mm": 2.0,
+  "front_panel_width_bottom_top_mm": [
+    128.0,
+    112.23454545454545
+  ],
+  "rear_panel_width_bottom_top_mm": [
+    126.0,
+    106.32272727272726
+  ],
+  "front_panel_fasteners_yz_mm": [
+    [
+      -53.0,
+      67.0
+    ],
+    [
+      53.0,
+      67.0
+    ],
+    [
+      -46.0,
+      125.0
+    ],
+    [
+      46.0,
+      125.0
+    ]
+  ],
+  "rear_panel_fasteners_yz_mm": [
+    [
+      -52.0,
+      51.0
+    ],
+    [
+      52.0,
+      51.0
+    ],
+    [
+      -44.0,
+      125.0
+    ],
+    [
+      44.0,
+      125.0
+    ]
+  ],
+  "speaker_center_mm": [
+    85.5,
+    0.0,
+    99.0
+  ],
+  "speaker_basket_diameter_mm": 50.0,
+  "microphone_ports": [
+    {
+      "center_mm": [
+        54.0,
+        70.0,
+        118.0
+      ],
+      "name": "FRONT_L"
+    },
+    {
+      "center_mm": [
+        54.0,
+        -70.0,
+        118.0
+      ],
+      "name": "FRONT_R"
+    },
+    {
+      "center_mm": [
+        -22.0,
+        70.0,
+        108.0
+      ],
+      "name": "REAR_L"
+    },
+    {
+      "center_mm": [
+        -22.0,
+        -70.0,
+        108.0
+      ],
+      "name": "REAR_R"
+    }
+  ],
+  "compute_center_mm": [
+    22.0,
+    0.0,
+    102.0
+  ],
+  "pi_cooler_headroom_mm": 10.5,
+  "head_yaw_datum_mm": [
+    16.0,
+    0.0,
+    140.0
+  ],
+  "yaw_bearing_radii_mm": [
+    25.0,
+    33.0
+  ],
+  "yaw_bearing_z_mm": [
+    138.0,
+    145.0
+  ],
+  "yaw_servo_envelope_mm": [
+    6.0,
+    26.0,
+    29.0,
+    55.0,
+    99.0,
+    133.0
+  ],
+  "yaw_disc_top_z_mm": 155.0,
+  "head_sweep_floor_z_mm": 159.0
+}

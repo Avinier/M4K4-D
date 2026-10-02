@@ -1,0 +1,152 @@
+{
+  "scope": "body register rows only; partial estimate, not a full body mass or solid measurement",
+  "mass_g": 786.2,
+  "com_mm": [
+    18.7528237089799,
+    -0.2410964131264309,
+    98.0160137369626
+  ],
+  "whole_robot_estimate": {
+    "mass_g": 2425.6794811320765,
+    "com_mm": [
+      18.481264932904264,
+      0.2408006429620004,
+      105.91813045738452
+    ],
+    "forward_tip_acceleration_m_s2": 1.7117108110658752,
+    "ball_static_share": 0.16801149939003876
+  },
+  "rows": [
+    {
+      "id": "BODY_SHELL_AND_PANELS",
+      "mass_g": 249.3,
+      "com_mm": [
+        19.9,
+        0.0,
+        92.6
+      ],
+      "source": "Body v1 CAD volume and centroid (2026-10-02): 2.4 mm shell, front/rear service skins with speaker cup and E-stop well, badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods/trims at 0.571 g/cm3. Excludes panel screws already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."
+    },
+    {
+      "id": "BODY_PRIMARY_FRAME",
+      "mass_g": 170.9,
+      "com_mm": [
+        12.5,
+        1.0,
+        94.9
+      ],
+      "source": "Body v1 CAD volume and centroid (2026-10-02): main connected print and removable front-left foot cassette at conservative 1.20 g/cm3 effective PETG, plus modeled four M4 bolts/nuts, two locating pins, cassette M3 joints, and four shell-to-frame M3 screw/insert joints at 7.85/8.50 g/cm3 steel/brass. Estimated, not weighed; check_body_layout.py verifies against the solids."
+    },
+    {
+      "id": "RASPBERRY_PI5_AND_COOLER",
+      "mass_g": 76.0,
+      "com_mm": [
+        22.0,
+        0.0,
+        102.0
+      ],
+      "source": "vendor + estimate"
+    },
+    {
+      "id": "PCB02_CHARGE_AND_SYSTEM_POWER",
+      "mass_g": 18.0,
+      "com_mm": [
+        -43.8,
+        0.0,
+        76.0
+      ],
+      "source": "E (proposal): 50 x 36 mm board 6.8 g + USB-C 1.2 + connectors 3 + inductor 2 + capacitors 3 + ICs 0.6 + misc 1; vertical on the rear-panel frame"
+    },
+    {
+      "id": "PCB03_MOTOR_GATE_AND_HEAD_RAIL",
+      "mass_g": 24.0,
+      "com_mm": [
+        38.5,
+        0.0,
+        69.0
+      ],
+      "source": "E (proposal): 2460 mm2 board 9.4 g + 4 x Micro-Fit+ 8 + inductor 3 + capacitors 2 + FETs, shunt, TVS, misc 1.6"
+    },
+    {
+      "id": "PCB04_BRANCH_CONVERTERS",
+      "mass_g": 45.0,
+      "com_mm": [
+        -5.0,
+        0.0,
+        70.05
+      ],
+      "source": "E (proposal): WS-H 35 g (3080 mm2 board 11.7 g + inductors 5.4 + connectors 8 + ICs 1 + polymer/ceramics ~1) with the hold-up raised from 4 x 1 mF (~8 g) to 2 x 3.3 mF (~9 g each, \u00d812.5 x 20 lying) per board-specs.md sec 8.1: +10 g; the board footprint is NOT enlarged (no slack in the bay)"
+    },
+    {
+      "id": "C3_DEVKITC_N8",
+      "mass_g": 9.0,
+      "com_mm": [
+        21.0,
+        -51.55,
+        110.35000000000001
+      ],
+      "source": "E: ESP32-S3-DevKitC-1-N8 board; moved 2026-09-26 onto the PCB-10 carrier on the -Y side wall"
+    },
+    {
+      "id": "C3_CARRIER_PCB10",
+      "mass_g": 20.0,
+      "com_mm": [
+        21.0,
+        -59.4,
+        103.75
+      ],
+      "source": "E (proposal): 70 x 43.5 mm board ~8.5 g + THVD1451, TPS3436, READY logic, SLEEP FETs ~1 g + 2 x 22-pin headers ~3 g + 10 GH and 1 Micro-Fit 3.0 header ~3 g + four M2.5 screws and inserts ~1 g; two printed uprights on the -Y rails ~3.5 g"
+    },
+    {
+      "id": "YAW_JUNCTION_PCB08",
+      "mass_g": 4.0,
+      "com_mm": [
+        -6.0,
+        -33.5,
+        116.0
+      ],
+      "source": "E: 32 x 21 mm board ~2 g + Micro-Fit+ 2x3 and three GH headers ~2 g"
+    },
+    {
+      "id": "C0_LINK_ADAPTER_PCB09",
+      "mass_g": 7.0,
+      "com_mm": [
+        30.0,
+        32.0,
+        107.5
+      ],
+      "source": "E: strip-and-wide board ~3 g + 2 x 20 socket ~2 g + 2 x THVD1451 and three GH headers ~2 g"
+    },
+    {
+      "id": "ESTOP_XA1E_BV3U02KT_R",
+      "mass_g": 14.0,
+      "com_mm": [
+        -48.96071428571429,
+        0.0,
+        105.5
+      ],
+      "source": "D: IDEC XA unibody \u00d829 mushroom 14 g (XA datasheet); ~5 g mushroom and collar outside the well floor, ~9 g contact block behind it. The revised rear-panel well and bezel print mass is included in BODY_SHELL_AND_PANELS."
+    },
+    {
+      "id": "BODY_AUDIO",
+      "mass_g": 60.0,
+      "com_mm": [
+        75.5,
+        0.0,
+        101.9
+      ],
+      "source": "RP03-CAD-11 60 g audio estimate with Visaton K 50 WP 48 g, PCB-05 ~6 g, mic boards ~2 g and cables ~4 g. Body v1 sloped nose shifts the modeled speaker face from X 98 to X 95 mm; a 3 mm shift of its 48 g share moves the audio row X centroid from 77.9 to 75.5 mm. Weigh installed parts."
+    },
+    {
+      "id": "BODY_YAW_STAGE",
+      "mass_g": 89.0,
+      "com_mm": [
+        16.0,
+        13.5,
+        134.3
+      ],
+      "source": "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 6 g driven spur + 6 g scissor pinion (two 2.4 mm halves) + 1 g torsion spring and retaining clip (2026-09-25) + 2 g clamp ring + 1 g coupling shaft; no SKU"
+    }
+  ],
+  "exclusions": "Head, chassis, battery, drive, deck sensors, and mixed HARNESS_AND_FASTENERS row"
+}

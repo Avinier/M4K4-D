@@ -1,0 +1,8 @@
+{
+  "shell_connected_solids": 1,
+  "shell_frame_overlap_mm3": {},
+  "shell_chassis_overlap_mm3": {},
+  "shell_hardware_overlap_mm3": {},
+  "lowering_overlap_mm3": {},
+  "screw_driver_overlap_mm3": {}
+}

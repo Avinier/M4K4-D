@@ -1,0 +1,38 @@
+{
+  "mount_points_mm": [
+    [
+      -22.0,
+      -48.0
+    ],
+    [
+      -22.0,
+      48.0
+    ],
+    [
+      64.0,
+      -48.0
+    ],
+    [
+      64.0,
+      48.0
+    ]
+  ],
+  "locating_points_mm": [
+    [
+      -27.0,
+      -42.0
+    ],
+    [
+      59.0,
+      42.0
+    ]
+  ],
+  "main_connected_solids": 1,
+  "cassette_connected_solids": 1,
+  "frame_chassis_overlap_mm3": {},
+  "frame_mount_hardware_overlap_mm3": {},
+  "vertical_lift_overlap_mm3": {},
+  "cassette_slide_overlap_mm3": {},
+  "tool_path_overlap_mm3": {},
+  "underside_socket_overlap_mm3": {}
+}

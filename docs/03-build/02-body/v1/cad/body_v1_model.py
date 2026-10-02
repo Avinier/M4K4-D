@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import functools
 import importlib
+import importlib.util
 import json
 import math
 import sys
@@ -29,6 +30,7 @@ from build123d import (
     Location,
     Plane,
     Polygon,
+    RegularPolygon,
     RectangleRounded,
     Sphere,
     extrude,
@@ -334,6 +336,25 @@ BODY_Z_TOP = 140.0
 BODY_WIDTH_LOWER = 174.0
 BODY_WIDTH_UPPER = 148.0
 SHELL_THICKNESS = 2.4
+SHELL_FRAME_X = (BODY_AXIS_X - 48.0, BODY_AXIS_X + 48.0)
+SHELL_FRAME_Z = 95.0
+SHELL_BOSS_INNER_Y = 69.4  # 0.4 mm nominal gap to the side of a frame post
+SHELL_BOSS_OUTER_Y = 80.1  # planar M3 head seats outside the sloped side wall
+SHELL_BOSS_RADIUS = 5.0
+SHELL_FRAME_SCREW_RADIUS = 1.7  # M3 clearance through the shell and its boss
+# Body v1 shell: full lower belly, beveled belt and faceted upper shoulder.
+# Stations are (Z, rear X, front X, side half-width).
+SHELL_STATIONS = (
+    (30.0, -58.0, 94.0, 75.0),
+    (42.0, -58.0, 98.0, 87.0),
+    (62.0, -60.0, 100.0, 90.0),
+    (70.0, -61.1, 101.1, 91.1),
+    (82.0, -58.5, 98.5, 86.0),
+    (88.0, -55.0, 95.0, 80.0),
+    (94.0, -54.0, 94.0, 79.0),
+    (128.0, -48.0, 88.0, 75.0),
+    (140.0, -44.0, 84.0, 66.0),
+)
 # Every exterior skin (shell, service panels, wheel-arch pods) shares one
 # see-through alpha so the internal packaging reads in every view.
 SHELL_ALPHA = 0.28
@@ -371,6 +392,8 @@ BODY_MOUNT_Y = (-48.0, 48.0)
 BODY_MOUNT_CLEARANCE_RADIUS = 2.25
 BODY_MOUNT_PAD_Z0 = 56.0
 BODY_MOUNT_PAD_THICKNESS = 4.0
+BODY_M4_TOOL_RADIUS = 4.4  # O8 button head plus 0.4 mm radial tool clearance
+BODY_CASSETTE_MOUNT = (BODY_MOUNT_X[1], BODY_MOUNT_Y[1])
 BODY_FRAME_LOWER_Z = 65.0
 # Upper frame tops out at 134 so its cross-members carry the yaw adapter plate.
 BODY_FRAME_UPPER_Z = 130.0
@@ -438,16 +461,16 @@ FRONT_POD_NOTCH_CLEARANCE = 0.5
 # K 50 WP 8 ohm speaker, PCB-05 (MAX98357A + 2 x ADAU7002) and four PCB-06 boards with
 # an Infineon IM73D122V01 each. The speaker's Ø50 x 18 mm outline and Ø46 cutout are
 # Visaton's; its internal frame/basket/magnet split is estimated (no drawing read).
-SPEAKER_CENTER = (72.0 + BODY_SHIFT_X, 0.0, 99.0)
+SPEAKER_CENTER = (85.5, 0.0, 99.0)
 SPEAKER_CONE_DIAMETER = 44.0
 SPEAKER_BASKET_DIAMETER = 50.0
 SPEAKER_DEPTH = 18.0
-# Sealed back cavity: was 34 mm (X 63-97), which ran through the compute tray (X max 76) and
-# the Pi 5 (X max 67), unchecked until RP03-CAD-11. Now X 77-97: 1 mm off the tray, ~46 cm3 gross.
-SPEAKER_CAVITY_X = (77.0, 97.0)
+# The sloped nose moves the speaker face inward while retaining clearance to
+# the compute tray at X 76; the cavity remains behind its local mounting cup.
+SPEAKER_CAVITY_X = (77.0, 92.5)
 SPEAKER_CAVITY_DEPTH = SPEAKER_CAVITY_X[1] - SPEAKER_CAVITY_X[0]
 SPEAKER_CAVITY_CENTER_X = sum(SPEAKER_CAVITY_X) / 2.0
-SPEAKER_FRONT_X = BODY_X_FRONT - 0.5  # frame face 0.5 mm behind the front panel's inner face
+SPEAKER_FRONT_X = 95.0
 SPEAKER_CUTOUT_DIAMETER = 46.0
 SPEAKER_FLANGE_DEPTH = 2.5
 SPEAKER_BASKET_DEPTH = 9.0
@@ -718,12 +741,12 @@ PACK_FOAM_X = {"-Y": (28.0, 64.0), "+Y": (50.5, 64.0)}
 # arch trims. The well fits between PCB-02 (X >= -49.6 below Z 94) and the panel
 # frame's top bar (X -55.6...-53.2, Z >= 122); the Pi's rear parts start at X -23.
 ESTOP_CENTER_Z = 105.5
-ESTOP_REAR_OUTER_X = BODY_X_REAR - SHELL_THICKNESS  # rear panel outer face
+ESTOP_REAR_OUTER_X = -60.0  # raised landing clears both the sloped panel and PCB-02
 ESTOP_WELL_DEPTH = 8.0  # panel face to the mounting face on the well floor
 ESTOP_WELL_FLOOR = 2.0
 ESTOP_WELL_MOUTH = 34.0  # inner across-flats at the panel face: 2.5 mm round the mushroom
 ESTOP_WELL_THROAT = 26.0  # inner across-flats at the floor (45 deg taper)
-ESTOP_WELL_WALL = 1.6
+ESTOP_WELL_WALL = 2.4  # FDM wall margin through the faceted cup
 ESTOP_BEZEL_ACROSS_FLATS = 42.0
 ESTOP_BEZEL_PROUD = 1.2
 ESTOP_CUTOUT_DIAMETER = 16.2
@@ -1047,8 +1070,8 @@ MASS_ROWS = [
         HEAD_ORIGIN_IN_CHASSIS[1] + HEAD_LOCAL_COM[1],
         HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_LOCAL_COM[2],
     ), "RP-01 generated mass tree"),
-    ("BODY_SHELL_AND_PANELS", 285.6, (4.0 + BODY_SHIFT_X, 0.0, 96.0), "Layout 02 CAD estimate; +15 g for the internal panel frames (+15.6 cm3 net printed volume, near-solid 2.4 mm walls); -27.2 g for the -22.7 cm3 of shell floor opened over the motors, battery hatch and pod tongue (RP03-CAD-05/06) at ~1.2 g/cm3; +2.6 g for the ~0.9 cm2 x 2.4 mm of shell floor returned when the battery opening shrank to the 2S1P pack tub (RP03-CAD-07); -4.8 g for the measured -4.04 cm3 when the battery opening grew to clear the hatch flange and tub bosses (2026-10-01)"),
-    ("BODY_PRIMARY_FRAME", 335.0, (4.0 + BODY_SHIFT_X, 0.0, 94.0), "Layout 02 CAD estimate incl. mounts"),
+    ("BODY_SHELL_AND_PANELS", 249.3, (19.9, 0.0, 92.6), "Body v1 CAD volume and centroid (2026-10-02): 2.4 mm shell, front/rear service skins with speaker cup and E-stop well, badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods/trims at 0.571 g/cm3. Excludes panel screws already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."),
+    ("BODY_PRIMARY_FRAME", 170.9, (12.5, 1.0, 94.9), "Body v1 CAD volume and centroid (2026-10-02): main connected print and removable front-left foot cassette at conservative 1.20 g/cm3 effective PETG, plus modeled four M4 bolts/nuts, two locating pins, cassette M3 joints, and four shell-to-frame M3 screw/insert joints at 7.85/8.50 g/cm3 steel/brass. Estimated, not weighed; check_body_layout.py verifies against the solids."),
     ("CHASSIS_PRIMARY_FRAME", 229.1, (18.14, 0.0, 46.64), "D-029 (2026-10-01): +21.4 g of newly modeled hardware measured from the solids at 7.9/8.5 g/cm3, centroid (30.4, 0, 46.4): J05/J06/J16/J11A ISO 7380 screws and 14 M3 x 6 inserts, four M2.5 driver screws and inserts; +0.7 g for the measured +1.24 cm3 printed volume at 0.571 g/cm3 (driver posts and tie lugs, wider tongues and rear rail ends, moved J16 ears, hatch strap slots, recess/cavity growth), centroid about (35, 0, 64); was 207.0 g at (16.82, 0, 46.61). 2026-10-01: +0.2 g for the measured +0.29 cm3 when the front hatch bosses moved to the front wall, the bosses were cut to Z 39.5 and the hatch grew 4 mm forward; D-011: -0.3 g for the O5 J10-8 cable bore through the front crossmember and deck at (86, -31); D-010 J04 adds two integrated plate-and-cheek carriers, keyed rail joints, eight modeled M3 x 8 screws and eight 6 mm inserts; estimated +10.2 g total (about +0.7 g printed cheek/key volume and +9.5 g steel/brass hardware, preliminary geometry-density estimate); previous 196.9 g centroid (17.7, 0, 46.8). D-007 axle stack (2026-09-29), +20.9 g at the axle (X 0, Z 42): printed plate + housing replace the flange/boss/diaphragm, +7.24 cm3 measured at ~0.571 g/cm3 (+4.1 g); two 1.2 mm aluminium caps 1.52 cm3 (+4.1 g); eight M3 x 18 cap screws (+10.6 g); eight M3 brass inserts (+1.5 g); face screws M3 x 8 CSK -> M3 x 6 low head (+0.6 g); before that 176.0 g at (19.8, 0, 47.4): +2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"),
     ("WHEEL_L", 92.5, WHEEL_CENTER_L, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
     ("WHEEL_R", 92.5, WHEEL_CENTER_R, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
@@ -1074,10 +1097,10 @@ MASS_ROWS = [
     ("ADAFRUIT_DRV8833_CARRIERS_X2", 6.0, (DRIVER_CENTER_X, 0.0, 68.5), "E: 2 x Adafruit #3297 boards, 25.4 x 17.8 mm board-file outline with the 3.5 mm terminal block fitted (10.1 mm tall), 3 g each; mass unmeasured"),
     ("IMU_PCB07", 2.5, (IMU_BOARD_CENTER[0], 0.0, IMU_BOARD_CENTER[2] + 1.0), "E: PCB-07 16 x 20 x 1.0 mm FR4 ~0.6 g + ICM-42688-P and JST-SH 8-pin ~0.3 g + two M2 x 5 ~0.6 g + 8-way AWG30 lead to C3 ~1 g (RP03-CAD-11); was a 2 g breakout estimate at (16, 0, 60)"),
     ("TCRT5000_BREAKOUT_AND_CABLE", 3.0, TCRT_REAR_CENTER, "E: TCRT5000 with a soldered 350 mm 4-core J10-10 GH lead (CH-020) and heat-shrink (D-016) (most of it rises to the C3 carrier; lumped at the sensor); was inside the old CONTROL_POWER_SENSORS row at the body centre"),
-    ("ESTOP_XA1E_BV3U02KT_R", 14.0, ((5.0 * (ESTOP_MOUNT_X - ESTOP_MUSHROOM_TOP_ABOVE_MOUNT + 4.0) + 9.0 * (ESTOP_KEEP_OUT[0] + ESTOP_KEEP_OUT[1]) / 2.0) / 14.0, 0.0, ESTOP_CENTER_Z), "D: IDEC XA unibody Ø29 mushroom 14 g (XA datasheet); ~5 g mushroom and collar outside the well floor, ~9 g contact block behind it. Replaced the XW1E-BV402M-R row (40 g) on 2026-09-25. The rear-panel well and bezel add a net 0.14 cm3 (~0.2 g) of print, not booked"),
+    ("ESTOP_XA1E_BV3U02KT_R", 14.0, ((5.0 * (ESTOP_MOUNT_X - ESTOP_MUSHROOM_TOP_ABOVE_MOUNT + 4.0) + 9.0 * (ESTOP_KEEP_OUT[0] + ESTOP_KEEP_OUT[1]) / 2.0) / 14.0, 0.0, ESTOP_CENTER_Z), "D: IDEC XA unibody Ø29 mushroom 14 g (XA datasheet); ~5 g mushroom and collar outside the well floor, ~9 g contact block behind it. The revised rear-panel well and bezel print mass is included in BODY_SHELL_AND_PANELS."),
     ("BALL_NOSE_POD_SENSOR_CAP", 18.9, (111.4, 0.0, 37.9), "D-027: +0.2 g for the lid lead hump, raised nose top and wider front pocket (pod 12.45, lid 2.62, cap 2.12 cm3 measured, was 12.44/2.45/2.03, at ~0.571 g/cm3); earlier estimate predates the selected A21 sensor (3.6 g datasheet, ears trimmed), custom Hall carrier and O3 x 1.5 magnet; weigh received parts"),
-    ("BODY_AUDIO", 60.0, (77.9, 0.0, 101.9), "RP03-CAD-11: Visaton K 50 WP 48 g (D) with its centroid at the magnet end, X ~85 + PCB-05 30 x 38 mm board and parts ~6 g (E) at (60, 0, 116) + four PCB-06 mic boards ~0.5 g each (E) + speaker leads and mic cables ~4 g (E); was 90 g at (64, 0, 102) for unselected parts"),
-    ("HARNESS_AND_FASTENERS", 95.0, (4.0 + BODY_SHIFT_X, 0.0, 88.0), "estimate"),
+    ("BODY_AUDIO", 60.0, (75.5, 0.0, 101.9), "RP03-CAD-11 60 g audio estimate with Visaton K 50 WP 48 g, PCB-05 ~6 g, mic boards ~2 g and cables ~4 g. Body v1 sloped nose shifts the modeled speaker face from X 98 to X 95 mm; a 3 mm shift of its 48 g share moves the audio row X centroid from 77.9 to 75.5 mm. Weigh installed parts."),
+    ("HARNESS_AND_FASTENERS", 95.0, (4.0 + BODY_SHIFT_X, 0.0, 88.0), "Conservative allowance for unmodeled installed harness, connector tails, clips, service-panel screws and remaining fasteners. Body-frame M4/M3 joints and shell-to-frame M3 joints are measured separately in BODY_PRIMARY_FRAME; weigh the completed harness and hardware to replace this allowance."),
     ("BODY_YAW_STAGE", 89.0, (BODY_AXIS_X, 13.5, 134.3), "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 6 g driven spur + 6 g scissor pinion (two 2.4 mm halves) + 1 g torsion spring and retaining clip (2026-09-25) + 2 g clamp ring + 1 g coupling shaft; no SKU"),
     ("REAR_SKID_KEEL", 20.0, (-40.5, 0.0, 22.7), "J09/J10 rework 2026-09-30 (D-014, D-016), measured from the solids: keel body 14.64 cm3 at ~0.571 g/cm3 = 8.4 g at (-39.7, 0, 20.4) (D-016 closed the board cavity back to the sensor pocket); shoe 0.40, bezel with guard lips 0.30 and two 1 mm shims 0.24 cm3 printed solid at ~1.27 g/cm3 = 1.2 g; four ISO 4762 M3 x 30 ~8.4 g; four CNC Kitchen M3 x 5.7 crossmember inserts ~1.4 g; M2 x 10 and M2 x 6 screws ~0.6 g (the M2 x 5 board screw was dropped by D-015). Was 12.0 g at (-39.9, 0, 20.4); rear-crossmember cable bore closed and tie lug added (<0.1 g, left in the frame row)"),
 ]
@@ -1624,24 +1647,29 @@ def tactile_ball_nose():
     return Compound(label="BALL_NOSE_CONCEALED_CONTACT_MODULE", children=[cap, board, sensor, magnet, *springs, travel])
 
 
-def _body_profile(x, inset=0.0, width_factor=1.0):
-    z0 = BODY_Z_BOTTOM + inset
-    z1 = BODY_Z_TOP - inset
-    lower = BODY_WIDTH_LOWER * width_factor / 2.0 - inset
-    upper = BODY_WIDTH_UPPER * width_factor / 2.0 - inset
-    lower_corner = max(5.0, 12.0 - inset)
-    upper_corner = max(4.0, 10.0 - inset)
+def _shell_section(z, rear_x, front_x, half_width, inset=0.0):
+    """Eight-sided horizontal station with clipped plan-view corners."""
+    rear_x += inset
+    front_x -= inset
+    half_width -= inset
+    rear_end = half_width * REAR_SHELL_END_WIDTH_FACTOR
+    front_end = half_width * FRONT_SHELL_END_WIDTH_FACTOR
     points = [
-        (-lower + lower_corner, z0),
-        (lower - lower_corner, z0),
-        (lower, z0 + lower_corner),
-        (upper, z1 - upper_corner),
-        (upper - upper_corner, z1),
-        (-upper + upper_corner, z1),
-        (-upper, z1 - upper_corner),
-        (-lower, z0 + lower_corner),
+        (rear_x, -rear_end), (rear_x + 4.0, -half_width),
+        (front_x - 10.0, -half_width), (front_x, -front_end),
+        (front_x, front_end), (front_x - 10.0, half_width),
+        (rear_x + 4.0, half_width), (rear_x, rear_end),
     ]
-    return (Plane.YZ * Polygon(*points, align=None)).moved(Location((x, 0.0, 0.0)))
+    return (Plane.XY * Polygon(*points, align=None)).moved(Location((0.0, 0.0, z)))
+
+
+def _shell_station_at(z, stations=SHELL_STATIONS):
+    """Interpolate the exterior envelope at an inner-roof/floor station."""
+    for lower, upper in zip(stations, stations[1:]):
+        if lower[0] <= z <= upper[0]:
+            fraction = (z - lower[0]) / (upper[0] - lower[0])
+            return (z, *(a + (b - a) * fraction for a, b in zip(lower[1:], upper[1:])))
+    raise ValueError(f"Z {z} is outside the body shell stations")
 
 
 def _panel_solid(x0, x1, width_bottom, width_top, z0, z1, lower_corner=PANEL_LOWER_CORNER, upper_corner=PANEL_UPPER_CORNER, grow=0.0):
@@ -1676,6 +1704,27 @@ def _service_panel_outline(face, x0, x1, grow=0.0):
     if face == "FRONT":
         return _panel_solid(x0, x1, FRONT_PANEL_BOTTOM_WIDTH, FRONT_PANEL_TOP_WIDTH, FRONT_PANEL_Z0, PANEL_Z1, grow=grow)
     return _panel_solid(x0, x1, REAR_PANEL_BOTTOM_WIDTH, REAR_PANEL_TOP_WIDTH, REAR_PANEL_Z0, PANEL_Z1, grow=grow)
+
+
+def _shell_end_x(face, z):
+    station = _shell_station_at(z)
+    return station[2] if face == "FRONT" else station[1]
+
+
+def _sloped_panel_band(face, offset_a, offset_b, grow=0.0):
+    """Panel-profile band whose X faces track the selected shell end."""
+    z0 = FRONT_PANEL_Z0 if face == "FRONT" else REAR_PANEL_Z0
+    levels = (z0, *(s[0] for s in SHELL_STATIONS if z0 < s[0] < PANEL_Z1), PANEL_Z1)
+    sections = []
+    for z in levels:
+        end_x = _shell_end_x(face, z)
+        xa, xb = sorted((end_x + offset_a, end_x + offset_b))
+        profile = Plane.XY * Polygon(
+            (xa, -100.0), (xb, -100.0), (xb, 100.0), (xa, 100.0), align=None
+        )
+        sections.append(profile.moved(Location((0.0, 0.0, z))))
+    band = loft(sections, ruled=True)
+    return band & _service_panel_outline(face, -90.0, 110.0, grow)
 
 
 def _front_range_window(clearance, x0, x1):
@@ -1713,35 +1762,30 @@ def _triad(origin, label, scale=18.0):
 # ---------------------------------------------------------------------------
 
 def body_shell():
-    outer = loft(
-        [
-            _body_profile(BODY_X_REAR, 0.0, REAR_SHELL_END_WIDTH_FACTOR),
-            _body_profile(-58.0 + BODY_SHIFT_X, 0.0, 1.00),
-            _body_profile(60.0 + BODY_SHIFT_X, 0.0, 1.00),
-            _body_profile(BODY_X_FRONT, 0.0, FRONT_SHELL_END_WIDTH_FACTOR),
-        ],
-        ruled=True,
-    )
-    inner = loft(
-        [
-            _body_profile(BODY_X_REAR + SHELL_THICKNESS, SHELL_THICKNESS, REAR_SHELL_END_WIDTH_FACTOR),
-            _body_profile(-56.0 + BODY_SHIFT_X, SHELL_THICKNESS, 1.00),
-            _body_profile(58.0 + BODY_SHIFT_X, SHELL_THICKNESS, 1.00),
-            _body_profile(BODY_X_FRONT - SHELL_THICKNESS, SHELL_THICKNESS, FRONT_SHELL_END_WIDTH_FACTOR),
-        ],
-        ruled=True,
-    )
+    stations = SHELL_STATIONS
+    rear_extreme_x = min(station[1] for station in stations)
+    front_extreme_x = max(station[2] for station in stations)
+    outer = loft([_shell_section(*station) for station in stations], ruled=True)
+    inner_sections = [
+        _shell_section(z, rear, front, half, SHELL_THICKNESS)
+        for z, rear, front, half in (
+            _shell_station_at(BODY_Z_BOTTOM + SHELL_THICKNESS, stations),
+            *[station for station in stations if BODY_Z_BOTTOM + SHELL_THICKNESS < station[0] < BODY_Z_TOP - SHELL_THICKNESS],
+            _shell_station_at(BODY_Z_TOP - SHELL_THICKNESS, stations),
+        )
+    ]
+    inner = loft(inner_sections, ruled=True)
     shell = outer - inner
     # Openings are the panel outline offset inward by PANEL_OVERLAP: a
     # constant-width sealing land on every edge and clipped corner.
-    front_opening = _service_panel_outline("FRONT", BODY_X_FRONT - 6.0, BODY_X_FRONT + 2.0, -PANEL_OVERLAP)
-    rear_opening = _service_panel_outline("REAR", BODY_X_REAR - 5.0, BODY_X_REAR + 6.0, -PANEL_OVERLAP)
-    # The ball pod's tongue passes the lower front band and runs over the
-    # shell floor to the crossmember; the notch is open at the bottom, back to
-    # the pod's rear face, so the body still lowers onto the chassis.
+    # The service apertures cut through the entire sloped end wall.
+    front_opening = _service_panel_outline("FRONT", BODY_X_FRONT - 23.0, front_extreme_x + 2.0, -PANEL_OVERLAP)
+    rear_opening = _service_panel_outline("REAR", rear_extreme_x - 2.0, BODY_X_REAR + 23.0, -PANEL_OVERLAP)
+    # The ball pod's tongue passes the lower front band toward the
+    # crossmember; the notch is open at the bottom so the shell can lower.
     pod_notch = _block(
         BALL_POD_X[0] - FRONT_POD_NOTCH_CLEARANCE,
-        BODY_X_FRONT + 1.0,
+        front_extreme_x + 1.0,
         -BALL_POD_HALF_WIDTH - FRONT_POD_NOTCH_CLEARANCE,
         BALL_POD_HALF_WIDTH + FRONT_POD_NOTCH_CLEARANCE,
         BODY_Z_BOTTOM - 1.0,
@@ -1768,21 +1812,52 @@ def body_shell():
     # Head-yaw opening passes the rotating ring-gear skirt; the proud disc
     # covers it with a 1 mm running gap above the body top.
     yaw_opening = Cylinder(YAW_OPENING_RADIUS, 10.0).moved(Location((BODY_AXIS_X, 0.0, BODY_Z_TOP)))
+    yaw_plate_roof_slot = _block(
+        BODY_AXIS_X - 52.6, BODY_AXIS_X + 52.6,
+        -YAW_PLATE_BAR_HALF_WIDTH - 0.6, YAW_PLATE_BAR_HALF_WIDTH + 0.6,
+        YAW_PLATE_Z[0] - 0.5, BODY_Z_TOP + 1.0,
+    )
     shell = shell - [
         front_opening, rear_opening, pod_notch, keel_slot, motor_slot, battery_opening, yaw_opening,
+        yaw_plate_roof_slot,
         *microphone_ports, *_wheel_well_tools(),
     ]
+    # Open the floor inside a narrow perimeter rim. A closed floor cannot pass
+    # over the already-mounted body frame during top-down shell installation.
+    shell -= _block(BODY_X_REAR + 4.0, BODY_X_FRONT - 4.0, -82.0, 82.0,
+                    BODY_Z_BOTTOM - 1.0, BODY_Z_BOTTOM + SHELL_THICKNESS + 1.0)
+    # Four planar side bosses stand just off the post faces. Their 0.4 mm
+    # clearance lets the shell lower vertically; M3 screws clamp them later.
+    for x in SHELL_FRAME_X:
+        for sign in (-1.0, 1.0):
+            y0, y1 = sorted((sign * SHELL_BOSS_INNER_Y, sign * SHELL_BOSS_OUTER_Y))
+            shell += _axial_bore_y(SHELL_BOSS_RADIUS, y0, y1, x, SHELL_FRAME_Z)
+            shell -= _axial_bore_y(SHELL_FRAME_SCREW_RADIUS, y0 - 0.2, y1 + 0.2, x, SHELL_FRAME_Z)
     return _paint(shell, "BODY_SHELL", IVORY, SHELL_ALPHA)
 
 
 def body_panels():
-    front_raw = _service_panel_outline("FRONT", BODY_X_FRONT, BODY_X_FRONT + SHELL_THICKNESS)
+    front_raw = _sloped_panel_band("FRONT", 0.0, SHELL_THICKNESS)
+    # The 50 mm speaker needs a locally planar seat across the faceted nose.
+    # A short annular cup joins the sloped panel and supports a slotted grille;
+    # its inner bore leaves the purchased speaker flange and basket clear.
+    speaker_axis = (0.0, SPEAKER_CENTER[2])
+    speaker_opening = _axial_bore_x(26.0, 75.0, 106.0, *speaker_axis)
+    cup = _axial_bore_x(29.0, 87.0, 102.0, *speaker_axis)
+    cup -= _axial_bore_x(27.2, 86.0, 92.5, *speaker_axis)
+    cup -= _axial_bore_x(25.5, 92.5, 103.0, *speaker_axis)
+    grille = _axial_bore_x(25.8, 100.8, 102.6, *speaker_axis)
+    front_raw = (front_raw - speaker_opening) + cup + grille
+    front_raw -= _axial_bore_x(SPEAKER_BASKET_DIAMETER / 2.0 + 2.2,
+                               SPEAKER_CAVITY_X[0], SPEAKER_CAVITY_X[1], *speaker_axis)
     grille_slots = [
-        _block(BODY_X_FRONT - 1.0, BODY_X_FRONT + 4.0, y - 2.25, y + 2.25, 78.0, 116.0)
-        for y in (-36.0, -24.0, -12.0, 0.0, 12.0, 24.0, 36.0)
+        _block(100.0, 104.0, y - 2.0, y + 2.0, 84.0, 114.0)
+        for y in (-18.0, -12.0, -6.0, 0.0, 6.0, 12.0, 18.0)
     ]
     front_bores = [
-        _axial_bore_x(1.65, BODY_X_FRONT - 2.0, BODY_X_FRONT + 5.0, y, z) for y, z in FRONT_PANEL_FASTENERS
+        _axial_bore_x(1.65, _shell_end_x("FRONT", z) - 1.0,
+                      _shell_end_x("FRONT", z) + SHELL_THICKNESS + 1.0, y, z)
+        for y, z in FRONT_PANEL_FASTENERS
     ]
     front = _paint(
         front_raw - [*grille_slots, *front_bores],
@@ -1790,21 +1865,23 @@ def body_panels():
         PANEL_WARM_GRAY,
         SHELL_ALPHA,
     )
-    rear_raw = _service_panel_outline("REAR", BODY_X_REAR - SHELL_THICKNESS, BODY_X_REAR)
+    rear_raw = _sloped_panel_band("REAR", -SHELL_THICKNESS, 0.0)
     rear_bores = [
-        _axial_bore_x(1.65, BODY_X_REAR - 5.0, BODY_X_REAR + 3.0, y, z)
+        _axial_bore_x(1.65, _shell_end_x("REAR", z) - SHELL_THICKNESS - 1.0,
+                      _shell_end_x("REAR", z) + 1.0, y, z)
         for y, z in REAR_PANEL_FASTENERS
     ]
     cw, ch = CHARGE_INLET_CUTOUT
     cy, cz = CHARGE_INLET_CENTER_YZ
-    inlet_cutout = _block(BODY_X_REAR - SHELL_THICKNESS - 1.0, BODY_X_REAR + 1.0, cy - cw / 2.0, cy + cw / 2.0, cz - ch / 2.0, cz + ch / 2.0)
+    inlet_cutout = _block(-65.0, -53.0, cy - cw / 2.0, cy + cw / 2.0, cz - ch / 2.0, cz + ch / 2.0)
+    estop_well, estop_bezel = rear_panel_estop_well()
     rear = _paint(
-        rear_raw - rear_bores - _estop_well_outer() - inlet_cutout,
+        rear_raw - rear_bores - _estop_well_outer() - inlet_cutout + estop_well,
         "REAR_SERVICE_PANEL_OCTAGONAL",
         IVORY,
         SHELL_ALPHA,
     )
-    top_badge = _box(2.0, 30.0, 4.0, (BODY_X_FRONT + 3.4, 0.0, 124.0), "FRONT_BADGE_LAND", AMBER, 0.92)
+    top_badge = _box(2.0, 30.0, 4.0, (_shell_end_x("FRONT", 124.0) + SHELL_THICKNESS + 1.0, 0.0, 124.0), "FRONT_BADGE_LAND", AMBER, 0.92)
     wheel_arches = []
     for sign, side in ((1.0, "L"), (-1.0, "R")):
         yc = sign * TRACK / 2.0
@@ -1819,16 +1896,11 @@ def body_panels():
         trim = trim_outer - trim_inner - _block(-56.0, 56.0, -105.0, 105.0, -10.0, AXLE_Z)
         trim = _paint(trim, f"WHEEL_ARCH_UPPER_TRIM_{side}", AMBER, 0.92)
         wheel_arches.append(Compound(label=f"WHEEL_ARCH_{side}", children=[pod, trim]))
-    return Compound(label="BODY_PANELS", children=[front, rear, *rear_panel_estop_well(), top_badge, *wheel_arches])
+    return Compound(label="BODY_PANELS", children=[front, rear, estop_bezel, top_badge, *wheel_arches])
 
 
 def panel_mount_hardware():
-    """Internal panel frames with fused bosses, and front-access M3 screws.
-
-    Each frame sits behind the shell end wall, laps PANEL_FRAME_OUTSET past
-    the panel outline and reaches PANEL_FRAME_FLANGE inside it. Its bosses
-    stand forward through the shell opening to the panel's inner face.
-    """
+    """Sloped inner panel frames, fused bosses, and end-access M3 screws."""
     speaker_keep_out = _cylinder(
         SPEAKER_BASKET_DIAMETER / 2.0 + 2.0,
         SPEAKER_CAVITY_DEPTH,
@@ -1839,29 +1911,45 @@ def panel_mount_hardware():
         "x",
     )
     parts = []
-    for face, panel_x0, panel_x1, positions in (
-        ("FRONT", BODY_X_FRONT, BODY_X_FRONT + SHELL_THICKNESS, FRONT_PANEL_FASTENERS),
-        ("REAR", BODY_X_REAR, BODY_X_REAR - SHELL_THICKNESS, REAR_PANEL_FASTENERS),
+    for face, positions in (
+        ("FRONT", FRONT_PANEL_FASTENERS),
+        ("REAR", REAR_PANEL_FASTENERS),
     ):
         inward = -1.0 if face == "FRONT" else 1.0
-        wall_inner_x = panel_x0 + inward * SHELL_THICKNESS
-        frame_back_x = wall_inner_x + inward * PANEL_FRAME_THICKNESS
-        boss_back_x = frame_back_x + inward * PANEL_BOSS_TAIL
-        fx0, fx1 = sorted((wall_inner_x, frame_back_x))
-        frame = _service_panel_outline(face, fx0, fx1, PANEL_FRAME_OUTSET) - _service_panel_outline(
-            face, fx0 - 1.0, fx1 + 1.0, -PANEL_FRAME_FLANGE
-        )
-        bx0, bx1 = sorted((panel_x0, boss_back_x))
+        frame = _sloped_panel_band(
+            face, inward * SHELL_THICKNESS,
+            inward * (SHELL_THICKNESS + PANEL_FRAME_THICKNESS), PANEL_FRAME_OUTSET
+        ) - _service_panel_outline(face, -90.0, 110.0, -PANEL_FRAME_FLANGE)
         for y, z in positions:
+            panel_x = _shell_end_x(face, z)
+            boss_back_x = panel_x + inward * (SHELL_THICKNESS + PANEL_FRAME_THICKNESS + PANEL_BOSS_TAIL)
+            edge_x = [_shell_end_x(face, z + dz) for dz in (-PANEL_BOSS_RADIUS, PANEL_BOSS_RADIUS)]
+            boss_front_x = min(edge_x) - 0.2 if face == "FRONT" else max(edge_x) + 0.2
+            bx0, bx1 = sorted((boss_front_x, boss_back_x))
             frame = frame + _cylinder(PANEL_BOSS_RADIUS, bx1 - bx0, ((bx0 + bx1) / 2.0, y, z), "BOSS", SLATE, 1.0, "x")
         for y, z in positions:
+            panel_x = _shell_end_x(face, z)
+            boss_back_x = panel_x + inward * (SHELL_THICKNESS + PANEL_FRAME_THICKNESS + PANEL_BOSS_TAIL)
+            edge_x = [_shell_end_x(face, z + dz) for dz in (-PANEL_BOSS_RADIUS, PANEL_BOSS_RADIUS)]
+            boss_front_x = min(edge_x) - 0.2 if face == "FRONT" else max(edge_x) + 0.2
+            bx0, bx1 = sorted((boss_front_x, boss_back_x))
             frame = frame - _axial_bore_x(1.4, bx0 - 1.0, bx1 + 1.0, y, z)
         if face == "FRONT":
             frame = frame - speaker_keep_out
         parts.append(_paint(frame, f"{face}_PANEL_INTERNAL_FRAME_WITH_BOSSES", SLATE_DARK, 1.0))
-        outer_face_x = panel_x1
+        panel_skin = _sloped_panel_band(
+            face, 0.0 if face == "FRONT" else -SHELL_THICKNESS,
+            SHELL_THICKNESS if face == "FRONT" else 0.0,
+        )
         for index, (y, z) in enumerate(positions, start=1):
-            head = _cylinder(2.8, 1.8, (outer_face_x - inward * 0.9, y, z), f"{face}_PANEL_M3_HEAD_{index}", STEEL, 1.0, "x")
+            outer_face_x = _shell_end_x(face, z) - inward * SHELL_THICKNESS
+            head_edges = [_shell_end_x(face, z + dz) - inward * SHELL_THICKNESS for dz in (-3.2, 3.2)]
+            head_seat_x = max(head_edges) + 0.2 if face == "FRONT" else min(head_edges) - 0.2
+            wx0, wx1 = min(head_seat_x, *head_edges), max(head_seat_x, *head_edges)
+            washer = _axial_bore_x(3.2, wx0, wx1, y, z) - panel_skin
+            washer -= _axial_bore_x(1.65, wx0 - 0.1, wx1 + 0.1, y, z)
+            parts.append(_paint(washer, f"{face}_PANEL_M3_WEDGE_WASHER_{index}", STEEL, 1.0))
+            head = _cylinder(2.8, 1.8, (head_seat_x - inward * 0.9, y, z), f"{face}_PANEL_M3_HEAD_{index}", STEEL, 1.0, "x")
             shank = _cylinder(
                 1.35,
                 PANEL_SCREW_LENGTH,
@@ -2239,32 +2327,39 @@ def chassis_frame():
 
 
 def body_primary_frame():
-    parts = []
+    # The main print lowers vertically. The +Y front foot is a separate
+    # cassette because the fixed chassis fuse shelf covers its bolt and pin.
+    frame = None
+
+    def add(part):
+        nonlocal frame
+        frame = part if frame is None else frame + part
+
     for x in (BODY_AXIS_X - 48.0, BODY_AXIS_X + 48.0):
         for y in (-64.0, 64.0):
-            parts.append(
-                _box(
-                    10.0,
-                    10.0,
-                    BODY_FRAME_UPPER_Z - 60.0,
-                    (x, y, (BODY_FRAME_UPPER_Z + 60.0) / 2.0),
-                    f"BODY_POST_{'F' if x > BODY_AXIS_X else 'R'}_{'L' if y > 0 else 'R'}",
-                    FRAME_BLUE,
-                )
-            )
+            post_bottom = 70.0 if (x, y) == (BODY_AXIS_X + 48.0, 64.0) else 60.0
+            add(_box(
+                10.0, 10.0, BODY_FRAME_UPPER_Z - post_bottom,
+                (x, y, (BODY_FRAME_UPPER_Z + post_bottom) / 2.0),
+                "BODY_CORNER_POST", FRAME_BLUE,
+            ))
     for z, label in ((BODY_FRAME_LOWER_Z, "LOWER"), (BODY_FRAME_UPPER_Z, "UPPER")):
-        parts.extend([
-            _box(112.0, 8.0, 8.0, (BODY_AXIS_X, 64.0, z), f"BODY_{label}_RAIL_L", FRAME_BLUE),
-            _box(112.0, 8.0, 8.0, (BODY_AXIS_X, -64.0, z), f"BODY_{label}_RAIL_R", FRAME_BLUE),
-            _box(8.0, 120.0, 8.0, (BODY_AXIS_X + 48.0, 0.0, z), f"BODY_{label}_CROSS_FRONT", FRAME_BLUE),
-            _box(8.0, 120.0, 8.0, (BODY_AXIS_X - 48.0, 0.0, z), f"BODY_{label}_CROSS_REAR", FRAME_BLUE),
-        ])
+        for y in (-64.0, 64.0):
+            rail_z = 129.6 if label == "UPPER" else z
+            rail_height = 7.2 if label == "UPPER" else 8.0
+            add(_box(112.0, 8.0, rail_height, (BODY_AXIS_X, y, rail_z), f"BODY_{label}_SIDE_RAIL", FRAME_BLUE))
+        cross_positions = (BODY_AXIS_X - 48.0,) if label == "LOWER" else (BODY_AXIS_X - 48.0, BODY_AXIS_X + 33.5)
+        for x in cross_positions:
+            add(_box(8.0, 124.0, 8.0, (x, 0.0, z), f"BODY_{label}_CROSS_RAIL", FRAME_BLUE))
     # Four bored feet seat on the chassis deck. Short dog-leg brackets connect
     # the inboard bolt pattern to the body posts without overlapping chassis
     # volume below the deck top plane.
     for mount_x, mount_y in BODY_MOUNT_POINTS:
-        pad = Box(20.0, 18.0, BODY_MOUNT_PAD_THICKNESS).moved(
-            Location((mount_x, mount_y, BODY_MOUNT_PAD_Z0 + BODY_MOUNT_PAD_THICKNESS / 2.0))
+        if (mount_x, mount_y) == BODY_CASSETTE_MOUNT:
+            continue
+        front = mount_x > BODY_AXIS_X
+        pad = Box(16.0 if front else 20.0, 18.0, BODY_MOUNT_PAD_THICKNESS).moved(
+            Location((mount_x + (2.0 if front else 0.0), mount_y, BODY_MOUNT_PAD_Z0 + BODY_MOUNT_PAD_THICKNESS / 2.0))
         )
         pad = pad - _z_cylinder(
             BODY_MOUNT_CLEARANCE_RADIUS,
@@ -2273,42 +2368,94 @@ def body_primary_frame():
             mount_x,
             mount_y,
         )
-        front = mount_x > BODY_AXIS_X
         corner_x = BODY_AXIS_X + (48.0 if front else -48.0)
         corner_y = 64.0 if mount_y > 0.0 else -64.0
+        bracket_x_size = 16.0 if front else abs(corner_x - mount_x) + 20.0
+        bracket_x_center = mount_x + 2.0 if front else (corner_x + mount_x) / 2.0
         bracket = _box(
-            abs(corner_x - mount_x) + 12.0,
-            abs(corner_y - mount_y) + 8.0,
+            bracket_x_size,
+            abs(corner_y - mount_y) + 14.0,
             12.0,
-            ((corner_x + mount_x) / 2.0, (corner_y + mount_y) / 2.0, 64.0),
+            (bracket_x_center, (corner_y + mount_y) / 2.0, 64.0),
             f"BODY_MOUNT_DOGLEG_{'F' if front else 'R'}_{'L' if corner_y > 0 else 'R'}",
             FRAME_BLUE,
         )
-        parts.extend([
-            _paint(pad, f"BODY_M4_FOOT_{'F' if front else 'R'}_{'L' if mount_y > 0 else 'R'}", FRAME_BLUE, 1.0),
-            bracket,
-        ])
+        add(pad)
+        add(bracket)
     for index, (x, y) in enumerate(BODY_LOCATING_POINTS, start=1):
+        if (x, y) == BODY_LOCATING_POINTS[1]:
+            continue
         locator = Cylinder(5.0, 5.0, align=(Align.CENTER, Align.CENTER, Align.CENTER)).moved(
             Location((x, y, 58.5))
         )
         locator = locator - _z_cylinder(2.05, 55.0, 62.0, x, y)
-        parts.append(_paint(locator, f"BODY_LOCATING_BOSS_{index}", SLATE_DARK, 1.0))
-    parts.extend([
-    ])
+        add(locator)
     # Head load path: plate spans the upper cross-members (which top out at
     # YAW_PLATE_Z[0]); central ring seats the yaw bearing.
     plate = _block(BODY_AXIS_X - 52.0, BODY_AXIS_X + 52.0, -YAW_PLATE_BAR_HALF_WIDTH, YAW_PLATE_BAR_HALF_WIDTH, *YAW_PLATE_Z) + Cylinder(
         YAW_PLATE_RADIUS, YAW_PLATE_Z[1] - YAW_PLATE_Z[0]
     ).moved(Location((BODY_AXIS_X, 0.0, sum(YAW_PLATE_Z) / 2.0)))
     plate = plate - Cylinder(9.0, 10.0).moved(Location((BODY_AXIS_X, 0.0, sum(YAW_PLATE_Z) / 2.0)))
-    parts.append(_paint(plate, "HEAD_YAW_ADAPTER_PLATE", FRAME_BLUE))
-    return Compound(label="BODY_PRIMARY_FRAME", children=parts)
+    add(plate)
+    # Local enlarged side-rail wall for two horizontal M3 cassette screws.
+    add(_block(52.0, 70.0, 60.0, 69.0, 58.0, 72.0))
+    # Cut after the unions: an uncropped bracket otherwise refills the foot
+    # bore. This also opens a straight socket/driver path above each button head.
+    for x, y in BODY_MOUNT_POINTS:
+        if (x, y) == BODY_CASSETTE_MOUNT:
+            continue
+        frame -= _z_cylinder(BODY_MOUNT_CLEARANCE_RADIUS, 55.0, 60.01, x, y)
+        frame -= _z_cylinder(BODY_M4_TOOL_RADIUS, 60.0, BODY_Z_TOP + 1.0, x, y)
+    for x, y in BODY_LOCATING_POINTS:
+        if (x, y) == BODY_LOCATING_POINTS[1]:
+            continue
+        frame -= _z_cylinder(2.05, 55.0, 62.0, x, y)
+    for x in (61.0, 68.0):
+        frame -= _axial_bore_y(1.7, 59.9, 69.1, x, 65.0)
+    for x in SHELL_FRAME_X:
+        for sign in (-1.0, 1.0):
+            y0, y1 = sorted((sign * 62.9, sign * 69.1))
+            frame -= _axial_bore_y(2.0, y0, y1, x, SHELL_FRAME_Z)
+    cassette = body_front_left_foot_cassette()
+    return Compound(label="BODY_PRIMARY_FRAME", children=[
+        _paint(frame, "BODY_FRAME_MAIN_PRINT", FRAME_BLUE, 1.0),
+        _paint(cassette, "BODY_FRAME_FRONT_LEFT_FOOT_CASSETTE", FRAME_BLUE, 1.0),
+    ])
+
+
+def body_front_left_foot_cassette():
+    """Side-inserted foot below the chassis fuse shelf; hardware enters from below."""
+    x, y = BODY_CASSETTE_MOUNT
+    cassette = _block(x - 10.0, x + 10.0, y - 9.0, y + 12.0, 56.0, 60.0)
+    cassette += _block(x - 6.0, x + 10.0, y - 9.0, y + 12.0, 59.99, 70.0)
+    cassette -= _z_cylinder(BODY_MOUNT_CLEARANCE_RADIUS, 55.0, 60.1, x, y)
+    # Nut drops into this hexagonal anti-rotation seat before the cassette is
+    # slid under the shelf. The M4 x 12 bolt points upward from the rail socket.
+    nut_pocket = extrude(RegularPolygon(radius=4.3, side_count=6), amount=3.5)
+    cassette -= nut_pocket.moved(Location((x, y, 60.0)))
+    cassette -= _z_cylinder(4.4, 63.5, 71.0, x, y)
+    px, py = BODY_LOCATING_POINTS[1]
+    cassette -= _z_cylinder(2.05, 55.0, 62.0, px, py)
+    for sx in (61.0, 68.0):
+        cassette -= _axial_bore_y(2.15, 54.0, 60.1, sx, 65.0)
+        cassette -= _axial_bore_y(1.6, 52.9, 54.1, sx, 65.0)
+    return cassette
 
 
 def body_chassis_mount_hardware():
     parts = []
     for index, (x, y) in enumerate(BODY_MOUNT_POINTS, start=1):
+        if (x, y) == BODY_CASSETTE_MOUNT:
+            # The fixed fuse shelf blocks a top-down driver at this corner.
+            # Reverse this one M4 x 12: head in the chassis rail relief and
+            # a plain hex nut in the cassette's anti-rotation pocket.
+            parts.extend([
+                _paint(_z_cylinder(1.9, 52.0, 64.0, x, y), f"BODY_CHASSIS_M4_SHANK_{index}", STEEL),
+                _paint(_z_cylinder(4.0, 49.6, 52.0, x, y), f"BODY_CHASSIS_M4_HEAD_{index}", STEEL),
+                _paint(extrude(RegularPolygon(radius=4.1, side_count=6), amount=3.2).moved(Location((x, y, 60.0))),
+                       f"BODY_CHASSIS_M4_NUT_{index}", BRONZE),
+            ])
+            continue
         parts.extend([
             _cylinder(1.9, 12.0, (x, y, 56.0), f"BODY_CHASSIS_M4_SHANK_{index}", STEEL),
             _cylinder(4.0, 2.4, (x, y, 61.2), f"BODY_CHASSIS_M4_HEAD_{index}", STEEL),
@@ -2317,6 +2464,51 @@ def body_chassis_mount_hardware():
     for index, (x, y) in enumerate(BODY_LOCATING_POINTS, start=1):
         parts.append(_cylinder(2.0, 8.0, (x, y, 56.0), f"BODY_CHASSIS_LOCATING_PIN_{index}", STEEL))
     return Compound(label="BODY_CHASSIS_MOUNT_HARDWARE", children=parts)
+
+
+def body_frame_joint_hardware():
+    """Two M3 x 16 side bolts and M3 inserts retain the removable foot."""
+    parts = []
+    for index, x in enumerate((61.0, 68.0), 1):
+        insert = _axial_bore_y(2.0, 54.0, 60.0, x, 65.0) - _axial_bore_y(1.5, 53.9, 60.1, x, 65.0)
+        screw = _axial_bore_y(1.5, 53.0, 69.0, x, 65.0) + _axial_bore_y(2.9, 69.0, 70.7, x, 65.0)
+        parts.extend([
+            _paint(insert, f"BODY_CASSETTE_INSERT_M3_{index}", BRONZE),
+            _paint(screw, f"BODY_CASSETTE_SCREW_M3X16_{index}", STEEL),
+        ])
+    return Compound(label="BODY_FRAME_CASSETTE_HARDWARE", children=parts)
+
+
+def shell_frame_hardware():
+    """Four outside-driven M3 x 16 screws into inserts in the frame posts."""
+    parts = []
+    for x in SHELL_FRAME_X:
+        for sign in (-1.0, 1.0):
+            side = "L" if sign > 0 else "R"
+            region = "F" if x > BODY_AXIS_X else "R"
+            iy0, iy1 = sorted((sign * 63.0, sign * 69.0))
+            insert = _axial_bore_y(2.0, iy0, iy1, x, SHELL_FRAME_Z) - _axial_bore_y(
+                1.5, iy0 - 0.1, iy1 + 0.1, x, SHELL_FRAME_Z)
+            sy0, sy1 = sorted((sign * 64.1, sign * SHELL_BOSS_OUTER_Y))
+            hy0, hy1 = sorted((sign * SHELL_BOSS_OUTER_Y, sign * (SHELL_BOSS_OUTER_Y + 1.7)))
+            screw = _axial_bore_y(1.5, sy0, sy1, x, SHELL_FRAME_Z) + _axial_bore_y(
+                2.9, hy0, hy1, x, SHELL_FRAME_Z)
+            parts.extend([
+                _paint(insert, f"SHELL_FRAME_INSERT_M3_{region}_{side}", BRONZE),
+                _paint(screw, f"SHELL_FRAME_SCREW_M3X16_{region}_{side}", STEEL),
+            ])
+    return Compound(label="SHELL_FRAME_HARDWARE", children=parts)
+
+
+def chassis_v1_reference():
+    """Compose the live locked chassis source, replacing only joint hardware."""
+    source = HERE.parents[2] / "01-chassis" / "v1" / "cad" / "body_chassis_model.py"
+    spec = importlib.util.spec_from_file_location("locked_chassis_v1", source)
+    chassis = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(chassis)
+    actual = chassis.build_chassis_v1()
+    parts = [part for part in actual.children if part.label != "BODY_CHASSIS_MOUNT_HARDWARE"]
+    return Compound(label="CHASSIS_V1_REFERENCE", children=parts)
 
 
 def _check_wheel_interface():
@@ -3292,6 +3484,7 @@ def build_assembly():
     asm.add(harness_routes(), "HARNESS_ROUTES")
     asm.add(connectors_and_exits(), "CONNECTORS_AND_EXITS")
     asm.add(body_shell(), "BODY_SHELL")
+    asm.add(shell_frame_hardware(), "SHELL_FRAME_HARDWARE")
     asm.add(body_panels(), "BODY_PANELS")
     asm.add(panel_mount_hardware(), "PANEL_MOUNT_HARDWARE")
     asm.add(body_yaw_stage(), "BODY_YAW_STAGE")
@@ -3354,8 +3547,12 @@ def build_body_assembly():
             connector_parts.append(part)
     body_connectors = Compound(label="BODY_CONNECTORS_AND_EXITS", children=connector_parts)
 
-    return Compound(label="BODY_V1", children=[
+    return Compound(label="BODY_V1_WITH_CHASSIS_V1", children=[
+        chassis_v1_reference(),
         body_primary_frame(),
+        body_chassis_mount_hardware(),
+        body_frame_joint_hardware(),
+        shell_frame_hardware(),
         body_electronics,
         body_audio(),
         body_harness,

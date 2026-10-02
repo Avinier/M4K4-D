@@ -1,0 +1,16 @@
+{
+  "panel_solids": {
+    "FRONT_SERVICE_PANEL_FUNCTIONAL_GRILLE": 1,
+    "REAR_SERVICE_PANEL_OCTAGONAL": 1
+  },
+  "panel_shell_gap_mm": {
+    "FRONT_SERVICE_PANEL_FUNCTIONAL_GRILLE": 0.0,
+    "REAR_SERVICE_PANEL_OCTAGONAL": 0.0
+  },
+  "panel_shell_overlap_mm3": {},
+  "panel_frame_overlap_mm3": {},
+  "panel_fixed_overlap_mm3": {},
+  "panel_function_overlap_mm3": {},
+  "panel_screw_overlap_mm3": {},
+  "panel_driver_overlap_mm3": {}
+}

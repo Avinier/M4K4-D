@@ -4,7 +4,7 @@
 |---|---|
 | Status | **Historical paper envelope v0.2 — not a scored configuration.** The Layout 03 / 304 mm / 70 mm-skid calculations below precede the 2026-09-26 Layout 04 and body Layout 02 baseline. Use the current-interface note immediately below before any gate calculation |
 | Created | 2026-09-17 |
-| Last updated | 2026-09-18 |
+| Last updated | 2026-10-03 (current-interface note only) |
 | Owner | Project builder |
 | Governing plan | `plan.md` Part 2; `plan.md` §5 checklist |
 | Method | Safety toolkit `d_available > v·t_latency + v²/(2·a_brake) + d_margin` |
@@ -14,11 +14,11 @@
 
 This file originally computed the locomotion envelope as **ranges**. Every numeric input carries `W`/`D`/`E`/`U`. An `E` value is not a target, not a measurement, and not a freeze. The older `a_tip ≈ 1.98 m/s²` figure belongs to the historical +25 / 124 mm planning target. It is not a property of the current robot.
 
-## Current CAD interface — 2026-09-26, not physical evidence
+## Current CAD interface — 2026-10-03, not physical evidence
 
-`dimensional-baseline.md` v1.13 and RP-06 `RP03-CAD-06/08/09/10` supersede the inputs in §1.3 for the working article: head Layout 04; 293.5 mm neutral stack; body 16 mm forward; ball contact 110 mm ahead of the axle; skid contact 27 mm behind at 3.5 mm height; preferred but unlocked Pololu #4804 motor; and an 81.6 g ballast bar retained under the deck. The current hand-kept Layout 02 mass register is 2,551.9 g at x +19.46 / h 107.27 mm, so its neutral `a_tip = g·x/h` is about 1.78 m/s². `RP03-CAD-09` accepts the re-based **1.582 m/s² paper screen**, not a physical lift-onset pass. The old +25 / 124 mm and 70 / 14 mm pair is historical.
+`dimensional-baseline.md` and RP-06 `RP03-CAD-06/08/09/10` supersede the inputs in §1.3 for the working article: head Layout 04; 293.5 mm neutral stack; body 16 mm forward; ball contact 110 mm ahead of the axle; skid contact 27 mm behind at 3.5 mm height; and an 81.6 g ballast bar retained under the deck. The current body-v1 geometry-based mass register is 2,425.7 g at x +18.48 / h 105.92 mm, so its neutral `a_tip = g·x/h` is 1.712 m/s². A conservative bound using the current head's mass centroids and all yaw angles gives 1.708 m/s²; its pitch and roll carried centroids lie within 0.001 mm of their axes in the generated head tree. See `../../03-build/02-body/v1/cad/generated/body-layout-checks.json`. `RP03-CAD-09` accepts the re-based **1.582 m/s² paper screen**, not a physical lift-onset pass. The former Layout 02 2,551.9 g register and the old +25 / 124 mm and 70 / 14 mm pair are historical.
 
-The detailed §2–§10 load, head-pose, skid, motor and stopping calculations below have **not** been recomputed for these current inputs. Do that and freeze the gate configuration before using them for a scored run; measure CoM and lift onset on the rig. Layout 02 packages one rear TCRT, leaves forward edges without a direct stop channel, and gives no contact signal for low objects that reach the ball housing. Those sensing gaps remain open in `openitems.md` and are not waived by this note.
+The detailed §2–§10 load, motor and stopping calculations below remain historical Layout 03 cases. The current body-v1 report refreshes neutral and bounded head-pose CoM, support share, skid ordering, reverse/braking and lateral-tip proxies; it does not establish traction, stopping distance or a physical tip limit. Freeze the gate configuration before a scored run; measure CoM and lift onset on the rig. Layout 02 packages one rear TCRT, leaves forward edges without a direct stop channel, and gives no contact signal for low objects that reach the ball housing. Those sensing gaps remain open in `openitems.md` and are not waived by this note.
 
 ## 1. Assumption register
 

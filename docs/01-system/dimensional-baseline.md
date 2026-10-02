@@ -3,9 +3,9 @@
 | Field | Value |
 |---|---|
 | Status | **Current target baseline — supersedes earlier dimensional and packaging assumptions** |
-| Version | 1.13 |
+| Version | 1.14 |
 | Owner | Project builder |
-| Approved / revised | 2026-08-30 / 2026-09-26 |
+| Approved / revised | 2026-08-30 / 2026-10-03 |
 | Feeds | Mass/envelope ledger, RP-01 head, RP-03 drive, RP-06 layout, sourcing |
 
 ## Authority and interpretation
@@ -55,7 +55,7 @@ The moving head contains the selected display/renderer board, the required separ
 |---|---:|---|
 | Visible body shell height | **~105–115 mm** | Distinct from the 140 mm ground-to-body-top datum |
 | Visible body width | **~175–185 mm** | Visually narrower than the full wheel/body stance |
-| Visible body depth | **~150–160 mm** | Compact appearance while the mechanical footprint extends farther |
+| Visible body depth | **~150–163 mm** | Current body-v1 shell spans 162.2 mm at its widest belt; the mechanical footprint extends farther |
 | Visible neck height | **~35–45 mm** | Actuators overlap into the body and head instead of stacking externally |
 | Overall width across wheel/body structure | **~195–205 mm** | Planted appearance and stability |
 | Axle height | **~42 mm** | Half the nominal Ø84 mm wheel diameter |
@@ -64,7 +64,7 @@ The moving head contains the selected display/renderer board, the required separ
 | Rear anti-tip skid reach | **27 mm behind the drive axle in Layout 02** | Current CAD contact datum after `RP03-CAD-06`; physical lift-onset proof remains open |
 | Rear anti-tip skid height above floor | **3.5 mm at 27 mm reach in Layout 02** | Must contact before the CoM crosses the drive-wheel support line; verify on the physical rig |
 
-The skid is a separate lower protrusion, not flush with the main shell. Its floor height `h` and rearward reach `d` must satisfy **`h/d < x_CoM/h_CoM`** at the measured integrated CoM. The current CAD has `h/d = 3.5/27 ≈ 0.130`; its hand-kept 2,551.9 g register has `x_CoM/h_CoM = 19.46/107.27 ≈ 0.181`. The physical rig must verify the ordering. The older 70 mm / 14 mm pair is superseded.
+The skid is a separate lower protrusion, not flush with the main shell. Its floor height `h` and rearward reach `d` must satisfy **`h/d < x_CoM/h_CoM`** at the measured integrated CoM. The current CAD has `h/d = 3.5/27 ≈ 0.130`; the body-v1 estimate gives `x_CoM/h_CoM = 18.48/105.92 ≈ 0.174`. The physical rig must verify the ordering. The older 70 mm / 14 mm pair is superseded.
 
 ## Drive targets
 
@@ -81,14 +81,14 @@ The skid is a separate lower protrusion, not flush with the main shell. Its floo
 | Required wheel speed | **~160 RPM at 0.70 m/s; design around 160–200 RPM unloaded** | Derived from the Ø84 mm wheel circumference |
 | Normal / fast yaw rate | **~120–220°/s** | Convincing snap turns and expressive body motion |
 | Maximum theoretical spin capability | **300°/s+ possible, drivetrain-dependent** | Headroom; not a normal commanded rate |
-| Longitudinal whole-robot CoM | **Current Layout 02 register `x_CoM = +19.46 mm` (`E`); measured value TBD** | Includes the 81.6 g `RP03-CAD-08` ballast bar. The earlier +25 mm target is superseded by `RP03-CAD-09` for this layout |
-| Whole-robot CoM height | **Current Layout 02 register `h_CoM = 107.27 mm` (`E`); measured value TBD** | The earlier 124 mm planning height is historical, not an accepted measurement |
-| Forward-launch front-support lift screen | **`a_tip = g·x_CoM/h_CoM ≥ 1.582 m/s²` (`E` until weighed)** | `RP03-CAD-09` retains the physics margin encoded by the former +20 mm line at 124 mm. Current register gives about 1.78 m/s²; physical lift onset and head-pose corners remain open |
-| CoM sensitivity | **Each +10 mm forward raises `a_tip` by ~0.91 m/s² at the current register height** | `Δa_tip = g·10/107.27 ≈ 0.91 m/s²`; recompute at measured height |
+| Longitudinal whole-robot CoM | **Current body-v1 register `x_CoM = +18.48 mm` (`E`); measured value TBD** | Includes the 81.6 g `RP03-CAD-08` ballast bar. The earlier +25 mm target is superseded by `RP03-CAD-09` for this layout |
+| Whole-robot CoM height | **Current body-v1 register `h_CoM = 105.92 mm` (`E`); measured value TBD** | The earlier 124 mm planning height is historical, not an accepted measurement |
+| Forward-launch front-support lift screen | **`a_tip = g·x_CoM/h_CoM ≥ 1.582 m/s²` (`E` until weighed)** | `RP03-CAD-09` retains the physics margin encoded by the former +20 mm line at 124 mm. Current neutral estimate is 1.712 m/s² and the conservative current-head pose bound is 1.708 m/s²; physical lift onset remains open |
+| CoM sensitivity | **Each +10 mm forward raises `a_tip` by ~0.93 m/s² at the current register height** | `Δa_tip = g·10/105.92 ≈ 0.93 m/s²`; recompute at measured height |
 
 The existing **0.5 m/s maximum for person-following trials remains a behavioural safety/validation limit**. It does not conflict with the higher drivetrain capability target, which exists for bounded expressive moves and engineering headroom.
 
-Until RP-03 measures lift onset and dynamic compliance, commanded forward acceleration must remain below the measured lift threshold with a registered safety margin; the current 1.78 m/s² value is a hand-kept estimate, not permission to raise the command limit. A higher expressive acceleration requires a validated forward CoM shift, lower CoM, or support-geometry revision; tire traction alone does not justify it. Battery-on-or-behind-axle (RP-03 `HIGH_AFT`) is a forbidden placement: `a_tip` changes sign. The older +25 / 124 mm and 1.98 m/s² figures remain planning history, not the accepted Layout 02 baseline.
+Until RP-03 measures lift onset and dynamic compliance, commanded forward acceleration must remain below the measured lift threshold with a registered safety margin; the current 1.712 m/s² value is an estimate, not permission to raise the command limit. A higher expressive acceleration requires a validated forward CoM shift, lower CoM, or support-geometry revision; tire traction alone does not justify it. Battery-on-or-behind-axle (RP-03 `HIGH_AFT`) is a forbidden placement: `a_tip` changes sign. The older +25 / 124 mm and 1.98 m/s² figures remain planning history, not the accepted Layout 02 baseline.
 
 ## Component placement
 
@@ -130,3 +130,4 @@ Design around **300 H × 205 W × 180 D mm overall as a rounded target; RP-01 La
 | 2026-09-17 | 1.11 | Consumed RP-03 `physics.md`: retained the +25 / 124 mm CoM **target** and the 1.98 m/s² figure as the value *at that target*; recorded that Layout 03 lumped roll-up does not automatically hit it (`a_tip` about 0.9–1.9 m/s² with battery forward; sign reversal if battery is on/behind the axle). No geometry target changed. No gate pass. |
 | 2026-09-19 | 1.12 | Builder selected the **Ø1 inch ball transfer** as the V1 front support (`RP-03` BD-08). Wheelbase remains 110 mm to **front-support contact**. Swivel caster is the RP-03 comparison swap only. Not a gate pass, not a purchase, not ADR-04 closure. |
 | 2026-09-26 | 1.13 | Propagated RP-06 head Layout 04 and `RP03-CAD-06/09`: 49.5 mm neck, 293.5 mm neutral CAD stack, ~588 g `D/E` head tree, 27 mm / 3.5 mm rear-skid contact, and the accepted `a_tip ≥ 1.582 m/s²` screen. The current 2,551.9 g hand-kept register includes the 81.6 g `RP03-CAD-08` bar; physical CoM and lift onset remain open. The +25 / 124 mm and 304 mm figures are historical planning values. |
+| 2026-10-03 | 1.14 | Propagated the body-v1 shell envelope and geometry-based 2,425.7 g estimate. Current CoM is +18.48 / 105.92 mm, neutral a_tip 1.712 m/s² and conservative head-pose bound 1.708 m/s². The accepted 1.582 m/s² paper screen is unchanged; physical CoM and lift onset remain open. |
