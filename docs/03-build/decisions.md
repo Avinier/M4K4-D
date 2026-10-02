@@ -1015,7 +1015,7 @@ D-029 is reserved by a parallel session (lid hump), so this is D-030.
 
 **2026-10-02 · Chassis / frame print units and hub cap (CH-001, CH-012, CH-058, CH-059, CH-073–CH-075, CH-077; J03, J05, J06, J16) · ACTIVE; HOLD on printer/orientation review, junction coupons and a cap retention test**
 
-**Decision:** the builder asked to implement the [fastener review](01-chassis/v1/research/fastener-review.md). Two of its recommendations are adopted:
+**Decision:** the builder asked to implement the fastener review. Two of its recommendations are adopted:
 
 - **Frame modules.** Each end of the frame is one print: deck, both rails and crossmember. J05, J06 and J16 are deleted, with their ten M3 screws (CH-073, CH-074, CH-075) and ten of the fourteen CH-077 inserts. The two modules join only through the two J04 carriers, which stay removable.
 - **Hub cap.** One central ISO 7380 M3 × 10 per cap, into a tapped hole in the steel stub's spigot end, replaces the six M2 × 6 thread-forming screws (CH-059 goes from 12 to 2).
