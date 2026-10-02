@@ -128,7 +128,8 @@ def main():
         if _boxes_meet(part, other)
     )
     _stage("yaw/headroom clash sweeps done")
-    rear_crossmember = next(child for child in chassis_frame.children if child.label == "REAR_SKID_CROSSMEMBER")
+    # D-033: the rear crossmember is part of the one-piece rear frame module.
+    rear_crossmember = next(child for child in chassis_frame.children if child.label == "CHASSIS_FRAME_REAR_MODULE")
     body_shell = M.body_shell()
     body_panels = M.body_panels()
 
@@ -285,7 +286,7 @@ def main():
     ball_parts = leaves(M.ball_transfer())
     pod_group = next(c for c in chassis_frame.children if c.label == "BALL_POD")
     pod_parts = leaves(pod_group)
-    front_crossmember = next(c for c in chassis_frame.children if c.label == "FRONT_CROSSMEMBER")
+    front_crossmember = next(c for c in chassis_frame.children if c.label == "CHASSIS_FRAME_FRONT_MODULE")  # D-033
     nose_module = next(c for c in M.sensors().children if c.label == "BALL_NOSE_CONCEALED_CONTACT_MODULE")
     nose_parts = leaves(nose_module)
     gp2y_parts = [c for c in M.sensors().children if c.label.startswith("GP2Y") and c.label != "GP2Y_OPTICAL_AXIS"]
@@ -332,7 +333,7 @@ def main():
     nose_solids = [*ball_parts, *pod_parts, front_crossmember, *gp2y_parts, *[p for p in nose_parts if p is not travel_reserve]]
     designed_interference = (
         {"BALL_POD_M3_SHANK", "BALL_POD_HEATSET_INSERT"},
-        {"BALL_POD_HEATSET_INSERT", "FRONT"},  # FRONT_CROSSMEMBER after the rsplit
+        {"BALL_POD_HEATSET_INSERT", "CHASSIS_FRAME_FRONT"},  # CHASSIS_FRAME_FRONT_MODULE after the rsplit
         {"BALL_M3_SHANK", "BALL_SEAT_HEATSET_INSERT"},
         {"BALL_SEAT_HEATSET_INSERT", "BALL_POD_PRINTED"},
         {"BALL_POD_LID_M2X8_CSK", "BALL_POD_PRINTED"},  # thread-forming screw in its pilot
@@ -626,7 +627,7 @@ def main():
             # The E-stop clamps on its well floor, so it touches the well by design.
             mounted = part.label.startswith("ESTOP_XA1E") and other.label == "REAR_PANEL_ESTOP_WELL"
             # D-032: the fuse holder sits on its bracket shelf, part of the front deck print.
-            mounted = mounted or (part.label == "PACK_ATOF_FUSE_HOLDER_ENVELOPE" and other.label == "CHASSIS_DECK_WITH_BODY_INTERFACE")
+            mounted = mounted or (part.label == "PACK_ATOF_FUSE_HOLDER_ENVELOPE" and other.label == "CHASSIS_FRAME_FRONT_MODULE")
             if "KEEP_OUT" not in part.label and not mounted and near(part, other, 5.0):
                 distance = part.distance_to(other)
                 if best is None or distance < best[0]:
@@ -700,8 +701,8 @@ def main():
     imu_leaves = leaves(imu_group)
     selected_parts = [p for p in audio_leaves + imu_leaves if not any(k in p.label for k in ("ACOUSTIC_PORT", "PORT_BOOT"))]
     imu_shanks = [p for p in imu_leaves if p.label.startswith("IMU_M2_SCREW_SHANK")]
-    # Two deck prints share the label since the frame split; the IMU screws go into the front one.
-    deck = next(p for p in chassis_static if p.label == "CHASSIS_DECK_WITH_BODY_INTERFACE" and _boxes_meet(p, imu_shanks[0]))
+    # The IMU screws go into the front frame module (D-033: deck, rails and crossmember in one print).
+    deck = next(p for p in chassis_static if p.label == "CHASSIS_FRAME_FRONT_MODULE")
     selected_others = [
         *chassis_static, body_shell, *leaves(body_panels), *leaves(panel_hardware), *leaves(body_frame),
         *power_parts, *[c for c in M.electronics().children if c.label not in ("POWER_DISTRIBUTION_BOARDS", "IMU_PCB07")],

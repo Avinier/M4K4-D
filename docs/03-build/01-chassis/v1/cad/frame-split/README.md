@@ -1,61 +1,50 @@
 # Frame print-split study
 
-**Status:** detailed provisional split, not a fabrication release. Open `frame-split.step` in CAD Viewer. `frame-split.step.py` is the editable source. This view calls the same frame print-unit geometry as the main `chassis-v1.step.py` assembly.
+**Status:** frame print units after D-033, not a fabrication release. Open `frame-split.step` in CAD Viewer. `frame-split.step.py` is the editable source. This view calls the same frame print-unit geometry as the main `chassis-v1.step.py` assembly.
 
 The view keeps the chassis coordinate system: origin at the axle line on the floor, +X forward, +Y robot-left, +Z up. The gray motor barrels and green battery block are **reference envelopes**, not print units. They show why the top deck has a motor relief and battery aperture. This frame-only view leaves the rail ends visible; the integrated J04 carriers are defined in the main chassis CAD and [axle-stack §9](../../axle-stack.md#9-j04-carrier-and-test-plan). J04 print fit and strength proof are still open.
 
-## Provisional print units
+## Print units (D-033)
 
 | Part label | Quantity | Current extent / purpose |
 |---|---:|---|
-| `FS_DECK_REAR` | 1 | Rear deck, X −41 to −17; rear body holes and rail clamp holes |
-| `FS_DECK_FRONT_BATTERY_TUB` | 1 | Front deck, X +17 to +92; battery opening and tub walls, front body holes, ballast and rail clamp holes |
-| `FS_RAIL_L/R_REAR` | 2 | Rail segments from the rear crossmember to the carrier boundary |
-| `FS_RAIL_L/R_FRONT` | 2 | Rail segments from the carrier boundary to the front crossmember |
-| `FS_CROSSMEMBER_REAR` | 1 | Rear transverse member, X −48 to −32, Z 34 to 48; keel/sensor clearance reserve |
-| `FS_CROSSMEMBER_FRONT` | 1 | Front transverse member, X +80 to +92, Z 35 to 51; existing pod screw axes retained |
-| `FS_BATTERY_HATCH_FOUR_M3` | 1 | Separate downward-removable hatch with four M3 clearance holes |
+| `FS_FRAME_FRONT_MODULE` | 1 | One print: front deck, battery tub walls and hatch bosses, both front rails, front crossmember, driver posts and the D-032 fuse bracket. X +17 to +92. |
+| `FS_FRAME_REAR_MODULE` | 1 | One print: rear deck, both rear rails and the rear skid crossmember with the keel inserts and cable-tie lug. X −51 to −17. |
+| `FS_BATTERY_HATCH_FOUR_M3` | 1 | Separate downward-removable hatch with four M3 clearance holes; carries the strapped pack. |
 
-This is nine proposed print units. The front deck and tub walls are shown as one print; the hatch stays separate. The study deliberately keeps the rails and crossmembers separate so their joints can be reviewed. Fusing any of these units requires a printer-volume and orientation review, followed by a revised part map.
+The two modules join only through the two removable J04 carriers in the main chassis CAD, so the frame is **five prints** (two modules, two carriers, the hatch), down from eleven. [D-033](../../../../decisions.md#d-033) fused each end after the [fastener review](../../research/fastener-review.md) found no service or printer reason for the old split: the rails and crossmembers had been kept separate only so their joints could be reviewed. The fusion removes J05, J06 and J16: ten M3 screws and ten inserts. It also removes the rear deck's two detached screw pads, which sat 1 mm off the deck plate, so the old rear J16 screws clamped nothing to the deck.
 
-## Joint concept in the view
+Where the deck covers a crossmember, the crossmember now rises to the deck underside: the front one from Z 51 to 52, the rear one from Z 48 to 52 under the deck (X −41 to −32). Deck and crossmember are continuous, and the rear module prints deck-down without a floating crossmember.
 
-1. **Crossmember to rail (J05/J06).** Each rail has a 3 mm tongue, 8 mm wide, at its crossmember end. The member has a matching pocket with 0.2 mm nominal clearance. A front M3 × 16 screw from X +92 or rear M3 × 20 screw from X −48 passes through the crossmember and threads 6 mm into an M3 × 6 heat-set insert pressed into the tongue's end face ([D-030](../../../../decisions.md#d-030); the earlier pilot sat behind a Ø3.4 tongue bore and could not take an insert). One screw and tongue per side. The front joint axes are at Y ±54; the rear axes move outward to Y ±58.5 so their inserts do not intersect the nearby body-nut access path. The crossmembers extend to Y ±62 front and Y ±66 rear to retain material around the pockets. Front pod screws remain at Y ±10 and do not block the rail screws.
-2. **Deck to rail.** Six M3 × 10 button heads enter M3 × 6 inserts flush with the rail tops: (30, ±54) and (77.5, ±54) on the front rails, and (−27.5, ±61) on two rear deck ears (D-030 moved the outer pairs off the body M4 feet). The four-millimetre deck is drilled Ø3.4; the rail has a Ø4.3 insert bore with a Ø3.4 tip relief. Local 8 × 8 mm deck ears carry the heads. Heads are approached from above before the body is installed.
-3. **Body M4 receiver access (J13).** The rails have open vertical socket paths at the four body bolt positions (Y ±48), with a local outside rib replacing the removed section. The model includes a 10 mm OD, 18 mm long reference socket at each location; it clears the rail, battery tub and motor envelopes. This permits underside M4 nuts with the existing through-bolts. Nut standard, washer, bolt length and loaded joint proof remain to be selected.
-4. **Battery hatch (J11).** Four bosses are integral with the front deck/tub print, outside the thin tub walls. Four M3 × 6 button heads enter M3 × 6 inserts through the 1.5 mm hatch. Since D-030 the pack is strapped to the hatch (two hook-and-loop straps through hatch slots) and drops out with it; foam pads fill the cell-end gaps.
-5. **Carrier boundary (J04).** The rail ends stop at X ±17 and mate to the keyed carriers in the main chassis CAD. Their datum, locating keys, screws/inserts, load path and removal direction are defined in [axle-stack §9](../../axle-stack.md#9-j04-carrier-and-test-plan); coupon fit, tool access and structural proof remain open.
-6. **Other service interfaces retained.** The four body M4 holes, two Ø4 locating-pin bores, battery opening and +Y tub service window, ballast axes, front pod screw axes and rear sensor clearance reserve are shown. Their complete clamp and receiver hardware belongs to their respective joint work packages.
+## Interfaces that remain
 
-The earlier body-nut/rail overlap is removed geometrically in this study. This is a clearance check, not yet a strength or tool-handling test; confirm that an actual nut and slim socket can be seated with a dry assembly.
+1. **Carrier boundary (J04).** The rail ends stop at X ±17 and take the keyed carriers: two M3 × 8 per end into 6 mm inserts in the rail ends. The carriers stay removable because the motor face pattern is unmeasured ([D-007](../../../../decisions.md#d-007)).
+2. **Body M4 receiver access (J13).** The rails keep open vertical socket paths at the four body bolt positions (Y ±48), with a local outside rib. The nut bears on the deck underside.
+3. **Battery hatch (J11).** Four bosses are integral with the front module. Four M3 × 6 button heads go through the 1.5 mm hatch into M3 × 6 inserts. The pack is strapped to the hatch and drops out with it.
+4. **Nose pod, keel, ballast, IMU and drivers** keep their own joints (J07B, J09A, J12, J15A, J15B).
 
-## Working hardware schedule
+## Hardware schedule
 
-| Joint | Candidate screw and access | Receiver | Qty |
+| Joint | Screw | Receiver | Qty |
 |---|---|---|---:|
-| J05 front member to rails | CH-073 ISO 7380 M3 × 16, driven from the front at Y ±54 | CH-077 M3 × 6 insert in each front tongue face | 2 |
-| J06 rear member to rails | CH-074 ISO 7380 M3 × 20, driven from the rear at Y ±58.5 | CH-077 insert in each rear tongue face | 2 |
-| J16 deck to four rails | CH-075 ISO 7380 M3 × 10, driven from above | CH-077 insert pressed down into each rail top | 6 |
+| J04 carriers to modules | CH-060 ISO 7380 M3 × 8 | CH-061 M3 × 6 insert in the rail ends | 8 |
 | J11A battery hatch | CH-076 ISO 7380 M3 × 6, driven from below | CH-077 insert pressed up into each tub boss | 4 |
 
-D-030 drops the washers; the heads seat directly on the printed faces. The insert pilot is Ø4.3 mm, with a Ø3.4 tip relief beyond each insert. These are **working dimensions**, not selected supplier articles or proven printed fits; verify a real insert drawing and printed coupon before buying a full set or releasing print files. The inherited body joint uses four M4 through-bolts and nuts, separately specified under J13.
+D-030's J05 (CH-073), J06 (CH-074) and J16 (CH-075) screws and their ten CH-077 inserts are deleted by D-033.
 
-## Proposed assembly and service order
+## Assembly and service order
 
-1. Print the nine units and the fit coupons. Ream or clean only the features called out by the calibrated process sheet. Install the 14 M3 inserts in the rails and tub bosses; reject any split or loose boss.
-2. Fit the front and rear crossmembers to the rails by their tongues and pockets. Drive the front screws from X +92 and the rear screws from X −48. Check that both rails seat without forcing and that their upper faces are coplanar.
-3. Place the rear and front decks on the rail tops. Drive the six deck screws from above, then check body-hole and locating-pin coordinates. Fit the J04 carriers at X ±17 per [axle-stack §9](../../axle-stack.md#9-j04-carrier-and-test-plan); keep the interface removable for service.
-4. Install the rear keel and front caster pod from their separate joint work packages. Confirm their fasteners remain clear of the crossmember screws.
-5. Fit the battery pack only after its electrical isolation/retention detail is approved. Connect through the +Y service window, then close the hatch from below with four screws. The pack should be restrained by a specified pad or fixture without crushing its cells or wiring.
-6. Place the body on its two pins. Install the four M4 through-bolts from above and hold each nut with a slim socket from below through the rail cutout. Check the body lift-off path after removing those bolts.
-
-For service: the hatch comes off downward after the robot is safely supported; the front crossmember screws are reached from the front after removing the pod if its wiring obstructs the tool; the rear screws are reached from the back with the body lifted if its shell obstructs the tool. A motor/carrier removal sequence belongs to J04 and must be dry-run before claiming frame serviceability.
+1. Print the two modules, two carriers, the hatch and the fit coupons. Install the eight J04 inserts in the rail ends, the four hatch-boss inserts, the four driver-post inserts, the two pod inserts in the front crossmember and the four keel inserts in the rear crossmember.
+2. Fit each carrier's keys into the front and rear rail ends and drive its four J04 screws. Check that the two modules' deck tops are coplanar across the motor bay.
+3. Install the rear keel and the front caster pod from their own joint work packages.
+4. Fit the pack strapped to the hatch, connect through the +Y window, and close the hatch from below with four screws.
+5. Place the body on its two pins. Fit the four M4 bolts from above and hold each nut from below through the rail socket path.
 
 ## Work required before printable parts
 
-- Measure the lab printer's usable build volume and confirm filament, nozzle, enclosure, layer height, and support limits. Choose print orientation for each unit against its main load; check access to remove supports from the tub, pilot pockets and nut features.
+- Measure the lab printer's usable build volume (the front module is about 75 × 128 × 41 mm with the fuse bracket, the rear about 34 × 132 × 22 mm) and confirm filament, nozzle, enclosure, layer height, and support limits. Choose print orientation for each unit against its main load; check access to remove supports from the tub, pilot pockets and nut features.
 - Verify carrier-to-rail coupon fit and wheel alignment against the J04 locating keys before releasing either rail end; screw clearance alone is not an alignment check.
-- Select exact M3 inserts, screw standards and washers for the provisional lengths above. Print pull-out and joint coupons; the Ø4.3 insert bore and 0.2 mm tongue allowance must be calibrated to the printer. Check the thin walls around the rail-end insert and the tongue under caster/skid impact loads.
+- Select exact M3 inserts, screw standards and washers for the provisional lengths above. Print pull-out and joint coupons; the Ø4.3 insert bore and the 0.2 mm J04 key allowance must be calibrated to the printer. Check the module junctions (rail to crossmember, crossmember to deck) under caster/skid impact loads.
 - Check body-on and body-off tool access, caster pod removal, rear keel removal, downward battery exit, connector reach, and cable strain relief through a numbered assembly/service sequence.
 - Print mating and insert coupons on the selected process. Revise the pilot allowance and hole/receiver dimensions from measurements. Then dry-assemble the frame and inspect alignment, racking, forced fits, damaged inserts and tool collisions.
 - Assign final part IDs, add chosen hardware to the project BOM, update the build decision ledger, make per-part printable exports and rerun CAD/mesh checks before any fabrication release.

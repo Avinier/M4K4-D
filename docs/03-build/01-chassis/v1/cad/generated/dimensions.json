@@ -13,7 +13,7 @@
     0.0
   ],
   "axle_stack": {
-    "decision": "03-build D-007 (axle-stack.md); geometry basis RP03-CAD-05",
+    "decision": "03-build D-007 axle architecture with D-012 bearing selection (axle-stack.md); geometry basis RP03-CAD-05",
     "motor_face_y_mm": 69.0,
     "motor_plate_y_mm": [
       69.0,
@@ -25,15 +25,15 @@
     ],
     "bearing_housing_radius_mm": 16.0,
     "retaining_cap_y_mm": [
-      86.5,
-      87.7
+      86.51,
+      87.71
     ],
-    "bearing_model": "MR148ZZ",
+    "bearing_model": "688ZZ",
     "bearing_centre_y_mm": [
-      80.5,
-      84.5
+      79.01,
+      84.01
     ],
-    "set_screw_y_mm": 75.7,
+    "set_screw_y_mm": 74.8,
     "stub_shaft_radius_mm": 4.0,
     "stub_shaft_y_mm": [
       73.0,
@@ -62,18 +62,18 @@
   "body_shift_x_mm": 16.0,
   "body_axis_x_mm": 16.0,
   "battery_center_mm": [
-    46.7,
+    46.25,
     0.0,
     43.099999999999994
   ],
   "battery_size_mm": [
-    37.6,
+    38.5,
     67.0,
     22.199999999999996
   ],
   "battery_mount": "chassis tub under the deck, flush with the deck top; removable bottom hatch through a shell-floor opening",
   "ball_mount_mode": "FIXED_3HOLE_NON_INTERCHANGEABLE",
-  "ball_mount": "vendor flange top face seats on the printed pod at Z 29; three M3 from inside the pod pocket; pod tied to FRONT_CROSSMEMBER by two M3 into heat-set inserts",
+  "ball_mount": "vendor flange top face seats on the printed pod at Z 29; three M3 from inside the pod pocket; pod tied to the front crossmember of CHASSIS_FRAME_FRONT_MODULE by two M3 into heat-set inserts",
   "ball_screw_points_mm": [
     [
       117.04367328411344,
@@ -103,7 +103,7 @@
   "front_range_sensor_face_mm": [
     128.0,
     0.0,
-    40.3
+    41.5
   ],
   "front_range_face_ahead_of_ball_contact_mm": 18.0,
   "front_range_required_from_ball_contact_mm": {
@@ -111,7 +111,7 @@
     "0.50 m/s 2deg downhill": 221.0,
     "0.70 m/s level": 289.0
   },
-  "front_range_rated_max_mm": 300.0,
+  "front_range_rated_max_mm": 800.0,
   "body_shell_x_mm": [
     -58.0,
     98.0
@@ -311,16 +311,23 @@
       2.0
     ],
     [
+      -46.0,
+      9.4,
+      12.0,
+      34.0,
+      1.8
+    ],
+    [
       -48.0,
-      8.5,
-      10.0,
+      9.5,
+      12.0,
       34.0,
       1.8
     ],
     [
       -62.0,
-      8.5,
-      10.0,
+      9.5,
+      12.0,
       26.0,
       1.6
     ],
@@ -332,7 +339,7 @@
       0.8
     ]
   ],
-  "rear_keel_mount": "four M3 screws up into REAR_SKID_CROSSMEMBER underside",
+  "rear_keel_mount": "four M3 screws up into the rear crossmember underside of CHASSIS_FRAME_REAR_MODULE",
   "skid_pad_center_mm": [
     -27.0,
     0.0,

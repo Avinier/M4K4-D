@@ -1,8 +1,9 @@
-"""Fast checks for the D-030 frame fasteners, pack restraint and driver mounts.
+"""Fast checks for the frame modules, frame fasteners, pack restraint and driver mounts.
 
-Covers J05/J06 (crossmember to rails), J16 (decks to rails), J11A (hatch
-screws), J11B (pack straps and foam), J15B (driver posts and tie lugs), the
-ISO 7380 heads at J01/J04 and the ISO 4029 M3 x 3 set screw. Run from this
+Covers the D-033 one-piece front and rear frame modules (J05, J06 and J16 are
+gone: each module must be one connected solid with no split hardware left), J11A
+(hatch screws), J11B (pack straps and foam), J15B (driver posts and tie lugs),
+the ISO 7380 heads at J01/J04 and the ISO 4029 M3 x 3 set screw. Run from this
 folder with the text-to-cad 0.4.28 runtime:
 python check_frame_fasteners.py
 Writes generated/frame-fastener-checks.json.
@@ -51,8 +52,9 @@ def overlap_len(a, b):
 frame = M.chassis_frame()
 frame_parts = leaves(frame)
 by = {p.label: p for p in frame_parts}
-decks = [p for p in frame_parts if p.label == "CHASSIS_DECK_WITH_BODY_INTERFACE"]  # REAR, FRONT
-deck_rear, deck_front = decks
+# D-033: deck, rails and crossmember of each end are one print.
+deck_front, deck_rear = by["CHASSIS_FRAME_FRONT_MODULE"], by["CHASSIS_FRAME_REAR_MODULE"]
+decks = [deck_rear, deck_front]
 # The new hardware is taken from the assembled frame, so each solid exists once.
 _labels = lambda c: {l.label for l in leaves(c)}
 hardware = [p for p in frame_parts if p.label in _labels(M.frame_joint_hardware())]
@@ -77,9 +79,8 @@ R = {}
 
 # 1. Clashes of every changed or new solid against the whole model.
 changed = [
-    *[p for p in frame_parts if p.label.startswith(("CHASSIS_RAIL_", "FRONT_CROSSMEMBER", "REAR_SKID_CROSSMEMBER",
-                                                    "BATTERY_TUB", "AXLE_MOTOR_CARRIER_", "AXLE_BEARING_HOUSING_",
-                                                    "AXLE_MOTOR_SCREW_", "J04_CARRIER_SCREW_"))],
+    *[p for p in frame_parts if p.label.startswith(("BATTERY_TUB", "AXLE_MOTOR_CARRIER_", "AXLE_BEARING_HOUSING_",
+                                                    "AXLE_MOTOR_SCREW_", "J04_CARRIER_SCREW_", "J04_RAIL_INSERT_"))],
     *decks, *hardware, *restraint, *driver_hw, *driver_leaves,
     *[l for s in "LR" for l in leaves(M.wheel_assembly(s)) if "SET_SCREW" in l.label],
 ]
@@ -99,8 +100,8 @@ for part in changed:
 # thread 4 mm into the deck (D-028); the CNC Kitchen inserts' 0.3 mm knurl
 # interference in the crossmembers (D-011, D-014); the motor-face screw threads in
 # the gearbox (measured by check_layout.py motor_face_joint_is_engaged).
-ACCEPTED = {k for k in clashes if ("IMU_M2_SCREW_SHANK" in k and "CHASSIS_DECK_WITH_BODY_INTERFACE" in k)
-            or ("CROSSMEMBER" in k and "HEATSET_INSERT" in k)
+ACCEPTED = {k for k in clashes if ("IMU_M2_SCREW_SHANK" in k and "CHASSIS_FRAME_FRONT_MODULE" in k)
+            or ("CHASSIS_FRAME_" in k and "HEATSET_INSERT" in k)
             or ("AXLE_MOTOR_SCREW_M3X6_" in k and "_GEARBOX" in k)}
 R["clashes"] = {k: v for k, v in clashes.items() if k not in ACCEPTED}
 R["accepted_overlaps"] = {k: clashes[k] for k in ACCEPTED}
@@ -120,15 +121,6 @@ def engagement(screw_label, insert_label, axis):
 
 
 eng = {}
-for j in ("J05", "J06"):
-    length = M.J05_SCREW[0] if j == "J05" else M.J06_SCREW[0]
-    for s in "LR":
-        eng[f"{j}_{s}"] = engagement(f"{j}_SCREW_M3X{int(length)}_{s}", f"{j}_RAIL_INSERT_M3_{s}", "X")
-for k in range(1, len(M.J16_POINTS) + 1):
-    for s in "LR":
-        sc = next(h for h in hardware if h.label == f"J16_SCREW_M3X10_{k}_{s}")
-        ins = next(h for h in hardware if h.label == f"J16_RAIL_INSERT_M3_{k}_{s}")
-        eng[f"J16_{k}_{s}"] = overlap_len((span(sc, "Z")[0], M.DECK_Z + 2.0), span(ins, "Z"))
 for k in range(1, 5):
     sc = next(h for h in hardware if h.label == f"J11A_HATCH_SCREW_M3X6_{k}")
     ins = next(h for h in hardware if h.label == f"J11A_BOSS_INSERT_M3_{k}")
@@ -140,20 +132,12 @@ R["thread_engagement_mm"] = eng
 
 # 3. Inserts can be pressed in: sweep each insert 15 mm out of its pilot along the
 # press direction and intersect with its own host print only.
-rails = {p.label: p for p in frame_parts if p.label.startswith("CHASSIS_RAIL_")}
 press = {}
 for h in hardware + driver_hw:
     if "INSERT" not in h.label:
         continue
     b = h.bounding_box()
-    if h.label.startswith(("J05", "J06")):
-        side, region = h.label[-1], "FRONT" if h.label.startswith("J05") else "REAR"
-        host, d = rails[f"CHASSIS_RAIL_{side}_{region}"], (1.0 if region == "FRONT" else -1.0, 0.0, 0.0)
-    elif h.label.startswith("J16"):
-        side = h.label[-1]
-        region = "FRONT" if b.center().X > 0 else "REAR"
-        host, d = rails[f"CHASSIS_RAIL_{side}_{region}"], (0.0, 0.0, 1.0)
-    elif h.label.startswith("J11A"):
+    if h.label.startswith("J11A"):
         host, d = deck_front, (0.0, 0.0, -1.0)
     else:
         host, d = deck_front, (0.0, 0.0, 1.0)
@@ -163,9 +147,22 @@ for h in hardware + driver_hw:
     press[h.label] = round(_vol(path & host), 3)
 R["insert_press_path_overlap_mm3"] = press
 
-# 4. J05/J06 tongues seat in their pockets (fit allowance, no clash).
-R["tongue_side_clearance_mm"] = round(M.RAIL_POCKET_HALF_Y - M.RAIL_TONGUE_HALF_Y, 3)
-R["tongue_insert_wall_mm"] = round(M.RAIL_TONGUE_HALF_Y - M.FRAME_INSERT_RADIUS, 3)
+# 4. D-033: each frame module is one connected solid (deck, both rails and the
+# crossmember fused, no detached pads), and no J05/J06/J16 hardware remains.
+modules = {}
+for p in (deck_front, deck_rear):
+    solids = p.solids()
+    b = p.bounding_box()
+    modules[p.label] = {"solids": len(solids), "volume_cm3": round(p.volume / 1000.0, 2),
+                        "bbox_mm": [round(b.size.X, 1), round(b.size.Y, 1), round(b.size.Z, 1)]}
+R["frame_modules"] = modules
+R["split_hardware_left"] = sorted(p.label for p in frame_parts if p.label.startswith(("J05_", "J06_", "J16_")))
+R["split_parts_left"] = sorted(p.label for p in frame_parts if p.label.startswith(("CHASSIS_RAIL_", "FRONT_CROSSMEMBER", "REAR_SKID_CROSSMEMBER", "CHASSIS_DECK_WITH_BODY_INTERFACE")))
+# Rear deck to rail: the deck plate itself (not a pad) must stand on both rear rails.
+R["rear_deck_on_rails"] = {}
+for sy in (1.0, -1.0):
+    probe = M._block(-31.5, -28.0, *sorted((sy * 50.5, sy * 55.5)), M.DECK_Z - 4.0, M.DECK_Z + 2.0)
+    R["rear_deck_on_rails"]["L" if sy > 0 else "R"] = round(_vol(probe & deck_rear) / probe.volume, 3)
 
 # 5. Set screw (ISO 4029 M3 x 3 faced to 2.5): the screw itself turned about the axle in 3 deg steps.
 set_screw = {}
@@ -230,8 +227,9 @@ rows = [
     ("thread_engagement_min", all(v >= (3.5 if k.startswith("J15B") else 4.0) for k, v in eng.items()),
      {**eng, "rule": "M3 >= 4.0 mm in the insert; M2.5 >= 3.5 mm"}),
     ("inserts_pressable_from_free_face", all(v < 1e-3 for v in press.values()), press),
-    ("tongue_fit", R["tongue_side_clearance_mm"] >= 0.2 and R["tongue_insert_wall_mm"] >= 1.8,
-     {"side_clearance_mm": R["tongue_side_clearance_mm"], "insert_wall_mm": R["tongue_insert_wall_mm"]}),
+    ("frame_modules_are_single_prints", all(v["solids"] == 1 for v in modules.values()) and not R["split_hardware_left"]
+     and not R["split_parts_left"] and all(v > 0.99 for v in R["rear_deck_on_rails"].values()),
+     {k: R[k] for k in ("frame_modules", "split_hardware_left", "split_parts_left", "rear_deck_on_rails")}),
     ("set_screw_swept_clear", all(v["min_swept_gap_mm"] >= 1.5 and v["on_shaft_flat_mm"] < 1e-6 for v in set_screw.values()), set_screw),
     ("button_heads_seated", all(v["to_carrier_mm"] < 1e-6 and v.get("to_inner_bearing_mm", 1.0) >= 0.4 for v in heads.values()), heads),
     ("drivers_on_posts", all(v < 1e-6 for v in R["driver_pcb_to_deck_mm"].values()), R["driver_pcb_to_deck_mm"]),
@@ -248,3 +246,4 @@ for r in out:
     if not r["pass"]:
         print("   ", json.dumps(r["value"])[:1500])
 print("accepted:", R["accepted_overlaps"])
+os.remove("generated/frame-fastener-checks.partial.json")  # progress copy only; the full result is written above

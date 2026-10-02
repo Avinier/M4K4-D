@@ -55,7 +55,7 @@ def main():
         "battery_size_mm": list(M.BATTERY_SIZE),
         "battery_mount": "chassis tub under the deck, flush with the deck top; removable bottom hatch through a shell-floor opening",
         "ball_mount_mode": M.BALL_MOUNT_MODE,
-        "ball_mount": "vendor flange top face seats on the printed pod at Z 29; three M3 from inside the pod pocket; pod tied to FRONT_CROSSMEMBER by two M3 into heat-set inserts",
+        "ball_mount": "vendor flange top face seats on the printed pod at Z 29; three M3 from inside the pod pocket; pod tied to the front crossmember of CHASSIS_FRAME_FRONT_MODULE by two M3 into heat-set inserts",
         "ball_screw_points_mm": [list(point) for point in M.ball_screw_points()],
         "ball_pod_x_mm": list(M.BALL_POD_X),
         "ball_pod_half_width_mm": M.BALL_POD_HALF_WIDTH,
@@ -108,7 +108,7 @@ def main():
         "rear_keel_color_alpha": [M.REAR_KEEL_COLOR, M.REAR_KEEL_ALPHA],
         "rear_keel_group": "REAR_SKID_TCRT_MODULE/REAR_SKID_TCRT_KEEL",
         "rear_keel_stations_mm": [list(station) for station in M.REAR_KEEL_STATIONS],
-        "rear_keel_mount": "four M3 screws up into REAR_SKID_CROSSMEMBER underside",
+        "rear_keel_mount": "four M3 screws up into the rear crossmember underside of CHASSIS_FRAME_REAR_MODULE",
         "skid_pad_center_mm": list(M.SKID_PAD_CENTER),
     }
     write_json("dimensions.json", dims)
@@ -159,7 +159,7 @@ def main():
         f"- TCRT optical face / sacrificial guard bottom: {M.TCRT_OPTICAL_FACE_Z:.1f} / {M.TCRT_GUARD_BOTTOM_Z:.1f} mm above ground",
         f"- Rear contact lookahead: {M.TCRT_REAR_LOOKAHEAD:.1f} mm",
         f"- Rear keel finish: translucent `{M.REAR_KEEL_COLOR}` alpha {M.REAR_KEEL_ALPHA}",
-        f"- Skid/TCRT keel: under `REAR_SKID_CROSSMEMBER`, X {M.REAR_KEEL_STATIONS[-1][0]:.1f} to {M.REAR_KEEL_STATIONS[0][0]:.1f} mm; skid pad center `{M.SKID_PAD_CENTER}` mm",
+        f"- Skid/TCRT keel: under the rear crossmember (`CHASSIS_FRAME_REAR_MODULE`), X {M.REAR_KEEL_STATIONS[-1][0]:.1f} to {M.REAR_KEEL_STATIONS[0][0]:.1f} mm; skid pad center `{M.SKID_PAD_CENTER}` mm",
         "- Coverage: rear-only CAD-context choice; no front or lateral cliff-safety claim (forward edges are left to camera perception, which is not a low-level stop channel)",
         "",
         "Generated from `body_chassis_model.py`; do not edit manually.",

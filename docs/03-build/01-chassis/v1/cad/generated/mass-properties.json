@@ -1,10 +1,10 @@
 {
   "layout_id": "RP03_BODY_CHASSIS_LAYOUT02",
-  "mass_g": 2590.0794811320766,
+  "mass_g": 2615.0794811320766,
   "com_mm": [
-    19.295621426747694,
-    0.1595337833014032,
-    106.28318541407363
+    19.152952135676212,
+    0.17149389986502106,
+    105.69421186796744
   ],
   "rows": [
     {
@@ -19,13 +19,13 @@
     },
     {
       "id": "BODY_SHELL_AND_PANELS",
-      "mass_g": 290.4,
+      "mass_g": 285.6,
       "com_mm": [
         20.0,
         0.0,
         96.0
       ],
-      "source": "Layout 02 CAD estimate; +15 g for the internal panel frames (+15.6 cm3 net printed volume, near-solid 2.4 mm walls); -27.2 g for the -22.7 cm3 of shell floor opened over the motors, battery hatch and pod tongue (RP03-CAD-05/06) at ~1.2 g/cm3; +2.6 g for the ~0.9 cm2 x 2.4 mm of shell floor returned when the battery opening shrank to the 2S1P pack tub (RP03-CAD-07)"
+      "source": "Layout 02 CAD estimate; +15 g for the internal panel frames (+15.6 cm3 net printed volume, near-solid 2.4 mm walls); -27.2 g for the -22.7 cm3 of shell floor opened over the motors, battery hatch and pod tongue (RP03-CAD-05/06) at ~1.2 g/cm3; +2.6 g for the ~0.9 cm2 x 2.4 mm of shell floor returned when the battery opening shrank to the 2S1P pack tub (RP03-CAD-07); -4.8 g for the measured -4.04 cm3 when the battery opening grew to clear the hatch flange and tub bosses (2026-10-01)"
     },
     {
       "id": "BODY_PRIMARY_FRAME",
@@ -39,13 +39,13 @@
     },
     {
       "id": "CHASSIS_PRIMARY_FRAME",
-      "mass_g": 206.8,
+      "mass_g": 219.1,
       "com_mm": [
-        16.82,
-        0.0,
-        46.61
+        17.71,
+        0.15,
+        46.73
       ],
-      "source": "D-011: -0.3 g for the O5 J10-8 cable bore through the front crossmember and deck at (86, -31); D-010 J04 adds two integrated plate-and-cheek carriers, keyed rail joints, eight modeled M3 x 8 screws and eight 6 mm inserts; estimated +10.2 g total (about +0.7 g printed cheek/key volume and +9.5 g steel/brass hardware, preliminary geometry-density estimate); previous 196.9 g centroid (17.7, 0, 46.8). D-007 axle stack (2026-09-29), +20.9 g at the axle (X 0, Z 42): printed plate + housing replace the flange/boss/diaphragm, +7.24 cm3 measured at ~0.571 g/cm3 (+4.1 g); two 1.2 mm aluminium caps 1.52 cm3 (+4.1 g); eight M3 x 18 cap screws (+10.6 g); eight M3 brass inserts (+1.5 g); face screws M3 x 8 CSK -> M3 x 6 low head (+0.6 g); before that 176.0 g at (19.8, 0, 47.4): +2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"
+      "source": "D-033 (2026-10-02): -10.7 g for the ten J05/J06/J16 M3 screws and -3.8 g for their ten M3 x 6 inserts, measured from the solids at 7.9/8.5 g/cm3 (centroids (22.2, 0, 47.1) and (25.6, 0, 45.8)); +3.7 g for the measured +6.52 cm3 printed volume at 0.571 g/cm3 when the deck, rails and crossmember of each end became one module (crossmember fills to the deck underside, filled tongue pockets and screw/insert bores, no J16 ears); was 229.9 g at (18.32, 0.14, 46.71). D-032 (2026-10-02): +0.8 g for the main-fuse bracket on the front deck (column 0.72 + shelf 0.60 cm3 at 0.571 g/cm3, centroid (73.0, 44.0, 67.4)); D-030 (2026-10-01): +21.4 g of newly modeled hardware measured from the solids at 7.9/8.5 g/cm3, centroid (30.4, 0, 46.4): J05/J06/J16/J11A ISO 7380 screws and 14 M3 x 6 inserts, four M2.5 driver screws and inserts; +0.7 g for the measured +1.24 cm3 printed volume at 0.571 g/cm3 (driver posts and tie lugs, wider tongues and rear rail ends, moved J16 ears, hatch strap slots, wider J04 recesses; measured with the since-reverted set-screw recess/cavity growth, under 0.1 g), centroid about (35, 0, 64); was 207.0 g at (16.82, 0, 46.61). 2026-10-01: +0.2 g for the measured +0.29 cm3 when the front hatch bosses moved to the front wall, the bosses were cut to Z 39.5 and the hatch grew 4 mm forward; D-011: -0.3 g for the O5 J10-8 cable bore through the front crossmember and deck at (86, -31); D-010 J04 adds two integrated plate-and-cheek carriers, keyed rail joints, eight modeled M3 x 8 screws and eight 6 mm inserts; estimated +10.2 g total (about +0.7 g printed cheek/key volume and +9.5 g steel/brass hardware, preliminary geometry-density estimate); previous 196.9 g centroid (17.7, 0, 46.8). D-007 axle stack (2026-09-29), +20.9 g at the axle (X 0, Z 42): printed plate + housing replace the flange/boss/diaphragm, +7.24 cm3 measured at ~0.571 g/cm3 (+4.1 g); two 1.2 mm aluminium caps 1.52 cm3 (+4.1 g); eight M3 x 18 cap screws (+10.6 g); eight M3 brass inserts (+1.5 g); face screws M3 x 8 CSK -> M3 x 6 low head (+0.6 g); before that 176.0 g at (19.8, 0, 47.4): +2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"
     },
     {
       "id": "WHEEL_L",
@@ -55,7 +55,7 @@
         85.0,
         42.0
       ],
-      "source": "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"
+      "source": "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, one central M3 x 10 cap screw (D-033; six M2 x 6 before, same 92.5 g) (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"
     },
     {
       "id": "WHEEL_R",
@@ -65,17 +65,17 @@
         -85.0,
         42.0
       ],
-      "source": "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"
+      "source": "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, one central M3 x 10 cap screw (D-033; six M2 x 6 before, same 92.5 g) (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"
     },
     {
       "id": "AXLE_BEARINGS_AND_STUB_SHAFTS",
-      "mass_g": 44.0,
+      "mass_g": 50.4,
       "com_mm": [
         0.0,
         0.0,
         42.0
       ],
-      "source": "D-007 (2026-09-29): two turned EN8 stubs with flange and spigot, 1.969 cm3 each measured = 30.9 g; four MR148ZZ at ~2.2 g (E, weigh on receipt) = 8.8 g; six M3 x 6 button wheel screws 4.0 g; two M3 x 2.5 set screws 0.3 g. Before that 64.4 g: E: four 608ZZ at ~12 g (not in the register before 2026-09-24) + two 8 mm steel stub shafts at ~8.2 g (23 mm long since 2026-09-26, was 24.5); symmetric about the centre plane"
+      "source": "D-033: -1.0 g for the M3 tapped hole in each stub's spigot end (hub-cap screw, 0.064 cm3 each at 7.85 g/cm3). D-012 estimate: two turned EN8 stubs with flange and spigot 30.9 g (29.9 g after D-033); four 688 ZZ bearings estimated at 4.05 g each = 16.2 g (weigh on receipt); six M3 x 6 button wheel screws 4.0 g; two M3 set screws, ISO 4029 M3 x 3 faced to 2.5 (D-030), 0.3 g. Symmetric about the centre plane; all masses estimated except measured stub geometry"
     },
     {
       "id": "MOTOR_L",
@@ -109,7 +109,7 @@
     },
     {
       "id": "BALLAST_STEEL_BAR",
-      "mass_g": 81.6,
+      "mass_g": 81.1,
       "com_mm": [
         74.0,
         0.0,
@@ -121,7 +121,7 @@
       "id": "BATTERY",
       "mass_g": 108.2,
       "com_mm": [
-        46.7,
+        46.25,
         0.0,
         43.099999999999994
       ],
@@ -151,9 +151,9 @@
       "id": "PACK_INTERFACE_MICROFIT_PLUS_AND_FUSE",
       "mass_g": 11.0,
       "com_mm": [
-        56.18181818181818,
-        43.68636363636364,
-        41.27272727272727
+        59.09090909090909,
+        43.904545454545456,
+        74.81818181818181
       ],
       "source": "E: Micro-Fit+ 1x2 wire-to-wire pair with terminals ~3 g + ATOF 15 A holder and fuse ~6 g + ~2 g; was 14 g with an unplaced SBS Mini (CN-05)"
     },
@@ -218,14 +218,24 @@
       "source": "E: strip-and-wide board ~3 g + 2 x 20 socket ~2 g + 2 x THVD1451 and three GH headers ~2 g"
     },
     {
-      "id": "DRV8874_CARRIERS_X2",
+      "id": "BATTERY_RESTRAINT",
+      "mass_g": 3.4,
+      "com_mm": [
+        46.36,
+        0.0,
+        40.63
+      ],
+      "source": "D-030 J11B, measured from the solids: two 10 x 1.2 mm hook-and-loop strap loops at ~1.1 g/cm3 (3.3 g) and two 1.5 mm closed-cell foam pads at ~0.1 g/cm3 (0.05 g); estimate, not weighed"
+    },
+    {
+      "id": "ADAFRUIT_DRV8833_CARRIERS_X2",
       "mass_g": 6.0,
       "com_mm": [
-        46.0,
+        47.4,
         0.0,
-        67.4
+        68.5
       ],
-      "source": "E: 2 x Pololu 4035 at ~3 g (weight not read); symmetric about the centre plane"
+      "source": "E: 2 x Adafruit #3297 boards, 25.4 x 17.8 mm board-file outline with the 3.5 mm terminal block fitted (10.1 mm tall), 3 g each; mass unmeasured"
     },
     {
       "id": "IMU_PCB07",
@@ -245,7 +255,7 @@
         0.0,
         13.5
       ],
-      "source": "E: breakout, comparator and cable in the rear keel cartridge; was inside the old CONTROL_POWER_SENSORS row at the body centre"
+      "source": "E: TCRT5000 with a soldered 350 mm 4-core J10-10 GH lead (CH-020) and heat-shrink (D-016) (most of it rises to the C3 carrier; lumped at the sensor); was inside the old CONTROL_POWER_SENSORS row at the body centre"
     },
     {
       "id": "ESTOP_XA1E_BV3U02KT_R",
@@ -259,13 +269,13 @@
     },
     {
       "id": "BALL_NOSE_POD_SENSOR_CAP",
-      "mass_g": 18.7,
+      "mass_g": 18.9,
       "com_mm": [
         111.4,
         0.0,
         37.9
       ],
-      "source": "D-011 (2026-09-29), measured from the solids: pod 12.44 cm3 (6 mm seat, constant nose, neck), lid 2.45 cm3 and snap-finger cap 2.03 cm3 at ~45% effective PETG density (0.571 g/cm3) = 9.7 g; five ISO 7380 M3 x 8 (3 caster from below, 2 pod-to-crossmember) 3.2 g, five CNC Kitchen M3 x 5.7 inserts ~1.7 g E, M2 x 8 lid screw 0.2 g; ESE22MV21 switch and carrier ~0.4 g E; GP2Y0A41SK0F 3.5 g E. Was 15.9 g at (110.5, 0, 41.2)"
+      "source": "D-027: +0.2 g for the lid lead hump, raised nose top and wider front pocket (pod 12.45, lid 2.62, cap 2.12 cm3 measured, was 12.44/2.45/2.03, at ~0.571 g/cm3); earlier estimate predates the selected A21 sensor (3.6 g datasheet, ears trimmed), custom Hall carrier and O3 x 1.5 magnet; weigh received parts"
     },
     {
       "id": "BODY_AUDIO",
@@ -299,13 +309,13 @@
     },
     {
       "id": "REAR_SKID_KEEL",
-      "mass_g": 12.0,
+      "mass_g": 20.0,
       "com_mm": [
-        -39.9,
+        -40.5,
         0.0,
-        20.4
+        22.7
       ],
-      "source": "CAD volume: 15.4 cm3 keel body at ~45% effective PETG density, 12x10 mm shoe, guards, 4 M3 screws"
+      "source": "J09/J10 rework 2026-09-30 (D-014, D-016), measured from the solids: keel body 14.64 cm3 at ~0.571 g/cm3 = 8.4 g at (-39.7, 0, 20.4) (D-016 closed the board cavity back to the sensor pocket); shoe 0.40, bezel with guard lips 0.30 and two 1 mm shims 0.24 cm3 printed solid at ~1.27 g/cm3 = 1.2 g; four ISO 4762 M3 x 30 ~8.4 g; four CNC Kitchen M3 x 5.7 crossmember inserts ~1.4 g; M2 x 10 and M2 x 6 screws ~0.6 g (the M2 x 5 board screw was dropped by D-015). Was 12.0 g at (-39.9, 0, 20.4); rear-crossmember cable bore closed and tie lug added (<0.1 g, left in the frame row)"
     }
   ],
   "warning": "Estimated/custom masses require measured replacement before release."

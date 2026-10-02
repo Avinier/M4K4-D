@@ -19,7 +19,7 @@ Wheel CAD for joint **J14** and BOM rows CH-004/005/058/059, per [D-005](../../.
   - a 26 mm hex over a Ø10 bore on the stub spigot;
   - three Ø3.4 holes at PCD 16 for the M3 × 6 button heads (CH-056) into the stub flange;
   - a 1.3 mm wall between the bore and each screw hole.
-- **Hub cap (CH-058):** a dark hex cap, 26 mm across flats, standing 3 mm proud, with a faceted 16 mm boss. A 1.9 mm-deep recess underneath covers the three wheel screws. It is held by 6 × M2 × 6 thread-forming screws (CH-059) with 3 mm engagement. **Wheel removal:** cap off, three M3 screws out, pull the wheel off the spigot.
+- **Hub cap (CH-058):** a dark hex cap, 26 mm across flats, standing 3 mm proud, with a faceted 16 mm boss. A 1.9 mm-deep recess underneath covers the three wheel screws. Since [D-033](../../../../decisions.md#d-033) it is held by **one central ISO 7380 M3 × 10 (CH-059)** in a tapped hole in the steel stub's spigot end, 6.9 mm of thread. The head sits in a Ø6.2 counterbore 0.25 mm under the boss top, on a Ø9 column that stops 0.65 mm inside the wheel-screw heads and 0.6 mm above the spigot tip. Two Ø1.8 × 1.5 mm pegs at R12.2 drop into Ø2.1 holes in the hub hex and clock the cap. This replaces the six M2 × 6 thread-forming screws. **Wheel removal:** cap off (one screw), three M3 screws out, pull the wheel off the spigot.
 - **Clamp ring:** 12 sides, alternating six M3 screw flats with six recessed vent slots (9 × 2.7 × 1.2 mm). The corners are chamfered and the flats are not.
 - **Two-tone:** rim and clamp ring in light PETG, hub cap in dark PETG.
 
@@ -32,7 +32,7 @@ Wheel CAD for joint **J14** and BOM rows CH-004/005/058/059, per [D-005](../../.
   - The tyre is 19 mm wide and clamped between a 2 mm integral inboard lip and a 3 mm outboard ring. Both overlap its side by 2 mm.
   - 6 × ISO 7380 M3 × 8 screws go into M3 heat-set inserts (Ø4 hole, 4 mm long, 6 mm deep) on a Ø68 bolt circle, between the spokes.
 - **Service:** remove six screws and the tyre slides off. The wheel stays on the stub.
-- **Width:** the hub cap and its screw heads stand 4.3 mm proud (the ring screws 1.65 mm), so the robot is 202.6 mm wide, within the 205 mm target.
+- **Width:** the hub cap stands 4.0 mm proud and its recessed screw adds nothing (the ring screws stand 1.65 mm), so the robot is 202.0 mm wide, within the 205 mm target.
 
 **Print notes (not modelled):**
 
@@ -40,28 +40,28 @@ Wheel CAD for joint **J14** and BOM rows CH-004/005/058/059, per [D-005](../../.
 - **Rim:** print outer face down. The spoke chamfers and ring bevel then print as 45° walls, and the spoke slots as floors.
 - **Clamp ring:** print flat, face up.
 - **Hub cap:** print face down, so the recess prints as an open pocket.
-- **M2 pilots:** Ø1.6, 3.3 mm deep, leaving 0.7 mm to the pocket. Tune to the screw on a coupon.
+- **Cap pegs and hub holes:** Ø1.8 pegs in Ø2.1 × 1.8 mm holes (0.15 mm radial). Tune the hole on a coupon so the cap drops on without play.
 
 **Fallback (not modelled):** if the lab can't print TPU 95A, use three 70 × 5 mm NBR 70A O-rings in grooves on a one-piece rim. The design is recorded in [D-005](../../../../decisions.md#d-005).
 
 ## Checks
 
-`check_wheel.py` measures the built solids and writes [generated/checks.md](generated/checks.md). **24/24 pass (2026-09-29):**
+`check_wheel.py` measures the built solids and writes [generated/checks.md](generated/checks.md). **25/25 pass (2026-10-02, D-033):**
 
 - both mounted tyres lead forward (the right is the left mirrored)
 
-- OD 84.0; rim, tyre and ring stay within 24 mm, and only the cap and heads are proud (4.3 mm)
+- OD 84.0; rim, tyre and ring stay within 24 mm, and only the cap is proud (4.0 mm)
 - the clamp ring reaches only R39.0, below the tread
 - **D-007 interface:** the pocket is clear to |Y| 93, the stub flange turns free, and the spigot bore is open
   - the wall from bore to screw hole is 1.3 mm
   - the wheel screws seat on the web and end at the flange face
-- **cap:** covers the bore and screws, M2 engagement 3.0 mm, heads 100% seated, 0.6 mm wall to the recess
+- **cap (D-033):** covers the bore and screws; the central M3 × 10 has 6.9 mm of thread in the stub (8 mm tapped), its head is fully seated and 0.25 mm under the boss top; the column clears the wheel-screw heads by 0.65 mm and the spigot by 0.6 mm; both pegs sit in their hub holes with a 1.38 mm wall to the hex
 - the spokes are solid, with ≥ 2 mm under the slot inside the pocket
 - no part overlaps
 - the tyre is trapped on both sides and keyed against rotation, and the contact line is always on a chevron
 - the insert-hole wall is ≥ 1.0 mm
 
-**Mass at solid density:** 94.6 g per wheel. That is 92.5 g without the D-007 wheel screws, which are counted with the axle; the chassis register now carries 92.5 g (was 87.3).
+**Mass at solid density:** 94.5 g per wheel (D-033). That is 92.5 g without the D-007 wheel screws, which are counted with the axle; the chassis register carries 92.5 g.
 
 ## Open (physical, not closable in CAD)
 

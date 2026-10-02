@@ -75,7 +75,9 @@ def check_wheel():
 
     # D-007 interface: bearing-housing pocket, turning stub flange, spigot bore, wheel screws.
     keepout = W._ycyl(W.BOSS_POCKET_RADIUS, W.Y_IN - 1.0, W.BOSS_POCKET_FLOOR_Y)
-    intrusion = sum(overlap(p, keepout) for label, p in parts.items() if "WHEEL_SCREW_M3X6" not in label)
+    # The wheel screws and (D-033) the central cap screw run on into the steel stub,
+    # which fills this pocket on the axle line; the keep-out is for the bearing housing.
+    intrusion = sum(overlap(p, keepout) for label, p in parts.items() if "WHEEL_SCREW_M3X6" not in label and "CAP_SCREW" not in label)
     add("pocket_R18_clear_to_y8", intrusion < TOL, {"overlap_mm3": round(intrusion, 4), "floor_abs_y": 85 + W.BOSS_POCKET_FLOOR_Y})
     flange = W._ycyl(W.STUB_FLANGE["radius"] + 0.5, W.STUB_FLANGE["y"][0], W.STUB_FLANGE["y"][1] - 0.01)
     add("stub_flange_turns_free_in_pocket", overlap(rim, flange) < TOL, {"overlap_mm3": round(overlap(rim, flange), 4)})
@@ -91,8 +93,11 @@ def check_wheel():
         tips.append(parts[f"WHEEL_SCREW_M3X6_{n}"].bounding_box().min.Y)
     add("wheel_screws_seat_on_web_and_end_at_flange_face", min(heads) > 0.99 and max(abs(t - W.STUB_FLANGE["y"][0]) for t in tips) < 1e-6,
         {"seat_fill": round(min(heads), 3), "tip_y": round(max(tips), 3), "flange_inner_face_y": W.STUB_FLANGE["y"][0]})
-    lid = W._ycyl(W.HUB_BORE_RADIUS, W.CAP_RECESS["y"][1], W.CAP_Y[1])
-    add("hub_cap_covers_bore_and_screws", overlap(cap, lid) > 0.99 * lid.volume, {"cover": round(overlap(cap, lid) / lid.volume, 3), "recess_to_y": W.CAP_RECESS["y"][1]})
+    # D-033: the cap is solid from its screw hole out to the recess edge over the
+    # bore and wheel screws, and the central head (wider than the hole) closes the rest.
+    lid = W._ring(W.CAP_SCREW["clear_radius"], W.CAP_RECESS["radius"], W.CAP_RECESS["y"][1], W.CAP_SCREW_SEAT_Y)
+    add("hub_cap_covers_bore_and_screws", overlap(cap, lid) > 0.99 * lid.volume and W.CAP_SCREW["head_radius"] > W.CAP_SCREW["clear_radius"],
+        {"cover": round(overlap(cap, lid) / lid.volume, 3), "recess_to_y": W.CAP_RECESS["y"][1], "head_r_mm": W.CAP_SCREW["head_radius"], "hole_r_mm": W.CAP_SCREW["clear_radius"]})
 
     # Spokes carry the load: a band under each spoke slot is solid full width.
     fills = []
@@ -103,20 +108,34 @@ def check_wheel():
     under_slot = floor_top - W.HUB_Y[0]
     add("spokes_solid_under_slot_ge_2mm", min(fills) > 0.99 and under_slot >= 2.0 - 1e-6, {"min_fill": round(min(fills), 3), "floor_under_slot_in_pocket_mm": round(under_slot, 2), "spoke_depth_mm": {"in_pocket": W.HUB_Y[1] - W.HUB_Y[0], "outside": W.Y_OUT - W.FACE_Y[0]}})
 
-    s2 = parts["WHEEL_CAP_SCREW_M2X6_1"]
-    tip = s2.bounding_box().min.Y
-    engagement = W.Y_OUT - tip
-    add("cap_screw_engagement_ge_3mm", engagement >= 3.0 and tip >= W.CAP_PILOT_Y[0] - 1e-6, {"engagement_mm": round(engagement, 2), "tip_y": round(tip, 2), "pilot_bottom_y": W.CAP_PILOT_Y[0]})
-    # Bearing ring under each head on the cap top, and clearance to the raised boss.
-    fills = []
-    for angle in W._screw_angles():
-        seat = W._at_pcd(W._ring(W.CAP_SCREW["clear_radius"], W.CAP_SCREW["head_radius"], W.CAP_Y[1] - 0.5, W.CAP_Y[1]), W.CAP_SCREW_R, angle)
-        fills.append(overlap(cap, seat) / seat.volume)
-    boss = cap - W._ycyl(40.0, W.CAP_Y[0] - 1.0, W.CAP_Y[1])
-    boss_gap = min(parts[f"WHEEL_CAP_SCREW_M2X6_{n}"].distance_to(boss) for n in range(1, 7))
-    add("cap_screw_head_seated", min(fills) > 0.99 and boss_gap > 0.2, {"seat_fill": round(min(fills), 3), "head_to_boss_mm": round(boss_gap, 3)})
-    recess_wall = min(W._at_pcd(W._ycyl(W.CAP_SCREW["clear_radius"], *W.CAP_Y), W.CAP_SCREW_R, a).distance_to(W._ycyl(W.CAP_RECESS["radius"], *W.CAP_RECESS["y"])) for a in W._screw_angles())
-    add("cap_wall_between_screw_and_recess_ge_0p5mm", recess_wall >= 0.5, {"wall_mm": round(recess_wall, 3)})
+    # D-033 central cap screw: ISO 7380 M3 x 10 into the stub's tapped spigot end (y 11).
+    cs = parts["WHEEL_CAP_SCREW_M3X10"]
+    tip = cs.bounding_box().min.Y
+    spigot_tip = W.STUB_SPIGOT_Y[1]
+    engagement = spigot_tip - tip
+    add("cap_screw_engagement_in_stub_ge_6mm", engagement >= 6.0 and tip >= spigot_tip - W.STUB_CAP_TAP["thread"] - 1e-6,
+        {"engagement_mm": round(engagement, 2), "tip_y": round(tip, 2), "thread_bottom_y": spigot_tip - W.STUB_CAP_TAP["thread"]})
+    seat = W._ring(W.CAP_SCREW["clear_radius"], W.CAP_SCREW["head_radius"], W.CAP_SCREW_SEAT_Y - 0.5, W.CAP_SCREW_SEAT_Y)
+    head_top = cs.bounding_box().max.Y
+    add("cap_screw_head_seated_and_recessed", overlap(cap, seat) > 0.99 * seat.volume and head_top <= W.CAP_BOSS_Y[1] - 0.2,
+        {"seat_fill": round(overlap(cap, seat) / seat.volume, 3), "head_below_boss_top_mm": round(W.CAP_BOSS_Y[1] - head_top, 3)})
+    column = cap & W._ycyl(W.CAP_COLUMN["radius"] + 0.01, W.CAP_COLUMN["y0"] - 0.1, W.CAP_RECESS["y"][1])
+    head_gap = min(column.distance_to(parts[f"WHEEL_SCREW_M3X6_{n}"]) for n in (1, 2, 3))
+    spigot_gap = round(column.bounding_box().min.Y - spigot_tip, 3)
+    add("cap_column_clears_wheel_screws_and_spigot", head_gap >= 0.5 and spigot_gap >= 0.5,
+        {"to_wheel_screw_heads_mm": round(head_gap, 3), "above_spigot_tip_mm": spigot_gap,
+         "under_head_column_mm": round(W.CAP_SCREW_SEAT_Y - W.CAP_COLUMN["y0"], 2)})
+    # Clocking pegs sit in their hub holes with clearance, not bottomed, and the holes keep a wall to the hub hex.
+    outside_hex = W._ycyl(20.0, W.HUB_Y[0], W.Y_OUT) - W._yprism(6, W.HUB_AF / 2.0, W.HUB_Y[0] - 1.0, W.Y_OUT + 1.0)
+    pegs, walls = [], []
+    for angle in W.CAP_PEG["angles"]:
+        hole = W._at_pcd(W._ycyl(W.CAP_PEG["hole_radius"], W.Y_OUT - W.CAP_PEG["hole_depth"], W.Y_OUT), W.CAP_PEG["r"], angle)
+        peg = cap & W._at_pcd(W._ycyl(W.CAP_PEG["radius"] + 0.01, W.Y_OUT - W.CAP_PEG["length"] - 0.1, W.Y_OUT), W.CAP_PEG["r"], angle)
+        pegs.append(round(vol(peg), 3))
+        walls.append(hole.distance_to(outside_hex))
+    add("cap_pegs_clock_cap_in_hub_holes", all(v > 1.0 for v in pegs) and min(walls) >= 0.8
+        and W.CAP_PEG["hole_radius"] > W.CAP_PEG["radius"] and W.CAP_PEG["hole_depth"] > W.CAP_PEG["length"],
+        {"peg_volume_mm3": pegs, "hole_wall_to_hex_mm": round(min(walls), 3), "radial_clearance_mm": round(W.CAP_PEG["hole_radius"] - W.CAP_PEG["radius"], 3)})
 
     worst = 0.0
     pairs = []

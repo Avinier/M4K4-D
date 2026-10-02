@@ -48,7 +48,7 @@ def clash_map(parts, others, skip=()):
 
 
 frame_parts = leaves(M.chassis_frame())
-deck_front = [p for p in frame_parts if p.label == "CHASSIS_DECK_WITH_BODY_INTERFACE"][1]  # FRONT print, carries the tub walls
+deck_front = by_label(frame_parts, "CHASSIS_FRAME_FRONT_MODULE")  # D-033: front deck, tub walls, rails and crossmember in one print
 hatch = by_label(frame_parts, "BATTERY_TUB_BOTTOM_HATCH")
 ballast = [p for p in frame_parts if p.label.startswith("BALLAST_")]
 bar = by_label(ballast, "BALLAST_STEEL_BAR")
@@ -89,7 +89,7 @@ R["tub_margin_mm"] = {
 # (front bosses moved to the front wall, pair and window lifted over the rear boss).
 ACCEPTED = {
     # Two M2 shanks (r 1.0) thread-form 4 mm into the deck: 2 * pi * 1^2 * 4.
-    "CHASSIS_DECK_WITH_BODY_INTERFACE x IMU_PCB07": (8.0 * math.pi, "IMU M2 screws thread-form 4 mm into the deck by design"),
+    "CHASSIS_FRAME_FRONT_MODULE x IMU_PCB07": (8.0 * math.pi, "IMU M2 screws thread-form 4 mm into the deck by design"),
 }
 OPEN = {}
 non_frame = [o for o in others if o not in frame_parts]

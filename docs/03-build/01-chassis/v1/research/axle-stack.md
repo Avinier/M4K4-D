@@ -139,7 +139,7 @@ face |            | stub ━━━━━━━┿━━━━━━━━━━�
 
 ### Selected CAD architecture
 
-Each motor side has one replaceable printed carrier combining the 5 mm motor plate with its front and rear cheeks. The bearing housing and 1.2 mm cap remain separate service parts. The carrier's cheeks seat against the two split rails at X = +17 and −17 mm. This keeps the left and right wheel axes independent; no shaft spans the chassis centreline. The front/rear crossmembers and deck continue to tie the rail pairs together.
+Each motor side has one replaceable printed carrier combining the 5 mm motor plate with its front and rear cheeks. The bearing housing and 1.2 mm cap remain separate service parts. The carrier's cheeks seat against the rail ends of the front and rear frame modules at X = +17 and −17 mm ([D-033](../../../decisions.md#d-033)). This keeps the left and right wheel axes independent; no shaft spans the chassis centreline. Within each module, the deck and crossmember are printed with the rails and tie each rail pair together.
 
 Each rail end has a 2.0 × 3.0 × 2.5 mm locating key and matching 2.4 × 3.4 × 3.2 mm pocket (0.2 mm nominal side clearance, 0.7 mm end clearance). Two axial M3 insert pilots sit at Z = 38 and 48 mm on each interface: Y = ±54 mm at the front and ±58.5 mm at the rear. DIN 7984 M3 × 8 low-head screws enter from the open motor bay through 1.7 mm-radius cheek clearance holes and 2.9 mm-radius × 2.1 mm-deep head recesses into 6 mm rail inserts. There are four screws and four inserts per carrier, eight of each for the chassis. The rail bores include a 1 mm screw-tip relief beyond the insert.
 

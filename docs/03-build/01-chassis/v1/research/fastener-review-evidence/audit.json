@@ -1,0 +1,4147 @@
+{
+  "review_date": "2026-10-02",
+  "methods": "Inspection only. Source geometry built in memory; existing STEP inspected/rendered. No production CAD regenerated. Motor paths sampled at 48 positions per side per route; lid forward positions sampled every 0.2 mm. No physical or structural testing.",
+  "measurements": {
+    "source_geometry": {
+      "basis": "current source, inspection only",
+      "source_sha256": "7c1c56738f00c2d911565f4e20fba871a046f34dbaac2ac426b2f1c86eb7a248",
+      "wheel_sha256": "124d283077557ac1f1a0b9341835dda3430e52991bac07ad877899b6217183b7",
+      "structure": [
+        {
+          "label": "DECK_REAR",
+          "min": [
+            -41.0,
+            -65.0,
+            52.0
+          ],
+          "max": [
+            -17.0,
+            65.0,
+            56.0
+          ],
+          "size": [
+            24.0,
+            130.0,
+            4.0
+          ],
+          "solids": 3,
+          "volume_mm3": 11011.3217,
+          "valid": true
+        },
+        {
+          "label": "DECK_FRONT",
+          "min": [
+            17.0,
+            -58.0,
+            32.0
+          ],
+          "max": [
+            92.0,
+            58.0,
+            73.0
+          ],
+          "size": [
+            75.0,
+            116.0,
+            41.0
+          ],
+          "solids": 1,
+          "volume_mm3": 32865.6514,
+          "valid": true
+        },
+        {
+          "label": "CHASSIS_RAIL_L_REAR",
+          "min": [
+            -35.0,
+            50.0,
+            35.0
+          ],
+          "max": [
+            -17.0,
+            66.0,
+            52.0
+          ],
+          "size": [
+            18.0,
+            16.0,
+            17.0
+          ],
+          "solids": 1,
+          "volume_mm3": 3282.4571,
+          "valid": true
+        },
+        {
+          "label": "CHASSIS_RAIL_R_REAR",
+          "min": [
+            -35.0,
+            -66.0,
+            35.0
+          ],
+          "max": [
+            -17.0,
+            -50.0,
+            52.0
+          ],
+          "size": [
+            18.0,
+            16.0,
+            17.0
+          ],
+          "solids": 1,
+          "volume_mm3": 3282.4571,
+          "valid": true
+        },
+        {
+          "label": "CHASSIS_RAIL_L_FRONT",
+          "min": [
+            17.0,
+            50.0,
+            35.0
+          ],
+          "max": [
+            83.0,
+            64.0,
+            52.0
+          ],
+          "size": [
+            66.0,
+            14.0,
+            17.0
+          ],
+          "solids": 1,
+          "volume_mm3": 9141.4865,
+          "valid": true
+        },
+        {
+          "label": "CHASSIS_RAIL_R_FRONT",
+          "min": [
+            17.0,
+            -64.0,
+            35.0
+          ],
+          "max": [
+            83.0,
+            -50.0,
+            52.0
+          ],
+          "size": [
+            66.0,
+            14.0,
+            17.0
+          ],
+          "solids": 1,
+          "volume_mm3": 9141.4865,
+          "valid": true
+        },
+        {
+          "label": "AXLE_MOTOR_CARRIER_L",
+          "min": [
+            -19.5,
+            50.0,
+            25.5
+          ],
+          "max": [
+            19.5,
+            74.0,
+            58.5
+          ],
+          "size": [
+            39.0,
+            24.0,
+            33.0
+          ],
+          "solids": 1,
+          "volume_mm3": 6025.6377,
+          "valid": true
+        },
+        {
+          "label": "AXLE_MOTOR_CARRIER_R",
+          "min": [
+            -19.5,
+            -74.0,
+            25.5
+          ],
+          "max": [
+            19.5,
+            -50.0,
+            58.5
+          ],
+          "size": [
+            39.0,
+            24.0,
+            33.0
+          ],
+          "solids": 1,
+          "volume_mm3": 6025.6377,
+          "valid": true
+        },
+        {
+          "label": "FRONT_CROSSMEMBER",
+          "min": [
+            80.0,
+            -62.0,
+            35.0
+          ],
+          "max": [
+            92.0,
+            62.0,
+            51.0
+          ],
+          "size": [
+            12.0,
+            124.0,
+            16.0
+          ],
+          "solids": 1,
+          "volume_mm3": 22599.0136,
+          "valid": true
+        },
+        {
+          "label": "REAR_SKID_CROSSMEMBER",
+          "min": [
+            -51.0,
+            -66.0,
+            34.0
+          ],
+          "max": [
+            -32.0,
+            66.0,
+            48.0
+          ],
+          "size": [
+            19.0,
+            132.0,
+            14.0
+          ],
+          "solids": 1,
+          "volume_mm3": 28362.8243,
+          "valid": true
+        }
+      ],
+      "structural_contacts": [
+        {
+          "a": "DECK_FRONT",
+          "b": "FRONT_CROSSMEMBER",
+          "distance_mm": 1.0,
+          "overlap_mm3": 0
+        },
+        {
+          "a": "DECK_REAR",
+          "b": "REAR_SKID_CROSSMEMBER",
+          "distance_mm": 4.0,
+          "overlap_mm3": 0
+        },
+        {
+          "a": "DECK_REAR",
+          "b": "CHASSIS_RAIL_L_REAR",
+          "distance_mm": 0.0,
+          "overlap_mm3": 0
+        },
+        {
+          "a": "DECK_REAR",
+          "b": "CHASSIS_RAIL_R_REAR",
+          "distance_mm": 0.0,
+          "overlap_mm3": 0
+        },
+        {
+          "a": "DECK_FRONT",
+          "b": "CHASSIS_RAIL_L_FRONT",
+          "distance_mm": 0.0,
+          "overlap_mm3": 0
+        },
+        {
+          "a": "DECK_FRONT",
+          "b": "CHASSIS_RAIL_R_FRONT",
+          "distance_mm": 0.0,
+          "overlap_mm3": 0
+        },
+        {
+          "a": "AXLE_MOTOR_CARRIER_L",
+          "b": "CHASSIS_RAIL_L_FRONT",
+          "distance_mm": 0.0,
+          "overlap_mm3": 0
+        },
+        {
+          "a": "AXLE_MOTOR_CARRIER_L",
+          "b": "CHASSIS_RAIL_L_REAR",
+          "distance_mm": 0.0,
+          "overlap_mm3": 0
+        },
+        {
+          "a": "AXLE_MOTOR_CARRIER_R",
+          "b": "CHASSIS_RAIL_R_FRONT",
+          "distance_mm": 0.0,
+          "overlap_mm3": 0
+        },
+        {
+          "a": "AXLE_MOTOR_CARRIER_R",
+          "b": "CHASSIS_RAIL_R_REAR",
+          "distance_mm": 0.0,
+          "overlap_mm3": 0
+        }
+      ],
+      "module_envelopes": {
+        "FRONT": {
+          "label": "FRONT_MODULE_ENVELOPE",
+          "min": [
+            17.0,
+            -64.0,
+            32.0
+          ],
+          "max": [
+            92.0,
+            64.0,
+            73.0
+          ],
+          "size": [
+            75.0,
+            128.0,
+            41.0
+          ],
+          "solids": 4,
+          "volume_mm3": 73747.638,
+          "valid": true
+        },
+        "REAR": {
+          "label": "REAR_MODULE_ENVELOPE",
+          "min": [
+            -51.0,
+            -66.0,
+            34.0
+          ],
+          "max": [
+            -17.0,
+            66.0,
+            56.0
+          ],
+          "size": [
+            34.0,
+            132.0,
+            22.0
+          ],
+          "solids": 6,
+          "volume_mm3": 45939.0602,
+          "valid": true
+        }
+      },
+      "frame_envelope": {
+        "label": "",
+        "min": [
+          -51.0,
+          -74.0,
+          25.5
+        ],
+        "max": [
+          92.0,
+          74.0,
+          73.0
+        ],
+        "size": [
+          143.0,
+          148.0,
+          47.5
+        ],
+        "solids": 12,
+        "volume_mm3": 131737.9736,
+        "valid": true
+      },
+      "hardware_leaves": [
+        {
+          "label": "REAR_KEEL_HEATSET_INSERT_1",
+          "min": [
+            -38.8,
+            3.2,
+            34.0
+          ],
+          "max": [
+            -34.2,
+            7.8,
+            39.7
+          ],
+          "size": [
+            4.6,
+            4.6,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 66.7486,
+          "valid": true
+        },
+        {
+          "label": "REAR_KEEL_HEATSET_INSERT_2",
+          "min": [
+            -38.8,
+            -7.8,
+            34.0
+          ],
+          "max": [
+            -34.2,
+            -3.2,
+            39.7
+          ],
+          "size": [
+            4.6,
+            4.6,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 66.7486,
+          "valid": true
+        },
+        {
+          "label": "REAR_KEEL_HEATSET_INSERT_3",
+          "min": [
+            -46.3,
+            3.2,
+            34.0
+          ],
+          "max": [
+            -41.7,
+            7.8,
+            39.7
+          ],
+          "size": [
+            4.6,
+            4.6,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 66.7486,
+          "valid": true
+        },
+        {
+          "label": "REAR_KEEL_HEATSET_INSERT_4",
+          "min": [
+            -46.3,
+            -7.8,
+            34.0
+          ],
+          "max": [
+            -41.7,
+            -3.2,
+            39.7
+          ],
+          "size": [
+            4.6,
+            4.6,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 66.7486,
+          "valid": true
+        },
+        {
+          "label": "BALLAST_M3_SHANK_L",
+          "min": [
+            72.5,
+            -21.5,
+            43.9
+          ],
+          "max": [
+            75.5,
+            -18.5,
+            54.25
+          ],
+          "size": [
+            3.0,
+            3.0,
+            10.35
+          ],
+          "solids": 1,
+          "volume_mm3": 73.1598,
+          "valid": true
+        },
+        {
+          "label": "BALLAST_M3_SHANK_R",
+          "min": [
+            72.5,
+            18.5,
+            43.9
+          ],
+          "max": [
+            75.5,
+            21.5,
+            54.25
+          ],
+          "size": [
+            3.0,
+            3.0,
+            10.35
+          ],
+          "solids": 1,
+          "volume_mm3": 73.1598,
+          "valid": true
+        },
+        {
+          "label": "J05_SCREW_M3X16_L",
+          "min": [
+            76.0,
+            51.15,
+            38.15
+          ],
+          "max": [
+            93.65,
+            56.85,
+            43.85
+          ],
+          "size": [
+            17.65,
+            5.7,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 155.2014,
+          "valid": true
+        },
+        {
+          "label": "J05_RAIL_INSERT_M3_L",
+          "min": [
+            77.0,
+            51.85,
+            38.85
+          ],
+          "max": [
+            83.0,
+            56.15,
+            43.15
+          ],
+          "size": [
+            6.0,
+            4.3,
+            4.3
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J05_SCREW_M3X16_R",
+          "min": [
+            76.0,
+            -56.85,
+            38.15
+          ],
+          "max": [
+            93.65,
+            -51.15,
+            43.85
+          ],
+          "size": [
+            17.65,
+            5.7,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 155.2014,
+          "valid": true
+        },
+        {
+          "label": "J05_RAIL_INSERT_M3_R",
+          "min": [
+            77.0,
+            -56.15,
+            38.85
+          ],
+          "max": [
+            83.0,
+            -51.85,
+            43.15
+          ],
+          "size": [
+            6.0,
+            4.3,
+            4.3
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J06_SCREW_M3X20_L",
+          "min": [
+            -49.65,
+            55.65,
+            38.15
+          ],
+          "max": [
+            -28.0,
+            61.35,
+            43.85
+          ],
+          "size": [
+            21.65,
+            5.7,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 183.4757,
+          "valid": true
+        },
+        {
+          "label": "J06_RAIL_INSERT_M3_L",
+          "min": [
+            -35.0,
+            56.35,
+            38.85
+          ],
+          "max": [
+            -29.0,
+            60.65,
+            43.15
+          ],
+          "size": [
+            6.0,
+            4.3,
+            4.3
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J06_SCREW_M3X20_R",
+          "min": [
+            -49.65,
+            -61.35,
+            38.15
+          ],
+          "max": [
+            -28.0,
+            -55.65,
+            43.85
+          ],
+          "size": [
+            21.65,
+            5.7,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 183.4757,
+          "valid": true
+        },
+        {
+          "label": "J06_RAIL_INSERT_M3_R",
+          "min": [
+            -35.0,
+            -60.65,
+            38.85
+          ],
+          "max": [
+            -29.0,
+            -56.35,
+            43.15
+          ],
+          "size": [
+            6.0,
+            4.3,
+            4.3
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J16_SCREW_M3X10_1_L",
+          "min": [
+            27.15,
+            51.15,
+            46.0
+          ],
+          "max": [
+            32.85,
+            56.85,
+            57.65
+          ],
+          "size": [
+            5.7,
+            5.7,
+            11.65
+          ],
+          "solids": 1,
+          "volume_mm3": 112.7899,
+          "valid": true
+        },
+        {
+          "label": "J16_RAIL_INSERT_M3_1_L",
+          "min": [
+            27.85,
+            51.85,
+            46.0
+          ],
+          "max": [
+            32.15,
+            56.15,
+            52.0
+          ],
+          "size": [
+            4.3,
+            4.3,
+            6.0
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J16_SCREW_M3X10_1_R",
+          "min": [
+            27.15,
+            -56.85,
+            46.0
+          ],
+          "max": [
+            32.85,
+            -51.15,
+            57.65
+          ],
+          "size": [
+            5.7,
+            5.7,
+            11.65
+          ],
+          "solids": 1,
+          "volume_mm3": 112.7899,
+          "valid": true
+        },
+        {
+          "label": "J16_RAIL_INSERT_M3_1_R",
+          "min": [
+            27.85,
+            -56.15,
+            46.0
+          ],
+          "max": [
+            32.15,
+            -51.85,
+            52.0
+          ],
+          "size": [
+            4.3,
+            4.3,
+            6.0
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J16_SCREW_M3X10_2_L",
+          "min": [
+            74.65,
+            51.15,
+            46.0
+          ],
+          "max": [
+            80.35,
+            56.85,
+            57.65
+          ],
+          "size": [
+            5.7,
+            5.7,
+            11.65
+          ],
+          "solids": 1,
+          "volume_mm3": 112.7899,
+          "valid": true
+        },
+        {
+          "label": "J16_RAIL_INSERT_M3_2_L",
+          "min": [
+            75.35,
+            51.85,
+            46.0
+          ],
+          "max": [
+            79.65,
+            56.15,
+            52.0
+          ],
+          "size": [
+            4.3,
+            4.3,
+            6.0
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J16_SCREW_M3X10_2_R",
+          "min": [
+            74.65,
+            -56.85,
+            46.0
+          ],
+          "max": [
+            80.35,
+            -51.15,
+            57.65
+          ],
+          "size": [
+            5.7,
+            5.7,
+            11.65
+          ],
+          "solids": 1,
+          "volume_mm3": 112.7899,
+          "valid": true
+        },
+        {
+          "label": "J16_RAIL_INSERT_M3_2_R",
+          "min": [
+            75.35,
+            -56.15,
+            46.0
+          ],
+          "max": [
+            79.65,
+            -51.85,
+            52.0
+          ],
+          "size": [
+            4.3,
+            4.3,
+            6.0
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J16_SCREW_M3X10_3_L",
+          "min": [
+            -30.35,
+            58.15,
+            46.0
+          ],
+          "max": [
+            -24.65,
+            63.85,
+            57.65
+          ],
+          "size": [
+            5.7,
+            5.7,
+            11.65
+          ],
+          "solids": 1,
+          "volume_mm3": 112.7899,
+          "valid": true
+        },
+        {
+          "label": "J16_RAIL_INSERT_M3_3_L",
+          "min": [
+            -29.65,
+            58.85,
+            46.0
+          ],
+          "max": [
+            -25.35,
+            63.15,
+            52.0
+          ],
+          "size": [
+            4.3,
+            4.3,
+            6.0
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J16_SCREW_M3X10_3_R",
+          "min": [
+            -30.35,
+            -63.85,
+            46.0
+          ],
+          "max": [
+            -24.65,
+            -58.15,
+            57.65
+          ],
+          "size": [
+            5.7,
+            5.7,
+            11.65
+          ],
+          "solids": 1,
+          "volume_mm3": 112.7899,
+          "valid": true
+        },
+        {
+          "label": "J16_RAIL_INSERT_M3_3_R",
+          "min": [
+            -29.65,
+            -63.15,
+            46.0
+          ],
+          "max": [
+            -25.35,
+            -58.85,
+            52.0
+          ],
+          "size": [
+            4.3,
+            4.3,
+            6.0
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J11A_HATCH_SCREW_M3X6_1",
+          "min": [
+            25.15,
+            -42.35,
+            28.85
+          ],
+          "max": [
+            30.85,
+            -36.65,
+            36.5
+          ],
+          "size": [
+            5.7,
+            5.7,
+            7.65
+          ],
+          "solids": 1,
+          "volume_mm3": 84.5155,
+          "valid": true
+        },
+        {
+          "label": "J11A_BOSS_INSERT_M3_1",
+          "min": [
+            25.85,
+            -41.65,
+            32.0
+          ],
+          "max": [
+            30.15,
+            -37.35,
+            38.0
+          ],
+          "size": [
+            4.3,
+            4.3,
+            6.0
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J11A_HATCH_SCREW_M3X6_2",
+          "min": [
+            25.15,
+            36.65,
+            28.85
+          ],
+          "max": [
+            30.85,
+            42.35,
+            36.5
+          ],
+          "size": [
+            5.7,
+            5.7,
+            7.65
+          ],
+          "solids": 1,
+          "volume_mm3": 84.5155,
+          "valid": true
+        },
+        {
+          "label": "J11A_BOSS_INSERT_M3_2",
+          "min": [
+            25.85,
+            37.35,
+            32.0
+          ],
+          "max": [
+            30.15,
+            41.65,
+            38.0
+          ],
+          "size": [
+            4.3,
+            4.3,
+            6.0
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J11A_HATCH_SCREW_M3X6_3",
+          "min": [
+            68.65,
+            -37.2,
+            28.85
+          ],
+          "max": [
+            74.35,
+            -31.5,
+            36.5
+          ],
+          "size": [
+            5.7,
+            5.7,
+            7.65
+          ],
+          "solids": 1,
+          "volume_mm3": 84.5155,
+          "valid": true
+        },
+        {
+          "label": "J11A_BOSS_INSERT_M3_3",
+          "min": [
+            69.35,
+            -36.5,
+            32.0
+          ],
+          "max": [
+            73.65,
+            -32.2,
+            38.0
+          ],
+          "size": [
+            4.3,
+            4.3,
+            6.0
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J11A_HATCH_SCREW_M3X6_4",
+          "min": [
+            68.65,
+            31.5,
+            28.85
+          ],
+          "max": [
+            74.35,
+            37.2,
+            36.5
+          ],
+          "size": [
+            5.7,
+            5.7,
+            7.65
+          ],
+          "solids": 1,
+          "volume_mm3": 84.5155,
+          "valid": true
+        },
+        {
+          "label": "J11A_BOSS_INSERT_M3_4",
+          "min": [
+            69.35,
+            32.2,
+            32.0
+          ],
+          "max": [
+            73.65,
+            36.5,
+            38.0
+          ],
+          "size": [
+            4.3,
+            4.3,
+            6.0
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "PACK_STRAP_HOOK_LOOP_L",
+          "min": [
+            25.8,
+            24.0,
+            29.3
+          ],
+          "max": [
+            66.7,
+            34.0,
+            51.9
+          ],
+          "size": [
+            40.9,
+            10.0,
+            22.6
+          ],
+          "solids": 1,
+          "volume_mm3": 1466.4,
+          "valid": true
+        },
+        {
+          "label": "PACK_STRAP_HOOK_LOOP_R",
+          "min": [
+            25.8,
+            -34.0,
+            29.3
+          ],
+          "max": [
+            66.7,
+            -24.0,
+            51.9
+          ],
+          "size": [
+            40.9,
+            10.0,
+            22.6
+          ],
+          "solids": 1,
+          "volume_mm3": 1466.4,
+          "valid": true
+        },
+        {
+          "label": "DRIVER_POST_INSERT_M25_1",
+          "min": [
+            39.1,
+            32.09,
+            62.0
+          ],
+          "max": [
+            43.0,
+            35.99,
+            66.0
+          ],
+          "size": [
+            3.9,
+            3.9,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 28.1487,
+          "valid": true
+        },
+        {
+          "label": "DRIVER_SCREW_M25X6_1",
+          "min": [
+            38.7,
+            31.69,
+            61.6
+          ],
+          "max": [
+            43.4,
+            36.39,
+            69.1
+          ],
+          "size": [
+            4.7,
+            4.7,
+            7.5
+          ],
+          "solids": 1,
+          "volume_mm3": 55.4766,
+          "valid": true
+        },
+        {
+          "label": "DRIVER_POST_INSERT_M25_2",
+          "min": [
+            39.1,
+            52.41,
+            62.0
+          ],
+          "max": [
+            43.0,
+            56.31,
+            66.0
+          ],
+          "size": [
+            3.9,
+            3.9,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 28.1487,
+          "valid": true
+        },
+        {
+          "label": "DRIVER_SCREW_M25X6_2",
+          "min": [
+            38.7,
+            52.01,
+            61.6
+          ],
+          "max": [
+            43.4,
+            56.71,
+            69.1
+          ],
+          "size": [
+            4.7,
+            4.7,
+            7.5
+          ],
+          "solids": 1,
+          "volume_mm3": 55.4766,
+          "valid": true
+        },
+        {
+          "label": "DRIVER_POST_INSERT_M25_3",
+          "min": [
+            39.1,
+            -35.99,
+            62.0
+          ],
+          "max": [
+            43.0,
+            -32.09,
+            66.0
+          ],
+          "size": [
+            3.9,
+            3.9,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 28.1487,
+          "valid": true
+        },
+        {
+          "label": "DRIVER_SCREW_M25X6_3",
+          "min": [
+            38.7,
+            -36.39,
+            61.6
+          ],
+          "max": [
+            43.4,
+            -31.69,
+            69.1
+          ],
+          "size": [
+            4.7,
+            4.7,
+            7.5
+          ],
+          "solids": 1,
+          "volume_mm3": 55.4766,
+          "valid": true
+        },
+        {
+          "label": "DRIVER_POST_INSERT_M25_4",
+          "min": [
+            39.1,
+            -56.31,
+            62.0
+          ],
+          "max": [
+            43.0,
+            -52.41,
+            66.0
+          ],
+          "size": [
+            3.9,
+            3.9,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 28.1487,
+          "valid": true
+        },
+        {
+          "label": "DRIVER_SCREW_M25X6_4",
+          "min": [
+            38.7,
+            -56.71,
+            61.6
+          ],
+          "max": [
+            43.4,
+            -52.01,
+            69.1
+          ],
+          "size": [
+            4.7,
+            4.7,
+            7.5
+          ],
+          "solids": 1,
+          "volume_mm3": 55.4766,
+          "valid": true
+        },
+        {
+          "label": "AXLE_CAP_SCREW_M3X18_L_1",
+          "min": [
+            5.6353,
+            69.71,
+            47.6353
+          ],
+          "max": [
+            11.3353,
+            89.36,
+            53.3353
+          ],
+          "size": [
+            5.7,
+            19.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 169.3385,
+          "valid": true
+        },
+        {
+          "label": "AXLE_PLATE_INSERT_M3_L_1",
+          "min": [
+            6.4853,
+            70.0,
+            48.4853
+          ],
+          "max": [
+            10.4853,
+            74.0,
+            52.4853
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "AXLE_CAP_SCREW_M3X18_L_2",
+          "min": [
+            -11.3353,
+            69.71,
+            47.6353
+          ],
+          "max": [
+            -5.6353,
+            89.36,
+            53.3353
+          ],
+          "size": [
+            5.7,
+            19.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 169.3385,
+          "valid": true
+        },
+        {
+          "label": "AXLE_PLATE_INSERT_M3_L_2",
+          "min": [
+            -10.4853,
+            70.0,
+            48.4853
+          ],
+          "max": [
+            -6.4853,
+            74.0,
+            52.4853
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "AXLE_CAP_SCREW_M3X18_L_3",
+          "min": [
+            -11.3353,
+            69.71,
+            30.6647
+          ],
+          "max": [
+            -5.6353,
+            89.36,
+            36.3647
+          ],
+          "size": [
+            5.7,
+            19.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 169.3385,
+          "valid": true
+        },
+        {
+          "label": "AXLE_PLATE_INSERT_M3_L_3",
+          "min": [
+            -10.4853,
+            70.0,
+            31.5147
+          ],
+          "max": [
+            -6.4853,
+            74.0,
+            35.5147
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "AXLE_CAP_SCREW_M3X18_L_4",
+          "min": [
+            5.6353,
+            69.71,
+            30.6647
+          ],
+          "max": [
+            11.3353,
+            89.36,
+            36.3647
+          ],
+          "size": [
+            5.7,
+            19.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 169.3385,
+          "valid": true
+        },
+        {
+          "label": "AXLE_PLATE_INSERT_M3_L_4",
+          "min": [
+            6.4853,
+            70.0,
+            31.5147
+          ],
+          "max": [
+            10.4853,
+            74.0,
+            35.5147
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "J04_RAIL_INSERT_M3_L_FRONT_38",
+          "min": [
+            17.0,
+            51.85,
+            35.85
+          ],
+          "max": [
+            23.0,
+            56.15,
+            40.15
+          ],
+          "size": [
+            6.0,
+            4.3,
+            4.3
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J04_CARRIER_SCREW_M3X8_L_FRONT_38",
+          "min": [
+            13.95,
+            51.15,
+            35.15
+          ],
+          "max": [
+            23.6,
+            56.85,
+            40.85
+          ],
+          "size": [
+            9.65,
+            5.7,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "J04_RAIL_INSERT_M3_L_FRONT_48",
+          "min": [
+            17.0,
+            51.85,
+            45.85
+          ],
+          "max": [
+            23.0,
+            56.15,
+            50.15
+          ],
+          "size": [
+            6.0,
+            4.3,
+            4.3
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J04_CARRIER_SCREW_M3X8_L_FRONT_48",
+          "min": [
+            13.95,
+            51.15,
+            45.15
+          ],
+          "max": [
+            23.6,
+            56.85,
+            50.85
+          ],
+          "size": [
+            9.65,
+            5.7,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "J04_RAIL_INSERT_M3_L_REAR_38",
+          "min": [
+            -23.0,
+            56.35,
+            35.85
+          ],
+          "max": [
+            -17.0,
+            60.65,
+            40.15
+          ],
+          "size": [
+            6.0,
+            4.3,
+            4.3
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J04_CARRIER_SCREW_M3X8_L_REAR_38",
+          "min": [
+            -23.6,
+            55.65,
+            35.15
+          ],
+          "max": [
+            -13.95,
+            61.35,
+            40.85
+          ],
+          "size": [
+            9.65,
+            5.7,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "J04_RAIL_INSERT_M3_L_REAR_48",
+          "min": [
+            -23.0,
+            56.35,
+            45.85
+          ],
+          "max": [
+            -17.0,
+            60.65,
+            50.15
+          ],
+          "size": [
+            6.0,
+            4.3,
+            4.3
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J04_CARRIER_SCREW_M3X8_L_REAR_48",
+          "min": [
+            -23.6,
+            55.65,
+            45.15
+          ],
+          "max": [
+            -13.95,
+            61.35,
+            50.85
+          ],
+          "size": [
+            9.65,
+            5.7,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "AXLE_MOTOR_SCREW_M3X6_L_1",
+          "min": [
+            -11.35,
+            65.8,
+            39.15
+          ],
+          "max": [
+            -5.65,
+            73.45,
+            44.85
+          ],
+          "size": [
+            5.7,
+            7.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 65.8156,
+          "valid": true
+        },
+        {
+          "label": "AXLE_MOTOR_SCREW_M3X6_L_2",
+          "min": [
+            5.65,
+            65.8,
+            39.15
+          ],
+          "max": [
+            11.35,
+            73.45,
+            44.85
+          ],
+          "size": [
+            5.7,
+            7.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 65.8156,
+          "valid": true
+        },
+        {
+          "label": "AXLE_CAP_SCREW_M3X18_R_1",
+          "min": [
+            5.6353,
+            -89.36,
+            47.6353
+          ],
+          "max": [
+            11.3353,
+            -69.71,
+            53.3353
+          ],
+          "size": [
+            5.7,
+            19.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 169.3385,
+          "valid": true
+        },
+        {
+          "label": "AXLE_PLATE_INSERT_M3_R_1",
+          "min": [
+            6.4853,
+            -74.0,
+            48.4853
+          ],
+          "max": [
+            10.4853,
+            -70.0,
+            52.4853
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "AXLE_CAP_SCREW_M3X18_R_2",
+          "min": [
+            -11.3353,
+            -89.36,
+            47.6353
+          ],
+          "max": [
+            -5.6353,
+            -69.71,
+            53.3353
+          ],
+          "size": [
+            5.7,
+            19.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 169.3385,
+          "valid": true
+        },
+        {
+          "label": "AXLE_PLATE_INSERT_M3_R_2",
+          "min": [
+            -10.4853,
+            -74.0,
+            48.4853
+          ],
+          "max": [
+            -6.4853,
+            -70.0,
+            52.4853
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "AXLE_CAP_SCREW_M3X18_R_3",
+          "min": [
+            -11.3353,
+            -89.36,
+            30.6647
+          ],
+          "max": [
+            -5.6353,
+            -69.71,
+            36.3647
+          ],
+          "size": [
+            5.7,
+            19.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 169.3385,
+          "valid": true
+        },
+        {
+          "label": "AXLE_PLATE_INSERT_M3_R_3",
+          "min": [
+            -10.4853,
+            -74.0,
+            31.5147
+          ],
+          "max": [
+            -6.4853,
+            -70.0,
+            35.5147
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "AXLE_CAP_SCREW_M3X18_R_4",
+          "min": [
+            5.6353,
+            -89.36,
+            30.6647
+          ],
+          "max": [
+            11.3353,
+            -69.71,
+            36.3647
+          ],
+          "size": [
+            5.7,
+            19.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 169.3385,
+          "valid": true
+        },
+        {
+          "label": "AXLE_PLATE_INSERT_M3_R_4",
+          "min": [
+            6.4853,
+            -74.0,
+            31.5147
+          ],
+          "max": [
+            10.4853,
+            -70.0,
+            35.5147
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "J04_RAIL_INSERT_M3_R_FRONT_38",
+          "min": [
+            17.0,
+            -56.15,
+            35.85
+          ],
+          "max": [
+            23.0,
+            -51.85,
+            40.15
+          ],
+          "size": [
+            6.0,
+            4.3,
+            4.3
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J04_CARRIER_SCREW_M3X8_R_FRONT_38",
+          "min": [
+            13.95,
+            -56.85,
+            35.15
+          ],
+          "max": [
+            23.6,
+            -51.15,
+            40.85
+          ],
+          "size": [
+            9.65,
+            5.7,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "J04_RAIL_INSERT_M3_R_FRONT_48",
+          "min": [
+            17.0,
+            -56.15,
+            45.85
+          ],
+          "max": [
+            23.0,
+            -51.85,
+            50.15
+          ],
+          "size": [
+            6.0,
+            4.3,
+            4.3
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J04_CARRIER_SCREW_M3X8_R_FRONT_48",
+          "min": [
+            13.95,
+            -56.85,
+            45.15
+          ],
+          "max": [
+            23.6,
+            -51.15,
+            50.85
+          ],
+          "size": [
+            9.65,
+            5.7,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "J04_RAIL_INSERT_M3_R_REAR_38",
+          "min": [
+            -23.0,
+            -60.65,
+            35.85
+          ],
+          "max": [
+            -17.0,
+            -56.35,
+            40.15
+          ],
+          "size": [
+            6.0,
+            4.3,
+            4.3
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J04_CARRIER_SCREW_M3X8_R_REAR_38",
+          "min": [
+            -23.6,
+            -61.35,
+            35.15
+          ],
+          "max": [
+            -13.95,
+            -55.65,
+            40.85
+          ],
+          "size": [
+            9.65,
+            5.7,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "J04_RAIL_INSERT_M3_R_REAR_48",
+          "min": [
+            -23.0,
+            -60.65,
+            45.85
+          ],
+          "max": [
+            -17.0,
+            -56.35,
+            50.15
+          ],
+          "size": [
+            6.0,
+            4.3,
+            4.3
+          ],
+          "solids": 1,
+          "volume_mm3": 44.7206,
+          "valid": true
+        },
+        {
+          "label": "J04_CARRIER_SCREW_M3X8_R_REAR_48",
+          "min": [
+            -23.6,
+            -61.35,
+            45.15
+          ],
+          "max": [
+            -13.95,
+            -55.65,
+            50.85
+          ],
+          "size": [
+            9.65,
+            5.7,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "AXLE_MOTOR_SCREW_M3X6_R_1",
+          "min": [
+            -11.35,
+            -73.45,
+            39.15
+          ],
+          "max": [
+            -5.65,
+            -65.8,
+            44.85
+          ],
+          "size": [
+            5.7,
+            7.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 65.8156,
+          "valid": true
+        },
+        {
+          "label": "AXLE_MOTOR_SCREW_M3X6_R_2",
+          "min": [
+            5.65,
+            -73.45,
+            39.15
+          ],
+          "max": [
+            11.35,
+            -65.8,
+            44.85
+          ],
+          "size": [
+            5.7,
+            7.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 65.8156,
+          "valid": true
+        },
+        {
+          "label": "BALL_M3_SHANK_1",
+          "min": [
+            115.6937,
+            -1.35,
+            26.3
+          ],
+          "max": [
+            118.3937,
+            1.35,
+            34.3
+          ],
+          "size": [
+            2.7,
+            2.7,
+            8.0
+          ],
+          "solids": 1,
+          "volume_mm3": 45.8044,
+          "valid": true
+        },
+        {
+          "label": "BALL_SEAT_HEATSET_INSERT_1",
+          "min": [
+            114.7437,
+            -2.3,
+            29.0
+          ],
+          "max": [
+            119.3437,
+            2.3,
+            34.7
+          ],
+          "size": [
+            4.6,
+            4.6,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 66.7486,
+          "valid": true
+        },
+        {
+          "label": "BALL_M3_SHANK_2",
+          "min": [
+            105.1282,
+            4.75,
+            26.3
+          ],
+          "max": [
+            107.8282,
+            7.45,
+            34.3
+          ],
+          "size": [
+            2.7,
+            2.7,
+            8.0
+          ],
+          "solids": 1,
+          "volume_mm3": 45.8044,
+          "valid": true
+        },
+        {
+          "label": "BALL_SEAT_HEATSET_INSERT_2",
+          "min": [
+            104.1782,
+            3.8,
+            29.0
+          ],
+          "max": [
+            108.7782,
+            8.4,
+            34.7
+          ],
+          "size": [
+            4.6,
+            4.6,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 66.7486,
+          "valid": true
+        },
+        {
+          "label": "BALL_M3_SHANK_3",
+          "min": [
+            105.1282,
+            -7.45,
+            26.3
+          ],
+          "max": [
+            107.8282,
+            -4.75,
+            34.3
+          ],
+          "size": [
+            2.7,
+            2.7,
+            8.0
+          ],
+          "solids": 1,
+          "volume_mm3": 45.8044,
+          "valid": true
+        },
+        {
+          "label": "BALL_SEAT_HEATSET_INSERT_3",
+          "min": [
+            104.1782,
+            -8.4,
+            29.0
+          ],
+          "max": [
+            108.7782,
+            -3.8,
+            34.7
+          ],
+          "size": [
+            4.6,
+            4.6,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 66.7486,
+          "valid": true
+        },
+        {
+          "label": "BALL_POD_M3_SHANK_1",
+          "min": [
+            87.0,
+            8.65,
+            40.65
+          ],
+          "max": [
+            95.0,
+            11.35,
+            43.35
+          ],
+          "size": [
+            8.0,
+            2.7,
+            2.7
+          ],
+          "solids": 1,
+          "volume_mm3": 45.8044,
+          "valid": true
+        },
+        {
+          "label": "BALL_POD_HEATSET_INSERT_1",
+          "min": [
+            86.3,
+            7.7,
+            39.7
+          ],
+          "max": [
+            92.0,
+            12.3,
+            44.3
+          ],
+          "size": [
+            5.7,
+            4.6,
+            4.6
+          ],
+          "solids": 1,
+          "volume_mm3": 66.7486,
+          "valid": true
+        },
+        {
+          "label": "BALL_POD_M3_SHANK_2",
+          "min": [
+            87.0,
+            -11.35,
+            40.65
+          ],
+          "max": [
+            95.0,
+            -8.65,
+            43.35
+          ],
+          "size": [
+            8.0,
+            2.7,
+            2.7
+          ],
+          "solids": 1,
+          "volume_mm3": 45.8044,
+          "valid": true
+        },
+        {
+          "label": "BALL_POD_HEATSET_INSERT_2",
+          "min": [
+            86.3,
+            -12.3,
+            39.7
+          ],
+          "max": [
+            92.0,
+            -7.7,
+            44.3
+          ],
+          "size": [
+            5.7,
+            4.6,
+            4.6
+          ],
+          "solids": 1,
+          "volume_mm3": 66.7486,
+          "valid": true
+        },
+        {
+          "label": "BALL_POD_LID_M2X8_CSK_SCREW",
+          "min": [
+            109.9,
+            -13.7,
+            43.0
+          ],
+          "max": [
+            113.7,
+            -9.9,
+            51.0
+          ],
+          "size": [
+            3.8,
+            3.8,
+            8.0
+          ],
+          "solids": 1,
+          "volume_mm3": 26.2661,
+          "valid": true
+        },
+        {
+          "label": "BODY_CHASSIS_M4_SHANK_1",
+          "min": [
+            -23.9,
+            -49.9,
+            50.0
+          ],
+          "max": [
+            -20.1,
+            -46.1,
+            62.0
+          ],
+          "size": [
+            3.8,
+            3.8,
+            12.0
+          ],
+          "solids": 1,
+          "volume_mm3": 136.0938,
+          "valid": true
+        },
+        {
+          "label": "BODY_CHASSIS_M4_NUT_1",
+          "min": [
+            -26.1,
+            -52.1,
+            48.8
+          ],
+          "max": [
+            -17.9,
+            -43.9,
+            52.0
+          ],
+          "size": [
+            8.2,
+            8.2,
+            3.2
+          ],
+          "solids": 1,
+          "volume_mm3": 168.9926,
+          "valid": true
+        },
+        {
+          "label": "BODY_CHASSIS_M4_SHANK_2",
+          "min": [
+            -23.9,
+            46.1,
+            50.0
+          ],
+          "max": [
+            -20.1,
+            49.9,
+            62.0
+          ],
+          "size": [
+            3.8,
+            3.8,
+            12.0
+          ],
+          "solids": 1,
+          "volume_mm3": 136.0938,
+          "valid": true
+        },
+        {
+          "label": "BODY_CHASSIS_M4_NUT_2",
+          "min": [
+            -26.1,
+            43.9,
+            48.8
+          ],
+          "max": [
+            -17.9,
+            52.1,
+            52.0
+          ],
+          "size": [
+            8.2,
+            8.2,
+            3.2
+          ],
+          "solids": 1,
+          "volume_mm3": 168.9926,
+          "valid": true
+        },
+        {
+          "label": "BODY_CHASSIS_M4_SHANK_3",
+          "min": [
+            62.1,
+            -49.9,
+            50.0
+          ],
+          "max": [
+            65.9,
+            -46.1,
+            62.0
+          ],
+          "size": [
+            3.8,
+            3.8,
+            12.0
+          ],
+          "solids": 1,
+          "volume_mm3": 136.0938,
+          "valid": true
+        },
+        {
+          "label": "BODY_CHASSIS_M4_NUT_3",
+          "min": [
+            59.9,
+            -52.1,
+            48.8
+          ],
+          "max": [
+            68.1,
+            -43.9,
+            52.0
+          ],
+          "size": [
+            8.2,
+            8.2,
+            3.2
+          ],
+          "solids": 1,
+          "volume_mm3": 168.9926,
+          "valid": true
+        },
+        {
+          "label": "BODY_CHASSIS_M4_SHANK_4",
+          "min": [
+            62.1,
+            46.1,
+            50.0
+          ],
+          "max": [
+            65.9,
+            49.9,
+            62.0
+          ],
+          "size": [
+            3.8,
+            3.8,
+            12.0
+          ],
+          "solids": 1,
+          "volume_mm3": 136.0938,
+          "valid": true
+        },
+        {
+          "label": "BODY_CHASSIS_M4_NUT_4",
+          "min": [
+            59.9,
+            43.9,
+            48.8
+          ],
+          "max": [
+            68.1,
+            52.1,
+            52.0
+          ],
+          "size": [
+            8.2,
+            8.2,
+            3.2
+          ],
+          "solids": 1,
+          "volume_mm3": 168.9926,
+          "valid": true
+        },
+        {
+          "label": "BODY_CHASSIS_LOCATING_PIN_1",
+          "min": [
+            -29.0,
+            -44.0,
+            52.0
+          ],
+          "max": [
+            -25.0,
+            -40.0,
+            60.0
+          ],
+          "size": [
+            4.0,
+            4.0,
+            8.0
+          ],
+          "solids": 1,
+          "volume_mm3": 100.531,
+          "valid": true
+        },
+        {
+          "label": "BODY_CHASSIS_LOCATING_PIN_2",
+          "min": [
+            57.0,
+            40.0,
+            52.0
+          ],
+          "max": [
+            61.0,
+            44.0,
+            60.0
+          ],
+          "size": [
+            4.0,
+            4.0,
+            8.0
+          ],
+          "solids": 1,
+          "volume_mm3": 100.531,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_SET_SCREW_M3X2_5",
+          "min": [
+            -1.5,
+            73.3,
+            43.5
+          ],
+          "max": [
+            1.5,
+            76.3,
+            46.0
+          ],
+          "size": [
+            3.0,
+            3.0,
+            2.5
+          ],
+          "solids": 1,
+          "volume_mm3": 17.6715,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_RING_SCREW_M3X8_1",
+          "min": [
+            14.15,
+            89.0,
+            68.5949
+          ],
+          "max": [
+            19.85,
+            98.65,
+            74.2949
+          ],
+          "size": [
+            5.7,
+            9.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_RING_INSERT_M3_1",
+          "min": [
+            15.0,
+            90.0,
+            69.4449
+          ],
+          "max": [
+            19.0,
+            94.0,
+            73.4449
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_CAP_SCREW_M2X6_1",
+          "min": [
+            4.7,
+            94.0,
+            51.4217
+          ],
+          "max": [
+            8.2,
+            101.3,
+            54.9217
+          ],
+          "size": [
+            3.5,
+            7.3,
+            3.5
+          ],
+          "solids": 1,
+          "volume_mm3": 24.5712,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_RING_SCREW_M3X8_2",
+          "min": [
+            31.15,
+            89.0,
+            39.15
+          ],
+          "max": [
+            36.85,
+            98.65,
+            44.85
+          ],
+          "size": [
+            5.7,
+            9.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_RING_INSERT_M3_2",
+          "min": [
+            32.0,
+            90.0,
+            40.0
+          ],
+          "max": [
+            36.0,
+            94.0,
+            44.0
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_CAP_SCREW_M2X6_2",
+          "min": [
+            11.15,
+            94.0,
+            40.25
+          ],
+          "max": [
+            14.65,
+            101.3,
+            43.75
+          ],
+          "size": [
+            3.5,
+            7.3,
+            3.5
+          ],
+          "solids": 1,
+          "volume_mm3": 24.5712,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_RING_SCREW_M3X8_3",
+          "min": [
+            14.15,
+            89.0,
+            9.7051
+          ],
+          "max": [
+            19.85,
+            98.65,
+            15.4051
+          ],
+          "size": [
+            5.7,
+            9.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_RING_INSERT_M3_3",
+          "min": [
+            15.0,
+            90.0,
+            10.5551
+          ],
+          "max": [
+            19.0,
+            94.0,
+            14.5551
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_CAP_SCREW_M2X6_3",
+          "min": [
+            4.7,
+            94.0,
+            29.0783
+          ],
+          "max": [
+            8.2,
+            101.3,
+            32.5783
+          ],
+          "size": [
+            3.5,
+            7.3,
+            3.5
+          ],
+          "solids": 1,
+          "volume_mm3": 24.5712,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_RING_SCREW_M3X8_4",
+          "min": [
+            -19.85,
+            89.0,
+            9.7051
+          ],
+          "max": [
+            -14.15,
+            98.65,
+            15.4051
+          ],
+          "size": [
+            5.7,
+            9.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_RING_INSERT_M3_4",
+          "min": [
+            -19.0,
+            90.0,
+            10.5551
+          ],
+          "max": [
+            -15.0,
+            94.0,
+            14.5551
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_CAP_SCREW_M2X6_4",
+          "min": [
+            -8.2,
+            94.0,
+            29.0783
+          ],
+          "max": [
+            -4.7,
+            101.3,
+            32.5783
+          ],
+          "size": [
+            3.5,
+            7.3,
+            3.5
+          ],
+          "solids": 1,
+          "volume_mm3": 24.5712,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_RING_SCREW_M3X8_5",
+          "min": [
+            -36.85,
+            89.0,
+            39.15
+          ],
+          "max": [
+            -31.15,
+            98.65,
+            44.85
+          ],
+          "size": [
+            5.7,
+            9.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_RING_INSERT_M3_5",
+          "min": [
+            -36.0,
+            90.0,
+            40.0
+          ],
+          "max": [
+            -32.0,
+            94.0,
+            44.0
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_CAP_SCREW_M2X6_5",
+          "min": [
+            -14.65,
+            94.0,
+            40.25
+          ],
+          "max": [
+            -11.15,
+            101.3,
+            43.75
+          ],
+          "size": [
+            3.5,
+            7.3,
+            3.5
+          ],
+          "solids": 1,
+          "volume_mm3": 24.5712,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_RING_SCREW_M3X8_6",
+          "min": [
+            -19.85,
+            89.0,
+            68.5949
+          ],
+          "max": [
+            -14.15,
+            98.65,
+            74.2949
+          ],
+          "size": [
+            5.7,
+            9.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_RING_INSERT_M3_6",
+          "min": [
+            -19.0,
+            90.0,
+            69.4449
+          ],
+          "max": [
+            -15.0,
+            94.0,
+            73.4449
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_CAP_SCREW_M2X6_6",
+          "min": [
+            -8.2,
+            94.0,
+            51.4217
+          ],
+          "max": [
+            -4.7,
+            101.3,
+            54.9217
+          ],
+          "size": [
+            3.5,
+            7.3,
+            3.5
+          ],
+          "solids": 1,
+          "volume_mm3": 24.5712,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_SCREW_M3X6_1",
+          "min": [
+            4.0782,
+            91.0,
+            43.15
+          ],
+          "max": [
+            9.7782,
+            98.65,
+            48.85
+          ],
+          "size": [
+            5.7,
+            7.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 84.5155,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_SCREW_M3X6_2",
+          "min": [
+            -9.7782,
+            91.0,
+            43.15
+          ],
+          "max": [
+            -4.0782,
+            98.65,
+            48.85
+          ],
+          "size": [
+            5.7,
+            7.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 84.5155,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_L_SCREW_M3X6_3",
+          "min": [
+            -2.85,
+            91.0,
+            31.15
+          ],
+          "max": [
+            2.85,
+            98.65,
+            36.85
+          ],
+          "size": [
+            5.7,
+            7.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 84.5155,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_SET_SCREW_M3X2_5",
+          "min": [
+            -1.5,
+            -76.3,
+            43.5
+          ],
+          "max": [
+            1.5,
+            -73.3,
+            46.0
+          ],
+          "size": [
+            3.0,
+            3.0,
+            2.5
+          ],
+          "solids": 1,
+          "volume_mm3": 17.6715,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_RING_SCREW_M3X8_1",
+          "min": [
+            14.15,
+            -98.65,
+            68.5949
+          ],
+          "max": [
+            19.85,
+            -89.0,
+            74.2949
+          ],
+          "size": [
+            5.7,
+            9.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_RING_INSERT_M3_1",
+          "min": [
+            15.0,
+            -94.0,
+            69.4449
+          ],
+          "max": [
+            19.0,
+            -90.0,
+            73.4449
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_CAP_SCREW_M2X6_1",
+          "min": [
+            4.7,
+            -101.3,
+            51.4217
+          ],
+          "max": [
+            8.2,
+            -94.0,
+            54.9217
+          ],
+          "size": [
+            3.5,
+            7.3,
+            3.5
+          ],
+          "solids": 1,
+          "volume_mm3": 24.5712,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_RING_SCREW_M3X8_2",
+          "min": [
+            31.15,
+            -98.65,
+            39.15
+          ],
+          "max": [
+            36.85,
+            -89.0,
+            44.85
+          ],
+          "size": [
+            5.7,
+            9.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_RING_INSERT_M3_2",
+          "min": [
+            32.0,
+            -94.0,
+            40.0
+          ],
+          "max": [
+            36.0,
+            -90.0,
+            44.0
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_CAP_SCREW_M2X6_2",
+          "min": [
+            11.15,
+            -101.3,
+            40.25
+          ],
+          "max": [
+            14.65,
+            -94.0,
+            43.75
+          ],
+          "size": [
+            3.5,
+            7.3,
+            3.5
+          ],
+          "solids": 1,
+          "volume_mm3": 24.5712,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_RING_SCREW_M3X8_3",
+          "min": [
+            14.15,
+            -98.65,
+            9.7051
+          ],
+          "max": [
+            19.85,
+            -89.0,
+            15.4051
+          ],
+          "size": [
+            5.7,
+            9.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_RING_INSERT_M3_3",
+          "min": [
+            15.0,
+            -94.0,
+            10.5551
+          ],
+          "max": [
+            19.0,
+            -90.0,
+            14.5551
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_CAP_SCREW_M2X6_3",
+          "min": [
+            4.7,
+            -101.3,
+            29.0783
+          ],
+          "max": [
+            8.2,
+            -94.0,
+            32.5783
+          ],
+          "size": [
+            3.5,
+            7.3,
+            3.5
+          ],
+          "solids": 1,
+          "volume_mm3": 24.5712,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_RING_SCREW_M3X8_4",
+          "min": [
+            -19.85,
+            -98.65,
+            9.7051
+          ],
+          "max": [
+            -14.15,
+            -89.0,
+            15.4051
+          ],
+          "size": [
+            5.7,
+            9.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_RING_INSERT_M3_4",
+          "min": [
+            -19.0,
+            -94.0,
+            10.5551
+          ],
+          "max": [
+            -15.0,
+            -90.0,
+            14.5551
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_CAP_SCREW_M2X6_4",
+          "min": [
+            -8.2,
+            -101.3,
+            29.0783
+          ],
+          "max": [
+            -4.7,
+            -94.0,
+            32.5783
+          ],
+          "size": [
+            3.5,
+            7.3,
+            3.5
+          ],
+          "solids": 1,
+          "volume_mm3": 24.5712,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_RING_SCREW_M3X8_5",
+          "min": [
+            -36.85,
+            -98.65,
+            39.15
+          ],
+          "max": [
+            -31.15,
+            -89.0,
+            44.85
+          ],
+          "size": [
+            5.7,
+            9.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_RING_INSERT_M3_5",
+          "min": [
+            -36.0,
+            -94.0,
+            40.0
+          ],
+          "max": [
+            -32.0,
+            -90.0,
+            44.0
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_CAP_SCREW_M2X6_5",
+          "min": [
+            -14.65,
+            -101.3,
+            40.25
+          ],
+          "max": [
+            -11.15,
+            -94.0,
+            43.75
+          ],
+          "size": [
+            3.5,
+            7.3,
+            3.5
+          ],
+          "solids": 1,
+          "volume_mm3": 24.5712,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_RING_SCREW_M3X8_6",
+          "min": [
+            -19.85,
+            -98.65,
+            68.5949
+          ],
+          "max": [
+            -14.15,
+            -89.0,
+            74.2949
+          ],
+          "size": [
+            5.7,
+            9.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 98.6527,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_RING_INSERT_M3_6",
+          "min": [
+            -19.0,
+            -94.0,
+            69.4449
+          ],
+          "max": [
+            -15.0,
+            -90.0,
+            73.4449
+          ],
+          "size": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "solids": 1,
+          "volume_mm3": 21.9911,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_CAP_SCREW_M2X6_6",
+          "min": [
+            -8.2,
+            -101.3,
+            51.4217
+          ],
+          "max": [
+            -4.7,
+            -94.0,
+            54.9217
+          ],
+          "size": [
+            3.5,
+            7.3,
+            3.5
+          ],
+          "solids": 1,
+          "volume_mm3": 24.5712,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_SCREW_M3X6_1",
+          "min": [
+            4.0782,
+            -98.65,
+            43.15
+          ],
+          "max": [
+            9.7782,
+            -91.0,
+            48.85
+          ],
+          "size": [
+            5.7,
+            7.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 84.5155,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_SCREW_M3X6_2",
+          "min": [
+            -9.7782,
+            -98.65,
+            43.15
+          ],
+          "max": [
+            -4.0782,
+            -91.0,
+            48.85
+          ],
+          "size": [
+            5.7,
+            7.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 84.5155,
+          "valid": true
+        },
+        {
+          "label": "WHEEL_R_SCREW_M3X6_3",
+          "min": [
+            -2.85,
+            -98.65,
+            31.15
+          ],
+          "max": [
+            2.85,
+            -91.0,
+            36.85
+          ],
+          "size": [
+            5.7,
+            7.65,
+            5.7
+          ],
+          "solids": 1,
+          "volume_mm3": 84.5155,
+          "valid": true
+        },
+        {
+          "label": "REAR_KEEL_M3X30_SCREW_1",
+          "min": [
+            -39.25,
+            2.75,
+            6.5
+          ],
+          "max": [
+            -33.75,
+            8.25,
+            39.5
+          ],
+          "size": [
+            5.5,
+            5.5,
+            33.0
+          ],
+          "solids": 1,
+          "volume_mm3": 218.537,
+          "valid": true
+        },
+        {
+          "label": "REAR_KEEL_M3X30_SCREW_2",
+          "min": [
+            -39.25,
+            -8.25,
+            6.5
+          ],
+          "max": [
+            -33.75,
+            -2.75,
+            39.5
+          ],
+          "size": [
+            5.5,
+            5.5,
+            33.0
+          ],
+          "solids": 1,
+          "volume_mm3": 218.537,
+          "valid": true
+        },
+        {
+          "label": "REAR_KEEL_M3X30_SCREW_3",
+          "min": [
+            -46.75,
+            2.75,
+            9.0
+          ],
+          "max": [
+            -41.25,
+            8.25,
+            42.0
+          ],
+          "size": [
+            5.5,
+            5.5,
+            33.0
+          ],
+          "solids": 1,
+          "volume_mm3": 218.537,
+          "valid": true
+        },
+        {
+          "label": "REAR_KEEL_M3X30_SCREW_4",
+          "min": [
+            -46.75,
+            -8.25,
+            9.0
+          ],
+          "max": [
+            -41.25,
+            -2.75,
+            42.0
+          ],
+          "size": [
+            5.5,
+            5.5,
+            33.0
+          ],
+          "solids": 1,
+          "volume_mm3": 218.537,
+          "valid": true
+        },
+        {
+          "label": "REAR_KEEL_SHOE_M2X6_SCREW",
+          "min": [
+            -28.75,
+            -0.7,
+            5.5
+          ],
+          "max": [
+            -25.25,
+            6.4,
+            9.0
+          ],
+          "size": [
+            3.5,
+            7.1,
+            3.5
+          ],
+          "solids": 1,
+          "volume_mm3": 22.647,
+          "valid": true
+        },
+        {
+          "label": "REAR_TCRT_BEZEL_M2X10_SCREW",
+          "min": [
+            -55.75,
+            -7.35,
+            7.4
+          ],
+          "max": [
+            -52.25,
+            -3.85,
+            18.5
+          ],
+          "size": [
+            3.5,
+            3.5,
+            11.1
+          ],
+          "solids": 1,
+          "volume_mm3": 30.6894,
+          "valid": true
+        },
+        {
+          "label": "IMU_M2_SCREW_HEAD_L",
+          "min": [
+            20.1,
+            5.6,
+            57.0
+          ],
+          "max": [
+            23.9,
+            9.4,
+            58.3
+          ],
+          "size": [
+            3.8,
+            3.8,
+            1.3
+          ],
+          "solids": 1,
+          "volume_mm3": 14.7435,
+          "valid": true
+        },
+        {
+          "label": "IMU_M2_SCREW_SHANK_L",
+          "min": [
+            21.0,
+            6.5,
+            52.0
+          ],
+          "max": [
+            23.0,
+            8.5,
+            57.0
+          ],
+          "size": [
+            2.0,
+            2.0,
+            5.0
+          ],
+          "solids": 1,
+          "volume_mm3": 15.708,
+          "valid": true
+        },
+        {
+          "label": "IMU_M2_SCREW_HEAD_R",
+          "min": [
+            20.1,
+            -9.4,
+            57.0
+          ],
+          "max": [
+            23.9,
+            -5.6,
+            58.3
+          ],
+          "size": [
+            3.8,
+            3.8,
+            1.3
+          ],
+          "solids": 1,
+          "volume_mm3": 14.7435,
+          "valid": true
+        },
+        {
+          "label": "IMU_M2_SCREW_SHANK_R",
+          "min": [
+            21.0,
+            -8.5,
+            52.0
+          ],
+          "max": [
+            23.0,
+            -6.5,
+            57.0
+          ],
+          "size": [
+            2.0,
+            2.0,
+            5.0
+          ],
+          "solids": 1,
+          "volume_mm3": 15.708,
+          "valid": true
+        }
+      ],
+      "leaf_count": 265,
+      "parameters": {
+        "J16_POINTS": [
+          [
+            30.0,
+            54.0
+          ],
+          [
+            77.5,
+            54.0
+          ],
+          [
+            -27.5,
+            61.0
+          ]
+        ],
+        "TUB_BOSS_XY": [
+          [
+            28.0,
+            -39.5
+          ],
+          [
+            28.0,
+            39.5
+          ],
+          [
+            71.5,
+            -34.35
+          ],
+          [
+            71.5,
+            34.35
+          ]
+        ],
+        "BALL_POD_SCREWS_YZ": [
+          [
+            10.0,
+            42.0
+          ],
+          [
+            -10.0,
+            42.0
+          ]
+        ],
+        "BODY_MOUNT_POINTS": [
+          [
+            -22.0,
+            -48.0
+          ],
+          [
+            -22.0,
+            48.0
+          ],
+          [
+            64.0,
+            -48.0
+          ],
+          [
+            64.0,
+            48.0
+          ]
+        ],
+        "BODY_LOCATING_POINTS": [
+          [
+            -27.0,
+            -42.0
+          ],
+          [
+            59.0,
+            42.0
+          ]
+        ],
+        "REAR_KEEL_SCREWS_X": [
+          -36.5,
+          -44.0
+        ],
+        "REAR_KEEL_SCREW_Y": 5.5,
+        "BALL_POD_X": [
+          92.0,
+          128.5
+        ],
+        "BALL_POD_Z0": 29.0,
+        "REAR_CHASSIS_SHIFT_X": 16.0
+      }
+    },
+    "split_connectivity": {
+      "rear_deck_solids": [
+        {
+          "min": [
+            -41.0,
+            -56.0,
+            52.0
+          ],
+          "max": [
+            -17.0,
+            56.0,
+            56.0
+          ],
+          "size": [
+            24.0,
+            112.0,
+            4.0
+          ],
+          "volume": 10571.95532502277
+        },
+        {
+          "min": [
+            -31.5,
+            -65.0,
+            52.0
+          ],
+          "max": [
+            -23.5,
+            -57.0,
+            56.0
+          ],
+          "size": [
+            8.0,
+            8.0,
+            4.0
+          ],
+          "volume": 219.68318892450193
+        },
+        {
+          "min": [
+            -31.5,
+            57.0,
+            52.0
+          ],
+          "max": [
+            -23.5,
+            65.0,
+            56.0
+          ],
+          "size": [
+            8.0,
+            8.0,
+            4.0
+          ],
+          "volume": 219.68318892450193
+        }
+      ],
+      "ear_to_main_deck_mm": [
+        1.0,
+        1.0
+      ],
+      "ear_screw_to_main_deck_mm": [
+        2.15,
+        2.15
+      ],
+      "simple_union_modules": {
+        "FRONT": {
+          "simple_union_solids": 1,
+          "volume": 73747.63804696858,
+          "valid": true
+        },
+        "REAR": {
+          "simple_union_solids": 1,
+          "volume": 45939.060192401266,
+          "valid": true
+        }
+      },
+      "rear_keel_points": [
+        [
+          -36.5,
+          5.5
+        ],
+        [
+          -36.5,
+          -5.5
+        ],
+        [
+          -44.0,
+          5.5
+        ],
+        [
+          -44.0,
+          -5.5
+        ]
+      ],
+      "caster_points": [
+        [
+          117.04367328411344,
+          0.0
+        ],
+        [
+          106.47816335794329,
+          6.1000000000000005
+        ],
+        [
+          106.47816335794327,
+          -6.099999999999998
+        ]
+      ]
+    },
+    "downward_motor_route_and_frame_union": {
+      "full_frame_simple_union": {
+        "solids": 1,
+        "valid": true,
+        "volume_mm3": 131737.974
+      },
+      "motor_service_samples": {
+        "L": {
+          "procedure": "wheel/stub removed, face screws removed; motor inward 12.1 mm then down 40 mm; housing/cap and body shell retained",
+          "sample_count": 48,
+          "first_hits": {
+            "MOTOR_R_PIGTAIL_RESERVE": {
+              "at": [
+                0,
+                -12.1,
+                0
+              ],
+              "volume_mm3": 12.0
+            },
+            "CHASSIS_DECK_WITH_BODY_INTERFACE": {
+              "at": [
+                0,
+                -12.1,
+                -1
+              ],
+              "volume_mm3": 24.0
+            },
+            "BODY_SHELL": {
+              "at": [
+                0,
+                -12.1,
+                -3
+              ],
+              "volume_mm3": 9.6
+            }
+          }
+        },
+        "R": {
+          "procedure": "wheel/stub removed, face screws removed; motor inward 12.1 mm then down 40 mm; housing/cap and body shell retained",
+          "sample_count": 48,
+          "first_hits": {
+            "MOTOR_L_PIGTAIL_RESERVE": {
+              "at": [
+                0,
+                12.1,
+                0
+              ],
+              "volume_mm3": 12.0
+            },
+            "CHASSIS_DECK_WITH_BODY_INTERFACE": {
+              "at": [
+                0,
+                12.1,
+                -1
+              ],
+              "volume_mm3": 24.0
+            },
+            "BODY_SHELL": {
+              "at": [
+                0,
+                12.1,
+                -3
+              ],
+              "volume_mm3": 9.6
+            }
+          }
+        }
+      }
+    },
+    "downward_motor_hit_details": [
+      {
+        "moving": "MOTOR_L_PIGTAIL_RESERVE",
+        "static": "MOTOR_R_PIGTAIL_RESERVE",
+        "pose": [
+          0,
+          -12.1,
+          0
+        ],
+        "mm3": 12.0
+      },
+      {
+        "moving": "MOTOR_L_PIGTAIL_RESERVE",
+        "static": "CHASSIS_DECK_WITH_BODY_INTERFACE",
+        "pose": [
+          0,
+          -12.1,
+          -1
+        ],
+        "mm3": 24.0
+      },
+      {
+        "moving": "MOTOR_L_ENCODER_6PIN_CONNECTOR",
+        "static": "BODY_SHELL",
+        "pose": [
+          0,
+          -12.1,
+          -3
+        ],
+        "mm3": 9.6
+      }
+    ],
+    "exported_step_facts": {
+      "ok": true,
+      "tokens": [
+        {
+          "line": 1,
+          "token": "docs/03-build/01-chassis/v1/cad/chassis-v1#",
+          "document": "docs/03-build/01-chassis/v1/cad/chassis-v1.step",
+          "summary": {
+            "kind": "assembly",
+            "occurrenceCount": 264,
+            "leafOccurrenceCount": 264,
+            "shapeCount": 264,
+            "faceCount": 3931,
+            "edgeCount": 9110,
+            "vertexCount": 0,
+            "bounds": {
+              "max": [
+                133.90000016224977,
+                101.30000026222976,
+                84.00000026222976
+              ],
+              "min": [
+                -67.00000026222976,
+                -101.30000026222976,
+                -2.6222976490038896e-07
+              ]
+            }
+          },
+          "selections": [],
+          "warnings": [],
+          "entryFacts": {
+            "size": [
+              200.90000042447952,
+              202.60000052445952,
+              84.00000052445952
+            ],
+            "extentAxis": "y",
+            "center": [
+              33.44999995001,
+              0.0,
+              42.0
+            ],
+            "diag": 297.4282610499145,
+            "kind": "assembly"
+          },
+          "planes": [
+            {
+              "axis": "z",
+              "coordinate": 52.00000000000002,
+              "normalSign": 1,
+              "faceCount": 24,
+              "totalArea": 10097.520311874696,
+              "bbox": {
+                "min": [
+                  -41.0000001,
+                  -66.0000001,
+                  51.9999999
+                ],
+                "max": [
+                  92.0000001,
+                  66.0000001,
+                  52.0000001
+                ]
+              },
+              "selectors": [
+                "o1.1.1.f4",
+                "o1.1.10.1.f3",
+                "o1.1.11.10.f2",
+                "o1.1.11.12.f2",
+                "o1.1.11.14.f2",
+                "o1.1.11.16.f2",
+                "o1.1.11.18.f2",
+                "o1.1.11.20.f2",
+                "o1.1.2.f2",
+                "o1.1.3.f3",
+                "o1.1.4.f3",
+                "o1.1.8.1.f14",
+                "o1.1.8.1.f21",
+                "o1.1.8.1.f5",
+                "o1.1.8.2.f5",
+                "o1.1.8.2.f65",
+                "o1.14.5.f3",
+                "o1.14.7.f3",
+                "o1.2.12.f2",
+                "o1.2.13.f3",
+                "o1.2.14.f3",
+                "o1.2.3.f2",
+                "o1.2.6.f2",
+                "o1.2.9.f2"
+              ]
+            }
+          ],
+          "entryPositioning": {
+            "kind": "assembly",
+            "bbox": {
+              "max": [
+                133.90000016224977,
+                101.30000026222976,
+                84.00000026222976
+              ],
+              "min": [
+                -67.00000026222976,
+                -101.30000026222976,
+                -2.6222976490038896e-07
+              ]
+            },
+            "bboxFacts": {
+              "size": [
+                200.90000042447952,
+                202.60000052445952,
+                84.00000052445952
+              ],
+              "extentAxis": "y",
+              "center": [
+                33.44999995001,
+                0.0,
+                42.0
+              ],
+              "diag": 297.4282610499145
+            },
+            "majorPlanes": [
+              {
+                "axis": "z",
+                "coordinate": 52.00000000000002,
+                "normalSign": 1,
+                "faceCount": 24,
+                "totalArea": 10097.520311874696,
+                "bbox": {
+                  "min": [
+                    -41.0000001,
+                    -66.0000001,
+                    51.9999999
+                  ],
+                  "max": [
+                    92.0000001,
+                    66.0000001,
+                    52.0000001
+                  ]
+                },
+                "selectors": [
+                  "o1.1.1.f4",
+                  "o1.1.10.1.f3",
+                  "o1.1.11.10.f2",
+                  "o1.1.11.12.f2",
+                  "o1.1.11.14.f2",
+                  "o1.1.11.16.f2",
+                  "o1.1.11.18.f2",
+                  "o1.1.11.20.f2",
+                  "o1.1.2.f2",
+                  "o1.1.3.f3",
+                  "o1.1.4.f3",
+                  "o1.1.8.1.f14",
+                  "o1.1.8.1.f21",
+                  "o1.1.8.1.f5",
+                  "o1.1.8.2.f5",
+                  "o1.1.8.2.f65",
+                  "o1.14.5.f3",
+                  "o1.14.7.f3",
+                  "o1.2.12.f2",
+                  "o1.2.13.f3",
+                  "o1.2.14.f3",
+                  "o1.2.3.f2",
+                  "o1.2.6.f2",
+                  "o1.2.9.f2"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "errors": []
+    },
+    "exported_frame_validation": {
+      "ok": true,
+      "entry": "docs/03-build/01-chassis/v1/cad/chassis-v1",
+      "occurrenceCount": 118,
+      "prototypeCount": 118,
+      "selfIntersectionCheck": "skipped",
+      "failureCount": 0,
+      "parts": [],
+      "errors": []
+    },
+    "lid_capture_and_upward_motor_route": {
+      "lid_lift_overlap_with_cap_mm3": {
+        "0": {
+          "0": 0,
+          "0.25": 0,
+          "0.5": 0,
+          "0.75": 12.5654,
+          "1": 27.1003
+        },
+        "-3": {
+          "0": 0,
+          "0.25": 0,
+          "0.5": 0,
+          "0.75": 34.4246,
+          "1": 72.929
+        }
+      },
+      "lid_forward_first_cap_intersection_mm": {
+        "0": {
+          "x_mm": 3.2,
+          "overlap_mm3": 13.44
+        },
+        "-3": {
+          "x_mm": 0.2,
+          "overlap_mm3": 13.44
+        }
+      },
+      "tongue_dimensions_mm": [
+        1.5,
+        12.0,
+        2.0
+      ],
+      "motor_upward_with_body_removed": {
+        "L": {
+          "samples": 48,
+          "hits": {
+            "MOTOR_L_ENCODER_6PIN_CONNECTOR x CHASSIS_DECK_WITH_BODY_INTERFACE": {
+              "pose_mm": [
+                0,
+                -12.1,
+                4
+              ],
+              "overlap_mm3": 24.0
+            }
+          },
+          "excluded": "body assembly/electronics/shell, serviced wheel/stub, face screws, flexible pigtail reserves; housing/cap and opposite rigid motor retained"
+        },
+        "R": {
+          "samples": 48,
+          "hits": {
+            "MOTOR_R_ENCODER_6PIN_CONNECTOR x CHASSIS_DECK_WITH_BODY_INTERFACE": {
+              "pose_mm": [
+                0,
+                12.1,
+                4
+              ],
+              "overlap_mm3": 24.0
+            }
+          },
+          "excluded": "body assembly/electronics/shell, serviced wheel/stub, face screws, flexible pigtail reserves; housing/cap and opposite rigid motor retained"
+        }
+      }
+    }
+  }
+}

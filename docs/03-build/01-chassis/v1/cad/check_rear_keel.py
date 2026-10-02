@@ -31,7 +31,7 @@ def moved(s, dx=0.0, dy=0.0, dz=0.0):
 
 frame = M.chassis_frame()
 frame_parts = leaves(frame)
-crossmember = by_label(frame_parts, "REAR_SKID_CROSSMEMBER")
+crossmember = by_label(frame_parts, "CHASSIS_FRAME_REAR_MODULE")  # D-033: crossmember, rails and deck are one print
 inserts = [p for p in frame_parts if p.label.startswith("REAR_KEEL_HEATSET_INSERT_")]
 keel_group = M.rear_skid_tcrt_module().children[0]
 keel_parts = leaves(keel_group)
@@ -56,7 +56,7 @@ solids = keel_parts + [crossmember, *inserts]
 # the pigtail runs out of the joint envelope.
 allowed = {frozenset(("TCRT5000_REAR_STEP", joints.label)), frozenset((joints.label, pigtail.label))}
 # Heat-set inserts sit 0.3 mm radially into their O4.0 bores by design.
-allowed |= {frozenset(("REAR_SKID_CROSSMEMBER", i.label)) for i in inserts}
+allowed |= {frozenset((crossmember.label, i.label)) for i in inserts}
 clashes = {}
 for a, b in itertools.combinations(solids, 2):
     if frozenset((a.label, b.label)) in allowed:
@@ -122,7 +122,7 @@ swap = (sweep([bezel, *shims, bezel_screw], [keel], dz=-20.0), sweep([tcrt, join
 R["sensor_and_lead_drop_out_below_keel_on"] = (max(swap) < 1e-3, *swap)
 R["shoe_slides_out_forward"] = (sweep([shoe], [keel], dx=20.0) < 1e-3, sweep([shoe], [keel], dx=20.0))
 keel_module = [p for p in keel_parts if p not in keel_screws and p is not pigtail]
-others = [crossmember, *inserts, shell] + [p for p in frame_parts if p.label.startswith(("CHASSIS_RAIL", "CHASSIS_DECK", "BATTERY", "BALLAST"))]
+others = [crossmember, *inserts, shell] + [p for p in frame_parts if p.label.startswith(("CHASSIS_FRAME_FRONT", "BATTERY", "BALLAST"))]
 R["keel_drops_30mm_clear"] = (sweep(keel_module, others, dz=-30.0, steps=10) < 1e-3, sweep(keel_module, others, dz=-30.0, steps=10))
 
 # J10-10 route and disconnect point.

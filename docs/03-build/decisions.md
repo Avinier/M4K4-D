@@ -37,6 +37,7 @@ The central record of every decision and change made during the build phase. New
 | [D-030](#d-030) | 2026-10-01 | Chassis / frame fasteners, pack restraint, driver mounts (J05, J06, J11A, J11B, J12, J13, J15B, J16; CH-030, CH-055, CH-060) | J05/J06 inserts moved into the rail tongues; all frame, hatch and driver hardware modeled and added (CH-073–CH-082); pack strapped to the hatch; DIN 7984 → ISO 7380; set screw = M3 × 3 faced to 2.5 | ACTIVE; HOLD on coupons, strap/foam source and physical tests |
 | [D-031](#d-031) | 2026-10-02 | Chassis / driver boards (J15B), inline motor pairs, motor face screws | #3297 boards turned long side along Y at X 38.5–56.3, posts at X 41.05; inline pairs re-placed; face-screw heads modelled as ISO 7380 domes; `check_layout.py` 119/119 | ACTIVE; supersedes the D-030 J15B layout; post coupon and received-board fit open |
 | [D-032](#d-032) | 2026-10-02 | Chassis / main fuse holder (CH-028) | Inline Littelfuse 0FHA0001ZXJ ATO holder on a printed front-deck bracket above the +Y channel; the old channel envelope could not hold any ATO fuse | ACTIVE; CH-028 HOLD for an India source |
+| [D-033](#d-033) | 2026-10-02 | Chassis / frame print units and hub cap (J03, J05, J06, J16; CH-001, CH-012, CH-058, CH-059, CH-073–CH-075, CH-077) | Each frame end printed as one module (deck + rails + crossmember), removing J05/J06/J16 and ten screws and inserts; hub cap held by one central M3 into the tapped stub end instead of six M2 | ACTIVE; HOLD on module print orientation, junction coupons and cap retention; full `check_layout.py` not rerun |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -1009,3 +1010,70 @@ D-029 is reserved by a parallel session (lid hump), so this is D-030.
 **Changed docs:** `BOM.csv` CH-028 row, the chassis `BOM.md` fuse paragraph, the CAD README.
 
 **Open:** an India source for 0FHA0001ZXJ or an equivalent inline ATO holder; check the received body against the envelope; confirm 16 AWG leads for the 15 A fuse; how the holder is tied to the shelf; bracket print. Fuse access needs the body off.
+
+## D-033
+
+**2026-10-02 · Chassis / frame print units and hub cap (CH-001, CH-012, CH-058, CH-059, CH-073–CH-075, CH-077; J03, J05, J06, J16) · ACTIVE; HOLD on printer/orientation review, junction coupons and a cap retention test**
+
+**Decision:** the builder asked to implement the [fastener review](01-chassis/v1/research/fastener-review.md). Two of its recommendations are adopted:
+
+- **Frame modules.** Each end of the frame is one print: deck, both rails and crossmember. J05, J06 and J16 are deleted, with their ten M3 screws (CH-073, CH-074, CH-075) and ten of the fourteen CH-077 inserts. The two modules join only through the two J04 carriers, which stay removable.
+- **Hub cap.** One central ISO 7380 M3 × 10 per cap, into a tapped hole in the steel stub's spigot end, replaces the six M2 × 6 thread-forming screws (CH-059 goes from 12 to 2).
+
+The review's other proposals are not adopted here. They need physical evidence first: a screwless nose lid, stretch-fit tyres or fewer ring screws, integrated carriers, a two-screw keel, and a hinged hatch. Everything else keeps its hardware.
+
+**Why:**
+
+- The frame split had no printer or service reason. The frame-split study kept the rails and crossmembers separate only so their joints could be reviewed. No service step removes a rail from its deck or crossmember.
+- The split was also defective. `frame_deck("REAR")` was three solids: its two J16 screw pads sat 1.00 mm off the deck plate, so the rear J16 screws clamped detached pads onto the rails, not the deck.
+- The J05/J06 tongues carried inserts in 1.85 mm walls, an open coupon risk. Fusing removes them.
+- The six cap screws only retain a cosmetic cover. One screw keeps the cap removable for wheel service.
+
+**CAD changed:**
+
+- [`body_chassis_model.py`](01-chassis/v1/cad/body_chassis_model.py):
+  - New `frame_module(region)` gives `CHASSIS_FRAME_FRONT_MODULE` and `CHASSIS_FRAME_REAR_MODULE`. They replace the labels `CHASSIS_RAIL_*`, `FRONT_CROSSMEMBER`, `REAR_SKID_CROSSMEMBER` and `CHASSIS_DECK_WITH_BODY_INTERFACE`.
+  - The tongues, pockets, J05/J06/J16 screw and insert bores, the J16 deck ears and the J05/J06/J16 hardware are removed, along with their constants.
+  - Where the deck covers a crossmember, the crossmember rises to the deck underside (`FRAME_MODULE_FILLS`): front Z 51 → 52, rear Z 48 → 52 at X −41 to −32. The J10-8 cable bore is recut through the front fill.
+  - The rear rails keep their widened end as a gusset into the crossmember.
+  - J04 receivers, keys, body-nut socket paths, tub, bosses, posts, the D-032 fuse bracket, pod inserts, keel inserts and the cable-tie lug are unchanged.
+  - Stub: `STUB_CAP_TAP` adds an M3 tapped hole in the spigot end, 8 mm of thread and a 9.5 mm drill, which leaves 4.5 mm of steel to the D-shaft bore. `_check_wheel_interface()` now also checks the tap.
+- [`wheel/wheel_model.py`](01-chassis/v1/cad/wheel/wheel_model.py):
+  - The cap has a central Ø3.4 hole and a Ø6.2 counterbore. The head sits 0.25 mm under the boss top, so the robot is 202.0 mm wide (was 202.6).
+  - A Ø9 column under the head stops 0.65 mm inside the wheel-screw heads and 0.6 mm above the spigot tip.
+  - Two Ø1.8 × 1.5 mm pegs at R12.2 (30°/210°) sit in Ø2.1 × 1.8 mm hub holes and clock the cap. The six M2 pilots are gone.
+- `frame-split.step.py` now shows the two modules and the hatch.
+
+**Counts:** screws 90 → **70** (−10 frame, −12 M2 cap screws, +2 central cap screws), inserts 55 → **45**. Frame prints 11 → 5: two modules, two carriers, the hatch.
+
+**Mass register:**
+- `CHASSIS_PRIMARY_FRAME` goes from 229.9 to **219.1 g**, CoM (17.71, 0.15, 46.73):
+  - −10.7 g for the ten screws and −3.8 g for the ten inserts, measured from the solids at 7.9/8.5 g/cm³;
+  - +3.7 g for the measured +6.52 cm³ of printed volume at 0.571 g/cm³ (fills, filled bores and pockets).
+- `AXLE_BEARINGS_AND_STUB_SHAFTS` goes from 51.4 to 50.4 g, for the two tapped holes.
+- `WHEEL_L/R` stays at 92.5 g: `check_wheel.py` gives 92.5 g with the M3 × 10 in place of six M2 × 6.
+- Register total 2626.9 → **2615.1 g**, CoM (+19.15, 0.17, 105.69); a_tip 1.778 m/s² against the 1.582 minimum.
+
+**Checks (2026-10-02):**
+- `check_frame_fasteners.py`: **9/9**. The new row `frame_modules_are_single_prints` replaces `tongue_fit`: each module is one solid (front 75.84 cm³, 75 × 128 × 41 mm; rear 50.37 cm³, 34 × 132 × 22 mm), no J05/J06/J16 hardware or split part remains, and the rear deck plate fills both rear-rail probes. No new clashes; the accepted overlaps are the existing insert knurls, motor-face threads and IMU shanks, now against the module labels. The run used the patched model before the mass rows changed; the rows do not affect geometry.
+- `check_nose_joints.py` 12/12, `check_rear_keel.py` 21/21, `check_battery_ballast.py` all pass (no new tub clashes with the fused front module).
+- `wheel/check_wheel.py` **25/25**. New rows: cap-screw engagement in the stub (6.9 mm), head seated and recessed (0.25 mm), column clearances (0.65 mm to the wheel-screw heads, 0.6 mm to the spigot), and pegs in the hub holes (1.38 mm wall to the hex). The pocket keep-out row now excludes the cap screw, which runs into the stub on the axle line, like the wheel screws.
+- `wheel/check_wheel_on_chassis.py` **6/6**. The central screw sweeps 3.67 mm clear of the bearing cap and meets the tapped stub with no overlap.
+- `check_layout.py` was **not rerun** (builder preference for targeted checks). Its frame label lookups were updated (rear and front crossmember, the nose insert pair, fuse-holder mounting and the IMU deck) and compile, but have not been exercised.
+- `chassis-v1.step`, `frame-split.step`, `wheel.step`, `wheel-pair.step` and the local `body-chassis.step` rebuilt; `write_outputs.py` reports regenerated. Those reports also pick up earlier stale values (688 ZZ positions, the A21 sensor and the battery X).
+
+**Changed docs:** joint register (J03, J05, J06, J16, summary, release actions), chassis `BOM.md`, `BOM.csv`, the CAD, wheel and frame-split READMEs, the engineering checklist and the fastener review's status line.
+
+**BOM changed:**
+- CH-001 is re-specified as two frame modules, two carriers, the tub and the hatch.
+- CH-012 gains the spigot-end tap.
+- CH-058 and CH-059 are re-specified: CH-059 is ISO 7380 M3 × 10, 2 each.
+- CH-077 goes from 14 to 4 (J11A only).
+- CH-073, CH-074 and CH-075 are retired; do not reuse the IDs.
+
+**Open:**
+- Printer and orientation review for each module. The front module has features above and below the deck (driver posts and fuse bracket above; rails and tub below). The rear module prints deck-down.
+- Junction coupons: rail-to-crossmember and crossmember-to-deck under caster and skid loads.
+- Deck coplanarity across the motor bay through the J04 carriers.
+- Cap retention and peg fit on a coupon. Tapped-hole depth on the stub drawing.
+- Physical retention of the remaining joints, as before.

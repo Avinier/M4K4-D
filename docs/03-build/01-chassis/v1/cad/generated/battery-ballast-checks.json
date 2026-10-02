@@ -10,7 +10,7 @@
  },
  "tub_clashes": {},
  "tub_accepted": {
-  "CHASSIS_DECK_WITH_BODY_INTERFACE x IMU_PCB07": {
+  "CHASSIS_FRAME_FRONT_MODULE x IMU_PCB07": {
    "mm3": 25.133,
    "note": "IMU M2 screws thread-form 4 mm into the deck by design"
   }
@@ -35,13 +35,13 @@
  "screw_length_mm": 12.0,
  "engagement_mm": 8.1,
  "tip_to_hole_floor_mm": 0.9,
- "mass_g": 2626.9,
+ "mass_g": 2615.1,
  "com_mm": [
-  19.19,
+  19.15,
   0.17,
-  105.43
+  105.69
  ],
- "a_tip_m_s2": 1.786,
+ "a_tip_m_s2": 1.778,
  "a_tip_min_m_s2": 1.582,
  "pass": {
   "battery_pack_is_clear": true,

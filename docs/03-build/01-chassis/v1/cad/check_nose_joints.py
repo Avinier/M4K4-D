@@ -12,7 +12,8 @@ def by_label(ss,l): return next(s for s in ss if s.label==l)
 frame=M.chassis_frame()
 ball_parts=leaves(M.ball_transfer())
 pod_parts=leaves(next(c for c in frame.children if c.label=="BALL_POD"))
-front_crossmember=next(c for c in frame.children if c.label=="FRONT_CROSSMEMBER")
+# D-033: the front crossmember is part of the one-piece front frame module.
+front_crossmember=next(c for c in frame.children if c.label=="CHASSIS_FRAME_FRONT_MODULE")
 sens=M.sensors()
 nose_parts=leaves(next(c for c in sens.children if c.label=="BALL_NOSE_CONCEALED_CONTACT_MODULE"))
 gp2y=[c for c in sens.children if c.label.startswith("GP2Y") and c.label!="GP2Y_OPTICAL_AXIS"]
@@ -35,7 +36,7 @@ R["heat_set_bores_give_interference"]=(len(ii)==5 and all(v>1e-3 for v in ii.val
 R["ball_flange_seats_on_pod"]=(flange.distance_to(pod_seat)<1e-6 and _vol(flange&pod_seat)<1e-3,)
 # nose clashes
 solids=[*ball_parts,*pod_parts,front_crossmember,*gp2y,*[p for p in nose_parts if p is not travel]]
-ok_pairs=({"BALL_POD_M3_SHANK","BALL_POD_HEATSET_INSERT"},{"BALL_POD_HEATSET_INSERT","FRONT"},{"BALL_M3_SHANK","BALL_SEAT_HEATSET_INSERT"},{"BALL_SEAT_HEATSET_INSERT","BALL_POD_PRINTED"},{"BALL_POD_LID_M2X8_CSK","BALL_POD_PRINTED"})
+ok_pairs=({"BALL_POD_M3_SHANK","BALL_POD_HEATSET_INSERT"},{"BALL_POD_HEATSET_INSERT","CHASSIS_FRAME_FRONT"},{"BALL_M3_SHANK","BALL_SEAT_HEATSET_INSERT"},{"BALL_SEAT_HEATSET_INSERT","BALL_POD_PRINTED"},{"BALL_POD_LID_M2X8_CSK","BALL_POD_PRINTED"})
 cl={}
 for i,a in enumerate(solids):
     for b in solids[i+1:]:

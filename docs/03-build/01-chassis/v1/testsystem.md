@@ -72,7 +72,7 @@ The instrument table in [rig.md § 5](../../../02-prototypes/RP-03-locomotion/ri
 |---|---|---|---|
 | **One axle, then the other** | J01, J02, J03, J04 | Bearing fit and drag; stub endplay; shaft alignment before and after tightening the floating motor; wheel runout; full-turn clearance | Service load 31 N radial + 8 N lateral: axle deflection ≤0.25 mm, clearance ≥1.5 mm. 2× proof (62 N, 16 N, 0.8 N·m): no crack or insert movement, residual set ≤0.10 mm. Powered: runout ≤0.30 mm TIR, endplay ≤0.10 mm, no-load current change ≤ max(0.05 A, 10 %), 200 low-speed reversals. Then inspect for set-screw shift, insert movement, cracks and changed drag. |
 | **Wheel and tyre** | J14 | Left/right handedness; loaded radius; diameter match between sides; clamp seating; runout | Loaded rolling, hard turns, short controlled torque events. Mark the tyre against the rim to reveal creep. Recheck clamp screws and dimensions after running. |
-| **Rails, carriers, decks, crossmembers** | J04, J05, J06, J16 | Keys seat without force; coplanarity; wheel-axis alignment; screw engagement; tool access | Load and twist the frame with representative body ballast. Measure deflection **under load** and residual set afterwards. Repeat after a warm dwell to expose print creep. |
+| **Frame modules and carriers** | J04; J05, J06, J16 integrated (D-033) | Keys seat without force; deck coplanarity across the carriers; wheel-axis alignment; J04 screw engagement; tool access; module junctions free of cracks | Load and twist the frame with representative body ballast. Measure deflection **under load** and residual set afterwards. Repeat after a warm dwell to expose print creep. |
 | **Caster pod and nose** | J07A/B, J08A/B/C | Caster rolls freely; pod and lid come off with the intended tools; cap travels 3 mm and returns from partial presses | Representative front-support loads, threshold crossings, repeated cap presses and removals. Check snap fingers, spring seating, insert retention, and whether the caster or the housing strikes first. |
 | **Rear keel** | J09A/B, J10A/B | Shoe and bezel retention; TCRT shim fit; protected lead route; removal sequence | Scrape and threshold passes, controlled rear skid contact, abrasion, repeated shoe replacement. Confirm the sensor and lead stay protected and serviceable. |
 | **Body mount, ballast, hatch** | J11A/B, J12, J13 | Pin fit, foot contact, bolt and nut access, ballast bar seating, pack removal path | Shake and load with representative body/head mass. Check for loosening, print crushing, hatch retention and pack restraint. |
@@ -273,7 +273,7 @@ Follow the dated written procedure required by [workbench § Battery](../../../0
 
 These are system-architecture decisions. A successful rolling test cannot validate them by default.
 
-1. **Hatch and pack restraint** (J11A/B) and the remaining **frame hardware** (J05/J06/J16, J12, J13, J15B).
+1. **Hatch and pack restraint** (J11A/B) and the remaining **frame hardware** (J12, J13, J15B; J05/J06/J16 have no hardware since D-033).
 2. **Print process:** printer, material, orientation and settings for each part.
 3. **Measured motor/driver envelope:** replaces the reduced-envelope estimate.
 4. **Cliff sensing coverage:** the v1 CAD has **one** rear cliff channel. RP03-P07 asks for at least **three** look-down channels (front-support forward, reverse/skid, wheel-adjacent).

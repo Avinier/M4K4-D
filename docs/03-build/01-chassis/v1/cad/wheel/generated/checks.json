@@ -20,8 +20,8 @@
     "check": "hub_cap_and_heads_proud_le_4p5mm",
     "pass": true,
     "value": {
-      "mm": 4.3,
-      "robot_width_mm": 202.6,
+      "mm": 4.0,
+      "robot_width_mm": 202.0,
       "target_mm": 205
     }
   },
@@ -78,7 +78,9 @@
     "pass": true,
     "value": {
       "cover": 1.0,
-      "recess_to_y": 13.9
+      "recess_to_y": 13.9,
+      "head_r_mm": 2.85,
+      "hole_r_mm": 1.7
     }
   },
   {
@@ -94,27 +96,41 @@
     }
   },
   {
-    "check": "cap_screw_engagement_ge_3mm",
+    "check": "cap_screw_engagement_in_stub_ge_6mm",
     "pass": true,
     "value": {
-      "engagement_mm": 3.0,
-      "tip_y": 9.0,
-      "pilot_bottom_y": 8.7
+      "engagement_mm": 6.9,
+      "tip_y": 4.1,
+      "thread_bottom_y": 3.0
     }
   },
   {
-    "check": "cap_screw_head_seated",
+    "check": "cap_screw_head_seated_and_recessed",
     "pass": true,
     "value": {
       "seat_fill": 1.0,
-      "head_to_boss_mm": 1.912
+      "head_below_boss_top_mm": 0.25
     }
   },
   {
-    "check": "cap_wall_between_screw_and_recess_ge_0p5mm",
+    "check": "cap_column_clears_wheel_screws_and_spigot",
     "pass": true,
     "value": {
-      "wall_mm": 0.6
+      "to_wheel_screw_heads_mm": 0.65,
+      "above_spigot_tip_mm": 0.6,
+      "under_head_column_mm": 2.5
+    }
+  },
+  {
+    "check": "cap_pegs_clock_cap_in_hub_holes",
+    "pass": true,
+    "value": {
+      "peg_volume_mm3": [
+        3.817,
+        3.817
+      ],
+      "hole_wall_to_hex_mm": 1.384,
+      "radial_clearance_mm": 0.15
     }
   },
   {
@@ -195,32 +211,27 @@
     "check": "mass_estimate_g",
     "pass": true,
     "value": {
-      "per_wheel_g": 94.6,
+      "per_wheel_g": 94.5,
       "register_row_g": 92.5,
       "note": "register row excludes the D-007 wheel screws",
       "parts_g": {
-        "WHEEL_RIM_PETG": 54.9,
+        "WHEEL_RIM_PETG": 54.94,
         "WHEEL_CLAMP_RING_PETG": 6.16,
-        "WHEEL_HUB_CAP_PETG": 1.47,
+        "WHEEL_HUB_CAP_PETG": 1.65,
         "WHEEL_TYRE_TPU95A_L": 23.12,
         "WHEEL_RING_SCREW_M3X8_1": 0.78,
         "WHEEL_RING_INSERT_M3_1": 0.18,
-        "WHEEL_CAP_SCREW_M2X6_1": 0.19,
         "WHEEL_RING_SCREW_M3X8_2": 0.78,
         "WHEEL_RING_INSERT_M3_2": 0.18,
-        "WHEEL_CAP_SCREW_M2X6_2": 0.19,
         "WHEEL_RING_SCREW_M3X8_3": 0.78,
         "WHEEL_RING_INSERT_M3_3": 0.18,
-        "WHEEL_CAP_SCREW_M2X6_3": 0.19,
         "WHEEL_RING_SCREW_M3X8_4": 0.78,
         "WHEEL_RING_INSERT_M3_4": 0.18,
-        "WHEEL_CAP_SCREW_M2X6_4": 0.19,
         "WHEEL_RING_SCREW_M3X8_5": 0.78,
         "WHEEL_RING_INSERT_M3_5": 0.18,
-        "WHEEL_CAP_SCREW_M2X6_5": 0.19,
         "WHEEL_RING_SCREW_M3X8_6": 0.78,
         "WHEEL_RING_INSERT_M3_6": 0.18,
-        "WHEEL_CAP_SCREW_M2X6_6": 0.19,
+        "WHEEL_CAP_SCREW_M3X10": 0.89,
         "WHEEL_SCREW_M3X6_1": 0.67,
         "WHEEL_SCREW_M3X6_2": 0.67,
         "WHEEL_SCREW_M3X6_3": 0.67

@@ -12,8 +12,8 @@
 | J02 L/R | Bearings, housing, cap and stub | Designed; fits provisional | Supplier drawing/lot, fit coupons, retention and endplay |
 | J03 L/R | Motor shaft to stub to wheel | Designed; fit/torque provisional | Motor fit, shaft coupling, runout and reversals |
 | J04 L/R | Carrier to front/rear rails | Defined in CAD | Coupon fit, insert pull-out and loaded stiffness/clearance |
-| J05 | Front crossmember to rails | CAD defined (D-030) | Insert coupon in the tongue, fit and load proof |
-| J06 | Rear crossmember to rails | CAD defined (D-030) | Insert coupon in the tongue, fit and impact/torsion proof |
+| J05 | Front crossmember to rails | Integrated by D-033: one front-module print, no hardware | Junction coupon and pod/crossmember load proof |
+| J06 | Rear crossmember to rails | Integrated by D-033: one rear-module print, no hardware | Junction coupon and impact/torsion proof |
 | J07A | Ball caster to pod | Defined in CAD (D-011) | Received-caster measurement, insert pull-out, load tests |
 | J07B | Pod to front crossmember | Defined in CAD (D-011) | Insert coupon, tool access and load test |
 | J08A | Range sensor to pod | Defined in CAD (D-011) | Vibration retention and lens alignment |
@@ -30,7 +30,7 @@
 | J14 | TPU tyre to wheel rim | Designed in wheel CAD | Material/process fit, clamp, creep and runout |
 | J15A | IMU board to deck | Modeled | Board-hole confirmation and screw fit |
 | J15B | Driver boards and motor-lead restraint | CAD defined (D-030, D-031) | Insert coupon, tug/vibration test, service dry run |
-| J16 | Split decks to rails | CAD defined (D-030) | Insert coupon, coplanarity, racking and tool access |
+| J16 | Decks to rails | Integrated by D-033: deck and rails are one print per end | Deck coplanarity across the carriers; bending/racking proof |
 
 ## Detailed interfaces
 
@@ -54,34 +54,29 @@
 
 - **Parts/load path:** motor 4 mm D-shaft → EN8/C45 stub CH-012 → flange → wheel web CH-004. Torque passes through set screw on motor flat and three wheel screws into wheel.
 - **Location/joint:** Ø4.05 H8 bore gives 8 mm shaft engagement; DIN 916 screw bears on flat at |Y| 74.8 (D-012, maintaining tap-drill edge clearance to the wider bearing). Ø10 g6 stub spigot locates wheel in Ø10 H7 hub bore; stub shoulder/bearing stack establish axial datum.
-- **Hardware/clamp:** 1 × ISO 4029 M3 × 3 cup-point set screw per side, faced to 2.5 mm so it sits flush with the Ø8 stub, with Loctite 222 (CH-055/057, [D-030](../../decisions.md#d-030)). It sweeps 1.54 mm past the face-screw heads; an unmodified M3 × 3 would sweep only 1.07 mm; 3 × ISO 7380 M3 × 6 into flange per side (CH-056; six total), modeled 2 mm thread engagement. Six M2 × 6 thread-forming cap screws per side (CH-059) retain the hub cover, not the torque joint.
-- **Material/access/service:** turned steel stub; wheel/carrier candidate PETG, tyre TPU. Access set screw through housing slot with 1.5 mm key after wheel removal. Wheel removal: cap off, three M3 screws out, pull from spigot. Stub drawing/quote open.
+- **Hardware/clamp:** 1 × ISO 4029 M3 × 3 cup-point set screw per side, faced to 2.5 mm so it sits flush with the Ø8 stub, with Loctite 222 (CH-055/057, [D-030](../../decisions.md#d-030)). It sweeps 1.54 mm past the face-screw heads; an unmodified M3 × 3 would sweep only 1.07 mm; 3 × ISO 7380 M3 × 6 into flange per side (CH-056; six total), modeled 2 mm thread engagement. One central ISO 7380 M3 × 10 per side (CH-059, [D-033](../../decisions.md#d-033)) retains the hub cover, not the torque joint: it threads 6.9 mm into an M3 hole tapped 8 mm deep in the stub's spigot end, and two moulded pegs clock the cap. It replaced six M2 × 6 thread-forming screws.
+- **Material/access/service:** turned steel stub; wheel/carrier candidate PETG, tyre TPU. Access set screw through housing slot with 1.5 mm key after wheel removal. Wheel removal: cap off (one screw), three M3 screws out, pull from spigot. Stub drawing/quote open.
 - **Proof/state:** nominal CAD checks exist. Verify motor shaft fit, spigot, concentricity, runout ≤0.30 mm TIR and no set-screw mark shift after 200 reversals. **Design defined; coupling/torque proof open.**
 
 ### J04 L/R — carrier to front/rear rail ends
 
-- **Parts/load path:** one integrated printed motor plate/front cheek/rear cheek carrier per side joins split rail ends. Load path: tyre/stub/bearings → housing/cap → carrier → keyed rail faces and screws/inserts → rails → crossmembers/deck/body.
+- **Parts/load path:** one integrated printed motor plate/front cheek/rear cheek carrier per side joins the rail ends of the front and rear frame modules (D-033); the carriers are the only parts joining the two modules. Load path: tyre/stub/bearings → housing/cap → carrier → keyed rail faces and screws/inserts → rails → crossmembers/deck/body.
 - **Location/joint:** datum at X = ±17 mm. Each cheek has a 2 × 3 × 2.5 mm key; rail pocket 2.4 × 3.4 × 3.2 mm (0.2 mm nominal side clearance, 0.7 mm end allowance). Key locates Y/Z; screws clamp faces.
 - **Hardware/clamp:** two ISO 7380 M3 × 8 button heads at Z = 38/48 at each of two interfaces ([D-030](../../decisions.md#d-030); was DIN 7984); 6 mm axial M3 rail inserts. Four screws/inserts per side, eight each total (CH-060/061). Cheek holes R1.7, recess R2.95 × 2.1 for the Ø5.7 head; insert pilot Ø4.3 with 1 mm tip relief.
 - **Material/access/service:** one printed carrier per side and four rail print units; structural material/process unselected. Screws are reached from motor-relief bay after removing motor and wheel-side stack; carrier withdraws toward chassis centre. Tool path and cheek strength unproven.
 - **Proof/state:** nominal CAD architecture defined. Coupon targets: key seats by hand, face gap ≤0.10 mm, rails coplanar ≤0.20 mm, no bottoming/cracks/spin after three cycles. Insert pull-out ≥100 N. At service loads 31 N radial/8 N lateral: deflection ≤0.25 mm and wheel gap ≥1.5 mm; at 2× proof no crack/movement and residual set ≤0.10 mm. **Physical gates open.**
 
-### J05 — front crossmember to front rails
+### J05 — front crossmember to front rails (integrated, D-033)
 
-- **Parts/load path:** front crossmember to both front rails; caster pod loads enter crossmember and pass to rails/deck.
-- **Location/joint:** each rail ends in a 3 × 8 × 10 mm tongue (X 80–83, Y ±4 about the axis, Z 37–47) in a crossmember pocket with 0.2 mm per side. Screw axes Y = ±54, Z = 41.
-- **Hardware/clamp ([D-030](../../decisions.md#d-030)):** 1 × ISO 7380 M3 × 16 per side (CH-073), driven from X +92 through the Ø3.4 crossmember bore. It threads 6 mm into an M3 × 6 insert (CH-077) pressed into the tongue's end face, with a Ø3.4 tip relief behind it. No washer; the head seats on the crossmember face.
-- **Why the insert moved:** the earlier receiver put the Ø4.3 insert pilot behind a Ø3.4 tongue bore, so the insert could not be pressed in. The tongue is now the full 8 mm rail width, leaving 1.85 mm of wall either side of the insert.
-- **Material/access/service:** candidate structural prints. Press the inserts before assembly, fit the tongues, then drive the screws from the front. The heads sit outboard of the pod (Y ±54), but the pod may still need removal for tool access.
-- **Proof/state:** `cad/check_frame_fasteners.py` checks clashes, 6 mm engagement and that each insert can be pressed in from the free tongue face. **Open:** insert coupon and pull-out in the tongue, coplanarity, tool access with pod and shell, and a load test of the pod/crossmember path.
+- **Now:** the front crossmember, both front rails and the front deck with its battery tub are one print, `CHASSIS_FRAME_FRONT_MODULE` ([D-033](../../decisions.md#d-033)). The crossmember rises from Z 51 to the deck underside at Z 52, so deck, rails and crossmember are continuous. Caster pod loads enter the crossmember and pass straight into rails and deck.
+- **Removed:** the 3 × 8 × 10 mm rail tongues and crossmember pockets, the two ISO 7380 M3 × 16 screws (CH-073, retired) and their two M3 × 6 tongue inserts (CH-077). The tongue inserts had only 1.85 mm of wall.
+- **Proof/state:** `cad/check_frame_fasteners.py` row `frame_modules_are_single_prints` checks that the module is one solid and that no J05 hardware remains. **Open:** printer and orientation review for the module, a rail-to-crossmember junction coupon, and the pod/crossmember load test.
 
-### J06 — rear crossmember to rear rails
+### J06 — rear crossmember to rear rails (integrated, D-033)
 
-- **Parts/load path:** rear skid crossmember to both rear rails; skid impact and frame torsion pass into rails/deck.
-- **Location/joint:** rail tongues (X −35 to −32, Y ±4 about the axis, Z 37–47) in crossmember pockets with 0.2 mm per side. Axes Y = ±58.5, Z = 41. The widened rail ends now run X −32 to −23.
-- **Hardware/clamp ([D-030](../../decisions.md#d-030)):** 1 × ISO 7380 M3 × 20 per side (CH-074), driven from X −48 through the 12.8 mm crossmember wall. It threads 6 mm into an M3 × 6 insert (CH-077) in the tongue's end face. No washer. As at J05, the insert moved from behind a Ø3.4 bore, where it could not be fitted.
-- **Material/access/service:** candidate structural prints. Press the inserts, fit the tongues, then drive from the rear; the body may need lifting for tool access.
-- **Proof/state:** `check_frame_fasteners.py` as J05. **Open:** insert coupon, dry-run access, coplanarity, and a rear-crossmember load/twist test with the inserts inspected for movement and cracks.
+- **Now:** the rear skid crossmember, both rear rails and the rear deck are one print, `CHASSIS_FRAME_REAR_MODULE` ([D-033](../../decisions.md#d-033)). Under the deck (X −41 to −32) the crossmember rises from Z 48 to Z 52, so the module prints deck-down without a floating crossmember. The widened rail ends (X −32 to −23) stay as gussets into the crossmember.
+- **Removed:** the rail tongues and pockets, the two ISO 7380 M3 × 20 screws (CH-074, retired) and their two tongue inserts (CH-077).
+- **Proof/state:** as J05. **Open:** junction coupon, and the rear-crossmember skid impact and twist test.
 
 ### J07A — Pololu #2691 caster to printed pod
 
@@ -203,7 +198,7 @@
 
 ### J13 — body frame to chassis deck
 
-- **Parts/load path:** body-frame feet/pads to split decks. Four M4 bolts clamp; two diagonal pins carry repeatable lateral location/shear.
+- **Parts/load path:** body-frame feet/pads to the decks of the two frame modules. Four M4 bolts clamp; two diagonal pins carry repeatable lateral location/shear.
 - **Location/joint:** four Ø4.5 clearance holes at modeled points; two Ø4 pins in Ø4.1 nominal holes; pins establish XY datum, bolts clamp pads to deck.
 - **Hardware/clamp ([D-030](../../decisions.md#d-030)):** 4 × M4 × 12 button-head through-bolts and four accessible M4 plain hex nuts (CH-035/036), plus 2 × Ø4 × 8 mm pins (CH-037). The stack is 4 mm frame foot + 4 mm deck + 3.2 mm nut = 11.2 mm, leaving 0.8 mm of thread past the nut, more than one 0.7 mm pitch. There are no washers. Loctite 222 (CH-057) on the nut thread is the locking method; a Nyloc would need a longer bolt and a different socket path. Confirm actual head seat, nut height and projection on the received parts.
 - **Material/access/service:** printed frame candidates. Bolt heads from above; nuts held from below through rail socket paths. Remove bolts and lift body vertically off pins. Verify slim-socket access with tub/rails/shell installed.
@@ -233,18 +228,16 @@
 - **Not covered:** the PCB-03/04 and C3 boards stay full-system proposals (CH-041–CH-047). Their mounts are not part of this chassis joint.
 - **Proof/state:** CAD defined; `check_frame_fasteners.py` checks that the boards sit on the posts and nothing clashes. **Open:** confirm the M2.5 head diameter, post coupon, tug test (20 N on a motor lead), vibration retention.
 
-### J16 — split deck prints to rails
+### J16 — decks to rails (integrated, D-033)
 
-- **Parts/load path:** front/rear deck prints clamp to four rail segments; deck transfers body, battery, ballast and crossmember loads into rails.
-- **Location/joint ([D-030](../../decisions.md#d-030)):** deck lands on rail tops. Six vertical axes: front at (30, ±54) and (77.5, ±54), rear at (−27.5, ±61). The outer front pair moved from X 70 and the rear pair from (−25, ±58.5) because their heads sat under the body M4 feet. Each screw has an 8 × 8 mm deck ear.
-- **Hardware/clamp:** 6 × ISO 7380 M3 × 10 button heads (CH-075) through Ø3.4 deck holes into M3 × 6 inserts (CH-077) pressed down flush with the rail top; 6 mm of thread, Ø3.4 tip relief below. No washer.
-- **Material/access/service:** separate candidate prints. Assemble rails and crossmembers first, decks second, before body and upper packaging. The heads are not reachable with the body fitted.
-- **Proof/state:** CAD defined; `check_frame_fasteners.py`. **Open:** insert coupon, coplanarity/racking, bending/shear and insert pull-out.
+- **Now:** each deck is one print with its two rails and crossmember. The deck transfers body, battery, ballast and crossmember loads into the rails through continuous material ([D-033](../../decisions.md#d-033)).
+- **Removed:** six ISO 7380 M3 × 10 screws (CH-075, retired), six rail-top inserts (CH-077) and the 8 × 8 mm deck ears. The fastener review found that the two rear ears sat 1.00 mm off the rear deck plate. The rear J16 screws therefore clamped detached pads to the rails, not the deck; the module removes that defect.
+- **Proof/state:** `check_frame_fasteners.py` checks that each module is one solid and that the rear deck plate sits on both rear rails. **Open:** deck-top coplanarity across the motor bay once the J04 carriers join the modules, and a bending/racking test.
 
 ## Release actions
 
 1. CAD receiver gaps are closed: J07/J08 by D-011, J09A/B and J10A/B by D-014. Confirm the J07B and J09A crossmember insert fit and screw engagement with the real hardware.
-2. Done by [D-030](../../decisions.md#d-030): J05, J06, J11A, J11B, J15B and J16 hardware is in CAD and the BOM, the J12 source is identified and the J13 stack is closed. Source the straps and the foam.
+2. Done by [D-030](../../decisions.md#d-030): J11A, J11B and J15B hardware is in CAD and the BOM, the J12 source is identified and the J13 stack is closed. Source the straps and the foam. [D-033](../../decisions.md#d-033) then integrated J05, J06 and J16 into two frame-module prints, removing their hardware.
 3. Select printer/nozzle/material/orientation and insert articles. Print coupons for bearing fits, insert orientations, keys/tongues and thin walls; record dimensions and pull-out results.
 4. Update J01/J03 using measured motor/stub hardware when received. Build axle rig and record test results separately from CAD checks.
 5. Dry-run assembly/service with body installed, including tool access, wiring disconnects, battery isolation/removal, and per-part print/export validation.

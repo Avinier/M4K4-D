@@ -9,7 +9,8 @@ The outboard face follows the droid's shell language (00-foundation vision:
 rugged, visibly assembled; RP-01 D-07 stepped panels) after the builder's
 reference image (D-008): six framed spokes with bevelled sides and a recessed
 slot run from a hex hub to a bevelled inner ring; a removable faceted hex cap
-(6 x M2 screws) covers the hub and the three D-007 wheel screws; the 12-sided beadlock
+(one central M3 into the stub end, two clocking pegs; D-033) covers the hub
+and the three D-007 wheel screws; the 12-sided beadlock
 ring alternates screw flats with recessed vent slots and has chamfered
 corners. Rim and ring light, cap dark: a two-tone print.
 
@@ -19,7 +20,7 @@ chassis Z is 42 + z. The envelope and the D-007 hub interface match
 ``../body_chassis_model.py``: Ø84 x 24; R18 pocket over the bearing housing to
 y +8 (|Y| 93); a 4 mm web (y +8..+12) with a Ø10 bore on the stub spigot and
 3 x Ø3.4 at R8 for the M3 x 6 button heads into the stub flange. Only the hub
-cap and its screws stand proud of the outer face. The chassis model itself is
+cap stands proud of the outer face; its screw head is recessed in the boss. The chassis model itself is
 not changed by this file.
 
 All dimensions are the assembled state. Print allowances are in README.md.
@@ -69,9 +70,15 @@ CAP_BOSS_AF = 16.0  # raised faceted centre on the cap
 CAP_BOSS_Y = (CAP_Y[1], CAP_Y[1] + 1.0)
 CAP_BOSS_CHAMFER = 1.0
 CAP_RECESS = dict(radius=11.2, y=(Y_OUT, Y_OUT + 1.9))  # clears the three M3 heads (to R10.85, 1.65 tall)
-CAP_SCREW_R = 12.9  # toward the hex corners, between spokes: head fully on the cap, clear of the boss
-CAP_SCREW = dict(length=6.0, clear_radius=1.1, pilot_radius=0.8, head_radius=1.75, head_height=1.3)
-CAP_PILOT_Y = (BOSS_POCKET_FLOOR_Y + 0.7, Y_OUT)  # M2 thread-forming into the hub, 0.7 mm skin to the pocket
+# D-033: one central ISO 7380 M3 x 10 into a tapped hole in the stub's spigot end
+# replaces the six M2 cap screws. Its head sits in a counterbore 0.25 mm under the
+# boss top, on a column that stops inside the wheel-screw heads and 0.6 mm short of
+# the spigot tip. Two pegs in the old hex-corner pilot positions clock the cap.
+CAP_SCREW = dict(length=10.0, clear_radius=1.7, head_radius=2.85, head_height=1.65, cbore_radius=3.1)
+CAP_SCREW_SEAT_Y = CAP_BOSS_Y[1] - 1.9  # y 14.1: head top 0.25 under the boss top
+CAP_COLUMN = dict(radius=4.5, y0=STUB_SPIGOT_Y[1] + 0.6)  # 0.65 mm inside the wheel-screw heads (R5.15)
+STUB_CAP_TAP = dict(thread=8.0, drill=9.5)  # M3 tapped into the spigot end from y 11 (|Y| 96)
+CAP_PEG = dict(r=12.2, radius=0.9, hole_radius=1.05, length=1.5, hole_depth=1.8, angles=(30.0, 210.0))
 
 # Tyre seat, lip and clamp ring.
 SEAT_RADIUS = 37.0
@@ -166,7 +173,7 @@ def _spoke_angles():
 
 
 def _screw_angles():
-    # Between the spokes: rim inserts in plain barrel wall, cap screws at the hub hex corners.
+    # Between the spokes: rim inserts in plain barrel wall (the cap pegs use two of these angles).
     return [(i + 0.5) * 360.0 / SCREW_COUNT for i in range(SCREW_COUNT)]
 
 
@@ -190,8 +197,8 @@ def _face():
     face = face - _ycyl(HUB_BORE_RADIUS, HUB_Y[0] - 1.0, Y_OUT + 1.0)
     for angle in WHEEL_SCREW["angles"]:
         face = face - _at_pcd(_ycyl(WHEEL_SCREW["clear_radius"], HUB_Y[0] - 1.0, Y_OUT + 1.0), WHEEL_SCREW["pcd_r"], angle)
-    for angle in _screw_angles():
-        face = face - _at_pcd(_ycyl(CAP_SCREW["pilot_radius"], *CAP_PILOT_Y), CAP_SCREW_R, angle)
+    for angle in CAP_PEG["angles"]:
+        face = face - _at_pcd(_ycyl(CAP_PEG["hole_radius"], Y_OUT - CAP_PEG["hole_depth"], Y_OUT + 1.0), CAP_PEG["r"], angle)
     return face
 
 
@@ -225,8 +232,11 @@ def hub_cap():
     circ = CAP_BOSS_AF / 2.0 / math.cos(math.pi / 6.0)
     boss = boss & _ycone(circ + 0.01, circ - CAP_BOSS_CHAMFER, *CAP_BOSS_Y)
     cap = body + boss - _ycyl(CAP_RECESS["radius"], *CAP_RECESS["y"])
-    for angle in _screw_angles():
-        cap = cap - _at_pcd(_ycyl(CAP_SCREW["clear_radius"], CAP_Y[0] - 1.0, CAP_Y[1] + 1.0), CAP_SCREW_R, angle)
+    cap = cap + _ycyl(CAP_COLUMN["radius"], CAP_COLUMN["y0"], CAP_RECESS["y"][1] + 0.01)
+    for angle in CAP_PEG["angles"]:
+        cap = cap + _at_pcd(_ycyl(CAP_PEG["radius"], Y_OUT - CAP_PEG["length"], Y_OUT + 0.01), CAP_PEG["r"], angle)
+    cap = cap - _ycyl(CAP_SCREW["clear_radius"], CAP_COLUMN["y0"] - 1.0, CAP_BOSS_Y[1] + 1.0)
+    cap = cap - _ycyl(CAP_SCREW["cbore_radius"], CAP_SCREW_SEAT_Y, CAP_BOSS_Y[1] + 1.0)
     return cap
 
 
@@ -274,11 +284,10 @@ def _hardware():
         # Melted-in insert: its knurl displaces into the 2.0 mm hole wall; shown at hole size.
         insert = _ycyl(INSERT["hole_radius"], *INSERT_Y) - _ycyl(INSERT["bore_radius"], *INSERT_Y)
         parts.append((f"RING_INSERT_M3_{n}", _at_pcd(insert, SCREW_PCD_RADIUS, angle), BRONZE))
-        top = CAP_Y[1]
-        # Thread-forming shank shown at the pilot size: its thread cuts into the pilot wall.
-        shank = _ycyl(CAP_SCREW["pilot_radius"], top - CAP_SCREW["length"], top)
-        cap_screw = _ycyl(CAP_SCREW["head_radius"], top, top + CAP_SCREW["head_height"]) + shank
-        parts.append((f"CAP_SCREW_M2X6_{n}", _at_pcd(cap_screw, CAP_SCREW_R, angle), STEEL))
+    # D-033 central hub-cap screw (CH-059) into the stub's tapped spigot end.
+    seat = CAP_SCREW_SEAT_Y
+    cap_screw = _ycyl(CAP_SCREW["head_radius"], seat, seat + CAP_SCREW["head_height"]) + _ycyl(1.5, seat - CAP_SCREW["length"], seat)
+    parts.append(("CAP_SCREW_M3X10", cap_screw, STEEL))
     for n, angle in enumerate(WHEEL_SCREW["angles"], start=1):
         # D-007 wheel-to-stub screw (CH-056); the suffix matches the chassis checks.
         head = _ycyl(WHEEL_SCREW_HEAD["radius"], Y_OUT, Y_OUT + WHEEL_SCREW_HEAD["height"])

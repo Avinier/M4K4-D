@@ -9,16 +9,6 @@
       "check": "thread_engagement_min",
       "pass": true,
       "value": {
-        "J05_L": 6.0,
-        "J05_R": 6.0,
-        "J06_L": 6.0,
-        "J06_R": 6.0,
-        "J16_1_L": 6.0,
-        "J16_1_R": 6.0,
-        "J16_2_L": 6.0,
-        "J16_2_R": 6.0,
-        "J16_3_L": 6.0,
-        "J16_3_R": 6.0,
         "J11A_1": 4.5,
         "J11A_2": 4.5,
         "J11A_3": 4.5,
@@ -34,16 +24,6 @@
       "check": "inserts_pressable_from_free_face",
       "pass": true,
       "value": {
-        "J05_RAIL_INSERT_M3_L": 0,
-        "J05_RAIL_INSERT_M3_R": 0,
-        "J06_RAIL_INSERT_M3_L": 0,
-        "J06_RAIL_INSERT_M3_R": 0,
-        "J16_RAIL_INSERT_M3_1_L": 0,
-        "J16_RAIL_INSERT_M3_1_R": 0,
-        "J16_RAIL_INSERT_M3_2_L": 0,
-        "J16_RAIL_INSERT_M3_2_R": 0,
-        "J16_RAIL_INSERT_M3_3_L": 0,
-        "J16_RAIL_INSERT_M3_3_R": 0,
         "J11A_BOSS_INSERT_M3_1": 0,
         "J11A_BOSS_INSERT_M3_2": 0,
         "J11A_BOSS_INSERT_M3_3": 0,
@@ -55,11 +35,35 @@
       }
     },
     {
-      "check": "tongue_fit",
+      "check": "frame_modules_are_single_prints",
       "pass": true,
       "value": {
-        "side_clearance_mm": 0.2,
-        "insert_wall_mm": 1.85
+        "frame_modules": {
+          "CHASSIS_FRAME_FRONT_MODULE": {
+            "solids": 1,
+            "volume_cm3": 75.84,
+            "bbox_mm": [
+              75.0,
+              128.0,
+              41.0
+            ]
+          },
+          "CHASSIS_FRAME_REAR_MODULE": {
+            "solids": 1,
+            "volume_cm3": 50.37,
+            "bbox_mm": [
+              34.0,
+              132.0,
+              22.0
+            ]
+          }
+        },
+        "split_hardware_left": [],
+        "split_parts_left": [],
+        "rear_deck_on_rails": {
+          "L": 1.0,
+          "R": 1.0
+        }
       }
     },
     {
@@ -162,17 +166,17 @@
     }
   ],
   "accepted_overlaps": {
-    "REAR_SKID_CROSSMEMBER x REAR_KEEL_HEATSET_INSERT_4": 23.1,
-    "REAR_SKID_CROSSMEMBER x REAR_KEEL_HEATSET_INSERT_2": 23.1,
-    "CHASSIS_DECK_WITH_BODY_INTERFACE x IMU_M2_SCREW_SHANK_R": 12.566,
-    "CHASSIS_DECK_WITH_BODY_INTERFACE x IMU_M2_SCREW_SHANK_L": 12.566,
-    "FRONT_CROSSMEMBER x BALL_POD_HEATSET_INSERT_1": 23.1,
-    "REAR_SKID_CROSSMEMBER x REAR_KEEL_HEATSET_INSERT_1": 23.1,
+    "CHASSIS_FRAME_REAR_MODULE x REAR_KEEL_HEATSET_INSERT_1": 23.1,
     "AXLE_MOTOR_SCREW_M3X6_L_2 x MOTOR_L_MOT3001_6V230_GEARBOX": 6.912,
-    "FRONT_CROSSMEMBER x BALL_POD_HEATSET_INSERT_2": 23.1,
-    "AXLE_MOTOR_SCREW_M3X6_R_1 x MOTOR_R_MOT3001_6V230_GEARBOX": 6.912,
-    "AXLE_MOTOR_SCREW_M3X6_R_2 x MOTOR_R_MOT3001_6V230_GEARBOX": 6.912,
     "AXLE_MOTOR_SCREW_M3X6_L_1 x MOTOR_L_MOT3001_6V230_GEARBOX": 6.912,
-    "REAR_SKID_CROSSMEMBER x REAR_KEEL_HEATSET_INSERT_3": 23.1
+    "CHASSIS_FRAME_REAR_MODULE x REAR_KEEL_HEATSET_INSERT_3": 23.1,
+    "CHASSIS_FRAME_FRONT_MODULE x IMU_M2_SCREW_SHANK_L": 12.566,
+    "CHASSIS_FRAME_REAR_MODULE x REAR_KEEL_HEATSET_INSERT_2": 23.1,
+    "CHASSIS_FRAME_FRONT_MODULE x IMU_M2_SCREW_SHANK_R": 12.566,
+    "AXLE_MOTOR_SCREW_M3X6_R_2 x MOTOR_R_MOT3001_6V230_GEARBOX": 6.912,
+    "CHASSIS_FRAME_FRONT_MODULE x BALL_POD_HEATSET_INSERT_1": 23.1,
+    "AXLE_MOTOR_SCREW_M3X6_R_1 x MOTOR_R_MOT3001_6V230_GEARBOX": 6.912,
+    "CHASSIS_FRAME_REAR_MODULE x REAR_KEEL_HEATSET_INSERT_4": 23.1,
+    "CHASSIS_FRAME_FRONT_MODULE x BALL_POD_HEATSET_INSERT_2": 23.1
   }
 }
