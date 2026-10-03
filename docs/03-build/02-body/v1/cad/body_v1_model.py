@@ -53,6 +53,7 @@ PROTOTYPE_CAD_ROOT = HERE.parents[3] / "02-prototypes" / "RP-06-cad"
 PURCHASED = PROTOTYPE_CAD_ROOT / "body-chassis" / "layout-01" / "references" / "purchased"
 # Vendor or vendor-derived STEPs added in 03-build (see purchased/README.md).
 V1_PURCHASED = HERE.parents[2] / "01-chassis" / "v1" / "cad" / "purchased"
+BODY_V1_PURCHASED = HERE / "purchased"
 # Adafruit #3297 leaves in adafruit_3297_drv8833.step export order.
 ADAFRUIT_3297_LEAVES = ("PCB", "U1_HTSSOP16", "U1_LEADS_A", "U1_LEADS_B", "R1_1206", "R2_1206",
                         "C1_0805", "C2_0805", "C3_0805", "C4_0805", "Q1_SOT23", "J1_TERMINAL_BLOCK")
@@ -457,6 +458,23 @@ PANEL_SCREW_LENGTH = 8.0
 # to the bottom edge so the body still lowers onto the chassis.
 FRONT_POD_NOTCH_CLEARANCE = 0.5
 
+# Wheel-arch pods are separate prints seated on the shell's outer skin. Three
+# M3 x 8 screws per side enter from inside the shell, through flat-seat bosses
+# on the inner skin, into heat-set inserts in the pod; fit them on the bench
+# before the shell is lowered. The amber trim ring is glued to the pod's
+# outer face, which is flush with the tyre face.
+WHEEL_ARCH_INNER_RADIUS = WHEEL_OD / 2.0 + WHEEL_WELL_RADIAL_CLEARANCE
+WHEEL_ARCH_OUTER_RADIUS = 54.0  # 8 mm band: 2 mm of wall each side of the O4 insert pilot
+WHEEL_ARCH_OUTER_Y = TRACK / 2.0 + WHEEL_WIDTH / 2.0
+WHEEL_ARCH_FASTENER_RADIUS = 50.0
+WHEEL_ARCH_FASTENER_ANGLES = (20.0, 90.0, 160.0)  # about the axle, from +X toward +Z
+WHEEL_ARCH_BOSS_RADIUS = 4.0  # tangent to the wheel well at the fastener radius
+WHEEL_ARCH_SEAT_DEPTH = 2.0  # flat head seat this far inside the 2.4 mm skin
+WHEEL_ARCH_INSERT_RADIUS = 2.0  # O4 pilot, as the shell-joint inserts
+WHEEL_ARCH_INSERT_LENGTH = 4.0
+WHEEL_ARCH_INSERT_HOLE_DEPTH = 5.0
+WHEEL_ARCH_SCREW_LENGTH = 8.0
+
 # Audio parts selected 2026-09-26 (RP03-CAD-11, ../../peripheral-selection.md): Visaton
 # K 50 WP 8 ohm speaker, PCB-05 (MAX98357A + 2 x ADAU7002) and four PCB-06 boards with
 # an Infineon IM73D122V01 each. The speaker's Ø50 x 18 mm outline and Ø46 cutout are
@@ -482,12 +500,38 @@ SPEAKER_MAGNET_DIAMETER = 26.0
 PCB05_CENTER = (60.0, 0.0, 118.5)
 PCB05_SIZE = (30.0, 38.0, 9.0)
 PCB05_BOARD_THICKNESS = 1.6
-# PCB-06 mic boards: 12 x 8 x 1.0 mm, outer face on |Y| 70 against the port boot; the
-# IM73D122 (4 x 3 x 1.2) sits on the port axis on the inboard face and a JST-SH 4-pin
-# side-entry header (7 x 4.25 footprint, 2.95 tall) below it.
-MIC_BOARD_OUTER_Y = 70.0
-MIC_BOARD_SIZE = (12.0, 1.0, 9.5)  # 9.5 tall (was 8) so the 4.96 mm GH header clears the mic package
-MIC_PACKAGE_SIZE = (4.0, 1.2, 3.0)
+# PCB-06 mic boards are shell-mounted (D-037). Each sits on a printed boss on the
+# inner skin, coaxial with its port. The board's outer face lands on the boss face at
+# |Y| MIC_BOARD_OUTER_Y; a foam gasket ring in a pocket round the port seals it; two M2
+# thread-forming screws through the board clamp it. Nothing on the board may reach
+# inboard of |Y| 68.5: the shell lowers past the upper side rails (|Y| <= 68), so the
+# old side-entry GH header (4.25 tall) is replaced by a soldered GH pigtail.
+MIC_BOARD_OUTER_Y = 71.3
+MIC_BOARD_SIZE = (12.0, 1.0, 14.0)  # X, thickness, Z; the IM73D122 is centred on the port
+MIC_PACKAGE_SIZE = (4.0, 1.30, 3.0)  # Infineon PG-LLGA-5-4 STEP body without logo faces (datasheet: 4 x 3 x 1.2 +-0.1)
+MIC_PACKAGE_STEP = "infineon_pg_llga_5_4.stp"  # body v1 purchased/, from Infineon's PG-LLGA-5-4 package page
+# Datasheet Fig. 12/13: the sound port is 0.68 mm from the package centre along the
+# 4 mm side, away from pins 1-4. The STEP has it at local (+0.68, 0) with the pads on
+# Z 0 and the lid toward +Z. The port, not the package centre, sits on the port axis.
+MIC_PORT_OFFSET = 0.68
+MIC_SCREW_V = 5.0  # M2 screws at +-5 mm in Z from the port axis, on its X
+MIC_SCREW_LENGTH = 4.0  # M2 x 4 pan head (Ø3.8 x 1.3): 3.0 mm thread-formed into the boss
+MIC_SCREW_PILOT_RADIUS = 0.8  # Ø1.6 pilot; drill to size after printing
+MIC_SCREW_PILOT_DEPTH = 3.3
+MIC_SCREW_CLEARANCE_RADIUS = 1.1  # Ø2.2 board hole
+MIC_PORT_RADIUS = 1.0  # Ø2.0 bore through the boss and skin
+MIC_PCB_PORT_RADIUS = 0.4  # Ø0.8 sound hole through PCB-06 under the bottom-port mic
+MIC_GASKET_OD = 6.5
+MIC_GASKET_ID = 2.0
+MIC_GASKET_FREE_THICKNESS = 1.0  # closed-cell foam, die-cut or punched
+MIC_GASKET_POCKET_RADIUS = 3.5
+MIC_GASKET_POCKET_DEPTH = 0.7  # board lands on the boss face: 30% gasket compression
+MIC_BOSS_HALF_X = 8.0
+MIC_BOSS_HALF_Z = 8.5
+MIC_PIGTAIL_THICKNESS = 1.0  # 4 x AWG28 lying flat on the inboard face
+MIC_PIGTAIL_RESERVE_V = 2.0  # +-2 mm in Z about the port axis
+MIC_PIGTAIL_PAD_U = 2.5  # pads start 2.5 mm toward the body centre from the port axis
+MIC_PIGTAIL_RUN = 10.0  # first run past the board edge toward the body centre
 # PCB-07 IMU board: ICM-42688-P on 16 x 20 x 1.0 mm FR4, flat on the chassis deck crossbar
 # (deck material X ~17.5-26.5 here; open over the motors and the battery on either side).
 # Two M2 x 5 thread-forming screws at (IMU_SCREW_X, +-IMU_SCREW_HALF_Y) into the 4 mm deck.
@@ -1070,7 +1114,7 @@ MASS_ROWS = [
         HEAD_ORIGIN_IN_CHASSIS[1] + HEAD_LOCAL_COM[1],
         HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_LOCAL_COM[2],
     ), "RP-01 generated mass tree"),
-    ("BODY_SHELL_AND_PANELS", 249.3, (19.9, 0.0, 92.6), "Body v1 CAD volume and centroid (2026-10-02): 2.4 mm shell, front/rear service skins with speaker cup and E-stop well, badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods/trims at 0.571 g/cm3. Excludes panel screws already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."),
+    ("BODY_SHELL_AND_PANELS", 250.7, (19.8, 0.0, 93.5), "Body v1 CAD volume and centroid (2026-10-03): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037, +4.0 g), front/rear service skins with the seven uniform rectangular speaker slots and E-stop well, badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."),
     ("BODY_PRIMARY_FRAME", 170.9, (12.5, 1.0, 94.9), "Body v1 CAD volume and centroid (2026-10-02): main connected print and removable front-left foot cassette at conservative 1.20 g/cm3 effective PETG, plus modeled four M4 bolts/nuts, two locating pins, cassette M3 joints, and four shell-to-frame M3 screw/insert joints at 7.85/8.50 g/cm3 steel/brass. Estimated, not weighed; check_body_layout.py verifies against the solids."),
     ("CHASSIS_PRIMARY_FRAME", 229.1, (18.14, 0.0, 46.64), "D-029 (2026-10-01): +21.4 g of newly modeled hardware measured from the solids at 7.9/8.5 g/cm3, centroid (30.4, 0, 46.4): J05/J06/J16/J11A ISO 7380 screws and 14 M3 x 6 inserts, four M2.5 driver screws and inserts; +0.7 g for the measured +1.24 cm3 printed volume at 0.571 g/cm3 (driver posts and tie lugs, wider tongues and rear rail ends, moved J16 ears, hatch strap slots, recess/cavity growth), centroid about (35, 0, 64); was 207.0 g at (16.82, 0, 46.61). 2026-10-01: +0.2 g for the measured +0.29 cm3 when the front hatch bosses moved to the front wall, the bosses were cut to Z 39.5 and the hatch grew 4 mm forward; D-011: -0.3 g for the O5 J10-8 cable bore through the front crossmember and deck at (86, -31); D-010 J04 adds two integrated plate-and-cheek carriers, keyed rail joints, eight modeled M3 x 8 screws and eight 6 mm inserts; estimated +10.2 g total (about +0.7 g printed cheek/key volume and +9.5 g steel/brass hardware, preliminary geometry-density estimate); previous 196.9 g centroid (17.7, 0, 46.8). D-007 axle stack (2026-09-29), +20.9 g at the axle (X 0, Z 42): printed plate + housing replace the flange/boss/diaphragm, +7.24 cm3 measured at ~0.571 g/cm3 (+4.1 g); two 1.2 mm aluminium caps 1.52 cm3 (+4.1 g); eight M3 x 18 cap screws (+10.6 g); eight M3 brass inserts (+1.5 g); face screws M3 x 8 CSK -> M3 x 6 low head (+0.6 g); before that 176.0 g at (19.8, 0, 47.4): +2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"),
     ("WHEEL_L", 92.5, WHEEL_CENTER_L, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
@@ -1099,7 +1143,7 @@ MASS_ROWS = [
     ("TCRT5000_BREAKOUT_AND_CABLE", 3.0, TCRT_REAR_CENTER, "E: TCRT5000 with a soldered 350 mm 4-core J10-10 GH lead (CH-020) and heat-shrink (D-016) (most of it rises to the C3 carrier; lumped at the sensor); was inside the old CONTROL_POWER_SENSORS row at the body centre"),
     ("ESTOP_XA1E_BV3U02KT_R", 14.0, ((5.0 * (ESTOP_MOUNT_X - ESTOP_MUSHROOM_TOP_ABOVE_MOUNT + 4.0) + 9.0 * (ESTOP_KEEP_OUT[0] + ESTOP_KEEP_OUT[1]) / 2.0) / 14.0, 0.0, ESTOP_CENTER_Z), "D: IDEC XA unibody Ø29 mushroom 14 g (XA datasheet); ~5 g mushroom and collar outside the well floor, ~9 g contact block behind it. The revised rear-panel well and bezel print mass is included in BODY_SHELL_AND_PANELS."),
     ("BALL_NOSE_POD_SENSOR_CAP", 18.9, (111.4, 0.0, 37.9), "D-027: +0.2 g for the lid lead hump, raised nose top and wider front pocket (pod 12.45, lid 2.62, cap 2.12 cm3 measured, was 12.44/2.45/2.03, at ~0.571 g/cm3); earlier estimate predates the selected A21 sensor (3.6 g datasheet, ears trimmed), custom Hall carrier and O3 x 1.5 magnet; weigh received parts"),
-    ("BODY_AUDIO", 60.0, (75.5, 0.0, 101.9), "RP03-CAD-11 60 g audio estimate with Visaton K 50 WP 48 g, PCB-05 ~6 g, mic boards ~2 g and cables ~4 g. Body v1 sloped nose shifts the modeled speaker face from X 98 to X 95 mm; a 3 mm shift of its 48 g share moves the audio row X centroid from 77.9 to 75.5 mm. Weigh installed parts."),
+    ("BODY_AUDIO", 61.0, (74.5, 0.0, 102.1), "RP03-CAD-11 60 g audio estimate with Visaton K 50 WP 48 g, PCB-05 ~6 g, mic boards ~2 g and cables ~4 g. Body v1 sloped nose shifts the modeled speaker face from X 98 to X 95 mm; a 3 mm shift of its 48 g share moves the audio row X centroid from 77.9 to 75.5 mm. D-037 adds ~1 g at the mic-array centre (16, 0, 113): eight M2 x 4 screws, larger 12 x 14 boards and gaskets; the soldered leads replace the GH header and plug in the cable allowance. Weigh installed parts."),
     ("HARNESS_AND_FASTENERS", 95.0, (4.0 + BODY_SHIFT_X, 0.0, 88.0), "Conservative allowance for unmodeled installed harness, connector tails, clips, service-panel screws and remaining fasteners. Body-frame M4/M3 joints and shell-to-frame M3 joints are measured separately in BODY_PRIMARY_FRAME; weigh the completed harness and hardware to replace this allowance."),
     ("BODY_YAW_STAGE", 89.0, (BODY_AXIS_X, 13.5, 134.3), "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 6 g driven spur + 6 g scissor pinion (two 2.4 mm halves) + 1 g torsion spring and retaining clip (2026-09-25) + 2 g clamp ring + 1 g coupling shaft; no SKU"),
     ("REAR_SKID_KEEL", 20.0, (-40.5, 0.0, 22.7), "J09/J10 rework 2026-09-30 (D-014, D-016), measured from the solids: keel body 14.64 cm3 at ~0.571 g/cm3 = 8.4 g at (-39.7, 0, 20.4) (D-016 closed the board cavity back to the sensor pocket); shoe 0.40, bezel with guard lips 0.30 and two 1 mm shims 0.24 cm3 printed solid at ~1.27 g/cm3 = 1.2 g; four ISO 4762 M3 x 30 ~8.4 g; four CNC Kitchen M3 x 5.7 crossmember inserts ~1.4 g; M2 x 10 and M2 x 6 screws ~0.6 g (the M2 x 5 board screw was dropped by D-015). Was 12.0 g at (-39.9, 0, 20.4); rear-crossmember cable bore closed and tie lug added (<0.1 g, left in the frame row)"),
@@ -1663,6 +1707,11 @@ def _shell_section(z, rear_x, front_x, half_width, inset=0.0):
     return (Plane.XY * Polygon(*points, align=None)).moved(Location((0.0, 0.0, z)))
 
 
+def _shell_outer():
+    """Solid exterior envelope of the body shell."""
+    return loft([_shell_section(*station) for station in SHELL_STATIONS], ruled=True)
+
+
 def _shell_station_at(z, stations=SHELL_STATIONS):
     """Interpolate the exterior envelope at an inner-roof/floor station."""
     for lower, upper in zip(stations, stations[1:]):
@@ -1765,7 +1814,7 @@ def body_shell():
     stations = SHELL_STATIONS
     rear_extreme_x = min(station[1] for station in stations)
     front_extreme_x = max(station[2] for station in stations)
-    outer = loft([_shell_section(*station) for station in stations], ruled=True)
+    outer = _shell_outer()
     inner_sections = [
         _shell_section(z, rear, front, half, SHELL_THICKNESS)
         for z, rear, front, half in (
@@ -1791,12 +1840,6 @@ def body_shell():
         BODY_Z_BOTTOM - 1.0,
         BALL_POD_LID_Z[1] + FRONT_POD_NOTCH_CLEARANCE,
     )
-    microphone_ports = []
-    for x, y, z, _name in MICROPHONE_PORTS:
-        if y > 0.0:
-            microphone_ports.append(_axial_bore_y(1.5, 66.0, 91.0, x, z))
-        else:
-            microphone_ports.append(_axial_bore_y(1.5, -91.0, -66.0, x, z))
     slot_x0, slot_x1, slot_half = REAR_KEEL_SHELL_SLOT
     floor_z = (BODY_Z_BOTTOM - 1.0, BODY_Z_BOTTOM + SHELL_THICKNESS + 1.0)
     keel_slot = _block(slot_x0, slot_x1, -slot_half, slot_half, *floor_z)
@@ -1820,11 +1863,14 @@ def body_shell():
     shell = shell - [
         front_opening, rear_opening, pod_notch, keel_slot, motor_slot, battery_opening, yaw_opening,
         yaw_plate_roof_slot,
-        *microphone_ports, *_wheel_well_tools(),
+        *_wheel_well_tools(),
     ]
     # Open the floor inside a narrow perimeter rim. A closed floor cannot pass
     # over the already-mounted body frame during top-down shell installation.
-    shell -= _block(BODY_X_REAR + 4.0, BODY_X_FRONT - 4.0, -82.0, 82.0,
+    # Only the rear keeps a 4 mm rim. A front rim would hit the chassis front
+    # module while lowering, so the cut runs out through the nose: the front
+    # wall ends square at full thickness (as the sides do), not as a sliver.
+    shell -= _block(BODY_X_REAR + 4.0, front_extreme_x + 1.0, -82.0, 82.0,
                     BODY_Z_BOTTOM - 1.0, BODY_Z_BOTTOM + SHELL_THICKNESS + 1.0)
     # Four planar side bosses stand just off the post faces. Their 0.4 mm
     # clearance lets the shell lower vertically; M3 screws clamp them later.
@@ -1833,7 +1879,32 @@ def body_shell():
             y0, y1 = sorted((sign * SHELL_BOSS_INNER_Y, sign * SHELL_BOSS_OUTER_Y))
             shell += _axial_bore_y(SHELL_BOSS_RADIUS, y0, y1, x, SHELL_FRAME_Z)
             shell -= _axial_bore_y(SHELL_FRAME_SCREW_RADIUS, y0 - 0.2, y1 + 0.2, x, SHELL_FRAME_Z)
+    # Wheel-arch joint: a boss on the inner skin gives each pod screw a flat
+    # head seat; it is kept inside the outer envelope so the pod seat is clean.
+    for sign in (-1.0, 1.0):
+        for x, z, skin_y in _wheel_arch_fasteners():
+            seat_y = skin_y - SHELL_THICKNESS - WHEEL_ARCH_SEAT_DEPTH
+            y0, y1 = sorted((sign * seat_y, sign * skin_y))
+            shell += _axial_bore_y(WHEEL_ARCH_BOSS_RADIUS, y0, y1, x, z) & outer
+            shell -= _axial_bore_y(SHELL_FRAME_SCREW_RADIUS, y0 - 1.0, y1 + 1.0, x, z)
+    # Microphone bosses (D-037): a flat PCB-06 seat on the sloped inner skin,
+    # with the gasket pocket, the Ø2 port and two M2 pilots.
+    for x, y, z, _name in MICROPHONE_PORTS:
+        sign = 1.0 if y > 0.0 else -1.0
+        shell += _mic_boss(x, z, sign) & outer
+        shell -= _mic_boss_cuts(x, z, sign)
+    shell -= _wheel_well_tools()
     return _paint(shell, "BODY_SHELL", IVORY, SHELL_ALPHA)
+
+
+def _wheel_arch_fasteners():
+    """(X, Z, outer-skin |Y|) of each left-side pod screw; the right side mirrors."""
+    points = []
+    for angle in WHEEL_ARCH_FASTENER_ANGLES:
+        x = WHEEL_ARCH_FASTENER_RADIUS * math.cos(math.radians(angle))
+        z = AXLE_Z + WHEEL_ARCH_FASTENER_RADIUS * math.sin(math.radians(angle))
+        points.append((x, z, _shell_station_at(z)[3]))
+    return points
 
 
 def body_panels():
@@ -1885,9 +1956,16 @@ def body_panels():
     wheel_arches = []
     for sign, side in ((1.0, "L"), (-1.0, "R")):
         yc = sign * TRACK / 2.0
-        pod_outer = _cylinder(52.0, 18.0, (0.0, yc, AXLE_Z), f"WHEEL_ARCH_OUTER_{side}", IVORY, 1.0, "y")
-        pod_inner = _cylinder(46.0, 22.0, (0.0, yc, AXLE_Z), f"WHEEL_ARCH_INNER_{side}", IVORY, 1.0, "y")
-        pod = pod_outer - pod_inner - _block(-58.0, 58.0, -105.0, 105.0, -10.0, AXLE_Z)
+        # The pod runs from inside the shell out to the tyre face, then the
+        # shell envelope is removed so its inner face seats on the skin.
+        py0, py1 = sorted((yc - sign * 20.0, sign * WHEEL_ARCH_OUTER_Y))
+        pod = (_axial_bore_y(WHEEL_ARCH_OUTER_RADIUS, py0, py1, 0.0, AXLE_Z)
+               - _axial_bore_y(WHEEL_ARCH_INNER_RADIUS, py0 - 1.0, py1 + 1.0, 0.0, AXLE_Z)
+               - _block(-58.0, 58.0, -105.0, 105.0, AXLE_Z - WHEEL_ARCH_OUTER_RADIUS - 1.0, AXLE_Z)
+               - _shell_outer())
+        for x, z, skin_y in _wheel_arch_fasteners():
+            hy0, hy1 = sorted((sign * (skin_y - 1.0), sign * (skin_y + WHEEL_ARCH_INSERT_HOLE_DEPTH)))
+            pod -= _axial_bore_y(WHEEL_ARCH_INSERT_RADIUS, hy0, hy1, x, z)
         pod = _paint(pod, f"WHEEL_ARCH_POD_{side}", IVORY, SHELL_ALPHA)
 
         outer_face_y = sign * (TRACK / 2.0 + WHEEL_WIDTH / 2.0 + 1.5)
@@ -1961,6 +2039,26 @@ def panel_mount_hardware():
             )
             parts.extend([head, shank])
     return Compound(label="PANEL_MOUNT_HARDWARE", children=parts)
+
+
+def wheel_arch_hardware():
+    """Per side, three M3 x 8 screws from inside the shell into pod heat-set inserts."""
+    parts = []
+    for sign, side in ((1.0, "L"), (-1.0, "R")):
+        for index, (x, z, skin_y) in enumerate(_wheel_arch_fasteners(), start=1):
+            seat_y = skin_y - SHELL_THICKNESS - WHEEL_ARCH_SEAT_DEPTH
+            # Pressed 0.5 mm below the pod's sloped seat face.
+            iy0, iy1 = sorted((sign * (skin_y + 0.5), sign * (skin_y + 0.5 + WHEEL_ARCH_INSERT_LENGTH)))
+            insert = _axial_bore_y(WHEEL_ARCH_INSERT_RADIUS, iy0, iy1, x, z) - _axial_bore_y(
+                1.5, iy0 - 0.1, iy1 + 0.1, x, z)
+            sy0, sy1 = sorted((sign * seat_y, sign * (seat_y + WHEEL_ARCH_SCREW_LENGTH)))
+            hy0, hy1 = sorted((sign * (seat_y - 1.7), sign * seat_y))
+            screw = _axial_bore_y(1.5, sy0, sy1, x, z) + _axial_bore_y(2.9, hy0, hy1, x, z)
+            parts.extend([
+                _paint(insert, f"WHEEL_ARCH_INSERT_M3_{side}{index}", BRONZE),
+                _paint(screw, f"WHEEL_ARCH_SCREW_M3X8_{side}{index}", STEEL),
+            ])
+    return Compound(label="WHEEL_ARCH_HARDWARE", children=parts)
 
 
 def battery_pack():
@@ -3033,27 +3131,98 @@ def imu_board():
     return Compound(label="IMU_PCB07", children=parts)
 
 
+def _mic_boss(x, z, sign):
+    """Shell boss under one PCB-06: flat seat at |Y| MIC_BOARD_OUTER_Y out to the skin.
+
+    The shell prints roof-down, so the boss's upper (+Z) face is the overhang;
+    it rises 45 degrees from the seat edge to the skin.
+    """
+    f = MIC_BOARD_OUTER_Y
+    far = 85.0  # beyond the outer skin; the caller trims to the shell envelope
+    hz = MIC_BOSS_HALF_Z
+    points = [(f, z - hz), (far, z - hz), (far, z + hz + (far - f)), (f, z + hz)]
+    profile = (Plane.YZ * Polygon(*points, align=None)).moved(Location((x - MIC_BOSS_HALF_X, 0.0, 0.0)))
+    boss = extrude(profile, amount=2.0 * MIC_BOSS_HALF_X)
+    if sign < 0.0:
+        boss = boss.mirror(Plane.XZ)
+    return boss
+
+
+def _mic_boss_cuts(x, z, sign):
+    """Gasket pocket, Ø2 port through boss and skin, and the two M2 pilots."""
+    f = MIC_BOARD_OUTER_Y
+
+    def bore(radius, y0, y1, zz):
+        return _axial_bore_y(radius, sign * y0, sign * y1, x, zz)
+
+    return [
+        bore(MIC_GASKET_POCKET_RADIUS, f - 0.1, f + MIC_GASKET_POCKET_DEPTH, z),
+        bore(MIC_PORT_RADIUS, f - 0.1, 90.0, z),
+        *[bore(MIC_SCREW_PILOT_RADIUS, f - 0.1, f + MIC_SCREW_PILOT_DEPTH, z + dv)
+          for dv in (-MIC_SCREW_V, MIC_SCREW_V)],
+    ]
+
+
+@functools.lru_cache(maxsize=None)
+def _im73d122_package():
+    """Infineon PG-LLGA-5-4 vendor STEP as one solid, in its own frame.
+
+    The file holds the substrate, lid, embedded pads and zero-volume logo
+    faces. The pads lie inside the substrate, so fusing the solids keeps the
+    vendor outline and gives one clash-checkable body; the logo faces are dropped.
+    """
+    part = _purchased_step(MIC_PACKAGE_STEP, "IM73D122_STEP", folder=BODY_V1_PURCHASED)
+    solids = [solid for solid in part.solids() if solid.volume > 1e-3]
+    fused = solids[0].fuse(*solids[1:]).clean()
+    assert len(fused.solids()) == 1, "IM73D122 STEP did not fuse to one solid"
+    return fused.solids()[0]
+
+
 def _mic_board(x, y, z, name):
-    """PCB-06: one IM73D122V01 on the port axis, inboard face, JST GH 4-pin below it."""
+    """PCB-06 on its shell boss (D-037): mic, gasket, two M2 screws, soldered GH pigtail."""
     sign = 1.0 if y > 0.0 else -1.0
+    centre = -1.0 if x > BODY_AXIS_X else 1.0  # +X or -X toward the body centre
     wx, wy, wz = MIC_BOARD_SIZE
-    board_y = sign * (MIC_BOARD_OUTER_Y - wy / 2.0)
-    board_z = z + 2.0 - wz / 2.0  # board top 2 mm over the mic axis; the GH header fills the rest below
-    board = _box(wx, wy, wz, (x, board_y, board_z), f"PDM_MIC_{name}_PCB06", PCB_GREEN, 0.94)
-    # Ø0.8 acoustic hole through the board on the port axis (Infineon footprint note).
-    board = board - _cylinder(0.4, wy + 1.0, (x, board_y, z), "hole", PCB_GREEN, 1.0, "y")
-    inboard = sign * (MIC_BOARD_OUTER_Y - wy)
-    px, py, pz = MIC_PACKAGE_SIZE
-    mic = _box(px, py, pz, (x, inboard - sign * py / 2.0, z), f"PDM_MIC_{name}_IM73D122", "#C9CDD0", 1.0)
-    # JST GH SM04B-GHS-TB on the inboard face, mating face on the board's bottom
-    # edge so the plug enters from below: STEP -Y (mating) to -Z, STEP +Z (height)
-    # inboard. The right-hand board is the same header turned 180 deg about Z.
-    turns = [(Axis.X, 90.0)] if sign > 0 else [(Axis.X, 90.0), (Axis.Z, 180.0)]
-    connector = _place(
-        _gh_header(4, f"PDM_MIC_{name}_JST_GH_SM04B_HEADER", turns),
-        x, inboard, board_z - wz / 2.0, ref={"X": "center", "Y": "max" if sign > 0 else "min", "Z": "min"},
-    )
-    return [_paint(board, f"PDM_MIC_{name}_PCB06", PCB_GREEN, 0.94), mic, connector]
+    outer = MIC_BOARD_OUTER_Y
+    inner = outer - wy
+
+    def bore(radius, y0, y1, zz=z, xx=x):
+        return _axial_bore_y(radius, sign * y0, sign * y1, xx, zz)
+
+    board = _box(wx, wy, wz, (x, sign * (outer - wy / 2.0), z), f"PDM_MIC_{name}_PCB06", PCB_GREEN, 0.94)
+    # Ø0.8 sound hole under the bottom-port mic and two Ø2.2 screw holes.
+    board = board - [
+        bore(MIC_PCB_PORT_RADIUS, inner - 0.5, outer + 0.5),
+        *[bore(MIC_SCREW_CLEARANCE_RADIUS, inner - 0.5, outer + 0.5, z + dv)
+          for dv in (-MIC_SCREW_V, MIC_SCREW_V)],
+    ]
+    # Vendor STEP: pads on the board's inboard face, lid inboard, 4 mm side along X.
+    # The sound port (local +0.68 X) lands on the port axis and the Ø0.8 PCB hole;
+    # the body extends 2.68 mm toward the post and 1.32 mm toward the lead pads.
+    seat = Plane(origin=(x - centre * MIC_PORT_OFFSET, sign * inner, z), x_dir=(centre, 0.0, 0.0), z_dir=(0.0, -sign, 0.0))
+    mic = _paint(_im73d122_package().moved(Location(seat)), f"PDM_MIC_{name}_IM73D122", "#C9CDD0", 1.0)
+    # Drawn compressed: it fills the pocket between the board and the pocket floor.
+    gasket = (bore(MIC_GASKET_OD / 2.0, outer, outer + MIC_GASKET_POCKET_DEPTH)
+              - bore(MIC_GASKET_ID / 2.0, outer - 0.1, outer + MIC_GASKET_POCKET_DEPTH + 0.1))
+    parts = [
+        _paint(board, f"PDM_MIC_{name}_PCB06", PCB_GREEN, 0.94),
+        mic,
+        _paint(gasket, f"PDM_MIC_{name}_GASKET", RUBBER, 0.90),
+    ]
+    for index, dv in enumerate((MIC_SCREW_V, -MIC_SCREW_V), start=1):
+        # M2 x 4 pan head (Ø3.8 x 1.3) on the board; the shank is drawn at Ø1.5
+        # inside the Ø1.6 pilot and thread-forms 3.0 mm into the boss.
+        head = bore(1.9, inner - 1.3, inner, z + dv)
+        shank = bore(0.75, inner, inner + MIC_SCREW_LENGTH, z + dv)
+        parts.append(_paint(head, f"PDM_MIC_{name}_M2_SCREW_HEAD_{index}", STEEL, 1.0))
+        parts.append(_paint(shank, f"PDM_MIC_{name}_M2_SCREW_SHANK_{index}", STEEL, 1.0))
+    # Pre-crimped GH 4-way lead soldered to pads beside the mic, lying flat on the
+    # inboard face and leaving the board edge toward the body centre.
+    xs = sorted((x + centre * MIC_PIGTAIL_PAD_U, x + centre * (wx / 2.0 + MIC_PIGTAIL_RUN)))
+    ys = sorted((sign * (inner - MIC_PIGTAIL_THICKNESS), sign * inner))
+    pigtail = _block(*xs, *ys, z - MIC_PIGTAIL_RESERVE_V, z + MIC_PIGTAIL_RESERVE_V)
+    parts.append(_paint(pigtail, f"PDM_MIC_{name}_GH4_PIGTAIL_RESERVE", "#F4F1E6", 0.60))
+    return parts
 
 
 def body_audio():
@@ -3096,10 +3265,7 @@ def body_audio():
     ])
     parts = [cavity, speaker, pcb05]
     for x, y, z, name in MICROPHONE_PORTS:
-        sign = 1.0 if y > 0.0 else -1.0
-        port = _cylinder(1.25, 8.0, (x, sign * 74.0, z), f"PDM_MIC_{name}_ACOUSTIC_PORT", "#252B2E", 1.0, "y")
-        boot = _cylinder(3.0, 5.0, (x, sign * 72.5, z), f"PDM_MIC_{name}_PORT_BOOT", RUBBER, 0.90, "y")
-        parts.append(Compound(label=f"PDM_MIC_{name}", children=[*_mic_board(x, y, z, name), port, boot]))
+        parts.append(Compound(label=f"PDM_MIC_{name}", children=_mic_board(x, y, z, name)))
     return Compound(label="BODY_AUDIO", children=parts)
 
 
@@ -3351,18 +3517,12 @@ def connectors_and_exits():
         _paint(_block(36.0, 45.0, -9.0, 9.0, 115.6, 120.0), "PCB05_REAR_EDGE_PLUG_RESERVE", reserve, 0.20),
     ]
     parts += [_yaw_junction_board(), _c0_link_adapter(), _pcb05_connectors(), _edge_power_plugs()]
-    # GH plug and lead reserves in front of the IMU and microphone headers.
+    # GH plug and lead reserve in front of the IMU header. The mic boards carry
+    # soldered pigtails (D-037), modelled with the boards in BODY_AUDIO.
     ix, iy, iz = IMU_BOARD_CENTER
     top = iz + IMU_BOARD_SIZE[2] / 2.0
     w = connector_width("GH", 8)
     parts.append(_paint(_block(ix - IMU_BOARD_SIZE[0] / 2.0 - 9.0, ix - IMU_BOARD_SIZE[0] / 2.0, iy - w / 2.0, iy + w / 2.0, top, top + 4.5), "IMU_GH8_PLUG_RESERVE", reserve, 0.30))
-    for x, y, z, name in MICROPHONE_PORTS:
-        sign = 1.0 if y > 0.0 else -1.0
-        inboard = sign * (MIC_BOARD_OUTER_Y - MIC_BOARD_SIZE[1])
-        bottom = z + 2.0 - MIC_BOARD_SIZE[2]
-        w = connector_width("GH", 4)
-        ys = sorted((inboard, inboard - sign * 4.5))
-        parts.append(_paint(_block(x - w / 2.0, x + w / 2.0, ys[0], ys[1], bottom - 9.0, bottom), f"PDM_MIC_{name}_GH4_PLUG_RESERVE", reserve, 0.30))
     return Compound(label="CONNECTORS_AND_EXITS", children=parts)
 
 
@@ -3486,6 +3646,7 @@ def build_assembly():
     asm.add(body_shell(), "BODY_SHELL")
     asm.add(shell_frame_hardware(), "SHELL_FRAME_HARDWARE")
     asm.add(body_panels(), "BODY_PANELS")
+    asm.add(wheel_arch_hardware(), "WHEEL_ARCH_HARDWARE")
     asm.add(panel_mount_hardware(), "PANEL_MOUNT_HARDWARE")
     asm.add(body_yaw_stage(), "BODY_YAW_STAGE")
     asm.add(head, "RP01_HEAD_LAYOUT03")
@@ -3559,6 +3720,7 @@ def build_body_assembly():
         body_connectors,
         body_shell(),
         body_panels(),
+        wheel_arch_hardware(),
         panel_mount_hardware(),
         body_yaw_stage(),
     ])

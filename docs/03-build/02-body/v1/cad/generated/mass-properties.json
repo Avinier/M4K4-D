@@ -1,31 +1,31 @@
 {
   "scope": "body register rows only; partial estimate, not a full body mass or solid measurement",
-  "mass_g": 786.2,
+  "mass_g": 788.6,
   "com_mm": [
-    18.7528237089799,
-    -0.2410964131264309,
-    98.0160137369626
+    18.717676895764647,
+    -0.24036266801927464,
+    98.31290895257418
   ],
   "whole_robot_estimate": {
-    "mass_g": 2425.6794811320765,
+    "mass_g": 2428.0794811320766,
     "com_mm": [
-      18.481264932904264,
-      0.2408006429620004,
-      105.91813045738452
+      18.470118248436442,
+      0.24056262705370757,
+      106.0067463732037
     ],
-    "forward_tip_acceleration_m_s2": 1.7117108110658752,
-    "ball_static_share": 0.16801149939003876
+    "forward_tip_acceleration_m_s2": 1.709248384808111,
+    "ball_static_share": 0.16791016589487676
   },
   "rows": [
     {
       "id": "BODY_SHELL_AND_PANELS",
-      "mass_g": 249.3,
+      "mass_g": 250.7,
       "com_mm": [
-        19.9,
+        19.8,
         0.0,
-        92.6
+        93.5
       ],
-      "source": "Body v1 CAD volume and centroid (2026-10-02): 2.4 mm shell, front/rear service skins with speaker cup and E-stop well, badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods/trims at 0.571 g/cm3. Excludes panel screws already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."
+      "source": "Body v1 CAD volume and centroid (2026-10-03): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037, +4.0 g), front/rear service skins with the seven uniform rectangular speaker slots and E-stop well, badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."
     },
     {
       "id": "BODY_PRIMARY_FRAME",
@@ -129,13 +129,13 @@
     },
     {
       "id": "BODY_AUDIO",
-      "mass_g": 60.0,
+      "mass_g": 61.0,
       "com_mm": [
-        75.5,
+        74.5,
         0.0,
-        101.9
+        102.1
       ],
-      "source": "RP03-CAD-11 60 g audio estimate with Visaton K 50 WP 48 g, PCB-05 ~6 g, mic boards ~2 g and cables ~4 g. Body v1 sloped nose shifts the modeled speaker face from X 98 to X 95 mm; a 3 mm shift of its 48 g share moves the audio row X centroid from 77.9 to 75.5 mm. Weigh installed parts."
+      "source": "RP03-CAD-11 60 g audio estimate with Visaton K 50 WP 48 g, PCB-05 ~6 g, mic boards ~2 g and cables ~4 g. Body v1 sloped nose shifts the modeled speaker face from X 98 to X 95 mm; a 3 mm shift of its 48 g share moves the audio row X centroid from 77.9 to 75.5 mm. D-037 adds ~1 g at the mic-array centre (16, 0, 113): eight M2 x 4 screws, larger 12 x 14 boards and gaskets; the soldered leads replace the GH header and plug in the cable allowance. Weigh installed parts."
     },
     {
       "id": "BODY_YAW_STAGE",

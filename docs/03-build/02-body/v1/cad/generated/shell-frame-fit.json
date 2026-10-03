@@ -4,5 +4,13 @@
   "shell_chassis_overlap_mm3": {},
   "shell_hardware_overlap_mm3": {},
   "lowering_overlap_mm3": {},
-  "screw_driver_overlap_mm3": {}
+  "screw_driver_overlap_mm3": {},
+  "wheel_arch_print_solids": {
+    "WHEEL_ARCH_POD_L": 1,
+    "WHEEL_ARCH_UPPER_TRIM_L": 1,
+    "WHEEL_ARCH_POD_R": 1,
+    "WHEEL_ARCH_UPPER_TRIM_R": 1
+  },
+  "wheel_arch_unit_overlap_mm3": {},
+  "wheel_arch_driver_overlap_mm3": {}
 }

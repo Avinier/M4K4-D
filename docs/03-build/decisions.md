@@ -38,6 +38,11 @@ The central record of every decision and change made during the build phase. New
 | [D-031](#d-031) | 2026-10-02 | Chassis / driver boards (J15B), inline motor pairs, motor face screws | #3297 boards turned long side along Y at X 38.5–56.3, posts at X 41.05; inline pairs re-placed; face-screw heads modelled as ISO 7380 domes; `check_layout.py` 119/119 | ACTIVE; supersedes the D-030 J15B layout; post coupon and received-board fit open |
 | [D-032](#d-032) | 2026-10-02 | Chassis / main fuse holder (CH-028) | Inline Littelfuse 0FHA0001ZXJ ATO holder on a printed front-deck bracket above the +Y channel; the old channel envelope could not hold any ATO fuse | ACTIVE; CH-028 HOLD for an India source |
 | [D-033](#d-033) | 2026-10-02 | Chassis / frame print units and hub cap (J03, J05, J06, J16; CH-001, CH-012, CH-058, CH-059, CH-073–CH-075, CH-077) | Each frame end printed as one module (deck + rails + crossmember), removing J05/J06/J16 and ten screws and inserts; hub cap held by one central M3 into the tapped stub end instead of six M2 | ACTIVE; HOLD on module print orientation, junction coupons and cap retention; full `check_layout.py` not rerun |
+| [D-034](#d-034) | 2026-10-03 | Body / audio speaker (BO-001; BO-002–BO-006 registered) | Speaker: Visaton K 50 WP 8 Ω (art. 2915), element14 India 1683894; body audio chain entered in the project BOM | ACTIVE; speaker SELECTED, not ordered; HOLD on received-part measurement and bench listen |
+| [D-035](#d-035) | 2026-10-03 | Body / audio bench amplifier (BO-007) | SmartElex MAX98357A I²S breakout (Robocraze) as the bench amplifier until PCB-05 exists | ACTIVE; SELECTED, not ordered; bench only |
+| [D-036](#d-036) | 2026-10-03 | Body / audio microphones (BO-012, BO-005) | Mic IC: Infineon IM73D122V01XTMA1, element14 India 4125831; four-mic array (two per ADAU7002 lane), not six | ACTIVE; SELECTED, not ordered; HOLD on PCB-06 layout and the array tap test |
+| [D-037](#d-037) | 2026-10-03 | Body / microphone mounting (BO-005, BO-006, BO-013, BO-014) | Mic boards mount on gasketed shell bosses with two M2 thread-forming screws and a soldered GH lead, not on the frame | ACTIVE; DESIGN; HOLD on boss coupon and PCB-06 layout |
+| [D-038](#d-038) | 2026-10-03 | Power boards (PCB-01, PCB-03, PCB-10; CH-017, CH-023, CH-041–CH-043; CH-083–CH-086 registered) | PCB-03 drive feed re-specified for the DRV8833: SMBJ8.5A bus TVS, VM entry, AND-gate sleep, latched FLT, INA181 feed monitors; TIFPS0629 bench acceptance window; 04-pcbs home and board register; PCB-12 assigned to the C2 head carrier | ACTIVE; DESIGN; HOLD on TIFPS0629 bench acceptance and MOT3001 winding R/L |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -691,7 +696,7 @@ The canonical [BOM](BOM.csv) and [chassis snapshot](01-chassis/v1/BOM.md) contai
 
 **Release audit:** nose/rear joint architecture is defined under D-011/D-013/D-014/D-016, while physical proof is open. Remaining detail gaps include J05/J06/J16, J11A/B, J12/J13 and J15A/B; purchased interfaces/stub drawing and print/process release are also pending. The saved full-layout baseline predates current source/checker changes. Stage gates are summarized in the chassis BOM; #4804 is superseded, not a current variant blocker.
 
-**Custom PCB work:** a separate [04-custom-pcb folder](04-custom-pcb/README.md) now records the unreleased board work packages. No schematic, Gerbers or fabricated-board result is implied. Pre-existing edits to the chassis checker and engineering checklist were preserved. A malformed comma-delimited CH-012 release-check field was repaired while updating the BOM; installed quantities are unchanged.
+**Custom PCB work:** a separate [04-custom-pcb folder](04-pcbs/README.md) (renamed `04-pcbs/` in D-038) now records the unreleased board work packages. No schematic, Gerbers or fabricated-board result is implied. Pre-existing edits to the chassis checker and engineering checklist were preserved. A malformed comma-delimited CH-012 release-check field was repaired while updating the BOM; installed quantities are unchanged.
 
 **Verification:** thirteen review reports produced; supplier observations and documentation audited. No hardware purchase, receipt, CAD regeneration or physical PASS was performed in this review. Final CAD checks require the compatible pinned runtime and the release revision.
 
@@ -1077,3 +1082,220 @@ The review's other proposals are not adopted here. They need physical evidence f
 - Deck coplanarity across the motor bay through the J04 carriers.
 - Cap retention and peg fit on a coupon. Tapped-hole depth on the stub drawing.
 - Physical retention of the remaining joints, as before.
+
+## D-034
+
+**2026-10-03 · Body / audio speaker (BO-001; BO-002–BO-006 registered) · ACTIVE; speaker SELECTED, not ordered; HOLD on received-part measurement and bench listen**
+
+**Decision:** the builder locked the body speaker as the **Visaton K 50 WP – 8 Ω (art. 2915)**, bought from [element14 India, order code 1683894](https://in.element14.com/visaton/2915/speaker-k-50-wp-8-ohms/dp/1683894). The body audio chain from the RP-06 [peripheral selection](../02-prototypes/RP-06-cad/peripheral-selection.md) §2 is entered in the project BOM as BO-001 to BO-006. Only the speaker is selected. The amplifier, front end, mic boards and cables stay `CANDIDATE` or `HOLD`.
+
+**Why:**
+
+- It is the driver the CAD already carries: Ø50 × 18 mm, Ø46 cutout, 48 g, behind the front-panel grille with a sealed Ø54 back cavity (X 77–92.5). No geometry or mass change.
+- 8 Ω and 2 W rated / 3 W max match the MAX98357A on the 5 V `PB-AUDIO-OUT` branch (1.75 W, about 0.7 A peak, under the 2.0 A e-fuse).
+- Of the 50 mm Visaton drivers it has the widest range (180 Hz–17 kHz, fs 300 Hz) and the lowest price seen (about €5.74 in the EU).
+- Alternatives compared on 2026-10-03:
+  - **K 50 (2901, metal basket):** 250 Hz–10 kHz, fs 400–500 Hz, and it cost more. Kept as the fallback if 2915 is unavailable.
+  - **K 28 GI (2830):** 0.5 W, 450–7000 Hz, fs 730 Hz. Too quiet and thin as the only speaker, and the MAX98357A could overdrive it.
+  - **Local generic 50 mm 8 Ω (for example Robomart, ₹174):** cheaper, but with no datasheet, so depth and resonance are unknown until measured. Most local "2-inch full-range" units are Ø52–55 mm and 25–45 mm deep, too big for the front cup and cavity.
+
+**BOM changed:** [`BOM.csv`](BOM.csv) gains the `body` owner and rows BO-001 to BO-006: the speaker (`SELECTED`), PCB-05, the MAX98357A, 2 × ADAU7002, 4 × PCB-06 mic boards with IM73D122V01, and the W12/W26–W28 audio cable set. [`02-body/v1/BOM.md`](02-body/v1/BOM.md) is the body v1 snapshot.
+
+**CAD:** no change. `body_v1_model.py` already models the K 50 WP outline (`SPEAKER_*`), and the `BODY_AUDIO` mass row (60 g) already counts it at 48 g.
+
+**Unverified:**
+
+- element14 India price and stock for 1683894 were not read; check them at order.
+- Received outline, depth and mass against Ø50 × 18 mm and 48 g.
+- Low-end response in the 15.5 mm sealed cavity, and speaker-to-mic coupling (RP-05 `AR-60`).
+- Flange bond and grille seal method.
+
+**Next:** order BO-001 with a MAX98357A bench breakout. Caliper and weigh the speaker, update `BODY_AUDIO`, and bench-listen to the character cues and a music clip at a capped gain.
+
+## D-035
+
+**2026-10-03 · Body / audio bench amplifier (BO-007) · ACTIVE; SELECTED, not ordered; bench only**
+
+**Decision:** the builder selected the [SmartElex MAX98357A I²S breakout from Robocraze](https://robocraze.com/products/smartelex-max98357a-i2s-audio-breakout-amplifier-for-raspberry-pi-and-microcontrollers) (₹195, 78 in stock on 2026-10-03) as the bench amplifier. It is BO-007, qty 2 (one spare). It drives the BO-001 speaker until PCB-05 exists. The installed amplifier is still the MAX98357AETE+T on PCB-05 (BO-003, `CANDIDATE`).
+
+**Why:**
+
+- It has the same chip as BO-003, so the i2s0 overlay, wiring and software carry over to PCB-05 unchanged.
+- It is the "Adafruit #3006-class breakout" that the [peripheral selection](../02-prototypes/RP-06-cad/peripheral-selection.md) §2.7 and D-034 name for Phase A, and it is in stock in India.
+
+**Bench wiring:** BCLK → GPIO18, LRC → GPIO19, DIN → GPIO21 (SDO0), SD → GPIO23 (`AMP_SD`), VIN → 5 V, GND → GND. The speaker goes on the screw terminal. Leave GAIN open to start.
+
+**Differences from PCB-05 (accepted for the bench):**
+
+- **Not off by default.** The listing publishes no schematic. If the board follows Adafruit's layout, SD has a 1 MΩ pull-up to VIN, so the amp is on at power-up. A 100 kΩ pull-down against that gives about 0.45 V, which is (L+R)/2 mode, not shutdown (< 0.16 V). Fit about 10 kΩ from SD to GND if off-at-boot is wanted. GPIO23 high (3.3 V) selects the left channel.
+- **No 100 Ω series resistors** on BCLK, LRC or DIN. Do not stream into it while it is unpowered.
+- **Screw terminal, not JST GH**, and no mounting in the CAD. It is not an installed article.
+
+**BOM changed:** [`BOM.csv`](BOM.csv) gains BO-007. BO-003's release check now points at it. [`02-body/v1/BOM.md`](02-body/v1/BOM.md) lists it under bench articles.
+
+**CAD:** no change.
+
+**Unverified:** the SD pull-up value and the default gain on the received board; its outline; the listing's stock and price at order.
+
+**Next:** order BO-007 with BO-001. Check the SD network on receipt, then run the bench listen and the Pi 5 two-lane capture-plus-playback test.
+
+## D-036
+
+**2026-10-03 · Body / audio microphones (BO-012, BO-005) · ACTIVE; SELECTED, not ordered; HOLD on PCB-06 layout and the array tap test**
+
+**Decision:** the builder locked the body microphone as the **Infineon IM73D122V01XTMA1** (PDM, PG-LLGA-5-4, bottom port), bought from [element14 India, order code 4125831](https://in.element14.com/infineon/im73d122v01xtma1/mems-microphone-pdm-122db-pg-llga/dp/4125831). It is the new row BO-012: four installed, one on each BO-005 (PCB-06) board. Buy six (two reflow spares). The array stays at **four mics**: FRONT_L/R and REAR_L/R.
+
+**Why this mic:**
+
+- **73 dB(A) SNR** (about 21 dBA self-noise). Cheap PDM mics are about 64 dB (about 30 dBA). The difference shows in a quiet room at 2–3 m, which is the quiet-sleep wake-word case (RP-05 `audio-path.md` rule 2), when the Pi cooler is likely off. With the fan or motors running, their noise dominates and the gap narrows.
+- Bottom port, which the PCB-06 design needs (mic on the inboard face, listening through a Ø0.8 mm hole). Matched to ±1 dB, 122 dB SPL overload, IP57. Runs in its high-performance clock window at the 3.072 MHz the ADAU7002 gives at 48 kHz.
+- It is the part the RP-06 [peripheral selection](../02-prototypes/RP-06-cad/peripheral-selection.md) §2.2 named, so the CAD (`MIC_PACKAGE_SIZE` 4 × 3 × 1.2) and the `BODY_AUDIO` mass row need no change.
+- Cost: six cost about ₹1,500–2,000. A cheaper mic would save about ₹1,200–1,700 of the ₹6,500–11,000 audio estimate; the builder kept the SNR.
+- Availability: the builder saw 9,000+ in stock at element14 India. The 45-week figure on the page is Infineon's factory lead time for orders beyond that stock. JLCPCB (C5563886) showed 0 stock, so the mics go to JLCPCB as consigned parts or are reflowed by hand.
+
+**Alternatives:**
+
+- **MEMSensing MSM261D3526Z1CM:** PDM, bottom port, 64 dB SNR, 3.5 × 2.65 mm. The cheaper fallback; PCB-06 is not laid out, so the footprint change would be free. Not the **MSM261D3526H1CPM**, which is top port.
+- **Infineon IM69D128S:** 69 dB SNR at a similar price. No gain.
+- **IM69D130:** not for new designs.
+
+**Why four, not six:** RP-05 `AR-01` asks for four synchronised body mics at the existing ports. Each ADAU7002 carries one stereo pair on one Pi 5 capture lane, so four mics use SDI0/SDI1 (GPIO20/22). Six would need a third ADAU7002, a third lane (GPIO24, another `CA-06` change), two more PCB-06 boards and shell ports, and new placement checks. A ±70 mm four-mic rectangle already supports direction finding and beamforming.
+
+**BOM changed:** [`BOM.csv`](BOM.csv) gains BO-012 (`SELECTED`); BO-005's supplier column points to it. [`02-body/v1/BOM.md`](02-body/v1/BOM.md) lists BO-012.
+
+**CAD:** no change.
+
+**Unverified:** element14 price and stock at order; the received package against 4 × 3 × 1.2 mm; PCB-06 layout; channel order and L/R convention by the array tap test.
+
+**Next:** order six with BO-001 and BO-007. Store them sealed. Lay out PCB-06 around the PG-LLGA-5-4 land pattern.
+
+**Array checks (added 2026-10-03, builder review of the side-only layout):** the four side ports stay. The array is centred on the yaw axis (X 16), 76 × 140 mm, and keeps the mics away from the forward speaker. Three checks are added to the BOM release checks:
+
+- **Calibration (BO-012):** the body shadows the far-side mics above about 1.5–2 kHz (`E`), so free-field DOA is biased. Each robot gets a spin-in-place calibration: loudspeaker at 1 m, chirp every 10° as the base rotates, measured responses stored for DOA and beamforming.
+- **Noise (BO-005):** FRONT_L and REAR_L are about 30 mm from the yaw-servo envelope; the −Y pair is far from it. Before ordering PCB-06, run the yaw servo and the cooler at full speed and compare left and right channels. If the +Y pair is worse, isolate the board mounts rather than move the ports. Confirm the cooler exhaust does not reach the front ports (`AR-61`).
+- **Port seal (BO-005):** the boot must seal between the board and the shell skin.
+
+## D-037
+
+**2026-10-03 · Body / microphone mounting (BO-005, BO-006; BO-013, BO-014 new) · ACTIVE; DESIGN in CAD, checks green; HOLD on a printed boss coupon and the PCB-06 layout**
+
+**Decision:** the four PCB-06 mic boards mount on the **shell**, not the body frame.
+- Each board lands on a printed boss on the inner skin, coaxial with its side port.
+- A closed-cell foam gasket ring in a pocket round the port seals it.
+- Two M2 × 4 thread-forming screws clamp it.
+- The side-entry GH header is dropped. Each board carries a soldered, pre-crimped GH 4-way lead that plugs into PCB-05 after the shell is lowered.
+
+This replaces "screwed to the body frame" in BO-005 and RP-06 [peripheral selection](../02-prototypes/RP-06-cad/peripheral-selection.md) §2.7. It also replaces the GH header at the mic end of W27 in the RP-06 [connector schedule](../02-prototypes/RP-06-cad/connector-schedule.md).
+
+**Why:**
+
+- **Nothing held the boards.** The CAD had no fixing. There is also no frame material at the ports: between the lower rail (Z 69) and the upper rail (Z 126) the frame side is open, apart from the corner posts about 5 mm from each board.
+- **A frame-mounted board cannot seal to the shell.** The shell lowers vertically, so a boot between board and skin would be wiped sideways as the shell drops. The old Ø6 × 5 boot also overlapped the leaning skin unevenly: 26 mm³ at the front ports, 2.4 mm³ at the rear. No check covered it, because the mics were outside `check_shell_frame_fit.py`.
+- **On the shell, port and seat are one print.** They stay coaxial with no frame-to-shell tolerance between them. The screws compress the gasket squarely to a hard stop, so the seal does not depend on how the shell lands.
+- **The array stays rigid.** All four mics are fixed to one part (RP-05 `AR-64`), and the D-036 spin calibration absorbs print tolerance. The boards also come off the frame that carries the yaw servo (the D-036 noise concern).
+- **The header had to go.** The boards ride down with the shell past the frame's upper side rails (|Y| ≤ 68). The 4.25 mm GH header would hit them. With a soldered lead, the inboard-most part is a screw head at |Y| 69.0, 1.0 mm clear.
+
+**Geometry** (`body_v1_model.py`: `MIC_*` constants, `_mic_boss`, `_mic_boss_cuts`, `_mic_board`):
+
+| Item | Value |
+|---|---|
+| PCB-06 | 12 × 14 × 1.0 mm (was 12 × 9.5). IM73D122 on the inboard face, on the port axis, over a Ø0.8 hole. Ø2.2 screw holes 5 mm above and below the port. Four lead pads beside the mic |
+| Boss | 16 × 17 mm flat seat at \|Y\| 71.3, filled out to the sloped skin. Its upper face rises at 45°, because the shell prints roof-down. Depth from seat to inner skin is 2.5 mm at the front port axis and 3.7 mm at the rear |
+| Gasket | Ø6.5/Ø2.0 × 1.0 mm closed-cell foam in a Ø7.0 × 0.7 mm pocket. The board lands on the seat, so compression is 30% |
+| Port | Ø2.0 through boss and skin (was Ø3.0 through the skin). Skin-to-mic chain is 5.9 mm front and 7.1 mm rear. Helmholtz estimate 13–23 kHz for a 1–3 mm³ mic front chamber (`E`) |
+| Screws | M2 × 4 pan head, thread-forming, into Ø1.6 × 3.3 mm blind pilots: 3.0 mm engagement, at least 0.98 mm of skin left beyond each pilot (front top screws) |
+| Lead | 4 × AWG28 lying flat on the inboard face, leaving toward the body centre. About 150 mm front and 200 mm rear (`E`). The +Y boards plug into `J5-2`/`J5-3`, the −Y boards into `J5-4`/`J5-5` |
+
+**Assembly:** on the bench, stick a gasket to each board and screw the boards to the loose shell, in the same step as the wheel-arch pods. Leave the leads hanging free. Lower the shell. With the front panel and speaker still off, plug the leads in through the front service aperture. Unplug them before lifting the shell off.
+
+**BOM changed:** [`BOM.csv`](BOM.csv):
+- **BO-005:** respecified (shell-mounted, 12 × 14 mm, no header, DATA series resistor).
+- **BO-006:** W27 becomes four pre-crimped GH leads soldered at PCB-06.
+- **BO-013 (new):** M2 × 4 thread-forming screw, 8 off, `CANDIDATE`. Same family and pilot qualification as CH-039.
+- **BO-014 (new):** mic port gasket, 4 off, `CANDIDATE`.
+
+[`02-body/v1/BOM.md`](02-body/v1/BOM.md) is updated to match.
+
+**CAD and checks:**
+- The shell gains the four bosses, and the boot and port placeholders are removed.
+- New [`check_mic_mounts.py`](02-body/v1/cad/check_mic_mounts.py): 15/15 checks pass (16/16 after the vendor-STEP addendum below), written to `generated/mic-mount-fit.json`. It covers seat, gasket, sound path, port, screw depth, rail clearance, and clashes against the shell, each other and every body and chassis part.
+- `check_shell_frame_fit.py` lowers the 32 mic parts with the shell, against PCB-05 and its edge connectors added to the fixed parts. Result: no overlaps (29 min; 69 min after the vendor-STEP addendum, still clean).
+- `check_body_layout.py`: 14/14 checks pass.
+
+**Mass:**
+- `BODY_SHELL_AND_PANELS`: 246.7 → 250.7 g at (19.8, 0, 93.5).
+- `BODY_AUDIO`: 60 → 61 g at (74.5, 0, 102.1).
+- Whole robot: 2,423.1 → 2,428.1 g, CoM (+18.47, +0.24, 106.01) mm.
+- Neutral a_tip: 1.711 → 1.709 m/s². Head-pose bound: 1.708 → 1.706 m/s². Paper screen: 1.582.
+- Propagated to `01-system/dimensional-baseline.md` v1.15 and `mass-envelope-ledger.md` v0.19.
+
+**Not changed:** the chassis v1 model's legacy copy of the body (`01-chassis/v1/cad/body_chassis_model.py`) and its `check_layout.py` mic checks still describe the old frame-side boards. Chassis v1 does not fabricate the body.
+
+**Unverified:**
+
+- Print: a side-wall coupon with one boss. Check seat flatness, the Ø1.6 pilots drilled to 3.3 mm, no witness mark on the outer skin over the pilots, and the roof-down 45° boss face.
+- Seal: a tap test with the port taped and open, and gasket compression set after a week clamped. The gasket material and source are open.
+- The thread-forming screw itself (CH-039 qualification) and repeated-service strip resistance.
+- Reaching and mating the four GH plugs at PCB-05 through the front aperture, and the lead lengths. The leads are not routed in CAD.
+- PDM over a 200 mm AWG28 lead: CLK and DATA integrity at 3.072 MHz. Termination is set in the PCB-05/06 layouts.
+- The mic front-chamber volume behind the resonance estimate.
+
+**Next:** print the boss coupon with the next shell test print, lay out PCB-06 to the 12 × 14 outline (everything inboard within 1.3 mm of the board), and pick and punch a gasket sample.
+
+**Vendor STEP (added 2026-10-03, builder review):** the mic package was a 4 × 3 × 1.2 mm placeholder box. It is now Infineon's own PG-LLGA-5-4 STEP, downloaded from the Infineon package page into [`02-body/v1/cad/purchased/`](02-body/v1/cad/purchased/README.md) with its SHA-256.
+- The body measures 4 × 3 × 1.30 mm; the datasheet gives 1.2 ± 0.1 mm.
+- **The sound port is 0.68 mm off the package centre** along the 4 mm side, away from pins 1–4 (datasheet Fig. 12/13). The placeholder had it at the centre.
+- The package is now placed by its port, which sits on the port axis and the Ø0.8 PCB hole. The body extends 2.68 mm toward the frame post and 1.32 mm toward the lead pads.
+- `check_mic_mounts.py` now checks the port position and the vendor outline: 16/16 pass.
+- **PCB-06 layout:** use the Fig. 13 land pattern with the PCB hole at the port, not at the package centre. Everything inboard must stay within 1.3 mm of the board face.
+
+## D-038
+
+**2026-10-03 · Power boards (PCB-01, PCB-03, PCB-10; CH-017, CH-023, CH-041–CH-043; CH-083–CH-086 new) · ACTIVE; DESIGN; HOLD on TIFPS0629 bench acceptance and MOT3001 winding R/L**
+
+**Why:** the whole-system power review found that the RP-02 power-board spec still assumes the custom PCB-01, Pololu DRV8874 carriers and the Pololu #4804 motor. The build uses the bought TIFPS0629 (D-019), Adafruit #3297 DRV8833 boards (D-019) and the MOT3001-6V230RPM (D-003). RP-02 is read-only, so the build deltas now live in [04-pcbs/power-boards.md](04-pcbs/power-boards.md).
+
+**Decisions:**
+
+- **Motor-bus TVS: SMBJ8.5A replaces SMBJ10A.** The DRV8833's `VM` absolute maximum is 11.8 V (TI SLVSAR1E). The SMBJ10A's 11.1–12.3 V breakdown and 17 V clamp do not protect it. The SMBJ8.5A breaks down at 9.44 V minimum and clamps at about 10.9–11.3 V at 5 A (`E`). The bus never exceeds the 8.4 V pack because the charger is cut off by `CHARGE_ABSENT`. Each #3297 keeps at least 100 µF + 0.1 µF at `VM`.
+- **Power entry:** `PB-DRIVE-L/R` lands on the #3297 `VM` pin, not on the polarity-protected `Vmotor` terminal, which could block regeneration.
+- **Sleep gate:**
+  - A 74LVC1G08 on PCB-10 drives both `SLP` pins from C3 GPIO21 AND `BASE_READY`.
+  - It replaces the series N-FET stages. A 3.3 V signal passed through an N-FET falls below the DRV8833's 2.5 V `nSLEEP` `VIH`.
+- **Fault:** both `FLT` pins are wired-OR to GPIO9. Firmware latches any fault and requires a fresh arm, which defeats the chip's 1.35 ms auto-retry.
+- **Inputs:** GPIO13/14 change from DIR to a second LEDC output (`IN2`), so both directions run in slow decay. Brake is `1, 1`. C3 caps the duty at `6.0 V / V_bus` (71% at 8.4 V).
+- **Current observation:** two bidirectional INA181A2 monitors (5 mΩ, 0.25 V/A around 1.25 V) on the PCB-03 drive feeds. They replace the DRV8874 `CS` signal. No C3 pin is added.
+- **Hardware limit:** the fitted 0.2 Ω sense resistors chop each board at 1.6–2.4 A.
+- **Regeneration:** the 3 A / zero-below-0 °C rule holds with margin. Slow-decay deceleration returns at most `E_b² / (4 · V_bus · R)` ≈ 0.32–0.45 A per motor (`E`). Below 0 °C, C3 stops by brake and coast only.
+- **PCB-01 acceptance:** the TIFPS0629 publishes no trip points, so it must pass a bench window before cells are connected:
+  - overcharge 4.275–4.35 V per cell;
+  - over-discharge 2.30–2.70 V per cell, so the pack cuts out after `ENERGY_OK`;
+  - discharge overcurrent ≥ 15 A, ≥ 20 A preferred, so the motor gate opens first;
+  - short-circuit trip ≤ 1 ms, ≤ 30 mΩ series resistance, ≤ 16 µA quiescent, ≤ 4.5 mm height.
+
+  The AC72ABD and 103AT-2 stay separate from the module.
+- **Folder:** `04-custom-pcb/` is replaced by [04-pcbs/](04-pcbs/README.md), with a register of every board.
+- **New BOM rows:** PCB-08 (CH-083), PCB-09 (CH-084), PCB-11 (CH-085) and **PCB-12**, a new ID for the C2 head carrier (RP-02 `CCD-HDL-02`, CH-086).
+
+**Recomputed (`E`):**
+
+- Peak pack current at a 6.0 V pack is about 10.2 A (11.0 A at the upper chopping corner), below the historical 11.7 A. The 15 A main fuse and 3 mΩ gate shunt stand.
+- The OFF budget is 34–84 µA plus the module.
+- `V_SRC_SAFE` no longer comes from the driver (DRV8833 runs to 2.7 V). The brownout thresholds are unchanged.
+
+**BOM changed:**
+
+- CH-017 and CH-023 release checks.
+- CH-041–CH-043 now point to `04-pcbs/power-boards.md`; CH-042 lists the new parts.
+- BO-002's folder reference.
+- CH-083–CH-086 added.
+
+**CAD:** not changed. `body_v1_model.py` has uncommitted edits from other work. The J10-5/J10-6 labels ("mapping TBD") take the power-boards §2.4 mapping at the next body CAD edit. The RP-06 connector schedule (W06/W07, W32/W33, §3.3) is superseded by power-boards §2.3–2.4 where they differ.
+
+**Open:**
+
+- TIFPS0629 bench acceptance on two received units.
+- MOT3001 winding resistance and inductance on receipt, then recheck the TVS and regeneration numbers.
+- SMBJ8.5A leakage at 8.4 V.
+- INA181 reference part.
+- NTC lead and disconnect (CH-025).

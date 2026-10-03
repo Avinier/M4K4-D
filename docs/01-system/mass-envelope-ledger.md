@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Status | **Living — dimensional baseline active; remaining mass values provisional.** |
-| Version | 0.18 |
+| Version | 0.19 |
 | Owner | Project builder |
 | Created | 2026-08-17 |
 | Last reviewed | 2026-10-03 |
@@ -11,7 +11,7 @@
 | Consumes | `dimensional-baseline.md`, foundation scale class (`workbench.md`), `system-design-brief.md` responsibility set |
 | Feeds | RP-01 (representative head load), RP-06 (integrated layout), head-CAD, engineering budgets |
 
-This ledger tracks the system mass and envelope. `dimensional-baseline.md` supplies target geometry; RP-01 Layout 04 supplies the current **~588 g `D/E` yaw-carried head tree** at M008=20 g. The body-v1 CAD now supplies the current **2,425.7 g `E` whole-robot register**, including its measured CAD shell/frame volumes and estimated material densities; RP-06 Layout 02's 2,551.9 g register remains a historical prototype snapshot. Neither is a measured acceptance. The range table below is the earlier scale-class planning budget and is retained as history; it is not a current part-by-part BOM. Complete-head `W`, the pack mass and the whole-robot CoM still require measurement. Do not let a component's absence from a row mean it weighs nothing.
+This ledger tracks the system mass and envelope. `dimensional-baseline.md` supplies target geometry; RP-01 Layout 04 supplies the current **~588 g `D/E` yaw-carried head tree** at M008=20 g. The body-v1 CAD now supplies the current **2,428.1 g `E` whole-robot register**, including its measured CAD shell/frame volumes and estimated material densities; RP-06 Layout 02's 2,551.9 g register remains a historical prototype snapshot. Neither is a measured acceptance. The range table below is the earlier scale-class planning budget and is retained as history; it is not a current part-by-part BOM. Complete-head `W`, the pack mass and the whole-robot CoM still require measurement. Do not let a component's absence from a row mean it weighs nothing.
 
 ## Scale-class anchors (from approved foundation)
 
@@ -59,7 +59,7 @@ The head is the first mechanical risk (AD-02) and the CAD blocker, so it gets it
 
 **Representative RP-01 planning load: about 588 g yaw-carried in the current Layout 04 D/E tree.** M008 remains `U` as physical evidence; XC330-M181 yaw and M288 pitch/roll are working choices, not bench-frozen actuators. This is not a target or accepted measurement. The Layout 03 ~509 g nominal / 499–524 g sensitivity and the former ~250 g target are historical. Candidate-specific centre of mass/inertia and axis calculations precede actuator freeze; the scored rig load is registered from the representative as-built/CAD configuration.
 
-Body packaging must separately reserve four PDM MEMS microphones, the speaker and its acoustic cavity, the battery **low and forward of the drive axle**, and primary electronics. The current body-v1 register is 2,425.7 g at `x_CoM=+18.48 mm`, `h_CoM=105.92 mm`, including the retained 81.6 g `RP03-CAD-08` bar. It gives neutral `a_tip=1.712 m/s²` against the accepted `a_tip ≥ 1.582 m/s²` paper screen; the conservative current-head pose bound is 1.708 m/s². See [`check_body_layout.py`](../03-build/02-body/v1/cad/check_body_layout.py) and its generated report. These are estimates pending whole-robot measurement. None of the body subsystems belongs in moving-head ballast.
+Body packaging must separately reserve four PDM MEMS microphones, the speaker and its acoustic cavity, the battery **low and forward of the drive axle**, and primary electronics. The current body-v1 register is 2,428.1 g at `x_CoM=+18.47 mm`, `h_CoM=106.01 mm`, including the retained 81.6 g `RP03-CAD-08` bar. It gives neutral `a_tip=1.709 m/s²` against the accepted `a_tip ≥ 1.582 m/s²` paper screen; the conservative current-head pose bound is 1.706 m/s². See [`check_body_layout.py`](../03-build/02-body/v1/cad/check_body_layout.py) and its generated report. These are estimates pending whole-robot measurement. None of the body subsystems belongs in moving-head ballast.
 
 ## Open items
 
@@ -93,4 +93,5 @@ Body packaging must separately reserve four PDM MEMS microphones, the speaker an
 | 2026-09-17 | 0.15 | RP-03 `physics.md` (`RP03-P2-REG-01`) reviewed the drive row and **does not move** the 200–600 g bound. D02 JGA25-class is a reference-unit lead, not a freeze, not `W`. |
 | 2026-09-19 | 0.16 | Front support in the drive row is the **ball transfer** (`dimensional-baseline.md` v1.12). Bound 200–600 g unchanged. Not `W`. |
 | 2026-09-26 | 0.17 | Identified the earlier range table as planning history and linked the current Layout 04 ~588 g head tree and Layout 02 2,551.9 g robot register. No `W` evidence added. |
-| 2026-10-03 | 0.18 | Updated the current reference to body-v1's geometry-based shell/frame estimate and 2,425.7 g whole-robot register. Preserved the earlier Layout 02 figures as prototype history; no `W` evidence added. |
+| 2026-10-03 | 0.18 | Updated the current reference to body-v1's geometry-based shell/frame estimate and 2,423.1 g whole-robot register (wheel-arch pods seated on the shell skin and fastened, no longer double-counted). Preserved the earlier Layout 02 figures as prototype history; no `W` evidence added. |
+| 2026-10-03 | 0.19 | Body-v1 mic boards moved onto shell bosses (03-build D-037): shell/panels 246.7 → 250.7 g, `BODY_AUDIO` 60 → 61 g; whole-robot register 2,428.1 g, `x_CoM` +18.47 mm, `h_CoM` 106.01 mm. No `W` evidence added. |
