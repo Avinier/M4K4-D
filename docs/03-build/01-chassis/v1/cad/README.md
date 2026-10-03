@@ -23,6 +23,8 @@ The scoped export is built by **chassis-v1.step.py** as **chassis-v1.step**. In 
 - run `wheel/check_wheel_on_chassis.py`, which sweeps the non-axisymmetric wheel against the chassis in about 9 min;
 - rerun the full `check_layout.py` with the next release.
 
+**Harness ([D-039](../../../decisions.md#d-039)):** after a connector, cable-exit, pack-interface or harness reserve change, run `check_harness.py` (about 30 s). It runs the `check_layout.py` connector rows: reserves and bodies against the hardware and each other, plugs inside reserves, board-edge fit and the pack disconnect slide path. It also measures the pack NTC break and the `BATBUS` star splices, and writes `generated/harness-checks.json`. The wire list, pinouts and service breaks are in [05-harness](../../../05-harness/README.md).
+
 **Ball-transfer nose ([D-011](../../../decisions.md#d-011)):** covers joints J07 and J08.
 
 - **Caster:** the three caster screws are ISO 7380 M3 × 8, driven from below into CNC Kitchen M3 × 5.7 inserts in a 6 mm pod seat. Unsnap the housing and ball first to reach them.

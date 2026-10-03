@@ -43,6 +43,7 @@ The central record of every decision and change made during the build phase. New
 | [D-036](#d-036) | 2026-10-03 | Body / audio microphones (BO-012, BO-005) | Mic IC: Infineon IM73D122V01XTMA1, element14 India 4125831; four-mic array (two per ADAU7002 lane), not six | ACTIVE; SELECTED, not ordered; HOLD on PCB-06 layout and the array tap test |
 | [D-037](#d-037) | 2026-10-03 | Body / microphone mounting (BO-005, BO-006, BO-013, BO-014) | Mic boards mount on gasketed shell bosses with two M2 thread-forming screws and a soldered GH lead, not on the frame | ACTIVE; DESIGN; HOLD on boss coupon and PCB-06 layout |
 | [D-038](#d-038) | 2026-10-03 | Power boards (PCB-01, PCB-03, PCB-10; CH-017, CH-023, CH-041–CH-043; CH-083–CH-086 registered) | PCB-03 drive feed re-specified for the DRV8833: SMBJ8.5A bus TVS, VM entry, AND-gate sleep, latched FLT, INA181 feed monitors; TIFPS0629 bench acceptance window; 04-pcbs home and board register; PCB-12 assigned to the C2 head carrier | ACTIVE; DESIGN; HOLD on TIFPS0629 bench acceptance and MOT3001 winding R/L |
+| [D-039](#d-039) | 2026-10-04 | Harness (W01–W39, J-PK, J2-1, J3-1, J3-4, J8-1; CH-025–CH-027, CH-041, CH-042, CH-083; HN-001–HN-010 registered) | Fused pack feed split at butt splices beside the fuse (W04, J2-2 deleted); J-PK is the isolator; NTC break is a JST SM 2p in the +Y channel; Micro-Fit+ only on AWG16/18 UL1061, Micro-Fit 3.0 on AWG22, pre-crimped GH; J3-4/J8-1 to Micro-Fit 3.0; full wire list, pinouts and service breaks in 05-harness | ACTIVE; DESIGN; HOLD on housing PNs, crimp qualification and the first harness build |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -1303,3 +1304,55 @@ This replaces "screwed to the body frame" in BO-005 and RP-06 [peripheral select
 - The drive-feed monitors are one INA2181A2 (dual, separate `REF` pins) with a REF3312 1.25 V reference, fed from a local 3.3 V LDO so the output cannot exceed 3.3 V.
 - The `J10-5`/`J10-6` labels in `body_v1_model.py` and `body_chassis_model.py` carry the mapping (strings only, no geometry).
 - The temporary `power-review-todo.md` is deleted. Its remaining bench items are tracked in [power-boards.md §5](04-pcbs/power-boards.md#5-open) and CH-023.
+
+## D-039
+
+**2026-10-04 · Harness: connectors, wires and service breaks (W01–W39; CH-025–CH-027, CH-041, CH-042, CH-083; HN-001–HN-010) · ACTIVE; DESIGN; HOLD on housing part numbers, crimp qualification and the first harness build**
+
+**Decision:** the harness is specified in [05-harness/README.md](05-harness/README.md), which replaces RP-06 `connector-schedule.md` §3 and §5 for the build. It closes that schedule's open items 1 (NTC break), 6 (pinouts and mating order), 7 (tooling) and 8 (wire list).
+
+**Builder choice (2026-10-04): the fused pack feed splits at the fuse.** The fuse output and the pack negative each fork at a crimped butt splice above the PCB-03 +Y edge (X 22–48, Y 36.5–49, Z 77–83). One branch feeds PCB-03 `J3-1`, the other PCB-02 `J2-1`. **`W04` and PCB-02 `J2-2` are deleted.** The negative splice is the power star.
+
+**Why:** the RP-02 route ran pack → fuse → PCB-02 on the rear panel → back to PCB-03: about 0.5 m and four mated pairs. With typical contacts (2.5 mΩ) the pack-to-gate path falls from 44 to **25 mΩ**; at Molex's 10 mΩ maximum it falls from 104 to **55 mΩ**. That is still above the ledger's 10 mΩ wiring allowance, because the contacts dominate. The pack model becomes about 99 mΩ typical, at the top of the ledger's 80–100 mΩ range. Measure it in Phase C.
+
+**Other rules set:**
+- **`J-PK` is the isolator.** `J2-1` and `J3-1` mate only with `J-PK` open. Every other connector mates only in `OFF`, with the charger out, when every body rail is dead. That replaces a mating-order requirement Micro-Fit parts cannot meet: they have no first-mate pins.
+- **One tool per crimp family.** Micro-Fit+ is used only on AWG16/18 (Molex 213309-4400). Micro-Fit 3.0 is used only on AWG20–24. Every GH cable is a pre-crimped lead.
+- **Micro-Fit+ needs thin-wall wire.** The 206460-0041 terminal is specified for 2.00 mm insulation, so the pack lead and every Micro-Fit+ lead are UL1061 class, not silicone (CH-026, CH-027).
+- **`J3-4` and `J8-1` move to Micro-Fit 3.0, with all head power pairs at AWG22.** The PCB-03 −Y edge margin rises from 0.4 to 1.44 mm.
+- **Pack NTC break:** a JST SM 2-way wire-to-wire pair in the +Y channel ahead of `J-PK` (X 52–76, Z 41.6–47.4), in the space the fuse left in D-032. Its section passes the tub window.
+- **Body removal:** 11 chassis leads (12 with the IMU) unplug at the body-side boards; there is no bulkhead connector.
+- **Encoders:** run from the C3 carrier 3V3.
+
+The document also holds the full wire list with estimated lengths, every pinout, the drop and current checks, the GH buy list and the service sequences.
+
+**CAD changed:**
+- `01-chassis/v1/cad/body_chassis_model.py`:
+  - `PACK_NTC_BREAK_RESERVE`/`_PAIR` and `BATBUS_SPLICE_RESERVE` with two Ø6 × 26 splices in `connectors_and_exits()`;
+  - `J2-2` removed from the PCB-02 edge;
+  - `J2-1`/`J3-1` relabelled;
+  - `J3-4` and `J8-1` changed to Micro-Fit 3.0.
+- `02-body/v1/cad/body_v1_model.py`: the same connector edits, without the chassis reserves.
+- New `01-chassis/v1/cad/check_harness.py` (about 30 s). It runs the check_layout connector rows plus the NTC and splice measurements.
+
+**Checks:**
+- `check_harness.py`: **ALL PASS**. There are no reserve or body clashes. Edge margins: PCB-03 +Y 0.4 mm, −Y 1.44, PCB-04 −Y 1.18, PCB-02 13.4. The slide path is clear, the splices sit 2.65 mm from the `J3-1` plug, and the NTC pair passes the window.
+- A planted clash (NTC reserve moved onto the fuse holder) was caught.
+- The free space for both reserves was found by a clash probe against the whole model.
+- The full `check_layout.py` was not rerun.
+
+**Found, not caused by this change (confirmed against the HEAD body model):**
+- `body_v1_model.py` still carries pre-D-031 driver positions and the pre-D-032 fuse envelope, so its PCB-03 edge reserves clash with the stale drivers.
+- In the body model, the PCB-04 edge reserves clash with `BODY_FRAME_MAIN_PRINT` (108 mm³ each), and so does the `J4-1` plug (45.7 mm³). This is real body-v1 frame geometry.
+- `body_v1_model.wheel_assembly()` raises `NameError: WHEEL_MODEL`.
+
+**BOM changed:**
+- CH-025 (NTC break defined), CH-026 (UL1061 leads), CH-027 (terminal PN), CH-041/CH-042 (feed entry), CH-083 (`J8-1`).
+- New HN-001 to HN-010: harness set, Micro-Fit+ and Micro-Fit 3.0 parts, pre-crimped GH leads, the NTC break pair, splices, wire, the two crimp tools and the Pi power plug.
+
+**Open:**
+- Exact Micro-Fit+ housing and male-terminal part numbers, and confirmation of the Micro-Fit 3.0 tool PN.
+- The MOT3001 cable colours on receipt.
+- Crimp pull tests.
+- First-build lengths, the 4-wire pack-to-`J3-1` resistance and plug reach.
+- The body-model drift and the frame/PCB-04 edge clash above.

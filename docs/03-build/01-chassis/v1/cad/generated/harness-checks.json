@@ -1,0 +1,110 @@
+{
+ "reserve_clashes": {},
+ "body_clashes": {},
+ "body_self_clashes": {},
+ "reserve_self_clashes": {},
+ "plugs_outside_reserve": {},
+ "edge_fit": {
+  "PCB03_PY": {
+   "needed_mm": 17.6,
+   "free_edge_mm": 18.0,
+   "margin_mm": 0.4,
+   "connectors": {
+    "J3-2": "MF+ 2p, 8.3 mm",
+    "J3-1": "MF+ 2p, 8.3 mm"
+   }
+  },
+  "PCB03_NY": {
+   "needed_mm": 16.56,
+   "free_edge_mm": 18.0,
+   "margin_mm": 1.44,
+   "connectors": {
+    "J3-3": "MF+ 2p, 8.3 mm",
+    "J3-4": "MF3 2p, 7.26 mm"
+   }
+  },
+  "PCB04_NY": {
+   "needed_mm": 27.82,
+   "free_edge_mm": 29.0,
+   "margin_mm": 1.18,
+   "connectors": {
+    "J4-1": "MF+ 2p, 8.3 mm",
+    "J4-2": "MF3 4p, 10.26 mm",
+    "J4-4": "MF3 2p, 7.26 mm"
+   }
+  },
+  "PCB04_PY": {
+   "needed_mm": 19.56,
+   "free_edge_mm": 29.0,
+   "margin_mm": 9.44,
+   "connectors": {
+    "J4-3": "MF+ 4p, 11.3 mm",
+    "J4-5": "MF3 2p, 7.26 mm"
+   }
+  },
+  "PCB02_NY": {
+   "needed_mm": 20.6,
+   "free_edge_mm": 34.0,
+   "margin_mm": 13.4,
+   "connectors": {
+    "J2-1": "MF+ 2p, 8.3 mm",
+    "J2-3": "MF+ 4p, 11.3 mm"
+   }
+  }
+ },
+ "slide_path_blockers": {},
+ "ntc_break": {
+  "x_mm": [
+   52.0,
+   76.0
+  ],
+  "z_mm": [
+   41.6,
+   47.4
+  ],
+  "gap_behind_to_window_x1_mm": 2.5,
+  "cross_section_fits_window": true
+ },
+ "splices": {
+  "BATBUS_POS_BUTT_SPLICE_MATED_PAIR": {
+   "x": [
+    22.0,
+    48.0
+   ],
+   "y": [
+    43.0,
+    49.0
+   ],
+   "z": [
+    77.25,
+    83.25
+   ]
+  },
+  "BATBUS_NEG_STAR_BUTT_SPLICE_MATED_PAIR": {
+   "x": [
+    22.0,
+    48.0
+   ],
+   "y": [
+    36.5,
+    42.5
+   ],
+   "z": [
+    77.25,
+    83.25
+   ]
+  }
+ },
+ "splice_to_j3_1_mm": 2.65,
+ "deleted_j2_2_absent": true,
+ "pass": {
+  "connector_reserves_clear_of_real_hardware": true,
+  "connector_bodies_clear_of_hardware_and_each_other": true,
+  "connector_reserves_do_not_overlap_each_other": true,
+  "mated_plugs_sit_inside_their_reserves": true,
+  "edge_power_connectors_fit_free_board_edges": true,
+  "pack_disconnect_slide_path_clear": true,
+  "ntc_break_passes_tub_window": true,
+  "j2_2_deleted": true
+ }
+}

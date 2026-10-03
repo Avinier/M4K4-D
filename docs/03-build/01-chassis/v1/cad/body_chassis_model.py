@@ -673,6 +673,20 @@ FUSE_BRACKET_COLUMN = (75.0, 81.0, 40.0, 48.0)  # x0, x1, y0, y1; deck top to th
 FUSE_BRACKET_SHELF = (52.0, 82.0, 39.0, 49.0, 71.0, 73.0)
 TUB_SERVICE_WINDOW = (26.9, 49.5, 40.0, 50.0)  # x0, x1, z0, z1 through the +Y tub wall
 PACK_DISCONNECT_SLIDE_PATH = (27.0, 49.0, 30.0, 39.5, 40.0, 50.0)  # into the emptied tub
+# Harness (05-harness/README.md, D-039). The pack NTC (CH-025, W02) breaks at a
+# JST SM 2-way wire-to-wire pair lying along X in the +Y channel ahead of the
+# disconnect, below the deck: the fuse left this space in D-032. To drop the pack,
+# unplug J-PK first, then pull the NTC pair back to the tub window and unplug it.
+PACK_NTC_BREAK_RESERVE = (51.0, 77.0, 40.0, 48.0, 41.0, 48.0)
+PACK_NTC_BREAK_PAIR = (52.0, 76.0, 40.75, 47.25, 41.6, 47.4)  # JST SM 2p mated, 24 x 6.5 x 5.8 (E)
+# Fused feed split (D-039): the fuse output and the pack negative each fork at a
+# crimped butt splice (2 x AWG16 into 1) above the PCB-03 +Y edge; one branch
+# runs to PCB-03 J3-1 (motor side), the other to PCB-02 J2-1. The negative
+# splice is the power star. Two O6 x 26 mm splices side by side along X.
+BATBUS_SPLICE_RESERVE = (20.0, 50.0, 36.0, 49.4, 76.5, 84.0)
+BATBUS_SPLICE_RADIUS = 3.0
+BATBUS_SPLICE_X = (22.0, 48.0)
+BATBUS_SPLICE_YZ = {"POS": (46.0, 80.25), "NEG_STAR": (39.5, 80.25)}
 # 7 x 7 mm hatch-screw bosses, each lapping 0.5 mm onto a tub wall: two outside
 # the side walls at the rear, two on the front wall's face at Y +/-34.35, midway
 # between the ballast bar (|Y| 30) and the channel (Y 38.7).
@@ -774,11 +788,11 @@ def connector_width(family, circuits):
 CONNECTOR_EDGE_STRIPS = {
     "PCB03_PY": {"box": (19.0, 37.0, 30.0, 50.0, 64.6, 75.0), "span": (19.0, 37.0), "connectors": [
         ("J3-2", "MF+", 2, "PB-DRIVE-L to the left DRV8833 carrier"),
-        ("J3-1", "MF+", 2, "BATBUS in from PCB-02 J2-2"),
+        ("J3-1", "MF+", 2, "BATBUS-M in from the fuse-side star splice (D-039)"),
     ]},
     "PCB03_NY": {"box": (19.0, 37.0, -50.0, -30.0, 64.6, 75.0), "span": (19.0, 37.0), "connectors": [
         ("J3-3", "MF+", 2, "PB-DRIVE-R to the right DRV8833 carrier"),
-        ("J3-4", "MF+", 2, "PB-HEAD pitch/roll trunk to the yaw junction"),
+        ("J3-4", "MF3", 2, "PB-HEAD pitch/roll trunk to the yaw junction J8-1 (D-039: Micro-Fit 3.0, AWG22)"),
     ]},
     "PCB04_NY": {"box": (-14.0, 15.0, -51.0, -35.0, 64.6, 77.0), "span": (-14.0, 15.0), "connectors": [
         ("J4-1", "MF+", 2, "PB-COMPUTE to the Pi 5 USB-C pigtail"),
@@ -791,8 +805,7 @@ CONNECTOR_EDGE_STRIPS = {
     ]},
     # PCB-02 stands vertical: this edge runs along Z and the plugs exit -Y.
     "PCB02_NY": {"box": (-48.0, -38.0, -41.0, -25.0, 60.0, 94.0), "span": (60.0, 94.0), "connectors": [
-        ("J2-1", "MF+", 2, "pack in from the fuse and SBS Mini"),
-        ("J2-2", "MF+", 2, "BATBUS out to PCB-03 J3-1"),
+        ("J2-1", "MF+", 2, "BATBUS-C in from the fuse-side star splice (D-039; J2-2 deleted)"),
         ("J2-3", "MF+", 4, "OPBUS and CHGBUS out to PCB-04 J4-3"),
     ]},
 }
@@ -845,8 +858,8 @@ MOTOR_INLINE_RESERVE = {
 # headroom prism; its body-side cables drop down a -Y riser to PCB-03/04.
 YAW_JUNCTION_BOX = (-22.0, 10.0, -44.0, -23.0, 112.0, 125.5)
 # PCB-08: 32 x 21 x 1.6 mm plate at the bottom of the junction reserve. The
-# clock-spring flex is soldered to it; body-side connectors: J8-1 Micro-Fit+
-# 2x3 right-angle on the -X edge (exits -X, then down the riser) and three GH
+# clock-spring flex is soldered to it; body-side connectors: J8-1 Micro-Fit 3.0
+# 2x3 right-angle (D-039) on the -X edge (exits -X, then down the riser) and three GH
 # top-entry headers (J8-3/J8-5 sideband GH 8 x 2, J8-4 head link GH 6).
 YAW_JUNCTION_PLATE_Z = (112.0, 113.6)
 YAW_JUNCTION_MF_PLUG_RESERVE = (-40.0, -22.0, -41.0, -26.0, 113.6, 124.0)
@@ -1080,7 +1093,7 @@ MASS_ROWS = [
     ("PCB04_BRANCH_CONVERTERS", 45.0, (sum(PCB04_BOX[0:2]) / 2.0, 0.0, sum(PCB04_BOX[4:6]) / 2.0), "E (proposal): WS-H 35 g (3080 mm2 board 11.7 g + inductors 5.4 + connectors 8 + ICs 1 + polymer/ceramics ~1) with the hold-up raised from 4 x 1 mF (~8 g) to 2 x 3.3 mF (~9 g each, Ø12.5 x 20 lying) per board-specs.md sec 8.1: +10 g; the board footprint is NOT enlarged (no slack in the bay)"),
     ("C3_DEVKITC_N8", 9.0, (sum(C3_CARRIER_BOARD[0:2]) / 2.0, C3_CARRIER_BOARD[3] + C3_DEVKIT_STANDOFF + 2.75, C3_DEVKIT_Z[0] + 14.15), "E: ESP32-S3-DevKitC-1-N8 board; moved 2026-09-26 onto the PCB-10 carrier on the -Y side wall"),
     ("C3_CARRIER_PCB10", 20.0, (sum(C3_CARRIER_BOARD[0:2]) / 2.0, C3_CARRIER_BOARD[2] - 1.0, sum(C3_CARRIER_BOARD[4:6]) / 2.0), "E (proposal): 70 x 43.5 mm board ~8.5 g + THVD1451, TPS3436, READY logic, SLEEP FETs ~1 g + 2 x 22-pin headers ~3 g + 10 GH and 1 Micro-Fit 3.0 header ~3 g + four M2.5 screws and inserts ~1 g; two printed uprights on the -Y rails ~3.5 g"),
-    ("YAW_JUNCTION_PCB08", 4.0, (sum(YAW_JUNCTION_BOX[0:2]) / 2.0, sum(YAW_JUNCTION_BOX[2:4]) / 2.0, 116.0), "E: 32 x 21 mm board ~2 g + Micro-Fit+ 2x3 and three GH headers ~2 g"),
+    ("YAW_JUNCTION_PCB08", 4.0, (sum(YAW_JUNCTION_BOX[0:2]) / 2.0, sum(YAW_JUNCTION_BOX[2:4]) / 2.0, 116.0), "E: 32 x 21 mm board ~2 g + Micro-Fit 3.0 2x3 (D-039) and three GH headers ~2 g"),
     ("C0_LINK_ADAPTER_PCB09", 7.0, (30.0, 32.0, 107.5), "E: strip-and-wide board ~3 g + 2 x 20 socket ~2 g + 2 x THVD1451 and three GH headers ~2 g"),
     ("BATTERY_RESTRAINT", 3.4, (46.36, 0.0, 40.63), "D-030 J11B, measured from the solids: two 10 x 1.2 mm hook-and-loop strap loops at ~1.1 g/cm3 (3.3 g) and two 1.5 mm closed-cell foam pads at ~0.1 g/cm3 (0.05 g); estimate, not weighed"),
     ("ADAFRUIT_DRV8833_CARRIERS_X2", 6.0, (DRIVER_CENTER_X, 0.0, 68.5), "E: 2 x Adafruit #3297 boards, 25.4 x 17.8 mm board-file outline with the 3.5 mm terminal block fitted (10.1 mm tall), 3 g each; mass unmeasured"),
@@ -3015,11 +3028,11 @@ def _yaw_junction_board():
     x0, x1, y0, y1, _z0, _z1 = YAW_JUNCTION_BOX
     pz0, pz1 = YAW_JUNCTION_PLATE_Z
     parts = [_paint(_block(x0, x1, y0, y1, pz0, pz1), "YAW_JUNCTION_PCB08_BOARD", PCB_GREEN, 1.0)]
-    # J8-1 Micro-Fit+ 2x3 right-angle on the -X edge, mating -X.
-    w = connector_width("MF+", 6)
+    # J8-1 Micro-Fit 3.0 2x3 right-angle on the -X edge, mating -X (D-039: was Micro-Fit+).
+    w = connector_width("MF3", 6)
     yc = (YAW_JUNCTION_MF_PLUG_RESERVE[2] + YAW_JUNCTION_MF_PLUG_RESERVE[3]) / 2.0
-    parts.append(_paint(_block(x0, x0 + 10.0, yc - w / 2.0, yc + w / 2.0, pz1, pz1 + MATED_POWER_PLUG_HEIGHT), "YAW_JUNCTION_J8_1_MICROFIT_PLUS_6P_RA_HEADER", "#2E3336", 1.0))
-    parts.append(_paint(_block(x0 - MATED_POWER_PLUG_LENGTH, x0, yc - w / 2.0, yc + w / 2.0, pz1, pz1 + MATED_POWER_PLUG_HEIGHT), "YAW_JUNCTION_J8_1_MICROFIT_PLUS_6P_MATED_PLUG", "#3A4044", 1.0))
+    parts.append(_paint(_block(x0, x0 + 10.0, yc - w / 2.0, yc + w / 2.0, pz1, pz1 + MATED_POWER_PLUG_HEIGHT), "YAW_JUNCTION_J8_1_MICROFIT3_6P_RA_HEADER", "#2E3336", 1.0))
+    parts.append(_paint(_block(x0 - MATED_POWER_PLUG_LENGTH, x0, yc - w / 2.0, yc + w / 2.0, pz1, pz1 + MATED_POWER_PLUG_HEIGHT), "YAW_JUNCTION_J8_1_MICROFIT3_6P_MATED_PLUG", "#3A4044", 1.0))
     for cid, n, gy0 in YAW_JUNCTION_GH:
         hdr = _place(_gh_header(n, f"YAW_JUNCTION_{_cid(cid)}_JST_GH_BM{n:02d}B_HEADER", top_entry=True), -10.0, gy0, pz1, ref={"X": "min", "Y": "min", "Z": "min"})
         b = hdr.bounding_box()
@@ -3149,6 +3162,9 @@ def connectors_and_exits():
         _paint(_block(*C3_POWER_PLUG_RESERVE), "C3_CARRIER_EDGE_CONNECTOR_J101_RESERVE", power, 0.30),
         _paint(_block(*C3_DEVKIT_USB_CORRIDOR), "C3_DEVKITC_USB_SERVICE_CORRIDOR_KEEP_OUT", reserve, 0.12),
         _paint(_block(*PACK_DISCONNECT_SLIDE_PATH), "PACK_DISCONNECT_SERVICE_SLIDE_PATH_KEEP_OUT", reserve, 0.12),
+        _paint(_block(*PACK_NTC_BREAK_RESERVE), "PACK_NTC_BREAK_JST_SM2_RESERVE", reserve, 0.30),
+        _paint(_block(*BATBUS_SPLICE_RESERVE), "BATBUS_STAR_SPLICE_RESERVE", power, 0.30),
+        _paint(_block(*PACK_NTC_BREAK_PAIR), "PACK_NTC_BREAK_JST_SM2_WIRE_TO_WIRE_MATED_PAIR", "#F4F1E6", 1.0),
         _paint(_block(*YAW_JUNCTION_MF_PLUG_RESERVE), "YAW_JUNCTION_J81_PLUG_RESERVE", power, 0.30),
         _paint(_block(*C0_LINK_ADAPTER_TOP_PLUGS), "C0_LINK_ADAPTER_TOP_ENTRY_PLUG_RESERVE", reserve, 0.20),
         _paint(_block(*C0_LINK_ADAPTER_SIDE_PLUG), "C0_LINK_ADAPTER_J91_PLUG_RESERVE", reserve, 0.20),
@@ -3157,6 +3173,9 @@ def connectors_and_exits():
         _paint(_block(36.0, 45.0, -9.0, 9.0, 115.6, 120.0), "PCB05_REAR_EDGE_PLUG_RESERVE", reserve, 0.20),
     ]
     parts += [_yaw_junction_board(), _c0_link_adapter(), _pcb05_connectors(), _edge_power_plugs()]
+    for name, (y, z) in BATBUS_SPLICE_YZ.items():
+        splice = _axial_bore_x(BATBUS_SPLICE_RADIUS, BATBUS_SPLICE_X[0], BATBUS_SPLICE_X[1], y, z)
+        parts.append(_paint(splice, f"BATBUS_{name}_BUTT_SPLICE_MATED_PAIR", "#C55842", 1.0))
     # GH plug and lead reserves in front of the IMU and microphone headers.
     ix, iy, iz = IMU_BOARD_CENTER
     top = iz + IMU_BOARD_SIZE[2] / 2.0

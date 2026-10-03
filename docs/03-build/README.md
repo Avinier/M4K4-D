@@ -21,6 +21,8 @@ In the register, `DESIGN` means custom geometry exists, `CANDIDATE` means a part
 3. [Head](03-head/) — build and test the mechanism on its real body support. Part selection and isolated joint tests can start earlier.
 4. [Full droid](fulldroid/) — assemble the subsystems and rerun whole-robot motion, power, thermal, fault, and interaction tests.
 
+Connectors, cables, pinouts and service breaks are in [05-harness](05-harness/README.md).
+
 Custom schematic, layout and board validation work has a separate [04-pcbs work area](04-pcbs/README.md), which also holds the build deltas to the RP-02 power-board specs. Its unreleased assemblies do not universally block isolated chassis fit or controlled external-supply tests.
 
 Work can overlap. Freeze only the interfaces needed for the next release; record changes that affect another subsystem. The integrated [Layout 02 CAD](../02-prototypes/RP-06-cad/body-chassis/layout-02/) is the starting geometry, not a fabrication release or physical proof.

@@ -13,7 +13,7 @@ This folder holds the schematic, layout, fabrication and electrical-validation w
 | PCB-05 | Audio front end (MAX98357A, 2 × ADAU7002) | Body, above the Pi | BO-002 | Spec | Schematic and layout |
 | PCB-06 ×4 | PDM microphone board | Body shell bosses | BO-005 | Spec | Layout; array tap and noise tests |
 | PCB-07 | Base IMU (ICM-42688-P) | Chassis | CH-021 | HOLD | Sensor and SPI vs I²C interface |
-| PCB-08 | Yaw junction (clock-spring stationary end) | Body, under the yaw adapter plate | CH-083 | Spec | Schematic, pin and mating order |
+| PCB-08 | Yaw junction (clock-spring stationary end) | Body, under the yaw adapter plate | CH-083 | Spec | Schematic; clock-spring flex pin order. Body-side pinout and the mating rule: [05-harness](../05-harness/README.md) (D-039) |
 | PCB-09 | C0 link adapter (2 × RS-422, audio pass-through) | Body, on the Pi header | CH-084 | Spec | Schematic; bench fit beside the yaw servo |
 | PCB-10 | C3 controller carrier (watchdog, READY, sleep gate, Hall and TCRT circuits) | Body, −Y side wall | CH-044 | Spec | J10-8 Hall and J10-10 TCRT changes; [J10-5/6 driver mapping](power-boards.md#24-logic-to-c3-j10-5--j10-6-gh-6) |
 | PCB-11 | Status LED carrier (WS2812B-2020) | Head crown | CH-085 | Spec | Brightness and stray-light bench |

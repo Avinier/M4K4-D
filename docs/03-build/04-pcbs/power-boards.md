@@ -111,7 +111,7 @@ The listing gives 20 A continuous discharge, 10 A charge, balancing, "charging v
 
 - The AC72ABD (CH-024) sits in the cell-negative strap, bonded to a cell. It sits outside the module's current-sense path.
 - The 103AT-2 (CH-025) goes to the BQ25798 `TS` input on PCB-02.
-- The pack disconnect (CH-027) is 2-circuit power only, so the NTC needs its own 2-pin lead and disconnect (CH-025, still open).
+- The pack disconnect (CH-027) is 2-circuit power only, so the NTC has its own 2-pin lead and a JST SM 2-way break in the +Y channel ([D-039](../decisions.md#d-039), [05-harness](../05-harness/README.md)).
 
 ## 4. Rebuilt numbers (`E`)
 
@@ -146,4 +146,5 @@ At a 16 µA module the maximum is 100 µA, which is 2.9% of 2.5 Ah per month. At
 - [x] CAD labels: `J10-5`/`J10-6` carry the §2.4 mapping in `body_v1_model.py` and `body_chassis_model.py` (label strings only, no geometry).
 - [x] SMBJ8.5A leakage (§2.2) and the current-monitor reference (§2.5) are now taken from the datasheets.
 - [ ] Schematic: 74LVC1G08 placement on PCB-10; INA2181 output routing to the C2 ADC (RP-02 §8 pins still open).
-- [ ] Pack NTC inline break beside `J-PK` (CH-025; RP-06 connector-schedule §5 item 1): choose the 2-circuit wire-to-wire part and add a CAD reserve, then run the targeted pack checks.
+- [x] Pack NTC inline break beside `J-PK` (CH-025): JST SM 2-way pair in the +Y channel, CAD reserve added, `check_harness.py` ALL PASS ([D-039](../decisions.md#d-039)).
+- [ ] PCB-02/PCB-03 feed entry changed by [D-039](../decisions.md#d-039): `BATBUS` reaches `J3-1` and `J2-1` separately from a star splice beside the fuse, and `J2-2` is deleted. Pinouts for every board connector are in [05-harness §5](../05-harness/README.md#5-pinouts); carry them into the schematics.
