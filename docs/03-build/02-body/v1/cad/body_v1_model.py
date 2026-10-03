@@ -919,7 +919,7 @@ C0_LINK_ADAPTER_PLATE_Z = (106.4, 108.0)
 C0_LINK_ADAPTER_TOP_PLUGS = (36.0, 54.0, 29.0, 42.0, 112.0, 116.0)
 C0_LINK_ADAPTER_SIDE_PLUG = (26.0, 38.0, 45.0, 54.0, 108.0, 112.5)
 # C3 carrier (PCB-10, RP-02 CCD-HDL-03: DevKitC backplane with the base-link
-# THVD1451, the TPS3436 window watchdog, READY logic, the driver enable gating; DRV8833 input/control mapping TBD,
+# THVD1451, the TPS3436 window watchdog, READY logic, the 74LVC1G08 driver sleep gate; DRV8833 mapping in 04-pcbs/power-boards.md sec 2.4 (D-038),
 # driver/sensor connectors and test points). Nothing modelled it, and the bare
 # DevKitC floated over PCB-04 with its header pins in PCB-04's parts envelope.
 # A free-volume scan found one home: standing vertical on the -Y side wall
@@ -948,8 +948,8 @@ C3_CARRIER_CONNECTORS = [
     ("J10-2", "GH", 6, "base link RS-422 to PCB-09 J9-2"),
     ("J10-3", "GH", 4, "encoder L"),
     ("J10-4", "GH", 4, "encoder R"),
-    ("J10-5", "GH", 6, "left DRV8833 input logic; mapping TBD"),
-    ("J10-6", "GH", 6, "right DRV8833 input logic; mapping TBD"),
+    ("J10-5", "GH", 6, "left DRV8833: SLP (AND of GPIO21 and BASE_READY), IN1, IN2, FLT (wired-OR GPIO9), GND, spare (D-038)"),
+    ("J10-6", "GH", 6, "right DRV8833: SLP (AND of GPIO21 and BASE_READY), IN1, IN2, FLT (wired-OR GPIO9), GND, spare (D-038)"),
     ("J10-7", "GH", 8, "IMU PCB-07 (SPI)"),
     ("J10-8", "GH", 5, "nose pod, one cable (D-013): +5V and Vo for the GP2Y0A21YK0F, GND, +3V3 and OUT for the DRV5055 Hall board"),
     ("J10-10", "GH", 4, "rear TCRT cartridge"),

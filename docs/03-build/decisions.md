@@ -1296,6 +1296,10 @@ This replaces "screwed to the body frame" in BO-005 and RP-06 [peripheral select
 
 - TIFPS0629 bench acceptance on two received units.
 - MOT3001 winding resistance and inductance on receipt, then recheck the TVS and regeneration numbers.
-- SMBJ8.5A leakage at 8.4 V.
-- INA181 reference part.
 - NTC lead and disconnect (CH-025).
+
+**Update 2026-10-03 (same day):** paper items closed.
+- SMBJ8.5A leakage is at most 20 µA at 8.5 V (Littelfuse).
+- The drive-feed monitors are one INA2181A2 (dual, separate `REF` pins) with a REF3312 1.25 V reference, fed from a local 3.3 V LDO so the output cannot exceed 3.3 V.
+- The `J10-5`/`J10-6` labels in `body_v1_model.py` and `body_chassis_model.py` carry the mapping (strings only, no geometry).
+- The temporary `power-review-todo.md` is deleted. Its remaining bench items are tracked in [power-boards.md §5](04-pcbs/power-boards.md#5-open) and CH-023.
