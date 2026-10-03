@@ -11,6 +11,7 @@ This directory follows the chassis v1 CAD layout: an editable model and STEP ent
 | `check_shell_frame_fit.py` | Static fit, lowering path, and outside screw access check. |
 | `check_body_panel_fit.py` | Sloped service-panel, frame, functional-part, and fastener clearance check. |
 | `check_mic_mounts.py` | Shell-mounted mic boards: seat, gasket, sound path, screw depth, rail clearance and clashes (D-037). |
+| `check_charge_inlet.py` | Rear-panel charge inlet PCB-13: pocket depth, flush mouth, maximum-overmold fit, seat, screw engagement, clashes, PCB-02 clearance and the panel-removal sweep (D-040; about 6 min). |
 | `check_body_layout.py` | CAD-volume mass/CoM, body axes/envelope, and whole-robot stability-screen audit. |
 | `write_outputs.py` | Writes body dimensions, frames, and a partial body mass-register report to `generated/`. |
 | `purchased/` | Provenance and current import locations for vendor STEP sources. |
@@ -25,6 +26,7 @@ python check_body_frame_fit.py
 python check_shell_frame_fit.py
 python check_body_panel_fit.py
 python check_mic_mounts.py
+python check_charge_inlet.py
 python check_body_layout.py
 python write_outputs.py
 ```

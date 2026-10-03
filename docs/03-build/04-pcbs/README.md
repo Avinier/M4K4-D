@@ -7,7 +7,7 @@ This folder holds the schematic, layout, fabrication and electrical-validation w
 | ID | Board | Location | BOM | Status | Work still required |
 |---|---|---|---|---|---|
 | PCB-01 | 2S pack protection | Chassis tub, on the pack | CH-023 | **Bought:** Robocraze TIFPS0629 ([D-019](../decisions.md#d-019)); the RP-02 custom design is reference only | Bench acceptance before cells: [power-boards.md §3](power-boards.md#3-pcb-01--tifps0629-acceptance-before-cells-are-connected) |
-| PCB-02 | Charge, USB-C PD inlet, on/off latch, pack sense, `ENERGY_OK` | Body, rear panel (vertical) | CH-041 | Spec | Schematic; charger default-mode, latch and adapter tests |
+| PCB-02 | Charger (BQ25798), on/off latch, pack sense, `ENERGY_OK` | Body, behind the rear panel (vertical) | CH-041 | Spec; charger block closed in [charge-path.md](charge-path.md) ([D-040](../decisions.md#d-040)) | Schematic; latch tests; charge bench CP-04 to CP-12; mounting (none in CAD yet) |
 | PCB-03 | Motor gate, permit chain, head 5 V rail, drive feeds | Body, above the tub | CH-042 | Spec, with [build deltas](power-boards.md#2-pcb-03-drive-feed-for-the-drv8833) | Schematic; truth table, fault, inrush, regeneration tests |
 | PCB-04 | Five branch converters (C2, base, Pi, display, audio) | Body, under the compute tray | CH-043 | Spec | Schematic; start-up, hold-up, breaker and back-feed tests |
 | PCB-05 | Audio front end (MAX98357A, 2 × ADAU7002) | Body, above the Pi | BO-002 | Spec | Schematic and layout |
@@ -19,8 +19,9 @@ This folder holds the schematic, layout, fabrication and electrical-validation w
 | PCB-11 | Status LED carrier (WS2812B-2020) | Head crown | CH-085 | Spec | Brightness and stray-light bench |
 | PCB-12 | C2 head carrier (ESP32-S3-Zero, transceivers, TPS3436 watchdog) | Head | CH-086 | Lead design | Schematic; head pocket fit |
 | CH-064 | Nose Hall carrier (DRV5055) | Chassis nose | CH-064 | Spec | Layout of the 6 × 4.6 × 0.8 mm board |
+| PCB-13 | Charge inlet: GCT USB4140, TVS2200, ESDA25W, STUSB4500, input P-FET | Body, rear-panel pad (comes off with the panel) | BO-015 | Spec and CAD ([charge-path.md §3, §6](charge-path.md), [D-040](../decisions.md#d-040)) | Schematic and layout; NVM image and read-back; CP-01 to CP-03, CP-13, CP-14 |
 
-Power-board specification: the RP-02 [board-specs.md](../../02-prototypes/RP-02-electrical/board-specs.md) is the read-only reference, and [power-boards.md](power-boards.md) holds what the build changes.
+Power-board specification: the RP-02 [board-specs.md](../../02-prototypes/RP-02-electrical/board-specs.md) is the read-only reference, and [power-boards.md](power-boards.md) holds what the build changes. The charge path, from the USB-C inlet to the pack entry, is in [charge-path.md](charge-path.md). Open board work without another home is tracked in [open-items.md](open-items.md).
 
 ## Rules
 

@@ -855,6 +855,10 @@ CONNECTOR_EDGE_STRIPS = {
         ("J2-1", "MF+", 2, "BATBUS-C in from the fuse-side star splice (D-039; J2-2 deleted)"),
         ("J2-3", "MF+", 4, "OPBUS and CHGBUS out to PCB-04 J4-3"),
     ]},
+    # The +Y edge takes only the charge-inlet lead (D-040); its plug also exits +Y.
+    "PCB02_PY": {"box": (-48.0, -38.0, 25.0, 41.0, 62.0, 74.0), "span": (62.0, 74.0), "connectors": [
+        ("J2-8", "MF3", 2, "VSNK in from the PCB-13 charge inlet (W16)"),
+    ]},
 }
 # Top-entry signal headers plug up into these layers (reserve = plugs + first bend).
 CONNECTOR_TOP_LAYERS = {
@@ -877,13 +881,44 @@ CONNECTOR_TOP_LAYERS = {
     ]},
 }
 
-# Charge inlet (PCD-CON-05): a vertical-mount 16-pin USB-C receptacle on the back
-# (-X) face of PCB-02, mouth 1.05 mm behind the rear panel's inner face, and a
-# 13.2 x 7.2 mm plug cut-out through the panel. Envelope only; part number open.
+# Charge inlet (D-040, ../../../04-pcbs/charge-path.md): PCB-13, a 28 x 15 mm board
+# screwed to a pad printed on the rear panel's inner face, carries a GCT USB4140
+# vertical 6-pin power-only receptacle (6.50 mm high, four through-hole shell stakes).
+# Its mouth is flush with the floor of a 13.4 x 7.6 mm pocket in the sloped facet, so
+# a plug overmold up to the USB Type-C 12.35 x 6.5 mm maximum seats on the receptacle
+# face. Two M2 thread-forming screws either side of the receptacle put the plug loads
+# into the panel, not into PCB-02. The inlet comes off with the panel after W16 is
+# unplugged from PCB-02 J2-8.
 CHARGE_INLET_CENTER_YZ = (0.0, 64.0)
-CHARGE_INLET_RECEPTACLE = (-56.95, PCB02_BOX[0], -4.47, 4.47, 62.37, 65.63)
-CHARGE_INLET_CUTOUT = (13.2, 7.2)
-CHARGE_INLET_OUTSIDE_CORRIDOR = (BODY_X_REAR - SHELL_THICKNESS - 27.0, BODY_X_REAR - SHELL_THICKNESS, -6.5, 6.5, 60.5, 67.5)
+CHARGE_INLET_POCKET = (13.4, 7.6, 1.0)  # Y x Z, corner radius: >= 0.35 mm round a sharp-cornered 12.35 x 6.5 overmold
+# Flat floor normal to X: 0.6 mm inside the outer face at the pocket's lowest edge
+# (outer face X -62.22 at Z 60.2), 1.6 mm at its top edge (X -63.20 at Z 67.8).
+CHARGE_INLET_POCKET_FLOOR_X = -61.6
+CHARGE_INLET_OVERMOLD = (12.35, 6.5)  # USB Type-C plug overmold maximum (USB-IF compliance document)
+USB4140_BODY = (8.94, 3.16, 6.50)  # D: GCT USB4140 drawing, Y x Z shell, height off the board
+USB4140_MOUTH = (8.34, 2.56, 6.20)  # D: opening Y x Z; plug cavity depth to the receptacle datum (E)
+USB4140_FOOTPRINT = (8.64, 4.70)  # D: shell stakes 8.64 apart; SMT pad rows inside 4.7 mm
+CHARGE_INLET_BOARD_SEAT_X = CHARGE_INLET_POCKET_FLOOR_X + USB4140_BODY[2]  # PCB-13 -X face, X -55.1
+PCB13_BOARD = (CHARGE_INLET_BOARD_SEAT_X, CHARGE_INLET_BOARD_SEAT_X + PCB_THICKNESS, -14.0, 14.0, 56.5, 71.5)
+PCB13_PARTS = (PCB13_BOARD[1], PCB13_BOARD[1] + 2.0, -14.0, 9.0, 57.0, 71.0)  # +X face; 1206 capacitors are the tallest (E)
+PCB13_SCREW_YZ = ((-11.0, 64.0), (11.0, 64.0))
+PCB13_SCREW = (5.0, 1.9, 1.3, 0.8)  # M2 x 5 thread-forming: length, head radius, head height, formed-core radius (BO-013 family)
+PCB13_PILOT_DEPTH = 3.6  # Ø1.6 blind pilot below the seat: 3.4 mm engagement + 0.2 mm tip clearance
+PCB13_PAD = (-15.0, 15.0, 55.5, 72.5)  # Y, Z of the printed pad, panel inner face to the seat
+CHARGE_INLET_BODY_HOLE = (9.50, 3.80)  # receptacle shell through the pad and panel, 0.28 / 0.32 mm a side
+CHARGE_INLET_PIN_RELIEF = (9.60, 5.60, 1.2)  # SMT pins and stakes at the seat face
+# Plug corridor: the maximum overmold, from the pocket floor out 30 mm.
+CHARGE_INLET_OUTSIDE_CORRIDOR = (
+    CHARGE_INLET_POCKET_FLOOR_X - 30.0, CHARGE_INLET_POCKET_FLOOR_X,
+    -CHARGE_INLET_OVERMOLD[0] / 2.0, CHARGE_INLET_OVERMOLD[0] / 2.0,
+    CHARGE_INLET_CENTER_YZ[1] - CHARGE_INLET_OVERMOLD[1] / 2.0, CHARGE_INLET_CENTER_YZ[1] + CHARGE_INLET_OVERMOLD[1] / 2.0,
+)
+# W16: 2 x AWG22 soldered to PCB-13's +Y end, +Y through the gap behind PCB-02, then
+# forward to the cable end of the J2-8 plug. Reserves are the lead plus its bend.
+CHARGE_INLET_LEAD_RESERVES = (
+    (PCB13_BOARD[1], PCB02_BOX[0] - 0.4, 10.0, 41.0, 66.0, 71.0),
+    (PCB02_BOX[0] - 0.4, -38.0, 37.0, 41.0, 66.0, 71.0),
+)
 
 # Pi 5 power: right-angle USB-C plug on the Pi's -Y edge (the port is at X -10.1,
 # Z 96.2) and its pigtail down past the compute tray to PCB-04 J4-1.
@@ -1113,7 +1148,7 @@ MASS_ROWS = [
         HEAD_ORIGIN_IN_CHASSIS[1] + HEAD_LOCAL_COM[1],
         HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_LOCAL_COM[2],
     ), "RP-01 generated mass tree"),
-    ("BODY_SHELL_AND_PANELS", 250.7, (19.8, 0.0, 93.5), "Body v1 CAD volume and centroid (2026-10-03): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037, +4.0 g), front/rear service skins with the seven uniform rectangular speaker slots and E-stop well, badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."),
+    ("BODY_SHELL_AND_PANELS", 253.7, (18.9, 0.0, 93.1), "Body v1 CAD volume and centroid (2026-10-04; D-040 rear-panel charge-inlet pad +3.0 g, was 250.7 g at (19.8, 0, 93.5)): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037, +4.0 g), front/rear service skins with the seven uniform rectangular speaker slots and E-stop well, badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."),
     ("BODY_PRIMARY_FRAME", 170.9, (12.5, 1.0, 94.9), "Body v1 CAD volume and centroid (2026-10-02): main connected print and removable front-left foot cassette at conservative 1.20 g/cm3 effective PETG, plus modeled four M4 bolts/nuts, two locating pins, cassette M3 joints, and four shell-to-frame M3 screw/insert joints at 7.85/8.50 g/cm3 steel/brass. Estimated, not weighed; check_body_layout.py verifies against the solids."),
     ("CHASSIS_PRIMARY_FRAME", 229.1, (18.14, 0.0, 46.64), "D-029 (2026-10-01): +21.4 g of newly modeled hardware measured from the solids at 7.9/8.5 g/cm3, centroid (30.4, 0, 46.4): J05/J06/J16/J11A ISO 7380 screws and 14 M3 x 6 inserts, four M2.5 driver screws and inserts; +0.7 g for the measured +1.24 cm3 printed volume at 0.571 g/cm3 (driver posts and tie lugs, wider tongues and rear rail ends, moved J16 ears, hatch strap slots, recess/cavity growth), centroid about (35, 0, 64); was 207.0 g at (16.82, 0, 46.61). 2026-10-01: +0.2 g for the measured +0.29 cm3 when the front hatch bosses moved to the front wall, the bosses were cut to Z 39.5 and the hatch grew 4 mm forward; D-011: -0.3 g for the O5 J10-8 cable bore through the front crossmember and deck at (86, -31); D-010 J04 adds two integrated plate-and-cheek carriers, keyed rail joints, eight modeled M3 x 8 screws and eight 6 mm inserts; estimated +10.2 g total (about +0.7 g printed cheek/key volume and +9.5 g steel/brass hardware, preliminary geometry-density estimate); previous 196.9 g centroid (17.7, 0, 46.8). D-007 axle stack (2026-09-29), +20.9 g at the axle (X 0, Z 42): printed plate + housing replace the flange/boss/diaphragm, +7.24 cm3 measured at ~0.571 g/cm3 (+4.1 g); two 1.2 mm aluminium caps 1.52 cm3 (+4.1 g); eight M3 x 18 cap screws (+10.6 g); eight M3 brass inserts (+1.5 g); face screws M3 x 8 CSK -> M3 x 6 low head (+0.6 g); before that 176.0 g at (19.8, 0, 47.4): +2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"),
     ("WHEEL_L", 92.5, WHEEL_CENTER_L, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
@@ -1128,7 +1163,8 @@ MASS_ROWS = [
     # Replaces the single CONTROL_POWER_SENSORS row (121.5 g at (22, 0, 80), 2026-09-25). Masses are the RP-02
     # board-specs.md sec 2 / WS-H estimates (PCB 1.6 mm FR4 with copper about 3.8 g per 1000 mm2 plus the parts
     # inventory), not measurements; positions are the centres of the proposal boxes.
-    ("PCB02_CHARGE_AND_SYSTEM_POWER", 18.0, ((PCB02_BOX[0] + PCB02_BOX[1]) / 2.0, 0.0, (PCB02_BOX[4] + PCB02_BOX[5]) / 2.0), "E (proposal): 50 x 36 mm board 6.8 g + USB-C 1.2 + connectors 3 + inductor 2 + capacitors 3 + ICs 0.6 + misc 1; vertical on the rear-panel frame"),
+    ("PCB02_CHARGE_AND_SYSTEM_POWER", 18.0, ((PCB02_BOX[0] + PCB02_BOX[1]) / 2.0, 0.0, (PCB02_BOX[4] + PCB02_BOX[5]) / 2.0), "E (proposal): 50 x 36 mm board 6.8 g + connectors 3.3 + inductor 2 + capacitors 3 + ICs 0.6 + misc 1; vertical on the rear-panel frame. D-040 moved the USB-C receptacle and PD sink to PCB-13 (-1.2 g) and added the J2-8 header (+0.3 g)"),
+    ("CHARGE_INLET_PCB13", 4.5, (PCB13_BOARD[0] - 1.0, 2.0, CHARGE_INLET_CENTER_YZ[1]), "E (D-040): 28 x 15 mm board 1.6 g + GCT USB4140 0.8 g + STUSB4500, P-FET, TVS and passives 0.5 g + two M2 x 5 0.2 g + W16 lead (2 x AWG22, 150 mm) and Micro-Fit 3.0 plug 1.4 g; the receptacle sits forward of the board; mounted on the rear-panel pad (its print mass is in BODY_SHELL_AND_PANELS)"),
     ("PACK_INTERFACE_MICROFIT_PLUS_AND_FUSE", 11.0, tuple((3.0 * (PACK_DISCONNECT_PAIR_BOX[2 * i] + PACK_DISCONNECT_PAIR_BOX[2 * i + 1]) / 2.0 + 8.0 * (PACK_FUSE_HOLDER_BOX[2 * i] + PACK_FUSE_HOLDER_BOX[2 * i + 1]) / 2.0) / 11.0 for i in range(3)), "E: Micro-Fit+ 1x2 wire-to-wire pair with terminals ~3 g + ATOF 15 A holder and fuse ~6 g + ~2 g; was 14 g with an unplaced SBS Mini (CN-05)"),
     ("PCB03_MOTOR_GATE_AND_HEAD_RAIL", 24.0, (sum(PCB03_BOX[0:2]) / 2.0, 0.0, sum(PCB03_BOX[4:6]) / 2.0), "E (proposal): 2460 mm2 board 9.4 g + 4 x Micro-Fit+ 8 + inductor 3 + capacitors 2 + FETs, shunt, TVS, misc 1.6"),
     ("PCB04_BRANCH_CONVERTERS", 45.0, (sum(PCB04_BOX[0:2]) / 2.0, 0.0, sum(PCB04_BOX[4:6]) / 2.0), "E (proposal): WS-H 35 g (3080 mm2 board 11.7 g + inductors 5.4 + connectors 8 + ICs 1 + polymer/ceramics ~1) with the hold-up raised from 4 x 1 mF (~8 g) to 2 x 3.3 mF (~9 g each, Ø12.5 x 20 lying) per board-specs.md sec 8.1: +10 g; the board footprint is NOT enlarged (no slack in the bay)"),
@@ -1941,12 +1977,10 @@ def body_panels():
                       _shell_end_x("REAR", z) + 1.0, y, z)
         for y, z in REAR_PANEL_FASTENERS
     ]
-    cw, ch = CHARGE_INLET_CUTOUT
-    cy, cz = CHARGE_INLET_CENTER_YZ
-    inlet_cutout = _block(-65.0, -53.0, cy - cw / 2.0, cy + cw / 2.0, cz - ch / 2.0, cz + ch / 2.0)
+    inlet_pad, inlet_cuts = rear_panel_charge_inlet()
     estop_well, estop_bezel = rear_panel_estop_well()
     rear = _paint(
-        rear_raw - rear_bores - _estop_well_outer() - inlet_cutout + estop_well,
+        rear_raw + inlet_pad - rear_bores - _estop_well_outer() - inlet_cuts + estop_well,
         "REAR_SERVICE_PANEL_OCTAGONAL",
         IVORY,
         SHELL_ALPHA,
@@ -2893,6 +2927,69 @@ def rear_panel_estop_well():
     ]
 
 
+def _rounded_slot_x(x0, x1, yc, zc, width, height, radius):
+    """Prism along X with a rounded-rectangle section."""
+    hw, hh = width / 2.0, height / 2.0
+    slot = _block(x0, x1, yc - hw + radius, yc + hw - radius, zc - hh, zc + hh)
+    slot = slot + _block(x0, x1, yc - hw, yc + hw, zc - hh + radius, zc + hh - radius)
+    for dy in (-hw + radius, hw - radius):
+        for dz in (-hh + radius, hh - radius):
+            slot = slot + _axial_bore_x(radius, x0, x1, yc + dy, zc + dz)
+    return slot
+
+
+def rear_panel_charge_inlet():
+    """Pad printed on the rear panel's inner face for PCB-13, and the cuts through it.
+
+    Returns (pad, cuts). The pad fills from the panel's outer skin to the board
+    seat, so the pocket floor, the receptacle hole and the screw pilots all sit in
+    solid print. The pocket's flat floor is normal to the receptacle axis (X).
+    """
+    y0, y1, z0, z1 = PCB13_PAD
+    seat = CHARGE_INLET_BOARD_SEAT_X
+    pad = _block(-70.0, seat, y0, y1, z0, z1) & _sloped_panel_band("REAR", -SHELL_THICKNESS, 10.0)
+    cy, cz = CHARGE_INLET_CENTER_YZ
+    floor = CHARGE_INLET_POCKET_FLOOR_X
+    pw, ph, pr = CHARGE_INLET_POCKET
+    bw, bh = CHARGE_INLET_BODY_HOLE
+    rw, rh, rd = CHARGE_INLET_PIN_RELIEF
+    cuts = _rounded_slot_x(-70.0, floor, cy, cz, pw, ph, pr)
+    cuts = cuts + _block(floor - 0.1, seat + 0.1, cy - bw / 2.0, cy + bw / 2.0, cz - bh / 2.0, cz + bh / 2.0)
+    cuts = cuts + _block(seat - rd, seat + 0.1, cy - rw / 2.0, cy + rw / 2.0, cz - rh / 2.0, cz + rh / 2.0)
+    for y, z in PCB13_SCREW_YZ:
+        cuts = cuts + _axial_bore_x(PCB13_SCREW[3], seat - PCB13_PILOT_DEPTH, seat + 0.1, y, z)
+    return pad, cuts
+
+
+def charge_inlet_pcb13():
+    """PCB-13 charge inlet board on the rear-panel pad (D-040): board, GCT USB4140, parts, screws."""
+    bx0, bx1, by0, by1, bz0, bz1 = PCB13_BOARD
+    cy, cz = CHARGE_INLET_CENTER_YZ
+    w, h, height = USB4140_BODY
+    mw, mh, md = USB4140_MOUTH
+    fw, fh = USB4140_FOOTPRINT
+    board = _block(bx0, bx1, by0, by1, bz0, bz1)
+    for y, z in PCB13_SCREW_YZ:
+        board = board - _axial_bore_x(1.1, bx0 - 0.1, bx1 + 0.1, y, z)
+    shell = _block(bx0 - height, bx0, cy - w / 2.0, cy + w / 2.0, cz - h / 2.0, cz + h / 2.0)
+    shell = shell - _block(bx0 - height - 0.1, bx0 - height + md, cy - mw / 2.0, cy + mw / 2.0, cz - mh / 2.0, cz + mh / 2.0)
+    # Pad rows and the four stakes at the board face, inside the pin relief.
+    pins = _block(bx0 - 1.0, bx0, cy - fw / 2.0, cy + fw / 2.0, cz - fh / 2.0, cz + fh / 2.0) - _block(bx0 - 1.1, bx0 + 0.1, cy - w / 2.0, cy + w / 2.0, cz - h / 2.0, cz + h / 2.0)
+    sl, hr, hh, core = PCB13_SCREW
+    screws = []
+    for i, (y, z) in enumerate(PCB13_SCREW_YZ, start=1):
+        head = _axial_bore_x(hr, bx1, bx1 + hh, y, z)
+        shank = _axial_bore_x(core, bx1 - sl, bx1, y, z)
+        screws.append(_paint(head + shank, f"PCB13_M2X5_THREAD_FORMING_SCREW_{i}", STEEL, 1.0))
+    return Compound(label="CHARGE_INLET_PCB13", children=[
+        _paint(board, "PCB13_CHARGE_INLET_PCB", PCB_GREEN, 1.0),
+        _paint(_block(*PCB13_PARTS), "PCB13_STUSB4500_PFET_TVS_PARTS_ENVELOPE", "#D38132", 0.55),
+        _paint(shell, "PCB13_GCT_USB4140_VERTICAL_RECEPTACLE", "#B7BFC0", 1.0),
+        _paint(pins, "PCB13_USB4140_PADS_AND_STAKES", STEEL, 1.0),
+        *screws,
+    ])
+
+
 def estop_switch():
     """IDEC XA1E-BV3U02KT-R: Ø29 domed mushroom, operator collar and unibody contact block."""
     top_x = ESTOP_MOUNT_X - ESTOP_MUSHROOM_TOP_ABOVE_MOUNT
@@ -2928,9 +3025,10 @@ def power_distribution_boards():
 
     Each board is a 1.6 mm PCB plate plus a translucent parts envelope up to the
     stated total height. The E-stop keep-out is a reserved volume, not a solid
-    that belongs to a part. The E-stop's well and bezel and the charge-inlet
-    cut-out belong to the rear panel (body_panels); the inlet receptacle and its
-    plug corridor are in connectors_and_exits().
+    that belongs to a part. The E-stop's well and bezel and the charge-inlet pad
+    and pocket belong to the rear panel (body_panels). PCB-13 rides on that pad
+    and comes off with the panel; its plug corridor and lead are in
+    connectors_and_exits().
     """
     def board(name, box, color, pcb_at_top=False):
         x0, x1, y0, y1, z0, z1 = box
@@ -2955,6 +3053,7 @@ def power_distribution_boards():
         _paint(_block(*PACK_FUSE_HOLDER_BOX), "PACK_ATOF_FUSE_HOLDER_ENVELOPE", "#C55842", 0.74),
         _paint(_block(*PACK_DISCONNECT_PAIR_BOX), "PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE", "#E7A95B", 0.85),
         estop,
+        charge_inlet_pcb13(),
     ]
     return Compound(label="POWER_DISTRIBUTION_BOARDS", children=parts)
 
@@ -3458,6 +3557,9 @@ def _edge_power_plugs():
             if name == "PCB02_NY":
                 bx0 = PCB02_BOX[0] + PCB_THICKNESS
                 box = (bx0, bx0 + MATED_POWER_PLUG_HEIGHT, PCB02_BOX[2] - MATED_POWER_PLUG_LENGTH, PCB02_BOX[2], pos, pos + w)
+            elif name == "PCB02_PY":
+                bx0 = PCB02_BOX[0] + PCB_THICKNESS
+                box = (bx0, bx0 + MATED_POWER_PLUG_HEIGHT, PCB02_BOX[3], PCB02_BOX[3] + MATED_POWER_PLUG_LENGTH, pos, pos + w)
             else:
                 b = boards[name[:5]]
                 ztop = b[4] + PCB_THICKNESS
@@ -3491,8 +3593,8 @@ def connectors_and_exits():
     for name, layer in CONNECTOR_TOP_LAYERS.items():
         parts.append(_paint(_block(*layer["box"]), f"{name}_TOP_ENTRY_SIGNAL_PLUG_LAYER_RESERVE", reserve, 0.14))
     parts += [
-        _paint(_block(*CHARGE_INLET_RECEPTACLE), "CHARGE_INLET_USBC_VERTICAL_RECEPTACLE_ENVELOPE", "#B7BFC0", 1.0),
         _paint(_block(*CHARGE_INLET_OUTSIDE_CORRIDOR), "CHARGE_INLET_OUTSIDE_PLUG_CORRIDOR_KEEP_OUT", reserve, 0.20),
+        *[_paint(_block(*box), f"CHARGE_INLET_W16_LEAD_RESERVE_{i}", power, 0.30) for i, box in enumerate(CHARGE_INLET_LEAD_RESERVES, start=1)],
         _paint(_block(*PI_POWER_PLUG_RESERVE), "PI5_POWER_USBC_RIGHT_ANGLE_PLUG_RESERVE", power, 0.35),
         _paint(_block(*PI_POWER_PIGTAIL_DROP), "PI5_POWER_PIGTAIL_DROP_RESERVE", power, 0.30),
         _paint(_block(*YAW_JUNCTION_BOX), "YAW_JUNCTION_PCB08_WITH_CONNECTORS_RESERVE", "#9566D9", 0.30),

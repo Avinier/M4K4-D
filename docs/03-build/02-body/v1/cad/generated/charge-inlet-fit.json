@@ -1,0 +1,27 @@
+{
+  "pocket_depth_min_max_mm": [
+    0.62,
+    1.597
+  ],
+  "rear_panel_solids": 1,
+  "mouth_to_pocket_floor_mm": 0.0,
+  "receptacle_yz_mm": [
+    8.94,
+    3.16
+  ],
+  "board_to_pad_gap_mm": 0.0,
+  "receptacle_to_panel_clearance_mm": 0.28,
+  "overmold_to_pocket_wall_mm": 0.346,
+  "pcb13_parts_to_pcb02_mm": 1.9,
+  "pcb13_screw_heads_to_pcb02_mm": 2.6,
+  "screw_engagement_mm": 3.4,
+  "skin_beyond_pilot_mm": {
+    "Y-11": 3.97,
+    "Y+11": 3.97
+  },
+  "inlet_vs_rear_panel_mm3": {},
+  "corridor_vs_parts_mm3": {},
+  "inlet_vs_fixed_mm3": {},
+  "lead_and_j28_vs_fixed_mm3": {},
+  "removal_sweep_clashes": {}
+}

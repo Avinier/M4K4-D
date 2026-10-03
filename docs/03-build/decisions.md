@@ -44,6 +44,7 @@ The central record of every decision and change made during the build phase. New
 | [D-037](#d-037) | 2026-10-03 | Body / microphone mounting (BO-005, BO-006, BO-013, BO-014) | Mic boards mount on gasketed shell bosses with two M2 thread-forming screws and a soldered GH lead, not on the frame | ACTIVE; DESIGN; HOLD on boss coupon and PCB-06 layout |
 | [D-038](#d-038) | 2026-10-03 | Power boards (PCB-01, PCB-03, PCB-10; CH-017, CH-023, CH-041–CH-043; CH-083–CH-086 registered) | PCB-03 drive feed re-specified for the DRV8833: SMBJ8.5A bus TVS, VM entry, AND-gate sleep, latched FLT, INA181 feed monitors; TIFPS0629 bench acceptance window; 04-pcbs home and board register; PCB-12 assigned to the C2 head carrier | ACTIVE; DESIGN; HOLD on TIFPS0629 bench acceptance and MOT3001 winding R/L |
 | [D-039](#d-039) | 2026-10-04 | Harness (W01–W39, J-PK, J2-1, J3-1, J3-4, J8-1; CH-025–CH-027, CH-041, CH-042, CH-083; HN-001–HN-010 registered) | Fused pack feed split at butt splices beside the fuse (W04, J2-2 deleted); J-PK is the isolator; NTC break is a JST SM 2p in the +Y channel; Micro-Fit+ only on AWG16/18 UL1061, Micro-Fit 3.0 on AWG22, pre-crimped GH; J3-4/J8-1 to Micro-Fit 3.0; full wire list, pinouts and service breaks in 05-harness | ACTIVE; DESIGN; HOLD on housing PNs, crimp qualification and the first harness build |
+| [D-040](#d-040) | 2026-10-04 | Charge path (PCB-02, PCB-13 registered; CH-041, HN-003; BO-015–BO-017 registered) | Charge inlet moves to a panel-mounted board PCB-13 (GCT USB4140, TVS2200, ESDA25W, STUSB4500, input P-FET) in a pocket that takes any compliant plug; charger straps closed: D+ tied to D−, BATP sense, TS 8.45 k / 324 k for 0–50 °C, 20 V-rated input | ACTIVE; DESIGN; HOLD on schematic, NVM image and bench CP-01 to CP-14 |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -1356,3 +1357,71 @@ The document also holds the full wire list with estimated lengths, every pinout,
 - Crimp pull tests.
 - First-build lengths, the 4-wire pack-to-`J3-1` resistance and plug reach.
 - The body-model drift and the frame/PCB-04 edge clash above.
+
+## D-040
+
+**2026-10-04 · Charge path: inlet board PCB-13 and the PCB-02 charger block (CH-041, HN-003; BO-015–BO-017 registered) · ACTIVE; DESIGN; HOLD on schematic capture, the STUSB4500 NVM image and bench CP-01 to CP-14**
+
+**Decision:** the charge path is specified in [04-pcbs/charge-path.md](04-pcbs/charge-path.md). It replaces RP-02 board-specs §4.1 "Charge inlet" and "Input switch" and corrects §4.5.1. Builder request (2026-10-04): design the inlet properly and close the recharging circuit.
+
+**Why the inlet moved:**
+- The vertical receptacle on PCB-02's back face had its mouth 3.3 mm behind the sloped panel's inner face, not the 1.05 mm its CAD comment said. A plug had to push its overmold 5.7 mm into a 13.2 × 7.2 mm cut-out, with 0.35–0.43 mm a side against an untoleranced panel-to-board stack.
+- Every insertion and pull loaded PCB-02, which has no mounting.
+- The part number was open.
+
+**Inlet (PCB-13, BO-015):**
+- A 28 × 15 mm board on a pad printed with the rear panel.
+- **GCT USB4140-GF-0170-C**: vertical, 6-pin power-only, 6.50 mm high, four through-hole shell stakes, 20k cycles, 5–20 N mating (`D`).
+- Its mouth is flush with the floor of a 13.4 × 7.6 mm, R 1.0 pocket in the 7° facet. A sharp-cornered 12.35 × 6.5 mm overmold, the USB Type-C maximum, clears it by at least 0.35 mm.
+- Two M2 × 5 thread-forming screws (BO-017) 11 mm either side carry the plug loads into the panel.
+- The board also carries the TVS2200, the ESDA25W on CC, the STUSB4500 and the STL6P3LLH6 input switch.
+- `W16` (2 × AWG22) runs to a new PCB-02 `J2-8`, Micro-Fit 3.0 on the free +Y edge. Unplug it when the panel comes off; the inlet stays on the panel.
+
+**Circuit corrections found against the datasheets** (BQ25798 SLUSDV2C June 2026, STUSB4500 DS12499, TVS2200 SLVSED5C):
+- **`TS` divider 5.23 k / 30.1 k → 8.45 k / 324 k.** Across all tolerances, the old values let charging run from −3.5 °C up to 62 °C. The 25R allows 0–50 °C at the surface. The new window is 0.1–3.9 °C to 46.4–49.5 °C. Cost: the JEITA warm step (8.0 V) now starts at about 35 °C instead of 45 °C.
+- **`D+` tied to `D−`.** This reads as a BC1.2 DCP, and the `ILIM_HIZ` pin clamps it at 1.18–1.38 A. Floating lines risk an SDP result: 500 mA, about 7 W.
+- **`BATP`** (pack voltage sense) gets 100 Ω and a Kelvin trace to `J2-1`. RP-02 omitted the pin.
+- **The `VBUS` side is rated for 20 V,** because a blank STUSB4500 asks for 20 V.
+  - TVS2200: 22 V standoff, 28 V clamp, under the charger's 30 V absolute maximum. The ESDA25P35 does not fit both limits.
+  - A 100 k / 33 k divider keeps the P-FET `VGS` at −15 V at 20 V.
+  - 50 V capacitors on `VBUS`/`PMID`.
+- **Both NTC leads land on PCB-02.** A return on a cell would sit behind the TIFPS0629 FETs and block recovery charging.
+- **Defaults confirmed** (`D`): 8.4 V (8.379–8.455 V), 1 A, 12 h timer, `VSYSMIN` 7 V, `VAC_OVP` 26 V. The register reset value is 85h; the field's "POR: 11b" reads as 7 V and is treated as a datasheet slip, with bench check CP-04 to confirm. The inductor is Würth 74437346022 (Isat 10 A), which closes the RP-02 item.
+
+**CAD changed** (`02-body/v1/cad/body_v1_model.py`):
+- The `CHARGE_INLET_*`/`PCB13_*`/`USB4140_*` constants.
+- `rear_panel_charge_inlet()`, the pad and cuts unioned into the rear panel.
+- `charge_inlet_pcb13()` in `POWER_DISTRIBUTION_BOARDS`.
+- The `PCB02_PY` edge strip with `J2-8`.
+- The `W16` lead reserves, and the plug corridor redrawn at the maximum overmold.
+- The old PCB-02 receptacle envelope and the 13.2 × 7.2 cut-out are removed.
+- Mass: `PCB02_CHARGE_AND_SYSTEM_POWER` keeps 18.0 g (receptacle out, header in); new `CHARGE_INLET_PCB13` row, 4.5 g (`E`). The pad is in `BODY_SHELL_AND_PANELS`: 253.7 g, re-measured, +3.0 g.
+
+The chassis model's Layout 02 body copy (`body_chassis_model.py`) still has the old inlet and its `charge_inlet_is_cut_through_rear_panel` row. Body v1 governs the body, so the copy is left as it is.
+
+**Checks:**
+- New `check_charge_inlet.py` (about 6 min): **ALL PASS**.
+  - Pocket depth 0.62–1.60 mm.
+  - Mouth to floor 0.00 mm.
+  - Board seated (0.00 mm).
+  - Receptacle to panel 0.28 mm.
+  - Overmold to pocket wall 0.346 mm.
+  - PCB-13 parts to PCB-02 1.9 mm.
+  - Screw engagement 3.4 mm, with 3.97 mm of print beyond each pilot.
+  - No clash for the inlet, corridor, lead or `J2-8` against the shell, the frames or any body or chassis part.
+  - The 40 mm removal sweep of the pad and board is clear.
+- Planted clashes were caught: 328.9 mm³ with PCB-13's parts moved 3 mm into PCB-02, and 49.5 mm³ with the pad dropped 2.5 mm onto the panel frame.
+- `check_body_panel_fit.py`: clean.
+- `check_body_layout.py`: all checks true. Whole robot 2435.6 g, CoM x +18.24 / z 105.87 mm, a_tip 1.690 m/s² against the 1.582 minimum.
+- The full chassis `check_layout.py` was not run; nothing in the chassis model changed.
+
+**BOM changed:** CH-041 (charger block, `J2-8`) and HN-003 (`J2-8` plug). New BO-015 (PCB-13), BO-016 (≥ 30 W PD adapter with 15 V and a 3 A cable) and BO-017 (M2 × 5 screws).
+
+**Open:**
+- Schematic and layout of PCB-13 and the PCB-02 charger block.
+- ST PDFs for the ESDA25W and STL6P3LLH6; only distributor summaries were read.
+- India sourcing for the USB4140, TVS2200 and BQ25798.
+- The NVM programming jig.
+- Bench CP-01 to CP-14.
+- Whether summer charging to 8.0 V above 35 °C is acceptable. A host would be needed to move T3.
+- PCB-02 mounting, which is still absent from the CAD; the rear lower cross rail is the candidate seat.

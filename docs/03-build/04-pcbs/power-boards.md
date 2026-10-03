@@ -6,6 +6,7 @@
 | Reference | [RP-02 board-specs.md](../../02-prototypes/RP-02-electrical/board-specs.md) v0.17 (read-only). Everything there stands unless this page changes it |
 | Why this page exists | The RP-02 spec was written for a custom PCB-01, Pololu DRV8874 carriers and the Pololu #4804 motor. The build uses the bought TIFPS0629 ([D-019](../decisions.md#d-019)), Adafruit #3297 DRV8833 boards (D-019) and the MOT3001-6V230RPM ([D-003](../decisions.md#d-003)) |
 | Evidence labels | `D` datasheet, `E` estimate, `U` unknown, `W` measured. No `W` value exists yet |
+| Charge path | PCB-02's charger block and the new PCB-13 inlet are in [charge-path.md](charge-path.md) ([D-040](../decisions.md#d-040)) |
 
 ## 1. Build baseline that replaces RP-02 assumptions
 

@@ -31,6 +31,7 @@
                         │                                 └──────W03d─ J2-1  PCB-02 ─J2-3─W05─ J4-3 PCB-04
                         └────────────W03a−──────────── (−)STAR splice ─W03c/d (−)
  NTC ─W02a─ SM 2p break ─W02b───────────────────────────────────── J2-7  PCB-02 (BQ25798 TS)
+ USB-C adapter ─ PCB-13 (rear panel; STUSB4500, input switch) ─W16─────── J2-8  PCB-02 (BQ25798 VBUS)
 ```
 
 ## 3. Connector families and parts
@@ -38,7 +39,7 @@
 | Family | Use | Housing | Terminal | Wire | Tool |
 |---|---|---|---|---|---|
 | Micro-Fit+ 3.0 mm | `J-PK` (wire-to-wire), `J3-1`, `J2-1`, `J3-2`, `J3-3`, `J4-1` (1×2); `J2-3`, `J4-3` (2×2) | Single-row receptacle (215759 series, `D` family) or dual row (206461-0200 for 2×2-class); exact PN at order (`U`) | Female 206460-0041, tin, 16 AWG, 13 A (`D`); 18 AWG sibling; male 215953 series for the `J-PK` plug half (`U`) | AWG16/18 UL1061 | Molex 213309-4400, 16/18 AWG UL1061 (`D`) |
-| Micro-Fit 3.0 | `J3-4`, `J4-2`, `J4-4`, `J4-5`, `J5-7`, `J8-1`, `J10-1`, motor inline pairs | 43025 receptacle; 43645/43640 wire-to-wire (`D`) | Female 43030-0007, 20–24 AWG, 8.5 A max (`D`); male 43031 series | AWG22 (motor pairs: the MOT3001's own leads) | Molex 63819-0900 20–24 AWG (`E`, confirm the tool PN) |
+| Micro-Fit 3.0 | `J3-4`, `J4-2`, `J4-4`, `J4-5`, `J5-7`, `J8-1`, `J10-1`, `J2-8` (D-040), motor inline pairs | 43025 receptacle; 43645/43640 wire-to-wire (`D`) | Female 43030-0007, 20–24 AWG, 8.5 A max (`D`); male 43031 series | AWG22 (motor pairs: the MOT3001's own leads) | Molex 63819-0900 20–24 AWG (`E`, confirm the tool PN) |
 | JST GH 1.25 mm | All signals | GHR-xxV-S | Pre-crimped leads (SSHL-002T-P0.2 on AWG28) | AWG28 pre-crimped, double- or single-ended | None. Engineer PA-09 class only for re-pinning |
 | JST SM 2.5 mm | Pack NTC break | SMP-02V-BC / SMR-02V-B | Pre-wired pigtail pair | AWG22–26 pigtails, soldered | None |
 | JST EH | XC330 yaw servo `J3-5` | ROBOTIS 3-pin cable (vendor) | Vendor | Vendor | None |
@@ -71,7 +72,7 @@ Lengths are `E`: Manhattan routes through CAD waypoints plus service slack. Cut 
 | `W13` `PB-HEAD` pitch/roll | PCB-03 `J3-4` → PCB-08 `J8-1` pins 1/4 | Micro-Fit 3.0 2×1 / one leg of the `J8-1` 2×3 plug | 2 × AWG22 | 160 | −Y riser (`HARNESS_HEAD_RISER_*`) |
 | `W14` `PB-SAFE-C2` + `PB-DISPLAY` | PCB-04 `J4-2` → `J8-1` pins 2/5 and 3/6 | Micro-Fit 3.0 2×2 / the other leg of the `J8-1` plug | 4 × AWG22 | 140 | −Y riser, joins `W13` in one sleeve |
 | `W15` yaw servo | PCB-03 `J3-5` → XC330-M181 | ROBOTIS 3-pin EH cable | Vendor | 120 | Up to the servo at X −8…26, Y 27…47 |
-| `W16` charge inlet | Adapter → PCB-02 USB-C | No cable | — | — | Rear-panel cut-out |
+| `W16` charge inlet ([D-040](../decisions.md#d-040)) | PCB-13 on the rear panel → PCB-02 `J2-8` | S / Micro-Fit 3.0 2-way (43025, female on the cable) | 2 × AWG22 (`VSNK`, `GND`) | 150 | +Y through the gap behind PCB-02 (`CHARGE_INLET_W16_LEAD_RESERVE_1/2`), forward to the `J2-8` plug on the PCB-02 +Y edge. Unplug before lifting the rear panel away |
 
 ### 4.2 Signals (all GH, AWG28 pre-crimped)
 
@@ -127,7 +128,8 @@ Pin 1 is the housing's marked cavity. On a dual-row Micro-Fit, pins 1…n are th
 | `J8-1` (Micro-Fit 3.0 2×3) | 1 +5V_HEAD_PR, 2 +5V_C2, 3 +5V_DISPLAY, 4 GND_HEAD, 5 GND_C2, 6 GND_DISPLAY |
 | Motor inline (Micro-Fit 3.0 1×2 wire-to-wire) | 1 OUT1 (`AOUT1+BOUT1`), 2 OUT2 (`AOUT2+BOUT2`). Set the forward sense in firmware after the first spin |
 | NTC break (SM 2p) | 1 TS, 2 TS_RTN (thermistor; polarity-free) |
-| `J2-7` (GH2) | 1 TS, 2 TS_RTN |
+| `J2-7` (GH2) | 1 TS, 2 TS_RTN. TS_RTN is the BQ25798 ground pad on PCB-02, never a cell or B− (charge-path.md §4) |
+| `J2-8` (Micro-Fit 3.0 2×1) | 1 VSNK, 2 GND. Female contacts on the `W16` cable side, which is the source (D-040) |
 
 ### 5.2 Signals
 
@@ -183,7 +185,7 @@ Resistance: AWG16 13.2, AWG18 21.0, AWG22 53, AWG28 213 mΩ/m at 20 °C, ×1.16 
 ### 7.2 Body off the chassis
 
 1. Pack out (7.1), or at least `J-PK` open (H-02).
-2. Remove the shell (body README) and the rear service panel.
+2. Remove the shell (body README) and the rear service panel. Draw the panel out along −X and unplug `W16` at `J2-8` before setting it aside; PCB-13 stays on the panel (D-040).
 3. Unplug the 11 chassis leads at the body boards:
    - `J3-1` and `J2-1`: the `BATBUS` branches. Their splices stay with the chassis.
    - `J3-2` and `J3-3`: the drive feeds.

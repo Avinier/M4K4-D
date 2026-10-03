@@ -1,31 +1,31 @@
 {
   "scope": "body register rows only; partial estimate, not a full body mass or solid measurement",
-  "mass_g": 788.6,
+  "mass_g": 796.1,
   "com_mm": [
-    18.717676895764647,
-    -0.24036266801927464,
-    98.31290895257418
+    18.012033664112547,
+    -0.22679311644265793,
+    97.97334505715362
   ],
   "whole_robot_estimate": {
-    "mass_g": 2428.0794811320766,
+    "mass_g": 2435.5794811320766,
     "com_mm": [
-      18.470118248436442,
-      0.24056262705370757,
-      106.0067463732037
+      18.240232140756213,
+      0.24351706986817592,
+      105.87206360044256
     ],
-    "forward_tip_acceleration_m_s2": 1.709248384808111,
-    "ball_static_share": 0.16791016589487676
+    "forward_tip_acceleration_m_s2": 1.6901217489829912,
+    "ball_static_share": 0.16582029218869285
   },
   "rows": [
     {
       "id": "BODY_SHELL_AND_PANELS",
-      "mass_g": 250.7,
+      "mass_g": 253.7,
       "com_mm": [
-        19.8,
+        18.9,
         0.0,
-        93.5
+        93.1
       ],
-      "source": "Body v1 CAD volume and centroid (2026-10-03): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037, +4.0 g), front/rear service skins with the seven uniform rectangular speaker slots and E-stop well, badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."
+      "source": "Body v1 CAD volume and centroid (2026-10-04; D-040 rear-panel charge-inlet pad +3.0 g, was 250.7 g at (19.8, 0, 93.5)): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037, +4.0 g), front/rear service skins with the seven uniform rectangular speaker slots and E-stop well, badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."
     },
     {
       "id": "BODY_PRIMARY_FRAME",
@@ -55,7 +55,17 @@
         0.0,
         76.0
       ],
-      "source": "E (proposal): 50 x 36 mm board 6.8 g + USB-C 1.2 + connectors 3 + inductor 2 + capacitors 3 + ICs 0.6 + misc 1; vertical on the rear-panel frame"
+      "source": "E (proposal): 50 x 36 mm board 6.8 g + connectors 3.3 + inductor 2 + capacitors 3 + ICs 0.6 + misc 1; vertical on the rear-panel frame. D-040 moved the USB-C receptacle and PD sink to PCB-13 (-1.2 g) and added the J2-8 header (+0.3 g)"
+    },
+    {
+      "id": "CHARGE_INLET_PCB13",
+      "mass_g": 4.5,
+      "com_mm": [
+        -56.1,
+        2.0,
+        64.0
+      ],
+      "source": "E (D-040): 28 x 15 mm board 1.6 g + GCT USB4140 0.8 g + STUSB4500, P-FET, TVS and passives 0.5 g + two M2 x 5 0.2 g + W16 lead (2 x AWG22, 150 mm) and Micro-Fit 3.0 plug 1.4 g; the receptacle sits forward of the board; mounted on the rear-panel pad (its print mass is in BODY_SHELL_AND_PANELS)"
     },
     {
       "id": "PCB03_MOTOR_GATE_AND_HEAD_RAIL",
@@ -105,7 +115,7 @@
         -33.5,
         116.0
       ],
-      "source": "E: 32 x 21 mm board ~2 g + Micro-Fit+ 2x3 and three GH headers ~2 g"
+      "source": "E: 32 x 21 mm board ~2 g + Micro-Fit 3.0 2x3 (D-039) and three GH headers ~2 g"
     },
     {
       "id": "C0_LINK_ADAPTER_PCB09",
