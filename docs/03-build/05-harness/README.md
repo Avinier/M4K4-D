@@ -80,7 +80,7 @@ Lengths are `E`: Manhattan routes through CAD waypoints plus service slack. Cut 
 |---|---|---|---|---|
 | `W20` | PCB-02 `J2-4` ↔ PCB-04 `J4-6` | GH10, double-ended | 60 | |
 | `W21` | `J2-5` ↔ PCB-03 `J3-6` | GH6, double-ended | 110 | |
-| `W22` E-stop | XA1E tabs → `J3-7` | GH4, single-ended (S at the switch) | 150 | Two twisted pairs |
+| ~~`W22` E-stop~~ | Deleted ([D-041](../decisions.md#d-041)): there is no E-stop and no `J3-7` | — | — | |
 | `W23a` | PCB-08 `J8-3` ↔ `J3-8` | GH8, double-ended | 200 | −Y riser |
 | `W23b` | `J8-5` ↔ `J2-6` | GH8, double-ended | 160 | −Y riser |
 | `W24` head link | PCB-09 `J9-1` ↔ `J8-4` | GH6, double-ended, pairs twisted | 170 | RS-422 |
@@ -92,16 +92,17 @@ Lengths are `E`: Manhattan routes through CAD waypoints plus service slack. Cut 
 | `W34` nose | GP2Y0A21 (S) and the Hall board pads (S) → `J10-8` | GH5, single-ended | 220 | `HARNESS_NOSE_J10_8_*` route (D-013, D-027) |
 | `W36` rear TCRT | TCRT5000 legs (S) → `J10-10` | GH4, 350 mm single-ended (CH-020) | 350 | [rear-tcrt-lead.md](../01-chassis/v1/research/rear-tcrt-lead.md) |
 | `W37` CSI | Pi 5 ↔ Camera Module 3 | PCN-36 15-to-22 FFC | — | Unchanged (BA-05) |
-| `W38` | PCB-03 → `J10-11` | GH3, double-ended | 90 | |
+| ~~`W38`~~ | Not fitted (D-041): `J10-11` carried the E-stop status | — | — | |
 | `W39` | `J10-12` ↔ `J3-9` | GH4, double-ended | 100 | |
+| `W40` power button ([D-041](../decisions.md#d-041)) | Mushroom NO terminals (S, heat-shrink) → PCB-02 `J2-9` | GH2, single-ended | 150 | Out past the contact block, +Y beside the Pi's rear edge, back above the PCB-02 +Y edge and down to `J2-9` (`POWER_BUTTON_W40_LEAD_RESERVE_1…4`). Rides with the rear panel; unplug at `J2-9` before lifting the panel away |
 
 **Pre-crimped GH lead buy list** (lengths rounded up to the stock 50/100/150/200/300 mm, one spare of each):
 
 | Circuits | Double-ended | Single-ended |
 |---|---|---|
-| GH2 | — | 1 × 300 (`W02b`) |
-| GH3 | 1 × 100 (`W38`) | — |
-| GH4 | 1 × 150 (`W39`) | 1 × 200 (`W22`), 2 × 300 (`W30`/`W31`); `W36` 350 already on CH-020 |
+| GH2 | — | 1 × 300 (`W02b`), 1 × 150 (`W40`) |
+| GH3 | — (`W38` not fitted, D-041) | — |
+| GH4 | 1 × 150 (`W39`) | 2 × 300 (`W30`/`W31`); `W36` 350 already on CH-020 (`W22` deleted, D-041) |
 | GH5 | — | 1 × 300 (`W34`) |
 | GH6 | 1 × 150 (`W21`), 1 × 200 (`W24`), 1 × 300 (`W25`) | 1 × 200 (`W32`), 1 × 100 (`W33`) |
 | GH8 | 1 × 300 (`W23a`), 1 × 200 (`W23b`) | — |
@@ -139,8 +140,7 @@ Each GH cable puts GND at pin 1 where it carries no supply, and keeps each diffe
 |---|---|---|---|---|---|---|---|---|---|---|
 | `J2-4` ↔ `J4-6` (`W20`) | GND | +5V_C2 (pull-up supply to PCB-02) | PG_C2 | PG_BASE | SEQ_EN (latch out) | PG_COMPUTE | PG_DISPLAY | PG_AUDIO | spare | GND |
 | `J2-5` ↔ `J3-6` (`W21`) | GND | CHARGE_ABSENT | ENERGY_OK | SYSTEM_ARM | MOTOR_PRESENT | GND | | | | |
-| `J3-7` (`W22`) | LOOP_IN (NC1) | LOOP_OUT (NC1) | STAT_A (NC2) | STAT_B (NC2) | | | | | | |
-| `J3-8` ↔ `J8-3` (`W23a`) | SIG_REF | SERVO_DATA | C2_READY_H | C2_READY_L | E_STOP_STATUS | MOTOR_PRESENT | HEAD_OC | HEAD_PGOOD | | |
+| `J3-8` ↔ `J8-3` (`W23a`) | SIG_REF | SERVO_DATA | C2_READY_H | C2_READY_L | spare (was E_STOP_STATUS, D-041) | MOTOR_PRESENT | HEAD_OC | HEAD_PGOOD | | |
 | `J2-6` ↔ `J8-5` (`W23b`) | SIG_GND | V_PACK_ANA | SIG_GND | STAT | INT_PB | KILL | CHG_ABSENT_3V3 | spare | | |
 | `J9-1` ↔ `J8-4`, `J9-2` ↔ `J10-2` | GND | TX+ | TX− | RX+ | RX− | spare | | | | |
 | `J10-3`/`J10-4` (`W30`/`W31`) | GND | +3V3_ENC | ENC_A | ENC_B | | | | | | |
@@ -148,8 +148,8 @@ Each GH cable puts GND at pin 1 where it carries no supply, and keeps each diffe
 | `J10-7` (`W29`) | +3V3 | GND | SCLK | MOSI | MISO | CS | INT1 | INT2 | | |
 | `J10-8` (`W34`) | +5V (GP2Y) | GND | GP2Y_VO | +3V3 (Hall) | HALL_OUT | | | | | |
 | `J10-10` (`W36`) | LED_A | LED_K | TCRT_OUT | GND | | | | | | |
-| `J10-11` (`W38`) | ESTOP_N | +3V3 (pull-up ref) | GND | | | | | | | |
 | `J10-12` ↔ `J3-9` (`W39`) | GND | C3_READY | MOTOR_PRESENT | GND | | | | | | |
+| `J2-9` (`W40`) | PB_SW (10 kΩ to latch `VIN`, 5.1 kΩ to `PB`) | GND | | | | | | | | |
 | `J3-5` (EH3, ROBOTIS) | GND | VDD | DATA | | | | | | | |
 
 `J2-4`/`J4-6` signal names follow RP-02 §6.4. The schematic may rename them, but not move a supply onto an end pin. The `W20` +5V_C2 replaces the RP-02 §8 `+5V_C2` line, which had no cable. `J10-8` and `J10-10` are unchanged from [nose-hall-board.md](../01-chassis/v1/research/nose-hall-board.md) and [rear-tcrt-lead.md](../01-chassis/v1/research/rear-tcrt-lead.md); the nose sensor is now the GP2Y0A21YK0F (D-019), not the A41.
@@ -185,7 +185,7 @@ Resistance: AWG16 13.2, AWG18 21.0, AWG22 53, AWG28 213 mΩ/m at 20 °C, ×1.16 
 ### 7.2 Body off the chassis
 
 1. Pack out (7.1), or at least `J-PK` open (H-02).
-2. Remove the shell (body README) and the rear service panel. Draw the panel out along −X and unplug `W16` at `J2-8` before setting it aside; PCB-13 stays on the panel (D-040).
+2. Remove the shell (body README) and the rear service panel. Draw the panel out along −X and unplug `W16` at `J2-8` and `W40` at `J2-9` (both on PCB-02's +Y edge) before setting it aside; PCB-13 and the power button stay on the panel (D-040, D-041).
 3. Unplug the 11 chassis leads at the body boards:
    - `J3-1` and `J2-1`: the `BATBUS` branches. Their splices stay with the chassis.
    - `J3-2` and `J3-3`: the drive feeds.

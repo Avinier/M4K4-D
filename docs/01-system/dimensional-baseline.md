@@ -64,7 +64,7 @@ The moving head contains the selected display/renderer board, the required separ
 | Rear anti-tip skid reach | **27 mm behind the drive axle in Layout 02** | Current CAD contact datum after `RP03-CAD-06`; physical lift-onset proof remains open |
 | Rear anti-tip skid height above floor | **3.5 mm at 27 mm reach in Layout 02** | Must contact before the CoM crosses the drive-wheel support line; verify on the physical rig |
 
-The skid is a separate lower protrusion, not flush with the main shell. Its floor height `h` and rearward reach `d` must satisfy **`h/d < x_CoM/h_CoM`** at the measured integrated CoM. The current CAD has `h/d = 3.5/27 ≈ 0.130`; the body-v1 estimate gives `x_CoM/h_CoM = 18.49/105.99 ≈ 0.174`. The physical rig must verify the ordering. The older 70 mm / 14 mm pair is superseded.
+The skid is a separate lower protrusion, not flush with the main shell. Its floor height `h` and rearward reach `d` must satisfy **`h/d < x_CoM/h_CoM`** at the measured integrated CoM. The current CAD has `h/d = 3.5/27 ≈ 0.130`; the body-v1 estimate gives `x_CoM/h_CoM = 18.20/105.88 ≈ 0.172`. The physical rig must verify the ordering. The older 70 mm / 14 mm pair is superseded.
 
 ## Drive targets
 
@@ -81,14 +81,14 @@ The skid is a separate lower protrusion, not flush with the main shell. Its floo
 | Required wheel speed | **~160 RPM at 0.70 m/s; design around 160–200 RPM unloaded** | Derived from the Ø84 mm wheel circumference |
 | Normal / fast yaw rate | **~120–220°/s** | Convincing snap turns and expressive body motion |
 | Maximum theoretical spin capability | **300°/s+ possible, drivetrain-dependent** | Headroom; not a normal commanded rate |
-| Longitudinal whole-robot CoM | **Current body-v1 register `x_CoM = +18.49 mm` (`E`); measured value TBD** | Includes the 81.6 g `RP03-CAD-08` ballast bar. The earlier +25 mm target is superseded by `RP03-CAD-09` for this layout |
-| Whole-robot CoM height | **Current body-v1 register `h_CoM = 105.99 mm` (`E`); measured value TBD** | The earlier 124 mm planning height is historical, not an accepted measurement |
-| Forward-launch front-support lift screen | **`a_tip = g·x_CoM/h_CoM ≥ 1.582 m/s²` (`E` until weighed)** | `RP03-CAD-09` retains the physics margin encoded by the former +20 mm line at 124 mm. Current neutral estimate is 1.709 m/s² and the conservative current-head pose bound is 1.706 m/s²; physical lift onset remains open |
-| CoM sensitivity | **Each +10 mm forward raises `a_tip` by ~0.93 m/s² at the current register height** | `Δa_tip = g·10/105.99 ≈ 0.93 m/s²`; recompute at measured height |
+| Longitudinal whole-robot CoM | **Current body-v1 register `x_CoM = +18.20 mm` (`E`); measured value TBD** | Includes the 81.6 g `RP03-CAD-08` ballast bar. The earlier +25 mm target is superseded by `RP03-CAD-09` for this layout |
+| Whole-robot CoM height | **Current body-v1 register `h_CoM = 105.88 mm` (`E`); measured value TBD** | The earlier 124 mm planning height is historical, not an accepted measurement |
+| Forward-launch front-support lift screen | **`a_tip = g·x_CoM/h_CoM ≥ 1.582 m/s²` (`E` until weighed)** | `RP03-CAD-09` retains the physics margin encoded by the former +20 mm line at 124 mm. Current neutral estimate is 1.686 m/s² and the conservative current-head pose bound is 1.682 m/s²; physical lift onset remains open |
+| CoM sensitivity | **Each +10 mm forward raises `a_tip` by ~0.93 m/s² at the current register height** | `Δa_tip = g·10/105.88 ≈ 0.93 m/s²`; recompute at measured height |
 
 The existing **0.5 m/s maximum for person-following trials remains a behavioural safety/validation limit**. It does not conflict with the higher drivetrain capability target, which exists for bounded expressive moves and engineering headroom.
 
-Until RP-03 measures lift onset and dynamic compliance, commanded forward acceleration must remain below the measured lift threshold with a registered safety margin; the current 1.709 m/s² value is an estimate, not permission to raise the command limit. A higher expressive acceleration requires a validated forward CoM shift, lower CoM, or support-geometry revision; tire traction alone does not justify it. Battery-on-or-behind-axle (RP-03 `HIGH_AFT`) is a forbidden placement: `a_tip` changes sign. The older +25 / 124 mm and 1.98 m/s² figures remain planning history, not the accepted Layout 02 baseline.
+Until RP-03 measures lift onset and dynamic compliance, commanded forward acceleration must remain below the measured lift threshold with a registered safety margin; the current 1.686 m/s² value is an estimate, not permission to raise the command limit. A higher expressive acceleration requires a validated forward CoM shift, lower CoM, or support-geometry revision; tire traction alone does not justify it. Battery-on-or-behind-axle (RP-03 `HIGH_AFT`) is a forbidden placement: `a_tip` changes sign. The older +25 / 124 mm and 1.98 m/s² figures remain planning history, not the accepted Layout 02 baseline.
 
 ## Component placement
 

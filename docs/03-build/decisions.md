@@ -45,6 +45,7 @@ The central record of every decision and change made during the build phase. New
 | [D-038](#d-038) | 2026-10-03 | Power boards (PCB-01, PCB-03, PCB-10; CH-017, CH-023, CH-041–CH-043; CH-083–CH-086 registered) | PCB-03 drive feed re-specified for the DRV8833: SMBJ8.5A bus TVS, VM entry, AND-gate sleep, latched FLT, INA181 feed monitors; TIFPS0629 bench acceptance window; 04-pcbs home and board register; PCB-12 assigned to the C2 head carrier | ACTIVE; DESIGN; HOLD on TIFPS0629 bench acceptance and MOT3001 winding R/L |
 | [D-039](#d-039) | 2026-10-04 | Harness (W01–W39, J-PK, J2-1, J3-1, J3-4, J8-1; CH-025–CH-027, CH-041, CH-042, CH-083; HN-001–HN-010 registered) | Fused pack feed split at butt splices beside the fuse (W04, J2-2 deleted); J-PK is the isolator; NTC break is a JST SM 2p in the +Y channel; Micro-Fit+ only on AWG16/18 UL1061, Micro-Fit 3.0 on AWG22, pre-crimped GH; J3-4/J8-1 to Micro-Fit 3.0; full wire list, pinouts and service breaks in 05-harness | ACTIVE; DESIGN; HOLD on housing PNs, crimp qualification and the first harness build |
 | [D-040](#d-040) | 2026-10-04 | Charge path (PCB-02, PCB-13 registered; CH-041, HN-003; BO-015–BO-017 registered) | Charge inlet moves to a panel-mounted board PCB-13 (GCT USB4140, TVS2200, ESDA25W, STUSB4500, input P-FET) in a pocket that takes any compliant plug; charger straps closed: D+ tied to D−, BATP sense, TS 8.45 k / 324 k for 0–50 °C, 20 V-rated input | ACTIVE; DESIGN; HOLD on schematic, NVM image and bench CP-01 to CP-14 |
+| [D-041](#d-041) | 2026-10-04 | Body / power button; E-stop removed (BO-018 registered; CH-041, CH-042, CH-046, HN-001, HN-004; W40, J2-9; W22, J3-7, W38 removed) | No E-stop: the rear red mushroom becomes the momentary power button (LTC2954 `PB`, GH2 `J2-9` on PCB-02's +Y edge, 10 k wetting pull-up); a press also resets `SYSTEM_ARM`, so it stops the motors in hardware; the latching NC IDEC XA1E is replaced by a 16 mm momentary 1NO mushroom in the same well | ACTIVE; DESIGN; HOLD on the received part's fit in the well and bench PB-01 to PB-06 |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -1425,3 +1426,85 @@ The chassis model's Layout 02 body copy (`body_chassis_model.py`) still has the 
 - Bench CP-01 to CP-14.
 - Whether summer charging to 8.0 V above 35 °C is acceptable. A host would be needed to move T3.
 - PCB-02 mounting, which is still absent from the CAD; the rear lower cross rail is the candidate seat.
+
+## D-041
+
+**2026-10-04 · Body / power button: the rear mushroom is the power button and there is no E-stop (BO-018 registered; CH-041, CH-042, CH-046, HN-001, HN-004; W40, J2-9 added; W22, J3-7 removed; W38, J10-11 not fitted) · ACTIVE; DESIGN; HOLD on the received part's fit in the well and bench PB-01 to PB-06**
+
+**Decision:** Makad has **no E-stop**. The red mushroom in the rear-panel well is now the **power button**. Builder (2026-10-04): "remove the newly made power button, and rewire the red mushroom to be the power button, instead of the estop button".
+
+The first draft of this entry, earlier the same day and not committed, added a separate 12 mm GQ12 ring-lit button beside the E-stop. That button, its pad, its LED feed and its mass row are removed.
+
+**Why the part changes.** The fitted IDEC XA1E-BV3U02KT-R (CH-046) is a push-lock, turn-reset E-stop with two NC contacts. The power latch (`LTC2954`) needs a momentary NO contact. Held in, the XA1E would keep `PB` pressed; released, its NC contact would short `PB` all the time. It cannot be rewired to do the job. BO-018 is a **16 mm momentary red mushroom, 1NO**, in the same well and inside the XA1E's envelope:
+- Ø16.2 cut-out in the 2 mm floor;
+- mushroom Ø30 or less, rising no more than 20.6 mm above the floor;
+- 23.9 mm or less behind the floor.
+
+Candidate: a SparkFun-type metal 16 mm mushroom (Tanotis, ₹850). Bench fallback: the Daier A16-11SM (Evelta, ₹118), which is plastic and rated for 10k operations.
+
+**Why removing the E-stop is acceptable.** The builder's call, with the hazard as context: a 2.4 kg robot at about 0.5 m/s, with about 2 A stall motors. Robots of this class (Roomba, TurtleBot 4) carry no mushroom E-stop. This supersedes, for the build, RP-02 `PA-13`'s dominant latching hardware E-stop and the `E_STOP_OK` term of `MOTOR_PERMIT` (`BR-05`). The separate bench E-stop on motion rigs (`workbench.md`, F4) is unchanged.
+
+**What keeps a hardware stop.** The latch's `INT` output also resets the `SYSTEM_ARM` latch on PCB-02. RP-02 cleared that latch on an E-stop assertion. So any press while running opens `Q_ARM` in the permit chain, and the `LTC4368` cuts the drive and head bus through its fast `UV` path, with no firmware involved. The arm never resumes on release (F-13); C2 has to re-arm.
+
+What this loses against the XA1E:
+- a stop that stays latched where you can see it;
+- the second, independent contact;
+- the universally recognised E-stop meaning, although the button is still red.
+
+**Circuit** ([power-boards.md §6](04-pcbs/power-boards.md#6-pcb-02-power-button-input-d-041)):
+- `J2-9` is a side-entry GH2 on PCB-02's +Y edge at Z 88.6, above `J2-8`. Pin 1 is `PB_SW`, pin 2 is GND.
+- `R_WET`: 10 kΩ from the latch `VIN` to `PB_SW`. A press passes 0.84 mA instead of 19 µA, and a released button draws nothing (`D`, LTC2954; `PB` accepts up to 26.4 V).
+- `INT` resets `SYSTEM_ARM`.
+- On PCB-03, a 0 Ω link replaces the E-stop NC contact at the head of the permit chain. `J3-7` is deleted.
+- **Firmware:** C2 starts an orderly shutdown only after `INT_PB` has been low for 1 s. A shorter press only stops motion.
+- Turn-on still needs the 0.5 s `ONT` hold, and about 5.2 s forces off in hardware. In `CHARGE` a press does nothing (`Q_kill`).
+- The button has no light; the head display shows the state.
+
+**Harness** ([05-harness](05-harness/README.md)):
+- `W40` is a 150 mm single-ended GH2, terminals to `J2-9`. It comes off with the panel.
+- `W22` (to `J3-7`) is deleted.
+- `W38` and C3 `J10-11` (E-stop status) are not fitted. The `J3-8` `E_STOP_STATUS` pin is spare.
+
+**CAD changed** (`02-body/v1/cad/body_v1_model.py`):
+- The XA1E header comment is rewritten.
+- `estop_switch()` becomes `power_button_mushroom()`, with two terminals instead of three tabs.
+- Labels change: `ESTOP_XA1E_*` → `POWER_BUTTON_MUSHROOM_*`, and `REAR_PANEL_ESTOP_*` → `REAR_PANEL_BUTTON_*`. The `ESTOP_*` geometry constants keep their names.
+- New `POWER_BUTTON_LEAD_RESERVES` (W40) and `_power_button_lead()` with `J2_9_GHR02_MATED_PLUG`.
+- `J3-7` is dropped from the PCB-03 connector list, and `J10-11` is marked not fitted.
+- The mass row is now `POWER_BUTTON_MUSHROOM_16MM_AND_W40`: 15 g (`E`; was the XA1E, 14 g `D`).
+- Check scripts follow the new labels: `check_body_panel_fit.py`, `check_charge_inlet.py`, `check_shell_frame_fit.py` (the button stays out of the lowering path) and `write_outputs.py`.
+- The chassis v1 model still carries the XA1E in its reference copy. It is filtered out of the body checks and was not edited.
+
+**Checks:**
+- New `check_power_button.py` (about 5 min): **ALL PASS**.
+  - Mushroom to the well wall 3.98 mm.
+  - Button solids to PCB-02 2.5 mm; contact-block keep-out to PCB-02 0.5 mm, against the 0.4 mm running-gap rule.
+  - No clash for the button, the `W40` reserves or the `J2-9` plug.
+  - The 40 mm panel-removal sweep is clear.
+- `check_body_panel_fit.py`: clean.
+- `check_body_layout.py`: all checks true. Whole robot 2433.1 g, CoM (+18.20, +0.24, 105.88) mm, a_tip 1.686 m/s² against the 1.582 minimum, head-pose bound 1.682. The 95 g harness allowance must sit forward of X −7.7 mm.
+- `body-v1.step` rebuilt with `--force`; snapshot `snapshots/body-v1-rear-power-button.png`.
+- Not run: `check_shell_frame_fit.py` (70 min) and the chassis `check_layout.py`.
+
+**BOM changed:**
+- BO-018 (mushroom power button).
+- CH-046 SUPERSEDED.
+- CH-041: `J2-9`, `R_WET`, the `INT` → `SYSTEM_ARM` reset.
+- CH-042: `J3-7` deleted, 0 Ω link in the permit chain.
+- HN-001 and HN-004: `W40` GH2, `W22` deleted, `W38` not fitted.
+
+**Docs changed:**
+- [power-boards.md §6](04-pcbs/power-boards.md#6-pcb-02-power-button-input-d-041) and the [04-pcbs board register](04-pcbs/README.md) (PCB-02, PCB-03).
+- [05-harness](05-harness/README.md): wire list, buy list, pinouts and the panel-removal step.
+- The [02-body BOM](02-body/v1/BOM.md) and [CAD README](02-body/v1/cad/README.md#power-button-d-041).
+- The [chassis BOM](01-chassis/v1/BOM.md) (CH-046) and the [chassis CAD README](01-chassis/v1/cad/README.md).
+- The [charge-path](04-pcbs/charge-path.md) service note.
+- `01-system/power-energy-ledger.md` (`PB-MOTOR`) and `01-system/workbench.md`: the robot has no E-stop, but the bench motion rigs keep theirs.
+- Not edited: `02-prototypes/` (read-only, D-001) and the `01-system` option and sourcing studies (dated analyses).
+
+**Open:**
+- Order BO-018 and check its fit in the well envelope: momentary 1NO, weight.
+- Add `J2-9`, `R_WET` and the `INT` → `SYSTEM_ARM` reset to the PCB-02 schematic, and the 0 Ω link to the PCB-03 schematic.
+- Add the 1 s `INT_PB` rule to the C2 firmware.
+- Run bench PB-01 to PB-06.
+- Update the chassis v1 reference copy of the E-stop at the next chassis CAD pass.

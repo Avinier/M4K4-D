@@ -1,0 +1,18 @@
+{
+  "button_parts": [
+    "POWER_BUTTON_MUSHROOM_BEHIND_PANEL_KEEP_OUT",
+    "POWER_BUTTON_MUSHROOM_COLLAR",
+    "POWER_BUTTON_MUSHROOM_CONTACT_BLOCK",
+    "POWER_BUTTON_MUSHROOM_D29",
+    "POWER_BUTTON_MUSHROOM_TERMINAL_1",
+    "POWER_BUTTON_MUSHROOM_TERMINAL_2"
+  ],
+  "rear_panel_solids": 1,
+  "mushroom_to_well_mm": 3.98,
+  "button_to_pcb02_mm": 2.5,
+  "keep_out_to_pcb02_mm": 0.5,
+  "button_vs_rear_panel_mm3": {},
+  "button_vs_fixed_mm3": {},
+  "lead_and_j29_vs_fixed_mm3": {},
+  "removal_sweep_clashes": {}
+}

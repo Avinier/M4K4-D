@@ -479,16 +479,16 @@ WHEEL_ARCH_SCREW_LENGTH = 8.0
 # K 50 WP 8 ohm speaker, PCB-05 (MAX98357A + 2 x ADAU7002) and four PCB-06 boards with
 # an Infineon IM73D122V01 each. The speaker's Ø50 x 18 mm outline and Ø46 cutout are
 # Visaton's; its internal frame/basket/magnet split is estimated (no drawing read).
-SPEAKER_CENTER = (85.5, 0.0, 99.0)
+SPEAKER_CENTER = (90.5, 0.0, 99.0)
 SPEAKER_CONE_DIAMETER = 44.0
 SPEAKER_BASKET_DIAMETER = 50.0
 SPEAKER_DEPTH = 18.0
 # The sloped nose moves the speaker face inward while retaining clearance to
 # the compute tray at X 76; the cavity remains behind its local mounting cup.
-SPEAKER_CAVITY_X = (77.0, 92.5)
+SPEAKER_CAVITY_X = (82.0, 97.5)
 SPEAKER_CAVITY_DEPTH = SPEAKER_CAVITY_X[1] - SPEAKER_CAVITY_X[0]
 SPEAKER_CAVITY_CENTER_X = sum(SPEAKER_CAVITY_X) / 2.0
-SPEAKER_FRONT_X = 95.0
+SPEAKER_FRONT_X = 100.0
 SPEAKER_CUTOUT_DIAMETER = 46.0
 SPEAKER_FLANGE_DEPTH = 2.5
 SPEAKER_BASKET_DEPTH = 9.0
@@ -774,15 +774,18 @@ PACK_FOAM_T = 1.5
 PACK_FOAM_Z = (33.0, 50.0)
 PACK_FOAM_X = {"-Y": (28.0, 64.0), "+Y": (50.5, 64.0)}
 
-# E-stop: IDEC XA1E-BV3U02KT-R, the Ø16 unibody XA with a Ø29 mushroom and 2NC
-# (one to the permit loop, one to C2), 14 g. IDEC XA datasheet: Ø16.2 cut-out,
-# 0.8-4.5 mm panel, mushroom top 20.6 mm above the mounting face, 23.9 mm behind
-# it. It replaces the Ø40 XW1E (20 mm proud, 46.4 mm deep, 40 g). The switch
+# Power button (D-041): the red mushroom in the rear-panel well is the momentary
+# power button, the PB input of the LTC2954 latch on PCB-02. There is no E-stop.
+# The part is a 16 mm momentary red mushroom pushbutton, 1NO, two terminals; it
+# replaces the latching 2NC IDEC XA1E-BV3U02KT-R, which cannot drive the latch.
+# The ESTOP_* names are kept for the well geometry. The envelope is still the XA1E
+# one and is the fit spec for the bought part (E): Ø16.2 cut-out, 2 mm floor, Ø29
+# mushroom 20.6 mm above the mounting face, 23.9 mm behind the floor. The XA1E
+# replaced the Ø40 XW1E (20 mm proud, 46.4 mm deep, 40 g). The switch
 # mounts on the floor of a tapered octagonal well printed with the rear panel,
 # so the mushroom rises 12.6 mm out of a socket that repeats the panel outline
 # instead of standing 20 mm off a flat wall. An amber octagonal bezel land round
-# the well is the ISO 13850 yellow background and matches the ear inlays and
-# arch trims. The well fits between PCB-02 (X >= -49.6 below Z 94) and the panel
+# the well matches the ear inlays and arch trims. The well fits between PCB-02 (X >= -49.6 below Z 94) and the panel
 # frame's top bar (X -55.6...-53.2, Z >= 122); the Pi's rear parts start at X -23.
 ESTOP_CENTER_Z = 105.5
 ESTOP_REAR_OUTER_X = -60.0  # raised landing clears both the sloped panel and PCB-02
@@ -804,7 +807,7 @@ ESTOP_DEPTH_BEHIND_PANEL = 23.9  # unibody, solder/tab #110; taken from the floo
 ESTOP_BODY_DIAMETER = 18.0
 ESTOP_MOUNT_X = ESTOP_REAR_OUTER_X + ESTOP_WELL_DEPTH
 ESTOP_FLOOR_BACK_X = ESTOP_MOUNT_X + ESTOP_WELL_FLOOR
-ESTOP_KEEP_OUT = (ESTOP_FLOOR_BACK_X, ESTOP_FLOOR_BACK_X + ESTOP_DEPTH_BEHIND_PANEL, -11.0, 11.0, ESTOP_CENTER_Z - 11.0, ESTOP_CENTER_Z + 11.0)  # contact block, three #110 tabs and wiring
+ESTOP_KEEP_OUT = (ESTOP_FLOOR_BACK_X, ESTOP_FLOOR_BACK_X + ESTOP_DEPTH_BEHIND_PANEL, -11.0, 11.0, ESTOP_CENTER_Z - 11.0, ESTOP_CENTER_Z + 11.0)  # contact block, terminals and wiring
 ESTOP_RED = "#C62F28"
 ESTOP_AMBER = "#D39F36"  # the droid's amber, lifted toward safety yellow for the background
 
@@ -855,7 +858,8 @@ CONNECTOR_EDGE_STRIPS = {
         ("J2-1", "MF+", 2, "BATBUS-C in from the fuse-side star splice (D-039; J2-2 deleted)"),
         ("J2-3", "MF+", 4, "OPBUS and CHGBUS out to PCB-04 J4-3"),
     ]},
-    # The +Y edge takes only the charge-inlet lead (D-040); its plug also exits +Y.
+    # The +Y edge takes the charge-inlet lead (D-040); its plug also exits +Y. The
+    # power-button GH2 J2-9 sits higher on the same edge (D-041, _power_button_lead).
     "PCB02_PY": {"box": (-48.0, -38.0, 25.0, 41.0, 62.0, 74.0), "span": (62.0, 74.0), "connectors": [
         ("J2-8", "MF3", 2, "VSNK in from the PCB-13 charge inlet (W16)"),
     ]},
@@ -865,7 +869,6 @@ CONNECTOR_TOP_LAYERS = {
     "PCB03": {"box": (19.0, 58.0, -29.0, 29.0, 75.0, 84.3), "connectors": [
         ("J3-5", "EH", 3, "XC330 yaw servo: VDD, GND, bus DATA"),
         ("J3-6", "GH", 6, "PCB-02 logic: CHARGE_ABSENT, ENERGY_OK, SYSTEM_ARM, MOTOR_PRESENT, 2 x GND"),
-        ("J3-7", "GH", 4, "E-stop NC1 loop and NC2 status"),
         ("J3-8", "GH", 8, "head sideband from the yaw junction"),
         ("J3-9", "GH", 4, "C3_READY, MOTOR_PRESENT to C3, 2 x GND (C3 carrier J10-12)"),
     ]},
@@ -918,6 +921,18 @@ CHARGE_INLET_OUTSIDE_CORRIDOR = (
 CHARGE_INLET_LEAD_RESERVES = (
     (PCB13_BOARD[1], PCB02_BOX[0] - 0.4, 10.0, 41.0, 66.0, 71.0),
     (PCB02_BOX[0] - 0.4, -38.0, 37.0, 41.0, 66.0, 71.0),
+)
+
+# W40 (D-041): GH2 lead from the mushroom's two terminals, out past the end of the
+# contact block, +Y beside the Pi's rear edge, back above PCB-02's +Y edge and down
+# to the side-entry GH2 J2-9. Reserves are lead plus bend. The button and lead come
+# off with the rear panel after J2-9 is unplugged, beside J2-8.
+POWER_BUTTON_J29_Z = 88.6  # centre of J2-9 on PCB-02's +Y edge
+POWER_BUTTON_LEAD_RESERVES = (
+    (ESTOP_KEEP_OUT[1], ESTOP_KEEP_OUT[1] + 4.0, -4.0, 27.0, 101.0, 108.0),  # terminal exit, +Y behind the contact block
+    (-30.0, ESTOP_KEEP_OUT[1] + 4.0, 27.0, 35.0, 94.0, 108.0),  # down beside the Pi's rear edge
+    (-47.0, -30.0, 27.0, 35.0, 94.0, 99.0),  # back above PCB-02's +Y edge
+    (-47.0, -41.0, 28.2, 34.0, 84.5, 94.0),  # drop to the J2-9 plug (mated plug face at Y 25 + 3.2)
 )
 
 # Pi 5 power: right-angle USB-C plug on the Pi's -Y edge (the port is at X -10.1,
@@ -987,7 +1002,7 @@ C3_CARRIER_CONNECTORS = [
     ("J10-7", "GH", 8, "IMU PCB-07 (SPI)"),
     ("J10-8", "GH", 5, "nose pod, one cable (D-013): +5V and Vo for the GP2Y0A21YK0F, GND, +3V3 and OUT for the DRV5055 Hall board"),
     ("J10-10", "GH", 4, "rear TCRT cartridge"),
-    ("J10-11", "GH", 3, "E-stop status (GPIO3 input) from PCB-03"),
+    ("J10-11", "GH", 3, "spare, not fitted: was the E-stop status from PCB-03 (D-041)"),
     ("J10-12", "GH", 4, "C3_READY, MOTOR_PRESENT to PCB-03 J3-9"),
 ]
 
@@ -1148,7 +1163,7 @@ MASS_ROWS = [
         HEAD_ORIGIN_IN_CHASSIS[1] + HEAD_LOCAL_COM[1],
         HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_LOCAL_COM[2],
     ), "RP-01 generated mass tree"),
-    ("BODY_SHELL_AND_PANELS", 253.7, (18.9, 0.0, 93.1), "Body v1 CAD volume and centroid (2026-10-04; D-040 rear-panel charge-inlet pad +3.0 g, was 250.7 g at (19.8, 0, 93.5)): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037, +4.0 g), front/rear service skins with the seven uniform rectangular speaker slots and E-stop well, badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."),
+    ("BODY_SHELL_AND_PANELS", 250.2, (17.8, 0.0, 93.0), "Body v1 CAD volume and centroid (2026-10-04): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037), front service skin with an open 46 mm speaker aperture and retaining lip, rear service skin, E-stop well and charge-inlet pad (D-040), badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."),
     ("BODY_PRIMARY_FRAME", 170.9, (12.5, 1.0, 94.9), "Body v1 CAD volume and centroid (2026-10-02): main connected print and removable front-left foot cassette at conservative 1.20 g/cm3 effective PETG, plus modeled four M4 bolts/nuts, two locating pins, cassette M3 joints, and four shell-to-frame M3 screw/insert joints at 7.85/8.50 g/cm3 steel/brass. Estimated, not weighed; check_body_layout.py verifies against the solids."),
     ("CHASSIS_PRIMARY_FRAME", 229.1, (18.14, 0.0, 46.64), "D-029 (2026-10-01): +21.4 g of newly modeled hardware measured from the solids at 7.9/8.5 g/cm3, centroid (30.4, 0, 46.4): J05/J06/J16/J11A ISO 7380 screws and 14 M3 x 6 inserts, four M2.5 driver screws and inserts; +0.7 g for the measured +1.24 cm3 printed volume at 0.571 g/cm3 (driver posts and tie lugs, wider tongues and rear rail ends, moved J16 ears, hatch strap slots, recess/cavity growth), centroid about (35, 0, 64); was 207.0 g at (16.82, 0, 46.61). 2026-10-01: +0.2 g for the measured +0.29 cm3 when the front hatch bosses moved to the front wall, the bosses were cut to Z 39.5 and the hatch grew 4 mm forward; D-011: -0.3 g for the O5 J10-8 cable bore through the front crossmember and deck at (86, -31); D-010 J04 adds two integrated plate-and-cheek carriers, keyed rail joints, eight modeled M3 x 8 screws and eight 6 mm inserts; estimated +10.2 g total (about +0.7 g printed cheek/key volume and +9.5 g steel/brass hardware, preliminary geometry-density estimate); previous 196.9 g centroid (17.7, 0, 46.8). D-007 axle stack (2026-09-29), +20.9 g at the axle (X 0, Z 42): printed plate + housing replace the flange/boss/diaphragm, +7.24 cm3 measured at ~0.571 g/cm3 (+4.1 g); two 1.2 mm aluminium caps 1.52 cm3 (+4.1 g); eight M3 x 18 cap screws (+10.6 g); eight M3 brass inserts (+1.5 g); face screws M3 x 8 CSK -> M3 x 6 low head (+0.6 g); before that 176.0 g at (19.8, 0, 47.4): +2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"),
     ("WHEEL_L", 92.5, WHEEL_CENTER_L, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
@@ -1176,9 +1191,9 @@ MASS_ROWS = [
     ("ADAFRUIT_DRV8833_CARRIERS_X2", 6.0, (DRIVER_CENTER_X, 0.0, 68.5), "E: 2 x Adafruit #3297 boards, 25.4 x 17.8 mm board-file outline with the 3.5 mm terminal block fitted (10.1 mm tall), 3 g each; mass unmeasured"),
     ("IMU_PCB07", 2.5, (IMU_BOARD_CENTER[0], 0.0, IMU_BOARD_CENTER[2] + 1.0), "E: PCB-07 16 x 20 x 1.0 mm FR4 ~0.6 g + ICM-42688-P and JST-SH 8-pin ~0.3 g + two M2 x 5 ~0.6 g + 8-way AWG30 lead to C3 ~1 g (RP03-CAD-11); was a 2 g breakout estimate at (16, 0, 60)"),
     ("TCRT5000_BREAKOUT_AND_CABLE", 3.0, TCRT_REAR_CENTER, "E: TCRT5000 with a soldered 350 mm 4-core J10-10 GH lead (CH-020) and heat-shrink (D-016) (most of it rises to the C3 carrier; lumped at the sensor); was inside the old CONTROL_POWER_SENSORS row at the body centre"),
-    ("ESTOP_XA1E_BV3U02KT_R", 14.0, ((5.0 * (ESTOP_MOUNT_X - ESTOP_MUSHROOM_TOP_ABOVE_MOUNT + 4.0) + 9.0 * (ESTOP_KEEP_OUT[0] + ESTOP_KEEP_OUT[1]) / 2.0) / 14.0, 0.0, ESTOP_CENTER_Z), "D: IDEC XA unibody Ø29 mushroom 14 g (XA datasheet); ~5 g mushroom and collar outside the well floor, ~9 g contact block behind it. The revised rear-panel well and bezel print mass is included in BODY_SHELL_AND_PANELS."),
+    ("POWER_BUTTON_MUSHROOM_16MM_AND_W40", 15.0, ((5.0 * (ESTOP_MOUNT_X - ESTOP_MUSHROOM_TOP_ABOVE_MOUNT + 4.0) + 9.0 * (ESTOP_KEEP_OUT[0] + ESTOP_KEEP_OUT[1]) / 2.0) / 14.0, 0.0, ESTOP_CENTER_Z), "E (D-041): 16 mm momentary red mushroom pushbutton about 14 g (metal head; unweighed) + W40 GH2 lead and plug about 1 g, split as the XA1E it replaces: about 5 g mushroom and collar outside the well floor, the rest behind it. Was the IDEC XA1E E-stop, 14 g (D). The rear-panel well and bezel print mass is in BODY_SHELL_AND_PANELS."),
     ("BALL_NOSE_POD_SENSOR_CAP", 18.9, (111.4, 0.0, 37.9), "D-027: +0.2 g for the lid lead hump, raised nose top and wider front pocket (pod 12.45, lid 2.62, cap 2.12 cm3 measured, was 12.44/2.45/2.03, at ~0.571 g/cm3); earlier estimate predates the selected A21 sensor (3.6 g datasheet, ears trimmed), custom Hall carrier and O3 x 1.5 magnet; weigh received parts"),
-    ("BODY_AUDIO", 61.0, (74.5, 0.0, 102.1), "RP03-CAD-11 60 g audio estimate with Visaton K 50 WP 48 g, PCB-05 ~6 g, mic boards ~2 g and cables ~4 g. Body v1 sloped nose shifts the modeled speaker face from X 98 to X 95 mm; a 3 mm shift of its 48 g share moves the audio row X centroid from 77.9 to 75.5 mm. D-037 adds ~1 g at the mic-array centre (16, 0, 113): eight M2 x 4 screws, larger 12 x 14 boards and gaskets; the soldered leads replace the GH header and plug in the cable allowance. Weigh installed parts."),
+    ("BODY_AUDIO", 61.0, (78.4, 0.0, 102.1), "RP03-CAD-11 60 g audio estimate with Visaton K 50 WP 48 g, PCB-05 ~6 g, mic boards ~2 g and cables ~4 g. The exposed front installation places the modeled speaker face at X 100 mm, 5 mm forward of the former grille-backed seat; its 48 g share shifts the audio row X centroid to about 78.4 mm. D-037 adds ~1 g at the mic-array centre (16, 0, 113): eight M2 x 4 screws, larger 12 x 14 boards and gaskets; the soldered leads replace the GH header and plug in the cable allowance. Weigh installed parts."),
     ("HARNESS_AND_FASTENERS", 95.0, (4.0 + BODY_SHIFT_X, 0.0, 88.0), "Conservative allowance for unmodeled installed harness, connector tails, clips, service-panel screws and remaining fasteners. Body-frame M4/M3 joints and shell-to-frame M3 joints are measured separately in BODY_PRIMARY_FRAME; weigh the completed harness and hardware to replace this allowance."),
     ("BODY_YAW_STAGE", 89.0, (BODY_AXIS_X, 13.5, 134.3), "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 6 g driven spur + 6 g scissor pinion (two 2.4 mm halves) + 1 g torsion spring and retaining clip (2026-09-25) + 2 g clamp ring + 1 g coupling shaft; no SKU"),
     ("REAR_SKID_KEEL", 20.0, (-40.5, 0.0, 22.7), "J09/J10 rework 2026-09-30 (D-014, D-016), measured from the solids: keel body 14.64 cm3 at ~0.571 g/cm3 = 8.4 g at (-39.7, 0, 20.4) (D-016 closed the board cavity back to the sensor pocket); shoe 0.40, bezel with guard lips 0.30 and two 1 mm shims 0.24 cm3 printed solid at ~1.27 g/cm3 = 1.2 g; four ISO 4762 M3 x 30 ~8.4 g; four CNC Kitchen M3 x 5.7 crossmember inserts ~1.4 g; M2 x 10 and M2 x 6 screws ~0.6 g (the M2 x 5 board screw was dropped by D-015). Was 12.0 g at (-39.9, 0, 20.4); rear-crossmember cable bore closed and tie lug added (<0.1 g, left in the frame row)"),
@@ -1945,29 +1960,27 @@ def _wheel_arch_fasteners():
 def body_panels():
     front_raw = _sloped_panel_band("FRONT", 0.0, SHELL_THICKNESS)
     # The 50 mm speaker needs a locally planar seat across the faceted nose.
-    # A short annular cup joins the sloped panel and supports a slotted grille;
-    # its inner bore leaves the purchased speaker flange and basket clear.
+    # The annular cup joins the sloped skin to an exposed-speaker aperture.
+    # Its 46 mm opening leaves the 44 mm cone visible and untouched. The
+    # flange face at X=100 sits 0.8 mm behind the lip for a sealing bond line.
     speaker_axis = (0.0, SPEAKER_CENTER[2])
     speaker_opening = _axial_bore_x(26.0, 75.0, 106.0, *speaker_axis)
     cup = _axial_bore_x(29.0, 87.0, 102.0, *speaker_axis)
-    cup -= _axial_bore_x(27.2, 86.0, 92.5, *speaker_axis)
-    cup -= _axial_bore_x(25.5, 92.5, 103.0, *speaker_axis)
-    grille = _axial_bore_x(25.8, 100.8, 102.6, *speaker_axis)
-    front_raw = (front_raw - speaker_opening) + cup + grille
+    cup -= _axial_bore_x(27.2, 86.0, SPEAKER_CAVITY_X[1], *speaker_axis)
+    cup -= _axial_bore_x(25.5, SPEAKER_CAVITY_X[1], 103.0, *speaker_axis)
+    speaker_lip = (_axial_bore_x(26.0, 100.8, 102.6, *speaker_axis)
+                   - _axial_bore_x(SPEAKER_CUTOUT_DIAMETER / 2.0, 100.0, 103.0, *speaker_axis))
+    front_raw = (front_raw - speaker_opening) + cup + speaker_lip
     front_raw -= _axial_bore_x(SPEAKER_BASKET_DIAMETER / 2.0 + 2.2,
                                SPEAKER_CAVITY_X[0], SPEAKER_CAVITY_X[1], *speaker_axis)
-    grille_slots = [
-        _block(100.0, 104.0, y - 2.0, y + 2.0, 84.0, 114.0)
-        for y in (-18.0, -12.0, -6.0, 0.0, 6.0, 12.0, 18.0)
-    ]
     front_bores = [
         _axial_bore_x(1.65, _shell_end_x("FRONT", z) - 1.0,
                       _shell_end_x("FRONT", z) + SHELL_THICKNESS + 1.0, y, z)
         for y, z in FRONT_PANEL_FASTENERS
     ]
     front = _paint(
-        front_raw - [*grille_slots, *front_bores],
-        "FRONT_SERVICE_PANEL_FUNCTIONAL_GRILLE",
+        front_raw - front_bores,
+        "FRONT_SERVICE_PANEL_EXPOSED_SPEAKER",
         PANEL_WARM_GRAY,
         SHELL_ALPHA,
     )
@@ -2922,8 +2935,8 @@ def rear_panel_estop_well():
     bezel = extrude(_estop_octagon(ESTOP_REAR_OUTER_X - ESTOP_BEZEL_PROUD, ESTOP_BEZEL_ACROSS_FLATS), amount=ESTOP_BEZEL_PROUD)
     bezel = bezel - extrude(_estop_octagon(ESTOP_REAR_OUTER_X - ESTOP_BEZEL_PROUD - 1.0, ESTOP_WELL_MOUTH + 2.0 * ESTOP_WELL_WALL), amount=ESTOP_BEZEL_PROUD + 2.0)
     return [
-        _paint(well, "REAR_PANEL_ESTOP_WELL", SLATE_DARK, 1.0),
-        _paint(bezel, "REAR_PANEL_ESTOP_AMBER_BEZEL", ESTOP_AMBER, 1.0),
+        _paint(well, "REAR_PANEL_BUTTON_WELL", SLATE_DARK, 1.0),
+        _paint(bezel, "REAR_PANEL_BUTTON_AMBER_BEZEL", ESTOP_AMBER, 1.0),
     ]
 
 
@@ -2990,8 +3003,21 @@ def charge_inlet_pcb13():
     ])
 
 
-def estop_switch():
-    """IDEC XA1E-BV3U02KT-R: Ø29 domed mushroom, operator collar and unibody contact block."""
+def _power_button_lead():
+    """W40 lead reserves and the mated GH2 plug on PCB-02's +Y edge (J2-9, D-041)."""
+    w = gh_plug_width(2)
+    bx0 = PCB02_BOX[0] + PCB_THICKNESS
+    zc = POWER_BUTTON_J29_Z
+    parts = [_paint(_block(bx0, bx0 + GH_PLUG_THICKNESS, PCB02_BOX[3], PCB02_BOX[3] + GH_PLUG_PROUD, zc - w / 2.0, zc + w / 2.0), "J2_9_GHR02_MATED_PLUG", "#F4F1E6", 1.0)]
+    parts += [_paint(_block(*box), f"POWER_BUTTON_W40_LEAD_RESERVE_{i}", "#44BDD0", 0.42) for i, box in enumerate(POWER_BUTTON_LEAD_RESERVES, start=1)]
+    return parts
+
+
+def power_button_mushroom():
+    """16 mm momentary red mushroom power button (D-041): Ø29 dome, collar, contact block, two terminals.
+
+    Envelope of the IDEC XA1E it replaces; the bought part must fit inside it.
+    """
     top_x = ESTOP_MOUNT_X - ESTOP_MUSHROOM_TOP_ABOVE_MOUNT
     skirt_x1 = top_x + ESTOP_MUSHROOM_DOME + ESTOP_MUSHROOM_SKIRT
     r = ESTOP_MUSHROOM_DIAMETER / 2.0
@@ -3010,24 +3036,24 @@ def estop_switch():
     body = _axial_bore_x(ESTOP_BODY_DIAMETER / 2.0, ESTOP_FLOOR_BACK_X, ESTOP_FLOOR_BACK_X + ESTOP_DEPTH_BEHIND_PANEL - 3.0, 0.0, ESTOP_CENTER_Z)
     tabs = [
         _block(ESTOP_FLOOR_BACK_X + ESTOP_DEPTH_BEHIND_PANEL - 3.0, ESTOP_FLOOR_BACK_X + ESTOP_DEPTH_BEHIND_PANEL, y - 3.2, y + 3.2, ESTOP_CENTER_Z + dz - 0.4, ESTOP_CENTER_Z + dz + 0.4)
-        for y, dz in ((-5.5, -3.0), (5.5, -3.0), (0.0, 5.5))
+        for y, dz in ((-5.5, -3.0), (5.5, -3.0))  # NO pair (E)
     ]
     return [
-        _paint(dome + skirt, "ESTOP_XA1E_MUSHROOM_D29", ESTOP_RED, 1.0),
-        _paint(stem + collar + barrel, "ESTOP_XA1E_OPERATOR_COLLAR", "#3A4044", 1.0),
-        _paint(body, "ESTOP_XA1E_UNIBODY_CONTACT_BLOCK", "#2E3336", 1.0),
-        *[_paint(tab, f"ESTOP_XA1E_TAB_{i}", STEEL, 1.0) for i, tab in enumerate(tabs, start=1)],
+        _paint(dome + skirt, "POWER_BUTTON_MUSHROOM_D29", ESTOP_RED, 1.0),
+        _paint(stem + collar + barrel, "POWER_BUTTON_MUSHROOM_COLLAR", "#3A4044", 1.0),
+        _paint(body, "POWER_BUTTON_MUSHROOM_CONTACT_BLOCK", "#2E3336", 1.0),
+        *[_paint(tab, f"POWER_BUTTON_MUSHROOM_TERMINAL_{i}", STEEL, 1.0) for i, tab in enumerate(tabs, start=1)],
     ]
 
 
 def power_distribution_boards():
-    """RP-02 custom power/safety board envelopes, main-fuse holder and E-stop (proposal).
+    """RP-02 custom power board envelopes, main-fuse holder and power button (proposal).
 
     Each board is a 1.6 mm PCB plate plus a translucent parts envelope up to the
-    stated total height. The E-stop keep-out is a reserved volume, not a solid
-    that belongs to a part. The E-stop's well and bezel and the charge-inlet pad
-    and pocket belong to the rear panel (body_panels). PCB-13 rides on that pad
-    and comes off with the panel; its plug corridor and lead are in
+    stated total height. The button keep-out is a reserved volume, not a solid
+    that belongs to a part. The button's well and bezel and the charge-inlet pad
+    belong to the rear panel (body_panels). The button and PCB-13 ride on the
+    panel and come off with it; the plug corridor and leads are in
     connectors_and_exits().
     """
     def board(name, box, color, pcb_at_top=False):
@@ -3042,9 +3068,9 @@ def power_distribution_boards():
             parts.append(_paint(_block(x0, x1, y0, y1, z0 + PCB_THICKNESS, z1), f"{name}_PARTS_ENVELOPE", color, 0.55))
         return Compound(label=name, children=parts)
 
-    estop = Compound(label="ESTOP_XA1E_BV3U02KT_R", children=[
-        *estop_switch(),
-        _paint(_block(*ESTOP_KEEP_OUT), "ESTOP_XA1E_BEHIND_PANEL_KEEP_OUT", ESTOP_RED, 0.18),
+    button = Compound(label="POWER_BUTTON_MUSHROOM_16MM", children=[
+        *power_button_mushroom(),
+        _paint(_block(*ESTOP_KEEP_OUT), "POWER_BUTTON_MUSHROOM_BEHIND_PANEL_KEEP_OUT", ESTOP_RED, 0.18),
     ])
     parts = [
         board("PCB02_CHARGE_AND_SYSTEM_POWER", PCB02_BOX, "#D38132"),
@@ -3052,7 +3078,7 @@ def power_distribution_boards():
         board("PCB04_BRANCH_CONVERTERS", PCB04_BOX, "#D38132"),
         _paint(_block(*PACK_FUSE_HOLDER_BOX), "PACK_ATOF_FUSE_HOLDER_ENVELOPE", "#C55842", 0.74),
         _paint(_block(*PACK_DISCONNECT_PAIR_BOX), "PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE", "#E7A95B", 0.85),
-        estop,
+        button,
         charge_inlet_pcb13(),
     ]
     return Compound(label="POWER_DISTRIBUTION_BOARDS", children=parts)
@@ -3348,11 +3374,17 @@ def body_audio():
     basket = basket.moved(Location(((flange_x1 + basket_x1) / 2.0, sy, sz)))
     cone = _cylinder(SPEAKER_CONE_DIAMETER / 2.0, 1.0, (front - 0.5, sy, sz), "SPEAKER_K50WP_CONE", "#252B2E", 1.0, "x")
     magnet = _cylinder(SPEAKER_MAGNET_DIAMETER / 2.0, basket_x1 - rear, ((basket_x1 + rear) / 2.0, sy, sz), "SPEAKER_K50WP_MAGNET", BRONZE, 1.0, "x")
+    # Bonded silicone annulus seats the flange against the exposed aperture's
+    # rear lip while leaving the diaphragm free; speaker is installed from
+    # inside with the front service panel removed.
+    seal = (_axial_bore_x(SPEAKER_BASKET_DIAMETER / 2.0, front, front + 0.8, sy, sz)
+            - _axial_bore_x(SPEAKER_CUTOUT_DIAMETER / 2.0, front - 0.1, front + 0.9, sy, sz))
     speaker = Compound(label="SPEAKER_VISATON_K50WP_8OHM", children=[
         _paint(flange, "SPEAKER_K50WP_FRAME_FLANGE", SLATE_DARK, 0.92),
         _paint(basket, "SPEAKER_K50WP_BASKET", SLATE_DARK, 0.92),
         cone,
         magnet,
+        _paint(seal, "SPEAKER_K50WP_FLANGE_SEAL_BONDED_0P8", "#394345", 0.75),
     ])
     px, py, pz = PCB05_CENTER
     wx, wy, wz = PCB05_SIZE
@@ -3595,6 +3627,7 @@ def connectors_and_exits():
     parts += [
         _paint(_block(*CHARGE_INLET_OUTSIDE_CORRIDOR), "CHARGE_INLET_OUTSIDE_PLUG_CORRIDOR_KEEP_OUT", reserve, 0.20),
         *[_paint(_block(*box), f"CHARGE_INLET_W16_LEAD_RESERVE_{i}", power, 0.30) for i, box in enumerate(CHARGE_INLET_LEAD_RESERVES, start=1)],
+        *_power_button_lead(),
         _paint(_block(*PI_POWER_PLUG_RESERVE), "PI5_POWER_USBC_RIGHT_ANGLE_PLUG_RESERVE", power, 0.35),
         _paint(_block(*PI_POWER_PIGTAIL_DROP), "PI5_POWER_PIGTAIL_DROP_RESERVE", power, 0.30),
         _paint(_block(*YAW_JUNCTION_BOX), "YAW_JUNCTION_PCB08_WITH_CONNECTORS_RESERVE", "#9566D9", 0.30),

@@ -1,31 +1,31 @@
 {
   "scope": "body register rows only; partial estimate, not a full body mass or solid measurement",
-  "mass_g": 796.1,
+  "mass_g": 793.6,
   "com_mm": [
-    18.012033664112547,
-    -0.22679311644265793,
-    97.97334505715362
+    17.876700208813364,
+    -0.22750756048387094,
+    97.97279485887097
   ],
   "whole_robot_estimate": {
-    "mass_g": 2435.5794811320766,
+    "mass_g": 2433.0794811320766,
     "com_mm": [
-      18.240232140756213,
-      0.24351706986817592,
-      105.87206360044256
+      18.19632476544757,
+      0.24376728474171025,
+      105.88000011018292
     ],
-    "forward_tip_acceleration_m_s2": 1.6901217489829912,
-    "ball_static_share": 0.16582029218869285
+    "forward_tip_acceleration_m_s2": 1.6859269528077099,
+    "ball_static_share": 0.16542113423134155
   },
   "rows": [
     {
       "id": "BODY_SHELL_AND_PANELS",
-      "mass_g": 253.7,
+      "mass_g": 250.2,
       "com_mm": [
-        18.9,
+        17.8,
         0.0,
-        93.1
+        93.0
       ],
-      "source": "Body v1 CAD volume and centroid (2026-10-04; D-040 rear-panel charge-inlet pad +3.0 g, was 250.7 g at (19.8, 0, 93.5)): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037, +4.0 g), front/rear service skins with the seven uniform rectangular speaker slots and E-stop well, badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."
+      "source": "Body v1 CAD volume and centroid (2026-10-04): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037), front service skin with an open 46 mm speaker aperture and retaining lip, rear service skin, E-stop well and charge-inlet pad (D-040), badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."
     },
     {
       "id": "BODY_PRIMARY_FRAME",
@@ -128,24 +128,24 @@
       "source": "E: strip-and-wide board ~3 g + 2 x 20 socket ~2 g + 2 x THVD1451 and three GH headers ~2 g"
     },
     {
-      "id": "ESTOP_XA1E_BV3U02KT_R",
-      "mass_g": 14.0,
+      "id": "POWER_BUTTON_MUSHROOM_16MM_AND_W40",
+      "mass_g": 15.0,
       "com_mm": [
         -48.96071428571429,
         0.0,
         105.5
       ],
-      "source": "D: IDEC XA unibody \u00d829 mushroom 14 g (XA datasheet); ~5 g mushroom and collar outside the well floor, ~9 g contact block behind it. The revised rear-panel well and bezel print mass is included in BODY_SHELL_AND_PANELS."
+      "source": "E (D-041): 16 mm momentary red mushroom pushbutton about 14 g (metal head; unweighed) + W40 GH2 lead and plug about 1 g, split as the XA1E it replaces: about 5 g mushroom and collar outside the well floor, the rest behind it. Was the IDEC XA1E E-stop, 14 g (D). The rear-panel well and bezel print mass is in BODY_SHELL_AND_PANELS."
     },
     {
       "id": "BODY_AUDIO",
       "mass_g": 61.0,
       "com_mm": [
-        74.5,
+        78.4,
         0.0,
         102.1
       ],
-      "source": "RP03-CAD-11 60 g audio estimate with Visaton K 50 WP 48 g, PCB-05 ~6 g, mic boards ~2 g and cables ~4 g. Body v1 sloped nose shifts the modeled speaker face from X 98 to X 95 mm; a 3 mm shift of its 48 g share moves the audio row X centroid from 77.9 to 75.5 mm. D-037 adds ~1 g at the mic-array centre (16, 0, 113): eight M2 x 4 screws, larger 12 x 14 boards and gaskets; the soldered leads replace the GH header and plug in the cable allowance. Weigh installed parts."
+      "source": "RP03-CAD-11 60 g audio estimate with Visaton K 50 WP 48 g, PCB-05 ~6 g, mic boards ~2 g and cables ~4 g. The exposed front installation places the modeled speaker face at X 100 mm, 5 mm forward of the former grille-backed seat; its 48 g share shifts the audio row X centroid to about 78.4 mm. D-037 adds ~1 g at the mic-array centre (16, 0, 113): eight M2 x 4 screws, larger 12 x 14 boards and gaskets; the soldered leads replace the GH header and plug in the cable allowance. Weigh installed parts."
     },
     {
       "id": "BODY_YAW_STAGE",

@@ -55,7 +55,7 @@ Load-group codes are defined here once; `state-register.md`, `rig.md` and run-re
 | `PB-AUDIO-OUT` | Operating source | Application | Noisy/crest load separately contained. |
 | `PB-CAMERA` | Selected SBC camera interface | Application | Downstream load remains separately attributable. |
 | `PB-AUDIO-IN` | Operating source or compute downstream interface | Application | Source depends on RP-05 front-end selection. |
-| `PB-MOTOR` | Battery through system motor-arm plus dominant E-stop | Hazardous motor | Cannot be sourced in system off, boot inhibit, hard stop or charging. |
+| `PB-MOTOR` | Battery through system motor-arm plus dominant E-stop. **Build: no E-stop; a power-button press resets the motor-arm latch in hardware ([03-build D-041](../03-build/decisions.md#d-041))** | Hazardous motor | Cannot be sourced in system off, boot inhibit, hard stop or charging. |
 | `PB-HEAD` / `PB-HEAD-Y/P/R` | `PB-MOTOR`, direct or converted | Hazardous motor | Voltage decided by RP-01 servo family; C01 makes regulated 5 V from a 2S planning case a leading assumption only. |
 | `PB-DRIVE` / `PB-DRIVE-L/R` | `PB-MOTOR`, direct or converted | Hazardous motor | RP-03 selects and measures. |
 

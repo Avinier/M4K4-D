@@ -180,7 +180,7 @@ The CAD is in `body_v1_model.py`: `rear_panel_charge_inlet()`, `charge_inlet_pcb
 | Fixing | Two M2 × 5 thread-forming screws (BO-013 family), heads on the board's +X face. Ø1.6 × 3.6 mm pilots give 3.4 mm of engagement and about 4 mm of print beyond each pilot |
 | Load path | Plug → shell stakes → board → two screws 11 mm either side → pad → panel → four M3 panel screws → frame. PCB-02 carries none of it |
 | Clearance to PCB-02 | 1.9 mm from the 2.0 mm parts envelope, 2.6 mm from the screw heads (check) |
-| Service | Remove the four panel screws and slide the panel out along −X. Reach in and unplug `W16` at J2-8 on PCB-02's +Y edge, as for the E-stop leads. The inlet stays on the panel |
+| Service | Remove the four panel screws and slide the panel out along −X. Reach in and unplug `W16` at J2-8 on PCB-02's +Y edge, next to the power-button lead at J2-9 (D-041). The inlet stays on the panel |
 
 `check_charge_inlet.py` passes (results in [D-040](../decisions.md#d-040) and `02-body/v1/cad/generated/charge-inlet-fit.json`). Two planted clashes were caught: parts moved into PCB-02, and the pad dropped 2.5 mm onto the panel frame. The second shows that the pad's 1.5 mm margin to the frame is real.
 

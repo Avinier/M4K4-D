@@ -1,10 +1,10 @@
 {
   "panel_solids": {
-    "FRONT_SERVICE_PANEL_FUNCTIONAL_GRILLE": 1,
+    "FRONT_SERVICE_PANEL_EXPOSED_SPEAKER": 1,
     "REAR_SERVICE_PANEL_OCTAGONAL": 1
   },
   "panel_shell_gap_mm": {
-    "FRONT_SERVICE_PANEL_FUNCTIONAL_GRILLE": 0.0,
+    "FRONT_SERVICE_PANEL_EXPOSED_SPEAKER": 0.0,
     "REAR_SERVICE_PANEL_OCTAGONAL": 0.0
   },
   "panel_shell_overlap_mm3": {},

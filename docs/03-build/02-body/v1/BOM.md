@@ -4,7 +4,7 @@ Started 2026-10-03 from the [project BOM](../../BOM.csv) for **one body**. Quant
 
 The model basis is [body_v1_model.py](cad/body_v1_model.py). The project BOM carries the detailed specification, source and release check for every ID below.
 
-**Coverage:** this snapshot holds the **audio system** and the **wheel arches** only. The shell, body frame, service panels, compute (Pi 5 and cooler), yaw stage and their hardware are not yet in the project BOM. Shared power boards (PCB-02, PCB-03, PCB-04) and the C3 carrier are counted once, in the chassis rows CH-041 to CH-044.
+**Coverage:** this snapshot holds the **audio system**, the **wheel arches** and the **power button** only. The shell, body frame, service panels, compute (Pi 5 and cooler), yaw stage and their hardware are not yet in the project BOM. Shared power boards (PCB-02, PCB-03, PCB-04) and the C3 carrier are counted once, in the chassis rows CH-041 to CH-044.
 
 ## Audio
 
@@ -52,7 +52,7 @@ Design basis: [peripheral selection](../../../02-prototypes/RP-06-cad/peripheral
 
 | Part | Location | How it is mounted |
 |---|---|---|
-| Speaker | Face at X 95, axis (Y 0, Z 99) | Flange bonded behind the front service panel's slotted grille. Sealed Ø54 back cavity, X 77–92.5 |
+| Speaker | Exposed face at X 100, axis (Y 0, Z 99) | Unobstructed Ø46 panel aperture; face recessed 2.6 mm behind the lip, Ø50 flange bonded to its rear across a 0.8 mm silicone seal. Ø54 speaker clearance reserve X 82–97.5; rear enclosure sealing still requires physical verification |
 | PCB-05 | Flat at (60, 0, 118.5) | Above the Pi 5's front end, under the front upper cross |
 | PCB-06 boards | Front pair X 54, Z 118; rear pair X −22, Z 108; outer face on \|Y\| 71.3 | On printed bosses on the shell's inner skin, coaxial with the ports: a foam gasket ring in a pocket seals each port, two M2 × 4 thread-forming screws clamp the board, and a soldered GH lead replaces the header ([D-037](../../decisions.md#d-037), [CAD README](cad/README.md#microphone-mounts-d-037)) |
 
@@ -75,12 +75,34 @@ Separate prints fastened to the shell on the bench before it is lowered; see the
 
 The pod and trim mass is in the `BODY_SHELL_AND_PANELS` row; the screws and inserts are in the mixed fastener allowance.
 
+## Power button
+
+The red mushroom on the rear panel is the power button; **there is no E-stop** ([D-041](../../decisions.md#d-041)). It is the `PB` input of the LTC2954 latch on PCB-02, wired to a GH2 `J2-9`. A press also stops the motors in hardware ([power-boards.md §6](../../04-pcbs/power-boards.md#6-pcb-02-power-button-input-d-041)).
+
+| ID | Part | Qty | State |
+|---|---|---:|---|
+| BO-018 | 16 mm momentary red mushroom pushbutton, 1NO, metal head, IP65, with nut and gasket: [SparkFun-type 16 mm metal mushroom](https://www.tanotis.com/products/metal-mushroom-head-pushbutton-panel-mount-16mm-red) (Tanotis, ₹850). It must fit the existing well (Ø16.2 cut-out, 2 mm floor, mushroom ≤ Ø30 and ≤ 20.6 mm above the floor, ≤ 23.9 mm behind it) | 1 | CANDIDATE |
+
+It replaces the IDEC XA1E-BV3U02KT-R E-stop (CH-046). That part latches when pushed and has NC contacts, so it cannot drive the latch. The `W40` lead (GH2, single-ended, 150 mm) is in the harness buy list (HN-004).
+
+**Use:**
+- Hold about 0.5 s to turn on.
+- Any press while running stops the drive and head at once, in hardware. They stay stopped until C2 re-arms.
+- Hold 1 s for an orderly shutdown.
+- Hold about 5 s to force off.
+- In `CHARGE` the button does nothing.
+
+**Mounting.** It sits on the floor of the existing octagonal well, inside the amber bezel. It comes off with the rear panel after `W40` is unplugged at `J2-9`. The `POWER_BUTTON_MUSHROOM_16MM_AND_W40` mass row carries 15 g (`E`).
+
+**Fallback:** the Daier A16-11SM 16 mm momentary mushroom (Evelta, ₹118). It is plastic and rated for only 10,000 operations, so it is a bench part.
+
 ## Open before release
 
 1. **Order and measure the speaker:** order BO-001. Caliper and weigh it against Ø50 × 18 mm and 48 g, then update `BODY_AUDIO`. The element14 India price and stock were not read on 2026-10-03.
 2. **Bench test:** order BO-007 with BO-001 and check its SD pull-up on receipt. Listen first, then Pi 5 two-lane capture plus playback on one i2s0: `arecord -c 4` and `aplay` together, a tap test per mic port, and an hour with no xruns.
 3. **Boards:** schematics and layouts for PCB-05 and PCB-06 are not started. Settle whether 5 V reaches PCB-05 on W12 only, or also on the GH 10.
 4. **Pins:** approve `CA-06` CR-01 for GPIO22 (SDI1) and GPIO23 (`AMP_SD`).
-5. **CAD details:** the speaker flange bond and grille seal, a printed shell-boss coupon for the mic mount (seat, Ø1.6 pilots, skin witness marks, gasket seal by tap test), and supports for the front-panel speaker cup print.
+5. **CAD details:** the exposed-speaker flange bond and front-panel seal, a printed shell-boss coupon for the mic mount (seat, Ø1.6 pilots, skin witness marks, gasket seal by tap test), and supports for the front-panel speaker cup print.
 6. **Acoustics:** speaker-to-mic coupling (RP-05 `AR-60`), cooler and drive noise (`AR-61` to `AR-63`), and low-end response in the 15.5 mm cavity.
 7. **Ordering the boards:** quotes for the JLCPCB order (PCB-05 to PCB-08). IM73D122 mics come as cut tape or are sourced by JLCPCB, since reels are 5000.
+8. **Power button:** order BO-018. Check on receipt that the mushroom, the collar and the body behind the floor fit the well envelope, and that the contact is 1NO and momentary. Weigh it, then run bench PB-01 to PB-06.

@@ -41,15 +41,15 @@ shell_unit = [shell, *arches, *arch_hardware, *mic_parts]
 pcb05 = [leaf for group in audio.children if (group.label or "") == "PCB05_AUDIO_FRONT_END" for leaf in leaves(group)]
 pcb05_connectors = [leaf for leaf in leaves(body.connectors_and_exits()) if (leaf.label or "").startswith("PCB05_")]
 chassis = leaves(body.chassis_v1_reference())
-# The E-stop operator is carried by the rear service panel. It goes in with
-# that panel after the shell, even though the combined review shows its final
-# installed position in the chassis reference group.
+# The mushroom power button (D-041; the chassis reference still carries the old
+# XA1E E-stop) is carried by the rear service panel. It goes in with that panel
+# after the shell, even though the combined review shows its final position.
 chassis_at_shell_install = [
     part for part in chassis if not (part.label or "").startswith("ESTOP_XA1E_")
 ]
 electronics = [
     part for part in leaves(body.electronics())
-    if not (part.label or "").startswith("ESTOP_XA1E_")
+    if not (part.label or "").startswith(("ESTOP_XA1E_", "POWER_BUTTON_"))
 ]
 results = {
     "shell_connected_solids": len(shell.solids()),

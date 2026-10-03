@@ -28,13 +28,13 @@ front, rear = panels.children[:2]
 hardware = body.panel_mount_hardware().children
 frames = [part for part in hardware if "FRAME_WITH_BOSSES" in (part.label or "")]
 speaker = [part for part in leaves(body.body_audio()) if (part.label or "").startswith("SPEAKER_K50WP_")]
-estop = body.estop_switch()
+estop = body.power_button_mushroom()
 fixed = [
     *leaves(body.body_primary_frame()),
     *(part for part in leaves(body.chassis_v1_reference())
       if not (part.label or "").startswith("ESTOP_XA1E_")),
     *(part for part in leaves(body.electronics())
-      if not (part.label or "").startswith("ESTOP_XA1E_")),
+      if not (part.label or "").startswith(("ESTOP_XA1E_", "POWER_BUTTON_"))),
 ]
 results = {
     "panel_solids": {front.label: len(front.solids()), rear.label: len(rear.solids())},

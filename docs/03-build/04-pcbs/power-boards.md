@@ -7,6 +7,7 @@
 | Why this page exists | The RP-02 spec was written for a custom PCB-01, Pololu DRV8874 carriers and the Pololu #4804 motor. The build uses the bought TIFPS0629 ([D-019](../decisions.md#d-019)), Adafruit #3297 DRV8833 boards (D-019) and the MOT3001-6V230RPM ([D-003](../decisions.md#d-003)) |
 | Evidence labels | `D` datasheet, `E` estimate, `U` unknown, `W` measured. No `W` value exists yet |
 | Charge path | PCB-02's charger block and the new PCB-13 inlet are in [charge-path.md](charge-path.md) ([D-040](../decisions.md#d-040)) |
+| Power button | The rear mushroom is the `LTC2954` `PB` input and a hardware motor stop; there is no E-stop. `J2-9`, the arm-latch reset and the permit-chain change are in [§6](#6-pcb-02-power-button-input-d-041) ([D-041](../decisions.md#d-041)) |
 
 ## 1. Build baseline that replaces RP-02 assumptions
 
@@ -149,3 +150,50 @@ At a 16 µA module the maximum is 100 µA, which is 2.9% of 2.5 Ah per month. At
 - [ ] Schematic: 74LVC1G08 placement on PCB-10; INA2181 output routing to the C2 ADC (RP-02 §8 pins still open).
 - [x] Pack NTC inline break beside `J-PK` (CH-025): JST SM 2-way pair in the +Y channel, CAD reserve added, `check_harness.py` ALL PASS ([D-039](../decisions.md#d-039)).
 - [ ] PCB-02/PCB-03 feed entry changed by [D-039](../decisions.md#d-039): `BATBUS` reaches `J3-1` and `J2-1` separately from a star splice beside the fuse, and `J2-2` is deleted. Pinouts for every board connector are in [05-harness §5](../05-harness/README.md#5-pinouts); carry them into the schematics.
+- [ ] Power button (§6, [D-041](../decisions.md#d-041)): add `J2-9`, `R_WET` and the `INT` → `SYSTEM_ARM` reset to the PCB-02 schematic, and the 0 Ω link in place of the E-stop loop to PCB-03; delete `J3-7`. Bench PB-01 to PB-06.
+
+## 6. PCB-02 power-button input ([D-041](../decisions.md#d-041))
+
+The red mushroom on the rear panel is the power button. **There is no E-stop.** The button is the `PB` input of the RP-02 `LTC2954-2` latch (board-specs §4.1–4.2). The latch, its `ONT`/`PDT` capacitors, `KILL`/`INT` and the charge-time blocks are unchanged. This section lists what the build changes.
+
+**Button (BO-018).** A 16 mm momentary red mushroom pushbutton, 1NO, silver-alloy contacts. It replaces the IDEC XA1E-BV3U02KT-R, which is a push-lock, turn-reset E-stop with two NC contacts. That part cannot drive a latch that needs a momentary NO contact. The replacement must fit the existing well: Ø16.2 cut-out, 2 mm floor, mushroom Ø30 or less and 20.6 mm or less above the floor, 23.9 mm or less behind it.
+
+**`J2-9`.** A side-entry GH2 (SM02B-GHS-TB) on PCB-02's +Y edge, centred at Z 88.6, above `J2-8`. The plug exits +Y.
+
+| Pin | Net | On PCB-02 |
+|---|---|---|
+| 1 | `PB_SW` | 5.1 kΩ to `LTC2954` `PB`, 0.1 µF at `PB` (RP-02 values). **Add `R_WET` 10 kΩ from the latch `VIN` (`BATBUS`) to `PB_SW`** |
+| 2 | GND | Signal ground at the latch |
+
+**Why `R_WET`.** The `PB` pin has an internal 100 kΩ pull-up to 1.9 V, so a press passes about 19 µA (`D`, LTC2954 datasheet). That is a dry circuit for silver contacts. A 10 kΩ pull-up to `VIN` raises the press current to 0.84 mA at 8.4 V. It draws nothing while the button is released, because the contact is open. The datasheet recommends a 10 kΩ pull-up to `VIN` against board leakage (Fig. 9), and `PB` accepts up to 26.4 V "without consuming extra current" (`D`). The `OFF` budget is unchanged.
+
+**The press is also a hardware motor stop.** `INT` (open drain) also resets the `SYSTEM_ARM` latch on PCB-02. RP-02 cleared that latch on an E-stop assertion; the button press takes that place. A press in `OPERATE` therefore opens `Q_ARM` in the permit chain, and the `LTC4368` cuts the motor and head bus through its fast `UV` pull-down. No firmware is involved. The arm latch never re-arms on release (RP-02 F-13), so motion resumes only after a fresh arm request from C2.
+
+**Permit chain.** The E-stop NC contact at the head of the RP-02 chain (board-specs §5.2.3) is replaced by a fitted 0 Ω link on PCB-03. The chain becomes `5 V → 470 Ω → Q_ARM → Q_CHG → Q_EN → Q_C2H → Q_C2L → Q_BASE → PERMIT`. `MOTOR_PERMIT` loses its `E_STOP_OK` term (`BR-05`).
+
+**Connectors removed:**
+- PCB-03 `J3-7` and the `W22` lead (the E-stop loop and status).
+- `W38` and C3 `J10-11` (the E-stop status to C3) are not fitted.
+- The `E_STOP_STATUS` pin on `J3-8` is spare.
+
+**Press behaviour** (`ONT` 82 nF, `PDT` 0.82 µF, RP-02):
+
+| Action | Result |
+|---|---|
+| Hold about 0.5 s in `OFF` | `EN` asserts and `OPBUS` comes up |
+| Any press in `OPERATE` | After 32 ms `INT` goes low and stays low while held. The motor and head bus cut at once (hardware, above). **C2 firmware starts an orderly shutdown only if `INT_PB` stays low for 1 s or more**; a shorter press only stops motion |
+| Hold about 5.2 s | The latch releases `EN` itself, even if C2 is hung |
+| Any press in `CHARGE` | Nothing. `Q_kill` holds `KILL` low (RP-02) |
+
+The button has no light. The head display shows the power state.
+
+**Bench (before the panel is fitted):**
+
+| # | Test | Pass |
+|---|---|---|
+| PB-01 | Contact current on press, at `J2-9` pin 1 | 0.8–0.9 mA at 8.4 V |
+| PB-02 | Turn-on hold time, 20 presses each at 0.3 s and 0.8 s | 0.3 s never turns on; 0.8 s always does (`tDB,ON` + `tONT` ≈ 0.56 s, `E`) |
+| PB-03 | Press while the drive and head are moving, with C2 halted | Motor bus off within 50 ms of the press; no re-arm on release |
+| PB-04 | Firmware filter: 0.2 s and 1.5 s presses in `OPERATE` | 0.2 s stops motion only; 1.5 s gives an orderly shutdown |
+| PB-05 | 5.2 s force-off with C2 halted | `OPBUS` drops |
+| PB-06 | ESD on the mushroom and bezel, ±8 kV air, in `OFF` and `OPERATE` | No turn-on, no shutdown, no latch-up |

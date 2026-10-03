@@ -68,7 +68,7 @@ j28 = [p for p in connectors if (p.label or "").startswith("J2_8_") or (p.label 
 fixed = [
     *leaves(body.body_primary_frame()),
     *(p for p in leaves(body.chassis_v1_reference()) if not (p.label or "").startswith("ESTOP_XA1E_")),
-    *(p for p in electronics if not (p.label or "").startswith(("ESTOP_XA1E_", "PCB13_"))),
+    *(p for p in electronics if not (p.label or "").startswith(("ESTOP_XA1E_", "POWER_BUTTON_", "PCB13_"))),
 ]
 others = [p for p in connectors if p not in (corridor, *leads, *j28)]
 

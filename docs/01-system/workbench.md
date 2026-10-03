@@ -113,6 +113,8 @@ No exclusion zones, spotters, tethers, or marked floor geometry — those exist 
 
 Fit one to every motion rig. It must cut **motor bus power, not safety-supervision power**. Under registered `RP02-P2-REG-01`, the system motor-arm gate and a latching hardware E-stop are series permissions in the battery-only motor path; the selected DC-rated switching element must interrupt or command removal of the actual load/fault class. A separately accessible retained-pack isolation action remains required, but its connector family is not preselected.
 
+**The robot itself has no E-stop** in the build ([03-build D-041](../03-build/decisions.md#d-041)). Its rear red mushroom is the momentary power button, and a press resets the motor-arm latch in hardware. That does not replace the rig E-stop: every motion rig still needs its own latching E-stop that cuts motor power.
+
 ## Scored-test gate
 
 No test whose result gets recorded against a registered gate (`RP*-G*`) starts until:

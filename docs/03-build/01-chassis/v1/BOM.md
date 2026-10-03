@@ -133,10 +133,10 @@ These rows describe the **full-system electrical architecture** shown in whole-r
 | CH-043 | Branch converter PCB-04 | 1 assembly | HOLD |
 | CH-044 | C3 carrier PCB-10 | 1 assembly | HOLD |
 | CH-045 | ESP32-S3-DevKitC-1-N8 | 1 | CANDIDATE |
-| CH-046 | IDEC XA1E-BV3U02KT-R E-stop | 1 | CANDIDATE |
+| CH-046 | ~~IDEC XA1E-BV3U02KT-R E-stop~~: no E-stop; the rear mushroom is the momentary power button BO-018 ([D-041](../../decisions.md#d-041)) | — | SUPERSEDED |
 | CH-047 | C3 carrier M2.5 screw and insert | 4 sets | HOLD |
 
-`PCB-02` manages charge and system power; `PCB-03` provides motor gating and power distribution; `PCB-04` supplies protected voltage rails; `PCB-10` carries the C3 controller. The separate ESP32-S3 DevKit and E-stop are part of that integrated electrical system. The [connector and wire schedule](../../../02-prototypes/RP-06-cad/connector-schedule.md) describes the full-system harness, not a minimal bench harness. Board positions appear in the full Layout 02 model, but not in the chassis v1 filtered STEP. Body and head mass stand-ins are test fixtures and are excluded from installed quantities.
+`PCB-02` manages charge and system power; `PCB-03` provides motor gating and power distribution; `PCB-04` supplies protected voltage rails; `PCB-10` carries the C3 controller. The separate ESP32-S3 DevKit and the rear power button are part of that integrated electrical system; there is no E-stop ([D-041](../../decisions.md#d-041)). The [connector and wire schedule](../../../02-prototypes/RP-06-cad/connector-schedule.md) describes the full-system harness, not a minimal bench harness. Board positions appear in the full Layout 02 model, but not in the chassis v1 filtered STEP. Body and head mass stand-ins are test fixtures and are excluded from installed quantities.
 
 ## Release blockers by stage
 

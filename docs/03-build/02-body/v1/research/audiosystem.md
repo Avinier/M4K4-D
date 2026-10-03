@@ -268,23 +268,23 @@ Body model coordinates, mm, from [`body_v1_model.py`](../cad/body_v1_model.py).
 
 | Item | Placement |
 |---|---|
-| Speaker | Centre (85.5, 0, 99), axis +X, face at X 95 (`SPEAKER_FRONT_X`) |
-| Front panel seat | Integral annular cup on the front service panel with a slotted 1.8 mm grille; the speaker flange is bonded behind it. The cup needs print supports |
-| Back cavity | Sealed, Ø54, X 77–92.5 (15.5 mm deep). It was cut from the original 34 mm because that ran through the compute tray and Pi 5 |
+| Speaker | Centre (90.5, 0, 99), axis +X, face at X 100 (`SPEAKER_FRONT_X`) |
+| Front panel seat | Integral annular cup on the front service panel with an unobstructed Ø46 aperture. The exposed speaker face is recessed 2.6 mm behind the lip; its flange is bonded and sealed behind the lip across a modeled 0.8 mm annulus. The cup needs print supports |
+| Back cavity | Ø54 speaker clearance reserve, X 82–97.5 (15.5 mm deep), shifted forward with the speaker to clear the compute tray and Pi 5; actual rear enclosure sealing remains to be verified |
 | Mic ports | Ø3 bores through the side walls. FRONT_L/R at (54, ±70, 118); REAR_L/R at (−22, ±70, 108) |
 | Mic boards | PCB-06 outer face on \|Y\| 70 against the port boot (§3). Front pair is 41 mm behind the speaker face along X and ±70 mm off the centreline |
-| Mass row | `BODY_AUDIO` 60 g at (75.5, 0, 101.9): speaker 48, PCB-05 ~6, mic boards ~2, cables ~4 (`E`) |
+| Mass row | `BODY_AUDIO` 61 g at (78.4, 0, 102.1): speaker 48, PCB-05 ~6, mic boards ~2, cables ~4 (`E`) |
 
 **Capture rate:** 48 kHz, decimated to 16 kHz in software where needed. At 48 kHz the ADAU7002 clocks the mics at 3.072 MHz, inside the IM73D122 high-performance window; at 16 kHz the 1.024 MHz clock falls between its power-mode windows (`D`).
 
-**Acoustic trade-off:** the short cavity raises the sealed-box resonance above the driver's 300 Hz fs. Speech and chirps sit above it; music bass does not (RP-05 `AR-36`, `U`).
+**Acoustic trade-off:** the open front removes grille obstruction, while the short rear clearance reserve and unverified enclosure seal leave low-end response uncertain. Measure the assembled response before treating the nominal 300 Hz driver resonance as the installed resonance (RP-05 `AR-36`, `U`).
 
 **Open acoustic items:**
 
 1. Low-end response of the 15.5 mm cavity (bench listen at a capped gain, D-034).
 2. Speaker-to-mic coupling, `AR-60`. Estimate about 110 dB SPL at 5 cm on axis at 1.75 W, under the mics' 122 dB AOP (`E`).
 3. Pi 5 cooler noise at the mics, `AR-61`; drive and servo noise, `AR-62/63` (RP06-G03 acoustic matrix).
-4. Speaker flange bond and grille seal method; mic port boot seal.
+4. Exposed speaker flange bond, rear enclosure and panel-to-shell seal method; mic port boot seal.
 5. Caliper and weigh the received speaker against Ø50 × 18 mm and 48 g, then update `BODY_AUDIO`.
 
 ---
