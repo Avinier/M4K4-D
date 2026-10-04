@@ -26,7 +26,8 @@ def overlap(a, b):
         ab.max.Y <= bb.min.Y or bb.max.Y <= ab.min.Y or
         ab.max.Z <= bb.min.Z or bb.max.Z <= ab.min.Z):
         return 0.0
-    return round((a & b).volume, 4)
+    common = a & b
+    return 0.0 if common is None else round(common.volume, 4)
 
 
 main, cassette = leaves(body.body_primary_frame())

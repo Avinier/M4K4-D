@@ -13,7 +13,7 @@ This directory follows the chassis v1 CAD layout: an editable model and STEP ent
 | `check_mic_mounts.py` | Shell-mounted mic boards: seat, gasket, sound path, screw depth, rail clearance and clashes (D-037). |
 | `check_charge_inlet.py` | Rear-panel charge inlet PCB-13: pocket depth, flush mouth, maximum-overmold fit, seat, screw engagement, clashes, PCB-02 clearance and the panel-removal sweep (D-040; about 6 min). |
 | `check_compute_mount.py` | Compute tray, Pi 5 and Active Cooler retention, frame lugs, tray-screw driver access and the front insertion sweep (D-042). |
-| `check_cooling_path.py` | Enclosure fan (BO-040 4010), +Y intake grille and collar, rear vent slots, shell lowering past the fan, mic-port distances and a first-order thermal estimate (D-042). |
+| `check_cooling_path.py` | Enclosure fan (BO-040 3010, D-043), +Y intake grille and collar, rear vent slots, shell lowering past the fan, mic-port distances and a first-order thermal estimate (D-042). |
 | `check_power_button.py` | Rear-panel mushroom power button: well clearance, PCB-02 clearance, W40 lead and `J2-9` plug clashes and the panel-removal sweep (D-041; about 5 min). |
 | `check_body_layout.py` | CAD-volume mass/CoM, body axes/envelope, and whole-robot stability-screen audit. |
 | `write_outputs.py` | Writes body dimensions, frames, and a partial body mass-register report to `generated/`. |
@@ -105,17 +105,17 @@ Assembly: screw the Pi to the tray on the bench, fit the cooler, then slide the 
 - the driver path to each tray screw;
 - the front insertion sweep, with the vendor Pi and cooler leaves swept as their bounding boxes (booleans on their moved vendor solids stall).
 
-### Cooling path (D-042)
+### Cooling path (D-042, D-043)
 
 Air enters through a grille in the +Y side wall and leaves through the open floor and two slot grilles in the rear panel.
-- **Fan:** BO-040, a generic 2-wire DC 5 V 4010 double-ball fan, 40 × 40 × 10, centred at X 24, Z 105.5. The builder chose it over the Noctua NF-A4x10. It sits on a web of the body frame between the +Y side rails (`FAN_WEB_*`), with its intake face at Y 68.9. Two 12 mm self-tapping screws (BO-041), driven from inboard through the web into the fan frame, hold it, so its outer face stays clear for the shell to pass. Its hole pattern (32 mm), hole size, airflow, noise and mass are unmeasured (`E`).
+- **Fan:** BO-040, the photo-derived 2-wire DC 5 V 3010 hydraulic fan from [`purchased/dc5v_3010_hydraulic_usb_fan.step`](purchased/dc5v_3010_hydraulic_usb_fan.step), 30 × 30 × 10, centred at X 17.5, Z 107, midway between the +Y mic ports. D-043 replaced the 4010 at X 24, whose grille edge was 14 mm from FRONT_L. It sits on a web of the body frame between the +Y side rails (`FAN_WEB_*`), with its intake face at Y 68.9. Two 12 mm self-tapping screws (BO-041), driven from inboard through the web into the fan frame, hold it at (5.5, 95) and (29.5, 119), so its outer face stays clear for the shell to pass. Their heads sit 1.4 mm under and 0.9 mm forward of the yaw servo; the other two holes are behind it. Its modeled hole pattern (24 mm), hole size, airflow, noise and mass are unmeasured (`E`); verify the purchased fan before fabrication.
 - **Switching:** it has no PWM or tach, so it runs on/off. A low-side MOSFET on PCB-09 is switched by Pi GPIO24 under the standard `gpio-fan` overlay, with a threshold to be set on the bench. It is fed from the 40-pin header's 5 V.
 - **Wiring (`W41`):** the fan's own lead, cut to about 80 mm and re-crimped into its XH2.54-2P housing, runs from the fan's top-front corner above PCB-09's top-entry plugs to `J9-4` on PCB-09 (`HARNESS_W41_FAN_LEAD_*`, `C0_LINK_ADAPTER_J94_FAN_XH2_PLUG_RESERVE`).
-- **Side grille:** vertical 2.5 mm slots inside R18.5, giving 605 mm² of free area. They stay out of the wheel-arch pod band, and a printed collar (R19.5–21, edge at Y 70.5) limits recirculation round the fan face.
+- **Side grille:** vertical 2.5 mm slots inside R14, giving 373 mm² of free area. They stay out of the wheel-arch pod band, and a printed collar (R15–16.5, edge at Y 70.5, 2.55 mm from the 90° pod boss) limits recirculation round the fan face.
 - **Rear slots:** eight 2.5 × 23 mm slots beside the button well, 460 mm² in all, inside the panel-frame aperture.
 - **Floor:** at least 10,000 mm² of free horizontal area, so the inlet is not the limit.
 
-The grille's edge is 14 mm from the FRONT_L port (33 mm centre to port) and 28 mm from REAR_L. The rear slots are 42.7 mm from REAR_L/R. The FRONT_L pigtail's first 10 mm crosses the top of the gap between the fan face and the collar, 0.4 mm off the fan face; dress it outboard when the shell goes on.
+The grille's edge is 24.1 mm from the FRONT_L port (38.6 mm centre to port) and 25.9 mm from REAR_L (40.0 mm). The rear slots are 42.7 mm from REAR_L/R. No mic pigtail crosses the intake path.
 
 `check_cooling_path.py` writes `generated/cooling-path.json`. It checks:
 - fan, screw, `W41` and grille clashes;
@@ -125,14 +125,16 @@ The grille's edge is 14 mm from the FRONT_L port (33 mm centre to port) and 28 m
 - the mic-port distances;
 - a first-order thermal estimate (`E`).
 
-That estimate assumes 0.44 W/K through the walls. BO-040 has no published curve, so it uses a typical 4010 5 V listing class (about 5.5 CFM free air, 4 mm H₂O shut-off) and a half-flow sensitivity case. At 8.5 W (Pi 6 W plus converters) it gives an internal air rise of:
+That estimate assumes 0.44 W/K through the walls. BO-040 has no published curve, so it uses a typical 3010 5 V listing class (about 3 CFM free air, 3 mm H₂O shut-off) and a half-flow sensitivity case. At 8.5 W (Pi 6 W plus converters) it gives an internal air rise of:
 
 | Fan | Rise |
 |---|---|
 | Sealed, no vents | 19.3 K |
-| Vents only, fan off | 14.7 K |
-| Fan on, half the listing-class flow | 7.0 K |
-| Fan on, listing-class flow | 4.3 K |
+| Vents only, fan off | 15.2 K |
+| Fan on, half the listing-class flow | 10.1 K |
+| Fan on, listing-class flow | 6.9 K |
+
+The 4010 it replaced gave 7.0 K and 4.3 K with the fan on (D-042).
 
 These numbers compare options; the bench measures the real ones, including the fan's real airflow.
 
@@ -174,7 +176,7 @@ The shell's 2.4 mm inset is horizontal, so its 45° facets are 1.7 mm normal to 
 
 ## Mass and physics refresh
 
-`check_body_layout.py` derives the selected shell/panels at 248.3 g (including the D-037 mic bosses, the D-040 charge-inlet pad and the D-042 fan grille, collar and rear vent slots) and the connected frame, cassette and modeled joint hardware at 178.4 g (with the D-042 fan web and tray supports) from their CAD volumes and centroids. The estimate uses 1.20 g/cm³ effective PETG for skins, frames and the conservative structural print; 0.571 g/cm³ for wheel arches; and 7.85/8.50 g/cm³ for modeled steel/brass. The earlier Layout 02 mass rows (285.6 g shell/panels and 335 g frame) no longer described the authored body-v1 solids. The revised whole-robot register, with the D-042 compute tray and fixings (29.5 g, never counted before) and the enclosure fan (15 g, `E`), is 2,483.2 g at CoM (+18.27, +0.63, 105.62) mm. Neutral forward-launch tip acceleration is 1.697 m/s² versus the accepted 1.582 m/s² paper screen; a conservative bound over the current balanced head's yaw, pitch and roll centroids is 1.694 m/s². The `shell_symmetric_about_y` check now allows 0.5 mm, because the +Y fan grille is deliberately one-sided. The head yaw datum remains (16, 0, 140) mm and its sweep floor remains 19 mm above the body roof. `generated/body-layout-checks.json` records the component breakdown, assumptions and checks.
+`check_body_layout.py` derives the selected shell/panels at 248.7 g (including the D-037 mic bosses, the D-040 charge-inlet pad, the D-043 3010 fan grille and collar and the D-042 rear vent slots) and the connected frame, cassette and modeled joint hardware at 178.5 g (with the D-043 fan web and the D-042 tray supports) from their CAD volumes and centroids. The estimate uses 1.20 g/cm³ effective PETG for skins, frames and the conservative structural print; 0.571 g/cm³ for wheel arches; and 7.85/8.50 g/cm³ for modeled steel/brass. The earlier Layout 02 mass rows (285.6 g shell/panels and 335 g frame) no longer described the authored body-v1 solids. The revised whole-robot register, with the D-042 compute tray and fixings (29.5 g, never counted before) and the D-043 3010 enclosure fan (10 g, `E`), is 2,478.7 g at CoM (+18.22, +0.52, 105.62) mm. Neutral forward-launch tip acceleration is 1.693 m/s² versus the accepted 1.582 m/s² paper screen; a conservative bound over the current balanced head's yaw, pitch and roll centroids is 1.689 m/s². The `shell_symmetric_about_y` check now allows 0.5 mm, because the +Y fan grille is deliberately one-sided. The head yaw datum remains (16, 0, 140) mm and its sweep floor remains 19 mm above the body roof. `generated/body-layout-checks.json` records the component breakdown, assumptions and checks.
 
 The selected shell and printed frame contribute about 0.00261 kg·m² about the drive-axle vertical axis under those material assumptions, versus about 0.00291 kg·m² for their earlier CAD shapes under the same assumptions. This is a roughly 10% reduction in that subset's yaw inertia; it is not the whole-robot yaw inertia or the head yaw-servo load, because the shell and frame do not rotate with the head.
 

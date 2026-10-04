@@ -46,7 +46,8 @@ The central record of every decision and change made during the build phase. New
 | [D-039](#d-039) | 2026-10-04 | Harness (W01–W39, J-PK, J2-1, J3-1, J3-4, J8-1; CH-025–CH-027, CH-041, CH-042, CH-083; HN-001–HN-010 registered) | Fused pack feed split at butt splices beside the fuse (W04, J2-2 deleted); J-PK is the isolator; NTC break is a JST SM 2p in the +Y channel; Micro-Fit+ only on AWG16/18 UL1061, Micro-Fit 3.0 on AWG22, pre-crimped GH; J3-4/J8-1 to Micro-Fit 3.0; full wire list, pinouts and service breaks in 05-harness | ACTIVE; DESIGN; HOLD on housing PNs, crimp qualification and the first harness build |
 | [D-040](#d-040) | 2026-10-04 | Charge path (PCB-02, PCB-13 registered; CH-041, HN-003; BO-015–BO-017 registered) | Charge inlet moves to a panel-mounted board PCB-13 (GCT USB4140, TVS2200, ESDA25W, STUSB4500, input P-FET) in a pocket that takes any compliant plug; charger straps closed: D+ tied to D−, BATP sense, TS 8.45 k / 324 k for 0–50 °C, 20 V-rated input | ACTIVE; DESIGN; HOLD on schematic, NVM image and bench CP-01 to CP-14 |
 | [D-041](#d-041) | 2026-10-04 | Body / power button; E-stop removed (BO-018 registered; CH-041, CH-042, CH-046, HN-001, HN-004; W40, J2-9; W22, J3-7, W38 removed) | No E-stop: the rear red mushroom becomes the momentary power button (LTC2954 `PB`, GH2 `J2-9` on PCB-02's +Y edge, 10 k wetting pull-up); a press also resets `SYSTEM_ARM`, so it stops the motors in hardware; the latching NC IDEC XA1E is replaced by a 16 mm momentary 1NO mushroom in the same well | ACTIVE; DESIGN; HOLD on the received part's fit in the well and bench PB-01 to PB-06 |
-| [D-042](#d-042) | 2026-10-04 | Body / compute retention and cooling (BO-033–BO-042; CH-084; W41, J9-4) | Pi 5 screwed to a vented three-point compute tray (rear −Y lug, front −Y column, rear +Y block); Active Cooler on its push pins with tip keep-outs; BO-040 2-wire 4010 side intake fan on a +Y frame web, switched on/off by Pi GPIO24 through a MOSFET on PCB-09 (`J9-4`, `gpio-fan`); +Y shell grille and collar, rear-panel vent slots, open floor as the outlet | ACTIVE; HOLD on the bench thermal test, the AR-61 noise check, CR-02 and coupons |
+| [D-042](#d-042) | 2026-10-04 | Body / compute retention and cooling (BO-033–BO-042; CH-084; W41, J9-4) | Pi 5 screwed to a vented three-point compute tray (rear −Y lug, front −Y column, rear +Y block); Active Cooler on its push pins with tip keep-outs; BO-040 2-wire 4010 side intake fan on a +Y frame web, switched on/off by Pi GPIO24 through a MOSFET on PCB-09 (`J9-4`, `gpio-fan`); +Y shell grille and collar, rear-panel vent slots, open floor as the outlet | ACTIVE; fan size and position superseded by D-043; HOLD on the bench thermal test, the AR-61 noise check, CR-02 and coupons |
+| [D-043](#d-043) | 2026-10-04 | Body / enclosure fan vs mic ports (BO-040, BO-041; W41) | The +Y enclosure fan shrinks from a 4010 to the purchased 3010 hydraulic model and moves to X 17.5, Z 107, midway between the +Y mic ports: grille edge 24.1 mm from FRONT_L (was 14) and 25.9 mm from REAR_L; mic array unchanged | ACTIVE; DESIGN; HOLD on measured mounting holes, the bench thermal test and the AR-61 noise check |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -1609,3 +1610,62 @@ This entry changed:
 - **Push-pin tips:** measure the Active Cooler pin-tip protrusion against the 3.5 mm keep-out.
 - **Prints:** the tray (flatness and boss height), the lug and insert coupons, and the shell collar's support in the roof-down print (DfAM to re-measure).
 - **Fan current:** measure BO-040's running and start current against the MOSFET and the Pi 5 V rail (it draws from the 40-pin header, not the fan header).
+
+## D-043
+
+**2026-10-04 · Body / enclosure fan against the mic ports (BO-040, BO-041; W41) · ACTIVE; DESIGN in CAD, checks green; HOLD on measured mounting holes, the bench thermal test and the AR-61 noise check**
+
+**Decision:** the builder rejected the D-042 fan position, which put FRONT_L right beside the fan. The +Y enclosure fan becomes the purchased **3010 hydraulic fan** (30 × 30 × 10 mm, 2-wire, DC 5 V, USB-A lead that is cut and reterminated for W41). It sits **midway between the +Y mic ports**, centred at X 17.5, Z 107. The mic array (D-036/D-037) does not move. Everything else in D-042 stands: the GPIO24 on/off switch on PCB-09, `J9-4`, `W41`, the rear slots and the open floor.
+
+**Why:**
+
+- **Too close.** The 4010 grille's edge was 14 mm from the FRONT_L port and 28 mm from REAR_L. FRONT_L would hear the blade noise and the intake turbulence across its port, and the array's +Y pair would be unbalanced.
+- **A 4010 cannot move.** The +Y wall is boxed in: the wheel-arch pod band below (R ≤ 54 about the axle), the upper side rail above (Z 126), and the mic ports at X 54 and X −22. A 4010 at the midpoint (X 16) overlaps the 90° pod screw boss by 1.6 mm. There is no room under the compute tray for a floor-intake fan: the harness trunks and plug layers fill Z 75–86.
+- **Moving the mics was the alternative.** Moving the front pair forward to X 78 would give 37 mm, but takes the array's centre off the yaw axis (X 28 vs 16) and brings the mics toward the speaker. The builder chose the smaller fan.
+- **Position.** At X 17.5 the diagonal screw pair clears the yaw servo (X 6–26, Z 99–133). The bottom-left head is 1.4 mm under the servo and the top-right head 0.9 mm forward of it. X 16 would put a head on the servo either way round.
+
+**Geometry** (`body_v1_model.py`):
+
+| Item | D-042 (4010) | D-043 (3010) |
+|---|---|---|
+| Fan centre (X, Z) | 24, 105.5 | 17.5, 107 |
+| Hole pattern | 32 mm (`E`) | 24 mm, Ø3.3 (`E`) |
+| Screws (BO-041) | (8, 89.5), (40, 121.5) | (5.5, 95), (29.5, 119) |
+| Frame web X / opening | 4–44 / R18.5 | 1–33 / R14 |
+| Grille / free area | R18.5 / 605 mm² | R14 / 373 mm² |
+| Collar | R19.5–21 | R15–16.5, 2.55 mm from the pod boss |
+| `W41` | from X 44 | from the fan's top-front corner (X 32.5), forward of the web end (X 33), down to `J9-4` |
+| Grille edge to FRONT_L / REAR_L | 14.0 / 28.4 mm | 24.1 / 25.9 mm |
+
+The FRONT_L pigtail no longer crosses the intake path, so `check_cooling_path.py` drops that allowance.
+
+**Cost: airflow.** A 3010 of this class moves about 3 CFM against about 5.5 CFM (`E`, both unmeasured). The first-order estimate at 8.5 W (Pi 6 W plus converters) is:
+
+| Case | 4010 (D-042) | 3010 |
+|---|---|---|
+| Fan on, listing-class flow | 4.3 K | 6.9 K |
+| Fan on, half that flow | 7.0 K | 10.1 K |
+| Vents only, fan off | 14.7 K | 15.2 K |
+
+That is still well under the vents-only case. With the Active Cooler holding the SoC 30–40 K over its local air, a 30–35 °C room stays under the 80 °C throttle at typical load, but the margin is about 2.5 K smaller. The bench thermal test decides.
+
+**CAD and checks:**
+- `check_cooling_path.py`: **ALL PASS**, with no fan, screw, `W41` or shell clash, a clean shell-lowering sweep and an open intake path. Its mic-distance gate rises from 12 mm to 22 mm.
+- `check_body_layout.py`: all checks true after the mass rows were re-measured:
+  - shell and panels 248.3 → 248.7 g;
+  - frame 178.4 → 178.5 g;
+  - `ENCLOSURE_FAN_3010_AND_W41` 15 → 10 g (`E`).
+  - Whole robot 2,483.2 → 2,478.7 g, CoM (+18.22, +0.52, 105.62) mm. a_tip 1.693 m/s² (was 1.697) against the 1.582 minimum; head-pose bound 1.689. The harness allowance must stay forward of X −10.0 mm (was −11.3).
+- `check_body_frame_fit.py`: clean. It also now treats an empty boolean (`None`) as no overlap; it crashed on that before.
+- The dedicated photo-derived fan STEP and body-v1 STEP were rebuilt; their fan groups validate as closed positive solids. Not run: `check_shell_frame_fit.py` (about 70 min; the cooling check covers the shell lowering past the fan), `check_body_panel_fit.py`, and the chassis `check_layout.py`.
+
+**BOM changed:** BO-040 is now the purchased hydraulic 3010. BO-041 is sized to the estimated Ø3.3 hole (`E`). [`BOM.csv`](BOM.csv), [`02-body/v1/BOM.md`](02-body/v1/BOM.md) and the [CAD README](02-body/v1/cad/README.md#cooling-path-d-042-d-043) are updated.
+
+**Unverified:** the purchased fan's hole pitch and size, airflow, noise, current and mass. The noise check (`AR-61`) still applies: compare FRONT_L/REAR_L against the −Y pair with the fan on. A small 3010 runs at a higher blade-pass frequency than a 4010, so check the spectrum, not just the level.
+
+**Next:** on receipt, measure the holes and update `ENCLOSURE_FAN_HOLE_*` and `FAN_SCREW_POINTS`, then run the bench thermal and noise tests from D-042.
+
+**Fan bought (added 2026-10-04, builder):** BO-040 is the [Robu.in DC5V 3010 Hydraulic Cooling Fan with USB](https://oldwp.robu.in/product/dc-5v-3010-hydraulic-cooling-fan-with-usb-size303010mm/): 30 × 30 × 10 mm, hydraulic bearing, 100 mA max, 90 cm lead with a USB-A plug.
+- **Connector:** the USB-A plug is cut off. The lead is cut to about 80 mm and crimped into a new XH2.54-2P housing for `J9-4` (BO-042). Fan+ (red) goes to pin 1. Check polarity before crimping.
+- **Hole pitch:** the listing says 26 mm. Other sellers of the same fan say 25 mm, and the usual 3010 standard is 24 mm. The CAD keeps 24 mm until the received fan is measured. 26 mm would move the screws to (4.5, 94) and (30.5, 120). They still clear the yaw servo (1.9 mm), but the top-right head would reach X 33.1, so the web end and `W41` would move about 1 mm forward.
+- **STEP:** there is no vendor model. The body imports a [photo-derived 3010 STEP](02-body/v1/cad/purchased/dc5v_3010_hydraulic_usb_fan.step) from `purchased/`. Its mounting holes are estimated. A separate generic step.parts 30 × 30 × 10 fan (24 mm pitch) may be used for comparison but is not imported.

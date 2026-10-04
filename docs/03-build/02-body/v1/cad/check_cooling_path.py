@@ -31,12 +31,12 @@ ROOM_K = 308.0
 CD = 0.6
 FLOOR_INLET_MM2 = 10000.0  # measured 2026-10-04: >= 11,600 mm2 free in horizontal sections Z 31-90; rounded down
 STACK_HEIGHT_M = 0.071  # floor (Z ~35) to the outlet centroid (Z ~106)
-# BO-040 is a generic 2-wire DC 5 V 4010 double-ball fan with no published curve. These
+# BO-040 is a 2-wire DC 5 V 3010 hydraulic fan (D-043) with no published curve. These
 # are typical listing-class figures for such fans (E, unmeasured): replace them with the
 # bench measurement. The fan is switched on/off (gpio-fan), so it runs at full speed or not
 # at all; the 50 % row is a sensitivity case for a weaker fan than the listing class.
-FAN_Q_MAX_M3_S = 9.3 / 3600.0  # about 5.5 CFM free air
-FAN_P_MAX_PA = 4.0 * 9.81  # about 4 mm H2O shut-off
+FAN_Q_MAX_M3_S = 5.1 / 3600.0  # about 3.0 CFM free air
+FAN_P_MAX_PA = 3.0 * 9.81  # about 3 mm H2O shut-off
 FAN_FLOW_FACTORS = {"fan_on_half_listing_flow": 0.5, "fan_on_listing_flow": 1.0}
 
 
@@ -119,12 +119,7 @@ results["w41_vs_fixed_mm3"] = clashes(w41, [p for p in fixed if not label(p).sta
 y_fan = body.ENCLOSURE_FAN_Y[1]
 path = body._axial_bore_y(body.FAN_GRILLE_RADIUS, y_fan + 0.05, 95.0, cx, cz) & body._shell_outer()
 path.label = "FAN_INTAKE_AIR_PATH"
-# The FRONT_L pigtail's first 10 mm crosses the top of the gap between the fan face and the
-# collar (0.4 mm off the fan face, 0.2 mm inside the collar edge): reported, dressed on assembly.
-PATH_ALLOWED = ("PDM_MIC_FRONT_L_GH4_PIGTAIL_RESERVE",)
-path_hits = clashes([path], [p for p in fixed if p not in pods])
-results["intake_path_vs_parts_mm3"] = {k: v for k, v in path_hits.items() if not k.endswith(PATH_ALLOWED)}
-results["intake_path_allowed_mm3"] = {k: v for k, v in path_hits.items() if k.endswith(PATH_ALLOWED)}
+results["intake_path_vs_parts_mm3"] = clashes([path], [p for p in fixed if p not in pods])
 results["intake_path_skin_blocked_fraction"] = round(overlap(path, shell) / path.volume, 3)
 results["grille_vs_pods_mm3"] = clashes([grille], pods)
 pod_boss = body._axial_bore_y(body.WHEEL_ARCH_BOSS_RADIUS, 60.0, 95.0, 0.0, body.AXLE_Z + body.WHEEL_ARCH_FASTENER_RADIUS)
@@ -204,7 +199,7 @@ web_area = math.pi * body.FAN_WEB_OPENING_RADIUS**2
 thermal = {"assumptions": {
     "wall_conductance_W_K": UA_WALLS_W_K, "floor_inlet_mm2": FLOOR_INLET_MM2, "orifice_cd": CD,
     "collar_leak_mm2": round(leak, 1), "fresh_air_fraction": round(fresh, 3),
-    "fan_curve": "BO-040 generic 4010 5 V, E listing class: linear between 9.3 m3/h free and 4.0 mm H2O shut-off; the half-flow case scales flow by 0.5 and pressure by 0.25",
+    "fan_curve": "BO-040 hydraulic 3010 5 V, E listing class: linear between 5.1 m3/h free and 3.0 mm H2O shut-off; the half-flow case scales flow by 0.5 and pressure by 0.25",
     "room_K": ROOM_K, "status": "E: estimate for comparing options; measure on the bench",
 }}
 flows = {}
@@ -246,6 +241,6 @@ assert results["fan_face_to_collar_mm"] >= 0.5
 assert results["fan_seated_on_web_gap_mm"] <= 0.01
 assert results["rear_slots_cut_panel_mm3"] > 0.0
 assert min(d["rear_slot_openings_mm"] for d in dist.values()) >= 40.0, "rear slots too close to a mic port"
-# The side grille sits between the +Y ports; its edge is 14 mm from FRONT_L (AR-61 bench check, D-042).
-assert min(d["side_grille_edge_mm"] for d in dist.values()) >= 12.0, "side grille moved closer to a mic port"
+# The side grille sits midway between the +Y ports, its edge about 24 mm from each (D-043; was 14 mm from FRONT_L).
+assert min(d["side_grille_edge_mm"] for d in dist.values()) >= 22.0, "side grille moved closer to a mic port"
 print("ALL PASS")
