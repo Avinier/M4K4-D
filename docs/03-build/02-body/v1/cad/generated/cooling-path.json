@@ -1,0 +1,81 @@
+{
+  "side_grille_free_area_mm2": 605.0,
+  "rear_slots_free_area_mm2": 460.0,
+  "fan_vs_fixed_mm3": {},
+  "fan_vs_shell_mm3": {},
+  "fan_face_to_collar_mm": 1.6,
+  "fan_seated_on_web_gap_mm": 0.0,
+  "w41_vs_fixed_mm3": {},
+  "intake_path_vs_parts_mm3": {},
+  "intake_path_allowed_mm3": {
+    "FAN_INTAKE_AIR_PATH:PDM_MIC_FRONT_L_GH4_PIGTAIL_RESERVE": 1.018
+  },
+  "intake_path_skin_blocked_fraction": 0.12,
+  "grille_vs_pods_mm3": {},
+  "grille_and_collar_vs_bosses_mm3": {},
+  "collar_to_bosses_mm": {
+    "WHEEL_ARCH_90DEG_BOSS": 2.54,
+    "FRONT_L_MIC_BOSS": 1.36
+  },
+  "rear_slots_vs_panel_frame_and_shell_mm3": {},
+  "rear_slots_cut_panel_mm3": 1104.0,
+  "mic_port_distances": {
+    "FRONT_L": {
+      "side_grille_edge_mm": 14.0,
+      "side_grille_centre_mm": 33.0,
+      "rear_slot_openings_mm": 108.4
+    },
+    "FRONT_R": {
+      "side_grille_edge_mm": 130.8,
+      "side_grille_centre_mm": 149.6,
+      "rear_slot_openings_mm": 108.4
+    },
+    "REAR_L": {
+      "side_grille_edge_mm": 28.4,
+      "side_grille_centre_mm": 46.5,
+      "rear_slot_openings_mm": 42.7
+    },
+    "REAR_R": {
+      "side_grille_edge_mm": 133.1,
+      "side_grille_centre_mm": 153.1,
+      "rear_slot_openings_mm": 42.7
+    }
+  },
+  "shell_lowering_sweep_clashes": {},
+  "thermal_estimate": {
+    "assumptions": {
+      "wall_conductance_W_K": 0.44,
+      "floor_inlet_mm2": 10000.0,
+      "orifice_cd": 0.6,
+      "collar_leak_mm2": 196.0,
+      "fresh_air_fraction": 0.755,
+      "fan_curve": "BO-040 generic 4010 5 V, E listing class: linear between 9.3 m3/h free and 4.0 mm H2O shut-off; the half-flow case scales flow by 0.5 and pressure by 0.25",
+      "room_K": 308.0,
+      "status": "E: estimate for comparing options; measure on the bench"
+    },
+    "fan_flow_l_s": {
+      "fan_on_half_listing_flow": 0.888,
+      "fan_on_listing_flow": 1.776
+    },
+    "internal_air_rise_K": {
+      "light: Pi 4 W + converters 2.5 W": {
+        "fan_on_half_listing_flow": 5.3,
+        "fan_on_listing_flow": 3.3,
+        "fan_off_vents": 11.6,
+        "sealed_no_vents": 14.8
+      },
+      "typical: Pi 6 W + 2.5 W": {
+        "fan_on_half_listing_flow": 7.0,
+        "fan_on_listing_flow": 4.3,
+        "fan_off_vents": 14.7,
+        "sealed_no_vents": 19.3
+      },
+      "heavy: Pi 8 W + 3 W": {
+        "fan_on_half_listing_flow": 9.0,
+        "fan_on_listing_flow": 5.5,
+        "fan_off_vents": 18.5,
+        "sealed_no_vents": 25.0
+      }
+    }
+  }
+}

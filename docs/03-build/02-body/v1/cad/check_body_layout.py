@@ -127,7 +127,8 @@ def main():
     checks = {
         "shell_and_panels_match_mass_register": matches("BODY_SHELL_AND_PANELS", shell_props),
         "frame_and_joints_match_mass_register": matches("BODY_PRIMARY_FRAME", frame_props),
-        "shell_symmetric_about_y": abs(shell.center().Y) < 0.01,
+        # D-042: the +Y fan-intake grille and collar make the shell slightly asymmetric.
+        "shell_symmetric_about_y": abs(shell.center().Y) < 0.5,
         "head_yaw_axis_unchanged": M.HEAD_YAW_DATUM == (16.0, 0.0, 140.0),
         "head_sweep_above_shell": M.HEAD_SWEEP_FLOOR_Z - M.BODY_Z_TOP >= 15.0,
         "yaw_stage_and_moving_parts_clear_shell": not yaw_shell_clashes,

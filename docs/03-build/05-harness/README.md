@@ -95,6 +95,7 @@ Lengths are `E`: Manhattan routes through CAD waypoints plus service slack. Cut 
 | ~~`W38`~~ | Not fitted (D-041): `J10-11` carried the E-stop status | — | — | |
 | `W39` | `J10-12` ↔ `J3-9` | GH4, double-ended | 100 | |
 | `W40` power button ([D-041](../decisions.md#d-041)) | Mushroom NO terminals (S, heat-shrink) → PCB-02 `J2-9` | GH2, single-ended | 150 | Out past the contact block, +Y beside the Pi's rear edge, back above the PCB-02 +Y edge and down to `J2-9` (`POWER_BUTTON_W40_LEAD_RESERVE_1…4`). Rides with the rear panel; unplug at `J2-9` before lifting the panel away |
+| `W41` enclosure fan ([D-042](../decisions.md#d-042)) | BO-040 fan leads → PCB-09 `J9-4` | XH2.54-2P, the fan's own 2-wire lead (30 cm as bought), cut to ~80 mm and re-crimped into its housing | ~80 | Along `HARNESS_W41_FAN_LEAD_1/2`: from the fan's top-front corner along −Y above PCB-09's top-entry plugs to `J9-4`. `J9-4` pin 1 is FAN+ (5 V from the 40-pin header), pin 2 is FAN− (drain of the PCB-09 low-side MOSFET, switched by Pi GPIO24). Unplug at `J9-4` to remove the fan or PCB-09 |
 
 **Pre-crimped GH lead buy list** (lengths rounded up to the stock 50/100/150/200/300 mm, one spare of each):
 
@@ -150,6 +151,7 @@ Each GH cable puts GND at pin 1 where it carries no supply, and keeps each diffe
 | `J10-10` (`W36`) | LED_A | LED_K | TCRT_OUT | GND | | | | | | |
 | `J10-12` ↔ `J3-9` (`W39`) | GND | C3_READY | MOTOR_PRESENT | GND | | | | | | |
 | `J2-9` (`W40`) | PB_SW (10 kΩ to latch `VIN`, 5.1 kΩ to `PB`) | GND | | | | | | | | |
+| `J9-4` (`W41`, XH2.54) | FAN+ (+5 V, 40-pin header) | FAN− (low-side MOSFET drain; Pi GPIO24 `FAN_EN`) | | | | | | | | |
 | `J3-5` (EH3, ROBOTIS) | GND | VDD | DATA | | | | | | | |
 
 `J2-4`/`J4-6` signal names follow RP-02 §6.4. The schematic may rename them, but not move a supply onto an end pin. The `W20` +5V_C2 replaces the RP-02 §8 `+5V_C2` line, which had no cable. `J10-8` and `J10-10` are unchanged from [nose-hall-board.md](../01-chassis/v1/research/nose-hall-board.md) and [rear-tcrt-lead.md](../01-chassis/v1/research/rear-tcrt-lead.md); the nose sensor is now the GP2Y0A21YK0F (D-019), not the A41.

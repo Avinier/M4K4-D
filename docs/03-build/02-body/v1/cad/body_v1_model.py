@@ -745,6 +745,90 @@ TUB_BOSS_XY = tuple(
 # heads seat straight on the printed faces; no washers.
 FRAME_INSERT_RADIUS = 2.15  # pilot and modeled insert envelope
 FRAME_INSERT_LENGTH = 6.0
+
+# Compute tray and Pi 5 retention (D-042). The tray is its own print. The Pi screws
+# to four printed bosses with M2.5 heat-set inserts. The official Active Cooler is
+# held by its own two spring push pins in the Pi's cooler holes; their tips spread
+# below the board, so nothing on the tray enters that keep-out. The tray is a
+# three-point support, screwed from above at each point and stiffened by a perimeter
+# rib. A rear -Y ear sits on a lug on the rear -Y post. A column rises from the front
+# -Y foot's dog-leg under the front -Y corner: the C3 carrier's J10-1 plug keeps an
+# ear off the front -Y post. On +Y nothing may stand proud of the tray edge, because
+# the tray goes in from the front past the chassis fuse holder (D-032, X 52-82, Y
+# 39-49, Z 73-99); a block under the rear +Y corner, on a short column from the lower
+# rear cross rail, takes the third screw. The tray and the Pi go in as one unit from
+# the front, before the C3 carrier, and drop 2 mm onto the supports.
+COMPUTE_TRAY_BOX = (-32.0, 76.0, -38.0, 38.0, 84.5, 87.5)
+COMPUTE_TRAY_COLOR = "#7A858B"
+PI_PCB_BOTTOM_Z = 94.05  # Pi 5 STEP PCB, Z 94.05-95.45
+PI_PCB_TOP_Z = 95.45
+PI_MOUNT_HOLES = ((-17.8, -23.67), (40.2, -23.67), (-17.8, 25.33), (40.2, 25.33))  # 58 x 49 mm, M2.5, from the STEP PCB
+PI_COOLER_PIN_HOLES = ((-17.8, -17.67), (40.2, 19.33))  # Ø3 holes, 58 x 37 mm diagonal
+PI_BOSS_RADIUS = 3.0  # the Pi's Ø6 pad round each mounting hole
+PI_INSERT = DRIVER_INSERT  # M2.5 x 4 brass insert, Ø3.9 envelope, pressed flush with the boss top
+PI_INSERT_PILOT_DEPTH = 5.0
+PI_SCREW = DRIVER_SCREW  # M2.5 x 6 low button head: 1.4 mm board, 4.6 mm into the insert
+COOLER_PIN_TIP_KEEP_OUT = (2.5, 3.5)  # radius, depth below the PCB (E: the spread push-pin tip)
+TRAY_RIB = (2.0, 4.0)  # perimeter rib on the tray top: width, height
+TRAY_EAR_MOUNTS = ((-32.0, -50.5),)  # rear -Y ear, M3 screw from above, (x, y)
+TRAY_FRONT_MOUNT = (64.0, -33.0)  # through the plate, head 0.15 mm inside the rib, clear of the Pi's Ethernet jack
+TRAY_FRONT_COLUMN = (60.0, 68.0, -43.0, -29.5, 69.9, 84.5)  # on the front -Y dog-leg (top Z 70), clear of the M4 tool path
+TRAY_REAR_PY_MOUNT = (-24.0, 33.0)  # head 0.15 mm inside the rib; driver passes the W40 route, fitted later
+TRAY_REAR_PY_BLOCK = (-32.0, -20.0, 29.5, 37.0, 78.0, 84.5)  # over PCB-04 (top Z 77.1) and beside its plug layer (Y <= 29)
+TRAY_REAR_PY_COLUMN = (-32.0, -27.5, 29.5, 37.0, 68.9, 78.01)  # on the lower rear cross rail (top Z 69), 0.5 mm off PCB-04
+TRAY_MOUNTS = (*TRAY_EAR_MOUNTS, TRAY_FRONT_MOUNT, TRAY_REAR_PY_MOUNT)
+TRAY_EAR_HALF_X = 3.5
+TRAY_EAR_Y_END = 53.5
+TRAY_LUG_Z = (76.5, COMPUTE_TRAY_BOX[4])
+TRAY_LUG_Y = (46.0, 59.5)  # |Y|; 0.5 mm into the post face at |Y| 59
+TRAY_SCREW = (8.0, 2.85, 1.65)  # ISO 7380 M3 x 8: length, head radius, head height
+TRAY_INSTALL_LIFT = 2.0
+TRAY_VENT_ROWS_Y = (-28.0, -21.0, -14.0, -7.0, 0.0, 7.0, 14.0, 21.0, 28.0)
+TRAY_VENT_SEGMENTS_X = ((-28.0, -2.0), (2.0, 23.0), (27.0, 48.0), (52.0, 72.0))
+TRAY_VENT_WIDTH = 4.0
+TRAY_VENT_BOSS_MARGIN = 4.5  # slots stop this far from each Pi boss axis
+
+# Enclosure cooling (D-042). Air enters through a grille in the +Y side wall,
+# driven by a generic 2-wire DC 5 V 4010 double-ball fan (BO-040; builder's choice
+# over the Noctua NF-A4x10 5V PWM). The fan sits on a web of the body frame between
+# the +Y side rails, and air leaves through the open floor and two slot grilles in
+# the rear panel beside the button well. It has no PWM or tach: a low-side MOSFET on
+# PCB-09, switched by Pi GPIO24 under the gpio-fan overlay, turns it on and off, and
+# its own XH2.54-2P plug (W41) mates with J9-4 on PCB-09. The grille avoids the
+# wheel-arch pod band (R <= 54 about the axle), the 90 deg pod screw boss and the
+# FRONT_L mic boss; a shell collar round it limits recirculation past the fan face.
+# The fan is held by two self-tapping screws driven from inboard, so its outer face
+# is clear for the shell collar to pass as the shell is lowered.
+ENCLOSURE_FAN_CENTER = (24.0, 105.5)  # X, Z of the axis; the axis runs along Y
+ENCLOSURE_FAN_SIZE = 40.0
+ENCLOSURE_FAN_Y = (58.9, 68.9)  # intake face outboard (+Y), 0.4 mm inboard of the FRONT_L mic pigtail
+ENCLOSURE_FAN_HUB_RADIUS = 10.0
+ENCLOSURE_FAN_BORE_RADIUS = 19.0
+ENCLOSURE_FAN_HOLE_RADIUS = 1.75
+ENCLOSURE_FAN_HOLE_HALF_PITCH = 16.0  # 32 mm square hole pattern, usual for 4010 fans (E: unmeasured on BO-040)
+FAN_WEB_X = (4.0, 44.0)
+FAN_WEB_Y = (56.1, 58.9)  # 1.1 mm outboard of the yaw servo; joined to the rails by FAN_WEB_ROOTS
+FAN_WEB_Z = (84.0, 133.2)  # top fused into the upper side rail
+FAN_WEB_STRUT = (4.0, 12.0, 61.0, FAN_WEB_Z[0])  # x0, x1, z0, z1: leg down to the lower side rail
+FAN_WEB_ROOTS = ((126.0, 133.2), (61.0, 69.0))  # Z bands where the web thickens out to Y 60.4 to fuse with the upper and lower side rails
+FAN_WEB_OPENING_RADIUS = 18.5
+FAN_SCREW_POINTS = ((8.0, 89.5), (40.0, 121.5))  # two diagonal holes (x, z); the others sit behind the yaw servo
+FAN_SCREW = (2.6, 2.0, 1.7, 9.2)  # head radius, head height, shank radius, thread into the fan frame: 12 mm self-tapping (BO-041, E), tip 0.8 mm short of the fan face
+FAN_GRILLE_RADIUS = 18.5
+FAN_GRILLE_SLOT = (2.5, 1.6)  # width, web; vertical slots print as short bridges with the shell roof-down
+FAN_GRILLE_POD_RADIUS = WHEEL_OD / 2.0 + WHEEL_WELL_RADIAL_CLEARANCE + 8.0 + 1.0  # pod outer R54 + 1 mm
+FAN_COLLAR = (19.5, 21.0, 70.5)  # inner radius, outer radius, inboard edge |Y|: outboard of the FRONT_L mic pigtail (|Y| <= 70.3)
+REAR_VENT_SLOTS_Y = (24.0, 28.1, 32.2, 36.3)  # |Y| inner edges, both sides of the button well
+REAR_VENT_SLOT_WIDTH = 2.5
+REAR_VENT_Z = (95.0, 118.0)  # inside the panel-frame aperture (Z <= 122) and under the panel bosses
+# W41: the fan's own 2-wire lead (30 cm as bought; cut to about 80 mm and re-crimped
+# into its XH2.54-2P housing) runs from the fan's top-front corner along -Y above
+# PCB-09's top-entry plugs to J9-4 on PCB-09.
+W41_FAN_LEAD_RESERVES = (
+    (44.0, 47.0, 44.0, 68.9, 118.0, 124.0),
+    (33.0, 47.0, 33.0, 44.0, 118.0, 124.0),
+)
+J9_4_FAN_HEADER_RESERVE = (27.0, 35.0, 30.0, 36.0, 108.0, 121.0)  # JST B2B-XH-A top entry on PCB-09 with the mated plug (E)
 # J05/J06: the insert is pressed into the rail tongue's end face, which is the
 # only face it can enter (D-029; the old pilot sat behind a O3.4 tongue bore).
 RAIL_TONGUE_HALF_Y = 4.0  # was 3.2; 1.85 mm of wall either side of the insert
@@ -1164,8 +1248,8 @@ MASS_ROWS = [
         HEAD_ORIGIN_IN_CHASSIS[1] + HEAD_LOCAL_COM[1],
         HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_LOCAL_COM[2],
     ), "RP-01 generated mass tree"),
-    ("BODY_SHELL_AND_PANELS", 250.2, (17.8, 0.0, 93.0), "Body v1 CAD volume and centroid (2026-10-04): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037), front service skin with an open 46 mm speaker aperture and retaining lip, rear service skin, E-stop well and charge-inlet pad (D-040), badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."),
-    ("BODY_PRIMARY_FRAME", 170.9, (12.5, 1.0, 94.9), "Body v1 CAD volume and centroid (2026-10-02): main connected print and removable front-left foot cassette at conservative 1.20 g/cm3 effective PETG, plus modeled four M4 bolts/nuts, two locating pins, cassette M3 joints, and four shell-to-frame M3 screw/insert joints at 7.85/8.50 g/cm3 steel/brass. Estimated, not weighed; check_body_layout.py verifies against the solids."),
+    ("BODY_SHELL_AND_PANELS", 248.3, (18.16, -0.19, 92.91), "Body v1 CAD volume and centroid (2026-10-04, D-042: -1.9 g net for the +Y fan-intake grille and collar and the eight rear-panel vent slots; was 250.2 g at (17.8, 0, 93.0)): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037), front service skin with an open 46 mm speaker aperture and retaining lip, rear service skin, E-stop well and charge-inlet pad (D-040), badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."),
+    ("BODY_PRIMARY_FRAME", 178.4, (12.83, 1.84, 94.85), "Body v1 CAD volume and centroid (2026-10-04, D-042: +7.5 g for the +Y fan web with its rail roots and strut, the rear -Y tray lug, the front -Y tray column and the rear +Y tray block and column; was 170.9 g at (12.5, 1.0, 94.9)); 2026-10-02: main connected print and removable front-left foot cassette at conservative 1.20 g/cm3 effective PETG, plus modeled four M4 bolts/nuts, two locating pins, cassette M3 joints, and four shell-to-frame M3 screw/insert joints at 7.85/8.50 g/cm3 steel/brass. Estimated, not weighed; check_body_layout.py verifies against the solids."),
     ("CHASSIS_PRIMARY_FRAME", 229.1, (18.14, 0.0, 46.64), "D-029 (2026-10-01): +21.4 g of newly modeled hardware measured from the solids at 7.9/8.5 g/cm3, centroid (30.4, 0, 46.4): J05/J06/J16/J11A ISO 7380 screws and 14 M3 x 6 inserts, four M2.5 driver screws and inserts; +0.7 g for the measured +1.24 cm3 printed volume at 0.571 g/cm3 (driver posts and tie lugs, wider tongues and rear rail ends, moved J16 ears, hatch strap slots, recess/cavity growth), centroid about (35, 0, 64); was 207.0 g at (16.82, 0, 46.61). 2026-10-01: +0.2 g for the measured +0.29 cm3 when the front hatch bosses moved to the front wall, the bosses were cut to Z 39.5 and the hatch grew 4 mm forward; D-011: -0.3 g for the O5 J10-8 cable bore through the front crossmember and deck at (86, -31); D-010 J04 adds two integrated plate-and-cheek carriers, keyed rail joints, eight modeled M3 x 8 screws and eight 6 mm inserts; estimated +10.2 g total (about +0.7 g printed cheek/key volume and +9.5 g steel/brass hardware, preliminary geometry-density estimate); previous 196.9 g centroid (17.7, 0, 46.8). D-007 axle stack (2026-09-29), +20.9 g at the axle (X 0, Z 42): printed plate + housing replace the flange/boss/diaphragm, +7.24 cm3 measured at ~0.571 g/cm3 (+4.1 g); two 1.2 mm aluminium caps 1.52 cm3 (+4.1 g); eight M3 x 18 cap screws (+10.6 g); eight M3 brass inserts (+1.5 g); face screws M3 x 8 CSK -> M3 x 6 low head (+0.6 g); before that 176.0 g at (19.8, 0, 47.4): +2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"),
     ("WHEEL_L", 92.5, WHEEL_CENTER_L, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
     ("WHEEL_R", 92.5, WHEEL_CENTER_R, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
@@ -1176,6 +1260,8 @@ MASS_ROWS = [
     ("BALLAST_STEEL_BAR", round(BALLAST_BAR_G + BALLAST_SCREWS_G, 1), (sum(BALLAST_X) / 2.0, 0.0, sum(BALLAST_Z) / 2.0), "E: mild-steel bar 9 x 60 x 19 mm at 7.85 g/cm3 (less two M3 tapped holes) + two M3 screws; sized so the register CoM clears the physics.md 2.5 line after the 110 g pack (RP03-CAD-08)"),
     ("BATTERY", 108.2, BATTERY_CENTER, "E: 2 x Samsung INR18650-25R (45 g max each = 90 g) + RP-02 PCB-01 pack-protection assembly (~5 g: 48 x 20 mm board 3.7 g + parts 1.3 g) + Bourns AC72ABD thermal cutoff and NTC (~0.7 g) + nickel straps, sleeve and AWG16 leads (~11 g) + pack-side Micro-Fit+ 1x2 half with terminals (~1.5 g, CN-05; was a ~6 g SBS Mini half); working selection, no purchase or measured mass; was 110 g with a generic ~8 g BMS (RP-02 board-specs.md sec 3, 2026-09-25)"),
     ("RASPBERRY_PI5_AND_COOLER", 76.0, PI_CENTER, "vendor + estimate"),
+    ("COMPUTE_TRAY_AND_PI_FIXINGS", 29.5, (17.6, -2.61, 86.92), "D-042 CAD volume and centroid (2026-10-04): tray print 23.1 g at 1.20 g/cm3 effective PETG (plate, perimeter rib, rear -Y ear, four Pi bosses, vent slots) + 6.5 g modeled hardware at 7.85/8.50 g/cm3 (four M2.5 x 4 inserts and M2.5 x 6 screws, three M3 x 6 support inserts and ISO 7380 M3 x 8 tray screws). The tray was in no row before. Estimated, not weighed"),
+    ("ENCLOSURE_FAN_4010_AND_W41", 15.0, (25.0, 62.0, 106.0), "E (D-042): generic DC 5 V 4010 double-ball fan (BO-040) ~13 g with its lead cut to ~80 mm + two 12 mm self-tapping screws ~0.8 g (BO-041) + XH housing ~0.5 g; unmeasured; centroid at the fan, pulled slightly toward the lead. Was 12 g for the Noctua NF-A4x10"),
     # Replaces the single CONTROL_POWER_SENSORS row (121.5 g at (22, 0, 80), 2026-09-25). Masses are the RP-02
     # board-specs.md sec 2 / WS-H estimates (PCB 1.6 mm FR4 with copper about 3.8 g per 1000 mm2 plus the parts
     # inventory), not measurements; positions are the centres of the proposal boxes.
@@ -1944,8 +2030,34 @@ def body_shell():
         sign = 1.0 if y > 0.0 else -1.0
         shell += _mic_boss(x, z, sign) & outer
         shell -= _mic_boss_cuts(x, z, sign)
+    # Enclosure-fan intake (D-042): a collar from the inner skin to just off the
+    # fan face, then vertical slots through the skin inside it.
+    shell += _fan_collar() & outer
+    shell -= _fan_grille_cuts()
     shell -= _wheel_well_tools()
     return _paint(shell, "BODY_SHELL", IVORY, SHELL_ALPHA)
+
+
+def _fan_collar():
+    """Tube on the fan axis from FAN_COLLAR's inboard edge outward; the caller trims it to the envelope."""
+    x, z = ENCLOSURE_FAN_CENTER
+    r0, r1, y0 = FAN_COLLAR
+    return _axial_bore_y(r1, y0, 95.0, x, z) - _axial_bore_y(r0, y0 - 1.0, 96.0, x, z)
+
+
+def _fan_grille_cuts():
+    """Vertical slots through the +Y skin inside the grille circle, clear of the wheel-arch pod band."""
+    x, z = ENCLOSURE_FAN_CENTER
+    width, web = FAN_GRILLE_SLOT
+    r = FAN_GRILLE_RADIUS
+    count = int((2.0 * r + web) // (width + web))
+    x0 = x - (count * width + (count - 1) * web) / 2.0
+    slots = None
+    for k in range(count):
+        slot = _block(x0 + k * (width + web), x0 + k * (width + web) + width, 60.0, 95.0, z - r, z + r)
+        slots = slot if slots is None else slots + slot
+    window = _axial_bore_y(r, 60.0, 95.0, x, z) - _axial_bore_y(FAN_GRILLE_POD_RADIUS, 59.0, 96.0, 0.0, AXLE_Z)
+    return slots & window
 
 
 def _wheel_arch_fasteners():
@@ -1994,7 +2106,7 @@ def body_panels():
     inlet_pad, inlet_cuts = rear_panel_charge_inlet()
     estop_well, estop_bezel = rear_panel_estop_well()
     rear = _paint(
-        rear_raw + inlet_pad - rear_bores - _estop_well_outer() - inlet_cuts + estop_well,
+        rear_raw + inlet_pad - rear_bores - _estop_well_outer() - inlet_cuts + estop_well - rear_vent_slots(),
         "REAR_SERVICE_PANEL_OCTAGONAL",
         IVORY,
         SHELL_ALPHA,
@@ -2544,6 +2656,22 @@ def body_primary_frame():
     add(plate)
     # Local enlarged side-rail wall for two horizontal M3 cassette screws.
     add(_block(52.0, 70.0, 60.0, 69.0, 58.0, 72.0))
+    # D-042: enclosure-fan web between the +Y side rails, and a strut to the lower rail.
+    add(_block(*FAN_WEB_X, *FAN_WEB_Y, *FAN_WEB_Z))
+    sx0, sx1, sz0, sz1 = FAN_WEB_STRUT
+    add(_block(sx0, sx1, *FAN_WEB_Y, sz0, sz1 + 0.01))
+    rz_upper, rz_lower = FAN_WEB_ROOTS
+    add(_block(*FAN_WEB_X, FAN_WEB_Y[0], 60.4, *rz_upper))
+    add(_block(sx0, sx1, FAN_WEB_Y[0], 60.4, *rz_lower))
+    # D-042: compute-tray lugs on the rear posts and a column on the front -Y dog-leg,
+    # each with a vertical M3 insert pilot.
+    add(_block(*TRAY_FRONT_COLUMN))
+    add(_block(*TRAY_REAR_PY_COLUMN))
+    add(_block(*TRAY_REAR_PY_BLOCK))
+    for x, y in TRAY_EAR_MOUNTS:
+        sign = 1.0 if y > 0.0 else -1.0
+        ly0, ly1 = sorted((sign * TRAY_LUG_Y[0], sign * TRAY_LUG_Y[1]))
+        add(_block(x - TRAY_EAR_HALF_X, x + TRAY_EAR_HALF_X, ly0, ly1, *TRAY_LUG_Z))
     # Cut after the unions: an uncropped bracket otherwise refills the foot
     # bore. This also opens a straight socket/driver path above each button head.
     for x, y in BODY_MOUNT_POINTS:
@@ -2557,6 +2685,12 @@ def body_primary_frame():
         frame -= _z_cylinder(2.05, 55.0, 62.0, x, y)
     for x in (61.0, 68.0):
         frame -= _axial_bore_y(1.7, 59.9, 69.1, x, 65.0)
+    fx, fz = ENCLOSURE_FAN_CENTER
+    frame -= _axial_bore_y(FAN_WEB_OPENING_RADIUS, FAN_WEB_Y[0] - 0.1, FAN_WEB_Y[1] + 0.1, fx, fz)
+    for x, z in FAN_SCREW_POINTS:
+        frame -= _axial_bore_y(1.8, FAN_WEB_Y[0] - 0.1, FAN_WEB_Y[1] + 0.1, x, z)
+    for x, y in TRAY_MOUNTS:
+        frame -= _z_cylinder(FRAME_INSERT_RADIUS, TRAY_LUG_Z[1] - FRAME_INSERT_LENGTH - 0.5, TRAY_LUG_Z[1] + 0.1, x, y)
     for x in SHELL_FRAME_X:
         for sign in (-1.0, 1.0):
             y0, y1 = sorted((sign * 62.9, sign * 69.1))
@@ -2904,6 +3038,91 @@ def raspberry_pi5():
     return pi
 
 
+def compute_tray_print():
+    """Separate tray print (D-042): plate, perimeter rib, three ears, four Pi bosses, vent slots."""
+    x0, x1, y0, y1, z0, z1 = COMPUTE_TRAY_BOX
+    width, height = TRAY_RIB
+    tray = _block(*COMPUTE_TRAY_BOX)
+    tray += _block(x0, x1, y0, y1, z1 - 0.01, z1 + height) - _block(x0 + width, x1 - width, y0 + width, y1 - width, z1 - 1.0, z1 + height + 1.0)
+    for x, y in TRAY_EAR_MOUNTS:
+        sign = 1.0 if y > 0.0 else -1.0
+        ey0, ey1 = sorted((sign * (y1 - 1.0), sign * TRAY_EAR_Y_END))
+        tray += _block(x - TRAY_EAR_HALF_X, x + TRAY_EAR_HALF_X, ey0, ey1, z0, z1)
+    for x, y in PI_MOUNT_HOLES:
+        tray += _z_cylinder(PI_BOSS_RADIUS, z1 - 0.01, PI_PCB_BOTTOM_Z, x, y)
+    vents = []
+    for yc in TRAY_VENT_ROWS_Y:
+        for vx0, vx1 in TRAY_VENT_SEGMENTS_X:
+            vents.append(_block(vx0, vx1, yc - TRAY_VENT_WIDTH / 2.0, yc + TRAY_VENT_WIDTH / 2.0, z0 - 1.0, z1 + 1.0))
+    keep = [_z_cylinder(TRAY_VENT_BOSS_MARGIN, z0 - 2.0, z1 + 2.0, x, y) for x, y in PI_MOUNT_HOLES]
+    vent_cut = vents[0]
+    for v in vents[1:]:
+        vent_cut += v
+    tray -= vent_cut - keep
+    for x, y in PI_MOUNT_HOLES:
+        tray -= _z_cylinder(PI_INSERT[0], PI_PCB_BOTTOM_Z - PI_INSERT_PILOT_DEPTH, PI_PCB_BOTTOM_Z + 0.1, x, y)
+    for x, y in TRAY_MOUNTS:
+        tray -= _z_cylinder(1.7, z0 - 0.1, z1 + 0.1, x, y)
+    return _paint(tray, "COMPUTE_TRAY", COMPUTE_TRAY_COLOR, 1.0)
+
+
+def compute_tray_hardware():
+    """Pi M2.5 inserts and screws, tray M3 screws and the lug M3 inserts (D-042)."""
+    parts = []
+    radius, length = PI_INSERT
+    screw_length, head_radius, head_height = PI_SCREW
+    for k, (x, y) in enumerate(PI_MOUNT_HOLES, start=1):
+        insert = _z_cylinder(radius, PI_PCB_BOTTOM_Z - length, PI_PCB_BOTTOM_Z, x, y) - _z_cylinder(1.25, PI_PCB_BOTTOM_Z - length - 0.1, PI_PCB_BOTTOM_Z + 0.1, x, y)
+        screw = (_z_cylinder(1.25, PI_PCB_TOP_Z - screw_length, PI_PCB_TOP_Z, x, y)
+                 + _z_cylinder(head_radius, PI_PCB_TOP_Z, PI_PCB_TOP_Z + head_height, x, y))
+        parts += [_paint(insert, f"PI5_M25_INSERT_{k}", BRONZE), _paint(screw, f"PI5_M25X6_SCREW_{k}", STEEL)]
+    screw_length, head_radius, head_height = TRAY_SCREW
+    top = COMPUTE_TRAY_BOX[5]
+    for k, (x, y) in enumerate(TRAY_MOUNTS, start=1):
+        lug_top = TRAY_LUG_Z[1]
+        insert = (_z_cylinder(FRAME_INSERT_RADIUS, lug_top - FRAME_INSERT_LENGTH, lug_top, x, y)
+                  - _z_cylinder(1.25, lug_top - FRAME_INSERT_LENGTH - 0.1, lug_top + 0.1, x, y))
+        screw = (_z_cylinder(1.5, top - screw_length, top, x, y)
+                 + _z_cylinder(head_radius, top, top + head_height, x, y))
+        parts += [_paint(insert, f"TRAY_LUG_M3_INSERT_{k}", BRONZE), _paint(screw, f"TRAY_M3X8_SCREW_{k}", STEEL)]
+    return parts
+
+
+def cooler_pin_keep_outs():
+    """Space under the Pi for the Active Cooler's spread push-pin tips (E)."""
+    radius, depth = COOLER_PIN_TIP_KEEP_OUT
+    return [
+        _paint(_z_cylinder(radius, PI_PCB_BOTTOM_Z - depth, PI_PCB_BOTTOM_Z, x, y), f"PI5_COOLER_PUSH_PIN_TIP_KEEP_OUT_{k}", "#D38132", 0.3)
+        for k, (x, y) in enumerate(PI_COOLER_PIN_HOLES, start=1)
+    ]
+
+
+def enclosure_fan():
+    """Generic DC 5 V 4010 fan (BO-040) on the frame web, and its two self-tapping screws (D-042)."""
+    x, z = ENCLOSURE_FAN_CENTER
+    y0, y1 = ENCLOSURE_FAN_Y
+    h = ENCLOSURE_FAN_SIZE / 2.0
+    frame = _block(x - h, x + h, y0, y1, z - h, z + h) - _axial_bore_y(ENCLOSURE_FAN_BORE_RADIUS, y0 - 0.1, y1 + 0.1, x, z)
+    p = ENCLOSURE_FAN_HOLE_HALF_PITCH
+    for dx in (-p, p):
+        for dz in (-p, p):
+            frame -= _axial_bore_y(ENCLOSURE_FAN_HOLE_RADIUS, y0 - 0.1, y1 + 0.1, x + dx, z + dz)
+    hub = _axial_bore_y(ENCLOSURE_FAN_HUB_RADIUS, y0 + 0.5, y1 - 0.5, x, z)
+    rotor = _axial_bore_y(ENCLOSURE_FAN_BORE_RADIUS - 0.5, y0 + 1.0, y1 - 1.0, x, z) - _axial_bore_y(ENCLOSURE_FAN_HUB_RADIUS, y0, y1, x, z)
+    head_radius, head_height, shank_radius, thread = FAN_SCREW
+    screws = []
+    for k, (sx, sz) in enumerate(FAN_SCREW_POINTS, start=1):
+        screw = (_axial_bore_y(head_radius, FAN_WEB_Y[0] - head_height, FAN_WEB_Y[0], sx, sz)
+                 + _axial_bore_y(shank_radius, FAN_WEB_Y[0], FAN_WEB_Y[1] + thread, sx, sz))
+        screws.append(_paint(screw, f"ENCLOSURE_FAN_SCREW_{k}", STEEL))
+    return Compound(label="ENCLOSURE_FAN_4010", children=[
+        _paint(frame, "ENCLOSURE_FAN_4010_FRAME", "#2E3336", 1.0),
+        _paint(hub, "ENCLOSURE_FAN_4010_HUB", "#1E2426", 1.0),
+        _paint(rotor, "ENCLOSURE_FAN_4010_ROTOR_SWEPT_VOLUME", "#5E676B", 0.35),
+        *screws,
+    ])
+
+
 def _estop_octagon(x, across_flats):
     """Regular octagon in the YZ plane at X, flats horizontal, on the E-stop axis."""
     r = across_flats / 2.0 / math.cos(math.pi / 8.0)
@@ -2939,6 +3158,16 @@ def rear_panel_estop_well():
         _paint(well, "REAR_PANEL_BUTTON_WELL", SLATE_DARK, 1.0),
         _paint(bezel, "REAR_PANEL_BUTTON_AMBER_BEZEL", ESTOP_AMBER, 1.0),
     ]
+
+
+def rear_vent_slots():
+    """Exhaust slots through the rear panel on both sides of the button well (D-042)."""
+    slots = []
+    for y0 in REAR_VENT_SLOTS_Y:
+        for sign in (-1.0, 1.0):
+            ya, yb = sorted((sign * y0, sign * (y0 + REAR_VENT_SLOT_WIDTH)))
+            slots.append(_block(-70.0, -40.0, ya, yb, *REAR_VENT_Z))
+    return slots
 
 
 def _rounded_slot_x(x0, x1, yc, zc, width, height, radius):
@@ -3078,7 +3307,9 @@ def electronics():
     # The battery lives in the chassis tub (RP03-CAD-06); it stays in this
     # group so the viewer's electronics toggle still shows it.
     battery = battery_pack()
-    pi_tray = _box(108.0, 76.0, 3.0, (PI_CENTER[0], 0.0, 86.0), "COMPUTE_TRAY", "#7A858B", 1.0)
+    pi_tray = Compound(label="COMPUTE_TRAY_AND_PI_FIXINGS", children=[
+        compute_tray_print(), *compute_tray_hardware(), *cooler_pin_keep_outs(),
+    ])
     # GrabCAD heatsink+fan STEP: +90 deg about X (the Pi's own turn) puts the two spring posts,
     # 58 x 37.6 mm apart, over the Pi's two cooler holes with the tips down; the -90 deg first used
     # mirrored that diagonal. The heatsink plate then sits on the tallest package under it (Z 97.7).
@@ -3116,6 +3347,7 @@ def electronics():
         driver_r,
         power_distribution_boards(),
         imu,
+        enclosure_fan(),
     ])
 
 
@@ -3462,6 +3694,7 @@ def harness_routes():
         # beside the cooler into the Pi 5's rear FPC socket; demated at the Pi.
         _paint(_block(BODY_AXIS_X, 30.0, -26.5, -11.0, 127.0, YAW_PLATE_Z[0] - 0.5), "HARNESS_CSI_FFC_UNDER_PLATE", "#65A584", 0.35),
         _paint(_block(26.0, 29.0, -26.5, -11.0, 99.6, 127.0), "HARNESS_CSI_FFC_DROP_TO_PI_CAM", "#65A584", 0.35),
+        *[_paint(_block(*box), f"HARNESS_W41_FAN_LEAD_{k}", "#2FAFC2", 0.42) for k, box in enumerate(W41_FAN_LEAD_RESERVES, start=1)],
         # Nose pod J10-8 (D-011): GP2Y lead plus switch pair as one flat 5-way run from the pod's
         # back-wall slot under the front crossmember, up the O5 bore through crossmember and deck,
         # beside the speaker cavity into the sensor trunk, then across to the C3 carrier header.
@@ -3636,6 +3869,7 @@ def connectors_and_exits():
         _paint(_block(*YAW_JUNCTION_MF_PLUG_RESERVE), "YAW_JUNCTION_J81_PLUG_RESERVE", power, 0.30),
         _paint(_block(*C0_LINK_ADAPTER_TOP_PLUGS), "C0_LINK_ADAPTER_TOP_ENTRY_PLUG_RESERVE", reserve, 0.20),
         _paint(_block(*C0_LINK_ADAPTER_SIDE_PLUG), "C0_LINK_ADAPTER_J91_PLUG_RESERVE", reserve, 0.20),
+        _paint(_block(*J9_4_FAN_HEADER_RESERVE), "C0_LINK_ADAPTER_J94_FAN_XH2_PLUG_RESERVE", reserve, 0.20),
         _paint(_block(45.0, 75.0, 19.0, 28.0, 115.6, 120.0), "PCB05_PY_EDGE_PLUG_RESERVE", reserve, 0.20),
         _paint(_block(45.0, 75.0, -31.0, -19.0, 115.6, 125.6), "PCB05_NY_EDGE_PLUG_RESERVE", reserve, 0.20),
         _paint(_block(36.0, 45.0, -9.0, 9.0, 115.6, 120.0), "PCB05_REAR_EDGE_PLUG_RESERVE", reserve, 0.20),

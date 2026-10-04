@@ -14,7 +14,7 @@ This folder holds the schematic, layout, fabrication and electrical-validation w
 | PCB-06 ×4 | PDM microphone board | Body shell bosses | BO-005 | Spec | Layout; array tap and noise tests |
 | PCB-07 | Base IMU (ICM-42688-P) | Chassis | CH-021 | HOLD | Sensor and SPI vs I²C interface |
 | PCB-08 | Yaw junction (clock-spring stationary end) | Body, under the yaw adapter plate | CH-083 | Spec | Schematic; clock-spring flex pin order. Body-side pinout and the mating rule: [05-harness](../05-harness/README.md) (D-039) |
-| PCB-09 | C0 link adapter (2 × RS-422, audio pass-through) | Body, on the Pi header | CH-084 | Spec | Schematic; bench fit beside the yaw servo |
+| PCB-09 | C0 link adapter (2 × RS-422, audio pass-through, enclosure-fan switch `J9-4`) | Body, on the Pi header | CH-084 | Spec; fan switch added ([D-042](../decisions.md#d-042)): Pi GPIO24 → logic-level N-MOSFET low side, XH2.54-2P `J9-4` | Schematic; bench fit beside the yaw servo; GPIO24 needs a `CA-06` change request (CR-02) |
 | PCB-10 | C3 controller carrier (watchdog, READY, sleep gate, Hall and TCRT circuits) | Body, −Y side wall | CH-044 | Spec | J10-8 Hall and J10-10 TCRT changes; [J10-5/6 driver mapping](power-boards.md#24-logic-to-c3-j10-5--j10-6-gh-6) |
 | PCB-11 | Status LED carrier (WS2812B-2020) | Head crown | CH-085 | Spec | Brightness and stray-light bench |
 | PCB-12 | C2 head carrier (ESP32-S3-Zero, transceivers, TPS3436 watchdog) | Head | CH-086 | Lead design | Schematic; head pocket fit |

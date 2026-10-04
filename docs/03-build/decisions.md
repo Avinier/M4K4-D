@@ -46,6 +46,7 @@ The central record of every decision and change made during the build phase. New
 | [D-039](#d-039) | 2026-10-04 | Harness (W01–W39, J-PK, J2-1, J3-1, J3-4, J8-1; CH-025–CH-027, CH-041, CH-042, CH-083; HN-001–HN-010 registered) | Fused pack feed split at butt splices beside the fuse (W04, J2-2 deleted); J-PK is the isolator; NTC break is a JST SM 2p in the +Y channel; Micro-Fit+ only on AWG16/18 UL1061, Micro-Fit 3.0 on AWG22, pre-crimped GH; J3-4/J8-1 to Micro-Fit 3.0; full wire list, pinouts and service breaks in 05-harness | ACTIVE; DESIGN; HOLD on housing PNs, crimp qualification and the first harness build |
 | [D-040](#d-040) | 2026-10-04 | Charge path (PCB-02, PCB-13 registered; CH-041, HN-003; BO-015–BO-017 registered) | Charge inlet moves to a panel-mounted board PCB-13 (GCT USB4140, TVS2200, ESDA25W, STUSB4500, input P-FET) in a pocket that takes any compliant plug; charger straps closed: D+ tied to D−, BATP sense, TS 8.45 k / 324 k for 0–50 °C, 20 V-rated input | ACTIVE; DESIGN; HOLD on schematic, NVM image and bench CP-01 to CP-14 |
 | [D-041](#d-041) | 2026-10-04 | Body / power button; E-stop removed (BO-018 registered; CH-041, CH-042, CH-046, HN-001, HN-004; W40, J2-9; W22, J3-7, W38 removed) | No E-stop: the rear red mushroom becomes the momentary power button (LTC2954 `PB`, GH2 `J2-9` on PCB-02's +Y edge, 10 k wetting pull-up); a press also resets `SYSTEM_ARM`, so it stops the motors in hardware; the latching NC IDEC XA1E is replaced by a 16 mm momentary 1NO mushroom in the same well | ACTIVE; DESIGN; HOLD on the received part's fit in the well and bench PB-01 to PB-06 |
+| [D-042](#d-042) | 2026-10-04 | Body / compute retention and cooling (BO-033–BO-042; CH-084; W41, J9-4) | Pi 5 screwed to a vented three-point compute tray (rear −Y lug, front −Y column, rear +Y block); Active Cooler on its push pins with tip keep-outs; BO-040 2-wire 4010 side intake fan on a +Y frame web, switched on/off by Pi GPIO24 through a MOSFET on PCB-09 (`J9-4`, `gpio-fan`); +Y shell grille and collar, rear-panel vent slots, open floor as the outlet | ACTIVE; HOLD on the bench thermal test, the AR-61 noise check, CR-02 and coupons |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -1508,3 +1509,103 @@ What this loses against the XA1E:
 - Add the 1 s `INT_PB` rule to the C2 firmware.
 - Run bench PB-01 to PB-06.
 - Update the chassis v1 reference copy of the E-stop at the next chassis CAD pass.
+
+## D-042
+
+**2026-10-04 · Body / compute retention and cooling path: the Pi 5 is screwed to a vented three-point tray, and a +Y side intake fan switched by the Pi ventilates the body (BO-033 to BO-042; CH-084 PCB-09 fan switch; W41, J9-4) · ACTIVE; DESIGN; HOLD on the bench thermal test, the AR-61 noise check, the GPIO24 change request (CR-02) and printed coupons**
+
+**Decision.** The builder chose the side intake fan (2026-10-04) after the passive and rear-exhaust options were compared. The builder then chose BO-040, a generic 2-wire DC 5 V 4010 double-ball fan, over the Noctua NF-A4x10 5V PWM this entry first drew, and chose to switch it on/off from a Pi GPIO through PCB-09 rather than PWM it inline or run it always on.
+
+**Why the change.** The Pi 5 and its cooler were not held down. The compute tray was a plain 3 mm box that floated in CAD, with no standoffs, no screws and no tie to the frame (RP-06 TODO). The shell had no cooling path: the Pi and its fan sat in a closed PETG body.
+
+**Why a fan, not vents only.** The measured layout leaves almost no high outlet area.
+- **Inlet:** the open floor is already a large inlet, with at least 11,600 mm² free in horizontal sections from Z 31 to 90.
+- **Outlet:** the only high wall area away from the mic ports is the rear-panel aperture beside the button well, about 460 mm². The 1 mm gap under the yaw disc passes almost nothing.
+- **Pi cooler:** its exhaust runs rearward into the button's contact block, with 5 mm between them, so it cannot be ducted out.
+- **Estimate (`E`):** at 8.5 W (Pi 6 W plus converters 2.5 W) the internal air rise is 19.3 K sealed and 14.7 K with vents only. With the fan on it is 4.3 K at a typical 4010 listing-class flow (about 5.5 CFM, 4 mm H₂O) and 7.0 K at half that flow. BO-040's real curve is unmeasured.
+- **Throttling:** the Pi 5 throttles from 80 °C and the Active Cooler holds the SoC roughly 30–40 K above its local air. That leaves vents only throttling under sustained load in a 30–35 °C room.
+
+**Why the +Y side.** A 40 mm rear exhaust fan does not fit:
+- The panel-frame aperture beside the button well is about 23 mm wide.
+- The rear cavity is about 23 mm deep before the Pi, PCB-02 and the W40 lead.
+
+The +Y side wall has one place that clears all of these:
+- the wheel-arch pod band (R ≤ 54 about the axle);
+- the 90° pod screw boss;
+- both +Y mic bosses;
+- the upper side rail.
+
+**Compute retention (CAD).**
+- **Tray:** a separate PETG print (`COMPUTE_TRAY`). It is a 108 × 76 × 3 mm plate at Z 84.5–87.5 with a 2 × 4 mm perimeter rib, vent slots and four Ø6 bosses up to the Pi's PCB underside at Z 94.05.
+- **Pi 5:** four M2.5 × 6 low-head screws into M2.5 × 4 heat-set inserts (as CH-080/081), with 4.6 mm of thread.
+- **Active Cooler:** kept on its own two spring push pins, the vendor design. A Ø5 × 3.5 mm keep-out under each pin tip (`E`) stays clear of the tray.
+- **Tray to frame:** three supports printed on the frame, each taking an ISO 7380 M3 × 8 screw from above into an M3 × 6 insert (as CH-077):
+  - a lug on the rear −Y post, under an ear at (−32, −50.5);
+  - a column on the front −Y foot's dog-leg, at (64, −33);
+  - a block under the rear +Y corner, on a column from the lower rear cross rail, at (−24, 33).
+- **Why these points:** the C3 carrier's `J10-1` plug keeps an ear off the front −Y post. On +Y, nothing may stand proud of the tray edge: the tray goes in from the front past the chassis fuse holder (D-032, X 52–82, Y 39–49, Z 73–99). That fuse holder is where the first-draft front +Y lug was, and the check found it. The front +Y corner is free; the rib stiffens it.
+- **Assembly order:** enclosure fan, then the tray with the Pi and cooler slid in from the front 2 mm high, dropped onto the supports and screwed, then the C3 carrier, PCB-09, the yaw servo and the plugged harness.
+
+**Cooling path (CAD).**
+- **Fan:** BO-040, DC 5 V 4010 double-ball, 40 × 40 × 10 mm, 2-wire (no PWM or tach), XH2.54-2P lead. Hole pattern 32 mm assumed (`E`); airflow, noise, current and mass unmeasured. It is centred at X 24, Z 105.5, with its intake face at Y 68.9.
+- **Fan web:** a new web of the main frame print, X 4–44, Y 56.1–58.9, Z 84–133.2. Roots join it to the upper and lower +Y side rails, and it sits 1.1 mm outboard of the yaw servo.
+- **Fan fixing:** two 12 mm self-tapping screws (BO-041), driven from inboard through the web into the fan frame at (8, 89.5) and (40, 121.5); the tips stop 0.8 mm short of the fan face. The other two holes are behind the yaw servo.
+- **Shell grille:** vertical 2.5 mm slots inside R18.5, 605 mm² free. A collar, R19.5–21 with its edge at Y 70.5, limits recirculation; 1.6 mm gap and 98 mm² of leak in the estimate.
+- **Exhaust:** the open floor, plus eight 2.5 × 23 mm slots in the rear panel beside the button well (460 mm²).
+- **Switching (PCB-09, CH-084):** Pi GPIO24 (`FAN_EN`, header pin 18) drives a logic-level N-MOSFET (AO3400A class) on the fan's low side, through 100 Ω with a 100 kΩ gate pull-down so the fan is off at boot and reset. A Schottky sits across the fan and 10 µF on its 5 V. The fan runs from the 40-pin header's 5 V, not the fan header, so the Active Cooler's lead is untouched.
+  - Linux: the standard `gpio-fan` overlay on GPIO24 with a temperature threshold and hysteresis, set from the bench test (start at about 60 °C on, 55 °C off).
+  - GPIO24 is outside every `CA-06` reservation (UARTs on 4/5 and 14/15, I²C on 2/3, SPI on 8–11, audio on 18–23) and leaves the PWM-capable 12/13 free. It still needs a `CA-06` change request, recorded here as CR-02, as GPIO22/23 did (CR-01).
+- **Wiring (`W41`):** the fan's own lead, cut to about 80 mm and re-crimped into its XH2.54-2P housing, runs from the fan's top-front corner above PCB-09's top-entry plugs to `J9-4`, a JST B2B-XH-A top-entry header on PCB-09 (pin 1 FAN+, pin 2 FAN−). CAD: `HARNESS_W41_FAN_LEAD_1/2` and `C0_LINK_ADAPTER_J94_FAN_XH2_PLUG_RESERVE`.
+- **Mic distances:** the grille's edge is 14 mm from the FRONT_L port (33 mm centre to port) and 28 mm from REAR_L. The rear slots are 42.7 mm from REAR_L/R.
+- **FRONT_L pigtail:** its first 10 mm crosses the top of the gap between the fan face and the collar, 0.4 mm off the fan face. Dress it outboard when the shell goes on.
+
+**Checks.**
+- New `check_cooling_path.py`: **ALL PASS**.
+  - No clash for the fan, its screws, `W41` or the `J9-4` plug reserve.
+  - The shell, with the +Y mic boards, lowers past the fan and web clear.
+  - The intake path is open, apart from the FRONT_L pigtail noted above.
+  - The grille clears the pod; the collar is 2.54 mm from the pod boss and 1.36 mm from the FRONT_L mic boss.
+  - The rear slots pass the panel frame.
+- New `check_compute_mount.py` (about 1 min): **ALL PASS**.
+  - The PCB lands on the bosses (0.0 mm). The bosses and screw heads clear the Pi and cooler by 0.3 mm or more.
+  - Nothing enters the push-pin keep-outs; the tray is 0.5 mm from them.
+  - Thread: 4.6 mm (Pi) and 5.0 mm (tray). At least 1.35 mm of wall round each insert.
+  - No clash with any fixed part. The tray screw drivers are clear.
+  - The front insertion sweep is clear, with the vendor Pi and cooler leaves swept as their boxes.
+  - The tray crosses the existing signal and sensor trunk route reserves (reported, unchanged from before).
+- `check_body_frame_fit.py`: clean.
+- `check_body_layout.py`: all checks true.
+  - Shell and panels 248.3 g (−1.9 g); frame and joints 178.4 g (+7.5 g, web and tray supports).
+  - New rows: `COMPUTE_TRAY_AND_PI_FIXINGS` 29.5 g (the tray was in no row before) and `ENCLOSURE_FAN_4010_AND_W41` 15 g (`E`).
+  - Whole robot 2,483.2 g, CoM (+18.27, +0.63, 105.62) mm, a_tip 1.697 m/s² against the 1.582 minimum, head-pose bound 1.694.
+  - The 95 g harness allowance must stay forward of X −11.3 mm (was −7.7).
+  - `shell_symmetric_about_y` now allows 0.5 mm, because the grille is one-sided.
+- `write_outputs.py` re-run.
+- Not run: `check_shell_frame_fit.py` (about 70 min; `check_cooling_path.py` covers the shell lowering past the fan), `check_body_panel_fit.py`, the chassis `check_layout.py`, and a `body-v1.step` rebuild.
+
+**BOM.** The body BOM pass running in parallel registered the parts:
+- BO-033 tray;
+- BO-034 Pi 5, BO-035 Active Cooler;
+- BO-036 to BO-039 Pi and tray hardware;
+- BO-040 fan, BO-041 fan screws;
+- BO-042 `W41`.
+
+This entry changed:
+- BO-042: now the fan's own lead to `J9-4`, no splice; DESIGN.
+- The tray-support wording in BO-025, BO-033, BO-038 and BO-039.
+- CH-084 (PCB-09): the fan switch and `J9-4`.
+
+**Docs changed:**
+- [CAD README](02-body/v1/cad/README.md#compute-tray-and-pi-5-retention-d-042): the compute-tray and cooling-path sections, the assembly order and the mass refresh.
+- [05-harness](05-harness/README.md): `W41` and the `J9-4` pinout.
+- [04-pcbs](04-pcbs/README.md): the PCB-09 register row.
+- [02-body BOM](02-body/v1/BOM.md): the fan-choice note, BO-042 and the cooling open item.
+
+**Open:**
+- **CR-02:** accept GPIO24 `FAN_EN` against the final PCB-09 pin audit, and add the switch and `J9-4` to the PCB-09 schematic.
+- **BO-040 on receipt:** measure hole size and pitch, current, airflow against a known restriction, and mass, then update the CAD and `check_cooling_path.py`.
+- **AR-61 noise:** this fan is on/off at full speed, with the grille edge 14 mm from FRONT_L. Run it with the yaw servo and compare FRONT_L/REAR_L against the −Y pair. If it is too loud, options are a series resistor or a second GPIO speed step on PCB-09, holding the fan off while listening (firmware), or narrowing the grille's front half.
+- **Bench thermal test:** sustained `stress-ng` with the shell on, at a measured room temperature. Log the SoC temperature, `vcgencmd get_throttled`, the internal air near the cooler intake and the cooler RPM, with the enclosure fan on and off. Set the `gpio-fan` threshold from it. Pass: no throttle flag at 35 °C room equivalent under the typical load.
+- **Push-pin tips:** measure the Active Cooler pin-tip protrusion against the 3.5 mm keep-out.
+- **Prints:** the tray (flatness and boss height), the lug and insert coupons, and the shell collar's support in the roof-down print (DfAM to re-measure).
+- **Fan current:** measure BO-040's running and start current against the MOSFET and the Pi 5 V rail (it draws from the 40-pin header, not the fan header).

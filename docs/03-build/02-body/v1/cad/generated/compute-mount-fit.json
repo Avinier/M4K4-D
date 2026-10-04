@@ -1,0 +1,38 @@
+{
+  "tray_solids": 1,
+  "tray_volume_cm3": 19.21,
+  "pcb_bottom_z_mm": 94.045,
+  "pcb_to_boss_gap_mm": 0.0,
+  "bosses_grown_0.3_vs_pi_underside_mm3": {},
+  "tray_and_hardware_vs_pin_keep_out_mm3": {},
+  "pin_keep_out_to_tray_mm": 0.5,
+  "pi_screw_heads_vs_pi_and_cooler_mm3": {},
+  "pi_screw_heads_grown_0.3_vs_pi_and_cooler_mm3": {},
+  "pi_screw_thread_below_pcb_mm": 4.6,
+  "pi_insert_pilot_depth_mm": 5.0,
+  "tray_screw_thread_in_lug_mm": 5.0,
+  "ears_on_lugs_gap_mm": 0.0,
+  "lug_inserts_vs_frame_mm3": {},
+  "lug_wall_round_insert_mm": 1.35,
+  "tray_screw_heads_vs_tray_rib_mm3": {},
+  "unit_vs_fixed_mm3": {},
+  "unit_vs_harness_reserves_mm3_info": {
+    "COMPUTE_TRAY:HARNESS_SIGNAL_TRUNK": 458.638,
+    "COMPUTE_TRAY:HARNESS_SENSOR_TRUNK": 440.231
+  },
+  "pi_and_cooler_to_tray_hardware_mm3": {},
+  "tray_screw_driver_clashes": {},
+  "install_sweep_clashes": {},
+  "install_sweep_excludes": [
+    "C3_",
+    "BODY_FRAME_C3_",
+    "C0_LINK",
+    "C0_GPIO",
+    "HARNESS_",
+    "PCB09",
+    "SPEAKER_",
+    "*RESERVE*",
+    "*KEEP_OUT*",
+    "*PLUG*"
+  ]
+}

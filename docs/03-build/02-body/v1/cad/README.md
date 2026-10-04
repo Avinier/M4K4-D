@@ -12,6 +12,8 @@ This directory follows the chassis v1 CAD layout: an editable model and STEP ent
 | `check_body_panel_fit.py` | Sloped service-panel, frame, functional-part, and fastener clearance check. |
 | `check_mic_mounts.py` | Shell-mounted mic boards: seat, gasket, sound path, screw depth, rail clearance and clashes (D-037). |
 | `check_charge_inlet.py` | Rear-panel charge inlet PCB-13: pocket depth, flush mouth, maximum-overmold fit, seat, screw engagement, clashes, PCB-02 clearance and the panel-removal sweep (D-040; about 6 min). |
+| `check_compute_mount.py` | Compute tray, Pi 5 and Active Cooler retention, frame lugs, tray-screw driver access and the front insertion sweep (D-042). |
+| `check_cooling_path.py` | Enclosure fan (BO-040 4010), +Y intake grille and collar, rear vent slots, shell lowering past the fan, mic-port distances and a first-order thermal estimate (D-042). |
 | `check_power_button.py` | Rear-panel mushroom power button: well clearance, PCB-02 clearance, W40 lead and `J2-9` plug clashes and the panel-removal sweep (D-041; about 5 min). |
 | `check_body_layout.py` | CAD-volume mass/CoM, body axes/envelope, and whole-robot stability-screen audit. |
 | `write_outputs.py` | Writes body dimensions, frames, and a partial body mass-register report to `generated/`. |
@@ -29,11 +31,13 @@ python check_body_panel_fit.py
 python check_mic_mounts.py
 python check_charge_inlet.py
 python check_power_button.py
+python check_compute_mount.py
+python check_cooling_path.py
 python check_body_layout.py
 python write_outputs.py
 ```
 
-The view includes the body frame, shell, service panels and their internal frames, panel hardware, speaker, microphones, compute tray, Raspberry Pi 5 and cooler, C3 carrier/DevKitC, power-distribution boards, yaw stage, internal wiring, and body connector/plug reserves. It also includes `CHASSIS_V1_REFERENCE`, loaded from the current chassis v1 Python source at build time. Hide that group in the viewer for body-only work. The chassis-owned battery pack, fuse holder, Adafruit drive boards, deck IMU, nose sensor, contact module, and motor wiring remain with the chassis group instead of being duplicated in the body groups. The combined view omits the chassis source's original J13 bolt/pin group and replaces it with the body integration hardware, which reverses the front-left M4 bolt and nut for fuse-shelf access. The chassis frame geometry and hole pattern are unmodified.
+The view includes the body frame, shell, service panels and their internal frames, panel hardware, speaker, microphones, compute tray with its Pi fixings, Raspberry Pi 5 and cooler, enclosure fan, C3 carrier/DevKitC, power-distribution boards, yaw stage, internal wiring, and body connector/plug reserves. It also includes `CHASSIS_V1_REFERENCE`, loaded from the current chassis v1 Python source at build time. Hide that group in the viewer for body-only work. The chassis-owned battery pack, fuse holder, Adafruit drive boards, deck IMU, nose sensor, contact module, and motor wiring remain with the chassis group instead of being duplicated in the body groups. The combined view omits the chassis source's original J13 bolt/pin group and replaces it with the body integration hardware, which reverses the front-left M4 bolt and nut for fuse-shelf access. The chassis frame geometry and hole pattern are unmodified.
 
 ## Body frame/chassis assembly
 
@@ -56,7 +60,7 @@ The shell is one printable, open-bottom piece. Only the rear keeps a 4 mm lower 
 
 Assembly order after the first three frame/chassis steps above:
 
-1. Fit the four shell-joint inserts to the frame posts. Install and test the frame-mounted body electronics and wiring. Leave the rear service panel with its power button, the other service panels, and the head/yaw moving parts off.
+1. Fit the four shell-joint inserts to the frame posts. Fit the enclosure fan to its web (its lead plugs into PCB-09 `J9-4` later), then slide in the compute tray with the Pi and screw it down (D-042), then the C3 carrier. Install and test the frame-mounted body electronics and wiring. Leave the rear service panel with its power button, the other service panels, and the head/yaw moving parts off.
 2. On the bench, fit both wheel-arch pods and the four microphone boards to the loose shell (see below). Leave the mic leads hanging free.
 3. Lower the shell vertically over the assembled frame and chassis. The open floor passes the chassis, the shell bosses pass outside the posts, and the open-bottomed arches pass over the tyres. Fit the four outside-driven M3 × 16 screws.
 4. Through the open front service aperture, plug the four mic leads into PCB-05: the +Y boards into `J5-2`/`J5-3`, the −Y boards into `J5-4`/`J5-5`. Unplug them first when removing the shell.
@@ -79,6 +83,60 @@ The `W40` GH2 lead leaves the two terminals past the end of the contact block. I
 - The 40 mm removal sweep is clear.
 
 The chassis reference group still carries the old XA1E at the same place; the checks filter it out.
+
+### Compute tray and Pi 5 retention (D-042)
+
+The compute tray is its own print, `COMPUTE_TRAY`: a 3 mm plate at Z 84.5–87.5, a 2 × 4 mm perimeter rib on top, slots for air to rise through, three ears and four bosses.
+- **Pi 5:** sits on the four Ø6 bosses, which rise to the PCB underside at Z 94.05. Each boss takes an M2.5 × 4 heat-set insert (as CH-080). Four M2.5 × 6 low-head screws from above give 4.6 mm of thread.
+- **Active Cooler:** held by its own two spring push pins in the Pi's cooler holes, as Raspberry Pi designed it. Nothing on the tray enters the Ø5 × 3.5 mm keep-out under each pin tip (`PI5_COOLER_PUSH_PIN_TIP_KEEP_OUT_*`, `E`).
+- **Tray to frame:** three supports printed on the frame, each taking an ISO 7380 M3 × 8 screw from above into an M3 × 6 insert:
+  - a lug on the rear −Y post, under an ear at (−32, −50.5);
+  - a column on the front −Y foot's dog-leg, at (64, −33);
+  - a block under the tray's rear +Y corner, on a short column from the lower rear cross rail, at (−24, 33).
+- **Why these points:** the C3 carrier's `J10-1` plug keeps an ear off the front −Y post. On +Y, nothing may stand proud of the tray edge, because the tray goes in from the front past the chassis fuse holder (D-032, X 52–82, Y 39–49, Z 73–99). The front +Y corner is free; the rib stiffens it.
+
+Assembly: screw the Pi to the tray on the bench, fit the cooler, then slide the tray in from the front, 2 mm high, and drop it onto the lugs. Do this before the C3 carrier, PCB-09 and the plugged harness go in, and after the enclosure fan (below). The tray screws are driven from above, before the yaw servo, PCB-09 and the `W40` lead are fitted.
+
+`check_compute_mount.py` writes `generated/compute-mount-fit.json`. It checks:
+- the PCB on the bosses and the boss clearance to the Pi's underside;
+- the push-pin keep-outs, the screw heads against the Pi's top parts and the cooler, and the thread engagement;
+- the tray on its three supports and the wall round each insert;
+- clashes with every fixed body and chassis part;
+- the driver path to each tray screw;
+- the front insertion sweep, with the vendor Pi and cooler leaves swept as their bounding boxes (booleans on their moved vendor solids stall).
+
+### Cooling path (D-042)
+
+Air enters through a grille in the +Y side wall and leaves through the open floor and two slot grilles in the rear panel.
+- **Fan:** BO-040, a generic 2-wire DC 5 V 4010 double-ball fan, 40 × 40 × 10, centred at X 24, Z 105.5. The builder chose it over the Noctua NF-A4x10. It sits on a web of the body frame between the +Y side rails (`FAN_WEB_*`), with its intake face at Y 68.9. Two 12 mm self-tapping screws (BO-041), driven from inboard through the web into the fan frame, hold it, so its outer face stays clear for the shell to pass. Its hole pattern (32 mm), hole size, airflow, noise and mass are unmeasured (`E`).
+- **Switching:** it has no PWM or tach, so it runs on/off. A low-side MOSFET on PCB-09 is switched by Pi GPIO24 under the standard `gpio-fan` overlay, with a threshold to be set on the bench. It is fed from the 40-pin header's 5 V.
+- **Wiring (`W41`):** the fan's own lead, cut to about 80 mm and re-crimped into its XH2.54-2P housing, runs from the fan's top-front corner above PCB-09's top-entry plugs to `J9-4` on PCB-09 (`HARNESS_W41_FAN_LEAD_*`, `C0_LINK_ADAPTER_J94_FAN_XH2_PLUG_RESERVE`).
+- **Side grille:** vertical 2.5 mm slots inside R18.5, giving 605 mm² of free area. They stay out of the wheel-arch pod band, and a printed collar (R19.5–21, edge at Y 70.5) limits recirculation round the fan face.
+- **Rear slots:** eight 2.5 × 23 mm slots beside the button well, 460 mm² in all, inside the panel-frame aperture.
+- **Floor:** at least 10,000 mm² of free horizontal area, so the inlet is not the limit.
+
+The grille's edge is 14 mm from the FRONT_L port (33 mm centre to port) and 28 mm from REAR_L. The rear slots are 42.7 mm from REAR_L/R. The FRONT_L pigtail's first 10 mm crosses the top of the gap between the fan face and the collar, 0.4 mm off the fan face; dress it outboard when the shell goes on.
+
+`check_cooling_path.py` writes `generated/cooling-path.json`. It checks:
+- fan, screw, `W41` and grille clashes;
+- the shell, with the +Y mic boards riding on it, lowering past the fan and web;
+- the open intake path and the pod and boss clearances;
+- that the rear slots pass the panel frame;
+- the mic-port distances;
+- a first-order thermal estimate (`E`).
+
+That estimate assumes 0.44 W/K through the walls. BO-040 has no published curve, so it uses a typical 4010 5 V listing class (about 5.5 CFM free air, 4 mm H₂O shut-off) and a half-flow sensitivity case. At 8.5 W (Pi 6 W plus converters) it gives an internal air rise of:
+
+| Fan | Rise |
+|---|---|
+| Sealed, no vents | 19.3 K |
+| Vents only, fan off | 14.7 K |
+| Fan on, half the listing-class flow | 7.0 K |
+| Fan on, listing-class flow | 4.3 K |
+
+These numbers compare options; the bench measures the real ones, including the fan's real airflow.
+
+The shell collar is a horizontal tube on a vertical wall in the roof-down print, so expect local support. The fresh DfAM measurement is still pending.
 
 ### Microphone mounts (D-037)
 
@@ -116,10 +174,10 @@ The shell's 2.4 mm inset is horizontal, so its 45° facets are 1.7 mm normal to 
 
 ## Mass and physics refresh
 
-`check_body_layout.py` derives the selected shell/panels at 250.2 g (including the D-037 mic bosses and the D-040 charge-inlet pad) and the connected frame, cassette and modeled joint hardware at 170.9 g from their CAD volumes and centroids. The estimate uses 1.20 g/cm³ effective PETG for skins, frames and the conservative structural print; 0.571 g/cm³ for wheel arches; and 7.85/8.50 g/cm³ for modeled steel/brass. The earlier Layout 02 mass rows (285.6 g shell/panels and 335 g frame) no longer described the authored body-v1 solids. The revised whole-robot register is 2,433.1 g at CoM (+18.20, +0.24, 105.88) mm. Neutral forward-launch tip acceleration is 1.686 m/s² versus the accepted 1.582 m/s² paper screen; a conservative bound over the current balanced head's yaw, pitch and roll centroids is 1.682 m/s². The head yaw datum remains (16, 0, 140) mm and its sweep floor remains 19 mm above the body roof. `generated/body-layout-checks.json` records the component breakdown, assumptions and checks.
+`check_body_layout.py` derives the selected shell/panels at 248.3 g (including the D-037 mic bosses, the D-040 charge-inlet pad and the D-042 fan grille, collar and rear vent slots) and the connected frame, cassette and modeled joint hardware at 178.4 g (with the D-042 fan web and tray supports) from their CAD volumes and centroids. The estimate uses 1.20 g/cm³ effective PETG for skins, frames and the conservative structural print; 0.571 g/cm³ for wheel arches; and 7.85/8.50 g/cm³ for modeled steel/brass. The earlier Layout 02 mass rows (285.6 g shell/panels and 335 g frame) no longer described the authored body-v1 solids. The revised whole-robot register, with the D-042 compute tray and fixings (29.5 g, never counted before) and the enclosure fan (15 g, `E`), is 2,483.2 g at CoM (+18.27, +0.63, 105.62) mm. Neutral forward-launch tip acceleration is 1.697 m/s² versus the accepted 1.582 m/s² paper screen; a conservative bound over the current balanced head's yaw, pitch and roll centroids is 1.694 m/s². The `shell_symmetric_about_y` check now allows 0.5 mm, because the +Y fan grille is deliberately one-sided. The head yaw datum remains (16, 0, 140) mm and its sweep floor remains 19 mm above the body roof. `generated/body-layout-checks.json` records the component breakdown, assumptions and checks.
 
 The selected shell and printed frame contribute about 0.00261 kg·m² about the drive-axle vertical axis under those material assumptions, versus about 0.00291 kg·m² for their earlier CAD shapes under the same assumptions. This is a roughly 10% reduction in that subset's yaw inertia; it is not the whole-robot yaw inertia or the head yaw-servo load, because the shell and frame do not rotate with the head.
 
-The 95 g remaining harness/fastener allowance is still unweighed and placed at X +20 mm in the register. With the other rows fixed, its actual mass-weighted X must remain forward of about −7.7 mm to retain the paper head-pose screen; placing all 95 g at X −20 mm would lower that estimate to 1.538 m/s² and fail it. Route and weigh the final harness and hardware before treating the margin as robust. These are CAD/material estimates, not weighed mass, motor approval, or a measured lift threshold.
+The 95 g remaining harness/fastener allowance is still unweighed and placed at X +20 mm in the register. With the other rows fixed, its actual mass-weighted X must remain forward of about −11.3 mm to retain the paper head-pose screen; placing all 95 g at X −20 mm would lower that estimate to 1.552 m/s² and fail it. Route and weigh the final harness and hardware before treating the margin as robust. These are CAD/material estimates, not weighed mass, motor approval, or a measured lift threshold.
 
 The separate head assembly is not part of the body enclosure. Its body-side yaw drive and body-side head wiring are included. This is a subsystem review model, not a fabrication release. The model still depends on purchased STEP files in the prototype and chassis directories; see `purchased/README.md`.
