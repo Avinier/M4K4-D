@@ -11,6 +11,7 @@ Measures, against the body v1 model:
 """
 
 import json
+import math
 from pathlib import Path
 
 from build123d import Location
@@ -36,6 +37,15 @@ def overlap(a, b):
     return 0.0 if common is None else round(common.volume, 3)
 
 
+def aabb_gap(a, b):
+    """Conservative clearance lower bound, avoiding a torus/box OCC solver stall."""
+    aa, bb = a.bounding_box(), b.bounding_box()
+    gaps = [max(0.0, getattr(bb.min, axis) - getattr(aa.max, axis),
+                getattr(aa.min, axis) - getattr(bb.max, axis))
+            for axis in "XYZ"]
+    return math.sqrt(sum(g * g for g in gaps))
+
+
 def clashes(movers, parts):
     found = {}
     for m in movers:
@@ -55,7 +65,18 @@ rear_screws = [p for p in hardware if (p.label or "").startswith("REAR_PANEL_M3_
 electronics = leaves(body.electronics())
 button_all = [p for p in electronics if (p.label or "").startswith("POWER_BUTTON_MUSHROOM_")]
 button = [p for p in button_all if "KEEP_OUT" not in p.label]
-mushroom = next(p for p in button if p.label == "POWER_BUTTON_MUSHROOM_D29")
+mushroom = next(p for p in button if p.label == "POWER_BUTTON_MUSHROOM_RED_MUSHROOM_HEAD")
+# The cosmetic torus crests stall OCC's intersection solver. An enclosing
+# smooth cylinder gives a conservative clash and removal check for the barrel.
+thread = next(p for p in button if "THREADED_BARREL" in p.label)
+thread_box = thread.bounding_box()
+thread_proxy = body._axial_bore_x(
+    max(thread_box.size.Y, thread_box.size.Z) / 2.0,
+    thread_box.min.X, thread_box.max.X, 0.0, body.ESTOP_CENTER_Z,
+)
+thread_proxy.label = thread.label
+collision_button = [thread_proxy if p is thread else p for p in button]
+collision_button_all = [*collision_button, *(p for p in button_all if "KEEP_OUT" in p.label)]
 pcb02 = [p for p in electronics if (p.label or "").startswith("PCB02_CHARGE_AND_SYSTEM_POWER")]
 connectors = leaves(body.connectors_and_exits())
 leads = [p for p in connectors if (p.label or "").startswith("POWER_BUTTON_W40_LEAD_RESERVE")]
@@ -70,12 +91,14 @@ others = [p for p in connectors if p not in (*leads, *j29)]
 
 results = {
     "button_parts": sorted(p.label for p in button_all),
+    "thread_clash_method": "enclosing smooth cylinder",
     "rear_panel_solids": len(rear.solids()),
     "mushroom_to_well_mm": round(mushroom.distance(rear), 2),
-    "button_to_pcb02_mm": round(min(b.distance(p) for b in button for p in pcb02), 2),
+    "button_to_pcb02_mm": round(min(aabb_gap(b, p) for b in button for p in pcb02), 2),
+    "button_to_pcb02_method": "conservative axis-aligned bounding-box lower bound",
     "keep_out_to_pcb02_mm": round(min(b.distance(p) for b in button_all if "KEEP_OUT" in b.label for p in pcb02), 2),
-    "button_vs_rear_panel_mm3": clashes(button, [rear]),
-    "button_vs_fixed_mm3": clashes(button_all, [shell, *rear_frame, *rear_screws, *fixed, *others, *j29]),
+    "button_vs_rear_panel_mm3": clashes(collision_button, [rear]),
+    "button_vs_fixed_mm3": clashes(collision_button_all, [shell, *rear_frame, *rear_screws, *fixed, *others, *j29]),
     "lead_and_j29_vs_fixed_mm3": clashes([*leads, *j29], [shell, *rear_frame, rear, *fixed, *others]),
 }
 
@@ -83,8 +106,8 @@ results = {
 sweep = {}
 for step in range(1, 11):
     dx = -4.0 * step
-    moved = [p.moved(Location((dx, 0.0, 0.0))) for p in button]
-    for m, src in zip(moved, button):
+    moved = [p.moved(Location((dx, 0.0, 0.0))) for p in collision_button]
+    for m, src in zip(moved, collision_button):
         m.label = src.label
     hit = clashes(moved, [shell, *rear_frame, *fixed, *others])
     if hit:

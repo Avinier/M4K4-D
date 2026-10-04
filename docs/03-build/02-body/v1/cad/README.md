@@ -21,7 +21,7 @@ This directory follows the chassis v1 CAD layout: an editable model and STEP ent
 Build with the project's CAD Python environment from this directory:
 
 ```bash
-python body-v1.step.py
+python /path/to/text-to-cad/skills/cad/scripts/gen body-v1.step.py --write
 python body-frame-v1.step.py
 python check_body_frame_fit.py
 python check_shell_frame_fit.py
@@ -68,13 +68,13 @@ Each wheel arch is two separate prints: an ivory pod and an amber trim ring. The
 
 ### Power button (D-041)
 
-The red mushroom in the rear-panel well is the power button. **There is no E-stop.** The bought part is a 16 mm momentary mushroom, 1NO. It replaces the latching, NC IDEC XA1E, and the model keeps the XA1E envelope as its fit spec (`E`): Ø16.2 cut-out in the 2 mm well floor, Ø29 mushroom 20.6 mm above the floor, 23.9 mm behind it. The `ESTOP_*` constants keep their names for the well geometry; the parts are labelled `POWER_BUTTON_MUSHROOM_*`.
+The red mushroom in the rear-panel well is the power button. **There is no E-stop.** Body v1 imports the photo-derived [SparkFun COM-31041 STEP](purchased/sparkfun_com_31041_mushroom_red.step), a 16 mm momentary 1NO switch, from `purchased/`. Its local gasket face is mounted on the well floor and its actuator points out along −X. The model estimates a Ø25.2 mushroom, 9.0 mm projection in front of the floor, and 21.8 mm behind the floor's back face. The Ø16.2 cut-out in the 2 mm floor and the original XA1E keep-out remain as conservative clearance limits. The `ESTOP_*` constants retain their names for the well geometry and keep-out; the imported parts are labelled `POWER_BUTTON_MUSHROOM_*`.
 
 The `W40` GH2 lead leaves the two terminals past the end of the contact block. It runs +Y beside the Pi's rear edge, then back above PCB-02's +Y edge, and drops to `J2-9` (`POWER_BUTTON_W40_LEAD_RESERVE_1…4`, `J2_9_GHR02_MATED_PLUG`). The button comes off with the panel: draw the panel out, unplug `J2-9` beside `J2-8`, then lift it away.
 
-`check_power_button.py` writes `generated/power-button-fit.json`. Results:
-- The mushroom is 3.98 mm from the well wall.
-- The button's solid parts are 2.5 mm from PCB-02, and its contact-block keep-out is 0.5 mm away (0.4 mm running-gap rule).
+`check_power_button.py` writes `generated/power-button-fit.json`. Results with the locknut clocked 30°:
+- The mushroom is 3.13 mm from the well wall.
+- The button is at least 1.5 mm from PCB-02 by a conservative bounding-box clearance check, and its contact-block keep-out is 0.5 mm away (0.4 mm running-gap rule).
 - The lead and plug are clear.
 - The 40 mm removal sweep is clear.
 

@@ -54,6 +54,7 @@ PURCHASED = PROTOTYPE_CAD_ROOT / "body-chassis" / "layout-01" / "references" / "
 # Vendor or vendor-derived STEPs added in 03-build (see purchased/README.md).
 V1_PURCHASED = HERE.parents[2] / "01-chassis" / "v1" / "cad" / "purchased"
 BODY_V1_PURCHASED = HERE / "purchased"
+POWER_BUTTON_STEP = "sparkfun_com_31041_mushroom_red.step"
 # Adafruit #3297 leaves in adafruit_3297_drv8833.step export order.
 ADAFRUIT_3297_LEAVES = ("PCB", "U1_HTSSOP16", "U1_LEADS_A", "U1_LEADS_B", "R1_1206", "R2_1206",
                         "C1_0805", "C2_0805", "C3_0805", "C4_0805", "Q1_SOT23", "J1_TERMINAL_BLOCK")
@@ -3014,36 +3015,25 @@ def _power_button_lead():
 
 
 def power_button_mushroom():
-    """16 mm momentary red mushroom power button (D-041): Ø29 dome, collar, contact block, two terminals.
+    """Place the photo-derived SparkFun COM-31041 STEP on the well floor (D-041).
 
-    Envelope of the IDEC XA1E it replaces; the bought part must fit inside it.
+    Its local +Z actuator axis becomes body -X. Local Z=0 is the gasket's
+    panel-contact face, coincident with ESTOP_MOUNT_X. Keep the imported STEP
+    children separate so the switch materials and part labels remain visible.
     """
-    top_x = ESTOP_MOUNT_X - ESTOP_MUSHROOM_TOP_ABOVE_MOUNT
-    skirt_x1 = top_x + ESTOP_MUSHROOM_DOME + ESTOP_MUSHROOM_SKIRT
-    r = ESTOP_MUSHROOM_DIAMETER / 2.0
-    dome_r = (r * r + ESTOP_MUSHROOM_DOME ** 2) / (2.0 * ESTOP_MUSHROOM_DOME)
-    # Trim the cap at the origin, then turn +Z to -X: trimming the placed sphere
-    # returns the whole sphere in this OCC build.
-    dome = Sphere(dome_r) & Box(2.0 * r, 2.0 * r, ESTOP_MUSHROOM_DOME + 1.0, align=(Align.CENTER, Align.CENTER, Align.MAX)).moved(Location((0.0, 0.0, dome_r + 1.0)))
-    dome = dome.rotate(Axis.Y, -90.0).moved(Location((top_x + dome_r, 0.0, ESTOP_CENTER_Z)))
-    skirt = _axial_bore_x(r, top_x + ESTOP_MUSHROOM_DOME, skirt_x1, 0.0, ESTOP_CENTER_Z)
-    # A shallow grip groove round the skirt reads as the real cap's rim.
-    skirt = skirt - (_axial_bore_x(r + 1.0, skirt_x1 - 2.2, skirt_x1 - 1.4, 0.0, ESTOP_CENTER_Z) - _axial_bore_x(r - 0.5, skirt_x1 - 3.0, skirt_x1, 0.0, ESTOP_CENTER_Z))
-    collar_d, collar_h = ESTOP_OPERATOR_BEZEL
-    collar = _axial_bore_x(collar_d / 2.0, ESTOP_MOUNT_X - collar_h, ESTOP_MOUNT_X, 0.0, ESTOP_CENTER_Z)
-    stem = _axial_bore_x(ESTOP_STEM_DIAMETER / 2.0, skirt_x1, ESTOP_MOUNT_X - collar_h, 0.0, ESTOP_CENTER_Z)
-    barrel = _axial_bore_x(ESTOP_CUTOUT_DIAMETER / 2.0 - 0.3, ESTOP_MOUNT_X, ESTOP_FLOOR_BACK_X, 0.0, ESTOP_CENTER_Z)
-    body = _axial_bore_x(ESTOP_BODY_DIAMETER / 2.0, ESTOP_FLOOR_BACK_X, ESTOP_FLOOR_BACK_X + ESTOP_DEPTH_BEHIND_PANEL - 3.0, 0.0, ESTOP_CENTER_Z)
-    tabs = [
-        _block(ESTOP_FLOOR_BACK_X + ESTOP_DEPTH_BEHIND_PANEL - 3.0, ESTOP_FLOOR_BACK_X + ESTOP_DEPTH_BEHIND_PANEL, y - 3.2, y + 3.2, ESTOP_CENTER_Z + dz - 0.4, ESTOP_CENTER_Z + dz + 0.4)
-        for y, dz in ((-5.5, -3.0), (5.5, -3.0))  # NO pair (E)
-    ]
-    return [
-        _paint(dome + skirt, "POWER_BUTTON_MUSHROOM_D29", ESTOP_RED, 1.0),
-        _paint(stem + collar + barrel, "POWER_BUTTON_MUSHROOM_COLLAR", "#3A4044", 1.0),
-        _paint(body, "POWER_BUTTON_MUSHROOM_CONTACT_BLOCK", "#2E3336", 1.0),
-        *[_paint(tab, f"POWER_BUTTON_MUSHROOM_TERMINAL_{i}", STEEL, 1.0) for i, tab in enumerate(tabs, start=1)],
-    ]
+    source = import_step(str(BODY_V1_PURCHASED / POWER_BUTTON_STEP))
+    parts = []
+    for child in source.children:
+        # The loose hex nut can be clocked on the barrel. Put a flat toward
+        # PCB-02's top edge to clear it without moving the switch axis.
+        if child.label == "hex_locknut_20_af_estimated":
+            child = child.rotate(Axis.Z, 30.0)
+        placed = child.rotate(Axis.Y, -90.0).moved(
+            Location((ESTOP_MOUNT_X, 0.0, ESTOP_CENTER_Z))
+        )
+        placed.label = f"POWER_BUTTON_MUSHROOM_{child.label.upper()}"
+        parts.append(placed)
+    return parts
 
 
 def power_distribution_boards():
