@@ -1,41 +1,41 @@
 {
   "scope": "body register rows only; partial estimate, not a full body mass or solid measurement",
-  "mass_g": 799.2,
+  "mass_g": 851.6800000000001,
   "com_mm": [
-    18.011936043186044,
-    -0.08805180180180174,
-    97.9166579079079
+    17.62681956335042,
+    -0.020490559834679598,
+    100.44196623144843
   ],
   "whole_robot_estimate": {
-    "mass_g": 2483.1794811320765,
+    "mass_g": 2530.659481132077,
     "com_mm": [
-      18.273143267976483,
-      0.6267324575212849,
-      105.61958196061552
+      18.099141808812742,
+      0.5133874345256212,
+      106.31687176260836
     ],
-    "forward_tip_acceleration_m_s2": 1.6972187555683889,
-    "ball_static_share": 0.16611948425433165
+    "forward_tip_acceleration_m_s2": 1.6700320297318816,
+    "ball_static_share": 0.16453765280738858
   },
   "rows": [
     {
       "id": "BODY_SHELL_AND_PANELS",
-      "mass_g": 248.3,
+      "mass_g": 248.7,
       "com_mm": [
-        18.16,
-        -0.19,
-        92.91
+        18.17,
+        -0.09,
+        92.95
       ],
-      "source": "Body v1 CAD volume and centroid (2026-10-04, D-042: -1.9 g net for the +Y fan-intake grille and collar and the eight rear-panel vent slots; was 250.2 g at (17.8, 0, 93.0)): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037), front service skin with an open 46 mm speaker aperture and retaining lip, rear service skin, E-stop well and charge-inlet pad (D-040), badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."
+      "source": "Body v1 CAD volume and centroid (2026-10-04, D-043: +0.4 g for the smaller 3010 grille and collar, was 248.3 g at (18.16, -0.19, 92.91); D-042: -1.9 g net for the +Y fan-intake grille and collar and the eight rear-panel vent slots; was 250.2 g at (17.8, 0, 93.0)): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037), front service skin with an open 46 mm speaker aperture and retaining lip, rear service skin, E-stop well and charge-inlet pad (D-040), badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."
     },
     {
       "id": "BODY_PRIMARY_FRAME",
-      "mass_g": 178.4,
+      "mass_g": 169.18,
       "com_mm": [
-        12.83,
-        1.84,
-        94.85
+        12.38,
+        2.27,
+        92.46
       ],
-      "source": "Body v1 CAD volume and centroid (2026-10-04, D-042: +7.5 g for the +Y fan web with its rail roots and strut, the rear -Y tray lug, the front -Y tray column and the rear +Y tray block and column; was 170.9 g at (12.5, 1.0, 94.9)); 2026-10-02: main connected print and removable front-left foot cassette at conservative 1.20 g/cm3 effective PETG, plus modeled four M4 bolts/nuts, two locating pins, cassette M3 joints, and four shell-to-frame M3 screw/insert joints at 7.85/8.50 g/cm3 steel/brass. Estimated, not weighed; check_body_layout.py verifies against the solids."
+      "source": "Body v1 CAD volume and centroid (2026-10-04, D-044: -9.3 g for the yaw plate's R28 bore and R36.6 housing pocket against its R44 ring and the yaw-servo pad, was 178.5 g at (12.70, 1.88, 94.80); D-043: fan web moved to X 1-33 with a R14 opening, was 178.4 g at (12.83, 1.84, 94.85); D-042: +7.5 g for the +Y fan web with its rail roots and strut, the rear -Y tray lug, the front -Y tray column and the rear +Y tray block and column; was 170.9 g at (12.5, 1.0, 94.9)); 2026-10-02: main connected print and removable front-left foot cassette at conservative 1.20 g/cm3 effective PETG, plus modeled four M4 bolts/nuts, two locating pins, cassette M3 joints, and four shell-to-frame M3 screw/insert joints at 7.85/8.50 g/cm3 steel/brass. Estimated, not weighed; check_body_layout.py verifies against the solids."
     },
     {
       "id": "RASPBERRY_PI5_AND_COOLER",
@@ -149,13 +149,13 @@
     },
     {
       "id": "BODY_YAW_STAGE",
-      "mass_g": 89.0,
+      "mass_g": 150.3,
       "com_mm": [
-        16.0,
-        13.5,
-        134.3
+        14.81,
+        7.81,
+        136.22
       ],
-      "source": "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 6 g driven spur + 6 g scissor pinion (two 2.4 mm halves) + 1 g torsion spring and retaining clip (2026-09-25) + 2 g clamp ring + 1 g coupling shaft; no SKU"
+      "source": "D-044 (2026-10-04), check_yaw_stage.py from the solids: 61810-2Z bearing 55 g (E, SKF lists 52-59 g) + XC330-M181 23 g (D) at its STEP centroid + PETG prints at 1.20 g/cm3 (hub 15.8, housing 15.6, rotor 10.4, cassette stator 4.5, clamp ring 2.2, pinion halves 2 x 2.5, drive hub 0.6) + steel/brass hardware at 7.85/8.50 (shaft 2.7, spring 1.2, screws and inserts ~6) + three 22-pin FFCs 4.5 g (E) + PCB-14 3 g (E). Was 89 g at (16, 13.5, 134.3) with a 50 g bearing placeholder and no housing, cassette or fixings. Estimated, not weighed"
     }
   ],
   "exclusions": "Head, chassis, battery, drive, deck sensors, and mixed HARNESS_AND_FASTENERS row"

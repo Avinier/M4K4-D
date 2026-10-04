@@ -91,7 +91,9 @@ Lengths are `E`: Manhattan routes through CAD waypoints plus service slack. Cut 
 | `W32`/`W33` driver logic | #3297 `SLP`, `AIN1+BIN1`, `AIN2+BIN2`, `FLT`, `GND` → `J10-5`/`J10-6` | GH6, single-ended (S at the board) | 180/80 | D-038 mapping |
 | `W34` nose | GP2Y0A21 (S) and the Hall board pads (S) → `J10-8` | GH5, single-ended | 220 | `HARNESS_NOSE_J10_8_*` route (D-013, D-027) |
 | `W36` rear TCRT | TCRT5000 legs (S) → `J10-10` | GH4, 350 mm single-ended (CH-020) | 350 | [rear-tcrt-lead.md](../01-chassis/v1/research/rear-tcrt-lead.md) |
-| `W37` CSI | Pi 5 ↔ Camera Module 3 | PCN-36 15-to-22 FFC | — | Unchanged (BA-05) |
+| `W37` CSI | Pi 5 ↔ PCB-14 (head side: PCB-14 ↔ Camera Module 3) | 22-pin 0.5 mm FFC, about 200 mm (Raspberry Pi 5 camera cable), through the yaw cassette | — | Changed by [D-044](../decisions.md#d-044): it now crosses yaw in the FFC cassette (BO-050) and demates at PCB-14 |
+| `W42` yaw power FFC | PCB-08 `J8-6` ↔ PCB-14 | 22-pin 0.5 mm FFC, about 200 mm, in the cassette | — | D-044: carries the three `J8-1` power pairs (7 + 7, 2 + 2, 2 + 2 conductors) |
+| `W43` yaw sideband FFC | PCB-08 `J8-7` ↔ PCB-14 | 22-pin 0.5 mm FFC, about 200 mm, in the cassette | — | D-044: the `J8-3`, `J8-5` and `J8-4` signals, spares dropped |
 | ~~`W38`~~ | Not fitted (D-041): `J10-11` carried the E-stop status | — | — | |
 | `W39` | `J10-12` ↔ `J3-9` | GH4, double-ended | 100 | |
 | `W40` power button ([D-041](../decisions.md#d-041)) | Mushroom NO terminals (S, heat-shrink) → PCB-02 `J2-9` | GH2, single-ended | 150 | Out past the contact block, +Y beside the Pi's rear edge, back above the PCB-02 +Y edge and down to `J2-9` (`POWER_BUTTON_W40_LEAD_RESERVE_1…4`). Rides with the rear panel; unplug at `J2-9` before lifting the panel away |

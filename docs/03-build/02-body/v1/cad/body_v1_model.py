@@ -591,14 +591,24 @@ PI_COOLER_TOP_Z = 123.0  # headroom datum only; the real cooler now tops out nea
 PI_SOC_TOP_Z = 97.7  # tallest package under the cooler plate on the Pi 5 STEP (BCM2712 96.65, RAM 97.7; PCB top 95.4)
 PI_COOLER_HEADROOM = 10.5
 YAW_PLATE_Z = (BODY_FRAME_UPPER_Z + 4.0, BODY_FRAME_UPPER_Z + 8.0)
-YAW_PLATE_RADIUS = 33.5
+# D-044: the plate ring grows to R44 (1 mm inside the R45 shell opening) to carry
+# the yaw cartridge flange. It is bored R28 so the cartridge's cassette passes
+# down through it, and pocketed R36.6 down to Z 135.5 for the housing seat.
+YAW_PLATE_RADIUS = 44.0
 YAW_PLATE_BAR_HALF_WIDTH = 29.0
-YAW_BEARING_RADII = (25.0, 33.0)
-YAW_BEARING_Z = (YAW_PLATE_Z[1], YAW_PLATE_Z[1] + 7.0)
-YAW_CLOCKSPRING_RADII = (12.5, 24.0)
+YAW_PLATE_BORE_RADIUS = 28.0
+YAW_PLATE_POCKET = (36.6, 135.5)  # radius, floor Z
+# Bearing (BO-044, D-044): 61810-2Z (6810ZZ) 50 x 65 x 7 deep-groove ball bearing,
+# outer ring in the stationary housing, inner ring on the rotating hub. Shielded,
+# not sealed: the 2RS contact seals' drag would eat the yaw servo's 8% margin.
+YAW_BEARING_MODEL = "61810-2Z"
+YAW_BEARING_RADII = (25.0, 32.5)
+YAW_BEARING_Z = (137.0, 144.0)  # seated 1 mm into the plate so the clamp and shoulder get 1.6-1.8 mm
+YAW_BEARING_LANDS = (26.8, 30.7)  # E: inner-ring shoulder and outer-ring land radii (d1 ~53.6, D1 ~61.4)
+YAW_BEARING_MASS_G = 55.0  # E: SKF 61810-2RS1 lists 0.052-0.059 kg; weigh on receipt
 YAW_GEAR_PITCH_RADIUS = 18.5
-YAW_GEAR_OUTER_RADIUS = 20.0
-YAW_GEAR_BORE_RADIUS = 13.0
+YAW_GEAR_OUTER_RADIUS = 19.5  # tip radius, m1 z37
+YAW_GEAR_BORE_RADIUS = 12.15  # pilots the head disc's R12 hub
 YAW_GEAR_RATIO = 1.0
 YAW_PINION_CENTER = (0.0, 2.0 * YAW_GEAR_PITCH_RADIUS)  # offset from the yaw axis
 # Spur pair: module 1, 37 teeth each (pitch Ø37), 20 deg pressure angle. The
@@ -610,8 +620,8 @@ YAW_PINION_CENTER = (0.0, 2.0 * YAW_GEAR_PITCH_RADIUS)  # offset from the yaw ax
 # always in contact until the transmitted torque exceeds the preload.
 YAW_GEAR_MODULE = 1.0
 YAW_GEAR_TEETH = 37
-YAW_SCISSOR_HALF_FACE = 2.4
-YAW_SCISSOR_GAP = 0.2
+YAW_SCISSOR_HALF_FACE = 2.0  # D-044: 2.0 (was 2.4) leaves 0.6 mm over the hub shoulder and 0.4 mm under the disc
+YAW_SCISSOR_GAP = 0.2  # a printed 0.2 mm thrust land on the sprung half
 # Preload vs demand: the RP-01 screen's yaw peak external torque (0.1099 N*m
 # at Layout 03's 0.001080 kg*m2) scales with the head's current yaw inertia and
 # needs >= 1.5x margin; the M181 Current Limit (0.9 A x 0.333 N*m/A = 0.30 N*m)
@@ -627,6 +637,46 @@ YAW_OPENING_RADIUS = 45.0
 # no-load speed 95 / 129 rpm at 3.7 / 5.0 V (ROBOTIS e-manual).
 YAW_PEAK_OUTPUT_RPM = 63.0
 YAW_SERVO_NO_LOAD_RPM = {"3.7V": 95.0, "5.0V": 129.0}
+# D-044 yaw stage detail. Angles are degrees about the yaw axis from +X at yaw 0.
+# Cartridge = housing + bearing + clamp ring + hub + rotor + FFC cassette, built on
+# the bench and lowered in from above before the pinion and the head disc.
+YAW_GEAR_PRESSURE_ANGLE = 20.0
+YAW_GEAR_BACKLASH = 0.15  # nominal circumferential, both gears thinned 0.075 mm for FDM; the scissor takes it up
+YAW_GEAR_Z = (145.8, 151.0)  # driven gear face, under the disc plate
+YAW_PINION_Z = (146.4, 150.6)  # sprung half below, fixed half above
+YAW_HOUSING_SEAT = (30.8, 36.5, 135.5, 137.0)  # r0, r1, z0, z1: lip under the outer ring
+YAW_HOUSING_WALL = (32.55, 36.5, 137.0, 144.0)
+YAW_HOUSING_FLANGE = (36.5, 44.0, 138.0, 141.0)
+YAW_CLAMP_RING = (30.8, 36.5, 144.0, 145.6)  # BO-049, stationary: holds the outer ring down
+YAW_CLAMP_SCREW_R, YAW_CLAMP_SCREW_DEG = 34.5, (0.0, 135.0, 225.0)  # M2 x 8 thread-forming
+YAW_FLANGE_SCREW_R, YAW_FLANGE_SCREW_DEG = 40.0, (0.0, 180.0, 270.0)  # ISO 7380 M3 x 6 into plate inserts
+YAW_HUB_SPIGOT = (18.0, 25.0, 137.0, 144.0)
+YAW_HUB_SHOULDER = (YAW_GEAR_BORE_RADIUS, 26.6, 144.0, 145.8)
+YAW_HUB_BOSS_R, YAW_HUB_BOSS_RADIUS, YAW_HUB_BOSS_DEG = 22.0, 3.2, (210.0, 270.0, 330.0)  # disc M3 inserts
+YAW_ROTOR_RING = (11.0, 27.0, 133.6, 137.0)  # clamps the inner ring up against the hub shoulder
+YAW_ROTOR_DRUM = (11.0, 13.5, 121.4, 133.6)
+YAW_ROTOR_SCREW_R, YAW_ROTOR_SCREW_DEG = 21.5, (30.0, 150.0, 270.0)  # M2.5 x 8 thread-forming into the spigot
+# Hard stops (RP-01 P08): usable +-55 deg, servo position limits +-58, stops +-62.
+YAW_HARD_STOP_DEG = 62.0
+YAW_STOP_DOG = (27.0, 30.3, 135.8, 136.8, 270.0, 2.0)  # r0, r1, z0, z1, deg, half-width (on the rotor)
+YAW_STOP_BUMP = (27.6, 30.8, 135.5, 136.9, 2.0)  # r0, r1, z0, z1, half-width (on the housing seat)
+# FFC clock-spring cassette (BO-050): three 22-pin 0.5 mm FFCs (power, sideband, CSI)
+# on edge in a rolling loop between the rotor drum and the stator wall.
+YAW_CASSETTE_FLOOR = (23.5, 120.0, 121.0)
+YAW_CASSETTE_WALL = (22.3, 23.5, 121.0, 133.2)
+YAW_CASSETTE_EXIT_DEG = 300.0
+YAW_CASSETTE_POST_R, YAW_CASSETTE_POST_DEG = 33.0, (45.0, 150.0, 270.0)  # 45 not 30: the front upper cross rail is at X 45.5
+YAW_FFC_WIDTH = 11.5  # 22-pin, 0.5 mm pitch
+YAW_FFC_CAPACITY_DEG = 90.0  # loop sized for +-90 deg, beyond the stops
+# Pinion drive: a printed hub on the XC330 horn (4 x M2 on its 12 mm PCD) carries a
+# 5 mm steel D-shaft; a torsion spring between its collar and the sprung half sets the preload.
+YAW_DRIVE_HUB = (8.0, 133.0, 136.2)  # radius, z0, z1
+YAW_DRIVE_COLLAR = (3.0, 136.2, 140.2)
+YAW_SHAFT = (2.5, 133.2, 150.6)
+YAW_SPRING = (1.2, 8.0, 4, 140.2, 146.2)  # wire, OD, coils, z0, z1
+YAW_SERVO_TOP_Z = 130.0
+YAW_SERVO_CASE_SCREWS = ((20.5, 28.6), (20.5, 45.4), (-6.9, 32.1), (-3.4, 45.4))  # from the XC330 STEP
+YAW_SERVO_BRACKET = (-8.5, 25.5, 27.0, 47.0, 130.0, 134.0)  # fused under the plate
 
 PI_CENTER = (6.0 + BODY_SHIFT_X, 0.0, 102.0)
 # Pi 5 cooler-post holes (STEP PCB), from the Pi's bounding-box corner: 58 x 37 mm apart.
@@ -804,17 +854,18 @@ TRAY_VENT_BOSS_MARGIN = 4.5  # slots stop this far from each Pi boss axis
 ENCLOSURE_FAN_CENTER = (17.5, 107.0)  # X, Z of the axis; the axis runs along Y. X 17.5 lets the diagonal screw pair clear the yaw servo
 ENCLOSURE_FAN_SIZE = 30.0
 ENCLOSURE_FAN_Y = (58.9, 68.9)  # intake face outboard (+Y)
-ENCLOSURE_FAN_HUB_RADIUS = 8.0
-ENCLOSURE_FAN_BORE_RADIUS = 14.25
-ENCLOSURE_FAN_HOLE_RADIUS = 1.65
-ENCLOSURE_FAN_HOLE_HALF_PITCH = 12.0  # 24 mm square hole pattern, usual for 3010 fans (E: unmeasured on BO-040)
+# The fan solid is purchased/dc5v_3010_hydraulic_usb_fan.step; its HOLE_PITCH must match this.
+ENCLOSURE_FAN_HOLE_HALF_PITCH = 12.0  # 24 mm square hole pattern, usual for 3010 fans (E: listing says 26 mm; measure BO-040)
 FAN_WEB_X = (1.0, 33.0)
 FAN_WEB_Y = (56.1, 58.9)  # 1.1 mm outboard of the yaw servo; joined to the rails by FAN_WEB_ROOTS
 FAN_WEB_Z = (84.0, 133.2)  # top fused into the upper side rail
 FAN_WEB_STRUT = (4.0, 12.0, 61.0, FAN_WEB_Z[0])  # x0, x1, z0, z1: leg down to the lower side rail
 FAN_WEB_ROOTS = ((126.0, 133.2), (61.0, 69.0))  # Z bands where the web thickens out to Y 60.4 to fuse with the upper and lower side rails
 FAN_WEB_OPENING_RADIUS = 14.0
-FAN_SCREW_POINTS = ((5.5, 95.0), (29.5, 119.0))  # two diagonal holes (x, z): heads 1.4 mm under and 0.9 mm forward of the yaw servo; the others sit behind it
+FAN_SCREW_POINTS = (  # two diagonal holes (x, z): at 24 mm, heads 1.4 mm under and 0.9 mm forward of the yaw servo; the others sit behind it
+    (ENCLOSURE_FAN_CENTER[0] - ENCLOSURE_FAN_HOLE_HALF_PITCH, ENCLOSURE_FAN_CENTER[1] - ENCLOSURE_FAN_HOLE_HALF_PITCH),
+    (ENCLOSURE_FAN_CENTER[0] + ENCLOSURE_FAN_HOLE_HALF_PITCH, ENCLOSURE_FAN_CENTER[1] + ENCLOSURE_FAN_HOLE_HALF_PITCH),
+)
 FAN_SCREW = (2.6, 2.0, 1.7, 9.2)  # head radius, head height, shank radius, thread into the fan frame: 12 mm self-tapping (BO-041, E), tip 0.8 mm short of the fan face
 FAN_GRILLE_RADIUS = 14.0
 FAN_GRILLE_SLOT = (2.5, 1.6)  # width, web; vertical slots print as short bridges with the shell roof-down
@@ -1035,6 +1086,7 @@ MOTOR_INLINE_RESERVE_L = (37.5, 58.0, 49.5, 59.0, 69.0, 82.0)  # starts past PCB
 # junction board (PCB-08) under the adapter plate on -Y, clear of the cooler
 # headroom prism; its body-side cables drop down a -Y riser to PCB-03/04.
 YAW_JUNCTION_BOX = (-22.0, 10.0, -44.0, -23.0, 112.0, 125.5)
+YAW_JUNCTION_FFC_EXTENSION = (10.0, 20.0, -42.0, -24.5)  # D-044: x0, x1, y0, y1; two 22-pin ZIFs (J8-6 power, J8-7 sideband)
 # PCB-08: 32 x 21 x 1.6 mm plate at the bottom of the junction reserve. The
 # clock-spring flex is soldered to it; body-side connectors: J8-1 Micro-Fit 3.0
 # 2x3 right-angle (D-039) on the -X edge (exits -X, then down the riser) and three GH
@@ -1251,7 +1303,7 @@ MASS_ROWS = [
         HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_LOCAL_COM[2],
     ), "RP-01 generated mass tree"),
     ("BODY_SHELL_AND_PANELS", 248.7, (18.17, -0.09, 92.95), "Body v1 CAD volume and centroid (2026-10-04, D-043: +0.4 g for the smaller 3010 grille and collar, was 248.3 g at (18.16, -0.19, 92.91); D-042: -1.9 g net for the +Y fan-intake grille and collar and the eight rear-panel vent slots; was 250.2 g at (17.8, 0, 93.0)): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037), front service skin with an open 46 mm speaker aperture and retaining lip, rear service skin, E-stop well and charge-inlet pad (D-040), badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."),
-    ("BODY_PRIMARY_FRAME", 178.5, (12.70, 1.88, 94.80), "Body v1 CAD volume and centroid (2026-10-04, D-043: fan web moved to X 1-33 with a R14 opening, was 178.4 g at (12.83, 1.84, 94.85); D-042: +7.5 g for the +Y fan web with its rail roots and strut, the rear -Y tray lug, the front -Y tray column and the rear +Y tray block and column; was 170.9 g at (12.5, 1.0, 94.9)); 2026-10-02: main connected print and removable front-left foot cassette at conservative 1.20 g/cm3 effective PETG, plus modeled four M4 bolts/nuts, two locating pins, cassette M3 joints, and four shell-to-frame M3 screw/insert joints at 7.85/8.50 g/cm3 steel/brass. Estimated, not weighed; check_body_layout.py verifies against the solids."),
+    ("BODY_PRIMARY_FRAME", 169.18, (12.38, 2.27, 92.46), "Body v1 CAD volume and centroid (2026-10-04, D-044: -9.3 g for the yaw plate's R28 bore and R36.6 housing pocket against its R44 ring and the yaw-servo pad, was 178.5 g at (12.70, 1.88, 94.80); D-043: fan web moved to X 1-33 with a R14 opening, was 178.4 g at (12.83, 1.84, 94.85); D-042: +7.5 g for the +Y fan web with its rail roots and strut, the rear -Y tray lug, the front -Y tray column and the rear +Y tray block and column; was 170.9 g at (12.5, 1.0, 94.9)); 2026-10-02: main connected print and removable front-left foot cassette at conservative 1.20 g/cm3 effective PETG, plus modeled four M4 bolts/nuts, two locating pins, cassette M3 joints, and four shell-to-frame M3 screw/insert joints at 7.85/8.50 g/cm3 steel/brass. Estimated, not weighed; check_body_layout.py verifies against the solids."),
     ("CHASSIS_PRIMARY_FRAME", 229.1, (18.14, 0.0, 46.64), "D-029 (2026-10-01): +21.4 g of newly modeled hardware measured from the solids at 7.9/8.5 g/cm3, centroid (30.4, 0, 46.4): J05/J06/J16/J11A ISO 7380 screws and 14 M3 x 6 inserts, four M2.5 driver screws and inserts; +0.7 g for the measured +1.24 cm3 printed volume at 0.571 g/cm3 (driver posts and tie lugs, wider tongues and rear rail ends, moved J16 ears, hatch strap slots, recess/cavity growth), centroid about (35, 0, 64); was 207.0 g at (16.82, 0, 46.61). 2026-10-01: +0.2 g for the measured +0.29 cm3 when the front hatch bosses moved to the front wall, the bosses were cut to Z 39.5 and the hatch grew 4 mm forward; D-011: -0.3 g for the O5 J10-8 cable bore through the front crossmember and deck at (86, -31); D-010 J04 adds two integrated plate-and-cheek carriers, keyed rail joints, eight modeled M3 x 8 screws and eight 6 mm inserts; estimated +10.2 g total (about +0.7 g printed cheek/key volume and +9.5 g steel/brass hardware, preliminary geometry-density estimate); previous 196.9 g centroid (17.7, 0, 46.8). D-007 axle stack (2026-09-29), +20.9 g at the axle (X 0, Z 42): printed plate + housing replace the flange/boss/diaphragm, +7.24 cm3 measured at ~0.571 g/cm3 (+4.1 g); two 1.2 mm aluminium caps 1.52 cm3 (+4.1 g); eight M3 x 18 cap screws (+10.6 g); eight M3 brass inserts (+1.5 g); face screws M3 x 8 CSK -> M3 x 6 low head (+0.6 g); before that 176.0 g at (19.8, 0, 47.4): +2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"),
     ("WHEEL_L", 92.5, WHEEL_CENTER_L, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
     ("WHEEL_R", 92.5, WHEEL_CENTER_R, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
@@ -1263,7 +1315,7 @@ MASS_ROWS = [
     ("BATTERY", 108.2, BATTERY_CENTER, "E: 2 x Samsung INR18650-25R (45 g max each = 90 g) + RP-02 PCB-01 pack-protection assembly (~5 g: 48 x 20 mm board 3.7 g + parts 1.3 g) + Bourns AC72ABD thermal cutoff and NTC (~0.7 g) + nickel straps, sleeve and AWG16 leads (~11 g) + pack-side Micro-Fit+ 1x2 half with terminals (~1.5 g, CN-05; was a ~6 g SBS Mini half); working selection, no purchase or measured mass; was 110 g with a generic ~8 g BMS (RP-02 board-specs.md sec 3, 2026-09-25)"),
     ("RASPBERRY_PI5_AND_COOLER", 76.0, PI_CENTER, "vendor + estimate"),
     ("COMPUTE_TRAY_AND_PI_FIXINGS", 29.5, (17.6, -2.61, 86.92), "D-042 CAD volume and centroid (2026-10-04): tray print 23.1 g at 1.20 g/cm3 effective PETG (plate, perimeter rib, rear -Y ear, four Pi bosses, vent slots) + 6.5 g modeled hardware at 7.85/8.50 g/cm3 (four M2.5 x 4 inserts and M2.5 x 6 screws, three M3 x 6 support inserts and ISO 7380 M3 x 8 tray screws). The tray was in no row before. Estimated, not weighed"),
-    ("ENCLOSURE_FAN_3010_AND_W41", 10.0, (18.5, 62.0, 108.0), "E (D-043): generic DC 5 V 3010 double-ball fan (BO-040) ~8.5 g with its lead cut to ~80 mm + two 12 mm self-tapping screws ~0.8 g (BO-041) + XH housing ~0.5 g; unmeasured; centroid at the fan, pulled slightly toward the lead. Was 15 g for the 4010 (D-042)"),
+    ("ENCLOSURE_FAN_3010_AND_W41", 10.0, (18.5, 62.0, 108.0), "E (D-043): Robu DC 5 V 3010 hydraulic fan (BO-040) ~8.5 g with its lead cut to ~80 mm + two 12 mm self-tapping screws ~0.8 g (BO-041) + XH housing ~0.5 g; unmeasured; centroid at the fan, pulled slightly toward the lead. Was 15 g for the 4010 (D-042)"),
     # Replaces the single CONTROL_POWER_SENSORS row (121.5 g at (22, 0, 80), 2026-09-25). Masses are the RP-02
     # board-specs.md sec 2 / WS-H estimates (PCB 1.6 mm FR4 with copper about 3.8 g per 1000 mm2 plus the parts
     # inventory), not measurements; positions are the centres of the proposal boxes.
@@ -1284,7 +1336,7 @@ MASS_ROWS = [
     ("BALL_NOSE_POD_SENSOR_CAP", 18.9, (111.4, 0.0, 37.9), "D-027: +0.2 g for the lid lead hump, raised nose top and wider front pocket (pod 12.45, lid 2.62, cap 2.12 cm3 measured, was 12.44/2.45/2.03, at ~0.571 g/cm3); earlier estimate predates the selected A21 sensor (3.6 g datasheet, ears trimmed), custom Hall carrier and O3 x 1.5 magnet; weigh received parts"),
     ("BODY_AUDIO", 61.0, (78.4, 0.0, 102.1), "RP03-CAD-11 60 g audio estimate with Visaton K 50 WP 48 g, PCB-05 ~6 g, mic boards ~2 g and cables ~4 g. The exposed front installation places the modeled speaker face at X 100 mm, 5 mm forward of the former grille-backed seat; its 48 g share shifts the audio row X centroid to about 78.4 mm. D-037 adds ~1 g at the mic-array centre (16, 0, 113): eight M2 x 4 screws, larger 12 x 14 boards and gaskets; the soldered leads replace the GH header and plug in the cable allowance. Weigh installed parts."),
     ("HARNESS_AND_FASTENERS", 95.0, (4.0 + BODY_SHIFT_X, 0.0, 88.0), "Conservative allowance for unmodeled installed harness, connector tails, clips, service-panel screws and remaining fasteners. Body-frame M4/M3 joints and shell-to-frame M3 joints are measured separately in BODY_PRIMARY_FRAME; weigh the completed harness and hardware to replace this allowance."),
-    ("BODY_YAW_STAGE", 89.0, (BODY_AXIS_X, 13.5, 134.3), "E: 50 g thin-section bearing placeholder + 23 g XC330-M181 + 6 g driven spur + 6 g scissor pinion (two 2.4 mm halves) + 1 g torsion spring and retaining clip (2026-09-25) + 2 g clamp ring + 1 g coupling shaft; no SKU"),
+    ("BODY_YAW_STAGE", 150.3, (14.81, 7.81, 136.22), "D-044 (2026-10-04), check_yaw_stage.py from the solids: 61810-2Z bearing 55 g (E, SKF lists 52-59 g) + XC330-M181 23 g (D) at its STEP centroid + PETG prints at 1.20 g/cm3 (hub 15.8, housing 15.6, rotor 10.4, cassette stator 4.5, clamp ring 2.2, pinion halves 2 x 2.5, drive hub 0.6) + steel/brass hardware at 7.85/8.50 (shaft 2.7, spring 1.2, screws and inserts ~6) + three 22-pin FFCs 4.5 g (E) + PCB-14 3 g (E). Was 89 g at (16, 13.5, 134.3) with a 50 g bearing placeholder and no housing, cassette or fixings. Estimated, not weighed"),
     ("REAR_SKID_KEEL", 20.0, (-40.5, 0.0, 22.7), "J09/J10 rework 2026-09-30 (D-014, D-016), measured from the solids: keel body 14.64 cm3 at ~0.571 g/cm3 = 8.4 g at (-39.7, 0, 20.4) (D-016 closed the board cavity back to the sensor pocket); shoe 0.40, bezel with guard lips 0.30 and two 1 mm shims 0.24 cm3 printed solid at ~1.27 g/cm3 = 1.2 g; four ISO 4762 M3 x 30 ~8.4 g; four CNC Kitchen M3 x 5.7 crossmember inserts ~1.4 g; M2 x 10 and M2 x 6 screws ~0.6 g (the M2 x 5 board screw was dropped by D-015). Was 12.0 g at (-39.9, 0, 20.4); rear-crossmember cable bore closed and tie lug added (<0.1 g, left in the frame row)"),
 ]
 def mass_properties():
@@ -2650,12 +2702,15 @@ def body_primary_frame():
         locator = locator - _z_cylinder(2.05, 55.0, 62.0, x, y)
         add(locator)
     # Head load path: plate spans the upper cross-members (which top out at
-    # YAW_PLATE_Z[0]); central ring seats the yaw bearing.
+    # YAW_PLATE_Z[0]); its R44 ring carries the yaw cartridge flange (D-044).
+    # The bore, housing pocket and holes are cut after the unions below.
     plate = _block(BODY_AXIS_X - 52.0, BODY_AXIS_X + 52.0, -YAW_PLATE_BAR_HALF_WIDTH, YAW_PLATE_BAR_HALF_WIDTH, *YAW_PLATE_Z) + Cylinder(
         YAW_PLATE_RADIUS, YAW_PLATE_Z[1] - YAW_PLATE_Z[0]
     ).moved(Location((BODY_AXIS_X, 0.0, sum(YAW_PLATE_Z) / 2.0)))
-    plate = plate - Cylinder(9.0, 10.0).moved(Location((BODY_AXIS_X, 0.0, sum(YAW_PLATE_Z) / 2.0)))
     add(plate)
+    # D-044: the yaw servo hangs from a pad under the plate, clamped by its own
+    # four case screws lengthened 4 mm into pilots in the pad.
+    add(_block(*YAW_SERVO_BRACKET))
     # Local enlarged side-rail wall for two horizontal M3 cassette screws.
     add(_block(52.0, 70.0, 60.0, 69.0, 58.0, 72.0))
     # D-042: enclosure-fan web between the +Y side rails, and a strut to the lower rail.
@@ -2685,6 +2740,7 @@ def body_primary_frame():
         if (x, y) == BODY_LOCATING_POINTS[1]:
             continue
         frame -= _z_cylinder(2.05, 55.0, 62.0, x, y)
+    frame -= _yaw_frame_cuts()
     for x in (61.0, 68.0):
         frame -= _axial_bore_y(1.7, 59.9, 69.1, x, 65.0)
     fx, fz = ENCLOSURE_FAN_CENTER
@@ -3631,40 +3687,264 @@ def _ring(r0, r1, z0, z1, x=BODY_AXIS_X):
     ).moved(Location((x, 0.0, (z0 + z1) / 2.0)))
 
 
-def body_yaw_stage():
-    """Stationary half of the head yaw stage: bearing, pinion, shaft and servo."""
-    px, py = YAW_PINION_CENTER
-    px += BODY_AXIS_X
-    gear_z = (YAW_BEARING_Z[1] + 1.0, YAW_DISC_PLATE_BOTTOM_Z)
-    x0, x1, y0, y1, z0, z1 = YAW_SERVO_ENVELOPE
-    # Scissor pinion: fixed half (keyed to the shaft) below, spring-loaded
-    # loose half above, 0.2 mm apart; both engage the 5 mm driven gear face.
+def _ring_at(r0, r1, z0, z1, x, y):
+    """Vertical ring about (x, y)."""
+    return _z_cylinder(r1, z0, z1, x, y) - _z_cylinder(r0, z0 - 1.0, z1 + 1.0, x, y)
+
+
+def _yaw_polar(r, deg):
+    """Point at radius r and angle deg (from +X, yaw 0) about the yaw axis."""
+    a = math.radians(deg)
+    return BODY_AXIS_X + r * math.cos(a), r * math.sin(a)
+
+
+def _yaw_radial_block(r0, r1, half_width, z0, z1, deg):
+    """Block running radially from r0 to r1 about the yaw axis, centred on deg."""
+    block = _block(r0, r1, -half_width, half_width, z0, z1)
+    return block.rotate(Axis.Z, deg).moved(Location((BODY_AXIS_X, 0.0, 0.0)))
+
+
+def _yaw_rotated(shape, deg, x=BODY_AXIS_X, y=0.0):
+    """Rotate a shape about a vertical axis through (x, y)."""
+    return shape.moved(Location((-x, -y, 0.0))).rotate(Axis.Z, deg).moved(Location((x, y, 0.0)))
+
+
+def _involute_gear(teeth, module, z0, z1, x, y, phase_deg=0.0, backlash=YAW_GEAR_BACKLASH, steps=6):
+    """Standard (x = 0) involute spur gear, both flanks thinned backlash / 4 at the pitch circle.
+
+    Tooth k is centred at phase_deg + k * 360 / teeth. The root below the base
+    circle is a radial line and the root and tip are chords: an FDM print model,
+    not a hobbed form.
+    """
+    alpha = math.radians(YAW_GEAR_PRESSURE_ANGLE)
+    rp = module * teeth / 2.0
+    rb = rp * math.cos(alpha)
+    ra = rp + module
+    rf = rp - 1.25 * module
+
+    def inv(a):
+        return math.tan(a) - a
+
+    psi_p = (math.pi * module / 2.0 - backlash / 2.0) / (2.0 * rp)
+
+    def half(r):
+        return psi_p + inv(alpha) - inv(math.acos(min(1.0, rb / r)))
+
+    r_start = max(rb, rf)
+    flank = [r_start + (ra - r_start) * i / steps for i in range(steps + 1)]
+    pts = []
+    for k in range(teeth):
+        t = math.radians(phase_deg) + 2.0 * math.pi * k / teeth
+        polar = [(rf, t - half(r_start))] + [(r, t - half(r)) for r in flank]
+        polar += [(r, t + half(r)) for r in reversed(flank)] + [(rf, t + half(r_start))]
+        pts += [(x + r * math.cos(a), y + r * math.sin(a)) for r, a in polar]
+    face = Plane.XY * Polygon(*pts, align=None)
+    return extrude(face, amount=z1 - z0).moved(Location((0.0, 0.0, z0)))
+
+
+def _yaw_hub():
+    """BO-045: rotating hub, one print: driven gear, shoulder, spigot and disc bosses."""
+    ax = BODY_AXIS_X
+    gear = _involute_gear(YAW_GEAR_TEETH, YAW_GEAR_MODULE, *YAW_GEAR_Z, ax, 0.0, phase_deg=90.0)
+    hub = gear + _ring(*YAW_HUB_SHOULDER) + _ring(*YAW_HUB_SPIGOT)
+    for deg in YAW_HUB_BOSS_DEG:
+        hub += _z_cylinder(YAW_HUB_BOSS_RADIUS, YAW_GEAR_Z[0], YAW_GEAR_Z[1], *_yaw_polar(YAW_HUB_BOSS_R, deg))
+    hub -= _z_cylinder(YAW_GEAR_BORE_RADIUS, YAW_HUB_SHOULDER[2] - 1.0, YAW_GEAR_Z[1] + 1.0, ax, 0.0)
+    for deg in YAW_HUB_BOSS_DEG:
+        hub -= _z_cylinder(2.0, YAW_GEAR_Z[1] - 4.0, YAW_GEAR_Z[1] + 1.0, *_yaw_polar(YAW_HUB_BOSS_R, deg))
+    for deg in YAW_ROTOR_SCREW_DEG:
+        hub -= _z_cylinder(1.05, YAW_HUB_SPIGOT[2] - 1.0, YAW_HUB_SPIGOT[3] - 0.4, *_yaw_polar(YAW_ROTOR_SCREW_R, deg))
+    return hub
+
+
+def _yaw_rotor():
+    """Rotor: inner-ring clamp ring, FFC drum and the hard-stop dog, one print."""
+    r0, r1, dz0, dz1, deg, hw = YAW_STOP_DOG
+    rotor = _ring(*YAW_ROTOR_RING) + _ring(*YAW_ROTOR_DRUM) + _yaw_radial_block(r0 - 0.5, r1, hw, dz0, dz1, deg)
+    # FFC inner ends pass into the drum core through a slot at the inner-wrap anchor.
+    rotor -= _yaw_radial_block(YAW_ROTOR_DRUM[0] - 1.0, YAW_ROTOR_DRUM[1] + 1.0, 0.6, YAW_ROTOR_DRUM[2] + 0.4, YAW_ROTOR_DRUM[3] - 0.4, 90.0)
+    for deg in YAW_ROTOR_SCREW_DEG:
+        x, y = _yaw_polar(YAW_ROTOR_SCREW_R, deg)
+        rotor -= _z_cylinder(2.4, YAW_ROTOR_RING[2] - 1.0, YAW_ROTOR_RING[2] + 2.0, x, y)
+        rotor -= _z_cylinder(1.4, YAW_ROTOR_RING[2], YAW_ROTOR_RING[3] + 1.0, x, y)
+    return rotor
+
+
+def _yaw_stop_bump_angles():
+    """Bump centres: the dog's face meets the bump's face at +-YAW_HARD_STOP_DEG."""
+    r0, r1, _, _, deg, hw = YAW_STOP_DOG
+    br0, br1, _, _, bhw = YAW_STOP_BUMP
+    r_contact = (max(r0, br0) + min(r1, br1)) / 2.0
+    gap = math.degrees(math.asin(hw / r_contact)) + math.degrees(math.asin(bhw / r_contact))
+    return deg + YAW_HARD_STOP_DEG + gap, deg - YAW_HARD_STOP_DEG - gap
+
+
+def _yaw_housing():
+    """Stationary cartridge housing: seat lip, wall, flange and the two hard-stop bumps."""
+    px, py = BODY_AXIS_X + YAW_PINION_CENTER[0], YAW_PINION_CENTER[1]
+    r0, r1, z0, z1 = YAW_HOUSING_SEAT
+    housing = _ring(r0, r1, z0, z1) + _ring(*YAW_HOUSING_WALL) + _ring(*YAW_HOUSING_FLANGE)
+    br0, br1, bz0, bz1, bhw = YAW_STOP_BUMP
+    for deg in _yaw_stop_bump_angles():
+        housing += _yaw_radial_block(br0, r0 + 0.5, bhw, bz0, bz1, deg)
+    # Pinion pocket: the drive hub below, the collar and the preload spring above.
+    housing -= _z_cylinder(YAW_DRIVE_HUB[0] + 0.8, z0 - 1.0, z1, px, py)
+    housing -= _z_cylinder(YAW_SPRING[1] / 2.0 + 0.6, z0 - 1.0, YAW_HOUSING_WALL[3] + 1.0, px, py)
+    for deg in YAW_CLAMP_SCREW_DEG:
+        housing -= _z_cylinder(0.8, YAW_HOUSING_WALL[3] - 8.5, YAW_HOUSING_WALL[3] + 1.0, *_yaw_polar(YAW_CLAMP_SCREW_R, deg))
+    for deg in YAW_FLANGE_SCREW_DEG:
+        housing -= _z_cylinder(1.7, YAW_HOUSING_FLANGE[2] - 1.0, YAW_HOUSING_FLANGE[3] + 1.0, *_yaw_polar(YAW_FLANGE_SCREW_R, deg))
+    for deg in YAW_CASSETTE_POST_DEG:
+        housing -= _z_cylinder(0.8, z0 - 1.0, z0 + 3.0, *_yaw_polar(YAW_CASSETTE_POST_R + 0.5, deg))
+    return housing
+
+
+def _yaw_clamp_ring():
+    px, py = BODY_AXIS_X + YAW_PINION_CENTER[0], YAW_PINION_CENTER[1]
+    ring = _ring(*YAW_CLAMP_RING) - _z_cylinder(YAW_SPRING[1] / 2.0 + 0.6, YAW_CLAMP_RING[2] - 1.0, YAW_CLAMP_RING[3] + 1.0, px, py)
+    for deg in YAW_CLAMP_SCREW_DEG:
+        ring -= _z_cylinder(1.1, YAW_CLAMP_RING[2] - 1.0, YAW_CLAMP_RING[3] + 1.0, *_yaw_polar(YAW_CLAMP_SCREW_R, deg))
+    return ring
+
+
+def _yaw_cassette_stator():
+    """FFC cassette stator: floor, wall with the exit window, and three hanger tabs and posts."""
+    fr, fz0, fz1 = YAW_CASSETTE_FLOOR
+    w0, w1, wz0, wz1 = YAW_CASSETTE_WALL
+    stator = (_z_cylinder(fr, fz0, fz1, BODY_AXIS_X, 0.0) - _z_cylinder(9.0, fz0 - 1.0, fz1 + 1.0, BODY_AXIS_X, 0.0)
+              + _ring(w0, w1, wz0, wz1))
+    stator -= _yaw_radial_block(w0 - 1.0, w1 + 1.0, 1.5, wz0 + 0.3, wz1 - 0.2, YAW_CASSETTE_EXIT_DEG)
+    for deg in YAW_CASSETTE_POST_DEG:
+        x, y = _yaw_polar(YAW_CASSETTE_POST_R, deg)
+        stator += _yaw_radial_block(w0 + 0.5, YAW_CASSETTE_POST_R + 2.0, 2.3, wz1 - 1.0, wz1, deg)
+        stator += _z_cylinder(2.0, wz1, YAW_HOUSING_SEAT[2], x, y)
+        sx, sy = _yaw_polar(YAW_CASSETTE_POST_R + 0.5, deg)
+        stator -= _z_cylinder(1.1, wz1 - 2.0, YAW_HOUSING_SEAT[2] + 1.0, sx, sy)
+    return stator
+
+
+def _yaw_frame_cuts():
+    """D-044 cuts in the main frame print: plate bore, housing pocket, post notches,
+    drive-hub hole, flange-screw insert holes and the servo pad's horn and screw holes."""
+    ax = BODY_AXIS_X
+    pz0, pz1 = YAW_PLATE_Z
+    px, py = ax + YAW_PINION_CENTER[0], YAW_PINION_CENTER[1]
+    cuts = _z_cylinder(YAW_PLATE_BORE_RADIUS, pz0 - 1.0, pz1 + 1.0, ax, 0.0)
+    cuts += _z_cylinder(YAW_PLATE_POCKET[0], YAW_PLATE_POCKET[1], pz1 + 1.0, ax, 0.0)
+    for deg in YAW_CASSETTE_POST_DEG:
+        cuts += _yaw_radial_block(YAW_PLATE_BORE_RADIUS - 1.0, YAW_CASSETTE_POST_R + 2.9, 2.6, pz0 - 1.0, YAW_PLATE_POCKET[1] + 0.1, deg)
+    cuts += _z_cylinder(YAW_DRIVE_HUB[0] + 0.6, YAW_SERVO_BRACKET[4] - 1.0, pz1 + 1.0, px, py)
+    for deg in YAW_FLANGE_SCREW_DEG:
+        cuts += _z_cylinder(2.0, pz0 - 0.01, pz1 + 0.01, *_yaw_polar(YAW_FLANGE_SCREW_R, deg))
+    cuts += _z_cylinder(9.0, YAW_SERVO_BRACKET[4] - 1.0, pz0 + 0.01, px, py)
+    for x, y in YAW_SERVO_CASE_SCREWS:
+        cuts += _z_cylinder(0.8, YAW_SERVO_BRACKET[4] - 1.0, YAW_SERVO_BRACKET[5] - 0.6, x, y)
+    return cuts
+
+
+def yaw_pinion_parts(yaw_deg=0.0):
+    """Scissor pinion, shaft, spring, collar and horn drive hub at a head yaw angle.
+
+    The 1:1 external mesh turns the pinion by -yaw_deg about its own axis.
+    """
+    px, py = BODY_AXIS_X + YAW_PINION_CENTER[0], YAW_PINION_CENTER[1]
+    z0, z1 = YAW_PINION_Z
     half = YAW_SCISSOR_HALF_FACE
-    pinion_fixed = Cylinder(YAW_GEAR_OUTER_RADIUS, half).moved(Location((px, py, gear_z[0] + half / 2.0)))
-    pinion_loose = Cylinder(YAW_GEAR_OUTER_RADIUS, half).moved(Location((px, py, gear_z[0] + half + YAW_SCISSOR_GAP + half / 2.0)))
-    shaft = Cylinder(2.5, gear_z[0] - z1).moved(Location((px, py, (gear_z[0] + z1) / 2.0)))
-    return Compound(label="BODY_YAW_STAGE", children=[
-        _paint(_ring(*YAW_BEARING_RADII, *YAW_BEARING_Z), "YAW_THIN_SECTION_BEARING_ENVELOPE", STEEL, 0.9),
-        _paint(pinion_fixed, "YAW_DRIVE_SCISSOR_PINION_FIXED_HALF", STEEL, 1.0),
-        _paint(pinion_loose, "YAW_DRIVE_SCISSOR_PINION_SPRUNG_HALF", BRONZE, 1.0),
-        _paint(shaft, "YAW_SERVO_COUPLING_SHAFT", STEEL, 1.0),
-        # XC330 dummy assembly: output horn axis is STEP Z, body runs -24.5..+9.5 in STEP Y
-        # from that axis. -90 deg about Z runs the body along X (+180 hit the left upper rail; both clear the Pi
-        # cooler), output axis on the pinion centre, horn top at z1.
-        _place(
-            _purchased_step("robotis_xc330_dummy_assy.step", "YAW_SERVO_XC330_M181_STEP", [(Axis.Z, -90.0)]),
-            px, py, z1, ref={"X": "origin", "Y": "origin", "Z": "max"},
-        ),
-    ])
-
-
-def yaw_drive_moving_parts():
-    """Yaw-moving body-side parts in chassis coordinates (axisymmetric)."""
-    gear_z = (YAW_BEARING_Z[1] + 1.0, YAW_DISC_PLATE_BOTTOM_Z)
+    # A tooth gap faces the yaw axis (270 deg) when the hub has a tooth on 90 deg.
+    phase = 270.0 + 180.0 / YAW_GEAR_TEETH - yaw_deg
+    sprung = _involute_gear(YAW_GEAR_TEETH, YAW_GEAR_MODULE, z0, z0 + half, px, py, phase)
+    sprung -= _z_cylinder(YAW_SHAFT[0] + 0.1, z0 - 1.0, z1 + 1.0, px, py)
+    fixed = _involute_gear(YAW_GEAR_TEETH, YAW_GEAR_MODULE, z1 - half, z1, px, py, phase)
+    fixed -= _z_cylinder(YAW_SHAFT[0], z0 - 1.0, z1 + 1.0, px, py)
+    hr, hz0, hz1 = YAW_DRIVE_HUB
+    cr, cz0, cz1 = YAW_DRIVE_COLLAR
+    drive_hub = _z_cylinder(hr, hz0, hz1, px, py) + _z_cylinder(cr, cz0, cz1, px, py)
+    drive_hub -= _z_cylinder(YAW_SHAFT[0], YAW_SHAFT[1] - 0.01, cz1 + 1.0, px, py)
+    horn_screws = []
+    for k in range(4):
+        sx, sy = px + 6.0 * math.cos(math.radians(90.0 * k - yaw_deg)), py + 6.0 * math.sin(math.radians(90.0 * k - yaw_deg))
+        drive_hub -= _z_cylinder(1.95, hz1 - 1.4, hz1 + 1.0, sx, sy)
+        drive_hub -= _z_cylinder(1.1, hz0 - 1.0, hz1, sx, sy)
+        horn_screws.append(_paint(_z_cylinder(1.9, hz1 - 1.4, hz1 - 0.05, sx, sy) + _z_cylinder(0.8, YAW_SERVO_TOP_Z + 0.1, hz1 - 1.4, sx, sy),
+                                  f"YAW_DRIVE_HUB_M2X6_HORN_SCREW_{k + 1}", STEEL, 1.0))
+    wire, od, _, sz0, sz1 = YAW_SPRING
     return [
-        _paint(_ring(YAW_GEAR_BORE_RADIUS, YAW_GEAR_OUTER_RADIUS, *gear_z), "YAW_DRIVEN_SPUR_1TO1_ON_DISC", SLATE_DARK, 1.0),
-        _paint(_ring(*YAW_BEARING_RADII, YAW_BEARING_Z[1], YAW_BEARING_Z[1] + 1.0), "YAW_BEARING_CLAMP_RING", SLATE_DARK, 1.0),
+        _paint(sprung, "YAW_DRIVE_SCISSOR_PINION_SPRUNG_HALF", BRONZE, 1.0),
+        _paint(fixed, "YAW_DRIVE_SCISSOR_PINION_FIXED_HALF", SLATE_DARK, 1.0),
+        _paint(_z_cylinder(YAW_SHAFT[0], YAW_SHAFT[1], YAW_SHAFT[2], px, py), "YAW_PINION_SHAFT_D5_STEEL", STEEL, 1.0),
+        _paint(_ring_at(od / 2.0 - wire, od / 2.0, sz0, sz1, px, py), "YAW_SCISSOR_PRELOAD_TORSION_SPRING", STEEL, 1.0),
+        _paint(drive_hub, "YAW_DRIVE_HUB_ON_XC330_HORN", SLATE_DARK, 1.0),
+        *horn_screws,
     ]
+
+
+def body_yaw_stage():
+    """Stationary half of the D-044 yaw stage: cartridge housing, bearing, clamp
+    ring, FFC cassette stator and reserves, their fixings, and the servo drive."""
+    px, py = BODY_AXIS_X + YAW_PINION_CENTER[0], YAW_PINION_CENTER[1]
+    z1 = YAW_SERVO_ENVELOPE[5]
+    parts = [
+        _paint(_ring(*YAW_BEARING_RADII, *YAW_BEARING_Z), f"YAW_BEARING_{YAW_BEARING_MODEL.replace('-', '_')}", STEEL, 0.9),
+        _paint(_yaw_housing(), "YAW_CARTRIDGE_HOUSING", FRAME_BLUE, 1.0),
+        _paint(_yaw_clamp_ring(), "YAW_BEARING_CLAMP_RING", SLATE_DARK, 1.0),
+        _paint(_yaw_cassette_stator(), "YAW_FFC_CASSETTE_STATOR", FRAME_BLUE, 1.0),
+        # The three 22-pin FFCs roll between the drum and the wall; this is their swept band.
+        _paint(_ring(YAW_ROTOR_DRUM[1] + 0.4, YAW_CASSETTE_WALL[0] - 0.3, YAW_CASSETTE_WALL[2] + 0.35, YAW_CASSETTE_WALL[3] - 0.35),
+               "YAW_FFC_ROLLING_LOOP_RESERVE", "#9566D9", 0.25),
+    ]
+    for k, deg in enumerate(YAW_CLAMP_SCREW_DEG, start=1):
+        x, y = _yaw_polar(YAW_CLAMP_SCREW_R, deg)
+        parts.append(_paint(_z_cylinder(1.9, YAW_CLAMP_RING[3], YAW_CLAMP_RING[3] + 1.3, x, y)
+                            + _z_cylinder(0.8, YAW_CLAMP_RING[3] - 8.0, YAW_CLAMP_RING[3], x, y),
+                            f"YAW_CLAMP_RING_M2X8_SCREW_{k}", STEEL, 1.0))
+    for k, deg in enumerate(YAW_FLANGE_SCREW_DEG, start=1):
+        x, y = _yaw_polar(YAW_FLANGE_SCREW_R, deg)
+        fz1 = YAW_HOUSING_FLANGE[3]
+        parts.append(_paint(_z_cylinder(2.85, fz1, fz1 + 1.65, x, y) + _z_cylinder(1.5, fz1 - 6.0, fz1, x, y),
+                            f"YAW_FLANGE_ISO7380_M3X6_SCREW_{k}", STEEL, 1.0))
+        parts.append(_paint(_ring_at(1.5, 2.0, YAW_PLATE_Z[0], YAW_PLATE_Z[1], x, y), f"YAW_FLANGE_M3X4_FRAME_INSERT_{k}", BRONZE, 1.0))
+    for k, deg in enumerate(YAW_CASSETTE_POST_DEG, start=1):
+        x, y = _yaw_polar(YAW_CASSETTE_POST_R + 0.5, deg)
+        top = YAW_CASSETTE_WALL[3]
+        parts.append(_paint(_z_cylinder(1.9, top - 2.3, top - 1.0, x, y) + _z_cylinder(0.8, top - 1.0, top + 5.0, x, y),
+                            f"YAW_CASSETTE_M2X6_POST_SCREW_{k}", STEEL, 1.0))
+    for k, (x, y) in enumerate(YAW_SERVO_CASE_SCREWS, start=1):
+        parts.append(_paint(_z_cylinder(0.8, YAW_SERVO_TOP_Z - 0.2, YAW_SERVO_BRACKET[5] - 0.6, x, y),
+                            f"YAW_SERVO_CASE_SCREW_EXTENSION_{k}", STEEL, 1.0))
+    parts += yaw_pinion_parts(0.0)
+    # XC330 dummy assembly: output horn axis is STEP Z, body runs -24.5..+9.5 in STEP Y
+    # from that axis. -90 deg about Z runs the body along X (+180 hit the left upper rail; both clear the Pi
+    # cooler), output axis on the pinion centre, horn top at z1.
+    parts.append(_place(
+        _purchased_step("robotis_xc330_dummy_assy.step", "YAW_SERVO_XC330_M181_STEP", [(Axis.Z, -90.0)]),
+        px, py, z1, ref={"X": "origin", "Y": "origin", "Z": "max"},
+    ))
+    return Compound(label="BODY_YAW_STAGE", children=parts)
+
+
+def yaw_drive_moving_parts(yaw_deg=0.0):
+    """Yaw-moving body-side parts in chassis coordinates, turned to yaw_deg."""
+    parts = [
+        _paint(_yaw_hub(), "YAW_HUB_DRIVEN_GEAR_M1_Z37", SLATE_DARK, 1.0),
+        _paint(_yaw_rotor(), "YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG", BRONZE, 1.0),
+        # PCB-14: rotor transition board. Underside ZIFs take the three FFC inner
+        # ends; the head harness demates on its top inside the hub (head disc off).
+        _paint(_ring(6.0, 17.6, YAW_ROTOR_RING[3] + 0.2, YAW_DISC_PLATE_BOTTOM_Z - 10.2), "PCB14_YAW_ROTOR_BOARD_RESERVE", PCB_GREEN, 0.45),
+        _paint(_ring(12.4, 17.6, YAW_DISC_PLATE_BOTTOM_Z - 10.2, YAW_HUB_SHOULDER[2] - 0.2), "PCB14_HEAD_DEMATE_CONNECTOR_RESERVE", "#9566D9", 0.30),
+    ]
+    for k, deg in enumerate(YAW_HUB_BOSS_DEG, start=1):
+        x, y = _yaw_polar(YAW_HUB_BOSS_R, deg)
+        parts.append(_paint(_ring_at(1.5, 2.0, YAW_GEAR_Z[1] - 4.0, YAW_GEAR_Z[1], x, y), f"YAW_HUB_M3X4_DISC_INSERT_{k}", BRONZE, 1.0))
+    for k, deg in enumerate(YAW_ROTOR_SCREW_DEG, start=1):
+        x, y = _yaw_polar(YAW_ROTOR_SCREW_R, deg)
+        z0 = YAW_ROTOR_RING[2] + 0.2
+        parts.append(_paint(_z_cylinder(2.25, z0, z0 + 1.8, x, y) + _z_cylinder(1.05, z0 + 1.8, z0 + 9.8, x, y),
+                            f"YAW_ROTOR_M2P5X8_SCREW_{k}", STEEL, 1.0))
+    if yaw_deg:
+        parts = [_yaw_rotated(p, yaw_deg) for p in parts]
+        for p, src in zip(parts, yaw_drive_moving_parts()):
+            p.label, p.color = src.label, src.color
+    return parts
 
 
 def yaw_drive_moving_local():
@@ -3685,18 +3965,15 @@ def harness_routes():
         _box(12.0, 92.0, 6.0, (DRIVER_CENTER_X, 0.0, 59.5), "HARNESS_MOTOR_BRANCH", "#D94A3A", 0.42),  # between the driver posts (D-029)
         _box(82.0, 8.0, 8.0, (30.0 + BODY_SHIFT_X, 26.0, 82.0), "HARNESS_SIGNAL_TRUNK", "#2FAFC2", 0.42),
         _box(82.0, 8.0, 8.0, (30.0 + BODY_SHIFT_X, -26.0, 82.0), "HARNESS_SENSOR_TRUNK", "#44BDD0", 0.42),
-        # Flat clock-spring loop under the disc takes the ±55° yaw twist.
-        _paint(_ring(*YAW_CLOCKSPRING_RADII, *YAW_BEARING_Z), "HARNESS_HEAD_YAW_CLOCKSPRING_RESERVE", "#9566D9", 0.20),
-        # Head trunk (connector-schedule.md): down the plate's Ø18 bore, along the
-        # plate underside to the -Y yaw junction, then down a -Y riser to PCB-03/04,
-        # so it no longer passes through the compute tray and the Pi cooler.
-        _paint(_block(BODY_AXIS_X - 6.0, BODY_AXIS_X + 6.0, -24.0, 6.0, 127.0, YAW_PLATE_Z[0] - 0.5), "HARNESS_HEAD_TRUNK_UNDER_PLATE", "#9566D9", 0.35),
+        # D-044: the head trunk crosses yaw as three 22-pin FFCs in the cassette under
+        # the plate. They leave its -Y window (300 deg): the CSI drops to the Pi 5's
+        # camera socket, the power and sideband FFCs run under the cassette floor to
+        # the PCB-08 ZIFs. The head riser below PCB-08 is unchanged.
         _paint(_block(-22.0, -2.0, -40.0, -23.0, 100.0, 126.0), "HARNESS_HEAD_RISER_UPPER", "#9566D9", 0.35),
         _paint(_block(-28.0, -16.0, -50.0, -40.0, 75.0, 112.0), "HARNESS_HEAD_RISER_LOWER", "#9566D9", 0.35),
-        # CSI (PCN-36 15-to-22 FFC, 11.5 mm wide): straight down the axis bore and
-        # beside the cooler into the Pi 5's rear FPC socket; demated at the Pi.
-        _paint(_block(BODY_AXIS_X, 30.0, -26.5, -11.0, 127.0, YAW_PLATE_Z[0] - 0.5), "HARNESS_CSI_FFC_UNDER_PLATE", "#65A584", 0.35),
-        _paint(_block(26.0, 29.0, -26.5, -11.0, 99.6, 127.0), "HARNESS_CSI_FFC_DROP_TO_PI_CAM", "#65A584", 0.35),
+        _paint(_block(26.0, 31.0, -27.5, -21.5, 119.8, 133.0), "HARNESS_YAW_FFC_CASSETTE_EXIT", "#9566D9", 0.35),
+        _paint(_block(10.0, 25.9, -27.5, -24.0, 115.0, 119.8), "HARNESS_YAW_FFC_TO_PCB08", "#9566D9", 0.35),
+        _paint(_block(26.0, 29.0, -26.5, -11.0, 99.6, 119.8), "HARNESS_CSI_FFC_DROP_TO_PI_CAM", "#65A584", 0.35),
         *[_paint(_block(*box), f"HARNESS_W41_FAN_LEAD_{k}", "#2FAFC2", 0.42) for k, box in enumerate(W41_FAN_LEAD_RESERVES, start=1)],
         # Nose pod J10-8 (D-011): GP2Y lead plus switch pair as one flat 5-way run from the pod's
         # back-wall slot under the front crossmember, up the O5 bore through crossmember and deck,
@@ -3741,6 +4018,11 @@ def _yaw_junction_board():
         b = hdr.bounding_box()
         parts.append(hdr)
         parts.append(_box(gh_plug_width(n), GH_PLUG_THICKNESS, GH_PLUG_PROUD, ((b.min.X + b.max.X) / 2.0, (b.min.Y + b.max.Y) / 2.0, b.max.Z + GH_PLUG_PROUD / 2.0), f"YAW_JUNCTION_{_cid(cid)}_GHR{n:02d}_MATED_PLUG", "#F4F1E6", 1.0))
+    # D-044: the board grows +X to X 20 for two 22-pin 0.5 mm ZIFs that take the
+    # cassette's power and sideband FFCs (the clock-spring is no longer soldered on).
+    ex0, ex1, ey0, ey1 = YAW_JUNCTION_FFC_EXTENSION
+    parts.append(_paint(_block(ex0, ex1, ey0, ey1, pz0, pz1), "YAW_JUNCTION_PCB08_FFC_EXTENSION", PCB_GREEN, 1.0))
+    parts.append(_paint(_block(ex0 + 0.5, ex1, ey0 + 1.0, ey1, pz1, pz1 + 1.4), "YAW_JUNCTION_J8_6_J8_7_FFC_ZIF_PAIR_RESERVE", "#2E3336", 0.6))
     return Compound(label="YAW_JUNCTION_PCB08", children=parts)
 
 

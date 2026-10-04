@@ -45,7 +45,7 @@ The [current CAD mass check](cad/generated/body-layout-checks.json) estimates **
 | BO-039 | M3 × 6 heat-set insert in the three tray supports (rear −Y lug, front −Y column, rear +Y block) | 3 | CANDIDATE |
 | BO-040 | **Bought 2026-10-04:** Robu.in DC5V 3010 Hydraulic Cooling Fan with USB, 30 × 30 × 10 mm (hydraulic bearing, 2-wire, no PWM or tach, 100 mA max, 90 cm lead with a USB-A plug) ([D-043](../../decisions.md#d-043)). Hole pitch to measure: listing 26 mm, CAD 24 mm | 1 | SELECTED |
 | BO-041 | Fan fixing screw, bought with the fan (not relied on as supplied); self-tapping, about 12 to 16 mm; two diagonal positions | 2 | CANDIDATE |
-| BO-042 | W41 fan lead: the BO-040 fan's own 2-wire lead, USB-A plug cut off, cut to about 80 mm and crimped into a new XH2.54-2P housing (XHP-2, two SXH terminals), to PCB-09 `J9-4` | 1 assembly | DESIGN |
+| BO-042 | W41 fan lead: the BO-040 fan's own 2-wire lead, which stays attached at the fan; USB-A plug cut off, cut to about 80 mm and crimped into a new XH2.54-2P housing (XHP-2, two SXH terminals), to PCB-09 `J9-4`. Inspect the delivered fan before cutting | 1 assembly | DESIGN |
 
 **Fan choice (2026-10-04):** the builder chose the 2-pin 5 V double-ball 4010 fan over the Noctua NF-A4x10 5V PWM (≈₹2,000). **D-043 (same day)** shrinks it to the 3010 of the same family: the 4010's grille edge was 14 mm from the FRONT_L mic port, and the 3010 fits midway between the +Y ports, about 24 mm from each. It has no PWM or tach, so it runs on/off: a low-side MOSFET on PCB-09 (CH-084), switched by Pi GPIO24 under the `gpio-fan` overlay, drives it from the 40-pin header's 5 V ([D-042](../../decisions.md#d-042)). The CAD fan model, the two 12 mm self-tapping screws, the W41 route and `J9-4`, the 10 g mass row (`E`) and the airflow figures (a typical 3010 listing class plus a half-flow case) now follow this fan. Its hole size, hole pitch (24 mm assumed), airflow, noise and mass are still unmeasured.
 
@@ -55,17 +55,24 @@ The Pi's four M2.5 holes are modeled over tray bosses; the Active Cooler's push-
 
 | ID | Part | Qty | State |
 |---|---|---:|---|
-| BO-043 | ROBOTIS XC330-M181-T yaw servo on the body frame, working actuator choice | 1 | CANDIDATE |
-| BO-044 | Thin-section yaw bearing, modeled Ø50/Ø66 envelope | 1 | OPEN |
-| BO-045 | Driven 1:1 spur gear on the yaw disc | 1 | DESIGN |
-| BO-046 | Split scissor drive pinion, fixed and sprung halves | 1 assembly (2 halves) | DESIGN |
-| BO-047 | Yaw-servo coupling shaft | 1 | DESIGN |
-| BO-048 | Scissor-pinion preload spring and retaining clip | 1 set | OPEN |
-| BO-049 | Yaw-bearing clamp ring | 1 | DESIGN |
-| BO-050 | Head-yaw clock-spring/flex interconnect | 1 | HOLD |
+| BO-043 | ROBOTIS XC330-M181-T yaw servo, hung from a frame pad under the yaw plate on its own case screws | 1 | CANDIDATE |
+| BO-044 | 61810-2Z (6810ZZ) deep-groove bearing, 50 × 65 × 7, metal shields: e.g. [Koyo 6810ZZ, Moglix](https://www.moglix.com/koyo-deep-groove-bearing-6810/mp/msn8580ypj8492) (₹955, on request) | 1 | CANDIDATE |
+| BO-045 | Yaw hub print (PETG): m1 z37 driven gear, shoulder, bearing spigot and three disc-insert bosses | 1 | DESIGN |
+| BO-046 | Scissor pinion, two PETG m1 z37 halves of 2.0 mm (sprung below, fixed above) | 1 assembly (2 halves) | DESIGN |
+| BO-047 | Ø5 h6 steel D-shaft, 17.4 mm, M2-tapped top end | 1 | CANDIDATE |
+| BO-048 | Custom torsion spring (music wire Ø1.2, OD 8, 4 coils, axial legs) and an M2 × 4 countersunk screw holding the fixed half | 1 set | CANDIDATE |
+| BO-049 | Bearing clamp ring print (stationary), with 3 × M2 × 8 thread-forming screws | 1 | DESIGN |
+| BO-050 | Three 22-pin 0.5 mm FFCs, about 200 mm (power, sideband, CSI; the CSI one is a Raspberry Pi 5 camera cable) | 1 set | CANDIDATE |
+| BO-056 | Pinion drive hub print on the XC330 horn, with 4 × M2 × 6 horn screws | 1 | DESIGN |
+| BO-057 | Yaw cartridge housing print: bearing seat, flange and the two hard-stop bumps | 1 | DESIGN |
+| BO-058 | Yaw rotor print: inner-ring clamp, FFC drum and stop dog, with 3 × M2.5 × 8 thread-forming screws | 1 | DESIGN |
+| BO-059 | FFC cassette stator print, with 3 × M2 × 6 post screws | 1 | DESIGN |
+| BO-060 | Cartridge fasteners: 3 × ISO 7380 M3 × 6 and 3 × M3 × 4 inserts in the frame plate; 3 × M3 × 4 inserts in the hub for the head-disc screws | 1 set | CANDIDATE |
+| BO-061 | M2 × 26 XC330 case screws (stock length + 4 mm, `E`) | 4 | CANDIDATE |
+| BO-062 | Yaw rotor board PCB-14 (Ø35 ring in the hub: three FFC ZIFs underneath, head-harness demate on top) | 1 assembly | HOLD |
 | BO-054 | Retention hardware for PCB-05, PCB-08 and other body-mounted boards without defined mounts | 1 set | OPEN |
 
-The model carries a mass allowance of 89 g for this stage, including a **50 g bearing placeholder**. It does not establish a bearing SKU, gear tooth specification/material, spring article, servo-to-shaft fastening, bearing retention or load life. PCB-08 (`CH-083`) is the stationary yaw junction, PCB-09 (`CH-084`) is the Pi-header link adapter; both are HOLD in the project BOM. BO-054 is a placeholder for **unresolved board mounting**, not a specified fastener pack. The body-side W13–W15 and W23–W26 wiring belongs to HN-001. Head-side moving parts belong to the head assembly, so count each gear and interconnect only once at integration release.
+**Design: [D-044](../../decisions.md#d-044), [CAD README](cad/README.md#head-yaw-stage-d-044), `check_yaw_stage.py`.** The stage is a bench-built **cartridge** (BO-057 housing, BO-044 bearing, BO-049 clamp ring, BO-045 hub, BO-058 rotor, BO-059 cassette with the BO-050 FFCs and PCB-14). It is lowered into the frame plate from above with the shell on, and its flange is screwed down. Then the pinion (BO-046/048) drops onto the shaft. Then the head disc is screwed to the hub from above, before the head's tilting assembly goes on. The model now registers the stage from its solids (see the `BODY_YAW_STAGE` mass row); the bearing (55 g) and servo (23 g) are `E` until weighed. PCB-08 (`CH-083`) gains two 22-pin ZIFs for the power and sideband FFCs. PCB-09 (`CH-084`) is the Pi-header link adapter; both stay HOLD. BO-054 is still a placeholder for **unresolved board mounting**, not a specified fastener pack. The body-side W13–W15 and W23–W26 wiring belongs to HN-001. The head disc and its three M3 screws belong to the head assembly; count each part once at integration release.
 
 ## Audio
 
@@ -173,7 +180,14 @@ It replaces the IDEC XA1E-BV3U02KT-R E-stop (CH-046). That part latches when pus
 
 1. **Enclosure and joints:** select the print material/process and support plan for BO-019–026 and BO-033; print fit coupons. Define BO-053 internal-frame attachment and the service-panel screw/pilot specification; qualify inserts and the front-left cassette captive nut, and prove loaded joint retention, panel stiffness, shell removal and actual driver access.
 2. **Compute and cooling:** verify the Pi/Active Cooler mounting and pin-tip clearance, tray insertion and screw engagement. Add the GPIO24 fan switch and `J9-4` to the PCB-09 schematic (CA-06 CR-02), then measure air temperatures, Pi throttling, cooler RPM and microphone noise in the closed body with the fan on and off. Replace the 29.5 g tray/fixings and 15 g fan CAD estimates with measured masses and recheck stability.
-3. **Yaw stage:** select and load-rate BO-044, BO-048 and BO-050, detail gear teeth, material and bearing/servo retention, and validate head-sweep, backlash, life and cable twist. PCB-08/09 and the head-harness service path remain on HOLD.
+3. **Yaw stage (D-044):** order BO-044 and weigh it; check its tilt play at the head crown. Wind and rate-check BO-048. Print the hub/bearing fit coupon and the gears. Bench-test:
+   - B4 lash through the scissor mesh;
+   - B1 drag and current, since the scissor friction may use up the 8% yaw margin;
+   - the XC330 side load with the pinion fitted;
+   - 2 N·m stop and 3 × robot-weight uplift proofs;
+   - a 100k-cycle ±55° FFC cassette test with the CSI streaming.
+
+   PCB-14 needs its head-side connectors chosen with the head harness, and PCB-08 its two ZIFs; both stay HOLD.
 4. **Order and measure the speaker:** order BO-001. Caliper and weigh it against Ø50 × 18 mm and 48 g, then update `BODY_AUDIO`. The element14 India price and stock were not read on 2026-10-03.
 5. **Bench audio:** order BO-007 with BO-001 and check its SD pull-up on receipt. Listen first, then Pi 5 two-lane capture plus playback on one i2s0: `arecord -c 4` and `aplay` together, a tap test per mic port, and an hour with no xruns.
 6. **Boards and pins:** schematics and layouts for PCB-05 and PCB-06 are not started. Settle whether 5 V reaches PCB-05 on W12 only, or also on GH10. Approve `CA-06` CR-01 for GPIO22 (SDI1) and GPIO23 (`AMP_SD`).

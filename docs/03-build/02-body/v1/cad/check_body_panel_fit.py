@@ -19,7 +19,8 @@ def overlap(a, b):
         aa.max.Y <= bb.min.Y or bb.max.Y <= aa.min.Y or
         aa.max.Z <= bb.min.Z or bb.max.Z <= aa.min.Z):
         return 0.0
-    return round((a & b).volume, 3)
+    common = a & b  # build123d returns None for an empty intersection
+    return 0.0 if common is None else round(common.volume, 3)
 
 
 shell = body.body_shell()

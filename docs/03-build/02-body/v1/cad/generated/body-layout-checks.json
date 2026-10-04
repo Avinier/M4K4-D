@@ -172,21 +172,21 @@
     ]
   },
   "printed_frame_only": {
-    "mass_g": 154.28433386572846,
+    "mass_g": 144.923139703169,
     "com_mm": [
-      10.853849324489447,
-      1.0263690099817315,
-      99.22562096599185
+      10.357059220516241,
+      1.420534155719244,
+      96.77139630562372
     ],
-    "yaw_inertia_about_ground_origin_g_mm2": 661051.971686462,
+    "yaw_inertia_about_ground_origin_g_mm2": 658181.2730040043,
     "components": [
       {
         "name": "BODY_FRAME_MAIN_PRINT",
-        "mass_g": 149.30784044942763,
+        "mass_g": 139.94664628686817,
         "com_mm": [
-          9.026320558373,
-          -0.5902245672323235,
-          100.45483278522818
+          8.389619103763717,
+          -0.29017876236525636,
+          97.99555946970177
         ]
       },
       {
@@ -201,21 +201,21 @@
     ]
   },
   "frame_and_joints": {
-    "mass_g": 178.5459759179271,
+    "mass_g": 169.18478175536765,
     "com_mm": [
-      12.699184905108128,
-      1.881631187025916,
-      94.80321982797413
+      12.375740701626905,
+      2.2665944508921414,
+      92.45624219254267
     ],
-    "yaw_inertia_about_ground_origin_g_mm2": 801934.4855504794,
+    "yaw_inertia_about_ground_origin_g_mm2": 799063.7868680216,
     "components": [
       {
         "name": "BODY_FRAME_MAIN_PRINT",
-        "mass_g": 149.30784044942763,
+        "mass_g": 139.94664628686817,
         "com_mm": [
-          9.026320558373,
-          -0.5902245672323235,
-          100.45483278522818
+          8.389619103763717,
+          -0.29017876236525636,
+          97.99555946970177
         ]
       },
       {
@@ -464,29 +464,29 @@
     ]
   },
   "whole_robot": {
-    "mass_g": 2478.679481132077,
+    "mass_g": 2530.659481132077,
     "com_mm": [
-      18.224753850866637,
-      0.5157613916634567,
-      105.62481059905843
+      18.099141808812742,
+      0.5133874345256212,
+      106.31687176260836
     ],
-    "forward_tip_acceleration_m_s2": 1.6926405288966782,
+    "forward_tip_acceleration_m_s2": 1.6700320297318816,
     "forward_tip_screen_min_m_s2": 1.5822580645161293,
-    "ball_static_share": 0.16567958046242398,
-    "com_over_axle_pitch_deg": 9.789560435395535,
+    "ball_static_share": 0.16453765280738858,
+    "com_over_axle_pitch_deg": 9.661282557093315,
     "rear_skid_first_contact_pitch_deg": 6.054191894114834,
-    "reverse_launch_or_forward_brake_tip_acceleration_m_s2": 8.523709151446507,
-    "axle_line_lateral_tip_proxy_m_s2": 7.846550219093785,
-    "neutral_spin_centripetal_at_220_deg_s_m_s2": 0.2686963507240656,
-    "head_pose_conservative_tip_acceleration_m_s2": 1.6890619601750394,
+    "reverse_launch_or_forward_brake_tip_acceleration_m_s2": 8.479815140428363,
+    "axle_line_lateral_tip_proxy_m_s2": 7.795692776946409,
+    "neutral_spin_centripetal_at_220_deg_s_m_s2": 0.2668443917026671,
+    "head_pose_conservative_tip_acceleration_m_s2": 1.6665497948857702,
     "head_yaw_com_offset_from_axis_mm": 0.8469647482717024,
     "head_pitch_carried_com_offset_from_axis_mm": 0.00013665226662536165,
     "head_roll_carried_com_offset_from_axis_mm": 5.112737170499328e-05,
-    "printed_enclosure_yaw_inertia_about_drive_axis_kg_m2": 0.0026331894487726455,
+    "printed_enclosure_yaw_inertia_about_drive_axis_kg_m2": 0.0026303187500901874,
     "unweighed_harness_fastener_allowance_g": 95.0,
     "allowance_assumed_x_mm": 20.0,
-    "allowance_min_x_for_pose_screen_mm": -10.004132117424604,
-    "allowance_if_at_x_minus20_a_tip_m_s2": 1.5466763777613628
+    "allowance_min_x_for_pose_screen_mm": -4.334841591108752,
+    "allowance_if_at_x_minus20_a_tip_m_s2": 1.5279966343006801
   },
   "axes": {
     "head_yaw_datum_mm": [

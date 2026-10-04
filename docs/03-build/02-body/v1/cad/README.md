@@ -14,6 +14,7 @@ This directory follows the chassis v1 CAD layout: an editable model and STEP ent
 | `check_charge_inlet.py` | Rear-panel charge inlet PCB-13: pocket depth, flush mouth, maximum-overmold fit, seat, screw engagement, clashes, PCB-02 clearance and the panel-removal sweep (D-040; about 6 min). |
 | `check_compute_mount.py` | Compute tray, Pi 5 and Active Cooler retention, frame lugs, tray-screw driver access and the front insertion sweep (D-042). |
 | `check_cooling_path.py` | Enclosure fan (BO-040 3010, D-043), +Y intake grille and collar, rear vent slots, shell lowering past the fan, mic-port distances and a first-order thermal estimate (D-042). |
+| `check_yaw_stage.py` | Head yaw stage (D-044): fit, ±61° sweep with the counter-rotating pinion, ±62° hard stops, involute mesh clearance, cartridge and pinion install paths, and load, spring, FFC-loop and mass estimates (about 5 min). |
 | `check_power_button.py` | Rear-panel mushroom power button: well clearance, PCB-02 clearance, W40 lead and `J2-9` plug clashes and the panel-removal sweep (D-041; about 5 min). |
 | `check_body_layout.py` | CAD-volume mass/CoM, body axes/envelope, and whole-robot stability-screen audit. |
 | `write_outputs.py` | Writes body dimensions, frames, and a partial body mass-register report to `generated/`. |
@@ -33,6 +34,7 @@ python check_charge_inlet.py
 python check_power_button.py
 python check_compute_mount.py
 python check_cooling_path.py
+python check_yaw_stage.py
 python check_body_layout.py
 python write_outputs.py
 ```
@@ -139,6 +141,75 @@ The 4010 it replaced gave 7.0 K and 4.3 K with the fan on (D-042).
 These numbers compare options; the bench measures the real ones, including the fan's real airflow.
 
 The shell collar is a horizontal tube on a vertical wall in the roof-down print, so expect local support. The fresh DfAM measurement is still pending.
+
+### Head yaw stage (D-044)
+
+The head turns on a **61810-2Z** bearing (50 × 65 × 7, shielded) in a printed cartridge on the frame's yaw plate. The XC330-M181 drives it 1:1 through a scissor pinion. The head cables cross the joint as three 22-pin FFCs in a clock-spring cassette under the plate. Angles below are about the yaw axis (16, 0), from +X at yaw 0.
+
+**Stack (Z, mm).**
+
+| Z | Stationary | Rotating with the head |
+|---|---|---|
+| 155–151 | | head disc plate (head-owned) |
+| 151–145.8 | pinion 146.4–150.6 at (16, 37) | hub gear, m1 z37, and three insert bosses |
+| 145.6–144 | clamp ring (BO-049) | hub shoulder on the inner ring, 144–145.8 |
+| 144–137 | bearing outer ring in the housing wall | bearing inner ring on the hub spigot |
+| 141–135.5 | housing flange on the plate (138–141), seat lip in the plate pocket (135.5–137) | rotor clamp ring under the inner ring (133.6–137) |
+| 138–134 | frame plate: R44 ring, R28 bore, R36.6 pocket | |
+| 133.2–120 | FFC cassette stator | rotor drum, 121.4–133.6 |
+
+**Parts.**
+- **Cartridge housing (BO-057):** seat lip, wall and an R36.5–44 flange. Three ISO 7380 M3 × 6 screws at R40 (0°, 180°, 270°) go into inserts in the plate, driven from above. A stepped pocket at the pinion clears the drive hub, collar and spring; there the bearing OD is open for about 14°.
+- **Clamp ring (BO-049):** stationary. Three M2 × 8 thread-forming screws at R34.5 (0°, 135°, 225°), outside the pinion's 58–122° shadow.
+- **Hub (BO-045):** one PETG print.
+  - Gear: m1, z37, 20° involute, both flanks thinned 0.0375 mm (0.15 mm nominal backlash for FDM).
+  - The R12.15 bore pilots the head disc's R12 hub.
+  - The shoulder sits on the inner ring; the R18–25 spigot fills the ring's bore.
+  - Bosses at R22 (210°, 270°, 330°) take three M3 × 4 inserts. The head disc's three M3 screws (head-side) go in from above. Nothing on the hub outside R19.5 rises above Z 145.8 outside the 184–356° band, so the pinion never meets a boss within ±62°.
+- **Rotor (BO-058):** one print holding three parts:
+  - a ring that clamps the inner ring up against the hub shoulder, with three M2.5 × 8 thread-forming screws into the spigot;
+  - the FFC drum;
+  - the hard-stop **dog** at 270°.
+
+  This screw path also carries uplift: lifting the robot by its head loads rotor → inner ring → balls → outer ring → clamp ring → housing → flange screws.
+- **Hard stops:** the dog meets two bumps on the housing seat at 200.1° and 339.9° when the head is at ±62°. The bumps are 2.7 mm of radial engagement at R29. Usable travel is ±55°; set the XC330 position limits to ±58°.
+- **Pinion (BO-046 to BO-048, BO-056):**
+  - A printed hub sits on the horn (4 × M2 into its 12 mm PCD) and carries a Ø5 steel D-shaft.
+  - The torsion spring (music wire Ø1.2, OD 8, 4 coils) sits on the hub's collar. Its legs go into the collar and the sprung half.
+  - The sprung half (below) turns on the shaft, on a 0.2 mm thrust land. The fixed half (above) is keyed by the D-flat and held by an M2 countersunk screw into the shaft end.
+  - Preload is 0.22 N·m at about 51° (5.25 teeth) of wind-up. A peg on the fixed half in an arc slot of the sprung half holds the wind-up off the mesh.
+  - 0.5 mm lead-in chamfers let the pinion drop into mesh with the hub. No pin is needed under the disc.
+- **Servo mount:** the XC330 hangs from a pad under the plate (part of the main frame print). Its four case screws are lengthened to M2 × 26 (BO-061) and thread 3.4 mm into the pad's pilots. Fit it from below before PCB-09, with the drive hub and shaft already on the horn.
+- **FFC cassette (BO-050, BO-059):** three 22-pin 0.5 mm FFCs, 11.5 mm wide, run on edge in a 12.2 mm band. They make a rolling loop between the drum (R13.7) and the stator wall (R22.1), with a U-turn of R4.2. The stator hangs from the housing on three posts (45°, 150°, 270°) that pass notches in the plate bore.
+  - Neutral wraps are 120° inner and 120° outer. The loop is sized for ±90°, beyond the stops: at ±90° the inner wrap runs 64–176° and the outer 86–154°.
+  - The FFCs leave through a window at 300°. The CSI drops to the Pi 5 camera socket. Power and sideband run under the cassette floor to two ZIFs on PCB-08's new +X extension (`J8-6`, `J8-7`).
+  - The inner ends rise through the drum core to **PCB-14**, a Ø35 ring board in the hub. The head harness demates on PCB-14's top, inside the hub, with the head disc off.
+  - The cassette floor is 13 mm above the real cooler top (Z 107), inside the 10.5 mm headroom rule.
+
+**Assembly (shell on).**
+1. **Bench:** press the bearing into the housing and screw down the clamp ring. Drop the hub in from the top and screw the rotor on from below. Fit PCB-14 in the hub and plug the FFCs into it. Wind the FFCs into the stator and screw the stator's posts into the housing.
+2. Fit the servo from below before PCB-09, with its drive hub, shaft and spring collar already on the horn.
+3. Hold the cartridge above the plate. Reach through the R28 bore to plug the power and sideband FFCs into PCB-08 `J8-6`/`J8-7` and the CSI into the Pi. Lower the cartridge; the posts pass the notches. Screw the flange down.
+4. Drop the pre-wound pinion onto the shaft. The chamfers take it into mesh. Fit the fixed-half screw.
+5. Plug the head harness into PCB-14 through the hub bore. Screw the head disc and yoke to the hub (3 × M3, from above). Then fit the head's tilting assembly.
+
+To remove the head, reverse these steps. Removing the cartridge needs the disc off first, then the pinion.
+
+**Check.** `check_yaw_stage.py` writes `generated/yaw-stage.json`. It checks:
+- the stage against every fixed part and itself;
+- the yaw sweep;
+- the stops at ±61.5° and ±62.5°;
+- the mesh over one pitch: no interference, 0.072 mm running gap;
+- the cartridge lowering (40 mm) and the pinion drop (12 mm);
+- the axial gaps: pinion to shoulder 0.6, to clamp ring 0.8, to disc 0.4; spring to bearing OD 0.5.
+
+It also gives these estimates (`E`):
+- **Bearing static safety:** 17 or more, including a 100 N fall load at 100 mm.
+- **Tilt play:** about 0.1° (single deep-groove bearing).
+- **PETG tooth stress (Lewis):** 15.5 MPa at preload alone, 25 MPa at peak, 37 MPa at the servo's current limit. The sustained preload will creep the teeth; the spring follows it, losing about 0.0013 N·m per 0.1 mm. Swap to metal pinion halves if B4 fails.
+- **Spring:** 0.25 N·m/rad, 1.49 GPa at preload.
+- **Servo side load:** 8.7 N at rest, 13.3 N at peak, 0.2 N·m on its output. XC330 radial ratings are unpublished.
+- **Drag:** the scissor's mesh friction (about 0.02 N·m) is the one that can use up RP-01's 8% yaw margin. B1 measures it.
 
 ### Microphone mounts (D-037)
 

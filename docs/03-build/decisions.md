@@ -1663,9 +1663,131 @@ That is still well under the vents-only case. With the Active Cooler holding the
 
 **Unverified:** the purchased fan's hole pitch and size, airflow, noise, current and mass. The noise check (`AR-61`) still applies: compare FRONT_L/REAR_L against the −Y pair with the fan on. A small 3010 runs at a higher blade-pass frequency than a 4010, so check the spectrum, not just the level.
 
-**Next:** on receipt, measure the holes and update `ENCLOSURE_FAN_HOLE_*` and `FAN_SCREW_POINTS`, then run the bench thermal and noise tests from D-042.
+**Next:** on receipt, measure the holes and update `ENCLOSURE_FAN_HOLE_HALF_PITCH` (`FAN_SCREW_POINTS` follow it), then run the bench thermal and noise tests from D-042.
 
 **Fan bought (added 2026-10-04, builder):** BO-040 is the [Robu.in DC5V 3010 Hydraulic Cooling Fan with USB](https://oldwp.robu.in/product/dc-5v-3010-hydraulic-cooling-fan-with-usb-size303010mm/): 30 × 30 × 10 mm, hydraulic bearing, 100 mA max, 90 cm lead with a USB-A plug.
-- **Connector:** the USB-A plug is cut off. The lead is cut to about 80 mm and crimped into a new XH2.54-2P housing for `J9-4` (BO-042). Fan+ (red) goes to pin 1. Check polarity before crimping.
+- **Connector:** the listing describes no detachable connector at the fan, and the photos show the wires going straight into the housing, so the lead stays on the fan. The USB-A plug is cut off. The lead is cut to about 80 mm and crimped into a new XH2.54-2P housing for `J9-4` (BO-042). Fan+ (red) goes to pin 1. Before cutting, check the delivered fan: the listing warns that it may differ from the photos. If it does have a connector at the fan, rework the BO-042 plan before cutting anything. Check polarity before crimping.
 - **Hole pitch:** the listing says 26 mm. Other sellers of the same fan say 25 mm, and the usual 3010 standard is 24 mm. The CAD keeps 24 mm until the received fan is measured. 26 mm would move the screws to (4.5, 94) and (30.5, 120). They still clear the yaw servo (1.9 mm), but the top-right head would reach X 33.1, so the web end and `W41` would move about 1 mm forward.
 - **STEP:** there is no vendor model. The body imports a [photo-derived 3010 STEP](02-body/v1/cad/purchased/dc5v_3010_hydraulic_usb_fan.step) from `purchased/`. Its mounting holes are estimated. A separate generic step.parts 30 × 30 × 10 fan (24 mm pitch) may be used for comparison but is not imported.
+- **Listing data (builder, 2026-10-04):** a seller's spec sheet confirms 5 V, hydraulic, USB-A and a 900 mm lead. It gives the current as "100 (A)", which must mean 100 mA, and a 0.04 kg shipping weight that includes packaging and the full lead; the 10 g row (`E`) stands. No listing gives hole size, airflow, RPM or noise, and the hole-pitch claims disagree, so these come from the received fan, not a listing.
+- **How to measure the holes (open, builder):**
+  - *Hole size:* inside jaws of the calipers in two holes; expect about 2.7–3.4 mm. Without calipers, the largest drill-bit shank that slides through freely.
+  - *Hole pitch:* across two holes on one edge, take **A** (outside jaws over the holes' outer edges) and **B** (inside jaws between their inner edges). Pitch = (A + B) / 2, independent of hole size. Repeat on a second edge; the sides should agree within 0.2 mm, or the pattern is not square and every side is recorded.
+  - *Through or blind:* note whether the holes pass right through the frame.
+  - *No calipers:* print a pin plate with rows at 24, 25 and 26 mm pitch and see which row drops into the fan. A ruler (±0.5 mm) cannot tell 25 from 26.
+  - *Then:* update the STEP's `HOLE_PITCH`/`HOLE_DIAMETER` and `ENCLOSURE_FAN_HOLE_HALF_PITCH` (the screw points and web holes follow it), recheck the screw heads against the yaw servo and `W41` (26 mm puts the top-right head at X 33.1), size BO-041, and re-run `check_cooling_path.py`.
+
+## D-044
+
+**2026-10-04 · Body / head yaw stage designed: 61810-2Z bearing cartridge, printed scissor-pinion mesh, ±62° hard stops and an FFC clock-spring cassette (BO-043 to BO-050, BO-056 to BO-062; CH-083 PCB-08; new PCB-14; W37, W42, W43) · ACTIVE; DESIGN in CAD, checks green; HOLD on parts, printed coupons and the B1/B4 and cassette bench tests**
+
+**Decision.** The builder chose two things for the yaw stage on 2026-10-04:
+- **FDM-printed gears for the first build.** They accept creep and wear as a bench finding, and will move to metal or PA12 later if they fail.
+- **An FFC clock-spring cassette** for the head cables, rather than a loose-wire loop or leaving the volume reserved.
+
+Everything else here fills the open items in the old envelope stage: the 50 g bearing placeholder, the preload spring and clip, the clock-spring, the tooth and material spec, bearing and servo retention, and load and life.
+
+**What fixed the layout.** The 1:1 spur pair (m1 z37, pitch Ø37) sits under the head disc (plate underside Z 151). Its pinion, at (16, 37), reaches in to R17.5 from the yaw axis. That has three consequences:
+1. **The inner ring rotates.** A rotating cup on the outer ring would have to pass through the pinion.
+2. **The order is fixed.** Nothing stationary can be lowered past an installed pinion, and the disc hides everything under it. So the order is: cartridge, then pinion, then head disc, all from above with the shell on.
+3. **The disc screws go in from above,** with the head's tilting assembly off (head README service step 5).
+
+**Bearing (BO-044).** A **61810-2Z / 6810ZZ**, 50 × 65 × 7: C 6.76 kN, C₀ 6.8 kN ([SKF via RS](https://uk.rs-online.com/web/p/ball-bearings/2076972)), about 55 g (`E`). It is in India as the [Koyo 6810ZZ on Moglix](https://www.moglix.com/koyo-deep-groove-bearing-6810/mp/msn8580ypj8492) (₹955, on request).
+- It fits the old Ø50/Ø66 × 7 reserve.
+- It is **shielded, not sealed**: 2RS contact seals add about 0.015 N·m (`E`), which is more than the yaw servo's 8% margin.
+- Head CoM is 82 mm above the bearing. Static safety s₀ is 17 or more in every case, including a 100 N fall on the head at 100 mm and lifting the robot by the head at 3 × its weight. L10 is effectively unlimited.
+- The weakness of a single deep-groove bearing is **tilt play**, about 0.1° (about 0.2 mm at the crown). It shows once the moment exceeds about 0.17 N·m, which is head weight × dm/2. Measure it.
+
+**Cartridge (bench-built, lowered into the frame plate).**
+- **Frame plate:** the ring grows R33.5 → R44, 1 mm inside the R45 shell opening. It is bored R28 and pocketed R36.6 down to Z 135.5. It has three post notches, three M3 inserts at R40 and the drive-hub hole.
+- **Housing (BO-057):** seat lip, wall and an R36.5–44 flange. Three ISO 7380 M3 × 6 screws hold it from above.
+- **Bearing seat:** the bearing sits at Z 137–144, 1 mm into the plate. That gives the clamp ring 1.6 mm and the hub shoulder 1.8 mm under the pinion.
+- **Clamp ring (BO-049):** now stationary. It holds the outer ring with three M2 × 8 screws, at 0°, 135° and 225°, outside the pinion's shadow.
+- **Hub (BO-045):** one print with:
+  - the driven gear;
+  - a shoulder on the inner ring;
+  - an R18–25 spigot in its bore;
+  - an R12.15 bore that pilots the disc's R12 hub;
+  - three M3-insert bosses at 210°, 270° and 330°. Hub features above Z 145.8 stay outside the band the pinion sweeps within ±62°.
+- **Rotor (BO-058):** clamps the inner ring up against the shoulder with three M2.5 × 8 screws into the spigot. It also carries the FFC drum and the stop dog. Uplift path: rotor → inner ring → balls → outer ring → clamp ring → housing → flange screws (24 N per screw at 3 × robot weight).
+- **Hard stops (RP-01 P08):** the dog at 270° meets bumps at 200.1° and 339.9° at ±62°, with 2.7 mm of engagement at R29. At a 2 N·m hand twist the bump sees 12 MPa of shear. Usable travel is ±55°; set the XC330 position limits to ±58°.
+
+**Gears and preload (BO-045, BO-046, BO-048, BO-056, BO-047).**
+- **Tooth form:** m1, z37, 20° full-depth involute, profile shift x = 0. Contact ratio is 1.70; tip thickness about 0.7 mm. Both gears are thinned for 0.15 mm nominal backlash (0.46° if the scissor were absent), so FDM error does not bind the fixed half. The CAD carries real involute teeth. The mesh check finds no interference over a full pitch, with a 0.072 mm running gap.
+- **Pinion halves:** two 2.0 mm halves (were 2.4). They leave 0.6 mm over the hub shoulder, 0.8 mm over the clamp ring and 0.4 mm under the disc.
+  - The sprung half sits below, free on the shaft, on a printed 0.2 mm thrust land.
+  - The fixed half sits above. It is keyed by a D-flat and held by an M2 countersunk screw into the shaft end.
+- **Preload spring (BO-048, custom):** music wire Ø1.2, OD 8, 4 coils, about 0.25 N·m/rad. It takes about 51° (5.25 teeth) of wind-up for 0.22 N·m, at 1.49 GPa bending (`E`, against about 1.6 GPa allowed). It sits on the drive hub's collar, 0.5 mm off the bearing OD.
+- **Wind-up and assembly:** a peg on the fixed half, in an arc slot of the sprung half, holds the wind-up off the mesh. With 0.5 mm lead-in chamfers, the pinion drops into mesh without a pin under the disc.
+- **Shaft and drive hub:** the shaft (BO-047) is Ø5 h6 steel. The printed drive hub (BO-056) goes on the horn's four Ø1.6 holes on a 12 mm PCD.
+- **PETG tooth stress (Lewis, `E`):** 15.5 MPa at preload alone, 25 MPa at peak demand, 37 MPa at the servo current limit.
+  - The sustained preload will creep the teeth. The spring follows that creep and loses only about 0.0013 N·m per 0.1 mm.
+  - Move to metal pinion halves if B4 lash or wear fails; the CAD allows a drop-in swap.
+- **Servo side load:** 8.7 N at rest from the preload separating force, and 13.3 N at peak. That is about 0.2 N·m at the XC330 output, which ROBOTIS does not rate.
+- **Drag:** scissor mesh friction is estimated at about 0.02 N·m. On the RP-01 paper screen it alone could use up yaw's 8% margin. B1 decides.
+
+**Servo mount (BO-043, BO-061).** The XC330 hangs from a pad under the plate, fused into the main frame print. Its four case screws are lengthened to M2 × 26 (`E`, stock + 4 mm) into pilots in the pad. It goes in from below before PCB-09, with the drive hub and shaft already on the horn.
+
+**FFC clock-spring cassette (BO-050, BO-059, BO-062).**
+- **Location:** under the plate, R ≤ 23.5, Z 120–133.2. That is 13 mm over the real cooler top (Z 107), so the 10.5 mm headroom rule holds.
+- **Cables:** three 22-pin 0.5 mm FFCs (11.5 mm wide, 0.5 A per conductor `E`) run on edge in a 12.2 mm band. They form a rolling loop between the drum (R13.7) and the stator wall (R22.1), with an R4.2 U-turn (about 0.7% copper strain, `E`).
+  - **W42 power:** the three `J8-1` pairs on 7 + 7, 2 + 2 and 2 + 2 conductors.
+  - **W43 sideband:** the `J8-3`, `J8-5` and `J8-4` signals, spares dropped.
+  - **W37 CSI:** a Raspberry Pi 5 camera cable.
+- **Travel:** the loop is sized for ±90°, beyond the stops. Neutral wraps are 120°/120°; at ±90° they run 64–176° inner and 86–154° outer.
+- **Exit:** the FFCs leave at 300°. The CSI drops to the Pi; W42 and W43 go to two new ZIFs, `J8-6`/`J8-7`, on PCB-08's +X extension.
+- **Rotor end:** the inner ends rise through the drum core to **PCB-14**. This is a new Ø35 ring board in the hub, on HOLD, where the head harness demates with the disc off.
+- **Mounting:** the stator hangs from the housing on three posts at 45°, 150° and 270°. The 30° post moved because the front upper cross rail sits at X 45.5. The posts pass notches in the plate bore.
+
+**Assembly (shell on).**
+1. **Bench:** bearing into the housing, then the clamp ring, the hub and the rotor. Then PCB-14 and the FFCs, then the cassette stator.
+2. Servo from below, before PCB-09.
+3. Plug `J8-6`/`J8-7` and the CSI through the R28 bore, lower the cartridge, and screw the flange down.
+4. Drop the pinion onto the shaft and fit the fixed-half screw.
+5. Plug the head harness into PCB-14 and screw the disc and yoke to the hub (3 × M3 from above). Then fit the tilting assembly.
+
+**Mass.**
+- **`BODY_YAW_STAGE`:** **150.3 g** at (14.81, 7.81, 136.22), from the solids (was an 89 g estimate at (16, 13.5, 134.3)). The bearing 55 g and servo 23 g are `E`/`D`; the FFCs (4.5 g) and PCB-14 (3 g) are `E`.
+- **`BODY_PRIMARY_FRAME`:** 169.18 g, −9.3 g. The plate bore and pocket remove more than the ring and pad add.
+- **Whole robot:** 2,530.7 g at CoM (+18.10, +0.51, 106.32). a_tip is **1.670** m/s² against 1.582 (head-pose bound 1.667). The 95 g harness allowance must now stay forward of **X −4.3 mm** (was about −11). That margin is shrinking.
+
+**Checks.**
+- New `check_yaw_stage.py` (about 5 min). It covers fit, a ±61° sweep with the counter-rotating pinion, the stops at ±61.5/±62.5°, the mesh over one pitch, the cartridge lowering, the pinion drop, the axial gaps, the load, spring and FFC-loop estimates, and the mass-row match.
+- `check_body_layout.py`: all true.
+- `check_body_frame_fit.py`: clean. `check_compute_mount.py`, `check_cooling_path.py`: ALL PASS. `check_mic_mounts.py`: ok. All include the new yaw parts as fixed parts.
+- `check_body_panel_fit.py`: clean, after a one-line fix to its overlap helper. It crashed on build123d's `None` for an empty intersection, which the new yaw parts' boxes triggered.
+- `write_outputs.py`: re-run.
+- Not run: `check_shell_frame_fit.py` (about 70 min; the shell opening and roof are unchanged, and the plate ring stays inside them), the chassis `check_layout.py`, and the `body-v1.step` rebuild.
+
+**Interfaces to the head (03-head / RP-01 Layout 04, not edited here).** The disc needs:
+- three Ø3.4 holes at R22, at 210°, 270° and 330° about the yaw axis, for M3 screws into the hub inserts;
+- its R12 hub to pilot in the R12.15 gear bore;
+- the head harness to end in connectors that plug into PCB-14 through the disc bore.
+
+The yaw-carried mass tree does not include the hub, rotor, inner ring or PCB-14. Their yaw inertia is under 1 × 10⁻⁶ kg·m², against 0.00128 for the head.
+
+**BOM.**
+- BO-043 to BO-050 are rewritten.
+- New rows:
+  - BO-056 drive hub;
+  - BO-057 housing;
+  - BO-058 rotor;
+  - BO-059 cassette stator;
+  - BO-060 cartridge fasteners;
+  - BO-061 servo screws;
+  - BO-062 PCB-14.
+- CH-083 (PCB-08) gets the two ZIFs.
+- 05-harness: W37 changed; W42 and W43 added. 04-pcbs: PCB-08 updated and PCB-14 added.
+
+**Open:**
+- **Buy and measure:** BO-044 (weigh it; measure tilt play at the crown) and the BO-048 spring (rate and wind-up). Confirm the stock XC330 case-screw length (BO-061) and that the horn screws hold in its Ø1.6 holes.
+- **Print coupons:** the hub spigot and housing fits on a real bearing, the gear teeth, and the chamfered drop-in mesh.
+- **Bench, RP-01:**
+  - B1: drag and current through the mesh, and the yaw margin.
+  - B4: lash through the scissor (≤0.25° best case).
+  - XC330 side-load endurance with the pinion fitted.
+  - 2 N·m stop proof and 3 × robot-weight uplift proof.
+- **Cassette:** 100k ±55° sweeps with the CSI streaming (no frame errors), plus W42 voltage drop at 1 A and at the stall transient.
+- **PCB-14 and PCB-08:** choose the head-side connectors with the head harness, and lay out both boards (ZIF pin order).
+- **Head:** add the disc holes and record the interface in 03-head.
+- **Stability:** weigh the harness and keep its centroid forward of X −4.3 mm.
