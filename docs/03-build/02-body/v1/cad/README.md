@@ -1,6 +1,6 @@
 # Body v1 CAD
 
-This directory follows the chassis v1 CAD layout: an editable model and STEP entry point at the root, `generated/` for derived reports, `snapshots/` for review images, and `purchased/` for vendor-reference provenance. Subsystem folders are added when a body component has its own model. The current body is one scoped assembly, so its source remains in the root. Its head reference now comes from [head v1](../../../03-head/v1/cad/README.md); build `head-v1-integrated.step.py` there for the complete head, body and chassis view.
+This directory follows the chassis v1 CAD layout: an editable model and STEP entry point at the root, `generated/` for derived reports, `snapshots/` for review images, and `purchased/` for vendor-reference provenance. Subsystem folders are added when a body component has its own model. The current body is one scoped assembly, so its source remains in the root.
 
 | Path | Purpose |
 |---|---|

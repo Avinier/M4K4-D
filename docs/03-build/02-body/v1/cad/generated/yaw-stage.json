@@ -16,8 +16,8 @@
   "pinion_to_disc_mm": 0.4,
   "yaw_sweep_clashes_mm3": {},
   "stop_dog_vs_housing_mm3": {
-    "61.5": 0,
-    "-61.5": 0,
+    "61.5": 0.0,
+    "-61.5": 0.0,
     "62.5": 0.662,
     "-62.5": 0.662
   },
@@ -27,37 +27,37 @@
   ],
   "mesh_min_gap_mm": 0.072,
   "mesh_max_gap_mm": 0.0736,
-  "mesh_max_overlap_mm3": 0,
+  "mesh_max_overlap_mm3": 0.0,
   "cartridge_lowering_clashes": {},
   "pinion_drop_clashes": {},
   "bearing_61810_2Z": {
     "C_N": 6760.0,
     "C0_N": 6800.0,
-    "head_com_above_bearing_mm": 82.6,
+    "head_com_above_bearing_mm": 82.0,
     "cases": {
       "static_head_weight": {
         "axial_N": 5.8,
         "moment_Nm": 0.0,
         "P0_N": 2.9,
-        "s0": 2343.1
+        "s0": 2356.2
       },
       "braking_2ms2": {
         "axial_N": 5.8,
-        "moment_Nm": 0.098,
-        "P0_N": 6.3,
-        "s0": 1079.4
+        "moment_Nm": 0.097,
+        "P0_N": 6.2,
+        "s0": 1089.0
       },
       "bump_3g_lateral": {
-        "axial_N": 17.4,
-        "moment_Nm": 1.437,
-        "P0_N": 58.7,
-        "s0": 115.8
+        "axial_N": 17.3,
+        "moment_Nm": 1.421,
+        "P0_N": 58.1,
+        "s0": 117.1
       },
       "lift_robot_by_head_x3": {
-        "axial_N": -74.6,
-        "moment_Nm": 2.237,
-        "P0_N": 115.1,
-        "s0": 59.1
+        "axial_N": -74.5,
+        "moment_Nm": 2.234,
+        "P0_N": 115.0,
+        "s0": 59.2
       },
       "fall_on_head_100N_at_100mm": {
         "axial_N": 100.0,
@@ -66,7 +66,7 @@
         "s0": 17.1
       }
     },
-    "L10_hours_at_20rpm": "3.30e+11",
+    "L10_hours_at_20rpm": "3.38e+11",
     "tilt_play_deg_E": 0.11,
     "note": "single deep-groove bearing: radial clearance gives ~0.1 deg tilt play (~0.2 mm at the crown) once moment exceeds head weight x dm/2 ~0.17 N.m; measure"
   },
@@ -131,11 +131,11 @@
     }
   },
   "uplift_path": {
-    "design_N": 74.6,
+    "design_N": 74.5,
     "rotor_screws": "3 x M2.5 thread-forming, 6.6 mm in the PETG spigot",
-    "per_screw_N": 24.9,
+    "per_screw_N": 24.8,
     "post_and_clamp_screws": "3 x M2 x 8 clamp ring (outer ring) and 3 x M3 x 6 flange screws into frame inserts",
-    "per_flange_screw_N": 24.9
+    "per_flange_screw_N": 24.8
   },
   "drag_Nm": {
     "bearing_2Z_E": 0.002,
@@ -217,7 +217,7 @@
       "PCB14_YAW_ROTOR_BOARD": 3.0
     },
     "moving_yaw_inertia_kg_m2_lower_bound": "8.87e-07",
-    "head_yaw_inertia_kg_m2": 0.001281920650586696
+    "head_yaw_inertia_kg_m2": 0.001281864105407214
   },
   "mass_register_matches": true
 }
