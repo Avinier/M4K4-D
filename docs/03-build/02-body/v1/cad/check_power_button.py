@@ -60,7 +60,7 @@ shell = body.body_shell()
 panels = body.body_panels()
 rear = panels.children[1]
 hardware = body.panel_mount_hardware().children
-rear_frame = [p for p in hardware if (p.label or "") == "REAR_PANEL_INTERNAL_FRAME_WITH_BOSSES"]
+rear_frame = [body.panel_internal_frame("REAR")]  # part of the shell print (D-045); named for clash reports
 rear_screws = [p for p in hardware if (p.label or "").startswith("REAR_PANEL_M3_")]
 electronics = leaves(body.electronics())
 button_all = [p for p in electronics if (p.label or "").startswith("POWER_BUTTON_MUSHROOM_")]

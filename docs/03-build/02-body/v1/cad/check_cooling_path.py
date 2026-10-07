@@ -74,7 +74,8 @@ panels = body.body_panels()
 rear = panels.children[1]
 pods = [p for p in leaves(panels) if label(p).startswith("WHEEL_ARCH_POD_")]
 panel_hw = body.panel_mount_hardware().children
-rear_frame = next(p for p in panel_hw if label(p) == "REAR_PANEL_INTERNAL_FRAME_WITH_BOSSES")
+# The frame is part of the shell print (D-045); kept separately so a slot hit names it.
+rear_frame = body.panel_internal_frame("REAR")
 electronics = leaves(body.electronics())
 fan = [p for p in electronics if label(p).startswith("ENCLOSURE_FAN_")]
 fan_body = [p for p in fan if "SCREW" not in label(p)]

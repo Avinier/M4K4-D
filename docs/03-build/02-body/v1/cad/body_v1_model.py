@@ -449,13 +449,21 @@ FRONT_PANEL_FASTENERS = ((-53.0, 67.0), (53.0, 67.0), (-46.0, 125.0), (46.0, 125
 REAR_PANEL_FASTENERS = ((-52.0, 51.0), (52.0, 51.0), (-44.0, 125.0), (44.0, 125.0))
 # Internal frame: 2.4 mm plate behind the shell end wall, reaching 1 mm past
 # the panel outline and 12 mm inside it. Bosses run from the panel's inner
-# face through the frame and 2.6 mm beyond it for thread engagement.
+# face through the frame and 3.5 mm beyond it (was 2.6 before D-045: the sloped
+# panel shortens the upper bosses to about 6.2 mm, less than the insert pilot).
+# D-045 (BO-053): the frame is printed as part of the shell, not bonded. It is
+# larger than the opening, so it can only ever enter with the shell, and with
+# the panel off it must stay put. Each boss takes an M3 x 6 heat-set insert
+# (BO-030 article) pressed from the opening side, because BO-031 is a machine
+# screw and the panels are taken off for service.
 PANEL_FRAME_THICKNESS = 2.4
 PANEL_FRAME_OUTSET = 1.0
 PANEL_FRAME_FLANGE = 12.0
 PANEL_BOSS_RADIUS = 4.5
-PANEL_BOSS_TAIL = 2.6
+PANEL_BOSS_TAIL = 3.5
 PANEL_SCREW_LENGTH = 8.0
+PANEL_INSERT_PILOT_DEPTH = 6.5  # 6 mm insert plus 0.5 mm for displaced melt
+PANEL_SCREW_RELIEF_RADIUS = 1.6  # Ø3.2 past the insert, for the screw tip
 # Front shell notch: the ball pod's tongue passes the lower front band, open
 # to the bottom edge so the body still lowers onto the chassis.
 FRONT_POD_NOTCH_CLEARANCE = 0.5
@@ -2089,6 +2097,8 @@ def body_shell():
     shell += _fan_collar() & outer
     shell -= _fan_grille_cuts()
     shell -= _wheel_well_tools()
+    # Service-panel internal frames (D-045): one print with the shell.
+    shell += [panel_internal_frame("FRONT"), panel_internal_frame("REAR")]
     return _paint(shell, "BODY_SHELL", IVORY, SHELL_ALPHA)
 
 
@@ -2190,61 +2200,92 @@ def body_panels():
     return Compound(label="BODY_PANELS", children=[front, rear, estop_bezel, top_badge, *wheel_arches])
 
 
+def _panel_fasteners(face):
+    return FRONT_PANEL_FASTENERS if face == "FRONT" else REAR_PANEL_FASTENERS
+
+
+def _panel_inward(face):
+    return -1.0 if face == "FRONT" else 1.0
+
+
+def _panel_boss_ends(face, z):
+    """(front, back) X of a panel boss: 0.2 mm off the sloped panel's inner face to the tail."""
+    inward = _panel_inward(face)
+    panel_x = _shell_end_x(face, z)
+    boss_back_x = panel_x + inward * (SHELL_THICKNESS + PANEL_FRAME_THICKNESS + PANEL_BOSS_TAIL)
+    edge_x = [_shell_end_x(face, z + dz) for dz in (-PANEL_BOSS_RADIUS, PANEL_BOSS_RADIUS)]
+    boss_front_x = min(edge_x) - 0.2 if face == "FRONT" else max(edge_x) + 0.2
+    return boss_front_x, boss_back_x
+
+
+def _panel_head_seat_x(face, z):
+    """X of the wedge washer's outer face, where the screw head seats."""
+    inward = _panel_inward(face)
+    head_edges = [_shell_end_x(face, z + dz) - inward * SHELL_THICKNESS for dz in (-3.2, 3.2)]
+    return max(head_edges) + 0.2 if face == "FRONT" else min(head_edges) - 0.2
+
+
+def panel_internal_frame(face):
+    """Service-panel internal frame with its four bosses (D-045: printed with the shell).
+
+    Each boss has an Ø4.3 x 6.5 insert pilot from its front face, then an Ø3.2
+    relief through the rest for the screw tip.
+    """
+    inward = _panel_inward(face)
+    frame = _sloped_panel_band(
+        face, inward * SHELL_THICKNESS,
+        inward * (SHELL_THICKNESS + PANEL_FRAME_THICKNESS), PANEL_FRAME_OUTSET
+    ) - _service_panel_outline(face, -90.0, 110.0, -PANEL_FRAME_FLANGE)
+    for y, z in _panel_fasteners(face):
+        bx0, bx1 = sorted(_panel_boss_ends(face, z))
+        frame = frame + _cylinder(PANEL_BOSS_RADIUS, bx1 - bx0, ((bx0 + bx1) / 2.0, y, z), "BOSS", SLATE, 1.0, "x")
+    for y, z in _panel_fasteners(face):
+        front_x, back_x = _panel_boss_ends(face, z)
+        pilot_end = front_x + inward * PANEL_INSERT_PILOT_DEPTH
+        frame = frame - _axial_bore_x(FRAME_INSERT_RADIUS, *sorted((front_x - inward * 1.0, pilot_end)), y, z)
+        frame = frame - _axial_bore_x(PANEL_SCREW_RELIEF_RADIUS, *sorted((pilot_end - inward * 0.1, back_x + inward * 1.0)), y, z)
+    if face == "FRONT":
+        frame = frame - _cylinder(
+            SPEAKER_BASKET_DIAMETER / 2.0 + 2.0,
+            SPEAKER_CAVITY_DEPTH,
+            (SPEAKER_CAVITY_CENTER_X, SPEAKER_CENTER[1], SPEAKER_CENTER[2]),
+            "SPEAKER_KEEP_OUT_TOOL",
+            SLATE,
+            1.0,
+            "x",
+        )
+    return _paint(frame, f"{face}_PANEL_INTERNAL_FRAME_WITH_BOSSES", SLATE_DARK, 1.0)
+
+
 def panel_mount_hardware():
-    """Sloped inner panel frames, fused bosses, and end-access M3 screws."""
-    speaker_keep_out = _cylinder(
-        SPEAKER_BASKET_DIAMETER / 2.0 + 2.0,
-        SPEAKER_CAVITY_DEPTH,
-        (SPEAKER_CAVITY_CENTER_X, SPEAKER_CENTER[1], SPEAKER_CENTER[2]),
-        "SPEAKER_KEEP_OUT_TOOL",
-        SLATE,
-        1.0,
-        "x",
-    )
+    """Panel inserts, wedge washers and end-access M3 x 8 machine screws.
+
+    The internal frames they fasten into are part of the shell (D-045).
+    """
     parts = []
-    for face, positions in (
-        ("FRONT", FRONT_PANEL_FASTENERS),
-        ("REAR", REAR_PANEL_FASTENERS),
-    ):
-        inward = -1.0 if face == "FRONT" else 1.0
-        frame = _sloped_panel_band(
-            face, inward * SHELL_THICKNESS,
-            inward * (SHELL_THICKNESS + PANEL_FRAME_THICKNESS), PANEL_FRAME_OUTSET
-        ) - _service_panel_outline(face, -90.0, 110.0, -PANEL_FRAME_FLANGE)
-        for y, z in positions:
-            panel_x = _shell_end_x(face, z)
-            boss_back_x = panel_x + inward * (SHELL_THICKNESS + PANEL_FRAME_THICKNESS + PANEL_BOSS_TAIL)
-            edge_x = [_shell_end_x(face, z + dz) for dz in (-PANEL_BOSS_RADIUS, PANEL_BOSS_RADIUS)]
-            boss_front_x = min(edge_x) - 0.2 if face == "FRONT" else max(edge_x) + 0.2
-            bx0, bx1 = sorted((boss_front_x, boss_back_x))
-            frame = frame + _cylinder(PANEL_BOSS_RADIUS, bx1 - bx0, ((bx0 + bx1) / 2.0, y, z), "BOSS", SLATE, 1.0, "x")
-        for y, z in positions:
-            panel_x = _shell_end_x(face, z)
-            boss_back_x = panel_x + inward * (SHELL_THICKNESS + PANEL_FRAME_THICKNESS + PANEL_BOSS_TAIL)
-            edge_x = [_shell_end_x(face, z + dz) for dz in (-PANEL_BOSS_RADIUS, PANEL_BOSS_RADIUS)]
-            boss_front_x = min(edge_x) - 0.2 if face == "FRONT" else max(edge_x) + 0.2
-            bx0, bx1 = sorted((boss_front_x, boss_back_x))
-            frame = frame - _axial_bore_x(1.4, bx0 - 1.0, bx1 + 1.0, y, z)
-        if face == "FRONT":
-            frame = frame - speaker_keep_out
-        parts.append(_paint(frame, f"{face}_PANEL_INTERNAL_FRAME_WITH_BOSSES", SLATE_DARK, 1.0))
+    for face in ("FRONT", "REAR"):
+        inward = _panel_inward(face)
         panel_skin = _sloped_panel_band(
             face, 0.0 if face == "FRONT" else -SHELL_THICKNESS,
             SHELL_THICKNESS if face == "FRONT" else 0.0,
         )
-        for index, (y, z) in enumerate(positions, start=1):
-            outer_face_x = _shell_end_x(face, z) - inward * SHELL_THICKNESS
+        for index, (y, z) in enumerate(_panel_fasteners(face), start=1):
+            front_x, _back_x = _panel_boss_ends(face, z)
+            ix = sorted((front_x, front_x + inward * FRAME_INSERT_LENGTH))
+            insert = _axial_bore_x(FRAME_INSERT_RADIUS, *ix, y, z) - _axial_bore_x(1.5, ix[0] - 0.1, ix[1] + 0.1, y, z)
+            parts.append(_paint(insert, f"{face}_PANEL_M3_INSERT_{index}", BRONZE, 1.0))
             head_edges = [_shell_end_x(face, z + dz) - inward * SHELL_THICKNESS for dz in (-3.2, 3.2)]
-            head_seat_x = max(head_edges) + 0.2 if face == "FRONT" else min(head_edges) - 0.2
+            head_seat_x = _panel_head_seat_x(face, z)
             wx0, wx1 = min(head_seat_x, *head_edges), max(head_seat_x, *head_edges)
             washer = _axial_bore_x(3.2, wx0, wx1, y, z) - panel_skin
             washer -= _axial_bore_x(1.65, wx0 - 0.1, wx1 + 0.1, y, z)
             parts.append(_paint(washer, f"{face}_PANEL_M3_WEDGE_WASHER_{index}", STEEL, 1.0))
             head = _cylinder(2.8, 1.8, (head_seat_x - inward * 0.9, y, z), f"{face}_PANEL_M3_HEAD_{index}", STEEL, 1.0, "x")
+            # Screw length is measured from under the head, which seats on the washer.
             shank = _cylinder(
                 1.35,
                 PANEL_SCREW_LENGTH,
-                (outer_face_x + inward * PANEL_SCREW_LENGTH / 2.0, y, z),
+                (head_seat_x + inward * PANEL_SCREW_LENGTH / 2.0, y, z),
                 f"{face}_PANEL_M3_SHANK_{index}",
                 STEEL,
                 1.0,

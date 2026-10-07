@@ -8,9 +8,68 @@
     "REAR_SERVICE_PANEL_OCTAGONAL": 0.0
   },
   "panel_shell_overlap_mm3": {},
-  "panel_frame_overlap_mm3": {},
   "panel_fixed_overlap_mm3": {},
   "panel_function_overlap_mm3": {},
   "panel_screw_overlap_mm3": {},
-  "panel_driver_overlap_mm3": {}
+  "panel_driver_overlap_mm3": {},
+  "fastener_shell_overlap_mm3": {},
+  "insert_press_overlap_mm3": {},
+  "fastener_stack_mm": {
+    "FRONT_1": {
+      "boss_length": 7.48,
+      "insert_pilot_depth": 6.5,
+      "pilot_wall": 2.35,
+      "thread_in_insert": 4.21,
+      "tip_short_of_boss_back": 3.27
+    },
+    "FRONT_2": {
+      "boss_length": 7.48,
+      "insert_pilot_depth": 6.5,
+      "pilot_wall": 2.35,
+      "thread_in_insert": 4.21,
+      "tip_short_of_boss_back": 3.27
+    },
+    "FRONT_3": {
+      "boss_length": 7.07,
+      "insert_pilot_depth": 6.5,
+      "pilot_wall": 2.35,
+      "thread_in_insert": 3.61,
+      "tip_short_of_boss_back": 3.46
+    },
+    "FRONT_4": {
+      "boss_length": 7.07,
+      "insert_pilot_depth": 6.5,
+      "pilot_wall": 2.35,
+      "thread_in_insert": 3.61,
+      "tip_short_of_boss_back": 3.46
+    },
+    "REAR_1": {
+      "boss_length": 7.65,
+      "insert_pilot_depth": 6.5,
+      "pilot_wall": 2.35,
+      "thread_in_insert": 4.43,
+      "tip_short_of_boss_back": 3.22
+    },
+    "REAR_2": {
+      "boss_length": 7.65,
+      "insert_pilot_depth": 6.5,
+      "pilot_wall": 2.35,
+      "thread_in_insert": 4.43,
+      "tip_short_of_boss_back": 3.22
+    },
+    "REAR_3": {
+      "boss_length": 7.07,
+      "insert_pilot_depth": 6.5,
+      "pilot_wall": 2.35,
+      "thread_in_insert": 3.61,
+      "tip_short_of_boss_back": 3.46
+    },
+    "REAR_4": {
+      "boss_length": 7.07,
+      "insert_pilot_depth": 6.5,
+      "pilot_wall": 2.35,
+      "thread_in_insert": 3.61,
+      "tip_short_of_boss_back": 3.46
+    }
+  }
 }

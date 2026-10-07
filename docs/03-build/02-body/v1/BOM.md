@@ -10,11 +10,11 @@ The model basis is [body_v1_model.py](cad/body_v1_model.py). The project BOM car
 
 | ID | Part | Qty | State |
 |---|---|---:|---|
-| BO-019 | Open-bottom faceted body shell, one print with four frame bosses, four mic bosses, wheel-arch seats and the +Y fan grille/collar | 1 | DESIGN |
+| BO-019 | Open-bottom faceted body shell, one print with four frame bosses, four mic bosses, wheel-arch seats, the +Y fan grille/collar and both internal service-panel frames | 1 | DESIGN |
 | BO-020 | Front service panel print with open Ø46 speaker aperture and cup | 1 | DESIGN |
 | BO-021 | Rear service panel print with power-button well, charge-inlet pad and vent slots | 1 | DESIGN |
-| BO-022 | Front internal service-panel frame with four screw bosses | 1 | DESIGN |
-| BO-023 | Rear internal service-panel frame with four screw bosses | 1 | DESIGN |
+| BO-022 | Front internal service-panel frame with four insert bosses, **printed as part of BO-019** ([D-045](../../decisions.md#d-045)) | 1 | DESIGN |
+| BO-023 | Rear internal service-panel frame with four insert bosses, **printed as part of BO-019** (D-045) | 1 | DESIGN |
 | BO-024 | Amber rear-button bezel and front badge land, separate trim prints | 1 set (2 prints) | DESIGN |
 | BO-025 | Main body-frame print: three feet, posts, side/cross rails, yaw adapter plate, compute-tray supports and fan web | 1 | DESIGN |
 | BO-026 | Removable front-left foot cassette print with captive-nut pocket | 1 | DESIGN |
@@ -22,9 +22,10 @@ The model basis is [body_v1_model.py](cad/body_v1_model.py). The project BOM car
 | BO-028 | M3 × 6 heat-set insert in the cassette | 2 | CANDIDATE |
 | BO-029 | M3 × 16 outside-driven shell-to-frame screw | 4 | CANDIDATE |
 | BO-030 | M3 × 6 heat-set insert in the frame posts | 4 | CANDIDATE |
-| BO-031 | M3 × 8 service-panel screw, four at each end | 8 | CANDIDATE |
+| BO-031 | M3 × 8 service-panel machine screw, four at each end, into BO-063 | 8 | CANDIDATE |
 | BO-032 | Profiled M3 wedge washer for the sloped service-panel screw seat | 8 | DESIGN |
-| BO-053 | Front and rear internal-panel-frame attachment or bond | 1 set | OPEN |
+| BO-053 | Internal-panel-frame attachment: closed by D-045, the frames are part of the shell print (no bond or fastener) | 1 set | DESIGN |
+| BO-063 | M3 × 6 heat-set insert in the panel bosses, pressed through the opening (same article as BO-030) | 8 | CANDIDATE |
 
 The body-to-chassis joint uses existing **CH-035 M4 × 12 bolts (4), CH-036 plain M4 nuts (4), and CH-037 Ø4 × 8 locating pins (2)**. Three bolt heads are driven from above; the front-left head is driven from below into a nut trapped in BO-026. These are chassis-owned purchase rows and are not counted again as BO items.
 
@@ -178,7 +179,7 @@ It replaces the IDEC XA1E-BV3U02KT-R E-stop (CH-046). That part latches when pus
 
 ## Open before release
 
-1. **Enclosure and joints:** select the print material/process and support plan for BO-019–026 and BO-033; print fit coupons. Define BO-053 internal-frame attachment and the service-panel screw/pilot specification; qualify inserts and the front-left cassette captive nut, and prove loaded joint retention, panel stiffness, shell removal and actual driver access.
+1. **Enclosure and joints:** select the print material/process and support plan for BO-019–026 and BO-033; print fit coupons. Print a panel-boss coupon (the D-045 frame corner with two bosses and BO-063 inserts) for pull-out and a 20-removal cycle; qualify inserts and the front-left cassette captive nut, and prove loaded joint retention, panel stiffness, shell removal and actual driver access.
 2. **Compute and cooling:** verify the Pi/Active Cooler mounting and pin-tip clearance, tray insertion and screw engagement. Add the GPIO24 fan switch and `J9-4` to the PCB-09 schematic (CA-06 CR-02), then measure air temperatures, Pi throttling, cooler RPM and microphone noise in the closed body with the fan on and off. Replace the 29.5 g tray/fixings and 15 g fan CAD estimates with measured masses and recheck stability.
 3. **Yaw stage (D-044):** order BO-044 and weigh it; check its tilt play at the head crown. Wind and rate-check BO-048. Print the hub/bearing fit coupon and the gears. Bench-test:
    - B4 lash through the scissor mesh;

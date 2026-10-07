@@ -48,6 +48,7 @@ The central record of every decision and change made during the build phase. New
 | [D-041](#d-041) | 2026-10-04 | Body / power button; E-stop removed (BO-018 registered; CH-041, CH-042, CH-046, HN-001, HN-004; W40, J2-9; W22, J3-7, W38 removed) | No E-stop: the rear red mushroom becomes the momentary power button (LTC2954 `PB`, GH2 `J2-9` on PCB-02's +Y edge, 10 k wetting pull-up); a press also resets `SYSTEM_ARM`, so it stops the motors in hardware; the latching NC IDEC XA1E is replaced by a 16 mm momentary 1NO mushroom in the same well | ACTIVE; DESIGN; HOLD on the received part's fit in the well and bench PB-01 to PB-06 |
 | [D-042](#d-042) | 2026-10-04 | Body / compute retention and cooling (BO-033–BO-042; CH-084; W41, J9-4) | Pi 5 screwed to a vented three-point compute tray (rear −Y lug, front −Y column, rear +Y block); Active Cooler on its push pins with tip keep-outs; BO-040 2-wire 4010 side intake fan on a +Y frame web, switched on/off by Pi GPIO24 through a MOSFET on PCB-09 (`J9-4`, `gpio-fan`); +Y shell grille and collar, rear-panel vent slots, open floor as the outlet | ACTIVE; fan size and position superseded by D-043; HOLD on the bench thermal test, the AR-61 noise check, CR-02 and coupons |
 | [D-043](#d-043) | 2026-10-04 | Body / enclosure fan vs mic ports (BO-040, BO-041; W41) | The +Y enclosure fan shrinks from a 4010 to the purchased 3010 hydraulic model and moves to X 17.5, Z 107, midway between the +Y mic ports: grille edge 24.1 mm from FRONT_L (was 14) and 25.9 mm from REAR_L; mic array unchanged | ACTIVE; DESIGN; HOLD on measured mounting holes, the bench thermal test and the AR-61 noise check |
+| [D-045](#d-045) | 2026-10-05 | Body / service-panel internal frames (BO-022, BO-023, BO-053; BO-031; BO-063 registered) | Internal panel frames printed as part of the shell, not bonded; bosses lengthened to 7.1–7.7 mm with M3 × 6 heat-set inserts for the M3 × 8 machine screws | ACTIVE; DESIGN; HOLD on the panel-boss coupon and the shell print |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -1791,3 +1792,41 @@ The yaw-carried mass tree does not include the hub, rotor, inner ring or PCB-14.
 - **PCB-14 and PCB-08:** choose the head-side connectors with the head harness, and lay out both boards (ZIF pin order).
 - **Head:** add the disc holes and record the interface in 03-head.
 - **Stability:** weigh the harness and keep its centroid forward of X −4.3 mm.
+
+## D-045
+
+**2026-10-05 · Body / service-panel internal frames (BO-022, BO-023, BO-053; BO-031; BO-063 registered) · ACTIVE; DESIGN in CAD; HOLD on the panel-boss coupon and the shell print**
+
+**Decision:** the front and rear internal panel frames are **printed as part of the shell** (BO-019). They are not separate prints and are not bonded. Each boss takes an **M3 × 6 heat-set insert** (BO-063, the BO-030 article), and the BO-031 M3 × 8 machine screws thread into it. This closes BO-053.
+
+**What the frames are.** Each service opening has a 2.4 mm plate behind the end wall. It reaches 1 mm past the panel outline and 12 mm inside it, and carries the four panel bosses. The panel laps a 2 mm land round the opening; its screws pull it onto that land.
+
+**Why part of the shell:**
+- **Assembly.** A frame is larger than its opening, so it can never be fitted through it. It has to enter the body with the shell, and with the panel off it has to stay where it is. A loose frame cannot do either.
+- **Bond (rejected).** The only bond area is the 3 mm overlap band on the inner skin. That means PETG-to-PETG adhesive on layer lines, a fixture to hold the alignment, and still a separate supported print for each frame (3.8% / 3.1% support upright).
+- **Screws into the skin (rejected).** That needs more bosses in a 2.4 mm skin and more parts, for a frame that only carries its own weight and the screw clamp.
+- **Cost of the choice: printability.** Fused into the roof-down shell, the frames add about 1,330 mm² of unsupported overhang (2.19% → 2.94% of the surface by my 45° triangle-normal measure; the earlier DfAM tool gave 3.0% for the shell alone). Most of it is the frames' 2.4 mm edges facing the openings and the boss undersides, so the supports come out through the openings. A damaged boss now means a shell repair, which the inserts make unlikely.
+
+**Why inserts.** BO-031 is a machine screw, which cannot thread into a printed Ø2.8 hole. The panels also come off for service: the speaker, the power button, the charge inlet and PCB-02 access.
+
+**CAD changed** (`02-body/v1/cad/body_v1_model.py`):
+- New `panel_internal_frame(face)`, fused into `body_shell()`. `panel_mount_hardware()` no longer returns the frames; it now holds the eight inserts, the wedge washers and the screws.
+- **Bosses:** the tail behind the frame grows from 2.6 to 3.5 mm (`PANEL_BOSS_TAIL`). The sloped panels had shortened the upper bosses to about 6.2 mm, less than the insert pilot; they are now 7.07–7.65 mm.
+- **Holes:** each boss has an Ø4.3 × 6.5 insert pilot (`FRAME_INSERT_RADIUS`, `PANEL_INSERT_PILOT_DEPTH`) and an Ø3.2 relief beyond it. This replaces the Ø2.8 through hole. The wall round the pilot is 2.35 mm.
+- **Screw model:** the shank now starts at the head seat on the wedge washer, not at the panel's outer face. Thread in the insert is 3.6–4.4 mm, and the tip stops 3.2–3.5 mm short of the boss end.
+- **Assembly:** the frames lower with the shell. A sweep of both frames down the lowering path is clean except for PCB-13, which is installed later with the rear panel.
+
+**Checks:**
+- `check_body_panel_fit.py` gains the insert and screw stack per boss, insert-press access (a Ø6 iron tip straight through the opening) and screw/insert-against-shell overlap: **ALL PASS**.
+- `check_charge_inlet.py`, `check_power_button.py` and `check_cooling_path.py` now test against `panel_internal_frame("REAR")` as well as the shell.
+- `check_shell_frame_fit.py` now leaves PCB-13 out of the fixed parts during lowering, like the power button, because both arrive with the rear panel.
+- `check_charge_inlet.py`, `check_power_button.py` and `check_cooling_path.py`: **ALL PASS**.
+- Mass: shell and panels measure 248.62 g against the 248.7 g `BODY_SHELL_AND_PANELS` row, so the row is unchanged; the eight inserts are in the fastener allowance, as before. `check_body_layout.py` itself could not run: it fails with `KeyError: 'RP01_HEAD_LAYOUT04'` on the in-progress head-v1 rename in the working tree, which is not part of this change.
+- `check_shell_frame_fit.py` (about 70 min, the first run since D-040): **ALL PASS**. The shell, with both frames fused, is one solid. The lowering, frame, chassis, joint-hardware, driver-access and wheel-arch results are all empty.
+
+**BOM changed:** BO-022 and BO-023 become features of BO-019. BO-053 is closed (DESIGN). BO-031's release check names the inserts. New row BO-063: eight M3 × 6 inserts. [`BOM.csv`](BOM.csv), [`02-body/v1/BOM.md`](02-body/v1/BOM.md) and the [CAD README](02-body/v1/cad/README.md#panel-internal-frames-and-inserts-d-045) are updated.
+
+**Open:**
+- **Panel-boss coupon:** print a frame corner with two bosses in the shell's roof-down orientation. Press BO-063 inserts and check the 2.35 mm wall does not split. Then do a pull-out test and 20 panel removals with BO-031.
+- **Shell print:** confirm the supports at the frame edges and boss undersides, and re-measure the shell's support area with the DfAM tool.
+- **Torque:** set a hand-tight limit for the M3 × 8 into the inserts once the coupon has been tested.
