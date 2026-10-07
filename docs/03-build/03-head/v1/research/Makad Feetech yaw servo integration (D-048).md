@@ -2,9 +2,21 @@
 
 Oct 7, 2026 · @Aditya
 
+> **Review correction (2026-10-08):** The initial four case-mount screw axes
+> missed the corresponding official STEP holes by 0.8 mm. The yaw CAD now
+> follows the STEP axes and its checker no longer waives a mount-screw/case
+> collision. A separate 0.120 mm³ clash remains between the estimated Pi
+> USB-C plug reserve and the purchased C3 DevKitC STEP; select and model the
+> real low-profile plug before claiming connector clearance. The proposed
+> 0.30 N·m yaw ceiling is not implemented or bench-calibrated, and its own
+> PETG tooth estimate exceeds the 15 MPa screen flag. The shell-fit run and
+> received-part checks remain open. The corrected yaw-stage CAD rerun passes;
+> read the earlier "every targeted check passes" statement with the remaining
+> connector and torque limits below.
+
 ## Summary
 
-The Feetech yaw servo (Waveshare ST3215-HS) now fits in the body v1 CAD. It needs no taller body and no extra ballast, and every targeted check passes. It was recorded as decision D-048 on 2026-10-07.
+The Feetech yaw servo (Waveshare ST3215-HS) has a viable body v1 CAD placement without raising the shell. The current mass-only estimate uses no extra ballast. Its mounting, connector and torque limits remain open as noted above. It was recorded as decision D-048 on 2026-10-07.
 
 - **Actuator set:** two Feetech STS3045M on head pitch and roll (D-046) and one ST3215-HS on body yaw (D-047). Together they cost about ₹9.4k, against about ₹34k for the original XC330 set.
 - **How it fits:** the servo hangs horn-up on the existing yaw pinion, 7.6 mm lower than the XC330 sat, clamped to a ring built into the frame. The Raspberry Pi, its cooler, the compute tray bosses and PCB-09 moved 10 mm forward and 6 mm toward −Y to make room.
@@ -62,13 +74,13 @@ The servo keeps the D-044 gear train untouched. Everything else moved around it.
 
 | Item | Design | Constant / function |
 | --- | --- | --- |
-| Placement | Horn up on the pinion axis (16, 37); case runs −X; case top Z 122.4, 7.6 mm below the old XC330 seat | `yaw_servo_st3215_hs()`, `YAW_SERVO_DROP` |
+| Placement | Horn up on the pinion axis (16, 37); case runs −X; overall STEP maximum Z 122.4, 7.6 mm below the old top datum (not the case seating face) | `yaw_servo_st3215_hs()`, `YAW_SERVO_DROP` |
 | Why 7.6 mm | Room for the horn-face plugs under the plate; the bottom idler disc stays above the PCB-03/04 plug layers (Z 84.3) |  |
 | Mount | Frame-integral clamp ring with four ×4.8 pillars seated on the corner-hole step; two side walls up to the pad under the plate | `_yaw_servo_mount()` |
 | Fasteners | 4 × M2 × 8 from above into the corner holes (about 1.9 mm thread); driver holes through pad and plate | `YAW_SERVO_MOUNT_SCREWS`, BO-061 |
 | Plug access | Window X −15.6…4.9, Y 28.8…45.2 over the plug recess, open to −X for the W15 cable | `YAW_SERVO_PLUG_WINDOW` |
 | Drive hub | r 8.8 from the horn face (Z 121.85) to Z 136.2; Ø12.4 pocket over the horn centre boss; four horn screws at 7.11 mm radius from 10.1° | BO-056 |
-| Torque cap | 0.30 N·m in firmware (Feetech running-torque limit). The 1.96 N·m stall would break the PETG teeth and stops | `YAW_SERVO_TORQUE_LIMIT_NM` |
+| Proposed torque ceiling | 0.30 N·m CAD stress assumption; no firmware limit or delivered torque verified. The 1.96 N·m stall is far above the printed tooth screen | `YAW_SERVO_TORQUE_LIMIT_NM` |
 
 **Compute stack (+10 mm X, −6 mm Y, `COMPUTE_SHIFT_X/Y`)**
 
@@ -91,9 +103,9 @@ The servo keeps the D-044 gear train untouched. Everything else moved around it.
 
 ## Verification
 
-Every targeted body check passes on the live model. They are geometry and mass screens on purchased STEPs, not physical tests.
+The original targeted body scripts passed their own assertions. The review found a mount-hole error that their yaw checker waived, plus a connector clash and under-tray wiring-reserve overlaps outside the compute check's pass criteria. The corrected yaw and compute runs must be read with those limits. These are geometry and mass screens on purchased STEPs, not physical tests.
 
-| Check | Result | What it proves |
+| Check | Original reported result | Scope of that run |
 | --- | --- | --- |
 | `check_yaw_stage.py` | ALL PASS | No stage, sweep (±61°), cartridge-lowering, pinion-drop or moving-part clashes. Frame is one solid. Mesh gap 0.072 mm; pinion 0.6 mm over the hub shoulder; cassette 13.0 mm over the cooler. Mass row matches |
 | `check_compute_mount.py` | ALL PASS | Pi bosses, inserts, screw heads, push-pin clearance, tray-screw driver paths, front-slide install sweep |
@@ -106,7 +118,9 @@ Every targeted body check passes on the live model. They are geometry and mass s
 | `check_shell_frame_fit.py` | Running (about 70 min) | Shell lowered over the new frame and compute stack |
 | Chassis `check_layout.py` | Not run | Whole-robot chassis layout |
 
-The hub and mount screws' engagement in the servo's own threaded holes is reported as information, not as a clash.
+The original yaw check reported both hub and case-mount screw intersections as engagement. That waiver was wrong for the case screws and has been removed. The corrected screw axes have zero case-solid intersection in a separate exact-solid check, and the full corrected yaw-stage rerun reports all four hole-axis offsets as zero and passes its assertions.
+
+The current `check_compute_mount.py` rerun deliberately **fails** its new fixed-part gate: the estimated Pi power-plug reserve intersects the C3 DevKitC STEP by 0.120 mm³. Its tray retention, driver and slide-in checks remain clear. Current cooling-path and body-frame-fit reruns pass. The saved full shell/frame lowering result still predates D-048.
 
 ## Mass and stability
 

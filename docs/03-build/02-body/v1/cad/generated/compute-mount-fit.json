@@ -17,9 +17,10 @@
   "tray_screw_heads_vs_tray_rib_mm3": {},
   "unit_vs_fixed_mm3": {},
   "unit_vs_harness_reserves_mm3_info": {
-    "COMPUTE_TRAY:HARNESS_SIGNAL_TRUNK": 169.875,
+    "COMPUTE_TRAY:HARNESS_SIGNAL_TRUNK": 622.875,
     "COMPUTE_TRAY:HARNESS_SENSOR_TRUNK": 487.255
   },
+  "pi_power_plug_vs_c3_devkitc_mm3": 0.12,
   "pi_and_cooler_to_tray_hardware_mm3": {},
   "tray_screw_driver_clashes": {},
   "install_sweep_clashes": {},

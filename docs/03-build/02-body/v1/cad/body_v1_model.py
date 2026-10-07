@@ -638,7 +638,7 @@ YAW_SCISSOR_GAP = 0.2  # a printed 0.2 mm thrust land on the sprung half
 # collision) the halves part and lash returns.
 YAW_SCISSOR_PRELOAD_NM = 0.22
 YAW_PEAK_EXTERNAL_TORQUE_NM = 0.1099 * _HEAD_YAW_MASS["estimated_inertia_kg_m2"] / 0.001080
-YAW_SERVO_CURRENT_LIMIT_TORQUE_NM = 0.30  # D-048: = YAW_SERVO_TORQUE_LIMIT_NM, set in firmware
+YAW_SERVO_CURRENT_LIMIT_TORQUE_NM = 0.30  # D-048 stress-screen assumption; firmware limit and physical torque unverified
 YAW_SERVO_ENVELOPE = (-19.2, 26.2, 24.6, 49.4, 84.6, 122.4)  # D-048: ST3215-HS STEP bounds as placed
 YAW_OPENING_RADIUS = 45.0
 # RP-01 actuator screen: peak yaw 378 deg/s = 63 rpm at the output. ST3215-HS
@@ -686,17 +686,18 @@ YAW_SERVO_MODEL = "Waveshare ST3215-HS"
 YAW_SERVO_STEP_AXIS = (-25.5, 0.0)  # horn axis in the STEP after -90 deg about X: 10.11 mm from the case end (drawing)
 YAW_SERVO_CLOCK_DEG = 180.0  # case runs -X from the axis
 YAW_SERVO_DROP = 7.6  # bottom (idler) disc stays above the PCB-03/04 plug layers (Z 84.3)
-YAW_SERVO_TOP_Z = 130.0 - YAW_SERVO_DROP  # case top (STEP maximum)
+YAW_SERVO_TOP_Z = 130.0 - YAW_SERVO_DROP  # overall STEP maximum on the horn side; not a case seating face
 YAW_SERVO_HORN_Z = YAW_SERVO_TOP_Z - 0.55  # horn disc top in the STEP
 YAW_HORN_SCREW_R, YAW_HORN_SCREW_DEG0 = 7.11, 10.1  # horn holes (STEP, Ø2.5; drawing 14 mm PCD), first at 10.1 deg from +X
 # Horn-face corner holes from the STEP: Ø1.6 x 2.8 deep in a step 2.8 mm below the case
-# top. The drawing (24.45 x 20.5 mm) puts them 0.8 mm further from the horn: measure the part.
-YAW_SERVO_MOUNT_SCREWS = ((6.9, 26.75), (6.9, 47.25), (-17.55, 26.75), (-17.55, 47.25))
+# top. The drawing's axes differ by 0.8 mm in X; use the selected STEP's axes
+# for this CAD fit and measure the received part before printing the mount.
+YAW_SERVO_MOUNT_SCREWS = ((7.7, 26.75), (7.7, 47.25), (-16.75, 26.75), (-16.75, 47.25))
 YAW_SERVO_MOUNT_FACE_Z = YAW_SERVO_TOP_Z - 2.58  # seat of the corner-hole step, probed on the STEP
 YAW_SERVO_MOUNT_SCREW = (8.0, 1.75, 1.3)  # M2 x 8 low head: length, head radius, head height (E); ~1.9 mm thread in the case
 YAW_SERVO_RING = (-21.0, 11.0, 23.8, 50.2, YAW_SERVO_TOP_Z + 0.3, YAW_SERVO_TOP_Z + 3.3)  # clamp ring 0.3 mm over the case top; pillars reach the hole step
 YAW_SERVO_PLUG_WINDOW = (-15.6, 4.9, 28.8, 45.2)  # horn-face plug recess kept clear; open to -X for the W15 exit
-YAW_SERVO_TORQUE_LIMIT_NM = 0.30  # firmware cap (Feetech running-torque limit): PETG teeth and stops, not the 1.96 N*m stall
+YAW_SERVO_TORQUE_LIMIT_NM = 0.30  # proposed ceiling for stress screen; register value and delivered torque need bench calibration
 # Pinion drive: a printed hub on the ST3215-HS horn (4 x M2 on its 14 mm PCD) carries a
 # 5 mm steel D-shaft; a torsion spring between its collar and the sprung half sets the preload.
 YAW_DRIVE_HUB = (8.8, YAW_SERVO_HORN_Z, 136.2)  # radius, z0, z1

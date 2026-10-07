@@ -52,7 +52,7 @@ The central record of every decision and change made during the build phase. New
 | [D-045](#d-045) | 2026-10-05 | Body / service-panel internal frames (BO-022, BO-023, BO-053; BO-031; BO-063 registered) | Internal panel frames printed as part of the shell, not bonded; bosses lengthened to 7.1–7.7 mm with M3 × 6 heat-set inserts for the M3 × 8 machine screws | ACTIVE; DESIGN; HOLD on the panel-boss coupon and the shell print |
 | [D-046](#d-046) | 2026-10-07 | Head / pitch and roll actuators (HD-001 registered; RP-01 `ACT-01` overridden for pitch/roll) | Feetech STS3045M (metal gear, coreless, 34.8 g) for pitch and roll, replacing the XC330-M288; fastest pitch moves capped at 70% speed; head rail setpoint must rise above the servo's 4.8 V minimum; yaw servo and bus protocol open | SELECTED; HOLD on head CAD re-fit, rail setpoint, bench B1/B4 |
 | [D-047](#d-047) | 2026-10-07 | Body / yaw servo (BO-043) | Waveshare ST3215-HS on a 12 V yaw-only rail on PCB-03 replaces the D-044 XC330-M181-T: speed margin first, one Feetech protocol with D-046; STS3250 fallback on lash, XC330-M181 if no Feetech case fits | SELECTED; provisional case fit found; HOLD on mount/hub integration, rail and bench B1/B4 |
-| [D-048](#d-048) | 2026-10-07 | Body / ST3215-HS yaw integration and compute-stack shift (BO-043, BO-056, BO-061; CH-084 PCB-09, CH-086 PCB-10, PCB-04; W15) | HS on the true horn axis, horn up, case to -X, 7.6 mm lower, clamped by four M2 screws to a frame ring; Pi, cooler, tray bosses and PCB-09 move +10 X / -6 Y; tray +Y edge to Y 23.5; C3 Z 92 header row repacked | ACTIVE; DESIGN in CAD, targeted checks ALL PASS; HOLD on the received HS, shell-fit rerun, head re-balance and bench B1/B4 |
+| [D-048](#d-048) | 2026-10-07 | Body / ST3215-HS yaw integration and compute-stack shift (BO-043, BO-056, BO-061; CH-084 PCB-09, CH-086 PCB-10, PCB-04; W15) | HS on the true horn axis, horn up, case to -X, 7.6 mm lower, clamped by four M2 screws to a frame ring; Pi, cooler, tray bosses and PCB-09 move +10 X / -6 Y; tray +Y edge to Y 23.5; C3 Z 92 header row repacked | ACTIVE; CAD fit under review; HOLD on the plug clash, torque/gear proof, received HS, shell fit, head re-balance and bench B1/B2/B4 |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -1911,7 +1911,7 @@ The yaw-carried mass tree does not include the hub, rotor, inner ring or PCB-14.
 
 ## D-048
 
-**2026-10-07 · Body / ST3215-HS yaw integration and compute-stack shift (BO-043, BO-056, BO-061; CH-084 PCB-09, CH-086 PCB-10 headers, PCB-04 plug reserve; W15) · ACTIVE; DESIGN in CAD, targeted checks ALL PASS; HOLD on the received HS, the shell-fit rerun, the head re-balance and bench B1/B4**
+**2026-10-07 · Body / ST3215-HS yaw integration and compute-stack shift (BO-043, BO-056, BO-061; CH-084 PCB-09, CH-086 PCB-10 headers, PCB-04 plug reserve; W15) · ACTIVE; CAD fit under review; HOLD on connector clearance, torque/gear proof, the received HS, shell fit, head re-balance and bench B1/B2/B4**
 
 **Decision.** The builder asked to make the Feetech yaw servo (D-047) work by rearranging the body rather than falling back to the XC330. The ST3215-HS stays on the D-044 pinion axis and gear height. The compute stack moves to make room and to pay back the tip margin.
 
@@ -1919,10 +1919,10 @@ The yaw-carried mass tree does not include the hub, rotor, inner ring or PCB-14.
 
 **Servo installation (`body_v1_model.py`, `yaw_servo_st3215_hs()`).**
 - **Orientation:** horn up on the pinion axis (16, 37), case running −X (`YAW_SERVO_CLOCK_DEG` 180).
-- **Height:** case top Z 122.4, **7.6 mm below** the old XC330 seat. The drawing puts both bus plugs in a recess on the horn face, so they plug in from above and need about 10 mm under the plate. The 7.6 mm also keeps the bottom (idler) disc above the PCB-03/04 plug layers (Z 84.3).
+- **Height:** overall purchased-STEP maximum Z 122.4, **7.6 mm below** the old top datum; this is not the case seating face. The drawing puts both bus plugs in a recess on the horn face, so they plug in from above and need about 10 mm under the plate. The offset also keeps the bottom (idler) disc above the PCB-03/04 plug layers (Z 84.3).
 - **Mount:** four M2 × 8 screws, from above, into the horn-face corner holes (STEP: Ø1.6 × 2.8 deep, in a step 2.58 mm below the case top). They clamp four Ø4.8 pillars of a frame-integral ring. Two side walls carry the ring up to the pad under the plate, which grows to X −21…25.5, Y 23.8…50.2. A window (X −15.6…4.9, Y 28.8…45.2) over the plug recess opens to −X for the W15 exit. Driver holes run up through the pad and plate. The two screws inside R44 sit under the cartridge flange, so **servo replacement needs the cartridge out**.
 - **Drive:** BO-056 hub r 8.8 from the horn face (Z 121.85) to Z 136.2, with a Ø12.4 pocket over the horn's centre boss. Four horn screws at 10.1° + 90°k (Ø2.5 horn holes: M2.5 or M3 to confirm on the received horn).
-- **Firmware torque cap:** `YAW_SERVO_TORQUE_LIMIT_NM` 0.30 (Feetech running-torque limit). The 1.96 N·m stall would otherwise exceed the PETG teeth and stops; the Lewis "at limit" case stays 36.7 MPa as in D-044.
+- **Proposed torque ceiling:** `YAW_SERVO_TORQUE_LIMIT_NM` 0.30 is a CAD stress assumption, not an implemented or measured limit. The Feetech percentage register must be calibrated under load at the required 63 rpm; an effective 0.30 N·m ceiling leaves only about 1.36× the 0.22 N·m paper peak demand. The PETG pinion-half Lewis estimate is already 15.5 MPa at preload alone against its 15 MPa screen flag, and rises to 36.7 MPa at this ceiling. Full 1.96 N·m stall would be much worse. Prove the gear/stop load path or redesign the teeth and protection before release.
 
 **Compute stack (`COMPUTE_SHIFT_X/Y` = +10, −6 mm).**
 - **What moves:** the Pi 5, the Active Cooler, the four tray bosses and inserts, the push-pin keep-outs, PCB-09 (all parts) and its plug reserves, J9-4, and the Pi USB-C plug reserve. The pigtail drop moves +10 mm in X only.
@@ -1940,13 +1940,13 @@ The yaw-carried mass tree does not include the hub, rotor, inner ring or PCB-14.
 - **C3 carrier PCB-10 (paper):** the Z 92 GH row is repacked to start at X 6.5, right of the moved USB-C plug: J10-7, J10-3, J10-4, J10-10, J10-12. **J10-11 (spare, not fitted since D-041) loses its header.**
 - **Harness:** the `HARNESS_SIGNAL_TRUNK` reserve moves 4 mm toward −Y, clear of the servo's bottom disc.
 
-**Checks (live model, 2026-10-07).**
-- `check_yaw_stage.py` **ALL PASS**: no stage, sweep, cartridge-lowering, pinion-drop or moving-part clashes, and the frame is one solid. The hub and mount screws' engagement in the servo's own holes is reported as info.
-- `check_compute_mount.py` ALL PASS, including the front-slide install sweep and every tray-screw driver path.
-- `check_cooling_path.py`, `check_charge_inlet.py`, `check_power_button.py`: ALL PASS.
-- `check_body_frame_fit.py`, `check_body_panel_fit.py`, `check_mic_mounts.py`: clean.
+**Checks (D-048 model; reviewed 2026-10-08).**
+- `check_yaw_stage.py` **ALL PASS after mount-axis correction**: no stage, sweep, cartridge-lowering, pinion-drop or moving-part clashes, and the frame is one solid. All four case-screw axes match the vendor STEP holes; only horn-screw/horn engagement is informational.
+- `check_compute_mount.py` **FAIL on Pi power-plug reserve vs C3 DevKitC, 0.120 mm³** after adding the missing fixed-part test. Tray retention, front-slide sweep and driver paths remain clear. The under-tray harness reserves overlap the tray as recorded below.
+- `check_cooling_path.py` current-source rerun **ALL PASS**; `check_charge_inlet.py` and `check_power_button.py` originally passed.
+- `check_body_frame_fit.py` current-source rerun **clean**; `check_body_panel_fit.py` and `check_mic_mounts.py` originally clean.
 - `check_body_layout.py` ok, after the one-line fix D-045 recorded (the `HEAD_V1` row key).
-- Not yet run: `check_shell_frame_fit.py` (about 70 min, started) and the chassis `check_layout.py`.
+- No current-source completion result: `check_shell_frame_fit.py` (the saved JSON predates D-048); chassis `check_layout.py` was not run.
 
 **Mass and stability.**
 - `BODY_YAW_STAGE` is 199.4 g at (11.62, 15.0, 126.86), was 150.3 g. `BODY_PRIMARY_FRAME` is 172.59 g, was 169.18. `COMPUTE_TRAY_AND_PI_FIXINGS` is 27.07 g at (21.16, −10.44, 86.98).
@@ -1959,9 +1959,13 @@ The yaw-carried mass tree does not include the hub, rotor, inner ring or PCB-14.
 
 **Open:**
 - **Received part:** measure the HS. Check the horn-axis offset, the corner-hole positions (the drawing and the STEP differ by 0.8 mm), the step height, the horn hole thread and the plug height with cables. The official STEP has one invalid-topology case solid.
+- **Mount-hole audit:** the first D-048 CAD screw axes were 0.8 mm from every STEP hole axis, and `check_yaw_stage.py` incorrectly waived the resulting screw/case overlap as thread engagement. The CAD now uses the STEP axes (X 7.7 and −16.75), and the checker rejects case-screw overlap and axis offset. The drawing discrepancy remains a received-part gate.
+- **Pi power connector:** the estimated USB-C right-angle plug reserve intersects the purchased C3 DevKitC STEP by 0.120 mm³ at its upper rear corner (X −6.20…−3.73, Y −50.00…−49.69, Z 99.90…100.20). With the same XY footprint and Z 92.2 base, a Z 99.0 top gives 0.706 mm nominal STEP separation; select and model a plug no taller than that trial envelope, or revise the route, before claiming connector clearance.
+- **Under-tray wiring:** the current `check_compute_mount.py` rerun reports 622.875 mm³ overlap with the signal-trunk reserve and 487.255 mm³ with the sensor-trunk reserve as information, not pass criteria. Re-route and check the actual cables/clips before claiming a complete installation path.
 - **Assembly:** confirm the M2 driver path through the pad and plate before the cartridge, and the W15 route from the plug window to PCB-03 `J3-5`.
 - **Service:** two mount screws are under the cartridge flange.
 - **Head:** refit the STS3045M mounts and re-solve A0, then re-run this tip screen with the real head tree.
 - **Shell:** the `check_shell_frame_fit.py` result.
 - **Boards:** place J4-6 forward of X −14 on PCB-04. PCB-10 header row as above. PCB-09 outline unchanged relative to the Pi.
 - **Bench B1/B4** with the pinion fitted, including side-load endurance.
+- **B2 torque-speed and protection:** validate the proposed yaw torque ceiling at 63 rpm, and include a stall/fault test of the teeth and hard stops; a CAD constant does not enforce a physical cap.

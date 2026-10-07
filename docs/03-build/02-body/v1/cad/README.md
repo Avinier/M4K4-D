@@ -17,8 +17,7 @@ This directory follows the chassis v1 CAD layout: an editable model and STEP ent
 | `check_yaw_stage.py` | Head yaw stage (D-044): fit, ±61° sweep with the counter-rotating pinion, ±62° hard stops, involute mesh clearance, cartridge and pinion install paths, and load, spring, FFC-loop and mass estimates (about 5 min). |
 | `check_power_button.py` | Rear-panel mushroom power button: well clearance, PCB-02 clearance, W40 lead and `J2-9` plug clashes and the panel-removal sweep (D-041; about 5 min). |
 | `check_body_layout.py` | CAD-volume mass/CoM, body axes/envelope, and whole-robot stability-screen audit. |
-| `check_feetech_yaw_fit.py`, `check_feetech_yaw_relocation.py` | Original-layout ST3215-HS collision and gear-circle relocation screens. The original compute layout fails. |
-| `check_feetech_yaw_compute_shift.py`, `check_feetech_yaw_cradle.py` | Exact-solid packaging checks for a trial at the original pinion centre: Pi/cooler/PCB-09 −Y 6 mm, PCB-09 outer board +X 6 mm, XC330 pad removed, new U-cradle. [Findings](feetech-yaw-fit.md), [candidate frame](feetech-yaw-frame-candidate.step) and [package](feetech-yaw-package.step) are separate from the live XC330 body assembly. |
+| `check_feetech_yaw_fit.py`, `check_feetech_yaw_relocation.py`, `check_feetech_yaw_compute_shift.py`, `check_feetech_yaw_cradle.py` | **Superseded historical trials:** these placed the official STEP 25.5 mm off its horn axis. Their candidate frame/package STEP files are not the D-048 live assembly. See the [fit history](feetech-yaw-fit.md) and the D-048 section below. |
 | `write_outputs.py` | Writes body dimensions, frames, and a partial body mass-register report to `generated/`. |
 | `purchased/` | Provenance and current import locations for vendor STEP sources. |
 | `snapshots/` | Dated images from STEP review. |
@@ -144,7 +143,11 @@ These numbers compare options; the bench measures the real ones, including the f
 
 The shell collar is a horizontal tube on a vertical wall in the roof-down print, so expect local support. The fresh DfAM measurement is still pending.
 
-### Head yaw stage (D-044)
+### Head yaw stage (D-044 baseline; XC330-specific text superseded by D-048)
+
+The gear, bearing, cassette and stop description below remains the D-044
+baseline. The XC330 servo mount and horn details below are historical; use the
+D-048 section later on this page for the live Feetech yaw model.
 
 The head turns on a **61810-2Z** bearing (50 × 65 × 7, shielded) in a printed cartridge on the frame's yaw plate. The XC330-M181 drives it 1:1 through a scissor pinion. The head cables cross the joint as three 22-pin FFCs in a clock-spring cassette under the plate. Angles below are about the yaw axis (16, 0), from +X at yaw 0.
 

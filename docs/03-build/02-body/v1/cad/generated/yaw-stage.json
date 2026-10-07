@@ -5,12 +5,14 @@
     "YAW_DRIVE_HUB_HORN_SCREW_1:HS_STEP_LEAF_7": 6.001,
     "YAW_DRIVE_HUB_HORN_SCREW_2:HS_STEP_LEAF_7": 6.001,
     "YAW_DRIVE_HUB_HORN_SCREW_3:HS_STEP_LEAF_7": 6.001,
-    "YAW_DRIVE_HUB_HORN_SCREW_4:HS_STEP_LEAF_7": 6.001,
-    "YAW_SERVO_M2X8_MOUNT_SCREW_1:HS_STEP_LEAF_2": 2.537,
-    "YAW_SERVO_M2X8_MOUNT_SCREW_2:HS_STEP_LEAF_2": 2.537,
-    "YAW_SERVO_M2X8_MOUNT_SCREW_3:HS_STEP_LEAF_2": 2.537,
-    "YAW_SERVO_M2X8_MOUNT_SCREW_4:HS_STEP_LEAF_2": 2.537
+    "YAW_DRIVE_HUB_HORN_SCREW_4:HS_STEP_LEAF_7": 6.001
   },
+  "mount_screw_axis_offset_mm": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
   "moving_vs_fixed_at_0_mm3": {},
   "frame_solids": 1,
   "hub_solids": 1,
@@ -26,8 +28,8 @@
   "pinion_to_disc_mm": 0.4,
   "yaw_sweep_clashes_mm3": {},
   "stop_dog_vs_housing_mm3": {
-    "61.5": 0.0,
-    "-61.5": 0.0,
+    "61.5": 0,
+    "-61.5": 0,
     "62.5": 0.662,
     "-62.5": 0.662
   },
@@ -37,7 +39,7 @@
   ],
   "mesh_min_gap_mm": 0.072,
   "mesh_max_gap_mm": 0.0736,
-  "mesh_max_overlap_mm3": 0.0,
+  "mesh_max_overlap_mm3": 0,
   "cartridge_lowering_clashes": {},
   "pinion_drop_clashes": {},
   "bearing_61810_2Z": {
@@ -64,10 +66,10 @@
         "s0": 115.1
       },
       "lift_robot_by_head_x3": {
-        "axial_N": -76.0,
-        "moment_Nm": 2.281,
-        "P0_N": 117.3,
-        "s0": 58.0
+        "axial_N": -76.1,
+        "moment_Nm": 2.284,
+        "P0_N": 117.5,
+        "s0": 57.9
       },
       "fall_on_head_100N_at_100mm": {
         "axial_N": 100.0,
@@ -141,11 +143,11 @@
     }
   },
   "uplift_path": {
-    "design_N": 76.0,
+    "design_N": 76.1,
     "rotor_screws": "3 x M2.5 thread-forming, 6.6 mm in the PETG spigot",
-    "per_screw_N": 25.3,
+    "per_screw_N": 25.4,
     "post_and_clamp_screws": "3 x M2 x 8 clamp ring (outer ring) and 3 x M3 x 6 flange screws into frame inserts",
-    "per_flange_screw_N": 25.3
+    "per_flange_screw_N": 25.4
   },
   "drag_Nm": {
     "bearing_2Z_E": 0.002,

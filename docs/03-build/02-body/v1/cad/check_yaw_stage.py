@@ -138,8 +138,9 @@ for i, a in enumerate(stationary):
             continue
         v = overlap(a, b)
         if v > TOL:
-            # D-048: hub and mount screws thread into the servo's own holes (intended engagement).
-            screw = next((x for x in (a, b) if x.label.startswith(("YAW_DRIVE_HUB_HORN_SCREW_", "YAW_SERVO_M2X8_MOUNT_SCREW_"))), None)
+            # Horn screws enter the horn. Case-mount screws must stay inside
+            # the STEP's drilled holes: count any case overlap as a clash.
+            screw = next((x for x in (a, b) if x.label.startswith("YAW_DRIVE_HUB_HORN_SCREW_")), None)
             other = b if screw is a else a
             if screw is not None and other.label.startswith("HS_"):
                 engagement[f"{a.label}:{b.label}"] = v
@@ -147,6 +148,15 @@ for i, a in enumerate(stationary):
             pairs[f"{a.label}:{b.label}"] = v
 results["stage_internal_mm3"] = pairs
 results["screw_engagement_in_servo_mm3_info"] = engagement
+# Independent hole-axis measurement from the selected vendor STEP after its
+# -90 deg X turn. The prior D-048 coordinates were 0.8 mm off all four axes;
+# a screw/case overlap must never be waived as intentional thread engagement.
+step_hole_xy = [(body.BODY_AXIS_X - (sx - body.YAW_SERVO_STEP_AXIS[0]),
+                 body.YAW_PINION_CENTER[1] - sy)
+                for sx in (-17.2, 7.25) for sy in (-10.25, 10.25)]
+assert body.YAW_SERVO_CLOCK_DEG == 180.0, "update the STEP hole-axis transform"
+results["mount_screw_axis_offset_mm"] = [round(min(math.dist((x, y), h) for h in step_hole_xy), 3)
+                                          for x, y in body.YAW_SERVO_MOUNT_SCREWS]
 results["moving_vs_fixed_at_0_mm3"] = clashes(moving, fixed)
 results["frame_solids"] = len(next(p for p in frame if label(p) == "BODY_FRAME_MAIN_PRINT").solids())
 results["hub_solids"] = len(hub.solids())
@@ -401,4 +411,5 @@ assert results["preload_spring"]["bending_stress_MPa"] <= results["preload_sprin
 assert results["preload_spring"]["body_length_mm"] <= results["preload_spring"]["envelope_mm"]
 assert all(c["s0"] >= 4.0 for c in results["bearing_61810_2Z"]["cases"].values())
 assert results["mass_register_matches"], "update the BODY_YAW_STAGE mass row from results['mass']"
+assert max(results["mount_screw_axis_offset_mm"]) <= 0.1, "mount screws miss the STEP hole axes"
 print("ALL PASS")

@@ -9,6 +9,7 @@ Measures, against the body v1 model:
   the inserts sit inside them;
 - no clash between the tray, its hardware, the Pi and cooler and any fixed body or
   chassis part (harness route reserves are reported, not failed);
+- the Pi USB-C power-plug reserve clears the purchased C3 DevKitC after installation;
 - a straight driver reaches each tray screw from above;
 - the tray, Pi and cooler slide in from the front 2 mm high (C3 carrier, PCB-09 and
   the plugged harness go in afterwards), then drop onto the lugs; the vendor Pi and
@@ -147,6 +148,13 @@ results["lug_wall_round_insert_mm"] = round(min(
 results["tray_screw_heads_vs_tray_rib_mm3"] = clashes(tray_screws, [tray])
 results["unit_vs_fixed_mm3"] = clashes([*unit, *hardware], fixed)
 results["unit_vs_harness_reserves_mm3_info"] = clashes([tray], harness)
+# The Pi power plug is placed after the tray and is excluded from its install
+# sweep. It still needs a clash-free final position beside the C3 DevKitC.
+c3_group = next(c for c in electronics.children if label(c) == "C3_CARRIER_PCB10_WITH_DEVKITC")
+c3_devkit = next(c for c in c3_group.children if label(c) == "C3_ESP32_S3_DEVKITC_STEP")
+pi_power_plug = body._block(*body.PI_POWER_PLUG_RESERVE)
+pi_power_plug.label = "PI5_POWER_USBC_RIGHT_ANGLE_PLUG_RESERVE"
+results["pi_power_plug_vs_c3_devkitc_mm3"] = overlap(pi_power_plug, c3_devkit)
 results["pi_and_cooler_to_tray_hardware_mm3"] = clashes([*pi_parts, *cooler], [tray_screw for tray_screw in tray_screws])
 
 # Driver to each tray screw: a Ø6 tool from the head up to Z 126.
@@ -225,4 +233,5 @@ assert results["ears_on_lugs_gap_mm"] <= 0.01, "ears must sit on the lugs"
 assert results["lug_wall_round_insert_mm"] >= 1.2
 for key in ("lug_inserts_vs_frame_mm3", "tray_screw_heads_vs_tray_rib_mm3", "unit_vs_fixed_mm3", "pi_and_cooler_to_tray_hardware_mm3", "tray_screw_driver_clashes", "install_sweep_clashes"):
     assert not results[key], f"{key} not clear"
+assert results["pi_power_plug_vs_c3_devkitc_mm3"] <= TOL, "Pi power-plug envelope intersects C3 DevKitC; select and model a fitting plug"
 print("ALL PASS")
