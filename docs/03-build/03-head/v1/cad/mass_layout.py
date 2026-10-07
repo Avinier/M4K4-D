@@ -57,7 +57,7 @@ def rows_for(parts,c2=C2_NOMINAL_G):
     add('M019b-M019a','finish allowance','R',29,sc,(100,130,86))
     add('M019c-M019b','retained inserts/adhesive allowance','R',10,sc,(100,100,70))
     add('M002','display + retention allowance','R',133,(-10,0,40),(10.6,106.1,68))
-    add('M003','window + full-width mask','R',15,(-2,0,40),(1.5,110,64))
+    add('M003','window + full-width mask','R',15,(-2.25,0,40),(1.5,106,64))
     add('M005','camera + bracket allowance','R',10,(-10,0,m.CAMERA_BOTTOM+14),(12.4,25,24))
     add('M006','CSI cable + strain relief','R',8,(-30,10,65),(20,20,20))
     add('M007','addressable LED installed allowance','R',5,(-6,m.LED_Y,m.LED_Z),(5,5,5))

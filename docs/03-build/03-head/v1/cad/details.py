@@ -5,6 +5,19 @@ import layout_model as m
 
 INSERT_R,INSERT_DEPTH=1.6,3.0
 INSERT_BREAKTHROUGH=0.4
+# One M2 heat-set article for every printed receiver: Ø3.2 pilot, 3 mm long.
+# min_engagement is the shank length that must sit inside the insert.
+TIP_RELIEF_R=1.1
+LAND_DOUBLER=.5
+RETAINER_T,RETAINER_RELIEF=1.2,1.4
+RETAINER_SCREW_R=10.5
+RETAINER_SCREW_DEG=(225,315)
+CARTRIDGE_SCREW_X=(-62,-46)
+EAR_CAP_SCREW_DEG=(30,150)
+EAR_RECEIVER_FACE=71.6
+CAMERA_SCREW_Y=16
+STRAP_X,STRAP_SCREW_DY=-94.,13.
+M2_INSERT=dict(spec='M2 x 3 brass heat-set insert, Ø3.2 pilot',pilot_d=2*INSERT_R,length=INSERT_DEPTH,min_engagement=2.4)
 # Roll bearings: 696-2Z (ISO 619/6-2Z), d6 x D15 x B5, a stock deep-groove
 # size. Seats are D + 0.1 mm diametral trial slip fit, B + 0.2 mm long;
 # retention is the end plates, preload is a printed-fit item for the bench.
@@ -19,10 +32,13 @@ PITCH_STOP_PIN=dict(d=2.,l=8.)
 FLANGE_POCKET_CLEAR=.5
 FLANGE_POCKET_BACK_X=-37.3
 # Boss/receiver insertion faces from layout_model axial seats; open the Ø3.2 pocket through.
-FRONT_INSERT_FACE_X=-8.8
+FRONT_INSERT_FACE_X=-5.0
 REAR_INSERT_FACE_X=-112.3
-FRONT_INSERT_X=FRONT_INSERT_FACE_X+INSERT_BREAKTHROUGH-INSERT_DEPTH/2
-REAR_INSERT_X=REAR_INSERT_FACE_X-INSERT_BREAKTHROUGH+INSERT_DEPTH/2
+# Front/rear pockets are 3.5 mm deep in plastic (insert plus 0.5 melt room),
+# plus the 0.4 mm open mouth; the old 3 mm cut left only 2.6 mm in plastic.
+INSERT_POCKET=INSERT_DEPTH+.5
+FRONT_INSERT_X=FRONT_INSERT_FACE_X+INSERT_BREAKTHROUGH-(INSERT_POCKET+INSERT_BREAKTHROUGH)/2
+REAR_INSERT_X=REAR_INSERT_FACE_X-INSERT_BREAKTHROUGH+(INSERT_POCKET+INSERT_BREAKTHROUGH)/2
 
 def slot(axis,radius,pin_radius,start,end,centre,length):
     """Circular-centreline slot with exact circular ends and fine polygon flanks.
@@ -48,12 +64,21 @@ def detail_parts(out):
     name='front_bezel_integral_camera_crown'
     face=out[name]['shape']-cone(m.CAMERA_BOTTOM+14.4,xend=1,margin=.4)
     # Open crown rear wall for the 30 mm straight CSI exit corridor.
-    face=face-b(-25,-22,-18,18,75,103)-b(-25,-17,-3,3,78,82)
+    # The opening follows the crown cavity, so the sloped sides and roof keep
+    # their full wall (a +/-18 box notched them to 0.45 mm).
+    rear_opening=[(y,max(z,75.)) for y,z in m.crown_inner()]
+    face=face-extrude(Plane.YZ*Polygon(*rear_opening,align=None),amount=3).moved(Location((-25,0,0)))-b(-25,-17,-3,3,78,82)
     setshape(name,face)
     # M2 heat-set receivers. Recut after bridges so the union cannot fill them.
     n='main_octagonal_skin';skin=out[n]['shape']
-    for y,z in m.FRONT_SCREWS:skin=skin-a(INSERT_R,INSERT_DEPTH,(FRONT_INSERT_X,y,z))
-    for y,z in m.REAR_SCREWS:skin=skin-a(INSERT_R,INSERT_DEPTH,(REAR_INSERT_X,y,z))
+    # Ø2.2 tip reliefs beyond each pocket: the M2 x 8 front and M2 x 6 rear
+    # screws pass 1.2 / 1.3 mm beyond theirs.
+    for y,z in m.FRONT_SCREWS:
+        skin=skin-a(INSERT_R,INSERT_POCKET+INSERT_BREAKTHROUGH,(FRONT_INSERT_X,y,z))
+        skin=skin-a(TIP_RELIEF_R,2,(FRONT_INSERT_FACE_X-INSERT_POCKET-1,y,z))
+    for y,z in m.REAR_SCREWS:
+        skin=skin-a(INSERT_R,INSERT_POCKET+INSERT_BREAKTHROUGH,(REAR_INSERT_X,y,z))
+        skin=skin-a(TIP_RELIEF_R,2,(REAR_INSERT_FACE_X+INSERT_POCKET+1,y,z))
     # Two integral recessed stern lands: match the tapered plane, retain >=0.8 wall.
     for sign in [-1,1]:
         land=b(-104,-84,min(sign*50,sign*64),max(sign*50,sign*64),27,59)
@@ -61,16 +86,24 @@ def detail_parts(out):
         # Shallow offsets on tapered sides via translated outer cutter.
         shifted=outer.moved(Location((0,-sign*.35,0)))
         shallow=(outer-shifted).intersect(land)
-        if shallow:skin=skin-shallow
+        if shallow:
+            # 0.5 mm inner doubler behind the recess keeps >= 1.2 mm normal wall.
+            doubler=(inner-m.stern(-104,-84,inside=True,wall=m.SKIN+LAND_DOUBLER)).intersect(land)
+            skin=skin+doubler-shallow
     setshape(n,skin)
     for sign in [-1,1]:
         n=f'ear_{sign}_ridged_inner_mount';s=out[n]['shape']
-        for angle in [45,135,225,315]:
+        for angle in EAR_CAP_SCREW_DEG:
             t=math.radians(angle);x=m.EAR_X+25*math.cos(t);z=m.EAR_Z+25*math.sin(t)
-            s=s-a(INSERT_R,3,(x,sign*69.4,z),'y')
+            # Pocket from the receiver face (|Y| 71.6) inward, 0.4 mm open above it.
+            s=s-a(INSERT_R,INSERT_DEPTH+INSERT_BREAKTHROUGH,(x,sign*(EAR_RECEIVER_FACE-INSERT_DEPTH/2+INSERT_BREAKTHROUGH/2),z),'y')
+            s=s-a(TIP_RELIEF_R,1.6,(x,sign*(EAR_RECEIVER_FACE-INSERT_DEPTH-.8),z),'y')
         setshape(n,s)
         n='connected_rolling_cradle_flange_ear_stalks';s=out[n]['shape']
-        for dz in [-4,4]:s=s-a(INSERT_R,3,(-20.5,sign*68.8,m.EAR_Z+dz),'y')
+        for dz in [-4,4]:
+            top=m.EAR_PAD_TOP
+            s=s-a(INSERT_R,INSERT_DEPTH+.2,(-20.5,sign*(top+.1-INSERT_DEPTH/2),m.EAR_Z+dz),'y')
+            s=s-a(TIP_RELIEF_R,1.5,(-20.5,sign*(top-INSERT_DEPTH-.75),m.EAR_Z+dz),'y')
         setshape(n,s)
     # C2 cage is open at rear and top. Board remains at the exact original seat.
     tray=b(-24.8,-23.6,-40,-18,26,54)
@@ -89,11 +122,11 @@ def detail_parts(out):
         screw=m.button_screw(-26.2,y,z,'x',-1)
         add(f'C2_tray_M2_{y}',screw,owner='M021-R',color='#555b5a')
     setshape('connected_rolling_cradle_flange_ear_stalks',cradle)
-    tray=tray-b(-34.1,-24.9,-38.1,-19.9,27.9,51.6)-b(-33.1,-23.9,-35.1,-22.9,51.5,55)
+    tray=tray-b(-34.1,-24.9,-38.1,-19.9,27.9,51.6)-b(-33.1,-23.5,-35.1,-22.9,51.5,55)
     # PCB edge keepers: rear jaws at the castellated Y margins, corner caps above
     # the USB-end corners (outside Y −35…−23). Board drop-in snaps past the caps.
     for y0,y1 in [(-38.45,-36.9),(-21.1,-19.55)]:
-        tray=tray+b(-27.55,-26.70,y0,y1,28.15,51.35)
+        tray=tray+b(-27.95,-26.70,y0,y1,28.15,51.35)
     tray=tray+b(-26.70,-24.80,-38.45,-35.15,51.60,52.90)
     tray=tray+b(-26.70,-24.80,-22.85,-19.55,51.60,52.90)
     add('C2_removable_open_rear_tray',tray,owner='M008')
@@ -107,25 +140,45 @@ def detail_parts(out):
     for x in [-43,-65]:cartridge=cartridge-a(BEARING_SEAT_R,BEARING_SEAT_L,(x,m.ROLL_Y,m.ROLL_Z))
     # End counterbores and split removable plates give axial assembly access.
     cartridge=cartridge-a(BEARING_SEAT_R,3,(-39.5,m.ROLL_Y,m.ROLL_Z))-a(BEARING_SEAT_R,3,(-68.5,m.ROLL_Y,m.ROLL_Z))
-    for x in [-39.5,-68.5]:
-        plate=a(10,.8,(x,m.ROLL_Y,m.ROLL_Z))-a(6,2,(x,m.ROLL_Y,m.ROLL_Z))
+    # Retainer plates are 1.2 mm prints in 1.4 mm deep end reliefs, 0.2 mm off
+    # the bearing outer race. Their two M2 x 4 screws sit on the lower
+    # diagonals at R10.5: at the old R9 on +/-Y the Ø3.2 insert pockets broke
+    # 0.15 mm into the Ø15.1 bearing seats. Here they keep 1.35 mm to the
+    # seat and 3 mm to the cartridge faces, and their swept head pockets in
+    # the rolling flange stay clear of the roll stop pin.
+    hole_yz=[(m.ROLL_Y+RETAINER_SCREW_R*math.cos(math.radians(p)),m.ROLL_Z+RETAINER_SCREW_R*math.sin(math.radians(p))) for p in RETAINER_SCREW_DEG]
+    for face,out_dir in [(-39.,1),(-69.,-1)]:
+        xc=face-out_dir*(.1+RETAINER_T/2)
+        plate=a(10,RETAINER_T,(xc,m.ROLL_Y,m.ROLL_Z))
+        relief=a(10.2,RETAINER_RELIEF,(face-out_dir*RETAINER_RELIEF/2,m.ROLL_Y,m.ROLL_Z))
+        for y,z in hole_yz:
+            plate=plate+a(2.4,RETAINER_T,(xc,y,z))
+            relief=relief+a(2.6,RETAINER_RELIEF,(face-out_dir*RETAINER_RELIEF/2,y,z))
         # Housing relieved for the separate retainer; centre boss does not grab shaft.
-        cartridge=cartridge-a(10.2,1,(x,m.ROLL_Y,m.ROLL_Z))
-        for dy in [-9,9]:
-            plate=plate-a(1.15,2,(x,m.ROLL_Y+dy,m.ROLL_Z))
-            cartridge=cartridge-a(INSERT_R,3,(x+(-2 if x>-50 else 2),m.ROLL_Y+dy,m.ROLL_Z))
-        if x>-50:plate=plate-slot('x',10.5,ROLL_STOP_PIN['d']/2,180+m.ROLL_STOP[0],180+m.ROLL_STOP[1],(x,m.ROLL_Y,m.ROLL_Z),2)
-        add(f'roll_bearing_retainer_{abs(x):g}',plate,'P','M010-P','#c38a47')
-        for dy in [-9,9]:
-            sign=1 if x>-50 else -1
-            add(f'bearing_retainer_M2_{abs(x):g}_{dy}',m.button_screw(x+sign*.4,m.ROLL_Y+dy,m.ROLL_Z,'x',sign),'P','M021-P','#555b5a')
-    # Four vertical cartridge fixing screws into the pitch-frame support slab.
+        cartridge=cartridge-relief
+        plate=plate-a(6,2,(xc,m.ROLL_Y,m.ROLL_Z))
+        floor=face-out_dir*RETAINER_RELIEF
+        for y,z in hole_yz:
+            plate=plate-a(1.15,2,(xc,y,z))
+            cartridge=cartridge-a(INSERT_R,INSERT_DEPTH,(floor-out_dir*INSERT_DEPTH/2,y,z))
+        if out_dir>0:plate=plate-slot('x',10.5,ROLL_STOP_PIN['d']/2,180+m.ROLL_STOP[0],180+m.ROLL_STOP[1],(xc,m.ROLL_Y,m.ROLL_Z),2)
+        name=f'{abs(face+out_dir*-.5):g}'
+        add(f'roll_bearing_retainer_{name}',plate,'P','M010-P','#c38a47')
+        for (y,z),deg in zip(hole_yz,RETAINER_SCREW_DEG):
+            add(f'bearing_retainer_M2x4_{name}_{deg}',m.button_screw(face-out_dir*.1,y,z,'x',out_dir,4),'P','M021-P','#555b5a')
+    # Four vertical ISO 4762 M2 x 25 cartridge fixing screws into the
+    # pitch-frame slab. 2 mm side-open spot faces drop the heads flush with
+    # the cartridge top, so 3 mm of shank sits in the slab insert. The slab
+    # widens to +/-13 at each pair so the insert keeps 1.4 mm of side wall.
     frame=out['connected_pitch_frame_roll_servo_saddle']['shape']
-    for x in [-62,-46]:
+    for x in CARTRIDGE_SCREW_X:
+        frame=frame+b(x-3,x+3,m.ROLL_Y-13,m.ROLL_Y+13,m.ROLL_Z-16,m.ROLL_Z-12)
         for dy in [-10,10]:
             y=m.ROLL_Y+dy
             cartridge=cartridge-a(1.15,26,(x,y,m.ROLL_Z),'z')
+            cartridge=cartridge-b(x-2.3,x+2.3,*sorted((y-math.copysign(2.3,dy),m.ROLL_Y+math.copysign(12.1,dy))),m.ROLL_Z+10,m.ROLL_Z+12.1)
             frame=frame-a(INSERT_R,4,(x,y,m.ROLL_Z-14),'z')
+            add(f'cartridge_M2x25_{abs(x):g}_{dy:g}',m.socket_screw(x,y,m.ROLL_Z+10,'z',1,25),'P','M021-P','#555b5a')
     setshape('connected_pitch_frame_roll_servo_saddle',frame)
     setshape('bearing_cartridge_trial',cartridge)
     # Radial opposed M3 grub screw scheme; shaft still supported by bearings.
@@ -139,14 +192,15 @@ def detail_parts(out):
     add('roll_hard_stop_pin',pin,owner='M016-18-R',color='#cc5750')
     setshape('connected_rolling_cradle_flange_ear_stalks',out['connected_rolling_cradle_flange_ear_stalks']['shape']-pin)
     # Swept pockets in the flange's back face for the two front retainer screw
-    # heads (radius 9 on +/-Y; local angle 90 is +Y after the Y rotation).
+    # heads (radius 10.5 on the lower diagonals).
     # This removes the Layout 03 audit's 5.53 mm3 screw/flange overlaps.
     sweep=m.ROLL_STOP[1]+1
     head_r=1.75+FLANGE_POCKET_CLEAR
     x0=-39.6;length=FLANGE_POCKET_BACK_X-x0
     cradle=out['connected_rolling_cradle_flange_ear_stalks']['shape']
-    for centre in [90,270]:
-        cradle=cradle-slot('x',9,head_r,centre-sweep,centre+sweep,(x0+length/2,m.ROLL_Y,m.ROLL_Z),length)
+    # slot() local angle = YZ angle from +Y plus 90 deg.
+    for centre in [deg+90 for deg in RETAINER_SCREW_DEG]:
+        cradle=cradle-slot('x',RETAINER_SCREW_R,head_r,centre-sweep,centre+sweep,(x0+length/2,m.ROLL_Y,m.ROLL_Z),length)
     setshape('connected_rolling_cradle_flange_ear_stalks',cradle)
     cartridge=out['bearing_cartridge_trial']['shape']
     # local angle 180 places the radial centre on +Z after the Y rotation.
@@ -163,9 +217,11 @@ def detail_parts(out):
     setshape('yaw_yoke_leg_-55',(leg+ring)-slot('y',10,1,*pitch_slot,(m.PITCH_X,-53,m.PITCH_Z),4))
     # Ø2 x 8 dowel: 2 mm in the yoke slot ring, 5 mm pressed into the root lug.
     add('pitch_hard_stop_pin',a(PITCH_STOP_PIN['d']/2,PITCH_STOP_PIN['l'],(m.PITCH_X-10,-54+PITCH_STOP_PIN['l']/2,m.PITCH_Z),'y'),'P','M016-18-P','#cc5750')
-    # Pin root lug joins the pitch frame side arm.
+    # Pin root lug joins the pitch frame side arm. It extends 3 mm past the
+    # pin centre on X and Z, leaving a 2 mm ligament round the Ø2 bore (the
+    # old lug ended tangent to the bore: zero wall, non-manifold STL).
     frame=out['connected_pitch_frame_roll_servo_saddle']['shape']
-    lug=b(m.PITCH_X-11,m.PITCH_X-4,-51,-46,m.PITCH_Z-2,m.PITCH_Z+2)
+    lug=b(m.PITCH_X-13,m.PITCH_X-4,-51,-46,m.PITCH_Z-3,m.PITCH_Z+3)
     frame=(frame+lug)-out['pitch_hard_stop_pin']['shape']
     # Roll stops at +/-21 swing the C2 castellated exit (R-frame, OD2 trial
     # jacket) onto the lower rail; relieve the rail with 0.4 mm clearance.
@@ -176,32 +232,41 @@ def detail_parts(out):
     # screws into long crown receivers. Boss centres clear the 25 mm board.
     face=out['front_bezel_integral_camera_crown']['shape']
     bracket=out['removable_camera_edge_bracket_trial']['shape']
-    for y in [-15,15]:
+    # Receivers at Y +/-16 with R2.8 bosses leave 1.2 mm round the Ø3.2
+    # insert and 0.7 mm to the camera PCB edge; bracket bosses are R2.4.
+    for y in [-CAMERA_SCREW_Y,CAMERA_SCREW_Y]:
         z=78.5
-        boss=a(2.2,12.8,(-8.2,y,z))-a(INSERT_R,3.2,(-13.2,y,z))
+        boss=a(2.8,12.8,(-8.2,y,z))-a(INSERT_R,3.2,(-13.2,y,z))-a(TIP_RELIEF_R,1,(-11.1,y,z))
         face=face+boss
-        bracket=bracket+a(2.2,2.2,(-15.9,y,z))
+        bracket=bracket+a(2.4,2.2,(-15.9,y,z))
         bracket=bracket-a(1.15,4,(-15.9,y,z))
         add(f'camera_bracket_M2_{y}',m.button_screw(-17,y,z,'x',-1),'R','M021-R','#555b5a')
     setshape('front_bezel_integral_camera_crown',face)
     setshape('removable_camera_edge_bracket_trial',bracket)
     # Removable roll-servo top strap, fixed to the saddle rather than drilled
     # into an unselected servo SKU. 0.3 mm liner space remains beside housing.
-    yy=m.ROLL_Y;zz=m.ROLL_Z
-    strap=b(-102,-98,yy-13.8,yy+13.8,zz+9.8,zz+11.8)
-    for dy in [-12,12]:
-        strap=strap+b(-102,-98,yy+dy-1.7,yy+dy+1.7,zz-12,zz+11.8)
-        strap=strap-a(1.15,26,(-100,yy+dy,zz),'z')
-    add('removable_roll_servo_saddle_strap',strap,'P','M011-P','#c38a47')
+    # Two ISO 4762 M2 x 25 screws run down the posts into inserts in frame
+    # bosses beside the saddle walls (joint plane 10 mm below the roll axis).
+    # Posts and bosses keep >= 1.2 mm round the Ø2.3 bore and Ø3.2 insert;
+    # the strap sits at X-94 so the -Y post clears the servo-bus exit at X-100.
+    yy=m.ROLL_Y;zz=m.ROLL_Z;sx=STRAP_X
+    strap=b(sx-2.35,sx+2.35,yy-15.7,yy+15.7,zz+9.8,zz+11.8)
     frame=out['connected_pitch_frame_roll_servo_saddle']['shape']
-    for dy in [-12,12]:frame=frame-a(INSERT_R,3,(-100,yy+dy,zz-13.5),'z')
+    for sign in [-1,1]:
+        y=yy+sign*STRAP_SCREW_DY
+        strap=strap+b(sx-2.35,sx+2.35,*sorted((yy+sign*10.3,yy+sign*15.7)),zz-10,zz+11.8)
+        strap=strap-a(1.15,22.5,(sx,y,zz+.9),'z')
+        frame=frame+b(sx-3,sx+3,*sorted((yy+sign*10.2,yy+sign*16.2)),zz-27.5,zz-10)
+        frame=frame-a(INSERT_R,4,(sx,y,zz-12),'z')
+        add(f'roll_servo_strap_M2x25_{sign*STRAP_SCREW_DY:g}',m.socket_screw(sx,y,zz+11.8,'z',1,25),'P','M021-P','#555b5a')
+    add('removable_roll_servo_saddle_strap',strap,'P','M011-P','#c38a47')
     setshape('connected_pitch_frame_roll_servo_saddle',frame)
     # Explicit radial fasteners; nominal M3 tapped metal bores in coupling.
     for x in [-74.5,-71.5]:
         add(f'coupling_M3_radial_grub_{abs(x):g}',a(1.5,3,(x,yy+4.5,zz),'y'),'R','M021-R','#555b5a')
     # CSI guide saddle contacts the existing inner roof. The passage gives the
     # trial OD2 jacket 0.4 mm diametral clearance and is open in both directions.
-    guide=b(-49,-45,-4,4,78.6,84.8)-a(1.2,6,(-47,0,80))
+    guide=b(-49,-45,-4,4,78.6,m.MAIN_H-m.SKIN)-a(1.2,6,(-47,0,80))
     add('CSI_roof_straight_exit_guide',guide,'R','M010','#678c81')
     stiffen_and_trim(out,add,setshape)
 
@@ -280,7 +345,9 @@ def stiffen_and_trim(out,add,setshape):
         slug=a(EAR_SLUG['r'],EAR_SLUG['max_len'],(m.EAR_X,slug_c,m.EAR_Z),'y')
         slug=slug-a(1.15,EAR_SLUG['max_len']+.2,(m.EAR_X,slug_c,m.EAR_Z),'y')
         add(f'ear_{sign}_trim_slug_stack_max',slug,'R','M022-R','#8d8f93')
-        add(f'ear_{sign}_trim_M2x6',m.button_screw(m.EAR_X,sign*(EAR_TRIM_INNER_FACE-EAR_SLUG['max_len']),m.EAR_Z,'y',-sign),'R','M021-R','#555b5a')
+        # M2 x 5: 2.5 mm through the stack, 2.5 mm in the insert. The stack is
+        # always built to 2.5 mm (tungsten plus spacer discs) so it cannot bottom.
+        add(f'ear_{sign}_trim_M2x5',m.button_screw(m.EAR_X,sign*(EAR_TRIM_INNER_FACE-EAR_SLUG['max_len']),m.EAR_Z,'y',-sign,5),'R','M021-R','#555b5a')
     # Rear-cover seat on the roll axis: M3 insert boss, brass washer stack.
     cn='removable_octagonal_rear_cover';cover=out[cn]['shape']
     cover=cover+a(4.5,2.5,(-112.15,ry,rz))

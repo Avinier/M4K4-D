@@ -63,12 +63,14 @@ trapped support.
 Each ear is a layered enclosure, now detailed as separately printable inner
 mount, hollow cap, 1.2 mm amber ring, and 1.2 mm dark centre. The centre
 recess leaves a 1.7 mm cap backing and a 0.1 mm adhesive bed. The inner
-mount ring has a 2 mm radial wall and an internal web; four M2 cap receivers
-tie into that ring. Two exposed M2 × 6 screws on the upper arc hold each cap;
-the lower quadrant is kept clear of the pitch yoke's stop sweep. Behind it,
-two recessed M2 × 4 screws hold the inner mount to the cradle stalks. A
-central M2 × 6 retainer holds the removable Ø12 × 2.5 mm tungsten trim slug;
-the cap must come off to reach it.
+mount ring has a 2 mm radial wall and an internal web; two stepped M2 cap
+receivers on the upper arc tie into that ring, each with an M2 heat-set
+insert. Two exposed M2 × 6 screws hold each cap; the lower quadrant is kept
+clear of the pitch yoke's stop sweep. Behind it, two recessed M2 × 4 screws
+hold the inner mount to inserts in the cradle stalk pads; their heads seat on
+a 1.2 mm floor. A central M2 × 5 retainer holds the removable Ø12 × 2.5 mm
+trim stack (tungsten slugs plus spacer discs, always built to 2.5 mm so the
+screw cannot bottom); the cap must come off to reach it.
 This gives 5.46 g maximum trim per ear at the estimated tungsten density;
 the working mass model uses half that capacity. Final A0 balance must be
 measured on the assembled head.
@@ -79,7 +81,49 @@ screws, and withdraw the inner ring. `check_ears.py` tests that nominal
 straight path on both sides at neutral and checks one valid solid per main
 print part. The check does not prove driver room, wire slack, insert pull-out,
 or repeated removal. Print dimensions and orientation still need a slicer
-and fit coupon; see `../fabrication-audit.md`.
+and fit coupon; see [`../research/fabrication-audit.md`](../research/fabrication-audit.md).
+
+## Fabrication details (2026-10-07)
+
+Changes from the [fabrication audit](../research/fabrication-audit.md):
+
+- **Walls.** The skin inset is 1.3 mm (`SKIN`), which keeps the tapered rear
+  facets at ≥ 1.2 mm along their normals; the recessed stern lands have a
+  0.5 mm inner doubler. The front bezel's band and crown walls are 1.3 mm
+  along their own normals (`bezel_band_inner`, `crown_inner`). The window lip
+  is 1.3 mm: the glass sits 0.35 mm further back and is now **106 mm** wide
+  (was 110), still 3.5 mm per side under the lip beyond the 99 mm aperture.
+  The front chamfer is 9.5 mm (was 10) so the band's lower corner keeps its
+  wall at the display board corner. The crown's rear CSI opening follows the
+  crown cavity instead of notching the sloped sides.
+- **Pitch stop pin.** The lug leaves a 2 mm ligament round the Ø2 pin; the
+  pitch frame now exports as a watertight mesh.
+- **Inserts.** Every printed M2 receiver takes one article: M2 × 3 brass,
+  OD 3.6, in a Ø3.2 pilot at least 3.5 mm deep (CNC Kitchen / Purecrea
+  class; the OnlyScrews M2 × 3 is OD 3.9 and does not suit this pilot).
+  Screw tips that pass an insert run into Ø2.2 reliefs, not plastic. The
+  six front receivers now run forward to X −5, so each bezel pad clamps on
+  its receiver; the front screws are M2 × 8. The side screws moved to
+  |Y| 56.4. The ear cap receivers carry inserts (the old pockets at
+  45/135/225/315° had no screws and are gone).
+- **Hardware added.** Four ISO 4762 M2 × 25 screws fix the bearing
+  cartridge to the pitch-frame slab (2 mm side-open spot faces, slab widened
+  to ±13 at each pair). The roll-servo strap moved to X −94, has 4.7 mm
+  posts and two M2 × 25 screws into frame bosses beside the saddle. The
+  roll-bearing retainers are 1.2 mm plates held by M2 × 4 screws on the lower
+  diagonals at R10.5: at R9 on ±Y their insert pockets broke 0.15 mm into
+  the bearing seats.
+- **Pitch servo.** The adapter has a 3 mm inboard face plate with four
+  M2 × 6 screws into the XC330's tapped face holes (axis −22.5/+7.5 in X,
+  ±8 in Z, from the vendor STEP). The fit proxy is now case plus two horns.
+  The adapter-to-yoke-leg joint is still unfastened.
+- **Small parts.** Camera receivers at Y ±16 with R2.8 bosses; the bracket's
+  lips, cap and boss are ≥ 1.25 mm. C2 tray jaws are 1.25 mm.
+
+`check_fasteners.py` writes `generated/fastener-stack.json`: for every
+modeled M2 screw it samples what the shank passes through (clearance,
+insert pocket, plastic, tapped metal or air) and fails on plastic, short
+engagement or a pocket shallower than the insert.
 
 ## Verification
 
@@ -90,6 +134,8 @@ and fit coupon; see `../fabrication-audit.md`.
 - `revision-checks.json`: the 56 sampled roll/pitch poses pass with no
   mechanism or harness intersections; neutral service extraction and hard-stop
   checks pass.
+- `generated/fastener-stack.json`: all 50 modeled M2 screws pass; insert
+  joints have 2.6–3.0 mm of shank in the insert.
 - Body v1's `generated/yaw-stage.json`: the yaw stage, drive sweep, gear mesh,
   assembly lowering paths, and modeled disc/hub contact pass. Its gear and
   bearing estimates remain estimates.
@@ -104,5 +150,5 @@ bearing cartridge, and servo mounts. The main CAD views group parts by shell,
 ears, display, camera, controller, roll, pitch, yaw, and fasteners. Inspection
 overlays remain in the source and checks but are omitted from these exports.
 The harness branches are trial routes and the mass tree is estimated. Purchased bearing/insert fit coupons,
-pitch-servo adapter detail, loaded stiffness, cable flex, and measured A0
+the pitch adapter-to-yoke joint, loaded stiffness, cable flex, and measured A0
 trim remain build gates; the CAD geometry alone does not close them.

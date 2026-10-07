@@ -54,7 +54,7 @@ for r,q in poses:
 fov=cone(m.CAMERA_BOTTOM+14.4);optics=[]
 for r,q in itertools.product([-18,0,18],[-22,0,40]):
     c=posed(fov,'R',r,q,0)
-    for name in ['front_bezel_integral_camera_crown','window_opaque_mask_110mm','window_clear_optical_area','main_octagonal_skin','crown_status_light_diffuser']:
+    for name in ['front_bezel_integral_camera_crown','window_opaque_mask_106mm','window_clear_optical_area','main_octagonal_skin','crown_status_light_diffuser']:
         v=overlap(c,posed(p[name]['shape'],'R',r,q,0))
         optics.append(dict(roll=r,pitch=q,part=name,intersection_mm3=v))
 # Baseline hole at new camera location, prior to optical flare: independent

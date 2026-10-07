@@ -29,7 +29,7 @@ for sign in (-1, 1):
     cap = parts[prefix + 'hollow_removable_cap']['shape']
     rim = parts[prefix + 'ridged_inner_mount']['shape']
     inlays = [parts[prefix + name]['shape'] for name in ('amber_inlay', 'dark_centre')]
-    trim = [parts[prefix + name]['shape'] for name in ('trim_slug_stack_max', 'trim_M2x6')]
+    trim = [parts[prefix + name]['shape'] for name in ('trim_slug_stack_max', 'trim_M2x5')]
     cap_screws = [n for n in parts if n.startswith(prefix + 'M2_')]
     hidden_screws = [n for n in parts if n.startswith(prefix + 'hidden_mount_M2_')]
     assert len(cap_screws) == 2 and len(hidden_screws) == 2

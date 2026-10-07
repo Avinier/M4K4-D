@@ -1,0 +1,1407 @@
+{
+  "method": "Screw-stack audit: what each modeled screw passes through, from the B-rep.",
+  "insert": {
+    "spec": "M2 x 3 brass heat-set insert, \u00d83.2 pilot",
+    "pilot_d": 3.2,
+    "length": 3.0,
+    "min_engagement": 2.4
+  },
+  "sample_step_mm": 0.2,
+  "screws": {
+    "C2_tray_M2_-19": {
+      "axis": "X",
+      "seat": [
+        -27.28,
+        -19.0,
+        47.9
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "clearance",
+          "from": 0.2,
+          "to": 3.8
+        },
+        {
+          "class": "insert",
+          "from": 3.8,
+          "to": 6.8
+        },
+        {
+          "class": "air",
+          "from": 6.8,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.0,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "air",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "C2_tray_M2_-39": {
+      "axis": "X",
+      "seat": [
+        -27.28,
+        -39.0,
+        47.9
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "clearance",
+          "from": 0.2,
+          "to": 3.8
+        },
+        {
+          "class": "insert",
+          "from": 3.8,
+          "to": 6.8
+        },
+        {
+          "class": "air",
+          "from": 6.8,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.0,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "air",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "bearing_retainer_M2x4_39.5_225": {
+      "axis": "X",
+      "seat": [
+        -38.02,
+        -8.48,
+        40.48
+      ],
+      "shank_mm": 5.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.4
+        },
+        {
+          "class": "insert",
+          "from": 2.4,
+          "to": 5.2
+        }
+      ],
+      "insert_mm": 2.8,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "bearing_retainer_M2x4_39.5_315": {
+      "axis": "X",
+      "seat": [
+        -38.02,
+        6.37,
+        40.48
+      ],
+      "shank_mm": 5.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.4
+        },
+        {
+          "class": "insert",
+          "from": 2.4,
+          "to": 5.2
+        }
+      ],
+      "insert_mm": 2.8,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "bearing_retainer_M2x4_68.5_225": {
+      "axis": "X",
+      "seat": [
+        -69.98,
+        -8.48,
+        40.48
+      ],
+      "shank_mm": 5.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.4
+        },
+        {
+          "class": "insert",
+          "from": 2.4,
+          "to": 5.2
+        }
+      ],
+      "insert_mm": 2.8,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "bearing_retainer_M2x4_68.5_315": {
+      "axis": "X",
+      "seat": [
+        -69.98,
+        6.37,
+        40.48
+      ],
+      "shank_mm": 5.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.4
+        },
+        {
+          "class": "insert",
+          "from": 2.4,
+          "to": 5.2
+        }
+      ],
+      "insert_mm": 2.8,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "camera_bracket_M2_-16": {
+      "axis": "X",
+      "seat": [
+        -18.08,
+        -16.0,
+        78.5
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 3.4
+        },
+        {
+          "class": "air",
+          "from": 3.4,
+          "to": 3.6
+        },
+        {
+          "class": "insert",
+          "from": 3.6,
+          "to": 6.6
+        },
+        {
+          "class": "clearance",
+          "from": 6.6,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.0,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "camera_bracket_M2_16": {
+      "axis": "X",
+      "seat": [
+        -18.08,
+        16.0,
+        78.5
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 3.4
+        },
+        {
+          "class": "air",
+          "from": 3.4,
+          "to": 3.6
+        },
+        {
+          "class": "insert",
+          "from": 3.6,
+          "to": 6.6
+        },
+        {
+          "class": "clearance",
+          "from": 6.6,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.0,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "cartridge_M2x25_46_-10": {
+      "axis": "Z",
+      "seat": [
+        -46.0,
+        -11.06,
+        57.8
+      ],
+      "shank_mm": 24.9,
+      "runs": [
+        {
+          "class": "clearance",
+          "from": 0.2,
+          "to": 22.0
+        },
+        {
+          "class": "insert",
+          "from": 22.0,
+          "to": 25.0
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "cartridge_M2x25_46_10": {
+      "axis": "Z",
+      "seat": [
+        -46.0,
+        8.94,
+        57.8
+      ],
+      "shank_mm": 24.9,
+      "runs": [
+        {
+          "class": "clearance",
+          "from": 0.2,
+          "to": 22.0
+        },
+        {
+          "class": "insert",
+          "from": 22.0,
+          "to": 25.0
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "cartridge_M2x25_62_-10": {
+      "axis": "Z",
+      "seat": [
+        -62.0,
+        -11.06,
+        57.8
+      ],
+      "shank_mm": 24.9,
+      "runs": [
+        {
+          "class": "clearance",
+          "from": 0.2,
+          "to": 22.0
+        },
+        {
+          "class": "insert",
+          "from": 22.0,
+          "to": 25.0
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "cartridge_M2x25_62_10": {
+      "axis": "Z",
+      "seat": [
+        -62.0,
+        8.94,
+        57.8
+      ],
+      "shank_mm": 24.9,
+      "runs": [
+        {
+          "class": "clearance",
+          "from": 0.2,
+          "to": 22.0
+        },
+        {
+          "class": "insert",
+          "from": 22.0,
+          "to": 25.0
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "ear_-1_M2_1": {
+      "axis": "Y",
+      "seat": [
+        -21.35,
+        -74.78,
+        54.5
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.6
+        },
+        {
+          "class": "air",
+          "from": 2.6,
+          "to": 3.0
+        },
+        {
+          "class": "insert",
+          "from": 3.0,
+          "to": 6.2
+        },
+        {
+          "class": "clearance",
+          "from": 6.2,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.2,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "ear_-1_M2_2": {
+      "axis": "Y",
+      "seat": [
+        -64.65,
+        -74.78,
+        54.5
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.6
+        },
+        {
+          "class": "air",
+          "from": 2.6,
+          "to": 3.0
+        },
+        {
+          "class": "insert",
+          "from": 3.0,
+          "to": 6.2
+        },
+        {
+          "class": "clearance",
+          "from": 6.2,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.2,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "ear_-1_hidden_mount_M2_-4": {
+      "axis": "Y",
+      "seat": [
+        -20.5,
+        -71.58,
+        38.0
+      ],
+      "shank_mm": 5.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 2.4
+        },
+        {
+          "class": "insert",
+          "from": 2.4,
+          "to": 5.2
+        }
+      ],
+      "insert_mm": 2.8,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "ear_-1_hidden_mount_M2_4": {
+      "axis": "Y",
+      "seat": [
+        -20.5,
+        -71.58,
+        46.0
+      ],
+      "shank_mm": 5.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.4
+        },
+        {
+          "class": "insert",
+          "from": 2.4,
+          "to": 5.2
+        }
+      ],
+      "insert_mm": 2.8,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "ear_-1_trim_M2x5": {
+      "axis": "Y",
+      "seat": [
+        -43.0,
+        -65.72,
+        42.0
+      ],
+      "shank_mm": 6.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 3.6
+        },
+        {
+          "class": "insert",
+          "from": 3.6,
+          "to": 6.2
+        }
+      ],
+      "insert_mm": 2.6,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "ear_1_M2_1": {
+      "axis": "Y",
+      "seat": [
+        -21.35,
+        74.78,
+        54.5
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.6
+        },
+        {
+          "class": "air",
+          "from": 2.6,
+          "to": 3.0
+        },
+        {
+          "class": "insert",
+          "from": 3.0,
+          "to": 6.2
+        },
+        {
+          "class": "clearance",
+          "from": 6.2,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.2,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "ear_1_M2_2": {
+      "axis": "Y",
+      "seat": [
+        -64.65,
+        74.78,
+        54.5
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.6
+        },
+        {
+          "class": "air",
+          "from": 2.6,
+          "to": 3.0
+        },
+        {
+          "class": "insert",
+          "from": 3.0,
+          "to": 6.2
+        },
+        {
+          "class": "clearance",
+          "from": 6.2,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.2,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "ear_1_hidden_mount_M2_-4": {
+      "axis": "Y",
+      "seat": [
+        -20.5,
+        71.58,
+        38.0
+      ],
+      "shank_mm": 5.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 2.4
+        },
+        {
+          "class": "insert",
+          "from": 2.4,
+          "to": 5.2
+        }
+      ],
+      "insert_mm": 2.8,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "ear_1_hidden_mount_M2_4": {
+      "axis": "Y",
+      "seat": [
+        -20.5,
+        71.58,
+        46.0
+      ],
+      "shank_mm": 5.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.4
+        },
+        {
+          "class": "insert",
+          "from": 2.4,
+          "to": 5.2
+        }
+      ],
+      "insert_mm": 2.8,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "ear_1_trim_M2x5": {
+      "axis": "Y",
+      "seat": [
+        -43.0,
+        65.72,
+        42.0
+      ],
+      "shank_mm": 6.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 3.6
+        },
+        {
+          "class": "insert",
+          "from": 3.6,
+          "to": 6.2
+        }
+      ],
+      "insert_mm": 2.6,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "front_M2x8_1": {
+      "axis": "X",
+      "seat": [
+        -0.62,
+        -56.4,
+        16.0
+      ],
+      "shank_mm": 9.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 4.4
+        },
+        {
+          "class": "insert",
+          "from": 4.4,
+          "to": 8.0
+        },
+        {
+          "class": "clearance",
+          "from": 8.0,
+          "to": 9.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.6,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "front_M2x8_2": {
+      "axis": "X",
+      "seat": [
+        -0.62,
+        56.4,
+        16.0
+      ],
+      "shank_mm": 9.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 4.4
+        },
+        {
+          "class": "insert",
+          "from": 4.4,
+          "to": 8.0
+        },
+        {
+          "class": "clearance",
+          "from": 8.0,
+          "to": 9.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.6,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "front_M2x8_3": {
+      "axis": "X",
+      "seat": [
+        -0.62,
+        -56.4,
+        64.0
+      ],
+      "shank_mm": 9.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 4.4
+        },
+        {
+          "class": "insert",
+          "from": 4.4,
+          "to": 8.0
+        },
+        {
+          "class": "clearance",
+          "from": 8.0,
+          "to": 9.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.6,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "front_M2x8_4": {
+      "axis": "X",
+      "seat": [
+        -0.62,
+        56.4,
+        64.0
+      ],
+      "shank_mm": 9.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 4.4
+        },
+        {
+          "class": "insert",
+          "from": 4.4,
+          "to": 8.0
+        },
+        {
+          "class": "clearance",
+          "from": 8.0,
+          "to": 9.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.6,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "front_M2x8_5": {
+      "axis": "X",
+      "seat": [
+        -0.62,
+        -32.0,
+        78.0
+      ],
+      "shank_mm": 9.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 4.4
+        },
+        {
+          "class": "insert",
+          "from": 4.4,
+          "to": 8.0
+        },
+        {
+          "class": "clearance",
+          "from": 8.0,
+          "to": 9.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.6,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "front_M2x8_6": {
+      "axis": "X",
+      "seat": [
+        -0.62,
+        32.0,
+        78.0
+      ],
+      "shank_mm": 9.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 4.4
+        },
+        {
+          "class": "insert",
+          "from": 4.4,
+          "to": 8.0
+        },
+        {
+          "class": "clearance",
+          "from": 8.0,
+          "to": 9.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.6,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "pitch_servo_M2x6_-22.5_-8": {
+      "axis": "Y",
+      "seat": [
+        -62.51,
+        16.32,
+        37.8
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 4.2
+        },
+        {
+          "class": "metal",
+          "from": 4.2,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 3.0,
+      "tip": "metal",
+      "joint": "tapped metal",
+      "problems": []
+    },
+    "pitch_servo_M2x6_-22.5_8": {
+      "axis": "Y",
+      "seat": [
+        -62.51,
+        16.32,
+        53.8
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 4.2
+        },
+        {
+          "class": "metal",
+          "from": 4.2,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 3.0,
+      "tip": "metal",
+      "joint": "tapped metal",
+      "problems": []
+    },
+    "pitch_servo_M2x6_7.5_-8": {
+      "axis": "Y",
+      "seat": [
+        -32.51,
+        16.32,
+        37.8
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 4.2
+        },
+        {
+          "class": "metal",
+          "from": 4.2,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 3.0,
+      "tip": "metal",
+      "joint": "tapped metal",
+      "problems": []
+    },
+    "pitch_servo_M2x6_7.5_8": {
+      "axis": "Y",
+      "seat": [
+        -32.51,
+        16.32,
+        53.8
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 4.2
+        },
+        {
+          "class": "metal",
+          "from": 4.2,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 3.0,
+      "tip": "metal",
+      "joint": "tapped metal",
+      "problems": []
+    },
+    "rear_M2x6_1": {
+      "axis": "X",
+      "seat": [
+        -114.58,
+        -44.0,
+        26.0
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.4
+        },
+        {
+          "class": "insert",
+          "from": 2.4,
+          "to": 5.8
+        },
+        {
+          "class": "clearance",
+          "from": 5.8,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.4,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "rear_M2x6_2": {
+      "axis": "X",
+      "seat": [
+        -114.58,
+        44.0,
+        26.0
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.4
+        },
+        {
+          "class": "insert",
+          "from": 2.4,
+          "to": 5.8
+        },
+        {
+          "class": "clearance",
+          "from": 5.8,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.4,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "rear_M2x6_3": {
+      "axis": "X",
+      "seat": [
+        -114.58,
+        -44.0,
+        65.0
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.4
+        },
+        {
+          "class": "insert",
+          "from": 2.4,
+          "to": 5.8
+        },
+        {
+          "class": "clearance",
+          "from": 5.8,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.4,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "rear_M2x6_4": {
+      "axis": "X",
+      "seat": [
+        -114.58,
+        44.0,
+        65.0
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.4
+        },
+        {
+          "class": "insert",
+          "from": 2.4,
+          "to": 5.8
+        },
+        {
+          "class": "clearance",
+          "from": 5.8,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": 3.4,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "clearance",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "roll_servo_case_M2_-8": {
+      "axis": "X",
+      "seat": [
+        -76.42,
+        -9.06,
+        25.4
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 4.2
+        },
+        {
+          "class": "metal",
+          "from": 4.2,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 3.0,
+      "tip": "metal",
+      "joint": "tapped metal",
+      "problems": []
+    },
+    "roll_servo_case_M2_8": {
+      "axis": "X",
+      "seat": [
+        -76.42,
+        6.94,
+        25.4
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 4.2
+        },
+        {
+          "class": "metal",
+          "from": 4.2,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 3.0,
+      "tip": "metal",
+      "joint": "tapped metal",
+      "problems": []
+    },
+    "roll_servo_strap_M2x25_-13": {
+      "axis": "Z",
+      "seat": [
+        -94.0,
+        -14.06,
+        59.6
+      ],
+      "shank_mm": 24.9,
+      "runs": [
+        {
+          "class": "clearance",
+          "from": 0.2,
+          "to": 21.8
+        },
+        {
+          "class": "insert",
+          "from": 21.8,
+          "to": 25.0
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "roll_servo_strap_M2x25_13": {
+      "axis": "Z",
+      "seat": [
+        -94.0,
+        11.94,
+        59.6
+      ],
+      "shank_mm": 24.9,
+      "runs": [
+        {
+          "class": "clearance",
+          "from": 0.2,
+          "to": 21.8
+        },
+        {
+          "class": "insert",
+          "from": 21.8,
+          "to": 25.0
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    }
+  },
+  "failures": [],
+  "passed": true,
+  "limitations": [
+    "Nominal B-rep only: no insert knurl, thread pitch, preload, pull-out or print tolerance. Driver access is not checked here."
+  ]
+}
