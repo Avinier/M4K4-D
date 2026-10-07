@@ -47,8 +47,8 @@ except ImportError:  # repository's older CAD venv compatibility for report scri
 
 
 HERE = Path(__file__).resolve().parent
-# This v1 starting copy still composes the prototype's purchased STEP files and
-# Layout 04 head. Keep these explicit until the chassis-only CAD is separated.
+# Purchased chassis/body references still come from RP-06. The head is now
+# composed from the 03-build head v1 source below.
 PROTOTYPE_CAD_ROOT = HERE.parents[3] / "02-prototypes" / "RP-06-cad"
 PURCHASED = PROTOTYPE_CAD_ROOT / "body-chassis" / "layout-01" / "references" / "purchased"
 # Vendor or vendor-derived STEPs added in 03-build (see purchased/README.md).
@@ -59,7 +59,7 @@ HYDRAULIC_3010_FAN_STEP = "dc5v_3010_hydraulic_usb_fan.step"
 # Adafruit #3297 leaves in adafruit_3297_drv8833.step export order.
 ADAFRUIT_3297_LEAVES = ("PCB", "U1_HTSSOP16", "U1_LEADS_A", "U1_LEADS_B", "R1_1206", "R2_1206",
                         "C1_0805", "C2_0805", "C3_0805", "C4_0805", "Q1_SOT23", "J1_TERMINAL_BLOCK")
-HEAD_DIR = PROTOTYPE_CAD_ROOT / "head" / "layout-04"
+HEAD_DIR = HERE.parents[2] / "03-head" / "v1" / "cad"
 # Drive wheel (D-008, D-009): rim, handed TPU tyres, clamp ring, hub cap and their
 # hardware are modelled once in wheel/wheel_model.py; wheel_assembly() places them
 # on the chassis and adds the D-007 stub.
@@ -68,7 +68,7 @@ HEAD_MODEL = None
 
 
 def _load_head_model():
-    """Load RP-01 Layout 04 lazily from source for the actual CAD build.
+    """Load the head v1 source lazily for the actual CAD build.
 
     Report/check scripts can import this module without paying the full head
     build dependency cost. During `gen`, the text-to-cad runtime supplies the
@@ -362,7 +362,7 @@ SHELL_STATIONS = (
 # see-through alpha so the internal packaging reads in every view.
 SHELL_ALPHA = 0.28
 
-# Layout 04 yaw stage (40 mm neck): the head's turntable disc stands proud of
+# Head v1 yaw stage (49.5 mm neck): the head's turntable disc stands proud of
 # the body top; the yaw datum is the body-top plane on the yaw axis. Head A0,
 # envelope, disc and yaw-carried mass are read from the head's generated files.
 HEAD_AXES = json.loads((HEAD_DIR / "axes.json").read_text())
@@ -1297,7 +1297,7 @@ FRAMES = {
 
 
 MASS_ROWS = [
-    ("RP01_HEAD_LAYOUT04", HEAD_MASS_G, (
+    ("HEAD_V1", HEAD_MASS_G, (
         HEAD_ORIGIN_IN_CHASSIS[0] + HEAD_LOCAL_COM[0],
         HEAD_ORIGIN_IN_CHASSIS[1] + HEAD_LOCAL_COM[1],
         HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_LOCAL_COM[2],
@@ -4199,17 +4199,17 @@ def rp01_head_groups():
     # Split physical, harness and physics groups so Layout 02's viewer can
     # independently hide overlays while applying one shared yaw transform.
     head = Compound(
-        label="RP01_HEAD_LAYOUT03_LIVE",
+        label="HEAD_V1_PHYSICAL",
         children=[
             by_label["physical"],
             yaw_drive_moving_local(),
         ],
     )
     head = head.moved(Location(HEAD_ORIGIN_IN_CHASSIS))
-    harness = Compound(label="RP01_HEAD_HARNESS_LIVE", children=[by_label["harness"]]).moved(
+    harness = Compound(label="HEAD_V1_HARNESS", children=[by_label["harness"]]).moved(
         Location(HEAD_ORIGIN_IN_CHASSIS)
     )
-    physics = Compound(label="RP01_HEAD_PHYSICS_LIVE", children=[by_label["physics"]]).moved(
+    physics = Compound(label="HEAD_V1_PHYSICS", children=[by_label["physics"]]).moved(
         Location(HEAD_ORIGIN_IN_CHASSIS)
     )
     return head, harness, physics
@@ -4292,7 +4292,7 @@ def build_assembly():
     asm.add(wheel_arch_hardware(), "WHEEL_ARCH_HARDWARE")
     asm.add(panel_mount_hardware(), "PANEL_MOUNT_HARDWARE")
     asm.add(body_yaw_stage(), "BODY_YAW_STAGE")
-    asm.add(head, "RP01_HEAD_LAYOUT03")
+    asm.add(head, "HEAD_V1_PHYSICAL")
     asm.add(head_harness, "RP01_HEAD_HARNESS")
     asm.add(head_physics, "RP01_HEAD_PHYSICS")
     asm.add(physics_overlays(), "PHYSICS_OVERLAYS")

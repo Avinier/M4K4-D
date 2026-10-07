@@ -1,0 +1,530 @@
+"""Parametric appearance/packaging layout; NOT fabrication release.
+
+R rolls, pitches, yaws; P pitches/yaws; Y yaws. All transforms are explicit
+named component/joint datums, not visual placements. Catalog models are 1:1.
+"""
+from pathlib import Path
+import json, math
+from build123d import (Box, Cylinder, Cone, Sphere, Compound, Location, Plane,
+                      Polygon, RegularPolygon, extrude, loft, Axis, CenterOf)
+from cadgen import srgb
+from cadgen.step_scene import import_step
+from layout_axes import AXES
+from motion_envelope import ROLL_STOP, PITCH_STOP
+
+HERE=Path(__file__).parent
+CATALOG=HERE/'purchased'
+MAIN_W, MAIN_D, MAIN_H, CROWN_H, SKIN=130.,115.,86.,104.,1.2
+EAR_R, EAR_X, EAR_Z=30.,-43.,42.
+DISPLAY_BOTTOM, CAMERA_BOTTOM=6.,77.
+LED_Y, LED_Z=15.2,91.8
+FRONT_SCREWS=[(-57.4,16),(57.4,16),(-57.4,64),(57.4,64),(-32,78),(32,78)]
+REAR_SCREWS=[(-44,26),(44,26),(-44,65),(44,65)]
+ROLL_Y,ROLL_Z,PITCH_X,PITCH_Z=[AXES[k] for k in ('roll_y','roll_z','pitch_x','pitch_z')]
+ROLL_AXIS=Axis((0,ROLL_Y,ROLL_Z),(1,0,0))
+PITCH_AXIS=Axis((PITCH_X,0,PITCH_Z),(0,1,0))
+# Layout 04 yaw stage: a turntable disc replaces the 24 mm spindle stack.
+# Hard stops sit 3 deg beyond usable travel (roll +/-21, pitch -25/+43); the
+# full stop grid sweeps to about Z-30.3, so the disc top at Z-34.5 keeps >=4 mm
+# with no firmware roll/pitch limit. The disc stands YAW_DISC_PROUD above the
+# body top: the RP-06 stack (plate, bearing, 1:1 spur pair) starts 10.5 mm
+# above the Pi 5 cooler. Its rim skirts down to a 1 mm running gap.
+YAW_DISC_TOP_Z=-34.5
+SWEEP_FLOOR_Z=YAW_DISC_TOP_Z+4.
+YAW_DISC_PROUD=15.
+BODY_TOP_Z=YAW_DISC_TOP_Z-YAW_DISC_PROUD
+NECK=-BODY_TOP_Z
+YAW_DISC_THICKNESS=YAW_DISC_PROUD-1.
+YAW_DISC_PLATE=4.
+YAW_DISC_R=62.5
+YAW_BORE_R=7.
+# Body v1 BO-045 has three M3 inserts at R22, clocked away from its pinion.
+# Counterbores keep the button heads below the disc top and preserve the
+# measured 4 mm moving-head clearance above the disc.
+YAW_HUB_BOLT_R=22.
+YAW_HUB_BOLT_DEG=(210.,270.,330.)
+YAW_HUB_BOLT_CLEARANCE_R=1.7
+YAW_HUB_BOLT_HEAD_R=3.0
+YAW_HUB_BOLT_RECESS=1.8
+YAW_INTERFACE_Z=BODY_TOP_Z
+YAW_AXIS=Axis((PITCH_X,0,YAW_INTERFACE_Z),(0,0,1))
+
+def block(x0,x1,y0,y1,z0,z1):
+    return Box(x1-x0,y1-y0,z1-z0).moved(Location(((x0+x1)/2,(y0+y1)/2,(z0+z1)/2)))
+
+def axial(r,h,c,axis='x'):
+    s=Cylinder(r,h)
+    if axis=='x':s=s.rotate(Axis.Y,90)
+    elif axis=='y':s=s.rotate(Axis.X,-90)
+    return s.moved(Location(c))
+
+def oct_points(w,z0,z1,c):
+    a=w/2
+    return [(-a+c,z0),(a-c,z0),(a,z0+c),(a,z1-c),(a-c,z1),(-a+c,z1),(-a,z1-c),(-a,z0+c)]
+
+def profile(w,z0,z1,c,x=0):
+    return (Plane.YZ*Polygon(*oct_points(w,z0,z1,c),align=None)).moved(Location((x,0,0)))
+
+def prism(w,z0,z1,c,x0,x1):
+    return extrude(profile(w,z0,z1,c,x0),amount=x1-x0)
+
+# Helmet refinement: broad ear mounting belt, inward-sloping shoulders,
+# narrower stern and lifted lower rim. Hardware and front carrier stay 1:1.
+HELMET_SHOULDER_START_X=-26.
+HELMET_SHOULDER_FULL_X=-60.
+HELMET_REAR_TAPER_START_X=-78.
+HELMET_REAR_WIDTH=104.
+HELMET_REAR_BOTTOM=10.
+HELMET_REAR_TOP=84.
+
+def stern_section_values(x):
+    shoulder=max(0,min(1,(HELMET_SHOULDER_START_X-x)/(HELMET_SHOULDER_START_X-HELMET_SHOULDER_FULL_X)))
+    rear=max(0,min(1,(HELMET_REAR_TAPER_START_X-x)/(MAIN_D+HELMET_REAR_TAPER_START_X)))
+    return (MAIN_W+(HELMET_REAR_WIDTH-MAIN_W)*rear,HELMET_REAR_BOTTOM*rear,MAIN_H+(HELMET_REAR_TOP-MAIN_H)*rear,
+            14+10*shoulder-14*rear,14-2*rear)
+
+def stern(x0,x1,inside=False):
+    """Planar helmet facets. Different top/bottom corner depths preserve belt."""
+    def section(x):
+        width,bottom,top,upper,lower=stern_section_values(x)
+        wall=SKIN if inside else 0
+        a=width/2-wall;bottom+=wall;top-=wall
+        upper-=.7 if inside else 0;lower-=.7 if inside else 0
+        points=[(-a+lower,bottom),(a-lower,bottom),(a,bottom+lower),
+                (a,top-upper),(a-upper,top),(-a+upper,top),
+                (-a,top-upper),(-a,bottom+lower)]
+        return (Plane.YZ*Polygon(*points,align=None)).moved(Location((x,0,0)))
+    xs=sorted(set([x0,x1]+[x for x in [HELMET_REAR_TAPER_START_X,HELMET_SHOULDER_FULL_X,HELMET_SHOULDER_START_X] if x0<x<x1]))
+    return loft([section(x) for x in xs],ruled=True)
+
+def pieces(s):
+    return ([s] if hasattr(s,'volume') else list(s)) if s else []
+
+def tint(s,name,color,alpha=1):
+    s.label=name
+    if s.children:
+        for c in s.children:tint(c,c.label or name,color,alpha)
+    else:s.color=srgb(color,alpha)
+    return s
+
+def button_screw(x,y,z,axis='x',sign=1,shank_length=6):
+    # Local +Z points outwards; origin at under-head seat. Smooth major thread.
+    h=1.3;r=1.75;R=(r*r+h*h)/(2*h)
+    cap=Sphere(R).moved(Location((0,0,h-R))) & Box(6,6,h).moved(Location((0,0,h/2)))
+    shank=Cylinder(1,shank_length).moved(Location((0,0,-shank_length/2)))
+    socket=extrude(RegularPolygon(1.3/math.sqrt(3),6),amount=1).moved(Location((0,0,.6)))
+    screw=(cap+shank)-socket
+    if axis=='x':screw=screw.rotate(Axis.Y,90*sign)
+    elif axis=='y':screw=screw.rotate(Axis.X,-90*sign)
+    return screw.moved(Location((x,y,z)))
+
+def clean_catalog(path):
+    # Discard STEP annotation/open-shell children, preserve all closed solids.
+    raw=import_step(str(path))
+    solids=[]
+    for i,s in enumerate(raw.solids()):
+        if s.is_valid and s.volume>1e-8:
+            s.label=f'{path.stem}_solid_{i+1:03}'
+            solids.append(s)
+    return Compound(label=path.stem,children=solids)
+
+# Waveshare ESP32-S3-LCD-4.3 (SKU 30493 is the non-touch board; the Touch STEP,
+# 106.1 x 68.3 mm, is used as the conservative outline). STEP local X/Y/Z map to
+# head +Y/+Z/+X (rotate 120 deg about (1,1,1)); glass front on X -3.8 (the 0.2 mm active-area sheet sits ahead of it), outline
+# centred on Z 40. Body behind the PCB stops 12.5 mm behind the glass except one
+# 5 mm connector strip on the -Y edge (STEP X -52.4...-47.4, Y -12.5...19.1) that
+# reaches 16.9 mm.
+DISPLAY_FRONT_X, DISPLAY_CENTER_Z=-3.8,40.
+
+def _flat(shape,label):
+    # Flatten after transforms so booleans read world-placed solids.
+    return Compound(label=label,children=list(shape.solids()))
+
+def display_fit_proxy():
+    slab=block(DISPLAY_FRONT_X-12.5,DISPLAY_FRONT_X,-53.05,53.05,DISPLAY_CENTER_Z-34.15,DISPLAY_CENTER_Z+34.15)
+    strip=block(DISPLAY_FRONT_X-16.9,DISPLAY_FRONT_X-12.4,-52.4,-47.4,29.85,61.45)
+    return slab+strip
+
+def display_catalog():
+    d=clean_catalog(CATALOG/'waveshare_esp32_s3_touch_lcd_4_3.stp').rotate(Axis((0,0,0),(1,1,1)),120)
+    return _flat(d.moved(Location((DISPLAY_FRONT_X-4.8,-0.05,DISPLAY_CENTER_Z+2.35))),'display_module_1to1_envelope')
+
+# Waveshare ESP32-S3-Zero V2 (bare PCB, no USB-C solid in the STEP): STEP X/Y/Z map
+# to head -Y/+Z/-X so the components face -X; PCB front face on X -25.
+def c2_catalog():
+    c=clean_catalog(CATALOG/'waveshare_esp32_s3_zero_v2.step').rotate(Axis((0,0,0),(1,1,1)),120).rotate(Axis.Z,180)
+    return _flat(c.moved(Location((-25.8,-20.,28.))),'C2_ESP32_S3_Zero_23_5x18_footprint')
+
+# Imported Module 3 Wide groups after the existing Y−90 placement, mm.
+# PCB X −10.775…−10.104 × Y±12.5 × Z77…100.862; lens toward +X; shield/components −X.
+CAMERA_PCB_X=(-10.775,-10.104)
+
+def camera_fit_proxy():
+    """One-solid conservative groups matching the imported camera, with empty Y-edge rims.
+
+    The old 12.4 mm box occupied the air behind the PCB and forbade an edge clamp.
+    """
+    z0,z1=CAMERA_BOTTOM,CAMERA_BOTTOM+23.862
+    pcb=block(*CAMERA_PCB_X,-12.5,12.5,z0,z1)
+    lens=block(-10.25,-2,-6,6,84,98)
+    shield=block(-13.4,-10.70,-11.46,11.46,93.95,100.50)
+    comps=block(-12.6,-10.70,-10,10,78,88.3)
+    return pcb+lens+shield+comps
+
+def camera_edge_clamp():
+    """Rear-access U with CSI window, pad to the rear shield, and PCB Y-edge C-channels.
+
+    Side hooks sit in the empty 1 mm board rim outside the rear shield and lens.
+    Lower centre stays open for the CSI exit. Nominal 0.12–0.15 mm seating gaps.
+    """
+    back=block(-17,-14.8,-15,15,76,102)-block(-18,-14,-12.9,12.9,76,88.8)
+    pad=block(-14.9,-13.50,-11.35,11.35,94.05,100.40)
+    clamp=back+pad
+    for y0,y1 in [(12.65,15.0),(-15.0,-12.65)]:
+        clamp=clamp+block(-14.9,-9.80,y0,y1,88.8,102.0)
+    for y0,y1 in [(11.75,15.0),(-15.0,-11.75)]:
+        clamp=clamp+block(-11.02,-10.92,y0,y1,88.8,100.76)
+        clamp=clamp+block(-9.95,-9.80,y0,y1,88.8,100.76)
+        clamp=clamp+block(-10.90,-9.95,y0,y1,100.96,102.0)
+    return clamp
+
+# Crown roof cap: a three-faced hip behind the crown. Its base is the crown's
+# rear trapezoid (Y +/-23 at the roof, +/-17 at the crown top) butted against
+# the crown's rear face (X-24), with no seam gap. The top edge runs back to a
+# short end edge on the roof (CROWN_CAP_END_W wide), so the top face is a
+# trapezoid (about 18 deg pitch);
+# each slanted edge runs to one end of that edge, so the two sides are
+# triangles. The end edge lands on the roof's rear-taper crease (X-78), the
+# last X where the roof is flat at Z86. The top face carries a 0.4 mm recessed
+# panel, like the skin's side lands. Hollow hood, open to the crown and to the
+# roof it is fused into.
+CROWN_CAP_X0=-24.
+CROWN_CAP_END_X=HELMET_REAR_TAPER_START_X
+CROWN_CAP_END_W=6.
+CROWN_CAP_WALL=1.6
+CROWN_CAP_PANEL_INSET,CROWN_CAP_PANEL_DEPTH=3.,.4
+
+def crown_roof_cap():
+    from build123d import Face, Wire, Shell, Solid, Vector, offset, Kind
+    x0,x1,w,zb=CROWN_CAP_X0,CROWN_CAP_END_X,CROWN_CAP_END_W/2,MAIN_H-1.
+    face=lambda pts:Face(Wire.make_polygon([Vector(*p) for p in pts],close=True))
+    fl,fr,tr,tl=(x0,-23,zb),(x0,23,zb),(x0,17,CROWN_H),(x0,-17,CROWN_H)
+    el,er=(x1,-w,zb),(x1,w,zb)
+    solid=Solid(Shell([face([fl,fr,tr,tl]),face([fl,el,er,fr]),face([fr,er,tr]),face([tr,er,el,tl]),face([tl,el,fl])]))
+    front=solid.faces().sort_by(Axis.X)[-1];bottom=solid.faces().sort_by(Axis.Z)[0]
+    hood=offset(solid,amount=-CROWN_CAP_WALL,openings=[front,bottom],kind=Kind.INTERSECTION)
+    top=[f for f in solid.faces() if abs(f.normal_at().Y)<1e-6 and f.normal_at().Z>.3][0]
+    n=top.normal_at();panel=offset(top,amount=-CROWN_CAP_PANEL_INSET,kind=Kind.INTERSECTION)
+    return hood-extrude(panel.moved(Location(tuple(n))),amount=1+CROWN_CAP_PANEL_DEPTH,dir=-n)
+
+def build_parts(catalog=True,reliefs=True):
+    out={}
+    def add(n,s,f,color='#e3ddc9',kind='physical',alpha=1,owner=None):
+        out[n]=dict(shape=tint(s,n,color,alpha),frame=f,kind=kind,owner=owner,color=color,alpha=alpha)
+    # Planar front ring and sloping depth band; crown fuses into this one part.
+    outer=prism(120,2,84,10,-2,0)+loft([profile(120,2,84,10,-2),profile(130,0,86,14,-8)],ruled=True)
+    cp=[(-23,73),(23,73),(23,85),(17,104),(-17,104),(-23,85)]
+    crown=extrude(Plane.YZ*Polygon(*cp,align=None),amount=24).moved(Location((-24,0,0)))
+    outer=outer+crown
+    # Inside of the depth band provides a truthful full-size display pocket.
+    inner=prism(127.6,1.2,84.8,13.3,-25,-8.2)+loft([profile(127.6,1.2,84.8,13.3,-8.2),profile(117.6,3.2,82.8,8.3,-2.8)],ruled=True)
+    ci=[(-21.8,72),(21.8,72),(21.8,84.8),(16.15,102.8),(-16.15,102.8),(-21.8,84.8)]
+    inner=inner+extrude(Plane.YZ*Polygon(*ci,align=None),amount=20.8).moved(Location((-22.8,0,0)))
+    face=outer-inner-prism(99,11,69,3,-5,1)
+    # Full-size board corner clearance and a separate shallow window seat.
+    face=face-block(-14.7,-3.5,-53.35,53.35,5.7,74.3)
+    face=face-prism(110.6,7.7,72.3,4,-2.9,-.95)
+    # Wide-angle optical path remains a clearance trial, not FOV certification.
+    face=face-axial(8.6,6,(-1,0,CAMERA_BOTTOM+14.4))-axial(1.8,5,(-1,LED_Y,LED_Z))
+    # Recessed perimeter lands and real screw seats. Upper screws avoid camera.
+    for y,z in FRONT_SCREWS:
+        pad=axial(2.3,5,(-2.5,y,z))
+        face=face+pad
+        face=face-axial(1.15,9,(-3,y,z))-axial(2.1,2,(-.7,y,z))
+    # Integral visual panel lines: shallow, not through-cracks.
+    for y in [-38,38]:face=face-block(-.5,.1,y-.35,y+.35,70,84)
+    # Viewer material is translucent so the real 1:1 internal packaging remains
+    # inspectable while the shell stays present in the assembly view.
+    add('front_bezel_integral_camera_crown',face,'R',alpha=.28,owner='M019a')
+    # Thin side shell and separate octagonal rear cover with real 0.8 seam.
+    skin=stern(-112.6,-8.8)-stern(-114,-8,inside=True)
+    skin=skin-block(-24.8,-8,-23.8,23.8,84.2,90)
+    # Underside access is necessary for the fixed yoke and external cable loop.
+    # Integral panel steps add the required 0.4 mm relief without extra joints.
+    for sign in [-1,1]:
+        # Recessed rectangular side lands stay clear of the round ear mount.
+        tool=block(-103,-82,63.8,65.1,24,62) if sign==1 else block(-103,-82,-65.1,-63.8,24,62)
+        recess=tool.intersect(block(-104,-81,64.6,66,23,63) if sign==1 else block(-104,-81,-66,-64.6,23,63))
+        if recess:skin=skin-recess
+    # Front receivers rooted in shell wall, not in the display envelope.
+    for y,z in FRONT_SCREWS:
+        boss=axial(3.2,7,(-12.3,y,z))-axial(.8,8,(-12.3,y,z))
+        # Upper bosses reach the roof; side bosses reach the sidewall.
+        bridge=block(-15.8,-9, min(y,math.copysign(64.5,y))-1,max(y,math.copysign(64.5,y))+1,z-2,z+2) if abs(y)>50 else block(-15.8,-9,y-2,y+2,z,85.2)
+        bridge=bridge & prism(130,0,86,14,-16,-8)
+        skin=skin+boss+bridge
+    # Hipped roof cap behind the crown (appearance, 2026-09-25).
+    skin=skin+crown_roof_cap()
+    rear=stern(-115,-113.4)
+    for y,z in REAR_SCREWS:
+        # cover local reinforcement + receivers attached to shell sidewall
+        rear=rear+axial(3.3,2.7,(-113.65,y,z))
+        rear=rear-axial(1.15,7,(-113,y,z))-axial(2.1,2.2,(-114.6,y,z))
+        receiver=axial(3.2,5,(-109.8,y,z))-axial(.8,6,(-109.8,y,z))
+        bridge=block(-112.3,-107.3,min(y,math.copysign(64,y))-2,max(y,math.copysign(64,y))+2,z-2,z+2) & stern(-113,-107)
+        skin=skin+receiver+bridge
+    add('main_octagonal_skin',skin,'R',alpha=.28,owner='M019a')
+    add('removable_octagonal_rear_cover',rear,'R',alpha=.28,owner='M019a')
+    # A 110-wide opaque border masks all glass outside the aperture.
+    mask=prism(110,8,72,4,-2.65,-1.15)-prism(99,11,69,3,-3,-1)
+    add('window_opaque_mask_110mm',mask,'R','#202728',owner='M003')
+    add('window_clear_optical_area',prism(99,11,69,3,-2.65,-1.15),'R','#8b9a9d',alpha=.12,owner='M003')
+    # Transparent glazing is represented by its perimeter, with image surface.
+    add('active_display_95_04x53_86',block(-3.75,-3.55,-47.52,47.52,13.07,66.93),'R','#111f24',owner='M002')
+    add('display_module_1to1_envelope',display_catalog() if catalog else display_fit_proxy(),'R','#245967',owner='M002')
+    add('display_connector_and_flashing_access_reserve',block(-18,-14.4,-53.05,53.05,6,74),'R','#49adbe','reserve',.25)
+    if catalog:
+        camera=clean_catalog(CATALOG/'camera-module-3-wide.step').rotate(Axis.Y,-90).moved(Location((-10.805,-12.5,CAMERA_BOTTOM)))
+    else:camera=camera_fit_proxy()
+    add('camera_module_3_wide_1to1',camera,'R','#2d5949',owner='M005')
+    add('camera_CSI_exit_and_bend_reserve',block(-24,-14.5,-11,11,75,87),'R','#61a384','reserve',.3)
+    add('removable_camera_edge_bracket_trial',camera_edge_clamp(),'R','#8c9e9a',owner='M005')
+    add('addressable_status_LED_package_reserve',block(-8,-5,LED_Y-2.5,LED_Y+2.5,LED_Z-2.5,LED_Z+2.5),'R','#d3922d','reserve',.7,owner='M007')
+    # HEAD-CAD-12: selected WS2812B-2020-V6 on a 5 x 5 x 0.8 mm carrier (PCB-11) inside the reserve,
+    # emitting +X into the diffuser; 1.36 mm air gap to the diffuser's rear face at X -5.
+    add('status_LED_PCB08_carrier_5x5',block(-8,-7.2,LED_Y-2.5,LED_Y+2.5,LED_Z-2.5,LED_Z+2.5),'R','#2d8c53',owner='M007')
+    add('status_LED_WS2812B_2020',block(-7.2,-6.36,LED_Y-1,LED_Y+1,LED_Z-1,LED_Z+1),'R','#f2f0e6',owner='M007')
+    add('crown_status_light_diffuser',axial(1.7,2.9,(-3.55,LED_Y,LED_Z)),'R','#e4b35b',owner='M007')
+    # C2 footprint is exact; installed height/USB socket are clearly reserved.
+    add('C2_ESP32_S3_Zero_23_5x18_footprint',c2_catalog() if catalog else block(-26.6,-25,-38,-20,28,51.5),'R','#67559a',owner='M008')
+    add('C2_installed_components_reserve',block(-34,-26.6,-37,-21,28,51.5),'R','#a58ac4','reserve',.35)
+    add('C2_USB_C_withdrawal_BOOT_RESET_service_reserve',block(-33,-24,-35,-23,51.5,81.5),'R','#a58ac4','reserve',.18)
+    # One connected rolling cradle: perimeter rails + cross + 4 flange struts.
+    cradle=prism(116,2.5,76,8,-23.5,-21)-prism(110,5.5,73,6,-24,-20)
+    cradle=cradle+block(-23.5,-21,-57,57,ROLL_Z-2.5,ROLL_Z+2.5)+block(-23.5,-21,ROLL_Y-3,ROLL_Y+3,3,75)
+    flange=axial(17,3,(-37.5,ROLL_Y,ROLL_Z))+axial(5,3,(-38.5,ROLL_Y,ROLL_Z))
+    for yoff in [-10,10]:
+        for zoff in [-10,10]:
+            cradle=cradle+axial(2.5,14,(-29,ROLL_Y+yoff,ROLL_Z+zoff))
+            cradle=cradle+block(-23.5,-21,ROLL_Y+yoff-2.5,ROLL_Y+yoff+2.5,ROLL_Z-11,ROLL_Z+11)
+    cradle=cradle+flange
+    # Stalks run ahead of the pitch pins and connect to ear inner front rim.
+    for sign in [-1,1]:
+        stalk=block(-23.5,-16,sign*61-7,sign*61+7,EAR_Z-2,EAR_Z+2)
+        pad=block(-23.5,-18,65,70.0,EAR_Z-7,EAR_Z+7)
+        if sign==-1:pad=pad.moved(Location((0,-135.0,0)))
+        stalk=stalk+pad
+        for zoff in [-4,4]:stalk=stalk-axial(.8,10,(-20.5,sign*68,EAR_Z+zoff),'y')
+        cradle=cradle+stalk
+    # Lower rail notches follow the independently observed extreme-pose corner
+    # clearance, while the middle rail stays connected through the central spine.
+    cradle=cradle-block(-24,-20,38,48,1,5)-block(-24,-20,-48,-38,1,5)
+    cradle=cradle-block(-24,-20,57,60,29,34)-block(-24,-20,-60,-57,29,34)
+    add('connected_rolling_cradle_flange_ear_stalks',cradle,'R','#718d95',owner='M010')
+    skin=out['main_octagonal_skin']['shape']
+    for sign in [-1,1]:
+        port=block(-24,-14.5,62,67,EAR_Z-7.5,EAR_Z+7.5)
+        if sign==-1:port=port.moved(Location((0,-129,0)))
+        skin=skin-port
+    skin_style=out['main_octagonal_skin']
+    skin_style['shape']=tint(skin,'main_octagonal_skin',skin_style['color'],skin_style['alpha'])
+    add('rolling_spindle_6mm',axial(3,32,(-56,ROLL_Y,ROLL_Z)),'R','#b7bfc0',owner='M016-18-R')
+    # 696-2Z (ISO 619/6-2Z) d6 x D15 x B5; details.py owns the seats.
+    for i,x in enumerate([-43,-65]):
+        add(f'roll_bearing_{i+1}_696_2Z',axial(7.5,5,(x,ROLL_Y,ROLL_Z))-axial(3.1,7,(x,ROLL_Y,ROLL_Z)),'P','#acb5b9',owner='M016-18-P')
+    cartridge=block(-69,-39,ROLL_Y-12,ROLL_Y+12,ROLL_Z-12,ROLL_Z+12)-axial(8.3,32,(-54,ROLL_Y,ROLL_Z))
+    add('bearing_cartridge_trial',cartridge,'P','#c38a47',owner='M010-P')
+    add('coaxial_coupling_trial',axial(6,8.5,(-73.25,ROLL_Y,ROLL_Z))-axial(3.1,10,(-73.25,ROLL_Y,ROLL_Z)),'R','#b7bfc0',owner='M013-15-R')
+    if catalog:
+        servo=clean_catalog(CATALOG/'xc330.stp')
+        roll=servo.rotate(Axis.X,90).rotate(Axis.Z,90).moved(Location((-84,ROLL_Y,ROLL_Z)))
+        pitch=servo.rotate(Axis.X,-90).rotate(Axis.Y,270).moved(Location((PITCH_X,40,PITCH_Z)))
+    else:
+        # Case 23 mm (X -103.5..-80.5) plus the Ø16 x 3 horn on each face, per
+        # the official ROBOTIS drawing; the old single box filled the air
+        # round the front horn where the mounting bulkhead now sits.
+        roll=block(-103.5,-80.5,ROLL_Y-10,ROLL_Y+10,ROLL_Z-24.5,ROLL_Z+9.5)
+        roll=roll+axial(8,3,(-79,ROLL_Y,ROLL_Z))+axial(8,3,(-105,ROLL_Y,ROLL_Z))
+        pitch=block(PITCH_X-24.5,PITCH_X+9.5,17.5,46.5,PITCH_Z-10,PITCH_Z+10)
+    add('roll_XC330_1to1_reference',roll,'P','#a36f38',owner='M013-15-roll')
+    add('pitch_XC330_1to1_reference',pitch,'Y','#a36f38',owner='M013-15-pitch')
+    # Connected pitch frame, with relieved crossbar and an actuator saddle.
+    frame=block(-73,-39,-49,49,ROLL_Z-20,ROLL_Z-16)-block(-68,-44,-40,47,ROLL_Z-21,ROLL_Z-15)
+    for y in [-49,49]:
+        frame=frame+block(-74,PITCH_X+4,y-2,y+2,ROLL_Z-20,ROLL_Z-16)
+        frame=frame+block(PITCH_X-6,PITCH_X+6,y-2,y+2,ROLL_Z-16,PITCH_Z+6)
+        frame=frame-axial(4.2,6,(PITCH_X,y,PITCH_Z),'y')
+        add(f'pitch_trunnion_{y}',axial(4,9,(PITCH_X,y,PITCH_Z),'y'),'P','#b7bfc0',owner='M016-18-P')
+    frame=frame+block(-69,-39,ROLL_Y-12,ROLL_Y+12,ROLL_Z-16,ROLL_Z-12)
+    saddle=block(-108,-75,ROLL_Y-12,ROLL_Y+12,ROLL_Z-27.5,ROLL_Z-24.8)
+    for off in [-11.5,11.5]:
+        saddle=saddle+block(-107,-74,ROLL_Y+off-1.3,ROLL_Y+off+1.3,ROLL_Z-26,ROLL_Z-12)
+    # The saddle's old front block is replaced by the rear torsion box and
+    # case-screw wall in details.py.
+    frame=frame+saddle
+    # Open the positive-Y front crossbar below the fixed pitch servo's sweep;
+    # the rear crossbar, side arms and central cartridge seat remain connected.
+    frame=frame-block(-46,-37,16,47,ROLL_Z-21,ROLL_Z-15)
+    add('connected_pitch_frame_roll_servo_saddle',frame,'P','#c38a47',owner='M011-P')
+    # Short-knee legs keep the proven swept silhouette and mounting datums.
+    # The outside faces carry a shallow raised rail and recessed spine facet.
+    # A stepped inward shoulder makes the load path legible in the full robot
+    # view, while leaving at least 5.5 mm web across the narrowest step.
+    d=YAW_DISC_TOP_Z
+    for y in [-55,55]:
+        leg=extrude(Plane.XZ*Polygon(
+            (PITCH_X-21.5,d),(PITCH_X-5.5,d),(PITCH_X-13.5,d+10),
+            (PITCH_X-13.5,PITCH_Z-30),(PITCH_X-8.7,PITCH_Z-24),
+            (PITCH_X-9.3,PITCH_Z-24),(PITCH_X-9.3,PITCH_Z-20),
+            (PITCH_X-6.5,PITCH_Z-17),
+            (PITCH_X+4,PITCH_Z-8),(PITCH_X+4,PITCH_Z+6),
+            (PITCH_X-6,PITCH_Z+6),(PITCH_X-6,PITCH_Z-6),
+            (PITCH_X-21.5,PITCH_Z-30),align=None),amount=6).moved(Location((0,y+3,0)))
+        outer_face=58 if y>0 else -58
+        # Plane.XZ extrudes toward -Y. Each cutter straddles only the outer
+        # face, so the inner clearance and trunnion bearing face stay intact.
+        pocket_start=outer_face+0.05 if y>0 else outer_face+1.10
+        spine_facet=((PITCH_X-20.1,d+9),(PITCH_X-16.0,d+13),
+                     (PITCH_X-16.0,PITCH_Z-38),(PITCH_X-20.1,PITCH_Z-42))
+        recess=extrude(Plane.XZ*Polygon(*spine_facet,align=None),amount=1.15).moved(Location((0,pocket_start,0)))
+        leg=leg-recess
+        rail=extrude(Plane.XZ*Polygon(
+            (PITCH_X-21.3,d+3),(PITCH_X-19.9,d+3),
+            (PITCH_X-19.9,PITCH_Z-32),(PITCH_X-21.3,PITCH_Z-30),
+            align=None),amount=0.80).moved(Location((0,outer_face+0.75 if y>0 else outer_face+0.05,0)))
+        leg=leg+rail
+        leg=leg-axial(4.2,8,(PITCH_X,y,PITCH_Z),'y')
+        add(f'yaw_yoke_leg_{y}',leg,'Y','#536b78',owner='M011-Y')
+        # Optional contrast insert: 0.3 mm profile clearance and a 0.05 mm
+        # adhesive bed in the recess, with only 0.15 mm proud of the face.
+        # It can be printed flat in a second colour or the pocket can be painted.
+        accent=((PITCH_X-19.8,d+9.75),(PITCH_X-16.3,d+13.15),
+                (PITCH_X-16.3,PITCH_Z-38.72),(PITCH_X-19.8,PITCH_Z-42.15))
+        accent_start=outer_face+0.15 if y>0 else outer_face+1.05
+        inlay=extrude(Plane.XZ*Polygon(*accent,align=None),amount=1.2).moved(Location((0,accent_start,0)))
+        add(f'yaw_yoke_spine_inlay_{y}',inlay,'Y','#c38a47',owner='M011-Y')
+    # Flush turntable disc: top plate, outer rim and bearing hub, with a
+    # centre cable bore and a top groove carrying the yaw branch to the +Y leg.
+    disc=Cylinder(YAW_DISC_R,YAW_DISC_PLATE).moved(Location((PITCH_X,0,d-YAW_DISC_PLATE/2)))
+    disc=disc+(Cylinder(YAW_DISC_R,YAW_DISC_THICKNESS)-Cylinder(YAW_DISC_R-2,YAW_DISC_THICKNESS+1)).moved(Location((PITCH_X,0,d-YAW_DISC_THICKNESS/2)))
+    disc=disc+(Cylinder(YAW_BORE_R+5,YAW_DISC_THICKNESS)-Cylinder(YAW_BORE_R,YAW_DISC_THICKNESS+1)).moved(Location((PITCH_X,0,d-YAW_DISC_THICKNESS/2)))
+    # Only the rim and hub reach below the top plate: the RP-06 stationary
+    # pinion runs under the plate between them.
+    disc=disc-axial(YAW_BORE_R,YAW_DISC_THICKNESS+2,(PITCH_X,0,d-YAW_DISC_THICKNESS/2),'z')
+    disc=disc-block(PITCH_X-1.8,PITCH_X+1.8,0,46,d-3.4,d+1)
+    for i,deg in enumerate(YAW_HUB_BOLT_DEG,1):
+        theta=math.radians(deg)
+        bx=PITCH_X+YAW_HUB_BOLT_R*math.cos(theta)
+        by=YAW_HUB_BOLT_R*math.sin(theta)
+        disc=disc-axial(YAW_HUB_BOLT_CLEARANCE_R,YAW_DISC_PLATE+1,(bx,by,d-YAW_DISC_PLATE/2),'z')
+        disc=disc-axial(YAW_HUB_BOLT_HEAD_R,YAW_HUB_BOLT_RECESS,(bx,by,d-YAW_HUB_BOLT_RECESS/2),'z')
+        # Nominal ISO 7380 M3 x 6: 2.2 mm through the disc, 3.8 mm into
+        # the body hub insert. The head finishes 0.15 mm below the disc top.
+        screw=axial(1.5,6,(bx,by,d-YAW_HUB_BOLT_RECESS-3),'z')
+        screw=screw+axial(2.85,1.65,(bx,by,d-YAW_HUB_BOLT_RECESS+0.825),'z')
+        add(f'yaw_disc_to_body_hub_M3x6_{i}',screw,'Y','#b7bfc0',owner='M021-Y')
+    add('yaw_turntable_disc_flush',disc,'Y','#647787',owner='M012')
+    # Fixed over-top adapter reservation ties pitch actuator location to yoke.
+    # Exact XC330 mounting-hole pattern remains a detailing gate.
+    # Clip the unused outboard/rear corner to clear the deeper helmet shoulder
+    # at combined roll/look-up. Full servo seat and yoke attachment remain.
+    adapter=extrude(Polygon((PITCH_X-26,17),(PITCH_X+4,17),
+        (PITCH_X+4,55),(PITCH_X-5,55),(PITCH_X-26,41),align=None),amount=2).moved(Location((0,0,PITCH_Z+11)))
+    adapter=adapter+block(PITCH_X-26,PITCH_X-24.8,17,41,PITCH_Z-11,PITCH_Z+13)
+    adapter=adapter+block(PITCH_X-5,PITCH_X+3,52,58,PITCH_Z+6,PITCH_Z+13)
+    add('pitch_servo_to_yoke_adapter_trial',adapter,'Y','#647787',owner='M011-Y')
+    # Distinct layered ear rims and removable, hollow tapered caps. The caps
+    # have two supported receivers and a deep enough centre floor for real
+    # 1.2 mm colour inserts; the trim hardware is finished in details.py.
+    for sign in [-1,1]:
+        c=(EAR_X,sign*66.5,EAR_Z)
+        rim=axial(30,3,c,'y')-axial(28,5,c,'y')
+        # A continuous 1.8 mm annular web connects the cap receivers but
+        # starts outside the cradle stalk pads, preserving outboard removal.
+        rim=rim+(axial(24.8,1.8,(EAR_X,sign*71.0,EAR_Z),'y')-axial(20.3,2.2,(EAR_X,sign*71.0,EAR_Z),'y'))
+        cap=Cone(30,27,6.2).rotate(Axis.X,-90*sign).moved(Location((EAR_X,sign*71.9,EAR_Z)))
+        hollow=Cone(28.1,25.4,3.9).rotate(Axis.X,-90*sign).moved(Location((EAR_X,sign*70.05,EAR_Z)))
+        cap=cap-hollow
+        # A 1.3 mm recess leaves 1.7 mm behind the finish. The inlays below
+        # are 1.2 mm prints with a 0.1 mm adhesive bed, flush to the cap.
+        cap=cap-axial(22.5,2.6,(EAR_X,sign*75,EAR_Z),'y')
+        # Two M2 cap screws sit on the upper semicircle: the lower quadrant
+        # sweeps past the pitch yoke at the roll stops. Their receivers tie
+        # into both the outer ring and internal annular web.
+        screw_positions=[]
+        for angle in [30,150]:
+            a=math.radians(angle);xx=EAR_X+25*math.cos(a);zz=EAR_Z+25*math.sin(a)
+            screw_positions.append((xx,zz))
+            cap=cap+axial(2.6,3,(xx,sign*73.1,zz),'y')
+            # Stepped receiver: a wider inboard foot overlaps the outer ring
+            # below the cap, while the upper boss meets the annular web.
+            rim=rim+axial(3.8,1.6,(xx,sign*68,zz),'y')
+            rim=rim+axial(3,2.9,(xx,sign*70.15,zz),'y')
+        rim=rim & axial(30,9,(EAR_X,sign*68.5,EAR_Z),'y')
+        for xx,zz in screw_positions:
+            cap=cap-axial(1.15,8,(xx,sign*73,zz),'y')-axial(2.1,1.6,(xx,sign*74.5,zz),'y')
+            cap=cap-axial(3.3,5.8,(xx,sign*69.4,zz),'y')
+            rim=rim-axial(.8,6,(xx,sign*69.3,zz),'y')
+            rim=rim-axial(3.3,.4,(xx,sign*72.1,zz),'y')
+            add(f'ear_{sign}_M2_{len([n for n in out if n.startswith(f"ear_{sign}_M2")])+1}',button_screw(xx,sign*73.7,zz,'y',sign),'R','#555b5a',owner='M021a')
+        for zoff in [-4,4]:
+            zz=EAR_Z+zoff
+            rim=rim-axial(1.15,9,(-20.5,sign*69,zz),'y')
+            # Seat the hidden M2x4 head below the cap's inner roof, leaving
+            # the cap back wall intact and the fastener accessible cap-off.
+            rim=rim-axial(2.1,3.1,(-20.5,sign*72.05,zz),'y')
+            add(f'ear_{sign}_hidden_mount_M2_{zoff}',button_screw(-20.5,sign*70.5,zz,'y',sign,4),'R','#535957',owner='M021-R')
+        # Ear enclosure parts use the same inspection/X-ray material as the
+        # front, side and rear skins; hardware and moving structure stay opaque.
+        add(f'ear_{sign}_ridged_inner_mount',rim,'R','#303a3c',alpha=.20,owner='M019a')
+        add(f'ear_{sign}_hollow_removable_cap',cap,'R',alpha=.20,owner='M019a')
+        ring=axial(21.8,1.2,(EAR_X,sign*74.4,EAR_Z),'y')-axial(20.6,1.4,(EAR_X,sign*74.4,EAR_Z),'y')
+        inset=axial(20.4,1.2,(EAR_X,sign*74.4,EAR_Z),'y')
+        add(f'ear_{sign}_amber_inlay',ring,'R','#b88636',alpha=.20,owner='M019a')
+        add(f'ear_{sign}_dark_centre',inset,'R','#3d484a',alpha=.20,owner='M019a')
+    # Front screws need an 8 mm reach from the -1.7 seat into shell receivers.
+    # Model 10 mm shanks by extending the 6 mm reference only for these seats.
+    for i,(y,z) in enumerate(FRONT_SCREWS):
+        screw=button_screw(-1.7,y,z)+axial(1,4,(-9.7,y,z))
+        add(f'front_M2x10_{i+1}',screw,'R','#535957',owner='M021a')
+    for i,(y,z) in enumerate(REAR_SCREWS):
+        add(f'rear_M2x6_{i+1}',button_screw(-113.5,y,z,'x',-1),'R','#535957',owner='M021a')
+    from details import detail_parts
+    detail_parts(out)
+    if reliefs:
+        # Window construction samples deliberately differ from verification.
+        tools_by_side=[]
+        # Samples are clamped into the A+ firmware envelope: poses the head
+        # never reaches must not carve the helmet.
+        import motion_envelope as env
+        table=env.load()
+        # Dense along the boundary: each relief is one union box per tool, so
+        # sparse clamped samples leave gaps between them.
+        samples=env.grid_poses(table,[ROLL_STOP[0],-18,-12,-6,0,6,12,18,ROLL_STOP[1]],[PITCH_STOP[0],-22,-18,-14,-10,-5,0,5,10,15,20,25,30,35,40,PITCH_STOP[1]])
+        for support_name in ['yaw_yoke_leg_-55','yaw_yoke_leg_55','yaw_turntable_disc_flush']:
+            support=out[support_name]['shape']
+            tools_by_side.append([support.rotate(PITCH_AXIS,-p).rotate(ROLL_AXIS,-r) for r,p in samples])
+        for name in ['main_octagonal_skin','ear_-1_ridged_inner_mount','ear_1_ridged_inner_mount','ear_-1_hollow_removable_cap','ear_1_hollow_removable_cap','connected_rolling_cradle_flange_ear_stalks']:
+            s=out[name]['shape'];cuts=[]
+            for tools in tools_by_side:
+                bounds=[]
+                for t in tools:
+                    for c in pieces(s.intersect(t)):
+                        if c.volume>1e-5:bounds.append(c.bounding_box())
+                if bounds:
+                    lo=[min(tuple(b.min)[i] for b in bounds)-2 for i in range(3)]
+                    hi=[max(tuple(b.max)[i] for b in bounds)+2 for i in range(3)]
+                    cuts.append(block(lo[0],hi[0],lo[1],hi[1],lo[2],hi[2]))
+            if cuts:
+                style=out[name]
+                cut=s.cut(*cuts)
+                # A relief box ending within 0.1 mm of a free edge leaves a
+                # paper-thin chip; drop fragments below 5 mm3, keep real parts.
+                kept=[x for x in cut.solids() if x.volume>5.]
+                if len(kept)<len(cut.solids()):cut=kept[0] if len(kept)==1 else Compound(children=kept)
+                style['shape']=tint(cut,name,style['color'],style['alpha'])
+    return out
+
+def assembly(internals=False,roll=0,pitch=0,yaw=0):
+    from inspection_scene import scene
+    return scene(build_parts(),internals=internals,roll=roll,pitch=pitch,yaw=yaw)

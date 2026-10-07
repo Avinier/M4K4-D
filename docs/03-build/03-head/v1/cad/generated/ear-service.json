@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "method": "Rigid, nominal neutral-pose outboard withdrawal; two cap screws removed before cap, two hidden mount screws removed before rim.",
+  "sides": {
+    "-1": {
+      "cap_screws": [
+        "ear_-1_M2_1",
+        "ear_-1_M2_2"
+      ],
+      "hidden_mount_screws": [
+        "ear_-1_hidden_mount_M2_-4",
+        "ear_-1_hidden_mount_M2_4"
+      ],
+      "cap_solids": 1,
+      "rim_solids": 1,
+      "cap_valid": true,
+      "rim_valid": true,
+      "finish_intersections_mm3": [
+        0,
+        0
+      ],
+      "hardware_intersections": [],
+      "cap_withdrawal_hits": [],
+      "inner_mount_withdrawal_hits": []
+    },
+    "1": {
+      "cap_screws": [
+        "ear_1_M2_1",
+        "ear_1_M2_2"
+      ],
+      "hidden_mount_screws": [
+        "ear_1_hidden_mount_M2_-4",
+        "ear_1_hidden_mount_M2_4"
+      ],
+      "cap_solids": 1,
+      "rim_solids": 1,
+      "cap_valid": true,
+      "rim_valid": true,
+      "finish_intersections_mm3": [
+        0,
+        0
+      ],
+      "hardware_intersections": [],
+      "cap_withdrawal_hits": [],
+      "inner_mount_withdrawal_hits": []
+    }
+  },
+  "limitations": [
+    "No wire flex, driver swept volume, press-fit force, insert retention or service-cycle evidence."
+  ]
+}
