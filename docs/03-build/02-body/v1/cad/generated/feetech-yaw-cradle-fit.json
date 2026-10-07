@@ -1,0 +1,62 @@
+{
+  "compute_shift_y_mm": -6.0,
+  "pcb09_main_shift_x_mm": 6.0,
+  "cradle": {
+    "cradle": {
+      "solids": 1,
+      "valid": true,
+      "overlap_mm3": {
+        "servo": 0.0,
+        "Pi": 0.0,
+        "PCB09": 0.0,
+        "frame_without_pad": 95.04,
+        "yaw_housing": 0.0,
+        "cassette": 0.0,
+        "shell": 0.0,
+        "fan_web_intended_anchor": 95.04
+      },
+      "regions_mm": {
+        "frame_without_pad": [
+          {
+            "volume_mm3": 95.04,
+            "bounds_mm": [
+              [
+                2.0,
+                30.0
+              ],
+              [
+                56.099999999999994,
+                57.2
+              ],
+              [
+                123.80000000000001,
+                131.0
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "strap": {
+      "solids": 1,
+      "valid": true,
+      "overlap_mm3": {
+        "servo": 0.0,
+        "Pi": 0.0,
+        "PCB09": 0.0,
+        "frame_without_pad": 0.0,
+        "yaw_housing": 0.0,
+        "cassette": 0.0,
+        "shell": 0.0,
+        "fan_web_intended_anchor": 0.0
+      }
+    }
+  },
+  "integrated_frame": {
+    "solids": 1,
+    "valid": true,
+    "servo_overlap_mm3": 0.0,
+    "Pi_overlap_mm3": 0.0,
+    "PCB09_overlap_mm3": 0.0
+  }
+}

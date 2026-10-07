@@ -1,6 +1,6 @@
 {
   "tray_solids": 1,
-  "tray_volume_cm3": 19.21,
+  "tray_volume_cm3": 17.15,
   "pcb_bottom_z_mm": 94.045,
   "pcb_to_boss_gap_mm": 0.0,
   "bosses_grown_0.3_vs_pi_underside_mm3": {},
@@ -17,8 +17,8 @@
   "tray_screw_heads_vs_tray_rib_mm3": {},
   "unit_vs_fixed_mm3": {},
   "unit_vs_harness_reserves_mm3_info": {
-    "COMPUTE_TRAY:HARNESS_SIGNAL_TRUNK": 458.638,
-    "COMPUTE_TRAY:HARNESS_SENSOR_TRUNK": 440.231
+    "COMPUTE_TRAY:HARNESS_SIGNAL_TRUNK": 169.875,
+    "COMPUTE_TRAY:HARNESS_SENSOR_TRUNK": 487.255
   },
   "pi_and_cooler_to_tray_hardware_mm3": {},
   "tray_screw_driver_clashes": {},

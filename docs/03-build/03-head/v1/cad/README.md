@@ -22,6 +22,12 @@ manually positioned solids.
 | `check_ears.py`, `generated/ear-service.json` | Nominal cap and inner-mount removal paths, fastener count, and solid/finish checks. |
 | `check_integration.py` | Checks the shared yaw datum, disc height, three hub screws, and head sweep floor. |
 | `generated/`, `snapshots/` | Derived fit data and review images. |
+| `purchased/sts3045m_reference.step.py`, `.step` | Drawing-based Feetech STS3045M packaging reference. See its [brief](purchased/sts3045m_reference-brief.md); horn and mounts still need measured details. |
+| `check_feetech_head_envelopes.py`, `check_feetech_head_fit.py`, `feetech_mass_whatif.py` | Candidate placements, source-built collision screen and non-destructive mass sensitivity. These do not change the live XC330 assembly or A0 axes. |
+
+The [Feetech head fit report](feetech-head-fit.md) records the current
+neutral-pose clashes and preferred trial clockings. It is a redesign input,
+not a release of the replacement mounts.
 
 Run from this directory with Python 3.13 and `cadgen==0.4.28`; the existing
 project runtime is `/Users/avinier/.codex/runtimes/text-to-cad/0.4.28/venv/bin/python`.

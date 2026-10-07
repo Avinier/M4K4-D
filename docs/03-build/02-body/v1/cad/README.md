@@ -17,6 +17,8 @@ This directory follows the chassis v1 CAD layout: an editable model and STEP ent
 | `check_yaw_stage.py` | Head yaw stage (D-044): fit, ±61° sweep with the counter-rotating pinion, ±62° hard stops, involute mesh clearance, cartridge and pinion install paths, and load, spring, FFC-loop and mass estimates (about 5 min). |
 | `check_power_button.py` | Rear-panel mushroom power button: well clearance, PCB-02 clearance, W40 lead and `J2-9` plug clashes and the panel-removal sweep (D-041; about 5 min). |
 | `check_body_layout.py` | CAD-volume mass/CoM, body axes/envelope, and whole-robot stability-screen audit. |
+| `check_feetech_yaw_fit.py`, `check_feetech_yaw_relocation.py` | Original-layout ST3215-HS collision and gear-circle relocation screens. The original compute layout fails. |
+| `check_feetech_yaw_compute_shift.py`, `check_feetech_yaw_cradle.py` | Exact-solid packaging checks for a trial at the original pinion centre: Pi/cooler/PCB-09 −Y 6 mm, PCB-09 outer board +X 6 mm, XC330 pad removed, new U-cradle. [Findings](feetech-yaw-fit.md), [candidate frame](feetech-yaw-frame-candidate.step) and [package](feetech-yaw-package.step) are separate from the live XC330 body assembly. |
 | `write_outputs.py` | Writes body dimensions, frames, and a partial body mass-register report to `generated/`. |
 | `purchased/` | Provenance and current import locations for vendor STEP sources. |
 | `snapshots/` | Dated images from STEP review. |
@@ -210,6 +212,23 @@ It also gives these estimates (`E`):
 - **Spring:** 0.25 N·m/rad, 1.49 GPa at preload.
 - **Servo side load:** 8.7 N at rest, 13.3 N at peak, 0.2 N·m on its output. XC330 radial ratings are unpublished.
 - **Drag:** the scissor's mesh friction (about 0.02 N·m) is the one that can use up RP-01's 8% yaw margin. B1 measures it.
+
+### Feetech yaw servo and compute shift (D-048)
+
+The ST3215-HS (`yaw_servo_st3215_hs()`, official Waveshare STEP) hangs horn-up on the
+pinion axis with its case running −X, 7.6 mm below the old XC330 seat so its two
+horn-face plugs fit under the plate. Four M2 × 8 screws go down through pillars of a
+frame-integral clamp ring (`_yaw_servo_mount()`) into its horn-face corner holes; two
+side walls carry the ring to the pad under the plate, and a window between them keeps
+the plug recess clear and opens to −X for W15. The horn axis is 25.5 mm from the STEP
+origin (drawing: 10.11 mm from the case end); the earlier `check_feetech_yaw_*` trial
+scripts used the origin and are superseded by `check_yaw_stage.py`.
+
+The compute stack moves by `COMPUTE_SHIFT_X/Y` (+10, −6 mm): Pi, cooler, tray bosses,
+PCB-09 and the Pi plug reserves. The tray's +Y edge stops at Y 23.5 so it still slides
+in from the front past the servo; its rear +Y screw moved to (−24, 17.5) and the front
+screw to (64, −41.5) on a new −Y ear. Checks: `check_yaw_stage.py`, `check_compute_mount.py`,
+`check_cooling_path.py`, `check_body_frame_fit.py`, `check_body_layout.py`.
 
 ### Microphone mounts (D-037)
 

@@ -1,0 +1,82 @@
+{
+  "basis": "E sensitivity; only servo mass/box replaced, old structural geometry, axes and mounts retained",
+  "source": "mass-placement.json",
+  "working": {
+    "roll": {
+      "mass_g": 376.2112187900371,
+      "center_mm": [
+        -32.616937629685175,
+        -1.0557727174285028,
+        47.90073787923471
+      ],
+      "estimated_inertia_kg_m2_at_old_axis": 0.0006991729729425121
+    },
+    "pitch": {
+      "mass_g": 482.092046271171,
+      "center_mm": [
+        -41.5210522383665,
+        -0.9015745129541051,
+        45.77481107599061
+      ],
+      "estimated_inertia_kg_m2_at_old_axis": 0.0008344063139725094
+    },
+    "yaw": {
+      "mass_g": 617.6282500464206,
+      "center_mm": [
+        -41.901182607427764,
+        1.1197297587918855,
+        34.24216069244335
+      ],
+      "estimated_inertia_kg_m2_at_old_axis": 0.0013578636007989355
+    }
+  },
+  "baseline": {
+    "c2_g": 20.0,
+    "roll": {
+      "mass_g": 376.2112187900371,
+      "center_mm": [
+        -32.616937629685175,
+        -1.0557727174285028,
+        47.90073787923471
+      ],
+      "estimated_inertia_kg_m2": 0.0006991729729425121
+    },
+    "pitch": {
+      "mass_g": 470.292046271171,
+      "center_mm": [
+        -40.009731806258976,
+        -0.9090216910099177,
+        45.79603435033242
+      ],
+      "estimated_inertia_kg_m2": 0.0007872099550284104
+    },
+    "yaw": {
+      "mass_g": 594.0282500464206,
+      "center_mm": [
+        -40.690757790655326,
+        0.500015541466869,
+        33.79139645357713
+      ],
+      "estimated_inertia_kg_m2": 0.0012957851483725873
+    }
+  },
+  "nominal_servo_placements_mm": {
+    "roll": [
+      -97.4,
+      -1.0557739267834358,
+      41.90092110829701
+    ],
+    "pitch": [
+      -46.00973006401559,
+      30.6,
+      45.7964533110988
+    ]
+  },
+  "open": [
+    "new mount and horn mass",
+    "measured servo CoM and tensor",
+    "A0 re-solve",
+    "head structure/clearance/FEA",
+    "motion \u00a711.3"
+  ]
+}

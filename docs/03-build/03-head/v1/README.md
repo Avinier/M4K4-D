@@ -10,3 +10,12 @@ builds the head on the latest body v1 and chassis v1 source; the standalone
 The integrated CAD is a geometry and packaging handoff. The purchased fits,
 print process and tolerances, cable flex, and measured balance remain physical
 build checks before fabrication release.
+
+The head's purchased parts and their selection state are in the
+[head BOM](BOM.md).
+
+The Feetech change is tracked in the [actuator screen](feetech-actuator-screen.md),
+[revised storyboard](feetech-motion-storyboard.md), and
+[bench protocol](feetech-bench-protocol.md). The drawing-based STS3045M STEP
+and exploratory fits are in [cad/](cad/README.md); the integrated head export
+still contains the legacy XC330 mount geometry pending redesign.

@@ -100,7 +100,7 @@ def main():
     pitch_roll_x_bound = (2 * pitch["mass_g"] * pitch_offset
                           + 2 * roll["mass_g"] * roll_offset) / robot["mass_g"]
     head_x_min = M.BODY_AXIS_X - yaw_radius
-    yaw_x_shift = head_mass * (head_x_min - register["RP01_HEAD_LAYOUT04"][2][0]) / robot["mass_g"]
+    yaw_x_shift = head_mass * (head_x_min - register["HEAD_V1"][2][0]) / robot["mass_g"]
     worst_pose_x = x + yaw_x_shift - pitch_roll_x_bound
     worst_pose_z = z + pitch_roll_x_bound
     worst_pose_a_tip = 9.81 * worst_pose_x / worst_pose_z

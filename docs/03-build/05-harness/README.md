@@ -42,7 +42,7 @@
 | Micro-Fit 3.0 | `J3-4`, `J4-2`, `J4-4`, `J4-5`, `J5-7`, `J8-1`, `J10-1`, `J2-8` (D-040), motor inline pairs | 43025 receptacle; 43645/43640 wire-to-wire (`D`) | Female 43030-0007, 20–24 AWG, 8.5 A max (`D`); male 43031 series | AWG22 (motor pairs: the MOT3001's own leads) | Molex 63819-0900 20–24 AWG (`E`, confirm the tool PN) |
 | JST GH 1.25 mm | All signals | GHR-xxV-S | Pre-crimped leads (SSHL-002T-P0.2 on AWG28) | AWG28 pre-crimped, double- or single-ended | None. Engineer PA-09 class only for re-pinning |
 | JST SM 2.5 mm | Pack NTC break | SMP-02V-BC / SMR-02V-B | Pre-wired pigtail pair | AWG22–26 pigtails, soldered | None |
-| JST EH | XC330 yaw servo `J3-5` | ROBOTIS 3-pin cable (vendor) | Vendor | Vendor | None |
+| 5264-3P servo | Feetech ST3215-HS yaw `J3-5`; STS3045M pitch/roll within head | Feetech/Waveshare 3-pin cable; [Waveshare states ST-series compatibility](https://www.waveshare.com/sr-cable-5264-3pin.htm) | Vendor | Vendor lead, current rating to confirm | None |
 | Butt splice | `BATBUS` + and − forks | Insulated 12–10 AWG seamless butt splice: 2 × AWG16 in one end, 1 × AWG16 folded double in the other; adhesive dual-wall heat-shrink over it | — | AWG16 | Ratcheting insulated-terminal crimper |
 | USB-C plug | Pi 5 power `W10` | Right-angle, solder type, with a 56 kΩ Rp from CC to VBUS inside the shell (CN-03) | Soldered | AWG18 | Soldering iron |
 
@@ -69,9 +69,9 @@ Lengths are `E`: Manhattan routes through CAD waypoints plus service slack. Cut 
 | `W10` `PB-COMPUTE` | PCB-04 `J4-1` → Pi 5 USB-C | Micro-Fit+ 1×2 / right-angle USB-C plug (S) | 2 × AWG18 | 100 | Pi −Y edge, down past the tray (`PI5_POWER_PIGTAIL_DROP`) |
 | `W11` `PB-SAFE-BASE` | PCB-04 `J4-4` → C3 `J10-1` | Micro-Fit 3.0 2×1 both ends | 2 × AWG22 | 110 | −Y side up to the carrier front edge |
 | `W12` `PB-AUDIO-OUT` | PCB-04 `J4-5` → PCB-05 `J5-7` | Micro-Fit 3.0 2×1 both ends | 2 × AWG22 | 160 | +Y, then forward (BO-006) |
-| `W13` `PB-HEAD` pitch/roll | PCB-03 `J3-4` → PCB-08 `J8-1` pins 1/4 | Micro-Fit 3.0 2×1 / one leg of the `J8-1` 2×3 plug | 2 × AWG22 | 160 | −Y riser (`HARNESS_HEAD_RISER_*`) |
+| `W13` `PB-HEAD-PR` pitch/roll | PCB-03 `J3-4` → PCB-08 `J8-1` pins 1/4 | Micro-Fit 3.0 2×1 / one leg of the `J8-1` 2×3 plug | 2 × AWG22 | 160 | 5.5 V setpoint; 2.8 A aligned head-servo stall allowance at the 6 V datasheet point, pending B1; −Y riser (`HARNESS_HEAD_RISER_*`) |
 | `W14` `PB-SAFE-C2` + `PB-DISPLAY` | PCB-04 `J4-2` → `J8-1` pins 2/5 and 3/6 | Micro-Fit 3.0 2×2 / the other leg of the `J8-1` plug | 4 × AWG22 | 140 | −Y riser, joins `W13` in one sleeve |
-| `W15` yaw servo | PCB-03 `J3-5` → XC330-M181 | ROBOTIS 3-pin EH cable | Vendor | 120 | Up to the servo at X −8…26, Y 27…47 |
+| `W15` yaw servo | PCB-03 `J3-5` → ST3215-HS | Waveshare/Feetech 5264-3P servo lead | Vendor, current rating to confirm | 120 target; stocked leads are longer and need restraint | **12 V yaw-only supply**, GND and shared `SERVO_DATA`; routing and connector position to recheck after yaw-bay fit |
 | `W16` charge inlet ([D-040](../decisions.md#d-040)) | PCB-13 on the rear panel → PCB-02 `J2-8` | S / Micro-Fit 3.0 2-way (43025, female on the cable) | 2 × AWG22 (`VSNK`, `GND`) | 150 | +Y through the gap behind PCB-02 (`CHARGE_INLET_W16_LEAD_RESERVE_1/2`), forward to the `J2-8` plug on the PCB-02 +Y edge. Unplug before lifting the rear panel away |
 
 ### 4.2 Signals (all GH, AWG28 pre-crimped)
@@ -92,7 +92,7 @@ Lengths are `E`: Manhattan routes through CAD waypoints plus service slack. Cut 
 | `W34` nose | GP2Y0A21 (S) and the Hall board pads (S) → `J10-8` | GH5, single-ended | 220 | `HARNESS_NOSE_J10_8_*` route (D-013, D-027) |
 | `W36` rear TCRT | TCRT5000 legs (S) → `J10-10` | GH4, 350 mm single-ended (CH-020) | 350 | [rear-tcrt-lead.md](../01-chassis/v1/research/rear-tcrt-lead.md) |
 | `W37` CSI | Pi 5 ↔ PCB-14 (head side: PCB-14 ↔ Camera Module 3) | 22-pin 0.5 mm FFC, about 200 mm (Raspberry Pi 5 camera cable), through the yaw cassette | — | Changed by [D-044](../decisions.md#d-044): it now crosses yaw in the FFC cassette (BO-050) and demates at PCB-14 |
-| `W42` yaw power FFC | PCB-08 `J8-6` ↔ PCB-14 | 22-pin 0.5 mm FFC, about 200 mm, in the cassette | — | D-044: carries the three `J8-1` power pairs (7 + 7, 2 + 2, 2 + 2 conductors) |
+| `W42` yaw power FFC | PCB-08 `J8-6` ↔ PCB-14 | 22-pin 0.5 mm FFC, about 200 mm, in the cassette | — | Carries the three `J8-1` power pairs (7 + 7 head-servo, 2 + 2 C2, 2 + 2 display conductors). The 2.8 A aligned head stall divides to 0.40 A per parallel head conductor **only with verified equal sharing**; check FFC/contact ampacity and heat. The 12 V yaw supply stays on the body side |
 | `W43` yaw sideband FFC | PCB-08 `J8-7` ↔ PCB-14 | 22-pin 0.5 mm FFC, about 200 mm, in the cassette | — | D-044: the `J8-3`, `J8-5` and `J8-4` signals, spares dropped |
 | ~~`W38`~~ | Not fitted (D-041): `J10-11` carried the E-stop status | — | — | |
 | `W39` | `J10-12` ↔ `J3-9` | GH4, double-ended | 100 | |
@@ -127,9 +127,9 @@ Pin 1 is the housing's marked cavity. On a dual-row Micro-Fit, pins 1…n are th
 | `J3-2`, `J3-3` (Micro-Fit+ 1×2) | 1 PB-DRIVE+, 2 GND |
 | `J4-1` (Micro-Fit+ 1×2) | 1 +5V15_PI, 2 GND |
 | `J4-4` ↔ `J10-1`, `J4-5` ↔ `J5-7` (Micro-Fit 3.0 2×1) | 1 +5 V branch, 2 GND |
-| `J3-4` (Micro-Fit 3.0 2×1) | 1 +5V_HEAD_PR, 2 GND_HEAD |
+| `J3-4` (Micro-Fit 3.0 2×1) | 1 +5V5_HEAD_PR, 2 GND_HEAD |
 | `J4-2` (Micro-Fit 3.0 2×2) | 1 +5V_C2, 2 +5V_DISPLAY, 3 GND_C2, 4 GND_DISPLAY |
-| `J8-1` (Micro-Fit 3.0 2×3) | 1 +5V_HEAD_PR, 2 +5V_C2, 3 +5V_DISPLAY, 4 GND_HEAD, 5 GND_C2, 6 GND_DISPLAY |
+| `J8-1` (Micro-Fit 3.0 2×3) | 1 +5V5_HEAD_PR, 2 +5V_C2, 3 +5V_DISPLAY, 4 GND_HEAD, 5 GND_C2, 6 GND_DISPLAY |
 | Motor inline (Micro-Fit 3.0 1×2 wire-to-wire) | 1 OUT1 (`AOUT1+BOUT1`), 2 OUT2 (`AOUT2+BOUT2`). Set the forward sense in firmware after the first spin |
 | NTC break (SM 2p) | 1 TS, 2 TS_RTN (thermistor; polarity-free) |
 | `J2-7` (GH2) | 1 TS, 2 TS_RTN. TS_RTN is the BQ25798 ground pad on PCB-02, never a cell or B− (charge-path.md §4) |
@@ -154,7 +154,9 @@ Each GH cable puts GND at pin 1 where it carries no supply, and keeps each diffe
 | `J10-12` ↔ `J3-9` (`W39`) | GND | C3_READY | MOTOR_PRESENT | GND | | | | | | |
 | `J2-9` (`W40`) | PB_SW (10 kΩ to latch `VIN`, 5.1 kΩ to `PB`) | GND | | | | | | | | |
 | `J9-4` (`W41`, XH2.54) | FAN+ (+5 V, 40-pin header) | FAN− (low-side MOSFET drain; Pi GPIO24 `FAN_EN`) | | | | | | | | |
-| `J3-5` (EH3, ROBOTIS) | GND | VDD | DATA | | | | | | | |
+| `J3-5` (Feetech 5264-3P mating header; verify footprint) | GND | +12V_YAW | SERVO_DATA | | | | | | | |
+
+**Servo bus electrical check (D-046/D-047).** The STS3045M [specification](https://pages.switch-science.com/comparison/files/feetech/serial-sts/STS3045M_datasheet.pdf) defines a 5264-3P lead as GND / Vcc / signal and recognizes a 2–5 V data high. Its supply is independent of that TTL signal. The ST3215-HS is in Waveshare's [ST-series 5264-3PIN cable family](https://www.waveshare.com/sr-cable-5264-3pin.htm). C2, two 5.5 V STS3045Ms and the 12 V ST3215-HS can therefore share **one signal net in principle**, provided all their grounds share a signal reference and the PCB-12 transceiver and every servo drive only a 3.3–5 V logic level. This is an electrical *hypothesis*, not a mixed-supply bus pass: measure idle/high/low voltage, rise time, turnaround contention, return current and error rate on the assembled W43/PCB-08/PCB-12/W15 path, including yaw at 12 V and head at 5.23 V. No 12 V pull-up may reach `SERVO_DATA` or C2. Confirm the received ST3215-HS cable cavity orientation before applying 12 V; the three logical functions in the table are not a license to copy the ROBOTIS EH footprint.
 
 `J2-4`/`J4-6` signal names follow RP-02 §6.4. The schematic may rename them, but not move a supply onto an end pin. The `W20` +5V_C2 replaces the RP-02 §8 `+5V_C2` line, which had no cable. `J10-8` and `J10-10` are unchanged from [nose-hall-board.md](../01-chassis/v1/research/nose-hall-board.md) and [rear-tcrt-lead.md](../01-chassis/v1/research/rear-tcrt-lead.md); the nose sensor is now the GP2Y0A21YK0F (D-019), not the A41.
 

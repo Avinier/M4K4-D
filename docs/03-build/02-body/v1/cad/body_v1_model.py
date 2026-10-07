@@ -638,13 +638,13 @@ YAW_SCISSOR_GAP = 0.2  # a printed 0.2 mm thrust land on the sprung half
 # collision) the halves part and lash returns.
 YAW_SCISSOR_PRELOAD_NM = 0.22
 YAW_PEAK_EXTERNAL_TORQUE_NM = 0.1099 * _HEAD_YAW_MASS["estimated_inertia_kg_m2"] / 0.001080
-YAW_SERVO_CURRENT_LIMIT_TORQUE_NM = 0.9 * 0.333
-YAW_SERVO_ENVELOPE = (-10.0 + BODY_AXIS_X, 10.0 + BODY_AXIS_X, 29.0, 55.0, 99.0, 133.0)
+YAW_SERVO_CURRENT_LIMIT_TORQUE_NM = 0.30  # D-048: = YAW_SERVO_TORQUE_LIMIT_NM, set in firmware
+YAW_SERVO_ENVELOPE = (-19.2, 26.2, 24.6, 49.4, 84.6, 122.4)  # D-048: ST3215-HS STEP bounds as placed
 YAW_OPENING_RADIUS = 45.0
-# RP-01 actuator screen: peak yaw 378 deg/s = 63 rpm at the output. XC330-M181
-# no-load speed 95 / 129 rpm at 3.7 / 5.0 V (ROBOTIS e-manual).
+# RP-01 actuator screen: peak yaw 378 deg/s = 63 rpm at the output. ST3215-HS
+# no-load 106 rpm at 12 V (Waveshare); D-047 runs it from a 12 V yaw-only rail.
 YAW_PEAK_OUTPUT_RPM = 63.0
-YAW_SERVO_NO_LOAD_RPM = {"3.7V": 95.0, "5.0V": 129.0}
+YAW_SERVO_NO_LOAD_RPM = {"12V": 106.0}
 # D-044 yaw stage detail. Angles are degrees about the yaw axis from +X at yaw 0.
 # Cartridge = housing + bearing + clamp ring + hub + rotor + FFC cassette, built on
 # the bench and lowered in from above before the pinion and the head disc.
@@ -676,17 +676,48 @@ YAW_CASSETTE_EXIT_DEG = 300.0
 YAW_CASSETTE_POST_R, YAW_CASSETTE_POST_DEG = 33.0, (45.0, 150.0, 270.0)  # 45 not 30: the front upper cross rail is at X 45.5
 YAW_FFC_WIDTH = 11.5  # 22-pin, 0.5 mm pitch
 YAW_FFC_CAPACITY_DEG = 90.0  # loop sized for +-90 deg, beyond the stops
-# Pinion drive: a printed hub on the XC330 horn (4 x M2 on its 12 mm PCD) carries a
+# D-048: the yaw servo is a Waveshare ST3215-HS (D-047). Its horn and both bus
+# plugs are on the same face (Waveshare ST3215 2D drawing), so it hangs horn-up on
+# the pinion axis with the case running -X, 8 mm lower than the old XC330 so the
+# plugs have room under the plate. Four M2 screws into its horn-face corner holes
+# clamp the case top to a frame ring; the ring's two side walls carry it up to
+# the pad under the plate, and a window between them clears the plugs.
+YAW_SERVO_MODEL = "Waveshare ST3215-HS"
+YAW_SERVO_STEP_AXIS = (-25.5, 0.0)  # horn axis in the STEP after -90 deg about X: 10.11 mm from the case end (drawing)
+YAW_SERVO_CLOCK_DEG = 180.0  # case runs -X from the axis
+YAW_SERVO_DROP = 7.6  # bottom (idler) disc stays above the PCB-03/04 plug layers (Z 84.3)
+YAW_SERVO_TOP_Z = 130.0 - YAW_SERVO_DROP  # case top (STEP maximum)
+YAW_SERVO_HORN_Z = YAW_SERVO_TOP_Z - 0.55  # horn disc top in the STEP
+YAW_HORN_SCREW_R, YAW_HORN_SCREW_DEG0 = 7.11, 10.1  # horn holes (STEP, Ø2.5; drawing 14 mm PCD), first at 10.1 deg from +X
+# Horn-face corner holes from the STEP: Ø1.6 x 2.8 deep in a step 2.8 mm below the case
+# top. The drawing (24.45 x 20.5 mm) puts them 0.8 mm further from the horn: measure the part.
+YAW_SERVO_MOUNT_SCREWS = ((6.9, 26.75), (6.9, 47.25), (-17.55, 26.75), (-17.55, 47.25))
+YAW_SERVO_MOUNT_FACE_Z = YAW_SERVO_TOP_Z - 2.58  # seat of the corner-hole step, probed on the STEP
+YAW_SERVO_MOUNT_SCREW = (8.0, 1.75, 1.3)  # M2 x 8 low head: length, head radius, head height (E); ~1.9 mm thread in the case
+YAW_SERVO_RING = (-21.0, 11.0, 23.8, 50.2, YAW_SERVO_TOP_Z + 0.3, YAW_SERVO_TOP_Z + 3.3)  # clamp ring 0.3 mm over the case top; pillars reach the hole step
+YAW_SERVO_PLUG_WINDOW = (-15.6, 4.9, 28.8, 45.2)  # horn-face plug recess kept clear; open to -X for the W15 exit
+YAW_SERVO_TORQUE_LIMIT_NM = 0.30  # firmware cap (Feetech running-torque limit): PETG teeth and stops, not the 1.96 N*m stall
+# Pinion drive: a printed hub on the ST3215-HS horn (4 x M2 on its 14 mm PCD) carries a
 # 5 mm steel D-shaft; a torsion spring between its collar and the sprung half sets the preload.
-YAW_DRIVE_HUB = (8.0, 133.0, 136.2)  # radius, z0, z1
+YAW_DRIVE_HUB = (8.8, YAW_SERVO_HORN_Z, 136.2)  # radius, z0, z1
 YAW_DRIVE_COLLAR = (3.0, 136.2, 140.2)
 YAW_SHAFT = (2.5, 133.2, 150.6)
 YAW_SPRING = (1.2, 8.0, 4, 140.2, 146.2)  # wire, OD, coils, z0, z1
-YAW_SERVO_TOP_Z = 130.0
-YAW_SERVO_CASE_SCREWS = ((20.5, 28.6), (20.5, 45.4), (-6.9, 32.1), (-3.4, 45.4))  # from the XC330 STEP
-YAW_SERVO_BRACKET = (-8.5, 25.5, 27.0, 47.0, 130.0, 134.0)  # fused under the plate
+YAW_SERVO_BRACKET = (-21.0, 25.5, 23.8, 50.2, 130.0, 134.0)  # pad fused under the plate
 
-PI_CENTER = (6.0 + BODY_SHIFT_X, 0.0, 102.0)
+# D-048: the compute stack (Pi 5, Active Cooler, tray bosses, PCB-09 and the Pi's
+# plug reserves) moves +10 mm X and -6 mm Y. -6 Y clears the ST3215-HS case (the Pi's
+# GPIO edge was under it); +10 X puts 112 g further forward for the tip margin.
+COMPUTE_SHIFT_X, COMPUTE_SHIFT_Y = 10.0, -6.0
+
+
+def _compute_shifted(box, y=True):
+    x0, x1, y0, y1, z0, z1 = box
+    dy = COMPUTE_SHIFT_Y if y else 0.0
+    return (x0 + COMPUTE_SHIFT_X, x1 + COMPUTE_SHIFT_X, y0 + dy, y1 + dy, z0, z1)
+
+
+PI_CENTER = (6.0 + BODY_SHIFT_X + COMPUTE_SHIFT_X, COMPUTE_SHIFT_Y, 102.0)
 # Pi 5 cooler-post holes (STEP PCB), from the Pi's bounding-box corner: 58 x 37 mm apart.
 PI_COOLER_HOLE_A = (PI_CENTER[0] - 45.0 + 5.25, PI_CENTER[1] - 28.8 + 11.1)
 # Battery (RP03-CAD-06; RP03-CAD-07 for the pack): low in a chassis tub under
@@ -817,12 +848,16 @@ FRAME_INSERT_LENGTH = 6.0
 # 39-49, Z 73-99); a block under the rear +Y corner, on a short column from the lower
 # rear cross rail, takes the third screw. The tray and the Pi go in as one unit from
 # the front, before the C3 carrier, and drop 2 mm onto the supports.
-COMPUTE_TRAY_BOX = (-32.0, 76.0, -38.0, 38.0, 84.5, 87.5)
+COMPUTE_TRAY_BOX = (-32.0, 80.5, -38.0, 38.0, 84.5, 87.5)  # D-048: front +4.5 for the shifted Pi
+# D-048: the +Y edge stops at Y 23.5, outboard of the shifted Pi and 1.1 mm inboard of
+# the lowered yaw servo, so the tray slides in from the front past it; the rear +Y
+# screw moved inboard with its block and column.
+TRAY_PY_EDGE = 23.5
 COMPUTE_TRAY_COLOR = "#7A858B"
 PI_PCB_BOTTOM_Z = 94.05  # Pi 5 STEP PCB, Z 94.05-95.45
 PI_PCB_TOP_Z = 95.45
-PI_MOUNT_HOLES = ((-17.8, -23.67), (40.2, -23.67), (-17.8, 25.33), (40.2, 25.33))  # 58 x 49 mm, M2.5, from the STEP PCB
-PI_COOLER_PIN_HOLES = ((-17.8, -17.67), (40.2, 19.33))  # Ø3 holes, 58 x 37 mm diagonal
+PI_MOUNT_HOLES = tuple((x + COMPUTE_SHIFT_X, y + COMPUTE_SHIFT_Y) for x, y in ((-17.8, -23.67), (40.2, -23.67), (-17.8, 25.33), (40.2, 25.33)))  # 58 x 49 mm, M2.5, from the STEP PCB
+PI_COOLER_PIN_HOLES = tuple((x + COMPUTE_SHIFT_X, y + COMPUTE_SHIFT_Y) for x, y in ((-17.8, -17.67), (40.2, 19.33)))  # Ø3 holes, 58 x 37 mm diagonal
 PI_BOSS_RADIUS = 3.0  # the Pi's Ø6 pad round each mounting hole
 PI_INSERT = DRIVER_INSERT  # M2.5 x 4 brass insert, Ø3.9 envelope, pressed flush with the boss top
 PI_INSERT_PILOT_DEPTH = 5.0
@@ -830,11 +865,12 @@ PI_SCREW = DRIVER_SCREW  # M2.5 x 6 low button head: 1.4 mm board, 4.6 mm into t
 COOLER_PIN_TIP_KEEP_OUT = (2.5, 3.5)  # radius, depth below the PCB (E: the spread push-pin tip)
 TRAY_RIB = (2.0, 4.0)  # perimeter rib on the tray top: width, height
 TRAY_EAR_MOUNTS = ((-32.0, -50.5),)  # rear -Y ear, M3 screw from above, (x, y)
-TRAY_FRONT_MOUNT = (64.0, -33.0)  # through the plate, head 0.15 mm inside the rib, clear of the Pi's Ethernet jack
-TRAY_FRONT_COLUMN = (60.0, 68.0, -43.0, -29.5, 69.9, 84.5)  # on the front -Y dog-leg (top Z 70), clear of the M4 tool path
-TRAY_REAR_PY_MOUNT = (-24.0, 33.0)  # head 0.15 mm inside the rib; driver passes the W40 route, fitted later
-TRAY_REAR_PY_BLOCK = (-32.0, -20.0, 29.5, 37.0, 78.0, 84.5)  # over PCB-04 (top Z 77.1) and beside its plug layer (Y <= 29)
-TRAY_REAR_PY_COLUMN = (-32.0, -27.5, 29.5, 37.0, 68.9, 78.01)  # on the lower rear cross rail (top Z 69), 0.5 mm off PCB-04
+TRAY_FRONT_MOUNT = (64.0, -41.5)  # D-048: on a -Y ear, outboard of the shifted Pi (was Y -33, now under the board)
+TRAY_FRONT_COLUMN = (60.0, 68.0, -45.0, -29.5, 69.9, 84.5)  # on the front -Y dog-leg (top Z 70), clear of the M4 tool path; D-048: to Y -45
+TRAY_FRONT_EAR = (60.0, 68.0, -45.0, -37.0)  # D-048: x0, x1, y0, y1 of the tray ear over the column
+TRAY_REAR_PY_MOUNT = (-24.0, 17.5)  # D-048: was (-24, 33), whose corner swept under the lowered yaw servo
+TRAY_REAR_PY_BLOCK = (-32.0, -20.0, 13.5, 21.5, 78.0, 84.5)  # over PCB-04 (top Z 77.1)
+TRAY_REAR_PY_COLUMN = (-32.0, -27.5, 13.5, 21.5, 68.9, 78.01)  # on the lower rear cross rail (top Z 69), 0.5 mm off PCB-04
 TRAY_MOUNTS = (*TRAY_EAR_MOUNTS, TRAY_FRONT_MOUNT, TRAY_REAR_PY_MOUNT)
 TRAY_EAR_HALF_X = 3.5
 TRAY_EAR_Y_END = 53.5
@@ -889,7 +925,7 @@ W41_FAN_LEAD_RESERVES = (
     (32.5, 39.0, 58.9, 68.9, 118.0, 124.0),
     (33.0, 39.0, 33.0, 58.9, 118.0, 124.0),
 )
-J9_4_FAN_HEADER_RESERVE = (27.0, 35.0, 30.0, 36.0, 108.0, 121.0)  # JST B2B-XH-A top entry on PCB-09 with the mated plug (E)
+J9_4_FAN_HEADER_RESERVE = _compute_shifted((27.0, 35.0, 30.0, 36.0, 108.0, 121.0))  # JST B2B-XH-A top entry on PCB-09 with the mated plug (E)
 # J05/J06: the insert is pressed into the rail tongue's end face, which is the
 # only face it can enter (D-029; the old pilot sat behind a O3.4 tongue bore).
 RAIL_TONGUE_HALF_Y = 4.0  # was 3.2; 1.85 mm of wall either side of the insert
@@ -1013,12 +1049,13 @@ CONNECTOR_EDGE_STRIPS = {
 # Top-entry signal headers plug up into these layers (reserve = plugs + first bend).
 CONNECTOR_TOP_LAYERS = {
     "PCB03": {"box": (19.0, 58.0, -29.0, 29.0, 75.0, 84.3), "connectors": [
-        ("J3-5", "EH", 3, "XC330 yaw servo: VDD, GND, bus DATA"),
+        ("J3-5", "EH", 3, "ST3215-HS yaw servo (D-047/D-048): 12 V yaw rail, GND, bus DATA; Feetech 5264-3P at the servo, footprint TBD"),
         ("J3-6", "GH", 6, "PCB-02 logic: CHARGE_ABSENT, ENERGY_OK, SYSTEM_ARM, MOTOR_PRESENT, 2 x GND"),
         ("J3-8", "GH", 8, "head sideband from the yaw junction"),
         ("J3-9", "GH", 4, "C3_READY, MOTOR_PRESENT to C3, 2 x GND (C3 carrier J10-12)"),
     ]},
-    "PCB04": {"box": (-26.0, 16.0, -34.0, 29.0, 77.1, 84.3), "connectors": [
+    # D-048: rear edge X -26 -> -14; the tray's rear +Y screw block now sits over that corner. J4-6 goes forward of X -14.
+    "PCB04": {"box": (-14.0, 16.0, -34.0, 29.0, 77.1, 84.3), "connectors": [
         ("J4-6", "GH", 10, "EN_* / PG_* and the sequencing latch to PCB-02 J2-4"),
     ]},
     # PCB-02's parts face is +X, so its top-entry headers plug in along +X.
@@ -1083,8 +1120,8 @@ POWER_BUTTON_LEAD_RESERVES = (
 
 # Pi 5 power: right-angle USB-C plug on the Pi's -Y edge (the port is at X -10.1,
 # Z 96.2) and its pigtail down past the compute tray to PCB-04 J4-1.
-PI_POWER_PLUG_RESERVE = (-16.2, -4.0, -44.0, -28.6, 92.2, 100.2)
-PI_POWER_PIGTAIL_DROP = (-13.0, -7.0, -46.0, -39.0, 77.0, 92.2)  # lands on the PCB04_NY edge reserve (J4-1)
+PI_POWER_PLUG_RESERVE = _compute_shifted((-16.2, -4.0, -44.0, -28.6, 92.2, 100.2))  # D-048: moves with the Pi
+PI_POWER_PIGTAIL_DROP = _compute_shifted((-13.0, -7.0, -46.0, -39.0, 77.0, 92.2), y=False)  # lands on the PCB04_NY edge reserve (J4-1); D-048: +10 X only, stays inboard of the C3 plugs
 
 # Motor leads: the MOT3001 ships with a 6-pin cable; its motor pair is cut out and
 # re-crimped to a Micro-Fit 3.0 1x2 wire-to-wire pair outboard of each DRV8833 carrier.
@@ -1107,13 +1144,14 @@ YAW_JUNCTION_GH = (("J8-3", 8, -42.0), ("J8-5", 8, -35.5), ("J8-4", 6, -29.0))  
 # 0.6 mm under the XC330) and a 4.6 mm strip of the same board over it that
 # stays inboard of the servo (Y <= 26.9, 0.1 mm clear): tight, measured, not
 # yet bench-fitted. The bridge joins the strip to the wide part past the servo.
-C0_GPIO_SOCKET = (-14.7, 37.1, 22.3, 28.3, 104.1, 106.4)  # socket body above the pin tips; the part round the pins is the header's own volume
-C0_LINK_ADAPTER_STRIP = (-14.7, 26.0, 22.3, 26.9, 106.4, 108.2)
-C0_LINK_ADAPTER_BRIDGE = (26.0, 37.1, 22.3, 28.5, 106.4, 108.2)
-C0_LINK_ADAPTER_BOX = (26.0, 56.0, 28.5, 45.0, 104.0, 112.0)
+# D-048: the whole board moves with the Pi (+10 X, -6 Y); the ST3215-HS no longer sits over it.
+C0_GPIO_SOCKET = _compute_shifted((-14.7, 37.1, 22.3, 28.3, 104.1, 106.4))  # socket body above the pin tips; the part round the pins is the header's own volume
+C0_LINK_ADAPTER_STRIP = _compute_shifted((-14.7, 26.0, 22.3, 26.9, 106.4, 108.2))
+C0_LINK_ADAPTER_BRIDGE = _compute_shifted((26.0, 37.1, 22.3, 28.5, 106.4, 108.2))
+C0_LINK_ADAPTER_BOX = _compute_shifted((26.0, 56.0, 28.5, 45.0, 104.0, 112.0))
 C0_LINK_ADAPTER_PLATE_Z = (106.4, 108.0)
-C0_LINK_ADAPTER_TOP_PLUGS = (36.0, 54.0, 29.0, 42.0, 112.0, 116.0)
-C0_LINK_ADAPTER_SIDE_PLUG = (26.0, 38.0, 45.0, 54.0, 108.0, 112.5)
+C0_LINK_ADAPTER_TOP_PLUGS = _compute_shifted((36.0, 54.0, 29.0, 42.0, 112.0, 116.0))
+C0_LINK_ADAPTER_SIDE_PLUG = _compute_shifted((26.0, 38.0, 45.0, 54.0, 108.0, 112.5))
 # C3 carrier (PCB-10, RP-02 CCD-HDL-03: DevKitC backplane with the base-link
 # THVD1451, the TPS3436 window watchdog, READY logic, the 74LVC1G08 driver sleep gate; DRV8833 mapping in 04-pcbs/power-boards.md sec 2.4 (D-038),
 # driver/sensor connectors and test points). Nothing modelled it, and the bare
@@ -1137,7 +1175,8 @@ C3_CARRIER_SCREWS = ((-8.0, 86.0), (-8.0, 116.0), (24.0, 86.0), (24.0, 116.0))  
 # Top-entry GH headers in two rows below the DevKitC: (id, circuits, x0).
 C3_GH_ROWS = {
     86.0: (("J10-2", 6, -4.5), ("J10-5", 6, 7.25), ("J10-6", 6, 27.25), ("J10-8", 5, 39.0)),
-    92.0: (("J10-7", 8, -13.0), ("J10-3", 4, 1.25), ("J10-4", 4, 10.5), ("J10-10", 4, 19.75), ("J10-12", 4, 29.0), ("J10-11", 3, 38.25)),
+    # D-048: repacked right of the moved Pi USB-C plug (X <= 6.0); J10-11 (spare, not fitted since D-041) has no header.
+    92.0: (("J10-7", 8, 6.5), ("J10-3", 4, 20.25), ("J10-4", 4, 29.0), ("J10-10", 4, 37.75), ("J10-12", 4, 46.5)),
 }
 C3_CARRIER_CONNECTORS = [
     ("J10-1", "MF3", 2, "PB-SAFE-BASE from PCB-04 J4-4 (front edge, right-angle)"),
@@ -1149,7 +1188,7 @@ C3_CARRIER_CONNECTORS = [
     ("J10-7", "GH", 8, "IMU PCB-07 (SPI)"),
     ("J10-8", "GH", 5, "nose pod, one cable (D-013): +5V and Vo for the GP2Y0A21YK0F, GND, +3V3 and OUT for the DRV5055 Hall board"),
     ("J10-10", "GH", 4, "rear TCRT cartridge"),
-    ("J10-11", "GH", 3, "spare, not fitted: was the E-stop status from PCB-03 (D-041)"),
+    ("J10-11", "GH", 3, "spare, not fitted: was the E-stop status from PCB-03 (D-041); no header or footprint since D-048"),
     ("J10-12", "GH", 4, "C3_READY, MOTOR_PRESENT to PCB-03 J3-9"),
 ]
 
@@ -1311,7 +1350,7 @@ MASS_ROWS = [
         HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_LOCAL_COM[2],
     ), "RP-01 generated mass tree"),
     ("BODY_SHELL_AND_PANELS", 248.7, (18.17, -0.09, 92.95), "Body v1 CAD volume and centroid (2026-10-04, D-043: +0.4 g for the smaller 3010 grille and collar, was 248.3 g at (18.16, -0.19, 92.91); D-042: -1.9 g net for the +Y fan-intake grille and collar and the eight rear-panel vent slots; was 250.2 g at (17.8, 0, 93.0)): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037), front service skin with an open 46 mm speaker aperture and retaining lip, rear service skin, E-stop well and charge-inlet pad (D-040), badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."),
-    ("BODY_PRIMARY_FRAME", 169.18, (12.38, 2.27, 92.46), "Body v1 CAD volume and centroid (2026-10-04, D-044: -9.3 g for the yaw plate's R28 bore and R36.6 housing pocket against its R44 ring and the yaw-servo pad, was 178.5 g at (12.70, 1.88, 94.80); D-043: fan web moved to X 1-33 with a R14 opening, was 178.4 g at (12.83, 1.84, 94.85); D-042: +7.5 g for the +Y fan web with its rail roots and strut, the rear -Y tray lug, the front -Y tray column and the rear +Y tray block and column; was 170.9 g at (12.5, 1.0, 94.9)); 2026-10-02: main connected print and removable front-left foot cassette at conservative 1.20 g/cm3 effective PETG, plus modeled four M4 bolts/nuts, two locating pins, cassette M3 joints, and four shell-to-frame M3 screw/insert joints at 7.85/8.50 g/cm3 steel/brass. Estimated, not weighed; check_body_layout.py verifies against the solids."),
+    ("BODY_PRIMARY_FRAME", 172.59, (12.1, 2.78, 93.07), "D-048 (2026-10-07): +3.4 g for the ST3215-HS clamp ring, side walls, pillars and wider pad, the tray column to Y -45 and the moved rear +Y block; was 169.18 g at (12.38, 2.27, 92.46). Body v1 CAD volume and centroid (2026-10-04, D-044: -9.3 g for the yaw plate's R28 bore and R36.6 housing pocket against its R44 ring and the yaw-servo pad, was 178.5 g at (12.70, 1.88, 94.80); D-043: fan web moved to X 1-33 with a R14 opening, was 178.4 g at (12.83, 1.84, 94.85); D-042: +7.5 g for the +Y fan web with its rail roots and strut, the rear -Y tray lug, the front -Y tray column and the rear +Y tray block and column; was 170.9 g at (12.5, 1.0, 94.9)); 2026-10-02: main connected print and removable front-left foot cassette at conservative 1.20 g/cm3 effective PETG, plus modeled four M4 bolts/nuts, two locating pins, cassette M3 joints, and four shell-to-frame M3 screw/insert joints at 7.85/8.50 g/cm3 steel/brass. Estimated, not weighed; check_body_layout.py verifies against the solids."),
     ("CHASSIS_PRIMARY_FRAME", 229.1, (18.14, 0.0, 46.64), "D-029 (2026-10-01): +21.4 g of newly modeled hardware measured from the solids at 7.9/8.5 g/cm3, centroid (30.4, 0, 46.4): J05/J06/J16/J11A ISO 7380 screws and 14 M3 x 6 inserts, four M2.5 driver screws and inserts; +0.7 g for the measured +1.24 cm3 printed volume at 0.571 g/cm3 (driver posts and tie lugs, wider tongues and rear rail ends, moved J16 ears, hatch strap slots, recess/cavity growth), centroid about (35, 0, 64); was 207.0 g at (16.82, 0, 46.61). 2026-10-01: +0.2 g for the measured +0.29 cm3 when the front hatch bosses moved to the front wall, the bosses were cut to Z 39.5 and the hatch grew 4 mm forward; D-011: -0.3 g for the O5 J10-8 cable bore through the front crossmember and deck at (86, -31); D-010 J04 adds two integrated plate-and-cheek carriers, keyed rail joints, eight modeled M3 x 8 screws and eight 6 mm inserts; estimated +10.2 g total (about +0.7 g printed cheek/key volume and +9.5 g steel/brass hardware, preliminary geometry-density estimate); previous 196.9 g centroid (17.7, 0, 46.8). D-007 axle stack (2026-09-29), +20.9 g at the axle (X 0, Z 42): printed plate + housing replace the flange/boss/diaphragm, +7.24 cm3 measured at ~0.571 g/cm3 (+4.1 g); two 1.2 mm aluminium caps 1.52 cm3 (+4.1 g); eight M3 x 18 cap screws (+10.6 g); eight M3 brass inserts (+1.5 g); face screws M3 x 8 CSK -> M3 x 6 low head (+0.6 g); before that 176.0 g at (19.8, 0, 47.4): +2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"),
     ("WHEEL_L", 92.5, WHEEL_CENTER_L, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
     ("WHEEL_R", 92.5, WHEEL_CENTER_R, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
@@ -1322,7 +1361,7 @@ MASS_ROWS = [
     ("BALLAST_STEEL_BAR", round(BALLAST_BAR_G + BALLAST_SCREWS_G, 1), (sum(BALLAST_X) / 2.0, 0.0, sum(BALLAST_Z) / 2.0), "E: mild-steel bar 9 x 60 x 19 mm at 7.85 g/cm3 (less two M3 tapped holes) + two M3 screws; sized so the register CoM clears the physics.md 2.5 line after the 110 g pack (RP03-CAD-08)"),
     ("BATTERY", 108.2, BATTERY_CENTER, "E: 2 x Samsung INR18650-25R (45 g max each = 90 g) + RP-02 PCB-01 pack-protection assembly (~5 g: 48 x 20 mm board 3.7 g + parts 1.3 g) + Bourns AC72ABD thermal cutoff and NTC (~0.7 g) + nickel straps, sleeve and AWG16 leads (~11 g) + pack-side Micro-Fit+ 1x2 half with terminals (~1.5 g, CN-05; was a ~6 g SBS Mini half); working selection, no purchase or measured mass; was 110 g with a generic ~8 g BMS (RP-02 board-specs.md sec 3, 2026-09-25)"),
     ("RASPBERRY_PI5_AND_COOLER", 76.0, PI_CENTER, "vendor + estimate"),
-    ("COMPUTE_TRAY_AND_PI_FIXINGS", 29.5, (17.6, -2.61, 86.92), "D-042 CAD volume and centroid (2026-10-04): tray print 23.1 g at 1.20 g/cm3 effective PETG (plate, perimeter rib, rear -Y ear, four Pi bosses, vent slots) + 6.5 g modeled hardware at 7.85/8.50 g/cm3 (four M2.5 x 4 inserts and M2.5 x 6 screws, three M3 x 6 support inserts and ISO 7380 M3 x 8 tray screws). The tray was in no row before. Estimated, not weighed"),
+    ("COMPUTE_TRAY_AND_PI_FIXINGS", 27.07, (21.16, -10.44, 86.98), "D-048 (2026-10-07): tray print 20.58 g after the +Y edge moved to Y 23.5, the front grew 4.5 mm and the bosses moved with the Pi, + 6.49 g hardware; was 29.5 g at (17.6, -2.61, 86.92). D-042 CAD volume and centroid (2026-10-04): tray print 23.1 g at 1.20 g/cm3 effective PETG (plate, perimeter rib, rear -Y ear, four Pi bosses, vent slots) + 6.5 g modeled hardware at 7.85/8.50 g/cm3 (four M2.5 x 4 inserts and M2.5 x 6 screws, three M3 x 6 support inserts and ISO 7380 M3 x 8 tray screws). The tray was in no row before. Estimated, not weighed"),
     ("ENCLOSURE_FAN_3010_AND_W41", 10.0, (18.5, 62.0, 108.0), "E (D-043): Robu DC 5 V 3010 hydraulic fan (BO-040) ~8.5 g with its lead cut to ~80 mm + two 12 mm self-tapping screws ~0.8 g (BO-041) + XH housing ~0.5 g; unmeasured; centroid at the fan, pulled slightly toward the lead. Was 15 g for the 4010 (D-042)"),
     # Replaces the single CONTROL_POWER_SENSORS row (121.5 g at (22, 0, 80), 2026-09-25). Masses are the RP-02
     # board-specs.md sec 2 / WS-H estimates (PCB 1.6 mm FR4 with copper about 3.8 g per 1000 mm2 plus the parts
@@ -1335,7 +1374,7 @@ MASS_ROWS = [
     ("C3_DEVKITC_N8", 9.0, (sum(C3_CARRIER_BOARD[0:2]) / 2.0, C3_CARRIER_BOARD[3] + C3_DEVKIT_STANDOFF + 2.75, C3_DEVKIT_Z[0] + 14.15), "E: ESP32-S3-DevKitC-1-N8 board; moved 2026-09-26 onto the PCB-10 carrier on the -Y side wall"),
     ("C3_CARRIER_PCB10", 20.0, (sum(C3_CARRIER_BOARD[0:2]) / 2.0, C3_CARRIER_BOARD[2] - 1.0, sum(C3_CARRIER_BOARD[4:6]) / 2.0), "E (proposal): 70 x 43.5 mm board ~8.5 g + THVD1451, TPS3436, READY logic, SLEEP FETs ~1 g + 2 x 22-pin headers ~3 g + 10 GH and 1 Micro-Fit 3.0 header ~3 g + four M2.5 screws and inserts ~1 g; two printed uprights on the -Y rails ~3.5 g"),
     ("YAW_JUNCTION_PCB08", 4.0, (sum(YAW_JUNCTION_BOX[0:2]) / 2.0, sum(YAW_JUNCTION_BOX[2:4]) / 2.0, 116.0), "E: 32 x 21 mm board ~2 g + Micro-Fit 3.0 2x3 (D-039) and three GH headers ~2 g"),
-    ("C0_LINK_ADAPTER_PCB09", 7.0, (30.0, 32.0, 107.5), "E: strip-and-wide board ~3 g + 2 x 20 socket ~2 g + 2 x THVD1451 and three GH headers ~2 g"),
+    ("C0_LINK_ADAPTER_PCB09", 7.0, (30.0 + COMPUTE_SHIFT_X, 32.0 + COMPUTE_SHIFT_Y, 107.5), "E: strip-and-wide board ~3 g + 2 x 20 socket ~2 g + 2 x THVD1451 and three GH headers ~2 g"),
     ("BATTERY_RESTRAINT", 3.4, (46.36, 0.0, 40.63), "D-029 J11B, measured from the solids: two 10 x 1.2 mm hook-and-loop strap loops at ~1.1 g/cm3 (3.3 g) and two 1.5 mm closed-cell foam pads at ~0.1 g/cm3 (0.05 g); estimate, not weighed"),
     ("ADAFRUIT_DRV8833_CARRIERS_X2", 6.0, (DRIVER_CENTER_X, 0.0, 68.5), "E: 2 x Adafruit #3297 boards, 25.4 x 17.8 mm board-file outline with the 3.5 mm terminal block fitted (10.1 mm tall), 3 g each; mass unmeasured"),
     ("IMU_PCB07", 2.5, (IMU_BOARD_CENTER[0], 0.0, IMU_BOARD_CENTER[2] + 1.0), "E: PCB-07 16 x 20 x 1.0 mm FR4 ~0.6 g + ICM-42688-P and JST-SH 8-pin ~0.3 g + two M2 x 5 ~0.6 g + 8-way AWG30 lead to C3 ~1 g (RP03-CAD-11); was a 2 g breakout estimate at (16, 0, 60)"),
@@ -1344,7 +1383,7 @@ MASS_ROWS = [
     ("BALL_NOSE_POD_SENSOR_CAP", 18.9, (111.4, 0.0, 37.9), "D-027: +0.2 g for the lid lead hump, raised nose top and wider front pocket (pod 12.45, lid 2.62, cap 2.12 cm3 measured, was 12.44/2.45/2.03, at ~0.571 g/cm3); earlier estimate predates the selected A21 sensor (3.6 g datasheet, ears trimmed), custom Hall carrier and O3 x 1.5 magnet; weigh received parts"),
     ("BODY_AUDIO", 61.0, (78.4, 0.0, 102.1), "RP03-CAD-11 60 g audio estimate with Visaton K 50 WP 48 g, PCB-05 ~6 g, mic boards ~2 g and cables ~4 g. The exposed front installation places the modeled speaker face at X 100 mm, 5 mm forward of the former grille-backed seat; its 48 g share shifts the audio row X centroid to about 78.4 mm. D-037 adds ~1 g at the mic-array centre (16, 0, 113): eight M2 x 4 screws, larger 12 x 14 boards and gaskets; the soldered leads replace the GH header and plug in the cable allowance. Weigh installed parts."),
     ("HARNESS_AND_FASTENERS", 95.0, (4.0 + BODY_SHIFT_X, 0.0, 88.0), "Conservative allowance for unmodeled installed harness, connector tails, clips, service-panel screws and remaining fasteners. Body-frame M4/M3 joints and shell-to-frame M3 joints are measured separately in BODY_PRIMARY_FRAME; weigh the completed harness and hardware to replace this allowance."),
-    ("BODY_YAW_STAGE", 150.3, (14.81, 7.81, 136.22), "D-044 (2026-10-04), check_yaw_stage.py from the solids: 61810-2Z bearing 55 g (E, SKF lists 52-59 g) + XC330-M181 23 g (D) at its STEP centroid + PETG prints at 1.20 g/cm3 (hub 15.8, housing 15.6, rotor 10.4, cassette stator 4.5, clamp ring 2.2, pinion halves 2 x 2.5, drive hub 0.6) + steel/brass hardware at 7.85/8.50 (shaft 2.7, spring 1.2, screws and inserts ~6) + three 22-pin FFCs 4.5 g (E) + PCB-14 3 g (E). Was 89 g at (16, 13.5, 134.3) with a 50 g bearing placeholder and no housing, cassette or fixings. Estimated, not weighed"),
+    ("BODY_YAW_STAGE", 199.4, (11.62, 15.0, 126.86), "D-048 (2026-10-07), check_yaw_stage.py: ST3215-HS 68 g (D, Waveshare) replaces the XC330 23 g, longer drive hub and four M2 mount screws; was 150.3 g at (14.81, 7.81, 136.22). D-044 (2026-10-04), check_yaw_stage.py from the solids: 61810-2Z bearing 55 g (E, SKF lists 52-59 g) + XC330-M181 23 g (D) at its STEP centroid + PETG prints at 1.20 g/cm3 (hub 15.8, housing 15.6, rotor 10.4, cassette stator 4.5, clamp ring 2.2, pinion halves 2 x 2.5, drive hub 0.6) + steel/brass hardware at 7.85/8.50 (shaft 2.7, spring 1.2, screws and inserts ~6) + three 22-pin FFCs 4.5 g (E) + PCB-14 3 g (E). Was 89 g at (16, 13.5, 134.3) with a 50 g bearing placeholder and no housing, cassette or fixings. Estimated, not weighed"),
     ("REAR_SKID_KEEL", 20.0, (-40.5, 0.0, 22.7), "J09/J10 rework 2026-09-30 (D-014, D-016), measured from the solids: keel body 14.64 cm3 at ~0.571 g/cm3 = 8.4 g at (-39.7, 0, 20.4) (D-016 closed the board cavity back to the sensor pocket); shoe 0.40, bezel with guard lips 0.30 and two 1 mm shims 0.24 cm3 printed solid at ~1.27 g/cm3 = 1.2 g; four ISO 4762 M3 x 30 ~8.4 g; four CNC Kitchen M3 x 5.7 crossmember inserts ~1.4 g; M2 x 10 and M2 x 6 screws ~0.6 g (the M2 x 5 board screw was dropped by D-015). Was 12.0 g at (-39.9, 0, 20.4); rear-crossmember cable bore closed and tie lug added (<0.1 g, left in the frame row)"),
 ]
 def mass_properties():
@@ -2749,9 +2788,9 @@ def body_primary_frame():
         YAW_PLATE_RADIUS, YAW_PLATE_Z[1] - YAW_PLATE_Z[0]
     ).moved(Location((BODY_AXIS_X, 0.0, sum(YAW_PLATE_Z) / 2.0)))
     add(plate)
-    # D-044: the yaw servo hangs from a pad under the plate, clamped by its own
-    # four case screws lengthened 4 mm into pilots in the pad.
-    add(_block(*YAW_SERVO_BRACKET))
+    # D-048: the ST3215-HS hangs from a pad under the plate on a clamp ring with two
+    # side walls (see _yaw_servo_mount); four M2 screws go into its horn-face holes.
+    add(_yaw_servo_mount())
     # Local enlarged side-rail wall for two horizontal M3 cassette screws.
     add(_block(52.0, 70.0, 60.0, 69.0, 58.0, 72.0))
     # D-042: enclosure-fan web between the +Y side rails, and a strut to the lower rail.
@@ -3137,40 +3176,49 @@ def raspberry_pi5():
     return pi
 
 
-def compute_tray_print():
-    """Separate tray print (D-042): plate, perimeter rib, three ears, four Pi bosses, vent slots."""
+def compute_tray_print(pi_y_shift=0.0, pi_x_shift=0.0, front_extension=0.0):
+    """Separate tray print (D-042); optional Pi-boss/edge shifts for yaw trials."""
     x0, x1, y0, y1, z0, z1 = COMPUTE_TRAY_BOX
+    x1 += front_extension
+    tray_box = (x0, x1, y0, y1, z0, z1)
+    pi_holes = [(x + pi_x_shift, y + pi_y_shift) for x, y in PI_MOUNT_HOLES]
     width, height = TRAY_RIB
-    tray = _block(*COMPUTE_TRAY_BOX)
+    y1 = min(y1, TRAY_PY_EDGE)  # D-048
+    tray = _block(x0, x1, y0, y1, z0, z1)
     tray += _block(x0, x1, y0, y1, z1 - 0.01, z1 + height) - _block(x0 + width, x1 - width, y0 + width, y1 - width, z1 - 1.0, z1 + height + 1.0)
+    ex0, ex1, ey0, ey1 = TRAY_FRONT_EAR
+    tray += _block(ex0, ex1, ey0, ey1, z0, z1)
     for x, y in TRAY_EAR_MOUNTS:
         sign = 1.0 if y > 0.0 else -1.0
-        ey0, ey1 = sorted((sign * (y1 - 1.0), sign * TRAY_EAR_Y_END))
+        edge = y1 if sign > 0.0 else -y0  # D-048: the +Y edge moved, the -Y edge did not
+        ey0, ey1 = sorted((sign * (edge - 1.0), sign * TRAY_EAR_Y_END))
         tray += _block(x - TRAY_EAR_HALF_X, x + TRAY_EAR_HALF_X, ey0, ey1, z0, z1)
-    for x, y in PI_MOUNT_HOLES:
+    for x, y in pi_holes:
         tray += _z_cylinder(PI_BOSS_RADIUS, z1 - 0.01, PI_PCB_BOTTOM_Z, x, y)
     vents = []
     for yc in TRAY_VENT_ROWS_Y:
+        if yc + TRAY_VENT_WIDTH / 2.0 > TRAY_PY_EDGE - TRAY_RIB[0] - 0.5:
+            continue  # D-048: this row would undercut the moved +Y rib
         for vx0, vx1 in TRAY_VENT_SEGMENTS_X:
             vents.append(_block(vx0, vx1, yc - TRAY_VENT_WIDTH / 2.0, yc + TRAY_VENT_WIDTH / 2.0, z0 - 1.0, z1 + 1.0))
-    keep = [_z_cylinder(TRAY_VENT_BOSS_MARGIN, z0 - 2.0, z1 + 2.0, x, y) for x, y in PI_MOUNT_HOLES]
+    keep = [_z_cylinder(TRAY_VENT_BOSS_MARGIN, z0 - 2.0, z1 + 2.0, x, y) for x, y in pi_holes]
     vent_cut = vents[0]
     for v in vents[1:]:
         vent_cut += v
     tray -= vent_cut - keep
-    for x, y in PI_MOUNT_HOLES:
+    for x, y in pi_holes:
         tray -= _z_cylinder(PI_INSERT[0], PI_PCB_BOTTOM_Z - PI_INSERT_PILOT_DEPTH, PI_PCB_BOTTOM_Z + 0.1, x, y)
     for x, y in TRAY_MOUNTS:
         tray -= _z_cylinder(1.7, z0 - 0.1, z1 + 0.1, x, y)
     return _paint(tray, "COMPUTE_TRAY", COMPUTE_TRAY_COLOR, 1.0)
 
 
-def compute_tray_hardware():
+def compute_tray_hardware(pi_y_shift=0.0, pi_x_shift=0.0):
     """Pi M2.5 inserts and screws, tray M3 screws and the lug M3 inserts (D-042)."""
     parts = []
     radius, length = PI_INSERT
     screw_length, head_radius, head_height = PI_SCREW
-    for k, (x, y) in enumerate(PI_MOUNT_HOLES, start=1):
+    for k, (x, y) in enumerate(((x + pi_x_shift, y + pi_y_shift) for x, y in PI_MOUNT_HOLES), start=1):
         insert = _z_cylinder(radius, PI_PCB_BOTTOM_Z - length, PI_PCB_BOTTOM_Z, x, y) - _z_cylinder(1.25, PI_PCB_BOTTOM_Z - length - 0.1, PI_PCB_BOTTOM_Z + 0.1, x, y)
         screw = (_z_cylinder(1.25, PI_PCB_TOP_Z - screw_length, PI_PCB_TOP_Z, x, y)
                  + _z_cylinder(head_radius, PI_PCB_TOP_Z, PI_PCB_TOP_Z + head_height, x, y))
@@ -3187,11 +3235,11 @@ def compute_tray_hardware():
     return parts
 
 
-def cooler_pin_keep_outs():
+def cooler_pin_keep_outs(pi_y_shift=0.0, pi_x_shift=0.0):
     """Space under the Pi for the Active Cooler's spread push-pin tips (E)."""
     radius, depth = COOLER_PIN_TIP_KEEP_OUT
     return [
-        _paint(_z_cylinder(radius, PI_PCB_BOTTOM_Z - depth, PI_PCB_BOTTOM_Z, x, y), f"PI5_COOLER_PUSH_PIN_TIP_KEEP_OUT_{k}", "#D38132", 0.3)
+        _paint(_z_cylinder(radius, PI_PCB_BOTTOM_Z - depth, PI_PCB_BOTTOM_Z, x + pi_x_shift, y + pi_y_shift), f"PI5_COOLER_PUSH_PIN_TIP_KEEP_OUT_{k}", "#D38132", 0.3)
         for k, (x, y) in enumerate(PI_COOLER_PIN_HOLES, start=1)
     ]
 
@@ -3878,9 +3926,31 @@ def _yaw_frame_cuts():
     for deg in YAW_FLANGE_SCREW_DEG:
         cuts += _z_cylinder(2.0, pz0 - 0.01, pz1 + 0.01, *_yaw_polar(YAW_FLANGE_SCREW_R, deg))
     cuts += _z_cylinder(9.0, YAW_SERVO_BRACKET[4] - 1.0, pz0 + 0.01, px, py)
-    for x, y in YAW_SERVO_CASE_SCREWS:
-        cuts += _z_cylinder(0.8, YAW_SERVO_BRACKET[4] - 1.0, YAW_SERVO_BRACKET[5] - 0.6, x, y)
+    # D-048 servo mount: horn and drive-hub clearance down through the ring, the plug
+    # window (open to -X for the W15 exit), M2 clearance holes in the ring and a
+    # driver path above each screw head through the pad and plate.
+    rz0, rz1 = YAW_SERVO_RING[4], YAW_SERVO_RING[5]
+    cuts += _z_cylinder(10.6, YAW_SERVO_MOUNT_FACE_Z - 1.0, YAW_SERVO_BRACKET[4] + 0.01, px, py)
+    wx0, wx1, wy0, wy1 = YAW_SERVO_PLUG_WINDOW
+    cuts += _block(YAW_SERVO_RING[0] - 1.0, wx1, wy0, wy1, rz0 - 1.0, YAW_SERVO_BRACKET[5] - 1.5)
+    for x, y in YAW_SERVO_MOUNT_SCREWS:
+        cuts += _z_cylinder(1.1, YAW_SERVO_MOUNT_FACE_Z - 1.0, rz1 + 0.01, x, y)
+        cuts += _z_cylinder(2.4, rz1, pz1 + 1.0, x, y)
     return cuts
+
+
+def _yaw_servo_mount():
+    """D-048 frame-integral ST3215-HS mount (uncut): a ring on the case top, two side
+    walls up to the pad, and the pad under the plate. _yaw_frame_cuts opens it."""
+    x0, x1, y0, y1, z0, z1 = YAW_SERVO_RING
+    _wx0, _wx1, wy0, wy1 = YAW_SERVO_PLUG_WINDOW
+    pad = YAW_SERVO_BRACKET
+    mount = _block(x0, x1, y0, y1, z0, z1)
+    mount += _block(x0, x1, y0, wy0, z0, pad[4] + 0.01) + _block(x0, x1, wy1, y1, z0, pad[4] + 0.01)
+    mount += _block(*pad)
+    for x, y in YAW_SERVO_MOUNT_SCREWS:  # pillars down to the corner-hole step: the only seats
+        mount += _z_cylinder(2.4, YAW_SERVO_MOUNT_FACE_Z, z0 + 0.01, x, y)
+    return mount
 
 
 def yaw_pinion_parts(yaw_deg=0.0):
@@ -3901,20 +3971,24 @@ def yaw_pinion_parts(yaw_deg=0.0):
     cr, cz0, cz1 = YAW_DRIVE_COLLAR
     drive_hub = _z_cylinder(hr, hz0, hz1, px, py) + _z_cylinder(cr, cz0, cz1, px, py)
     drive_hub -= _z_cylinder(YAW_SHAFT[0], YAW_SHAFT[1] - 0.01, cz1 + 1.0, px, py)
+    drive_hub -= _z_cylinder(6.2, hz0 - 0.1, hz0 + 1.0, px, py)  # D-048: clears the horn's centre screw boss
     horn_screws = []
     for k in range(4):
-        sx, sy = px + 6.0 * math.cos(math.radians(90.0 * k - yaw_deg)), py + 6.0 * math.sin(math.radians(90.0 * k - yaw_deg))
-        drive_hub -= _z_cylinder(1.95, hz1 - 1.4, hz1 + 1.0, sx, sy)
-        drive_hub -= _z_cylinder(1.1, hz0 - 1.0, hz1, sx, sy)
-        horn_screws.append(_paint(_z_cylinder(1.9, hz1 - 1.4, hz1 - 0.05, sx, sy) + _z_cylinder(0.8, YAW_SERVO_TOP_Z + 0.1, hz1 - 1.4, sx, sy),
-                                  f"YAW_DRIVE_HUB_M2X6_HORN_SCREW_{k + 1}", STEEL, 1.0))
+        a = math.radians(YAW_HORN_SCREW_DEG0 + 90.0 * k - yaw_deg)
+        sx, sy = px + YAW_HORN_SCREW_R * math.cos(a), py + YAW_HORN_SCREW_R * math.sin(a)
+        # D-048: socket-head M2 from the hub top through a counterbore to the horn (M2 x 16, E).
+        drive_hub -= _z_cylinder(1.8, hz0 + 4.0, hz1 + 1.0, sx, sy)
+        drive_hub -= _z_cylinder(1.3, hz0 - 1.0, hz1, sx, sy)
+        # Horn holes are Ø2.5 (STEP): M2.5 through, nut or thread form TBD from the received horn (E).
+        horn_screws.append(_paint(_z_cylinder(1.75, hz0 + 4.0, hz0 + 6.0, sx, sy) + _z_cylinder(1.2, YAW_SERVO_HORN_Z - 2.2, hz0 + 4.0, sx, sy),
+                                  f"YAW_DRIVE_HUB_HORN_SCREW_{k + 1}", STEEL, 1.0))
     wire, od, _, sz0, sz1 = YAW_SPRING
     return [
         _paint(sprung, "YAW_DRIVE_SCISSOR_PINION_SPRUNG_HALF", BRONZE, 1.0),
         _paint(fixed, "YAW_DRIVE_SCISSOR_PINION_FIXED_HALF", SLATE_DARK, 1.0),
         _paint(_z_cylinder(YAW_SHAFT[0], YAW_SHAFT[1], YAW_SHAFT[2], px, py), "YAW_PINION_SHAFT_D5_STEEL", STEEL, 1.0),
         _paint(_ring_at(od / 2.0 - wire, od / 2.0, sz0, sz1, px, py), "YAW_SCISSOR_PRELOAD_TORSION_SPRING", STEEL, 1.0),
-        _paint(drive_hub, "YAW_DRIVE_HUB_ON_XC330_HORN", SLATE_DARK, 1.0),
+        _paint(drive_hub, "YAW_DRIVE_HUB_ON_ST3215_HS_HORN", SLATE_DARK, 1.0),
         *horn_screws,
     ]
 
@@ -3949,18 +4023,25 @@ def body_yaw_stage():
         top = YAW_CASSETTE_WALL[3]
         parts.append(_paint(_z_cylinder(1.9, top - 2.3, top - 1.0, x, y) + _z_cylinder(0.8, top - 1.0, top + 5.0, x, y),
                             f"YAW_CASSETTE_M2X6_POST_SCREW_{k}", STEEL, 1.0))
-    for k, (x, y) in enumerate(YAW_SERVO_CASE_SCREWS, start=1):
-        parts.append(_paint(_z_cylinder(0.8, YAW_SERVO_TOP_Z - 0.2, YAW_SERVO_BRACKET[5] - 0.6, x, y),
-                            f"YAW_SERVO_CASE_SCREW_EXTENSION_{k}", STEEL, 1.0))
+    length, head_r, head_h = YAW_SERVO_MOUNT_SCREW
+    rz1 = YAW_SERVO_RING[5]
+    for k, (x, y) in enumerate(YAW_SERVO_MOUNT_SCREWS, start=1):
+        parts.append(_paint(_z_cylinder(head_r, rz1, rz1 + head_h, x, y) + _z_cylinder(0.8, rz1 - length, rz1, x, y),
+                            f"YAW_SERVO_M2X8_MOUNT_SCREW_{k}", STEEL, 1.0))
     parts += yaw_pinion_parts(0.0)
-    # XC330 dummy assembly: output horn axis is STEP Z, body runs -24.5..+9.5 in STEP Y
-    # from that axis. -90 deg about Z runs the body along X (+180 hit the left upper rail; both clear the Pi
-    # cooler), output axis on the pinion centre, horn top at z1.
-    parts.append(_place(
-        _purchased_step("robotis_xc330_dummy_assy.step", "YAW_SERVO_XC330_M181_STEP", [(Axis.Z, -90.0)]),
-        px, py, z1, ref={"X": "origin", "Y": "origin", "Z": "max"},
-    ))
+    parts.append(yaw_servo_st3215_hs())
     return Compound(label="BODY_YAW_STAGE", children=parts)
+
+
+def yaw_servo_st3215_hs():
+    """D-048: official Waveshare ST3215-HS STEP, horn up on the pinion axis, case to -X.
+
+    The manufacturer file has one invalid-topology case solid: use it for packaging."""
+    px, py = BODY_AXIS_X + YAW_PINION_CENTER[0], YAW_PINION_CENTER[1]
+    servo = import_step(str(BODY_V1_PURCHASED / "waveshare_feetech_st3215_hs_servo.step")).rotate(Axis.X, -90.0)
+    servo = servo.translate((-YAW_SERVO_STEP_AXIS[0], -YAW_SERVO_STEP_AXIS[1], 0.0)).rotate(Axis.Z, YAW_SERVO_CLOCK_DEG)
+    servo = servo.translate((px, py, YAW_SERVO_TOP_Z - servo.bounding_box().max.Z))
+    return Compound(label="YAW_SERVO_ST3215_HS_STEP", children=list(servo.solids()))
 
 
 def yaw_drive_moving_parts(yaw_deg=0.0):
@@ -4004,7 +4085,7 @@ def harness_routes():
         # motor-can top (Z 57.4 at Y >= 16) and the Y 6-18 pigtail reserve (X -13..-1) set the trunk's floor and rear end.
         _box(42.0, 10.0, 5.0, (21.0, 18.0, 60.0), "HARNESS_BATTERY_TRUNK", "#F28C28", 0.42),
         _box(12.0, 92.0, 6.0, (DRIVER_CENTER_X, 0.0, 59.5), "HARNESS_MOTOR_BRANCH", "#D94A3A", 0.42),  # between the driver posts (D-029)
-        _box(82.0, 8.0, 8.0, (30.0 + BODY_SHIFT_X, 26.0, 82.0), "HARNESS_SIGNAL_TRUNK", "#2FAFC2", 0.42),
+        _box(82.0, 8.0, 8.0, (30.0 + BODY_SHIFT_X, 22.0, 82.0), "HARNESS_SIGNAL_TRUNK", "#2FAFC2", 0.42),
         _box(82.0, 8.0, 8.0, (30.0 + BODY_SHIFT_X, -26.0, 82.0), "HARNESS_SENSOR_TRUNK", "#44BDD0", 0.42),
         # D-044: the head trunk crosses yaw as three 22-pin FFCs in the cassette under
         # the plate. They leave its -Y window (300 deg): the CSI drops to the Pi 5's
@@ -4067,28 +4148,31 @@ def _yaw_junction_board():
     return Compound(label="YAW_JUNCTION_PCB08", children=parts)
 
 
-def _c0_link_adapter():
-    """PCB-09: 2 x 20 socket on the Pi header, strip over it, two THVD1451, GH headers."""
+def _c0_link_adapter(main_x_shift=0.0):
+    """PCB-09: socket/strip over the Pi and a positionable outer board bay."""
     z0, z1 = C0_LINK_ADAPTER_PLATE_Z
     sx0, sx1, sy0, sy1, _a, _b = C0_LINK_ADAPTER_STRIP
     bx0, bx1, by0, by1, _a, _b = C0_LINK_ADAPTER_BRIDGE
     wx0, wx1, wy0, wy1, _a, _b = C0_LINK_ADAPTER_BOX
+    wx0 += main_x_shift
+    wx1 += main_x_shift
     plate = _block(sx0, sx1, sy0, sy1, z0, z1) + _block(bx0, bx1, by0, by1, z0, z1) + _block(wx0, wx1, wy0, wy1, z0, z1)
     parts = [
         _paint(plate, "C0_LINK_ADAPTER_PCB09_BOARD", PCB_GREEN, 1.0),
         _paint(_block(*C0_GPIO_SOCKET), "C0_GPIO_2X20_SOCKET_BODY", "#2E3336", 1.0),
         # THVD1451D SOIC-14 (8.65 x 6.0 incl. leads x 1.75): head link on the bridge, base link on the wide part.
-        _paint(_block(27.0, 35.65, 22.5, 28.5, z1, z1 + 1.75), "C0_THVD1451_HEAD_LINK_SOIC14", "#1E2426", 1.0),
-        _paint(_block(27.0, 35.65, 30.0, 36.0, z1, z1 + 1.75), "C0_THVD1451_BASE_LINK_SOIC14", "#1E2426", 1.0),
+        _paint(_block(*_compute_shifted((27.0, 35.65, 22.5, 28.5, z1, z1 + 1.75))), "C0_THVD1451_HEAD_LINK_SOIC14", "#1E2426", 1.0),
+        _paint(_block(*_compute_shifted((27.0 + main_x_shift, 35.65 + main_x_shift, 30.0, 36.0, z1, z1 + 1.75))), "C0_THVD1451_BASE_LINK_SOIC14", "#1E2426", 1.0),
     ]
-    tops = (("J9-2", 6, 37.0, 30.0), ("J9-3", 10, 37.0, 36.5))  # id, circuits, x0, y0
+    dx, dy = COMPUTE_SHIFT_X, COMPUTE_SHIFT_Y
+    tops = (("J9-2", 6, 37.0 + main_x_shift + dx, 30.0 + dy), ("J9-3", 10, 37.0 + main_x_shift + dx, 36.5 + dy))  # id, circuits, x0, y0
     for cid, n, gx0, gy0 in tops:
         hdr = _place(_gh_header(n, f"C0_{_cid(cid)}_JST_GH_BM{n:02d}B_HEADER", top_entry=True), gx0, gy0, z1, ref={"X": "min", "Y": "min", "Z": "min"})
         b = hdr.bounding_box()
         parts.append(hdr)
         parts.append(_box(gh_plug_width(n), GH_PLUG_THICKNESS, GH_PLUG_PROUD, ((b.min.X + b.max.X) / 2.0, (b.min.Y + b.max.Y) / 2.0, b.max.Z + GH_PLUG_PROUD / 2.0), f"C0_{_cid(cid)}_GHR{n:02d}_MATED_PLUG", "#F4F1E6", 1.0))
     # J9-1 GH 6 side entry on the +Y edge, mating +Y (STEP -Y turned 180 deg about Z).
-    hdr = _place(_gh_header(6, "C0_J9_1_JST_GH_SM06B_HEADER", [(Axis.Z, 180.0)]), 26.2, wy1, z1, ref={"X": "min", "Y": "max", "Z": "min"})
+    hdr = _place(_gh_header(6, "C0_J9_1_JST_GH_SM06B_HEADER", [(Axis.Z, 180.0)]), 26.2 + main_x_shift + dx, wy1, z1, ref={"X": "min", "Y": "max", "Z": "min"})
     b = hdr.bounding_box()
     parts.append(hdr)
     parts.append(_box(gh_plug_width(6), GH_PLUG_PROUD, GH_PLUG_THICKNESS, ((b.min.X + b.max.X) / 2.0, wy1 + GH_PLUG_PROUD / 2.0, z1 + GH_PLUG_THICKNESS / 2.0), "C0_J9_1_GHR06_MATED_PLUG", "#F4F1E6", 1.0))

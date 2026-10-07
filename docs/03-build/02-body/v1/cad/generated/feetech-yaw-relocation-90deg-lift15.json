@@ -1,0 +1,30 @@
+{
+  "angle_deg": 90.0,
+  "clock_deg": 0,
+  "axial_lift_mm": 15.0,
+  "pinion_xy_mm": [
+    16.0,
+    37.0
+  ],
+  "case_bounds_mm": [
+    [
+      -19.612,
+      25.612
+    ],
+    [
+      24.638,
+      49.362
+    ],
+    [
+      107.2,
+      145.0
+    ]
+  ],
+  "exact_intersections_mm3": {
+    "BODY_PRIMARY_FRAME_CURRENT": 3730.118,
+    "PCB09_COMPLETE": 0.0,
+    "PI5_STEP": 0.0,
+    "BODY_FRAME_WITHOUT_XC330_PAD": 1369.988,
+    "PI5_ACTIVE_COOLER_STEP": 0.0
+  }
+}

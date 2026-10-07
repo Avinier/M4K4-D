@@ -1,0 +1,1512 @@
+{
+  "method": "exact solid checks at current pinion; 30-degree polar AABB screen",
+  "source_step": "purchased/waveshare_feetech_st3215_hs_servo.step",
+  "source_topology_note": "one invalid manufacturer STEP solid; packaging only",
+  "current_pinion_xy_mm": [
+    16.0,
+    37.0
+  ],
+  "neighbour_bounds_mm": {
+    "PCB09_GPIO_SOCKET": [
+      [
+        -14.7,
+        37.1
+      ],
+      [
+        22.3,
+        28.3
+      ],
+      [
+        104.1,
+        106.4
+      ]
+    ],
+    "PCB09_STRIP": [
+      [
+        -14.7,
+        26.0
+      ],
+      [
+        22.3,
+        26.9
+      ],
+      [
+        106.4,
+        108.2
+      ]
+    ],
+    "PCB09_BRIDGE": [
+      [
+        26.0,
+        37.1
+      ],
+      [
+        22.3,
+        28.5
+      ],
+      [
+        106.4,
+        108.2
+      ]
+    ],
+    "PCB09_MAIN_BOX": [
+      [
+        26.0,
+        56.0
+      ],
+      [
+        28.5,
+        45.0
+      ],
+      [
+        104.0,
+        112.0
+      ]
+    ],
+    "PCB09_TOP_PLUGS": [
+      [
+        36.0,
+        54.0
+      ],
+      [
+        29.0,
+        42.0
+      ],
+      [
+        112.0,
+        116.0
+      ]
+    ],
+    "PCB09_SIDE_PLUG": [
+      [
+        26.0,
+        38.0
+      ],
+      [
+        45.0,
+        54.0
+      ],
+      [
+        108.0,
+        112.5
+      ]
+    ],
+    "FAN_WEB": [
+      [
+        1.0,
+        33.0
+      ],
+      [
+        56.1,
+        58.9
+      ],
+      [
+        84.0,
+        133.2
+      ]
+    ],
+    "C3_CARRIER_BOARD": [
+      [
+        -14.0,
+        56.0
+      ],
+      [
+        -58.4,
+        -56.8
+      ],
+      [
+        82.0,
+        125.5
+      ]
+    ],
+    "C3_GH_PLUG_LAYER": [
+      [
+        -14.0,
+        56.0
+      ],
+      [
+        -56.8,
+        -46.0
+      ],
+      [
+        82.0,
+        95.2
+      ]
+    ],
+    "ENCLOSURE_FAN_BOX": [
+      [
+        2.5,
+        32.5
+      ],
+      [
+        58.9,
+        68.9
+      ],
+      [
+        92.0,
+        122.0
+      ]
+    ],
+    "PI5_STEP": [
+      [
+        -23.0,
+        67.0
+      ],
+      [
+        -28.832,
+        28.832
+      ],
+      [
+        92.105,
+        111.895
+      ]
+    ],
+    "PI5_ACTIVE_COOLER_STEP": [
+      [
+        -21.127,
+        43.627
+      ],
+      [
+        -20.7,
+        22.825
+      ],
+      [
+        94.35,
+        108.568
+      ]
+    ]
+  },
+  "rotations": {
+    "0": {
+      "bounds_mm": [
+        [
+          -19.612,
+          25.612
+        ],
+        [
+          24.638,
+          49.362
+        ],
+        [
+          92.2,
+          130.0
+        ]
+      ],
+      "exact_intersections_mm3": {
+        "PCB09_GPIO_SOCKET": 342.194,
+        "PCB09_STRIP": 156.892,
+        "PI5_STEP": 310.502
+      },
+      "neighbour_aabb_hits": [
+        "PCB09_GPIO_SOCKET",
+        "PCB09_STRIP",
+        "PI5_STEP"
+      ],
+      "pi_cooler_exact_screened": true
+    },
+    "90": {
+      "bounds_mm": [
+        [
+          3.638,
+          28.362
+        ],
+        [
+          1.388,
+          46.612
+        ],
+        [
+          92.2,
+          130.0
+        ]
+      ],
+      "exact_intersections_mm3": {
+        "PCB09_GPIO_SOCKET": 338.642,
+        "PCB09_STRIP": 184.541,
+        "PCB09_BRIDGE": 25.529,
+        "PCB09_MAIN_BOX": 302.696,
+        "PCB09_SIDE_PLUG": 12.443
+      },
+      "neighbour_aabb_hits": [
+        "PCB09_GPIO_SOCKET",
+        "PCB09_STRIP",
+        "PCB09_BRIDGE",
+        "PCB09_MAIN_BOX",
+        "PCB09_SIDE_PLUG",
+        "PI5_STEP",
+        "PI5_ACTIVE_COOLER_STEP"
+      ],
+      "pi_cooler_exact_screened": false
+    },
+    "180": {
+      "bounds_mm": [
+        [
+          6.388,
+          51.612
+        ],
+        [
+          24.638,
+          49.362
+        ],
+        [
+          92.2,
+          130.0
+        ]
+      ],
+      "exact_intersections_mm3": {
+        "BODY_PRIMARY_FRAME": 144.695,
+        "PCB09_GPIO_SOCKET": 249.418,
+        "PCB09_STRIP": 75.385,
+        "PCB09_BRIDGE": 75.675,
+        "PCB09_MAIN_BOX": 3763.723,
+        "PCB09_TOP_PLUGS": 940.964,
+        "PCB09_SIDE_PLUG": 232.917
+      },
+      "neighbour_aabb_hits": [
+        "PCB09_GPIO_SOCKET",
+        "PCB09_STRIP",
+        "PCB09_BRIDGE",
+        "PCB09_MAIN_BOX",
+        "PCB09_TOP_PLUGS",
+        "PCB09_SIDE_PLUG",
+        "PI5_STEP"
+      ],
+      "pi_cooler_exact_screened": false
+    },
+    "270": {
+      "bounds_mm": [
+        [
+          3.638,
+          28.362
+        ],
+        [
+          27.388,
+          72.612
+        ],
+        [
+          92.2,
+          130.0
+        ]
+      ],
+      "exact_intersections_mm3": {
+        "BODY_PRIMARY_FRAME": 1121.685,
+        "PCB09_GPIO_SOCKET": 42.981,
+        "PCB09_BRIDGE": 2.866,
+        "PCB09_MAIN_BOX": 302.154,
+        "PCB09_SIDE_PLUG": 93.687,
+        "FAN_WEB": 2453.129,
+        "ENCLOSURE_FAN_BOX": 7660.851
+      },
+      "neighbour_aabb_hits": [
+        "PCB09_GPIO_SOCKET",
+        "PCB09_BRIDGE",
+        "PCB09_MAIN_BOX",
+        "PCB09_SIDE_PLUG",
+        "FAN_WEB",
+        "ENCLOSURE_FAN_BOX",
+        "PI5_STEP"
+      ],
+      "pi_cooler_exact_screened": false
+    }
+  },
+  "polar_scan": [
+    {
+      "angle_deg": 0,
+      "pinion_xy_mm": [
+        53.0,
+        0.0
+      ],
+      "clockings": {
+        "0": {
+          "bounds_mm": [
+            [
+              17.388,
+              62.612
+            ],
+            [
+              -12.362,
+              12.362
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "90": {
+          "bounds_mm": [
+            [
+              40.638,
+              65.362
+            ],
+            [
+              -35.612,
+              9.612
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "180": {
+          "bounds_mm": [
+            [
+              43.388,
+              88.612
+            ],
+            [
+              -12.362,
+              12.362
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "270": {
+          "bounds_mm": [
+            [
+              40.638,
+              65.362
+            ],
+            [
+              -9.612,
+              35.612
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_MAIN_BOX",
+            "PCB09_TOP_PLUGS",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        }
+      }
+    },
+    {
+      "angle_deg": 30,
+      "pinion_xy_mm": [
+        48.043,
+        18.5
+      ],
+      "clockings": {
+        "0": {
+          "bounds_mm": [
+            [
+              12.431,
+              57.655
+            ],
+            [
+              6.138,
+              30.862
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PCB09_BRIDGE",
+            "PCB09_MAIN_BOX",
+            "PCB09_TOP_PLUGS",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "90": {
+          "bounds_mm": [
+            [
+              35.681,
+              60.405
+            ],
+            [
+              -17.112,
+              28.112
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_BRIDGE",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "180": {
+          "bounds_mm": [
+            [
+              38.431,
+              83.655
+            ],
+            [
+              6.138,
+              30.862
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_MAIN_BOX",
+            "PCB09_TOP_PLUGS",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "270": {
+          "bounds_mm": [
+            [
+              35.681,
+              60.405
+            ],
+            [
+              8.888,
+              54.112
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_BRIDGE",
+            "PCB09_MAIN_BOX",
+            "PCB09_TOP_PLUGS",
+            "PCB09_SIDE_PLUG",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        }
+      }
+    },
+    {
+      "angle_deg": 60,
+      "pinion_xy_mm": [
+        34.5,
+        32.043
+      ],
+      "clockings": {
+        "0": {
+          "bounds_mm": [
+            [
+              -1.112,
+              44.112
+            ],
+            [
+              19.681,
+              44.405
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PCB09_BRIDGE",
+            "PCB09_MAIN_BOX",
+            "PCB09_TOP_PLUGS",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "90": {
+          "bounds_mm": [
+            [
+              22.138,
+              46.862
+            ],
+            [
+              -3.569,
+              41.655
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PCB09_BRIDGE",
+            "PCB09_MAIN_BOX",
+            "PCB09_TOP_PLUGS",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "180": {
+          "bounds_mm": [
+            [
+              24.888,
+              70.112
+            ],
+            [
+              19.681,
+              44.405
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PCB09_BRIDGE",
+            "PCB09_MAIN_BOX",
+            "PCB09_TOP_PLUGS",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "270": {
+          "bounds_mm": [
+            [
+              22.138,
+              46.862
+            ],
+            [
+              22.431,
+              67.655
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PCB09_BRIDGE",
+            "PCB09_MAIN_BOX",
+            "PCB09_TOP_PLUGS",
+            "PCB09_SIDE_PLUG",
+            "FAN_WEB",
+            "ENCLOSURE_FAN_BOX",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        }
+      }
+    },
+    {
+      "angle_deg": 90,
+      "pinion_xy_mm": [
+        16.0,
+        37.0
+      ],
+      "clockings": {
+        "0": {
+          "bounds_mm": [
+            [
+              -19.612,
+              25.612
+            ],
+            [
+              24.638,
+              49.362
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PI5_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "90": {
+          "bounds_mm": [
+            [
+              3.638,
+              28.362
+            ],
+            [
+              1.388,
+              46.612
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PCB09_BRIDGE",
+            "PCB09_MAIN_BOX",
+            "PCB09_SIDE_PLUG",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "180": {
+          "bounds_mm": [
+            [
+              6.388,
+              51.612
+            ],
+            [
+              24.638,
+              49.362
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PCB09_BRIDGE",
+            "PCB09_MAIN_BOX",
+            "PCB09_TOP_PLUGS",
+            "PCB09_SIDE_PLUG",
+            "PI5_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "270": {
+          "bounds_mm": [
+            [
+              3.638,
+              28.362
+            ],
+            [
+              27.388,
+              72.612
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_BRIDGE",
+            "PCB09_MAIN_BOX",
+            "PCB09_SIDE_PLUG",
+            "FAN_WEB",
+            "ENCLOSURE_FAN_BOX",
+            "PI5_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        }
+      }
+    },
+    {
+      "angle_deg": 120,
+      "pinion_xy_mm": [
+        -2.5,
+        32.043
+      ],
+      "clockings": {
+        "0": {
+          "bounds_mm": [
+            [
+              -38.112,
+              7.112
+            ],
+            [
+              19.681,
+              44.405
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "90": {
+          "bounds_mm": [
+            [
+              -14.862,
+              9.862
+            ],
+            [
+              -3.569,
+              41.655
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "180": {
+          "bounds_mm": [
+            [
+              -12.112,
+              33.112
+            ],
+            [
+              19.681,
+              44.405
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PCB09_BRIDGE",
+            "PCB09_MAIN_BOX",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "270": {
+          "bounds_mm": [
+            [
+              -14.862,
+              9.862
+            ],
+            [
+              22.431,
+              67.655
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "FAN_WEB",
+            "ENCLOSURE_FAN_BOX",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        }
+      }
+    },
+    {
+      "angle_deg": 150,
+      "pinion_xy_mm": [
+        -16.043,
+        18.5
+      ],
+      "clockings": {
+        "0": {
+          "bounds_mm": [
+            [
+              -51.655,
+              -6.431
+            ],
+            [
+              6.138,
+              30.862
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "90": {
+          "bounds_mm": [
+            [
+              -28.405,
+              -3.681
+            ],
+            [
+              -17.112,
+              28.112
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "180": {
+          "bounds_mm": [
+            [
+              -25.655,
+              19.569
+            ],
+            [
+              6.138,
+              30.862
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "270": {
+          "bounds_mm": [
+            [
+              -28.405,
+              -3.681
+            ],
+            [
+              8.888,
+              54.112
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        }
+      }
+    },
+    {
+      "angle_deg": 180,
+      "pinion_xy_mm": [
+        -21.0,
+        0.0
+      ],
+      "clockings": {
+        "0": {
+          "bounds_mm": [
+            [
+              -56.612,
+              -11.388
+            ],
+            [
+              -12.362,
+              12.362
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "90": {
+          "bounds_mm": [
+            [
+              -33.362,
+              -8.638
+            ],
+            [
+              -35.612,
+              9.612
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "180": {
+          "bounds_mm": [
+            [
+              -30.612,
+              14.612
+            ],
+            [
+              -12.362,
+              12.362
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "270": {
+          "bounds_mm": [
+            [
+              -33.362,
+              -8.638
+            ],
+            [
+              -9.612,
+              35.612
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PCB09_GPIO_SOCKET",
+            "PCB09_STRIP",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        }
+      }
+    },
+    {
+      "angle_deg": 210,
+      "pinion_xy_mm": [
+        -16.043,
+        -18.5
+      ],
+      "clockings": {
+        "0": {
+          "bounds_mm": [
+            [
+              -51.655,
+              -6.431
+            ],
+            [
+              -30.862,
+              -6.138
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "90": {
+          "bounds_mm": [
+            [
+              -28.405,
+              -3.681
+            ],
+            [
+              -54.112,
+              -8.888
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "C3_GH_PLUG_LAYER",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "180": {
+          "bounds_mm": [
+            [
+              -25.655,
+              19.569
+            ],
+            [
+              -30.862,
+              -6.138
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "270": {
+          "bounds_mm": [
+            [
+              -28.405,
+              -3.681
+            ],
+            [
+              -28.112,
+              17.112
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        }
+      }
+    },
+    {
+      "angle_deg": 240,
+      "pinion_xy_mm": [
+        -2.5,
+        -32.043
+      ],
+      "clockings": {
+        "0": {
+          "bounds_mm": [
+            [
+              -38.112,
+              7.112
+            ],
+            [
+              -44.405,
+              -19.681
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "90": {
+          "bounds_mm": [
+            [
+              -14.862,
+              9.862
+            ],
+            [
+              -67.655,
+              -22.431
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "C3_CARRIER_BOARD",
+            "C3_GH_PLUG_LAYER",
+            "PI5_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "180": {
+          "bounds_mm": [
+            [
+              -12.112,
+              33.112
+            ],
+            [
+              -44.405,
+              -19.681
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "270": {
+          "bounds_mm": [
+            [
+              -14.862,
+              9.862
+            ],
+            [
+              -41.655,
+              3.569
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        }
+      }
+    },
+    {
+      "angle_deg": 270,
+      "pinion_xy_mm": [
+        16.0,
+        -37.0
+      ],
+      "clockings": {
+        "0": {
+          "bounds_mm": [
+            [
+              -19.612,
+              25.612
+            ],
+            [
+              -49.362,
+              -24.638
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "C3_GH_PLUG_LAYER",
+            "PI5_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "90": {
+          "bounds_mm": [
+            [
+              3.638,
+              28.362
+            ],
+            [
+              -72.612,
+              -27.388
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "C3_CARRIER_BOARD",
+            "C3_GH_PLUG_LAYER",
+            "PI5_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "180": {
+          "bounds_mm": [
+            [
+              6.388,
+              51.612
+            ],
+            [
+              -49.362,
+              -24.638
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "C3_GH_PLUG_LAYER",
+            "PI5_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "270": {
+          "bounds_mm": [
+            [
+              3.638,
+              28.362
+            ],
+            [
+              -46.612,
+              -1.388
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "C3_GH_PLUG_LAYER",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        }
+      }
+    },
+    {
+      "angle_deg": 300,
+      "pinion_xy_mm": [
+        34.5,
+        -32.043
+      ],
+      "clockings": {
+        "0": {
+          "bounds_mm": [
+            [
+              -1.112,
+              44.112
+            ],
+            [
+              -44.405,
+              -19.681
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "90": {
+          "bounds_mm": [
+            [
+              22.138,
+              46.862
+            ],
+            [
+              -67.655,
+              -22.431
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "C3_CARRIER_BOARD",
+            "C3_GH_PLUG_LAYER",
+            "PI5_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "180": {
+          "bounds_mm": [
+            [
+              24.888,
+              70.112
+            ],
+            [
+              -44.405,
+              -19.681
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "270": {
+          "bounds_mm": [
+            [
+              22.138,
+              46.862
+            ],
+            [
+              -41.655,
+              3.569
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        }
+      }
+    },
+    {
+      "angle_deg": 330,
+      "pinion_xy_mm": [
+        48.043,
+        -18.5
+      ],
+      "clockings": {
+        "0": {
+          "bounds_mm": [
+            [
+              12.431,
+              57.655
+            ],
+            [
+              -30.862,
+              -6.138
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "90": {
+          "bounds_mm": [
+            [
+              35.681,
+              60.405
+            ],
+            [
+              -54.112,
+              -8.888
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "C3_GH_PLUG_LAYER",
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "180": {
+          "bounds_mm": [
+            [
+              38.431,
+              83.655
+            ],
+            [
+              -30.862,
+              -6.138
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        },
+        "270": {
+          "bounds_mm": [
+            [
+              35.681,
+              60.405
+            ],
+            [
+              -28.112,
+              17.112
+            ],
+            [
+              92.2,
+              130.0
+            ]
+          ],
+          "neighbour_aabb_hits": [
+            "PI5_STEP",
+            "PI5_ACTIVE_COOLER_STEP"
+          ],
+          "current_frame_aabb_hit": true
+        }
+      }
+    }
+  ]
+}

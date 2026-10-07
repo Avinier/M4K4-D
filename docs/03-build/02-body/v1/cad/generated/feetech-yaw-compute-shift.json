@@ -1,0 +1,62 @@
+{
+  "pi_pcb_shift_y_mm": -6.0,
+  "pcb09_main_shift_x_mm": 6.0,
+  "servo_bounds_mm": [
+    [
+      -19.611704007722125,
+      25.611704007722
+    ],
+    [
+      24.638295992276888,
+      49.361704007723105
+    ],
+    [
+      92.19999999999999,
+      130.0000001
+    ]
+  ],
+  "overlap_mm3": {
+    "frame_without_XC330_pad": 0.0,
+    "tray_with_shifted_Pi_bosses": 0.0,
+    "Pi_shifted": 0.0,
+    "cooler_shifted": 0.0,
+    "PCB09_shifted": 0.0,
+    "yaw_housing": 0.0,
+    "cassette": 0.0,
+    "fan_web": 0.0,
+    "C3_carrier": 0.0,
+    "shell": 0.0
+  },
+  "separation_mm": {
+    "frame_without_XC330_pad": 4.0,
+    "Pi_shifted": 2.177,
+    "cooler_shifted": 8.913,
+    "PCB09_shifted": 2.42,
+    "fan_web": 6.738,
+    "shell": 7.6
+  },
+  "pcb09_vs_frame_mm3": 0.0,
+  "pcb09_vs_shell_mm3": 0.0,
+  "shifted_pi_vs_tray_mm3": 0.327,
+  "shifted_pi_vs_tray_regions": [
+    {
+      "volume_mm3": 0.327,
+      "bounds_mm": [
+        [
+          -20.8,
+          43.2
+        ],
+        [
+          -32.67,
+          22.33
+        ],
+        [
+          94.04500005000241,
+          94.05
+        ]
+      ]
+    }
+  ],
+  "shifted_cooler_vs_tray_mm3": 0.0,
+  "shifted_pcb09_vs_tray_mm3": 0.0
+}

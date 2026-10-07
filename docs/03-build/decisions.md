@@ -48,7 +48,11 @@ The central record of every decision and change made during the build phase. New
 | [D-041](#d-041) | 2026-10-04 | Body / power button; E-stop removed (BO-018 registered; CH-041, CH-042, CH-046, HN-001, HN-004; W40, J2-9; W22, J3-7, W38 removed) | No E-stop: the rear red mushroom becomes the momentary power button (LTC2954 `PB`, GH2 `J2-9` on PCB-02's +Y edge, 10 k wetting pull-up); a press also resets `SYSTEM_ARM`, so it stops the motors in hardware; the latching NC IDEC XA1E is replaced by a 16 mm momentary 1NO mushroom in the same well | ACTIVE; DESIGN; HOLD on the received part's fit in the well and bench PB-01 to PB-06 |
 | [D-042](#d-042) | 2026-10-04 | Body / compute retention and cooling (BO-033–BO-042; CH-084; W41, J9-4) | Pi 5 screwed to a vented three-point compute tray (rear −Y lug, front −Y column, rear +Y block); Active Cooler on its push pins with tip keep-outs; BO-040 2-wire 4010 side intake fan on a +Y frame web, switched on/off by Pi GPIO24 through a MOSFET on PCB-09 (`J9-4`, `gpio-fan`); +Y shell grille and collar, rear-panel vent slots, open floor as the outlet | ACTIVE; fan size and position superseded by D-043; HOLD on the bench thermal test, the AR-61 noise check, CR-02 and coupons |
 | [D-043](#d-043) | 2026-10-04 | Body / enclosure fan vs mic ports (BO-040, BO-041; W41) | The +Y enclosure fan shrinks from a 4010 to the purchased 3010 hydraulic model and moves to X 17.5, Z 107, midway between the +Y mic ports: grille edge 24.1 mm from FRONT_L (was 14) and 25.9 mm from REAR_L; mic array unchanged | ACTIVE; DESIGN; HOLD on measured mounting holes, the bench thermal test and the AR-61 noise check |
+| [D-044](#d-044) | 2026-10-04 | Body / head yaw stage (BO-043–BO-050, BO-056–BO-062; PCB-08/14; W37/W42/W43) | 61810-2Z bearing cartridge, 1:1 printed scissor spur pair, ±62° hard stops and FFC clock-spring cassette | ACTIVE; DESIGN; HOLD on received parts, coupons and B1/B4/cassette tests; D-047 changes its servo |
 | [D-045](#d-045) | 2026-10-05 | Body / service-panel internal frames (BO-022, BO-023, BO-053; BO-031; BO-063 registered) | Internal panel frames printed as part of the shell, not bonded; bosses lengthened to 7.1–7.7 mm with M3 × 6 heat-set inserts for the M3 × 8 machine screws | ACTIVE; DESIGN; HOLD on the panel-boss coupon and the shell print |
+| [D-046](#d-046) | 2026-10-07 | Head / pitch and roll actuators (HD-001 registered; RP-01 `ACT-01` overridden for pitch/roll) | Feetech STS3045M (metal gear, coreless, 34.8 g) for pitch and roll, replacing the XC330-M288; fastest pitch moves capped at 70% speed; head rail setpoint must rise above the servo's 4.8 V minimum; yaw servo and bus protocol open | SELECTED; HOLD on head CAD re-fit, rail setpoint, bench B1/B4 |
+| [D-047](#d-047) | 2026-10-07 | Body / yaw servo (BO-043) | Waveshare ST3215-HS on a 12 V yaw-only rail on PCB-03 replaces the D-044 XC330-M181-T: speed margin first, one Feetech protocol with D-046; STS3250 fallback on lash, XC330-M181 if no Feetech case fits | SELECTED; provisional case fit found; HOLD on mount/hub integration, rail and bench B1/B4 |
+| [D-048](#d-048) | 2026-10-07 | Body / ST3215-HS yaw integration and compute-stack shift (BO-043, BO-056, BO-061; CH-084 PCB-09, CH-086 PCB-10, PCB-04; W15) | HS on the true horn axis, horn up, case to -X, 7.6 mm lower, clamped by four M2 screws to a frame ring; Pi, cooler, tray bosses and PCB-09 move +10 X / -6 Y; tray +Y edge to Y 23.5; C3 Z 92 header row repacked | ACTIVE; DESIGN in CAD, targeted checks ALL PASS; HOLD on the received HS, shell-fit rerun, head re-balance and bench B1/B4 |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -1830,3 +1834,134 @@ The yaw-carried mass tree does not include the hub, rotor, inner ring or PCB-14.
 - **Panel-boss coupon:** print a frame corner with two bosses in the shell's roof-down orientation. Press BO-063 inserts and check the 2.35 mm wall does not split. Then do a pull-out test and 20 panel removals with BO-031.
 - **Shell print:** confirm the supports at the frame edges and boss undersides, and re-measure the shell's support area with the DfAM tool.
 - **Torque:** set a hand-tight limit for the M3 × 8 into the inserts once the coupon has been tested.
+
+## D-046
+
+**2026-10-07 · Head / pitch and roll actuators (HD-001 registered; overrides RP-01 `ACT-01` for pitch and roll) · SELECTED; HOLD on the head CAD re-fit, the head-rail setpoint and bench B1/B4**
+
+**Decision.** The builder chose the **Feetech STS3045M** for both pitch and roll, on cost (₹3,661 incl. GST, [Evelta](https://evelta.com/sts3045m-6v-6kg-cm-360deg-metal-gear-digital-servo-motor/), 5 in stock on 2026-10-07) and accepted the head remodel it needs. The fastest pitch moves are capped at **70% speed**; roll keeps full speed. Yaw stays BO-043 (XC330-M181) for now; see Open.
+
+**Part (`D`, Evelta listing and [Feetech specification](https://pages.switch-science.com/comparison/files/feetech/serial-sts/STS3045M_datasheet.pdf)):** 4.8–7.4 V; 6 kg·cm (0.59 N·m) stall and 2 kg·cm (0.20 N·m) rated at 6 V; 0.133 s/60° (75 rpm) no-load at 6 V; 1.4 A stall; 120 mA no-load; **34.8 ± 1 g**; 36 × 15 × 29.2 mm case and 48.8 mm mounting-ear span; aluminium case, metal gears, coreless motor, ball bearings; 12-bit magnetic encoder, 360°; half-duplex TTL serial, 38.4 kbps–1 Mbps; 25T/Ø5.9 mm spline and M3 × 6 horn screw. The specification **does publish 1:281 reduction and ≤0.5° gearbox backlash**; rotor/gear inertia remains unpublished (`U`). Its table says 4.0 V minimum while Feetech's product page says 4.8 V; use 4.8 V until the received revision is checked.
+
+**Why (paper screen, `E`).** Demands are the RP-01 `actuator-screen-01.md` values with the high internal-inertia bound; a k× slower move cuts the inertial terms by k², gravity unchanged. Capability is the straight-line endpoint proxy × 0.86 (the XC330 graph-to-proxy ratio), at the 5.23 V worst servo terminal of the proposed 5.5 V rail (below).
+
+| Axis | Demand | STS3045M capability | Ratio |
+|---|---|---|---|
+| Pitch, 100% | 0.249 N·m at 39.3 rpm | about 0.20 N·m | **fails** |
+| Pitch, 70% cap | about 0.145 N·m at 27.5 rpm | about 0.25 N·m | about 1.7× |
+| Pitch, RMS | 0.075 N·m | 0.20 N·m rated | 2.6× (XL330-M288 about 1.4×) |
+| Roll, 100% | 0.129 N·m at 30 rpm | about 0.24 N·m | about 1.8× |
+
+- **Against the XL330-M288** (the cheaper Dynamixel option): similar torque, but metal gears and a stated continuous rating suit pitch's constant gravity load, and the India price and stock are known.
+- **Against the XC330-M288 (`ACT-01`):** about one third of the price; lower torque, which the 70% pitch cap pays for.
+
+**Mass (`E`, not yet in the mass tree).** +11.8 g per servo against the 23 g XC330 rows. Pitch-carried 470.3 → about 482 g; yaw-carried 594.0 → about 618 g (C2 20 g case). Raising the robot CoM by about 0.8 mm puts a_tip near 1.66 m/s² against the 1.582 minimum (D-044: 1.670), by a rough height-only scaling. Re-run the mass tree after the CAD re-fit; do not edit the rows by hand.
+
+**Consequences.**
+- **Head-rail voltage.** The servo's 4.8 V minimum is above the rail's worst-case 4.74 V at the terminal (`LTC3119` 4.891–5.109 V less the 150 mV drop, RP-02 §5.4). Proposed: raise `PB-HEAD` to **5.5 V** (about 5.23–5.62 V at the terminals). That fits both the STS3045M (4.8–7.4 V) and the XC330-M181 yaw (3.7–6.0 V) if yaw shares the rail. The 5.74 V regeneration clamp then sits too close, so move it to about 5.9 V. If yaw leaves the rail (ST3215-HS on its own 12 V rail), 6.0 V is the better setpoint.
+- **Bus protocol.** Pitch and roll now speak Feetech, not Dynamixel 2.0. The physical layer stays half-duplex TTL, but C2's servo driver, the PCB-12 servo interface and the RP-02 `BD-13` per-axis protection (Dynamixel Current Limit, Operating Mode 5, Shutdown 0x35, Bus Watchdog) must be redone with Feetech's protection-current, overload and torque-limit registers.
+- **Head CAD.** The case is longer, thinner and taller than the XC330, with a different mounting pattern. Re-fit the pitch-servo saddle and yoke adapter and the roll-servo mount on the torsion box, then re-run the P07 FEA (41 Hz pitch frame, 84 Hz roll mount), `check_revision.py`, `check_fasteners.py` and the mass tree, and hand the new axes and masses to body v1.
+- **Storyboard.** The 70% pitch cap re-authors the fastest pitch moves (laugh reversal, startle); gate P07 needs the slower trajectory re-screened.
+
+**BOM.** New row **HD-001** (qty 2), the first head row.
+
+**Open:**
+- **Yaw servo.** Keeping the XC330-M181 means two protocols on two buses. The ST3215-HS on a 12 V yaw-only rail on PCB-03 would make the system all-Feetech and widen yaw's margin, but needs the rail, a yaw-bay CAD re-fit and a lash check. Decide after bench B1/B4.
+- **Bench B1** (one STS3045M against a pitch inertia and CoM mock-up, 0.00079 kg·m², at 5.23 V): measured current and margin on the 70% trajectory.
+- **Bench B4:** loaded and unloaded lash with an external angle reference; dead-zone registers at minimum first.
+- **Datasheet:** confirm the mounting drawing, gear ratio and protection registers from the Feetech datasheet before the CAD re-fit.
+- **Rail:** record the 5.5 V setpoint and clamp change in `04-pcbs/power-boards.md` before the PCB-03 schematic.
+
+## D-047
+
+**2026-10-07 · Body / yaw servo (BO-043; affects BO-056, BO-061, PCB-03) · SELECTED; provisional case fit found; HOLD on mount/hub integration, the yaw rail and bench B1/B4**
+
+**Decision.** The builder chose the **Waveshare ST3215-HS** (20 kg·cm, 106 rpm) as the yaw servo, replacing the D-044 XC330-M181-T. It runs from a **12 V yaw-only rail** on PCB-03. This closes the D-046 open item on the yaw servo and the bus protocol: the robot uses the Feetech protocol on all three axes.
+
+**Priorities used, in order:** (1) speed at 63 rpm while accelerating the head's 0.0013 kg·m², since yaw is the tightest axis on paper; (2) lash, which shows most on yaw (no gravity preload, and the spur pair is outside the servo's loop); (3) fit in the yaw bay; (4) one protocol; (5) cost. Mass does not matter, because the servo is body-fixed.
+
+**Part (`D`, Waveshare listing):** 6–12.6 V; 20 kg·cm stall and 0.094 s/60° (106 rpm) no-load at 12 V; 2.4 A stall, 240 mA no-load; kt 8.3 kg·cm/A; 68 g; metal gears; 360° magnetic encoder (4096 counts); Feetech serial bus, 38.4 kbps–1 Mbps. Case about 45 × 25 × 35 mm (`E`, STS3215 class; confirm). Gear ratio and lash are not published (`U`). ₹2,049.99 at [ThinkRobotics](https://thinkrobotics.com/products/st3215-hs) as a pre-order on 2026-10-07; $21.99 at Waveshare.
+
+**Comparison (`E`, straight-line endpoint proxy × graph factor, demand 0.22 N·m at 63 rpm including the D-044 mesh drag):**
+
+| | XC330-M181 at 5.5 V rail | ST3215-HS at 12 V | STS3250 at 12 V |
+|---|---|---|---|
+| Speed margin | about 16–27% | about 40% or more | about 6–14% |
+| Lash | unpublished | unmeasured; STS3215 family 0.6–1.3° | 0.13° / 0.33° loaded (Robonine) |
+| Protocol | Dynamixel | Feetech | Feetech |
+| Price | ₹11,459 | ₹2,050 | ₹6,100 |
+
+**Fallbacks.** If bench B4 shows the HS over about 0.5° loaded, yaw moves to the **STS3250** (same rail and protocol, similar size class to confirm). If no Feetech case fits the yaw bay, yaw returns to the **XC330-M181-T** on the 5.5 V head rail, with Dynamixel as a second protocol.
+
+**Consequences.**
+- **Rail:** a second `LTC3119` on PCB-03 boosting to 12 V for yaw only (about 2 A from a low pack, `E`); set the servo's protection current below it. Nothing new crosses the FFC cassette.
+- **CAD:** the case is about twice the XC330's volume. The frame pad, the BO-056 drive hub (made for the XC330 horn's 12 mm PCD) and the BO-061 case screws are re-designed after the fit check. Neighbours: the D-043 fan web (1.1 mm), the PCB-09 strip, the +Y mic ports (BO-005 noise check) and the Pi cooler.
+- **Yaw-bay correction and trial route (2026-10-07):** the first fit screen omitted PCB-09's over-header strip. At the existing pinion centre the 0° case overlaps that strip by 156.892 mm³, its GPIO socket by 342.194 mm³ and the Pi STEP by 310.502 mm³ with the original compute layout. The [corrected check](02-body/v1/cad/feetech-yaw-fit.md) found no usable case clocking with that layout. An exact-solid follow-up found a provisional packaging route at the **same R37 pinion centre and height**: delete the XC330 pad, move Pi/cooler/PCB-09 −Y 6 mm, reshape PCB-09's outer bay +X 6 mm, and join a new U-cradle to the frame. The HS STEP has zero solid overlap with the trial frame, tray, Pi, cooler, PCB-09, housing, cassette and shell. The candidate cradle/frame is one valid solid. This is not a released mounting or drive design; prove the retainer, shaft datum/BO-056 coupling, altered Pi/PCB-09 hardware, harness, assembly and yaw sweep before switching the live body source. The HS STEP's main-case topology is invalid, so confirm on received hardware.
+- **Yaw-rail alternative:** 11.1 V nominal gives more braking-clamp headroom than 12 V but reduces the current provisional torque margin to about 2.53× nominal, about 2.28× at the assumed low terminal corner. [PCB-03 power delta](04-pcbs/power-boards.md) records the calculation; retain 12 V as the selected paper target until the B1/B2 curve and braking measurements choose the setpoint.
+- **Mass:** +45 g in the body near the yaw plate. Re-run `BODY_YAW_STAGE` and a_tip after the CAD re-fit.
+- **Firmware:** the yaw servo moves to the Feetech driver with HD-001.
+
+**BOM.** BO-043 rewritten in [`BOM.csv`](BOM.csv) and [`02-body/v1/BOM.md`](02-body/v1/BOM.md); listed in [`03-head/v1/BOM.md`](03-head/v1/BOM.md) with the actuator set. BO-056 and BO-061 are unchanged until the re-fit.
+
+**Open:**
+- **Yaw-bay integration:** turn the non-clashing trial into a fastened, serviceable frame/compute/PCB-09 assembly and re-run the D-044 checks before any build order.
+- **Bench B1:** one HS on a yaw inertia mock-up with the scissor mesh, bearing and cassette fitted; log current and position.
+- **Bench B4:** loaded and unloaded lash with an external angle reference, dead zone at minimum.
+- **Rail:** record the 12 V yaw rail in `04-pcbs/power-boards.md` with the D-046 5.5 V head rail.
+
+## D-048
+
+**2026-10-07 · Body / ST3215-HS yaw integration and compute-stack shift (BO-043, BO-056, BO-061; CH-084 PCB-09, CH-086 PCB-10 headers, PCB-04 plug reserve; W15) · ACTIVE; DESIGN in CAD, targeted checks ALL PASS; HOLD on the received HS, the shell-fit rerun, the head re-balance and bench B1/B4**
+
+**Decision.** The builder asked to make the Feetech yaw servo (D-047) work by rearranging the body rather than falling back to the XC330. The ST3215-HS stays on the D-044 pinion axis and gear height. The compute stack moves to make room and to pay back the tip margin.
+
+**Correction to the earlier fit screens.** `check_feetech_yaw_fit.py`, `check_feetech_yaw_relocation.py`, `check_feetech_yaw_compute_shift.py` and `feetech_yaw_cradle.py` put the STEP origin on the pinion. The horn axis is **25.5 mm from it**: Waveshare's 2D drawing (`ST3215-2D.zip`, sheet "SCS215") puts the Ø19.2 horn 10.11 mm from the case end, which is STEP X −25.5 after the −90° turn about X. The Ø2.5 holes the trials treated as case screws are the horn's four holes on a 7.11 mm radius. Turned 180° about the true axis, the case envelope is almost the same box (X −19.1…26.1 against −19.6…25.6), so the packaging conclusion held, but those trial results are superseded by the live-model checks below.
+
+**Servo installation (`body_v1_model.py`, `yaw_servo_st3215_hs()`).**
+- **Orientation:** horn up on the pinion axis (16, 37), case running −X (`YAW_SERVO_CLOCK_DEG` 180).
+- **Height:** case top Z 122.4, **7.6 mm below** the old XC330 seat. The drawing puts both bus plugs in a recess on the horn face, so they plug in from above and need about 10 mm under the plate. The 7.6 mm also keeps the bottom (idler) disc above the PCB-03/04 plug layers (Z 84.3).
+- **Mount:** four M2 × 8 screws, from above, into the horn-face corner holes (STEP: Ø1.6 × 2.8 deep, in a step 2.58 mm below the case top). They clamp four Ø4.8 pillars of a frame-integral ring. Two side walls carry the ring up to the pad under the plate, which grows to X −21…25.5, Y 23.8…50.2. A window (X −15.6…4.9, Y 28.8…45.2) over the plug recess opens to −X for the W15 exit. Driver holes run up through the pad and plate. The two screws inside R44 sit under the cartridge flange, so **servo replacement needs the cartridge out**.
+- **Drive:** BO-056 hub r 8.8 from the horn face (Z 121.85) to Z 136.2, with a Ø12.4 pocket over the horn's centre boss. Four horn screws at 10.1° + 90°k (Ø2.5 horn holes: M2.5 or M3 to confirm on the received horn).
+- **Firmware torque cap:** `YAW_SERVO_TORQUE_LIMIT_NM` 0.30 (Feetech running-torque limit). The 1.96 N·m stall would otherwise exceed the PETG teeth and stops; the Lewis "at limit" case stays 36.7 MPa as in D-044.
+
+**Compute stack (`COMPUTE_SHIFT_X/Y` = +10, −6 mm).**
+- **What moves:** the Pi 5, the Active Cooler, the four tray bosses and inserts, the push-pin keep-outs, PCB-09 (all parts) and its plug reserves, J9-4, and the Pi USB-C plug reserve. The pigtail drop moves +10 mm in X only.
+- **Why −6 Y:** the Pi's GPIO-header edge was under the servo case.
+- **Why +10 X:** about 112 g moves forward to recover the tip margin the Feetech servos cost.
+- **Tray (BO-033):**
+  - its +Y edge stops at **Y 23.5**, 1.1 mm inboard of the servo, so it still slides in from the front;
+  - the front grows to X 80.5;
+  - the front screw moves to (64, −41.5) on a new −Y ear, with the column to Y −45;
+  - the rear +Y screw, block and column move to (−24, 17.5), because the old corner swept under the lowered servo;
+  - the vent row at Y 21 is dropped.
+
+  Tray print 20.58 g (was 23.1 g).
+- **PCB-04 (paper):** its top-entry plug reserve now starts at X −14 (was −26), so **J4-6 must sit forward of X −14**. The tray block uses the freed corner.
+- **C3 carrier PCB-10 (paper):** the Z 92 GH row is repacked to start at X 6.5, right of the moved USB-C plug: J10-7, J10-3, J10-4, J10-10, J10-12. **J10-11 (spare, not fitted since D-041) loses its header.**
+- **Harness:** the `HARNESS_SIGNAL_TRUNK` reserve moves 4 mm toward −Y, clear of the servo's bottom disc.
+
+**Checks (live model, 2026-10-07).**
+- `check_yaw_stage.py` **ALL PASS**: no stage, sweep, cartridge-lowering, pinion-drop or moving-part clashes, and the frame is one solid. The hub and mount screws' engagement in the servo's own holes is reported as info.
+- `check_compute_mount.py` ALL PASS, including the front-slide install sweep and every tray-screw driver path.
+- `check_cooling_path.py`, `check_charge_inlet.py`, `check_power_button.py`: ALL PASS.
+- `check_body_frame_fit.py`, `check_body_panel_fit.py`, `check_mic_mounts.py`: clean.
+- `check_body_layout.py` ok, after the one-line fix D-045 recorded (the `HEAD_V1` row key).
+- Not yet run: `check_shell_frame_fit.py` (about 70 min, started) and the chassis `check_layout.py`.
+
+**Mass and stability.**
+- `BODY_YAW_STAGE` is 199.4 g at (11.62, 15.0, 126.86), was 150.3 g. `BODY_PRIMARY_FRAME` is 172.59 g, was 169.18. `COMPUTE_TRAY_AND_PI_FIXINGS` is 27.07 g at (21.16, −10.44, 86.98).
+- **Whole robot with the current head tree (XC330 rows):** a_tip **1.667**, worst head pose 1.663, against 1.582. The harness allowance must stay forward of **X −4.0**.
+- **With the STS3045M head what-if** (`feetech-mass-whatif.json`, D-046): a_tip **1.621**, a 2.5% margin. The head-pose bound needs the head A0 re-balance first: the unbalanced what-if moves the pitch-carried CoM 1.5 mm off the axis.
+
+**Side load (risk).** The 7.6 mm drop lengthens the pinion-to-horn lever to 26.6 mm. The moment on the HS output is **0.355 N·m** at the 13.3 N peak (XC330: about 0.2). Feetech does not rate radial load. If bench B1/B4 or endurance shows wear, add a support bearing for the hub in the pad, and drive the pinion through a compliant coupling so the servo's bearings are not doubly constrained.
+
+**BOM.** BO-043, BO-056 and BO-061 rewritten.
+
+**Open:**
+- **Received part:** measure the HS. Check the horn-axis offset, the corner-hole positions (the drawing and the STEP differ by 0.8 mm), the step height, the horn hole thread and the plug height with cables. The official STEP has one invalid-topology case solid.
+- **Assembly:** confirm the M2 driver path through the pad and plate before the cartridge, and the W15 route from the plug window to PCB-03 `J3-5`.
+- **Service:** two mount screws are under the cartridge flange.
+- **Head:** refit the STS3045M mounts and re-solve A0, then re-run this tip screen with the real head tree.
+- **Shell:** the `check_shell_frame_fit.py` result.
+- **Boards:** place J4-6 forward of X −14 on PCB-04. PCB-10 header row as above. PCB-09 outline unchanged relative to the Pi.
+- **Bench B1/B4** with the pinion fitted, including side-load endurance.

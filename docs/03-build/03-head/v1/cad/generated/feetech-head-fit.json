@@ -1,0 +1,632 @@
+{
+  "method": "AABB screen plus exact overlap for non-legacy named parts",
+  "head_source": "layout_model.build_parts(catalog=False)",
+  "target_entries": [
+    "front_bezel_integral_camera_crown",
+    "main_octagonal_skin",
+    "removable_octagonal_rear_cover",
+    "display_module_1to1_envelope",
+    "display_connector_and_flashing_access_reserve",
+    "connected_rolling_cradle_flange_ear_stalks",
+    "bearing_cartridge_trial",
+    "roll_XC330_1to1_reference",
+    "pitch_XC330_1to1_reference",
+    "pitch_trunnion_49",
+    "connected_pitch_frame_roll_servo_saddle",
+    "yaw_yoke_leg_-55",
+    "yaw_yoke_leg_55",
+    "pitch_servo_to_yoke_adapter_trial",
+    "removable_roll_servo_saddle_strap",
+    "rear_pitch_trim_washer_stack_max"
+  ],
+  "placements": {
+    "roll_tabs_vertical": {
+      "bounds_mm": [
+        [
+          -112.0,
+          -78.9
+        ],
+        [
+          -10.556,
+          6.444
+        ],
+        [
+          17.501,
+          66.301
+        ]
+      ],
+      "aabb_hits": [
+        "main_octagonal_skin",
+        "removable_octagonal_rear_cover",
+        "roll_XC330_1to1_reference",
+        "connected_pitch_frame_roll_servo_saddle",
+        "removable_roll_servo_saddle_strap",
+        "rear_pitch_trim_washer_stack_max"
+      ],
+      "all_part_aabb_hits": [
+        "main_octagonal_skin",
+        "removable_octagonal_rear_cover",
+        "roll_XC330_1to1_reference",
+        "connected_pitch_frame_roll_servo_saddle",
+        "removable_roll_servo_saddle_strap",
+        "roll_servo_case_M2_-8",
+        "roll_servo_case_M2_8",
+        "rear_pitch_trim_washer_stack_max"
+      ],
+      "exact_intersections": [
+        {
+          "part": "removable_octagonal_rear_cover",
+          "overlap_mm3": 56.156,
+          "regions_mm": [
+            [
+              [
+                -112.0,
+                -110.9
+              ],
+              [
+                -5.556,
+                3.444
+              ],
+              [
+                43.401,
+                52.401
+              ]
+            ]
+          ]
+        },
+        {
+          "part": "connected_pitch_frame_roll_servo_saddle",
+          "overlap_mm3": 49.931,
+          "regions_mm": [
+            [
+              [
+                -92.3,
+                -90.3
+              ],
+              [
+                -8.556,
+                6.444
+              ],
+              [
+                20.401,
+                23.101
+              ]
+            ]
+          ]
+        },
+        {
+          "part": "removable_roll_servo_saddle_strap",
+          "overlap_mm3": 160.5,
+          "regions_mm": [
+            [
+              [
+                -96.35,
+                -91.65
+              ],
+              [
+                -8.556,
+                6.444
+              ],
+              [
+                57.701,
+                59.701
+              ]
+            ],
+            [
+              [
+                -92.3,
+                -91.65
+              ],
+              [
+                -8.556,
+                6.444
+              ],
+              [
+                57.701,
+                59.701
+              ]
+            ]
+          ]
+        },
+        {
+          "part": "rear_pitch_trim_washer_stack_max",
+          "overlap_mm3": 806.484,
+          "regions_mm": [
+            [
+              [
+                -110.9,
+                -107.9
+              ],
+              [
+                -8.556,
+                6.444
+              ],
+              [
+                37.901,
+                57.901
+              ]
+            ]
+          ]
+        }
+      ]
+    },
+    "roll_tabs_lateral": {
+      "bounds_mm": [
+        [
+          -112.0,
+          -78.9
+        ],
+        [
+          -19.456,
+          29.344
+        ],
+        [
+          38.401,
+          55.401
+        ]
+      ],
+      "aabb_hits": [
+        "main_octagonal_skin",
+        "removable_octagonal_rear_cover",
+        "roll_XC330_1to1_reference",
+        "connected_pitch_frame_roll_servo_saddle",
+        "removable_roll_servo_saddle_strap",
+        "rear_pitch_trim_washer_stack_max"
+      ],
+      "all_part_aabb_hits": [
+        "main_octagonal_skin",
+        "removable_octagonal_rear_cover",
+        "roll_XC330_1to1_reference",
+        "connected_pitch_frame_roll_servo_saddle",
+        "roll_servo_strap_M2x25_-13",
+        "roll_servo_strap_M2x25_13",
+        "removable_roll_servo_saddle_strap",
+        "rear_pitch_trim_washer_stack_max"
+      ],
+      "exact_intersections": [
+        {
+          "part": "removable_octagonal_rear_cover",
+          "overlap_mm3": 56.156,
+          "regions_mm": [
+            [
+              [
+                -112.0,
+                -110.9
+              ],
+              [
+                -5.556,
+                3.444
+              ],
+              [
+                43.401,
+                52.401
+              ]
+            ]
+          ]
+        },
+        {
+          "part": "removable_roll_servo_saddle_strap",
+          "overlap_mm3": 530.612,
+          "regions_mm": [
+            [
+              [
+                -96.35,
+                -91.65
+              ],
+              [
+                -13.056,
+                14.644
+              ],
+              [
+                40.401,
+                55.401
+              ]
+            ],
+            [
+              [
+                -92.3,
+                -91.65
+              ],
+              [
+                -16.756,
+                14.644
+              ],
+              [
+                40.401,
+                55.401
+              ]
+            ]
+          ]
+        },
+        {
+          "part": "rear_pitch_trim_washer_stack_max",
+          "overlap_mm3": 806.484,
+          "regions_mm": [
+            [
+              [
+                -110.9,
+                -107.9
+              ],
+              [
+                -11.056,
+                8.944
+              ],
+              [
+                40.401,
+                55.401
+              ]
+            ]
+          ]
+        }
+      ]
+    },
+    "pitch_tabs_forward": {
+      "bounds_mm": [
+        [
+          -58.41,
+          -9.61
+        ],
+        [
+          16.0,
+          49.1
+        ],
+        [
+          38.296,
+          55.296
+        ]
+      ],
+      "aabb_hits": [
+        "front_bezel_integral_camera_crown",
+        "main_octagonal_skin",
+        "display_module_1to1_envelope",
+        "display_connector_and_flashing_access_reserve",
+        "connected_rolling_cradle_flange_ear_stalks",
+        "pitch_XC330_1to1_reference",
+        "pitch_trunnion_49",
+        "connected_pitch_frame_roll_servo_saddle",
+        "pitch_servo_to_yoke_adapter_trial"
+      ],
+      "all_part_aabb_hits": [
+        "front_bezel_integral_camera_crown",
+        "main_octagonal_skin",
+        "display_module_1to1_envelope",
+        "display_connector_and_flashing_access_reserve",
+        "connected_rolling_cradle_flange_ear_stalks",
+        "pitch_XC330_1to1_reference",
+        "pitch_trunnion_49",
+        "connected_pitch_frame_roll_servo_saddle",
+        "pitch_servo_M2x6_7.5_-8",
+        "pitch_servo_M2x6_7.5_8",
+        "pitch_servo_to_yoke_adapter_trial"
+      ],
+      "exact_intersections": [
+        {
+          "part": "display_module_1to1_envelope",
+          "overlap_mm3": 248.057,
+          "regions_mm": [
+            [
+              [
+                -16.3,
+                -16.01
+              ],
+              [
+                16.0,
+                45.2
+              ],
+              [
+                38.296,
+                53.296
+              ]
+            ],
+            [
+              [
+                -16.3,
+                -9.61
+              ],
+              [
+                35.7,
+                37.7
+              ],
+              [
+                38.296,
+                53.296
+              ]
+            ]
+          ]
+        },
+        {
+          "part": "display_connector_and_flashing_access_reserve",
+          "overlap_mm3": 976.957,
+          "regions_mm": [
+            [
+              [
+                -18.0,
+                -16.01
+              ],
+              [
+                16.0,
+                45.2
+              ],
+              [
+                38.296,
+                53.296
+              ]
+            ],
+            [
+              [
+                -18.0,
+                -14.4
+              ],
+              [
+                35.7,
+                37.7
+              ],
+              [
+                38.296,
+                53.296
+              ]
+            ]
+          ]
+        },
+        {
+          "part": "connected_rolling_cradle_flange_ear_stalks",
+          "overlap_mm3": 390.0,
+          "regions_mm": [
+            [
+              [
+                -23.5,
+                -21.0
+              ],
+              [
+                16.0,
+                45.2
+              ],
+              [
+                45.401,
+                50.401
+              ]
+            ],
+            [
+              [
+                -23.5,
+                -21.0
+              ],
+              [
+                35.7,
+                37.7
+              ],
+              [
+                45.401,
+                50.401
+              ]
+            ]
+          ]
+        },
+        {
+          "part": "pitch_trunnion_49",
+          "overlap_mm3": 134.978,
+          "regions_mm": [
+            [
+              [
+                -44.01,
+                -36.01
+              ],
+              [
+                44.5,
+                45.2
+              ],
+              [
+                41.796,
+                49.796
+              ]
+            ],
+            [
+              [
+                -42.96,
+                -37.06
+              ],
+              [
+                45.2,
+                49.1
+              ],
+              [
+                42.846,
+                48.746
+              ]
+            ],
+            [
+              [
+                -44.01,
+                -36.01
+              ],
+              [
+                45.2,
+                45.5
+              ],
+              [
+                41.796,
+                49.796
+              ]
+            ]
+          ]
+        },
+        {
+          "part": "pitch_servo_to_yoke_adapter_trial",
+          "overlap_mm3": 352.79,
+          "regions_mm": [
+            [
+              [
+                -52.01,
+                -29.51
+              ],
+              [
+                17.4,
+                20.4
+              ],
+              [
+                38.296,
+                53.296
+              ]
+            ],
+            [
+              [
+                -53.41,
+                -51.41
+              ],
+              [
+                19.0,
+                20.4
+              ],
+              [
+                53.296,
+                55.296
+              ]
+            ]
+          ]
+        }
+      ]
+    },
+    "pitch_tabs_rearward": {
+      "bounds_mm": [
+        [
+          -70.41,
+          -21.61
+        ],
+        [
+          16.0,
+          49.1
+        ],
+        [
+          36.296,
+          53.296
+        ]
+      ],
+      "aabb_hits": [
+        "front_bezel_integral_camera_crown",
+        "main_octagonal_skin",
+        "connected_rolling_cradle_flange_ear_stalks",
+        "pitch_XC330_1to1_reference",
+        "pitch_trunnion_49",
+        "connected_pitch_frame_roll_servo_saddle",
+        "pitch_servo_to_yoke_adapter_trial"
+      ],
+      "all_part_aabb_hits": [
+        "front_bezel_integral_camera_crown",
+        "main_octagonal_skin",
+        "connected_rolling_cradle_flange_ear_stalks",
+        "pitch_XC330_1to1_reference",
+        "pitch_trunnion_49",
+        "connected_pitch_frame_roll_servo_saddle",
+        "pitch_servo_M2x6_-22.5_-8",
+        "pitch_servo_M2x6_-22.5_8",
+        "pitch_servo_M2x6_7.5_-8",
+        "pitch_servo_M2x6_7.5_8",
+        "pitch_servo_to_yoke_adapter_trial"
+      ],
+      "exact_intersections": [
+        {
+          "part": "connected_rolling_cradle_flange_ear_stalks",
+          "overlap_mm3": 7.733,
+          "regions_mm": [
+            [
+              [
+                -23.5,
+                -21.61
+              ],
+              [
+                35.7,
+                37.7
+              ],
+              [
+                45.401,
+                47.446
+              ]
+            ]
+          ]
+        },
+        {
+          "part": "pitch_trunnion_49",
+          "overlap_mm3": 134.978,
+          "regions_mm": [
+            [
+              [
+                -44.01,
+                -36.01
+              ],
+              [
+                44.5,
+                45.2
+              ],
+              [
+                41.796,
+                49.796
+              ]
+            ],
+            [
+              [
+                -42.96,
+                -37.06
+              ],
+              [
+                45.2,
+                49.1
+              ],
+              [
+                42.846,
+                48.746
+              ]
+            ],
+            [
+              [
+                -44.01,
+                -36.01
+              ],
+              [
+                45.2,
+                45.5
+              ],
+              [
+                41.796,
+                49.796
+              ]
+            ]
+          ]
+        },
+        {
+          "part": "pitch_servo_to_yoke_adapter_trial",
+          "overlap_mm3": 910.044,
+          "regions_mm": [
+            [
+              [
+                -64.01,
+                -29.51
+              ],
+              [
+                17.4,
+                20.4
+              ],
+              [
+                38.296,
+                53.296
+              ]
+            ],
+            [
+              [
+                -66.01,
+                -64.81
+              ],
+              [
+                35.7,
+                37.7
+              ],
+              [
+                38.296,
+                53.296
+              ]
+            ]
+          ]
+        }
+      ]
+    }
+  }
+}

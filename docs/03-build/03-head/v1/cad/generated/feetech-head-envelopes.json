@@ -1,0 +1,139 @@
+{
+  "method": "AABB placement screen from source STEP and current A0 axes",
+  "source_step": "purchased/sts3045m_reference.step",
+  "axes_mm": {
+    "roll_y": -1.0557739267834358,
+    "roll_z": 47.90092110829701,
+    "pitch_x": -40.00973006401559,
+    "pitch_z": 45.7964533110988
+  },
+  "nominal_outer_head_box_mm": [
+    [
+      -115.0,
+      0
+    ],
+    [
+      -65.0,
+      65.0
+    ],
+    [
+      0,
+      86.0
+    ]
+  ],
+  "placements": {
+    "roll_tabs_vertical": {
+      "origin_mm": [
+        -112.0,
+        -1.0557739267834358,
+        47.90092110829701
+      ],
+      "shaft_tip_mm": [
+        -78.9,
+        -1.0557739267834358,
+        47.90092110829701
+      ],
+      "bounds_mm": [
+        [
+          -112.0,
+          -78.9
+        ],
+        [
+          -10.556,
+          6.444
+        ],
+        [
+          17.501,
+          66.301
+        ]
+      ],
+      "placement_note": "shaft +X; 48.8 mm tab span approximately vertical; case rear X=-112"
+    },
+    "roll_tabs_lateral": {
+      "origin_mm": [
+        -112.0,
+        -1.0557739267834358,
+        47.90092110829701
+      ],
+      "shaft_tip_mm": [
+        -78.9,
+        -1.0557739267834358,
+        47.90092110829701
+      ],
+      "bounds_mm": [
+        [
+          -112.0,
+          -78.9
+        ],
+        [
+          -19.456,
+          29.344
+        ],
+        [
+          38.401,
+          55.401
+        ]
+      ],
+      "placement_note": "shaft +X; 48.8 mm tab span approximately lateral"
+    },
+    "pitch_tabs_forward": {
+      "origin_mm": [
+        -40.00973006401559,
+        16.0,
+        45.7964533110988
+      ],
+      "shaft_tip_mm": [
+        -40.00973006401559,
+        49.1,
+        45.7964533110988
+      ],
+      "bounds_mm": [
+        [
+          -58.41,
+          -9.61
+        ],
+        [
+          16.0,
+          49.1
+        ],
+        [
+          38.296,
+          55.296
+        ]
+      ],
+      "placement_note": "shaft +Y; long tab/case reach forward (+X)"
+    },
+    "pitch_tabs_rearward": {
+      "origin_mm": [
+        -40.00973006401559,
+        16.0,
+        45.7964533110988
+      ],
+      "shaft_tip_mm": [
+        -40.00973006401559,
+        49.1,
+        45.7964533110988
+      ],
+      "bounds_mm": [
+        [
+          -70.41,
+          -21.61
+        ],
+        [
+          16.0,
+          49.1
+        ],
+        [
+          36.296,
+          53.296
+        ]
+      ],
+      "placement_note": "shaft +Y; long tab/case reach rearward (-X)"
+    }
+  },
+  "limitations": [
+    "outer head box ignores tapered shell and wall thickness",
+    "no exact servo-to-frame intersections or motion sweep",
+    "horn, spline teeth, screw/thread and cable details unmeasured"
+  ]
+}

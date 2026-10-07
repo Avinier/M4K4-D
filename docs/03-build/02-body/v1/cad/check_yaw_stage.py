@@ -83,13 +83,13 @@ def moved(parts, dx=0.0, dy=0.0, dz=0.0):
 
 # --- Parts ------------------------------------------------------------------
 stage = leaves(body.body_yaw_stage())
-servo = [p for p in stage if not label(p).startswith(("YAW_", "PCB"))]  # unlabelled XC330 STEP leaves
+servo = [p for p in stage if not label(p).startswith(("YAW_", "PCB"))]  # unlabelled ST3215-HS STEP leaves (D-048)
 for k, p in enumerate(servo):
-    p.label = f"XC330_STEP_LEAF_{k}"
+    p.label = f"HS_STEP_LEAF_{k}"
 pinion_labels = ("YAW_DRIVE_SCISSOR_", "YAW_PINION_SHAFT", "YAW_SCISSOR_PRELOAD", "YAW_DRIVE_HUB")
 pinion = [p for p in stage if label(p).startswith(pinion_labels)]
 flange_fix = [p for p in stage if label(p).startswith("YAW_FLANGE_")]
-servo_fix = [p for p in stage if label(p).startswith("YAW_SERVO_CASE_SCREW_EXTENSION_")]
+servo_fix = [p for p in stage if label(p).startswith("YAW_SERVO_M2X8_MOUNT_SCREW_")]
 cartridge = [p for p in stage if p not in (*servo, *pinion, *flange_fix, *servo_fix)]
 moving = body.yaw_drive_moving_parts()
 by = {label(p): p for p in [*stage, *moving]}
@@ -131,14 +131,22 @@ results = {}
 results["stage_vs_fixed_mm3"] = clashes([*cartridge, *pinion, *flange_fix, *servo_fix, *servo], fixed)
 stationary = [*cartridge, *pinion, *flange_fix, *servo_fix, *servo]
 pairs = {}
+engagement = {}
 for i, a in enumerate(stationary):
     for b in stationary[i + 1:]:
-        if a.label.startswith("XC330_") and b.label.startswith("XC330_"):
+        if a.label.startswith("HS_") and b.label.startswith("HS_"):
             continue
         v = overlap(a, b)
         if v > TOL:
+            # D-048: hub and mount screws thread into the servo's own holes (intended engagement).
+            screw = next((x for x in (a, b) if x.label.startswith(("YAW_DRIVE_HUB_HORN_SCREW_", "YAW_SERVO_M2X8_MOUNT_SCREW_"))), None)
+            other = b if screw is a else a
+            if screw is not None and other.label.startswith("HS_"):
+                engagement[f"{a.label}:{b.label}"] = v
+                continue
             pairs[f"{a.label}:{b.label}"] = v
 results["stage_internal_mm3"] = pairs
+results["screw_engagement_in_servo_mm3_info"] = engagement
 results["moving_vs_fixed_at_0_mm3"] = clashes(moving, fixed)
 results["frame_solids"] = len(next(p for p in frame if label(p) == "BODY_FRAME_MAIN_PRINT").solids())
 results["hub_solids"] = len(hub.solids())
@@ -296,7 +304,7 @@ sigma_shaft = 32.0 * m_servo / (math.pi * (2.0 * body.YAW_SHAFT[0] / 1000.0) ** 
 results["shaft_and_servo"] = {"radial_at_rest_N": round(f_sep, 1), "radial_at_peak_N": round(f_peak, 1),
                               "lever_mm": round(lever * 1000.0, 1), "moment_on_servo_output_Nm": round(m_servo, 3),
                               "shaft_bending_MPa": round(sigma_shaft / 1e6, 1),
-                              "note": "XC330 radial load is unpublished (2 bearings); bench B1/B4 with the pinion fitted"}
+                              "note": "ST3215-HS radial load is unpublished; D-048 lowered the servo 8 mm, so the lever grew. Bench B1/B4 with the pinion fitted"}
 
 # Hard stop and uplift paths.
 r0, r1, dz0, dz1, _, hw = body.YAW_STOP_DOG
@@ -314,11 +322,11 @@ results["uplift_path"] = {"design_N": round(uplift, 1),
                           "post_and_clamp_screws": "3 x M2 x 8 clamp ring (outer ring) and 3 x M3 x 6 flange screws into frame inserts",
                           "per_flange_screw_N": round(uplift / 3.0, 1)}
 
-# Drag against the yaw servo's paper margin (RP-01: 8% of the moving curve, ~0.01 N.m).
+# Drag against the yaw servo margin (D-047 ST3215-HS screen: ~3x at 63 rpm; XC330 was 8%).
 drag = {"bearing_2Z_E": 0.002, "bearing_2RS_E_for_comparison": 0.015,
         "scissor_mesh_friction_E": round(0.1 * pre, 3), "ffc_loop_restoring_E": 0.002}
 results["drag_Nm"] = {**drag, "total_with_2Z_E": round(drag["bearing_2Z_E"] + drag["scissor_mesh_friction_E"] + drag["ffc_loop_restoring_E"], 3),
-                      "flag": "the scissor friction alone may exceed the RP-01 8% yaw margin; B1 measures it"}
+                      "flag": "small against the ST3215-HS margin; B1 measures it"}
 
 # FFC rolling loop.
 r_in = body.YAW_ROTOR_DRUM[1] + 0.2
@@ -352,7 +360,7 @@ servo_box = None
 for p in servo:
     b = box(p)
     servo_box = b if servo_box is None else servo_box.add(b)
-rows.append(("XC330_M181", 23.0, servo_box.center()))
+rows.append(("ST3215_HS", 68.0, servo_box.center()))  # Waveshare listing (D)
 loop = by["YAW_FFC_ROLLING_LOOP_RESERVE"]
 rows.append(("FFC_22P_X3_IN_CASSETTE_AND_DROPS", 4.5, loop.center()))
 rows.append(("PCB14_YAW_ROTOR_BOARD", 3.0, by["PCB14_YAW_ROTOR_BOARD_RESERVE"].center()))

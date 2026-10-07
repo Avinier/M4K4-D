@@ -1,0 +1,28 @@
+{
+  "angle_deg": 210.0,
+  "clock_deg": 0,
+  "pinion_xy_mm": [
+    -16.043,
+    -18.5
+  ],
+  "case_bounds_mm": [
+    [
+      -51.655,
+      -6.431
+    ],
+    [
+      -30.862,
+      -6.138
+    ],
+    [
+      92.2,
+      130.0
+    ]
+  ],
+  "exact_intersections_mm3": {
+    "BODY_PRIMARY_FRAME_CURRENT": 162.714,
+    "PCB09_COMPLETE": 0.0,
+    "PI5_STEP": 282.08,
+    "PI5_ACTIVE_COOLER_STEP": 671.303
+  }
+}
