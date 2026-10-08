@@ -52,7 +52,7 @@ The central record of every decision and change made during the build phase. New
 | [D-045](#d-045) | 2026-10-05 | Body / service-panel internal frames (BO-022, BO-023, BO-053; BO-031; BO-063 registered) | Internal panel frames printed as part of the shell, not bonded; bosses lengthened to 7.1–7.7 mm with M3 × 6 heat-set inserts for the M3 × 8 machine screws | ACTIVE; DESIGN; HOLD on the panel-boss coupon and the shell print |
 | [D-046](#d-046) | 2026-10-07 | Head / pitch and roll actuators (HD-001 registered; RP-01 `ACT-01` overridden for pitch/roll) | Feetech STS3045M (metal gear, coreless, 34.8 g) for pitch and roll, replacing the XC330-M288; fastest pitch moves capped at 70% speed; head rail setpoint must rise above the servo's 4.8 V minimum; yaw servo and bus protocol open | SELECTED; HOLD on head CAD re-fit, rail setpoint, bench B1/B4 |
 | [D-047](#d-047) | 2026-10-07 | Body / yaw servo (BO-043) | Waveshare ST3215-HS on a 12 V yaw-only rail on PCB-03 replaces the D-044 XC330-M181-T: speed margin first, one Feetech protocol with D-046; STS3250 fallback on lash, XC330-M181 if no Feetech case fits | SELECTED; provisional case fit found; HOLD on mount/hub integration, rail and bench B1/B4 |
-| [D-048](#d-048) | 2026-10-07 | Body / ST3215-HS yaw integration and compute-stack shift (BO-043, BO-056, BO-061; CH-084 PCB-09, CH-086 PCB-10, PCB-04; W15) | HS on the true horn axis, horn up, case to -X, 7.6 mm lower, clamped by four M2 screws to a frame ring; Pi, cooler, tray bosses and PCB-09 move +10 X / -6 Y; tray +Y edge to Y 23.5; C3 Z 92 header row repacked | ACTIVE; CAD fit under review; HOLD on the plug clash, torque/gear proof, received HS, shell fit, head re-balance and bench B1/B2/B4 |
+| [D-048](#d-048) | 2026-10-07 | Body / ST3215-HS yaw integration and compute-stack shift (BO-043, BO-056, BO-061; CH-084 PCB-09, CH-086 PCB-10, PCB-04; W15) | HS on the true horn axis, horn up, case to -X, 7.6 mm lower, clamped by four M2 screws to a frame ring; Pi, cooler, tray bosses and PCB-09 move +10 X / -6 Y; tray +Y edge to Y 23.5; C3 Z 92 header row repacked | ACTIVE; CAD packaging screens clean; HOLD on a matching plug, torque/gear proof, received HS, head re-balance and bench B1/B2/B4 |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -1911,7 +1911,7 @@ The yaw-carried mass tree does not include the hub, rotor, inner ring or PCB-14.
 
 ## D-048
 
-**2026-10-07 · Body / ST3215-HS yaw integration and compute-stack shift (BO-043, BO-056, BO-061; CH-084 PCB-09, CH-086 PCB-10 headers, PCB-04 plug reserve; W15) · ACTIVE; CAD fit under review; HOLD on connector clearance, torque/gear proof, the received HS, shell fit, head re-balance and bench B1/B2/B4**
+**2026-10-07 · Body / ST3215-HS yaw integration and compute-stack shift (BO-043, BO-056, BO-061; CH-084 PCB-09, CH-086 PCB-10 headers, PCB-04 plug reserve; W15) · ACTIVE; CAD packaging screens clean; HOLD on the specified plug, torque/gear proof, the received HS, head re-balance and bench B1/B2/B4**
 
 **Decision.** The builder asked to make the Feetech yaw servo (D-047) work by rearranging the body rather than falling back to the XC330. The ST3215-HS stays on the D-044 pinion axis and gear height. The compute stack moves to make room and to pay back the tip margin.
 
@@ -1946,7 +1946,7 @@ The yaw-carried mass tree does not include the hub, rotor, inner ring or PCB-14.
 - `check_cooling_path.py` current-source rerun **ALL PASS**; `check_charge_inlet.py` and `check_power_button.py` originally passed.
 - `check_body_frame_fit.py` current-source rerun **clean**; `check_body_panel_fit.py` and `check_mic_mounts.py` originally clean.
 - `check_body_layout.py` ok, after the one-line fix D-045 recorded (the `HEAD_V1` row key).
-- No current-source completion result: `check_shell_frame_fit.py` (the saved JSON predates D-048); chassis `check_layout.py` was not run.
+- `check_shell_frame_fit.py` saved 2026-10-08 result is clean for the current D-048 source: no frame, chassis, hardware, lowering or driver overlaps at its sampled positions. Chassis `check_layout.py` was not run.
 
 **Mass and stability.**
 - `BODY_YAW_STAGE` is 199.4 g at (11.62, 15.0, 126.86), was 150.3 g. `BODY_PRIMARY_FRAME` is 172.59 g, was 169.18. `COMPUTE_TRAY_AND_PI_FIXINGS` is 27.07 g at (21.16, −10.44, 86.98).
@@ -1965,7 +1965,7 @@ The yaw-carried mass tree does not include the hub, rotor, inner ring or PCB-14.
 - **Assembly:** confirm the M2 driver path through the pad and plate before the cartridge, and the W15 route from the plug window to PCB-03 `J3-5`.
 - **Service:** two mount screws are under the cartridge flange.
 - **Head:** refit the STS3045M mounts and re-solve A0, then re-run this tip screen with the real head tree.
-- **Shell:** the `check_shell_frame_fit.py` result.
+- **Shell:** the current-source lowering screen is clean; confirm on the first physical assembly.
 - **Boards:** place J4-6 forward of X −14 on PCB-04. PCB-10 header row as above. PCB-09 outline unchanged relative to the Pi.
 - **Bench B1/B4** with the pinion fitted, including side-load endurance.
 - **B2 torque-speed and protection:** validate the proposed yaw torque ceiling at 63 rpm, and include a stall/fault test of the teeth and hard stops; a CAD constant does not enforce a physical cap.

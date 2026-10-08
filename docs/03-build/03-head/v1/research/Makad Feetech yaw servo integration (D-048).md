@@ -5,12 +5,12 @@ Oct 7, 2026 · @Aditya
 > **Review correction (2026-10-08):** The initial four case-mount screw axes
 > missed the corresponding official STEP holes by 0.8 mm. The yaw CAD now
 > follows the STEP axes and its checker no longer waives a mount-screw/case
-> collision. A separate 0.120 mm³ clash remains between the estimated Pi
-> USB-C plug reserve and the purchased C3 DevKitC STEP; select and model the
-> real low-profile plug before claiming connector clearance. The proposed
+> collision. The earlier 0.120 mm³ Pi USB-C plug reserve clash is clear after
+> specifying a ≤13 mm down-exit plug envelope; a matching physical plug must
+> still be selected and measured. The proposed
 > 0.30 N·m yaw ceiling is not implemented or bench-calibrated, and its own
-> PETG tooth estimate exceeds the 15 MPa screen flag. The shell-fit run and
-> received-part checks remain open. The corrected yaw-stage CAD rerun passes;
+> PETG tooth estimate exceeds the 15 MPa screen flag. The 2026-10-08 shell-fit
+> output is clean; received-part checks remain open. The corrected yaw-stage CAD rerun passes;
 > read the earlier "every targeted check passes" statement with the remaining
 > connector and torque limits below.
 
@@ -22,7 +22,7 @@ The Feetech yaw servo (Waveshare ST3215-HS) has a viable body v1 CAD placement w
 - **How it fits:** the servo hangs horn-up on the existing yaw pinion, 7.6 mm lower than the XC330 sat, clamped to a ring built into the frame. The Raspberry Pi, its cooler, the compute tray bosses and PCB-09 moved 10 mm forward and 6 mm toward −Y to make room.
 - **Tipping:** the forward move recovers the stability the heavier Feetech servos cost. The forward tip limit is 1.621 m/s² with the Feetech head, against a 1.582 minimum.
 - **One error found and fixed:** two sessions' fit screens had placed the servo's 3D model 25.5 mm away from its real output shaft. The live model now uses the axis from Waveshare's drawing.
-- **Not yet proven:** nothing has been bought or built. The received servo's dimensions, backlash and side-load endurance, the head re-balance and the 70-minute shell-fit check are still open.
+- **Not yet proven:** nothing has been bought or built. The received servo's dimensions, backlash and side-load endurance, a matching Pi power plug and the head re-balance remain open.
 
 ## Background: why these servos
 
@@ -115,12 +115,12 @@ The original targeted body scripts passed their own assertions. The review found
 | `check_mic_mounts.py` | ok | Mic boards and ports clear |
 | `check_charge_inlet.py`, `check_power_button.py` | ALL PASS | Rear-panel parts unaffected |
 | `check_body_layout.py` | ok | Mass register, CoM and tip screens (after the one-line `HEAD_V1` key fix that D-045 recorded) |
-| `check_shell_frame_fit.py` | Running (about 70 min) | Shell lowered over the new frame and compute stack |
+| `check_shell_frame_fit.py` | Clean (2026-10-08 output) | Shell lowered over the new frame and compute stack at the checker's sampled positions |
 | Chassis `check_layout.py` | Not run | Whole-robot chassis layout |
 
 The original yaw check reported both hub and case-mount screw intersections as engagement. That waiver was wrong for the case screws and has been removed. The corrected screw axes have zero case-solid intersection in a separate exact-solid check, and the full corrected yaw-stage rerun reports all four hole-axis offsets as zero and passes its assertions.
 
-The current `check_compute_mount.py` rerun deliberately **fails** its new fixed-part gate: the estimated Pi power-plug reserve intersects the C3 DevKitC STEP by 0.120 mm³. Its tray retention, driver and slide-in checks remain clear. Current cooling-path and body-frame-fit reruns pass. The saved full shell/frame lowering result still predates D-048.
+The first revised `check_compute_mount.py` rerun failed its new fixed-part gate: the earlier Pi power-plug reserve intersected the C3 DevKitC STEP by 0.120 mm³. The down-exit, ≤13 mm plug envelope now clears it and the compute checker passes, but a matching purchasable plug has not been identified. Its tray retention, driver and slide-in checks remain clear. Current cooling-path, body-frame-fit and full shell/frame lowering outputs are clean. Under-tray harness-reserve intersections remain informational.
 
 ## Mass and stability
 

@@ -2,9 +2,10 @@
 
 This tracks the user's 0–3 checklist against evidence in `03-build`. The
 selected servos are **candidates**, not released production actuators. The
-existing head and body CAD still install XC330 geometry, so derived axes,
-mass, FEA, electrical hardware and whole-robot stability outputs remain the
-XC330 baseline until the mechanical and bench gates below close.
+existing head CAD still installs XC330 pitch/roll geometry, while the body CAD
+now installs the Feetech ST3215-HS on yaw. Head axes, FEA, electrical hardware
+and final whole-robot stability remain provisional until the mechanical and
+bench gates below close.
 
 | Checklist | Result | Evidence / remaining gate |
 |---|---|---|
@@ -18,7 +19,7 @@ XC330 baseline until the mechanical and bench gates below close.
 | 2.1–2.7 / 2.9 head CAD | Reference and exact neutral-pose screen ready; refit open | The reference STEP is validated. [Head fit report](03-head/v1/cad/feetech-head-fit.md) checks four clockings against the 100-entry live head source. Lateral roll ears and rearward pitch ears are preferred trials, but the rear cover/trim/strap and pitch trunnion/cradle/adapter intersect. Live `layout_model.py`, `details.py`, `mass_layout.py`, `axes.json` and derived outputs remain the XC330 build. No production mount or new A0 solution may be inferred from photo-estimated details. |
 | 2.8 / 2.10 head FEA / print edge | Open | Redesign the pitch frame and roll saddle first, then run the RP-06 FEA method and watertight mesh check. |
 | 3.1 yaw bay | **Integrated in the live body model (D-048); physical fit under review** | HS on the true horn axis (the trial screens were 25.5 mm off), horn up, case −X, 7.6 mm lower; Pi/cooler/tray/PCB-09 shifted +10 X / −6 Y. The original yaw checker hid a 0.8 mm mount-hole axis error. The CAD axes and checker are corrected, and the current `check_yaw_stage.py` run passes with four zero axis offsets. Received-part dimensions still need checking. |
-| 3.2–3.9 / 3.11 body CAD/electrical layout/stability | CAD integration under review (D-048) | Clamp-ring mount, BO-056 hub and BO-061 screws modelled. The corrected yaw-stage, current frame-fit and cooling checks pass. The compute checker passes again after the Pi USB-C plug was specified as a down-exit right-angle plug with a body ≤ 13 mm (HN-010; reserve 1.74 mm from the C3 DevKitC). The 0.30 N·m yaw limit is an unimplemented/uncalibrated assumption, and the PETG tooth estimate at that limit exceeds its screen flag. Neutral a_tip is 1.667 (current head tree) / 1.621 with the STS3045M mass-only what-if. Open: shell fit, buying a plug that meets the HN-010 envelope, gear/protection proof, PCB-03 converter, exports and head re-balance. |
+| 3.2–3.9 / 3.11 body CAD/electrical layout/stability | CAD packaging screens pass; hardware gates open (D-048) | Clamp-ring mount, BO-056 hub and BO-061 screws modelled. The corrected yaw-stage, frame-fit, cooling, compute and 2026-10-08 shell-lowering screens are clean. The Pi USB-C plug is specified as a down-exit right-angle plug with a body ≤ 13 mm (HN-010; reserve 1.74 mm from the C3 DevKitC), but no matching part has been selected. The 0.30 N·m yaw limit is an unimplemented/uncalibrated assumption, and the PETG tooth estimate at that limit exceeds its screen flag. Neutral a_tip is 1.667 (current head tree) / 1.621 with the STS3045M mass-only what-if. Open: plug selection, gear/protection proof, PCB-03 converter, exports and head re-balance. |
 | 3.10 mic noise | Bench gate open | Add the closer/faster yaw servo to the AR-61 mic noise test before PCB-06 release. |
 
 Release order: verify the provisional yaw packaging against received hardware;
