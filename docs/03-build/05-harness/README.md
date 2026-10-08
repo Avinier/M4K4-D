@@ -44,7 +44,7 @@
 | JST SM 2.5 mm | Pack NTC break | SMP-02V-BC / SMR-02V-B | Pre-wired pigtail pair | AWG22–26 pigtails, soldered | None |
 | 5264-3P servo | Feetech ST3215-HS yaw `J3-5`; STS3045M pitch/roll within head | Feetech/Waveshare 3-pin cable; [Waveshare states ST-series compatibility](https://www.waveshare.com/sr-cable-5264-3pin.htm) | Vendor | Vendor lead, current rating to confirm | None |
 | Butt splice | `BATBUS` + and − forks | Insulated 12–10 AWG seamless butt splice: 2 × AWG16 in one end, 1 × AWG16 folded double in the other; adhesive dual-wall heat-shrink over it | — | AWG16 | Ratcheting insulated-terminal crimper |
-| USB-C plug | Pi 5 power `W10` | Right-angle, solder type, with a 56 kΩ Rp from CC to VBUS inside the shell (CN-03) | Soldered | AWG18 | Soldering iron |
+| USB-C plug | Pi 5 power `W10` | Right-angle, solder type, cable exiting down (−Z), body ≤ 13 mm beyond the Pi edge (D-048), with a 56 kΩ Rp from CC to VBUS inside the shell (CN-03) | Soldered | AWG18 | Soldering iron |
 
 ## 4. Wire list
 

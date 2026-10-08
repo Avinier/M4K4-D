@@ -1121,7 +1121,10 @@ POWER_BUTTON_LEAD_RESERVES = (
 
 # Pi 5 power: right-angle USB-C plug on the Pi's -Y edge (the port is at X -10.1,
 # Z 96.2) and its pigtail down past the compute tray to PCB-04 J4-1.
-PI_POWER_PLUG_RESERVE = _compute_shifted((-16.2, -4.0, -44.0, -28.6, 92.2, 100.2))  # D-048: moves with the Pi
+# D-048 plug fix: with the Pi 6 mm closer to the C3 DevKitC (14 mm left to its face), the plug
+# is a right-angle USB-C whose cable exits DOWN (-Z) into the pigtail drop, body <= 13 mm past
+# the Pi edge (was a 15.4 mm sideways reserve that clipped the DevKitC by 0.12 mm3).
+PI_POWER_PLUG_RESERVE = _compute_shifted((-16.2, -4.0, -41.8, -28.6, 92.2, 100.2))  # D-048: moves with the Pi
 PI_POWER_PIGTAIL_DROP = _compute_shifted((-13.0, -7.0, -46.0, -39.0, 77.0, 92.2), y=False)  # lands on the PCB04_NY edge reserve (J4-1); D-048: +10 X only, stays inboard of the C3 plugs
 
 # Motor leads: the MOT3001 ships with a 6-pin cable; its motor pair is cut out and

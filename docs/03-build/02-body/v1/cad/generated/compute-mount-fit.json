@@ -20,7 +20,7 @@
     "COMPUTE_TRAY:HARNESS_SIGNAL_TRUNK": 622.875,
     "COMPUTE_TRAY:HARNESS_SENSOR_TRUNK": 487.255
   },
-  "pi_power_plug_vs_c3_devkitc_mm3": 0.12,
+  "pi_power_plug_vs_c3_devkitc_mm3": 0.0,
   "pi_and_cooler_to_tray_hardware_mm3": {},
   "tray_screw_driver_clashes": {},
   "install_sweep_clashes": {},
