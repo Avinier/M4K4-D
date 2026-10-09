@@ -15,9 +15,10 @@ manually positioned solids.
 | `layout_model.py`, `details.py`, `inspection_scene.py`, `harness.py`, `optics.py` | Editable head geometry, mechanism, and inspection groups. |
 | `layout_axes.py`, `motion_envelope.py`, `mass_layout.py` | A0 datums, pose limits, and estimated mass. |
 | `purchased/` | The 1:1 display, camera and C2 source STEPs copied from RP-06 Layout 01, the drawing-based STS3045M reference and the official goBILDA 4001-0025-0006 coupler STEP (D-049). `xc330.stp` is kept for history; nothing installs it. |
-| `feetech.py` | D-049 STS3045M installation: servo poses, roll coupler and pitch horn stack, mount and collar parameters, +Y leg stiffening outline. |
+| `feetech.py` | D-049 STS3045M installation: servo poses, roll coupler and pitch horn stack, mount and collar parameters; the D-050 yoke leg outline, plinth and gusset. |
 | `head-v1.step.py` | Standalone head CAD export. |
 | `head-v1-integrated.step.py` | Parts-only head plus latest body and chassis assembly. |
+| `head-v1-presentation.step.py` | The same robot as built: every part opaque, reservations and overlays left out (D-050). Use it to judge appearance; the inspection models draw the skin and shell at alpha 0.28. |
 | `yaw-yoke.step.py` | Compact review of the turntable, legs, accent inlays, and pitch trunnions. |
 | `ears-v1.step.py` | Focused two-ear assembly with caps, colour inlays, cradle and service hardware. |
 | `check_ears.py`, `generated/ear-service.json` | Nominal cap and inner-mount removal paths, fastener count, and solid/finish checks. |
@@ -26,6 +27,7 @@ manually positioned solids.
 | `purchased/sts3045m_reference.step.py`, `.step` | Drawing-based Feetech STS3045M packaging reference, checked against the drawing in D-049 step 0. See its [brief](purchased/sts3045m_reference-brief.md). |
 | `check_feetech_mounts.py`, `generated/feetech-mounts.json` | D-049 audit: spline and thread engagements, ear joints, insert walls, driver paths and posed minimum clearance of every D-049 part. |
 | `check_leg_clearance.py`, `generated/leg-clearance-d049.json` | Both yoke legs against every moving part (56 poses); compare with `generated/feetech-mounts-baseline.json` from the committed head. |
+| `check_leg_clearance_d050.py`, `generated/leg-clearance-d050.json` | The same sweep on the D-050 matched legs. |
 | `fea/` | Head v1 stiffness FEA (pitch frame, roll mount, +Y yoke leg), adapted from RP-06 Layout 04. See its [README](fea/README.md). |
 | `busy_minute.py`, `generated/busy-minute-d049.json` | RP-01 §11.3 busy minute re-run on the D-049 mass tree with the D-046 pitch cap, and STS3045M moving-curve margins. |
 | `check_feetech_head_envelopes.py`, `check_feetech_head_fit.py`, `feetech_mass_whatif.py` | **Superseded** pre-installation trials against the XC330 head; see [feetech-head-fit.md](feetech-head-fit.md). |
@@ -58,16 +60,28 @@ body v1.
 
 ## Yaw yoke
 
-The two exposed yoke legs now have a darker, faceted outside face: a 0.75 mm
-raised rear load-path rail, a 1.1 mm deep recessed spine panel, and a stepped
-inward shoulder. A pair of separately printable copper-coloured spine inlays
-sit in the recesses with a 0.05 mm adhesive bed and 0.15 mm proud face; the
-pockets can also be painted if the inlays are omitted. The 6 mm structural web
-remains at least 4.9 mm thick at the recess; the shoulder step leaves at least
-5.5 mm across its narrowest point.
-The pitch bearing bores, hard-stop contact, disc feet, and inside clearance
-are unchanged. Each leg can still print flat on its plain inside face without
-trapped support.
+D-050 makes the two legs one matched design (`feetech.py`, `layout_model.py`).
+Each is a 6 mm web with a faceted outline: a plinth flaring onto the disc, a
+waist at disc+23, and an arm rising into the head to the Ø22.4 pad. An inboard
+gusset fans out under the head. The outline is the D-049 free corridor eroded
+0.5 mm and simplified at 0.45 mm, so every facet lies inside the measured free
+space, unioned with the pre-D-049 leg, which the shell reliefs are cut around.
+That replaces D-049's +Y leg, which followed the corridor in 1 mm stair steps,
+had a ledge out to dx +10 at disc+15 and a 24.5 × 15 mm box foot. The +Y leg
+adds the horn pocket and screws, the −Y leg the trunnion bore and pitch-stop
+sector. The skin, ear and cradle reliefs are still cut by the pre-D-049 leg
+(`relief_tool`), so no head shell volume changes.
+
+The outside faces keep the 0.75 mm raised rear rail, the 1.15 mm recessed
+spine panel and its copper inlay (0.05 mm adhesive bed, 0.15 mm proud), now
+ending at disc+30.5 so the waist keeps a ≥ 1.2 mm lip in front of the pocket.
+Both legs carry the ear trim-stack band and the 0.5 mm skin step. Both are
+printed in CF-filled filament (D-049).
+
+The turntable disc's rim tapers from R62.5 under the plate to R58.5 at its
+foot, with a 0.6 mm top chamfer, so its lower edge sits inside the body roof
+(it overhung the roof's rear edge by 2.4 mm). The rim keeps 2.0 mm from the
+body's yaw pinion.
 
 ## Ears
 

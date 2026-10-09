@@ -45,6 +45,8 @@ NECK=-BODY_TOP_Z
 YAW_DISC_THICKNESS=YAW_DISC_PROUD-1.
 YAW_DISC_PLATE=4.
 YAW_DISC_R=62.5
+YAW_DISC_RIM_FOOT_R=58.5   # D-050 tapered rim
+YAW_DISC_TOP_CHAMFER=.6
 YAW_BORE_R=7.
 # Body v1 BO-045 has three M3 inserts at R22, clocked away from its pinion.
 # Counterbores keep the button heads below the disc top and preserve the
@@ -476,13 +478,24 @@ def build_parts(catalog=True,reliefs=True):
     # collar (details.py); the rear bar stays inside the torsion box.
     frame=frame-block(-68,-37,16,50,ROLL_Z-21,ROLL_Z-15)
     add('connected_pitch_frame_roll_servo_saddle',frame,'P','#c38a47',owner='M011-P')
-    # Short-knee legs keep the proven swept silhouette and mounting datums.
-    # The outside faces carry a shallow raised rail and recessed spine facet.
-    # A stepped inward shoulder makes the load path legible in the full robot
-    # view, while leaving at least 5.5 mm web across the narrowest step.
+    # D-050: both legs share one drawn outline (feetech.py): a plinth flaring
+    # onto the disc, a waist at disc+23 and an arm tangent to the Ø22.4 pad,
+    # with an inboard gusset, the outer-face rail and the recessed spine inlay.
+    # The +Y leg adds the horn pocket and screws, the -Y leg the trunnion bore.
     d=YAW_DISC_TOP_Z
+    def xz(points):
+        return [(PITCH_X+dx,PITCH_Z+dz) for dx,dz in points]
+    def facet(points):
+        # First two points are heights above the disc top, the last two dz.
+        (a0,h0),(a1,h1),(a2,z2),(a3,z3)=points
+        return [(PITCH_X+a0,d+h0),(PITCH_X+a1,d+h1),(PITCH_X+a2,PITCH_Z+z2),(PITCH_X+a3,PITCH_Z+z3)]
+    r_pad=fe.LEG_PAD_R
+    outline=[(PITCH_X+dx,d if dz is None else PITCH_Z+dz) for dx,dz in fe.LEG_OUTLINE_DXDZ]
     for y in [-55,55]:
-        leg=extrude(Plane.XZ*Polygon(
+        s_=1 if y>0 else -1
+        # Pre-D-049 leg, kept only as the relief tool for the skin, ears and
+        # cradle, so the head shell volumes do not change.
+        original=extrude(Plane.XZ*Polygon(
             (PITCH_X-21.5,d),(PITCH_X-5.5,d),(PITCH_X-13.5,d+10),
             (PITCH_X-13.5,PITCH_Z-30),(PITCH_X-8.7,PITCH_Z-24),
             (PITCH_X-9.3,PITCH_Z-24),(PITCH_X-9.3,PITCH_Z-20),
@@ -490,46 +503,45 @@ def build_parts(catalog=True,reliefs=True):
             (PITCH_X+4,PITCH_Z-8),(PITCH_X+4,PITCH_Z+6),
             (PITCH_X-6,PITCH_Z+6),(PITCH_X-6,PITCH_Z-6),
             (PITCH_X-21.5,PITCH_Z-30),align=None),amount=6).moved(Location((0,y+3,0)))
-        outer_face=58 if y>0 else -58
+        outer_face=58*s_
         # Plane.XZ extrudes toward -Y. Each cutter straddles only the outer
         # face, so the inner clearance and trunnion bearing face stay intact.
         pocket_start=outer_face+0.05 if y>0 else outer_face+1.10
-        spine_facet=((PITCH_X-20.1,d+9),(PITCH_X-16.0,d+13),
-                     (PITCH_X-16.0,PITCH_Z-38),(PITCH_X-20.1,PITCH_Z-42))
-        recess=extrude(Plane.XZ*Polygon(*spine_facet,align=None),amount=1.15).moved(Location((0,pocket_start,0)))
-        leg=leg-recess
+        old_facet=((PITCH_X-20.1,d+9),(PITCH_X-16.0,d+13),
+                   (PITCH_X-16.0,PITCH_Z-38),(PITCH_X-20.1,PITCH_Z-42))
+        old_recess=extrude(Plane.XZ*Polygon(*old_facet,align=None),amount=1.15).moved(Location((0,pocket_start,0)))
         rail=extrude(Plane.XZ*Polygon(
             (PITCH_X-21.3,d+3),(PITCH_X-19.9,d+3),
             (PITCH_X-19.9,PITCH_Z-32),(PITCH_X-21.3,PITCH_Z-30),
             align=None),amount=0.80).moved(Location((0,outer_face+0.75 if y>0 else outer_face+0.05,0)))
-        relief_tool=leg+rail-axial(4.2,8,(PITCH_X,y,PITCH_Z),'y')
+        relief_tool=original-old_recess+rail-axial(4.2,8,(PITCH_X,y,PITCH_Z),'y')
         # D-049: both rails stop lower and both legs get the ear trim-stack
-        # band (feetech.py); shell reliefs keep the pre-D-049 legs.
-        rail=rail-block(PITCH_X-25,PITCH_X-15,*sorted((outer_face-math.copysign(1,y),outer_face+math.copysign(2,y))),d+fe.LEG_RAIL_TOP_ABOVE_DISC,PITCH_Z)
-        leg=leg+rail
+        # band (feetech.py).
+        rail=rail-block(PITCH_X-25,PITCH_X-15,*sorted((outer_face-s_,outer_face+2*s_)),d+fe.LEG_RAIL_TOP_ABOVE_DISC,PITCH_Z)
+        yi,yo=fe.LEG_INNER_Y*s_,(fe.LEG_INNER_Y+6)*s_
+        leg=extrude(Plane.XZ*Polygon(*outline,align=None),amount=6).moved(Location((0,y+3,0)))
+        leg=leg+axial(r_pad,6,(PITCH_X,(yi+yo)/2,PITCH_Z),'y')
+        pl=fe.LEG_PLINTH
+        x0,x1,py0,py1=pl['top']
+        base=(Plane.XY*Polygon(*[(PITCH_X+px,s_*py) for px,py in pl['base']],align=None)).moved(Location((0,0,d)))
+        top=(Plane.XY*Polygon((PITCH_X+x0,s_*py0),(PITCH_X+x1,s_*py0),(PITCH_X+x1,s_*py1),(PITCH_X+x0,s_*py1),align=None)).moved(Location((0,0,d+pl['h'])))
+        leg=leg+loft([base,top],ruled=True)
+        g=fe.LEG_GUSSET
+        gusset=extrude(Plane.XZ*Polygon(*xz(g['dxdz']),align=None),amount=g['y'][1]-g['y'][0])
+        leg=leg+gusset.moved(Location((0,g['y'][1] if y>0 else -g['y'][0],0)))
+        recess=extrude(Plane.XZ*Polygon(*facet(fe.LEG_SPINE_FACET['recess']),align=None),amount=1.15).moved(Location((0,pocket_start,0)))
+        leg=leg-recess+rail
         t=fe.LEG_TRIM_RELIEF
         band=extrude(Plane.XZ*Polygon(*[(PITCH_X+dx,PITCH_Z+dz) for dx,dz in t['band']],align=None),amount=t['y'][1]-t['y'][0])
         bb=band.bounding_box()
         band=band.moved(Location((0,(t['y'][1]-bb.max.Y) if y>0 else (-t['y'][1]-bb.min.Y),0)))
-        if y<0:leg=leg-band-axial(4.2,8,(PITCH_X,y,PITCH_Z),'y')
+        k=fe.LEG_SKIN_STEP
+        leg=leg-band-block(PITCH_X+k['dx'][0],PITCH_X+k['dx'][1],*sorted(s_*v for v in k['y']),PITCH_Z+k['dz'][0],PITCH_Z+k['dz'][1])
+        if y<0:leg=leg-axial(4.2,8,(PITCH_X,y,PITCH_Z),'y')
         else:
-            # D-049: +Y leg carries the pitch horn. A Ø22.4 pad, a 0.6 mm horn
-            # pocket for radial location, four M3 clearance holes with button
-            # counterbores on the outer face and a centre-screw access hole.
-            yi,yo=fe.LEG_INNER_Y,fe.LEG_INNER_Y+6
-            leg=leg+axial(fe.LEG_PAD_R,6,(PITCH_X,(yi+yo)/2,PITCH_Z),'y')
-            spine=extrude(Plane.XZ*Polygon(*[(PITCH_X+dx,PITCH_Z+dz) for dx,dz in fe.LEG_SPINE_DXDZ],align=None),amount=6)
-            leg=leg+spine.moved(Location((0,yo-spine.bounding_box().max.Y,0)))
-            f=fe.LEG_FOOT
-            foot=block(PITCH_X+f['dx'][0],PITCH_X+f['dx'][1],*f['y'],d,d+f['h'])
-            leg=leg+(foot&Cylinder(f['r'],f['h']).moved(Location((PITCH_X,0,d+f['h']/2))))
-            rb=fe.LEG_INBOARD_RIB
-            rib=extrude(Plane.XZ*Polygon(*[(PITCH_X+dx,PITCH_Z+dz) for dx,dz in rb['dxdz']],align=None),amount=rb['y'][1]-rb['y'][0])
-            leg=leg+rib.moved(Location((0,rb['y'][1]-rib.bounding_box().max.Y,0)))
-            # Re-cut the outer-face spine recess the added material filled.
-            leg=leg-recess
-            k=fe.LEG_SKIN_STEP
-            leg=leg-band-block(PITCH_X+k['dx'][0],PITCH_X+k['dx'][1],*k['y'],PITCH_Z+k['dz'][0],PITCH_Z+k['dz'][1])
+            # D-049: +Y leg carries the pitch horn: a 0.6 mm horn pocket for
+            # radial location, four M3 clearance holes with button counterbores
+            # on the outer face and a centre-screw access hole.
             leg=leg-axial(fe.LEG_HORN_POCKET_R,fe.HORN_POCKET_DEPTH+.2,(PITCH_X,yi+(fe.HORN_POCKET_DEPTH-.2)/2,PITCH_Z),'y')
             leg=leg-axial(fe.LEG_CENTRE_HOLE_R,8,(PITCH_X,(yi+yo)/2,PITCH_Z),'y')
             for deg in fe.HORN['holes_deg']:
@@ -537,38 +549,55 @@ def build_parts(catalog=True,reliefs=True):
                 leg=leg-axial(fe.M3_CLEAR_R,8,(hx,(yi+yo)/2,hz),'y')
                 leg=leg-axial(fe.M3_HEAD_CBORE_R,2*fe.M3_HEAD_CBORE_D,(hx,yo,hz),'y')
         add(f'yaw_yoke_leg_{y}',leg,'Y','#536b78',owner='M011-Y')
-        # Shell/ear/cradle reliefs stay cut by the pre-D-049 leg outline, so
-        # the widened +Y leg must fit the existing pockets (checked posed).
         out[f'yaw_yoke_leg_{y}']['relief_tool']=relief_tool
         # Optional contrast insert: 0.3 mm profile clearance and a 0.05 mm
         # adhesive bed in the recess, with only 0.15 mm proud of the face.
         # It can be printed flat in a second colour or the pocket can be painted.
-        accent=((PITCH_X-19.8,d+9.75),(PITCH_X-16.3,d+13.15),
-                (PITCH_X-16.3,PITCH_Z-38.72),(PITCH_X-19.8,PITCH_Z-42.15))
         accent_start=outer_face+0.15 if y>0 else outer_face+1.05
-        inlay=extrude(Plane.XZ*Polygon(*accent,align=None),amount=1.2).moved(Location((0,accent_start,0)))
+        inlay=extrude(Plane.XZ*Polygon(*facet(fe.LEG_SPINE_FACET['inlay']),align=None),amount=1.2).moved(Location((0,accent_start,0)))
         add(f'yaw_yoke_spine_inlay_{y}',inlay,'Y','#c38a47',owner='M011-Y')
     # Flush turntable disc: top plate, outer rim and bearing hub, with a
     # centre cable bore and a top groove carrying the yaw branch to the +Y leg.
-    disc=Cylinder(YAW_DISC_R,YAW_DISC_PLATE).moved(Location((PITCH_X,0,d-YAW_DISC_PLATE/2)))
-    disc=disc+(Cylinder(YAW_DISC_R,YAW_DISC_THICKNESS)-Cylinder(YAW_DISC_R-2,YAW_DISC_THICKNESS+1)).moved(Location((PITCH_X,0,d-YAW_DISC_THICKNESS/2)))
-    disc=disc+(Cylinder(YAW_BORE_R+5,YAW_DISC_THICKNESS)-Cylinder(YAW_BORE_R,YAW_DISC_THICKNESS+1)).moved(Location((PITCH_X,0,d-YAW_DISC_THICKNESS/2)))
-    # Only the rim and hub reach below the top plate: the RP-06 stationary
-    # pinion runs under the plate between them.
-    disc=disc-axial(YAW_BORE_R,YAW_DISC_THICKNESS+2,(PITCH_X,0,d-YAW_DISC_THICKNESS/2),'z')
-    disc=disc-block(PITCH_X-1.8,PITCH_X+1.8,0,46,d-3.4,d+1)
+    # D-050: the rim tapers from R62.5 under the plate to R58.5 at its foot, a
+    # 2 mm wall, and the top edge has a 0.6 mm chamfer, so the disc reads as a
+    # turntable standing on the roof rather than a slab wider than it. The
+    # skin, ear and cradle reliefs keep the cylindrical disc (relief_tool).
+    cyl_disc=Cylinder(YAW_DISC_R,YAW_DISC_PLATE).moved(Location((PITCH_X,0,d-YAW_DISC_PLATE/2)))
+    cyl_disc=cyl_disc+(Cylinder(YAW_DISC_R,YAW_DISC_THICKNESS)-Cylinder(YAW_DISC_R-2,YAW_DISC_THICKNESS+1)).moved(Location((PITCH_X,0,d-YAW_DISC_THICKNESS/2)))
+    plate=Cylinder(YAW_DISC_R,YAW_DISC_PLATE-YAW_DISC_TOP_CHAMFER).moved(Location((PITCH_X,0,d-YAW_DISC_TOP_CHAMFER-(YAW_DISC_PLATE-YAW_DISC_TOP_CHAMFER)/2)))
+    plate=plate+Cone(YAW_DISC_R,YAW_DISC_R-YAW_DISC_TOP_CHAMFER,YAW_DISC_TOP_CHAMFER).moved(Location((PITCH_X,0,d-YAW_DISC_TOP_CHAMFER/2)))
+    rim_h=YAW_DISC_THICKNESS-YAW_DISC_PLATE
+    rim=Cone(YAW_DISC_RIM_FOOT_R,YAW_DISC_R,rim_h).moved(Location((PITCH_X,0,d-YAW_DISC_PLATE-rim_h/2)))
+    # Inner surface parallel to the outer one, 2 mm in radius, run 0.1 mm past
+    # both ends so the cut is clean.
+    taper=(YAW_DISC_R-YAW_DISC_RIM_FOOT_R)/rim_h
+    rim=rim-Cone(YAW_DISC_RIM_FOOT_R-2-.1*taper,YAW_DISC_R-2+.1*taper,rim_h+.2).moved(Location((PITCH_X,0,d-YAW_DISC_PLATE-rim_h/2)))
+    def hub_and_cuts(disc):
+        disc=disc+(Cylinder(YAW_BORE_R+5,YAW_DISC_THICKNESS)-Cylinder(YAW_BORE_R,YAW_DISC_THICKNESS+1)).moved(Location((PITCH_X,0,d-YAW_DISC_THICKNESS/2)))
+        # Only the rim and hub reach below the top plate: the RP-06 stationary
+        # pinion runs under the plate between them.
+        disc=disc-axial(YAW_BORE_R,YAW_DISC_THICKNESS+2,(PITCH_X,0,d-YAW_DISC_THICKNESS/2),'z')
+        disc=disc-block(PITCH_X-1.8,PITCH_X+1.8,0,46,d-3.4,d+1)
+        for deg in YAW_HUB_BOLT_DEG:
+            theta=math.radians(deg)
+            bx=PITCH_X+YAW_HUB_BOLT_R*math.cos(theta)
+            by=YAW_HUB_BOLT_R*math.sin(theta)
+            disc=disc-axial(YAW_HUB_BOLT_CLEARANCE_R,YAW_DISC_PLATE+1,(bx,by,d-YAW_DISC_PLATE/2),'z')
+            disc=disc-axial(YAW_HUB_BOLT_HEAD_R,YAW_HUB_BOLT_RECESS,(bx,by,d-YAW_HUB_BOLT_RECESS/2),'z')
+        return disc
+    disc=hub_and_cuts(plate+rim)
+    cyl_disc=hub_and_cuts(cyl_disc)
     for i,deg in enumerate(YAW_HUB_BOLT_DEG,1):
         theta=math.radians(deg)
         bx=PITCH_X+YAW_HUB_BOLT_R*math.cos(theta)
         by=YAW_HUB_BOLT_R*math.sin(theta)
-        disc=disc-axial(YAW_HUB_BOLT_CLEARANCE_R,YAW_DISC_PLATE+1,(bx,by,d-YAW_DISC_PLATE/2),'z')
-        disc=disc-axial(YAW_HUB_BOLT_HEAD_R,YAW_HUB_BOLT_RECESS,(bx,by,d-YAW_HUB_BOLT_RECESS/2),'z')
         # Nominal ISO 7380 M3 x 6: 2.2 mm through the disc, 3.8 mm into
         # the body hub insert. The head finishes 0.15 mm below the disc top.
         screw=axial(1.5,6,(bx,by,d-YAW_HUB_BOLT_RECESS-3),'z')
         screw=screw+axial(2.85,1.65,(bx,by,d-YAW_HUB_BOLT_RECESS+0.825),'z')
         add(f'yaw_disc_to_body_hub_M3x6_{i}',screw,'Y','#b7bfc0',owner='M021-Y')
     add('yaw_turntable_disc_flush',disc,'Y','#647787',owner='M012')
+    out['yaw_turntable_disc_flush']['relief_tool']=cyl_disc
     # D-049 pitch output: 25T aluminium disc horn (E, HD-002) on the servo
     # spline, its disc in the +Y leg's 0.6 mm pocket. ISO 4762 M3 x 5 through
     # the horn web into the output; four ISO 7380 M3 x 6 from the leg's outer

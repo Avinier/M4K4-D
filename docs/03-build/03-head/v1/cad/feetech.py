@@ -96,20 +96,42 @@ COLLAR_FLOOR = (-68.5, -51., 16.9, 21.9)   # X, Z of the keel-to-collar floor
 # nominal (tab-root fillet unmeasured).
 WASHER = dict(r_in=1.35, r_out=3.0, t=.5)
 
-# +Y yoke leg stiffening (D-049). The leg now carries the pitch reaction from
-# the horn to the disc; the old 8 x 6 mm spine screened at 8.6 N*m/rad in the
-# leg FEA. The widened in-plane outline (Z disc+15 to the old leg top) is the free corridor of the R/P swept
-# volume in the leg's own Y 52-58 slab (roll +/-21 in 1.5 deg, pitch -25..+43
-# in 1 deg, 0.6 mm surface samples), less 1.5 mm, smoothed over +/-2 mm in Z,
-# as (dx, dz) from the pitch axis. The foot fills the free neck below Z
-# disc+15 inside the disc radius. Exact posed checks re-verify it.
-LEG_SPINE_DXDZ = [(-31.99, -64.82), (-31.99, -63.82), (-31.99, -62.82), (-31.99, -61.82), (-22.69, -60.82), (-21.69, -59.82), (-21.69, -58.82), (-21.69, -57.82), (-21.69, -56.82), (-22.19, -55.82), (-22.19, -54.82), (-22.69, -53.82), (-23.19, -52.82), (-23.69, -51.82), (-24.19, -50.82), (-24.69, -49.82), (-25.19, -48.82), (-25.69, -47.82), (-26.19, -46.82), (-26.69, -45.82), (-27.19, -44.82), (-27.69, -43.82), (-28.19, -42.82), (-28.69, -41.82), (-29.19, -40.82), (-29.19, -39.82), (-29.19, -38.82), (-27.19, -37.82), (-26.19, -36.82), (-26.19, -35.82), (-26.19, -34.82), (-26.19, -33.82), (-27.19, -32.82), (-28.19, -31.82), (-29.19, -30.82), (-30.19, -29.82), (-31.19, -28.82), (-31.99, -27.82), (-31.99, -26.82), (-31.99, -25.82), (-31.99, -24.82), (-31.99, -23.82), (-31.99, -22.82), (-31.99, -21.82), (-31.99, -20.82), (-31.99, -19.82), (-31.99, -18.82), (-31.99, -17.82), (-31.99, -16.82), (-31.99, -15.82), (-31.99, -14.82), (-31.99, -13.82), (-31.99, -12.82), (-31.99, -11.82), (-31.19, -10.82), (-29.19, -9.82), (-27.19, -8.82), (-24.69, -7.82), (-22.69, -6.82), (-20.69, -5.82), (-18.19, -4.82), (-16.69, -3.82), (-16.19, -2.82), (-15.19, -1.82), (-14.19, -0.82), (-13.69, 0.18), (-12.69, 1.18), (-12.19, 2.18), (-11.19, 3.18), (-10.19, 4.18), (-9.69, 5.18), (10.0, 5.18), (10.0, 4.18), (10.0, 3.18), (10.0, 2.18), (10.0, 1.18), (10.0, 0.18), (10.0, -0.82), (10.0, -1.82), (10.0, -2.82), (10.0, -3.82), (10.0, -4.82), (10.0, -5.82), (10.0, -6.82), (10.0, -7.82), (10.0, -8.82), (10.0, -9.82), (10.0, -10.82), (10.0, -11.82), (10.0, -12.82), (9.31, -13.82), (8.31, -14.82), (7.31, -15.82), (6.31, -16.82), (5.31, -17.82), (4.31, -18.82), (3.81, -19.82), (2.81, -20.82), (1.81, -21.82), (0.81, -22.82), (-0.19, -23.82), (-1.19, -24.82), (-2.19, -25.82), (-2.69, -26.82), (-3.69, -27.82), (-4.69, -28.82), (-5.69, -29.82), (-6.69, -30.82), (-7.69, -31.82), (-8.69, -32.82), (-9.19, -33.82), (-10.19, -34.82), (-11.19, -35.82), (-12.19, -36.82), (-13.19, -37.82), (-14.19, -38.82), (-15.19, -39.82), (-15.19, -40.82), (-15.19, -41.82), (-15.19, -42.82), (-15.19, -43.82), (-15.19, -44.82), (-14.19, -45.82), (-11.69, -46.82), (-11.69, -47.82), (-11.69, -48.82), (-11.69, -49.82), (-12.19, -50.82), (-13.19, -51.82), (-14.19, -52.82), (-14.69, -53.82), (-14.69, -54.82), (-14.69, -55.82), (-14.69, -56.82), (-14.19, -57.82), (-13.19, -58.82), (-12.19, -59.82), (-11.19, -60.82), (-9.69, -61.82), (-2.19, -62.82), (10.0, -63.82), (10.0, -64.82)]
-# Inner face at Y 48: from Y 46 its top corner came within 0.73 mm of the
-# front bezel at roll -21 deg, pitch +43.
-LEG_FOOT = dict(dx=(-29.99, -5.49), y=(48., 58.), h=15., r=61.5)
-# Inboard rib (Y 48.5-52) on the spine from the foot to Z ~0: the free
-# corridor of that slab, generated the same way on the final axes.
-LEG_INBOARD_RIB = dict(y=(48.5, 52.), dxdz=[[-31.99, -65.05], [-31.99, -64.55], [-20.08, -64.05], [-20.08, -63.55], [-20.08, -63.05], [-20.08, -62.55], [-20.08, -62.05], [-20.08, -61.55], [-20.08, -61.05], [-20.08, -60.55], [-20.08, -60.05], [-20.08, -59.55], [-20.58, -59.05], [-20.58, -58.55], [-21.08, -58.05], [-21.08, -57.55], [-21.58, -57.05], [-21.58, -56.55], [-22.08, -56.05], [-22.08, -55.55], [-22.58, -55.05], [-22.58, -54.55], [-23.08, -54.05], [-23.08, -53.55], [-23.08, -53.05], [-23.58, -52.55], [-23.58, -52.05], [-24.08, -51.55], [-24.08, -51.05], [-24.58, -50.55], [-24.58, -50.05], [-25.08, -49.55], [-25.08, -49.05], [-25.58, -48.55], [-25.58, -48.05], [-26.08, -47.55], [-26.08, -47.05], [-24.08, -46.55], [-21.58, -46.05], [-18.08, -46.05], [-18.08, -46.55], [-18.08, -47.05], [-18.08, -47.55], [-18.08, -48.05], [-17.08, -48.55], [-16.58, -49.05], [-16.58, -49.55], [-14.08, -50.05], [-12.58, -50.55], [-12.58, -51.05], [-13.08, -51.55], [-13.58, -52.05], [-14.08, -52.55], [-14.58, -53.05], [-15.08, -53.55], [-15.58, -54.05], [-16.08, -54.55], [-16.58, -55.05], [-17.08, -55.55], [-17.08, -56.05], [-17.08, -56.55], [-17.08, -57.05], [-17.08, -57.55], [-17.08, -58.05], [-17.08, -58.55], [-17.08, -59.05], [-17.08, -59.55], [-16.58, -60.05], [-16.08, -60.55], [-15.58, -61.05], [-15.08, -61.55], [-14.58, -62.05], [-14.08, -62.55], [-13.58, -63.05], [-13.08, -63.55], [-12.08, -64.05], [-11.08, -64.55], [-9.08, -65.05]])
+# Yoke legs (D-050 restyle). Both legs share one faceted outline. D-049 used
+# the +Y leg's free corridor directly: the R/P swept volume in its Y 52-58 slab
+# (roll +/-21 in 1.5 deg, pitch -25..+43 in 1 deg, 0.6 mm samples) less 1.5 mm,
+# traced in 1 mm steps. That left stair-stepped edges, a ledge out to dx +10 at
+# disc+15 and a 24.5 x 15 mm box foot, all visible between the disc and the
+# head. Here the corridor is eroded 0.5 mm and simplified at 0.45 mm (shapely),
+# so every facet lies inside it, and the ledge and box give way to a plinth.
+# The fit is unioned with the pre-D-049 leg (free by construction: the skin,
+# ear and cradle reliefs are cut by it), which carries the waist's front edge
+# out to dx -13.5. The waist and the arm keep that full width: the leg's
+# in-plane stiffness goes with width cubed, and narrower drawn outlines
+# screened at 24-32 N*m/rad against D-049's 49.9. (dx, dz) from the pitch
+# axis; None = disc top.
+LEG_OUTLINE_DXDZ = (
+    (-21.5, None), (-5.5, None), (-9.0, -65.05), (-11.51, -61.21),
+    (-13.5, -58.9), (-13.5, -37.27), (9.5, -12.66), (9.5, 4.68),
+    (-9.38, 4.68), (-16.3, -4.16), (-31.49, -12.0), (-31.49, -27.64),
+    (-25.69, -33.61), (-25.69, -37.03), (-28.69, -39.13), (-28.69, -40.7),
+    (-21.69, -54.7), (-21.5, -60.34))
+# Plinth (Y 48-58, mirrored on -Y): a ruled loft from the D-049 foot's plan on
+# the disc top to 12.4 mm wide at disc+15, inside the foot box that D-049
+# showed free. Its outer face keeps the leg's vertical rear edge (r 61.8 at the
+# outer face, inside the disc's flat top at r 61.9).
+LEG_PLINTH = dict(base=((-29.99, 48.), (-5.49, 48.), (-5.49, 58.), (-21.5, 58.)),
+                  top=(-21.5, -9.0, 48.5, 58.), h=15.)
+# Inboard gusset (Y 48.5-52) on the plinth: the D-049 inboard-rib corridor
+# (that slab's own free space) fitted the same way.
+LEG_GUSSET = dict(y=(48.5, 52.), dxdz=(
+    (-19.58, -65.05), (-12.2, -65.05), (-17.58, -59.76), (-17.58, -55.34),
+    (-13.13, -50.89), (-17.08, -49.96), (-17.08, -49.26), (-18.58, -48.36),
+    (-18.58, -46.55), (-25.5, -47.42), (-19.58, -59.34)))
+# Outer-face spine recess and its inlay, ending at disc+30.5 so the waist keeps
+# a >= 1.2 mm lip in front of the pocket.
+LEG_SPINE_FACET = dict(recess=((-20.1, 9.), (-16.2, 13.), (-16.4, -46.), (-20.1, -49.5)),
+                       inlay=((-19.8, 9.75), (-16.5, 13.15), (-16.7, -46.72), (-19.8, -49.65)))
+# The first two points of each are heights above the disc top, the last two dz.
 # The +Y ear's trim stack (R) passes the leg's outer face at roll -21 deg,
 # pitch +13..+43 (0.4 mm before D-049; the A0 shift closed it). A 1.2 mm deep
 # band (floor Y 56.8) along that contact path, inside the head and above the
@@ -117,8 +139,9 @@ LEG_INBOARD_RIB = dict(y=(48.5, 52.), dxdz=[[-31.99, -65.05], [-31.99, -64.55], 
 LEG_TRIM_RELIEF = dict(band=((-2.5, -37.3), (-2.5, -26.0), (-27.5, -13.7), (-27.5, -24.6)), y=(56.8, 58.2))
 # Both legs: the -Y ear's stack follows the mirrored path (0.075 mm after the
 # A0 shift; committed head 0.17 mm), so the band and rail apply to both.
-# +Y only: a 0.5 mm outer-face step at the widened spine's rear edge, where
-# the skin passes at roll -21 deg, pitch -25 (committed head: 0.72 mm).
+# Both legs (D-050; +Y only in D-049): a 0.5 mm outer-face step at the
+# spine's rear edge, where the skin passes at roll -/+21 deg, pitch -25
+# (committed head: 0.72 mm; the D-050 -Y leg without it: 0.77 mm).
 LEG_SKIN_STEP = dict(dx=(-27.5, -24.5), dz=(-38.5, -30.5), y=(57.5, 58.2))
 # The outer-face styling rails stop at Z disc+32.5 (was about disc+48): their
 # upper halves, under the head, came within 0.06 / 0.20 mm of the ears' amber

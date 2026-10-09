@@ -9,7 +9,7 @@
     "pitch_z": 45.551454992696236
   },
   "source_sha256": {
-    "layout_model.py": "292929d044d7e6ceaebc3842ae6b12bc3161ab79655cc0b8a1b93587fb52c5f0",
+    "layout_model.py": "94f9d041ec40d2fb84dd0648de3258dc385336fd7159e38aee4e571baf6e5403",
     "details.py": "120ffd64274157e6e0702f444dc2d8268b22113dff50b17c45b580bae088a6cc",
     "layout_axes.py": "b3ce51da7778f6765f9bb534edf2e5a30a6ccae7c8593d0dfed1b1a3886f29f3",
     "harness.py": "e2a9008e241993af4f08bfee99977771372e7a148df70ac7c56ac7cda585bea7",
@@ -418,7 +418,7 @@
       "axis": "pitch",
       "angle": -26.0,
       "at_limit": false,
-      "overlap_mm3": 0.6972357625536405,
+      "overlap_mm3": 0.6972357625536737,
       "distance_mm": 0.0
     },
     {
@@ -432,7 +432,7 @@
       "axis": "pitch",
       "angle": 44.0,
       "at_limit": false,
-      "overlap_mm3": 0.6972357625535763,
+      "overlap_mm3": 0.6972357625536063,
       "distance_mm": 0.0
     }
   ],
@@ -591,22 +591,22 @@
     "yaw_yoke_leg_-55": {
       "valid": true,
       "solids": 1,
-      "volume": 4846.124336431353
+      "volume": 11822.647339715058
     },
     "yaw_yoke_spine_inlay_-55": {
       "valid": true,
       "solids": 1,
-      "volume": 118.29911096932429
+      "volume": 78.77898717195377
     },
     "yaw_yoke_leg_55": {
       "valid": true,
       "solids": 1,
-      "volume": 13233.866654557518
+      "volume": 11244.082087485756
     },
     "yaw_yoke_spine_inlay_55": {
       "valid": true,
       "solids": 1,
-      "volume": 118.2991109693243
+      "volume": 78.77898717195377
     },
     "yaw_disc_to_body_hub_M3x6_1": {
       "valid": true,
@@ -626,7 +626,7 @@
     "yaw_turntable_disc_flush": {
       "valid": true,
       "solids": 1,
-      "volume": 58493.54603741119
+      "volume": 58171.75898508942
     },
     "pitch_horn_to_leg_M3x6_45": {
       "valid": true,

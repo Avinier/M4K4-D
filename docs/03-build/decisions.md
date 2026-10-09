@@ -54,6 +54,7 @@ The central record of every decision and change made during the build phase. New
 | [D-047](#d-047) | 2026-10-07 | Body / yaw servo (BO-043) | Waveshare ST3215-HS on a 12 V yaw-only rail on PCB-03 replaces the D-044 XC330-M181-T: speed margin first, one Feetech protocol with D-046; STS3250 fallback on lash, XC330-M181 if no Feetech case fits | SELECTED; provisional case fit found; HOLD on mount/hub integration, rail and bench B1/B4 |
 | [D-048](#d-048) | 2026-10-07 | Body / ST3215-HS yaw integration and compute-stack shift (BO-043, BO-056, BO-061; CH-084 PCB-09, CH-086 PCB-10, PCB-04; W15) | HS on the true horn axis, horn up, case to -X, 7.6 mm lower, clamped by four M2 screws to a frame ring; Pi, cooler, tray bosses and PCB-09 move +10 X / -6 Y; tray +Y edge to Y 23.5; C3 Z 92 header row repacked | ACTIVE; CAD packaging screens clean; HOLD on a matching plug, torque/gear proof, received HS, head re-balance and bench B1/B2/B4 |
 | [D-049](#d-049) | 2026-10-08 | Head / STS3045M pitch and roll installation (HD-002–HD-007; head v1 CAD, A0, body v1 hand-off) | Roll servo on an ear plate driving the spindle through a goBILDA 25T-to-Ø6 coupler, rear bearing forward; pitch servo on the pitch frame with its horn screwed to a widened +Y yoke leg; CF-filled yoke legs; rear trim off-axis; A0 re-solved | ACTIVE; CAD and checks complete; HOLD on received horn/coupler fits, the CF leg coupon and bench B1/B4/B6 |
+| [D-050](#d-050) | 2026-10-09 | Head / yoke legs and turntable restyle (M011-Y, M012; head v1 CAD, mass tree, body v1 hand-off) | Both yoke legs become one faceted design inscribed in the D-049 free corridor (plinth, waist, arm), replacing the +Y leg's stair-stepped raster outline, ledge and box foot; disc rim tapers R62.5 to R58.5; opaque presentation model | ACTIVE; CAD and checks complete; HOLD on the CF leg coupon and print orientation |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -2051,3 +2052,47 @@ STS3045M moving-curve margins (proxy at the 5.23 V terminal, reflected motor ine
 - **Bench B1/B4/B6:** loaded motion, lash (spline, horn and coupler included), loaded modes.
 - **Firmware sign:** pitch CAD angle = −(servo output angle about +Y), because the case turns; roll CAD angle = +(output angle about +X). Confirm the Feetech count direction before writing limits.
 - **Harness:** both 5264 leads leave short-side end faces near the case bottom; only 8–10 mm straight exits are reserved.
+
+## D-050
+
+**2026-10-09 · Head / yoke legs and turntable restyle after the Feetech migration (M011-Y, M012; head v1 CAD, mass tree, body v1 hand-off) · ACTIVE; CAD and checks complete; HOLD on the D-049 CF leg coupon and print orientation**
+
+**Why.** After D-046 to D-049 the builder found the robot uglier. A before/after render of the integrated model (`6ce00df` against `54a3533`) showed what changed and what did not:
+- **The +Y yoke leg (D-049)** was the real regression. Its spine and inboard rib were the free corridor traced in 1 mm steps, so their edges were stair-stepped. It also had a flat ledge out to dx +10 at disc+15 and a 24.5 × 15 mm box foot. All three sit between the disc and the head, where they show. The −Y leg stayed slim, so the pair no longer matched.
+- **The disc** was not changed by the migration. It has been Ø125 since head v1, and the yaw axis is 4 mm behind the roof's centre, so it overhung the roof's rear edge by 2.4 mm.
+- **The body shell's exterior** is unchanged since D-034 to D-037.
+- **The two discs at the back of the head** are D-049's rear trim stacks. They are visible only because the inspection models draw the skin at alpha 0.28.
+
+**Legs (`feetech.py`, `layout_model.py`).** Both legs now share one outline:
+- **Outline.** The D-049 corridor is eroded 0.5 mm and simplified at 0.45 mm (shapely), so every facet lies inside it. The fit is unioned with the pre-D-049 leg, which is free by construction because the skin, ear and cradle reliefs are cut around it.
+- **Shape.** A plinth flares onto the disc as a ruled loft from the D-049 foot's plan to 12.4 mm wide at disc+15. The waist at disc+23 runs from dx −21.6 to −13.5. The arm rises into the head to the Ø22.4 pad. An inboard gusset (Y 48.5–52), fitted to the D-049 rib corridor the same way, fans out under the head.
+- **Side-specific features.** +Y keeps the horn pocket, screws and counterbores. −Y keeps the trunnion bore and the pitch-stop sector.
+- **Shared features.** Both legs have the rail, the trim-stack band and the 0.5 mm skin step; the step was +Y only in D-049. The spine recess and inlay end at disc+30.5, leaving a lip of at least 1.2 mm.
+- **Reliefs unchanged.** The skin, ear and cradle reliefs are still cut by the pre-D-049 leg, so no head shell volume changes.
+
+**Stiffness had to be kept.** Two narrower drawn outlines screened at 24.4 and 31.9 N·m/rad against D-049's 49.9. The leg's in-plane stiffness goes with its X width cubed, and the waist band at disc+20–25 took a third of the twist. The final outline screens at **46.2 N·m/rad** (E 3.5 GPa, h 1.4).
+
+| Pitch chain (frame + leg) | D-049 | D-050 |
+|---|---|---|
+| PLA 3.5 GPa | 31.6 Hz | 30.7 Hz |
+| PLA 2.3 GPa | 25.6 Hz | 24.9 Hz |
+| CF legs 4.5 GPa, frame 3.5 GPa | 34.3 Hz | 33.5 Hz |
+| CF legs 4.5 GPa, frame 2.3 GPa (the 30 Hz case) | 31.5 Hz | **30.8 Hz** |
+
+The CF leg requirement stands, with 0.7 Hz less margin. The leg floor for 30 Hz in that case is 41.9 N·m/rad.
+
+**Disc.** The rim tapers from R62.5 under the plate to R58.5 at its foot (2 mm wall), with a 0.6 mm top chamfer. Its lower edge sits 1.6 mm inside the roof's rear edge, and the rim keeps 2.0 mm from the yaw pinion's sprung half at every yaw angle. The skin reliefs keep the cylindrical disc (`relief_tool`).
+
+**Presentation model.** New `head-v1-presentation.step.py` is the integrated robot with every part opaque and the reservations and overlays left out. Judge appearance from it; the inspection models stay translucent.
+
+**Mass and stability.** A0 is unchanged: the roll-carried and pitch-carried totals and CoMs match D-049 to 0.001 mm.
+- **Yaw-carried mass:** 648.5 → **654.2 g**. The −Y leg gains 8.7 g, the +Y leg loses 2.5 g and the disc loses 0.4 g.
+- **Yaw-carried CoM offset from the axis:** 2.30 → **1.45 mm**.
+- **Body tip (`check_body_layout.py`, all true):** a_tip is 1.622 neutral (was 1.628) and **1.603** at the worst head pose (was 1.589), against 1.582. The 95 g harness allowance must now stay forward of X 13.5 (was 18.1).
+
+**Checks.** `run_checks.py` on the full 7 × 8 grid (2026-10-09) passes mass, envelope, revision (56 poses, no mechanism or harness hits), the D-049 mounts audit (`passed`, minimum 0.99 mm, every interface fact), integration, layout clearance, fasteners, body layout and yaw stage. `busy_minute.py` fails in the runner only because the CAD runtime lacks `openpyxl`; run with it, validation passes. Yaw RMS/peak rises about 1% (BC-60 0.0198 / 0.119 N·m). `fea/run_fea.py`, which the runner expects, is not in the repo, so the leg FEA was run by hand. `check_leg_clearance_d050.py` covers both legs on 56 poses: every pair is at or above the committed baseline and every new pair is at least 1.0 mm. Only the −Y leg to the skin is closer than in D-049 (0.981 mm against 1.24; baseline 0.717). The yaw stage loads move by 1% or less with the heavier head. The pinion half reaches 26.0 MPa at peak (was 25.8), so the D-048 flag stands. `head-v1-integrated.step` and the new `head-v1-presentation.step` are regenerated. `head-v1.step`, `yaw-yoke.step` and body v1's `body-v1.step` are not.
+
+**Open:**
+- **Print orientation.** Each leg now has the plinth and gusset on its inner face and the rail on its outer face, so neither face prints flat without supports. D-049's foot and rib had already ended the flat inside-face print. Choose the orientation with the CF coupon, which needs its modulus along the layers.
+- **CF leg coupon** (D-049), now against the 30.8 Hz case.
+- **The skin's side windows** round the arms are D-049's bounding-box reliefs. They are not restyled here.
