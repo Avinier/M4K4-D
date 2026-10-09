@@ -1,2 +1,2 @@
 """Generated A0 datums, mm. Refresh through mass_layout.py --solve."""
-AXES = {'roll_y': -1.0557739267834358, 'roll_z': 47.90092110829701, 'pitch_x': -40.00973006401559, 'pitch_z': 45.7964533110988}
+AXES = {'roll_y': -1.0265819698745329, 'roll_z': 48.15646489839186, 'pitch_x': -42.41874076877715, 'pitch_z': 45.551454992696236}

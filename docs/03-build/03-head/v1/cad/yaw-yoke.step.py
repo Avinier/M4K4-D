@@ -14,6 +14,6 @@ def gen_step():
         "yaw_yoke_spine_inlay_-55",
         "yaw_yoke_spine_inlay_55",
         "pitch_trunnion_-49",
-        "pitch_trunnion_49",
+        "pitch_horn_25T_disc",
     )
     return {"shape": Compound(label="head_v1_yaw_yoke", children=[parts[name]["shape"] for name in names])}

@@ -11,6 +11,7 @@ from cadgen import srgb
 from cadgen.step_scene import import_step
 from layout_axes import AXES
 from motion_envelope import ROLL_STOP, PITCH_STOP
+import feetech as fe
 
 HERE=Path(__file__).parent
 CATALOG=HERE/'purchased'
@@ -54,8 +55,6 @@ YAW_HUB_BOLT_CLEARANCE_R=1.7
 YAW_HUB_BOLT_HEAD_R=3.0
 YAW_HUB_BOLT_RECESS=1.8
 YAW_INTERFACE_Z=BODY_TOP_Z
-# XC330 user M2 holes on each case face, relative to the output axis (X, Z).
-PITCH_SERVO_HOLES=[(-22.5,-8),(-22.5,8),(7.5,-8),(7.5,8)]
 YAW_AXIS=Axis((PITCH_X,0,YAW_INTERFACE_Z),(0,0,1))
 
 def block(x0,x1,y0,y1,z0,z1):
@@ -138,6 +137,49 @@ def socket_screw(x,y,z,axis='z',sign=1,shank_length=25):
     elif axis=='y':screw=screw.rotate(Axis.X,-90*sign)
     elif sign<0:screw=screw.rotate(Axis.X,180)
     return screw.moved(Location((x,y,z)))
+
+def m3_button_screw(x,y,z,axis='x',sign=1,shank_length=6):
+    # ISO 7380 M3: Ø5.7 x 1.65 head, 2 mm key. Origin at the under-head seat,
+    # local +Z outwards, smooth major-diameter shank.
+    h=1.65;r=2.85;R=(r*r+h*h)/(2*h)
+    cap=Sphere(R).moved(Location((0,0,h-R))) & Box(6.,6.,h).moved(Location((0,0,h/2)))
+    shank=Cylinder(1.5,shank_length).moved(Location((0,0,-shank_length/2)))
+    socket=extrude(RegularPolygon(2./math.sqrt(3),6),amount=1.).moved(Location((0,0,.7)))
+    screw=(cap+shank)-socket
+    if axis=='x':screw=screw.rotate(Axis.Y,90*sign)
+    elif axis=='y':screw=screw.rotate(Axis.X,-90*sign)
+    return screw.moved(Location((x,y,z)))
+
+def m3_socket_screw(x,y,z,axis='x',sign=1,shank_length=5):
+    # ISO 4762 M3: Ø5.5 x 3 head, 2.5 mm key; same origin convention.
+    head=Cylinder(2.75,3).moved(Location((0,0,1.5)))
+    shank=Cylinder(1.5,shank_length).moved(Location((0,0,-shank_length/2)))
+    socket=extrude(RegularPolygon(2.5/math.sqrt(3),6),amount=1.5).moved(Location((0,0,1.5)))
+    screw=(head+shank)-socket
+    if axis=='x':screw=screw.rotate(Axis.Y,90*sign)
+    elif axis=='y':screw=screw.rotate(Axis.X,-90*sign)
+    return screw.moved(Location((x,y,z)))
+
+def washer(x,y,z,axis='x'):
+    # Plain washer from fe.WASHER (ISO 7089 M2.5, Ø2.7/Ø6 x 0.5), centred at (x,y,z).
+    w=fe.WASHER
+    return axial(w['r_out'],w['t'],(x,y,z),axis)-axial(w['r_in'],w['t']+.2,(x,y,z),axis)
+
+def sts3045m(catalog=True):
+    # Drawing-based STS3045M envelope (D-049 step 0). Checks fuse the five
+    # touching solids into one valid solid; the export keeps them labelled.
+    raw=import_step(str(CATALOG/'sts3045m_reference.step'))
+    solids=[s for s in raw.solids() if s.is_valid and s.volume>1e-8]
+    if catalog:return Compound(label='sts3045m_reference',children=solids)
+    out=solids[0]
+    for s in solids[1:]:out=out+s
+    return out
+
+def gobilda_coupler():
+    # goBILDA 4001-0025-0006 official STEP: clamping hub, then its M4 x 10.
+    raw=import_step(str(CATALOG/'gobilda_4001-0025-0006.step'))
+    hub,screw=sorted(raw.solids(),key=lambda s:-s.volume)
+    return hub,screw
 
 def clean_catalog(path):
     # Discard STEP annotation/open-shell children, preserve all closed solids.
@@ -399,46 +441,40 @@ def build_parts(catalog=True,reliefs=True):
         skin=skin-port
     skin_style=out['main_octagonal_skin']
     skin_style['shape']=tint(skin,'main_octagonal_skin',skin_style['color'],skin_style['alpha'])
-    add('rolling_spindle_6mm',axial(3,32,(-56,ROLL_Y,ROLL_Z)),'R','#b7bfc0',owner='M016-18-R')
-    # 696-2Z (ISO 619/6-2Z) d6 x D15 x B5; details.py owns the seats.
-    for i,x in enumerate([-43,-65]):
+    # D-049: Ø6 spindle runs back into the roll coupler's bore, 0.5 mm short
+    # of the coupler's M3 centre-screw head.
+    sx0,sx1=fe.SPINDLE_X
+    add('rolling_spindle_6mm',axial(3,sx1-sx0,((sx0+sx1)/2,ROLL_Y,ROLL_Z)),'R','#b7bfc0',owner='M016-18-R')
+    # 696-2Z (ISO 619/6-2Z) d6 x D15 x B5; details.py owns the seats. The
+    # rear bearing sits 18.2 mm behind the front one (D-049, was 22).
+    for i,x in enumerate(fe.ROLL_BEARING_X):
         add(f'roll_bearing_{i+1}_696_2Z',axial(7.5,5,(x,ROLL_Y,ROLL_Z))-axial(3.1,7,(x,ROLL_Y,ROLL_Z)),'P','#acb5b9',owner='M016-18-P')
-    cartridge=block(-69,-39,ROLL_Y-12,ROLL_Y+12,ROLL_Z-12,ROLL_Z+12)-axial(8.3,32,(-54,ROLL_Y,ROLL_Z))
+    cx0,cx1=fe.CARTRIDGE_X
+    cartridge=block(cx0,cx1,ROLL_Y-12,ROLL_Y+12,ROLL_Z-12,ROLL_Z+12)-axial(8.3,cx1-cx0+2,((cx0+cx1)/2,ROLL_Y,ROLL_Z))
     add('bearing_cartridge_trial',cartridge,'P','#c38a47',owner='M010-P')
-    add('coaxial_coupling_trial',axial(6,8.5,(-73.25,ROLL_Y,ROLL_Z))-axial(3.1,10,(-73.25,ROLL_Y,ROLL_Z)),'R','#b7bfc0',owner='M013-15-R')
-    if catalog:
-        servo=clean_catalog(CATALOG/'xc330.stp')
-        roll=servo.rotate(Axis.X,90).rotate(Axis.Z,90).moved(Location((-84,ROLL_Y,ROLL_Z)))
-        pitch=servo.rotate(Axis.X,-90).rotate(Axis.Y,270).moved(Location((PITCH_X,40,PITCH_Z)))
-    else:
-        # Case 23 mm (X -103.5..-80.5) plus the Ø16 x 3 horn on each face, per
-        # the official ROBOTIS drawing; the old single box filled the air
-        # round the front horn where the mounting bulkhead now sits.
-        roll=block(-103.5,-80.5,ROLL_Y-10,ROLL_Y+10,ROLL_Z-24.5,ROLL_Z+9.5)
-        roll=roll+axial(8,3,(-79,ROLL_Y,ROLL_Z))+axial(8,3,(-105,ROLL_Y,ROLL_Z))
-        # Same split for the pitch servo: case Y 20.5..43.5 (its tapped face
-        # holes start at Y 20.5 in the vendor STEP) plus the two Ø16 x 3 horns.
-        pitch=block(PITCH_X-24.5,PITCH_X+9.5,20.5,43.5,PITCH_Z-10,PITCH_Z+10)
-        pitch=pitch+axial(8,3,(PITCH_X,19,PITCH_Z),'y')+axial(8,3,(PITCH_X,45,PITCH_Z),'y')
-    add('roll_XC330_1to1_reference',roll,'P','#a36f38',owner='M013-15-roll')
-    add('pitch_XC330_1to1_reference',pitch,'Y','#a36f38',owner='M013-15-pitch')
+    # Roll output: goBILDA 4001-0025-0006 clamping coupler (H25T spline to
+    # Ø6 bore), clamp boss up at neutral, its M4 x 10 clamp screw, and an
+    # ISO 4762 M3 x 5 through the coupler floor into the servo output.
+    hub,clamp=gobilda_coupler()
+    add('roll_coupler_goBILDA_4001_0025_0006',fe.place_coupler(hub),'R','#b7bfc0',owner='M013-15-R')
+    add('roll_coupler_clamp_M4x10',fe.place_coupler(clamp),'R','#555b5a',owner='M021-R')
+    add('roll_coupler_centre_M3x5',m3_socket_screw(fe.COUPLER_FLOOR_X,ROLL_Y,ROLL_Z,'x',1,5),'R','#555b5a',owner='M021-R')
+    # STS3045M servos (HD-001). Both ride on the pitch frame.
+    add('roll_STS3045M_reference',fe.place_roll(sts3045m(catalog)),'P','#a36f38',owner='M013-15-roll')
+    add('pitch_STS3045M_reference',fe.place_pitch(sts3045m(catalog)),'P','#a36f38',owner='M013-15-pitch')
     # Connected pitch frame, with relieved crossbar and an actuator saddle.
     frame=block(-73,-39,-49,49,ROLL_Z-20,ROLL_Z-16)-block(-68,-44,-40,47,ROLL_Z-21,ROLL_Z-15)
-    for y in [-49,49]:
+    # D-049: only the -Y side keeps a trunnion arm. On +Y the pitch servo's
+    # spline is the pivot and its horn is screwed to the yoke leg.
+    for y in [-49]:
         frame=frame+block(-74,PITCH_X+4,y-2,y+2,ROLL_Z-20,ROLL_Z-16)
         frame=frame+block(PITCH_X-6,PITCH_X+6,y-2,y+2,ROLL_Z-16,PITCH_Z+6)
         frame=frame-axial(4.2,6,(PITCH_X,y,PITCH_Z),'y')
         add(f'pitch_trunnion_{y}',axial(4,9,(PITCH_X,y,PITCH_Z),'y'),'P','#b7bfc0',owner='M016-18-P')
     frame=frame+block(-69,-39,ROLL_Y-12,ROLL_Y+12,ROLL_Z-16,ROLL_Z-12)
-    saddle=block(-108,-75,ROLL_Y-12,ROLL_Y+12,ROLL_Z-27.5,ROLL_Z-24.8)
-    for off in [-11.5,11.5]:
-        saddle=saddle+block(-107,-74,ROLL_Y+off-1.3,ROLL_Y+off+1.3,ROLL_Z-26,ROLL_Z-12)
-    # The saddle's old front block is replaced by the rear torsion box and
-    # case-screw wall in details.py.
-    frame=frame+saddle
-    # Open the positive-Y front crossbar below the fixed pitch servo's sweep;
-    # the rear crossbar, side arms and central cartridge seat remain connected.
-    frame=frame-block(-46,-37,16,47,ROLL_Z-21,ROLL_Z-15)
+    # The ring's +Y bar and front crossbar give way to the pitch servo and its
+    # collar (details.py); the rear bar stays inside the torsion box.
+    frame=frame-block(-68,-37,16,50,ROLL_Z-21,ROLL_Z-15)
     add('connected_pitch_frame_roll_servo_saddle',frame,'P','#c38a47',owner='M011-P')
     # Short-knee legs keep the proven swept silhouette and mounting datums.
     # The outside faces carry a shallow raised rail and recessed spine facet.
@@ -466,9 +502,44 @@ def build_parts(catalog=True,reliefs=True):
             (PITCH_X-21.3,d+3),(PITCH_X-19.9,d+3),
             (PITCH_X-19.9,PITCH_Z-32),(PITCH_X-21.3,PITCH_Z-30),
             align=None),amount=0.80).moved(Location((0,outer_face+0.75 if y>0 else outer_face+0.05,0)))
+        relief_tool=leg+rail-axial(4.2,8,(PITCH_X,y,PITCH_Z),'y')
+        # D-049: both rails stop lower and both legs get the ear trim-stack
+        # band (feetech.py); shell reliefs keep the pre-D-049 legs.
+        rail=rail-block(PITCH_X-25,PITCH_X-15,*sorted((outer_face-math.copysign(1,y),outer_face+math.copysign(2,y))),d+fe.LEG_RAIL_TOP_ABOVE_DISC,PITCH_Z)
         leg=leg+rail
-        leg=leg-axial(4.2,8,(PITCH_X,y,PITCH_Z),'y')
+        t=fe.LEG_TRIM_RELIEF
+        band=extrude(Plane.XZ*Polygon(*[(PITCH_X+dx,PITCH_Z+dz) for dx,dz in t['band']],align=None),amount=t['y'][1]-t['y'][0])
+        bb=band.bounding_box()
+        band=band.moved(Location((0,(t['y'][1]-bb.max.Y) if y>0 else (-t['y'][1]-bb.min.Y),0)))
+        if y<0:leg=leg-band-axial(4.2,8,(PITCH_X,y,PITCH_Z),'y')
+        else:
+            # D-049: +Y leg carries the pitch horn. A Ø22.4 pad, a 0.6 mm horn
+            # pocket for radial location, four M3 clearance holes with button
+            # counterbores on the outer face and a centre-screw access hole.
+            yi,yo=fe.LEG_INNER_Y,fe.LEG_INNER_Y+6
+            leg=leg+axial(fe.LEG_PAD_R,6,(PITCH_X,(yi+yo)/2,PITCH_Z),'y')
+            spine=extrude(Plane.XZ*Polygon(*[(PITCH_X+dx,PITCH_Z+dz) for dx,dz in fe.LEG_SPINE_DXDZ],align=None),amount=6)
+            leg=leg+spine.moved(Location((0,yo-spine.bounding_box().max.Y,0)))
+            f=fe.LEG_FOOT
+            foot=block(PITCH_X+f['dx'][0],PITCH_X+f['dx'][1],*f['y'],d,d+f['h'])
+            leg=leg+(foot&Cylinder(f['r'],f['h']).moved(Location((PITCH_X,0,d+f['h']/2))))
+            rb=fe.LEG_INBOARD_RIB
+            rib=extrude(Plane.XZ*Polygon(*[(PITCH_X+dx,PITCH_Z+dz) for dx,dz in rb['dxdz']],align=None),amount=rb['y'][1]-rb['y'][0])
+            leg=leg+rib.moved(Location((0,rb['y'][1]-rib.bounding_box().max.Y,0)))
+            # Re-cut the outer-face spine recess the added material filled.
+            leg=leg-recess
+            k=fe.LEG_SKIN_STEP
+            leg=leg-band-block(PITCH_X+k['dx'][0],PITCH_X+k['dx'][1],*k['y'],PITCH_Z+k['dz'][0],PITCH_Z+k['dz'][1])
+            leg=leg-axial(fe.LEG_HORN_POCKET_R,fe.HORN_POCKET_DEPTH+.2,(PITCH_X,yi+(fe.HORN_POCKET_DEPTH-.2)/2,PITCH_Z),'y')
+            leg=leg-axial(fe.LEG_CENTRE_HOLE_R,8,(PITCH_X,(yi+yo)/2,PITCH_Z),'y')
+            for deg in fe.HORN['holes_deg']:
+                hx=PITCH_X+fe.HORN['pcd_r']*math.cos(math.radians(deg));hz=PITCH_Z+fe.HORN['pcd_r']*math.sin(math.radians(deg))
+                leg=leg-axial(fe.M3_CLEAR_R,8,(hx,(yi+yo)/2,hz),'y')
+                leg=leg-axial(fe.M3_HEAD_CBORE_R,2*fe.M3_HEAD_CBORE_D,(hx,yo,hz),'y')
         add(f'yaw_yoke_leg_{y}',leg,'Y','#536b78',owner='M011-Y')
+        # Shell/ear/cradle reliefs stay cut by the pre-D-049 leg outline, so
+        # the widened +Y leg must fit the existing pockets (checked posed).
+        out[f'yaw_yoke_leg_{y}']['relief_tool']=relief_tool
         # Optional contrast insert: 0.3 mm profile clearance and a 0.05 mm
         # adhesive bed in the recess, with only 0.15 mm proud of the face.
         # It can be printed flat in a second colour or the pocket can be painted.
@@ -498,23 +569,23 @@ def build_parts(catalog=True,reliefs=True):
         screw=screw+axial(2.85,1.65,(bx,by,d-YAW_HUB_BOLT_RECESS+0.825),'z')
         add(f'yaw_disc_to_body_hub_M3x6_{i}',screw,'Y','#b7bfc0',owner='M021-Y')
     add('yaw_turntable_disc_flush',disc,'Y','#647787',owner='M012')
-    # Fixed over-top adapter reservation ties pitch actuator location to yoke.
-    # Exact XC330 mounting-hole pattern remains a detailing gate.
-    # Clip the unused outboard/rear corner to clear the deeper helmet shoulder
-    # at combined roll/look-up. Full servo seat and yoke attachment remain.
-    adapter=extrude(Polygon((PITCH_X-26,17),(PITCH_X+4,17),
-        (PITCH_X+4,55),(PITCH_X-5,55),(PITCH_X-26,41),align=None),amount=2).moved(Location((0,0,PITCH_Z+11)))
-    adapter=adapter+block(PITCH_X-26,PITCH_X-24.8,17,41,PITCH_Z-11,PITCH_Z+13)
-    adapter=adapter+block(PITCH_X-5,PITCH_X+3,52,58,PITCH_Z+6,PITCH_Z+13)
-    # Inboard face plate: four M2 x 6 into the XC330's inboard-face tapped
-    # holes (vendor STEP: X axis -22.5/+7.5, Z axis +/-8, 4.5 mm deep from
-    # the case face at Y 20.5). The idler horn turns in a 0.6 mm clearance.
-    plate=block(PITCH_X-25.5,PITCH_X+10.5,17.4,20.4,PITCH_Z-11,PITCH_Z+13)-axial(8.6,4,(PITCH_X,18.9,PITCH_Z),'y')
-    for dx,dz in PITCH_SERVO_HOLES:
-        plate=plate-axial(1.15,4,(PITCH_X+dx,18.9,PITCH_Z+dz),'y')
-        add(f'pitch_servo_M2x6_{dx:g}_{dz:g}',button_screw(PITCH_X+dx,17.4,PITCH_Z+dz,'y',-1,6),'Y','#555b5a',owner='M021-Y')
-    adapter=adapter+plate
-    add('pitch_servo_to_yoke_adapter_trial',adapter,'Y','#647787',owner='M011-Y')
+    # D-049 pitch output: 25T aluminium disc horn (E, HD-002) on the servo
+    # spline, its disc in the +Y leg's 0.6 mm pocket. ISO 4762 M3 x 5 through
+    # the horn web into the output; four ISO 7380 M3 x 6 from the leg's outer
+    # face into the horn's tapped holes. All yaw-carried: the case turns.
+    h=fe.HORN;top=fe.HORN_TOP_Y
+    horn=axial(h['disc_r'],h['disc_t'],(PITCH_X,top-h['disc_t']/2,PITCH_Z),'y')
+    horn=horn+axial(h['hub_r'],h['hub_t'],(PITCH_X,top-h['disc_t']-h['hub_t']/2,PITCH_Z),'y')
+    bore=top-h['web']-fe.HORN_BOTTOM_Y
+    horn=horn-axial(h['bore_r'],bore+.2,(PITCH_X,fe.HORN_BOTTOM_Y+bore/2-.1,PITCH_Z),'y')
+    horn=horn-axial(h['screw_r'],h['web']+.2,(PITCH_X,top-h['web']/2,PITCH_Z),'y')
+    for deg in h['holes_deg']:
+        hx=PITCH_X+h['pcd_r']*math.cos(math.radians(deg));hz=PITCH_Z+h['pcd_r']*math.sin(math.radians(deg))
+        horn=horn-axial(1.5,h['disc_t']+.2,(hx,top-h['disc_t']/2,hz),'y')
+        seat=fe.LEG_INNER_Y+6-fe.M3_HEAD_CBORE_D
+        add(f'pitch_horn_to_leg_M3x6_{deg:g}',m3_button_screw(hx,seat,hz,'y',1,6),'Y','#555b5a',owner='M021-Y')
+    add('pitch_horn_25T_disc',horn,'Y','#b7bfc0',owner='M013-15-P')
+    add('pitch_horn_centre_M3x5',m3_socket_screw(PITCH_X,top,PITCH_Z,'y',1,5),'Y','#555b5a',owner='M021-Y')
     # Distinct layered ear rims and removable, hollow tapered caps. The caps
     # have two supported receivers and a deep enough centre floor for real
     # 1.2 mm colour inserts; the trim hardware is finished in details.py.
@@ -591,7 +662,8 @@ def build_parts(catalog=True,reliefs=True):
         from cad_cache import _encode
         from relief_worker import TARGETS, SUPPORTS, initialize, sample_bounds
         from run_checks import worker_cap
-        encoded={name:_encode(out[name]['shape']) for name in (*TARGETS,*SUPPORTS)}
+        encoded={name:_encode(out[name].get('relief_tool',out[name]['shape']))
+                 for name in (*TARGETS,*SUPPORTS)}
         # Daemon pool workers may themselves need to build parts on a cache
         # miss. They cannot spawn children, so retain a serial fallback.
         parallel=(not multiprocessing.current_process().daemon and

@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-08",
+  "decision": "D-049",
+  "method": "fea/README.md: P2 tets, pure couple on the loaded faces; k = M / theta; frame and +Y leg in series for pitch",
+  "inertia_kg_m2": {
+    "pitch_RP": 0.0008782180255071265,
+    "roll_R": 0.0007258117066940908
+  },
+  "stiffness_Nm_per_rad": {
+    "frame_pitch": {
+      "3500": 112.53,
+      "2300": 73.95
+    },
+    "frame_roll": {
+      "3500": 455.92,
+      "2300": 299.61
+    },
+    "leg": {
+      "3500": 49.88,
+      "2300": 32.78,
+      "3500_h1.0_previous_leg": 49.99
+    }
+  },
+  "convergence": "leg h 1.4 -> 1.0 mm on the previous leg outline: 50.27 -> 49.99 (-0.6%); the frame h 1.0 runs exceeded memory; RP-06 measured 51.44 -> 51.35 for the same method",
+  "leg_twist_by_height": "about half the leg rotation accumulates between Z disc+10 and disc+25 (the swept-volume bottleneck above the foot)",
+  "frequencies_Hz": {
+    "pitch_frame_only_E3500": 57.0,
+    "pitch_frame_plus_leg_E3500": 31.6,
+    "pitch_frame_plus_leg_E2300": 25.6,
+    "pitch_frame_E3500_plus_CF_leg_E4500": 34.3,
+    "pitch_frame_E2300_plus_CF_leg_E4500": 31.5,
+    "roll_E3500": 126.1,
+    "roll_E2300": 102.3
+  },
+  "targets_Hz": {
+    "pitch": [
+      30,
+      40
+    ],
+    "roll": [
+      25,
+      30
+    ]
+  },
+  "history": {
+    "rp06_frame_only_xc330": {
+      "pitch": 51.44,
+      "roll": 187.53
+    },
+    "d049_old_leg_spine": 8.63
+  },
+  "not_included": "servo gear train, horn/spline/coupler lash, screws, inserts, the yaw disc and its bearing (bench B6)"
+}

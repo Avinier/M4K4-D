@@ -1,4 +1,7 @@
-"""STS3045M mass sensitivity with unchanged head structure and A0 datums.
+"""SUPERSEDED by D-049: pre-installation trial against the XC330 head; do not
+run against the D-049 source (see feetech-head-fit.md).
+
+STS3045M mass sensitivity with unchanged head structure and A0 datums.
 
 Uses the existing mass-placement rows as a baseline, replacing only the two
 XC330 servo rows. Servo CoMs and intrinsic inertia use a uniform 36x15x29.2

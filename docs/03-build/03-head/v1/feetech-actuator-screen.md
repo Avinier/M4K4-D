@@ -31,14 +31,14 @@ The old RP-01 motor-side inertia estimate was 0.11–0.25 g·cm², not a measure
 
 | Gate | Current build status and closing evidence |
 |---|---|
-| P01 mass/configuration | **OPEN.** The drawing-based STS3045M STEP and unchanged-structure mass sensitivity are available; live head CAD still carries two 23 g XC330 rows. Redesign mounts, solve the mass tree and hand its output to body v1. The 68 g yaw STEP is available, but not installed in the body model. |
+| P01 mass/configuration | **CAD CLOSED, mass `E`.** [D-049](../../decisions.md#d-049) installs both servos and re-solves A0: roll 388.8 g / 0.000726 kg·m², pitch 535.7 g / 0.000878 kg·m², yaw 648.5 g / 0.001438 kg·m² ([mass tree](cad/mass-placement.json)). Servo CoM/tensor are uniform-envelope `E`; weigh the installed head. |
 | P02 rail/curve | **OPEN.** 5.23–5.62 V head-terminal estimate and 12 V yaw target documented; need loaded terminal logs and servo-specific moving curves. |
-| P03 transient | **OPEN.** Proxies above are encouraging but use old mass/axes, unknown HS internal inertia and unvalidated curves. Re-run full §11.3 cases after the CAD fit. |
+| P03 transient | **PAPER SCREEN DONE, bench open.** [busy_minute.py](cad/busy_minute.py) re-runs §11.3 on the D-049 tree with the 70% pitch cap: worst moving-curve ratio pitch 1.71×, roll 3.04× (proxy at 5.23 V, high reflected inertia, 0.020 N·m bias). The proxy is not a Feetech curve; B2 measures it. |
 | P04 continuous/thermal | **OPEN.** 6 V rated-torque screen only; bench B3 needed in the enclosed head. |
 | P05 uncertainty/coverage | **OPEN.** Head motor-side inertia is an `E` range reflected through 281:1; HS inertia, real cable load and cross-axis cases remain unknown. |
 | P06 decision/rig handoff | **CONDITIONAL RIG CANDIDATE.** B1 (loaded speed/current), B2 (torque–speed at actual terminals), B3 (thermal), B4 (loaded lash), B5 (rail/bus fault), B6 (loaded modes) remain. |
 | P07 structural dynamics | **OPEN.** Old 41 Hz pitch-frame and 84 Hz roll-mount FEA do not cover the new saddle, horn and joints. Re-run the RP-06 method, then loaded tap/ring-down; minimum ≥30 Hz pitch and ≥25 Hz roll. The 70% pitch trajectory reduces forcing frequency but does not replace modal evidence. |
-| P08 CAD/hardware | **OPEN.** The [neutral-pose fit](cad/feetech-head-fit.md) finds specific cover, trim, strap, cradle, trunnion and adapter clashes. New ear slots, horn, screws, stops, sweep, access and side load need a refitted model and received-part check. |
+| P08 CAD/hardware | **CAD CLOSED (D-049), parts open.** Mounts, horn, coupler, ear screws and stops pass `check_revision.py`, `check_fasteners.py` and `check_feetech_mounts.py`. Open: received horn (HD-002) and coupler (HD-004) fits, output thread depth, tab-root fillet against the ear washer, the +Y side load on the pitch servo output. |
 | P09 complete-output lash | **OPEN.** STS3045M claims ≤0.5° gearbox backlash, already at the minimum viable whole-output budget. The HS plus scissor mesh must be measured at both horn and head axis under load; B4 decides the HS/STS3250 fallback. |
 
 ## Firmware and protection contract to implement

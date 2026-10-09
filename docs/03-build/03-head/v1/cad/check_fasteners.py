@@ -30,7 +30,8 @@ INSERT = d.M2_INSERT
 # Declared plastic-thread joints: the screw is meant to form its own thread.
 THREAD_FORMING = {}
 # Screws into purchased parts (tapped metal): the servo case holes.
-INTO_METAL = ('roll_servo_case_M2_', 'pitch_servo_M2')
+INTO_METAL = ()
+METAL = ('STS3045M', 'coupler', 'horn')
 
 
 def axis_of(shape):
@@ -132,8 +133,8 @@ def main():
         frame = x['frame']
         same = {k: v for k, v in parts.items() if v['frame'] == frame and v['kind'] == 'physical'
                 and group_for(k, v) != 'fasteners'}
-        metals = [v['shape'] for k, v in same.items() if 'XC330' in k or 'coupling' in k]
-        plastics = [v['shape'] for k, v in same.items() if not ('XC330' in k or 'coupling' in k)]
+        metals = [v['shape'] for k, v in same.items() if any(t in k for t in METAL)]
+        plastics = [v['shape'] for k, v in same.items() if not any(t in k for t in METAL)]
         r = classify(n, x['shape'], plastics, metals)
         forming = any(n.startswith(p) for p in THREAD_FORMING)
         metal = n.startswith(INTO_METAL)

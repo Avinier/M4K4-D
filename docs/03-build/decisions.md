@@ -53,6 +53,7 @@ The central record of every decision and change made during the build phase. New
 | [D-046](#d-046) | 2026-10-07 | Head / pitch and roll actuators (HD-001 registered; RP-01 `ACT-01` overridden for pitch/roll) | Feetech STS3045M (metal gear, coreless, 34.8 g) for pitch and roll, replacing the XC330-M288; fastest pitch moves capped at 70% speed; head rail setpoint must rise above the servo's 4.8 V minimum; yaw servo and bus protocol open | SELECTED; HOLD on head CAD re-fit, rail setpoint, bench B1/B4 |
 | [D-047](#d-047) | 2026-10-07 | Body / yaw servo (BO-043) | Waveshare ST3215-HS on a 12 V yaw-only rail on PCB-03 replaces the D-044 XC330-M181-T: speed margin first, one Feetech protocol with D-046; STS3250 fallback on lash, XC330-M181 if no Feetech case fits | SELECTED; provisional case fit found; HOLD on mount/hub integration, rail and bench B1/B4 |
 | [D-048](#d-048) | 2026-10-07 | Body / ST3215-HS yaw integration and compute-stack shift (BO-043, BO-056, BO-061; CH-084 PCB-09, CH-086 PCB-10, PCB-04; W15) | HS on the true horn axis, horn up, case to -X, 7.6 mm lower, clamped by four M2 screws to a frame ring; Pi, cooler, tray bosses and PCB-09 move +10 X / -6 Y; tray +Y edge to Y 23.5; C3 Z 92 header row repacked | ACTIVE; CAD packaging screens clean; HOLD on a matching plug, torque/gear proof, received HS, head re-balance and bench B1/B2/B4 |
+| [D-049](#d-049) | 2026-10-08 | Head / STS3045M pitch and roll installation (HD-002–HD-007; head v1 CAD, A0, body v1 hand-off) | Roll servo on an ear plate driving the spindle through a goBILDA 25T-to-Ø6 coupler, rear bearing forward; pitch servo on the pitch frame with its horn screwed to a widened +Y yoke leg; CF-filled yoke legs; rear trim off-axis; A0 re-solved | ACTIVE; CAD and checks complete; HOLD on received horn/coupler fits, the CF leg coupon and bench B1/B4/B6 |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -1969,3 +1970,84 @@ The yaw-carried mass tree does not include the hub, rotor, inner ring or PCB-14.
 - **Boards:** place J4-6 forward of X −14 on PCB-04. PCB-10 header row as above. PCB-09 outline unchanged relative to the Pi.
 - **Bench B1/B4** with the pinion fitted, including side-load endurance.
 - **B2 torque-speed and protection:** validate the proposed yaw torque ceiling at 63 rpm, and include a stall/fault test of the teeth and hard stops; a CAD constant does not enforce a physical cap.
+
+## D-049
+
+**2026-10-08 · Head / STS3045M pitch and roll installation (HD-001–HD-007; head v1 CAD, mass tree, axes; body v1 hand-off) · ACTIVE; CAD and checks complete; HOLD on received servo, horn and coupler fits, the CF leg coupon and bench B1/B4/B6**
+
+**Decision.** Install the two D-046 STS3045M servos in the head v1 CAD. The roll servo stays on the pitch frame and drives the Ø6 spindle through a goBILDA clamping coupler. The pitch servo moves onto the pitch frame and its horn is screwed to the +Y yoke leg, so the case turns round a fixed output. This is the only arrangement that fits; the reasons are below.
+
+**Step 0: servo model against the drawing.** The Feetech drawing (STS3045M spec p. 6) confirms the reference STEP's horn axis (6 mm off the case centre), ear slot centres (±21.3 mm from the case centre, rows 7.5 mm apart), 48.8 mm span, ears at Z 19.7–21.7 and spline tip at 33.1. Three details were wrong and are corrected: the lead exits the shaft-end face, centred (the model had it beside the case); the slot necks are 2.4 mm wide (were 4.2); the boss is Ø10.4 (was Ø9.5). No axis error like D-048's. The trial clash screen changed only in its pitch-rearward cradle value (7.7 → 10.8 mm³).
+
+**Why pitch moved onto the pitch frame.** With the servo on the yoke, the cradle cross bar sweeps everything within 16.5 mm of the pitch axis forward and below it under combined roll and pitch, so no clocking clears the servo's 18.4 mm short-side ear (sweep map, all 360°). Carried by the pitch frame, the servo only sees roll relative to the cradle. At a 244° clocking (long side down-rear) every point clears by ≥ 2 mm on the sweep map. Axially, a servo, horn and a separate trunnion arm do not fit between the cradle flange (Y ≤ 15.9) and the leg (Y 52), so the horn bolts to the leg itself.
+
+**Roll (`feetech.py`).**
+- Servo case X −112.4…−83.2, 1.0 mm in front of the rear cover; spline on the roll axis, long side down.
+- goBILDA 4001-0025-0006 (HD-004, official STEP): spline face at X −82.6, clamp boss up at neutral, M4 × 10 clamp; ISO 4762 M3 × 5 through its floor into the output (3.8 mm thread). Spline engagement 2.9 mm.
+- Ø6 spindle lengthened to X −74.6…−40 (9.0 mm in the coupler bore, all of the clamp zone).
+- Rear bearing moved forward: 696-2Z at X −43 and −60.6 (spacing 17.6, was 22); cartridge X −64.6…−39; rear cartridge screws to X −57.5. Coupler runs 1.0 mm from the cartridge and 0.9 mm from the retainer.
+- Mount: 5 mm plate on the ears' front faces with a window round the case, ±18.7 mm wide and joined to the torsion box rear wall; its −Y upper corner is cut back for the C2 tray's service path. Ear screws drive from behind with the rear cover off.
+
+**Pitch (`feetech.py`).**
+- Servo on the pitch axis, spline +Y, case Y 18.3…47.5 (2.4 mm clear of the cradle flange), long side at 244°.
+- 25T aluminium disc horn (HD-002, `E` dimensions: Ø20 disc, Ø10 hub, 4.5 total, 4 × M3 on Ø14 PCD) in a Ø20.4 × 0.6 pocket on the +Y leg, four ISO 7380 M3 × 6 from the leg's outer face, ISO 4762 M3 × 5 centre screw reached through the leg. Spline engagement 3.3 mm.
+- Collar: a 6 mm XZ plate under the ears, round the case's rear-up side, joined by a web to the torsion box front wall and by a floor to the keel.
+- The +Y trunnion pin, adapter and the frame's +Y arm and web are removed. The +Y side of the head now rides on the servo's output bearings (side load: bench).
+- Assembly: horn and centre screw on the servo; servo into the collar; frame lowered between the legs and pushed 0.6 mm +Y into the pocket (1.0 mm float on the −Y side); −Y trunnion pin from outside; horn screws from outside.
+
+**Ear joints (HD-006/007).** ISO 7380 M2 × 6 on an ISO 7089 M2.5 washer (Ø6 × 0.5) into the head's M2 × 3 inserts. The slot is 3.3 mm from the case end: an M3 insert would leave 0.8–1.0 mm of wall, the M2 pocket leaves 1.4 mm. The M2 head is smaller than the slot, and a 0.3 mm M2 washer would dish over it.
+
+**Yoke legs.** The +Y leg now carries the pitch reaction from the horn to the disc. The old 8 × 6 mm spine screened at 8.6 N·m/rad; the XC330 adapter also hung the reaction on this leg, so the earlier 41 Hz frame-only result never covered it. The +Y leg is widened inside the free corridor of the R/P swept volume (1.5 mm margin), with a foot inside the disc radius (Y 48–58) and an inboard rib; its horn pad is Ø22.4. About half its twist is in a 6 mm band just above the foot, where the swept volume limits the spine to about 8 mm, so geometry cannot stiffen it further. **Both yoke legs are to be printed in a carbon-fibre-filled filament with E ≥ 4.5 GPa along the layers** (coupon to measure).
+
+The A0 shift moved both legs about 2.4 mm against the ears. A leg-versus-everything sweep (both legs, 56 poses) against the committed head found its +Y ear trim stack only **0.028 mm** from the leg and the −Y one 0.17 mm. Both legs now have a 1.2 mm relief band on the outer face along the trim-stack path, and their styling rails stop at Z disc+32.5 (the upper halves sit under the head and grazed the ears' amber rings). The +Y leg also has a 0.5 mm outer-face step where the skin passes. The skin, ear and cradle reliefs are still cut by the pre-D-049 legs, so no shell, ear or cradle volume changes. After these changes every leg pair is at least as clear as in the committed head (same 56-pose grid): +Y / −Y trim stacks 1.14 / 1.28 mm (were 0.028 / 0.17), amber rings 0.81 / 0.95 mm (0.22 / 0.35), skin 0.83 / 1.24 mm (0.72 / 0.72), and every new pair ≥ 1.1 mm.
+
+**Rear trim.** Two Ø14 brass stacks at Y = roll axis ±30, 22 mm above it, on the rear cover (built equal: no roll moment; above the C2 BOOT/RESET corridor). Capacity 7.85 g (was 8.0 g on the axis).
+
+**Mass and axes (`mass_layout.py --solve`).** The committed `mass-placement.json` was stale: the committed source gives 604.3 g yaw-carried, not 594.0 g (fabrication-audit skin and screws). D-049 against the committed source:
+
+| | Committed source | D-049 |
+|---|---|---|
+| Roll-carried | 382.8 g | 388.8 g |
+| Pitch-carried | 478.6 g | 535.7 g |
+| Yaw-carried | 604.3 g | 648.5 g |
+| Pitch inertia | 0.000807 | 0.000878 kg·m² |
+| Yaw inertia | 0.001322 | 0.001438 kg·m² |
+
+A0 axes: roll Y −1.027, Z 48.157; pitch X −42.419 (2.41 mm rearward), Z 45.551. Fresh-process residuals ≤ 0.003 mm. A solver bug (`feetech.py` was not reloaded between iterations) was found and fixed.
+
+**Checks (head v1).** `check_revision.py` pass: 56 poses, no mechanism or harness hits, service extraction, retention, insert mouths and hard stops clean. `check_fasteners.py` pass (all M2, including the eight ear screws: 3.0 mm in each insert). `check_integration.py` pass. `motion_envelope.py`: full ±21° roll at every pitch row; lowest point Z −28.39, 4.94 mm above the disc at 1° overtravel. `check_feetech_mounts.py`: every interface fact passes: spline engagement 2.9 (roll) / 3.3 mm (pitch), centre-screw thread 3.8 mm, coupler 1.0 / 0.9 mm from the cartridge / retainer, case 1.0 mm from the rear cover, horn seated, 0.4 mm frame float beyond the pocket, horn screws 2.0 mm in the horn thread, ear-screw shanks clear of the slots, insert walls 1.4 / 1.5 mm, and all eight ear-screw driver paths clear (ISO 7380 M2: 1.3 mm key). Posed clearance: every D-049 part is ≥ 0.99 mm from every part that moves relative to it (the coupler-to-cartridge running gap measures 0.997 mm, designed 1.0, because the goBILDA STEP is 17.003 mm long); pairs that already existed are no closer than in the committed head ([baseline](03-head/v1/cad/generated/feetech-mounts-baseline.json)). Evidence: the full 7 × 8 grid (2026-10-08 22:52) for the servo, coupler, horn, frame, plate and trim parts, `check_leg_clearance.py` for both legs after their final edits, and a 3 × 3 re-run on the final geometry.
+
+**P07 FEA (`fea/`, RP-06 method).** Frame and +Y leg in series ([results](03-head/v1/cad/fea/results.json)):
+
+| Case | Stiffness | Frequency |
+|---|---|---|
+| Pitch frame, E 3.5 / 2.3 GPa | 112.5 / 74.0 N·m/rad (was 51.4) | 57 Hz frame only |
+| +Y yoke leg, E 3.5 / 2.3 GPa | 49.9 / 32.8 N·m/rad (old spine 8.6) | — |
+| Pitch chain, PLA 3.5 GPa | 34.6 N·m/rad | **31.6 Hz** |
+| Pitch chain, PLA 2.3 GPa | 22.7 N·m/rad | **25.6 Hz**, below 30 |
+| Pitch chain, CF legs at 4.5 GPa (frame 3.5 / 2.3) | — | **34.3 / 31.5 Hz** |
+| Roll mount, 3.5 / 2.3 GPa | 455.9 / 299.6 N·m/rad (was 187.5) | 126 / 102 Hz |
+
+Pitch is clamped at the pitch-servo ear seats with the couple on the cartridge seat; roll at the −Y trunnion and pitch ear seats with the couple on the roll ear seats; the leg on its foot with the couple on the horn pocket. Leg mesh convergence 1.4 → 1.0 mm: −0.6% (previous outline); the frame's 1.0 mm runs exceeded memory. The CF leg requirement comes from the 2.3 GPa row. Servo, horn and joint compliance are excluded (B6).
+
+**Motion workbook (§11.3, `busy_minute.py`).** Rebuilt from the RP-01 workbook traces (validated: reproduces its RMS/peaks exactly), with the D-046 70% pitch cap (laugh reversals 145/175/160 ms, startle recoils 260/360 ms, rounded up) and the D-049 inertias. Nominal A0, output side:
+
+| Case | Pitch RMS / peak | Roll RMS / peak | Yaw RMS / peak |
+|---|---|---|---|
+| BC-60 | 0.0086 / 0.0475 N·m (Yes, 80°/s) | 0.0034 / 0.0247 | 0.0197 / 0.1183 |
+| MV-60 | 0.0053 / 0.0294 | 0.0019 / 0.0137 | 0.0122 / 0.0722 |
+
+STS3045M moving-curve margins (proxy at the 5.23 V terminal, reflected motor inertia 0.000869–0.001974 kg·m², with and without the 0.020 N·m bias): pitch **1.71×** worst (BC-60 Yes at 24.7 rpm), roll **3.04×**. Yaw output torque rose 34% with the heavier head (HS ratio unknown).
+
+**Body v1 hand-off.** Dry run, then accepted: `check_body_layout.py` all checks true; a_tip **1.628** neutral and **1.589** worst head pose against 1.582 (was 1.667); the unweighed 95 g harness/fastener allowance must stay forward of X **18.06** (assumed 20). Head yaw-carried CoM is about 2.4 mm off the yaw axis, toward +Y. `check_yaw_stage.py` ALL PASS. The head origin moved 2.41 mm +X relative to the body with the pitch axis.
+
+**BOM.** HD-002/003 rewritten, HD-004–HD-007 added.
+
+**Open:**
+- **Received parts:** measure the pitch horn before printing the +Y leg (pocket, PCD, hub, web); fit the goBILDA coupler on the STS3045M spline (H25T vs Feetech 25T); output thread depth ≥ 4.2 mm; ear tab-root fillet against the Ø6 washer.
+- **CF leg coupon:** modulus ≥ 4.5 GPa along the layers, or revisit the leg.
+- **Tip margin:** 0.4% at the worst head pose. Weigh the harness and fasteners, keep them forward of X 18.1, or add body ballast.
+- **Side load:** the +Y side of the head rides on the pitch servo's output bearings; include in B1/B4 endurance.
+- **Bench B1/B4/B6:** loaded motion, lash (spline, horn and coupler included), loaded modes.
+- **Firmware sign:** pitch CAD angle = −(servo output angle about +Y), because the case turns; roll CAD angle = +(output angle about +X). Confirm the Feetech count direction before writing limits.
+- **Harness:** both 5264 leads leave short-side end faces near the case bottom; only 8–10 mm straight exits are reserved.

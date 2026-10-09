@@ -1,4 +1,7 @@
-"""Locate the drawing-based STS3045M envelope at current pitch/roll axes.
+"""SUPERSEDED by D-049: pre-installation trial against the XC330 head; do not
+run against the D-049 source (see feetech-head-fit.md).
+
+Locate the drawing-based STS3045M envelope at current pitch/roll axes.
 
 This is a layout screen, not a head assembly collision or mounting proof.
 The case datum is the output axis at the case bottom; the spline tip is Z=33.1.

@@ -11,7 +11,12 @@ The [project BOM](../../BOM.csv) carries the specification, source and release c
 | ID | Part | Qty | State |
 |---|---|---:|---|
 | HD-001 | **Feetech STS3045M** pitch and roll servo: 4.8–7.4 V, 0.59 N·m stall / 0.20 N·m rated and 75 rpm no-load at 6 V, 34.8 g, 36 × 15 × 29.2 mm, 1:281 gears, 25T/Ø5.9 mm output, coreless, 12-bit magnetic encoder, Feetech half-duplex TTL ([D-046](../../decisions.md#d-046), [build screen](feetech-actuator-screen.md)) | 2 | CANDIDATE, first choice |
-| HD-002/003 | 25T horns and M3 × 6 horn screws; supplier package content conflicts between the Feetech accessory table and photograph | 2 each | HOLD on delivered-kit check |
+| HD-002 | Pitch output horn: 25T aluminium Ø20 disc, 4 × M3 on Ø14 PCD (`E` listing values), screwed to the +Y yoke leg ([D-049](../../decisions.md#d-049)) | 1 | HOLD: measure before printing the leg |
+| HD-003 | Output centre screws, ISO 4762 M3 × 5 (coupler floor and horn web into the servo output) | 2 | CANDIDATE |
+| HD-004 | Roll output coupler, goBILDA 4001-0025-0006 (25T spline to Ø6 clamping bore) | 1 | CANDIDATE; spline fit on the received servo |
+| HD-005 | Horn-to-leg screws, ISO 7380 M3 × 6 | 4 | CANDIDATE |
+| HD-006 | Servo ear screws, ISO 7380 M2 × 6, into M2 × 3 inserts | 8 | CANDIDATE |
+| HD-007 | Servo ear washers, ISO 7089 M2.5 (Ø6 × 0.5) | 8 | CANDIDATE |
 
 **Why the STS3045M ([D-046](../../decisions.md#d-046)).** It costs ₹3,661 including GST at [Evelta](https://evelta.com/sts3045m-6v-6kg-cm-360deg-metal-gear-digital-servo-motor/), with 5 in stock on 2026-10-07: about a third of an XC330. On paper it clears roll at full speed (about 1.8×) and pitch with the fastest moves capped at 70% speed (about 1.7×). Its rated 0.20 N·m continuous torque is 2.6× the pitch RMS demand. Its metal gears suit pitch's constant gravity load. Margins are estimates at the 5.23 V worst servo terminal of the proposed 5.5 V head rail; bench B1 replaces them.
 
@@ -27,8 +32,8 @@ Ruled out for the head: XL430-W250 and AX-12A (9–12 V, 55–57 g, too large); 
 **What the STS3045M changes**
 
 - **Head rail.** Its 4.8 V minimum is above the rail's 4.74 V worst-case servo terminal. Raise `PB-HEAD` to 5.5 V and move the 5.74 V clamp to about 5.9 V (D-046).
-- **CAD.** The case is longer, thinner and taller than the XC330, with a different mounting pattern. The pitch-servo adapter (`pitch_servo_to_yoke_adapter_trial`), the roll-servo saddle and strap, and the roll mount on the torsion box all need re-fitting, then the P07 FEA re-run. The CAD still carries `xc330.stp`.
-- **Mass.** +11.8 g per servo against the 23 g `M013-15-roll` and `M013-15-pitch` rows. The rows stay at 23 g until the CAD re-fit re-runs the mass tree.
+- **CAD ([D-049](../../decisions.md#d-049), done).** Roll: the servo bolts by its ears to a plate behind the torsion box and drives the Ø6 spindle through the goBILDA coupler; the rear bearing moved forward. Pitch: the servo rides on the pitch frame (collar and floor) and its horn is screwed to the +Y yoke leg, which was widened and must be printed in a CF-filled filament. Rear trim moved to two seats on the cover.
+- **Mass.** Both servos are pitch-carried (34.8 g each). Yaw-carried head mass is 648.5 g (+44.2 g on the committed source); the A0 axes are re-solved.
 - **Firmware and protection.** C2's servo driver and the RP-02 `BD-13` per-axis protection move from Dynamixel to Feetech registers.
 - **Motion.** The fastest pitch moves (laugh reversal, startle) are capped at 70% speed and must be re-screened (gate P07).
 
@@ -80,7 +85,7 @@ These parts are in the head CAD and mass tree but have no BOM row yet. The `M0xx
 | M019a | Prints: front bezel and camera crown, octagonal skin, removable rear cover, two ears (inner mount, removable cap, amber inlay, dark centre) | CAD volume, PLA |
 | M010, M011, M012 | Prints: rolling cradle and ear stalks, roll bearing cartridge (trial), pitch frame and roll saddle, yaw yoke legs, yaw turntable disc, CSI exit guide | CAD volume, PLA |
 | M016–M018 | Roll and pitch bearings and shafts | 6 + 8 + 8 g allowances |
-| M013–M015 | Roll hub/coupling and pitch horn | 4 + 2 g allowances |
+| M016 | Ø6 × 34.6 steel roll spindle (was 32 mm) | Modelled, 7.7 g |
 | M021a, M021 | Fasteners: ear M2 screws, front M2 × 10 (6), rear M2 × 6 (4), hidden hardware; see `cad/generated/fastener-stack.json` | Modelled |
 | M022 | Trim: tungsten ear slugs, brass rear-cover washers | 9.4 g nominal |
 | M020 | Non-camera head harness | 15 g allowance |
@@ -91,7 +96,7 @@ These parts are in the head CAD and mass tree but have no BOM row yet. The `M0xx
 2. **Measure the received HS** against the D-048 model: horn-axis offset, corner holes (drawing and STEP differ 0.8 mm), horn thread, plug height with cables.
 3. **Bench B1:** one STS3045M against a pitch mock-up (0.00079 kg·m², real CoM offset) at 5.23 V on the 70% trajectory; log current and position.
 4. **Bench B4:** loaded and unloaded lash on both servos (the HS result picks between it and the STS3250) with an external angle reference, dead-zone registers at minimum.
-5. **CAD re-fit** of the pitch and roll mounts once the drawing is in hand, then the FEA, `check_revision.py`, `check_fasteners.py` and the mass tree, handed to body v1.
+5. **Received-part checks for D-049:** measure the pitch horn (HD-002) before printing the +Y leg, try the goBILDA coupler (HD-004) on the servo spline, and print a modulus coupon of the CF leg filament (≥ 4.5 GPa along the layers).
 6. **Rails:** record the 5.5 V head setpoint, the clamp change and the 12 V yaw rail in `04-pcbs/power-boards.md`.
 7. **Order the second STS3045M** once B1 and B4 pass.
 8. **Register the head parts above** as HD rows as their selections firm up.

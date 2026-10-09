@@ -29,11 +29,18 @@ def main():
     # the same-frame check, where thread engagement is intended overlap.
     motion_set={n:d for n,d in p.items() if d['kind']=='physical'}
     valid={n:dict(valid=d['shape'].is_valid,solids=len(d['shape'].solids()),volume=d['shape'].volume) for n,d in p.items()}
-    intended={frozenset(['pitch_XC330_1to1_reference','pitch_trunnion_49'])}
+    # Coupler and horn spline engagements and their centre screws are intended.
+    intended={frozenset(x) for x in [
+        ('roll_STS3045M_reference','roll_coupler_goBILDA_4001_0025_0006'),
+        ('roll_STS3045M_reference','roll_coupler_centre_M3x5'),
+        ('pitch_STS3045M_reference','pitch_horn_25T_disc'),
+        ('pitch_STS3045M_reference','pitch_horn_centre_M3x5'),
+    ]}
     pairs=[(a,b) for a,b in itertools.combinations(motion_set,2) if motion_set[a]['frame']!=motion_set[b]['frame'] and frozenset([a,b]) not in intended]
     static=[]
+    same_frame_intended={frozenset(['rolling_spindle_6mm','roll_coupler_goBILDA_4001_0025_0006'])}
     for a,b in itertools.combinations(physical,2):
-        if physical[a]['frame']==physical[b]['frame']:
+        if physical[a]['frame']==physical[b]['frame'] and frozenset([a,b]) not in same_frame_intended:
             v=overlap(p[a]['shape'],p[b]['shape'])
             if v>1e-4:static.append(dict(a=a,b=b,volume_mm3=v))
     h,gaps=routes();jackets={n:d for n,d in h.items() if d['kind']=='jacket'}
@@ -134,7 +141,7 @@ def main():
     for y,z in m.REAR_SCREWS:
         v=overlap(skin,m.axial(INSERT_R,.2,(REAR_INSERT_FACE_X,y,z)))
         if v>1e-4:insert_mouths.append(dict(side='rear',y=y,z=z,plastic_mm3=v))
-    result=dict(motion_evidence_reused=bool(prior),motion_poses_executed_this_run=len(poses),C2_extraction_path='Neutral service pose; unplug and unfasten, lift 27mm in +Z, then withdraw rearward in -X with rear cover removed. PCB stay-with-tray keepers are integral to the tray.',axes=m.AXES,source_sha256=inputs,service_extraction_hits=extraction,retention_misses=retention,insert_mouth_plastic=insert_mouths,intended_pair_exclusions=[sorted(x) for x in intended],poses=prior['poses'] if prior else len(poses),motion_envelope='motion-envelope.json (A+ firmware limit; per-axis hard stops alone do not enforce it)',mechanism_pairs_per_pose=len(pairs),jacket_pairs_per_pose=len(jackets)*len(motion_set),fasteners_in_motion_grid=sorted(n for n in motion_set if n not in physical),same_frame_hits=static,motion_hits=hits,harness_pinches=pinches,optical_pose_checks=optics,old_aperture_conservative_vignetting_mm3=oldhit,optics_assumption='102° horizontal, vertical tangent from 16:9; pupil at X−8 and entrance half-size3mm, front of lens X−2; no entrance-pupil measurement or optical certification.',hard_stops=stops,C2_service_hits=service,solids=valid,harness_gaps=gaps,limitations=['Discrete poses, no continuous-sweep or tolerance certificate.','Rigid harness islands stop before unqualified transitions; no electrical continuity or cable flex/endurance claim.','Yaw branch ends at a keep-out below the +Y leg; the body-side clock-spring reserve is RP-06 packaging, not a qualified cable.','Camera and C2 keepers are trial printed snaps/channels, not purchased hardware or certified retention.'])
+    result=dict(motion_evidence_reused=bool(prior),motion_poses_executed_this_run=len(poses),C2_extraction_path='Neutral service pose; unplug and unfasten, lift 27mm in +Z, then withdraw rearward in -X with rear cover removed. PCB stay-with-tray keepers are integral to the tray.',axes=m.AXES,source_sha256=inputs,service_extraction_hits=extraction,retention_misses=retention,insert_mouth_plastic=insert_mouths,intended_pair_exclusions=sorted(sorted(x) for x in intended),poses=prior['poses'] if prior else len(poses),motion_envelope='motion-envelope.json (A+ firmware limit; per-axis hard stops alone do not enforce it)',mechanism_pairs_per_pose=len(pairs),jacket_pairs_per_pose=len(jackets)*len(motion_set),fasteners_in_motion_grid=sorted(n for n in motion_set if n not in physical),same_frame_hits=static,motion_hits=hits,harness_pinches=pinches,optical_pose_checks=optics,old_aperture_conservative_vignetting_mm3=oldhit,optics_assumption='102° horizontal, vertical tangent from 16:9; pupil at X−8 and entrance half-size3mm, front of lens X−2; no entrance-pupil measurement or optical certification.',hard_stops=stops,C2_service_hits=service,solids=valid,harness_gaps=gaps,limitations=['Discrete poses, no continuous-sweep or tolerance certificate.','Rigid harness islands stop before unqualified transitions; no electrical continuity or cable flex/endurance claim.','Yaw branch ends at a keep-out below the +Y leg; the body-side clock-spring reserve is RP-06 packaging, not a qualified cable.','Camera and C2 keepers are trial printed snaps/channels, not purchased hardware or certified retention.'])
     errors=bool(extraction or retention or insert_mouths or static or hits or pinches or service or any(x['intersection_mm3']>1e-4 for x in optics) or any(not d['valid'] or d['solids']!=1 or d['volume']<=0 for d in valid.values()) or any((s['overlap_mm3']>1e-4 or s['distance_mm']>.01) if s['at_limit'] else s['overlap_mm3']<1e-4 for s in stops))
     result['passed']=not errors
     path=HERE/('revision-neutral.json' if '--neutral' in sys.argv else 'revision-fast.json' if '--fast' in sys.argv else 'revision-checks.json');path.write_text(json.dumps(result,indent=2)+'\n')

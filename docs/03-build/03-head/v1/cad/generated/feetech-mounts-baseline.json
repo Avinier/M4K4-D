@@ -1,0 +1,29 @@
+{
+ "source": "committed head 1758d69, same 7 x 8 A+ grid; minimum distance per pair below 1.5 mm (legs) and the roll hard-stop/flange contacts",
+ "min_mm": {
+  "yaw_yoke_leg_55|main_octagonal_skin": 0.717,
+  "yaw_yoke_leg_55|connected_rolling_cradle_flange_ear_stalks": 0.701,
+  "yaw_yoke_leg_55|pitch_trunnion_49": 0.2,
+  "yaw_yoke_leg_55|connected_pitch_frame_roll_servo_saddle": 1.0,
+  "yaw_yoke_leg_55|ear_1_ridged_inner_mount": 0.867,
+  "yaw_yoke_leg_55|ear_1_hollow_removable_cap": 0.717,
+  "yaw_yoke_leg_55|ear_1_amber_inlay": 0.224,
+  "yaw_yoke_leg_55|ear_1_dark_centre": 0.703,
+  "yaw_yoke_leg_55|ear_1_trim_slug_stack_max": 0.028,
+  "yaw_yoke_leg_55|ear_1_trim_M2x5": 0.843,
+  "yaw_yoke_leg_-55|main_octagonal_skin": 0.717,
+  "yaw_yoke_leg_-55|connected_rolling_cradle_flange_ear_stalks": 0.726,
+  "yaw_yoke_leg_-55|pitch_trunnion_-49": 0.2,
+  "yaw_yoke_leg_-55|connected_pitch_frame_roll_servo_saddle": 1.0,
+  "yaw_yoke_leg_-55|ear_-1_ridged_inner_mount": 0.774,
+  "yaw_yoke_leg_-55|ear_-1_hollow_removable_cap": 0.717,
+  "yaw_yoke_leg_-55|ear_-1_amber_inlay": 0.349,
+  "yaw_yoke_leg_-55|ear_-1_dark_centre": 0.83,
+  "yaw_yoke_leg_-55|pitch_hard_stop_pin": 0.0,
+  "yaw_yoke_leg_-55|ear_-1_trim_slug_stack_max": 0.168,
+  "yaw_yoke_leg_-55|ear_-1_trim_M2x5": 0.984,
+  "connected_pitch_frame_roll_servo_saddle|connected_rolling_cradle_flange_ear_stalks": 0.0,
+  "bearing_cartridge_trial|connected_rolling_cradle_flange_ear_stalks": 0.0,
+  "bearing_cartridge_trial|roll_hard_stop_pin": 0.0
+ }
+}

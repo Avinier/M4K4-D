@@ -26,10 +26,10 @@ def main():
     # Catalog and electronics silhouettes are conservatively bounding envelopes.
     external=[n for n,d in parts.items() if d['owner']=='M019a']
     moving=external+['display_module_1to1_envelope','display_connector_and_flashing_access_reserve','camera_module_3_wide_1to1','removable_camera_edge_bracket_trial','C2_ESP32_S3_Zero_23_5x18_footprint','C2_installed_components_reserve','connected_rolling_cradle_flange_ear_stalks']
-    supports=['yaw_yoke_leg_-55','yaw_yoke_leg_55','yaw_turntable_disc_flush','pitch_servo_to_yoke_adapter_trial','pitch_XC330_1to1_reference','connected_pitch_frame_roll_servo_saddle','bearing_cartridge_trial','roll_XC330_1to1_reference']
+    supports=['yaw_yoke_leg_-55','yaw_yoke_leg_55','yaw_turntable_disc_flush','pitch_horn_25T_disc','pitch_STS3045M_reference','connected_pitch_frame_roll_servo_saddle','bearing_cartridge_trial','roll_STS3045M_reference']
     pairs=list(itertools.product(moving,supports))
     # Pitch-only moving parts must also clear the yaw-carried yoke and servo.
-    pairs += list(itertools.product(['connected_pitch_frame_roll_servo_saddle','bearing_cartridge_trial','roll_XC330_1to1_reference'],['yaw_yoke_leg_-55','yaw_yoke_leg_55','yaw_turntable_disc_flush','pitch_servo_to_yoke_adapter_trial','pitch_XC330_1to1_reference']))
+    pairs += list(itertools.product(['connected_pitch_frame_roll_servo_saddle','bearing_cartridge_trial','roll_STS3045M_reference','pitch_STS3045M_reference'],['yaw_yoke_leg_-55','yaw_yoke_leg_55','yaw_turntable_disc_flush']))
     hits=[];minz=[]
     poses=env.grid_poses(env.load(),[m.ROLL_STOP[0],-15,-6,0,6,15,m.ROLL_STOP[1]],[m.PITCH_STOP[0],-15,-5,0,10,20,30,m.PITCH_STOP[1]])
     if '--fast' in sys.argv:

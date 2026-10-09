@@ -7,6 +7,7 @@ import json,sys,importlib,math
 from pathlib import Path
 from build123d import CenterOf
 import layout_model as m
+import feetech as fe
 import layout_axes
 HERE=Path(__file__).parent
 # C2 is selected (Waveshare ESP32-S3-Zero on the rolling face), but M008 is
@@ -15,27 +16,15 @@ HERE=Path(__file__).parent
 # connectors + assigned local harness are weighed together.
 C2_NOMINAL_G=20.0
 C2_SENSITIVITY_G=(10.0,20.0,35.0)
-# ROBOTIS "XL330, XC330 Moment of Inertia" sheet (Feb 2023, reference only;
-# layout-01/parts/robotis_xl_xc330_moment_of_inertia.pdf): whole-servo
-# rigid-body CoG and tensor in the official STEP frame. M181 and M288 agree
-# to 0.02 mm and 0.3%; the M288 values are used for both.
-XC330_MASS_G=23.0
-XC330_COG_STEP=(-0.23138703,-7.5535115,-11.165635)
-XC330_INERTIA_STEP=((3528.6560,-23.270802,-25.249287),(-23.270802,1801.7452,-457.15800),(-25.249287,-457.15800,2977.4326))
+# D-049: STS3045M (HD-001), 34.8 g (D, Feetech). Its CoM and tensor are not
+# published: rows take the drawing envelope's uniform-density centroid and
+# inertia (E). Purchased metal from its CAD volume: goBILDA coupler and the
+# horn at 2.70 g/cm3 aluminium, spindle and modelled D-049 screws/washers at
+# 7.85 g/cm3 steel (E densities, D geometry except the E horn).
+STS3045M_MASS_G=34.8
+ALUMINIUM,STEEL=2.70e-3,7.85e-3
+D049_HARDWARE=('roll_servo_ear_','pitch_servo_ear_','pitch_horn_to_leg_','pitch_horn_centre_','roll_coupler_centre_','roll_coupler_clamp_')
 
-def _rot(axis,deg):
-    import numpy as np
-    c,s=math.cos(math.radians(deg)),math.sin(math.radians(deg))
-    return {'x':np.array([[1,0,0],[0,c,-s],[0,s,c]]),'y':np.array([[c,0,s],[0,1,0],[-s,0,c]]),'z':np.array([[c,-s,0],[s,c,0],[0,0,1]])}[axis]
-
-def xc330_placed(rotations,origin):
-    """Official CoG and inertia diagonal after the same rotations as layout_model."""
-    import numpy as np
-    R=np.eye(3)
-    for axis,deg in rotations:R=_rot(axis,deg)@R
-    centre=R@np.array(XC330_COG_STEP)+np.array(origin)
-    inertia=R@np.array(XC330_INERTIA_STEP)@R.T
-    return [float(v) for v in centre],[float(inertia[i][i]) for i in range(3)]
 def rows_for(parts,c2=C2_NOMINAL_G):
     rows=[]
     def add(owner,name,frame,mass,centre,size=(0,0,0),shape=None,basis='D/E allocation; uniform bounding-box inertia approximation'):
@@ -62,22 +51,29 @@ def rows_for(parts,c2=C2_NOMINAL_G):
     add('M006','CSI cable + strain relief','R',8,(-30,10,65),(20,20,20))
     add('M007','addressable LED installed allowance','R',5,(-6,m.LED_Y,m.LED_Z),(5,5,5))
     add('M008','C2 installed allowance','R',c2,(-29.5,-29,39.75),(9,18,23.5))
-    # Servos: official ROBOTIS CoG and tensor, placed with layout_model's rotations.
-    for owner,name,frame,rotations,origin in [
-        ('M013-15-roll','XC330-M288-T roll (ACT-01)','P',[('x',90),('z',90)],(-84,m.ROLL_Y,m.ROLL_Z)),
-        ('M013-15-pitch','XC330-M288-T pitch (ACT-01)','Y',[('x',-90),('y',270)],(m.PITCH_X,40,m.PITCH_Z))]:
-        centre,diag=xc330_placed(rotations,origin)
-        rows.append(dict(owner=owner,name=name,frame=frame,mass_g=XC330_MASS_G,center_mm=centre,intrinsic_diagonal_g_mm2=diag,basis='D: ROBOTIS XC330 mass-property sheet (reference only), rotated into the head frame'))
+    # Servos: both pitch-carried (D-049; the pitch case turns round its horn).
+    for name,label in [('roll_STS3045M_reference','STS3045M roll (HD-001)'),('pitch_STS3045M_reference','STS3045M pitch (HD-001)')]:
+        d=parts[name]
+        add(d['owner'],label,d['frame'],STS3045M_MASS_G,None,shape=d['shape'],basis='D: 34.8 g Feetech; E: uniform-density drawing envelope for CoM/inertia')
+    d=parts['roll_coupler_goBILDA_4001_0025_0006']
+    add(d['owner'],'goBILDA 4001-0025-0006 roll coupler','R',d['shape'].volume*ALUMINIUM,None,shape=d['shape'],basis='D: official STEP volume; E: 2.70 g/cm3 (listing 6 g with screw)')
+    d=parts['pitch_horn_25T_disc']
+    add(d['owner'],'25T aluminium pitch horn (HD-002)','Y',d['shape'].volume*ALUMINIUM,None,shape=d['shape'],basis='E: listing-dimension horn at 2.70 g/cm3; HD-002 hold')
+    d=parts['rolling_spindle_6mm']
+    add('M016-18-R','Ø6 roll spindle','R',d['shape'].volume*STEEL,None,shape=d['shape'],basis='E: Ø6 x 34.6 steel at 7.85 g/cm3')
+    for name,d in parts.items():
+        if name.startswith(D049_HARDWARE):
+            add(d['owner'],name,d['frame'],d['shape'].volume*STEEL,None,shape=d['shape'],basis='E: D-049 modelled screw/washer volume at 7.85 g/cm3')
     # Balance trim at half capacity, so it can be added or removed (details.py).
     from details import trim_capacity,TRIM_NOMINAL_FRACTION,EAR_SLUG,EAR_TRIM_INNER_FACE,REAR_STACK
     cap=trim_capacity();f=TRIM_NOMINAL_FRACTION
     for sign in (-1,1):
         add('M022-R',f'ear {sign} tungsten trim slugs (nominal half)','R',cap['ear_slug_max_g']*f,(m.EAR_X,sign*(EAR_TRIM_INNER_FACE-EAR_SLUG['max_len']*f/2),m.EAR_Z),(12,EAR_SLUG['max_len']*f,12),basis='E: half the Ø12 x 2.5 mm tungsten seat capacity at 19.3 g/cm3')
-    add('M022-R','rear-cover brass trim washers (nominal half)','R',cap['rear_stack_max_g']*f,(-110.9+REAR_STACK['max_len']*f/2,m.ROLL_Y,m.ROLL_Z),(REAR_STACK['max_len']*f,20,20),basis='E: half the Ø20 x 3 mm brass seat capacity at 8.5 g/cm3')
-    add('M013-15-R','rolling hub/coupling allowance','R',4,(-73.25,m.ROLL_Y,m.ROLL_Z),(8.5,12,12))
-    add('M013-15-P','pitch horn allowance','P',2,(m.PITCH_X,49,m.PITCH_Z),(8,5,8))
-    add('M016-18-R','rotating shaft portions','R',6,(-55,m.ROLL_Y,m.ROLL_Z),(32,6,6))
-    add('M016-18-P','pitch-carried bearing portions','P',8,(-54,m.ROLL_Y,m.ROLL_Z),(28,16,16))
+    n=len(REAR_STACK['dy'])
+    for dy in REAR_STACK['dy']:
+        add('M022-R',f'rear-cover brass trim washers {dy:+g} (nominal half)','R',cap['rear_stack_max_g']*f/n,(-110.9+REAR_STACK['max_len']*f/2,m.ROLL_Y+dy,m.ROLL_Z+REAR_STACK['dz']),(REAR_STACK['max_len']*f,14,14),basis='E: half the Ø14 x 3 mm brass seat capacity at 8.5 g/cm3')
+    bx=sum(fe.ROLL_BEARING_X)/2
+    add('M016-18-P','pitch-carried bearing portions','P',8,(bx,m.ROLL_Y,m.ROLL_Z),(28,16,16))
     add('M016-18-Y','yaw-carried bearing portions','Y',8,(m.PITCH_X,0,-5),(8,100,45))
     for frame,mass,centre,size in [('R',8,(-32,8,38),(30,35,30)),('P',4,(-65,0,32),(30,20,20)),('Y',3,(-52,0,-10),(20,15,40))]:
         add('M020-'+frame,'non-camera harness',frame,mass,centre,size)
@@ -100,6 +96,8 @@ if __name__=='__main__':
             (HERE/'axes.json').write_text(json.dumps(target,indent=2)+'\n')
             (HERE/'layout_axes.py').write_text('"""Generated A0 datums, mm. Refresh through mass_layout.py --solve."""\nAXES = '+repr(target)+'\n')
             importlib.reload(layout_axes)
+            # feetech.py copies the axes at import: reload it before the layout.
+            importlib.reload(fe)
             m=importlib.reload(m)
             if error<.02:break
 

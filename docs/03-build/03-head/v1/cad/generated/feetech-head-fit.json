@@ -27,7 +27,7 @@
           -78.9
         ],
         [
-          -10.556,
+          -8.556,
           6.444
         ],
         [
@@ -76,7 +76,7 @@
         },
         {
           "part": "connected_pitch_frame_roll_servo_saddle",
-          "overlap_mm3": 49.931,
+          "overlap_mm3": 49.936,
           "regions_mm": [
             [
               [
@@ -161,7 +161,7 @@
           29.344
         ],
         [
-          38.401,
+          40.401,
           55.401
         ]
       ],
@@ -206,7 +206,7 @@
         },
         {
           "part": "removable_roll_servo_saddle_strap",
-          "overlap_mm3": 530.612,
+          "overlap_mm3": 530.625,
           "regions_mm": [
             [
               [
@@ -272,7 +272,7 @@
         ],
         [
           38.296,
-          55.296
+          53.296
         ]
       ],
       "aabb_hits": [
@@ -302,7 +302,7 @@
       "exact_intersections": [
         {
           "part": "display_module_1to1_envelope",
-          "overlap_mm3": 248.057,
+          "overlap_mm3": 261.67,
           "regions_mm": [
             [
               [
@@ -452,7 +452,7 @@
         },
         {
           "part": "pitch_servo_to_yoke_adapter_trial",
-          "overlap_mm3": 352.79,
+          "overlap_mm3": 399.345,
           "regions_mm": [
             [
               [
@@ -470,16 +470,16 @@
             ],
             [
               [
-                -53.41,
-                -51.41
+                -55.51,
+                -52.0
               ],
               [
-                19.0,
+                17.4,
                 20.4
               ],
               [
-                53.296,
-                55.296
+                42.796,
+                48.796
               ]
             ]
           ]
@@ -497,7 +497,7 @@
           49.1
         ],
         [
-          36.296,
+          38.296,
           53.296
         ]
       ],
@@ -526,7 +526,7 @@
       "exact_intersections": [
         {
           "part": "connected_rolling_cradle_flange_ear_stalks",
-          "overlap_mm3": 7.733,
+          "overlap_mm3": 10.839,
           "regions_mm": [
             [
               [
@@ -539,7 +539,7 @@
               ],
               [
                 45.401,
-                47.446
+                48.346
               ]
             ]
           ]

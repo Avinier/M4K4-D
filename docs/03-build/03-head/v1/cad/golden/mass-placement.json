@@ -1,10 +1,10 @@
 {
   "method": "CAD-volume PLA at 1.24 g/cm3 + listed D/E allowances. C2 hardware is selected but M008 installed mass remains U. A0 is solved around the nominal 20 g E case; 10/20/35 g sensitivity cases remain until the complete M008 assembly is weighed. Uniform geometry/box intrinsic inertia and parallel-axis terms; NOT measured mass, torque or servo approval.",
   "axes": {
-    "roll_y": -1.0557739267834358,
-    "roll_z": 47.90092110829701,
-    "pitch_x": -40.00973006401559,
-    "pitch_z": 45.7964533110988
+    "roll_y": -1.0265819698745329,
+    "roll_z": 48.15646489839186,
+    "pitch_x": -42.41874076877715,
+    "pitch_z": 45.551454992696236
   },
   "rows": [
     {
@@ -28,16 +28,16 @@
       "owner": "M019a",
       "name": "main_octagonal_skin",
       "frame": "R",
-      "mass_g": 53.124287632804936,
+      "mass_g": 53.634367379659466,
       "center_mm": [
-        -61.38262788257697,
-        -0.11305463226723553,
-        53.88599344765347
+        -60.31952150800599,
+        -0.10698923972404269,
+        53.486640186347294
       ],
       "intrinsic_diagonal_g_mm2": [
-        152434.6632121827,
-        118697.78131289322,
-        143491.72138200141
+        155174.71854856753,
+        121515.25268116686,
+        147286.33126043252
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -45,16 +45,16 @@
       "owner": "M019a",
       "name": "removable_octagonal_rear_cover",
       "frame": "R",
-      "mass_g": 15.108436197351365,
+      "mass_g": 15.251111627714153,
       "center_mm": [
-        -114.16178692086471,
-        -0.00997012512757616,
-        47.078011675280536
+        -114.14117848282824,
+        -0.01920752112106395,
+        47.50211502537139
       ],
       "intrinsic_diagonal_g_mm2": [
-        19520.003614752834,
-        6549.015077371481,
-        12979.383643170253
+        19927.9870755333,
+        6699.815441194974,
+        13237.99493334979
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -62,16 +62,16 @@
       "owner": "M010",
       "name": "connected_rolling_cradle_flange_ear_stalks",
       "frame": "R",
-      "mass_g": 12.09383893948836,
+      "mass_g": 12.19326213231225,
       "center_mm": [
-        -26.82324727602697,
-        -0.5237982604689555,
-        45.67645640407166
+        -26.78595726775673,
+        -0.5044507993028157,
+        45.52325705458428
       ],
       "intrinsic_diagonal_g_mm2": [
-        15952.482392479242,
-        3961.014501378582,
-        13205.690082805573
+        16370.740551881743,
+        4101.8892716721775,
+        13487.301917945484
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -79,16 +79,16 @@
       "owner": "M010-P",
       "name": "bearing_cartridge_trial",
       "frame": "P",
-      "mass_g": 14.722267047145042,
+      "mass_g": 12.196670109792539,
       "center_mm": [
-        -54.043536337299784,
-        -1.0557739267834503,
-        47.860789639317
+        -51.84673100213723,
+        -1.0265819698745424,
+        48.10802329933243
       ],
       "intrinsic_diagonal_g_mm2": [
-        1751.9555761051809,
-        1832.9426916488032,
-        1815.3826370183413
+        1461.3627533902325,
+        1312.4375259783164,
+        1294.8823811902848
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -96,16 +96,16 @@
       "owner": "M011-P",
       "name": "connected_pitch_frame_roll_servo_saddle",
       "frame": "P",
-      "mass_g": 39.03646380046961,
+      "mass_g": 47.145211950365315,
       "center_mm": [
-        -66.83524204397932,
-        -2.07689370260641,
-        29.179923112021562
+        -68.45645209362169,
+        -1.5487200625942659,
+        31.328129889380207
       ],
       "intrinsic_diagonal_g_mm2": [
-        37343.37588616231,
-        12339.155720728306,
-        47144.08318183361
+        38200.53482406395,
+        16172.454564134585,
+        43703.663216149514
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -113,16 +113,16 @@
       "owner": "M011-Y",
       "name": "yaw_yoke_leg_-55",
       "frame": "Y",
-      "mass_g": 6.1493348529550556,
+      "mass_g": 6.009194177174878,
       "center_mm": [
-        -50.88052679994733,
-        -54.64410389332296,
-        12.197066619514542
+        -53.17664091958946,
+        -54.58211365177856,
+        11.952837317921166
       ],
       "intrinsic_diagonal_g_mm2": [
-        4853.72849992667,
-        5289.455772646313,
-        473.72558638919816
+        4807.1941496562395,
+        5239.312924900595,
+        467.76914805489156
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -130,16 +130,16 @@
       "owner": "M011-Y",
       "name": "yaw_yoke_spine_inlay_-55",
       "frame": "Y",
-      "mass_g": 0.1479668488442027,
+      "mass_g": 0.1466908976019621,
       "center_mm": [
-        -58.05942208962568,
+        -60.468430115555016,
         -57.550000000000004,
-        -8.843972849438728
+        -8.966469394865127
       ],
       "intrinsic_diagonal_g_mm2": [
-        10.114929053344351,
-        10.248222508977213,
-        0.16880549935547404
+        9.85825952676587,
+        9.990403562865618,
+        0.16734985152421752
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -147,16 +147,16 @@
       "owner": "M011-Y",
       "name": "yaw_yoke_leg_55",
       "frame": "Y",
-      "mass_g": 5.153514138216264,
+      "mass_g": 16.40999465165132,
       "center_mm": [
-        -53.24177840344865,
-        54.96179637853663,
-        5.426139238379524
+        -56.53799580713783,
+        54.17324186346736,
+        7.789797573859324
       ],
       "intrinsic_diagonal_g_mm2": [
-        3337.8210908344845,
-        3537.8270900433436,
-        230.9165979830372
+        12063.19134109545,
+        13567.591352884421,
+        1685.0370758376655
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -164,16 +164,16 @@
       "owner": "M011-Y",
       "name": "yaw_yoke_spine_inlay_55",
       "frame": "Y",
-      "mass_g": 0.1479668488442027,
+      "mass_g": 0.14669089760196213,
       "center_mm": [
-        -58.05942208962568,
+        -60.46843011555501,
         57.55,
-        -8.843972849438728
+        -8.966469394865127
       ],
       "intrinsic_diagonal_g_mm2": [
-        10.114929053344355,
-        10.248222508977285,
-        0.1688054993555462
+        9.858259526765869,
+        9.990403562865762,
+        0.1673498515242897
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -183,31 +183,14 @@
       "frame": "Y",
       "mass_g": 72.53199708638988,
       "center_mm": [
-        -40.00973006401561,
+        -42.418740768777155,
         -0.16306851224907914,
         -37.78642106632711
       ],
       "intrinsic_diagonal_g_mm2": [
         77902.37754221699,
-        78394.42846429568,
-        154855.35832745204
-      ],
-      "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
-    },
-    {
-      "owner": "M011-Y",
-      "name": "pitch_servo_to_yoke_adapter_trial",
-      "frame": "Y",
-      "mass_g": 5.616563069795197,
-      "center_mm": [
-        -51.46286800607911,
-        29.191400930018887,
-        51.738848969306325
-      ],
-      "intrinsic_diagonal_g_mm2": [
-        1123.2034971042817,
-        926.1345762605504,
-        1403.2351668878212
+        78394.4284642956,
+        154855.3583274521
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -249,16 +232,16 @@
       "owner": "M019a",
       "name": "ear_-1_ridged_inner_mount",
       "frame": "R",
-      "mass_g": 1.6557953666374965,
+      "mass_g": 1.6699168797936952,
       "center_mm": [
-        -41.303550061340395,
-        -68.60900509771238,
-        57.305910477688414
+        -40.94827315506733,
+        -68.5781069080552,
+        57.009767783216766
       ],
       "intrinsic_diagonal_g_mm2": [
-        132.1821119270085,
-        734.3732693729875,
-        618.1901974545647
+        147.13116361882604,
+        757.4263155884885,
+        626.444914628208
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -266,16 +249,16 @@
       "owner": "M019a",
       "name": "ear_-1_hollow_removable_cap",
       "frame": "R",
-      "mass_g": 5.288783304982499,
+      "mass_g": 5.282070461967738,
       "center_mm": [
-        -42.937460976162775,
-        -72.51234371972495,
-        51.62952469066502
+        -42.772480186307156,
+        -72.50059041826744,
+        51.63676778482776
       ],
       "intrinsic_diagonal_g_mm2": [
-        586.5006893829948,
-        2004.7553100614364,
-        1437.2843909014193
+        587.5374522873583,
+        2014.4953631773792,
+        1446.1963709864451
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -351,16 +334,16 @@
       "owner": "M019a",
       "name": "ear_1_ridged_inner_mount",
       "frame": "R",
-      "mass_g": 1.6385493148376609,
+      "mass_g": 1.6541052994744903,
       "center_mm": [
-        -41.3380987601119,
-        68.61122785680689,
-        57.49069289452808
+        -40.95968637772862,
+        68.57889004700841,
+        57.177716678285854
       ],
       "intrinsic_diagonal_g_mm2": [
-        126.0405539653471,
-        717.5809175242953,
-        607.3710785434553
+        141.22221857260578,
+        742.0956131813828,
+        616.8700606645302
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -368,16 +351,16 @@
       "owner": "M019a",
       "name": "ear_1_hollow_removable_cap",
       "frame": "R",
-      "mass_g": 5.2264480118129795,
+      "mass_g": 5.2178402156253405,
       "center_mm": [
-        -42.94986398397253,
-        72.51182795925051,
-        51.834229816115744
+        -42.79871699898899,
+        72.5002457574508,
+        51.84935648527719
       ],
       "intrinsic_diagonal_g_mm2": [
-        567.7986201132719,
-        1963.5296753369391,
-        1414.5655771731062
+        567.9254980065868,
+        1970.9401759780847,
+        1422.047146013817
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -589,50 +572,33 @@
       "owner": "M010-P",
       "name": "roll_bearing_retainer_39.5",
       "frame": "P",
-      "mass_g": 0.3158700735230201,
+      "mass_g": 0.31587007352302005,
       "center_mm": [
-        -39.699999999999946,
-        -1.0557739267834452,
-        47.12129478228834
+        -39.69999999999998,
+        -1.0265819698745398,
+        47.37683857238314
       ],
       "intrinsic_diagonal_g_mm2": [
-        22.69695206998083,
-        11.030031055082969,
-        11.742729832543503
+        22.69695206998184,
+        11.030031055085999,
+        11.742729832542782
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
     {
       "owner": "M010-P",
-      "name": "roll_bearing_retainer_68.5",
+      "name": "roll_bearing_retainer_64.1",
       "frame": "P",
-      "mass_g": 0.32207066520461464,
+      "mass_g": 0.32207066520461486,
       "center_mm": [
-        -68.29999999999997,
-        -1.055773926783441,
-        47.318467798192906
+        -63.89999999999999,
+        -1.0265819698745349,
+        47.574011588287746
       ],
       "intrinsic_diagonal_g_mm2": [
-        23.37026186191591,
-        11.669147874921933,
-        11.778410946644897
-      ],
-      "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
-    },
-    {
-      "owner": "M011-P",
-      "name": "removable_roll_servo_saddle_strap",
-      "frame": "P",
-      "mass_g": 1.387635176241681,
-      "center_mm": [
-        -94.00000000000001,
-        -1.0557739267834212,
-        50.51399719681061
-      ],
-      "intrinsic_diagonal_g_mm2": [
-        270.66946437601285,
-        67.88068813996881,
-        208.57604068886727
+        23.370261861916056,
+        11.669147874920778,
+        11.778410946643742
       ],
       "basis": "E: authored solid volume \u00d7 PLA 1.24 g/cm3; no infill or printer measurement"
     },
@@ -659,9 +625,9 @@
       "frame": "R",
       "mass_g": 29,
       "center_mm": [
-        -55.50696746530241,
-        -0.11649703389656646,
-        52.74920657668005
+        -55.04292649250357,
+        -0.11494759052292107,
+        52.598655175745066
       ],
       "intrinsic_diagonal_g_mm2": [
         58715.333333333336,
@@ -676,9 +642,9 @@
       "frame": "R",
       "mass_g": 10,
       "center_mm": [
-        -55.50696746530241,
-        -0.11649703389656646,
-        52.74920657668005
+        -55.04292649250357,
+        -0.11494759052292107,
+        52.598655175745066
       ],
       "intrinsic_diagonal_g_mm2": [
         12416.666666666666,
@@ -791,37 +757,479 @@
     },
     {
       "owner": "M013-15-roll",
-      "name": "XC330-M288-T roll (ACT-01)",
+      "name": "STS3045M roll (HD-001)",
       "frame": "P",
-      "mass_g": 23.0,
+      "mass_g": 34.8,
       "center_mm": [
-        -95.165635,
-        -1.2871609567834352,
-        40.34740960829701
+        -97.64685805598876,
+        -1.0265819698745346,
+        42.26694793297659
       ],
       "intrinsic_diagonal_g_mm2": [
-        2977.4326,
-        3528.656,
-        1801.7452
+        4607.319896492391,
+        6463.50743592352,
+        3152.4797859644455
       ],
-      "basis": "D: ROBOTIS XC330 mass-property sheet (reference only), rotated into the head frame"
+      "basis": "D: 34.8 g Feetech; E: uniform-density drawing envelope for CoM/inertia"
     },
     {
       "owner": "M013-15-pitch",
-      "name": "XC330-M288-T pitch (ACT-01)",
-      "frame": "Y",
-      "mass_g": 23.0,
+      "name": "STS3045M pitch (HD-001)",
+      "frame": "P",
+      "mass_g": 34.8,
       "center_mm": [
-        -47.56324156401559,
-        28.834365,
-        45.5650662810988
+        -45.00053507493997,
+        33.05314194401124,
+        40.257992208603056
       ],
       "intrinsic_diagonal_g_mm2": [
-        1801.7452,
-        2977.4326,
-        3528.656
+        5827.2296948529165,
+        4607.319896492392,
+        3788.7575270350685
       ],
-      "basis": "D: ROBOTIS XC330 mass-property sheet (reference only), rotated into the head frame"
+      "basis": "D: 34.8 g Feetech; E: uniform-density drawing envelope for CoM/inertia"
+    },
+    {
+      "owner": "M013-15-R",
+      "name": "goBILDA 4001-0025-0006 roll coupler",
+      "frame": "R",
+      "mass_g": 5.063421987394765,
+      "center_mm": [
+        -73.85361961590607,
+        -1.2490204972903356,
+        48.810416854923574
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        154.5977147034625,
+        213.86650682036642,
+        194.81580607484312
+      ],
+      "basis": "D: official STEP volume; E: 2.70 g/cm3 (listing 6 g with screw)"
+    },
+    {
+      "owner": "M013-15-P",
+      "name": "25T aluminium pitch horn (HD-002)",
+      "frame": "Y",
+      "mass_g": 1.7990576945805268,
+      "center_mm": [
+        -42.418740768777134,
+        51.18210853129836,
+        45.551454992696215
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        43.43519427553746,
+        82.67399868038963,
+        43.435194275536205
+      ],
+      "basis": "E: listing-dimension horn at 2.70 g/cm3; HD-002 hold"
+    },
+    {
+      "owner": "M016-18-R",
+      "name": "\u00d86 roll spindle",
+      "frame": "R",
+      "mass_g": 7.679591825773712,
+      "center_mm": [
+        -57.3,
+        -1.0265819698745327,
+        48.15646489839186
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        34.55816321598198,
+        783.4207607865953,
+        783.4207607865957
+      ],
+      "basis": "E: \u00d86 x 34.6 steel at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-R",
+      "name": "roll_coupler_clamp_M4x10",
+      "frame": "R",
+      "mass_g": 1.8229663740869784,
+      "center_mm": [
+        -69.59578339347644,
+        1.4573729741486723,
+        54.162206632905644
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        32.626733035959965,
+        8.248189570255539,
+        32.626327314583754
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-R",
+      "name": "roll_coupler_centre_M3x5",
+      "frame": "R",
+      "mass_g": 0.773215678287687,
+      "center_mm": [
+        -78.09708312981817,
+        -1.0265819698745327,
+        48.15646489839186
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        2.3724364343577116,
+        4.842147184877453,
+        4.842147184877478
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-Y",
+      "name": "pitch_horn_to_leg_M3x6_45",
+      "frame": "Y",
+      "mass_g": 0.49315862974447655,
+      "center_mm": [
+        -37.46899330047118,
+        54.33590244250789,
+        50.501202461002066
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        2.7845944908842153,
+        0.8893954135038811,
+        2.784594490884222
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-Y",
+      "name": "pitch_horn_to_leg_M3x6_135",
+      "frame": "Y",
+      "mass_g": 0.49315862974447655,
+      "center_mm": [
+        -47.36848823708284,
+        54.33590244250789,
+        50.501202461002066
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        2.7845944908842153,
+        0.8893954135038813,
+        2.784594490884221
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-Y",
+      "name": "pitch_horn_to_leg_M3x6_225",
+      "frame": "Y",
+      "mass_g": 0.49315862974447644,
+      "center_mm": [
+        -47.36848823708285,
+        54.33590244250789,
+        40.601707524390406
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        2.7845944908842166,
+        0.8893954135038804,
+        2.78459449088422
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-Y",
+      "name": "pitch_horn_to_leg_M3x6_315",
+      "frame": "Y",
+      "mass_g": 0.49315862974447655,
+      "center_mm": [
+        -37.46899330047118,
+        54.33590244250789,
+        40.601707524390406
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        2.7845944908842153,
+        0.8893954135038811,
+        2.784594490884222
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-Y",
+      "name": "pitch_horn_centre_M3x5",
+      "frame": "Y",
+      "mass_g": 0.7732156782876874,
+      "center_mm": [
+        -42.41874076877715,
+        52.60291687018182,
+        45.551454992696236
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        4.842147184877472,
+        2.372436434357712,
+        4.842147184877446
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "roll_servo_ear_1_washer",
+      "frame": "P",
+      "mass_g": 0.08850396648922738,
+      "center_mm": [
+        -92.95000000000002,
+        -4.776581969874533,
+        63.456464898391864
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.47891708866467053,
+        0.24130237696709514,
+        0.2413023769672094
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "roll_servo_ear_1_M2x6",
+      "frame": "P",
+      "mass_g": 0.19880473769491205,
+      "center_mm": [
+        -91.06999389978917,
+        -4.776581969874534,
+        63.45646489839194
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.13780429031111402,
+        0.954579657217808,
+        0.954579657217807
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "roll_servo_ear_2_washer",
+      "frame": "P",
+      "mass_g": 0.08850396648922738,
+      "center_mm": [
+        -92.95,
+        2.7234180301254676,
+        63.45646489839186
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.4789170886647847,
+        0.24130237696709514,
+        0.24130237696732365
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "roll_servo_ear_2_M2x6",
+      "frame": "P",
+      "mass_g": 0.19880473769491205,
+      "center_mm": [
+        -91.06999389978917,
+        2.7234180301254662,
+        63.45646489839194
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.137804290311114,
+        0.9545796572178075,
+        0.9545796572178066
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "roll_servo_ear_3_washer",
+      "frame": "P",
+      "mass_g": 0.0885039664892274,
+      "center_mm": [
+        -92.94999999999999,
+        -4.776581969874534,
+        20.856464898391863
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.4789170886648204,
+        0.24130237696743786,
+        0.24130237696778056
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "roll_servo_ear_3_M2x6",
+      "frame": "P",
+      "mass_g": 0.19880473769491214,
+      "center_mm": [
+        -91.06999389978917,
+        -4.776581969874534,
+        20.856464898391945
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.1378042903111141,
+        0.9545796572178077,
+        0.954579657217807
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "roll_servo_ear_4_washer",
+      "frame": "P",
+      "mass_g": 0.0885039664892274,
+      "center_mm": [
+        -92.95,
+        2.723418030125468,
+        20.856464898391863
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.47891708866484184,
+        0.24130237696732365,
+        0.24130237696732365
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "roll_servo_ear_4_M2x6",
+      "frame": "P",
+      "mass_g": 0.19880473769491214,
+      "center_mm": [
+        -91.06999389978917,
+        2.7234180301254662,
+        20.856464898391945
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.13780429031111413,
+        0.954579657217808,
+        0.954579657217807
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "pitch_servo_ear_1_washer",
+      "frame": "P",
+      "mass_g": 0.0885039664892274,
+      "center_mm": [
+        -32.34118454928238,
+        40.25,
+        57.659112100614436
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.24130237696766635,
+        0.47891708866489896,
+        0.24130237696758067
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "pitch_servo_ear_1_M2x6",
+      "frame": "P",
+      "mass_g": 0.1988047376949122,
+      "center_mm": [
+        -32.341184549282296,
+        38.36999389978918,
+        57.65911210061444
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.9545796572178101,
+        0.13780429031111405,
+        0.954579657217811
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "pitch_servo_ear_2_washer",
+      "frame": "P",
+      "mass_g": 0.0885039664892274,
+      "center_mm": [
+        -39.082139896526144,
+        40.25,
+        60.94689570153254
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.24130237696766635,
+        0.4789170886647847,
+        0.2413023769675521
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "pitch_servo_ear_2_M2x6",
+      "frame": "P",
+      "mass_g": 0.19880473769491216,
+      "center_mm": [
+        -39.08213989652605,
+        38.36999389978918,
+        60.94689570153253
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.9545796572178106,
+        0.13780429031111405,
+        0.9545796572178114
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "pitch_servo_ear_3_washer",
+      "frame": "P",
+      "mass_g": 0.08850396648922737,
+      "center_mm": [
+        -51.0157954024971,
+        40.25,
+        19.370485728269944
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.2413023769676378,
+        0.4789170886647847,
+        0.24130237696760923
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "pitch_servo_ear_3_M2x6",
+      "frame": "P",
+      "mass_g": 0.19880473769491236,
+      "center_mm": [
+        -51.015795402497005,
+        38.36999389978918,
+        19.37048572826994
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.9545796572178116,
+        0.13780429031111444,
+        0.954579657217812
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "pitch_servo_ear_4_washer",
+      "frame": "P",
+      "mass_g": 0.08850396648922737,
+      "center_mm": [
+        -57.75675074974086,
+        40.25,
+        22.658269329188023
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.24130237696760923,
+        0.4789170886647276,
+        0.2413023769675521
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
+    },
+    {
+      "owner": "M021-P",
+      "name": "pitch_servo_ear_4_M2x6",
+      "frame": "P",
+      "mass_g": 0.19880473769491236,
+      "center_mm": [
+        -57.75675074974076,
+        38.36999389978918,
+        22.658269329188023
+      ],
+      "intrinsic_diagonal_g_mm2": [
+        0.9545796572178106,
+        0.13780429031111455,
+        0.9545796572178125
+      ],
+      "basis": "E: D-049 modelled screw/washer volume at 7.85 g/cm3"
     },
     {
       "owner": "M022-R",
@@ -859,71 +1267,37 @@
     },
     {
       "owner": "M022-R",
-      "name": "rear-cover brass trim washers (nominal half)",
+      "name": "rear-cover brass trim washers -30 (nominal half)",
       "frame": "R",
-      "mass_g": 4.005530633326987,
+      "mass_g": 1.9627100103302233,
       "center_mm": [
         -110.15,
-        -1.0557739267834358,
-        47.90092110829701
+        -31.026581969874535,
+        70.15646489839186
       ],
       "intrinsic_diagonal_g_mm2": [
-        267.0353755551325,
-        134.26872477131505,
-        134.26872477131505
+        64.11519367078729,
+        32.42560496233056,
+        32.42560496233056
       ],
-      "basis": "E: half the \u00d820 x 3 mm brass seat capacity at 8.5 g/cm3"
+      "basis": "E: half the \u00d814 x 3 mm brass seat capacity at 8.5 g/cm3"
     },
     {
-      "owner": "M013-15-R",
-      "name": "rolling hub/coupling allowance",
+      "owner": "M022-R",
+      "name": "rear-cover brass trim washers +30 (nominal half)",
       "frame": "R",
-      "mass_g": 4,
+      "mass_g": 1.9627100103302233,
       "center_mm": [
-        -73.25,
-        -1.0557739267834358,
-        47.90092110829701
+        -110.15,
+        28.973418030125465,
+        70.15646489839186
       ],
       "intrinsic_diagonal_g_mm2": [
-        96.0,
-        72.08333333333333,
-        72.08333333333333
+        64.11519367078729,
+        32.42560496233056,
+        32.42560496233056
       ],
-      "basis": "D/E allocation; uniform bounding-box inertia approximation"
-    },
-    {
-      "owner": "M013-15-P",
-      "name": "pitch horn allowance",
-      "frame": "P",
-      "mass_g": 2,
-      "center_mm": [
-        -40.00973006401559,
-        49,
-        45.7964533110988
-      ],
-      "intrinsic_diagonal_g_mm2": [
-        14.833333333333334,
-        21.333333333333332,
-        14.833333333333334
-      ],
-      "basis": "D/E allocation; uniform bounding-box inertia approximation"
-    },
-    {
-      "owner": "M016-18-R",
-      "name": "rotating shaft portions",
-      "frame": "R",
-      "mass_g": 6,
-      "center_mm": [
-        -55,
-        -1.0557739267834358,
-        47.90092110829701
-      ],
-      "intrinsic_diagonal_g_mm2": [
-        36.0,
-        530.0,
-        530.0
-      ],
-      "basis": "D/E allocation; uniform bounding-box inertia approximation"
+      "basis": "E: half the \u00d814 x 3 mm brass seat capacity at 8.5 g/cm3"
     },
     {
       "owner": "M016-18-P",
@@ -931,9 +1305,9 @@
       "frame": "P",
       "mass_g": 8,
       "center_mm": [
-        -54,
-        -1.0557739267834358,
-        47.90092110829701
+        -51.8,
+        -1.0265819698745329,
+        48.15646489839186
       ],
       "intrinsic_diagonal_g_mm2": [
         341.3333333333333,
@@ -948,7 +1322,7 @@
       "frame": "Y",
       "mass_g": 8,
       "center_mm": [
-        -40.00973006401559,
+        -42.41874076877715,
         0,
         -5
       ],
@@ -1065,122 +1439,122 @@
   "working": {
     "c2_g": 20.0,
     "roll": {
-      "mass_g": 382.7656786513116,
+      "mass_g": 388.79129913282003,
       "center_mm": [
-        -32.72891339352695,
-        -1.0395588134529223,
-        47.93967325634617
+        -33.100016183275685,
+        -1.0266824275699926,
+        48.15742510764462
       ],
-      "estimated_inertia_kg_m2": 0.0007169932454839001
+      "estimated_inertia_kg_m2": 0.0007258117066940908
     },
     "pitch": {
-      "mass_g": 478.5499854138955,
+      "mass_g": 535.6695915651785,
       "center_mm": [
-        -40.16918703025312,
-        -0.9125793819433856,
-        45.8246209763666
+        -42.41886772898173,
+        1.2405741010057958,
+        45.554056952502776
       ],
-      "estimated_inertia_kg_m2": 0.0008073630255953345
+      "estimated_inertia_kg_m2": 0.0008782180255071265
     },
     "yaw": {
-      "mass_g": 604.2973282589403,
+      "mass_g": 648.4590671674447,
       "center_mm": [
-        -40.83829362168353,
-        0.5391794593951884,
-        34.01899609882309
+        -42.93629535740549,
+        2.2416774526695837,
+        33.91926127365912
       ],
-      "estimated_inertia_kg_m2": 0.0013222638075338971
+      "estimated_inertia_kg_m2": 0.0014376467945052328
     }
   },
   "scenarios": [
     {
       "c2_g": 10.0,
       "roll": {
-        "mass_g": 372.7656786513116,
+        "mass_g": 378.79129913282003,
         "center_mm": [
-          -32.815533851859094,
-          -0.28947792382516424,
-          48.15937355938846
+          -33.195055752334355,
+          -0.2881935119990625,
+          48.37937912630588
         ],
-        "estimated_inertia_kg_m2": 0.0007077898642931197
+        "estimated_inertia_kg_m2": 0.0007165496906769971
       },
       "pitch": {
-        "mass_g": 468.5499854138955,
+        "mass_g": 525.6695915651785,
         "center_mm": [
-          -40.39689351541774,
-          -0.3131252896922573,
-          45.95426821071665
+          -42.66462795434527,
+          1.8158513205034015,
+          45.66446959659774
         ],
-        "estimated_inertia_kg_m2": 0.0008053651770253833
+        "estimated_inertia_kg_m2": 0.0008756848097429618
       },
       "yaw": {
-        "mass_g": 594.2973282589403,
+        "mass_g": 638.4590671674447,
         "center_mm": [
-          -41.02907848781949,
-          1.0362232463146666,
-          33.92256282159523
+          -43.146744171563874,
+          2.731006824891907,
+          33.82793609674199
         ],
-        "estimated_inertia_kg_m2": 0.0013124117632737123
+        "estimated_inertia_kg_m2": 0.0014272303558747243
       }
     },
     {
       "c2_g": 20.0,
       "roll": {
-        "mass_g": 382.7656786513116,
+        "mass_g": 388.79129913282003,
         "center_mm": [
-          -32.72891339352695,
-          -1.0395588134529223,
-          47.93967325634617
+          -33.100016183275685,
+          -1.0266824275699926,
+          48.15742510764462
         ],
-        "estimated_inertia_kg_m2": 0.0007169932454839001
+        "estimated_inertia_kg_m2": 0.0007258117066940908
       },
       "pitch": {
-        "mass_g": 478.5499854138955,
+        "mass_g": 535.6695915651785,
         "center_mm": [
-          -40.16918703025312,
-          -0.9125793819433856,
-          45.8246209763666
+          -42.41886772898173,
+          1.2405741010057958,
+          45.554056952502776
         ],
-        "estimated_inertia_kg_m2": 0.0008073630255953345
+        "estimated_inertia_kg_m2": 0.0008782180255071265
       },
       "yaw": {
-        "mass_g": 604.2973282589403,
+        "mass_g": 648.4590671674447,
         "center_mm": [
-          -40.83829362168353,
-          0.5391794593951884,
-          34.01899609882309
+          -42.93629535740549,
+          2.2416774526695837,
+          33.91926127365912
         ],
-        "estimated_inertia_kg_m2": 0.0013222638075338971
+        "estimated_inertia_kg_m2": 0.0014376467945052328
       }
     },
     {
       "c2_g": 35.0,
       "roll": {
-        "mass_g": 397.7656786513116,
+        "mass_g": 403.79129913282003,
         "center_mm": [
-          -32.60714898924972,
-          -2.093965063937558,
-          47.63083540170341
+          -32.96628313141175,
+          -2.06583251447771,
+          47.845106895524886
         ],
-        "estimated_inertia_kg_m2": 0.000730798317270071
+        "estimated_inertia_kg_m2": 0.0007397047307197315
       },
       "pitch": {
-        "mass_g": 493.5499854138955,
+        "mass_g": 550.6695915651786,
         "center_mm": [
-          -39.84492847451719,
-          -1.7662139108098667,
-          45.640000740649064
+          -42.066963394871074,
+          0.41683402444593576,
+          45.3959569672828
         ],
-        "estimated_inertia_kg_m2": 0.0008103597984502611
+        "estimated_inertia_kg_m2": 0.0008820178491533737
       },
       "yaw": {
-        "mass_g": 619.2973282589403,
+        "mass_g": 663.4590671674447,
         "center_mm": [
-          -40.56366882263363,
-          -0.1762889782559171,
-          34.157806738874335
+          -42.63251711344908,
+          1.5353412444830261,
+          34.05108716198184
         ],
-        "estimated_inertia_kg_m2": 0.001337041873924174
+        "estimated_inertia_kg_m2": 0.0014532714524509958
       }
     }
   ],

@@ -11,7 +11,9 @@ def group_for(n,d):
     owner=d.get('owner') or ''
     if owner.startswith('M021') or '_M2' in n:return 'fasteners'
     if d['frame']=='Y':return 'pitch_actuator' if 'pitch' in n else 'yoke'
-    if d['frame']=='P':return 'roll_drive' if any(s in n for s in ['bearing','roll_XC','retainer']) else 'pitch_frame'
+    if d['frame']=='P':
+        if any(s in n for s in ['bearing','roll_STS','roll_servo','retainer']):return 'roll_drive'
+        return 'pitch_actuator' if any(s in n for s in ['pitch_STS','pitch_servo']) else 'pitch_frame'
     if n.startswith('C2'):return 'c2'
     if owner=='M019a':return 'skin_ears'
     if any(s in n for s in ['display','camera','window','LED','diffuser']):return 'display_camera'

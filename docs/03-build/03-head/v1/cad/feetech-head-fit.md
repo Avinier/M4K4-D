@@ -1,5 +1,16 @@
 # STS3045M trial fit in the live head source
 
+> **Superseded by [D-049](../../../decisions.md#d-049) (2026-10-08).** These
+> are pre-installation trial clockings against the XC330 head. The live source
+> now installs both STS3045M servos (`feetech.py`); its evidence is
+> `check_feetech_mounts.py` / `generated/feetech-mounts.json`,
+> `check_revision.py` and the `fea/` results. The three trial scripts
+> (`check_feetech_head_envelopes.py`, `check_feetech_head_fit.py`,
+> `feetech_mass_whatif.py`) describe the old source and are kept as history;
+> do not re-run them against the D-049 source. The D-049 step 0 drawing check
+> corrected the reference STEP (cable exit, slot necks, boss); re-running this
+> screen with it changed only the pitch-rearward cradle clash (7.7 → 10.8 mm³).
+
 `check_feetech_head_envelopes.py` locates the drawing-based STS3045M STEP at
 the current A0 pitch/roll axes. `check_feetech_head_fit.py --exact` then builds
 the current 100-entry `layout_model.py` head and checks four neutral-pose
