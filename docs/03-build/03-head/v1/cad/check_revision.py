@@ -20,11 +20,15 @@ physical={n:d for n,d in p.items() if d['kind']=='physical' and group_for(n,d)!=
 # the same-frame check, where thread engagement is intended overlap.
 motion_set={n:d for n,d in p.items() if d['kind']=='physical'}
 valid={n:dict(valid=d['shape'].is_valid,solids=len(d['shape'].solids()),volume=d['shape'].volume) for n,d in p.items()}
-intended={frozenset(['pitch_XC330_1to1_reference','pitch_trunnion_49'])}
+# D-049 intended engagements: the coupler and horn on the servo splines and
+# the centre screws in the servo output threads (coaxial with the joint axis).
+intended={frozenset(x) for x in [('roll_STS3045M_reference','roll_coupler_goBILDA_4001_0025_0006'),('roll_STS3045M_reference','roll_coupler_centre_M3x5'),('pitch_STS3045M_reference','pitch_horn_25T_disc'),('pitch_STS3045M_reference','pitch_horn_centre_M3x5')]}
 pairs=[(a,b) for a,b in itertools.combinations(motion_set,2) if motion_set[a]['frame']!=motion_set[b]['frame'] and frozenset([a,b]) not in intended]
 static=[]
+# D-049: the goBILDA coupler clamps the Ø6 spindle (line-on-line by design).
+same_frame_intended={frozenset(['rolling_spindle_6mm','roll_coupler_goBILDA_4001_0025_0006'])}
 for a,b in itertools.combinations(physical,2):
-    if physical[a]['frame']==physical[b]['frame']:
+    if physical[a]['frame']==physical[b]['frame'] and frozenset([a,b]) not in same_frame_intended:
         v=overlap(p[a]['shape'],p[b]['shape'])
         if v>1e-4:static.append(dict(a=a,b=b,volume_mm3=v))
 h,gaps=routes();jackets={n:d for n,d in h.items() if d['kind']=='jacket'}

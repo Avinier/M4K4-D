@@ -16,6 +16,6 @@ The head's purchased parts and their selection state are in the
 
 The Feetech change is tracked in the [actuator screen](feetech-actuator-screen.md),
 [revised storyboard](feetech-motion-storyboard.md), and
-[bench protocol](feetech-bench-protocol.md). The drawing-based STS3045M STEP
-and exploratory fits are in [cad/](cad/README.md); the integrated head export
-still contains the legacy XC330 mount geometry pending redesign.
+[bench protocol](feetech-bench-protocol.md). The head CAD in [cad/](cad/README.md)
+installs both STS3045M servos ([D-049](../../decisions.md#d-049)); the head
+exports were regenerated with them on 2026-10-08.

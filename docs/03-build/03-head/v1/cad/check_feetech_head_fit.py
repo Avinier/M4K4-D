@@ -1,4 +1,7 @@
-"""AABB screen of STS3045M trial placements against live head parts.
+"""SUPERSEDED by D-049: pre-installation trial against the XC330 head; do not
+run against the D-049 source (see feetech-head-fit.md).
+
+AABB screen of STS3045M trial placements against live head parts.
 
 This builds layout_model.py from source. AABB overlap is a conservative flag,
 not a solid intersection or approved mount. The legacy XC330 reference,

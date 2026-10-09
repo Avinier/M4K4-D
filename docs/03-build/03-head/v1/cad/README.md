@@ -14,7 +14,8 @@ manually positioned solids.
 |---|---|
 | `layout_model.py`, `details.py`, `inspection_scene.py`, `harness.py`, `optics.py` | Editable head geometry, mechanism, and inspection groups. |
 | `layout_axes.py`, `motion_envelope.py`, `mass_layout.py` | A0 datums, pose limits, and estimated mass. |
-| `purchased/` | The four 1:1 display, camera, C2, and XC330 source STEPs copied from RP-06 Layout 01. |
+| `purchased/` | The 1:1 display, camera and C2 source STEPs copied from RP-06 Layout 01, the drawing-based STS3045M reference and the official goBILDA 4001-0025-0006 coupler STEP (D-049). `xc330.stp` is kept for history; nothing installs it. |
+| `feetech.py` | D-049 STS3045M installation: servo poses, roll coupler and pitch horn stack, mount and collar parameters, +Y leg stiffening outline. |
 | `head-v1.step.py` | Standalone head CAD export. |
 | `head-v1-integrated.step.py` | Parts-only head plus latest body and chassis assembly. |
 | `yaw-yoke.step.py` | Compact review of the turntable, legs, accent inlays, and pitch trunnions. |
@@ -22,8 +23,12 @@ manually positioned solids.
 | `check_ears.py`, `generated/ear-service.json` | Nominal cap and inner-mount removal paths, fastener count, and solid/finish checks. |
 | `check_integration.py` | Checks the shared yaw datum, disc height, three hub screws, and head sweep floor. |
 | `generated/`, `snapshots/` | Derived fit data and review images. |
-| `purchased/sts3045m_reference.step.py`, `.step` | Drawing-based Feetech STS3045M packaging reference. See its [brief](purchased/sts3045m_reference-brief.md); horn and mounts still need measured details. |
-| `check_feetech_head_envelopes.py`, `check_feetech_head_fit.py`, `feetech_mass_whatif.py` | Candidate placements, source-built collision screen and non-destructive mass sensitivity. These do not change the live XC330 assembly or A0 axes. |
+| `purchased/sts3045m_reference.step.py`, `.step` | Drawing-based Feetech STS3045M packaging reference, checked against the drawing in D-049 step 0. See its [brief](purchased/sts3045m_reference-brief.md). |
+| `check_feetech_mounts.py`, `generated/feetech-mounts.json` | D-049 audit: spline and thread engagements, ear joints, insert walls, driver paths and posed minimum clearance of every D-049 part. |
+| `check_leg_clearance.py`, `generated/leg-clearance-d049.json` | Both yoke legs against every moving part (56 poses); compare with `generated/feetech-mounts-baseline.json` from the committed head. |
+| `fea/` | Head v1 stiffness FEA (pitch frame, roll mount, +Y yoke leg), adapted from RP-06 Layout 04. See its [README](fea/README.md). |
+| `busy_minute.py`, `generated/busy-minute-d049.json` | RP-01 §11.3 busy minute re-run on the D-049 mass tree with the D-046 pitch cap, and STS3045M moving-curve margins. |
+| `check_feetech_head_envelopes.py`, `check_feetech_head_fit.py`, `feetech_mass_whatif.py` | **Superseded** pre-installation trials against the XC330 head; see [feetech-head-fit.md](feetech-head-fit.md). |
 
 The [Feetech head fit report](feetech-head-fit.md) records the current
 neutral-pose clashes and preferred trial clockings. It is a redesign input,
@@ -114,15 +119,12 @@ Changes from the [fabrication audit](../research/fabrication-audit.md):
   45/135/225/315° had no screws and are gone).
 - **Hardware added.** Four ISO 4762 M2 × 25 screws fix the bearing
   cartridge to the pitch-frame slab (2 mm side-open spot faces, slab widened
-  to ±13 at each pair). The roll-servo strap moved to X −94, has 4.7 mm
-  posts and two M2 × 25 screws into frame bosses beside the saddle. The
+  to ±13 at each pair; D-049 moved the rear pair to X −57.5). The
   roll-bearing retainers are 1.2 mm plates held by M2 × 4 screws on the lower
   diagonals at R10.5: at R9 on ±Y their insert pockets broke 0.15 mm into
   the bearing seats.
-- **Pitch servo.** The adapter has a 3 mm inboard face plate with four
-  M2 × 6 screws into the XC330's tapped face holes (axis −22.5/+7.5 in X,
-  ±8 in Z, from the vendor STEP). The fit proxy is now case plus two horns.
-  The adapter-to-yoke-leg joint is still unfastened.
+- **Pitch and roll servos.** Superseded by D-049; see *STS3045M
+  installation* below.
 - **Small parts.** Camera receivers at Y ±16 with R2.8 bosses; the bracket's
   lips, cap and boss are ≥ 1.25 mm. C2 tray jaws are 1.25 mm.
 
@@ -131,17 +133,46 @@ modeled M2 screw it samples what the shank passes through (clearance,
 insert pocket, plastic, tapped metal or air) and fails on plastic, short
 engagement or a pocket shallower than the insert.
 
+## STS3045M installation (D-049)
+
+`feetech.py` holds every D-049 dimension; `layout_model.py` and `details.py`
+build from it. Summary (full record: [D-049](../../../decisions.md#d-049)):
+
+- **Roll:** servo on a 5 mm ear plate behind the torsion box, spline on the
+  roll axis, long side down, 1.0 mm in front of the rear cover. goBILDA
+  4001-0025-0006 coupler clamps the Ø6 spindle (X −74.6…−40). Rear bearing at
+  X −60.6 (spacing 17.6). Ear screws drive from behind with the cover off.
+- **Pitch:** servo on the pitch frame (collar, web to the torsion box, floor
+  to the keel), spline on the pitch axis, long side at 244°. Its 25T horn sits
+  in a 0.6 mm pocket on the +Y yoke leg and is screwed to it from outside, so
+  the case turns round a fixed output. No +Y trunnion pin or adapter.
+- **Ears:** ISO 7380 M2 × 6 on ISO 7089 M2.5 washers into M2 × 3 inserts.
+- **Yoke legs:** the +Y leg is widened within the swept-volume corridor, with
+  a foot, an inboard rib and a Ø22.4 horn pad. Both legs have an outer-face
+  relief band along the ear trim stacks' path and shorter styling rails.
+  Shell reliefs still use the pre-D-049 legs. Print both legs in CF-filled
+  filament (E ≥ 4.5 GPa).
+- **Rear trim:** two Ø14 brass stacks at the roll axis ±30 mm in Y, 22 mm up.
+
+`check_feetech_mounts.py` audits the interfaces and posed clearance;
+`fea/` holds the stiffness FEA; `busy_minute.py` re-runs the §11.3 busy minute.
+
 ## Verification
 
 - `generated/integration-fit.json`: head/body yaw datums and disc seating
   coincide, all three screw axes meet the hub inserts, nominal screw engagement
   is 3.8 mm, and the bolt shafts keep at least 10.47 mm from the stationary
   pinion's modeled outer radius over ±62° yaw.
-- `revision-checks.json`: the 56 sampled roll/pitch poses pass with no
-  mechanism or harness intersections; neutral service extraction and hard-stop
-  checks pass.
-- `generated/fastener-stack.json`: all 50 modeled M2 screws pass; insert
-  joints have 2.6–3.0 mm of shank in the insert.
+- `revision-checks.json` (D-049): the 56 sampled roll/pitch poses pass with no
+  mechanism or harness intersections (3,208 pairs per pose); neutral service
+  extraction, retention and hard-stop checks pass.
+- `generated/fastener-stack.json` (D-049): all 40 modeled M2 screws pass,
+  including the eight servo ear screws; insert joints have 2.6–3.0 mm of
+  shank in the insert.
+- `fea/results.json`: pitch frame 112.5 N·m/rad, +Y leg 49.9, roll mount
+  455.9 at E 3.5 GPa; pitch chain 31.6 Hz in PLA, 34.3 Hz with CF legs.
+- `generated/busy-minute-d049.json`: §11.3 rebuilt and validated against the
+  RP-01 workbook; STS3045M worst moving-curve ratios pitch 1.71×, roll 3.04×.
 - Body v1's `generated/yaw-stage.json`: the yaw stage, drive sweep, gear mesh,
   assembly lowering paths, and modeled disc/hub contact pass. Its gear and
   bearing estimates remain estimates.
@@ -156,5 +187,6 @@ bearing cartridge, and servo mounts. The main CAD views group parts by shell,
 ears, display, camera, controller, roll, pitch, yaw, and fasteners. Inspection
 overlays remain in the source and checks but are omitted from these exports.
 The harness branches are trial routes and the mass tree is estimated. Purchased bearing/insert fit coupons,
-the pitch adapter-to-yoke joint, loaded stiffness, cable flex, and measured A0
-trim remain build gates; the CAD geometry alone does not close them.
+the received STS3045M, horn and coupler fits (D-049), loaded stiffness, cable
+flex, and measured A0 trim remain build gates; the CAD geometry alone does not
+close them.

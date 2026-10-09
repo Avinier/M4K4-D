@@ -1,0 +1,365 @@
+{
+  "method": "RP-01 fullproofmath \u00a711.3 busy minute, re-run for the D-049 head.",
+  "workbook": "02-prototypes/RP-01-head/layout03-paper-model.xlsx",
+  "inertia_workbook_kg_m2": {
+    "pitch": 0.0007282124893036282,
+    "roll": 0.0006565493870131483,
+    "yaw": 0.0010797259590051168
+  },
+  "inertia_d049_kg_m2": {
+    "pitch": 0.0008782180255071265,
+    "roll": 0.0007258117066940908,
+    "yaw": 0.001441645356424566
+  },
+  "cases": {
+    "BC-60": {
+      "validation_against_workbook": {
+        "pitch": {
+          "workbook_rms": 0.00779153811437121,
+          "rebuilt_rms": 0.007791538114371203,
+          "workbook_peak": 0.0512455329489278,
+          "rebuilt_peak": 0.0512455329489278
+        },
+        "roll": {
+          "workbook_rms": 0.003096831628420298,
+          "rebuilt_rms": 0.0030968316284202984,
+          "workbook_peak": 0.022383342946680623,
+          "rebuilt_peak": 0.022383342946680623
+        },
+        "yaw": {
+          "workbook_rms": 0.014726005940180477,
+          "rebuilt_rms": 0.014726005940180488,
+          "workbook_peak": 0.0884918871046059,
+          "rebuilt_peak": 0.0884918871046059
+        }
+      },
+      "retimed": [
+        {
+          "segment": "HM-08 Laugh A 2",
+          "laws": {
+            "pitch": "MJ5"
+          },
+          "old_s": 0.1,
+          "new_s": 0.145
+        },
+        {
+          "segment": "HM-08 Laugh A 3",
+          "laws": {
+            "pitch": "MJ5"
+          },
+          "old_s": 0.12,
+          "new_s": 0.175
+        },
+        {
+          "segment": "HM-08 Laugh A 4",
+          "laws": {
+            "pitch": "MJ5"
+          },
+          "old_s": 0.11,
+          "new_s": 0.16
+        },
+        {
+          "segment": "HM-08 Laugh B 2",
+          "laws": {
+            "pitch": "MJ5"
+          },
+          "old_s": 0.1,
+          "new_s": 0.145
+        },
+        {
+          "segment": "HM-08 Laugh B 3",
+          "laws": {
+            "pitch": "MJ5"
+          },
+          "old_s": 0.12,
+          "new_s": 0.175
+        },
+        {
+          "segment": "HM-08 Laugh B 4",
+          "laws": {
+            "pitch": "MJ5"
+          },
+          "old_s": 0.11,
+          "new_s": 0.16
+        },
+        {
+          "segment": "HM-15 Startle recoil",
+          "laws": {
+            "pitch": "MJ5",
+            "roll": "MJ5",
+            "yaw": "MJ5"
+          },
+          "old_s": 0.18,
+          "new_s": 0.26
+        }
+      ],
+      "d046_trajectory_workbook_inertia": {
+        "pitch": {
+          "rms_Nm": 0.007153192799097729,
+          "peak_Nm": 0.039431125549007864,
+          "speed_at_peak_deg_s": 79.88063505488553,
+          "time_s": 5.145,
+          "segment": "HM-06 Yes A 1",
+          "peak_speed_deg_s": 221.44442692066576
+        },
+        "roll": {
+          "rms_Nm": 0.003071748971340886,
+          "peak_Nm": 0.022383342946680623,
+          "speed_at_peak_deg_s": -72.11451181351829,
+          "time_s": 25.51,
+          "segment": "HM-09 Wobble A 3",
+          "peak_speed_deg_s": 168.42113806217282
+        },
+        "yaw": {
+          "rms_Nm": 0.014700725390138334,
+          "peak_Nm": 0.0884918871046059,
+          "speed_at_peak_deg_s": -81.13684313393024,
+          "time_s": 10.845,
+          "segment": "HM-07 No A settle",
+          "peak_speed_deg_s": 353.9598654926521
+        }
+      },
+      "d049": {
+        "pitch": {
+          "rms_Nm": 0.00862668925398792,
+          "peak_Nm": 0.04755359971412779,
+          "speed_at_peak_deg_s": 79.88063505488553,
+          "time_s": 5.145,
+          "segment": "HM-06 Yes A 1",
+          "peak_speed_deg_s": 221.44442692066576
+        },
+        "roll": {
+          "rms_Nm": 0.0033958014545828787,
+          "peak_Nm": 0.024744661509102973,
+          "speed_at_peak_deg_s": -72.11451181351829,
+          "time_s": 25.51,
+          "segment": "HM-09 Wobble A 3",
+          "peak_speed_deg_s": 168.42113806217282
+        },
+        "yaw": {
+          "rms_Nm": 0.019628343949694007,
+          "peak_Nm": 0.1181539788514036,
+          "speed_at_peak_deg_s": -81.13684313393024,
+          "time_s": 10.845,
+          "segment": "HM-07 No A settle",
+          "peak_speed_deg_s": 353.9598654926521
+        }
+      },
+      "sts3045m_margins": {
+        "pitch_Jeq0.000869_bias0.0": {
+          "min_ratio": 3.197223184319912,
+          "demand_Nm": 0.08582300539724826,
+          "capability_Nm": 0.27439530260409506,
+          "rpm": 24.678022276326672,
+          "segment": "HM-06 Yes C 2"
+        },
+        "pitch_Jeq0.000869_bias0.02": {
+          "min_ratio": 2.5850389146723485,
+          "demand_Nm": 0.1013767513085547,
+          "capability_Nm": 0.2620628471756748,
+          "rpm": 26.507112129853653,
+          "segment": "HM-06 Yes C 2"
+        },
+        "pitch_Jeq0.001974_bias0.0": {
+          "min_ratio": 1.9585620486427597,
+          "demand_Nm": 0.14010038783006387,
+          "capability_Nm": 0.27439530260409506,
+          "rpm": 24.678022276326672,
+          "segment": "HM-06 Yes C 2"
+        },
+        "pitch_Jeq0.001974_bias0.02": {
+          "min_ratio": 1.7138953023358556,
+          "demand_Nm": 0.16010038783006386,
+          "capability_Nm": 0.27439530260409506,
+          "rpm": 24.678022276326672,
+          "segment": "HM-06 Yes C 2"
+        },
+        "roll_Jeq0.000869_bias0.0": {
+          "min_ratio": 6.331202384823909,
+          "demand_Nm": 0.05138275673546441,
+          "capability_Nm": 0.32531463198239907,
+          "rpm": 17.12591481039406,
+          "segment": "HM-09 Wobble A 2"
+        },
+        "roll_Jeq0.000869_bias0.02": {
+          "min_ratio": 4.546838802556513,
+          "demand_Nm": 0.06931031395733177,
+          "capability_Nm": 0.3151428249185703,
+          "rpm": 18.63454779921537,
+          "segment": "HM-09 Wobble A 2"
+        },
+        "roll_Jeq0.001974_bias0.0": {
+          "min_ratio": 3.739918474955628,
+          "demand_Nm": 0.08698441801896731,
+          "capability_Nm": 0.32531463198239907,
+          "rpm": 17.12591481039406,
+          "segment": "HM-09 Wobble A 2"
+        },
+        "roll_Jeq0.001974_bias0.02": {
+          "min_ratio": 3.0407664780185395,
+          "demand_Nm": 0.1069844180189651,
+          "capability_Nm": 0.3253146319823917,
+          "rpm": 17.12591481039516,
+          "segment": "HM-09 Wobble A 2"
+        }
+      }
+    },
+    "MV-60": {
+      "validation_against_workbook": {
+        "pitch": {
+          "workbook_rms": 0.00443740245622889,
+          "rebuilt_rms": 0.004437402456228888,
+          "workbook_peak": 0.024418460900645287,
+          "rebuilt_peak": 0.024418460900645287
+        },
+        "roll": {
+          "workbook_rms": 0.0017556052974844864,
+          "rebuilt_rms": 0.001755605297484485,
+          "workbook_peak": 0.0124145376756155,
+          "rebuilt_peak": 0.0124145376756155
+        },
+        "yaw": {
+          "workbook_rms": 0.009094845103129712,
+          "rebuilt_rms": 0.00909484510312971,
+          "workbook_peak": 0.05396350716916929,
+          "rebuilt_peak": 0.05396350716916929
+        }
+      },
+      "retimed": [
+        {
+          "segment": "HM-15 Startle recoil",
+          "laws": {
+            "pitch": "MJ5",
+            "roll": "MJ5",
+            "yaw": "MJ5"
+          },
+          "old_s": 0.25,
+          "new_s": 0.36
+        }
+      ],
+      "d046_trajectory_workbook_inertia": {
+        "pitch": {
+          "rms_Nm": 0.004415212246579417,
+          "peak_Nm": 0.024418460900645287,
+          "speed_at_peak_deg_s": 61.22513595653254,
+          "time_s": 40.63,
+          "segment": "HM-06 Yes C 3",
+          "peak_speed_deg_s": 152.35842745852722
+        },
+        "roll": {
+          "rms_Nm": 0.001748313788148437,
+          "peak_Nm": 0.0124145376756155,
+          "speed_at_peak_deg_s": -22.989844591440274,
+          "time_s": 26.035,
+          "segment": "HM-09 Wobble A settle",
+          "peak_speed_deg_s": 102.70117091899262
+        },
+        "yaw": {
+          "rms_Nm": 0.009088907648572671,
+          "peak_Nm": 0.05396350716916929,
+          "speed_at_peak_deg_s": 105.91321735322094,
+          "time_s": 41.63,
+          "segment": "HM-07 No C 2",
+          "peak_speed_deg_s": 236.10332138084718
+        }
+      },
+      "d049": {
+        "pitch": {
+          "rms_Nm": 0.005324708156397916,
+          "peak_Nm": 0.029448454720400013,
+          "speed_at_peak_deg_s": 61.22513595653254,
+          "time_s": 40.63,
+          "segment": "HM-06 Yes C 3",
+          "peak_speed_deg_s": 152.35842745852722
+        },
+        "roll": {
+          "rms_Nm": 0.0019327511981782047,
+          "peak_Nm": 0.013724202560219782,
+          "speed_at_peak_deg_s": -22.989844591440274,
+          "time_s": 26.035,
+          "segment": "HM-09 Wobble A settle",
+          "peak_speed_deg_s": 102.70117091899262
+        },
+        "yaw": {
+          "rms_Nm": 0.012135469558044051,
+          "peak_Nm": 0.07205183767045839,
+          "speed_at_peak_deg_s": 105.91321735322094,
+          "time_s": 41.63,
+          "segment": "HM-07 No C 2",
+          "peak_speed_deg_s": 236.10332138084718
+        }
+      },
+      "sts3045m_margins": {
+        "pitch_Jeq0.000869_bias0.0": {
+          "min_ratio": 6.078010415854601,
+          "demand_Nm": 0.056839916102938,
+          "capability_Nm": 0.34547360210995887,
+          "rpm": 14.13603433347786,
+          "segment": "HM-06 Yes A 2"
+        },
+        "pitch_Jeq0.000869_bias0.02": {
+          "min_ratio": 4.468105438351074,
+          "demand_Nm": 0.07501124471288678,
+          "capability_Nm": 0.33515815043913266,
+          "rpm": 15.6659719922976,
+          "segment": "HM-06 Yes A 2"
+        },
+        "pitch_Jeq0.001974_bias0.0": {
+          "min_ratio": 3.723281061556664,
+          "demand_Nm": 0.09278740884673371,
+          "capability_Nm": 0.34547360210995887,
+          "rpm": 14.13603433347786,
+          "segment": "HM-06 Yes A 2"
+        },
+        "pitch_Jeq0.001974_bias0.02": {
+          "min_ratio": 3.0517113235018565,
+          "demand_Nm": 0.110493152735926,
+          "capability_Nm": 0.3371932053736455,
+          "rpm": 15.364142534758317,
+          "segment": "HM-06 Yes A 2"
+        },
+        "roll_Jeq0.000869_bias0.0": {
+          "min_ratio": 12.760853470605953,
+          "demand_Nm": 0.02982760841677122,
+          "capability_Nm": 0.3806257403850304,
+          "rpm": 8.922440023577598,
+          "segment": "HM-09 Wobble A 2"
+        },
+        "roll_Jeq0.000869_bias0.02": {
+          "min_ratio": 7.6086615000505695,
+          "demand_Nm": 0.04924115101929833,
+          "capability_Nm": 0.3746592499787111,
+          "rpm": 9.807360883556141,
+          "segment": "HM-09 Wobble A 2"
+        },
+        "roll_Jeq0.001974_bias0.0": {
+          "min_ratio": 7.5379917984170115,
+          "demand_Nm": 0.05049431606770417,
+          "capability_Nm": 0.3806257403850304,
+          "rpm": 8.922440023577598,
+          "segment": "HM-09 Wobble A 2"
+        },
+        "roll_Jeq0.001974_bias0.02": {
+          "min_ratio": 5.389357757593294,
+          "demand_Nm": 0.06973792353059882,
+          "capability_Nm": 0.3758426191780807,
+          "rpm": 9.631849315068715,
+          "segment": "HM-09 Wobble A 2"
+        }
+      }
+    }
+  },
+  "capability_proxy": {
+    "terminal_V": 5.23,
+    "stall_Nm": 0.51254,
+    "no_load_rpm": 65.37500000000001,
+    "graph_factor": 0.86,
+    "basis": "E: 6 V vendor endpoints scaled to 5.23 V, straight line, legacy XC330 0.86 factor; not a Feetech curve"
+  },
+  "validation_passed": true,
+  "limitations": [
+    "Nominal A0 case: zero CoM residual and zero external bias. The \u00a711.3 sensitivity matrix (C2 mass, CoM offsets, +/-0.020 N*m bias) is not re-run.",
+    "Output-side rigid-body torque only; add the reflected motor inertia (J_motor x 281^2, U) and friction before comparing with a measured Feetech curve.",
+    "Inertias are the E mass tree (solid PLA, uniform-density servo envelopes)."
+  ]
+}

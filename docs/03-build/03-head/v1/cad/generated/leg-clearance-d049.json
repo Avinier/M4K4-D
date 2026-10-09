@@ -1,0 +1,107 @@
+{
+ "yaw_yoke_leg_55|main_octagonal_skin": [
+  0.825,
+  -21.0,
+  -15.0
+ ],
+ "yaw_yoke_leg_55|display_module_1to1_envelope": [
+  1.114,
+  -7.0,
+  43.0
+ ],
+ "yaw_yoke_leg_55|connected_rolling_cradle_flange_ear_stalks": [
+  0.705,
+  -7.0,
+  43.0
+ ],
+ "yaw_yoke_leg_55|pitch_STS3045M_reference": [
+  1.237,
+  -21.0,
+  -25.0
+ ],
+ "yaw_yoke_leg_55|connected_pitch_frame_roll_servo_saddle": [
+  1.0,
+  -21.0,
+  -25.0
+ ],
+ "yaw_yoke_leg_55|ear_1_ridged_inner_mount": [
+  1.467,
+  -21.0,
+  -25.0
+ ],
+ "yaw_yoke_leg_55|ear_1_hollow_removable_cap": [
+  1.467,
+  -21.0,
+  -15.0
+ ],
+ "yaw_yoke_leg_55|ear_1_amber_inlay": [
+  0.811,
+  -21.0,
+  15.0
+ ],
+ "yaw_yoke_leg_55|ear_1_dark_centre": [
+  1.313,
+  -21.0,
+  15.0
+ ],
+ "yaw_yoke_leg_55|ear_1_trim_slug_stack_max": [
+  1.138,
+  -21.0,
+  15.0
+ ],
+ "yaw_yoke_leg_55|ear_1_trim_M2x5": [
+  1.124,
+  -21.0,
+  5.0
+ ],
+ "yaw_yoke_leg_-55|main_octagonal_skin": [
+  1.24,
+  14.0,
+  43.0
+ ],
+ "yaw_yoke_leg_-55|connected_rolling_cradle_flange_ear_stalks": [
+  0.73,
+  7.0,
+  43.0
+ ],
+ "yaw_yoke_leg_-55|pitch_trunnion_-49": [
+  0.2,
+  -21.0,
+  -25.0
+ ],
+ "yaw_yoke_leg_-55|connected_pitch_frame_roll_servo_saddle": [
+  1.0,
+  -21.0,
+  -25.0
+ ],
+ "yaw_yoke_leg_-55|ear_-1_ridged_inner_mount": [
+  1.467,
+  21.0,
+  -25.0
+ ],
+ "yaw_yoke_leg_-55|ear_-1_hollow_removable_cap": [
+  1.467,
+  21.0,
+  -15.0
+ ],
+ "yaw_yoke_leg_-55|ear_-1_amber_inlay": [
+  0.948,
+  21.0,
+  25.0
+ ],
+ "yaw_yoke_leg_-55|ear_-1_dark_centre": [
+  1.449,
+  21.0,
+  25.0
+ ],
+ "yaw_yoke_leg_-55|pitch_hard_stop_pin": [
+  0.0,
+  -21.0,
+  -25.0
+ ],
+ "yaw_yoke_leg_-55|ear_-1_trim_slug_stack_max": [
+  1.275,
+  21.0,
+  25.0
+ ]
+}

@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 from build123d import *
 import layout_model as m
+import feetech as fe
 
 def rod(p,q,r):
     v=Vector(q)-Vector(p)
@@ -21,7 +22,16 @@ def routes():
       ('CSI_30mm_straight_exit_R','csi','R',(-18,0,80),(-48,0,80),1.0,'#65a584'),
       ('display_link_30mm_straight_R','display_link','R',(-18,-34,65),(-48,-34,65),1.2,'#4199b6'),
       ('C2_castellated_30mm_straight_R','c2_local','R',(-35,-29,42),(-65,-29,42),1.,'#a688c8'),
-      ('roll_servo_bus_30mm_straight_P','servo_bus','P',(-100,m.ROLL_Y-14,m.ROLL_Z-9),(-100,m.ROLL_Y-44,m.ROLL_Z-9),1.2,'#cb8750'),
+    ]
+    # D-049: each STS3045M lead leaves its nozzle tip (shaft-end face, near
+    # the case bottom) along the case's short side. Straight runs stop at a
+    # keep-out; the 5264 plug route and bus daisy chain are not yet drawn.
+    (ux,uz),_=fe.u_v();zc=sum(fe.NOZZLE_Z)/2;tip=fe.NOZZLE_TIP_X-.05
+    roll0=fe.roll_local_to_head(tip,0,zc)
+    pitch0=fe.pitch_local_to_head(tip,0,zc)
+    specs+=[
+      ('roll_servo_lead_8mm_exit_P','servo_bus','P',roll0,(roll0[0],roll0[1],roll0[2]+8),1.2,'#cb8750'),
+      ('pitch_servo_lead_10mm_exit_P','servo_bus','P',pitch0,(pitch0[0]-10*ux,pitch0[1],pitch0[2]-10*uz),1.2,'#cb8750'),
     ]
     for name,branch,frame,p,q,r,color in specs:
         put(name,rod(p,q,r),frame,branch,color=color)
