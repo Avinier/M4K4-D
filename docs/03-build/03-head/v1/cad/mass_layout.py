@@ -103,7 +103,8 @@ if __name__=='__main__':
             m=importlib.reload(m)
             if error<.02:break
 
-    parts=m.build_parts(catalog=False);rows=rows_for(parts,C2_NOMINAL_G)
+    from cad_cache import load_parts
+    parts=load_parts(catalog=False,bypass='--solve' in sys.argv);rows=rows_for(parts,C2_NOMINAL_G)
     scenarios=[]
     for c2 in C2_SENSITIVITY_G:
         scenario_rows=rows_for(parts,c2)

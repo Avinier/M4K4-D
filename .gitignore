@@ -5,4 +5,5 @@ __pycache__/
 
 # Reproducible CAD workspace outputs; canonical exported artifacts are tracked.
 __cadgen__/
+docs/03-build/03-head/v1/cad/.cache/
 docs/02-prototypes/RP-06-cad/body-chassis/layout-02/snapshots/*_20??????T??????Z.png

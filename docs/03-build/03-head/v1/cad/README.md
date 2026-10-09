@@ -133,6 +133,21 @@ engagement or a pocket shallower than the insert.
 
 ## Verification
 
+`cad_cache.py` stores source-keyed BinTools BReps under ignored `.cache/`;
+`mass_layout.py --solve` bypasses it while changing A0 axes. Cold relief
+sampling uses spawned workers and can be forced serial with
+`MAKAD_RELIEF_SERIAL=1` when inspecting a build. To compare full
+check outputs with the checked in references, run
+`python tools/compare_golden.py`. The D-048 checkout has no
+`generated/feetech-mounts.json`, so use `--allow-missing` only until D-049 is
+merged and its golden is reviewed. `run_checks.py` runs mass, envelope, head
+checks and body hand-off in dependency order, with input hashes for incremental
+reruns. `--fast` uses separate revision, layout, mount and fastener outputs;
+the full 7 × 8 grid remains the sign-off run. The D-049 mount script must be
+updated to write `generated/feetech-mounts-fast.json` for this mode. See
+`tools/profiling.md` for measured
+timings and remaining targets.
+
 - `generated/integration-fit.json`: head/body yaw datums and disc seating
   coincide, all three screw axes meet the hub inserts, nominal screw engagement
   is 3.8 mm, and the bolt shafts keep at least 10.47 mm from the stationary

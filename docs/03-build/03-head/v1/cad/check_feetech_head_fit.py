@@ -1,6 +1,6 @@
 """AABB screen of STS3045M trial placements against live head parts.
 
-This builds layout_model.py from source. AABB overlap is a conservative flag,
+This loads source-keyed head geometry. AABB overlap is a conservative flag,
 not a solid intersection or approved mount. The legacy XC330 reference,
 adapter and saddle are intentionally listed separately as replacement work.
 """
@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 from build123d import Axis, Location, import_step
 import layout_model as head
+from cad_cache import load_parts
 
 HERE = Path(__file__).resolve().parent
 servo = import_step(HERE / "purchased/sts3045m_reference.step")
@@ -34,8 +35,8 @@ placements = {
     "pitch_tabs_rearward": servo.rotate(Axis.Z, 180).rotate(Axis.X, -90).moved(
         Location((head.PITCH_X, 16, head.PITCH_Z))),
 }
-print("building live head geometry", flush=True)
-parts = head.build_parts(catalog=False)
+print("loading live head geometry", flush=True)
+parts = load_parts(catalog=False)
 print(f"built {len(parts)} head entries", flush=True)
 all_targets = {name: data["shape"] for name, data in parts.items()}
 targets = {name: data["shape"] for name, data in parts.items()
@@ -57,7 +58,7 @@ targets = {name: data["shape"] for name, data in parts.items()
 result = {
     "method": ("AABB screen plus exact overlap for non-legacy named parts"
                if "--exact" in sys.argv else "conservative AABB only"),
-    "head_source": "layout_model.build_parts(catalog=False)",
+    "head_source": "cad_cache.load_parts(catalog=False)",
     "target_entries": list(targets),
     "placements": {},
 }

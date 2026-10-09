@@ -16,9 +16,11 @@ insert length. Any plastic station is a failure unless the joint is declared
 thread-forming. M2 only; the M3 hub screws are checked by check_integration.py.
 """
 import json, math, sys
+from functools import lru_cache
 from pathlib import Path
 from build123d import Vector
 import layout_model as m
+from cad_cache import load_parts
 import details as d
 from inspection_scene import group_for
 
@@ -109,13 +111,20 @@ def classify(name, shape, plastics, metals):
                 plastic_mm=total('plastic'), metal_mm=total('metal'), tip=tip)
 
 
-def _near(s, p, pad=2.):
+@lru_cache(maxsize=None)
+def _bounds(s):
     bb = s.bounding_box()
-    return all(tuple(bb.min)[i] - pad <= tuple(p)[i] <= tuple(bb.max)[i] + pad for i in range(3))
+    return tuple(bb.min), tuple(bb.max)
+
+
+def _near(s, p, pad=2.):
+    lo, hi = _bounds(s)
+    point = tuple(p)
+    return all(lo[i] - pad <= point[i] <= hi[i] + pad for i in range(3))
 
 
 def main():
-    parts = m.build_parts(catalog=False, reliefs='--fast' not in sys.argv)
+    parts = load_parts(catalog=False, reliefs='--fast' not in sys.argv)
     screws = {n: x for n, x in parts.items()
               if group_for(n, x) == 'fasteners' and '_M2' in n and x['kind'] == 'physical'}
     out, failures = {}, []
@@ -149,7 +158,8 @@ def main():
                   screws=out, failures=failures, passed=not failures,
                   limitations=['Nominal B-rep only: no insert knurl, thread pitch, preload, '
                                'pull-out or print tolerance. Driver access is not checked here.'])
-    (HERE / 'generated' / 'fastener-stack.json').write_text(json.dumps(report, indent=2) + '\n')
+    output = 'fastener-stack-fast.json' if '--fast' in sys.argv else 'fastener-stack.json'
+    (HERE / 'generated' / output).write_text(json.dumps(report, indent=2) + '\n')
     print('PASS' if not failures else f'FAIL: {len(failures)} screws')
     raise SystemExit(1 if failures else 0)
 

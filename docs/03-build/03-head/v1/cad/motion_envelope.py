@@ -37,15 +37,31 @@ def _about(points, origin, axis_dir, angle_deg):
 class Sweep:
     """Lowest R/P-carried point for any roll/pitch, from one tessellation."""
 
-    def __init__(self, parts, m):
+    def __init__(self, parts, m, meshes=None):
         self.m = m
         clouds = {'R': [], 'P': []}
-        for d in parts.values():
+        for name,d in parts.items():
             if d['frame'] in clouds:
-                verts, _ = d['shape'].tessellate(0.05, 0.2)
-                clouds[d['frame']].append(np.array([tuple(v) for v in verts]))
+                if meshes is None:
+                    verts, _ = d['shape'].tessellate(0.05, 0.2)
+                    cloud = np.array([tuple(v) for v in verts])
+                else:
+                    cloud = meshes[name][0]
+                clouds[d['frame']].append(cloud)
         self.r = np.vstack(clouds['R'])
         self.p = np.vstack(clouds['P'])
+        # A rotated Z minimum is a linear functional of the original cloud.
+        # Only convex-hull vertices can attain it, at any roll/pitch angle.
+        # Keep the full cloud if Qhull cannot construct a hull.
+        try:
+            from scipy.spatial import ConvexHull, QhullError
+        except ImportError:
+            return
+        try:
+            self.r = self.r[ConvexHull(self.r).vertices]
+            self.p = self.p[ConvexHull(self.p).vertices]
+        except QhullError:
+            pass
 
     def min_z(self, roll, pitch):
         m = self.m
@@ -105,7 +121,9 @@ def load():
 
 if __name__ == '__main__' and '--write' in sys.argv:
     import layout_model as m
-    sweep = Sweep(m.build_parts(catalog=False, reliefs=False), m)
+    from cad_cache import load_parts, load_meshes
+    parts = load_parts(catalog=False, reliefs=False)
+    sweep = Sweep(parts, m, load_meshes(catalog=False, reliefs=False, parts=parts))
     table = dict(
         method='Tessellated R/P solids (0.05 mm), no relief cuts; per-pitch roll limits at 0.25° search, rounded toward zero.',
         sweep_floor_z_mm=m.SWEEP_FLOOR_Z, yaw_disc_top_z_mm=m.YAW_DISC_TOP_Z,

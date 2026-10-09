@@ -579,7 +579,6 @@ def build_parts(catalog=True,reliefs=True):
     detail_parts(out)
     if reliefs:
         # Window construction samples deliberately differ from verification.
-        tools_by_side=[]
         # Samples are clamped into the A+ firmware envelope: poses the head
         # never reaches must not carve the helmet.
         import motion_envelope as env
@@ -587,19 +586,39 @@ def build_parts(catalog=True,reliefs=True):
         # Dense along the boundary: each relief is one union box per tool, so
         # sparse clamped samples leave gaps between them.
         samples=env.grid_poses(table,[ROLL_STOP[0],-18,-12,-6,0,6,12,18,ROLL_STOP[1]],[PITCH_STOP[0],-22,-18,-14,-10,-5,0,5,10,15,20,25,30,35,40,PITCH_STOP[1]])
-        for support_name in ['yaw_yoke_leg_-55','yaw_yoke_leg_55','yaw_turntable_disc_flush']:
-            support=out[support_name]['shape']
-            tools_by_side.append([support.rotate(PITCH_AXIS,-p).rotate(ROLL_AXIS,-r) for r,p in samples])
-        for name in ['main_octagonal_skin','ear_-1_ridged_inner_mount','ear_1_ridged_inner_mount','ear_-1_hollow_removable_cap','ear_1_hollow_removable_cap','connected_rolling_cradle_flange_ear_stalks']:
+        import multiprocessing
+        import os
+        from cad_cache import _encode
+        from relief_worker import TARGETS, SUPPORTS, initialize, sample_bounds
+        from run_checks import worker_cap
+        encoded={name:_encode(out[name]['shape']) for name in (*TARGETS,*SUPPORTS)}
+        # Daemon pool workers may themselves need to build parts on a cache
+        # miss. They cannot spawn children, so retain a serial fallback.
+        parallel=(not multiprocessing.current_process().daemon and
+                  os.environ.get('MAKAD_RELIEF_SERIAL')!='1' and len(samples)>1)
+        if parallel:
+            pool=multiprocessing.get_context('spawn').Pool(
+                processes=min(worker_cap(),len(samples)),
+                initializer=initialize,initargs=(encoded,))
+            results=pool.imap(sample_bounds,samples,chunksize=1)
+        else:
+            initialize(encoded)
+            results=map(sample_bounds,samples)
+        bounds_by_pair={(name,support):[] for name in TARGETS for support in SUPPORTS}
+        try:
+            for result in results:
+                for pair,boxes in result.items():
+                    bounds_by_pair[pair].extend(boxes)
+        finally:
+            if parallel:
+                pool.close();pool.join()
+        for name in TARGETS:
             s=out[name]['shape'];cuts=[]
-            for tools in tools_by_side:
-                bounds=[]
-                for t in tools:
-                    for c in pieces(s.intersect(t)):
-                        if c.volume>1e-5:bounds.append(c.bounding_box())
+            for support in SUPPORTS:
+                bounds=bounds_by_pair[name,support]
                 if bounds:
-                    lo=[min(tuple(b.min)[i] for b in bounds)-2 for i in range(3)]
-                    hi=[max(tuple(b.max)[i] for b in bounds)+2 for i in range(3)]
+                    lo=[min(b[0][i] for b in bounds)-2 for i in range(3)]
+                    hi=[max(b[1][i] for b in bounds)+2 for i in range(3)]
                     cuts.append(block(lo[0],hi[0],lo[1],hi[1],lo[2],hi[2]))
             if cuts:
                 style=out[name]

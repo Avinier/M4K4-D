@@ -10,9 +10,10 @@ from pathlib import Path
 from build123d import Location, export_stl
 
 import layout_model as m
+from cad_cache import load_parts
 
 HERE = Path(__file__).resolve().parent
-parts = m.build_parts(catalog=False)
+parts = load_parts(catalog=False)
 
 
 def overlap(a, b):
