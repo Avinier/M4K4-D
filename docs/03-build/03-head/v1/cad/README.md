@@ -55,9 +55,15 @@ The source includes the body's three R22 M3 hub insert locations (210°, 270°,
 330°). Head v1 cuts Ø3.4 disc clearances and Ø6 × 1.8 counterbores, with
 nominal flush M3 × 6 fasteners. The modeled 3.8 mm engagement into each
 body-side M3 × 4 insert leaves the head-to-disc motion clearance unchanged.
-The disc still has the central cable bore and top groove. The body yaw
-cartridge, bearing, driven gear, scissor pinion, and FFC cassette stay owned by
-body v1.
+D-052 replaced the Ø14 bore and 3.6 mm groove, which had room for a Ø3
+placeholder only: the disc now has a Ø21 bore, an R10.5–13 pilot ring reaching
+10.6 mm below the top into the hub's R13.15 bore, and a 12.5 × 1.5 mm channel
+from the bore to Y 46 for the three stacked head FFCs (power, sideband, CSI).
+They rise from the body's PCB-14 joiner boards, whose upper ZIFs sit inside
+the bore, so the head harness demates through it with the disc on. The skin
+relief tool keeps the RP-06 bore and groove; reliefs only use the rim. The
+body yaw cartridge, bearing, driven gear, scissor pinion, FFC cassette and
+PCB-14 stay owned by body v1.
 
 ## Yaw yoke
 

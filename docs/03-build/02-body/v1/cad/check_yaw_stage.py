@@ -9,7 +9,12 @@ Geometry, against the body v1 model:
   measured clearance matches the designed backlash;
 - the bench-built cartridge lowers 40 mm onto the plate, and the pinion then
   drops 12 mm onto its shaft, without clashing;
-- the pinion keeps axial clearance to the hub shoulder, clamp ring and disc.
+- the pinion keeps axial clearance to the hub shoulder, clamp ring and disc;
+- D-052 cable path: the FFC band passes the drum slit, each FFC's 45 deg fold
+  fits the drum core, the PCB-14 joiner boards and ZIFs clear the rotor, hub
+  and the head disc's pilot ring, their tabs are captured under the hub
+  shoulder, the upper ZIFs lie inside the disc bore (demate with the disc on),
+  and the head FFC stack sits in the disc channel below the disc top.
 
 Engineering estimates (`E`, written to generated/yaw-stage.json): bearing static
 safety and life, Lewis tooth stress in printed PETG, the preload spring, shaft
@@ -344,18 +349,94 @@ r_out = body.YAW_CASSETTE_WALL[0] - 0.2
 r_u = (r_out - r_in) / 2.0
 frac_fold = r_in / (r_in + r_out)
 cap = math.radians(body.YAW_FFC_CAPACITY_DEG)
-a_in0 = a_out0 = math.radians(120.0)
+# Inner wrap clockwise from the slit, U-turn, outer wrap anticlockwise to the
+# exit: exit = slit - W_in + W_out. With the D-044 loop budget W_in + W_out,
+# take the solution with |W_out - W_in| below the budget.
+delta = (body.YAW_CASSETTE_EXIT_DEG - body.YAW_ROTOR_FFC_SLOT_DEG) % 360.0
+delta = delta if abs(delta) < body.YAW_FFC_LOOP_BUDGET_DEG else delta - 360.0
+w_in, w_out = (body.YAW_FFC_LOOP_BUDGET_DEG - delta) / 2.0, (body.YAW_FFC_LOOP_BUDGET_DEG + delta) / 2.0
+a_in0, a_out0 = math.radians(w_in), math.radians(w_out)
 results["ffc_loop"] = {"inner_wrap_r_mm": round(r_in, 2), "outer_wrap_r_mm": round(r_out, 2), "u_turn_r_mm": round(r_u, 2),
                        "fold_turns_per_rotor_turn": round(frac_fold, 3),
-                       "neutral_wraps_deg": [120, 120],
+                       "slit_deg": body.YAW_ROTOR_FFC_SLOT_DEG, "exit_deg": body.YAW_CASSETTE_EXIT_DEG,
+                       "neutral_wraps_deg": [round(w_in, 1), round(w_out, 1)],
+                       "u_turn_at_neutral_deg": round((body.YAW_ROTOR_FFC_SLOT_DEG - w_in) % 360.0, 1),
                        "inner_wrap_at_capacity_deg": [round(math.degrees(a_in0 - (1 - frac_fold) * cap)), round(math.degrees(a_in0 + (1 - frac_fold) * cap))],
                        "outer_wrap_at_capacity_deg": [round(math.degrees(a_out0 - frac_fold * cap)), round(math.degrees(a_out0 + frac_fold * cap))],
                        "loop_length_mm": round(r_in * a_in0 + math.pi * r_u + r_out * a_out0, 1),
                        "band_height_mm": round(body.YAW_CASSETTE_WALL[3] - body.YAW_CASSETTE_WALL[2], 2), "ffc_width_mm": body.YAW_FFC_WIDTH,
                        "copper_strain_at_u_turn_pct_E": round(100.0 * 0.03 / r_u, 2)}
 
+# --- D-052 cable path -------------------------------------------------------------
+cp = {}
+ax = body.BODY_AXIS_X
+fz0, fz1 = body.YAW_FFC_BAND_Z
+cp["slit_top_over_ffc_mm"] = round(body.YAW_ROTOR_DRUM[3] - fz1, 2)
+cp["slit_width_minus_stack_mm"] = round(2 * body.YAW_ROTOR_FFC_SLOT_HALF_WIDTH - body.YAW_JOINER_COUNT * body.YAW_FFC_STACK_T, 2)
+planes = body.yaw_ffc_planes_y()
+fold_r = math.hypot(body.YAW_FFC_WIDTH / 2.0 + 0.15, max(abs(y) for y in planes) + body.YAW_FFC_STACK_T)
+cp["fold_square_max_r_mm"] = round(fold_r, 2)
+cp["fold_to_drum_bore_mm"] = round(body.YAW_ROTOR_DRUM[0] - fold_r, 2)
+cp["fold_top_to_lower_zif_mouth_mm"] = round(body.YAW_JOINER_Z[0] - fz1, 2)
+cp["fold_bottom_to_stator_floor_mm"] = round(fz0 - body.YAW_CASSETTE_FLOOR[2], 2)
+# Planes 3.3 mm apart, reached from the 1.6 mm slit over the straight run to the fold.
+run = body.YAW_ROTOR_DRUM[0] - (body.YAW_FFC_WIDTH / 2.0 + 0.15)
+off = max(abs(y) for y in planes)
+cp["fan_out_s_bend_radius_mm_E"] = round((run ** 2 + off ** 2) / (4.0 * off), 2)
+joiner = {label(p): p for p in moving if label(p).startswith(("PCB14_", "YAW_ROTOR_FFC_"))}
+hits = {}
+for n, part in joiner.items():
+    for other in (hub, rotor, *disc):
+        v = overlap(part, other)
+        if v > TOL:
+            hits[f"{n}:{label(other)}"] = v
+for i, a in enumerate(list(joiner)):
+    for b in list(joiner)[i + 1:]:
+        v = overlap(joiner[a], joiner[b])
+        if v > TOL and not ("RESERVE" in a and "RESERVE" in b):
+            hits[f"{a}:{b}"] = v
+cp["joiner_overlaps_mm3"] = hits
+boards = [p for n, p in joiner.items() if n.startswith("PCB14_JOINER_")]
+upper = [p for n, p in joiner.items() if "UPPER_ZIF" in n]
+cp["joiner_to_disc_mm"] = round(min(b.distance(dd) for b in boards for dd in disc), 3)
+cp["joiner_to_hub_mm"] = round(min(b.distance(hub) for b in boards), 3)
+def max_r(part):
+    bb = box(part)
+    return max(math.hypot(x - ax, y) for x in (bb.min.X, bb.max.X) for y in (bb.min.Y, bb.max.Y))
+narrow = [p for n, p in joiner.items() if "ZIF" in n]
+cp["zif_max_r_mm"] = round(max(max_r(p) for p in narrow), 2)
+cp["board_narrow_max_r_mm"] = round(math.hypot(body.YAW_JOINER_HALF_LENGTH, max(abs(y) for y0, _a, _b in body._yaw_joiner_y() for y in (y0, y0 + body.YAW_JOINER_BOARD_T))), 2)
+head_mod = body._load_head_model()
+cp["disc_bore_r_mm"] = head_mod.YAW_CABLE_BORE_R
+cp["upper_zifs_inside_disc_bore_mm"] = round(head_mod.YAW_CABLE_BORE_R - max(max_r(p) for p in upper), 2)
+cp["board_to_disc_bore_mm"] = round(head_mod.YAW_CABLE_BORE_R - cp["board_narrow_max_r_mm"], 2)
+cp["disc_pilot_radial_clearance_mm"] = round(body.YAW_GEAR_BORE_RADIUS - head_mod.YAW_HUB_PILOT_R, 3)
+pilot_bottom = body.YAW_DISC_TOP_Z - head_mod.YAW_HUB_PILOT_DEPTH
+cp["disc_pilot_engagement_mm"] = round(body.YAW_DISC_PLATE_BOTTOM_Z - max(pilot_bottom, body.YAW_HUB_SHOULDER[2]), 2)
+cp["tab_capture_radial_mm"] = round(min(math.hypot(body.YAW_JOINER_TAB[0], y) for y0, _a, _b in body._yaw_joiner_y()
+                                        for y in (y0, y0 + body.YAW_JOINER_BOARD_T)) - body.YAW_GEAR_BORE_RADIUS, 2)
+cp["tab_lift_gap_mm"] = round(body.YAW_HUB_SHOULDER[2] - body.YAW_JOINER_TAB[2], 2)
+cp["tabs_below_pilot_mm"] = round(pilot_bottom - body.YAW_JOINER_TAB[2], 2)
+cp["post_to_spigot_mm"] = round(body.YAW_HUB_SPIGOT[0] - math.hypot(body.YAW_JOINER_POST[1], body.YAW_JOINER_POST[2]), 2)
+# Head-side FFC stack (head harness group) against the disc and the joiner boards.
+harness = []
+for p in leaves(body.rp01_head_groups()[1]):
+    if label(p).startswith("yaw_FFC_x3_"):
+        # Like the disc, the leaves keep head-local placement.
+        h = p.moved(Location(body.HEAD_ORIGIN_IN_CHASSIS))
+        h.label = label(p)
+        harness.append(h)
+assert len(harness) == 2, "head yaw FFC jackets not found"
+cp["head_ffc_vs_disc_mm3"] = {label(h): overlap(h, dd) for h in harness for dd in disc if overlap(h, dd) > TOL}
+cp["head_ffc_vs_joiner_mm3"] = {f"{label(h)}:{n}": overlap(h, p) for h in harness for n, p in joiner.items()
+                                if "RESERVE" not in n and overlap(h, p) > TOL}
+cp["head_ffc_top_below_disc_top_mm"] = round(body.YAW_DISC_TOP_Z - max(box(h).max.Z for h in harness), 2)
+cp["head_ffc_to_disc_mm"] = round(min(h.distance(dd) for h in harness for dd in disc), 3)
+results["cable_path_d052"] = cp
+
 # --- Mass register ------------------------------------------------------------------
-PETG, STEEL, BRASS = 1.20, 7.85, 8.50
+PETG, STEEL, BRASS, FR4 = 1.20, 7.85, 8.50, 1.85
+ZIF_G = 0.4  # E: 22-pin 0.5 mm side-entry ZIF
 rows = []
 for p in [*cartridge, *pinion, *flange_fix, *servo_fix, *moving]:
     name = label(p)
@@ -364,7 +445,11 @@ for p in [*cartridge, *pinion, *flange_fix, *servo_fix, *moving]:
     if name.startswith("YAW_BEARING_61810"):
         rows.append((name, body.YAW_BEARING_MASS_G, p.center()))
         continue
-    density = BRASS if "INSERT" in name else STEEL if any(t in name for t in ("SCREW", "SHAFT", "SPRING")) else PETG
+    if "_ZIF_" in name:
+        rows.append((name, ZIF_G, p.center()))
+        continue
+    density = (FR4 if name.startswith("PCB14_JOINER_BOARD") else BRASS if "INSERT" in name
+               else STEEL if any(t in name for t in ("SCREW", "SHAFT", "SPRING")) else PETG)
     rows.append((name, p.volume * density / 1000.0, p.center()))
 servo_box = None
 for p in servo:
@@ -373,10 +458,9 @@ for p in servo:
 rows.append(("ST3215_HS", 68.0, servo_box.center()))  # Waveshare listing (D)
 loop = by["YAW_FFC_ROLLING_LOOP_RESERVE"]
 rows.append(("FFC_22P_X3_IN_CASSETTE_AND_DROPS", 4.5, loop.center()))
-rows.append(("PCB14_YAW_ROTOR_BOARD", 3.0, by["PCB14_YAW_ROTOR_BOARD_RESERVE"].center()))
 total = sum(r[1] for r in rows)
 com = tuple(sum(r[1] * getattr(r[2], ax) for r in rows) / total for ax in "XYZ")
-moving_names = {label(p) for p in moving} | {"PCB14_YAW_ROTOR_BOARD"}
+moving_names = {label(p) for p in moving}
 izz = sum(r[1] * ((r[2].X - body.BODY_AXIS_X) ** 2 + r[2].Y ** 2) for r in rows if r[0] in moving_names) * 1e-9
 results["mass"] = {"total_g": round(total, 1), "com_mm": [round(c, 2) for c in com],
                    "rows_g": {r[0]: round(r[1], 2) for r in rows},
@@ -411,5 +495,17 @@ assert results["preload_spring"]["bending_stress_MPa"] <= results["preload_sprin
 assert results["preload_spring"]["body_length_mm"] <= results["preload_spring"]["envelope_mm"]
 assert all(c["s0"] >= 4.0 for c in results["bearing_61810_2Z"]["cases"].values())
 assert results["mass_register_matches"], "update the BODY_YAW_STAGE mass row from results['mass']"
+cp = results["cable_path_d052"]
+assert cp["slit_top_over_ffc_mm"] >= 0.5 and cp["slit_width_minus_stack_mm"] >= 0.3, "FFC band must pass the drum slit"
+assert cp["fold_to_drum_bore_mm"] >= 1.0 and cp["fold_bottom_to_stator_floor_mm"] >= 0.3
+assert cp["fold_top_to_lower_zif_mouth_mm"] >= 1.0, "straight tail before the lower ZIFs"
+assert cp["fan_out_s_bend_radius_mm_E"] >= 2.5
+assert not cp["joiner_overlaps_mm3"], "PCB-14 joiner parts clash"
+assert cp["joiner_to_disc_mm"] >= 0.5 and cp["joiner_to_hub_mm"] >= 0.5
+assert cp["upper_zifs_inside_disc_bore_mm"] >= 0.5 and cp["board_to_disc_bore_mm"] >= 0.5
+assert 0.1 <= cp["disc_pilot_radial_clearance_mm"] <= 0.2 and cp["disc_pilot_engagement_mm"] >= 5.0
+assert cp["tab_capture_radial_mm"] >= 0.3 and 0.3 <= cp["tab_lift_gap_mm"] <= 1.2 and cp["tabs_below_pilot_mm"] >= 0.5
+assert cp["post_to_spigot_mm"] >= 1.0
+assert not cp["head_ffc_vs_disc_mm3"] and not cp["head_ffc_vs_joiner_mm3"] and cp["head_ffc_top_below_disc_top_mm"] >= 0.3
 assert max(results["mount_screw_axis_offset_mm"]) <= 0.1, "mount screws miss the STEP hole axes"
 print("ALL PASS")

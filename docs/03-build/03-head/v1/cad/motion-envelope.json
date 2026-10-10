@@ -9,7 +9,9 @@
     "radius_mm": 62.5,
     "thickness_mm": 14.0,
     "plate_mm": 4.0,
-    "bore_radius_mm": 7.0
+    "bore_radius_mm": 10.5,
+    "hub_pilot_radius_mm": 13.0,
+    "hub_pilot_depth_mm": 10.6
   },
   "usable_travel": {
     "roll_deg": [

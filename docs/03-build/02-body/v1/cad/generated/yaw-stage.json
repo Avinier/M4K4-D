@@ -45,29 +45,29 @@
   "bearing_61810_2Z": {
     "C_N": 6760.0,
     "C0_N": 6800.0,
-    "head_com_above_bearing_mm": 82.9,
+    "head_com_above_bearing_mm": 83.2,
     "cases": {
       "static_head_weight": {
         "axial_N": 6.4,
         "moment_Nm": 0.0,
         "P0_N": 3.2,
-        "s0": 2119.3
+        "s0": 2126.9
       },
       "braking_2ms2": {
         "axial_N": 6.4,
-        "moment_Nm": 0.108,
+        "moment_Nm": 0.109,
         "P0_N": 7.0,
-        "s0": 974.1
+        "s0": 975.4
       },
       "bump_3g_lateral": {
-        "axial_N": 19.3,
-        "moment_Nm": 1.596,
+        "axial_N": 19.2,
+        "moment_Nm": 1.597,
         "P0_N": 65.1,
         "s0": 104.4
       },
       "lift_robot_by_head_x3": {
-        "axial_N": -77.9,
-        "moment_Nm": 2.337,
+        "axial_N": -77.8,
+        "moment_Nm": 2.335,
         "P0_N": 120.2,
         "s0": 56.6
       },
@@ -78,7 +78,7 @@
         "s0": 17.1
       }
     },
-    "L10_hours_at_20rpm": "2.43e+11",
+    "L10_hours_at_20rpm": "2.45e+11",
     "tilt_play_deg_E": 0.11,
     "note": "single deep-groove bearing: radial clearance gives ~0.1 deg tilt play (~0.2 mm at the crown) once moment exceeds head weight x dm/2 ~0.17 N.m; measure"
   },
@@ -124,7 +124,7 @@
     "radial_at_peak_N": 14.1,
     "lever_mm": 26.6,
     "moment_on_servo_output_Nm": 0.375,
-    "shaft_bending_MPa": 30.5,
+    "shaft_bending_MPa": 30.6,
     "note": "ST3215-HS radial load is unpublished; D-048 lowered the servo 8 mm, so the lever grew. Bench B1/B4 with the pinion fitted"
   },
   "hard_stop": {
@@ -143,11 +143,11 @@
     }
   },
   "uplift_path": {
-    "design_N": 77.9,
+    "design_N": 77.8,
     "rotor_screws": "3 x M2.5 thread-forming, 6.6 mm in the PETG spigot",
-    "per_screw_N": 26.0,
+    "per_screw_N": 25.9,
     "post_and_clamp_screws": "3 x M2 x 8 clamp ring (outer ring) and 3 x M3 x 6 flange screws into frame inserts",
-    "per_flange_screw_N": 26.0
+    "per_flange_screw_N": 25.9
   },
   "drag_Nm": {
     "bearing_2Z_E": 0.002,
@@ -162,29 +162,59 @@
     "outer_wrap_r_mm": 22.1,
     "u_turn_r_mm": 4.2,
     "fold_turns_per_rotor_turn": 0.383,
+    "slit_deg": 0.0,
+    "exit_deg": 300.0,
     "neutral_wraps_deg": [
-      120,
-      120
+      150.0,
+      90.0
     ],
+    "u_turn_at_neutral_deg": 210.0,
     "inner_wrap_at_capacity_deg": [
-      64,
-      176
+      94,
+      206
     ],
     "outer_wrap_at_capacity_deg": [
-      86,
-      154
+      56,
+      124
     ],
-    "loop_length_mm": 88.2,
+    "loop_length_mm": 83.8,
     "band_height_mm": 12.2,
     "ffc_width_mm": 11.5,
     "copper_strain_at_u_turn_pct_E": 0.71
   },
+  "cable_path_d052": {
+    "slit_top_over_ffc_mm": 0.75,
+    "slit_width_minus_stack_mm": 0.55,
+    "fold_square_max_r_mm": 7.16,
+    "fold_to_drum_bore_mm": 3.84,
+    "fold_top_to_lower_zif_mouth_mm": 1.05,
+    "fold_bottom_to_stator_floor_mm": 0.35,
+    "fan_out_s_bend_radius_mm_E": 2.68,
+    "joiner_overlaps_mm3": {},
+    "joiner_to_disc_mm": 0.787,
+    "joiner_to_hub_mm": 1.0,
+    "zif_max_r_mm": 9.28,
+    "board_narrow_max_r_mm": 9.71,
+    "disc_bore_r_mm": 10.5,
+    "upper_zifs_inside_disc_bore_mm": 1.22,
+    "board_to_disc_bore_mm": 0.79,
+    "disc_pilot_radial_clearance_mm": 0.15,
+    "disc_pilot_engagement_mm": 6.6,
+    "tab_capture_radial_mm": 0.46,
+    "tab_lift_gap_mm": 1.0,
+    "tabs_below_pilot_mm": 1.4,
+    "post_to_spigot_mm": 1.8,
+    "head_ffc_vs_disc_mm3": {},
+    "head_ffc_vs_joiner_mm3": {},
+    "head_ffc_top_below_disc_top_mm": 0.4,
+    "head_ffc_to_disc_mm": 0.0
+  },
   "mass": {
-    "total_g": 199.4,
+    "total_g": 200.3,
     "com_mm": [
-      11.62,
-      15.0,
-      126.86
+      11.63,
+      14.94,
+      126.95
     ],
     "rows_g": {
       "YAW_BEARING_61810_2Z": 55.0,
@@ -216,8 +246,17 @@
       "YAW_SERVO_M2X8_MOUNT_SCREW_2": 0.22,
       "YAW_SERVO_M2X8_MOUNT_SCREW_3": 0.22,
       "YAW_SERVO_M2X8_MOUNT_SCREW_4": 0.22,
-      "YAW_HUB_DRIVEN_GEAR_M1_Z37": 15.78,
-      "YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG": 10.42,
+      "YAW_HUB_DRIVEN_GEAR_M1_Z37": 15.11,
+      "YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG": 11.01,
+      "PCB14_JOINER_BOARD_1": 0.51,
+      "PCB14_JOINER_LOWER_ZIF_1": 0.4,
+      "PCB14_JOINER_UPPER_ZIF_1": 0.4,
+      "PCB14_JOINER_BOARD_2": 0.51,
+      "PCB14_JOINER_LOWER_ZIF_2": 0.4,
+      "PCB14_JOINER_UPPER_ZIF_2": 0.4,
+      "PCB14_JOINER_BOARD_3": 0.51,
+      "PCB14_JOINER_LOWER_ZIF_3": 0.4,
+      "PCB14_JOINER_UPPER_ZIF_3": 0.4,
       "YAW_HUB_M3X4_DISC_INSERT_1": 0.19,
       "YAW_HUB_M3X4_DISC_INSERT_2": 0.19,
       "YAW_HUB_M3X4_DISC_INSERT_3": 0.19,
@@ -225,11 +264,10 @@
       "YAW_ROTOR_M2P5X8_SCREW_2": 0.44,
       "YAW_ROTOR_M2P5X8_SCREW_3": 0.44,
       "ST3215_HS": 68.0,
-      "FFC_22P_X3_IN_CASSETTE_AND_DROPS": 4.5,
-      "PCB14_YAW_ROTOR_BOARD": 3.0
+      "FFC_22P_X3_IN_CASSETTE_AND_DROPS": 4.5
     },
-    "moving_yaw_inertia_kg_m2_lower_bound": "8.87e-07",
-    "head_yaw_inertia_kg_m2": 0.001453517054322006
+    "moving_yaw_inertia_kg_m2_lower_bound": "9.18e-07",
+    "head_yaw_inertia_kg_m2": 0.0014554979567378262
   },
   "mass_register_matches": true
 }

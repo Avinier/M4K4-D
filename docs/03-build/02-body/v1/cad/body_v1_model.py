@@ -616,7 +616,7 @@ YAW_BEARING_LANDS = (26.8, 30.7)  # E: inner-ring shoulder and outer-ring land r
 YAW_BEARING_MASS_G = 55.0  # E: SKF 61810-2RS1 lists 0.052-0.059 kg; weigh on receipt
 YAW_GEAR_PITCH_RADIUS = 18.5
 YAW_GEAR_OUTER_RADIUS = 19.5  # tip radius, m1 z37
-YAW_GEAR_BORE_RADIUS = 12.15  # pilots the head disc's R12 hub
+YAW_GEAR_BORE_RADIUS = 13.15  # D-052: pilots the head disc's R13 ring (was 12.15 / R12); 4.1 mm web under the tooth roots
 YAW_GEAR_RATIO = 1.0
 YAW_PINION_CENTER = (0.0, 2.0 * YAW_GEAR_PITCH_RADIUS)  # offset from the yaw axis
 # Spur pair: module 1, 37 teeth each (pitch Ø37), 20 deg pressure angle. The
@@ -675,6 +675,30 @@ YAW_CASSETTE_WALL = (22.3, 23.5, 121.0, 133.2)
 YAW_CASSETTE_EXIT_DEG = 300.0
 YAW_CASSETTE_POST_R, YAW_CASSETTE_POST_DEG = 33.0, (45.0, 150.0, 270.0)  # 45 not 30: the front upper cross rail is at X 45.5
 YAW_FFC_WIDTH = 11.5  # 22-pin, 0.5 mm pitch
+# D-052 cable path. The FFCs run centred in the 12.2 mm cassette band and enter
+# the drum core through a full-height slit at 0 deg (was 90 deg and 11.4 mm
+# tall, under the 11.5 mm FFC). With the exit at 300 deg and the D-044 240 deg
+# loop budget, the inner wrap is 150 deg clockwise from the slit, the U-turn
+# sits at 210 deg and the outer wrap is 90 deg (check_yaw_stage derives them).
+YAW_FFC_BAND_Z = (YAW_CASSETTE_WALL[2] + 0.35, YAW_CASSETTE_WALL[3] - 0.35)
+YAW_ROTOR_FFC_SLOT_DEG, YAW_ROTOR_FFC_SLOT_HALF_WIDTH = 0.0, 0.8
+YAW_FFC_LOOP_BUDGET_DEG = 240.0
+YAW_FFC_STACK_T = 0.35  # E: one 0.5 mm-pitch FFC, conductor plus insulation
+# In the core each FFC takes one 45 deg fold and rises in an XZ plane to the
+# down-facing ZIF of its own PCB-14 joiner board. Three identical vertical
+# boards, stacked in Y, each carry a down-facing ZIF (cassette FFC) and an
+# up-facing ZIF (head FFC) on their +Y face, so PCB-14 is three FFC-to-FFC
+# joiners. Tabs at both ends slide into two slotted posts on the rotor ring;
+# the hub shoulder overhangs the tabs, so the boards cannot lift out once the
+# rotor is screwed up. The upper ZIFs sit inside the head disc's R10.5 bore:
+# the head FFCs demate through it with the disc on.
+YAW_JOINER_ZIF = (16.0, 5.2, 2.0)  # E: 22-pin 0.5 mm side-entry ZIF (FH12 class): length, depth incl. actuator, height
+YAW_JOINER_BOARD_T, YAW_JOINER_GAP = 0.8, 0.5
+YAW_JOINER_COUNT = 3
+YAW_JOINER_HALF_LENGTH = 8.5  # board outline beside the ZIFs
+YAW_JOINER_Z = (133.9, 150.7)  # board; lower ZIF from the bottom, upper ZIF to the top
+YAW_JOINER_TAB = (13.6, 137.4, 143.0)  # tab tip |x|, z0, z1 (above the rotor ring, under the hub shoulder)
+YAW_JOINER_POST = (11.0, 15.2, 5.6, 143.4)  # |x| r0..r1, |y| half-width, top Z (posts stand on the rotor ring)
 YAW_FFC_CAPACITY_DEG = 90.0  # loop sized for +-90 deg, beyond the stops
 # D-048: the yaw servo is a Waveshare ST3215-HS (D-047). Its horn and both bus
 # plugs are on the same face (Waveshare ST3215 2D drawing), so it hangs horn-up on
@@ -1387,7 +1411,7 @@ MASS_ROWS = [
     ("BALL_NOSE_POD_SENSOR_CAP", 18.9, (111.4, 0.0, 37.9), "D-027: +0.2 g for the lid lead hump, raised nose top and wider front pocket (pod 12.45, lid 2.62, cap 2.12 cm3 measured, was 12.44/2.45/2.03, at ~0.571 g/cm3); earlier estimate predates the selected A21 sensor (3.6 g datasheet, ears trimmed), custom Hall carrier and O3 x 1.5 magnet; weigh received parts"),
     ("BODY_AUDIO", 61.0, (78.4, 0.0, 102.1), "RP03-CAD-11 60 g audio estimate with Visaton K 50 WP 48 g, PCB-05 ~6 g, mic boards ~2 g and cables ~4 g. The exposed front installation places the modeled speaker face at X 100 mm, 5 mm forward of the former grille-backed seat; its 48 g share shifts the audio row X centroid to about 78.4 mm. D-037 adds ~1 g at the mic-array centre (16, 0, 113): eight M2 x 4 screws, larger 12 x 14 boards and gaskets; the soldered leads replace the GH header and plug in the cable allowance. Weigh installed parts."),
     ("HARNESS_AND_FASTENERS", 95.0, (4.0 + BODY_SHIFT_X, 0.0, 88.0), "Conservative allowance for unmodeled installed harness, connector tails, clips, service-panel screws and remaining fasteners. Body-frame M4/M3 joints and shell-to-frame M3 joints are measured separately in BODY_PRIMARY_FRAME; weigh the completed harness and hardware to replace this allowance."),
-    ("BODY_YAW_STAGE", 199.4, (11.62, 15.0, 126.86), "D-048 (2026-10-07), check_yaw_stage.py: ST3215-HS 68 g (D, Waveshare) replaces the XC330 23 g, longer drive hub and four M2 mount screws; was 150.3 g at (14.81, 7.81, 136.22). D-044 (2026-10-04), check_yaw_stage.py from the solids: 61810-2Z bearing 55 g (E, SKF lists 52-59 g) + XC330-M181 23 g (D) at its STEP centroid + PETG prints at 1.20 g/cm3 (hub 15.8, housing 15.6, rotor 10.4, cassette stator 4.5, clamp ring 2.2, pinion halves 2 x 2.5, drive hub 0.6) + steel/brass hardware at 7.85/8.50 (shaft 2.7, spring 1.2, screws and inserts ~6) + three 22-pin FFCs 4.5 g (E) + PCB-14 3 g (E). Was 89 g at (16, 13.5, 134.3) with a 50 g bearing placeholder and no housing, cassette or fixings. Estimated, not weighed"),
+    ("BODY_YAW_STAGE", 200.3, (11.63, 14.94, 126.95), "D-052 (2026-10-10), check_yaw_stage.py: PCB-14 becomes three FR4 joiner boards (3 x 0.51 g) and six ZIFs (6 x 0.4 g, E) in place of the 3 g ring estimate; the rotor gains the board posts (11.01 g) and the hub loses its R13.15 bore (15.11 g); was 199.4 g at (11.62, 15.0, 126.86). D-048 (2026-10-07), check_yaw_stage.py: ST3215-HS 68 g (D, Waveshare) replaces the XC330 23 g, longer drive hub and four M2 mount screws; was 150.3 g at (14.81, 7.81, 136.22). D-044 (2026-10-04), check_yaw_stage.py from the solids: 61810-2Z bearing 55 g (E, SKF lists 52-59 g) + XC330-M181 23 g (D) at its STEP centroid + PETG prints at 1.20 g/cm3 (hub 15.8, housing 15.6, rotor 10.4, cassette stator 4.5, clamp ring 2.2, pinion halves 2 x 2.5, drive hub 0.6) + steel/brass hardware at 7.85/8.50 (shaft 2.7, spring 1.2, screws and inserts ~6) + three 22-pin FFCs 4.5 g (E) + PCB-14 3 g (E). Was 89 g at (16, 13.5, 134.3) with a 50 g bearing placeholder and no housing, cassette or fixings. Estimated, not weighed"),
     ("REAR_SKID_KEEL", 20.0, (-40.5, 0.0, 22.7), "J09/J10 rework 2026-09-30 (D-014, D-016), measured from the solids: keel body 14.64 cm3 at ~0.571 g/cm3 = 8.4 g at (-39.7, 0, 20.4) (D-016 closed the board cavity back to the sensor pocket); shoe 0.40, bezel with guard lips 0.30 and two 1 mm shims 0.24 cm3 printed solid at ~1.27 g/cm3 = 1.2 g; four ISO 4762 M3 x 30 ~8.4 g; four CNC Kitchen M3 x 5.7 crossmember inserts ~1.4 g; M2 x 10 and M2 x 6 screws ~0.6 g (the M2 x 5 board screw was dropped by D-015). Was 12.0 g at (-39.9, 0, 20.4); rear-crossmember cable bore closed and tie lug added (<0.1 g, left in the frame row)"),
 ]
 def mass_properties():
@@ -3850,12 +3874,60 @@ def _yaw_hub():
     return hub
 
 
+def _yaw_joiner_y():
+    """(board y0, ZIF y0, ZIF y1) for each PCB-14 joiner board, stack centred on the axis."""
+    pitch = YAW_JOINER_BOARD_T + YAW_JOINER_ZIF[2] + YAW_JOINER_GAP
+    span = YAW_JOINER_COUNT * (YAW_JOINER_BOARD_T + YAW_JOINER_ZIF[2]) + (YAW_JOINER_COUNT - 1) * YAW_JOINER_GAP
+    out = []
+    for k in range(YAW_JOINER_COUNT):
+        y0 = -span / 2.0 + k * pitch
+        out.append((y0, y0 + YAW_JOINER_BOARD_T, y0 + YAW_JOINER_BOARD_T + YAW_JOINER_ZIF[2]))
+    return out
+
+
+def yaw_ffc_planes_y():
+    """Y of each FFC's mid-plane where it enters its joiner ZIFs (the ZIF slot centre)."""
+    return [(zy0 + zy1) / 2.0 for _y0, zy0, zy1 in _yaw_joiner_y()]
+
+
+def _yaw_joiner_parts():
+    """PCB-14 (D-052): three vertical FFC joiner boards with their ZIFs, and the FFC core reserves."""
+    ax = BODY_AXIS_X
+    zl, zd, zh = YAW_JOINER_ZIF
+    b0, b1 = YAW_JOINER_Z
+    tx, tz0, tz1 = YAW_JOINER_TAB
+    parts = []
+    for k, (y0, zy0, zy1) in enumerate(_yaw_joiner_y(), start=1):
+        board = _block(ax - YAW_JOINER_HALF_LENGTH, ax + YAW_JOINER_HALF_LENGTH, y0, y0 + YAW_JOINER_BOARD_T, b0, b1)
+        board += _block(ax - tx, ax + tx, y0, y0 + YAW_JOINER_BOARD_T, tz0, tz1)
+        parts.append(_paint(board, f"PCB14_JOINER_BOARD_{k}", PCB_GREEN, 1.0))
+        parts.append(_paint(_block(ax - zl / 2.0, ax + zl / 2.0, zy0, zy1, b0, b0 + zd), f"PCB14_JOINER_LOWER_ZIF_{k}", "#E8E2D0", 1.0))
+        parts.append(_paint(_block(ax - zl / 2.0, ax + zl / 2.0, zy0, zy1, b1 - zd, b1), f"PCB14_JOINER_UPPER_ZIF_{k}", "#E8E2D0", 1.0))
+    # Inbound FFCs: through the slit, fanned out to their planes, one 45 deg
+    # fold each, then a short straight tail into the lower ZIF mouths.
+    z0, z1 = YAW_FFC_BAND_Z
+    parts.append(_paint(_z_cylinder(YAW_ROTOR_DRUM[0] - 0.3, z0 - 0.05, b0, ax, 0.0), "YAW_ROTOR_FFC_CORE_FOLD_RESERVE", "#9566D9", 0.25))
+    slit = _yaw_radial_block(YAW_ROTOR_DRUM[0] - 0.3, YAW_ROTOR_DRUM[1] + 0.2, YAW_ROTOR_FFC_SLOT_HALF_WIDTH - 0.05, z0 - 0.05, z1 + 0.05, YAW_ROTOR_FFC_SLOT_DEG)
+    parts.append(_paint(slit, "YAW_ROTOR_FFC_SLIT_PASSAGE_RESERVE", "#9566D9", 0.25))
+    return parts
+
+
 def _yaw_rotor():
     """Rotor: inner-ring clamp ring, FFC drum and the hard-stop dog, one print."""
     r0, r1, dz0, dz1, deg, hw = YAW_STOP_DOG
     rotor = _ring(*YAW_ROTOR_RING) + _ring(*YAW_ROTOR_DRUM) + _yaw_radial_block(r0 - 0.5, r1, hw, dz0, dz1, deg)
     # FFC inner ends pass into the drum core through a slot at the inner-wrap anchor.
-    rotor -= _yaw_radial_block(YAW_ROTOR_DRUM[0] - 1.0, YAW_ROTOR_DRUM[1] + 1.0, 0.6, YAW_ROTOR_DRUM[2] + 0.4, YAW_ROTOR_DRUM[3] - 0.4, 90.0)
+    # D-052: open-bottom slit, full band height, at YAW_ROTOR_FFC_SLOT_DEG.
+    rotor -= _yaw_radial_block(YAW_ROTOR_DRUM[0] - 1.0, YAW_ROTOR_DRUM[1] + 1.0, YAW_ROTOR_FFC_SLOT_HALF_WIDTH,
+                               YAW_ROTOR_DRUM[2] - 1.0, YAW_ROTOR_DRUM[3], YAW_ROTOR_FFC_SLOT_DEG)
+    # Slotted posts for the PCB-14 joiner boards' tabs.
+    r0, r1, hy, ztop = YAW_JOINER_POST
+    for sx in (-1.0, 1.0):
+        post = _block(min(sx * r0, sx * r1), max(sx * r0, sx * r1), -hy, hy, YAW_ROTOR_RING[3], ztop)
+        for y0, _zy0, _zy1 in _yaw_joiner_y():
+            post -= _block(min(sx * (r0 - 1.0), sx * (YAW_JOINER_TAB[0] + 0.2)), max(sx * (r0 - 1.0), sx * (YAW_JOINER_TAB[0] + 0.2)),
+                           y0 - 0.1, y0 + YAW_JOINER_BOARD_T + 0.1, YAW_JOINER_TAB[1], ztop + 1.0)  # tabs seat on a 0.4 mm floor
+        rotor += post.moved(Location((BODY_AXIS_X, 0.0, 0.0)))
     for deg in YAW_ROTOR_SCREW_DEG:
         x, y = _yaw_polar(YAW_ROTOR_SCREW_R, deg)
         rotor -= _z_cylinder(2.4, YAW_ROTOR_RING[2] - 1.0, YAW_ROTOR_RING[2] + 2.0, x, y)
@@ -4053,10 +4125,8 @@ def yaw_drive_moving_parts(yaw_deg=0.0):
     parts = [
         _paint(_yaw_hub(), "YAW_HUB_DRIVEN_GEAR_M1_Z37", SLATE_DARK, 1.0),
         _paint(_yaw_rotor(), "YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG", BRONZE, 1.0),
-        # PCB-14: rotor transition board. Underside ZIFs take the three FFC inner
-        # ends; the head harness demates on its top inside the hub (head disc off).
-        _paint(_ring(6.0, 17.6, YAW_ROTOR_RING[3] + 0.2, YAW_DISC_PLATE_BOTTOM_Z - 10.2), "PCB14_YAW_ROTOR_BOARD_RESERVE", PCB_GREEN, 0.45),
-        _paint(_ring(12.4, 17.6, YAW_DISC_PLATE_BOTTOM_Z - 10.2, YAW_HUB_SHOULDER[2] - 0.2), "PCB14_HEAD_DEMATE_CONNECTOR_RESERVE", "#9566D9", 0.30),
+        # PCB-14 (D-052): three vertical FFC joiner boards in the rotor posts.
+        *_yaw_joiner_parts(),
     ]
     for k, deg in enumerate(YAW_HUB_BOSS_DEG, start=1):
         x, y = _yaw_polar(YAW_HUB_BOSS_R, deg)

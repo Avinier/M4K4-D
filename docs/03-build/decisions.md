@@ -56,6 +56,7 @@ The central record of every decision and change made during the build phase. New
 | [D-049](#d-049) | 2026-10-08 | Head / STS3045M pitch and roll installation (HD-002–HD-007; head v1 CAD, A0, body v1 hand-off) | Roll servo on an ear plate driving the spindle through a goBILDA 25T-to-Ø6 coupler, rear bearing forward; pitch servo on the pitch frame with its horn screwed to a widened +Y yoke leg; CF-filled yoke legs; rear trim off-axis; A0 re-solved | ACTIVE; CAD and checks complete; HOLD on received horn/coupler fits, the CF leg coupon and bench B1/B4/B6 |
 | [D-050](#d-050) | 2026-10-09 | Head / yoke legs and turntable restyle (M011-Y, M012; head v1 CAD, mass tree, body v1 hand-off) | Both yoke legs become one faceted design inscribed in the D-049 free corridor (plinth, waist, arm), replacing the +Y leg's stair-stepped raster outline, ledge and box foot; disc rim tapers R62.5 to R58.5; opaque presentation model | ACTIVE; CAD and checks complete; HOLD on the CF leg coupon and print orientation |
 | [D-051](#d-051) | 2026-10-10 | Head / passive pitch pivot and yoke-leg joints (HD-008–HD-011; M011-Y, M012; head v1 CAD, mass tree, body v1 hand-off) | −Y pivot becomes an MR106ZZ in the −Y leg pad, a flush printed retainer and a Ø6 D-shaft pin into a D-bore boss on the pitch frame; each leg plinth keys over a block on the disc top and takes two M2 screws from its inner face | ACTIVE; CAD and checks complete; HOLD on received bearing/D-shaft fits, a seat and key coupon, and bench B6 |
+| [D-052](#d-052) | 2026-10-10 | Body + head / yaw cable path (BO-045, BO-050, BO-058, BO-062; M012; W37/W42/W43) | The cassette FFCs enter the drum through a full-height slit at 0° (wraps 150°/90°), fold once and plug into three vertical PCB-14 joiner boards held in rotor posts under the hub shoulder; the head FFCs rise from their upper ZIFs through a Ø21 disc bore into a 12.5 × 1.5 mm channel, demating with the disc on; hub bore R13.15, disc pilot R10.5–13 | ACTIVE; CAD and checks complete; HOLD on the ZIF selection, an FFC fold mock-up and the cassette bench test |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -2163,3 +2164,95 @@ The CF leg requirement stands, with 0.7 Hz less margin. The leg floor for 30 Hz 
 - **Coupons:** the 0.7 mm lip in CF, key and socket fit, and insert pull-out in the PLA key.
 - **Bench B6:** loaded pitch stiffness with the real joints.
 - **The spindle-to-cradle fastening** (fabrication audit) is still not released; it is not part of this decision.
+
+## D-052
+
+**2026-10-10 · Body + head / yaw cable path: drum slit, PCB-14 joiner boards, disc bore and channel (BO-045, BO-050, BO-058, BO-062; M012; W37, W42, W43; head v1 and body v1 CAD) · ACTIVE; CAD and checks complete; HOLD on the ZIF selection, an FFC fold mock-up and the D-044 cassette bench test**
+
+**Why.** Reading the D-044 stage and the head disc for the builder found that the head cables had no buildable route from the cassette to the head. No check covered it: the checks only test solid overlap, and the cables were placeholders.
+- **The drum slot was shorter than the FFC.** It was 11.4 mm tall (Z 121.8–133.2) for an 11.5 mm FFC.
+- **PCB-14 could not exist as drawn.** It was a Ø35 ring (R6–17.6) on the rotor ring.
+  - Its three 22-pin ZIFs underneath had to fit inside the R11 drum core, around an R6 hole. A 16 mm ZIF does not fit there.
+  - Its head-side connectors were a 3 mm tall ring (R12.4–17.6) boxed in by the solid hub shoulder above and the disc's own hub wall (R7–12) inside. That wall's lower end was 0.2 mm above the board. A cable plugged in there had no way into the disc bore.
+- **The disc was sized for a Ø3 placeholder.** The bore was Ø14 and the groove 3.6 × 3.4 mm, for `yaw_branch_bore_and_disc_groove_OD3_Y`. The real branch is three 22-pin FFCs: 6 power conductors, up to 22 signals and the CSI.
+- **The cassette angles did not close.** In a clock spring the inner wrap runs one way from the anchor and the outer wrap the other way to the exit, so exit = anchor − W_in + W_out. Equal 120°/120° wraps need the anchor at the exit angle (300°). With the slot at 90° and the 240° loop budget, the wraps are 15°/225°, and the inner wrap runs out at −55.6° of yaw.
+
+**Decision.** Keep the D-044 architecture (the head demates at PCB-14 inside the hub) and make every step of the path physical.
+
+**1. Drum slit (BO-058).**
+- The FFC enters the drum core through a slit at **0°**, 1.6 mm wide (three FFCs at 0.35 mm), open at the bottom and running up to the rotor ring.
+- The FFC band is centred in the cassette (Z 121.35–132.85), 0.75 mm under the slit top.
+- **Wraps:** with the exit at 300°, the D-044 240° budget gives **150° inner** (clockwise from the slit) and **90° outer**, with the U-turn at 210°. At the ±90° loop capacity the inner wrap runs 94–206° and the outer 56–124° (D-044's paper values were 64–176° / 86–154°). `check_yaw_stage.py` now derives the wraps from the two angles instead of assuming 120°/120°.
+
+**2. Fold in the drum core.**
+- In the core each FFC fans out to its own plane (Y −2.9, 0.4, 3.7; an S-bend of about R2.9 through the thickness) and takes **one 45° fold**. That turns it upward with its width along X.
+- The fold square sits inside R6.7, 4.3 mm inside the R11 drum bore and 0.35 mm above the stationary cassette floor (which has an R9 hole under it).
+- A 1.05 mm straight tail runs into the lower ZIF.
+
+**3. PCB-14 becomes three joiner boards (BO-062 ×3).**
+- **Boards:** three identical vertical boards (0.8 mm FR4, 17 mm wide, Z 133.9–150.7), stacked in Y at a 3.3 mm pitch and centred on the axis.
+- **ZIFs:** each board is a straight 1:1 22-pin FFC joiner with two side-entry ZIFs on its +Y face. The lower one faces down (Z 133.9–139.1) and takes the cassette FFC; the upper one faces up (Z 145.5–150.7) and takes the head FFC. The ZIF envelope is FH12 class, 16 × 5.2 × 2.0 mm (`E`).
+- **Tabs and posts:** each board has tabs (|X| up to 13.6, Z 137.4–143.0). They seat on 0.4 mm floors in two slotted posts on the rotor ring (|X| 11–15.2, up to Z 143.4), 2.4 mm inside the hub spigot.
+- **Capture:** the hub shoulder (R13.15, Z 144) overhangs every tab by at least 0.45 mm radially with a 1.0 mm lift gap, so the boards cannot come out once the rotor is screwed up.
+- **The upper ZIFs sit inside R9.3,** under the disc's R10.5 bore. The head FFCs therefore demate through the bore with the disc on. Removing the head no longer needs the disc off.
+
+**4. Hub and disc (BO-045, M012).**
+- **Hub:** the bore grows from R12.15 to **R13.15**, leaving a 4.1 mm web under the tooth roots. The shoulder still bears on the inner ring.
+- **Disc pilot and bore:** the disc's pilot becomes an **R10.5–13 ring** reaching 10.6 mm below the top (to Z 144.4): 6.6 mm of engagement, 0.15 mm radial clearance, 1.4 mm above the board tabs. It replaces the R7–12 ring that ran 14 mm down. The **bore is Ø21**; it keeps 0.8 mm to the joiner boards.
+- **Channel:** a **12.5 × 1.5 mm channel** runs from the bore to Y 46 and replaces the 3.6 × 3.4 mm groove. It leaves a 2.5 mm floor (the groove left 0.6 mm).
+  - The three head FFCs rise from the upper ZIFs in XZ planes, bend over toward +Y, and lie flat in the channel as a stack of about 1.05 mm. The top of the stack is 0.4 mm under the disc top.
+  - No fold is needed, because the 0° slit puts every FFC's width along X.
+- **Riser keep-out:** widened to the channel width (Y 44–47.6). It is 0.4 mm from the +Y leg and is still `UNROUTED`.
+- **Relief tool:** the skin relief tool keeps the RP-06 bore and groove; the reliefs only use the rim.
+
+**5. Harness.**
+- **W37, W42, W43** now end at their joiner boards' lower ZIFs.
+- **Head side:** each continues as a 22-pin 0.5 mm FFC from the upper ZIF through the disc channel. The CSI must stay at 22-pin width (11.5 mm) through the disc, so any 15-pin transition to the Camera Module 3 is inside the head.
+- **Not changed here:** the riser up the +Y leg and the pitch and roll crossings are unrouted, as before.
+
+**Assembly (replaces D-044 steps 1 and 5).**
+1. **Bench:**
+   - Press the bearing into the housing and screw down the clamp ring, then drop in the hub.
+   - On the rotor, drop the three boards into the post slots.
+   - Thread each FFC through the slit from below, fold it and plug it into its board's lower ZIF.
+   - Raise the rotor into the hub from below and screw it on. The hub shoulder now captures the boards.
+   - Wind the FFCs into the stator.
+5. Screw the disc and yoke to the hub. Plug the three head FFCs into the upper ZIFs through the Ø21 bore, lay them in the channel, then fit the tilting assembly.
+
+**Checks.**
+- **`check_yaw_stage.py`: ALL PASS** (body v1, serial relief build).
+  - The stage, sweep, cartridge-lowering, pinion-drop and moving-part results are all empty. The rotor and hub are one solid each, and the mesh gap is 0.072 mm.
+  - **New `cable_path_d052` block:**
+    - slit 0.75 mm over the FFC band and 0.55 mm wider than the stack;
+    - fold square R7.16, 3.84 mm inside the drum bore and 0.35 mm over the stator floor;
+    - a 1.05 mm tail before the lower ZIFs and a fan-out S-bend of R2.68 (`E`);
+    - no joiner overlaps with the rotor, hub or disc; boards 0.79 mm from the disc and 1.0 mm from the hub;
+    - upper ZIFs 1.22 mm inside the disc bore;
+    - disc pilot 0.15 mm radial clearance and 6.6 mm engagement;
+    - tabs captured by 0.46 mm with a 1.0 mm lift gap, 1.4 mm under the pilot;
+    - posts 1.8 mm inside the spigot;
+    - the placed head FFC stack touches nothing but the channel floor, and its top is 0.4 mm under the disc top.
+- **Head v1:** `check_revision.py` passes on all 56 poses with the new FFC jackets: no mechanism hits, no harness pinches, and service, retention and insert checks clean. `check_integration.py` and `check_layout.py` also pass.
+- **Exports:** `motion_envelope.py --write` changes only the disc record (bore, pilot); the sweep rows are unchanged. `yaw-yoke.step`, `head-v1-integrated.step` and `head-v1-presentation.step` are regenerated.
+- **Not re-run:** `check_fasteners.py` (no M2 screw changed), `check_d051_joints.py` (keys, pivot and legs untouched) and the 1.8 h mounts audit.
+- **Tooling note:** body scripts that build the head after a head edit hang in the spawn relief pool. Run them with `MAKAD_RELIEF_SERIAL=1`.
+
+**Mass and stability.**
+- **Head (`mass_layout.py`, plain run; A0 not re-solved):** the disc goes from 72.73 to 69.34 g. Yaw-carried mass goes from 655.2 to **651.8 g**, and yaw inertia from 0.001456 to 0.001455 kg·m². The roll- and pitch-carried totals and CoMs are unchanged, so `axes.json` stands.
+- **`BODY_YAW_STAGE`:** 199.4 → **200.3 g** at (11.63, 14.94, 126.95).
+  - The boards weigh 3 × 0.51 g and the ZIFs 6 × 0.4 g (`E`), replacing the 3 g ring estimate.
+  - The rotor, with its posts, is 11.01 g; the hub, with the larger bore, is 15.11 g.
+- **Body (`check_body_layout.py`, all true):** a_tip is 1.621 neutral (unchanged) and **1.604** at the worst head pose (was 1.603), against 1.582. The harness allowance must stay forward of X 13.20 (was 13.46).
+
+**BOM.**
+- **BO-062** becomes three joiner boards. The ring board is withdrawn.
+- **BO-058** adds the slit and the board posts.
+- **BO-045:** R13.15 bore.
+- **W37/W42/W43** and the 04-pcbs register are updated.
+
+**Open:**
+- **ZIF:** select a 22-pin 0.5 mm side-entry ZIF no taller than 2.0 mm and no deeper than 5.2 mm with its actuator open. Lay out the joiner with power traces sized for the paralleled W42 conductors.
+- **Fold mock-up:** print the rotor and fold three real FFCs through the slit into ZIFs on dummy boards. Check the fan-out S-bend, the 45° fold and the 1.05 mm tail, and that the rotor rises into the hub without loading them. Then run D-044's 100k-sweep cassette test with the 150°/90° wraps.
+- **Coupons:** board-slot fit in PETG (0.1 mm per side) and the disc pilot in the R13.15 hub bore.
+- **CSI:** signal check through two ZIF pairs (unchanged from D-044).
+- **Head riser:** the route up the +Y leg into the pitch-carried frame is still unrouted.

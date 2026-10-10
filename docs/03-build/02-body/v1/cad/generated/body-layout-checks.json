@@ -446,29 +446,29 @@
     ]
   },
   "whole_robot": {
-    "mass_g": 2647.578019565948,
+    "mass_g": 2645.0857507570604,
     "com_mm": [
-      18.064220592973292,
-      1.1492724154864788,
-      109.34005537172634
+      18.065432497955058,
+      1.1479765521525633,
+      109.3032760896674
     ],
-    "forward_tip_acceleration_m_s2": 1.620723562052373,
+    "forward_tip_acceleration_m_s2": 1.621377685510125,
     "forward_tip_screen_min_m_s2": 1.5822580645161293,
-    "ball_static_share": 0.16422018720884812,
-    "com_over_axle_pitch_deg": 9.381174459211369,
+    "ball_static_share": 0.16423120452686416,
+    "com_over_axle_pitch_deg": 9.38489335152061,
     "rear_skid_first_contact_pitch_deg": 6.054191894114834,
-    "reverse_launch_or_forward_brake_tip_acceleration_m_s2": 8.248486731753996,
-    "axle_line_lateral_tip_proxy_m_s2": 7.523095125638496,
-    "neutral_spin_centripetal_at_220_deg_s_m_s2": 0.26632953134648946,
-    "head_pose_conservative_tip_acceleration_m_s2": 1.6033208132461374,
-    "head_yaw_com_offset_from_axis_mm": 1.4143125309901348,
+    "reverse_launch_or_forward_brake_tip_acceleration_m_s2": 8.251153482858111,
+    "axle_line_lateral_tip_proxy_m_s2": 7.52574286381471,
+    "neutral_spin_centripetal_at_220_deg_s_m_s2": 0.26634739904712834,
+    "head_pose_conservative_tip_acceleration_m_s2": 1.6041879533355072,
+    "head_yaw_com_offset_from_axis_mm": 1.4110347618195047,
     "head_pitch_carried_com_offset_from_axis_mm": 0.0026733875285405414,
     "head_roll_carried_com_offset_from_axis_mm": 0.0009654499249899781,
     "printed_enclosure_yaw_inertia_about_drive_axis_kg_m2": 0.0026351590396579525,
     "unweighed_harness_fastener_allowance_g": 95.0,
     "allowance_assumed_x_mm": 20.0,
-    "allowance_min_x_for_pose_screen_mm": 13.457316401590852,
-    "allowance_if_at_x_minus20_a_tip_m_s2": 1.4745495015163192
+    "allowance_min_x_for_pose_screen_mm": 13.196659819316196,
+    "allowance_if_at_x_minus20_a_tip_m_s2": 1.4752519411005651
   },
   "axes": {
     "head_yaw_datum_mm": [

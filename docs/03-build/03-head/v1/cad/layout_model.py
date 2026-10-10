@@ -47,7 +47,16 @@ YAW_DISC_PLATE=4.
 YAW_DISC_R=62.5
 YAW_DISC_RIM_FOOT_R=58.5   # D-050 tapered rim
 YAW_DISC_TOP_CHAMFER=.6
-YAW_BORE_R=7.
+YAW_BORE_R=7.   # RP-06 Ø14 bore; kept only in the relief tool (cyl_disc)
+# D-052 cable path: the head FFCs rise from the body's PCB-14 joiner boards
+# (upper ZIFs at body Z 145.5-150.7, inside R9.7) through a Ø21 bore, then
+# lie flat in a 12.5 x 1.5 mm channel to the +Y leg. The pilot ring R10.5-13
+# drops into the hub's R13.15 bore down to body Z 144.4, 0.4 mm above the
+# shoulder's lower face and clear of the joiner boards' tabs.
+YAW_CABLE_BORE_R=10.5
+YAW_HUB_PILOT_R=13.
+YAW_HUB_PILOT_DEPTH=10.6
+YAW_FFC_CHANNEL=dict(half_w=6.25,y1=46.,depth=1.5)
 # Body v1 BO-045 has three M3 inserts at R22, clocked away from its pinion.
 # Counterbores keep the button heads below the disc top and preserve the
 # measured 4 mm moving-head clearance above the disc.
@@ -611,7 +620,8 @@ def build_parts(catalog=True,reliefs=True):
         add(f'pitch_trunnion_retainer_M2x4_{deg:g}',button_screw(x,fl-t['plate_t'],z,'y',-1,t['screw_len']),'Y','#555b5a',owner='M021-Y')
     add('pitch_trunnion_retainer',plate,'Y','#536b78',owner='M011-Y')
     # Flush turntable disc: top plate, outer rim and bearing hub, with a
-    # centre cable bore and a top groove carrying the yaw branch to the +Y leg.
+    # centre cable bore and a top channel carrying the yaw branch to the +Y
+    # leg (D-052; was a Ø14 bore and a 3.6 mm groove).
     # D-050: the rim tapers from R62.5 under the plate to R58.5 at its foot, a
     # 2 mm wall, and the top edge has a 0.6 mm chamfer, so the disc reads as a
     # turntable standing on the roof rather than a slab wider than it. The
@@ -639,7 +649,24 @@ def build_parts(catalog=True,reliefs=True):
             disc=disc-axial(YAW_HUB_BOLT_CLEARANCE_R,YAW_DISC_PLATE+1,(bx,by,d-YAW_DISC_PLATE/2),'z')
             disc=disc-axial(YAW_HUB_BOLT_HEAD_R,YAW_HUB_BOLT_RECESS,(bx,by,d-YAW_HUB_BOLT_RECESS/2),'z')
         return disc
-    disc=hub_and_cuts(plate+rim)
+    def cable_hub_and_cuts(disc):
+        # D-052: shorter, thinner-walled pilot round a Ø21 bore, and a flat
+        # channel for the three stacked 22-pin FFCs in place of the Ø3 groove.
+        h=YAW_HUB_PILOT_DEPTH
+        disc=disc+(Cylinder(YAW_HUB_PILOT_R,h)-Cylinder(YAW_CABLE_BORE_R,h+1)).moved(Location((PITCH_X,0,d-h/2)))
+        disc=disc-axial(YAW_CABLE_BORE_R,YAW_DISC_THICKNESS+2,(PITCH_X,0,d-YAW_DISC_THICKNESS/2),'z')
+        c=YAW_FFC_CHANNEL
+        disc=disc-block(PITCH_X-c['half_w'],PITCH_X+c['half_w'],0,c['y1'],d-c['depth'],d+1)
+        for deg in YAW_HUB_BOLT_DEG:
+            theta=math.radians(deg)
+            bx=PITCH_X+YAW_HUB_BOLT_R*math.cos(theta)
+            by=YAW_HUB_BOLT_R*math.sin(theta)
+            disc=disc-axial(YAW_HUB_BOLT_CLEARANCE_R,YAW_DISC_PLATE+1,(bx,by,d-YAW_DISC_PLATE/2),'z')
+            disc=disc-axial(YAW_HUB_BOLT_HEAD_R,YAW_HUB_BOLT_RECESS,(bx,by,d-YAW_HUB_BOLT_RECESS/2),'z')
+        return disc
+    disc=cable_hub_and_cuts(plate+rim)
+    # The relief tool keeps the RP-06 hub and groove: it only cuts the skin,
+    # ear and cradle reliefs near the rim, so their volumes do not change.
     cyl_disc=hub_and_cuts(cyl_disc)
     # D-051 leg keys on the disc top, one under each plinth, each with two
     # Ø3.2 M2 insert pockets entered from the inboard face; the screws come in

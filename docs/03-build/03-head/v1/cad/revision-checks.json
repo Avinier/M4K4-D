@@ -9,10 +9,10 @@
     "pitch_z": 45.551454992696236
   },
   "source_sha256": {
-    "layout_model.py": "e5eb4a6e1316b98effbb1528111d54a12dbe4d41dd53695e3900c29a941b8f2d",
+    "layout_model.py": "7b18af764fffd67f08caa40f22eb01e510aa364101e153bb980297358bd4eaec",
     "details.py": "94863750ad7fec142226d4a625f9cba88c51ab4d339e1ca3b0b2125232a38116",
     "layout_axes.py": "b3ce51da7778f6765f9bb534edf2e5a30a6ccae7c8593d0dfed1b1a3886f29f3",
-    "harness.py": "e2a9008e241993af4f08bfee99977771372e7a148df70ac7c56ac7cda585bea7",
+    "harness.py": "ac6e452fb5d3173f99f1fa99ba877c874b988b0171598192c51596357f445b49",
     "optics.py": "94185c1fd76a8727f90995de3ce8225a6b3498d9c08c3f2e1a598d8c3f233f3a",
     "mass_layout.py": "4fefc6509ca834ad1e346f844000a4868310fff5a3bce8c4f5d524eaaac813ab"
   },
@@ -40,7 +40,7 @@
   "poses": 56,
   "motion_envelope": "motion-envelope.json (A+ firmware limit; per-axis hard stops alone do not enforce it)",
   "mechanism_pairs_per_pose": 3936,
-  "jacket_pairs_per_pose": 678,
+  "jacket_pairs_per_pose": 791,
   "fasteners_in_motion_grid": [
     "C2_tray_M2_-19",
     "C2_tray_M2_-39",
@@ -672,7 +672,7 @@
     "yaw_turntable_disc_flush": {
       "valid": true,
       "solids": 1,
-      "volume": 58653.16430438475
+      "volume": 55917.463652055994
     },
     "pitch_horn_to_leg_M3x6_45": {
       "valid": true,
@@ -1102,7 +1102,7 @@
     },
     {
       "branch": "yaw_service_loop",
-      "reason": "Y-side branch ends below the +Y leg; riser to the pitch frame is unrouted. Yaw twist is taken by the RP-06 body-side clock-spring reserve under the disc, not qualified for cycles or bend radius."
+      "reason": "Y-side branch ends below the +Y leg; riser to the pitch frame is unrouted. Yaw twist is taken by the body-side FFC clock-spring cassette (D-044/D-052), not yet qualified for cycles."
     }
   ],
   "limitations": [

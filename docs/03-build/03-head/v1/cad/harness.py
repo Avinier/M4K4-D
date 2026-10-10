@@ -44,14 +44,20 @@ def routes():
     # LED requires a turn before the 30 mm straight reserve clears the crown.
     put('LED_30mm_exit_UNROUTED',m.block(-38,-8,12.7,17.7,89.3,94.3),'R','led_local','keepout','#d6a647')
     gaps.append(dict(branch='led_local',reason='HEAD-CAD-12: the selected WS2812B-2020 carrier takes 3 x AWG30 PTFE leads (3V3, GND, DIN) on its back pads, turned 90 deg within 2 mm, so no 30 mm straight exit is needed; the route from the crown to D1 GPIO6 (Sensor-AD PH2.0) is not yet drawn, so this keep-out stays.'))
-    # Layout 04: the yaw branch drops through the turntable centre bore into the
-    # body-side clock-spring reserve (RP-06). On the Y side it lies flush in the
-    # disc-top groove and stops at a keep-out below the +Y leg; the riser to the
-    # pitch-carried frame remains an unqualified transition.
+    # D-052: the yaw branch is three stacked 22-pin 0.5 mm FFCs (power,
+    # sideband, CSI). They leave the body's PCB-14 joiner boards' upper ZIFs
+    # (mouths at body Z 150.7, disc - 4.3, in XZ planes at Y -2.9 / 0.4 / 3.7),
+    # rise through the Ø21 disc bore, bend over toward +Y and lie flat in the
+    # 12.5 x 1.5 mm disc-top channel (stack about 1.05 mm), then stop at a
+    # keep-out below the +Y leg; the riser to the pitch-carried frame remains
+    # an unqualified transition. The FFC ends demate through the bore with the
+    # tilting assembly off; the disc can stay on.
     x,d=m.PITCH_X,m.YAW_DISC_TOP_Z
-    jacket=rod((x,0,d-m.YAW_DISC_THICKNESS),(x,0,d-1.8),1.5)+rod((x,0,d-1.8),(x,44,d-1.8),1.5)
-    put('yaw_branch_bore_and_disc_groove_OD3_Y',jacket,'Y','yaw_service_loop',color='#d3a860')
-    put('yaw_branch_leg_riser_UNROUTED',m.block(x-3,x+3,44,50,d-3,d+8),'Y','yaw_service_loop','keepout','#d3a860')
-    put('CAD05_yaw_plane_demating_reserve',m.block(x-6,x+6,-6,6,d-m.YAW_DISC_THICKNESS-6,d-m.YAW_DISC_THICKNESS),'Y','yaw_service_loop','keepout','#b488cf')
-    gaps.append(dict(branch='yaw_service_loop',reason='Y-side branch ends below the +Y leg; riser to the pitch frame is unrouted. Yaw twist is taken by the RP-06 body-side clock-spring reserve under the disc, not qualified for cycles or bend radius.'))
+    c=m.YAW_FFC_CHANNEL;w=5.9
+    floor=d-c['depth']
+    put('yaw_FFC_x3_bore_riser_Y',m.block(x-w,x+w,-3.15,3.95,d-4.3,floor+.05),'Y','yaw_service_loop',color='#d3a860')
+    put('yaw_FFC_x3_disc_channel_Y',m.block(x-w,x+w,-3.15,c['y1'],floor+.05,floor+1.1),'Y','yaw_service_loop',color='#d3a860')
+    put('yaw_branch_leg_riser_UNROUTED',m.block(x-c['half_w'],x+c['half_w'],44,47.6,floor,d+8),'Y','yaw_service_loop','keepout','#d3a860')
+    put('CAD05_yaw_plane_demating_reserve',m.block(x-8.5,x+8.5,-4.7,4.7,d-9.5,d),'Y','yaw_service_loop','keepout','#b488cf')
+    gaps.append(dict(branch='yaw_service_loop',reason='Y-side branch ends below the +Y leg; riser to the pitch frame is unrouted. Yaw twist is taken by the body-side FFC clock-spring cassette (D-044/D-052), not yet qualified for cycles.'))
     return items,gaps
