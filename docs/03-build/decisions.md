@@ -57,6 +57,7 @@ The central record of every decision and change made during the build phase. New
 | [D-050](#d-050) | 2026-10-09 | Head / yoke legs and turntable restyle (M011-Y, M012; head v1 CAD, mass tree, body v1 hand-off) | Both yoke legs become one faceted design inscribed in the D-049 free corridor (plinth, waist, arm), replacing the +Y leg's stair-stepped raster outline, ledge and box foot; disc rim tapers R62.5 to R58.5; opaque presentation model | ACTIVE; CAD and checks complete; HOLD on the CF leg coupon and print orientation |
 | [D-051](#d-051) | 2026-10-10 | Head / passive pitch pivot and yoke-leg joints (HD-008–HD-011; M011-Y, M012; head v1 CAD, mass tree, body v1 hand-off) | −Y pivot becomes an MR106ZZ in the −Y leg pad, a flush printed retainer and a Ø6 D-shaft pin into a D-bore boss on the pitch frame; each leg plinth keys over a block on the disc top and takes two M2 screws from its inner face | ACTIVE; CAD and checks complete; HOLD on received bearing/D-shaft fits, a seat and key coupon, and bench B6 |
 | [D-052](#d-052) | 2026-10-10 | Body + head / yaw cable path (BO-045, BO-050, BO-058, BO-062; M012; W37/W42/W43) | The cassette FFCs enter the drum through a full-height slit at 0° (wraps 150°/90°), fold once and plug into three vertical PCB-14 joiner boards held in rotor posts under the hub shoulder; the head FFCs rise from their upper ZIFs through a Ø21 disc bore into a 12.5 × 1.5 mm channel, demating with the disc on; hub bore R13.15, disc pilot R10.5–13 | ACTIVE; CAD and checks complete; HOLD on the ZIF selection, an FFC fold mock-up and the cassette bench test |
+| [D-054](#d-054) | 2026-10-10 | Head / camera housing restyle (M019a; head v1 CAD) | The 46 mm crown and its hipped roof cap become a slim raked fin: the crown narrows to 40 mm with 3 mm top chamfers and keeps its flat top to X −24; the skin hood behind it rakes down at 35.5° to the roof, about 25 mm long instead of running back to X −78 | ACTIVE; CAD and checks complete |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -2256,3 +2257,29 @@ The CF leg requirement stands, with 0.7 Hz less margin. The leg floor for 30 Hz 
 - **Coupons:** board-slot fit in PETG (0.1 mm per side) and the disc pilot in the R13.15 hub bore.
 - **CSI:** signal check through two ZIF pairs (unchanged from D-044).
 - **Head riser:** the route up the +Y leg into the pitch-carried frame is still unrouted.
+
+## D-054
+
+**2026-10-10 · Head / camera housing restyle: slim raked fin (M019a; head v1 CAD) · ACTIVE; CAD and checks complete**
+
+**Why.** The builder found the camera housing too heavy visually. It was a 46 mm crown with sloped sides on the front bezel, plus a hipped roof cap in the skin that ran 54 mm back to X −78 with triangular side facets. The camera cannot drop into the face: the display fills Z 6–74 and the camera clamp reaches Z 102.3 against an 86 mm roof, so about 18 mm of housing must stand above the roof at the front. Three concepts were rendered against the current design (slim raked fin, integrated forehead, soft blister). The builder chose the slim raked fin.
+
+**Decision.**
+- **Crown (`front_bezel_integral_camera_crown`):** `CROWN_OUTER` becomes 40 mm wide (Y ±20, was ±23 sloping in from Z 85 to ±17), vertical sides to Z 101 and 3 mm × 45° top chamfers to the Z 104 top. It keeps its 24 mm depth, flat top, front optics cut, LED hole, rear CSI opening and the 1.3 mm normal walls from `crown_inner`.
+- **Hood (`main_octagonal_skin`, `crown_roof_cap`):** the same section, above the roof, runs back from the crown's rear face at X −24 and rakes down at **35.5°** (`CROWN_RAKE_DEG`). It meets the Z 86 roof about 25 mm behind the crown (base edge at X −50.6). It is hollow (1.6 mm wall), open to the crown and to the roof it is fused into. It replaces the hipped cap to X −78 and its 0.4 mm top panel.
+- **Roof notch:** follows the crown width plus the 0.8 mm seam (Y ±20.8, was ±23.8).
+- **Unchanged:** the camera, its edge clamp and bracket screws, the LED and diffuser, the CSI exit and roof guide, the crown height (104 mm) and the bezel/skin joint.
+
+**Fit.** Inside the fin the clamp keeps 3.7 mm a side and the LED reserve 1.0 mm. The camera bracket receiver bosses (Y ±16, R2.8) now fuse into the side walls. The camera's nearest gap to the bezel stays 0.723 mm and the bracket's 0.2 mm, the same as before.
+
+**Mass.** The printed volume falls by 0.21 cm³ (bezel +0.09, skin −0.30; about −0.3 g PLA). `mass-placement.json` and `axes.json` are not regenerated, by the standing rule that head edits do not silently move the body hand-off; the change is far below the register's resolution.
+
+**Checks (head v1).**
+- `check_revision.py`: **PASS.** 56 roll/pitch poses run this time (not reused), 3,936 mechanism pairs per pose. Same-frame, motion, harness-pinch, service-extraction, retention and C2 service lists are all empty. Bezel and skin are one valid solid each (`revision-checks.json`).
+- `check_fasteners.py`: **PASS**, 46 screws; output unchanged.
+- `write_dimensions.py`: `dimensions.json`/`.md` regenerated. They were last written at the 2026-10-07 fabrication fixes and still carried pre-D-049 XC330 rows and axes. This refresh brings them to the current source.
+- Not rerun: the mounts audit, D-051 joint sweep, leg clearance and FEA (no part they cover changed), and `compare_golden.py` (goldens are the D-049 set).
+
+**Views.** `head-v1.step`, `head-v1-integrated.step` and `head-v1-presentation.step` regenerated locally (untracked); new presentation snapshots in `03-head/v1/cad/snapshots/`.
+
+**Next.** Judge the fin on the first skin and bezel print.

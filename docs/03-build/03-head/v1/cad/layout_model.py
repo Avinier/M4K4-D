@@ -296,34 +296,27 @@ def camera_edge_clamp():
         clamp=clamp+block(-14.9,-8.6,y0,y1,100.96,102.3)
     return clamp
 
-# Crown roof cap: a three-faced hip behind the crown. Its base is the crown's
-# rear trapezoid (Y +/-23 at the roof, +/-17 at the crown top) butted against
-# the crown's rear face (X-24), with no seam gap. The top edge runs back to a
-# short end edge on the roof (CROWN_CAP_END_W wide), so the top face is a
-# trapezoid (about 18 deg pitch);
-# each slanted edge runs to one end of that edge, so the two sides are
-# triangles. The end edge lands on the roof's rear-taper crease (X-78), the
-# last X where the roof is flat at Z86. The top face carries a 0.4 mm recessed
-# panel, like the skin's side lands. Hollow hood, open to the crown and to the
-# roof it is fused into.
+# D-054 slim raked camera fin (replaces the 46 mm crown and its hipped roof
+# cap). The crown keeps its flat top to X-24; behind it this hood in the skin
+# carries the crown section (CROWN_OUTER above the roof) back and falls at
+# CROWN_RAKE_DEG to the roof, meeting Z86 about 25 mm behind the crown. Its
+# base butts the crown's rear face (X-24) with no seam gap. Hollow hood, open
+# to the crown and to the roof it is fused into.
 CROWN_CAP_X0=-24.
-CROWN_CAP_END_X=HELMET_REAR_TAPER_START_X
-CROWN_CAP_END_W=6.
+CROWN_RAKE_DEG=35.5
 CROWN_CAP_WALL=1.6
-CROWN_CAP_PANEL_INSET,CROWN_CAP_PANEL_DEPTH=3.,.4
 
 def crown_roof_cap():
-    from build123d import Face, Wire, Shell, Solid, Vector, offset, Kind
-    x0,x1,w,zb=CROWN_CAP_X0,CROWN_CAP_END_X,CROWN_CAP_END_W/2,MAIN_H-1.
-    face=lambda pts:Face(Wire.make_polygon([Vector(*p) for p in pts],close=True))
-    fl,fr,tr,tl=(x0,-23,zb),(x0,23,zb),(x0,17,CROWN_H),(x0,-17,CROWN_H)
-    el,er=(x1,-w,zb),(x1,w,zb)
-    solid=Solid(Shell([face([fl,fr,tr,tl]),face([fl,el,er,fr]),face([fr,er,tr]),face([tr,er,el,tl]),face([tl,el,fl])]))
+    from build123d import offset, Kind
+    zb=MAIN_H-1.
+    x1=CROWN_CAP_X0-(CROWN_H-zb)/math.tan(math.radians(CROWN_RAKE_DEG))
+    section=[(y,max(z,zb)) for y,z in CROWN_OUTER]
+    prism=extrude(Plane.YZ*Polygon(*section,align=None),amount=CROWN_CAP_X0-x1).moved(Location((x1,0,0)))
+    w=CROWN_OUTER[1][0]+1
+    side=extrude(Plane.XZ*Polygon((CROWN_CAP_X0,zb),(CROWN_CAP_X0,CROWN_H),(x1,zb),align=None),amount=2*w).moved(Location((0,w,0)))
+    solid=(prism&side).solids()[0]
     front=solid.faces().sort_by(Axis.X)[-1];bottom=solid.faces().sort_by(Axis.Z)[0]
-    hood=offset(solid,amount=-CROWN_CAP_WALL,openings=[front,bottom],kind=Kind.INTERSECTION)
-    top=[f for f in solid.faces() if abs(f.normal_at().Y)<1e-6 and f.normal_at().Z>.3][0]
-    n=top.normal_at();panel=offset(top,amount=-CROWN_CAP_PANEL_INSET,kind=Kind.INTERSECTION)
-    return hood-extrude(panel.moved(Location(tuple(n))),amount=1+CROWN_CAP_PANEL_DEPTH,dir=-n)
+    return offset(solid,amount=-CROWN_CAP_WALL,openings=[front,bottom],kind=Kind.INTERSECTION)
 
 # Front bezel walls (fabrication audit 2026-10-05): every printed wall of the
 # bezel, band and crown is >= BEZEL_WALL measured along its normal. The front
@@ -332,7 +325,10 @@ def crown_roof_cap():
 BEZEL_WALL=1.3
 BEZEL_FRONT=(120,2,84,9.5)
 BEZEL_BACK=(130,0,86,14)
-CROWN_OUTER=[(-23,73),(23,73),(23,85),(17,104),(-17,104),(-23,85)]
+# D-054 camera fin section: 40 mm wide (was 46, sloping in from Z85) with
+# 3 mm top chamfers. Inside it the clamp keeps 3.7 mm a side, the LED reserve
+# 1 mm and the bracket bosses fuse into the side walls.
+CROWN_OUTER=[(-20,73),(20,73),(20,101),(17,104),(-17,104),(-20,101)]
 # Window lip in front of the glass: 1.3 mm. The 1.5 mm glass and its mask sit
 # 0.35 mm further back than before (0.55 mm ahead of the display's active
 # sheet), keeping the 0.2 mm front and 0.25 mm rear seat gaps.
@@ -398,7 +394,9 @@ def build_parts(catalog=True,reliefs=True):
     add('front_bezel_integral_camera_crown',face,'R',alpha=.28,owner='M019a')
     # Thin side shell and separate octagonal rear cover with real 0.8 seam.
     skin=stern(-112.6,-8.8)-stern(-114,-8,inside=True)
-    skin=skin-block(-24.8,-8,-23.8,23.8,84.2,90)
+    # Roof notch for the crown with the 0.8 seam.
+    notch=CROWN_OUTER[1][0]+.8
+    skin=skin-block(-24.8,-8,-notch,notch,84.2,90)
     # Underside access is necessary for the fixed yoke and external cable loop.
     # Integral panel steps add the required 0.4 mm relief without extra joints.
     for sign in [-1,1]:

@@ -9,7 +9,7 @@
     "pitch_z": 45.551454992696236
   },
   "source_sha256": {
-    "layout_model.py": "7b18af764fffd67f08caa40f22eb01e510aa364101e153bb980297358bd4eaec",
+    "layout_model.py": "97e221154c65797de20c4206dc4a709d9cfa33243a1bcfb9c99bae18df4427f1",
     "details.py": "94863750ad7fec142226d4a625f9cba88c51ab4d339e1ca3b0b2125232a38116",
     "layout_axes.py": "b3ce51da7778f6765f9bb534edf2e5a30a6ccae7c8593d0dfed1b1a3886f29f3",
     "harness.py": "ac6e452fb5d3173f99f1fa99ba877c874b988b0171598192c51596357f445b49",
@@ -447,12 +447,12 @@
     "front_bezel_integral_camera_crown": {
       "valid": true,
       "solids": 1,
-      "volume": 15065.25726592376
+      "volume": 15156.871548935424
     },
     "main_octagonal_skin": {
       "valid": true,
       "solids": 1,
-      "volume": 43253.52208037054
+      "volume": 42949.64132496881
     },
     "removable_octagonal_rear_cover": {
       "valid": true,
