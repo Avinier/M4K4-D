@@ -2154,7 +2154,7 @@ The CF leg requirement stands, with 0.7 Hz less margin. The leg floor for 30 Hz 
 - **Yaw-carried:** 654.2 → 655.2 g. The keys add 0.6 g, the frame boss 0.6 g, and the retainer and the six D-051 screws (now modelled steel, `D051_HARDWARE`) 1.3 g. The leg sockets and the −Y pad's seat and recess remove 1.4 g.
 - **Body:** `check_body_layout.py` all true. a_tip is 1.621 neutral (was 1.622) and 1.603 at the worst head pose (unchanged), against 1.582. The harness allowance must stay forward of X 13.46 (was 13.5).
 
-**Exports.** `yaw-yoke.step` is regenerated with the pivot and screws. `head-v1-integrated.step`, `head-v1-presentation.step` and `head-v1.step` are not.
+**Exports.** `yaw-yoke.step`, `head-v1-integrated.step` and `head-v1-presentation.step` are regenerated with the pivot, keys and screws. `head-v1.step` is not.
 
 **BOM.** HD-008 to HD-011 are added. The retainer and keys are prints (M011-Y, M012). The six M2 × 3 inserts are the head's OD 3.6 article.
 
