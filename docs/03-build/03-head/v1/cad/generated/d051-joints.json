@@ -114,7 +114,7 @@
       {
         "a": "main_octagonal_skin",
         "b": "yaw_yoke_leg_-55",
-        "min_mm": 0.981,
+        "min_mm": 0.988,
         "roll": 21.0,
         "pitch": -15.0,
         "before_mm": 0.981
@@ -175,7 +175,7 @@
     {
       "a": "main_octagonal_skin",
       "b": "yaw_yoke_leg_-55",
-      "min_mm": 0.981,
+      "min_mm": 0.988,
       "roll": 21.0,
       "pitch": -15.0
     },
@@ -201,6 +201,13 @@
       "pitch": 15.0
     },
     {
+      "a": "main_octagonal_skin_lower",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 1.154,
+      "roll": -14.0,
+      "pitch": 43.0
+    },
+    {
       "a": "ear_-1_trim_M2x5",
       "b": "yaw_yoke_leg_-55",
       "min_mm": 1.196,
@@ -220,6 +227,13 @@
       "min_mm": 1.237,
       "roll": -21.0,
       "pitch": -25.0
+    },
+    {
+      "a": "main_octagonal_skin_lower",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 1.24,
+      "roll": 14.0,
+      "pitch": 43.0
     },
     {
       "a": "ear_-1_trim_slug_stack_max",
@@ -314,9 +328,23 @@
     },
     {
       "a": "connected_pitch_frame_roll_servo_saddle",
-      "b": "main_octagonal_skin",
+      "b": "main_octagonal_skin_lower",
       "min_mm": 1.861,
       "roll": 21.0,
+      "pitch": 43.0
+    },
+    {
+      "a": "display_rear_frame",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 2.167,
+      "roll": -7.0,
+      "pitch": 43.0
+    },
+    {
+      "a": "display_rear_frame",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 2.266,
+      "roll": 7.0,
       "pitch": 43.0
     },
     {
@@ -341,6 +369,20 @@
       "pitch": -25.0
     },
     {
+      "a": "display_rear_foam_pad_3",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 3.042,
+      "roll": -7.0,
+      "pitch": 43.0
+    },
+    {
+      "a": "display_rear_foam_pad_1",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 3.213,
+      "roll": 7.0,
+      "pitch": 43.0
+    },
+    {
       "a": "connected_pitch_frame_roll_servo_saddle",
       "b": "roll_coupler_goBILDA_4001_0025_0006",
       "min_mm": 3.363,
@@ -360,48 +402,6 @@
       "min_mm": 3.856,
       "roll": -21.0,
       "pitch": -15.0
-    },
-    {
-      "a": "pitch_trunnion_D6x12_pin",
-      "b": "pitch_trunnion_retainer_M2x4_300",
-      "min_mm": 3.856,
-      "roll": -21.0,
-      "pitch": -25.0
-    },
-    {
-      "a": "pitch_hard_stop_pin",
-      "b": "pitch_trunnion_bearing_MR106ZZ",
-      "min_mm": 4.0,
-      "roll": -21.0,
-      "pitch": 35.0
-    },
-    {
-      "a": "C2_removable_open_rear_tray",
-      "b": "pitch_trunnion_D6x12_pin",
-      "min_mm": 4.444,
-      "roll": -21.0,
-      "pitch": 43.0
-    },
-    {
-      "a": "main_octagonal_skin",
-      "b": "pitch_trunnion_retainer",
-      "min_mm": 4.559,
-      "roll": 21.0,
-      "pitch": 25.0
-    },
-    {
-      "a": "main_octagonal_skin",
-      "b": "pitch_trunnion_retainer_M2x4_240",
-      "min_mm": 4.678,
-      "roll": 14.0,
-      "pitch": 35.0
-    },
-    {
-      "a": "main_octagonal_skin",
-      "b": "pitch_trunnion_retainer_M2x4_300",
-      "min_mm": 4.678,
-      "roll": 14.0,
-      "pitch": -25.0
     }
   ],
   "failures": [],

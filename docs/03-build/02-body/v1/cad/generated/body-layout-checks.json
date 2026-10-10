@@ -446,29 +446,29 @@
     ]
   },
   "whole_robot": {
-    "mass_g": 2645.0857507570604,
+    "mass_g": 2648.373832210093,
     "com_mm": [
-      18.065432497955058,
-      1.1479765521525633,
-      109.3032760896674
+      18.06808971787335,
+      1.1463505819920419,
+      109.46028457002961
     ],
-    "forward_tip_acceleration_m_s2": 1.621377685510125,
+    "forward_tip_acceleration_m_s2": 1.619290145540772,
     "forward_tip_screen_min_m_s2": 1.5822580645161293,
-    "ball_static_share": 0.16423120452686416,
-    "com_over_axle_pitch_deg": 9.38489335152061,
+    "ball_static_share": 0.1642553610715759,
+    "com_over_axle_pitch_deg": 9.37302476822606,
     "rear_skid_first_contact_pitch_deg": 6.054191894114834,
-    "reverse_launch_or_forward_brake_tip_acceleration_m_s2": 8.251153482858111,
-    "axle_line_lateral_tip_proxy_m_s2": 7.52574286381471,
-    "neutral_spin_centripetal_at_220_deg_s_m_s2": 0.26634739904712834,
-    "head_pose_conservative_tip_acceleration_m_s2": 1.6041879533355072,
-    "head_yaw_com_offset_from_axis_mm": 1.4110347618195047,
-    "head_pitch_carried_com_offset_from_axis_mm": 0.0026733875285405414,
-    "head_roll_carried_com_offset_from_axis_mm": 0.0009654499249899781,
+    "reverse_launch_or_forward_brake_tip_acceleration_m_s2": 8.239079986044462,
+    "axle_line_lateral_tip_proxy_m_s2": 7.515093753153721,
+    "neutral_spin_centripetal_at_220_deg_s_m_s2": 0.2663865757241336,
+    "head_pose_conservative_tip_acceleration_m_s2": 1.600484113341539,
+    "head_yaw_com_offset_from_axis_mm": 1.3937732373221896,
+    "head_pitch_carried_com_offset_from_axis_mm": 0.026067561797619647,
+    "head_roll_carried_com_offset_from_axis_mm": 0.014743122407572086,
     "printed_enclosure_yaw_inertia_about_drive_axis_kg_m2": 0.0026351590396579525,
     "unweighed_harness_fastener_allowance_g": 95.0,
     "allowance_assumed_x_mm": 20.0,
-    "allowance_min_x_for_pose_screen_mm": 13.196659819316196,
-    "allowance_if_at_x_minus20_a_tip_m_s2": 1.4752519411005651
+    "allowance_min_x_for_pose_screen_mm": 14.329840947451354,
+    "allowance_if_at_x_minus20_a_tip_m_s2": 1.471908892389193
   },
   "axes": {
     "head_yaw_datum_mm": [

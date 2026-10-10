@@ -45,31 +45,31 @@
   "bearing_61810_2Z": {
     "C_N": 6760.0,
     "C0_N": 6800.0,
-    "head_com_above_bearing_mm": 83.2,
+    "head_com_above_bearing_mm": 83.3,
     "cases": {
       "static_head_weight": {
         "axial_N": 6.4,
         "moment_Nm": 0.0,
         "P0_N": 3.2,
-        "s0": 2126.9
+        "s0": 2116.2
       },
       "braking_2ms2": {
         "axial_N": 6.4,
         "moment_Nm": 0.109,
         "P0_N": 7.0,
-        "s0": 975.4
+        "s0": 970.1
       },
       "bump_3g_lateral": {
-        "axial_N": 19.2,
-        "moment_Nm": 1.597,
-        "P0_N": 65.1,
-        "s0": 104.4
+        "axial_N": 19.3,
+        "moment_Nm": 1.606,
+        "P0_N": 65.5,
+        "s0": 103.8
       },
       "lift_robot_by_head_x3": {
-        "axial_N": -77.8,
-        "moment_Nm": 2.335,
-        "P0_N": 120.2,
-        "s0": 56.6
+        "axial_N": -77.9,
+        "moment_Nm": 2.338,
+        "P0_N": 120.3,
+        "s0": 56.5
       },
       "fall_on_head_100N_at_100mm": {
         "axial_N": 100.0,
@@ -78,7 +78,7 @@
         "s0": 17.1
       }
     },
-    "L10_hours_at_20rpm": "2.45e+11",
+    "L10_hours_at_20rpm": "2.41e+11",
     "tilt_play_deg_E": 0.11,
     "note": "single deep-groove bearing: radial clearance gives ~0.1 deg tilt play (~0.2 mm at the crown) once moment exceeds head weight x dm/2 ~0.17 N.m; measure"
   },
@@ -124,7 +124,7 @@
     "radial_at_peak_N": 14.1,
     "lever_mm": 26.6,
     "moment_on_servo_output_Nm": 0.375,
-    "shaft_bending_MPa": 30.6,
+    "shaft_bending_MPa": 30.5,
     "note": "ST3215-HS radial load is unpublished; D-048 lowered the servo 8 mm, so the lever grew. Bench B1/B4 with the pinion fitted"
   },
   "hard_stop": {
@@ -143,11 +143,11 @@
     }
   },
   "uplift_path": {
-    "design_N": 77.8,
+    "design_N": 77.9,
     "rotor_screws": "3 x M2.5 thread-forming, 6.6 mm in the PETG spigot",
-    "per_screw_N": 25.9,
+    "per_screw_N": 26.0,
     "post_and_clamp_screws": "3 x M2 x 8 clamp ring (outer ring) and 3 x M3 x 6 flange screws into frame inserts",
-    "per_flange_screw_N": 25.9
+    "per_flange_screw_N": 26.0
   },
   "drag_Nm": {
     "bearing_2Z_E": 0.002,
@@ -267,7 +267,7 @@
       "FFC_22P_X3_IN_CASSETTE_AND_DROPS": 4.5
     },
     "moving_yaw_inertia_kg_m2_lower_bound": "9.18e-07",
-    "head_yaw_inertia_kg_m2": 0.0014554979567378262
+    "head_yaw_inertia_kg_m2": 0.001454613966299119
   },
   "mass_register_matches": true
 }

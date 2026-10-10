@@ -9,8 +9,8 @@
     "pitch_z": 45.551454992696236
   },
   "source_sha256": {
-    "layout_model.py": "97e221154c65797de20c4206dc4a709d9cfa33243a1bcfb9c99bae18df4427f1",
-    "details.py": "94863750ad7fec142226d4a625f9cba88c51ab4d339e1ca3b0b2125232a38116",
+    "layout_model.py": "11918765da3fb0abed10396ef32318c5a6b033df8299eacd5640fe43956fcf19",
+    "details.py": "5a8c8400a607039ce2d196e592f5158c90ee5bf8d5ceace4a3992bdba73dca11",
     "layout_axes.py": "b3ce51da7778f6765f9bb534edf2e5a30a6ccae7c8593d0dfed1b1a3886f29f3",
     "harness.py": "ac6e452fb5d3173f99f1fa99ba877c874b988b0171598192c51596357f445b49",
     "optics.py": "94185c1fd76a8727f90995de3ce8225a6b3498d9c08c3f2e1a598d8c3f233f3a",
@@ -39,8 +39,8 @@
   ],
   "poses": 56,
   "motion_envelope": "motion-envelope.json (A+ firmware limit; per-axis hard stops alone do not enforce it)",
-  "mechanism_pairs_per_pose": 3936,
-  "jacket_pairs_per_pose": 791,
+  "mechanism_pairs_per_pose": 4328,
+  "jacket_pairs_per_pose": 840,
   "fasteners_in_motion_grid": [
     "C2_tray_M2_-19",
     "C2_tray_M2_-39",
@@ -64,12 +64,12 @@
     "ear_1_hidden_mount_M2_-4",
     "ear_1_hidden_mount_M2_4",
     "ear_1_trim_M2x5",
+    "front_M2x18_3",
+    "front_M2x18_4",
+    "front_M2x18_5",
+    "front_M2x18_6",
     "front_M2x8_1",
     "front_M2x8_2",
-    "front_M2x8_3",
-    "front_M2x8_4",
-    "front_M2x8_5",
-    "front_M2x8_6",
     "pitch_horn_centre_M3x5",
     "pitch_horn_to_leg_M3x6_135",
     "pitch_horn_to_leg_M3x6_225",
@@ -99,6 +99,7 @@
     "roll_servo_ear_3_washer",
     "roll_servo_ear_4_M2x6",
     "roll_servo_ear_4_washer",
+    "roll_spindle_set_screw_M3x5",
     "yaw_disc_to_body_hub_M3x6_1",
     "yaw_disc_to_body_hub_M3x6_2",
     "yaw_disc_to_body_hub_M3x6_3",
@@ -447,12 +448,12 @@
     "front_bezel_integral_camera_crown": {
       "valid": true,
       "solids": 1,
-      "volume": 15156.871548935424
+      "volume": 15065.25726592376
     },
     "main_octagonal_skin": {
       "valid": true,
       "solids": 1,
-      "volume": 42949.64132496881
+      "volume": 28009.804476504465
     },
     "removable_octagonal_rear_cover": {
       "valid": true,
@@ -537,12 +538,17 @@
     "connected_rolling_cradle_flange_ear_stalks": {
       "valid": true,
       "solids": 1,
-      "volume": 9833.275913155041
+      "volume": 11098.402944684032
     },
     "rolling_spindle_6mm": {
       "valid": true,
       "solids": 1,
-      "volume": 978.2919523278615
+      "volume": 1244.3516131234142
+    },
+    "roll_spindle_set_screw_M3x5": {
+      "valid": true,
+      "solids": 1,
+      "volume": 35.34291735288517
     },
     "roll_bearing_1_696_2Z": {
       "valid": true,
@@ -597,7 +603,7 @@
     "yaw_yoke_leg_-55": {
       "valid": true,
       "solids": 1,
-      "volume": 11045.998748868742
+      "volume": 11016.530606742544
     },
     "yaw_yoke_spine_inlay_-55": {
       "valid": true,
@@ -794,25 +800,25 @@
       "solids": 1,
       "volume": 31.608629599531362
     },
-    "front_M2x8_3": {
+    "front_M2x18_3": {
       "valid": true,
       "solids": 1,
-      "volume": 31.608629599531383
+      "volume": 63.024556135460685
     },
-    "front_M2x8_4": {
+    "front_M2x18_4": {
       "valid": true,
       "solids": 1,
-      "volume": 31.608629599531376
+      "volume": 63.024556135460685
     },
-    "front_M2x8_5": {
+    "front_M2x18_5": {
       "valid": true,
       "solids": 1,
-      "volume": 31.60862959953139
+      "volume": 63.0245561354607
     },
-    "front_M2x8_6": {
+    "front_M2x18_6": {
       "valid": true,
       "solids": 1,
-      "volume": 31.60862959953139
+      "volume": 63.0245561354607
     },
     "rear_M2x6_1": {
       "valid": true,
@@ -833,6 +839,31 @@
       "valid": true,
       "solids": 1,
       "volume": 25.32544429234551
+    },
+    "display_rear_frame": {
+      "valid": true,
+      "solids": 1,
+      "volume": 6573.689473210683
+    },
+    "display_rear_foam_pad_1": {
+      "valid": true,
+      "solids": 1,
+      "volume": 26.939157004532447
+    },
+    "display_rear_foam_pad_2": {
+      "valid": true,
+      "solids": 1,
+      "volume": 26.939157004532447
+    },
+    "display_rear_foam_pad_3": {
+      "valid": true,
+      "solids": 1,
+      "volume": 26.939157004532447
+    },
+    "display_rear_foam_pad_4": {
+      "valid": true,
+      "solids": 1,
+      "volume": 26.939157004532447
     },
     "C2_tray_M2_-39": {
       "valid": true,
@@ -1043,6 +1074,11 @@
       "valid": true,
       "solids": 1,
       "volume": 461.8141200776997
+    },
+    "main_octagonal_skin_lower": {
+      "valid": true,
+      "solids": 1,
+      "volume": 14975.408001388878
     }
   },
   "harness_gaps": [

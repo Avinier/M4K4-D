@@ -97,14 +97,6 @@
         "committed_mm": 0.0
       },
       {
-        "a": "pitch_trunnion_-49",
-        "b": "yaw_yoke_leg_-55",
-        "min_mm": 0.2,
-        "roll": -21.0,
-        "pitch": -25.0,
-        "committed_mm": 0.2
-      },
-      {
         "a": "connected_rolling_cradle_flange_ear_stalks",
         "b": "yaw_yoke_leg_55",
         "min_mm": 0.705,
@@ -147,7 +139,7 @@
       {
         "a": "main_octagonal_skin",
         "b": "yaw_yoke_leg_-55",
-        "min_mm": 0.981,
+        "min_mm": 0.988,
         "roll": 21.0,
         "pitch": -15.0,
         "committed_mm": 0.717
@@ -219,13 +211,6 @@
       "pitch": -5.0
     },
     {
-      "a": "pitch_trunnion_-49",
-      "b": "yaw_yoke_leg_-55",
-      "min_mm": 0.2,
-      "roll": -21.0,
-      "pitch": -25.0
-    },
-    {
       "a": "connected_rolling_cradle_flange_ear_stalks",
       "b": "yaw_yoke_leg_55",
       "min_mm": 0.705,
@@ -263,7 +248,7 @@
     {
       "a": "main_octagonal_skin",
       "b": "yaw_yoke_leg_-55",
-      "min_mm": 0.981,
+      "min_mm": 0.988,
       "roll": 21.0,
       "pitch": -15.0
     },
@@ -289,6 +274,13 @@
       "pitch": -25.0
     },
     {
+      "a": "pitch_trunnion_D6x12_pin",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 1.0,
+      "roll": -21.0,
+      "pitch": -15.0
+    },
+    {
       "a": "roll_bearing_retainer_64.1",
       "b": "roll_coupler_goBILDA_4001_0025_0006",
       "min_mm": 1.097,
@@ -303,10 +295,17 @@
       "pitch": 15.0
     },
     {
-      "a": "main_octagonal_skin",
+      "a": "main_octagonal_skin_lower",
       "b": "pitch_STS3045M_reference",
       "min_mm": 1.144,
       "roll": 21.0,
+      "pitch": 43.0
+    },
+    {
+      "a": "main_octagonal_skin_lower",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 1.154,
+      "roll": -14.0,
       "pitch": 43.0
     },
     {
@@ -317,11 +316,25 @@
       "pitch": 43.0
     },
     {
+      "a": "C2_removable_open_rear_tray",
+      "b": "connected_pitch_frame_roll_servo_saddle",
+      "min_mm": 1.219,
+      "roll": -21.0,
+      "pitch": 25.0
+    },
+    {
       "a": "pitch_STS3045M_reference",
       "b": "yaw_yoke_leg_55",
       "min_mm": 1.237,
       "roll": -21.0,
       "pitch": -25.0
+    },
+    {
+      "a": "main_octagonal_skin_lower",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 1.24,
+      "roll": 14.0,
+      "pitch": 43.0
     },
     {
       "a": "ear_-1_trim_slug_stack_max",
@@ -409,66 +422,45 @@
     },
     {
       "a": "connected_pitch_frame_roll_servo_saddle",
-      "b": "main_octagonal_skin",
+      "b": "pitch_trunnion_bearing_MR106ZZ",
+      "min_mm": 1.7,
+      "roll": -21.0,
+      "pitch": -25.0
+    },
+    {
+      "a": "connected_pitch_frame_roll_servo_saddle",
+      "b": "pitch_trunnion_retainer_M2x4_240",
+      "min_mm": 1.7,
+      "roll": -21.0,
+      "pitch": -25.0
+    },
+    {
+      "a": "connected_pitch_frame_roll_servo_saddle",
+      "b": "pitch_trunnion_retainer_M2x4_300",
+      "min_mm": 1.7,
+      "roll": -21.0,
+      "pitch": -25.0
+    },
+    {
+      "a": "connected_pitch_frame_roll_servo_saddle",
+      "b": "main_octagonal_skin_lower",
       "min_mm": 1.861,
       "roll": 21.0,
       "pitch": 43.0
     },
     {
-      "a": "C2_removable_open_rear_tray",
-      "b": "connected_pitch_frame_roll_servo_saddle",
-      "min_mm": 2.175,
-      "roll": -21.0,
-      "pitch": 35.0
-    },
-    {
-      "a": "main_octagonal_skin",
-      "b": "pitch_servo_ear_3_washer",
-      "min_mm": 2.3,
-      "roll": 21.0,
-      "pitch": 35.0
-    },
-    {
-      "a": "front_bezel_integral_camera_crown",
+      "a": "display_rear_frame",
       "b": "yaw_yoke_leg_55",
-      "min_mm": 2.303,
-      "roll": -21.0,
+      "min_mm": 2.167,
+      "roll": -7.0,
       "pitch": 43.0
     },
     {
-      "a": "connected_rolling_cradle_flange_ear_stalks",
-      "b": "pitch_STS3045M_reference",
-      "min_mm": 2.327,
-      "roll": -14.0,
-      "pitch": -25.0
-    },
-    {
-      "a": "pitch_STS3045M_reference",
-      "b": "pitch_horn_to_leg_M3x6_45",
-      "min_mm": 2.419,
-      "roll": -21.0,
-      "pitch": -5.0
-    },
-    {
-      "a": "pitch_STS3045M_reference",
-      "b": "pitch_horn_to_leg_M3x6_135",
-      "min_mm": 2.419,
-      "roll": -21.0,
-      "pitch": -5.0
-    },
-    {
-      "a": "pitch_STS3045M_reference",
-      "b": "pitch_horn_to_leg_M3x6_225",
-      "min_mm": 2.419,
-      "roll": -21.0,
-      "pitch": -15.0
-    },
-    {
-      "a": "pitch_STS3045M_reference",
-      "b": "pitch_horn_to_leg_M3x6_315",
-      "min_mm": 2.419,
-      "roll": -21.0,
-      "pitch": -25.0
+      "a": "display_rear_frame",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 2.266,
+      "roll": 7.0,
+      "pitch": 43.0
     }
   ],
   "failures": [],
