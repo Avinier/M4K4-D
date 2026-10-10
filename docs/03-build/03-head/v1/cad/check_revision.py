@@ -134,8 +134,10 @@ def main():
     # Insert pockets must open through the receiver faces; no leftover membrane.
     from details import INSERT_R,FRONT_INSERT_FACE_X,REAR_INSERT_FACE_X
     insert_mouths=[]
-    skin=p['main_octagonal_skin']['shape']
+    # D-053: the skin is two halves; the Z16 front receivers are in the lower.
+    skin=p['main_octagonal_skin']['shape'].fuse(p['main_octagonal_skin_lower']['shape'])
     for y,z in m.FRONT_SCREWS:
+        if (y,z) in m.DISPLAY_FRAME_SCREWS:continue   # D-053: through bosses, insert in the display frame
         v=overlap(skin,m.axial(INSERT_R,.2,(FRONT_INSERT_FACE_X,y,z)))
         if v>1e-4:insert_mouths.append(dict(side='front',y=y,z=z,plastic_mm3=v))
     for y,z in m.REAR_SCREWS:

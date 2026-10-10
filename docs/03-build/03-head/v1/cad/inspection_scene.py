@@ -39,7 +39,7 @@ def parts_scene(parts,roll=0,pitch=0,yaw=0):
             label='Fasteners'
         elif name.startswith('ear_'):
             label='Ears'
-        elif name in ('front_bezel_integral_camera_crown','main_octagonal_skin','removable_octagonal_rear_cover'):
+        elif name in ('front_bezel_integral_camera_crown','main_octagonal_skin','main_octagonal_skin_lower','removable_octagonal_rear_cover'):
             label='Shell and covers'
         elif any(token in name for token in ('display','window')):
             label='Display and window'

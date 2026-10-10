@@ -40,7 +40,7 @@ for sign in (-1, 1):
     # screws stay installed during this step.
     cap_blockers = [prefix + 'ridged_inner_mount',
                     'connected_rolling_cradle_flange_ear_stalks',
-                    'main_octagonal_skin', *hidden_screws]
+                    'main_octagonal_skin', 'main_octagonal_skin_lower', *hidden_screws]
     cap_hits = []
     for travel in (0, 1, 3, 6, 10, 20):
         for moving_name, moving in [('cap', cap), ('amber', inlays[0]),
@@ -61,7 +61,7 @@ for sign in (-1, 1):
     for travel in (1, 3, 6, 10, 20):
         moved = rim.moved(Location((0, sign * travel, 0)))
         for blocker in ('connected_rolling_cradle_flange_ear_stalks',
-                        'main_octagonal_skin'):
+                        'main_octagonal_skin', 'main_octagonal_skin_lower'):
             volume = overlap(moved, parts[blocker]['shape'])
             if volume > 1e-4:
                 fragments = m.pieces(moved.intersect(parts[blocker]['shape']))

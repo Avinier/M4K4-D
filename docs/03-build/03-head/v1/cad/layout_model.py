@@ -26,11 +26,25 @@ EAR_PAD_TOP=69.2
 # (lugs at R8.5 + 2.4); the +Y horn screw heads reach R9.85. Inside the ear
 # web's R20.3 and the inner mount's R28 seat.
 PIVOT_SERVICE_PORT_R=12.
+# D-053 skin split: the one-piece skin could not go over the one-piece
+# cradle, whose ear stalks pass through ports in its side walls (and its
+# bezel and rear-cover receivers trap it on X). It splits at the ear line,
+# through the stalk ports, so the upper half lifts off and the lower half
+# drops off. The bezel and rear cover screw to both halves and the ear inner
+# mounts clamp across the seam. A lap lip on the lower half rises inside the
+# upper half's wall; it stops short of the recessed side lands, whose inner
+# doubler fills that band.
+SKIN_SPLIT_Z=EAR_Z
+SKIN_LIP=dict(h=4.,t=1.2,gap=.15,root=2.,x=(-112.1,-9.3),skip_x=(-104.,-81.))
 DISPLAY_BOTTOM, CAMERA_BOTTOM=6.,77.
 LED_Y, LED_Z=15.2,91.8
 # Side screws at |Y| 56.4 keep >= 1.2 mm from their counterbores to the
 # bezel side and from their bores to the 106 mm window seat.
 FRONT_SCREWS=[(-56.4,16),(56.4,16),(-56.4,64),(56.4,64),(-32,78),(32,78)]
+# D-053: these four pass through their skin bosses into the display rear
+# frame. The two at Z 16 stay M2 x 8 into skin inserts: a frame tab there
+# meets the yoke legs at pitch 43 deg.
+DISPLAY_FRAME_SCREWS=[(-56.4,64),(56.4,64),(-32,78),(32,78)]
 REAR_SCREWS=[(-44,26),(44,26),(-44,65),(44,65)]
 ROLL_Y,ROLL_Z,PITCH_X,PITCH_Z=[AXES[k] for k in ('roll_y','roll_z','pitch_x','pitch_z')]
 ROLL_AXIS=Axis((0,ROLL_Y,ROLL_Z),(1,0,0))
@@ -201,6 +215,26 @@ def trunnion_plate_outline(grow,y0,y1):
         bar=Box(t['screw_r'],abs(y1-y0),2*w).rotate(Axis.Y,-deg)
         s=s+yspan(w,y0,y1,x,z)+bar.moved(Location(((PITCH_X+x)/2,(y0+y1)/2,(PITCH_Z+z)/2)))
     return s
+
+def skin_lip_zone(wall_out,z0,z1):
+    """Band inside the skin cavity, inset wall_out from the outer skin face."""
+    x0,x1=SKIN_LIP['x'];k0,k1=SKIN_LIP['skip_x']
+    zone=stern(x0,x1,inside=True,wall=wall_out)&block(x0,x1,-80,80,z0,z1)
+    return zone-block(k0,k1,-80,80,z0-1,z1+1)
+
+def skin_lap_lip():
+    """D-053 lower-half lip: rooted in the lower wall, clear of the upper."""
+    l=SKIN_LIP;z=SKIN_SPLIT_Z;inner=SKIN+l['gap']+l['t']
+    above=skin_lip_zone(SKIN+l['gap'],z,z+l['h'])-skin_lip_zone(inner,z-1,z+l['h']+1)
+    root=skin_lip_zone(SKIN-.1,z-l['root'],z)-skin_lip_zone(inner,z-l['root']-1,z+1)
+    return above+root
+
+def split_skin(skin):
+    """Upper half above SKIN_SPLIT_Z, less the lip band; the rest is lower."""
+    l=SKIN_LIP;z=SKIN_SPLIT_Z
+    upper=(skin&block(-200,50,-100,100,z,200))-skin_lip_zone(SKIN+l['gap'],z-.1,z+l['h'])
+    lower=skin-upper
+    return upper,lower
 
 def roll_d_section(r,flat,x0,x1):
     """D section on the roll axis from x0 to x1, flat at +Z (D-053)."""
@@ -434,6 +468,7 @@ def build_parts(catalog=True,reliefs=True):
         receiver=axial(3.2,5,(-109.8,y,z))-axial(.8,6,(-109.8,y,z))
         bridge=block(-112.3,-107.3,min(y,math.copysign(64,y))-2,max(y,math.copysign(64,y))+2,z-2,z+2) & stern(-113,-107)
         skin=skin+receiver+bridge
+    skin=skin+skin_lap_lip()
     add('main_octagonal_skin',skin,'R',alpha=.28,owner='M019a')
     add('removable_octagonal_rear_cover',rear,'R',alpha=.28,owner='M019a')
     # A 106-wide opaque border masks all glass outside the aperture.
@@ -791,7 +826,12 @@ def build_parts(catalog=True,reliefs=True):
     # Front M2 x 8: 3.3 mm through the bezel pad, 3 mm in the insert, 1.7 mm
     # into the tip relief.
     for i,(y,z) in enumerate(FRONT_SCREWS):
-        add(f'front_M2x8_{i+1}',button_screw(-1.7,y,z,'x',1,8),'R','#535957',owner='M021a')
+        # D-053: the four upper screws run on through their bosses into the
+        # display rear frame's inserts (M2 x 18), so one screw holds both.
+        if (y,z) in DISPLAY_FRAME_SCREWS:
+            add(f'front_M2x18_{i+1}',button_screw(-1.7,y,z,'x',1,18),'R','#535957',owner='M021a')
+        else:
+            add(f'front_M2x8_{i+1}',button_screw(-1.7,y,z,'x',1,8),'R','#535957',owner='M021a')
     for i,(y,z) in enumerate(REAR_SCREWS):
         add(f'rear_M2x6_{i+1}',button_screw(-113.5,y,z,'x',-1),'R','#535957',owner='M021a')
     from details import detail_parts
@@ -848,6 +888,12 @@ def build_parts(catalog=True,reliefs=True):
                 kept=[x for x in cut.solids() if x.volume>5.]
                 if len(kept)<len(cut.solids()):cut=kept[0] if len(kept)==1 else Compound(children=kept)
                 style['shape']=tint(cut,name,style['color'],style['alpha'])
+    # D-053: split after the motion reliefs, so they are cut once, in one
+    # piece. 'main_octagonal_skin' is now the upper half.
+    style=out['main_octagonal_skin']
+    upper,lower=split_skin(style['shape'])
+    style['shape']=tint(upper,'main_octagonal_skin',style['color'],style['alpha'])
+    add('main_octagonal_skin_lower',lower,'R',alpha=.28,owner='M019a')
     return out
 
 def assembly(internals=False,roll=0,pitch=0,yaw=0):

@@ -56,6 +56,51 @@ def slot(axis,radius,pin_radius,start,end,centre,length):
     elif axis=='y':s=s.rotate(Axis.X,90) # local x -> X, local y -> Z; extrusion -> -Y
     return s.moved(Location(centre))
 
+# D-053 display retention. Nothing held the display from behind. The
+# Waveshare board has four M3 standoffs behind the PCB (Ø5.5, rear faces at
+# X -16.3, Y +/-49.0, Z 9.88 / 69.88). A printed rear frame presses them
+# forward through closed-cell foam pads (1.5 mm free, 0.7 mm installed; still
+# ~33% compressed when the display reaches its 0.3 mm forward stop on the
+# bezel pocket face). The frame hangs from the four upper front receivers:
+# their M2 x 18 screws pass through the bosses into inserts in its tabs.
+# Its lower edge bears rearward on the cradle's bottom rail through two
+# feet. A notch clears the board's -Y connector strip.
+DISPLAY_FRAME=dict(x=(-19.2,-17.),foam_x=(-17.,-16.3),foam_r=3.5,side_y=(40.,52.),
+                   z=(6.4,73.4),top_z=(66.4,73.4),bottom_z=(6.4,12.6),
+                   standoffs=[(y,z) for y in (-49.,49.) for z in (9.88,69.85)],
+                   strip_notch=dict(y=(-52.9,-46.9),z=(29.4,62.)),
+                   feet=dict(y=(26.,34.),x=(-20.9,-19.2),z=(3.,12.6)),
+                   tab_face_x=-15.8,tab_back_x=-20.6,tab_r=3.2)
+
+def display_retention(add):
+    b,a=m.block,m.axial;f=DISPLAY_FRAME;x0,x1=f['x'];z0,z1=f['z']
+    frame=b(x0,x1,-f['side_y'][1],-f['side_y'][0],z0,z1)+b(x0,x1,*f['side_y'],z0,z1)
+    frame=frame+b(x0,x1,-f['side_y'][1],f['side_y'][1],*f['top_z'])+b(x0,x1,-f['side_y'][1],f['side_y'][1],*f['bottom_z'])
+    for s in (-1,1):
+        fy=sorted(s*v for v in f['feet']['y']);frame=frame+b(*f['feet']['x'],*fy,*f['feet']['z'])
+    tx0,tx1=f['tab_back_x'],f['tab_face_x']
+    for y,z in m.DISPLAY_FRAME_SCREWS:
+        s=1 if y>0 else -1
+        tab=a(f['tab_r'],tx1-tx0,((tx0+tx1)/2,y,z))
+        if abs(y)>50:
+            # Side tabs: forward of the frame only outboard of the display
+            # board edge (|Y| 53.05); the link stays behind it.
+            tab=tab-b(f['x'][1],tx1+1,*sorted((s*50,s*53.6)),z-4,z+4)
+            # The link overlaps the side member by 4 mm and starts above the
+            # -Y connector-strip notch (Z 62).
+            link=b(tx0,f['x'][1],*sorted((s*(f['side_y'][1]-4),y)),f['strip_notch']['z'][1]+.4,z+f['tab_r'])
+        else:
+            link=b(tx0,f['x'][1],y-f['tab_r'],y+f['tab_r'],f['top_z'][0],z)
+        frame=frame+tab+link
+    n=f['strip_notch'];frame=frame-b(tx0-1,tx1+1,*n['y'],*n['z'])
+    for y,z in m.DISPLAY_FRAME_SCREWS:
+        frame=frame-a(INSERT_R,INSERT_POCKET,(tx1-INSERT_POCKET/2,y,z))
+        frame=frame-a(TIP_RELIEF_R,tx1-tx0,((tx0+tx1)/2-.5,y,z))
+    add('display_rear_frame',frame,'R','M002','#5d6b70')
+    for i,(y,z) in enumerate(f['standoffs']):
+        fx0,fx1=f['foam_x']
+        add(f'display_rear_foam_pad_{i+1}',a(f['foam_r'],fx1-fx0,((fx0+fx1)/2,y,z)),'R','M002','#2b2f30')
+
 def detail_parts(out):
     b,a=m.block,m.axial
     def setshape(n,s):
@@ -76,6 +121,11 @@ def detail_parts(out):
     # Ø2.2 tip reliefs beyond each pocket: the M2 x 8 front and M2 x 6 rear
     # screws pass 1.2 / 1.3 mm beyond theirs.
     for y,z in m.FRONT_SCREWS:
+        if (y,z) in m.DISPLAY_FRAME_SCREWS:
+            # D-053: a Ø2.3 clearance bore the full boss length; the insert
+            # is in the display rear frame behind it.
+            skin=skin-a(1.15,12,(-10.4,y,z))
+            continue
         skin=skin-a(INSERT_R,INSERT_POCKET+INSERT_BREAKTHROUGH,(FRONT_INSERT_X,y,z))
         skin=skin-a(TIP_RELIEF_R,2,(FRONT_INSERT_FACE_X-INSERT_POCKET-1,y,z))
     for y,z in m.REAR_SCREWS:
@@ -93,6 +143,7 @@ def detail_parts(out):
             doubler=(inner-m.stern(-104,-84,inside=True,wall=m.SKIN+LAND_DOUBLER)).intersect(land)
             skin=skin+doubler-shallow
     setshape(n,skin)
+    display_retention(add)
     for sign in [-1,1]:
         n=f'ear_{sign}_ridged_inner_mount';s=out[n]['shape']
         for angle in EAR_CAP_SCREW_DEG:
