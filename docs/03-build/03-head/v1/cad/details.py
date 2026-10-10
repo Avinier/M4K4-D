@@ -28,6 +28,7 @@ BEARING_SEAT_L=ROLL_BEARING['B']+.2
 # Hard-stop pins: ISO 8734 hardened steel dowels, press fit in printed bores.
 ROLL_STOP_PIN=dict(d=2.,l=5.)
 PITCH_STOP_PIN=dict(d=2.,l=8.)
+PITCH_STOP_ENTRY_HALF_W=1.2   # D-053 entry channel: Ø2 dowel + 0.2 mm a side
 # Front retainer screw heads ride under the rolling flange: swept pockets
 # cover the stop travel plus 1 deg overtravel and 0.5 mm radial clearance.
 FLANGE_POCKET_CLEAR=.5
@@ -213,8 +214,14 @@ def detail_parts(out):
     ring=ring-slot('y',10,1,*pitch_slot,(m.PITCH_X,-53,m.PITCH_Z),4)
     leg=out['yaw_yoke_leg_-55']['shape']
     cut=slot('y',10,1,*pitch_slot,(m.PITCH_X,-53,m.PITCH_Z),4)
+    # Entry channel (D-053): the dowel is pressed into the frame before the
+    # head is lowered into the yoke, so the closed slot trapped it. A vertical
+    # channel from the pin's neutral position (180 deg) out through the top of
+    # the ring lets it drop in. It joins the slot mid-travel, so both stop
+    # ends are unchanged. The skin relief tool keeps the closed slot.
+    entry=b(m.PITCH_X-10-PITCH_STOP_ENTRY_HALF_W,m.PITCH_X-10+PITCH_STOP_ENTRY_HALF_W,-55,-51,m.PITCH_Z,m.PITCH_Z+30)
     # The ring overlaps the D-051 bearing seat band (Y -54..-52.7): recut it.
-    setshape('yaw_yoke_leg_-55',(leg+ring)-cut-m.trunnion_leg_cut())
+    setshape('yaw_yoke_leg_-55',(leg+ring)-cut-entry-m.trunnion_leg_cut())
     # The shell reliefs use the pre-D-049 leg with the same ring and slot.
     tool=out['yaw_yoke_leg_-55']['relief_tool']
     out['yaw_yoke_leg_-55']['relief_tool']=(tool+ring)-cut
