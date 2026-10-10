@@ -529,7 +529,7 @@ MIC_SCREW_LENGTH = 4.0  # M2 x 4 pan head (Ø3.8 x 1.3): 3.0 mm thread-formed in
 MIC_SCREW_PILOT_RADIUS = 0.8  # Ø1.6 pilot; drill to size after printing
 MIC_SCREW_PILOT_DEPTH = 3.3
 MIC_SCREW_CLEARANCE_RADIUS = 1.1  # Ø2.2 board hole
-MIC_PORT_RADIUS = 1.0  # Ø2.0 bore through the boss and skin
+MIC_PORT_RADIUS = 1.0  # Ø2.0 bore through the boss and skin; a horizontal hole in the roof-down print comes out under size, so drill Ø2.0 after printing (D-055)
 MIC_PCB_PORT_RADIUS = 0.4  # Ø0.8 sound hole through PCB-06 under the bottom-port mic
 MIC_GASKET_OD = 6.5
 MIC_GASKET_ID = 2.0
@@ -918,9 +918,12 @@ TRAY_VENT_BOSS_MARGIN = 4.5  # slots stop this far from each Pi boss axis
 # wheel-arch pod band (R <= 54 about the axle) and the 90 deg pod screw boss, and
 # its edge is about 24 mm from both +Y mic ports (D-043: the 4010 grille edge was 14 mm
 # from FRONT_L). A shell collar round it limits recirculation past the fan face.
+# D-055: the fan sits 3 mm higher (Z 110, was 107) so the whole 28 mm grille circle
+# clears the wheel-arch pod by 2.2 mm instead of being cut off 1 mm above it; the fan
+# top then stops 1 mm under the web's upper rail root (Z 126).
 # The fan is held by two self-tapping screws driven from inboard, so its outer face
 # is clear for the shell collar to pass as the shell is lowered.
-ENCLOSURE_FAN_CENTER = (17.5, 107.0)  # X, Z of the axis; the axis runs along Y. X 17.5 lets the diagonal screw pair clear the yaw servo
+ENCLOSURE_FAN_CENTER = (17.5, 110.0)  # X, Z of the axis; the axis runs along Y. X 17.5 lets the diagonal screw pair clear the yaw servo
 ENCLOSURE_FAN_SIZE = 30.0
 ENCLOSURE_FAN_Y = (58.9, 68.9)  # intake face outboard (+Y)
 # The fan solid is purchased/dc5v_3010_hydraulic_usb_fan.step; its HOLE_PITCH must match this.
@@ -931,7 +934,7 @@ FAN_WEB_Z = (84.0, 133.2)  # top fused into the upper side rail
 FAN_WEB_STRUT = (4.0, 12.0, 61.0, FAN_WEB_Z[0])  # x0, x1, z0, z1: leg down to the lower side rail
 FAN_WEB_ROOTS = ((126.0, 133.2), (61.0, 69.0))  # Z bands where the web thickens out to Y 60.4 to fuse with the upper and lower side rails
 FAN_WEB_OPENING_RADIUS = 14.0
-FAN_SCREW_POINTS = (  # two diagonal holes (x, z): at 24 mm, heads 1.4 mm under and 0.9 mm forward of the yaw servo; the others sit behind it
+FAN_SCREW_POINTS = (  # two diagonal holes (x, z) at 24 mm; at Z 110 (D-055) they are clear of every fixed part
     (ENCLOSURE_FAN_CENTER[0] - ENCLOSURE_FAN_HOLE_HALF_PITCH, ENCLOSURE_FAN_CENTER[1] - ENCLOSURE_FAN_HOLE_HALF_PITCH),
     (ENCLOSURE_FAN_CENTER[0] + ENCLOSURE_FAN_HOLE_HALF_PITCH, ENCLOSURE_FAN_CENTER[1] + ENCLOSURE_FAN_HOLE_HALF_PITCH),
 )
@@ -940,6 +943,9 @@ FAN_GRILLE_RADIUS = 14.0
 FAN_GRILLE_SLOT = (2.5, 1.6)  # width, web; vertical slots print as short bridges with the shell roof-down
 FAN_GRILLE_POD_RADIUS = WHEEL_OD / 2.0 + WHEEL_WELL_RADIAL_CLEARANCE + 8.0 + 1.0  # pod outer R54 + 1 mm
 FAN_COLLAR = (15.0, 16.5, 70.5)  # inner radius, outer radius, inboard edge |Y|
+# D-055: teardrop collar for the roof-down print. The outer face gets a 45 deg peak on
+# top and the bore a 45 deg peak at the bottom (with a matching outer peak below to keep
+# the 1.5 mm wall), so no collar face overhangs more than 45 deg.
 REAR_VENT_SLOTS_Y = (24.0, 28.1, 32.2, 36.3)  # |Y| inner edges, both sides of the button well
 REAR_VENT_SLOT_WIDTH = 2.5
 REAR_VENT_Z = (95.0, 118.0)  # inside the panel-frame aperture (Z <= 122) and under the panel bosses
@@ -1377,7 +1383,7 @@ MASS_ROWS = [
         HEAD_ORIGIN_IN_CHASSIS[1] + HEAD_LOCAL_COM[1],
         HEAD_ORIGIN_IN_CHASSIS[2] + HEAD_LOCAL_COM[2],
     ), "RP-01 generated mass tree"),
-    ("BODY_SHELL_AND_PANELS", 248.7, (18.17, -0.09, 92.95), "Body v1 CAD volume and centroid (2026-10-04, D-043: +0.4 g for the smaller 3010 grille and collar, was 248.3 g at (18.16, -0.19, 92.91); D-042: -1.9 g net for the +Y fan-intake grille and collar and the eight rear-panel vent slots; was 250.2 g at (17.8, 0, 93.0)): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037), front service skin with an open 46 mm speaker aperture and retaining lip, rear service skin, E-stop well and charge-inlet pad (D-040), badge/bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."),
+    ("BODY_SHELL_AND_PANELS", 248.4, (18.09, -0.05, 92.92), "Body v1 CAD volume and centroid (2026-10-10, D-055: -0.2 g, front badge land removed and the fan collar made a teardrop 3 mm higher, was 248.7 g at (18.17, -0.09, 92.95); 2026-10-04, D-043: +0.4 g for the smaller 3010 grille and collar, was 248.3 g at (18.16, -0.19, 92.91); D-042: -1.9 g net for the +Y fan-intake grille and collar and the eight rear-panel vent slots; was 250.2 g at (17.8, 0, 93.0)): 2.4 mm shell with a 4 mm rear bottom rim, six wheel-arch screw bosses and four microphone bosses (D-037), front service skin with an open 46 mm speaker aperture and retaining lip, rear service skin, E-stop well and charge-inlet pad (D-040), bezel, internal panel frames and eight wedge washers at 1.20 g/cm3 effective PETG; two wheel-arch pods (seated on the shell skin, no longer overlapping it) and trims at 0.571 g/cm3. Excludes panel and wheel-arch screws and inserts, already covered by the mixed fastener allowance. Estimated print mass, not weighed; check_body_layout.py verifies against the solids."),
     ("BODY_PRIMARY_FRAME", 172.59, (12.1, 2.78, 93.07), "D-048 (2026-10-07): +3.4 g for the ST3215-HS clamp ring, side walls, pillars and wider pad, the tray column to Y -45 and the moved rear +Y block; was 169.18 g at (12.38, 2.27, 92.46). Body v1 CAD volume and centroid (2026-10-04, D-044: -9.3 g for the yaw plate's R28 bore and R36.6 housing pocket against its R44 ring and the yaw-servo pad, was 178.5 g at (12.70, 1.88, 94.80); D-043: fan web moved to X 1-33 with a R14 opening, was 178.4 g at (12.83, 1.84, 94.85); D-042: +7.5 g for the +Y fan web with its rail roots and strut, the rear -Y tray lug, the front -Y tray column and the rear +Y tray block and column; was 170.9 g at (12.5, 1.0, 94.9)); 2026-10-02: main connected print and removable front-left foot cassette at conservative 1.20 g/cm3 effective PETG, plus modeled four M4 bolts/nuts, two locating pins, cassette M3 joints, and four shell-to-frame M3 screw/insert joints at 7.85/8.50 g/cm3 steel/brass. Estimated, not weighed; check_body_layout.py verifies against the solids."),
     ("CHASSIS_PRIMARY_FRAME", 229.1, (18.14, 0.0, 46.64), "D-029 (2026-10-01): +21.4 g of newly modeled hardware measured from the solids at 7.9/8.5 g/cm3, centroid (30.4, 0, 46.4): J05/J06/J16/J11A ISO 7380 screws and 14 M3 x 6 inserts, four M2.5 driver screws and inserts; +0.7 g for the measured +1.24 cm3 printed volume at 0.571 g/cm3 (driver posts and tie lugs, wider tongues and rear rail ends, moved J16 ears, hatch strap slots, recess/cavity growth), centroid about (35, 0, 64); was 207.0 g at (16.82, 0, 46.61). 2026-10-01: +0.2 g for the measured +0.29 cm3 when the front hatch bosses moved to the front wall, the bosses were cut to Z 39.5 and the hatch grew 4 mm forward; D-011: -0.3 g for the O5 J10-8 cable bore through the front crossmember and deck at (86, -31); D-010 J04 adds two integrated plate-and-cheek carriers, keyed rail joints, eight modeled M3 x 8 screws and eight 6 mm inserts; estimated +10.2 g total (about +0.7 g printed cheek/key volume and +9.5 g steel/brass hardware, preliminary geometry-density estimate); previous 196.9 g centroid (17.7, 0, 46.8). D-007 axle stack (2026-09-29), +20.9 g at the axle (X 0, Z 42): printed plate + housing replace the flange/boss/diaphragm, +7.24 cm3 measured at ~0.571 g/cm3 (+4.1 g); two 1.2 mm aluminium caps 1.52 cm3 (+4.1 g); eight M3 x 18 cap screws (+10.6 g); eight M3 brass inserts (+1.5 g); face screws M3 x 8 CSK -> M3 x 6 low head (+0.6 g); before that 176.0 g at (19.8, 0, 47.4): +2.1 g for the 2 mm motor-screw diaphragms and the pilot-hole plate (+3.65 cm3) and +1.8 g for four ISO 10642 M3 x 8 face screws (Pololu #4804 axle stack, 2026-09-26); front crossmember moved 13 mm forward to X 80-92, rails and deck extended to X 92 (+2.1 g, +3.3 g), battery-tub front wall added (+1.3 g); before that CAD estimate; 219.8 g before RP03-CAD-05/06, then -53.3 g for the net -93.3 cm3 printed volume at ~45% effective PETG density: axle crossmember and square carriers/gussets removed, flange bosses and gearbox cheeks added, rails split and shortened to X -46, deck opened over the motors and battery, rear crossmember moved 16 mm forward, 11.2 cm3 battery tub added; -1.2 g for the -2.1 cm3 smaller battery tub (RP03-CAD-07)"),
     ("WHEEL_L", 92.5, WHEEL_CENTER_L, "D-008 wheel from wheel/check_wheel.py at solid density: PETG rim, clamp ring and hub cap, TPU tyre, 6 x M3 x 8 ring screws with inserts, 6 x M2 x 6 cap screws (was 87.3 for the D-007 plain rim); the stub and D-007 wheel screws are counted with the axle; CoM kept on the wheel centre, about 1 mm outboard in fact"),
@@ -1390,7 +1396,7 @@ MASS_ROWS = [
     ("BATTERY", 108.2, BATTERY_CENTER, "E: 2 x Samsung INR18650-25R (45 g max each = 90 g) + RP-02 PCB-01 pack-protection assembly (~5 g: 48 x 20 mm board 3.7 g + parts 1.3 g) + Bourns AC72ABD thermal cutoff and NTC (~0.7 g) + nickel straps, sleeve and AWG16 leads (~11 g) + pack-side Micro-Fit+ 1x2 half with terminals (~1.5 g, CN-05; was a ~6 g SBS Mini half); working selection, no purchase or measured mass; was 110 g with a generic ~8 g BMS (RP-02 board-specs.md sec 3, 2026-09-25)"),
     ("RASPBERRY_PI5_AND_COOLER", 76.0, PI_CENTER, "vendor + estimate"),
     ("COMPUTE_TRAY_AND_PI_FIXINGS", 27.07, (21.16, -10.44, 86.98), "D-048 (2026-10-07): tray print 20.58 g after the +Y edge moved to Y 23.5, the front grew 4.5 mm and the bosses moved with the Pi, + 6.49 g hardware; was 29.5 g at (17.6, -2.61, 86.92). D-042 CAD volume and centroid (2026-10-04): tray print 23.1 g at 1.20 g/cm3 effective PETG (plate, perimeter rib, rear -Y ear, four Pi bosses, vent slots) + 6.5 g modeled hardware at 7.85/8.50 g/cm3 (four M2.5 x 4 inserts and M2.5 x 6 screws, three M3 x 6 support inserts and ISO 7380 M3 x 8 tray screws). The tray was in no row before. Estimated, not weighed"),
-    ("ENCLOSURE_FAN_3010_AND_W41", 10.0, (18.5, 62.0, 108.0), "E (D-043): Robu DC 5 V 3010 hydraulic fan (BO-040) ~8.5 g with its lead cut to ~80 mm + two 12 mm self-tapping screws ~0.8 g (BO-041) + XH housing ~0.5 g; unmeasured; centroid at the fan, pulled slightly toward the lead. Was 15 g for the 4010 (D-042)"),
+    ("ENCLOSURE_FAN_3010_AND_W41", 10.0, (18.5, 62.0, 111.0), "E (D-043; D-055 raised the fan 3 mm): Robu DC 5 V 3010 hydraulic fan (BO-040) ~8.5 g with its lead cut to ~80 mm + two 12 mm self-tapping screws ~0.8 g (BO-041) + XH housing ~0.5 g; unmeasured; centroid at the fan, pulled slightly toward the lead. Was 15 g for the 4010 (D-042)"),
     # Replaces the single CONTROL_POWER_SENSORS row (121.5 g at (22, 0, 80), 2026-09-25). Masses are the RP-02
     # board-specs.md sec 2 / WS-H estimates (PCB 1.6 mm FR4 with copper about 3.8 g per 1000 mm2 plus the parts
     # inventory), not measurements; positions are the centres of the proposal boxes.
@@ -2169,11 +2175,23 @@ def body_shell():
     return _paint(shell, "BODY_SHELL", IVORY, SHELL_ALPHA)
 
 
+def _teardrop_y(radius, y0, y1, x, z, up=False, down=False):
+    """Cylinder along Y with a 45 deg peak on top and/or bottom (teardrop section)."""
+    solid = _axial_bore_y(radius, y0, y1, x, z)
+    side = radius  # a square of side r turned 45 deg, corner on the axis, makes the peak
+    for sign, wanted in ((1.0, up), (-1.0, down)):
+        if wanted:
+            peak = Box(side, abs(y1 - y0), side).rotate(Axis.Y, 45.0)
+            solid += peak.moved(Location((x, (y0 + y1) / 2.0, z + sign * radius / math.sqrt(2.0))))
+    return solid
+
+
 def _fan_collar():
-    """Tube on the fan axis from FAN_COLLAR's inboard edge outward; the caller trims it to the envelope."""
+    """Teardrop tube on the fan axis from FAN_COLLAR's inboard edge outward; the caller trims it to the envelope."""
     x, z = ENCLOSURE_FAN_CENTER
     r0, r1, y0 = FAN_COLLAR
-    return _axial_bore_y(r1, y0, 95.0, x, z) - _axial_bore_y(r0, y0 - 1.0, 96.0, x, z)
+    return (_teardrop_y(r1, y0, 95.0, x, z, up=True, down=True)
+            - _teardrop_y(r0, y0 - 1.0, 96.0, x, z, down=True))
 
 
 def _fan_grille_cuts():
@@ -2242,7 +2260,7 @@ def body_panels():
         IVORY,
         SHELL_ALPHA,
     )
-    top_badge = _box(2.0, 30.0, 4.0, (_shell_end_x("FRONT", 124.0) + SHELL_THICKNESS + 1.0, 0.0, 124.0), "FRONT_BADGE_LAND", AMBER, 0.92)
+    # D-055: the Layout 02 FRONT_BADGE_LAND is gone; on this panel it sat inside the speaker cup.
     wheel_arches = []
     for sign, side in ((1.0, "L"), (-1.0, "R")):
         yc = sign * TRACK / 2.0
@@ -2264,7 +2282,7 @@ def body_panels():
         trim = trim_outer - trim_inner - _block(-56.0, 56.0, -105.0, 105.0, -10.0, AXLE_Z)
         trim = _paint(trim, f"WHEEL_ARCH_UPPER_TRIM_{side}", AMBER, 0.92)
         wheel_arches.append(Compound(label=f"WHEEL_ARCH_{side}", children=[pod, trim]))
-    return Compound(label="BODY_PANELS", children=[front, rear, estop_bezel, top_badge, *wheel_arches])
+    return Compound(label="BODY_PANELS", children=[front, rear, estop_bezel, *wheel_arches])
 
 
 def _panel_fasteners(face):
