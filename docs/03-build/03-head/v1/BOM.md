@@ -27,6 +27,18 @@ The [project BOM](../../BOM.csv) carries the specification, source and release c
 | HD-010 | Pivot retainer screws, ISO 7380 M2 × 4, into two M2 × 3 inserts in the −Y leg pad; heads flush with the leg face | 2 | CANDIDATE |
 | HD-011 | Yoke leg to disc screws, ISO 7380 M2 × 6, from each plinth's inner face into M2 × 3 inserts in the disc keys | 4 | CANDIDATE |
 
+## Assembly-path hardware
+
+| ID | Part | Qty | State |
+|---|---|---:|---|
+| HD-012 | Roll spindle set screw, ISO 4029 M3 × 5 cup point, on the spindle's D-flat in the cradle boss ([D-053](../../decisions.md#d-053)) | 1 | CANDIDATE |
+| HD-013 | M3 × 4 short heat-set insert for HD-012, from +Z in the cradle's spindle boss | 1 | CANDIDATE |
+| HD-014 | Display rear frame screws, M2 × 18 button head, through the four upper skin bosses into the frame tabs (replace four of the six front M2 × 8) | 4 | CANDIDATE |
+| HD-015 | Display rear foam pads, closed-cell Ø7 × 1.5 mm free, 0.7 mm installed on the display's M3 standoffs | 4 | CANDIDATE |
+| HD-016 | M2 × 3 heat-set inserts (OD 3.6) in the display rear frame tabs | 4 | CANDIDATE |
+
+**Why ([D-053](../../decisions.md#d-053)).** The head could not be assembled as drawn. The roll spindle only butted against the cradle, so it now runs into a D-bore in a cradle boss, held by HD-012. Nothing held the display from behind. A printed rear frame now presses the board's four M3 standoffs through HD-015. It hangs from the four upper front receivers, whose screws (HD-014) pass through the bosses into its inserts (HD-016). The frame and both skin halves are prints (M002, M019a).
+
 **Why ([D-051](../../decisions.md#d-051)).** The −Y pivot was a Ø8 pin, loose in Ø8.4 holes, 1.5 mm into the leg and not retained; the legs had no joint to the disc. The pivot now runs on a bearing captured inside the 6 mm leg pad by a printed 1.0 mm retainer, because nothing can stand proud of the leg's outer face: the skin passes it at 0.98 mm. Each leg's plinth now sits over a key on the disc and is held by two screws from its inner face, because the disc underside must stay flat over the yaw pinion. The retainer plate and the keys are prints (M011-Y, M012); the six M2 × 3 inserts are the head's standard OD 3.6 article.
 
 **Why the STS3045M ([D-046](../../decisions.md#d-046)).** It costs ₹3,661 including GST at [Evelta](https://evelta.com/sts3045m-6v-6kg-cm-360deg-metal-gear-digital-servo-motor/), with 5 in stock on 2026-10-07: about a third of an XC330. On paper it clears roll at full speed (about 1.8×) and pitch with the fastest moves capped at 70% speed (about 1.7×). Its rated 0.20 N·m continuous torque is 2.6× the pitch RMS demand. Its metal gears suit pitch's constant gravity load. Margins are estimates at the 5.23 V worst servo terminal of the proposed 5.5 V head rail; bench B1 replaces them.
@@ -88,16 +100,16 @@ These parts are in the head CAD and mass tree but have no BOM row yet. The `M0xx
 
 | Mass row | Part | Mass basis |
 |---|---|---|
-| M002 | Waveshare 4.3 inch display and retention (non-touch variant) | 133 g allowance |
+| M002 | Waveshare 4.3 inch display and retention (non-touch variant; printed rear frame, D-053) | 133 g allowance |
 | M003 | Display window and full-width mask | 15 g allowance |
 | M005, M006 | Raspberry Pi Camera Module 3 Wide, bracket, CSI cable and strain relief | 10 g + 8 g |
 | M007 | Addressable LED, installed (with CH-085) | 5 g |
 | M008 | C2: Waveshare ESP32-S3-Zero on CH-086 | 20 g, installed mass unknown |
-| M019a | Prints: front bezel and camera crown, octagonal skin, removable rear cover, two ears (inner mount, removable cap, amber inlay, dark centre) | CAD volume, PLA |
+| M019a | Prints: front bezel and camera crown, octagonal skin (upper and lower halves, D-053), removable rear cover, two ears (inner mount, removable cap, amber inlay, dark centre) | CAD volume, PLA |
 | M010, M011, M012 | Prints: rolling cradle and ear stalks, roll bearing cartridge (trial), pitch frame and roll saddle, yaw yoke legs, yaw turntable disc, CSI exit guide | CAD volume, PLA |
 | M016–M018 | Roll and pitch bearings and shafts | 6 + 8 + 8 g allowances |
-| M016 | Ø6 × 34.6 steel roll spindle (was 32 mm) | Modelled, 7.7 g |
-| M021a, M021 | Fasteners: ear M2 screws, front M2 × 10 (6), rear M2 × 6 (4), hidden hardware; see `cad/generated/fastener-stack.json` | Modelled |
+| M016 | Ø6 × 44.4 steel roll spindle with a 10 mm D-flat at its front end (D-053; was 34.6 mm) | Modelled |
+| M021a, M021 | Fasteners: ear M2 screws, front M2 × 8 (2) and M2 × 18 (4, HD-014), rear M2 × 6 (4), hidden hardware; see `cad/generated/fastener-stack.json` | Modelled |
 | M022 | Trim: tungsten ear slugs, brass rear-cover washers | 9.4 g nominal |
 | M020 | Non-camera head harness | 15 g allowance |
 

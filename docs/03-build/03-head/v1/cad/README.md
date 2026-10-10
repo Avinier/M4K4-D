@@ -205,6 +205,35 @@ build from it. Summary (full record: [D-049](../../../decisions.md#d-049)):
 `check_feetech_mounts.py` audits the interfaces and posed clearance;
 `fea/` holds the stiffness FEA; `busy_minute.py` re-runs the §11.3 busy minute.
 
+## Assembly order (D-053)
+
+The 2026-10-10 assembly pass found that the head could not be put together as
+drawn. No check covered the paths parts take to get in, only their final
+positions. [D-053](../../../decisions.md#d-053) fixes each joint below; this
+is the order they now imply.
+
+1. **Frame, on the bench.**
+   - Fit the bearing cartridge to the pitch frame (four M2 × 25 from above).
+   - Fit the roll servo and coupler, and the pitch servo on its collar. Press its horn onto the spline, without the centre screw.
+   - Press the Ø2 pitch-stop dowel into the frame lug.
+   - Push the Ø6 roll spindle through the bearings into the coupler. Slide the cradle onto the spindle's D-flat and drive the M3 × 5 set screw (HD-012) from above, then clamp the coupler.
+2. **Shell and display frame.**
+   - The skin is two halves, split at the ear line (Z 42) through the stalk ports. Raise the lower half from below round the cradle's ear stalks.
+   - Set the display rear frame in front of the cradle, its feet against the cradle's bottom rail. It must go in now: its upper tabs sit right behind the upper half's receiver bosses and cannot pass them later.
+   - Lower the upper half from above. The lower half's 1.2 mm lap lip goes inside its wall.
+   - Fit the rear cover (four M2 × 6). Its two lower screws are in the lower half, its two upper screws in the upper.
+3. **Display.**
+   - Stick the four foam pads (HD-015) on the display's M3 standoffs.
+   - Slide the display in from the front, past the side bosses' flats, until the pads touch the frame.
+   - Fit the bezel: the two Z 16 screws are M2 × 8 into skin inserts. The four upper screws are M2 × 18 (HD-014) through their bosses into the frame's inserts. They clamp the bezel, both skin halves and the frame together.
+   - To remove the display, take out the six front screws and draw the bezel and display forward. The frame stays behind.
+4. **Into the yoke.**
+   - On the bench, fit the legs to the disc. Screw the disc to the body hub.
+   - Lower the head with its skin on and the ears off, at neutral pitch: the stop dowel drops down the −Y leg's new entry channel into its slot. Push it 0.6 mm +Y so the horn seats in its pocket.
+   - **Through the +Y skin port** (R12 on the pitch axis, under the ear): drive the horn centre screw through the leg's access hole, then the four horn screws.
+   - **Through the −Y port:** with the retainer off, push the D-pin through the bearing into the frame's D-bore (flat +Z). Fit the retainer and its two M2 × 4.
+5. **Ears.** Inner mounts (two hidden M2 × 4 each), then the caps (two M2 × 6 each). The ear inner mounts clamp across the skin seam.
+
 ## Verification
 
 `cad_cache.py` stores source-keyed BinTools BReps under ignored `.cache/`;

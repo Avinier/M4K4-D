@@ -2258,6 +2258,74 @@ The CF leg requirement stands, with 0.7 Hz less margin. The leg floor for 30 Hz 
 - **CSI:** signal check through two ZIF pairs (unchanged from D-044).
 - **Head riser:** the route up the +Y leg into the pitch-carried frame is still unrouted.
 
+## D-053
+
+**2026-10-10 · Head / assembly paths: split skin, pitch-stop entry channel, pivot service ports, roll spindle joint and display retention (HD-012–HD-016; M002, M010, M011-Y, M019a; head v1 CAD, body v1 README) · ACTIVE; CAD and checks complete; HOLD on one real assembly and the coupons listed under Open**
+
+**Why.** A head-to-chassis assembly pass found that the head could not be put together as drawn. Every check passed, because each one tests overlap at the final position. None tested the path a part takes to get there or whether a tool can reach a screw. Rigid straight-line probes on the cached parts found:
+- **The skin could not go over the cradle.** The one-piece cradle's ear stalks reach |Y| 69.2 through ports in a skin only ±65 wide. Every ±X/±Z move of the bare skin hit the cradle or pitch frame within 2–40 mm. Its own bezel and rear-cover receivers would also have trapped it on X.
+- **The head could not be lowered into the yoke.** The Ø2 pitch-stop dowel, pressed into the frame lug, rides in a closed arc slot in the −Y leg's ring. It hit the ring from 8 mm above its seat, at both 0.6 and 1.0 mm Y offset. It could not be fitted afterwards either: the ring is solid outboard and the head interior is inboard.
+- **Two horn screws could not be driven.** The skin wall lay across the axes of the 45° and 135° horn-to-leg screws even with the ear off. The −Y D-pin's Ø6 path clipped the skin edge (axis 2.4 mm from it). Its retainer (R10.9) had no way in at all.
+- **The roll spindle had no joint to the cradle.** It stopped at the cradle's rear face (X −40), touching it, with no bore, key or pin. The fabrication audit listed it as not released.
+- **Nothing held the display from behind.** Its only rear contact was the −Y connector strip, 0.3 mm from a cradle rail. The glass could move about 1.25 mm.
+
+**1. Skin split (M019a).**
+- The skin is now two prints split at the ear line, **Z 42**, through the stalk ports. `main_octagonal_skin` is the upper half; `main_octagonal_skin_lower` is new.
+- Each half has a straight path: the upper half lifts clear for 120 mm and the lower half drops clear for 120 mm.
+- **Joint.** The bezel and rear cover each screw to both halves: front receivers at Z 16 are in the lower half, those at Z 64 and 78 in the upper; rear receivers at Z 26 lower, Z 65 upper. The ear inner mounts clamp across the seam at mid-length.
+- **Lap lip.** A 1.2 × 4 mm lip on the lower half rises inside the upper wall with 0.15 mm clearance, rooted 2 mm into the lower wall. It stops short of the recessed side lands (X −104…−81), whose inner doubler fills that band.
+- The split is cut after the motion reliefs, so the reliefs are unchanged and cut once on the whole skin.
+
+**2. Pitch-stop entry channel (M011-Y).** A 2.4 mm vertical channel runs from the dowel's neutral position (180°) out through the top of the −Y leg's ring, 4 mm deep in Y. The dowel now drops in as the head is lowered. It joins the slot mid-travel, so both stops are unchanged: no overlap at −25° and +43°, overlap 1° beyond each. The skin relief tool keeps the closed slot.
+
+**3. Pivot service ports (M019a).** An R12 port through each skin side wall on the pitch axis, under the ear cap. With the ear off:
+- **+Y:** all four horn screws (Ø5.9 head path) and the horn centre screw have straight paths.
+- **−Y:** the D-pin (Ø6.2) and the whole retainer (R11) have straight paths.
+The ports sit inside the ear web's R20.3 and the inner mount's R28 seat.
+
+**4. Roll spindle joint (M010, M016).**
+- The spindle runs 9.8 mm further forward (now Ø6 × 44.4) into a **D-bore** (Ø6.1, flat at 2.55, +Z at neutral) in a new **R8 boss** on the cradle, X −36…−28. Its front 10 mm carry the D-flat, ahead of the front bearing's inner ring.
+- An **ISO 4029 M3 × 5 cup-point set screw** (HD-012) in an M3 × 4 insert (HD-013) from +Z bears on the flat. The flat carries the roll torque; the set screw holds the cradle on axially. The insert keeps 0.95 mm of plastic above the bore.
+- The boss is on the roll axis, so its swept volume is itself. It keeps 1.5 mm from the roll stop pin and 2.6 mm from the front retainer screws.
+
+**5. Display retention (M002).**
+- The Waveshare board has four **M3 standoffs** behind its PCB (Ø5.5, rear faces at X −16.3, Y ±49.0, Z 9.88 / 69.85; found in the vendor STEP). A printed **display rear frame** presses them forward through **closed-cell foam pads** (HD-015, 1.5 mm free, 0.7 mm installed). The display's forward stop is the bezel pocket face 0.3 mm ahead, so the pads stay about 33% compressed there.
+- **The frame hangs from the four upper front receivers.** Their screws become **M2 × 18** (HD-014) through Ø2.3 clearance bores the full boss length into M2 × 3 inserts (HD-016) in the frame's tabs. One screw clamps the bezel, the skin half and the frame.
+- The two Z 16 screws stay M2 × 8 into skin inserts. A frame tab behind those bosses touches the +Y leg at pitch 43°.
+- Two feet at Y ±26…34 bear rearward on the cradle's bottom rail (0.1 mm nominal), so rearward loads go into the cradle, not the screws. A notch clears the −Y connector strip.
+- The frame keeps 2.17 mm from the yoke legs and 7.0 mm from the pitch frame over the 7 × 8 grid.
+- **Order.** The frame goes in after the lower skin half and before the upper one: its upper tabs sit right behind the upper half's bosses. The display then slides in from the front.
+
+**Assembly order.** See the [head CAD README](03-head/v1/cad/README.md#assembly-order-d-053). The head goes into the yoke with the skin on and the ears off; the horn screws, D-pin and retainer go in through the ports; then the ears.
+
+**Also corrected.** The body v1 README's yaw-stage step 2 still described the XC330 mounted from below. It now gives the D-048 ST3215-HS mount: four M2 × 8 from above through the plate, before the cartridge.
+
+**Checks.**
+- **`run_checks.py`, full 7 × 8 grid (head v1 and body v1 hand-off): PASS.** Mass, envelope, revision, mounts, integration, clearance, fasteners, body layout and yaw stage pass. `busy_minute.py` fails in the runner only because the CAD runtime lacks `openpyxl`; run with it, validation passes. `fea/run_fea.py` is still missing (D-050).
+  - **Revision:** 56 poses, no motion, harness, static or service hits; every part, including both skin halves and the frame, is one valid solid. Hard stops are unchanged.
+  - **Mounts audit:** passed, minimum 0.99 mm, no new pair under 1 mm.
+  - **Fasteners:** all 46 M2 screws pass. Each M2 × 18 has 3.0 mm in its frame insert, no plastic cut, tip in the relief.
+- **`check_d051_joints.py`: PASS**, no new pair under 1 mm. **`check_ears.py`: PASS**, output unchanged.
+- **Assembly paths (rigid straight-line probes, neutral pose):**
+  - lower skin half up from below, frame in from above, upper half down over the frame: all clear for 120 mm;
+  - display out forward with the bezel off: clear;
+  - pitch-stop dowel lowered into the yoke: clear at 0, 0.6 and 1.0 mm Y offset;
+  - all four horn screws, the horn centre screw, the D-pin and the retainer: clear apart from the ear parts.
+- **Not re-run:** the leg FEA (legs and their joints are unchanged apart from the 2.4 mm channel in the −Y leg's stop ring, which is not on the +Y leg the FEA covers).
+
+**Mass.**
+- **Head (`mass_layout.py`, plain run; A0 not re-solved):** roll-carried 388.8 → **392.1 g**, pitch-carried 536.3 → **539.6 g**, yaw-carried 651.8 → **655.1 g**. The cradle boss adds 1.6 g and the longer spindle 2.1 g; the two skin halves (34.7 + 18.6 g) weigh 0.3 g less than the one-piece skin. The display frame (about 8 g) is inside the M002 display allowance. The pitch-carried CoM moves 0.025 mm off the A0 axis, so `axes.json` stands.
+- **Body (`check_body_layout.py`, all true):** a_tip is **1.619** neutral (was 1.621) and **1.600** at the worst head pose (was 1.604), against 1.582. The 95 g harness allowance must now stay forward of X 14.3 (was 13.2).
+
+**BOM.** HD-012 to HD-016 are added. The frame, both skin halves, the cradle boss and the leg channel are prints (M002, M019a, M010, M011-Y).
+
+**Open:**
+- **One real assembly** in this order, with the real servos, display, bearings and tools. Record any screw a tool cannot reach. The probes are rigid, straight-line and at neutral; they do not prove hand room, wire slack or tilt.
+- **Coupons:** the split seam and lap lip in the skin material; the cradle D-bore on the real spindle; the M3 × 4 insert above the bore; the frame tab inserts.
+- **Received display:** confirm the standoff positions and thread, the pad seating and that the board stops on the bezel pocket face.
+- **Appearance:** the seam is visible at Z 42 on the front and rear of the side walls, outside the ears. Judge it in the presentation export.
+- **Not changed here:** the head harness route up the +Y leg and across the pitch and roll axes (D-052 open), the leg key's 0.15 mm side clearance (B6), and the body-to-chassis J13 washers.
+
 ## D-054
 
 **2026-10-10 · Head / camera housing restyle: slim raked fin (M019a; head v1 CAD) · ACTIVE; CAD and checks complete**

@@ -198,7 +198,7 @@ The head turns on a **61810-2Z** bearing (50 × 65 × 7, shielded) in a printed 
 
 **Assembly (shell on).**
 1. **Bench:** press the bearing into the housing and screw down the clamp ring. Drop the hub in from the top. On the rotor, drop the three PCB-14 joiner boards into the post slots, thread the FFCs in through the drum slit from below, fold each one and plug it into its board's lower ZIF (D-052). Raise the rotor into the hub from below and screw it on; the hub shoulder now captures the boards. Wind the FFCs into the stator and screw the stator's posts into the housing.
-2. Fit the servo from below before PCB-09, with its drive hub, shaft and spring collar already on the horn.
+2. Fit the ST3215-HS before PCB-09 and before the cartridge (D-048). Put its drive hub, shaft and spring collar on the horn first. Offer it up into the frame clamp ring from below, then drive its four M2 × 8 screws from above through the driver holes in the pad and plate. Two of them sit under the cartridge flange, so replacing the servo means taking the cartridge out.
 3. Hold the cartridge above the plate. Reach through the R28 bore to plug the power and sideband FFCs into PCB-08 `J8-6`/`J8-7` and the CSI into the Pi. Lower the cartridge; the posts pass the notches. Screw the flange down.
 4. Drop the pre-wound pinion onto the shaft. The chamfers take it into mesh. Fit the fixed-half screw.
 5. Screw the head disc and yoke to the hub (3 × M3, from above). Plug the head FFCs into the three upper ZIFs through the disc's Ø21 bore and lay them in the disc channel (D-052). Then fit the head's tilting assembly.
