@@ -15,7 +15,7 @@ The model basis is [body_v1_model.py](cad/body_v1_model.py). The project BOM car
 | BO-021 | Rear service panel print with power-button well, charge-inlet pad and vent slots | 1 | DESIGN |
 | BO-022 | Front internal service-panel frame with four insert bosses, **printed as part of BO-019** ([D-045](../../decisions.md#d-045)) | 1 | DESIGN |
 | BO-023 | Rear internal service-panel frame with four insert bosses, **printed as part of BO-019** (D-045) | 1 | DESIGN |
-| BO-024 | Amber rear-button bezel and front badge land, separate trim prints | 1 set (2 prints) | DESIGN |
+| BO-024 | Amber rear-button bezel, separate trim print (D-055 removed the front badge land) | 1 | DESIGN |
 | BO-025 | Main body-frame print: three feet, posts, side/cross rails, yaw adapter plate, compute-tray supports and fan web | 1 | DESIGN |
 | BO-026 | Removable front-left foot cassette print with captive-nut pocket | 1 | DESIGN |
 | BO-027 | M3 × 16 cassette-to-frame side screw | 2 | CANDIDATE |

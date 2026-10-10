@@ -58,6 +58,7 @@ The central record of every decision and change made during the build phase. New
 | [D-051](#d-051) | 2026-10-10 | Head / passive pitch pivot and yoke-leg joints (HD-008–HD-011; M011-Y, M012; head v1 CAD, mass tree, body v1 hand-off) | −Y pivot becomes an MR106ZZ in the −Y leg pad, a flush printed retainer and a Ø6 D-shaft pin into a D-bore boss on the pitch frame; each leg plinth keys over a block on the disc top and takes two M2 screws from its inner face | ACTIVE; CAD and checks complete; HOLD on received bearing/D-shaft fits, a seat and key coupon, and bench B6 |
 | [D-052](#d-052) | 2026-10-10 | Body + head / yaw cable path (BO-045, BO-050, BO-058, BO-062; M012; W37/W42/W43) | The cassette FFCs enter the drum through a full-height slit at 0° (wraps 150°/90°), fold once and plug into three vertical PCB-14 joiner boards held in rotor posts under the hub shoulder; the head FFCs rise from their upper ZIFs through a Ø21 disc bore into a 12.5 × 1.5 mm channel, demating with the disc on; hub bore R13.15, disc pilot R10.5–13 | ACTIVE; CAD and checks complete; HOLD on the ZIF selection, an FFC fold mock-up and the cassette bench test |
 | [D-054](#d-054) | 2026-10-10 | Head / camera housing restyle (M019a; head v1 CAD) | The 46 mm crown and its hipped roof cap become a slim raked fin: the crown narrows to 40 mm with 3 mm top chamfers and keeps its flat top to X −24; the skin hood behind it rakes down at 35.5° to the roof, about 25 mm long instead of running back to X −78 | ACTIVE; CAD and checks complete |
+| [D-055](#d-055) | 2026-10-10 | Body / shell review fixes (BO-019, BO-024; body v1 CAD) | Remove the Layout 02 front badge land that sat inside the speaker cup; raise the enclosure fan, web opening and +Y grille 3 mm (Z 110) so the grille clears the wheel-arch pod; teardrop fan collar for the roof-down print; drill the Ø2 mic ports after printing | ACTIVE; CAD and targeted checks complete; HOLD on a printed grille/collar coupon |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -2283,3 +2284,33 @@ The CF leg requirement stands, with 0.7 Hz less margin. The leg floor for 30 Hz 
 **Views.** `head-v1.step`, `head-v1-integrated.step` and `head-v1-presentation.step` regenerated locally (untracked); new presentation snapshots in `03-head/v1/cad/snapshots/`.
 
 **Next.** Judge the fin on the first skin and bezel print.
+
+## D-055
+
+**2026-10-10 · Body / shell review fixes: front badge, fan grille height, fan collar, mic ports (BO-019, BO-024; body v1 CAD) · ACTIVE; CAD and targeted checks complete; HOLD on a printed shell or grille coupon**
+
+**Why.** The builder reviewed the opaque presentation model (`head-v1-presentation.step.py`) and raised five points. Measuring them against the body v1 source found:
+- **Front badge land.** The square amber block over the speaker was `FRONT_BADGE_LAND`, a 30 × 4 × 2 mm box carried over from Layout 02 (`BODY_X_FRONT + 3.4`, Z 124), where the front panel was flat. The exposed-speaker panel later added a cup up to Z 128, so the box ended up inside the cup, behind the lip (X 91.1–93.1 against the lip at X 100.8–102.6). It overlapped the cup wall by 58.6 mm³ and the speaker acoustic-cavity keep-out by 153 mm³, sat 2.9 mm from the K 50 WP, and could not be printed. No check covered it.
+- **Fan grille.** The 28 mm grille circle was cut off 1 mm above the wheel-arch pod (window cut at R55 about the axle, pod outer R54), so in the model the grille seemed to touch the arch. Moving the fan and its screws up in 1 mm steps, nothing but the fan web (which moves with the fan) is hit up to +10 mm. At +5 mm the fan frame reaches the web's upper rail root (Z 126).
+- **Fan collar.** In the roof-down print, a measure of the grille and collar region (triangle normals, 45° limit) found 309 mm² of overhang. Most of it was the bore floor (145 mm², 2–4 mm off the skin) and the top of the outer face (72 mm²).
+- **Mic ports.** Ø2.0 is acoustically sufficient. The Ø0.8 PCB-06 hole is the narrowest point, and the D-037 Helmholtz estimate is 13–23 kHz. But a Ø2 hole lying horizontal in the roof-down print comes out under size.
+- **Shell-to-frame screws.** The four outside-driven M3 × 16 screws (BO-029) are the shell's only retention to the frame. They stay.
+
+**Decision.**
+- **Badge:** delete `FRONT_BADGE_LAND`. BO-024 is now the rear-button bezel only.
+- **Fan:** `ENCLOSURE_FAN_CENTER` moves from (17.5, 107) to **(17.5, 110)**. The web opening, the two fan screw holes, the grille and the collar follow it. The whole grille circle now clears the pod by 2.2 mm, and the fan top stops 1 mm under the upper rail root. The W41 lead reserves (Z 118–124) are unchanged; they still run beside the fan's front face to its top-front corner.
+- **Collar:** `_fan_collar()` becomes a teardrop. The outer face gets a 45° peak on top, the bore a 45° peak at the bottom, and the outer face a matching peak below to keep the 1.5 mm wall (new `_teardrop_y()`).
+- **Mic ports:** unchanged at Ø2.0. Drill them to Ø2.0 after printing (`MIC_PORT_RADIUS` comment, README).
+
+**Checks (body v1).**
+- `check_cooling_path.py`: **PASS.** Fan, W41, intake path, grille-to-pod and lowering-sweep clash lists are empty. Grille free area is 382 mm² (was 373). Collar to the 90° pod boss is 4.6 mm (was 2.55) and to the FRONT_L mic boss 12.0 mm. Grille edge to FRONT_L is 23.4 mm (was 24.1; the gate is 22) and to REAR_L 25.9 mm. Fan-on rise at 8.5 W is 6.8 K (was 6.9).
+- `check_body_panel_fit.py`: **PASS.**
+- `check_body_layout.py`: **PASS** once the shell row was updated to 248.4 g at (18.09, −0.05, 92.92) (was 248.7 g at (18.17, −0.09, 92.95)). The fan row's centroid moves to Z 111. Whole robot: 2,645.1 g, CoM Z 109.31 (was 109.30); neutral a_tip 1.621 m/s² and pose-conservative 1.604 m/s², both unchanged to three places.
+- **Shell-frame fit, targeted:** the full `check_shell_frame_fit.py` was stopped after about an hour of CPU. It sweeps the whole shell against every Pi 5 STEP leaf, which stalls. The collar is the only shell geometry changed, so it was run alone through the same tests. It does not overlap the frame, chassis or joint hardware, nor the pods, trims, their screws and inserts, or the mic boards. It clears every fixed part at each 5 mm lowering step from 0 to 120 mm, and both the pod-screw and frame-screw driver paths. The shell stays one solid. `check_cooling_path.py` also sweeps the shell past the fan, its screws, W41 and the web with no clash.
+- **Printability (my triangle-normal measure, roof-down, 45° limit):** grille and collar region 309 → 81 mm². What remains is the slot ends (34 mm², 2.5 mm bridges) and a 13 mm² line where the top peak meets the skin. The whole shell is 2.93% → 2.77%.
+- **Not rerun:** `check_mic_mounts.py` (no mic geometry changed) and `check_yaw_stage.py` (the fan sweep found no yaw-stage part near the fan). `check_feetech_yaw_fit.py` is a superseded D-048 trial; its regenerated JSON is not committed.
+- **Not refreshed:** `write_outputs.py` reports (`dimensions.json`, `frames.json`, `mass-properties.*`) were already stale on main (they list 2,530.7 g against the current 2,644.8 g). They are left for a separate refresh.
+
+**Views.** `body-v1.step` and the head presentation and integrated STEPs need regenerating to show the change.
+
+**Next.** Print a grille-and-collar coupon roof-down to confirm the slot bridges and the peaks. Drill-test a Ø2 port in the same coupon.
