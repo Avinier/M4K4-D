@@ -52,7 +52,16 @@ COUPLER_SPLINE_FACE_X = COUPLER_FRONT_X - COUPLER_LENGTH
 ROLL_CASE_BOTTOM_X = COUPLER_SPLINE_FACE_X - OUTPUT_GAP - BOSS_TOP
 ROLL_EAR_X = (ROLL_CASE_BOTTOM_X + EAR_Z[0], ROLL_CASE_BOTTOM_X + EAR_Z[1])
 COUPLER_FLOOR_X = COUPLER_SPLINE_FACE_X + COUPLER_SPLINE_DEPTH_TO_FLOOR
-SPINDLE_X = (COUPLER_FLOOR_X + 3. + .5, -40.)   # 3 mm M3 head + 0.5 mm
+# D-053: the spindle runs on into a D-bore in a boss on the rolling cradle,
+# which carries the roll torque (it used to stop at the cradle's rear face,
+# X -40, with no joint). Its front 10 mm carry the D-flat, ahead of the front
+# bearing's inner ring (X -40.5); an M3 cup-point set screw from +Z in an
+# M3 x 4 insert bears on the flat and holds the cradle on axially.
+SPINDLE_FRONT = dict(bore=(-40., -30.), tip_gap=.2, bore_r=3.05, bore_flat=2.55,
+                     flat=2.5, boss_r=8., boss_x=(-36., -28.), screw_x=-32.,
+                     insert_r=2., insert_depth=4.5, screw_len=5.)
+SPINDLE_X = (COUPLER_FLOOR_X + 3. + .5,
+             SPINDLE_FRONT['bore'][1] - SPINDLE_FRONT['tip_gap'])   # 3 mm M3 head + 0.5 mm
 # Mount plate on the ears' front faces, joined to the torsion box rear wall.
 ROLL_PLATE_T = 5.
 ROLL_PLATE_HALF_Y = 18.7

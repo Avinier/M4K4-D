@@ -22,6 +22,10 @@ MAIN_W, MAIN_D, MAIN_H, CROWN_H, SKIN=130.,115.,86.,104.,1.3
 SKIN_CHAMFER_RELIEF=SKIN*(2-math.sqrt(2))
 EAR_R, EAR_X, EAR_Z=30.,-43.,42.
 EAR_PAD_TOP=69.2
+# D-053: skin port radius on the pitch axis. The -Y retainer reaches R10.9
+# (lugs at R8.5 + 2.4); the +Y horn screw heads reach R9.85. Inside the ear
+# web's R20.3 and the inner mount's R28 seat.
+PIVOT_SERVICE_PORT_R=12.
 DISPLAY_BOTTOM, CAMERA_BOTTOM=6.,77.
 LED_Y, LED_Z=15.2,91.8
 # Side screws at |Y| 56.4 keep >= 1.2 mm from their counterbores to the
@@ -197,6 +201,10 @@ def trunnion_plate_outline(grow,y0,y1):
         bar=Box(t['screw_r'],abs(y1-y0),2*w).rotate(Axis.Y,-deg)
         s=s+yspan(w,y0,y1,x,z)+bar.moved(Location(((PITCH_X+x)/2,(y0+y1)/2,(PITCH_Z+z)/2)))
     return s
+
+def roll_d_section(r,flat,x0,x1):
+    """D section on the roll axis from x0 to x1, flat at +Z (D-053)."""
+    return axial(r,x1-x0,((x0+x1)/2,ROLL_Y,ROLL_Z))-block(x0-1,x1+1,ROLL_Y-r-1,ROLL_Y+r+1,ROLL_Z+flat,ROLL_Z+r+1)
 
 def trunnion_leg_cut():
     # D-051 cuts in the -Y leg pad: retainer recess, MR106ZZ seat, the lip's
@@ -474,18 +482,38 @@ def build_parts(catalog=True,reliefs=True):
     # clearance, while the middle rail stays connected through the central spine.
     cradle=cradle-block(-24,-20,38,48,1,5)-block(-24,-20,-48,-38,1,5)
     cradle=cradle-block(-24,-20,57,60,29,34)-block(-24,-20,-60,-57,29,34)
+    # D-053 spindle joint: a boss ahead of the flange takes the spindle's
+    # D-flat in a D-bore (flat +Z at neutral) and an M3 x 4 insert from +Z
+    # for the set screw on the flat.
+    sf=fe.SPINDLE_FRONT
+    bx0,bx1=sf['boss_x'];cradle=cradle+axial(sf['boss_r'],bx1-bx0,((bx0+bx1)/2,ROLL_Y,ROLL_Z))
+    cradle=cradle-roll_d_section(sf['bore_r'],sf['bore_flat'],*sf['bore'])
+    cradle=cradle-axial(sf['insert_r'],sf['insert_depth'],(sf['screw_x'],ROLL_Y,ROLL_Z+sf['boss_r']-sf['insert_depth']/2),'z')
+    cradle=cradle-axial(1.5,sf['boss_r'],(sf['screw_x'],ROLL_Y,ROLL_Z+sf['boss_r']/2),'z')
     add('connected_rolling_cradle_flange_ear_stalks',cradle,'R','#718d95',owner='M010')
     skin=out['main_octagonal_skin']['shape']
     for sign in [-1,1]:
         port=block(-24,-14.5,62,67,EAR_Z-7.5,EAR_Z+7.5)
         if sign==-1:port=port.moved(Location((0,-129,0)))
         skin=skin-port
+        # D-053 pivot service ports, on the pitch axis under each ear: the
+        # head goes into the yoke with the skin on, so the +Y horn screws and
+        # centre screw and the -Y D-pin, retainer and its screws all go in
+        # from outside afterwards. The skin wall crossed the upper horn screws
+        # and clipped the pin. The ear cap covers the port.
+        skin=skin-axial(PIVOT_SERVICE_PORT_R,4,(PITCH_X,sign*64.4,PITCH_Z),'y')
     skin_style=out['main_octagonal_skin']
     skin_style['shape']=tint(skin,'main_octagonal_skin',skin_style['color'],skin_style['alpha'])
     # D-049: Ø6 spindle runs back into the roll coupler's bore, 0.5 mm short
     # of the coupler's M3 centre-screw head.
+    # D-053: it now runs on into the cradle boss; its front carries the flat.
     sx0,sx1=fe.SPINDLE_X
-    add('rolling_spindle_6mm',axial(3,sx1-sx0,((sx0+sx1)/2,ROLL_Y,ROLL_Z)),'R','#b7bfc0',owner='M016-18-R')
+    spindle=axial(3,sx1-sx0,((sx0+sx1)/2,ROLL_Y,ROLL_Z))
+    spindle=spindle-(axial(3.5,sx1-sf['bore'][0]+.1,((sf['bore'][0]+sx1)/2+.05,ROLL_Y,ROLL_Z))-roll_d_section(3.5,sf['flat'],sf['bore'][0],sx1+.1))
+    add('rolling_spindle_6mm',spindle,'R','#b7bfc0',owner='M016-18-R')
+    # ISO 4029 M3 x 5 cup point, its tip on the flat.
+    tip=ROLL_Z+sf['flat']
+    add('roll_spindle_set_screw_M3x5',axial(1.5,sf['screw_len'],(sf['screw_x'],ROLL_Y,tip+sf['screw_len']/2),'z'),'R','#555b5a',owner='M021-R')
     # 696-2Z (ISO 619/6-2Z) d6 x D15 x B5; details.py owns the seats. The
     # rear bearing sits 18.2 mm behind the front one (D-049, was 22).
     for i,x in enumerate(fe.ROLL_BEARING_X):
