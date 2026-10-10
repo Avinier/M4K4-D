@@ -28,7 +28,7 @@ prefix, case = sys.argv[1], sys.argv[2]
 E = float(sys.argv[3]) if len(sys.argv) > 3 else 3500.0
 H = float(sys.argv[4]) if len(sys.argv) > 4 else 1.6
 meta = json.load(open(prefix + '.json'))
-step = prefix + ('_leg.step' if case == 'leg' else '_frame.step')
+step = prefix + ('_leg.step' if case in ('leg', 'legkey') else '_frame.step')
 px, pz, ry, rz = meta['pitch_x'], meta['pitch_z'], meta['roll_y'], meta['roll_z']
 
 gmsh.initialize(); gmsh.option.setNumber('General.Terminal', 0)
@@ -52,9 +52,9 @@ e = ElementVector(ElementTetP2()); ib = Basis(mesh, e)
 lam, mu = lame_parameters(E, 0.35)
 K = asm(linear_elasticity(lam, mu), ib)
 
-def near_bore(x, y0, y1):
+def near_bore(x, y0, y1, R=4.2):
     r = np.hypot(x[0] - px, x[2] - pz)
-    return (np.abs(r - 4.2) < 0.35) & (x[1] > y0 - 0.1) & (x[1] < y1 + 0.1)
+    return (np.abs(r - R) < 0.35) & (x[1] > y0 - 0.1) & (x[1] < y1 + 0.1)
 
 a = math.radians(meta['clock_deg']); ux, uz = math.cos(a), math.sin(a); vx, vz = uz, -ux
 cx0, cx1 = meta['case_x']; ex0, ex1 = meta['ear_x']; hw = meta['case_half_w']; c = meta['window_clear']
@@ -79,13 +79,26 @@ if case == 'pitch':
     x0, x1 = meta['cartridge_x']
     loaded = mesh.facets_satisfying(lambda x: (np.abs(x[2] - zc) < 0.05) & (x[0] > x0 - 0.1) & (x[0] < x1 + 0.1) & (np.abs(x[1] - ry) < 12.1))
 elif case == 'roll':
-    fixed = np.concatenate([mesh.facets_satisfying(lambda x: near_bore(x, -53.5, -44.5)),
+    # D-051: the -Y pin sits in a Ø6.1 D-bore (was the Ø8.4 trunnion bore).
+    by0, by1 = sorted(meta.get('trunnion_bore_y', (-53.5, -44.5)))
+    fixed = np.concatenate([mesh.facets_satisfying(lambda x: near_bore(x, by0, by1, meta.get('trunnion_bore_r', 4.2))),
                             mesh.facets_satisfying(pitch_ear_seats)])
     axis_pt, axis_dir = np.array([0, ry, rz]), np.array([1., 0., 0.])
     loaded = mesh.facets_satisfying(roll_ear_seats)
 else:
     dz0 = meta['disc_top_z']
     fixed = mesh.facets_satisfying(lambda x: np.abs(x[2] - dz0) < 0.05)
+    if case == 'legkey':
+        # D-051 keyed foot: the socket's four side walls bear on the disc key
+        # as well as the foot ring on the disc top ('leg' clamps the ring only).
+        k = meta['leg_key']; c = k['clear']
+        x0, x1 = px + k['dx'][0] - c, px + k['dx'][1] + c
+        y0, y1 = k['y'][0] - c, k['y'][1] + c
+        h = dz0 + k['h'] + k['top_clear']
+        side = lambda x: (x[2] > dz0 - .05) & (x[2] < h - .05) & (
+            ((np.abs(x[0] - x0) < .05) | (np.abs(x[0] - x1) < .05)) & (x[1] > y0 - .05) & (x[1] < y1 + .05) |
+            ((np.abs(x[1] - y0) < .05) | (np.abs(x[1] - y1) < .05)) & (x[0] > x0 - .05) & (x[0] < x1 + .05))
+        fixed = np.concatenate([fixed, mesh.facets_satisfying(side)])
     axis_pt, axis_dir = np.array([px, 0, pz]), np.array([0., 1., 0.])
     hy = meta['horn_top_y']
     loaded = mesh.facets_satisfying(lambda x: (np.abs(x[1] - hy) < 0.05) & (np.hypot(x[0] - px, x[2] - pz) < meta['horn_pocket_r'] + .05))
@@ -122,7 +135,7 @@ u = solve(*condense(K, f, D=D))
 # theta: least squares rigid rotation of the loaded faces = integral (r x u).a dA / integral |r|^2 dA
 theta = (asm(unit_rot, fb) @ u) / I2
 k = M / theta / 1000.0  # N*m/rad
-if case == 'leg':
+if case in ('leg', 'legkey'):
     # In-plane rotation reached at height bands, as a fraction of theta: where
     # the leg's twist accumulates (RP-06 station-breakdown method).
     ux, uz, P = u[ib.nodal_dofs[0]], u[ib.nodal_dofs[2]], mesh.p

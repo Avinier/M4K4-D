@@ -9,12 +9,12 @@
     "pitch_z": 45.551454992696236
   },
   "source_sha256": {
-    "layout_model.py": "94f9d041ec40d2fb84dd0648de3258dc385336fd7159e38aee4e571baf6e5403",
-    "details.py": "120ffd64274157e6e0702f444dc2d8268b22113dff50b17c45b580bae088a6cc",
+    "layout_model.py": "e5eb4a6e1316b98effbb1528111d54a12dbe4d41dd53695e3900c29a941b8f2d",
+    "details.py": "94863750ad7fec142226d4a625f9cba88c51ab4d339e1ca3b0b2125232a38116",
     "layout_axes.py": "b3ce51da7778f6765f9bb534edf2e5a30a6ccae7c8593d0dfed1b1a3886f29f3",
     "harness.py": "e2a9008e241993af4f08bfee99977771372e7a148df70ac7c56ac7cda585bea7",
     "optics.py": "94185c1fd76a8727f90995de3ce8225a6b3498d9c08c3f2e1a598d8c3f233f3a",
-    "mass_layout.py": "a29befa99d2baa158c8827b019dda10aecfbf9f3d04c0c8675e1a8af62a0517b"
+    "mass_layout.py": "4fefc6509ca834ad1e346f844000a4868310fff5a3bce8c4f5d524eaaac813ab"
   },
   "service_extraction_hits": [],
   "retention_misses": [],
@@ -39,8 +39,8 @@
   ],
   "poses": 56,
   "motion_envelope": "motion-envelope.json (A+ firmware limit; per-axis hard stops alone do not enforce it)",
-  "mechanism_pairs_per_pose": 3208,
-  "jacket_pairs_per_pose": 630,
+  "mechanism_pairs_per_pose": 3936,
+  "jacket_pairs_per_pose": 678,
   "fasteners_in_motion_grid": [
     "C2_tray_M2_-19",
     "C2_tray_M2_-39",
@@ -83,6 +83,8 @@
     "pitch_servo_ear_3_washer",
     "pitch_servo_ear_4_M2x6",
     "pitch_servo_ear_4_washer",
+    "pitch_trunnion_retainer_M2x4_240",
+    "pitch_trunnion_retainer_M2x4_300",
     "rear_M2x6_1",
     "rear_M2x6_2",
     "rear_M2x6_3",
@@ -99,7 +101,11 @@
     "roll_servo_ear_4_washer",
     "yaw_disc_to_body_hub_M3x6_1",
     "yaw_disc_to_body_hub_M3x6_2",
-    "yaw_disc_to_body_hub_M3x6_3"
+    "yaw_disc_to_body_hub_M3x6_3",
+    "yaw_leg_to_disc_M2x6_-55_-12.5",
+    "yaw_leg_to_disc_M2x6_-55_-17.5",
+    "yaw_leg_to_disc_M2x6_55_-12.5",
+    "yaw_leg_to_disc_M2x6_55_-17.5"
   ],
   "same_frame_hits": [],
   "motion_hits": [],
@@ -578,20 +584,20 @@
       "solids": 1,
       "volume": 16182.01780271879
     },
-    "pitch_trunnion_-49": {
+    "pitch_trunnion_D6x12_pin": {
       "valid": true,
       "solids": 1,
-      "volume": 452.38934211693027
+      "volume": 312.2128672600873
     },
     "connected_pitch_frame_roll_servo_saddle": {
       "valid": true,
       "solids": 1,
-      "volume": 38020.33221803654
+      "volume": 38518.70621602287
     },
     "yaw_yoke_leg_-55": {
       "valid": true,
       "solids": 1,
-      "volume": 11822.647339715058
+      "volume": 11045.998748868742
     },
     "yaw_yoke_spine_inlay_-55": {
       "valid": true,
@@ -601,12 +607,52 @@
     "yaw_yoke_leg_55": {
       "valid": true,
       "solids": 1,
-      "volume": 11244.082087485756
+      "volume": 10878.385047675181
     },
     "yaw_yoke_spine_inlay_55": {
       "valid": true,
       "solids": 1,
       "volume": 78.77898717195377
+    },
+    "pitch_trunnion_bearing_MR106ZZ": {
+      "valid": true,
+      "solids": 1,
+      "volume": 147.9454520391773
+    },
+    "pitch_trunnion_retainer_M2x4_240": {
+      "valid": true,
+      "solids": 1,
+      "volume": 19.042258985159663
+    },
+    "pitch_trunnion_retainer_M2x4_300": {
+      "valid": true,
+      "solids": 1,
+      "volume": 19.04225898515965
+    },
+    "pitch_trunnion_retainer": {
+      "valid": true,
+      "solids": 1,
+      "volume": 145.01806551260907
+    },
+    "yaw_leg_to_disc_M2x6_55_-17.5": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.32544429234551
+    },
+    "yaw_leg_to_disc_M2x6_55_-12.5": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.32544429234551
+    },
+    "yaw_leg_to_disc_M2x6_-55_-17.5": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.3254442923455
+    },
+    "yaw_leg_to_disc_M2x6_-55_-12.5": {
+      "valid": true,
+      "solids": 1,
+      "volume": 25.32544429234551
     },
     "yaw_disc_to_body_hub_M3x6_1": {
       "valid": true,
@@ -626,7 +672,7 @@
     "yaw_turntable_disc_flush": {
       "valid": true,
       "solids": 1,
-      "volume": 58171.75898508942
+      "volume": 58653.16430438475
     },
     "pitch_horn_to_leg_M3x6_45": {
       "valid": true,

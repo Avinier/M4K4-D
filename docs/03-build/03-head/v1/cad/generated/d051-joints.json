@@ -1,0 +1,413 @@
+{
+  "method": "D-051 audit: the -Y pitch pivot and the leg-to-disc joints.",
+  "poses": 56,
+  "facts": {
+    "pin_in_frame_bore_mm": 6.7,
+    "pin_spans_bearing": [
+      -55.8,
+      -44.3
+    ],
+    "pin_to_frame_mm": 0.05,
+    "pin_to_bearing_bore_mm": 0.05,
+    "pin_end_to_retainer_mm": 0.2,
+    "pin_to_leg_mm": 1.0,
+    "bearing_seated_in_leg": 0.0,
+    "bearing_to_frame_mm": 1.7,
+    "retainer_on_bearing": 0.0,
+    "retainer_relief_clears_inner_ring": 4.0,
+    "lip_hole_clears_inner_ring_mm": 0.4,
+    "lip_thickness_mm": 0.7,
+    "retainer_heads_not_proud_of_leg_face_mm": -0.119,
+    "retainer_not_proud_of_leg_face_mm": -1.3,
+    "retainer_insert_walls": [
+      {
+        "deg": 240.0,
+        "to_seat": 1.85,
+        "to_slot": 2.512,
+        "wall_ring_outside_leg_mm3": 0.0
+      },
+      {
+        "deg": 300.0,
+        "to_seat": 1.85,
+        "to_slot": 9.934,
+        "wall_ring_outside_leg_mm3": 0.0
+      }
+    ],
+    "frame_float_minus_horn_pocket_mm": 0.4,
+    "key_55_volume_mm3": 240.21,
+    "key_55_overlap_with_leg_mm3": 0,
+    "socket_55_wall_ge_1p2": 0.0,
+    "leg_screw_55_-17.5_insert_engagement_mm": 3.0,
+    "leg_screw_55_-17.5_tip_in_pocket": 54.15,
+    "leg_screw_55_-17.5_key_wall_mm": 1.4,
+    "leg_screw_55_-12.5_insert_engagement_mm": 3.0,
+    "leg_screw_55_-12.5_tip_in_pocket": 54.15,
+    "leg_screw_55_-12.5_key_wall_mm": 1.4,
+    "key_55_pocket_web_mm": 1.8,
+    "key_-55_volume_mm3": 240.21,
+    "key_-55_overlap_with_leg_mm3": 0,
+    "socket_-55_wall_ge_1p2": 0.0,
+    "leg_screw_-55_-17.5_insert_engagement_mm": 3.0,
+    "leg_screw_-55_-17.5_tip_in_pocket": 54.15,
+    "leg_screw_-55_-17.5_key_wall_mm": 1.4,
+    "leg_screw_-55_-12.5_insert_engagement_mm": 3.0,
+    "leg_screw_-55_-12.5_tip_in_pocket": 54.15,
+    "leg_screw_-55_-12.5_key_wall_mm": 1.4,
+    "key_-55_pocket_web_mm": 1.8,
+    "posed_inherited_not_worse": [
+      {
+        "a": "connected_pitch_frame_roll_servo_saddle",
+        "b": "connected_rolling_cradle_flange_ear_stalks",
+        "min_mm": 0.0,
+        "roll": -21.0,
+        "pitch": -25.0,
+        "before_mm": 0.0
+      },
+      {
+        "a": "pitch_hard_stop_pin",
+        "b": "yaw_yoke_leg_-55",
+        "min_mm": 0.0,
+        "roll": -21.0,
+        "pitch": -25.0,
+        "before_mm": 0.0
+      },
+      {
+        "a": "connected_rolling_cradle_flange_ear_stalks",
+        "b": "yaw_yoke_leg_55",
+        "min_mm": 0.705,
+        "roll": -7.0,
+        "pitch": 43.0,
+        "before_mm": 0.705
+      },
+      {
+        "a": "connected_rolling_cradle_flange_ear_stalks",
+        "b": "yaw_yoke_leg_-55",
+        "min_mm": 0.73,
+        "roll": 7.0,
+        "pitch": 43.0,
+        "before_mm": 0.73
+      },
+      {
+        "a": "ear_1_amber_inlay",
+        "b": "yaw_yoke_leg_55",
+        "min_mm": 0.811,
+        "roll": -21.0,
+        "pitch": 15.0,
+        "before_mm": 0.811
+      },
+      {
+        "a": "main_octagonal_skin",
+        "b": "yaw_yoke_leg_55",
+        "min_mm": 0.835,
+        "roll": -21.0,
+        "pitch": -15.0,
+        "before_mm": 0.835
+      },
+      {
+        "a": "ear_-1_amber_inlay",
+        "b": "yaw_yoke_leg_-55",
+        "min_mm": 0.948,
+        "roll": 21.0,
+        "pitch": 25.0,
+        "before_mm": 0.948
+      },
+      {
+        "a": "main_octagonal_skin",
+        "b": "yaw_yoke_leg_-55",
+        "min_mm": 0.981,
+        "roll": 21.0,
+        "pitch": -15.0,
+        "before_mm": 0.981
+      }
+    ],
+    "posed_new_or_worse_below_1mm": []
+  },
+  "posed_min_clearance": [
+    {
+      "a": "connected_pitch_frame_roll_servo_saddle",
+      "b": "connected_rolling_cradle_flange_ear_stalks",
+      "min_mm": 0.0,
+      "roll": -21.0,
+      "pitch": -25.0
+    },
+    {
+      "a": "pitch_hard_stop_pin",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 0.0,
+      "roll": -21.0,
+      "pitch": -25.0
+    },
+    {
+      "a": "connected_rolling_cradle_flange_ear_stalks",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 0.705,
+      "roll": -7.0,
+      "pitch": 43.0
+    },
+    {
+      "a": "connected_rolling_cradle_flange_ear_stalks",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 0.73,
+      "roll": 7.0,
+      "pitch": 43.0
+    },
+    {
+      "a": "ear_1_amber_inlay",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 0.811,
+      "roll": -21.0,
+      "pitch": 15.0
+    },
+    {
+      "a": "main_octagonal_skin",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 0.835,
+      "roll": -21.0,
+      "pitch": -15.0
+    },
+    {
+      "a": "ear_-1_amber_inlay",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 0.948,
+      "roll": 21.0,
+      "pitch": 25.0
+    },
+    {
+      "a": "main_octagonal_skin",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 0.981,
+      "roll": 21.0,
+      "pitch": -15.0
+    },
+    {
+      "a": "pitch_trunnion_D6x12_pin",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 1.0,
+      "roll": -21.0,
+      "pitch": -15.0
+    },
+    {
+      "a": "connected_pitch_frame_roll_servo_saddle",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 1.0,
+      "roll": -21.0,
+      "pitch": -25.0
+    },
+    {
+      "a": "ear_1_trim_slug_stack_max",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 1.138,
+      "roll": -21.0,
+      "pitch": 15.0
+    },
+    {
+      "a": "ear_-1_trim_M2x5",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 1.196,
+      "roll": 21.0,
+      "pitch": 43.0
+    },
+    {
+      "a": "C2_removable_open_rear_tray",
+      "b": "connected_pitch_frame_roll_servo_saddle",
+      "min_mm": 1.219,
+      "roll": -21.0,
+      "pitch": 25.0
+    },
+    {
+      "a": "pitch_STS3045M_reference",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 1.237,
+      "roll": -21.0,
+      "pitch": -25.0
+    },
+    {
+      "a": "ear_-1_trim_slug_stack_max",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 1.275,
+      "roll": 21.0,
+      "pitch": 15.0
+    },
+    {
+      "a": "ear_1_trim_M2x5",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 1.293,
+      "roll": -21.0,
+      "pitch": 5.0
+    },
+    {
+      "a": "ear_1_dark_centre",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 1.313,
+      "roll": -21.0,
+      "pitch": 25.0
+    },
+    {
+      "a": "display_module_1to1_envelope",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 1.444,
+      "roll": -7.0,
+      "pitch": 43.0
+    },
+    {
+      "a": "ear_-1_dark_centre",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 1.449,
+      "roll": 21.0,
+      "pitch": 25.0
+    },
+    {
+      "a": "ear_1_ridged_inner_mount",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 1.467,
+      "roll": -21.0,
+      "pitch": -25.0
+    },
+    {
+      "a": "ear_1_hollow_removable_cap",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 1.467,
+      "roll": -21.0,
+      "pitch": -15.0
+    },
+    {
+      "a": "ear_-1_ridged_inner_mount",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 1.467,
+      "roll": 21.0,
+      "pitch": -25.0
+    },
+    {
+      "a": "ear_-1_hollow_removable_cap",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 1.467,
+      "roll": 21.0,
+      "pitch": -15.0
+    },
+    {
+      "a": "display_module_1to1_envelope",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 1.489,
+      "roll": 7.0,
+      "pitch": 43.0
+    },
+    {
+      "a": "connected_pitch_frame_roll_servo_saddle",
+      "b": "pitch_trunnion_bearing_MR106ZZ",
+      "min_mm": 1.7,
+      "roll": -21.0,
+      "pitch": -25.0
+    },
+    {
+      "a": "connected_pitch_frame_roll_servo_saddle",
+      "b": "pitch_trunnion_retainer_M2x4_240",
+      "min_mm": 1.7,
+      "roll": -21.0,
+      "pitch": -25.0
+    },
+    {
+      "a": "connected_pitch_frame_roll_servo_saddle",
+      "b": "pitch_trunnion_retainer_M2x4_300",
+      "min_mm": 1.7,
+      "roll": -21.0,
+      "pitch": -25.0
+    },
+    {
+      "a": "connected_pitch_frame_roll_servo_saddle",
+      "b": "main_octagonal_skin",
+      "min_mm": 1.861,
+      "roll": 21.0,
+      "pitch": 43.0
+    },
+    {
+      "a": "front_bezel_integral_camera_crown",
+      "b": "yaw_yoke_leg_55",
+      "min_mm": 2.303,
+      "roll": -21.0,
+      "pitch": 43.0
+    },
+    {
+      "a": "front_bezel_integral_camera_crown",
+      "b": "yaw_yoke_leg_-55",
+      "min_mm": 2.636,
+      "roll": 21.0,
+      "pitch": 43.0
+    },
+    {
+      "a": "pitch_hard_stop_pin",
+      "b": "pitch_trunnion_retainer",
+      "min_mm": 2.889,
+      "roll": -21.0,
+      "pitch": -25.0
+    },
+    {
+      "a": "connected_pitch_frame_roll_servo_saddle",
+      "b": "roll_coupler_goBILDA_4001_0025_0006",
+      "min_mm": 3.363,
+      "roll": -21.0,
+      "pitch": 35.0
+    },
+    {
+      "a": "pitch_hard_stop_pin",
+      "b": "pitch_trunnion_retainer_M2x4_240",
+      "min_mm": 3.744,
+      "roll": -21.0,
+      "pitch": -25.0
+    },
+    {
+      "a": "pitch_trunnion_D6x12_pin",
+      "b": "pitch_trunnion_retainer_M2x4_240",
+      "min_mm": 3.856,
+      "roll": -21.0,
+      "pitch": -15.0
+    },
+    {
+      "a": "pitch_trunnion_D6x12_pin",
+      "b": "pitch_trunnion_retainer_M2x4_300",
+      "min_mm": 3.856,
+      "roll": -21.0,
+      "pitch": -25.0
+    },
+    {
+      "a": "pitch_hard_stop_pin",
+      "b": "pitch_trunnion_bearing_MR106ZZ",
+      "min_mm": 4.0,
+      "roll": -21.0,
+      "pitch": 35.0
+    },
+    {
+      "a": "C2_removable_open_rear_tray",
+      "b": "pitch_trunnion_D6x12_pin",
+      "min_mm": 4.444,
+      "roll": -21.0,
+      "pitch": 43.0
+    },
+    {
+      "a": "main_octagonal_skin",
+      "b": "pitch_trunnion_retainer",
+      "min_mm": 4.559,
+      "roll": 21.0,
+      "pitch": 25.0
+    },
+    {
+      "a": "main_octagonal_skin",
+      "b": "pitch_trunnion_retainer_M2x4_240",
+      "min_mm": 4.678,
+      "roll": 14.0,
+      "pitch": 35.0
+    },
+    {
+      "a": "main_octagonal_skin",
+      "b": "pitch_trunnion_retainer_M2x4_300",
+      "min_mm": 4.678,
+      "roll": 14.0,
+      "pitch": -25.0
+    }
+  ],
+  "failures": [],
+  "passed": true,
+  "limitations": [
+    "Nominal B-rep; MR106ZZ, D-shaft, insert and screw fits are catalogue values to confirm on received parts.",
+    "Joint compliance is not in the leg FEA (bench B6)."
+  ]
+}

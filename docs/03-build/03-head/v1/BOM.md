@@ -18,6 +18,17 @@ The [project BOM](../../BOM.csv) carries the specification, source and release c
 | HD-006 | Servo ear screws, ISO 7380 M2 × 6, into M2 × 3 inserts | 8 | CANDIDATE |
 | HD-007 | Servo ear washers, ISO 7089 M2.5 (Ø6 × 0.5) | 8 | CANDIDATE |
 
+## Pitch pivot and yoke joints
+
+| ID | Part | Qty | State |
+|---|---|---:|---|
+| HD-008 | MR106ZZ bearing (6 × 10 × 3) in the −Y yoke leg: the passive pitch pivot ([D-051](../../decisions.md#d-051)) | 1 | CANDIDATE |
+| HD-009 | Ø6 h6 steel D-shaft pin, cut to 11.5 mm: through the bearing into a D-bore on the pitch frame's −Y boss | 1 | CANDIDATE |
+| HD-010 | Pivot retainer screws, ISO 7380 M2 × 4, into two M2 × 3 inserts in the −Y leg pad; heads flush with the leg face | 2 | CANDIDATE |
+| HD-011 | Yoke leg to disc screws, ISO 7380 M2 × 6, from each plinth's inner face into M2 × 3 inserts in the disc keys | 4 | CANDIDATE |
+
+**Why ([D-051](../../decisions.md#d-051)).** The −Y pivot was a Ø8 pin, loose in Ø8.4 holes, 1.5 mm into the leg and not retained; the legs had no joint to the disc. The pivot now runs on a bearing captured inside the 6 mm leg pad by a printed 1.0 mm retainer, because nothing can stand proud of the leg's outer face: the skin passes it at 0.98 mm. Each leg's plinth now sits over a key on the disc and is held by two screws from its inner face, because the disc underside must stay flat over the yaw pinion. The retainer plate and the keys are prints (M011-Y, M012); the six M2 × 3 inserts are the head's standard OD 3.6 article.
+
 **Why the STS3045M ([D-046](../../decisions.md#d-046)).** It costs ₹3,661 including GST at [Evelta](https://evelta.com/sts3045m-6v-6kg-cm-360deg-metal-gear-digital-servo-motor/), with 5 in stock on 2026-10-07: about a third of an XC330. On paper it clears roll at full speed (about 1.8×) and pitch with the fastest moves capped at 70% speed (about 1.7×). Its rated 0.20 N·m continuous torque is 2.6× the pitch RMS demand. Its metal gears suit pitch's constant gravity load. Margins are estimates at the 5.23 V worst servo terminal of the proposed 5.5 V head rail; bench B1 replaces them.
 
 **Ranked fallbacks.** None is registered; each would need its own decision.

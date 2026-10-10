@@ -446,29 +446,29 @@
     ]
   },
   "whole_robot": {
-    "mass_g": 2646.505596976451,
+    "mass_g": 2647.578019565948,
     "com_mm": [
-      18.067772578541007,
-      1.159730314237915,
-      109.30368186201838
+      18.064220592973292,
+      1.1492724154864788,
+      109.34005537172634
     ],
-    "forward_tip_acceleration_m_s2": 1.6215816885220367,
+    "forward_tip_acceleration_m_s2": 1.620723562052373,
     "forward_tip_screen_min_m_s2": 1.5822580645161293,
-    "ball_static_share": 0.16425247798673642,
-    "com_over_axle_pitch_deg": 9.386053154837883,
+    "ball_static_share": 0.16422018720884812,
+    "com_over_axle_pitch_deg": 9.381174459211369,
     "rear_skid_first_contact_pitch_deg": 6.054191894114834,
-    "reverse_launch_or_forward_brake_tip_acceleration_m_s2": 8.25091282966101,
-    "axle_line_lateral_tip_proxy_m_s2": 7.524660026142494,
-    "neutral_spin_centripetal_at_220_deg_s_m_s2": 0.2663818999857413,
-    "head_pose_conservative_tip_acceleration_m_s2": 1.6032284470854015,
-    "head_yaw_com_offset_from_axis_mm": 1.4480482427762205,
-    "head_pitch_carried_com_offset_from_axis_mm": 0.002605055417529336,
+    "reverse_launch_or_forward_brake_tip_acceleration_m_s2": 8.248486731753996,
+    "axle_line_lateral_tip_proxy_m_s2": 7.523095125638496,
+    "neutral_spin_centripetal_at_220_deg_s_m_s2": 0.26632953134648946,
+    "head_pose_conservative_tip_acceleration_m_s2": 1.6033208132461374,
+    "head_yaw_com_offset_from_axis_mm": 1.4143125309901348,
+    "head_pitch_carried_com_offset_from_axis_mm": 0.0026733875285405414,
     "head_roll_carried_com_offset_from_axis_mm": 0.0009654499249899781,
     "printed_enclosure_yaw_inertia_about_drive_axis_kg_m2": 0.0026351590396579525,
     "unweighed_harness_fastener_allowance_g": 95.0,
     "allowance_assumed_x_mm": 20.0,
-    "allowance_min_x_for_pose_screen_mm": 13.490814234764642,
-    "allowance_if_at_x_minus20_a_tip_m_s2": 1.4743620522667304
+    "allowance_min_x_for_pose_screen_mm": 13.457316401590852,
+    "allowance_if_at_x_minus20_a_tip_m_s2": 1.4745495015163192
   },
   "axes": {
     "head_yaw_datum_mm": [

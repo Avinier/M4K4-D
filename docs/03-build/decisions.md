@@ -55,6 +55,7 @@ The central record of every decision and change made during the build phase. New
 | [D-048](#d-048) | 2026-10-07 | Body / ST3215-HS yaw integration and compute-stack shift (BO-043, BO-056, BO-061; CH-084 PCB-09, CH-086 PCB-10, PCB-04; W15) | HS on the true horn axis, horn up, case to -X, 7.6 mm lower, clamped by four M2 screws to a frame ring; Pi, cooler, tray bosses and PCB-09 move +10 X / -6 Y; tray +Y edge to Y 23.5; C3 Z 92 header row repacked | ACTIVE; CAD packaging screens clean; HOLD on a matching plug, torque/gear proof, received HS, head re-balance and bench B1/B2/B4 |
 | [D-049](#d-049) | 2026-10-08 | Head / STS3045M pitch and roll installation (HD-002–HD-007; head v1 CAD, A0, body v1 hand-off) | Roll servo on an ear plate driving the spindle through a goBILDA 25T-to-Ø6 coupler, rear bearing forward; pitch servo on the pitch frame with its horn screwed to a widened +Y yoke leg; CF-filled yoke legs; rear trim off-axis; A0 re-solved | ACTIVE; CAD and checks complete; HOLD on received horn/coupler fits, the CF leg coupon and bench B1/B4/B6 |
 | [D-050](#d-050) | 2026-10-09 | Head / yoke legs and turntable restyle (M011-Y, M012; head v1 CAD, mass tree, body v1 hand-off) | Both yoke legs become one faceted design inscribed in the D-049 free corridor (plinth, waist, arm), replacing the +Y leg's stair-stepped raster outline, ledge and box foot; disc rim tapers R62.5 to R58.5; opaque presentation model | ACTIVE; CAD and checks complete; HOLD on the CF leg coupon and print orientation |
+| [D-051](#d-051) | 2026-10-10 | Head / passive pitch pivot and yoke-leg joints (HD-008–HD-011; M011-Y, M012; head v1 CAD, mass tree, body v1 hand-off) | −Y pivot becomes an MR106ZZ in the −Y leg pad, a flush printed retainer and a Ø6 D-shaft pin into a D-bore boss on the pitch frame; each leg plinth keys over a block on the disc top and takes two M2 screws from its inner face | ACTIVE; CAD and checks complete; HOLD on received bearing/D-shaft fits, a seat and key coupon, and bench B6 |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -2096,3 +2097,69 @@ The CF leg requirement stands, with 0.7 Hz less margin. The leg floor for 30 Hz 
 - **Print orientation.** Each leg now has the plinth and gusset on its inner face and the rail on its outer face, so neither face prints flat without supports. D-049's foot and rib had already ended the flat inside-face print. Choose the orientation with the CF coupon, which needs its modulus along the layers.
 - **CF leg coupon** (D-049), now against the 30.8 Hz case.
 - **The skin's side windows** round the arms are D-049's bounding-box reliefs. They are not restyled here.
+
+## D-051
+
+**2026-10-10 · Head / passive pitch pivot and yoke-leg joints (HD-008–HD-011; M011-Y, M012; head v1 CAD, mass tree, body v1 hand-off) · ACTIVE; CAD and checks complete; HOLD on received bearing and D-shaft fits, a seat and key coupon, and bench B6**
+
+**Why.** Reading the D-049/D-050 CAD for the builder found two joints that were never designed. No check or BOM row covered either.
+- **The −Y pitch pivot.** `pitch_trunnion_-49` was a Ø8 × 9 steel pin in Ø8.4 holes in both the frame arm and the −Y leg. It reached 1.5 mm into the leg and 4 mm into the arm, and nothing retained it. That side carries half the 536 g pitch-carried head.
+- **The legs to the disc.** The legs (CF filament) and the disc (PLA) are separate prints, and nothing joined them. The leg FEA assumed a rigid foot. They cannot be one print: the legs must be printed with their layers in the leg plane for the modulus D-049 needs.
+
+**Constraints the joints had to meet.**
+- **Nothing outboard of the −Y leg.** A trial cylinder standing 5 mm proud of the outer face at the pivot touched the skin at roll 21°; the skin passes the face at 0.98 mm. So the pivot must be retained inside the 6 mm pad.
+- **Little inboard.** A Ø14 boss reaching to Y −40 came within 0.42 mm of the C2 tray at roll −21°, pitch 43°.
+- **The disc underside stays untouched.** The stationary yaw pinion runs 0.4 mm under the plate, and the +Y foot passes over it at yaw 0. So no screw heads or pockets from below.
+- **Assembly order.** The head is lowered into the yoke with its skin on and then pushed 0.6 mm +Y into the horn pocket. The pin therefore has to go in from outside afterwards.
+
+**Pivot (`feetech.TRUNNION`).**
+- **Bearing (HD-008):** MR106ZZ, 6 × 10 × 3, seated in the −Y leg pad from the outer face (Ø10.1 seat) on a 0.7 mm lip. The lip's Ø8.0 hole clears the turning inner ring.
+- **Retainer:** a printed 1.0 mm plate on the outer ring, relieved Ø8 × 0.3 over the inner ring and the pin end. It sits in a 2.3 mm recess. Two ISO 7380 M2 × 4 (HD-010) go into M2 × 3 inserts at R8.5, 240° and 300°, and their heads finish 0.12 mm below the leg face. Each insert keeps 1.85 mm to the seat and 2.5 mm to the pitch-stop slot.
+- **Pin (HD-009):** Ø6 h6 steel D-shaft, cut to 11.5 mm. It slides through the inner ring into a D-bore (Ø6.1, flat +Z at neutral) in an R6.2 boss on the frame's −Y arm, 6.7 mm engaged, so it turns with the frame. Its outer end stops 0.2 mm under the retainer, which also keeps it from walking out.
+- **Boss size:** set by the C2 tray. At R6.5 to Y −42.6 the tray came to 0.92 mm (roll −21°, pitch −25°); at R6.2 to Y −43 it keeps 1.22 mm.
+- **Axial location stays at the +Y horn pocket.** The bearing's outer ring is a plain seat, so the −Y side floats. The frame still has 0.4 mm of float beyond the 0.6 mm pocket.
+
+**Leg feet (`feetech.LEG_KEY`).**
+- **Key:** each leg's plinth sits over a 11 × 4.5 × 6 mm key on the disc top (dx −20.5…−9.5, |Y| 51–55.5), with 0.15 mm side and 0.3 mm top clearance. The key takes the shear and the pitch couple.
+- **Screws (HD-011):** two ISO 7380 M2 × 6 per leg, from the plinth's inner face (spot-faced) through its wall into M2 × 3 inserts in the key, hold the leg down. They engage 3.0 mm, with key walls of 1.4 mm.
+- **Walls:** the socket leaves ≥ 1.2 mm of plinth wall everywhere except the screw holes. The first layout (dx −21…−10) left about 1.0 mm at the rear-top corner, so the key moved 0.5 mm forward.
+- **Screw heads:** the plinth inner face keeps ≥ 3.2 mm to every moving part, so the heads may stand on it.
+- **Assembly:** fit the legs on the bench, then screw the disc to the body hub (the three R22 M3 screws are reachable between the legs).
+- **Printing:** print the disc top face down with a support under each key.
+
+**Checks (head v1).**
+- **New `check_d051_joints.py`: PASS** on the full 7 × 8 grid. It covers the pivot stack, seat, lip, retainer flush, insert and socket walls, key screws, frame float and posed clearance. Every new or changed part is ≥ 1.0 mm from every part that moves relative to it: pin to −Y leg 1.0, frame to +Y leg 1.0, frame to C2 tray 1.22, retainer to skin 4.56. Pairs that existed before are unchanged, including the −Y leg to skin at 0.981 mm.
+- **`check_fasteners.py`:** 46 M2 screws pass, including the six new ones (3.0 mm in each insert, no plastic cut).
+- **`check_revision.py`:** 56 poses with no mechanism or harness hits, and service, retention, insert-mouth and hard-stop checks clean. Every part is one valid solid, and the source hashes are current.
+- **Also passing:** `check_layout.py` (no hits) and `check_integration.py`.
+- **Not re-run:** the 1.8 h `check_feetech_mounts.py`. Its interface facts are untouched; its posed pairs for the frame and legs are covered by the new sweep.
+
+**FEA (`fea/`, D-051 block in `results.json`, E 3.5 GPa, h 1.4).**
+- **Frame:** pitch stiffness 112.6 N·m/rad (was 112.5).
+- **Roll mount:** 450.9 N·m/rad (was 455.9). The roll case now clamps the D-bore instead of the Ø8.4 bore.
+- **+Y leg:** 46.6 N·m/rad with the keyed foot (ring plus socket walls), 45.9 with the foot ring alone (D-050: 46.2 on a solid foot; floor 41.9).
+
+| Pitch chain | D-050 | D-051 |
+|---|---|---|
+| PLA 3.5 GPa | 30.7 Hz | 30.8 Hz |
+| PLA 2.3 GPa | 24.9 Hz | 25.0 Hz |
+| CF legs 4.5 GPa, frame 2.3 GPa (the 30 Hz case) | 30.8 Hz | **30.9 Hz** (30.8 with the ring-only foot) |
+| Roll, 3.5 GPa | 126 Hz | 125 Hz |
+
+`frame_fea.py` gains a `legkey` case. Joint, screw and insert compliance are still excluded (B6).
+
+**Mass and stability (`mass_layout.py`, plain run; A0 not re-solved).**
+- **Residuals:** the A0 residuals are ≤ 0.003 mm, so `axes.json` is unchanged.
+- **Pitch-carried:** 535.7 → 536.3 g. The boss sits on the axis.
+- **Yaw-carried:** 654.2 → 655.2 g. The keys add 0.6 g, the frame boss 0.6 g, and the retainer and the six D-051 screws (now modelled steel, `D051_HARDWARE`) 1.3 g. The leg sockets and the −Y pad's seat and recess remove 1.4 g.
+- **Body:** `check_body_layout.py` all true. a_tip is 1.621 neutral (was 1.622) and 1.603 at the worst head pose (unchanged), against 1.582. The harness allowance must stay forward of X 13.46 (was 13.5).
+
+**Exports.** `yaw-yoke.step` is regenerated with the pivot and screws. `head-v1-integrated.step`, `head-v1-presentation.step` and `head-v1.step` are not.
+
+**BOM.** HD-008 to HD-011 are added. The retainer and keys are prints (M011-Y, M012). The six M2 × 3 inserts are the head's OD 3.6 article.
+
+**Open:**
+- **Received parts:** check that the MR106ZZ slides into a printed CF seat coupon (Ø10.1) and that its inner-ring land is under Ø7.6. Check the D-shaft slip fit in a printed D-bore and in the bearing.
+- **Coupons:** the 0.7 mm lip in CF, key and socket fit, and insert pull-out in the PLA key.
+- **Bench B6:** loaded pitch stiffness with the real joints.
+- **The spindle-to-cradle fastening** (fabrication audit) is still not released; it is not part of this decision.

@@ -213,7 +213,8 @@ def detail_parts(out):
     ring=ring-slot('y',10,1,*pitch_slot,(m.PITCH_X,-53,m.PITCH_Z),4)
     leg=out['yaw_yoke_leg_-55']['shape']
     cut=slot('y',10,1,*pitch_slot,(m.PITCH_X,-53,m.PITCH_Z),4)
-    setshape('yaw_yoke_leg_-55',(leg+ring)-cut)
+    # The ring overlaps the D-051 bearing seat band (Y -54..-52.7): recut it.
+    setshape('yaw_yoke_leg_-55',(leg+ring)-cut-m.trunnion_leg_cut())
     # The shell reliefs use the pre-D-049 leg with the same ring and slot.
     tool=out['yaw_yoke_leg_-55']['relief_tool']
     out['yaw_yoke_leg_-55']['relief_tool']=(tool+ring)-cut

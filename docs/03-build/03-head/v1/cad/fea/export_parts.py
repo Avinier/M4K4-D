@@ -17,6 +17,7 @@ meta = dict(axes=m.AXES, pitch_x=m.PITCH_X, pitch_z=m.PITCH_Z, roll_y=m.ROLL_Y, 
             case_x=fe.CASE_X, ear_x=fe.EAR_X, case_half_w=fe.CASE_HALF_W, window_clear=fe.ROLL_WINDOW_CLEAR,
             cartridge_x=fe.CARTRIDGE_X, leg_inner_y=fe.LEG_INNER_Y, horn_top_y=fe.HORN_TOP_Y,
             horn_pocket_r=fe.LEG_HORN_POCKET_R, disc_top_z=m.YAW_DISC_TOP_Z,
+            trunnion_bore_r=fe.TRUNNION['bore_r'], trunnion_bore_y=fe.TRUNNION['bore_y'], leg_key=fe.LEG_KEY,
             frame_volume=p['connected_pitch_frame_roll_servo_saddle']['shape'].volume)
 json.dump(meta, open(sys.argv[1] + '.json', 'w'), indent=1)
 print(meta)

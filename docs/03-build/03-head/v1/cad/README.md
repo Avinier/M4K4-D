@@ -19,7 +19,7 @@ manually positioned solids.
 | `head-v1.step.py` | Standalone head CAD export. |
 | `head-v1-integrated.step.py` | Parts-only head plus latest body and chassis assembly. |
 | `head-v1-presentation.step.py` | The same robot as built: every part opaque, reservations and overlays left out (D-050). Use it to judge appearance; the inspection models draw the skin and shell at alpha 0.28. |
-| `yaw-yoke.step.py` | Compact review of the turntable, legs, accent inlays, and pitch trunnions. |
+| `yaw-yoke.step.py` | Compact review of the turntable, legs, accent inlays, the pitch horn and the D-051 −Y pivot and leg-foot screws. |
 | `ears-v1.step.py` | Focused two-ear assembly with caps, colour inlays, cradle and service hardware. |
 | `check_ears.py`, `generated/ear-service.json` | Nominal cap and inner-mount removal paths, fastener count, and solid/finish checks. |
 | `check_integration.py` | Checks the shared yaw datum, disc height, three hub screws, and head sweep floor. |
@@ -28,6 +28,7 @@ manually positioned solids.
 | `check_feetech_mounts.py`, `generated/feetech-mounts.json` | D-049 audit: spline and thread engagements, ear joints, insert walls, driver paths and posed minimum clearance of every D-049 part. |
 | `check_leg_clearance.py`, `generated/leg-clearance-d049.json` | Both yoke legs against every moving part (56 poses); compare with `generated/feetech-mounts-baseline.json` from the committed head. |
 | `check_leg_clearance_d050.py`, `generated/leg-clearance-d050.json` | The same sweep on the D-050 matched legs. |
+| `check_d051_joints.py`, `generated/d051-joints.json` | D-051 audit: the −Y pivot stack, the leg-foot keys and screws, wall and engagement facts, and posed clearance of every new or changed part (7 × 8 grid; `--fast` 3 × 3). |
 | `fea/` | Head v1 stiffness FEA (pitch frame, roll mount, +Y yoke leg), adapted from RP-06 Layout 04. See its [README](fea/README.md). |
 | `busy_minute.py`, `generated/busy-minute-d049.json` | RP-01 §11.3 busy minute re-run on the D-049 mass tree with the D-046 pitch cap, and STS3045M moving-curve margins. |
 | `check_feetech_head_envelopes.py`, `check_feetech_head_fit.py`, `feetech_mass_whatif.py` | **Superseded** pre-installation trials against the XC330 head; see [feetech-head-fit.md](feetech-head-fit.md). |
@@ -77,6 +78,27 @@ spine panel and its copper inlay (0.05 mm adhesive bed, 0.15 mm proud), now
 ending at disc+30.5 so the waist keeps a ≥ 1.2 mm lip in front of the pocket.
 Both legs carry the ear trim-stack band and the 0.5 mm skin step. Both are
 printed in CF-filled filament (D-049).
+
+**Joints (D-051).** Each plinth sits over a 11 × 4.5 × 6 mm key on the disc
+top (0.15 mm side, 0.3 mm top clearance) and is held by two ISO 7380 M2 × 6
+from the plinth's inner face into M2 × 3 inserts in the key. The key takes
+the shear and the pitch couple; the screws hold the leg down. The disc
+underside is untouched, because the stationary yaw pinion runs 0.4 mm under
+it and the +Y foot passes over the pinion. Fit the legs on the bench, before
+the disc goes onto the body hub. Print the disc top face down with a support
+under each key.
+
+The −Y leg carries the passive pitch pivot. An MR106ZZ (6 × 10 × 3) sits in
+its pad from the outer face on a 0.7 mm lip, under a 1.0 mm printed
+retainer whose two M2 × 4 button heads finish 0.12 mm below the leg face.
+Nothing may stand proud of that face: the skin passes it at 0.98 mm at the
+roll stops. A Ø6 D-shaft pin, 11.5 mm long, goes in from outside after the
+head is in the yoke. It slides through the inner ring into a D-bore in an
+R6.2 boss on the frame's −Y arm (6.7 mm engaged, flat +Z at neutral) and
+ends 0.2 mm under the retainer, so the retainer also stops it walking out.
+The boss is sized by the C2 tray at roll −21°, pitch −25° (1.0 mm). This
+replaces the Ø8 pin that sat loose in Ø8.4 holes, only 1.5 mm into the leg,
+with nothing retaining it.
 
 The turntable disc's rim tapers from R62.5 under the plate to R58.5 at its
 foot, with a 0.6 mm top chamfer, so its lower edge sits inside the body roof
@@ -191,14 +213,18 @@ timings and remaining targets.
   coincide, all three screw axes meet the hub inserts, nominal screw engagement
   is 3.8 mm, and the bolt shafts keep at least 10.47 mm from the stationary
   pinion's modeled outer radius over ±62° yaw.
-- `revision-checks.json` (D-049): the 56 sampled roll/pitch poses pass with no
-  mechanism or harness intersections (3,208 pairs per pose); neutral service
+- `revision-checks.json` (D-051): the 56 sampled roll/pitch poses pass with no
+  mechanism or harness intersections (3,936 pairs per pose); neutral service
   extraction, retention and hard-stop checks pass.
-- `generated/fastener-stack.json` (D-049): all 40 modeled M2 screws pass,
-  including the eight servo ear screws; insert joints have 2.6–3.0 mm of
-  shank in the insert.
-- `fea/results.json`: pitch frame 112.5 N·m/rad, +Y leg 49.9, roll mount
-  455.9 at E 3.5 GPa; pitch chain 31.6 Hz in PLA, 34.3 Hz with CF legs.
+- `generated/fastener-stack.json` (D-051): all 46 modeled M2 screws pass,
+  including the eight servo ear screws and the six D-051 screws; insert
+  joints have 2.6–3.0 mm of shank in the insert.
+- `generated/d051-joints.json`: the −Y pivot and leg-foot interface facts
+  and posed clearance of the new and changed parts.
+- `fea/results.json` (D-051 block): pitch frame 112.6 N·m/rad, +Y leg 46.6
+  on the keyed foot (45.9 with the foot ring alone), roll mount 450.9 at
+  E 3.5 GPa; pitch chain 30.8 Hz in PLA, 30.9 Hz with CF legs and the frame
+  at 2.3 GPa; roll 125 Hz.
 - `generated/busy-minute-d049.json`: §11.3 rebuilt and validated against the
   RP-01 workbook; STS3045M worst moving-curve ratios pitch 1.71×, roll 3.04×.
 - Body v1's `generated/yaw-stage.json`: the yaw stage, drive sweep, gear mesh,

@@ -65,5 +65,38 @@
     },
     "leg_floor_for_30Hz_at_frame_E2300_CF_leg_Nm_per_rad_at_E3500": 41.9,
     "note": "D-050 matched leg outline; frame unchanged. Screened outlines before it: 24.4 and 31.9 N*m/rad."
+  },
+  "d051": {
+    "date": "2026-10-10",
+    "decision": "D-051",
+    "mesh_h": 1.4,
+    "stiffness_Nm_per_rad": {
+      "frame_pitch": {
+        "3500": 112.6
+      },
+      "frame_roll": {
+        "3500": 450.86
+      },
+      "leg_keyed_foot": {
+        "3500": 46.63
+      },
+      "leg_foot_ring_only": {
+        "3500": 45.89
+      }
+    },
+    "inertia_kg_m2": {
+      "pitch_RP": 0.000878230584674189,
+      "roll_R": 0.0007258117066940909
+    },
+    "frequencies_Hz": {
+      "pitch_frame_plus_keyed_leg_E3500": 30.8,
+      "pitch_frame_plus_keyed_leg_E2300": 25.0,
+      "pitch_frame_E3500_plus_CF_keyed_leg_E4500": 33.6,
+      "pitch_frame_E2300_plus_CF_keyed_leg_E4500": 30.9,
+      "pitch_frame_E2300_plus_CF_ring_only_leg_E4500": 30.8,
+      "roll_E3500": 125.4,
+      "roll_E2300": 101.7
+    },
+    "note": "D-051: the pitch frame gains the -Y pin boss and D-bore; the roll case now clamps that D-bore (was the \u00d88.4 trunnion bore). The leg has a socket over the disc key: 'legkey' clamps the foot ring and the socket's side walls, 'leg' the foot ring only (conservative). Both stay above the 41.9 N*m/rad floor. E 2300 values scale the E 3500 runs linearly."
   }
 }

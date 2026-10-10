@@ -148,6 +148,34 @@ LEG_SKIN_STEP = dict(dx=(-27.5, -24.5), dz=(-38.5, -30.5), y=(57.5, 58.2))
 # rings at roll -/+21 deg after the A0 shift (committed head: 0.22 / 0.35 mm).
 LEG_RAIL_TOP_ABOVE_DISC = 32.5
 
+# D-051 passive -Y pitch pivot. Nothing may stand proud of the -Y leg's outer
+# face: the skin passes it at 0.98 mm at the roll stops. So the joint lives
+# inside the 6 mm pad: an MR106ZZ bearing (6 x 10 x 3) seated from the outer
+# face on a 0.7 mm lip, held by a 1.0 mm retainer whose two M2 x 4 heads sit
+# flush in a 2.3 mm recess. A Ø6 D-shaft pin, pushed in from outside after
+# the frame is in the yoke, slides through the inner ring into a D-bore in a
+# boss on the frame's -Y arm (it turns with the frame) and ends 0.2 mm under
+# the retainer. Y values are absolute (-Y side only).
+TRUNNION = dict(
+    bearing=dict(sku='MR106ZZ', d=6., D=10., B=3.),
+    seat_r=5.05, recess_floor_y=-55.7, lip_y=(-52.7, -52.), lip_hole_r=4.,
+    plate_t=1., plate_r=6.4, lug_r=2.4, recess_clear=.2, plate_relief=(4., .3),
+    screw_r=8.5, screw_deg=(240., 300.), screw_len=4.,
+    insert_pocket=3.4,            # 3 mm insert + 0.4; leaves 0.3 mm to the inner face
+    pin_r=3., pin_flat=2.5, pin_y=(-55.8, -44.3),   # Ø6 D-shaft cut to 11.5 mm, flat +Z at neutral
+    # Boss length and radius set by the C2 tray at roll -21 / pitch -25.
+    boss_r=6.2, boss_y=(-51., -43.), bore_r=3.05, bore_flat=2.55, bore_y=(-51., -44.))
+
+# D-051 leg-to-disc joint (both legs, mirrored). A key on the disc top stands
+# 6 mm into a socket in the plinth (0.15 mm side, 0.3 mm top clearance) and
+# takes the shear and the pitch couple; two ISO 7380 M2 x 6 screws from the
+# plinth's inner face into M2 x 3 inserts in the key hold the leg down. The
+# disc underside is untouched: the stationary yaw pinion runs 0.4 mm below it,
+# and the +Y foot passes over the pinion. (dx from the pitch axis, |Y|, mm.)
+LEG_KEY = dict(dx=(-20.5, -9.5), y=(51., 55.5), h=6., clear=.15, top_clear=.3,
+               screw_dx=(-17.5, -12.5), screw_h=3., screw_len=6., seat_y=48.15,
+               spot_face_r=2.2, insert_pocket=3.5)
+
 
 def u_v(deg=PITCH_CLOCK_DEG):
     """Unit vectors in XZ of the servo's local +X (long side) and +Y."""

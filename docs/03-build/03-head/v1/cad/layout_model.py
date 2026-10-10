@@ -167,6 +167,38 @@ def washer(x,y,z,axis='x'):
     w=fe.WASHER
     return axial(w['r_out'],w['t'],(x,y,z),axis)-axial(w['r_in'],w['t']+.2,(x,y,z),axis)
 
+def yspan(r,y0,y1,x=None,z=None):
+    # Y-axis cylinder between y0 and y1 (either order), on the pitch axis by default.
+    x=PITCH_X if x is None else x;z=PITCH_Z if z is None else z
+    return axial(r,abs(y1-y0),(x,(y0+y1)/2,z),'y')
+
+def d_section(r,flat,y0,y1):
+    # Ø2r D profile on the pitch axis, its flat `flat` from the axis on +Z at neutral.
+    return yspan(r,y0,y1)-block(PITCH_X-r-1,PITCH_X+r+1,min(y0,y1)-1,max(y0,y1)+1,PITCH_Z+flat,PITCH_Z+r+1)
+
+def trunnion_screw_points():
+    t=fe.TRUNNION
+    return [(PITCH_X+t['screw_r']*math.cos(math.radians(a)),PITCH_Z+t['screw_r']*math.sin(math.radians(a))) for a in t['screw_deg']]
+
+def trunnion_plate_outline(grow,y0,y1):
+    # D-051 -Y retainer outline: centre disc plus a lug and bar to each screw.
+    t=fe.TRUNNION;w=t['lug_r']+grow
+    s=yspan(t['plate_r']+grow,y0,y1)
+    for (x,z),deg in zip(trunnion_screw_points(),t['screw_deg']):
+        bar=Box(t['screw_r'],abs(y1-y0),2*w).rotate(Axis.Y,-deg)
+        s=s+yspan(w,y0,y1,x,z)+bar.moved(Location(((PITCH_X+x)/2,(y0+y1)/2,(PITCH_Z+z)/2)))
+    return s
+
+def trunnion_leg_cut():
+    # D-051 cuts in the -Y leg pad: retainer recess, MR106ZZ seat, the lip's
+    # hole (clear of the turning inner ring) and the two Ø3.2 M2 insert pockets.
+    t=fe.TRUNNION;outer=-(fe.LEG_INNER_Y+6);fl=t['recess_floor_y']
+    c=trunnion_plate_outline(t['recess_clear'],outer-1,fl)
+    c=c+yspan(t['seat_r'],fl-.1,t['lip_y'][0])+yspan(t['lip_hole_r'],t['lip_y'][0]-.1,t['lip_y'][1]+1)
+    for x,z in trunnion_screw_points():
+        c=c+yspan(1.6,fl-.1,fl+t['insert_pocket'],x,z)
+    return c
+
 def sts3045m(catalog=True):
     # Drawing-based STS3045M envelope (D-049 step 0). Checks fuse the five
     # touching solids into one valid solid; the export keeps them labelled.
@@ -471,8 +503,13 @@ def build_parts(catalog=True,reliefs=True):
     for y in [-49]:
         frame=frame+block(-74,PITCH_X+4,y-2,y+2,ROLL_Z-20,ROLL_Z-16)
         frame=frame+block(PITCH_X-6,PITCH_X+6,y-2,y+2,ROLL_Z-16,PITCH_Z+6)
-        frame=frame-axial(4.2,6,(PITCH_X,y,PITCH_Z),'y')
-        add(f'pitch_trunnion_{y}',axial(4,9,(PITCH_X,y,PITCH_Z),'y'),'P','#b7bfc0',owner='M016-18-P')
+    # D-051: the arm carries an inboard boss with a D-bore; the Ø6 D-shaft pin
+    # turns with the frame inside the -Y leg's MR106ZZ (was a Ø8 pin, loose in
+    # Ø8.4 holes, 1.5 mm into the leg and unretained).
+    t=fe.TRUNNION
+    frame=frame+yspan(t['boss_r'],*t['boss_y'])
+    frame=frame-d_section(t['bore_r'],t['bore_flat'],t['bore_y'][0]-1,t['bore_y'][1])
+    add('pitch_trunnion_D6x12_pin',d_section(t['pin_r'],t['pin_flat'],*t['pin_y']),'P','#b7bfc0',owner='M016-18-P')
     frame=frame+block(-69,-39,ROLL_Y-12,ROLL_Y+12,ROLL_Z-16,ROLL_Z-12)
     # The ring's +Y bar and front crossbar give way to the pitch servo and its
     # collar (details.py); the rear bar stays inside the torsion box.
@@ -537,7 +574,14 @@ def build_parts(catalog=True,reliefs=True):
         band=band.moved(Location((0,(t['y'][1]-bb.max.Y) if y>0 else (-t['y'][1]-bb.min.Y),0)))
         k=fe.LEG_SKIN_STEP
         leg=leg-band-block(PITCH_X+k['dx'][0],PITCH_X+k['dx'][1],*sorted(s_*v for v in k['y']),PITCH_Z+k['dz'][0],PITCH_Z+k['dz'][1])
-        if y<0:leg=leg-axial(4.2,8,(PITCH_X,y,PITCH_Z),'y')
+        # D-051 foot: socket over the disc key, M2 clearance holes through the
+        # plinth's inner wall and flat spot faces for the button heads.
+        f=fe.LEG_KEY;c=f['clear']
+        leg=leg-block(PITCH_X+f['dx'][0]-c,PITCH_X+f['dx'][1]+c,*sorted((s_*(f['y'][0]-c),s_*(f['y'][1]+c))),d-1,d+f['h']+f['top_clear'])
+        for dx in f['screw_dx']:
+            sx,sz=PITCH_X+dx,d+f['screw_h']
+            leg=leg-yspan(1.15,s_*(f['seat_y']-1),s_*(f['y'][0]+.5),sx,sz)-yspan(f['spot_face_r'],s_*(f['seat_y']-3),s_*f['seat_y'],sx,sz)
+        if y<0:leg=leg-trunnion_leg_cut()
         else:
             # D-049: +Y leg carries the pitch horn: a 0.6 mm horn pocket for
             # radial location, four M3 clearance holes with button counterbores
@@ -556,6 +600,16 @@ def build_parts(catalog=True,reliefs=True):
         accent_start=outer_face+0.15 if y>0 else outer_face+1.05
         inlay=extrude(Plane.XZ*Polygon(*facet(fe.LEG_SPINE_FACET['inlay']),align=None),amount=1.2).moved(Location((0,accent_start,0)))
         add(f'yaw_yoke_spine_inlay_{y}',inlay,'Y','#c38a47',owner='M011-Y')
+    # D-051 -Y pivot, yaw-carried: MR106ZZ in the leg seat, a 1.0 mm retainer
+    # on the bearing's outer ring (relieved over the inner ring and pin end)
+    # and two ISO 7380 M2 x 4 whose heads finish flush with the leg face.
+    t=fe.TRUNNION;fl=t['recess_floor_y'];b=t['bearing']
+    add('pitch_trunnion_bearing_MR106ZZ',yspan(b['D']/2,fl,t['lip_y'][0])-yspan(t['pin_r']+.05,fl-1,t['lip_y'][0]+1),'Y','#acb5b9',owner='M016-18-Y')
+    plate=trunnion_plate_outline(0,fl,fl-t['plate_t'])-yspan(t['plate_relief'][0],fl+.1,fl-t['plate_relief'][1])
+    for (x,z),deg in zip(trunnion_screw_points(),t['screw_deg']):
+        plate=plate-yspan(1.15,fl+.1,fl-t['plate_t']-.1,x,z)
+        add(f'pitch_trunnion_retainer_M2x4_{deg:g}',button_screw(x,fl-t['plate_t'],z,'y',-1,t['screw_len']),'Y','#555b5a',owner='M021-Y')
+    add('pitch_trunnion_retainer',plate,'Y','#536b78',owner='M011-Y')
     # Flush turntable disc: top plate, outer rim and bearing hub, with a
     # centre cable bore and a top groove carrying the yaw branch to the +Y leg.
     # D-050: the rim tapers from R62.5 under the plate to R58.5 at its foot, a
@@ -587,6 +641,18 @@ def build_parts(catalog=True,reliefs=True):
         return disc
     disc=hub_and_cuts(plate+rim)
     cyl_disc=hub_and_cuts(cyl_disc)
+    # D-051 leg keys on the disc top, one under each plinth, each with two
+    # Ø3.2 M2 insert pockets entered from the inboard face; the screws come in
+    # through the plinth's inner wall. Hidden inside the plinth sockets, so the
+    # reliefs keep the plain disc.
+    f=fe.LEG_KEY
+    for s_ in (1,-1):
+        key=block(PITCH_X+f['dx'][0],PITCH_X+f['dx'][1],*sorted((s_*f['y'][0],s_*f['y'][1])),d-.5,d+f['h'])
+        for dx in f['screw_dx']:
+            sx,sz=PITCH_X+dx,d+f['screw_h']
+            key=key-yspan(1.6,s_*(f['y'][0]-.1),s_*(f['y'][0]+f['insert_pocket']),sx,sz)
+            add(f'yaw_leg_to_disc_M2x6_{55*s_}_{dx:g}',button_screw(sx,s_*f['seat_y'],sz,'y',-s_,f['screw_len']),'Y','#555b5a',owner='M021-Y')
+        disc=disc+key
     for i,deg in enumerate(YAW_HUB_BOLT_DEG,1):
         theta=math.radians(deg)
         bx=PITCH_X+YAW_HUB_BOLT_R*math.cos(theta)

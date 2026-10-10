@@ -24,6 +24,8 @@ C2_SENSITIVITY_G=(10.0,20.0,35.0)
 STS3045M_MASS_G=34.8
 ALUMINIUM,STEEL=2.70e-3,7.85e-3
 D049_HARDWARE=('roll_servo_ear_','pitch_servo_ear_','pitch_horn_to_leg_','pitch_horn_centre_','roll_coupler_centre_','roll_coupler_clamp_')
+# D-051 leg-foot and -Y pivot retainer screws (yaw-carried), same basis.
+D051_HARDWARE=('yaw_leg_to_disc_M2x6_','pitch_trunnion_retainer_M2x4_')
 
 def rows_for(parts,c2=C2_NOMINAL_G):
     rows=[]
@@ -64,6 +66,8 @@ def rows_for(parts,c2=C2_NOMINAL_G):
     for name,d in parts.items():
         if name.startswith(D049_HARDWARE):
             add(d['owner'],name,d['frame'],d['shape'].volume*STEEL,None,shape=d['shape'],basis='E: D-049 modelled screw/washer volume at 7.85 g/cm3')
+        elif name.startswith(D051_HARDWARE):
+            add(d['owner'],name,d['frame'],d['shape'].volume*STEEL,None,shape=d['shape'],basis='E: D-051 modelled screw volume at 7.85 g/cm3')
     # Balance trim at half capacity, so it can be added or removed (details.py).
     from details import trim_capacity,TRIM_NOMINAL_FRACTION,EAR_SLUG,EAR_TRIM_INNER_FACE,REAR_STACK
     cap=trim_capacity();f=TRIM_NOMINAL_FRACTION

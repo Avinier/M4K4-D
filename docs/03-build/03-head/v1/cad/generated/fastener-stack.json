@@ -1104,6 +1104,72 @@
       "joint": "heat-set insert",
       "problems": []
     },
+    "pitch_trunnion_retainer_M2x4_240": {
+      "axis": "Y",
+      "seat": [
+        -46.67,
+        -57.78,
+        38.19
+      ],
+      "shank_mm": 5.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.2
+        },
+        {
+          "class": "insert",
+          "from": 2.2,
+          "to": 5.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "pitch_trunnion_retainer_M2x4_300": {
+      "axis": "Y",
+      "seat": [
+        -38.17,
+        -57.78,
+        38.19
+      ],
+      "shank_mm": 5.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 2.2
+        },
+        {
+          "class": "insert",
+          "from": 2.2,
+          "to": 5.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
     "rear_M2x6_1": {
       "axis": "X",
       "seat": [
@@ -1357,6 +1423,158 @@
         {
           "class": "insert",
           "from": 3.6,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "yaw_leg_to_disc_M2x6_-55_-12.5": {
+      "axis": "Y",
+      "seat": [
+        -54.92,
+        -47.07,
+        -31.5
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 3.8
+        },
+        {
+          "class": "air",
+          "from": 3.8,
+          "to": 4.0
+        },
+        {
+          "class": "insert",
+          "from": 4.0,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "yaw_leg_to_disc_M2x6_-55_-17.5": {
+      "axis": "Y",
+      "seat": [
+        -59.92,
+        -47.07,
+        -31.5
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 3.8
+        },
+        {
+          "class": "air",
+          "from": 3.8,
+          "to": 4.0
+        },
+        {
+          "class": "insert",
+          "from": 4.0,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "yaw_leg_to_disc_M2x6_55_-12.5": {
+      "axis": "Y",
+      "seat": [
+        -54.92,
+        47.07,
+        -31.5
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 3.8
+        },
+        {
+          "class": "air",
+          "from": 3.8,
+          "to": 4.0
+        },
+        {
+          "class": "insert",
+          "from": 4.0,
+          "to": 7.2
+        }
+      ],
+      "insert_mm": 3.0,
+      "pocket_mm": null,
+      "plastic_mm": 0,
+      "metal_mm": 0,
+      "tip": "insert",
+      "joint": "heat-set insert",
+      "problems": []
+    },
+    "yaw_leg_to_disc_M2x6_55_-17.5": {
+      "axis": "Y",
+      "seat": [
+        -59.92,
+        47.07,
+        -31.5
+      ],
+      "shank_mm": 7.08,
+      "runs": [
+        {
+          "class": "air",
+          "from": 0.2,
+          "to": 1.2
+        },
+        {
+          "class": "clearance",
+          "from": 1.2,
+          "to": 3.8
+        },
+        {
+          "class": "air",
+          "from": 3.8,
+          "to": 4.0
+        },
+        {
+          "class": "insert",
+          "from": 4.0,
           "to": 7.2
         }
       ],
