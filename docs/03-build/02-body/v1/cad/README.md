@@ -14,7 +14,8 @@ This directory follows the chassis v1 CAD layout: an editable model and STEP ent
 | `check_charge_inlet.py` | Rear-panel charge inlet PCB-13: pocket depth, flush mouth, maximum-overmold fit, seat, screw engagement, clashes, PCB-02 clearance and the panel-removal sweep (D-040; about 6 min). |
 | `check_compute_mount.py` | Compute tray, Pi 5 and Active Cooler retention, frame lugs, tray-screw driver access and the front insertion sweep (D-042). |
 | `check_cooling_path.py` | Enclosure fan (BO-040 3010, D-043), +Y intake grille and collar, rear vent slots, shell lowering past the fan, mic-port distances and a first-order thermal estimate (D-042). |
-| `check_yaw_stage.py` | Head yaw stage (D-044): fit, ±61° sweep with the counter-rotating pinion, ±62° hard stops, involute mesh clearance, cartridge and pinion install paths, and load, spring, FFC-loop and mass estimates (about 5 min). |
+| `yaw-interface.step.py`, `yaw-interface-exploded.step.py` | Review only: the head turntable (translucent) on the body yaw stage, assembled and exploded along Z in assembly order (D-052); scene in `yaw_interface_scene.py`, snapshots in `snapshots/yaw-interface*-d052.png`. |
+| `check_yaw_stage.py` | Head yaw stage (D-044): fit, ±61° sweep with the counter-rotating pinion, ±62° hard stops, involute mesh clearance, cartridge and pinion install paths, the D-052 cable path (drum slit, FFC fold, PCB-14 joiner boards, disc bore and channel), and load, spring, FFC-loop and mass estimates (about 15–25 min; run with `MAKAD_RELIEF_SERIAL=1` after head edits). |
 | `check_power_button.py` | Rear-panel mushroom power button: well clearance, PCB-02 clearance, W40 lead and `J2-9` plug clashes and the panel-removal sweep (D-041; about 5 min). |
 | `check_body_layout.py` | CAD-volume mass/CoM, body axes/envelope, and whole-robot stability-screen audit. |
 | `check_feetech_yaw_fit.py`, `check_feetech_yaw_relocation.py`, `check_feetech_yaw_compute_shift.py`, `check_feetech_yaw_cradle.py` | **Superseded historical trials:** these placed the official STEP 25.5 mm off its horn axis. Their candidate frame/package STEP files are not the D-048 live assembly. See the [fit history](feetech-yaw-fit.md) and the D-048 section below. |
@@ -168,7 +169,7 @@ The head turns on a **61810-2Z** bearing (50 × 65 × 7, shielded) in a printed 
 - **Clamp ring (BO-049):** stationary. Three M2 × 8 thread-forming screws at R34.5 (0°, 135°, 225°), outside the pinion's 58–122° shadow.
 - **Hub (BO-045):** one PETG print.
   - Gear: m1, z37, 20° involute, both flanks thinned 0.0375 mm (0.15 mm nominal backlash for FDM).
-  - The R12.15 bore pilots the head disc's R12 hub.
+  - The R13.15 bore pilots the head disc's R13 ring (D-052; was R12.15 / R12).
   - The shoulder sits on the inner ring; the R18–25 spigot fills the ring's bore.
   - Bosses at R22 (210°, 270°, 330°) take three M3 × 4 inserts. The head disc's three M3 screws (head-side) go in from above. Nothing on the hub outside R19.5 rises above Z 145.8 outside the 184–356° band, so the pinion never meets a boss within ±62°.
 - **Rotor (BO-058):** one print holding three parts:
@@ -186,17 +187,21 @@ The head turns on a **61810-2Z** bearing (50 × 65 × 7, shielded) in a printed 
   - 0.5 mm lead-in chamfers let the pinion drop into mesh with the hub. No pin is needed under the disc.
 - **Servo mount:** the XC330 hangs from a pad under the plate (part of the main frame print). Its four case screws are lengthened to M2 × 26 (BO-061) and thread 3.4 mm into the pad's pilots. Fit it from below before PCB-09, with the drive hub and shaft already on the horn.
 - **FFC cassette (BO-050, BO-059):** three 22-pin 0.5 mm FFCs, 11.5 mm wide, run on edge in a 12.2 mm band. They make a rolling loop between the drum (R13.7) and the stator wall (R22.1), with a U-turn of R4.2. The stator hangs from the housing on three posts (45°, 150°, 270°) that pass notches in the plate bore.
-  - Neutral wraps are 120° inner and 120° outer. The loop is sized for ±90°, beyond the stops: at ±90° the inner wrap runs 64–176° and the outer 86–154°.
+  - D-052: the inner end leaves the drum through a slit at 0°. With the exit at 300°, neutral wraps are 150° inner (clockwise from the slit) and 90° outer, with the U-turn at 210°. (D-044's 120°/120° needed the slit at the exit angle; its slit at 90° gave 15°/225°.) The loop is sized for ±90°, beyond the stops: at ±90° the inner wrap runs 94–206° and the outer 56–124°.
   - The FFCs leave through a window at 300°. The CSI drops to the Pi 5 camera socket. Power and sideband run under the cassette floor to two ZIFs on PCB-08's new +X extension (`J8-6`, `J8-7`).
-  - The inner ends rise through the drum core to **PCB-14**, a Ø35 ring board in the hub. The head harness demates on PCB-14's top, inside the hub, with the head disc off.
+  - **Cable path (D-052).** The D-044 Ø35 ring PCB-14 had no room for its ZIFs or a route into the disc's Ø14 bore, and the drum slot (11.4 mm) was shorter than the FFC. Now:
+    - the drum slit is full height and open at the bottom, 1.6 mm wide, at 0°;
+    - inside the drum core each FFC fans out to its plane (Y −2.9, 0.4, 3.7) and takes one 45° fold, which turns it upward with its width along X (fold square inside R6.7, under the R11 core);
+    - **PCB-14 is three vertical 22-pin joiner boards** (0.8 mm FR4), each with a down-facing ZIF (Z 133.9–139.1) for its cassette FFC and an up-facing ZIF (Z 145.5–150.7) for the head FFC. Their tabs (Z 137.4–143.0, |X| to 13.6) seat in two slotted posts on the rotor ring, and the hub shoulder overhangs them, so they cannot lift out once the rotor is screwed up;
+    - the head FFCs rise from the upper ZIFs through the head disc's Ø21 bore and lie flat in its 12.5 × 1.5 mm channel to the +Y leg. The upper ZIFs sit inside the bore, so the head harness demates with the disc on.
   - The cassette floor is 13 mm above the real cooler top (Z 107), inside the 10.5 mm headroom rule.
 
 **Assembly (shell on).**
-1. **Bench:** press the bearing into the housing and screw down the clamp ring. Drop the hub in from the top and screw the rotor on from below. Fit PCB-14 in the hub and plug the FFCs into it. Wind the FFCs into the stator and screw the stator's posts into the housing.
+1. **Bench:** press the bearing into the housing and screw down the clamp ring. Drop the hub in from the top. On the rotor, drop the three PCB-14 joiner boards into the post slots, thread the FFCs in through the drum slit from below, fold each one and plug it into its board's lower ZIF (D-052). Raise the rotor into the hub from below and screw it on; the hub shoulder now captures the boards. Wind the FFCs into the stator and screw the stator's posts into the housing.
 2. Fit the servo from below before PCB-09, with its drive hub, shaft and spring collar already on the horn.
 3. Hold the cartridge above the plate. Reach through the R28 bore to plug the power and sideband FFCs into PCB-08 `J8-6`/`J8-7` and the CSI into the Pi. Lower the cartridge; the posts pass the notches. Screw the flange down.
 4. Drop the pre-wound pinion onto the shaft. The chamfers take it into mesh. Fit the fixed-half screw.
-5. Plug the head harness into PCB-14 through the hub bore. Screw the head disc and yoke to the hub (3 × M3, from above). Then fit the head's tilting assembly.
+5. Screw the head disc and yoke to the hub (3 × M3, from above). Plug the head FFCs into the three upper ZIFs through the disc's Ø21 bore and lay them in the disc channel (D-052). Then fit the head's tilting assembly.
 
 To remove the head, reverse these steps. Removing the cartridge needs the disc off first, then the pinion.
 

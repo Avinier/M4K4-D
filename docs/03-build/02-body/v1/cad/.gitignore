@@ -3,3 +3,5 @@ __pycache__/
 body-v1.step
 # D-048: superseded Feetech yaw trial exports (wrong horn axis); regenerate from their .step.py
 feetech-yaw-*.step
+# Review exports; regenerate from their .step.py
+yaw-interface*.step
