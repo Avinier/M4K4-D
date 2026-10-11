@@ -57,8 +57,9 @@ The central record of every decision and change made during the build phase. New
 | [D-050](#d-050) | 2026-10-09 | Head / yoke legs and turntable restyle (M011-Y, M012; head v1 CAD, mass tree, body v1 hand-off) | Both yoke legs become one faceted design inscribed in the D-049 free corridor (plinth, waist, arm), replacing the +Y leg's stair-stepped raster outline, ledge and box foot; disc rim tapers R62.5 to R58.5; opaque presentation model | ACTIVE; CAD and checks complete; HOLD on the CF leg coupon and print orientation |
 | [D-051](#d-051) | 2026-10-10 | Head / passive pitch pivot and yoke-leg joints (HD-008–HD-011; M011-Y, M012; head v1 CAD, mass tree, body v1 hand-off) | −Y pivot becomes an MR106ZZ in the −Y leg pad, a flush printed retainer and a Ø6 D-shaft pin into a D-bore boss on the pitch frame; each leg plinth keys over a block on the disc top and takes two M2 screws from its inner face | ACTIVE; CAD and checks complete; HOLD on received bearing/D-shaft fits, a seat and key coupon, and bench B6 |
 | [D-052](#d-052) | 2026-10-10 | Body + head / yaw cable path (BO-045, BO-050, BO-058, BO-062; M012; W37/W42/W43) | The cassette FFCs enter the drum through a full-height slit at 0° (wraps 150°/90°), fold once and plug into three vertical PCB-14 joiner boards held in rotor posts under the hub shoulder; the head FFCs rise from their upper ZIFs through a Ø21 disc bore into a 12.5 × 1.5 mm channel, demating with the disc on; hub bore R13.15, disc pilot R10.5–13 | ACTIVE; CAD and checks complete; HOLD on the ZIF selection, an FFC fold mock-up and the cassette bench test |
-| [D-054](#d-054) | 2026-10-10 | Head / camera housing restyle (M019a; head v1 CAD) | The 46 mm crown and its hipped roof cap become a slim raked fin: the crown narrows to 40 mm with 3 mm top chamfers and keeps its flat top to X −24; the skin hood behind it rakes down at 35.5° to the roof, about 25 mm long instead of running back to X −78 | ACTIVE; CAD and checks complete |
+| [D-054](#d-054) | 2026-10-10 | Head / camera housing restyle (M019a; head v1 CAD) | The 46 mm crown and its hipped roof cap become a slim raked fin: the crown narrows to 40 mm with 3 mm top chamfers and keeps its flat top to X −24; the skin hood behind it rakes down at 35.5° to the roof, about 25 mm long instead of running back to X −78 | ACTIVE; front section revised by D-056 |
 | [D-055](#d-055) | 2026-10-10 | Body / shell review fixes (BO-019, BO-024; body v1 CAD) | Remove the Layout 02 front badge land that sat inside the speaker cup; raise the enclosure fan, web opening and +Y grille 3 mm (Z 110) so the grille clears the wheel-arch pod; teardrop fan collar for the roof-down print; drill the Ø2 mic ports after printing | ACTIVE; CAD and targeted checks complete; HOLD on a printed grille/collar coupon |
+| [D-056](#d-056) | 2026-10-11 | Head / camera fin front section (M019a; head v1 CAD) | The D-054 fin becomes trapezoidal from the front: sides slope in from 44 mm at Z 85 to a 34 mm flat top at Z 104, replacing 40 mm vertical sides with 3 mm top chamfers; the rake, depth and hood are unchanged | ACTIVE; CAD and checks complete |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -2382,3 +2383,23 @@ The ports sit inside the ear web's R20.3 and the inner mount's R28 seat.
 **Views.** `body-v1.step` and the head presentation and integrated STEPs need regenerating to show the change.
 
 **Next.** Print a grille-and-collar coupon roof-down to confirm the slot bridges and the peaks. Drill-test a Ø2 port in the same coupon.
+
+## D-056
+
+**2026-10-11 · Head / camera fin front section: trapezoid (M019a; head v1 CAD) · ACTIVE; CAD and checks complete**
+
+**Why.** Reviewing the D-054 fin in the presentation model, the builder wanted the camera bump trapezoidal from the front, not rectangular.
+
+**Decision.** `CROWN_OUTER` becomes a trapezoid: vertical below the roof to Z 85 at Y ±22, then straight sides sloping in to a **34 mm flat top at Z 104** (Y ±17). D-054 had 40 mm vertical sides with 3 mm × 45° top chamfers. The crown depth, flat top to X −24, the hood's 35.5° rake and length, and the 1.3 mm crown / 1.6 mm hood walls are unchanged; the hood and the roof notch (now Y ±22.8) follow the section. `crown_roof_cap` now drops the repeated corner that clamping the section at the hood base creates.
+
+**Fit.** The slope is set by the LED reserve's outer top corner (Y 17.7, Z 94.3), which keeps **0.49 mm** to the sloped inner wall (1.0 mm in D-054). The camera clamp keeps 1.1 mm under the wall at its top corners, and the camera bracket receiver bosses (Y ±16) stand free inside the 41.4 mm cavity again, as they did in the original crown. Camera 0.723 mm, bracket 0.2 mm, diffuser 0.141 mm and CSI reserve 2.2 mm to the bezel are unchanged.
+
+**Mass.** Printed volume −0.22 cm³ (bezel −0.12, upper skin −0.10; about −0.3 g PLA). `mass-placement.json` and `axes.json` are not regenerated.
+
+**Checks (head v1, on the D-053 split skin).**
+- `check_revision.py`: **PASS.** 56 poses run (not reused), 4,328 mechanism pairs per pose; same-frame, motion, harness-pinch, service-extraction, retention and C2 service lists all empty.
+- `check_fasteners.py`: **PASS**, 46 screws; output unchanged.
+- `write_dimensions.py`: regenerated.
+- Not rerun: mounts audit, D-051/D-053 joint sweeps, leg clearance, FEA (no part they cover changed).
+
+**Views.** Integrated and presentation render packages rebuilt; new snapshots in `03-head/v1/cad/snapshots/`.

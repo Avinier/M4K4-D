@@ -149,8 +149,10 @@ Changes from the [fabrication audit](../research/fabrication-audit.md):
   The front chamfer is 9.5 mm (was 10) so the band's lower corner keeps its
   wall at the display board corner. The crown's rear CSI opening follows the
   crown cavity instead of notching the sloped sides.
-- **Camera fin (D-054).** The crown is a slim fin, 40 mm wide (`CROWN_OUTER`,
-  was 46 mm with sloped sides) with 3 mm top chamfers and a flat top to X −24.
+- **Camera fin (D-054, D-056).** The crown is a slim fin with a trapezoidal
+  front (`CROWN_OUTER`): the sides slope in from 44 mm at Z 85 to a 34 mm
+  flat top at Z 104 (D-054 had 40 mm vertical sides; the original crown was
+  46 mm), and the flat top runs back to X −24.
   Behind it the skin's hood (`crown_roof_cap`) carries the same section back
   and rakes down at 35.5° (`CROWN_RAKE_DEG`) to meet the roof about 25 mm
   behind the crown. It replaces the hipped cap that ran back to X −78. Camera,
@@ -254,10 +256,10 @@ timings and remaining targets.
   coincide, all three screw axes meet the hub inserts, nominal screw engagement
   is 3.8 mm, and the bolt shafts keep at least 10.47 mm from the stationary
   pinion's modeled outer radius over ±62° yaw.
-- `revision-checks.json` (D-054): the 56 sampled roll/pitch poses pass with no
-  mechanism or harness intersections (3,936 pairs per pose); neutral service
+- `revision-checks.json` (D-056): the 56 sampled roll/pitch poses pass with no
+  mechanism or harness intersections (4,328 pairs per pose); neutral service
   extraction, retention and hard-stop checks pass.
-- `generated/fastener-stack.json` (D-051; unchanged on the D-054 rerun): all 46 modeled M2 screws pass,
+- `generated/fastener-stack.json` (D-051; unchanged on the D-054 and D-056 reruns): all 46 modeled M2 screws pass,
   including the eight servo ear screws and the six D-051 screws; insert
   joints have 2.6–3.0 mm of shank in the insert.
 - `generated/d051-joints.json`: the −Y pivot and leg-foot interface facts

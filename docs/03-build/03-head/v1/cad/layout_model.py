@@ -339,7 +339,7 @@ def camera_edge_clamp():
     return clamp
 
 # D-054 slim raked camera fin (replaces the 46 mm crown and its hipped roof
-# cap). The crown keeps its flat top to X-24; behind it this hood in the skin
+# cap; D-056 trapezoid section). The crown keeps its flat top to X-24; behind it this hood in the skin
 # carries the crown section (CROWN_OUTER above the roof) back and falls at
 # CROWN_RAKE_DEG to the roof, meeting Z86 about 25 mm behind the crown. Its
 # base butts the crown's rear face (X-24) with no seam gap. Hollow hood, open
@@ -352,7 +352,9 @@ def crown_roof_cap():
     from build123d import offset, Kind
     zb=MAIN_H-1.
     x1=CROWN_CAP_X0-(CROWN_H-zb)/math.tan(math.radians(CROWN_RAKE_DEG))
-    section=[(y,max(z,zb)) for y,z in CROWN_OUTER]
+    section=[]
+    for p in [(y,max(z,zb)) for y,z in CROWN_OUTER]:
+        if p not in section:section.append(p)
     prism=extrude(Plane.YZ*Polygon(*section,align=None),amount=CROWN_CAP_X0-x1).moved(Location((x1,0,0)))
     w=CROWN_OUTER[1][0]+1
     side=extrude(Plane.XZ*Polygon((CROWN_CAP_X0,zb),(CROWN_CAP_X0,CROWN_H),(x1,zb),align=None),amount=2*w).moved(Location((0,w,0)))
@@ -367,10 +369,12 @@ def crown_roof_cap():
 BEZEL_WALL=1.3
 BEZEL_FRONT=(120,2,84,9.5)
 BEZEL_BACK=(130,0,86,14)
-# D-054 camera fin section: 40 mm wide (was 46, sloping in from Z85) with
-# 3 mm top chamfers. Inside it the clamp keeps 3.7 mm a side, the LED reserve
-# 1 mm and the bracket bosses fuse into the side walls.
-CROWN_OUTER=[(-20,73),(20,73),(20,101),(17,104),(-17,104),(-20,101)]
+# D-056 camera fin section, trapezoidal from the front: the sides slope in
+# from Y +/-22 at Z85 (just under the roof) to a 34 mm flat top at Z104
+# (D-054 had 40 mm vertical sides and 3 mm top chamfers). The LED reserve's
+# outer top corner sets the slope (0.5 mm to the wall); the clamp keeps
+# 1.1 mm under the sloped wall.
+CROWN_OUTER=[(-22,73),(22,73),(22,85),(17,104),(-17,104),(-22,85)]
 # Window lip in front of the glass: 1.3 mm. The 1.5 mm glass and its mask sit
 # 0.35 mm further back than before (0.55 mm ahead of the display's active
 # sheet), keeping the 0.2 mm front and 0.25 mm rear seat gaps.
