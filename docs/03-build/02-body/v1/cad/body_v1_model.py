@@ -4519,9 +4519,10 @@ def build_assembly():
 def build_body_assembly():
     """Full body v1: body frame, shell, internals, wiring, and yaw stage.
 
-    Chassis v1 owns the battery pack, drive boards, deck IMU, front range sensor,
-    and concealed nose contact assembly. Filter those out here so this body view
-    remains complete without duplicating chassis-owned hardware.
+    Body only. Chassis v1 owns the battery pack, drive boards, deck IMU, front
+    range sensor, and concealed nose contact assembly. Filter those out here so
+    this body view does not duplicate chassis-owned hardware. The whole robot,
+    with chassis_v1_reference() and the head, is built in final/v1/cad/.
     """
     electronics_parts = {part.label: part for part in electronics().children}
     chassis_electronics = {
@@ -4568,8 +4569,7 @@ def build_body_assembly():
             connector_parts.append(part)
     body_connectors = Compound(label="BODY_CONNECTORS_AND_EXITS", children=connector_parts)
 
-    return Compound(label="BODY_V1_WITH_CHASSIS_V1", children=[
-        chassis_v1_reference(),
+    return Compound(label="BODY_V1", children=[
         body_primary_frame(),
         body_chassis_mount_hardware(),
         body_frame_joint_hardware(),

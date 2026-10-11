@@ -2,7 +2,7 @@
 
 See the [chassis v1 BOM](../BOM.md) for the modeled quantities, shared test dependencies, and release holds.
 
-This folder contains a copy of the latest working [Layout 02 whole-robot CAD](../../../../02-prototypes/RP-06-cad/body-chassis/layout-02/) as the starting point for chassis v1. `body-chassis.step` is the local, full-assembly STEP snapshot; `body-chassis.step.py` and `body_chassis_model.py` are the editable source. The check scripts, parameter sidecar, and saved reports came with that snapshot. The large STEP is ignored by Git and can be regenerated from the source.
+This folder contains a copy of the latest working [Layout 02 whole-robot CAD](../../../../02-prototypes/RP-06-cad/body-chassis/layout-02/) as the starting point for chassis v1. `body_chassis_model.py` is the editable source. The check scripts and saved reports came with that snapshot. This folder exports the chassis only: the Layout 02 whole-robot entry (`body-chassis.step.py`, its viewer params and `write_viewer_params.py`) was removed on 2026-10-11. `build_assembly()` stays in the model because `check_layout.py` and `check_nose_service.py` still use it. The whole robot is built in [final v1](../../../final/v1/README.md).
 
 Copied from the Layout 02 working tree on 2026-09-27. STEP SHA-256: `73c63c29f7f4d8733b28b023c546889812590d7d05636319c4c75f0d10a0b339`. The saved check reports were copied, not rerun for v1.
 

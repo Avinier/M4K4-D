@@ -2,11 +2,10 @@
 
 Head v1 starts from the latest RP-06 head, Layout 04, and is now the live source
 used by body v1. The source and purchased reference STEPs are local to this
-folder. `head-v1.step.py` produces a parts-only head assembly;
-`head-v1-integrated.step.py` places it on the latest body v1 and chassis v1.
-The latter imports `build_body_assembly()` from body v1, so the chassis is the
-actual chassis v1 reference already used by the body, with no second set of
-manually positioned solids.
+folder. `head-v1.step.py` produces a parts-only head assembly. This folder
+holds the head alone; [final v1](../../../final/v1/README.md) places it on the
+latest body v1 and chassis v1 (`makad-v1.step.py`, and the opaque
+`makad-v1-presentation.step.py`).
 
 ## Source and outputs
 
@@ -17,8 +16,6 @@ manually positioned solids.
 | `purchased/` | The 1:1 display, camera and C2 source STEPs copied from RP-06 Layout 01, the drawing-based STS3045M reference and the official goBILDA 4001-0025-0006 coupler STEP (D-049). `xc330.stp` is kept for history; nothing installs it. |
 | `feetech.py` | D-049 STS3045M installation: servo poses, roll coupler and pitch horn stack, mount and collar parameters; the D-050 yoke leg outline, plinth and gusset. |
 | `head-v1.step.py` | Standalone head CAD export. |
-| `head-v1-integrated.step.py` | Parts-only head plus latest body and chassis assembly. |
-| `head-v1-presentation.step.py` | The same robot as built: every part opaque, reservations and overlays left out (D-050). Use it to judge appearance; the inspection models draw the skin and shell at alpha 0.28. |
 | `yaw-yoke.step.py` | Compact review of the turntable, legs, accent inlays, the pitch horn and the D-051 −Y pivot and leg-foot screws. |
 | `ears-v1.step.py` | Focused two-ear assembly with caps, colour inlays, cradle and service hardware. |
 | `check_ears.py`, `generated/ear-service.json` | Nominal cap and inner-mount removal paths, fastener count, and solid/finish checks. |
@@ -48,7 +45,6 @@ CAD_PY=/Users/avinier/.codex/runtimes/text-to-cad/0.4.28/venv/bin/python
 CAD_GEN=/Users/avinier/.codex/plugins/cache/text-to-cad/cad/0.4.28/skills/cad/scripts/gen
 rtk proxy "$CAD_PY" check_integration.py
 rtk proxy "$CAD_PY" "$CAD_GEN" head-v1.step.py --write
-rtk proxy "$CAD_PY" "$CAD_GEN" head-v1-integrated.step.py --write
 ```
 
 The source includes the body's three R22 M3 hub insert locations (210°, 270°,
@@ -276,7 +272,9 @@ timings and remaining targets.
 - `dimensions.md` and `mass-placement.json`: source-derived dimensions and
   estimated mass. The 293.5 mm whole-robot crown height uses the shared body
   yaw datum.
-- `snapshots/`: the integrated isometric snapshot reviewed after export.
+- `snapshots/`: head review images. Whole-robot snapshots, including the
+  earlier `head-v1-integrated-*` and `head-v1-presentation-*` images, are in
+  `final/v1/cad/snapshots/`.
 
 Head v1 retains the RP-06 Layout 04 head mechanism and 1:1 module envelopes:
 removable front carrier and rear cover, camera bracket, C2 tray, ears,

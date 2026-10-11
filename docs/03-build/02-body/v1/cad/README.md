@@ -1,12 +1,12 @@
 # Body v1 CAD
 
-This directory follows the chassis v1 CAD layout: an editable model and STEP entry point at the root, `generated/` for derived reports, `snapshots/` for review images, and `purchased/` for vendor-reference provenance. Subsystem folders are added when a body component has its own model. The current body is one scoped assembly, so its source remains in the root. Its head reference now comes from [head v1](../../../03-head/v1/cad/README.md); build `head-v1-integrated.step.py` there for the complete head, body and chassis view.
+This directory follows the chassis v1 CAD layout: an editable model and STEP entry point at the root, `generated/` for derived reports, `snapshots/` for review images, and `purchased/` for vendor-reference provenance. Subsystem folders are added when a body component has its own model. The current body is one scoped assembly, so its source remains in the root. `body-v1.step` is the body alone; the chassis it sits on is `chassis_v1_reference()`, which the fit checks still load. Build the complete chassis, body and head view in [final v1](../../../final/v1/README.md).
 
 | Path | Purpose |
 |---|---|
 | `body_v1_model.py` | Geometry, dimensions, labels, and the body/chassis scope boundary. |
 | `body-v1.step.py` | CADgen build entry point for `body-v1.step`. |
-| `body-v1.step` | Derived body assembly; ignored by Git and regenerated from source. |
+| `body-v1.step` | Derived body-only assembly (no chassis, no head); ignored by Git and regenerated from source. |
 | `body-frame-v1.step.py` | Focused two-print frame and joint-hardware review export. |
 | `check_shell_frame_fit.py` | Static fit, lowering path, and outside screw access check. |
 | `check_body_panel_fit.py` | Sloped service-panel, frame, functional-part, and fastener clearance check. |
