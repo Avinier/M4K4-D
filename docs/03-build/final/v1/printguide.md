@@ -175,7 +175,7 @@ of them is a filament anyone has picked. This section replaces them with twelve
 real finishes, keeping **ivory and amber** as the droid's identity.
 
 **The scheme in one line:**
-- **Body:** an ivory shell with taupe service panels and a taupe rear keel.
+- **Body:** an ivory shell with pastel dark brown service panels and a brown rear keel.
 - **Head:** ivory.
 - **Frames, neck disc and ear centres:** one deep slate blue.
 - **Wheels:** a lighter slate blue from the same family.
@@ -211,7 +211,7 @@ neutral-light value.
 | Name | Hex | Finish (§3) | Used on | How to get it |
 |---|---|---|---|---|
 | **Ivory** | Viewer `#DDD4BA`; neutral light `#DAD5C3` (a cool cream) | Housing grain | Body shell (with its internal panel frames), wheel-arch pods, every head skin: bezel and crown, octagonal skins, rear cover, ear caps; the nose touch cap | Ivory ASA is uncommon. If the lab has none, print white or light-grey ASA and paint it matte ivory; the weathering needs paint anyway |
-| **Taupe** | Viewer `#A9A28E`; neutral light `#9D9886` | Housing grain | Front and rear service panels (with the button well printed in them); the rear TCRT keel and its sensor bezel | Warm taupe or khaki-grey ASA, or primer and taupe paint. Darker panels on the ivory shell (2.0:1) mark them as removable ("visibly assembled"). The keel is PETG, so it needs a taupe PETG or a primer before paint |
+| **Brown** | Viewer `#8A7060`; neutral light `#816C5F` (a soft, pastel dark cocoa brown; replaced a dull taupe, a khaki and a saddle brown) | Housing grain | Front and rear service panels (with the button well printed in them); the rear TCRT keel and its sensor bezel | Brown ASA, or primer and matte brown paint. Warm like the ivory and softly muted, but clearly darker: 3.1:1 against the shell and 1.9:1 against the signal-amber bezel, which it frames mark them as removable ("visibly assembled"). The keel is PETG, so it needs a taupe PETG or a primer before paint |
 | **Amber** | `#B88636` (unchanged) | Accent | Wheel-arch trim rings, ear inlays, yoke-leg spine inlays | Matte ochre or mustard filament, or paint. The parts are small, so paint is easy |
 | **Signal amber** | `#D39F36` (unchanged) | Accent | Rear power-button bezel only | Same as amber, lifted toward safety yellow so the red button stands out. Keep it: it is a safety cue, not decoration |
 | **Deep slate** | Viewer `#4F575B`; neutral light `#34495C` | Metal casing on visible parts; hidden structure elsewhere | Visible: the yaw turntable disc (the neck), ear dark centres. Hidden: chassis frame modules, motor carriers and plates, bearing housings, battery tub and hatch, ball pod and lid, keel wear shoe and TCRT shims, body frame and foot cassette, compute tray, the whole yaw stage, head cradle, pitch frame, bearing cartridge, display rear frame, ear inner mounts, CSI guide | A very dark blue-grey: one colour ties the frame and neck together. Dark blue-grey PETG (chassis, body) and PLA (head). The visible parts can be painted matte metallic in the same tone |
@@ -232,9 +232,9 @@ already draw screws in `STEEL`. The head draws its screws dark (`#555B5A`,
 
 | CAD colour today | Hex | Painted on now | Becomes |
 |---|---|---|---|
-| `IVORY` | `#E3DDC9` | Shell, arch pods, rear panel, head skins, nose cap; also the keel, wear shoe and TCRT bezel | Shell, arch pods, head skins and nose cap stay ivory, retuned to `#DAD5C3`. **Rear panel → taupe.** **Keel and TCRT bezel → taupe**, the panel colour. **Wear shoe → deep slate**: it is the part that drags on the floor and is hidden under the keel |
-| `PANEL_WARM_GRAY` | `#C5C0AD` | Front service panel | **Taupe**: the old sand was too close to ivory |
-| `SLATE_DARK` | `#707D82` | Shell's internal panel frames; rear button well; yaw gear, pinion, hub and clamp ring | **Panel frames → ivory**: they print as part of the shell (D-045), so they come out in its filament. **Button well → taupe**: it prints with the rear panel. Yaw parts → deep slate |
+| `IVORY` | `#E3DDC9` | Shell, arch pods, rear panel, head skins, nose cap; also the keel, wear shoe and TCRT bezel | Shell, arch pods, head skins and nose cap stay ivory, retuned to `#DAD5C3`. **Rear panel → brown.** **Keel and TCRT bezel → brown**, the panel colour. **Wear shoe → deep slate**: it is the part that drags on the floor and is hidden under the keel |
+| `PANEL_WARM_GRAY` | `#C5C0AD` | Front service panel | **Brown**: the old sand was too close to ivory |
+| `SLATE_DARK` | `#707D82` | Shell's internal panel frames; rear button well; yaw gear, pinion, hub and clamp ring | **Panel frames → ivory**: they print as part of the shell (D-045), so they come out in its filament. **Button well → brown**: it prints with the rear panel. Yaw parts → deep slate |
 | `FRAME_BLUE` | `#86A1A8` | Chassis and body frames, carriers, housings, yaw housing and stator; wheel rim and clamp ring | Deep slate; **wheel rim and clamp ring → slate blue** |
 | `SLATE` | `#87949A` | Ball pod and lid, battery hatch, chassis rails | Deep slate |
 | `BRONZE` | `#C38A47` | Inserts; pinion sprung half; yaw rotor; head pitch frame, bearing cartridge, roll retainers, spine inlays | Inserts stay brass; **spine inlays → amber**; the printed parts → deep slate |
@@ -258,7 +258,7 @@ print, a separate part bonded in, or paint:
 - **Yoke legs:** a carbon leg with an amber spine inlay that is 0.15 mm proud.
   The CAD comment already allows "printed flat in a second colour or the pocket
   can be painted".
-- **Rear panel:** taupe, with the signal-amber bezel land. Use an AMS colour
+- **Rear panel:** brown, with the signal-amber bezel land. Use an AMS colour
   change on the bezel layers, or mask and paint it.
 
 ### Applying it to the CAD
@@ -284,7 +284,7 @@ Checked on 2026-10-13 against all 2,286 parts in the assembly:
   washers).
 
 The shell's internal panel frames and the rear button well are features of the
-shell and panel solids, not separate parts. So they take ivory and taupe
+shell and panel solids, not separate parts. So they take ivory and brown
 automatically.
 
 **When a subsystem adds or renames a printed part,** add a rule for it here.
@@ -300,5 +300,5 @@ render.
 - The largest bed available. The body shell footprint is about 162 × 182 mm (X −61.1/+101.1, Y ±91.1).
 - **ASA allowed?** Some labs ban ABS and ASA for the fumes. Check for an enclosed printer with a filter, and ask about warping on a part the size of the shell.
 - Textured PEI plates, and whether their slicer allows painting fuzzy skin onto chosen faces.
-- Filament colours in stock, by brand and material, against the [§4 palette](#4-colour-scheme): ivory or white **ASA** and a warm taupe or khaki-grey **ASA**, matte amber or ochre, a very dark blue-grey (deep slate) in **PETG** and **PLA**, a lighter blue-grey (slate blue) **PETG** for the wheels, taupe **PETG** for the keel, matte gunmetal, black TPU 95A. Take photos next to a printed colour card. Screen hex values are only a guide.
+- Filament colours in stock, by brand and material, against the [§4 palette](#4-colour-scheme): ivory or white **ASA** and a soft dark brown **ASA**, matte amber or ochre, a very dark blue-grey (deep slate) in **PETG** and **PLA**, a lighter blue-grey (slate blue) **PETG** for the wheels, brown **PETG** for the keel, matte gunmetal, black TPU 95A. Take photos next to a printed colour card. Screen hex values are only a guide.
 - Whether the lab has a spray booth for primer and paint.
