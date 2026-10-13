@@ -16,7 +16,7 @@ PALETTE = {
     # removes yellow. Under neutral light (Fusion, real filament) four of them
     # need the values in NEUTRAL_LIGHT below to give the same look.
     "ivory": "#DDD4BA",          # ASA skins: body shell, arch pods, head (richer than the model's #E3DDC9)
-    "brown": "#8A7060",          # ASA body service panels, rear TCRT keel: pastel cocoa brown
+    "taupe": "#A9A28E",          # ASA body service panels, rear TCRT keel
     "amber": "#B88636",          # accents
     "signal_amber": "#D39F36",   # power-button bezel
     "deep_slate": "#4F575B",     # frames, neck disc, ear centres
@@ -33,7 +33,7 @@ PALETTE = {
 # the values to match filament or paint to (printguide.md §4). Not used here.
 NEUTRAL_LIGHT = {
     "ivory": "#DAD5C3",
-    "brown": "#816C5F",
+    "taupe": "#9D9886",
     "deep_slate": "#34495C",
     "slate_blue": "#587A94",
 }
@@ -41,12 +41,12 @@ NEUTRAL_LIGHT = {
 # (pattern, palette name). Case-insensitive search on the leaf label first,
 # then on its group path.
 RULES = [
-    # Skins: ASA, housing grain (printguide.md §3). Ivory shell, brown panels.
+    # Skins: ASA, housing grain (printguide.md §3). Ivory shell, taupe panels.
     (r"^BODY_SHELL$", "ivory"),
     (r"^WHEEL_ARCH_POD_[LR]$", "ivory"),
-    (r"^(FRONT|REAR)_SERVICE_PANEL", "brown"),
-    (r"^REAR_KEEL_FACETED_BODY$", "brown"),
-    (r"^REAR_TCRT_BEZEL_WITH_GUARDS$", "brown"),
+    (r"^(FRONT|REAR)_SERVICE_PANEL", "taupe"),
+    (r"^REAR_KEEL_FACETED_BODY$", "taupe"),
+    (r"^REAR_TCRT_BEZEL_WITH_GUARDS$", "taupe"),
     (r"^BALL_NOSE_TOUCH_CAP$", "ivory"),
     (r"^front_bezel_integral_camera_crown$", "ivory"),
     (r"^main_octagonal_skin(_lower)?$", "ivory"),
