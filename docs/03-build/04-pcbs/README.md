@@ -2,6 +2,29 @@
 
 This folder holds the schematic, layout, fabrication and electrical-validation work for the robot's custom boards. It is a work area, not a fabrication release. Part records stay in the [project BOM](../BOM.csv); every selection and change goes in the [build decisions](../decisions.md). It replaces the former `04-custom-pcb/` folder ([D-038](../decisions.md#d-038)).
 
+Each custom board is designed, procured and integrated into the final CAD one at a time, in its own `pcb-NN-name/` folder. [workflow.md](workflow.md) describes the three stages and tracks each board's progress.
+
+## Tools
+
+Chosen in [D-058](../decisions.md#d-058); layout tool and routing changed by [D-060](../decisions.md#d-060).
+
+| Tool | Used for | Where |
+|---|---|---|
+| KiCad 10.99 (nightly) + KiPy | Schematic and layout, driven through KiPy and computer-use tools; the GUI for review | Not installed yet; `/Applications/KiCad` is still 10.0.6. Each board's project is in its folder's `design/` |
+| `kicad-cli` (same install as the layout) | ERC, DRC with the schematic-to-board check, Gerbers, drill, pick-and-place, BOM, board STEP, renders | `/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli` |
+| JLCPCB | PCB fabrication and assembly (PCBA); layouts follow its limits | — |
+| text-to-cad (cadgen) | Stage 3: the board STEP placed in the robot CAD | Project runtime 0.4.28 (see [final/v1](../final/v1/README.md)) |
+
+## Layout rules
+
+These rules take priority over D-058 ([D-060](../decisions.md#d-060); builder, 2026-10-14). They come from someone else's experience of LLM-driven KiCad layout. When an LLM lays out a board, it must:
+
+1. use KiCad 10.99 (the nightly build, which adds scripting features) and drive it through KiPy and computer-use tools;
+2. not use an autorouter such as Freerouting;
+3. place components one at a time or in small functional groups;
+4. adjust placement after routing where that helps;
+5. route with octolinear traces, organised into buses of parallel, equally spaced tracks. Plan fanouts first. Keep detours and roundabout routes to a minimum, especially on signal nets. Size track widths and pours for each net's current. Optionally, write reusable scripts that check these properties and use them to check the work.
+
 ## Board register
 
 | ID | Board | Location | BOM | Status | Work still required |
@@ -19,7 +42,7 @@ This folder holds the schematic, layout, fabrication and electrical-validation w
 | PCB-10 | C3 controller carrier (watchdog, READY, sleep gate, Hall and TCRT circuits) | Body, −Y side wall | CH-044 | Spec | J10-8 Hall and J10-10 TCRT changes; [J10-5/6 driver mapping](power-boards.md#24-logic-to-c3-j10-5--j10-6-gh-6) |
 | PCB-11 | Status LED carrier (WS2812B-2020) | Head crown | CH-085 | Spec | Brightness and stray-light bench |
 | PCB-12 | C2 head carrier (ESP32-S3-Zero, transceivers, TPS3436 watchdog) | Head | CH-086 | Lead design | Schematic; head pocket fit |
-| CH-064 | Nose Hall carrier (DRV5055) | Chassis nose | CH-064 | Spec | Layout of the 6 × 4.6 × 0.8 mm board |
+| PCB-15 | Nose Hall carrier (DRV5055A3, decoupling, output filter, three wire pads); numbered by [D-057](../decisions.md#d-057), formerly listed by its BOM ID | Chassis nose, in the pod-seat slot | CH-064 | Spec ([D-013](../decisions.md#d-013)); [nose-hall-board.md](../01-chassis/v1/research/nose-hall-board.md) | Layout of the 6 × 4.6 × 0.8 mm board; cap trip and wire-break fault bench |
 | PCB-13 | Charge inlet: GCT USB4140, TVS2200, ESDA25W, STUSB4500, input P-FET | Body, rear-panel pad (comes off with the panel) | BO-015 | Spec and CAD ([charge-path.md §3, §6](charge-path.md), [D-040](../decisions.md#d-040)) | Schematic and layout; NVM image and read-back; CP-01 to CP-03, CP-13, CP-14 |
 
 Power-board specification: the RP-02 [board-specs.md](../../02-prototypes/RP-02-electrical/board-specs.md) is the read-only reference, and [power-boards.md](power-boards.md) holds what the build changes. The charge path, from the USB-C inlet to the pack entry, is in [charge-path.md](charge-path.md). Open board work without another home is tracked in [open-items.md](open-items.md).
@@ -38,3 +61,5 @@ Before releasing any board, record:
 - measured electrical results.
 
 When an interface changes, update the affected CAD and the canonical BOM.
+
+**Droid CAD changes go in [final/v1/cad](../final/v1/cad/) only** (builder, 2026-10-14). Envelope fixes, board STEPs that replace placeholders, and the mounting features they need are made in `makad-v1.step.py`. For example, `DROID_CUTS` cuts material from printed parts. They are not made in the chassis, body or head sources. The subsystem checks don't see these changes, so each one gets its own targeted check script in `final/v1/cad` (for example `check_pcb15_relief.py`, [D-059](../decisions.md#d-059)).

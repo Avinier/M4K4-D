@@ -7,3 +7,9 @@ __pycache__/
 __cadgen__/
 docs/03-build/03-head/v1/cad/.cache/
 docs/02-prototypes/RP-06-cad/body-chassis/layout-02/snapshots/*_20??????T??????Z.png
+
+# KiCad per-user view state, lock files and autosave backups
+*.kicad_prl
+*.lck
+*-backups/
+_autosave-*

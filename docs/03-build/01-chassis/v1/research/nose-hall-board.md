@@ -1,4 +1,4 @@
-# Nose Hall board (CH-064) and contact trip point
+# Nose Hall board PCB-15 (CH-064) and contact trip point
 
 **Status:** design, not ordered or built. Decision [D-013](../../../decisions.md#d-013). CAD: `NOSE_HALL_*` and `NOSE_MAGNET` in [`body_chassis_model.py`](../cad/body_chassis_model.py).
 
@@ -18,9 +18,9 @@ The touch cap carries a magnet. A linear Hall sensor on a small board in the pod
 
 - **Outline and stack:** 6.0 (Y) × 4.6 (Z) × 0.8 mm FR4, two layers, 1 oz copper, HASL or ENIG.
 - **Mounting:** the board stands vertically in a 6.2 × 1.0 mm slot in the pod seat, which is open at the top. Its world span is X 126.6–127.4, Y 7.0–13.0, Z 30.4–35.0.
-- **Front face (+X):** U1 is centred at board-local (Y 3.0, Z 2.2), which is world (Y 10.0, Z 32.6). The package's long axis runs along Y, and U1 sits in a notch through the seat's front face. C1 goes beside it at local (5.2, 2.2).
+- **Front face (+X):** U1 is centred at board-local (Y 3.0, Z 2.2), which is world (Y 10.0, Z 32.6). The package's long axis runs along Y, and U1 sits in a notch through the seat's front face. Nothing else fits on the front face ([D-059](../../../decisions.md#d-059)).
 - **U1 land pattern:** IPC-7351 SOT-23-3.
-- **Back face:** R1 and C2 go at local Z 1.0–2.0. Three wire pads, 0.8 × 1.2 mm, sit at local Y 2.9 / 4.0 / 5.1 and Z 3.4–4.6: +3V3, GND, OUT, in that order. They lie in line with the pod's lead groove (world Y 9.5–12.5, Z 33.5–35).
+- **Back face:** C1, R1 and C2 go here, in a 0.9 mm relief pocket in the seat behind the board ([D-059](../../../decisions.md#d-059)): local Y 0.8–5.2, Z 0–4.6, parts at most 0.9 mm tall. C1 sits behind U1 and connects to it through vias. Three wire pads, 0.8 × 1.2 mm, sit at local Y 2.9 / 4.0 / 5.1 and Z 3.4–4.6: +3V3, GND, OUT, in that order. They lie in line with the pod's lead groove (world Y 9.5–12.5, Z 33.5–35).
 - **Vias:** 0.3 mm drill, connecting the front and back.
 - **Retention:** the slot holds the board with 0.1 mm per side of clearance. Fix it with a drop of CA or hot glue at the slot top. No force acts on it: the magnet never touches the package, and 0.1 mm of air remains at the stop.
 

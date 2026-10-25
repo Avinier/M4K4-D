@@ -39,7 +39,7 @@ The purchased **Pololu #2691 caster** is a separate row (CH-016). It includes th
 | CH-017 | [Adafruit #3297 DRV8833 breakout](https://www.adafruit.com/product/3297); one board per motor, both bridges paralleled within each board | 2 | SELECTED |
 | CH-018 | [Robocraze Sharp GP2Y0A21YK0F](https://robocraze.com/products/robocraze-sharp-gp2y0a21yk0f-distance-sensor) | 1 | SELECTED |
 | CH-019 | [TI DRV5055A3QDBZR bare linear Hall sensor](https://evelta.com/drv5055a3qdbzr-ratiometric-linear-hall-effect-sensor-with-analog-output-sot-23-3/) ([datasheet](https://www.ti.com/lit/ds/symlink/drv5055.pdf)) | 1 | SELECTED |
-| CH-064 | Custom nose Hall carrier, 6.0 × 4.6 × 0.8 mm, for TI DRV5055A3 and filter | 1 | DESIGN |
+| CH-064 | Custom nose Hall carrier PCB-15 (D-057), 6.0 × 4.6 × 0.8 mm, for TI DRV5055A3 and filter | 1 | DESIGN |
 | CH-065 | N35 Ø3 × 1.5 mm cap magnet | 1 | SELECTED |
 | CH-066 | [Industrybuying RS PRO 821245 stainless compression spring](https://www.industrybuying.com/compression-spring-rs-pro-OFF.STO.223805403), pack of 10 listing; OD 2.75 × 0.25 wire × 15.7 free, 0.18 N/mm | 2 | SELECTED |
 | CH-020 | Vishay TCRT5000 bare sensor with a soldered 350 mm GH4 lead to J10-10 ([spec](research/rear-tcrt-lead.md), D-016/D-021) | 1 assembly | SELECTED |

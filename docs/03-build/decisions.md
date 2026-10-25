@@ -60,6 +60,10 @@ The central record of every decision and change made during the build phase. New
 | [D-054](#d-054) | 2026-10-10 | Head / camera housing restyle (M019a; head v1 CAD) | The 46 mm crown and its hipped roof cap become a slim raked fin: the crown narrows to 40 mm with 3 mm top chamfers and keeps its flat top to X −24; the skin hood behind it rakes down at 35.5° to the roof, about 25 mm long instead of running back to X −78 | ACTIVE; front section revised by D-056 |
 | [D-055](#d-055) | 2026-10-10 | Body / shell review fixes (BO-019, BO-024; body v1 CAD) | Remove the Layout 02 front badge land that sat inside the speaker cup; raise the enclosure fan, web opening and +Y grille 3 mm (Z 110) so the grille clears the wheel-arch pod; teardrop fan collar for the roof-down print; drill the Ø2 mic ports after printing | ACTIVE; CAD and targeted checks complete; HOLD on a printed grille/collar coupon |
 | [D-056](#d-056) | 2026-10-11 | Head / camera fin front section (M019a; head v1 CAD) | The D-054 fin becomes trapezoidal from the front: sides slope in from 44 mm at Z 85 to a 34 mm flat top at Z 104, replacing 40 mm vertical sides with 3 mm top chamfers; the rake, depth and hood are unchanged | ACTIVE; CAD and checks complete |
+| [D-057](#d-057) | 2026-10-13 | PCBs / register numbering (CH-064; final v1 CAD) | The custom nose Hall carrier, listed in the board register only by its BOM ID CH-064, becomes **PCB-15**; the BOM line stays CH-064 | ACTIVE; numbering only, no design change |
+| [D-058](#d-058) | 2026-10-14 | PCBs / design toolchain (all custom boards; 04-pcbs workflow) | Design every custom board in **KiCad 10**, with `kicad-cli` running the electrical and layout checks and the fab and STEP exports, **Freerouting** for autorouting, and **JLCPCB** as the default fab and assembler | PARTLY SUPERSEDED by [D-060](#d-060) (KiCad version, no autorouter); `kicad-cli` and JLCPCB stay ACTIVE |
+| [D-059](#d-059) | 2026-10-14 | PCBs / PCB-15 seat relief (CH-064; final v1 CAD) | Cut a 0.9 mm relief pocket into the nose seat behind the Hall board, so C1, R1 and C2 all go on the board's back face; the cut is made in `final/v1/cad`, not in the chassis source | ACTIVE; cut measured; schematic and layout not started |
+| [D-060](#d-060) | 2026-10-14 | PCBs / layout method (all custom boards; 04-pcbs workflow) | LLM-driven layout uses **KiCad 10.99 nightly** through KiPy and computer-use tools, places parts one at a time or in small functional groups, and routes by hand-planned octolinear buses with current-sized tracks; **no autorouter**. Replaces D-058's KiCad version and Freerouting | ACTIVE; nightly not installed yet; no board laid out |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -2403,3 +2407,118 @@ The ports sit inside the ear web's R20.3 and the inner mount's R28 seat.
 - Not rerun: mounts audit, D-051/D-053 joint sweeps, leg clearance, FEA (no part they cover changed).
 
 **Views.** Integrated and presentation render packages rebuilt; new snapshots in `03-head/v1/cad/snapshots/`.
+
+## D-057
+
+**2026-10-13 · PCBs / register numbering: nose Hall carrier becomes PCB-15 (CH-064; final v1 CAD) · ACTIVE; numbering only, no design change**
+
+**Why.** The nose Hall carrier came out of the chassis nose work ([D-013](#d-013)) before the [04-pcbs board register](04-pcbs/README.md#board-register) existed, and the register took it in under its BOM ID. It was the only custom board without a `PCB-xx` number, which made it read as something other than a custom PCB in the board list and in the whole-robot CAD's `Custom PCBs` group.
+
+**Decision.** The 6.0 × 4.6 × 0.8 mm DRV5055A3 nose Hall carrier is **PCB-15**. PCB-15 is the board ID and CH-064 stays its BOM line, the same pairing as PCB-12/CH-086 and PCB-14/BO-062. The board, its design and its open work are unchanged.
+
+**Changed.**
+- [04-pcbs/README.md](04-pcbs/README.md): the register row is PCB-15.
+- [BOM.csv](BOM.csv): CH-064 is named "Nose Hall board PCB-15"; its spec path is corrected to `01-chassis/v1/research/nose-hall-board.md` (the note moved to `research/` earlier and the BOM path was stale).
+- [01-chassis/v1/BOM.md](01-chassis/v1/BOM.md) and [nose-hall-board.md](01-chassis/v1/research/nose-hall-board.md): PCB-15 added next to CH-064.
+- `final/v1/cad/makad-v1.step.py`: the `Custom PCBs` subgroup is `PCB-15 nose Hall carrier`. The CAD part labels (`BALL_NOSE_HALL_CARRIER_PCB`, `BALL_NOSE_HALL_DRV5055A3_SOT23`) are unchanged, so no chassis or body check is affected.
+
+**Not changed.** Earlier entries that say CH-064 are left as written.
+
+**Next.** None for the numbering. The board's own open items (layout, cap trip and wire-break fault bench) stay as listed in the register.
+
+## D-058
+
+**2026-10-14 · PCBs / design toolchain: KiCad 10, Freerouting, JLCPCB (all custom boards; [04-pcbs workflow](04-pcbs/workflow.md)) · PARTLY SUPERSEDED by [D-060](#d-060): KiCad version and autorouting. `kicad-cli` checks and outputs and JLCPCB stay ACTIVE**
+
+**Why.** The [PCB workflow](04-pcbs/workflow.md) takes each custom board through design, procurement and integration into the final CAD, and stage 1 needed a design tool. Three options were checked:
+
+- **Fusion Electronics** cannot be driven by the agent. The Fusion MCP's electronics tool only reads designs, and the Fusion Python API's `adsk.electron` module is a read-only preview: nothing in it places a part, draws a net or routes a track. Its designs also live in Autodesk's cloud, not in the repo.
+- **text-to-cad (cadgen)** models solids only. Its KiCad support ([PR #518](https://github.com/earthtojake/text-to-cad/pull/518), `cadgen.pcb`) was open and unreleased on 2026-10-14; the latest release was 0.7.21.
+- **KiCad** keeps schematic and board as plain-text files that can be written, diffed and committed. `kicad-cli` runs every check and export without the GUI, and the GUI is there for review and hand routing.
+
+**Decision.**
+
+- **Design tool: KiCad 10** (10.0.6, Homebrew cask, `/Applications/KiCad`). Each board's KiCad project lives in its folder's `design/`. The global symbol and footprint tables are KiCad's defaults.
+- **Checks and outputs: `kicad-cli`.** ERC on the schematic. DRC with `--schematic-parity` on the board, which also catches any difference between schematic and board. Gerbers, drill, pick-and-place and BOM for fab. The populated board as STEP for stage 3.
+- **Autorouting: Freerouting 2.5.0** (`~/.local/share/freerouting/freerouting.jar`, SHA-256 checked against the GitHub release; runs on the Homebrew OpenJDK). The board goes out as Specctra DSN and comes back as a session, then KiCad's DRC checks the result. Small boards (PCB-06, PCB-11, PCB-14, PCB-15) may be fully autorouted. On PCB-02, PCB-03, PCB-04 and PCB-13 the high-current and switching paths are routed by hand and locked first; the autorouter then routes only the signal nets. Track widths and clearances come from KiCad net classes set before routing.
+- **Fab and assembly: JLCPCB PCBA by default**, as [audiosystem.md §5](02-body/v1/research/audiosystem.md#5-how-the-boards-will-be-made) already planned for PCB-05 to PCB-08. Layout follows JLCPCB's limits. A board goes elsewhere only by decision.
+
+**Evidence (2026-10-14, throwaway board in the session scratchpad, not in the repo).** A three-part board (2-pin header, 1 kΩ 0603, 0603 LED) went through the whole flow. Schematic written as text, then ERC: 0 violations. Netlist exported, then the board built from it in KiCad's Python: DRC 0 violations, 0 unconnected, 0 parity issues. Gerbers, drill, pick-and-place and BOM exported. The STEP loaded in the project's 0.4.28 build123d runtime, with one labelled child per part. With its tracks removed and the connector moved so that straight tracks would cross, Freerouting routed all three nets in 0.19 s, and KiCad's DRC on the result was again clean.
+
+**Integration notes for stage 3.**
+- KiCad's STEP has Y flipped: board Y points down, so the test board came out at Y −12…0.
+- The board solid runs Z 0…1.51 mm because copper isn't modelled. The CAD placeholders assume 1.6 mm.
+- The default Gerber export writes every layer, including user layers; fab exports must name JLCPCB's layer set.
+
+**Changed.**
+- [04-pcbs/README.md](04-pcbs/README.md): a Tools section.
+- [04-pcbs/workflow.md](04-pcbs/workflow.md): the tools replace "choose the EDA tool and fab house by decision", and `design/` is the KiCad project.
+
+**Not changed.** No board is drawn. Each board folder still holds only its README.
+
+**Unverified.** Freerouting on a dense two-layer board. JLCPCB's assembly checks on WLCSP and bottom-port MEMS parts (PCB-05, PCB-06), already open in audiosystem.md §6.
+
+**Next.** Start stage 1 on the first board. When text-to-cad releases its KiCad support, decide whether boards move to `cadgen.pcb` scripts.
+
+## D-059
+
+**2026-10-14 · PCBs / PCB-15 component relief in the nose seat (CH-064; final v1 CAD) · ACTIVE; cut measured; schematic and layout not started**
+
+**Why.** Freezing PCB-15's design inputs showed that the seat has room only for U1 and the three wire pads. On the front face, the only opening is the sensor notch. U1's SOT-23 pads fill it to local Z 3.9, which leaves 0.7 mm under the top edge, and that is too little for an 0402 part with its edge clearance. Behind the board, the slot leaves 0.1 mm per side, and the only open space is the lead groove, which the wire pads fill. The spec's C1, at local Y 5.2, falls outside the notch. Its R1 and C2, at local Z 1.0–2.0, face solid seat. The CAD drew the board as a plain block carrying only U1, so no check could see the problem. The datasheet requires C1.
+
+**Options.**
+- **A (chosen):** a relief pocket behind the board, with all three passives on the back face.
+- **B:** the same pocket, with R1 and C2 moved to PCB-10. C1 still needs the pocket, and another board's spec would change.
+- **C:** a taller board reaching above the seat top. It would run into the GP2Y pocket and the cap.
+
+**Decision.**
+- **Pocket:** cut from `BALL_POD_PRINTED_SEAT` at world X 125.7–126.6, Y 7.8–12.2, Z 30.3 to the seat top (Z 35). It is 0.9 mm deep behind the board's back face, open at the top, and joins the lead groove.
+- **Parts:** C1, R1 and C2 all go on the back face. C1 sits behind U1 and connects to it through vias.
+- **Back-face part zone, board-local:** Y 0.8–5.2, Z 0–4.6, parts at most 0.9 mm tall. 0402 parts with solder are about 0.55 mm.
+- **Support:** the board's ends, local Y 0–0.8 and 5.2–6.0, still rest on the slot's back wall. The front slot wall still holds the board on either side of the notch.
+- **Unchanged:** board outline, U1 position, notch and trip-point model.
+
+**Where the cut lives.** The builder ruled on 2026-10-14 that droid CAD changes are made only in `final/v1/cad`. `DROID_CUTS` in [makad-v1.step.py](final/v1/cad/makad-v1.step.py) cuts the box from the seat when the droid is built. `body_chassis_model.py` and `body_v1_model.py` are unchanged, so the chassis checks (`check_layout.py`, `check_nose_joints.py`) do not see the pocket. Its own check is [check_pcb15_relief.py](final/v1/cad/check_pcb15_relief.py).
+
+**Evidence (2026-10-14).** `check_pcb15_relief.py` run on the chassis tree, PASS:
+- 13.304 mm³ removed. That equals the box less the slot strip and lead groove it overlaps, so the pocket opens into no other cavity.
+- No seat material is left inside the box.
+- A 0.6 mm shell around the pocket is solid.
+- The seat is solid behind the slot wall at both board ends.
+- Board-to-seat clearance is still 0.1 mm.
+
+**Changed.**
+- [makad-v1.step.py](final/v1/cad/makad-v1.step.py): `DROID_CUTS` and `_apply_droid_cuts()`.
+- [check_pcb15_relief.py](final/v1/cad/check_pcb15_relief.py): new.
+- [nose-hall-board.md](01-chassis/v1/research/nose-hall-board.md): C1, R1 and C2 placement.
+- [pcb-15-nose-hall/README.md](04-pcbs/pcb-15-nose-hall/README.md): envelope, gap 1 closed.
+- [04-pcbs/README.md](04-pcbs/README.md) and [workflow.md](04-pcbs/workflow.md): the rule that droid CAD changes go in `final/v1/cad`.
+- [final/v1/README.md](final/v1/README.md): the folder now holds droid-level changes.
+
+**Not checked.** Printability of the 0.9 mm open-top pocket. It has the same form as the existing 1.0 mm board slot.
+
+**Next.** PCB-15 schematic, then a layout inside the back-face zone above.
+
+## D-060
+
+**2026-10-14 · PCBs / layout method: KiCad 10.99 nightly, no autorouter (all custom boards; [04-pcbs workflow](04-pcbs/workflow.md)) · ACTIVE; nightly not installed yet; no board laid out**
+
+**Why.** The builder supplied layout tips from someone else's experience of LLM-driven KiCad layout and ruled that they take priority over D-058 (2026-10-14).
+
+**Decision.** When an LLM lays out a board:
+
+- **Tool:** KiCad 10.99, the nightly build, which adds scripting features. Drive it through KiPy and computer-use tools. Replaces D-058's KiCad 10.0.6 as the layout tool.
+- **No autorouter.** Freerouting and other autorouters are not used. Replaces D-058's autorouting bullet, including the full autoroute of small boards and the signal-net autoroute on power boards.
+- **Placement:** place components one at a time or in small functional groups. Adjusting placement after routing is acceptable.
+- **Routing:** octolinear traces, organised into buses of parallel, equally spaced tracks. Plan fanouts first. Keep detours and roundabout routes to a minimum, especially on signal nets. Size track widths and pours for each net's current.
+- **Self-checks (optional):** write reusable scripts that check these routing properties, and use them to check the layout.
+
+**Unchanged from D-058.** `kicad-cli` ERC, DRC with `--schematic-parity`, fab and STEP outputs; JLCPCB as the default fab and assembler; each board's project in its folder's `design/`; the stage-3 STEP integration notes.
+
+**Changed.**
+- [04-pcbs/README.md](04-pcbs/README.md): Tools table and the *Layout rules* section.
+- [04-pcbs/workflow.md](04-pcbs/workflow.md): tools line and stage 1 layout step.
+
+**Unverified.** KiCad 10.99 nightly is not installed; `/Applications/KiCad` is 10.0.6. Files saved by the nightly may not open in 10.0.6, so `kicad-cli` must come from the same install as the layout. KiPy's coverage of placement and routing in the nightly is untested.
+
+**Next.** Install the nightly and KiPy, and repeat D-058's throwaway-board flow with hand routing before the first Makad board.
