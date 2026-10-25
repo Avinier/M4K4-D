@@ -12,6 +12,7 @@ Chosen in [D-058](../decisions.md#d-058); layout tool and routing changed by [D-
 |---|---|---|
 | KiCad 10.99 (nightly) + KiPy | Schematic and layout, driven through KiPy and computer-use tools; the GUI for review | `/Applications/KiCad-nightly` (build 20261024, `de08734017`), side by side with 10.0.6 in `/Applications/KiCad`. KiPy (`kicad-python` 0.8.0) in `~/.local/share/kipy/venv`; it talks to the running GUI, and the nightly has no bundled `pcbnew` Python. Each board's project is in its folder's `design/` |
 | `kicad-cli` (same install as the layout) | ERC, DRC with the schematic-to-board check, Gerbers, drill, pick-and-place, BOM, board STEP, renders | `/Applications/KiCad-nightly/KiCad.app/Contents/MacOS/kicad-cli` (10.99). The 10.0.6 CLI in `/Applications/KiCad` may not read files the nightly saved |
+| [`tools/kp.py`](tools/kp.py) | KiPy layout helpers: place (restores 3D models after a flip), octolinear tracks, vias, audit, DRC. Steps in [design-playbook.md](design-playbook.md) | Run with `~/.local/share/kipy/venv/bin/python` against the open PCB editor |
 | JLCPCB (default), PCBWay, Lion Circuits (MII service) | PCB fabrication and assembly (PCBA). These three only. Layouts follow the [fab-neutral rules](#fab-neutral-design-rules), and the fab is chosen by quote ([D-062](../decisions.md#d-062)) | — |
 | text-to-cad (cadgen) | Stage 3: the board STEP placed in the robot CAD | Project runtime 0.4.28 (see [final/v1](../final/v1/README.md)) |
 

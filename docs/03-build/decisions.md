@@ -67,6 +67,7 @@ The central record of every decision and change made during the build phase. New
 | [D-061](#d-061) | 2026-10-25 | PCBs / fab-neutral design rules (all custom boards; 04-pcbs workflow) | Design every board to the **strictest of JLCPCB, Lion Circuits and PCB Power** standard 2-layer limits, so either the Chinese default or an Indian fab can make it; choose the fab by quote at procure. Replaces D-058's "layout follows JLCPCB's limits"; JLCPCB stays the default | SUPERSEDED by D-062 |
 | [D-062](#d-062) | 2026-10-25 | PCBs / fab shortlist and design rules (all custom boards; 04-pcbs workflow) | Only **JLCPCB, PCBWay and Lion Circuits** make Makad boards. Every layout meets the strictest standard 2-layer limits of the three, with Lion Circuits' **MII (Make in India)** service as the target, which sets the vias at 0.35/0.67 mm and 0.31 mm via spacing. PCB Power is dropped. Replaces D-061 | ACTIVE; PCB-15 re-laid to it, DRC clean |
 | [D-063](#d-063) | 2026-10-25 | Chassis / nose: PCB-15 moved 0.4 mm back (CH-064, CH-065; final v1 CAD) | The nose Hall board and its 1.0 mm slot move **0.4 mm back** (board X 126.2–127.0). The relief pocket deepens to 1.3 mm. U1 then clears the cap magnet at the 3 mm stop by 0.195 mm in the worst case, where D-013 had assumed 0.1 mm and the real part could hit it by 0.205 mm | ACTIVE; fit and relief checks pass; trip point to re-measure on the bench |
+| [D-064](#d-064) | 2026-10-25 | PCBs / workflow order (all custom boards; 04-pcbs workflow) | **Design every board first**, one at a time, then procure them together in shared orders, then integrate. Replaces the one-board-at-a-time path through all three stages | ACTIVE; PCB-15 rev A designed, its procurement waits for the batch |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -2619,3 +2620,26 @@ So a full press could drive the magnet into U1.
 - [final/v1/README.md](final/v1/README.md).
 
 **Next.** Bench item 19 measures the trip with the moved board. Stage 3 places the PCB-15 STEP at X 126.2–127.0.
+
+
+## D-064
+
+**2026-10-25 · PCBs / workflow order: design all boards first, then procure together (all custom boards; [04-pcbs workflow](04-pcbs/workflow.md)) · ACTIVE; PCB-15 rev A designed, its procurement waits for the batch**
+
+**Why.** The workflow took each board through design, procurement and integration before starting the next. PCB-15 finished design on 2026-10-25, and the builder asked to design the other boards before buying any.
+- **Cost.** Each import order from China pays shipping, about 31 % courier duty and brokerage ([D-061](#d-061)). PCB-15 is below every fab's assembly minimum and needs a panel anyway, so it can share a panel and an order with other boards.
+- **Interfaces.** Boards connect to each other. PCB-10 is the far end of PCB-15's cable and carries the wire-break pull-up that PCB-15's design deferred to it. Both ends should be designed before either is bought.
+- **Lessons carry over.** PCB-15's design traps are written down and handled in the tooling: KiPy's flip strips 3D models, F8 drops the position-file flag, the seat keep-outs work, and so does the fit check.
+
+**Decision.**
+- **Design first.** Boards are designed one at a time, each in its own session if the builder wants, to a committed revision with schematic, layout, fab outputs and board STEP, as stage 1 says. The suggested order runs from simple to complex: PCB-11, PCB-06, PCB-10, PCB-13, then PCB-05, PCB-09 and PCB-12, then the power boards PCB-02, PCB-03 and PCB-04. PCB-07, PCB-08 and PCB-14 each need a decision before they can be designed.
+- **Then procure.** Stage 2 starts when the design batch is done. Boards on HOLD do not hold up the batch. Boards from the same fab go on one order, panelised together where that helps.
+- **Then integrate**, as stage 3 says.
+
+**Risk accepted.** No board is bench-checked until the batch is ordered, so a mistake common to several boards would surface late. Datasheet pinout checks, ERC and DRC with schematic parity, and the 3D fit check in each board's subsystem stay mandatory in stage 1.
+
+**Changed.**
+- [04-pcbs/workflow.md](04-pcbs/workflow.md): intro, stage 2 start and the PCB-15 row.
+- [04-pcbs/design-playbook.md](04-pcbs/design-playbook.md): new. The per-board design steps proven on PCB-15.
+- [04-pcbs/tools/kp.py](04-pcbs/tools/kp.py): new. The KiPy layout helpers, which restore models after a flip.
+- [pcb-15-nose-hall/README.md](04-pcbs/pcb-15-nose-hall/README.md): stage 2 status.

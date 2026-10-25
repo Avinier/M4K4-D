@@ -1,6 +1,6 @@
 # PCB workflow — design, procure, integrate
 
-Each custom board goes through three stages, one board at a time: **design** it, **procure** its parts and the assembled board, then **integrate** the real board into the final CAD. A board starts a stage only after it has finished the stage before. Each board has a folder in `04-pcbs/`. Its README records where the board is in this workflow.
+Each custom board goes through three stages: **design** it, **procure** its parts and the assembled board, then **integrate** the real board into the final CAD. **Every board is designed first, one at a time; procurement starts only when the design batch is done, and boards are then ordered together where they share a fab** ([D-064](../decisions.md#d-064)). A board starts a stage only after it has finished the stage before. How to design one board, step by step, is in [design-playbook.md](design-playbook.md). Each board has a folder in `04-pcbs/`. Its README records where the board is in this workflow.
 
 PCB-01 has no folder. It is the bought TIFPS0629 ([D-019](../decisions.md#d-019)), and its acceptance stays in [power-boards.md §3](power-boards.md#3-pcb-01--tifps0629-acceptance-before-cells-are-connected).
 
@@ -21,7 +21,7 @@ PCB-01 has no folder. It is the bought TIFPS0629 ([D-019](../decisions.md#d-019)
 | [pcb-12-c2-head-carrier](pcb-12-c2-head-carrier/README.md) | C2 head carrier | CH-086 | Not started | — | — |
 | [pcb-13-charge-inlet](pcb-13-charge-inlet/README.md) | Charge inlet | BO-015 | Not started | — | — |
 | [pcb-14-yaw-rotor-joiner](pcb-14-yaw-rotor-joiner/README.md) | Yaw rotor joiner ×3 | BO-062 | Not started | — | — |
-| [pcb-15-nose-hall](pcb-15-nose-hall/README.md) | Nose Hall carrier | CH-064 | Done (rev A) | Not started | — |
+| [pcb-15-nose-hall](pcb-15-nose-hall/README.md) | Nose Hall carrier | CH-064 | Done (rev A) | Waits for the design batch | — |
 
 Update this table and the board's README together. The [board register](README.md#board-register) keeps the board's specification status and the work it still needs.
 
@@ -56,7 +56,7 @@ The tools are KiCad 10.99 nightly with KiPy and `kicad-cli` ([D-058](../decision
 
 ## Stage 2 — Procure
 
-**Starts when** the board has a committed design revision.
+**Starts when** the board has a committed design revision **and** the design batch is done: every board that can be designed has a committed revision ([D-064](../decisions.md#d-064)). Boards on HOLD for a decision do not hold up the batch.
 
 1. **Component BOM.** `bom.csv` lists one board's parts: reference, value, MPN, manufacturer, quantity, supplier and its part number, unit price, and the date stock was checked. It also says whether each part is assembled by the fab house or fitted by hand.
 2. **Sourcing in India.** Confirm each part can be bought: fab-house stock, LCSC, element14 India, Evelta, Mouser/DigiKey India. A part that can't be sourced sends the board back to stage 1.

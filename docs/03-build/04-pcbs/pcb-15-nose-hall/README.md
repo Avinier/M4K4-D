@@ -19,7 +19,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
 | 1. Design | **Done: rev A.** Schematic, layout, fab outputs and board STEP committed; the envelope change has its decision ([D-063](../../decisions.md#d-063)) | [design/](design/), [fab/revA/](fab/revA/README.md), [cad/](cad/) | 2026-10-25 |
-| 2. Procure | Not started | — | — |
+| 2. Procure | Waits for the design batch ([D-064](../../decisions.md#d-064)) | — | — |
 | 3. Integrate | — | — | — |
 
 ## Inputs
@@ -153,3 +153,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-25:** re-laid to [D-062](../../decisions.md#d-062): the fabs are JLCPCB, PCBWay and Lion Circuits MII only. Vias 0.62/0.3 → 0.67/0.35, with 0.31 mm via spacing (Lion MII). C1 moved 0.2 mm left, and all three vias moved to the only legal spots a grid search found; re-routed by hand through KiPy. DRC 0 errors, 0 unconnected, parity clean; the same 4 `lib_footprint_mismatch` warnings.
 - **2026-10-25:** lesson 6. 3D models restored (stripped by KiPy's flip) and the wire pads' position-file flag set again (dropped by F8). Rev A outputs exported to `fab/revA/`; board STEP to `cad/`. New fit check `final/v1/cad/check_pcb15_fit.py`: the board fits the seat, but U1 can touch the magnet at the cap's 3 mm stop (air +0.035 mm nominal, −0.205 mm worst case). Decision needed before release.
 - **2026-10-25:** [D-063](../../decisions.md#d-063) taken (option A): board and slot 0.4 mm back, relief 1.3 mm deep, all in `final/v1/cad` (new `DROID_ADDS` and `DROID_MOVES`). Fit and relief checks PASS. Rev A committed: stage 1 done.
+- **2026-10-25:** [D-064](../../decisions.md#d-064): every board is designed before any is procured, so PCB-15's stage 2 waits for the batch and its order is shared with the other boards.
