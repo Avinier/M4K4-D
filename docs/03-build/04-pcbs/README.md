@@ -10,7 +10,7 @@ Chosen in [D-058](../decisions.md#d-058); layout tool and routing changed by [D-
 
 | Tool | Used for | Where |
 |---|---|---|
-| KiCad 10.99 (nightly) + KiPy | Schematic and layout, driven through KiPy and computer-use tools; the GUI for review | Not installed yet; `/Applications/KiCad` is still 10.0.6. Each board's project is in its folder's `design/` |
+| KiCad 10.99 (nightly) + KiPy | Schematic and layout, driven through KiPy and computer-use tools; the GUI for review | `/Applications/KiCad-nightly` (build 20261024, `de08734017`), side by side with 10.0.6 in `/Applications/KiCad`. KiPy (`kicad-python` 0.8.0) in `~/.local/share/kipy/venv`; it talks to the running GUI, and the nightly has no bundled `pcbnew` Python. Each board's project is in its folder's `design/` |
 | `kicad-cli` (same install as the layout) | ERC, DRC with the schematic-to-board check, Gerbers, drill, pick-and-place, BOM, board STEP, renders | `/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli` |
 | JLCPCB | PCB fabrication and assembly (PCBA); layouts follow its limits | — |
 | text-to-cad (cadgen) | Stage 3: the board STEP placed in the robot CAD | Project runtime 0.4.28 (see [final/v1](../final/v1/README.md)) |

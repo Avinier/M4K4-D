@@ -63,7 +63,7 @@ The central record of every decision and change made during the build phase. New
 | [D-057](#d-057) | 2026-10-13 | PCBs / register numbering (CH-064; final v1 CAD) | The custom nose Hall carrier, listed in the board register only by its BOM ID CH-064, becomes **PCB-15**; the BOM line stays CH-064 | ACTIVE; numbering only, no design change |
 | [D-058](#d-058) | 2026-10-14 | PCBs / design toolchain (all custom boards; 04-pcbs workflow) | Design every custom board in **KiCad 10**, with `kicad-cli` running the electrical and layout checks and the fab and STEP exports, **Freerouting** for autorouting, and **JLCPCB** as the default fab and assembler | PARTLY SUPERSEDED by [D-060](#d-060) (KiCad version, no autorouter); `kicad-cli` and JLCPCB stay ACTIVE |
 | [D-059](#d-059) | 2026-10-14 | PCBs / PCB-15 seat relief (CH-064; final v1 CAD) | Cut a 0.9 mm relief pocket into the nose seat behind the Hall board, so C1, R1 and C2 all go on the board's back face; the cut is made in `final/v1/cad`, not in the chassis source | ACTIVE; cut measured; schematic and layout not started |
-| [D-060](#d-060) | 2026-10-14 | PCBs / layout method (all custom boards; 04-pcbs workflow) | LLM-driven layout uses **KiCad 10.99 nightly** through KiPy and computer-use tools, places parts one at a time or in small functional groups, and routes by hand-planned octolinear buses with current-sized tracks; **no autorouter**. Replaces D-058's KiCad version and Freerouting | ACTIVE; nightly not installed yet; no board laid out |
+| [D-060](#d-060) | 2026-10-14 | PCBs / layout method (all custom boards; 04-pcbs workflow) | LLM-driven layout uses **KiCad 10.99 nightly** through KiPy and computer-use tools, places parts one at a time or in small functional groups, and routes by hand-planned octolinear buses with current-sized tracks; **no autorouter**. Replaces D-058's KiCad version and Freerouting | ACTIVE; nightly and KiPy installed 2026-10-25; no board laid out |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -2501,7 +2501,7 @@ The ports sit inside the ear web's R20.3 and the inner mount's R28 seat.
 
 ## D-060
 
-**2026-10-14 · PCBs / layout method: KiCad 10.99 nightly, no autorouter (all custom boards; [04-pcbs workflow](04-pcbs/workflow.md)) · ACTIVE; nightly not installed yet; no board laid out**
+**2026-10-14 · PCBs / layout method: KiCad 10.99 nightly, no autorouter (all custom boards; [04-pcbs workflow](04-pcbs/workflow.md)) · ACTIVE; nightly and KiPy installed 2026-10-25; no board laid out**
 
 **Why.** The builder supplied layout tips from someone else's experience of LLM-driven KiCad layout and ruled that they take priority over D-058 (2026-10-14).
 
@@ -2519,6 +2519,8 @@ The ports sit inside the ear web's R20.3 and the inner mount's R28 seat.
 - [04-pcbs/README.md](04-pcbs/README.md): Tools table and the *Layout rules* section.
 - [04-pcbs/workflow.md](04-pcbs/workflow.md): tools line and stage 1 layout step.
 
-**Unverified.** KiCad 10.99 nightly is not installed; `/Applications/KiCad` is 10.0.6. Files saved by the nightly may not open in 10.0.6, so `kicad-cli` must come from the same install as the layout. KiPy's coverage of placement and routing in the nightly is untested.
+**Installed (2026-10-25).** KiCad 10.99.0 nightly (build 20261024, `de08734017`) in `/Applications/KiCad-nightly`, beside 10.0.6 in `/Applications/KiCad`. Its `kicad-cli` ran ERC on a scratch copy of the PCB-15 schematic: 0 violations. The bundle has no Python framework, so the SWIG `pcbnew` module D-058's flow used is gone and boards are scripted only through KiPy against the running GUI. KiPy (`kicad-python` 0.8.0, Python 3.13) is in `~/.local/share/kipy/venv`, the API server is on in the 10.99 preferences, and KiPy connects (`GetVersion` returns 10.99.0-5923-gde08734017).
+
+**Unverified.** Files saved by the nightly may not open in 10.0.6, so `kicad-cli` must come from the same install as the layout. KiPy's coverage of placement and routing in the nightly is untested.
 
 **Next.** Install the nightly and KiPy, and repeat D-058's throwaway-board flow with hand routing before the first Makad board.
