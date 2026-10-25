@@ -21,7 +21,7 @@ PCB-01 has no folder. It is the bought TIFPS0629 ([D-019](../decisions.md#d-019)
 | [pcb-12-c2-head-carrier](pcb-12-c2-head-carrier/README.md) | C2 head carrier | CH-086 | Not started | — | — |
 | [pcb-13-charge-inlet](pcb-13-charge-inlet/README.md) | Charge inlet | BO-015 | Not started | — | — |
 | [pcb-14-yaw-rotor-joiner](pcb-14-yaw-rotor-joiner/README.md) | Yaw rotor joiner ×3 | BO-062 | Not started | — | — |
-| [pcb-15-nose-hall](pcb-15-nose-hall/README.md) | Nose Hall carrier | CH-064 | In progress | — | — |
+| [pcb-15-nose-hall](pcb-15-nose-hall/README.md) | Nose Hall carrier | CH-064 | Done (rev A) | Not started | — |
 
 Update this table and the board's README together. The [board register](README.md#board-register) keeps the board's specification status and the work it still needs.
 
@@ -40,7 +40,7 @@ pcb-NN-name/
 
 Material that spans several boards stays at the top of `04-pcbs/`: [power-boards.md](power-boards.md), [charge-path.md](charge-path.md), [feetech-link-contract.md](feetech-link-contract.md) and [open-items.md](open-items.md). Board folders link to it rather than copy it.
 
-The tools are KiCad 10.99 nightly with KiPy, `kicad-cli` and JLCPCB ([D-058](../decisions.md#d-058), [D-060](../decisions.md#d-060); paths in the [README](README.md#tools)). No autorouter.
+The tools are KiCad 10.99 nightly with KiPy and `kicad-cli` ([D-058](../decisions.md#d-058), [D-060](../decisions.md#d-060); paths in the [README](README.md#tools)). No autorouter. Every layout meets the [fab-neutral rules](README.md#fab-neutral-design-rules), so any of the three fabs, JLCPCB, PCBWay or Lion Circuits (MII), can make it ([D-062](../decisions.md#d-062)).
 
 ## Stage 1 — Design
 
@@ -49,7 +49,7 @@ The tools are KiCad 10.99 nightly with KiPy, `kicad-cli` and JLCPCB ([D-058](../
 1. **Freeze the inputs.** In the README, list the spec sources, the connector pinout and the envelope the CAD placeholder gives: outline, mounting holes, connector positions, tallest part.
 2. **Schematic.** Draw it from the spec. Check it against the spec row by row, and record that check.
 3. **Layout.** Follow the [layout rules](README.md#layout-rules): no autorouter, placement in small groups, octolinear buses, current-sized tracks. Keep the board inside the CAD envelope. Export a board STEP early and check it in the droid CAD ([final/v1/cad](../final/v1/cad/)). If the board must grow or a connector must move, raise a decision first.
-4. **Checks and DFM.** Run `kicad-cli` ERC on the schematic, and DRC with `--schematic-parity` on the board. Both must come back with 0 errors. Then run JLCPCB's design-rule and assembly checks.
+4. **Checks and DFM.** Run `kicad-cli` ERC on the schematic, and DRC with `--schematic-parity` on the board, with the board's fab-neutral `design/<board>.kicad_dru` in place. Both must come back with 0 errors. Then run the online DFM check of each fab that will quote.
 5. **Release outputs.** Commit the schematic, layout, fab outputs and board STEP under a revision letter (rev A, rev B…).
 
 **Done when** a revision is committed with schematic, layout, fab outputs and board STEP, and any change to the envelope or interface has its decision.
@@ -60,6 +60,7 @@ The tools are KiCad 10.99 nightly with KiPy, `kicad-cli` and JLCPCB ([D-058](../
 
 1. **Component BOM.** `bom.csv` lists one board's parts: reference, value, MPN, manufacturer, quantity, supplier and its part number, unit price, and the date stock was checked. It also says whether each part is assembled by the fab house or fitted by hand.
 2. **Sourcing in India.** Confirm each part can be bought: fab-house stock, LCSC, element14 India, Evelta, Mouser/DigiKey India. A part that can't be sourced sends the board back to stage 1.
+   Quote the board with all three fabs for the same revision: JLCPCB and PCBWay (including courier duty and brokerage), and Lion Circuits on its MII service. No other fab is used. Choose by landed cost, lead time and assembly support. A fab other than JLCPCB needs a decision.
 3. **Order.** Order the bare board or PCBA, with spares for one rework. Boards that share a fab house can go on one order.
 4. **Project BOM.** Update the board's line in [BOM.csv](../BOM.csv): `status`, `supplier_candidate`, `procurement`.
 5. **Receive.** Inspect the boards. Measure outline, thickness, tallest part and mass, and record them in the BOM line's `received_measurements`. Then run the board's bring-up and bench tests from its spec.

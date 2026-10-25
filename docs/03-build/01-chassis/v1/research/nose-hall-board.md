@@ -17,12 +17,12 @@ The touch cap carries a magnet. A linear Hall sensor on a small board in the pod
 ## Board
 
 - **Outline and stack:** 6.0 (Y) × 4.6 (Z) × 0.8 mm FR4, two layers, 1 oz copper, HASL or ENIG.
-- **Mounting:** the board stands vertically in a 6.2 × 1.0 mm slot in the pod seat, which is open at the top. Its world span is X 126.6–127.4, Y 7.0–13.0, Z 30.4–35.0.
+- **Mounting:** the board stands vertically in a 6.2 × 1.0 mm slot in the pod seat, which is open at the top. Its world span is X 126.2–127.0, Y 7.0–13.0, Z 30.4–35.0. [D-063](../../../decisions.md#d-063) moved the board and its slot 0.4 mm back from D-013's X 126.6–127.4, so U1 clears the magnet at the cap stop. The slot is now X 126.1–127.1.
 - **Front face (+X):** U1 is centred at board-local (Y 3.0, Z 2.2), which is world (Y 10.0, Z 32.6). The package's long axis runs along Y, and U1 sits in a notch through the seat's front face. Nothing else fits on the front face ([D-059](../../../decisions.md#d-059)).
 - **U1 land pattern:** IPC-7351 SOT-23-3.
-- **Back face:** C1, R1 and C2 go here, in a 0.9 mm relief pocket in the seat behind the board ([D-059](../../../decisions.md#d-059)): local Y 0.8–5.2, Z 0–4.6, parts at most 0.9 mm tall. C1 sits behind U1 and connects to it through vias. Three wire pads, 0.8 × 1.2 mm, sit at local Y 2.9 / 4.0 / 5.1 and Z 3.4–4.6: +3V3, GND, OUT, in that order. They lie in line with the pod's lead groove (world Y 9.5–12.5, Z 33.5–35).
+- **Back face:** C1, R1 and C2 go here, in a relief pocket in the seat behind the board ([D-059](../../../decisions.md#d-059); 1.3 mm deep since [D-063](../../../decisions.md#d-063)): local Y 0.8–5.2, Z 0–4.6, parts at most 0.9 mm tall. C1 sits behind U1 and connects to it through vias. Three wire pads, 0.8 × 1.2 mm, sit at local Y 2.9 / 4.0 / 5.1 and Z 3.4–4.6: +3V3, GND, OUT, in that order. They lie in line with the pod's lead groove (world Y 9.5–12.5, Z 33.5–35).
 - **Vias:** 0.3 mm drill, connecting the front and back.
-- **Retention:** the slot holds the board with 0.1 mm per side of clearance. Fix it with a drop of CA or hot glue at the slot top. No force acts on it: the magnet never touches the package, and 0.1 mm of air remains at the stop.
+- **Retention:** the slot holds the board with 0.1 mm per side of clearance. Fix it with a drop of CA or hot glue at the slot top. No force acts on it: the magnet never touches the package. At the stop, [D-063](../../../decisions.md#d-063) leaves 0.435 mm of air for a nominal part and 0.195 mm in the worst case (1.12 mm part, 0.88 mm board against the front wall). D-013's 0.1 mm assumed a 1.0 mm block; the real stack-up could have hit the magnet by 0.205 mm.
 
 | Net | U1 pin | Goes to |
 |---|---|---|
@@ -44,7 +44,7 @@ This reassigns pins 4 and 5, which were the switch pair. The PCB-10 carrier must
 
 ## Trip point
 
-The Hall plate sits 0.65 mm under the package top (confirm on TI's mechanical drawing). That puts it 3.75 mm from the magnet face at rest and 0.75 mm at the 3 mm stop. The field was computed from the on-axis field of a cylindrical magnet with Br = 1.19 T.
+The Hall plate sits 0.65 ± 0.08 mm under the package top (datasheet SBAS640C, Figure 6-5). With the D-063 board position and a nominal 1.0 mm part on 35 µm copper and solder, it is 4.09 mm from the magnet face at rest and 1.09 mm at the 3 mm stop (D-013's figures were 3.75 and 0.75 mm). The table below is D-013's original calculation for the Ø2 × 1 mm magnet. The Ø3 × 1.5 mm magnet at the D-063 gaps gives 16.1 mT at rest, 30.4 mT at 1 mm, 65.9 mT at 2 mm and 166 mT at the stop. The field was computed from the on-axis field of a cylindrical magnet with Br = 1.19 T.
 
 | Cap travel (mm) | 0 | 0.5 | 0.75 | 1.0 | 1.5 | 2.0 | 3.0 |
 |---|---|---|---|---|---|---|---|
@@ -59,7 +59,7 @@ The Hall plate sits 0.65 mm under the package top (confirm on TI's mechanical dr
 4. Sample at ≥ 1 kHz and average 4 samples.
 5. Treat a reading pinned near 0 V or 3.3 V at rest as a fault (board unplugged or shorted).
 
-**Predicted trip:** with the selected Ø3 × 1.5 mm magnet, a +12 mT threshold is estimated near 0.7 mm travel under the magnet model's stated assumptions. This is a calculation, not a measurement. A constant background field may be absorbed into a verified released-cap baseline; changing fields cannot. Boot calibration must first establish that the cap is released. Confirm polarity, wall thickness, full-stroke air gap and trip/release points with the assembled part and a displacement gauge.
+**Predicted trip:** with the selected Ø3 × 1.5 mm magnet, a +12 mT threshold is estimated near 0.9 mm travel (0.89 mm at the D-063 board position; 0.73 mm before it) under the magnet model's stated assumptions. This is a calculation, not a measurement. A constant background field may be absorbed into a verified released-cap baseline; changing fields cannot. Boot calibration must first establish that the cap is released. Confirm polarity, wall thickness, full-stroke air gap and trip/release points with the assembled part and a displacement gauge.
 
 **Bench check (item 19):** mount the pod and cap and log HALL_OUT against a dial indicator on the cap from 0 to 3 mm. Pass if the trip falls within 0.4–1.2 mm and the release is below the trip. For RS PRO 821245 at the current installed gaps, expected spring-only pair force is 2.67 N near the 0.71 mm trip and 3.49 N at the stop. Measure actual push force, spring movement/buckling, return at intermediate positions, and snap-hook retention; the higher load is not accepted until those checks pass.
 

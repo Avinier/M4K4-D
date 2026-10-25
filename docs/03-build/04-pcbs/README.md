@@ -11,8 +11,8 @@ Chosen in [D-058](../decisions.md#d-058); layout tool and routing changed by [D-
 | Tool | Used for | Where |
 |---|---|---|
 | KiCad 10.99 (nightly) + KiPy | Schematic and layout, driven through KiPy and computer-use tools; the GUI for review | `/Applications/KiCad-nightly` (build 20261024, `de08734017`), side by side with 10.0.6 in `/Applications/KiCad`. KiPy (`kicad-python` 0.8.0) in `~/.local/share/kipy/venv`; it talks to the running GUI, and the nightly has no bundled `pcbnew` Python. Each board's project is in its folder's `design/` |
-| `kicad-cli` (same install as the layout) | ERC, DRC with the schematic-to-board check, Gerbers, drill, pick-and-place, BOM, board STEP, renders | `/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli` |
-| JLCPCB | PCB fabrication and assembly (PCBA); layouts follow its limits | — |
+| `kicad-cli` (same install as the layout) | ERC, DRC with the schematic-to-board check, Gerbers, drill, pick-and-place, BOM, board STEP, renders | `/Applications/KiCad-nightly/KiCad.app/Contents/MacOS/kicad-cli` (10.99). The 10.0.6 CLI in `/Applications/KiCad` may not read files the nightly saved |
+| JLCPCB (default), PCBWay, Lion Circuits (MII service) | PCB fabrication and assembly (PCBA). These three only. Layouts follow the [fab-neutral rules](#fab-neutral-design-rules), and the fab is chosen by quote ([D-062](../decisions.md#d-062)) | — |
 | text-to-cad (cadgen) | Stage 3: the board STEP placed in the robot CAD | Project runtime 0.4.28 (see [final/v1](../final/v1/README.md)) |
 
 ## Layout rules
@@ -24,6 +24,26 @@ These rules take priority over D-058 ([D-060](../decisions.md#d-060); builder, 2
 3. place components one at a time or in small functional groups;
 4. adjust placement after routing where that helps;
 5. route with octolinear traces, organised into buses of parallel, equally spaced tracks. Plan fanouts first. Keep detours and roundabout routes to a minimum, especially on signal nets. Size track widths and pours for each net's current. Optionally, write reusable scripts that check these properties and use them to check the work.
+
+## Fab-neutral design rules
+
+Only three fabs make Makad boards: **JLCPCB** (China, the default), **PCBWay** (China) and **Lion Circuits** (Bengaluru), on its **MII** (Make in India) service ([D-062](../decisions.md#d-062), builder, 2026-10-25). Every board is laid out so that any of the three can make it on its standard service, with no layout change. The rule set is the strictest standard 2-layer, 1 oz limit of the three. Each board carries it as a KiCad custom rules file, `design/<board>.kicad_dru`, copied from [PCB-15's](pcb-15-nose-hall/design/pcb-15-nose-hall.kicad_dru). The fab is chosen by quote at procure.
+
+| Rule | Fab-neutral minimum | JLCPCB | PCBWay | Lion Circuits MII |
+|---|---|---|---|---|
+| Track width and copper gap | **0.16 mm** | 0.10 | 0.10 | 0.152 (6 mil) |
+| Via | **0.35 mm hole, 0.67 mm pad** (ring 0.16) | hole 0.15, pad 0.25 | hole 0.15, ring 0.15 | drill 0.35, ring 0.152 |
+| Via to other copper | **0.31 mm**, from the via's copper and from its hole | — | — | 12 mil (0.305), via to trace |
+| Hole to hole | **0.31 mm** | — | — | 12 mil between vias |
+| Copper to routed edge | **0.3 mm** | 0.2 | 0.25 | 0.3 |
+| Solder-mask web between pads | **0.16 mm** | 0.10 | not stated; confirm | 0.152 |
+| Silkscreen text | **1.0 mm high, 0.16 mm line**, or leave silkscreen off | 1.0 | 0.8 | 0.58, line 0.152 |
+| Board thickness tolerance | **State it on the order** when the mounting needs it | ±10 % | ±10 % at 1.0 mm and thicker; confirm below | ±10 % |
+| Assembly, minimum board | **Panelise** small boards | 10 × 10 mm | quote; 0402 parts get an engineering review | 50 × 100 mm |
+
+Lion's page lists three services. **MII** is the target. **Custom** is looser (0.25 mm drill, 10 mil via spacing), so an MII layout also suits it. **Rush** is tighter (0.4 mm drill, 8 mil tracks, 14 mil via spacing) and is not a target. A board that needs Rush is checked against it first.
+
+Sources, read 2026-10-25: [JLCPCB](https://jlcpcb.com/capabilities/pcb-capabilities), [PCBWay](https://www.pcbway.com/capabilities.html), [Lion Circuits](https://lioncircuits.com/pcb-manufacturing-capabilities). Read the pages again before each order. If a fab tightens a limit, tighten the rule here first.
 
 ## Board register
 
@@ -42,7 +62,7 @@ These rules take priority over D-058 ([D-060](../decisions.md#d-060); builder, 2
 | PCB-10 | C3 controller carrier (watchdog, READY, sleep gate, Hall and TCRT circuits) | Body, −Y side wall | CH-044 | Spec | J10-8 Hall and J10-10 TCRT changes; [J10-5/6 driver mapping](power-boards.md#24-logic-to-c3-j10-5--j10-6-gh-6) |
 | PCB-11 | Status LED carrier (WS2812B-2020) | Head crown | CH-085 | Spec | Brightness and stray-light bench |
 | PCB-12 | C2 head carrier (ESP32-S3-Zero, transceivers, TPS3436 watchdog) | Head | CH-086 | Lead design | Schematic; head pocket fit |
-| PCB-15 | Nose Hall carrier (DRV5055A3, decoupling, output filter, three wire pads); numbered by [D-057](../decisions.md#d-057), formerly listed by its BOM ID | Chassis nose, in the pod-seat slot | CH-064 | Spec ([D-013](../decisions.md#d-013)); [nose-hall-board.md](../01-chassis/v1/research/nose-hall-board.md) | Layout of the 6 × 4.6 × 0.8 mm board; cap trip and wire-break fault bench |
+| PCB-15 | Nose Hall carrier (DRV5055A3, decoupling, output filter, three wire pads); numbered by [D-057](../decisions.md#d-057), formerly listed by its BOM ID | Chassis nose, in the pod-seat slot | CH-064 | **Rev A designed** ([D-013](../decisions.md#d-013), [D-059](../decisions.md#d-059), [D-063](../decisions.md#d-063)); [nose-hall-board.md](../01-chassis/v1/research/nose-hall-board.md); [board folder](pcb-15-nose-hall/README.md) | Procure: panel, two-sided assembly quote, passive MPNs; cap trip and wire-break fault bench |
 | PCB-13 | Charge inlet: GCT USB4140, TVS2200, ESDA25W, STUSB4500, input P-FET | Body, rear-panel pad (comes off with the panel) | BO-015 | Spec and CAD ([charge-path.md §3, §6](charge-path.md), [D-040](../decisions.md#d-040)) | Schematic and layout; NVM image and read-back; CP-01 to CP-03, CP-13, CP-14 |
 
 Power-board specification: the RP-02 [board-specs.md](../../02-prototypes/RP-02-electrical/board-specs.md) is the read-only reference, and [power-boards.md](power-boards.md) holds what the build changes. The charge path, from the USB-C inlet to the pack entry, is in [charge-path.md](charge-path.md). Open board work without another home is tracked in [open-items.md](open-items.md).
@@ -62,4 +82,4 @@ Before releasing any board, record:
 
 When an interface changes, update the affected CAD and the canonical BOM.
 
-**Droid CAD changes go in [final/v1/cad](../final/v1/cad/) only** (builder, 2026-10-14). Envelope fixes, board STEPs that replace placeholders, and the mounting features they need are made in `makad-v1.step.py`. For example, `DROID_CUTS` cuts material from printed parts. They are not made in the chassis, body or head sources. The subsystem checks don't see these changes, so each one gets its own targeted check script in `final/v1/cad` (for example `check_pcb15_relief.py`, [D-059](../decisions.md#d-059)).
+**Droid CAD changes go in [final/v1/cad](../final/v1/cad/) only** (builder, 2026-10-14). Envelope fixes, board STEPs that replace placeholders, and the mounting features they need are made in `makad-v1.step.py`. For example, `DROID_CUTS` cuts material from printed parts, `DROID_ADDS` adds it and `DROID_MOVES` shifts parts ([D-063](../decisions.md#d-063)). They are not made in the chassis, body or head sources. The subsystem checks don't see these changes, so each one gets its own targeted check script in `final/v1/cad` (for example `check_pcb15_relief.py`, [D-059](../decisions.md#d-059)).

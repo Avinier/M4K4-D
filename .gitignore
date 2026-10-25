@@ -13,3 +13,5 @@ docs/02-prototypes/RP-06-cad/body-chassis/layout-02/snapshots/*_20??????T??????Z
 *.lck
 *-backups/
 _autosave-*
+# KiCad 10.99 local history (a git repo of snapshots next to each project)
+.history/

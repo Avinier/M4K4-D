@@ -43,13 +43,28 @@ def build_robot(label="Makad v1"):
 
 # Droid-level CAD changes. From 2026-10-14 the droid's CAD changes are made in
 # this folder, not in the subsystem sources (04-pcbs/README.md#rules), so the
-# subsystem checks do not see them. Each entry cuts a world-frame box
-# (x0, x1, y0, y1, z0, z1) from every part whose label fully matches.
+# subsystem checks do not see them. Each DROID_CUTS entry cuts a world-frame box
+# (x0, x1, y0, y1, z0, z1) from every part whose label fully matches; each
+# DROID_ADDS entry unions one in; each DROID_MOVES entry shifts every matching
+# part by a world-frame (dx, dy, dz).
 DROID_CUTS = [
-    # D-059: PCB-15 component relief behind the nose Hall board, 0.9 mm deep, open at
-    # the top and into the lead groove. The board's ends (local Y 0-0.8, 5.2-6.0)
-    # still bear on the slot's back wall.
-    (r"BALL_POD_PRINTED_SEAT", (125.7, 126.6, 7.8, 12.2, 30.3, 35.01)),
+    # D-059: PCB-15 component relief behind the nose Hall board, open at the top and
+    # into the lead groove. D-063 deepens it 0.4 mm (to 1.3 mm) with the board.
+    (r"BALL_POD_PRINTED_SEAT", (125.3, 126.6, 7.8, 12.2, 30.3, 35.01)),
+    # D-063: the slot's back wall moves 0.4 mm back (X 126.5 -> 126.1); the board's
+    # ends (local Y 0-0.8, 5.2-6.0) bear on it.
+    (r"BALL_POD_PRINTED_SEAT", (126.1, 126.5, 6.9, 13.1, 30.3, 35.01)),
+]
+DROID_ADDS = [
+    # D-063: the slot's front wall moves 0.4 mm back too (X 127.5 -> 127.1), beside the
+    # sensor notch (Y 8.3-11.7), so the slot stays 1.0 mm wide and locates the board.
+    (r"BALL_POD_PRINTED_SEAT", (127.1, 127.5, 6.9, 8.3, 30.3, 35.0)),
+    (r"BALL_POD_PRINTED_SEAT", (127.1, 127.5, 11.7, 13.1, 30.3, 35.0)),
+]
+DROID_MOVES = [
+    # D-063: PCB-15 sits 0.4 mm further back (X 126.2-127.0), so U1 clears the magnet
+    # at the cap's 3 mm stop.
+    (r"BALL_NOSE_HALL_(CARRIER_PCB|DRV5055A3_SOT23)", (-0.4, 0.0, 0.0)),
 ]
 
 
@@ -65,22 +80,31 @@ def _cut_parts(node, parent_location, hits):
         if all(k is c for k, c in zip(kept, children)):
             return node
         return _relabel(node.label, kept, node.location, node.color)
-    cuts = [box for pattern, box in DROID_CUTS if re.fullmatch(pattern, node.label or "")]
-    if not cuts:
+    label = node.label or ""
+    edits = [(kind, entry) for kind, table in (("cut", DROID_CUTS), ("add", DROID_ADDS), ("move", DROID_MOVES))
+             for entry in table if re.fullmatch(entry[0], label)]
+    if not edits:
         return node
     part = node
-    for box in cuts:
-        hits[box] += 1
-        part = part - _cut_box(*box).moved(parent_location.inverse())
+    for kind, (_, value) in edits:
+        hits[kind, value] += 1
+        if kind == "cut":
+            part = part - _cut_box(*value).moved(parent_location.inverse())
+        elif kind == "add":
+            part = part + _cut_box(*value).moved(parent_location.inverse())
+        else:  # world-frame shift of a part placed under parent_location
+            part = part.moved(parent_location.inverse() * Location(value) * parent_location)
     part.label, part.color = node.label, node.color
     return part
 
 
 def _apply_droid_cuts(robot):
-    hits = {box: 0 for _, box in DROID_CUTS}
+    """Apply DROID_CUTS, DROID_ADDS and DROID_MOVES; every entry must hit a part."""
+    tables = (("cut", DROID_CUTS), ("add", DROID_ADDS), ("move", DROID_MOVES))
+    hits = {(kind, value): 0 for kind, table in tables for _, value in table}
     robot = _cut_parts(robot, Location(), hits)
-    missing = [pattern for pattern, box in DROID_CUTS if not hits[box]]
-    assert not missing, f"droid cut labels not found: {missing}"
+    missing = [pattern for kind, table in tables for pattern, value in table if not hits[kind, value]]
+    assert not missing, f"droid change labels not found: {missing}"
     return robot
 
 

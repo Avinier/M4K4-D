@@ -1,0 +1,4 @@
+"Comment","Designator","Footprint","Quantity","MPN","Manufacturer"
+"100n X7R 10V","C1,C2","Capacitor_SMD:C_0402_1005Metric","2","",""
+"1k","R1","Resistor_SMD:R_0402_1005Metric","1","",""
+"DRV5055A3QDBZR","U1","pcb15:SOT-23_NoseNotch","1","DRV5055A3QDBZR","Texas Instruments"

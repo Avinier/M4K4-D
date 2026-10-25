@@ -64,6 +64,9 @@ The central record of every decision and change made during the build phase. New
 | [D-058](#d-058) | 2026-10-14 | PCBs / design toolchain (all custom boards; 04-pcbs workflow) | Design every custom board in **KiCad 10**, with `kicad-cli` running the electrical and layout checks and the fab and STEP exports, **Freerouting** for autorouting, and **JLCPCB** as the default fab and assembler | PARTLY SUPERSEDED by [D-060](#d-060) (KiCad version, no autorouter); `kicad-cli` and JLCPCB stay ACTIVE |
 | [D-059](#d-059) | 2026-10-14 | PCBs / PCB-15 seat relief (CH-064; final v1 CAD) | Cut a 0.9 mm relief pocket into the nose seat behind the Hall board, so C1, R1 and C2 all go on the board's back face; the cut is made in `final/v1/cad`, not in the chassis source | ACTIVE; cut measured; schematic and layout not started |
 | [D-060](#d-060) | 2026-10-14 | PCBs / layout method (all custom boards; 04-pcbs workflow) | LLM-driven layout uses **KiCad 10.99 nightly** through KiPy and computer-use tools, places parts one at a time or in small functional groups, and routes by hand-planned octolinear buses with current-sized tracks; **no autorouter**. Replaces D-058's KiCad version and Freerouting | ACTIVE; nightly and KiPy installed 2026-10-25; no board laid out |
+| [D-061](#d-061) | 2026-10-25 | PCBs / fab-neutral design rules (all custom boards; 04-pcbs workflow) | Design every board to the **strictest of JLCPCB, Lion Circuits and PCB Power** standard 2-layer limits, so either the Chinese default or an Indian fab can make it; choose the fab by quote at procure. Replaces D-058's "layout follows JLCPCB's limits"; JLCPCB stays the default | SUPERSEDED by D-062 |
+| [D-062](#d-062) | 2026-10-25 | PCBs / fab shortlist and design rules (all custom boards; 04-pcbs workflow) | Only **JLCPCB, PCBWay and Lion Circuits** make Makad boards. Every layout meets the strictest standard 2-layer limits of the three, with Lion Circuits' **MII (Make in India)** service as the target, which sets the vias at 0.35/0.67 mm and 0.31 mm via spacing. PCB Power is dropped. Replaces D-061 | ACTIVE; PCB-15 re-laid to it, DRC clean |
+| [D-063](#d-063) | 2026-10-25 | Chassis / nose: PCB-15 moved 0.4 mm back (CH-064, CH-065; final v1 CAD) | The nose Hall board and its 1.0 mm slot move **0.4 mm back** (board X 126.2–127.0). The relief pocket deepens to 1.3 mm. U1 then clears the cap magnet at the 3 mm stop by 0.195 mm in the worst case, where D-013 had assumed 0.1 mm and the real part could hit it by 0.205 mm | ACTIVE; fit and relief checks pass; trip point to re-measure on the bench |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -2513,6 +2516,8 @@ The ports sit inside the ear web's R20.3 and the inner mount's R28 seat.
 - **Routing:** octolinear traces, organised into buses of parallel, equally spaced tracks. Plan fanouts first. Keep detours and roundabout routes to a minimum, especially on signal nets. Size track widths and pours for each net's current.
 - **Self-checks (optional):** write reusable scripts that check these routing properties, and use them to check the layout.
 
+**Removed (2026-10-25).** At the builder's request, Freerouting is deleted from the machine: the 2.5.0 jar and its symlink in `~/.local/share/freerouting`, plus its settings and log under `~/Library/Application Support/freerouting` and `~/Library/Logs/freerouting`. The path in D-058 no longer exists. No Makad board was ever autorouted. The Homebrew OpenJDK it ran on is left installed.
+
 **Unchanged from D-058.** `kicad-cli` ERC, DRC with `--schematic-parity`, fab and STEP outputs; JLCPCB as the default fab and assembler; each board's project in its folder's `design/`; the stage-3 STEP integration notes.
 
 **Changed.**
@@ -2524,3 +2529,93 @@ The ports sit inside the ear web's R20.3 and the inner mount's R28 seat.
 **Unverified.** Files saved by the nightly may not open in 10.0.6, so `kicad-cli` must come from the same install as the layout. KiPy's coverage of placement and routing in the nightly is untested.
 
 **Next.** Install the nightly and KiPy, and repeat D-058's throwaway-board flow with hand routing before the first Makad board.
+
+## D-061
+
+**2026-10-25 · PCBs / fab-neutral design rules (all custom boards; [04-pcbs workflow](04-pcbs/workflow.md)) · SUPERSEDED by D-062**
+
+**Why.** D-058 set JLCPCB as the fab and said layouts follow its limits. Importing from China adds courier duty: about 31% under heading 9804 since IGST fell to 18% in September 2025. A 30% anti-dumping duty on Chinese PCBs, in force since March 2024, may also apply. Brokerage is ₹500–3,000 on top. Indian fabs avoid all of that, and the builder ruled that every board should be makeable by either kind of fab.
+
+**Decision.**
+- Each board's layout meets the **strictest standard limit** of JLCPCB, Lion Circuits (Bengaluru) and PCB Power (Gujarat), 2-layer, 1 oz copper. The values and their sources are in the [04-pcbs README](04-pcbs/README.md#fab-neutral-design-rules).
+- Each board carries them as a KiCad custom rules file, `design/<board>.kicad_dru`. KiCad applies it on top of the board's own settings, and the open PCB editor does not overwrite it.
+- The fab is chosen **by quote at procure**: JLCPCB with duty, Lion Circuits and PCB Power, for the same revision. JLCPCB stays the default. A board goes elsewhere by decision, as D-058 says.
+- Each board's order states the thickness tolerance its mounting needs. PCB Power's standard ±0.20 mm on 0.8 mm would not fit PCB-15's 1.0 mm slot.
+
+**Not decided.** Assembly. Lion Circuits' PCBA minimum board size is 50 × 100 mm, and JLCPCB's is 10 × 10 mm, so small boards need panels either way. Whether a fab will assemble 0402 parts in prototype quantities is settled by quote.
+
+**PCB-15 change.** Vias grow from 0.5/0.3 to 0.62/0.3 mm. The HALL_RAW via moves to (102.93, 103.95), wire pads P1–P3 move 0.05 mm down to keep 0.3 mm from the top edge, and R1 moves 0.19 mm right. DRC against the custom rules: 0 errors, 0 unconnected, schematic parity clean ([PCB-15 README](04-pcbs/pcb-15-nose-hall/README.md#layout)).
+
+**Unverified.** Lion Circuits' minimum drill: its capabilities page gave 0.25–6.3 mm on 2026-10-25, while an earlier search snippet of the same page said 0.35 mm. The rule uses 0.3 mm (the spec's via). Confirm at quote. The limits were read from the fabs' web pages and none has been confirmed with a fab.
+
+**Changed.**
+- [04-pcbs/README.md](04-pcbs/README.md): new *Fab-neutral design rules* section; Tools row for JLCPCB.
+- [04-pcbs/workflow.md](04-pcbs/workflow.md): stage 1 checks and stage 2 sourcing.
+- [pcb-15-nose-hall](04-pcbs/pcb-15-nose-hall/README.md): `design/pcb-15-nose-hall.kicad_dru` and the re-routed layout.
+
+## D-062
+
+**2026-10-25 · PCBs / fab shortlist and design rules: JLCPCB, PCBWay, Lion Circuits MII (all custom boards; [04-pcbs workflow](04-pcbs/workflow.md)) · ACTIVE; PCB-15 re-laid to it, DRC clean**
+
+**Why.** The builder ruled on 2026-10-25 that only three fabs will be used: Lion Circuits, JLCPCB and PCBWay. D-061 listed JLCPCB, Lion Circuits and PCB Power. It also took Lion Circuits' limits from the wrong column. Lion's capabilities page has three columns, one per service: **MII** (Make in India), **Custom** and **Rush**. D-061 used the Custom column (0.25 mm drill, 10 mil via spacing). MII is Lion's base service, and its Indian manufacture is the reason D-061 brought in an Indian fab: it avoids the import duty on Chinese boards. MII's limits are tighter (0.35 mm drill, 12 mil via spacing).
+
+**Decision.**
+- **Fabs:** JLCPCB (China, the default), PCBWay (China) and Lion Circuits (Bengaluru). No other fab is used. PCB Power is dropped.
+- **Rules:** each layout meets the strictest standard 2-layer, 1 oz limit of JLCPCB, PCBWay and **Lion Circuits MII**, as the [04-pcbs README table](04-pcbs/README.md#fab-neutral-design-rules) lists them. Lion MII sets every via rule: hole ≥ 0.35 mm, annular ring ≥ 0.16 (pad ≥ 0.67), and via copper and hole ≥ 0.31 mm from other-net copper. Lion's "12 mil, via to trace" is read as via copper to trace, the stricter of the two readings, and the hole is kept 0.31 mm away as well. Hole to hole is also ≥ 0.31 mm.
+- **Lion Rush is not a target.** Its 0.4 mm minimum drill and 8 mil tracks would grow every board. A board that needs Rush is checked against it first.
+- Each board still carries the rules as `design/<board>.kicad_dru`. The fab is still chosen by quote at procure, from these three only, and a fab other than JLCPCB still needs a decision. D-061's *Not decided* (assembly) stands.
+
+**PCB-15 change.** Vias grow from 0.62/0.3 to 0.67/0.35. C1 moves 0.2 mm left, to (102.55, 102.0). The GND via moves to (103.85, 102.02), and the HALL_RAW via to (103.05, 103.1), under U1 between pins 1 and 2. The +3V3 via moves to (101.2, 103.275). Every via also stays 0.16 mm from its own net's pads, a solder-mask web that keeps solder from wicking into the hole. A grid search over the board found the only legal via spots before the re-layout. DRC against the new `.kicad_dru`: 0 errors, 0 unconnected, schematic parity clean, and the same 4 nightly `lib_footprint_mismatch` warnings. A scratch copy with the hole minimum set to 0.4 mm flagged all three vias, which proves the rules file is enforced.
+
+**Unverified.** The limits come from the three fabs' web pages, read 2026-10-25, and none has been confirmed with a fab. PCBWay's page gives no solder-mask web and states thickness tolerance only for boards 1.0 mm and thicker. PCB-15 is 0.8 mm in a 1.0 mm slot, so confirm the tolerance at quote.
+
+**Changed.**
+- [04-pcbs/README.md](04-pcbs/README.md): Tools row and *Fab-neutral design rules* table.
+- [04-pcbs/workflow.md](04-pcbs/workflow.md): tools line and stage 2 quoting.
+- [pcb-15-nose-hall](04-pcbs/pcb-15-nose-hall/README.md): `design/pcb-15-nose-hall.kicad_dru`, the re-laid board, Layout section and log.
+
+
+## D-063
+
+**2026-10-25 · Chassis / nose: PCB-15 and its slot move 0.4 mm back, so U1 clears the magnet at the cap stop (CH-064, CH-065; final v1 CAD) · ACTIVE; fit and relief checks pass; trip point to re-measure on the bench**
+
+**Why.** PCB-15's stage-1 fit check ([check_pcb15_fit.py](final/v1/cad/check_pcb15_fit.py)) placed the KiCad board STEP in the nose seat. At the cap's 3 mm stop, the magnet face reaches the pod face, X 128.5. D-013 kept 0.1 mm of air there, but only for a 1.0 mm sensor block on a board that never moves in its slot. The real stack-up:
+
+| Case | U1 top, world X | Air at the stop |
+|---|---|---|
+| D-013 placeholder, 1.0 mm block | 128.400 | +0.100 |
+| Real part: 1.0 mm nominal, plus copper and solder, board at X 126.6–127.4 | 128.465 | +0.035 |
+| KiCad's 1.2 mm SOT-23 model | 128.640 | −0.140 |
+| TI DBZ0003A at 1.12 mm max, 0.88 mm board against the front slot wall | 128.705 | **−0.205** |
+
+So a full press could drive the magnet into U1.
+
+**Options.**
+- **A (chosen, builder 2026-10-25):** move the board back 0.4 mm. The slot keeps its 1.0 mm width and the relief deepens with it.
+- **B:** recess the magnet 0.4 mm into the cap and relieve the cap's inner face. This changes the cap and moves the magnet part.
+- **C:** add stop ribs, so the stroke shrinks to 2.6 mm from D-013's 3 mm.
+
+**Decision.**
+- **Board:** world X 126.2–127.0, from 126.6–127.4. The outline, the U1 position in Y/Z and the PCB-15 design are unchanged.
+- **Slot:** X 126.1–127.1, still 1.0 mm wide. Its back wall moves 0.4 mm back (cut X 126.1–126.5, Y 6.9–13.1). Its front wall moves 0.4 mm back beside the notch (material added at X 127.1–127.5, Y 6.9–8.3 and 11.7–13.1). The slot locates the board by itself, so no assembly care is needed.
+- **Relief:** D-059's pocket deepens 0.4 mm to X 125.3–126.6 (1.3 mm). The back parts keep 0.25–0.50 mm of clearance.
+- **Sensor notch:** unchanged at Y 8.3–11.7, Z ≥ 31.2. It now opens from the new front wall.
+
+**Where it lives.** All in `final/v1/cad` ([makad-v1.step.py](final/v1/cad/makad-v1.step.py)). `DROID_CUTS` holds the deepened relief and the back-wall cut. Two new tables join it: `DROID_ADDS` unions in the front-wall material, and `DROID_MOVES` shifts the `BALL_NOSE_HALL_*` placeholder board and sensor 0.4 mm back. `body_chassis_model.py` and `body_v1_model.py` are unchanged, so their checks still see the D-013 slot.
+
+**Evidence (2026-10-25).**
+- `check_pcb15_fit.py`, PASS. With KiCad's model, U1's top is at X 128.240, which leaves 0.260 mm of air, and nothing touches the magnet or the cap at the stop. The real part has 0.435 mm nominal and 0.195 mm in the worst case (1.12 mm part, 0.88 mm board against the front wall). The board and all four parts clear the seat by 0.10–0.50 mm.
+- `check_pcb15_relief.py`, updated and PASS. 17.896 mm³ net removed, which equals the cut boxes less the old slot and groove, less the added front wall, so no other cavity opened. Nothing is left in the pocket, and the 0.6 mm shell is solid. Both board ends are backed by the new back wall, and the front wall is solid. The notch is open, and the board-to-seat gap is 0.100 mm.
+
+**Trip point.** The on-axis model for the Ø3 × 1.5 mm N35 magnet (Br 1.19 T, Hall plate 0.65 mm under U1's top) gives these numbers. The rest gap grows from 3.75 to 4.09 mm, and the field at rest drops from 19.7 to 16.1 mT. The +12 mT bench starting threshold trips at about **0.89 mm** of travel instead of 0.73 mm, which is still inside bench item 19's 0.4–1.2 mm window. At the stop the field (166 mT) is still past the linear range. These are model figures; the bench measurement decides.
+
+**Not checked.** Printability of the 0.4 mm front-wall strips beside the notch, which are 1.4 mm wide and 4.7 mm tall in the printed seat.
+
+**Changed.**
+- [makad-v1.step.py](final/v1/cad/makad-v1.step.py): `DROID_CUTS`, new `DROID_ADDS` and `DROID_MOVES`, and `_apply_droid_cuts()`.
+- [check_pcb15_relief.py](final/v1/cad/check_pcb15_relief.py) and [check_pcb15_fit.py](final/v1/cad/check_pcb15_fit.py).
+- [nose-hall-board.md](01-chassis/v1/research/nose-hall-board.md): board position, retention and trip point.
+- [pcb-15-nose-hall/README.md](04-pcbs/pcb-15-nose-hall/README.md): envelope and fit.
+- [final/v1/README.md](final/v1/README.md).
+
+**Next.** Bench item 19 measures the trip with the moved board. Stage 3 places the PCB-15 STEP at X 126.2–127.0.
