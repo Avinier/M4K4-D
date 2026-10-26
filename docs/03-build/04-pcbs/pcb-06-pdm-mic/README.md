@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | In progress: inputs frozen ([D-066](../../decisions.md#d-066)); schematic drawn, ERC clean; layout next | — | 2026-10-26 |
+| 1. Design | In progress: schematic ERC clean; board set up with envelope keep-outs; ring clearance C2 ([D-066](../../decisions.md#d-066) amended); placement next | — | 2026-10-26 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -132,7 +132,7 @@ So the five passives fit by courtyard as well as by height. No envelope change i
 | `pcb-06-pdm-mic.kicad_pro` | PCB-11's project, renamed: the fab-neutral board minimums and default net class |
 | `pcb-06-pdm-mic.kicad_dru` | The fab-neutral rules ([D-062](../../decisions.md#d-062)), copied from PCB-11 |
 | `sym-lib-table`, `pcb06.kicad_sym` | Project symbol library `pcb06`. `IM73D122V01` is KiCad's stock `Sensor_Audio:IM69D120` body (the IM69D130's base symbol, the same five pins), with its own name, fields and datasheet. Pin 4 is renamed SELECT → LR (Table 9) |
-| `fp-lib-table`, `pcb06.pretty/` | Project footprint library `pcb06`. `IM73D122V01_PG-LLGA-5-3` is KiCad's stock `Infineon_PG-LLGA-5-1` with pads 1–4 widened from 0.45 × 0.70 to Fig. 13's **0.45 × 0.75 mm**. Unchanged: the pad positions, the GND ring (R 0.58–1.04), the Ø0.8 NPTH at the port (0.68 mm off the package centre), and the separate paste apertures (six ring segments, four pad apertures). `WirePad_0.9x2.0mm` is PCB-11's wire pad, sized for one AWG28 conductor lying along it; it has no paste and is left out of the BOM and the position file |
+| `fp-lib-table`, `pcb06.pretty/` | Project footprint library `pcb06`. `IM73D122V01_PG-LLGA-5-3` is KiCad's stock `Infineon_PG-LLGA-5-1` with pads 1–4 widened from 0.45 × 0.70 to Fig. 13's **0.45 × 0.75 mm**, and the GND ring's inner edge pulled from R 0.58 to **R 0.63** (decision C2, [Layout](#layout)). Unchanged: the pad positions, the ring's outer edge (R 1.04), the Ø0.8 NPTH at the port (0.68 mm off the package centre), and the separate paste apertures (six ring segments, four pad apertures). `WirePad_0.9x2.0mm` is PCB-11's wire pad, sized for one AWG28 conductor lying along it; it has no paste and is left out of the BOM and the position file |
 | `pcb06.3dshapes/IM73D122V01_PG-LLGA-5-3.step` | Infineon's PG-LLGA-5-4 package STEP, a copy of `02-body/v1/cad/purchased/infineon_pg_llga_5_4.stp` (SHA-256 `ebf2602a…f873f9b`). Pin 1 and the lid's pin-1 dot fall where the footprint has pin 1, so the model needs no offset or rotation. KiCad's own model would be the 1.0 mm IM69D130 |
 
 The purchased README had this STEP's SHA-256 mistyped (shifted by one character). It is corrected; the file itself is unchanged.
@@ -159,6 +159,40 @@ The purchased README had this STEP's SHA-256 mistyped (shifted by one character)
 | Two Ø2.2 screw holes | H1, H2 `MountingHole_2.2mm_M2`, no net | Match |
 | Four wire pads, not in the BOM | P1–P4 on `pcb06:WirePad_0.9x2.0mm`, `in_bom no` | Match |
 
+## Layout
+
+KiCad 10.99 nightly, laid out by hand through KiPy, with no autorouter ([D-060](../../decisions.md#d-060), [layout rules](../README.md#layout-rules)).
+
+**Board set-up** (`design/pcb-06-pdm-mic.kicad_pcb`, written before any part is placed):
+
+| Item | Value | Why |
+|---|---|---|
+| Outline | KiCad x 100–112, y 100–114 | Board-local xb = x − 100, yb = 114 − y, from the bottom-left corner. The aux and grid origins sit at local (0, 0), so the position file reads in board-local mm. The port is at local (6, 7), KiCad (106, 107). In the lesson-1 frame, u = xb − 6 (toward the body centre, the lead side) and v = yb − 7 |
+| Faces | **F.Cu is the inner face**: MK1, the passives and the W27 pads. **B.Cu is the outer face**, on the boss seat and the gasket: copper and mask only | D-037; the outer face must stay flat |
+| Stackup | 1.0 mm: 35 µm copper, 0.91 mm FR4 core, mask, HASL lead-free | D-037. Tolerance ±10 % at all three fabs (0.9–1.1 mm): at 1.1 mm the M2 × 4 still forms 2.9 mm of thread, above the 2.5 mm minimum |
+| Rules | Fab-neutral ([D-062](../../decisions.md#d-062)) in the `.kicad_pro` and `.kicad_dru`, plus one PCB-06 rule (below) | Any of JLCPCB, PCBWay or Lion Circuits MII can make it |
+| Rule areas | `POST_STRIP` (F.Cu, u −6…−5, full height): no footprints, tracks and vias allowed. `OUTER_FACE` (B.Cu, whole board): no footprints. `GASKET_NO_VIAS` (B.Cu, Ø7.0 round the port; a via passes through both faces, so it covers both): no vias | The frame post leaves 1.3 mm over the strip, so no parts there. A rule area can't check height, so "≤ 0.8 mm" becomes "none", which costs 1 mm of width. The outer face is the seat. A via whose mask tent broke under the gasket would let body noise round the seal into the port |
+| Custom rule | `PCB-06 wire pads clear of MK1`: courtyard clearance ≥ 1.9 mm between P1–P4 and MK1 | Gap 5: the pads stay ≥ 2.2 mm from the package (MK1's courtyard is 0.25 mm outside it) |
+| Already enforced | H1/H2 courtyards (Ø4.9) keep parts off the M2 heads | From the footprints |
+| By part choice | Height ≤ 1.3 mm everywhere else (0402s 0.55 max, MK1 1.3) | Not checkable by DRC |
+| Drawings | `Frame.Post` (the strip), `Gasket` (Ø2.0, Ø6.5, Ø7.0 pocket), `Screw.Heads` (Ø3.8), `Lead.Exit` (the CAD lead reserve, the u = 3.5 pad limit), `Boss.Seat` (16 × 17) on user layers | Orientation while placing. User layers are not in the fab set |
+
+**DRC on the empty board** (nightly, 2026-10-26): 0 violations. A scratch copy, with deliberate bad placements beside clean controls, proved every envelope rule:
+
+| Test | Result |
+|---|---|
+| 0402 in the post strip | `items_not_allowed`, `POST_STRIP` |
+| 0402 on the outer face | `items_not_allowed`, `OUTER_FACE` |
+| Via 2.5 mm from the port / 4.0 mm from it | Flagged by `GASKET_NO_VIAS` / clean |
+| Wire pad at u 2.5 / u 3.6 | Flagged: courtyard 0.94 mm against 1.9 / clean |
+| 0402 at u −4, v 4 (legal) | Clean |
+
+KiCad loads only the rules file named after the board. The first scratch run, with the file under the wrong name, silently skipped every custom rule, which is a trap worth knowing.
+
+**Open: the sound-hole ring is too close to its hole.** The same scratch run flagged MK1's own GND ring against its Ø0.8 hole: `hole_clearance` 0.21 mm (KiCad's polygon) against the fab-neutral 0.31 mm. By the datasheet, Fig. 13's ring starts at R 0.58 round a R 0.40 hole: **0.18 mm**. Published limits: JLCPCB "NPTH to track 0.2 mm"; PCBWay and Lion Circuits publish no NPTH-to-copper figure. The fab-neutral 0.31 mm came from Lion's 12 mil via-to-trace rule. The ring is the solder seal between the board and the mic's own port ring (R 0.6–1.0). A leak there opens the port to the air inside the body. Options: (C1) keep the datasheet ring, with a DRC exception for MK1's own hole, and confirm at each fab's DFM; (C2) pull the ring's inner edge to R 0.63 (0.23 mm, clear of JLCPCB's 0.2); (C3) pull it to R 0.71 (0.31 mm, fab-neutral); (C4) plate the hole, which risks solder wicking into it and narrowing the port.
+
+**Decided: C2** (builder, 2026-10-26; [D-066](../../decisions.md#d-066) amended). The project footprint's ring is R 0.63–1.04: a 0.835 mm-radius circle 0.41 mm wide, with the pad anchor moved onto it. The seal still overlaps 0.37 mm of the mic's 0.40 mm port ring (R 0.6–1.0). The stencil's six ring apertures are unchanged. Rule `PCB-06 MK1 sound hole to its own seal ring` gives MK1's own hole 0.2 mm in place of the fab-neutral 0.31 mm, and nothing else. Re-run on the scratch copy: the ring measures 0.235 mm and passes; with the rule tightened to 0.3 mm it is flagged, so the rule is live. PCBWay and Lion Circuits publish no NPTH-to-copper limit, so confirm it in their DFM checks.
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
@@ -166,3 +200,5 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-26:** design started (lesson 1). Inputs measured: the IM73D122 datasheet against D-037, BOM and CAD; the four boards in the body CAD, static and along the shell's lowering path. Found: audiosystem.md predates D-037 (header, 12 × 9.5); the datasheet asks for 1 µF + 100 nF and about 100 Ω on DATA; element14 India's stock is in the UK, and JLCPCB now stocks C5563886; the frame post leaves 1.3 mm over the board's post-side strip; FRONT_R/REAR_L mount the other way up from FRONT_L/REAR_R, so the layout must fit the envelope folded about the port axis. No envelope change needed. Open: strap method (A), mic source (B).
 - **2026-10-26:** [D-066](../../decisions.md#d-066) taken: strap by assembly variant (R_L/R_R 1 kΩ, one fitted), mic bought from element14 India and supplied to the fab. BO-005, BO-012 and the body BOM updated; audiosystem.md brought in line with D-037. Inputs frozen.
 - **2026-10-26:** lesson 2. Schematic drawn for the KiCad 10.99 nightly: MK1, C1, C2, R1, R2/R3 (L/R variants), P1–P4 and H1/H2. Project symbol (IM69D120 body, pin 4 LR) and footprint (PG-LLGA-5-1 land pattern, pads widened to Fig. 13's 0.75 mm, Infineon STEP). W27 pin order set: 1 +3V3, 2 CLK, 3 GND, 4 DATA. ERC 0 errors, 0 warnings; the netlist matches the spec row by row.
+- **2026-10-26:** lesson 3. Board set up: 12 × 14 outline, 1.0 mm stackup, origins at board-local (0, 0), envelope rule areas (post strip, outer face, gasket vias) and the wire-pad clearance rule, all proven on a scratch copy. Found: Infineon's sound-hole GND ring is 0.18 mm from the Ø0.8 NPTH, under JLCPCB's 0.2 mm and the fab-neutral 0.31 mm. Decision open.
+- **2026-10-26:** decision C2: MK1's seal ring pulled back to R 0.63 (0.23 mm from the hole), with a scoped 0.2 mm hole-clearance rule for MK1 alone; [D-066](../../decisions.md#d-066) amended. Re-proved on the scratch copy.

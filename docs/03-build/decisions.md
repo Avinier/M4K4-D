@@ -69,7 +69,7 @@ The central record of every decision and change made during the build phase. New
 | [D-063](#d-063) | 2026-10-25 | Chassis / nose: PCB-15 moved 0.4 mm back (CH-064, CH-065; final v1 CAD) | The nose Hall board and its 1.0 mm slot move **0.4 mm back** (board X 126.2–127.0). The relief pocket deepens to 1.3 mm. U1 then clears the cap magnet at the 3 mm stop by 0.195 mm in the worst case, where D-013 had assumed 0.1 mm and the real part could hit it by 0.205 mm | ACTIVE; fit and relief checks pass; trip point to re-measure on the bench |
 | [D-064](#d-064) | 2026-10-25 | PCBs / workflow order (all custom boards; 04-pcbs workflow) | **Design every board first**, one at a time, then procure them together in shared orders, then integrate. Replaces the one-board-at-a-time path through all three stages | ACTIVE; PCB-15 rev A designed, its procurement waits for the batch |
 | [D-065](#d-065) | 2026-10-26 | Head / crown: PCB-11 status LED socket, part and circuit (CH-085; final v1 CAD) | A printed **socket fused inside the crown** holds the PCB-11 board and the light pipe, which nothing held. The LED is the **WS2812B-2020-V6** (LCSC C52917434), not the pre-V6 C965555 the BOM named. PCB-11 gains **C1 100 nF** and **R1 330 Ω** in DIN, and its wire pads move to the back's right half | ACTIVE; socket check passes; India V6 stock to confirm at procure |
-| [D-066](#d-066) | 2026-10-26 | Body / audio: PCB-06 L/R strap and mic source (BO-005, BO-012) | One PCB-06 design serves all four positions; the LR strap is an **assembly variant**: two 0402 1 kΩ footprints, R_L (LR to GND) and R_R (LR to 3V3), and the fab fits exactly one. The mic is **bought by the builder from element14 India** (4125831, UK stock) and supplied to the fab, not bought by the fab from its own stock | ACTIVE; PCB-06 schematic next |
+| [D-066](#d-066) | 2026-10-26 | Body / audio: PCB-06 L/R strap and mic source (BO-005, BO-012) | One PCB-06 design serves all four positions; the LR strap is an **assembly variant**: two 0402 1 kΩ footprints, R_L (LR to GND) and R_R (LR to 3V3), and the fab fits exactly one. The mic is **bought by the builder from element14 India** (4125831, UK stock) and supplied to the fab, not bought by the fab from its own stock. Amended: MK1's sound-hole seal ring pulled back to R 0.63 (0.23 mm from the hole), with a scoped 0.2 mm rule | ACTIVE; PCB-06 board set up, placement next |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -2720,7 +2720,7 @@ So a full press could drive the magnet into U1.
 
 ## D-066
 
-**2026-10-26 · Body / audio: PCB-06 L/R strap and mic source (BO-005, BO-012) · ACTIVE; PCB-06 schematic next**
+**2026-10-26 · Body / audio: PCB-06 L/R strap, mic source and sound-hole ring (BO-005, BO-012) · ACTIVE; PCB-06 board set up, placement next**
 
 **Why.** Freezing PCB-06's stage-1 inputs ([PCB-06 README](04-pcbs/pcb-06-pdm-mic/README.md#inputs)) left two choices open:
 
@@ -2747,3 +2747,5 @@ So a full press could drive the magnet into U1.
 **Unverified:** element14 stock and price at order; the fab's handling of consigned parts for a reflow-only bottom-port MEMS part (no-clean, no wash); which edge the ADAU7002 calls left, which the array tap test settles. A wrong guess only swaps a lane's channels in software.
 
 **Next.** PCB-06 lesson 2: the schematic.
+
+**Amended 2026-10-26, at board set-up (builder's choice, option C2).** Infineon's land pattern (Fig. 13) puts MK1's GND seal ring 0.18 mm from the Ø0.8 non-plated sound hole (ring R 0.58, hole R 0.40). That is under JLCPCB's published "NPTH to track 0.2 mm" and the fab-neutral 0.31 mm ([D-062](#d-062)); PCBWay and Lion Circuits publish no NPTH-to-copper limit. The project footprint pulls the ring's inner edge to **R 0.63** (0.23 mm from the hole). The seal still covers 0.37 of the 0.40 mm of the mic's own port ring (R 0.6–1.0). A rule in `pcb-06-pdm-mic.kicad_dru` gives that one hole 0.2 mm; every other hole keeps 0.31. The other options were: keep the datasheet's 0.18 mm with an exception (C1); 0.31 mm, fab-neutral, with a 0.29 mm seal (C3); or plate the hole, which risks solder wicking in and narrowing the port (C4). **Unverified:** PCBWay's and Lion Circuits' acceptance, in their DFM checks.

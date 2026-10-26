@@ -37,3 +37,18 @@
 	(layer "?.Silkscreen")
 	(constraint text_height (min 1.0mm))
 	(constraint text_thickness (min 0.16mm)))
+
+# PCB-06 envelope (README, Inputs gap 5): the hand-soldered W27 pads stay at least 2.2 mm
+# from MK1's package, so the iron stays off a reflow-only MEMS part. MK1's courtyard is
+# 0.25 mm outside the package, so this is 1.9 mm courtyard to courtyard.
+(rule "PCB-06 wire pads clear of MK1"
+	(condition "A.Reference == 'P*' && B.Reference == 'MK1'")
+	(constraint courtyard_clearance (min 1.9mm)))
+
+# PCB-06 decision C2 (README, Layout): MK1's GND seal ring is pulled back to R 0.63 round
+# its Ø0.8 sound hole (Infineon Fig. 13: R 0.58), a 0.23 mm gap. That clears JLCPCB's
+# published "NPTH to track 0.2 mm" but not the fab-neutral 0.31 mm, so this hole alone
+# gets 0.2 mm. PCBWay and Lion publish no NPTH limit: confirm in their DFM checks.
+(rule "PCB-06 MK1 sound hole to its own seal ring"
+	(condition "A.memberOfFootprint('MK1') && B.memberOfFootprint('MK1')")
+	(constraint hole_clearance (min 0.2mm)))

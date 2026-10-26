@@ -3,7 +3,7 @@
 	(generator "pcbnew")
 	(generator_version "10.0")
 	(layer "F.Cu")
-	(descr "Infineon IM73D122V01, PG-LLGA-5-3: KiCad's PG-LLGA-5-1 land pattern with pads 1-4 widened to 0.45 x 0.75 mm (IM73D122 datasheet v1.00 Fig. 13); Ø0.8 NPTH under the sound port; Infineon's package STEP")
+	(descr "Infineon IM73D122V01, PG-LLGA-5-3: KiCad's PG-LLGA-5-1 land pattern with pads 1-4 widened to 0.45 x 0.75 mm (IM73D122 datasheet v1.00 Fig. 13); GND ring R 0.63-1.04 (Fig. 13: R 0.58), so it clears the Ø0.8 NPTH by 0.23 mm, over JLCPCB's 0.2 mm (PCB-06 decision C2); Ø0.8 NPTH under the sound port; Infineon's package STEP")
 	(tags "infineon mems microphone")
 	(property "Reference" "REF**"
 		(at 0 -2.5 0)
@@ -476,7 +476,7 @@
 		(uuid "7b3d5a07-550d-4603-a1e8-0e0676672658")
 	)
 	(pad "5" smd custom
-		(at 0.68 -0.81)
+		(at 0.68 -0.835)
 		(size 0.4 0.4)
 		(layers "F.Cu" "F.Mask")
 		(zone_connect 0)
@@ -486,9 +486,9 @@
 		)
 		(primitives
 			(gr_circle
-				(center 0 0.81)
-				(end 0.81 0.81)
-				(width 0.46)
+				(center 0 0.835)
+				(end 0.835 0.835)
+				(width 0.41)
 				(fill no)
 			)
 		)
