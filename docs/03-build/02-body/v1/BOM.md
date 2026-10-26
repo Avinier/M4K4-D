@@ -83,9 +83,9 @@ The Pi's four M2.5 holes are modeled over tray bosses; the Active Cooler's push-
 | BO-002 | Audio front end PCB-05, 30 × 38 mm | 1 assembly | HOLD |
 | BO-003 | MAX98357AETE+T I²S class-D amplifier, on PCB-05 | 1 | CANDIDATE |
 | BO-004 | [ADAU7002ACBZ-R7](https://in.element14.com/analog-devices/adau7002acbz-r7/tdm-conversion-ic-2-channel-wlcsp/dp/4028782) PDM-to-I²S converter, on PCB-05 (element14 India 4028782; LCSC C481886); distributor description "Audio Control, Sample Rate Converter, 1.62V to 3.6V, I2S, TDM, WLCSP, 8 Pins, -40 °C" | 2 | CANDIDATE |
-| BO-005 | Mic board PCB-06, 12 × 14 mm, with one Infineon IM73D122V01; shell-mounted ([D-037](../../decisions.md#d-037)) | 4 assemblies | HOLD |
+| BO-005 | Mic board PCB-06, 12 × 14 mm, with one Infineon IM73D122V01; shell-mounted ([D-037](../../decisions.md#d-037)); L and R assembly variants set the mic's LR strap ([D-066](../../decisions.md#d-066)) | 4 assemblies | HOLD |
 | BO-006 | Audio cable set: W12, W26, W27 × 4, W28 | 1 set | HOLD |
-| BO-012 | [Infineon IM73D122V01XTMA1 PDM mic](https://in.element14.com/infineon/im73d122v01xtma1/mems-microphone-pdm-122db-pg-llga/dp/4125831) (element14 India 4125831), one per BO-005 board; buy 6 for reflow spares ([D-036](../../decisions.md#d-036)) | 4 | SELECTED |
+| BO-012 | [Infineon IM73D122V01XTMA1 PDM mic](https://in.element14.com/infineon/im73d122v01xtma1/mems-microphone-pdm-122db-pg-llga/dp/4125831) (element14 India 4125831), one per BO-005 board; buy 6 for reflow spares ([D-036](../../decisions.md#d-036)); bought by the builder and supplied to the PCB-06 fab ([D-066](../../decisions.md#d-066)) | 4 | SELECTED |
 | BO-013 | M2 × 4 pan-head thread-forming screw for plastics, two per mic board into the shell boss ([D-037](../../decisions.md#d-037)) | 8 | CANDIDATE |
 | BO-014 | Mic port gasket, closed-cell foam ring Ø6.5/Ø2.0 × 1.0 mm, compressed 30% in the boss pocket ([D-037](../../decisions.md#d-037)); cut from Robu EVA foam tape, 50 mm × 5 m, 1 mm (builder-reported 2026-10-04) | 4 | CANDIDATE |
 | BO-051 | 0.8 mm annular silicone speaker-flange bond/seal behind the front-panel lip | 1 application | HOLD |

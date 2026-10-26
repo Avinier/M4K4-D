@@ -26,7 +26,7 @@ Four custom boards touch audio. Two are audio-only (PCB-05, PCB-06). Two are sha
 | Board | BOM | Audio role | Size (mm) | Where it sits |
 |---|---|---|---|---|
 | **PCB-05** audio front end | BO-002 | The audio hub. Converts mic PDM to I²S (2 × ADAU7002), amplifies the speaker (MAX98357A), filters the mic 3.3 V, and is the connection point for every audio cable | 30 × 38 × 1.6, parts to 9 total | Flat above the Pi 5's front end, centre (60, 0, 118.5): X 45–75, Y ±19, Z 114–123 |
-| **PCB-06** mic board, × 4 | BO-005 | Holds one IM73D122V01 mic over a sound hole, sets the mic's L/R channel with a strap, and brings it out on a GH 4 | 12 × 9.5 × 1.0 | Against the side-wall port boots, outer face on \|Y\| 70. FRONT_L/R at X 54, Z 118; REAR_L/R at X −22, Z 108 |
+| **PCB-06** mic board, × 4 | BO-005 | Holds one IM73D122V01 mic over a sound hole, sets the mic's L/R channel with a strap (L and R assembly variants, [D-066](../../../decisions.md#d-066)), and brings it out on a soldered GH 4 lead ([D-037](../../../decisions.md#d-037)) | 12 × 14 × 1.0 | On printed bosses on the shell's inner skin, outer face on \|Y\| 71.3 ([D-037](../../../decisions.md#d-037)). FRONT_L/R at X 54, Z 118; REAR_L/R at X −22, Z 108 |
 | **PCB-09** C0 link adapter | none yet | Breaks the Pi's I²S pins and 3.3 V out of the 2 × 20 header to the GH 10 `J9-3`. Its main job is the two RS-422 links (2 × THVD1451) | Strip + wide part, about X 26–56, Y 28.5–45, Z 104–112 | Stacked on the Pi 5 header beside the yaw servo |
 | **PCB-04** branch converters | CH-043 | Supplies the amplifier's 5 V `PB-AUDIO-OUT` branch (TPS630701 converter behind a TPS259474L e-fuse at 2.0 A) on `J4-5` | 70 × 44 | Under the compute tray, X −30…40, Z 60–77 |
 
@@ -64,7 +64,7 @@ All converters run from the one Pi i2s0 clock (48 kHz, BCLK 3.072 MHz), so mic c
 | Cable | From → to | Connector, each end | Conductors | Length (`E`, from CAD positions) |
 |---|---|---|---|---|
 | **W26** audio host | PCB-09 `J9-3` → PCB-05 `J5-1` | GH 10: top entry on PCB-09 (at X 37, Y 36.5); side entry on PCB-05's rear (−X) edge | BCLK, LRCLK, SDI0, SDI1, SDO0, AMP_SD, 3V3, 2 × GND, spare | ~60 mm |
-| **W27** mics × 4 | PCB-06 → PCB-05 `J5-2…5` | GH 4 at both ends: side entry on PCB-05's ±Y edges | 3V3, GND, CLK, DATA | Front pair ~60 mm; rear pair ~110 mm |
+| **W27** mics × 4 | PCB-06 → PCB-05 `J5-2…5` | Soldered to pads at PCB-06 ([D-037](../../../decisions.md#d-037)); GH 4 at PCB-05, side entry on its ±Y edges | 3V3, GND, CLK, DATA, AWG28 | About 150 mm front, 200 mm rear, so they plug in through the front service opening after the shell is lowered ([D-037](../../../decisions.md#d-037)) |
 | **W28** speaker | K 50 WP solder tabs → PCB-05 `J5-6` | Soldered at the speaker; GH 2 on PCB-05's +Y edge | 2 × AWG26, twisted | Under 150 mm (EMI limit) |
 | **W12** amp power | PCB-04 `J4-5` → PCB-05 `J5-7` | Micro-Fit 3.0 2×1 right-angle, both ends; `J5-7` on PCB-05's −Y edge | 5 V, GND; 2 × AWG22 | ~120 mm |
 
@@ -89,7 +89,7 @@ Crimp tools: GH needs its own tool (terminal `SSHL-002T-P0.2`), and Micro-Fit 3.
 
 ### 2.2 How the four mics share two converters
 
-A PDM data line can carry two mics. One mic drives the line on the rising clock edge and the other on the falling edge. The strap on each PCB-06 (LR to GND or to VDD) picks the edge, so it sets which I²S channel the mic lands on.
+A PDM data line can carry two mics. One mic drives the line on the rising clock edge and the other on the falling edge. The strap on each PCB-06 (LR to GND or to VDD) picks the edge, so it sets which I²S channel the mic lands on. The strap is set by the board's assembly variant, L or R ([D-066](../../../decisions.md#d-066)).
 
 | Mic | LR strap | ADAU7002 | Pi lane | ALSA channel |
 |---|---|---|---|---|
@@ -128,12 +128,12 @@ All four boards are **one design**. Only the LR strap changes per position.
 | Item | Detail |
 |---|---|
 | Mic | Infineon IM73D122V01XTMA1: digital PDM, 73 dB(A) SNR, bottom port, 4 × 3 × 1.2 mm (`D`) |
-| Sound path | Shell port (Ø3) → rubber port boot → Ø0.8 mm hole through the PCB → the mic's bottom port |
-| Board | 12 × 9.5 × 1.0 mm. The mic and the GH 4 header both sit on the inboard face, so the outer face stays flat against the boot |
-| Connector | JST GH 4-pin side entry (SM04B), below the mic: 3V3, GND, CLK, DATA. Changed from JST-SH by `CN-01`; the board grew from 8 to 9.5 mm tall to fit it |
-| Strap | LR to GND (L mics) or VDD (R mics): a solder jumper or 0 Ω resistor (`E`) |
-| Other parts | A 0.1 µF decoupling cap at the mic (`E`, per the datasheet) |
-| Fixing | Screwed to the body frame so the array stays rigid and its geometry stays calibrated. The screw points and the port seal are **not designed yet** |
+| Sound path | Ø2.0 port through the skin and the shell boss → foam gasket ring → Ø0.8 mm hole through the PCB → the mic's bottom port ([D-037](../../../decisions.md#d-037)) |
+| Board | 12 × 14 × 1.0 mm ([D-037](../../../decisions.md#d-037)). The mic and the lead pads sit on the inboard face, so the outer face stays flat on the boss seat and the gasket |
+| Connector | None on the board. A pre-crimped JST GH 4-way AWG28 lead (W27) is soldered to four pads beside the mic: 3V3, GND, CLK, DATA ([D-037](../../../decisions.md#d-037), which dropped the SM04B header: it would hit the frame's upper side rails as the shell is lowered) |
+| Strap | LR to GND (L mics) or VDD (R mics): two 1 kΩ 0402 footprints, and the fab fits one. L and R assembly variants of one board ([D-066](../../../decisions.md#d-066)) |
+| Other parts | Decoupling and a DATA series resistor. The datasheet asks for 1 µF at VDD and recommends 100 nF, and suggests about 100 Ω on DATA. Values are set in the [PCB-06 schematic](../../../04-pcbs/pcb-06-pdm-mic/README.md#inputs) |
+| Fixing | Two M2 × 4 thread-forming screws into the shell boss clamp the board on a foam gasket that seals the port ([D-037](../../../decisions.md#d-037)). All four boards are on the one shell print, so the array stays rigid |
 
 **Layout notes (`E`):**
 - Two layers are enough.
@@ -182,7 +182,7 @@ PCB-05 and PCB-06 are ordered as **assembled boards (PCBA) from JLCPCB**, on the
 | Step | Output | Notes |
 |---|---|---|
 | 1. Schematics | PCB-05, PCB-06 (and PCB-09's audio pins) | Pin order for every connector is fixed here |
-| 2. Layout | Board files on the CAD outlines | PCB-05 at 30 × 38 with the headers at the modelled positions (§2.3); PCB-06 at 12 × 9.5 × 1.0 |
+| 2. Layout | Board files on the CAD outlines | PCB-05 at 30 × 38 with the headers at the modelled positions (§2.3); PCB-06 at 12 × 14 × 1.0 |
 | 3. Fit check | Export the board STEPs and run them in the body CAD | Replace the box envelopes in `body_v1_model.py` and re-run the targeted body checks |
 | 4. DFM | JLCPCB design-rule and assembly checks | Check the WLCSP pitch and pad rules, and bottom-port MEMS handling, against JLCPCB's capability (`U`) |
 | 5. Order | PCBA, PCB-05 to PCB-08 together | Order spares: at least 2 × PCB-05 and 6 × PCB-06 (`E`); JLCPCB minimum quantities apply (`U`) |
@@ -194,7 +194,7 @@ PCB-05 and PCB-06 are ordered as **assembled boards (PCBA) from JLCPCB**, on the
 |---|---|---|
 | ADAU7002ACBZ-R7 × 2 per PCB-05 | LCSC C481886 (about 147 in stock) | US$4.10 |
 | MAX98357AETE+T × 1 per PCB-05 | LCSC / JLCPCB | US$2–3 |
-| IM73D122V01XTMA1 × 1 per PCB-06 | Cut tape from DigiKey or Mouser India, or sourced by JLCPCB (reels are 5000) | ~US$2 |
+| IM73D122V01XTMA1 × 1 per PCB-06 | element14 India 4125831 on cut tape, bought by the builder and supplied to the fab ([D-066](../../../decisions.md#d-066)) | ₹305 (₹232 at 10+), 2026-10-26 |
 | GH headers (SM10B, SM04B, SM02B), Micro-Fit 3.0 2×1 RA | LCSC / JLCPCB | — |
 | Passives, ferrite | JLCPCB basic parts | — |
 
@@ -223,9 +223,9 @@ The whole PCBA order (PCB-05 to PCB-08, fab, setup, shipping, customs) was estim
 3. **Power-good to the Pi:** define how `PB-AUDIO-OUT` power-good reaches the audio software (§4.2).
 4. **Mic to header map:** assign `J5-2…5` to FRONT_L/R and REAR_L/R (§2.3).
 5. **PCB-09 BOM row:** done, CH-084 in the shared rows (D-038).
-6. **Mounting:** fixing points for PCB-05, and the screw fixing and port seal for PCB-06.
-7. **Schematics and layouts:** PCB-05 and PCB-06 not started.
-8. **Model comment:** the comment above `MIC_BOARD_OUTER_Y` in `body_v1_model.py` still describes PCB-06 as 12 × 8 with a JST-SH header; the constants already use 9.5 mm and GH.
+6. **Mounting:** fixing points for PCB-05. PCB-06 is done ([D-037](../../../decisions.md#d-037)).
+7. **Schematics and layouts:** PCB-05 not started; PCB-06 started 2026-10-26 ([board README](../../../04-pcbs/pcb-06-pdm-mic/README.md)).
+8. **Model comment:** done. The comment above `MIC_BOARD_OUTER_Y` in `body_v1_model.py` now describes the D-037 board.
 9. **Mass:** replace the PCB-05 (~6 g) and mic-board (~2 g total) estimates in `BODY_AUDIO` with weighed boards.
 
 ---
@@ -271,8 +271,8 @@ Body model coordinates, mm, from [`body_v1_model.py`](../cad/body_v1_model.py).
 | Speaker | Centre (90.5, 0, 99), axis +X, face at X 100 (`SPEAKER_FRONT_X`) |
 | Front panel seat | Integral annular cup on the front service panel with an unobstructed Ø46 aperture. The exposed speaker face is recessed 2.6 mm behind the lip; its flange is bonded and sealed behind the lip across a modeled 0.8 mm annulus. The cup needs print supports |
 | Back cavity | Ø54 speaker clearance reserve, X 82–97.5 (15.5 mm deep), shifted forward with the speaker to clear the compute tray and Pi 5; actual rear enclosure sealing remains to be verified |
-| Mic ports | Ø3 bores through the side walls. FRONT_L/R at (54, ±70, 118); REAR_L/R at (−22, ±70, 108) |
-| Mic boards | PCB-06 outer face on \|Y\| 70 against the port boot (§3). Front pair is 41 mm behind the speaker face along X and ±70 mm off the centreline |
+| Mic ports | Ø2.0 bores through the shell bosses and the skin ([D-037](../../../decisions.md#d-037)). FRONT_L/R at (54, ±70, 118); REAR_L/R at (−22, ±70, 108) |
+| Mic boards | PCB-06 outer face on \|Y\| 71.3 on its shell boss, sealed by a gasket (§3, [D-037](../../../decisions.md#d-037)). Front pair is 41 mm behind the speaker face along X and ±70 mm off the centreline |
 | Mass row | `BODY_AUDIO` 61 g at (78.4, 0, 102.1): speaker 48, PCB-05 ~6, mic boards ~2, cables ~4 (`E`) |
 
 **Capture rate:** 48 kHz, decimated to 16 kHz in software where needed. At 48 kHz the ADAU7002 clocks the mics at 3.072 MHz, inside the IM73D122 high-performance window; at 16 kHz the 1.024 MHz clock falls between its power-mode windows (`D`).
@@ -284,7 +284,7 @@ Body model coordinates, mm, from [`body_v1_model.py`](../cad/body_v1_model.py).
 1. Low-end response of the 15.5 mm cavity (bench listen at a capped gain, D-034).
 2. Speaker-to-mic coupling, `AR-60`. Estimate about 110 dB SPL at 5 cm on axis at 1.75 W, under the mics' 122 dB AOP (`E`).
 3. Pi 5 cooler noise at the mics, `AR-61`; drive and servo noise, `AR-62/63` (RP06-G03 acoustic matrix).
-4. Exposed speaker flange bond, rear enclosure and panel-to-shell seal method; mic port boot seal.
+4. Exposed speaker flange bond, rear enclosure and panel-to-shell seal method; mic port gasket seal (tap test, D-037).
 5. Caliper and weigh the received speaker against Ø50 × 18 mm and 48 g, then update `BODY_AUDIO`.
 
 ---
@@ -308,7 +308,7 @@ The plan is to **estimate direction from timing and use loudness as a supporting
 
 - **One clock for all four mics** (§1.2, `AR-03`, `AR-51`): all four channels are sampled at exactly the same moments, so a delay of a few samples between them is real, not drift between separate devices. A USB array plus a separate mic, or four separate gadgets, couldn't guarantee this.
 - **Four mics in a rectangle, not a line** (`AR-04`): the ports at (54, ±70) and (−22, ±70) form a 140 × 76 mm rectangle. Two mics alone can't tell front from back; this layout gives a full 360° direction around the robot.
-- **Rigid mounting** (`AR-64`): the mic boards are screwed to the body frame, so the spacing that the maths assumes doesn't change.
+- **Rigid mounting** (`AR-64`): the mic boards are screwed to bosses on the one shell print (D-037), so the spacing that the maths assumes doesn't change.
 - **Echo reference** (§1.2): because the speaker shares the same clock, the robot's own voice can be subtracted before localising, so it doesn't "find itself".
 
 ### 9.3 Limits to expect
