@@ -1,0 +1,89 @@
+(footprint "WirePad_0.8x1.2mm"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "Wire pad (from PCB-15): 0.8 x 1.2 mm SMD pad for a hand-soldered lead, no silkscreen; courtyard equals the pad, since nothing stands on it but the wire")
+	(tags "wire pad solder lead")
+	(property "Reference" "REF**"
+		(at 0 -1.0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "32203df1-2712-4d13-8f49-1b35ccaa4836")
+		(effects
+			(font
+				(size 0.3 0.3)
+				(thickness 0.05)
+			)
+		)
+	)
+	(property "Value" "WirePad_0.8x1.2mm"
+		(at 0 1.0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "27d673d6-518b-4814-a6a7-bbda31133f9f")
+		(effects
+			(font
+				(size 0.3 0.3)
+				(thickness 0.05)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "66332271-36c0-4f20-8d26-2e54fdb7da71")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "88bbacff-1967-40ce-b297-743e8c3dc561")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd exclude_from_pos_files exclude_from_bom)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_rect
+		(start -0.4 -0.6)
+		(end 0.4 0.6)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "5f713b9e-99ab-413c-abab-1a613cc2faa2")
+	)
+	(fp_rect
+		(start -0.4 -0.6)
+		(end 0.4 0.6)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "a0ac9274-79e1-4f75-9f9b-5230da696c8b")
+	)
+	(pad "1" smd rect
+		(at 0 0)
+		(size 0.8 1.2)
+		(layers "F.Cu" "F.Mask")
+		(uuid "401a59e9-7980-4fd6-9702-c20d76313693")
+	)
+	(embedded_fonts no)
+)
