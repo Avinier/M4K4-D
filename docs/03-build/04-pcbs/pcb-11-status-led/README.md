@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | **In progress:** inputs frozen ([D-065](../../decisions.md#d-065)); schematic done, ERC clean; board set-up next | [Inputs](#inputs), [Schematic](#schematic), [design/](design/) | 2026-10-26 |
+| 1. Design | **In progress:** inputs frozen ([D-065](../../decisions.md#d-065)); schematic ERC clean; placed and routed, DRC clean; checks and outputs next | [Inputs](#inputs), [Schematic](#schematic), [Layout](#layout), [design/](design/) | 2026-10-26 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -33,8 +33,8 @@ Frozen 2026-10-25.
 | Ref | Part | Pins and nets |
 |---|---|---|
 | LED1 | Worldsemi WS2812B-2020-V6 (3.3–5.3 V) | 1 DO → not connected, 2 GND → GND, 3 DI → LED_DIN, 4 VDD → +3V3 |
-| C1 | 100 nF X7R 0402, 10 V | +3V3 to GND, at LED1's VDD pin (datasheet application circuit) |
-| R1 | 330 Ω 0402, 1 % | DIN (from the wire) to LED_DIN, at LED1's DI pin |
+| C1 | 100 nF X7R 0402, 10 V | +3V3 to GND, on the back behind LED1, one via from each LED pin (datasheet application circuit) |
+| R1 | 330 Ω 0402, 1 % | DIN (from the wire) to LED_DIN, on the back between P3 and LED1's DI via |
 | P1, P2, P3 | Wire pads for AWG30 PTFE, back face, right half (u 2.3–5.0) | +3V3, GND, DIN |
 
 The LED's reference is **LED1**, not KiCad's default D1, because D1 is the face controller's name in this project (RP-04).
@@ -68,7 +68,7 @@ TME lists the V6 on its India site but ships from Poland, so it is an import.
 | Top right corner (u 5, v 5) | 0.49 mm to the crown's sloped side wall |
 | Left and bottom edges | Nothing within 5.5 mm |
 | Mounting | **Socket fused inside the crown** ([D-065](../../decisions.md#d-065)). The pocket is X −8.1…−7.2 with 0.1 mm per side, and the board's front edge rests on a 0.5 mm shoulder (local u, v 0–0.5 and 4.5–5). The front cavity, u, v 0.5–4.5, is 1.8 mm deep to the pipe's stop lip at X −5.4. The board goes in from behind before the camera bracket and is glued at its edges |
-| Front parts | Inside u, v 0.5–4.5 only (the shoulder ring is part-free): the LED (0.99 mm max) leaves 0.81 mm to the lip, and 0402s (0.55 mm max) fit anywhere in it |
+| Front parts | Inside u, v 0.5–4.5 only (the shoulder ring is part-free). Only LED1 goes there (0.99 mm max, 0.81 mm to the lip). The 0402s fit by height but not by footprint area beside the centred LED, so C1 and R1 are on the back (D-065, amended at layout) |
 
 **Gaps.**
 
@@ -83,7 +83,7 @@ TME lists the V6 on its India site but ships from Poland, so it is an import.
 
 ### Mounting and wire side: decided
 
-[D-065](../../decisions.md#d-065), option A (builder, 2026-10-26). Of the options in the decision (A, the socket; B, a sleeve with the board glued to its end; C, glue by hand), A is the only one that locates the LED on the pipe axis and keeps C1 and R1 on the front. Assembly order: light pipe from the front onto the lip, then PCB-11 from behind, then the camera and its bracket. The ivory ASA walls (0.8–1.3 mm) may let light through. If the G03 bench shows a halo on the crown, paint the cavity matte black.
+[D-065](../../decisions.md#d-065), option A (builder, 2026-10-26). Of the options in the decision (A, the socket; B, a sleeve with the board glued to its end; C, glue by hand), A is the only one that locates the LED on the pipe axis and holds the light pipe. At layout, C1 and R1 moved to the back's right half: they don't fit beside the centred LED (see [Layout](#layout)). Assembly order: light pipe from the front onto the lip, then PCB-11 from behind, then the camera and its bracket. The ivory ASA walls (0.8–1.3 mm) may let light through. If the G03 bench shows a halo on the crown, paint the cavity matte black.
 
 ## Schematic
 
@@ -116,6 +116,49 @@ TME lists the V6 on its India site but ships from Poland, so it is an import.
 | R1 330 Ω 0402 | `330`, `R_0402_1005Metric` | Match |
 | Three wire pads, not in the BOM | P1–P3 on `pcb11:WirePad_0.8x1.2mm`, `in_bom no` | Match |
 
+## Layout
+
+KiCad 10.99 nightly, laid out by hand through KiPy, with no autorouter ([D-060](../../decisions.md#d-060), [layout rules](../README.md#layout-rules)).
+
+**Board set-up** (`design/pcb-11-status-led.kicad_pcb`, written before any part was placed):
+
+| Item | Value | Why |
+|---|---|---|
+| Outline | KiCad x 100–105, y 100–105 | Board-local u = x − 100 (world Y − 12.7), v = 105 − y (world Z − 89.3), viewed from the front (+X). The aux and grid origins sit at local (0, 0), so the position file reads in board-local u, v |
+| Faces | F.Cu is the front, towards the light pipe: LED1, C1 and R1. B.Cu is the back: P1–P3 | D-065 |
+| Stackup | 0.8 mm: 35 µm copper, 0.71 mm FR4 core, mask, HASL lead-free | Spec; same as PCB-15 |
+| Rules | Fab-neutral ([D-062](../../decisions.md#d-062)) in the `.kicad_pro` and `design/pcb-11-status-led.kicad_dru` | Any of JLCPCB, PCBWay or Lion Circuits MII can make it |
+| Socket keep-outs | Rule areas forbid footprints on F.Cu on the socket shoulder, local 0–0.5 mm all round (`FRONT_SHOULDER_T/B/L/R`). On B.Cu they forbid footprints on the left half, u 0–2.3, behind the camera bracket lip (`BACK_BRACKET`). Tracks and vias are allowed in both | DRC then checks the D-065 envelope on every run |
+| Drawings | The shoulder's inner edge (`Socket.Shoulder`), the bracket shadow (`Bracket.Lip`), and the Ø3.4 pipe and Ø2.6 lip window (`Light.Pipe`), on user layers | Orientation while placing |
+
+**DRC on the empty board** (nightly, 2026-10-26): 0 violations. On a scratch copy, a 0402 placed in the front shoulder and another behind the bracket were each flagged by their keep-out. A third, on the back's right half, was not. So the rule areas work.
+
+**Placement** (2026-10-26, through KiPy, one functional group at a time). KiCad coordinates, mm:
+
+| Part | Side | Position, rotation | Notes |
+|---|---|---|---|
+| LED1 | Front | (102.5, 102.5), 0° | Centred on the pipe axis. Pins: 1 DOUT (101.585, 101.95), 2 GND (101.585, 103.05), 3 DI (103.415, 103.05), 4 VDD (103.415, 101.95) |
+| P1, P2, P3 | Back | (104.2, 101.0 / 102.5 / 104.0) | +3V3, GND, DIN, in a column at the right edge. Pads 0.4 mm from the edges and 0.3 mm apart |
+| C1 | Back | (102.95, 101.75), 270° | +3V3 pad up (y 101.27), GND pad down (102.23), level with P1 and P2 |
+| R1 | Back | (102.95, 103.75), 90° | LED_DIN pad up (103.24), DIN pad down (104.26), level with P3 |
+
+**Why C1 and R1 are on the back.** Inside the 4.0 × 4.0 mm shoulder ring, the centred LED's courtyard (3.04 × 2.50 mm, KiCad stock) leaves strips 0.75 mm tall above and below it. An 0402's courtyard is 0.92–0.94 mm tall, so neither fits on the front. The builder chose the back's right half over narrowing the socket shoulder ([D-065](../../decisions.md#d-065), amended at layout). C1 and R1 stand upright 0.38 mm left of the wire pads' column, and their courtyards stay right of the `BACK_BRACKET` keep-out (x ≥ 102.3).
+
+**Routing** (by hand through KiPy, no autorouter). All tracks are 0.2 mm, the largest current being 36 mA at full white. Every segment is horizontal, vertical or 45°.
+
+| Net | Front | Via, 0.67/0.35 mm | Back |
+|---|---|---|---|
+| +3V3 | LED pin 4 straight up, then left | (102.0, 100.8), above the LED | Via to C1 pin 1, then on to P1 |
+| GND | LED pin 2 down, then 45° down-left | (100.8, 104.2), bottom left | Via up the left side to C1 pin 2, then on to P2 |
+| LED_DIN | LED pin 3 down, 45°, then left | (101.9, 104.2), below the LED | Via 45° up-right to R1 pin 2 |
+| DIN | — | — | R1 pin 1 to P3 |
+
+Beside the LED there is no room for a via: the 0.31 mm via spacing and the 0.3 mm edge rule leave a negative gap. So all three vias sit in the strips above and below it. Two of them lie partly on the front shoulder, where tracks and tented vias are allowed. The back's left half, behind the camera bracket, carries only the GND track and two vias, which are flat.
+
+**DRC** (nightly `kicad-cli pcb drc --schematic-parity --severity-all`, fab-neutral `.kicad_dru` in place, 2026-10-26): 0 errors, 0 unconnected pads, 0 schematic-parity issues, 0 keep-out hits. On a scratch copy with the via-hole minimum raised to 0.4 mm, all three vias were flagged, so the rules file is enforced. Two warnings remain, `lib_footprint_mismatch` on C1 and R1. They are the cosmetic kind PCB-15 found: the parts are rotated and flipped, and their reference labels were moved to the fab layers. Both 0402s and LED1 kept their 3D models (`audit()`: 1/1 each).
+
+Reference labels moved from silkscreen to the fab layers (`refs_to_fab()`). The stock footprints still carry 0.12 mm silkscreen outlines, below the fab-neutral 0.16 mm line, as on PCB-15. They are settled with the fab outputs.
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
@@ -123,3 +166,5 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-25:** design started. Inputs frozen from the spec, the V6 datasheet, D1's schematic and the head CAD. Gaps found: nothing holds the board or the light pipe; the camera bracket sits 0.6 mm behind half of the back face; the V6 datasheet now asks for a 100 nF VDD capacitor; the BOM names the pre-V6 LED (C965555).
 - **2026-10-26:** [D-065](../../decisions.md#d-065) taken (option A). A socket fused inside the crown holds the board and the light pipe (`DROID_ADDS`, [`check_pcb11_socket.py`](../../final/v1/cad/check_pcb11_socket.py) PASS). C1 (100 nF) and R1 (330 Ω) added. LED part pinned to the V6 (C52917434). In India only Hubtronics lists it, with 0 in stock, so RFQ at procure. BOM, register, head BOM and sourcing matrix updated.
 - **2026-10-26:** schematic drawn for the KiCad 10.99 nightly: LED1, C1, R1 and P1–P3, project footprint library `pcb11` with a datasheet-sized LED model. ERC 0 errors, 0 warnings. The netlist matches the spec row by row.
+- **2026-10-26:** board set up for layout: 5 × 5 mm outline, 0.8 mm stackup, fab-neutral rules, socket keep-outs (front shoulder, back bracket side). DRC on the empty board: 0 violations. The keep-outs were proven on a scratch copy.
+- **2026-10-26:** placed and routed by hand through KiPy on the nightly. C1 and R1 do not fit beside the centred LED (courtyards), so the builder moved them to the back's right half ([D-065](../../decisions.md#d-065) amended). Three vias, all 0.2 mm tracks. DRC 0 errors, 0 unconnected, parity clean; 2 cosmetic `lib_footprint_mismatch` warnings. The wire pads' position-file flag was set again after F8.

@@ -2673,7 +2673,7 @@ So a full press could drive the magnet into U1.
   2. Fit PCB-11, already wired, into the pocket from behind and glue it at its edges (UV glue or CA).
   3. Fit the camera and its bracket last: the bracket lip covers part of the pocket mouth.
 - **PCB-11 board.**
-  - LED at the centre of the front face, with C1 and R1 beside it inside the shoulder ring (u, v 0.5–4.5).
+  - LED at the centre of the front face, inside the shoulder ring (u, v 0.5–4.5). C1 and R1 were placed beside it here; the layout amendment below moves them to the back.
   - The three wire pads go on the back's right half (u 2.3–5.0), and the wires leave straight back, rearward of X −8. Nothing goes on the back's left half.
 - **LED part: Worldsemi WS2812B-2020-V6 only.** Worldsemi moved all WS2812B production to V6 on 2025-09-30. The datasheet footprint and pinout are unchanged.
   - **For fab assembly:** LCSC/JLCPCB **C52917434**, 783k in stock on 2026-10-26.
@@ -2713,4 +2713,6 @@ So a full press could drive the magnet into U1.
 - [check_pcb11_socket.py](final/v1/cad/check_pcb11_socket.py): new. [check_pcb15_relief.py](final/v1/cad/check_pcb15_relief.py) and [check_pcb15_fit.py](final/v1/cad/check_pcb15_fit.py): `strict=False`.
 - [BOM.csv](BOM.csv) CH-085, [03-head/v1/BOM.md](03-head/v1/BOM.md) CH-085, the [04-pcbs register](04-pcbs/README.md#board-register), [workflow.md](04-pcbs/workflow.md), the [PCB-11 README](04-pcbs/pcb-11-status-led/README.md), [final/v1/README.md](final/v1/README.md) and the [sourcing matrix](../01-system/candidate-sourcing-matrix.md) status-light row.
 
-**Next.** PCB-11 schematic (lesson 2). At procure, RFQ Hubtronics for the V6, or have the fab supply C52917434. Run the G03 brightness, colour and stray-light bench with the socket printed.
+**Amended 2026-10-26, at layout (builder's choice).** C1 and R1 move to the back's right half, beside the wire pads. Inside the 4.0 × 4.0 mm ring, the centred LED's courtyard (3.04 × 2.50 mm) leaves strips only 0.75 mm tall above and below it, but an 0402's courtyard needs 0.92–0.94 mm. The evidence above checked part heights against the cavity, not footprint areas. Other options were narrowing the shoulder to 0.3 mm (a socket change) or waiving courtyard overlaps. The socket and its check are unchanged, and the front now carries only the LED. C1 reaches the LED's VDD and GND through one via each, a loop of a few millimetres, which is fine for a 2 kHz, 36 mA load. Placement, routing and DRC are in the [PCB-11 README](04-pcbs/pcb-11-status-led/README.md#layout).
+
+**Next.** Lesson 5: checks and outputs. At procure, RFQ Hubtronics for the V6, or have the fab supply C52917434. Run the G03 brightness, colour and stray-light bench with the socket printed.
