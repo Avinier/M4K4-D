@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | In progress: inputs frozen 2026-10-26 ([D-066](../../decisions.md#d-066)); schematic next | — | 2026-10-26 |
+| 1. Design | In progress: inputs frozen ([D-066](../../decisions.md#d-066)); schematic drawn, ERC clean; layout next | — | 2026-10-26 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -37,7 +37,7 @@ Frozen 2026-10-26, with [D-066](../../decisions.md#d-066). The builder confirmed
 | C2 | 100 nF X7R 0402 | +3V3 to GND, at MK1 pin 2. Datasheet §3.5 note: "strongly recommended" |
 | R1 | 100 Ω 0402 | MK1 DATA to the DATA wire pad. Datasheet §3.5: "a termination resistor of about 100 Ω may be added to reduce ringing". The BOM's 33 Ω was an estimate (`E`) |
 | R_L, R_R | 1 kΩ 0402, exactly one fitted ([D-066](../../decisions.md#d-066)) | R_L: LR to GND (L variant: FRONT_L, REAR_L). R_R: LR to +3V3 (R variant: FRONT_R, REAR_R) |
-| P1–P4 | Wire pads for the W27 lead, inner face | +3V3, GND, CLK, DATA (order set in the schematic) |
+| P1–P4 | Wire pads for the W27 lead, inner face | GH pin order: P1 +3V3, P2 CLK, P3 GND, P4 DATA (set in the schematic) |
 
 **Pinout check.** Datasheet Table 9: 1 DATA, 2 VDD, 3 CLOCK, 4 LR, 5 GND. KiCad's stock `Sensor_Audio:IM69D120` symbol (the IM69D130's base) has 1 DATA, 2 VDD, 3 CLOCK, 4 SELECT, 5 GND: the same pins, so a derived IM73D122 symbol can use its body. The IM73D122 is not in KiCad's library. The stock footprint `Sensor_Audio:Infineon_PG-LLGA-5-1` (IM69D130) matches Fig. 13 in pad positions: pads at 0.8 and 1.5 mm from the package centre on the side away from the port, ± 0.85 across it, port 0.68 mm from the centre, GND ring R 0.58–1.04, Ø0.8 NPTH. Its pin order is Fig. 13's top view. It differs in pad size: 0.45 × 0.70 mm against Infineon's **0.45 × 0.75**. Its 3D model is the 1.0 mm-tall IM69D130, not this 1.2 ± 0.1 mm part. So stage 2 needs a project footprint with Fig. 13 pads and the Infineon STEP already in `02-body/v1/cad/purchased/`. Fig. 13's pads are solder-mask defined. Stencil: six ring segments and 0.65 × 0.4 mm pad apertures.
 
@@ -121,9 +121,48 @@ So the five passives fit by courtyard as well as by height. No envelope change i
 - **Strap: option A1, an assembly variant.** R_L (LR to GND) and R_R (LR to +3V3), both 1 kΩ 0402, and the fab fits exactly one. The L variant goes to FRONT_L and REAR_L, the R variant to FRONT_R and REAR_R. Of the other options, A2 (a solder jumper cut by hand) and A3 (an open jumper) need hand work, and A3 leaves LR floating if it is forgotten. Either footprint's pads can be bridged with solder by hand as a fallback.
 - **Mic source: option B2.** element14 India 4125831, bought by the builder and supplied to the fab, or reflowed by hand.
 
+## Schematic
+
+[`design/pcb-06-pdm-mic.kicad_sch`](design/pcb-06-pdm-mic.kicad_sch), with a PDF print, [`pcb-06-pdm-mic-schematic.pdf`](design/pcb-06-pdm-mic-schematic.pdf). The design folder was written for the KiCad 10.99 nightly, so it may not open in 10.0.6.
+
+**Project set-up.**
+
+| File | Holds |
+|---|---|
+| `pcb-06-pdm-mic.kicad_pro` | PCB-11's project, renamed: the fab-neutral board minimums and default net class |
+| `pcb-06-pdm-mic.kicad_dru` | The fab-neutral rules ([D-062](../../decisions.md#d-062)), copied from PCB-11 |
+| `sym-lib-table`, `pcb06.kicad_sym` | Project symbol library `pcb06`. `IM73D122V01` is KiCad's stock `Sensor_Audio:IM69D120` body (the IM69D130's base symbol, the same five pins), with its own name, fields and datasheet. Pin 4 is renamed SELECT → LR (Table 9) |
+| `fp-lib-table`, `pcb06.pretty/` | Project footprint library `pcb06`. `IM73D122V01_PG-LLGA-5-3` is KiCad's stock `Infineon_PG-LLGA-5-1` with pads 1–4 widened from 0.45 × 0.70 to Fig. 13's **0.45 × 0.75 mm**. Unchanged: the pad positions, the GND ring (R 0.58–1.04), the Ø0.8 NPTH at the port (0.68 mm off the package centre), and the separate paste apertures (six ring segments, four pad apertures). `WirePad_0.9x2.0mm` is PCB-11's wire pad, sized for one AWG28 conductor lying along it; it has no paste and is left out of the BOM and the position file |
+| `pcb06.3dshapes/IM73D122V01_PG-LLGA-5-3.step` | Infineon's PG-LLGA-5-4 package STEP, a copy of `02-body/v1/cad/purchased/infineon_pg_llga_5_4.stp` (SHA-256 `ebf2602a…f873f9b`). Pin 1 and the lid's pin-1 dot fall where the footprint has pin 1, so the model needs no offset or rotation. KiCad's own model would be the 1.0 mm IM69D130 |
+
+The purchased README had this STEP's SHA-256 mistyped (shifted by one character). It is corrected; the file itself is unchanged.
+
+**Parts and fields.** MK1 carries `MPN` IM73D122V01XTMA1, `Manufacturer` Infineon, `Supplier` element14 India 4125831 (builder-supplied, D-066) and the datasheet link. R2 and R3 carry a `Fit` field: R2 for the L variant only (FRONT_L, REAR_L), R3 for the R variant only (FRONT_R, REAR_R). Both are in the schematic and the BOM; the variant is chosen at the fab outputs by leaving one out of each BOM and placement file. D-066's R_L is R2 and its R_R is R3. H1 and H2 are `MountingHole_2.2mm_M2` footprints. Their Ø4.9 courtyard keeps parts off the M2 heads (Ø3.8), so DRC checks the screw-head keep-out. P1–P4 use `Connector:TestPoint`, marked not in the BOM. `PWR_FLAG` sits on +3V3 and GND, which enter through wire pads. The passives get MPNs at procure, as PCB-11's did.
+
+**W27 pin order** (set here, for PCB-05 `J5-2…5` to match): GH pin **1 +3V3, 2 CLK, 3 GND, 4 DATA**. The GND wire runs between CLK and DATA in the lead, so the 3 MHz clock couples less into the data line.
+
+**ERC** (nightly `kicad-cli sch erc --severity-all`, 2026-10-26): 0 errors, 0 warnings. KiCad skips its footprint-filter check by default.
+
+**Check against the spec**, row by row, using the exported netlist:
+
+| Spec row ([Inputs](#inputs), D-066) | Netlist | Result |
+|---|---|---|
+| +3V3: MK1 VDD (pin 2), C1, C2, R_R, wire pad | `+3V3`: MK1.2, C1.1, C2.1, R3.1, P1.1 | Match |
+| GND: MK1 GND ring (pin 5), C1, C2, R_L, wire pad | `GND`: MK1.5, C1.2, C2.2, R2.2, P3.1 | Match |
+| CLK: wire pad to MK1 CLOCK (pin 3) | `/CLK`: MK1.3, P2.1 | Match |
+| DATA: MK1 DATA (pin 1) through R1 to the wire pad | `/MIC_DATA`: MK1.1, R1.2; `/DATA`: R1.1, P4.1 | Match. `MIC_DATA` is the mic side of R1 |
+| LR: MK1 LR (pin 4) to R_L and R_R | `/LR`: MK1.4, R2.1, R3.2 | Match |
+| MK1 IM73D122V01, pins 1 DATA / 2 VDD / 3 CLOCK / 4 LR / 5 GND | Project symbol pins 1 DATA / 2 VDD / 3 CLOCK / 4 LR / 5 GND; footprint `pcb06:IM73D122V01_PG-LLGA-5-3` | Match (Table 9, Fig. 13) |
+| C1 1 µF X5R 0402 10 V, C2 100 nF X7R 0402 | `1u X5R 10V`, `100n X7R 10V`, `C_0402_1005Metric` | Match |
+| R1 100 Ω 0402 | `100`, `R_0402_1005Metric` | Match |
+| R_L, R_R 1 kΩ 0402, one fitted | R2, R3 `1k`, `R_0402_1005Metric`, `Fit` fields | Match |
+| Two Ø2.2 screw holes | H1, H2 `MountingHole_2.2mm_M2`, no net | Match |
+| Four wire pads, not in the BOM | P1–P4 on `pcb06:WirePad_0.9x2.0mm`, `in_bom no` | Match |
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
 
 - **2026-10-26:** design started (lesson 1). Inputs measured: the IM73D122 datasheet against D-037, BOM and CAD; the four boards in the body CAD, static and along the shell's lowering path. Found: audiosystem.md predates D-037 (header, 12 × 9.5); the datasheet asks for 1 µF + 100 nF and about 100 Ω on DATA; element14 India's stock is in the UK, and JLCPCB now stocks C5563886; the frame post leaves 1.3 mm over the board's post-side strip; FRONT_R/REAR_L mount the other way up from FRONT_L/REAR_R, so the layout must fit the envelope folded about the port axis. No envelope change needed. Open: strap method (A), mic source (B).
 - **2026-10-26:** [D-066](../../decisions.md#d-066) taken: strap by assembly variant (R_L/R_R 1 kΩ, one fitted), mic bought from element14 India and supplied to the fab. BO-005, BO-012 and the body BOM updated; audiosystem.md brought in line with D-037. Inputs frozen.
+- **2026-10-26:** lesson 2. Schematic drawn for the KiCad 10.99 nightly: MK1, C1, C2, R1, R2/R3 (L/R variants), P1–P4 and H1/H2. Project symbol (IM69D120 body, pin 4 LR) and footprint (PG-LLGA-5-1 land pattern, pads widened to Fig. 13's 0.75 mm, Infineon STEP). W27 pin order set: 1 +3V3, 2 CLK, 3 GND, 4 DATA. ERC 0 errors, 0 warnings; the netlist matches the spec row by row.
