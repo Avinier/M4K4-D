@@ -47,7 +47,7 @@ def _vol(shape):
 
 
 def main():
-    tree = entry._apply_droid_cuts(Compound(children=[entry.chassis_v1_reference()]))
+    tree = entry._apply_droid_cuts(Compound(children=[entry.chassis_v1_reference()]), strict=False)
     seat = _part(tree, "BALL_POD_PRINTED_SEAT")
     magnet = _part(tree, "BALL_NOSE_MAGNET_D3X1P5_N35").moved(Location((-TRAVEL, 0, 0)))
     cap = _part(tree, "BALL_NOSE_TOUCH_CAP").moved(Location((-TRAVEL, 0, 0)))

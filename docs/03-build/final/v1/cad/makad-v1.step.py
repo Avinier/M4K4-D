@@ -4,7 +4,7 @@ from pathlib import Path
 import re
 import sys
 
-from build123d import Box, Compound, Location
+from build123d import Box, Compound, Location, Plane, Polygon, Shape, extrude
 
 BUILD = Path(__file__).resolve().parents[3]
 HEAD_CAD = BUILD / "03-head" / "v1" / "cad"
@@ -20,6 +20,7 @@ def _use_subsystem_paths():
 
 
 _use_subsystem_paths()
+import layout_model
 from layout_model import build_parts
 from inspection_scene import parts_scene
 import details, harness, mass_layout, motion_envelope, optics
@@ -45,8 +46,40 @@ def build_robot(label="Makad v1"):
 # this folder, not in the subsystem sources (04-pcbs/README.md#rules), so the
 # subsystem checks do not see them. Each DROID_CUTS entry cuts a world-frame box
 # (x0, x1, y0, y1, z0, z1) from every part whose label fully matches; each
-# DROID_ADDS entry unions one in; each DROID_MOVES entry shifts every matching
-# part by a world-frame (dx, dy, dz).
+# DROID_ADDS entry unions one in (a box, or a world-frame shape); each DROID_MOVES
+# entry shifts every matching part by a world-frame (dx, dy, dz).
+
+
+# D-065: PCB-11 status-LED socket, fused into the inside of the bezel's crown. Head
+# frame R, mm; at the neutral pose the head frame is the world frame shifted by
+# HEAD_ORIGIN_IN_CHASSIS. The board (5 x 5 x 0.8) goes into the pocket from behind and
+# rests on a 0.5 mm shoulder round its front edge; the light pipe goes in from the front
+# through the crown bore and stops on the lip. check_pcb11_socket.py measures it.
+PCB11_SOCKET = dict(
+    board=(-8.0, -7.2, 12.7, 17.7, 89.3, 94.3),    # the CAD board, PCB-11 README envelope
+    outer=(-8.0, -1.9, 11.8, 18.6, 88.4, 95.2),    # 0.8 mm walls; 0.1 into the crown front wall
+    pocket=(-8.1, -7.2, 12.6, 17.8, 89.2, 94.4),   # board + 0.1 per side, open at the back
+    cavity=(-7.25, -5.4, 13.2, 17.2, 89.8, 93.8),  # front-part space; board local u, v 0.5-4.5
+    lip=(1.3, -5.4, -5.0),                         # pipe stop: r, X range (Ø2.6 window)
+    bore=(1.8, -5.0, -1.85),                       # pipe bore r, X range; joins the crown bore
+)
+
+
+def _x_cylinder(r, x0, x1):
+    y, z = layout_model.LED_Y, layout_model.LED_Z
+    return layout_model.axial(r, x1 - x0, ((x0 + x1) / 2.0, y, z))
+
+
+def pcb11_socket_local():
+    """The D-065 socket in head frame R, clipped to the crown's outer surface."""
+    s = PCB11_SOCKET
+    crown = extrude(Plane.YZ * Polygon(*layout_model.CROWN_OUTER, align=None), amount=24).moved(Location((-24, 0, 0)))
+    socket = layout_model.block(*s["outer"]) & crown
+    socket = socket - layout_model.block(*s["pocket"]) - layout_model.block(*s["cavity"])
+    socket = socket - _x_cylinder(s["lip"][0], s["lip"][1] - 0.05, s["lip"][2] + 0.05)
+    return socket - _x_cylinder(s["bore"][0], s["bore"][1], s["bore"][2])
+
+
 DROID_CUTS = [
     # D-059: PCB-15 component relief behind the nose Hall board, open at the top and
     # into the lead groove. D-063 deepens it 0.4 mm (to 1.3 mm) with the board.
@@ -60,6 +93,8 @@ DROID_ADDS = [
     # sensor notch (Y 8.3-11.7), so the slot stays 1.0 mm wide and locates the board.
     (r"BALL_POD_PRINTED_SEAT", (127.1, 127.5, 6.9, 8.3, 30.3, 35.0)),
     (r"BALL_POD_PRINTED_SEAT", (127.1, 127.5, 11.7, 13.1, 30.3, 35.0)),
+    # D-065: PCB-11 socket and light-pipe sleeve inside the crown.
+    (r"front_bezel_integral_camera_crown", pcb11_socket_local().moved(Location(HEAD_ORIGIN_IN_CHASSIS))),
 ]
 DROID_MOVES = [
     # D-063: PCB-15 sits 0.4 mm further back (X 126.2-127.0), so U1 clears the magnet
@@ -70,6 +105,10 @@ DROID_MOVES = [
 
 def _cut_box(x0, x1, y0, y1, z0, z1):
     return Box(x1 - x0, y1 - y0, z1 - z0).moved(Location(((x0 + x1) / 2.0, (y0 + y1) / 2.0, (z0 + z1) / 2.0)))
+
+
+def _tool(value):
+    return value if isinstance(value, Shape) else _cut_box(*value)
 
 
 def _cut_parts(node, parent_location, hits):
@@ -89,22 +128,26 @@ def _cut_parts(node, parent_location, hits):
     for kind, (_, value) in edits:
         hits[kind, value] += 1
         if kind == "cut":
-            part = part - _cut_box(*value).moved(parent_location.inverse())
+            part = part - _tool(value).moved(parent_location.inverse())
         elif kind == "add":
-            part = part + _cut_box(*value).moved(parent_location.inverse())
+            part = part + _tool(value).moved(parent_location.inverse())
         else:  # world-frame shift of a part placed under parent_location
             part = part.moved(parent_location.inverse() * Location(value) * parent_location)
     part.label, part.color = node.label, node.color
     return part
 
 
-def _apply_droid_cuts(robot):
-    """Apply DROID_CUTS, DROID_ADDS and DROID_MOVES; every entry must hit a part."""
+def _apply_droid_cuts(robot, strict=True):
+    """Apply DROID_CUTS, DROID_ADDS and DROID_MOVES; every entry must hit a part.
+
+    strict=False is for check scripts that build one subsystem tree: entries for
+    parts outside it are skipped.
+    """
     tables = (("cut", DROID_CUTS), ("add", DROID_ADDS), ("move", DROID_MOVES))
     hits = {(kind, value): 0 for kind, table in tables for _, value in table}
     robot = _cut_parts(robot, Location(), hits)
     missing = [pattern for kind, table in tables for pattern, value in table if not hits[kind, value]]
-    assert not missing, f"droid change labels not found: {missing}"
+    assert not (strict and missing), f"droid change labels not found: {missing}"
     return robot
 
 

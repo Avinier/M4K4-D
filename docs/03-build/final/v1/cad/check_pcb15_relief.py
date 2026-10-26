@@ -43,7 +43,7 @@ def _in_groove(y, z):
 
 def main():
     seat0 = _part(Compound(children=[entry.chassis_v1_reference()]), "BALL_POD_PRINTED_SEAT")
-    after = entry._apply_droid_cuts(Compound(children=[entry.chassis_v1_reference()]))
+    after = entry._apply_droid_cuts(Compound(children=[entry.chassis_v1_reference()]), strict=False)
     seat, board = _part(after, "BALL_POD_PRINTED_SEAT"), _part(after, "BALL_NOSE_HALL_CARRIER_PCB")
     x0, x1, y0, y1, z0, z1 = RELIEF
     bx0, bx1, by0, by1 = BACK[:4]

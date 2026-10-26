@@ -68,6 +68,7 @@ The central record of every decision and change made during the build phase. New
 | [D-062](#d-062) | 2026-10-25 | PCBs / fab shortlist and design rules (all custom boards; 04-pcbs workflow) | Only **JLCPCB, PCBWay and Lion Circuits** make Makad boards. Every layout meets the strictest standard 2-layer limits of the three, with Lion Circuits' **MII (Make in India)** service as the target, which sets the vias at 0.35/0.67 mm and 0.31 mm via spacing. PCB Power is dropped. Replaces D-061 | ACTIVE; PCB-15 re-laid to it, DRC clean |
 | [D-063](#d-063) | 2026-10-25 | Chassis / nose: PCB-15 moved 0.4 mm back (CH-064, CH-065; final v1 CAD) | The nose Hall board and its 1.0 mm slot move **0.4 mm back** (board X 126.2–127.0). The relief pocket deepens to 1.3 mm. U1 then clears the cap magnet at the 3 mm stop by 0.195 mm in the worst case, where D-013 had assumed 0.1 mm and the real part could hit it by 0.205 mm | ACTIVE; fit and relief checks pass; trip point to re-measure on the bench |
 | [D-064](#d-064) | 2026-10-25 | PCBs / workflow order (all custom boards; 04-pcbs workflow) | **Design every board first**, one at a time, then procure them together in shared orders, then integrate. Replaces the one-board-at-a-time path through all three stages | ACTIVE; PCB-15 rev A designed, its procurement waits for the batch |
+| [D-065](#d-065) | 2026-10-26 | Head / crown: PCB-11 status LED socket, part and circuit (CH-085; final v1 CAD) | A printed **socket fused inside the crown** holds the PCB-11 board and the light pipe, which nothing held. The LED is the **WS2812B-2020-V6** (LCSC C52917434), not the pre-V6 C965555 the BOM named. PCB-11 gains **C1 100 nF** and **R1 330 Ω** in DIN, and its wire pads move to the back's right half | ACTIVE; socket check passes; India V6 stock to confirm at procure |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -2643,3 +2644,73 @@ So a full press could drive the magnet into U1.
 - [04-pcbs/design-playbook.md](04-pcbs/design-playbook.md): new. The per-board design steps proven on PCB-15.
 - [04-pcbs/tools/kp.py](04-pcbs/tools/kp.py): new. The KiPy layout helpers, which restore models after a flip.
 - [pcb-15-nose-hall/README.md](04-pcbs/pcb-15-nose-hall/README.md): stage 2 status.
+
+## D-065
+
+**2026-10-26 · Head / crown: PCB-11 status LED socket, LED part and circuit (CH-085; final v1 CAD) · ACTIVE; socket check passes; India V6 stock to confirm at procure**
+
+**Why.** Freezing PCB-11's stage-1 inputs ([PCB-11 README](04-pcbs/pcb-11-status-led/README.md#inputs)) turned up five problems with the RP-06 selection (`HEAD-CAD-12`):
+
+1. **Nothing holds the board or the light pipe.** The 5 × 5 × 0.8 mm board is a free block in the crown cavity, 0.49 mm from the crown's sloped wall. The Ø3.4 × 2.9 pipe sits at X −5.0…−2.1, entirely behind the 2 mm crown front wall (X −2…0) that carries its Ø3.6 bore, and touches nothing.
+2. **The camera bracket's front lip** (`removable_camera_edge_bracket_trial`, X −8.6) sits 0.6 mm behind the left half of the board's back (Y 12.7–15.0). The spec's three back-face wire joints don't fit there.
+3. **The BOM named the wrong LED.** CH-085 says WS2812B-2020-V6 but cites LCSC C965555, the pre-V6 WS2812B-2020, which is rated 3.7–5.3 V. The V6 is LCSC C52917434, rated 3.3–5.3 V. D1 powers the LED at 3.3 V.
+4. **The V6 datasheet's application circuit gained a 100 nF VDD capacitor** (V1.1, 2025-12-01; V1.2, 2026-03-18). The spec had relied on the earlier "no external components" claim.
+5. **No series resistor on the data line.** A broken 3V3 wire with GPIO6 high would push current into the LED's input clamp.
+
+**Options (mounting).**
+- **A (chosen, builder 2026-10-26):** a printed socket fused to the inside of the crown. It holds the board in a pocket and the pipe in a full-length bore.
+- **B:** a sleeve only, with the board glued to its back end. Front parts would then have to move to the back's narrow right half.
+- **C:** no CAD change, the board and pipe glued by hand. LED-to-pipe alignment would be uncontrolled.
+
+**Decision.**
+- **Socket** (`PCB11_SOCKET` in [makad-v1.step.py](final/v1/cad/makad-v1.step.py), head frame R). A 6.8 × 6.8 mm block from X −8.0 to −1.9, clipped to the crown's outer surface and fused into `front_bezel_integral_camera_crown`. Its 0.8 mm walls merge into the front wall and the sloped side wall. Inside it:
+  - **Board pocket:** X −8.1…−7.2, 0.1 mm per side, open at the back. The board's front edge rests on a 0.5 mm shoulder all round.
+  - **Front cavity** for the parts: board-local u, v 0.5–4.5 mm, 1.8 mm deep (X −7.2…−5.4).
+  - **Pipe stop lip:** X −5.4…−5.0, with a Ø2.6 window.
+  - **Ø3.6 bore** from X −5.0 into the crown bore. The pipe's position, X −5.0…−2.1, is unchanged.
+- **Assembly.**
+  1. Bond the light pipe in from the front until it rests on the lip.
+  2. Fit PCB-11, already wired, into the pocket from behind and glue it at its edges (UV glue or CA).
+  3. Fit the camera and its bracket last: the bracket lip covers part of the pocket mouth.
+- **PCB-11 board.**
+  - LED at the centre of the front face, with C1 and R1 beside it inside the shoulder ring (u, v 0.5–4.5).
+  - The three wire pads go on the back's right half (u 2.3–5.0), and the wires leave straight back, rearward of X −8. Nothing goes on the back's left half.
+- **LED part: Worldsemi WS2812B-2020-V6 only.** Worldsemi moved all WS2812B production to V6 on 2025-09-30. The datasheet footprint and pinout are unchanged.
+  - **For fab assembly:** LCSC/JLCPCB **C52917434**, 783k in stock on 2026-10-26.
+  - **In India:** only **Hubtronics** (Pune, SKU 07957, ₹10 incl. GST) lists the V6, and it showed 0 in stock on 2026-10-26. Confirm by RFQ before procurement.
+  - **Not a substitute:** the pre-V6 WS2812B-2020 that Robu, Evelta, Hubtronics, Quartz Components, Punoscho and Sharvi stock fits the same footprint but is rated 3.7–5.3 V. It is not used on D1's 3.3 V. Using it would mean a 5 V feed to the crown, which is a new decision.
+- **Circuit.**
+  - **C1:** 100 nF X7R 0402 10 V across VDD–GND at the LED.
+  - **R1:** 330 Ω 0402 in series with DIN at the LED. With the LED's 15 pF input this is a 5 ns time constant against the 220 ns shortest pulse.
+
+**Where it lives.** All in `final/v1/cad`.
+- `DROID_ADDS` now accepts a world-frame shape as well as a box. The socket is defined in head frame R and moved by `HEAD_ORIGIN_IN_CHASSIS`; at the neutral pose the head adds no rotation.
+- `_apply_droid_cuts(strict=False)` lets the subsystem check scripts skip entries for parts outside their tree.
+- `layout_model.py` and the head checks are unchanged, so they still see the free block.
+
+**Evidence (2026-10-26).**
+- [check_pcb11_socket.py](final/v1/cad/check_pcb11_socket.py), all 8 checks PASS:
+  - **Fused:** the bezel gains 189.85 mm³, the socket less what the bezel already had, and stays one solid. Nothing pokes out of the crown skin.
+  - **Board:** no overlap with the bezel. The shoulder is under all 8 ring points, all four walls are present, and the edge-to-wall gap is 0.100 mm.
+  - **Front parts:** a 0.99 mm (maximum) LED leaves 0.81 mm to the lip, and 0.55 mm 0402s fit anywhere in u, v 0.5–4.5.
+  - **Light pipe:** it rests on the lip with a 0.100 mm radial gap, the bore wall runs its full length, and the window is open.
+  - **Nearest parts:** camera bracket 0.60 mm, camera 2.06 mm, skin 4.90 mm.
+  - **Wire zone:** Y 15.0–17.7, back to X −34, is clear.
+  - **Insertion path:** the way in from behind is blocked only by the camera bracket, which is fitted later.
+- `check_pcb15_relief.py` and `check_pcb15_fit.py` still pass, with the same figures as D-063.
+
+**Mass.** +0.19 cm³ of bezel material, about 0.2 g of ASA. This is below the head mass register's resolution and is not entered there.
+
+**Not checked.**
+- Printability of the 0.8 mm walls and the 0.4 mm lip in the bezel's print orientation.
+- **Light bleed through ivory ASA:** 0.8–1.3 mm walls may glow. Paint the cavity matte black if the G03 bench shows a halo.
+- The pipe's exit face sits 2.1 mm behind the crown face, as `HEAD-CAD-12` drew it. A pipe flush with the face would be an optics change.
+
+**Supersedes (read-only per [D-001](#d-001), not edited).** The LCSC number C965555 in RP-06 [peripheral-selection.md §3](../02-prototypes/RP-06-cad/peripheral-selection.md#3-status-light--ws2812b-2020-behind-the-existing-light-pipe) and in RP-06 body-chassis layout-02 `india-availability.md`. The "built-in capacitor" and "three back pads" wiring there too.
+
+**Changed.**
+- [makad-v1.step.py](final/v1/cad/makad-v1.step.py): `PCB11_SOCKET`, `pcb11_socket_local()`, a `DROID_ADDS` entry, `_tool()`, and `_apply_droid_cuts(strict=)`.
+- [check_pcb11_socket.py](final/v1/cad/check_pcb11_socket.py): new. [check_pcb15_relief.py](final/v1/cad/check_pcb15_relief.py) and [check_pcb15_fit.py](final/v1/cad/check_pcb15_fit.py): `strict=False`.
+- [BOM.csv](BOM.csv) CH-085, [03-head/v1/BOM.md](03-head/v1/BOM.md) CH-085, the [04-pcbs register](04-pcbs/README.md#board-register), [workflow.md](04-pcbs/workflow.md), the [PCB-11 README](04-pcbs/pcb-11-status-led/README.md), [final/v1/README.md](final/v1/README.md) and the [sourcing matrix](../01-system/candidate-sourcing-matrix.md) status-light row.
+
+**Next.** PCB-11 schematic (lesson 2). At procure, RFQ Hubtronics for the V6, or have the fab supply C52917434. Run the G03 brightness, colour and stray-light bench with the socket printed.

@@ -89,7 +89,7 @@ The yaw servo sits in the body and is counted in the [body BOM](../../02-body/v1
 
 | ID | Part | Qty | State |
 |---|---|---:|---|
-| CH-085 | Status LED carrier PCB-11 (WS2812B-2020 behind the crown light pipe) | 1 | Working selection |
+| CH-085 | Status LED carrier PCB-11 (WS2812B-2020-V6 with C1 and R1, in a socket fused inside the crown behind the light pipe, [D-065](../../decisions.md#d-065)) | 1 | Design |
 | CH-086 | C2 head carrier PCB-12 (ESP32-S3-Zero, head link and display transceivers, servo-bus interface, watchdog) | 1 | HOLD |
 
 PCB-12's servo-bus interface must carry the Feetech protocol for HD-001 (D-046).
