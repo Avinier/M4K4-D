@@ -53,4 +53,12 @@ How one custom board goes from spec to a committed revision. The steps were work
 | `.kicad_pro` while KiCad is open | KiCad may rewrite it | Edit project rules only with KiCad closed; board rules live in the `.kicad_dru` |
 | CAD placeholder heights | The placeholder had a 1.0 mm block; the real part is up to 1.12 mm, and KiCad's model 1.2 mm | Fit check with datasheet maximums and board thickness tolerance |
 
+## Traps found on PCB-11
+
+| Trap | What happens | Handling |
+|---|---|---|
+| Envelope checked by part height only | PCB-11's 0402s fitted the socket cavity by height, but their courtyards did not fit beside the centred LED. The parts moved to the back at layout (D-065 amended) | When freezing an envelope, check footprint areas (courtyards) as well as heights against every face that carries parts |
+| Stock footprint without its 3D model | KiCad's `LED_WS2812B-2020_PLCC4_2.0x2.0mm` names a model the library doesn't ship, so the board STEP has no LED | Copy the footprint into the project library with a project model built from the datasheet; check the STEP's `PRODUCT` list |
+| Placement file and Gerbers in different frames | With the aux origin at board-local (0, 0), `pcb export pos --use-drill-file-origin` is local, but the Gerbers and drill default to absolute, so the fab's preview misplaces parts | Export the Gerbers with `--use-drill-file-origin` and the drill with `--drill-origin plot`, so all files share one origin |
+
 KiCad keeps local history in `design/.history/` (git-ignored). `git log` there shows which save changed what.

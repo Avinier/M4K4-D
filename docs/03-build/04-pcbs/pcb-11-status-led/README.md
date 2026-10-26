@@ -18,8 +18,8 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | **In progress:** inputs frozen ([D-065](../../decisions.md#d-065)); schematic ERC clean; placed and routed, DRC clean; checks and outputs next | [Inputs](#inputs), [Schematic](#schematic), [Layout](#layout), [design/](design/) | 2026-10-26 |
-| 2. Procure | — | — | — |
+| 1. Design | **Done: rev A.** Schematic, layout, fab outputs and board STEP; the envelope change has its decision ([D-065](../../decisions.md#d-065)) and the fit check passes | [design/](design/), [fab/revA/](fab/revA/README.md), [cad/](cad/) | 2026-10-26 |
+| 2. Procure | Waits for the design batch ([D-064](../../decisions.md#d-064)) | — | — |
 | 3. Integrate | — | — | — |
 
 ## Inputs
@@ -157,7 +157,23 @@ Beside the LED there is no room for a via: the 0.31 mm via spacing and the 0.3 m
 
 **DRC** (nightly `kicad-cli pcb drc --schematic-parity --severity-all`, fab-neutral `.kicad_dru` in place, 2026-10-26): 0 errors, 0 unconnected pads, 0 schematic-parity issues, 0 keep-out hits. On a scratch copy with the via-hole minimum raised to 0.4 mm, all three vias were flagged, so the rules file is enforced. Two warnings remain, `lib_footprint_mismatch` on C1 and R1. They are the cosmetic kind PCB-15 found: the parts are rotated and flipped, and their reference labels were moved to the fab layers. Both 0402s and LED1 kept their 3D models (`audit()`: 1/1 each).
 
-Reference labels moved from silkscreen to the fab layers (`refs_to_fab()`). The stock footprints still carry 0.12 mm silkscreen outlines, below the fab-neutral 0.16 mm line, as on PCB-15. They are settled with the fab outputs.
+Reference labels moved from silkscreen to the fab layers (`refs_to_fab()`). The stock footprints still carry 0.12 mm silkscreen outlines, below the fab-neutral 0.16 mm line, as on PCB-15. The fab set leaves silkscreen out (below).
+
+## Checks and outputs (rev A)
+
+- **ERC** 0 errors, 0 warnings. **DRC** with schematic parity: 0 errors, 0 unconnected, and the 2 cosmetic warnings above. **`audit()`**: LED1, C1 and R1 each have their 3D model. P1–P3 are left out of the BOM and the position file.
+- **Board STEP:** [`cad/pcb-11-status-led-revA.step`](cad/pcb-11-status-led-revA.step). It lists the board, LED1 (the project model's base and lens), C1 and R1. The board core runs Z 0–0.71 and the parts sit 0.085 mm off it. LED1's model is 0.84 mm tall; KiCad's 0402 models are 0.5 mm (C) and 0.35 mm (R).
+- **Outputs:** [`fab/revA/`](fab/revA/README.md) holds Gerber X2 and Excellon drill, both from the board-local origin, the placement file in KiCad and JLCPCB CPL formats, the fab BOM with LCSC numbers, a Gerber zip and the order parameters. The set has no silkscreen.
+- **Fit in the robot:** [`final/v1/cad/check_pcb11_fit.py`](../../final/v1/cad/check_pcb11_fit.py) places the STEP in the D-065 socket, with the front copper on the shoulder at head X −7.2. **PASS:**
+
+  | Check | Result |
+  |---|---|
+  | Board in the pocket | Core X −7.945…−7.235, centred on the pipe axis; no clash; 0.100 mm from each pocket wall |
+  | LED1 | On the pipe axis (offset 0.000, 0.000). Model top X −6.31, which leaves 0.91 mm to the lip and 1.31 mm to the pipe. Real maximum (0.99 mm part plus solder) X −6.16: 0.76 mm to the lip |
+  | Back parts | C1 0.41 mm and R1 0.46 mm from the camera bracket, the nearest part. Both start at Y 15.40, beside the bracket lip, which ends at Y 15.0. A 0.55 mm maximum 0402 stops at X −8.58, short of the lip's plane at −8.6 |
+  | Everything else | Camera 2.13 mm, skin 6.13 mm |
+
+  `check_pcb11_socket.py` (D-065) also still passes.
 
 ## Log
 
@@ -168,3 +184,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-26:** schematic drawn for the KiCad 10.99 nightly: LED1, C1, R1 and P1–P3, project footprint library `pcb11` with a datasheet-sized LED model. ERC 0 errors, 0 warnings. The netlist matches the spec row by row.
 - **2026-10-26:** board set up for layout: 5 × 5 mm outline, 0.8 mm stackup, fab-neutral rules, socket keep-outs (front shoulder, back bracket side). DRC on the empty board: 0 violations. The keep-outs were proven on a scratch copy.
 - **2026-10-26:** placed and routed by hand through KiPy on the nightly. C1 and R1 do not fit beside the centred LED (courtyards), so the builder moved them to the back's right half ([D-065](../../decisions.md#d-065) amended). Three vias, all 0.2 mm tracks. DRC 0 errors, 0 unconnected, parity clean; 2 cosmetic `lib_footprint_mismatch` warnings. The wire pads' position-file flag was set again after F8.
+- **2026-10-26:** lesson 5. Models audited; board STEP exported with parts; new fit check `final/v1/cad/check_pcb11_fit.py` PASS (LED on axis, 0.76 mm to the lip at worst, back parts 0.41 mm from the bracket). Rev A outputs exported to `fab/revA/`: one origin throughout, no silkscreen. Stage 1 done.
