@@ -64,7 +64,7 @@ All converters run from the one Pi i2s0 clock (48 kHz, BCLK 3.072 MHz), so mic c
 | Cable | From → to | Connector, each end | Conductors | Length (`E`, from CAD positions) |
 |---|---|---|---|---|
 | **W26** audio host | PCB-09 `J9-3` → PCB-05 `J5-1` | GH 10: top entry on PCB-09 (at X 37, Y 36.5); side entry on PCB-05's rear (−X) edge | BCLK, LRCLK, SDI0, SDI1, SDO0, AMP_SD, 3V3, 2 × GND, spare | ~60 mm |
-| **W27** mics × 4 | PCB-06 → PCB-05 `J5-2…5` | Soldered to pads at PCB-06 ([D-037](../../../decisions.md#d-037)); GH 4 at PCB-05, side entry on its ±Y edges | 3V3, GND, CLK, DATA, AWG28 | About 150 mm front, 200 mm rear, so they plug in through the front service opening after the shell is lowered ([D-037](../../../decisions.md#d-037)) |
+| **W27** mics × 4 | PCB-06 → PCB-05 `J5-2…5` | Soldered to pads at PCB-06 ([D-037](../../../decisions.md#d-037)); GH 4 at PCB-05, side entry on its ±Y edges | 3V3, GND, CLK, DATA, AWG28. `J5-2` REAR_L, `J5-3` FRONT_L, `J5-4` REAR_R, `J5-5` FRONT_R ([D-067](../../../decisions.md#d-067)) | About 150 mm front, 200 mm rear, so they plug in through the front service opening after the shell is lowered ([D-037](../../../decisions.md#d-037)) |
 | **W28** speaker | K 50 WP solder tabs → PCB-05 `J5-6` | Soldered at the speaker; GH 2 on PCB-05's +Y edge | 2 × AWG26, twisted | Under 150 mm (EMI limit) |
 | **W12** amp power | PCB-04 `J4-5` → PCB-05 `J5-7` | Micro-Fit 3.0 2×1 right-angle, both ends; `J5-7` on PCB-05's −Y edge | 5 V, GND; 2 × AWG22 | ~120 mm |
 
@@ -82,9 +82,9 @@ Crimp tools: GH needs its own tool (terminal `SSHL-002T-P0.2`), and Micro-Fit 3.
 |---|---|---|
 | Mic converters | 2 × ADAU7002ACBZ-R7 (BO-004), 8-ball WLCSP | Each takes one mic pair on one PDM data line, clocks the pair at 64 × fs (3.072 MHz at 48 kHz) from BCLK, and outputs one stereo I²S lane. No registers, no I²C (`D`) |
 | Amplifier | MAX98357AETE+T (BO-003), TQFN-16 | I²S in, filterless class-D out, 1.75 W into 8 Ω at 5 V (`D`) |
-| Amp enable | 100 kΩ pull-down on `SD_MODE` | Amp **off by default**. The Pi raises `AMP_SD` (GPIO23) to turn it on; 3.3 V on `SD_MODE` selects the left channel |
-| Amp input protection | 100 Ω series resistors on BCLK, LRCLK and DIN at the amp | Limits current into the amp's inputs if the Pi streams while the amp's 5 V branch is off (for example in CHARGE) |
-| Mic supply | 3.3 V filter (ferrite bead + caps, `E`) from the Pi 3V3 on W26 | Feeds the four mics and both ADAU7002s (< 10 mA, `E`). Because it comes from the Pi, the front end is off whenever the Pi is off and cannot back-power its GPIO |
+| Amp enable | 100 kΩ pull-down on `SD_MODE` (the chip has its own 100 kΩ too), **2.2 kΩ in series from `AMP_SD`** ([D-067](../../../decisions.md#d-067)) | Amp **off by default**. The Pi raises `AMP_SD` (GPIO23) to turn it on; about 2.9 V on `SD_MODE` selects the left channel. `SD_MODE` is rated only to VDD + 0.3 V, so with the 5 V branch off (CHARGE) the 2.2 kΩ limits its current to about 1.2 mA, the datasheet's remedy. No power-good signal is needed (§4.2) |
+| Amp input damping | 100 Ω series resistors on BCLK, LRCLK and DIN at the amp | Edge damping. They are not needed as protection: the datasheet rates DIN, BCLK and LRCLK to 6 V whatever VDD is, so the Pi can stream while the amp's 5 V branch is off ([D-067](../../../decisions.md#d-067)) |
+| Mic supply | Ferrite bead (600 Ω at 100 MHz) + 2.2 Ω + 10 µF from the Pi 3V3 on W26, 100 nF at each ADAU7002 and mic connector ([D-067](../../../decisions.md#d-067)) | Feeds the four mics and both ADAU7002s (about 9 mA). Passive, so never above the Pi's 3V3 and the parts' 3.6 V limit; the 2.2 Ω damps the bead/capacitor resonance near 34 kHz. Because it comes from the Pi, the front end is off whenever the Pi is off and cannot back-power its GPIO |
 | Connectors | `J5-1` GH 10, `J5-2…5` GH 4, `J5-6` GH 2, `J5-7` Micro-Fit 3.0 2×1 | See the edge layout below |
 
 ### 2.2 How the four mics share two converters
@@ -108,16 +108,16 @@ On PCB-05, the DATA pins of a pair's two GH 4 headers are tied into that ADAU700
 | +Y (Y 19) | `J5-2` GH 4 (X 46), `J5-3` GH 4 (X 55.25), `J5-6` GH 2 (X 64.5) | +Y |
 | −Y (Y −19) | `J5-4` GH 4 (X 46), `J5-5` GH 4 (X 55.25), `J5-7` Micro-Fit 3.0 (X 64.5–74.8) | −Y |
 
-Which mic goes to which of `J5-2…5` is **not defined**. Proposal (`E`): the +Y edge (`J5-2`, `J5-3`) takes the L mics, which sit at +Y, and the −Y edge (`J5-4`, `J5-5`) takes the R mics, so no mic cable crosses over the board. Then each ADAU7002 takes one input from each edge, and its PDM traces cross the board instead. At 3 MHz over 38 mm that is easy to route.
+Mic to header ([D-067](../../../decisions.md#d-067)): **`J5-2` REAR_L, `J5-3` FRONT_L, `J5-4` REAR_R, `J5-5` FRONT_R.** The +Y edge takes the L mics, which sit at +Y, and the −Y edge the R mics ([D-037](../../../decisions.md#d-037)), so no mic cable crosses over the board. Along each edge the rear header takes the rear lead, which arrives from behind. ADAU7002 #2 (rear pair, SDI1) sits between `J5-2` and `J5-4`, and #1 (front pair, SDI0) between `J5-3` and `J5-5`; each one's PDM traces cross the board once.
 
 ### 2.4 Layout notes (`E`, recommendations for the schematic and layout)
 
-- **Layers:** four layers. The ADAU7002's small WLCSP is easier to fan out with an inner layer, and a solid ground plane keeps the class-D return currents away from the PDM and I²S lines. Two layers may be possible; decide at layout.
+- **Layers:** two, 1.6 mm, with a near-solid ground plane on the bottom, which carries no parts ([D-067](../../../decisions.md#d-067)). Every ADAU7002 ball is on the outside of its 2 × 4 array, so it fans out on the surface. The fab-neutral rules are 2-layer rules.
 - **Amplifier:** ground the exposed pad with thermal vias. Put 10 µF + 0.1 µF right at VDD, close to `J5-7`. Keep the OUTP/OUTN pair short to `J5-6`.
 - **EMI:** leave unpopulated footprints for a ferrite bead + capacitor on each speaker output. Fit them only if the camera or radios pick up noise (the peripheral selection's rule).
 - **Gain:** the MAX98357A's `GAIN_SLOT` pin sets 3–15 dB by strapping. Open is 9 dB. Choose the value after the bench listen on BO-007 (D-034 asks for a capped gain). Lay out a resistor footprint so any setting can be fitted.
 - **Test points:** BCLK, LRCLK, SDI0, SDI1, SDO0, AMP_SD, both PDM clocks, 3V3 (before and after the filter), 5 V and GND.
-- **Mounting:** no screw holes are in the model yet. The board needs fixing points that clear the Pi 5 (2.1 mm below) and the front upper cross (3 mm above).
+- **Mounting** ([D-067](../../../decisions.md#d-067)): three M2 SMT spacers (Würth 9774080243R, 8 mm) on the top face, at (48.5, ±11.0) under the front upper cross and (63, 0) under the yaw plate, onto printed bosses on the frame. ISO 7380 M2 screws are driven from above after the compute tray and PCB-09, before the yaw cartridge. The board slides in from the front over the Pi's USB jacks (2.1 mm below), so it goes in after the compute tray, whose insertion passes 0.10 mm under it. CAD: `final/v1/cad` (`PCB05_MOUNT`, `check_pcb05_mount.py`).
 
 ---
 
@@ -166,7 +166,7 @@ PCB-09 is registered as CH-084 in [BOM.csv](../../../BOM.csv) ([D-038](../../../
 | Load | About 0.4 A average and 0.7 A peak at 1.75 W into 8 Ω; 2.4 mA idle (`E`/`D`) |
 | Output | `J4-5`, Micro-Fit 3.0 2×1 on PCB-04's +Y edge → W12 |
 
-The audio software is meant to raise `AMP_SD` only after this branch reports power-good. **No cable in the audio set carries that signal to the Pi.** It has to come from the PCB-02/PCB-04 sequencing signals (W20) and reach the Pi some other way. This is open.
+The audio software was to raise `AMP_SD` only after this branch reports power-good, and no cable carried that signal to the Pi. **Closed by [D-067](../../../decisions.md#d-067): no power-good path.** The amp's data inputs tolerate the Pi streaming while the branch is off, and a 2.2 kΩ series resistor keeps `SD_MODE` within its rating (§2.1). PCB-05 carries an unfitted divider from its 5 V to the W26 spare pin, so a 5V-present signal can be added later without a new PCB-05.
 
 ---
 
@@ -218,13 +218,13 @@ The whole PCBA order (PCB-05 to PCB-08, fab, setup, shipping, customs) was estim
 
 ## 6. Open items for the PCBs
 
-1. **5 V route:** the peripheral selection lists 5 V on the GH 10 as well as on W12. The connector schedule's W26 has no 5 V. Recommendation (`E`): 5 V on W12 only. The GH 10 then carries signals, 3V3 and grounds, and no amp current shares the I²S grounds. Record the choice in a decision.
-2. **Pins:** approve RP-02 `CA-06` change request CR-01 for GPIO22 (SDI1) and GPIO23 (`AMP_SD`).
-3. **Power-good to the Pi:** define how `PB-AUDIO-OUT` power-good reaches the audio software (§4.2).
-4. **Mic to header map:** assign `J5-2…5` to FRONT_L/R and REAR_L/R (§2.3).
+1. **5 V route:** closed, [D-067](../../../decisions.md#d-067): 5 V on W12 only. The GH 10 carries signals, 3V3 and grounds.
+2. **Pins:** closed, [D-067](../../../decisions.md#d-067): `CA-06` CR-01 accepted, GPIO22 (I²S0 SDI1) and GPIO23 (`AMP_SD`).
+3. **Power-good to the Pi:** closed, [D-067](../../../decisions.md#d-067): none needed (§4.2).
+4. **Mic to header map:** closed, [D-067](../../../decisions.md#d-067) (§2.3).
 5. **PCB-09 BOM row:** done, CH-084 in the shared rows (D-038).
-6. **Mounting:** fixing points for PCB-05. PCB-06 is done ([D-037](../../../decisions.md#d-037)).
-7. **Schematics and layouts:** PCB-05 not started; PCB-06 started 2026-10-26 ([board README](../../../04-pcbs/pcb-06-pdm-mic/README.md)).
+6. **Mounting:** closed, [D-067](../../../decisions.md#d-067) for PCB-05 (§2.4); [D-037](../../../decisions.md#d-037) for PCB-06.
+7. **Schematics and layouts:** PCB-05 started 2026-10-27, inputs frozen ([board README](../../../04-pcbs/pcb-05-audio-front-end/README.md)); PCB-06 started 2026-10-26 ([board README](../../../04-pcbs/pcb-06-pdm-mic/README.md)).
 8. **Model comment:** done. The comment above `MIC_BOARD_OUTER_Y` in `body_v1_model.py` now describes the D-037 board.
 9. **Mass:** replace the PCB-05 (~6 g) and mic-board (~2 g total) estimates in `BODY_AUDIO` with weighed boards.
 

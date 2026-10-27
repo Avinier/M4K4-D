@@ -4,7 +4,7 @@ from pathlib import Path
 import re
 import sys
 
-from build123d import Box, Compound, Location, Plane, Polygon, Shape, extrude
+from build123d import Box, Compound, Cylinder, Location, Plane, Polygon, Shape, extrude
 
 BUILD = Path(__file__).resolve().parents[3]
 HEAD_CAD = BUILD / "03-head" / "v1" / "cad"
@@ -80,6 +80,44 @@ def pcb11_socket_local():
     return socket - _x_cylinder(s["bore"][0], s["bore"][1], s["bore"][2])
 
 
+# D-067: PCB-05 hangs from the frame on three Wurth 9774080243R M2 SMT spacers (8 mm,
+# reflowed on its top face), one ISO 7380 M2 screw each, driven from above after the
+# compute tray and PCB-09 are in. World mm. The two rear screws pass the front upper
+# cross rail (Z 126-135.5) and seat in counterbores under the yaw housing seat (Z 135.5,
+# R36.6 about the yaw axis); the front one passes the yaw plate (Z 134-138), open above.
+# Printed bosses on the frame meet the spacer tops. check_pcb05_mount.py measures it.
+PCB05_MOUNT = dict(
+    points=((48.5, 11.0), (48.5, -11.0), (63.0, 0.0)),
+    board_top=115.6,
+    spacer=(2.175, 0.8, 8.0),            # outer r, modelled bore r (M2 thread), length
+    boss=(3.5, (126.0, 126.0, 134.0)),   # r, frame underside above each point
+    bore=1.2,                            # M2 clearance, Ø2.4
+    cbore=(2.0, 134.0, 135.6),           # rear only: r, floor Z, open into the housing seat
+    screws=((16.0, 134.0), (16.0, 134.0), (20.0, 138.0)),  # length, head seat Z
+)
+
+
+def _z_cyl(r, z0, z1, x, y):
+    return Cylinder(r, z1 - z0).moved(Location((x, y, (z0 + z1) / 2.0)))
+
+
+def pcb05_mount_parts():
+    """D-067 world-frame shapes: spacers on the board, bosses and bores in the frame."""
+    m = PCB05_MOUNT
+    sr, sb, sl = m["spacer"]
+    top = m["board_top"] + sl
+    spacers, bosses, bores = [], [], []
+    for (x, y), roof in zip(m["points"], m["boss"][1]):
+        spacers.append(_z_cyl(sr, m["board_top"], top, x, y) - _z_cyl(sb, m["board_top"] - 0.1, top + 0.1, x, y))
+        bosses.append(_z_cyl(m["boss"][0], top, roof, x, y) - _z_cyl(m["bore"], top - 0.1, roof + 0.1, x, y))
+        bores.append(_z_cyl(m["bore"], roof - 0.1, 138.1, x, y))
+    cbores = [_z_cyl(m["cbore"][0], m["cbore"][1], m["cbore"][2], x, y) for x, y in m["points"][:2]]
+    return spacers, bosses, bores + cbores
+
+
+_PCB05_SPACERS, _PCB05_BOSSES, _PCB05_CUTS = pcb05_mount_parts()
+
+
 DROID_CUTS = [
     # D-059: PCB-15 component relief behind the nose Hall board, open at the top and
     # into the lead groove. D-063 deepens it 0.4 mm (to 1.3 mm) with the board.
@@ -87,6 +125,8 @@ DROID_CUTS = [
     # D-063: the slot's back wall moves 0.4 mm back (X 126.5 -> 126.1); the board's
     # ends (local Y 0-0.8, 5.2-6.0) bear on it.
     (r"BALL_POD_PRINTED_SEAT", (126.1, 126.5, 6.9, 13.1, 30.3, 35.01)),
+    # D-067: M2 clearance bores through the cross rail and yaw plate, rear counterbores.
+    *[(r"BODY_FRAME_MAIN_PRINT", cut) for cut in _PCB05_CUTS],
 ]
 DROID_ADDS = [
     # D-063: the slot's front wall moves 0.4 mm back too (X 127.5 -> 127.1), beside the
@@ -95,6 +135,9 @@ DROID_ADDS = [
     (r"BALL_POD_PRINTED_SEAT", (127.1, 127.5, 11.7, 13.1, 30.3, 35.0)),
     # D-065: PCB-11 socket and light-pipe sleeve inside the crown.
     (r"front_bezel_integral_camera_crown", pcb11_socket_local().moved(Location(HEAD_ORIGIN_IN_CHASSIS))),
+    # D-067: PCB-05 bosses under the frame, and the SMT spacers reflowed on the board.
+    *[(r"BODY_FRAME_MAIN_PRINT", boss) for boss in _PCB05_BOSSES],
+    *[(r"PCB05_AUDIO_FRONT_END_PCB", spacer) for spacer in _PCB05_SPACERS],
 ]
 DROID_MOVES = [
     # D-063: PCB-15 sits 0.4 mm further back (X 126.2-127.0), so U1 clears the magnet

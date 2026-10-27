@@ -80,7 +80,7 @@ The Pi's four M2.5 holes are modeled over tray bosses; the Active Cooler's push-
 | ID | Part | Qty | State |
 |---|---|---:|---|
 | BO-001 | [Visaton K 50 WP – 8 Ω speaker, art. 2915](https://in.element14.com/visaton/2915/speaker-k-50-wp-8-ohms/dp/1683894) (element14 India 1683894) ([D-034](../../decisions.md#d-034)) | 1 | SELECTED |
-| BO-002 | Audio front end PCB-05, 30 × 38 mm | 1 assembly | HOLD |
+| BO-002 | Audio front end PCB-05, 30 × 38 mm, hung from the frame on three M2 SMT spacers ([D-067](../../decisions.md#d-067)) | 1 assembly | HOLD |
 | BO-003 | MAX98357AETE+T I²S class-D amplifier, on PCB-05 | 1 | CANDIDATE |
 | BO-004 | [ADAU7002ACBZ-R7](https://in.element14.com/analog-devices/adau7002acbz-r7/tdm-conversion-ic-2-channel-wlcsp/dp/4028782) PDM-to-I²S converter, on PCB-05 (element14 India 4028782; LCSC C481886); distributor description "Audio Control, Sample Rate Converter, 1.62V to 3.6V, I2S, TDM, WLCSP, 8 Pins, -40 °C" | 2 | CANDIDATE |
 | BO-005 | Mic board PCB-06, 12 × 14 mm, with one Infineon IM73D122V01; shell-mounted ([D-037](../../decisions.md#d-037)); L and R assembly variants set the mic's LR strap ([D-066](../../decisions.md#d-066)) | 4 assemblies | HOLD |
@@ -88,6 +88,7 @@ The Pi's four M2.5 holes are modeled over tray bosses; the Active Cooler's push-
 | BO-012 | [Infineon IM73D122V01XTMA1 PDM mic](https://in.element14.com/infineon/im73d122v01xtma1/mems-microphone-pdm-122db-pg-llga/dp/4125831) (element14 India 4125831), one per BO-005 board; buy 6 for reflow spares ([D-036](../../decisions.md#d-036)); bought by the builder and supplied to the PCB-06 fab ([D-066](../../decisions.md#d-066)) | 4 | SELECTED |
 | BO-013 | M2 × 4 pan-head thread-forming screw for plastics, two per mic board into the shell boss ([D-037](../../decisions.md#d-037)) | 8 | CANDIDATE |
 | BO-014 | Mic port gasket, closed-cell foam ring Ø6.5/Ø2.0 × 1.0 mm, compressed 30% in the boss pocket ([D-037](../../decisions.md#d-037)); cut from Robu EVA foam tape, 50 mm × 5 m, 1 mm (builder-reported 2026-10-04) | 4 | CANDIDATE |
+| BO-064 | PCB-05 fixing screws: 2 × ISO 7380 M2 × 16 through the front upper cross rail and 1 × M2 × 20 through the yaw plate, into the board's SMT spacers ([D-067](../../decisions.md#d-067)) | 3 | CANDIDATE |
 | BO-051 | 0.8 mm annular silicone speaker-flange bond/seal behind the front-panel lip | 1 application | HOLD |
 
 **Bench articles** (not installed; not counted in `BODY_AUDIO`):
@@ -99,9 +100,9 @@ The Pi's four M2.5 holes are modeled over tray bosses; the Active Cooler's push-
 **Signal chain.** The Pi 5's i2s0 drives every converter from one clock (48 kHz, BCLK 3.072 MHz on GPIO18, LRCLK on GPIO19).
 - **Capture:** each ADAU7002 turns one stereo pair of PDM mics into one I²S lane. The front pair goes to SDI0 (GPIO20) and the rear pair to SDI1 (GPIO22). ALSA channels 0–3 are FRONT_L, FRONT_R, REAR_L, REAR_R.
 - **Playback:** SDO0 (GPIO21) feeds the MAX98357A, which drives the speaker.
-- **Amp enable:** GPIO23 drives `AMP_SD`. A 100 kΩ pull-down holds the amplifier off by default.
+- **Amp enable:** GPIO23 drives `AMP_SD` through 2.2 kΩ. A 100 kΩ pull-down holds the amplifier off by default. No power-good signal is needed ([D-067](../../decisions.md#d-067)).
 - **Echo reference:** capture and playback share the clock, so playback is a sample-aligned echo reference.
-- **Pins:** GPIO22 and GPIO23 need RP-02 `CA-06` change request CR-01.
+- **Pins:** GPIO22 and GPIO23 are `CA-06` change request CR-01, accepted by [D-067](../../decisions.md#d-067).
 
 Design basis: [peripheral selection](../../../02-prototypes/RP-06-cad/peripheral-selection.md) §2.
 
@@ -191,7 +192,7 @@ It replaces the IDEC XA1E-BV3U02KT-R E-stop (CH-046). That part latches when pus
    PCB-14 needs its head-side connectors chosen with the head harness, and PCB-08 its two ZIFs; both stay HOLD.
 4. **Order and measure the speaker:** order BO-001. Caliper and weigh it against Ø50 × 18 mm and 48 g, then update `BODY_AUDIO`. The element14 India price and stock were not read on 2026-10-03.
 5. **Bench audio:** order BO-007 with BO-001 and check its SD pull-up on receipt. Listen first, then Pi 5 two-lane capture plus playback on one i2s0: `arecord -c 4` and `aplay` together, a tap test per mic port, and an hour with no xruns.
-6. **Boards and pins:** schematics and layouts for PCB-05 and PCB-06 are not started. Settle whether 5 V reaches PCB-05 on W12 only, or also on GH10. Approve `CA-06` CR-01 for GPIO22 (SDI1) and GPIO23 (`AMP_SD`).
+6. **Boards and pins:** PCB-06 rev A is designed; PCB-05's inputs are frozen ([D-067](../../decisions.md#d-067): 5 V on W12 only, CR-01 accepted, frame-hung mounting). Schematic and layout next.
 7. **Acoustic and seal coupons:** prove the speaker flange bond, front-panel seal, mic boss seat/pilots/gasket seal and trim adhesive. Test speaker-to-mic coupling (RP-05 `AR-60`), cooler and drive noise (`AR-61` to `AR-63`), and low-end response in the 15.5 mm cavity.
 8. **Board orders:** define BO-054 board retention; get PCB-05/06/08/09/13 schematics, layout, assembly plans and quotes. IM73D122 mics come as cut tape or are sourced by the assembler, since reels are 5000.
 9. **Charge inlet and power button:** qualify PCB-13's programmed PD profiles and rear-panel fit. Order BO-018, measure its well fit and confirm momentary 1NO contact; weigh it and run bench PB-01 to PB-06.
