@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | In progress: inputs frozen ([D-067](../../decisions.md#d-067)); schematic next | — | 2026-10-27 |
+| 1. Design | In progress: schematic drawn, ERC 0 errors / 0 warnings; board set-up next | — | 2026-10-27 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -186,9 +186,69 @@ Taken 2026-10-27 by the builder, the recommended option of each ([D-067](../../d
 - **G1 (chosen): two layers, 1.6 mm.** The bottom is a near-solid ground plane, since it carries no parts. The WLCSP fans out on the surface (every ball is on the outside of the array). The fab-neutral rules are written for 2-layer boards, and all three fabs make them.
 - G2: four layers (signal, GND, power, signal). Easier routing, but more cost, and the fab-neutral rules would need 4-layer limits for all three fabs.
 
+## Schematic
+
+[`design/pcb-05-audio-front-end.kicad_sch`](design/pcb-05-audio-front-end.kicad_sch), with a PDF print, [`pcb-05-audio-front-end-schematic.pdf`](design/pcb-05-audio-front-end-schematic.pdf). One A3 sheet, written for the KiCad 10.99 nightly. Every pin end carries a short wire and a local label; nets join by label name.
+
+**Project set-up.**
+
+| File | Holds |
+|---|---|
+| `pcb-05-audio-front-end.kicad_pro` | PCB-06's project, renamed: the fab-neutral board minimums and default net class |
+| `sym-lib-table`, `pcb05.kicad_sym` | Project symbol library `pcb05`. `ADAU7002` is new: KiCad has none. Pins from Rev. C Fig. 2/Table 4, typed from Table 4 (SDATA tri-state, since it floats outside its 20 bits). `MAX98357A` is KiCad's stock `Audio:MAX98357A` (pins checked against Rev 16) with the exposed pad (pin 17) typed passive: the stock "unspecified" type draws an ERC warning on GND |
+| `fp-lib-table`, `pcb05.pretty/` | Project footprint `ADAU7002_WLCSP-8_0.76x1.56mm_P0.4mm`: KiCad has no 0.4 mm 2 × 4 WLCSP. Balls at ±0.2 × ±0.2/±0.6 mm, A1 top left (Fig. 2/22). **Ø0.23 mm non-solder-mask-defined pads** (0.8 × the Ø0.26 ball), so the copper gap is 0.17 mm against the fab-neutral 0.16. A 0.16 mm mask web can't fit between them, so the pads carry no mask margin and **one mask opening covers the array** (0.80 × 1.60 mm), the usual answer for 0.4 mm WLCSP. Courtyard 0.25 mm outside the package's maximum size |
+| `pcb05.3dshapes/ADAU7002_WLCSP-8_0.76x1.56mm_P0.4mm.step` | Built from Fig. 22 nominals: body 0.76 × 1.56, 0.50 tall, Ø0.26 × 0.20 balls, A1 mark. So the board STEP shows the part (the PCB-11 trap) |
+| Stock footprints | `TQFN-16-1EP_3x3mm_P0.5mm_EP1.23x1.23mm` (U3; the T1633+4 pad is 0.95–1.25), JST GH `SM10B/SM04B/SM02B-GHS-TB` side entry, `Molex_Micro-Fit_3.0_43650-0200`, `Mounting_Wuerth_WA-SMSI-M2_H8mm_9774080243` (with Würth's STEP and its Ø3 NPTH), 0402/0603/0805 passives, `TestPoint_Pad_D1.0mm` |
+
+**Circuit** (references as drawn):
+
+| Ref | Part | Nets |
+|---|---|---|
+| J1 (`J5-1`) | JST SM10B-GHS-TB, W26 | **1 +3V3, 2 GND, 3 BCLK, 4 GND, 5 LRCLK, 6 SDO0, 7 SDI0, 8 SDI1, 9 AMP_SD, 10 5V_SENSE**; MP GND. BCLK, the edge everything is clocked on, has a ground wire on each side; the supply sits next to its return. PCB-09 `J9-3` must match |
+| J2–J5 (`J5-2…5`) | SM04B-GHS-TB, W27 | 1 +3V3_MIC, 2 CLK, 3 GND, 4 DATA (PCB-06 order). J2 REAR_L, J3 FRONT_L, J4 REAR_R, J5 FRONT_R (D-067 D) |
+| J6 (`J5-6`) | SM02B-GHS-TB, W28 | 1 SPK_P, 2 SPK_N |
+| J7 (`J5-7`) | Molex 43650-0200, W12 | 1 +5V_AMP, 2 GND. PCB-04 `J4-5` must match |
+| FB1, R1, C1 | 600 Ω at 100 MHz 0603; 2.2 Ω; 10 µF X5R 10 V 0805 | +3V3 → MIC_FILT → +3V3_MIC (D-067 F) |
+| C4–C7 | 100 nF at each mic connector | +3V3_MIC to GND |
+| U1, U2 | ADAU7002ACBZ-R7 | U1: PDM_DAT1 ← J3/J5 DATA, PDM_CLK1, SDATA → SDI0. U2: PDM_DAT2 ← J2/J4 DATA, PDM_CLK2, SDATA → SDI1. Both: BCLK, LRCLK, IOVDD and CONFIG on +3V3_MIC (I²S), GND. C2, C3 100 nF at IOVDD (Fig. 11) |
+| R2–R5 | 100 Ω, one per mic lead | PDM_CLK1 → CLK_FL (J3), CLK_FR (J5); PDM_CLK2 → CLK_RL (J2), CLK_RR (J4). Source termination: the lead is about 200 Ω (`E`, two AWG28 wires 1.25 mm apart), the edge at the mic about 5 ns (≤ 13 ns). Tune on the bench |
+| R6, R7 | 100 kΩ | SDI0, SDI1 to GND: SDATA floats outside its 20 bits (Fig. 11's optional pull-down) |
+| U3 | MAX98357AETE+T | DIN_AMP, BCLK_AMP, LRCLK_AMP, SD_MODE, GAIN_SLOT, VDD (7, 8) +5V_AMP, OUTP, OUTN, GND (3, 11, 15) and EP (17) GND; NC 5, 6, 12, 13 |
+| R8–R10 | 100 Ω | BCLK, LRCLK, SDO0 into the amp (edge damping) |
+| R11, R12 | 2.2 kΩ, 100 kΩ | AMP_SD → SD_MODE, SD_MODE → GND (D-067 C) |
+| R13, R14 | unfitted | GAIN_SLOT to GND (0 Ω 12 dB, 100 kΩ 15 dB) or to +5V_AMP (0 Ω 6 dB, 100 kΩ 3 dB). Both open: 9 dB |
+| C8, C9 | 10 µF X5R 16 V 0805, 100 nF | At U3's VDD |
+| FB2, FB3 | 0 Ω 0603 (ferrite if EMI needs it) | OUTP → SPK_P, OUTN → SPK_N |
+| C10, C11 | unfitted 1 nF | SPK_P, SPK_N to GND (EMI option) |
+| R15, R16 | unfitted 10 kΩ / 15 kΩ | +5V_AMP → 5V_SENSE → GND: 5.0 V → 3.0 V on J1 pin 10 (D-067 C) |
+| TP1–TP12 | Ø1.0 pads, not in the BOM | BCLK, LRCLK, SDI0, SDI1, SDO0, AMP_SD, PDM_CLK1, PDM_CLK2, +3V3, +3V3_MIC, +5V_AMP, GND |
+| H1–H3 | Würth 9774080243R | No net; assembled (in the BOM and the position file) |
+
+`PWR_FLAG` sits on +3V3 and +5V_AMP (they enter through connectors), on +3V3_MIC (it is made of passives, but the ADAU7002s' IOVDD pins are power inputs), and on GND. Unfitted parts carry KiCad's DNP flag; the fab outputs leave them out of the BOM and position file (lesson 5).
+
+**ERC** (nightly `kicad-cli sch erc --severity-all`, 2026-10-27): **0 errors, 0 warnings.** The first run, before `pcb05.pretty` existed, flagged only the missing footprint library.
+
+**Check against the inputs**, row by row, from the exported netlist:
+
+| Input (lesson 1, D-067) | Netlist | Result |
+|---|---|---|
+| Mic rail: Pi 3V3 → bead → 2.2 Ω → +3V3_MIC with 10 µF; 100 nF at each converter and mic connector | `+3V3`: J1.1, FB1.1, TP9. `MIC_FILT`: FB1.2, R1.1. `+3V3_MIC`: R1.2, C1, C2, C3, C4–C7, J2–J5 pin 1, U1/U2 D1 and D2, TP10 | Match |
+| Front pair → U1 → SDI0, rear pair → U2 → SDI1 (§2.2, D-067 D) | `PDM_DAT1`: J3.4, J5.4, U1.A1. `PDM_DAT2`: J2.4, J4.4, U2.A1. `SDI0`: U1.B1, J1.7, R6, TP3. `SDI1`: U2.B1, J1.8, R7, TP4 | Match |
+| One series resistor per mic clock | `PDM_CLK1`: U1.A2, R2, R3, TP7 → `CLK_FL` J3.2, `CLK_FR` J5.2. `PDM_CLK2`: U2.A2, R4, R5, TP8 → `CLK_RL` J2.2, `CLK_RR` J4.2 | Match |
+| One Pi clock to all three chips; 100 Ω at the amp | `BCLK`: J1.3, U1.B2, U2.B2, R8, TP1 → `BCLK_AMP` U3.16. `LRCLK`: J1.5, U1.C2, U2.C2, R9, TP2 → `LRCLK_AMP` U3.14. `SDO0`: J1.6, R10, TP5 → `DIN_AMP` U3.1 | Match |
+| CONFIG to IOVDD (I²S) | U1.D2, U2.D2 on `+3V3_MIC` | Match |
+| AMP_SD through 2.2 kΩ, 100 kΩ pull-down | `AMP_SD`: J1.9, R11, TP6. `SD_MODE`: R11, R12, U3.4 | Match |
+| 5 V on W12 only (D-067 A) | `+5V_AMP`: J7.1, U3.7, U3.8, C8, C9, R14 (DNP), R15 (DNP), TP11. No J1 pin | Match |
+| Speaker pair, EMI option | `OUTP` U3.9 → FB2 → `SPK_P` J6.1, C10 (DNP); `OUTN` U3.10 → FB3 → `SPK_N` J6.2, C11 (DNP) | Match |
+| Gain strap footprints, 9 dB default | `GAIN_SLOT`: U3.2, R13 (DNP to GND), R14 (DNP to +5V_AMP) | Match |
+| Spare pin, unfitted divider | `5V_SENSE`: J1.10, R15, R16 (both DNP) | Match |
+| One ground: chips, EP, connectors, mounting pads | `GND`: J1.2, J1.4, J7.2, all J MP pads, U1/U2.C1, U3.3/11/15/17, every capacitor and pull-down | Match |
+| Fixings no net; amp NC pins open | H1–H3 pad 1, U3 5/6/12/13 unconnected | Match |
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
 
 - **2026-10-27:** design started (lesson 1). Read the ADAU7002 (Rev. C), MAX98357A (Rev 16), IM73D122 and RP1 datasheets; measured the board's neighbourhood in the built body CAD. Found: ADAU7002 Fig. 12 latches L on the rising edge, so the PCB-06 straps are right; the amp's data inputs are 6 V-tolerant with VDD off, but SD_MODE needs ~2 kΩ in series; GPIO22 is RP1's I2S0_SDI[1]; the compute shift put the cooler and the Pi's USB jacks under the board (2.10 mm), and the tray's insertion sweep passes 0.10 mm under it, so PCB-05 goes in after the tray; the frame cross rail is 10.4 mm above. The ICs are in stock at element14 India (UK stock); the GH headers are not. Decisions A–G raised.
 - **2026-10-27:** decisions A–G taken, the recommended option of each ([D-067](../../decisions.md#d-067)): 5 V on W12 only; CR-01 accepted; no power-good path (2.2 kΩ into SD_MODE, unfitted 5V-present divider on the spare pin); mic map `J5-2` REAR_L, `J5-3` FRONT_L, `J5-4` REAR_R, `J5-5` FRONT_R; ferrite + 2.2 Ω + 10 µF mic rail; two layers. Mounting built in `final/v1/cad`: Würth's M2 SMT spacers stop at 8 mm, so three 8 mm spacers meet printed frame bosses, with ISO 7380 M2 screws from above; `check_pcb05_mount.py` added. audiosystem.md, the body BOM, BO-002 and BO-006 updated, BO-064 added, PCB-09 told about `J9-3`. Inputs frozen.
+- **2026-10-27:** lesson 2. Schematic drawn for the KiCad 10.99 nightly, generated pin end by pin end from the library symbols: J1–J7, U1/U2 ADAU7002, U3 MAX98357A, the mic-rail filter, PDM clock resistors, SDATA pull-downs, amp damping and SD_MODE network, unfitted gain, EMI and 5V-sense parts, 12 test points, H1–H3 spacers. New project parts: an ADAU7002 symbol, its WLCSP footprint (Ø0.23 pads, one mask opening) and a 3D model from Fig. 22; the stock MAX98357A with its pad typed passive. `J5-1` order set: 1 +3V3, 2 GND, 3 BCLK, 4 GND, 5 LRCLK, 6 SDO0, 7 SDI0, 8 SDI1, 9 AMP_SD, 10 5V_SENSE. ERC 0 errors, 0 warnings; the netlist matches the inputs row by row.

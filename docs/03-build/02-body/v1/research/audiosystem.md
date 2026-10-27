@@ -68,7 +68,7 @@ All converters run from the one Pi i2s0 clock (48 kHz, BCLK 3.072 MHz), so mic c
 | **W28** speaker | K 50 WP solder tabs → PCB-05 `J5-6` | Soldered at the speaker; GH 2 on PCB-05's +Y edge | 2 × AWG26, twisted | Under 150 mm (EMI limit) |
 | **W12** amp power | PCB-04 `J4-5` → PCB-05 `J5-7` | Micro-Fit 3.0 2×1 right-angle, both ends; `J5-7` on PCB-05's −Y edge | 5 V, GND; 2 × AWG22 | ~120 mm |
 
-Pin order inside each connector is set by the board schematics. **W27** is set by [PCB-06's schematic](../../../04-pcbs/pcb-06-pdm-mic/README.md#schematic): GH pin 1 3V3, 2 CLK, 3 GND, 4 DATA, with GND between the clock and the data line. PCB-05's `J5-2…5` must use the same order. The other connectors are not assigned yet.
+Pin order inside each connector is set by the board schematics. **W27** is set by [PCB-06's schematic](../../../04-pcbs/pcb-06-pdm-mic/README.md#schematic): GH pin 1 3V3, 2 CLK, 3 GND, 4 DATA, with GND between the clock and the data line. PCB-05's `J5-2…5` use the same order. The [PCB-05 schematic](../../../04-pcbs/pcb-05-audio-front-end/README.md#schematic) sets the rest: **W26** (`J5-1`, `J9-3` wired 1:1) 1 3V3, 2 GND, 3 BCLK, 4 GND, 5 LRCLK, 6 SDO0, 7 SDI0, 8 SDI1, 9 AMP_SD, 10 spare (5V_SENSE); **W28** (`J5-6`) 1 SPK+, 2 SPK−; **W12** (`J5-7`) 1 +5 V, 2 GND, which PCB-04's `J4-5` must match.
 
 Crimp tools: GH needs its own tool (terminal `SSHL-002T-P0.2`), and Micro-Fit 3.0 needs another.
 
