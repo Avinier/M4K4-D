@@ -1,6 +1,6 @@
 # Board design playbook (stage 1)
 
-How one custom board goes from spec to a committed revision. The steps were worked out on [PCB-15](pcb-15-nose-hall/README.md), designed 2026-10-14 to 10-25 in the Claude Code session `makad-a2`. They follow [workflow.md](workflow.md) stage 1, the [layout rules](README.md#layout-rules) ([D-060](../decisions.md#d-060)) and the [fab-neutral design rules](README.md#fab-neutral-design-rules) ([D-062](../decisions.md#d-062)). Boards are designed one at a time and procured together afterwards ([D-064](../decisions.md#d-064)).
+How one custom board goes from spec to a committed revision. The steps were worked out on [PCB-15](pcb-15-nose-hall/README.md) and refined on [PCB-11](pcb-11-status-led/README.md) and [PCB-06](pcb-06-pdm-mic/README.md); PCB-15 was designed 2026-10-14 to 10-25 in the Claude Code session `makad-a2`. They follow [workflow.md](workflow.md) stage 1, the [layout rules](README.md#layout-rules) ([D-060](../decisions.md#d-060)) and the [fab-neutral design rules](README.md#fab-neutral-design-rules) ([D-062](../decisions.md#d-062)). Boards are designed one at a time and procured together afterwards ([D-064](../decisions.md#d-064)).
 
 **Teaching.** The builder is new to PCB design and learns as each board is made. Explain each step from first principles before doing it, one lesson per step. Say why each part and each rule exists, and stop at the steps where the builder must act or decide. PCB-15 went in six lessons: what a PCB is, the circuit, the envelope, the schematic, the layout, and the checks and outputs. Later boards can skip what is already taught and spend the time on what is new to that board.
 
@@ -60,5 +60,16 @@ How one custom board goes from spec to a committed revision. The steps were work
 | Envelope checked by part height only | PCB-11's 0402s fitted the socket cavity by height, but their courtyards did not fit beside the centred LED. The parts moved to the back at layout (D-065 amended) | When freezing an envelope, check footprint areas (courtyards) as well as heights against every face that carries parts |
 | Stock footprint without its 3D model | KiCad's `LED_WS2812B-2020_PLCC4_2.0x2.0mm` names a model the library doesn't ship, so the board STEP has no LED | Copy the footprint into the project library with a project model built from the datasheet; check the STEP's `PRODUCT` list |
 | Placement file and Gerbers in different frames | With the aux origin at board-local (0, 0), `pcb export pos --use-drill-file-origin` is local, but the Gerbers and drill default to absolute, so the fab's preview misplaces parts | Export the Gerbers with `--use-drill-file-origin` and the drill with `--drill-origin plot`, so all files share one origin |
+
+## Traps found on PCB-06
+
+| Trap | What happens | Handling |
+|---|---|---|
+| Rules file on a scratch copy | KiCad loads only the `.kicad_dru` named after the board. A scratch `test.kicad_pcb` beside `<board>.kicad_dru` runs DRC with **no custom rules, silently** | Copy the `.kicad_pro` and `.kicad_dru` under the scratch board's name, and make one test that only a custom rule can catch |
+| One design in mirrored positions | Four boards, left and right of the body, with the lead side toward the centre: two mount turned over, so an obstacle above the board at one position is below it at another | Measure every position in lesson 1 and lay out against the envelope folded about the board's axis. The fit check places each orientation from one plane (lead direction, inboard normal) and lets the third axis follow |
+| Datasheet land pattern vs fab-neutral rules | Infineon's GND seal ring sits 0.18 mm from the Ø0.8 non-plated sound hole: under JLCPCB's 0.2 mm and the fab-neutral 0.31 mm | Put each new footprint on a scratch board with the rules file before placing. A scoped exception (one footprint's own hole) is a decision, recorded with the fabs' published limits |
+| Track ending on a custom pad's shape | A track started on the seal ring's copper (a custom pad's circle primitive), not on its anchor, reads as dangling and unconnected | Start and end tracks on the pad's anchor point |
+| No-via zone round a feature | Vias banned within 3.8 mm of the port forced every net out of the mic on F.Cu, which fixed the pin escape order. At a 1.4 mm wire-pad pitch, two nets had to cross at the middle pads | Plan the routing before fixing a connector's pad pitch. Here the pads went to 2.2 mm, so a via fits in each gap |
+| Fit-check columns | A lowering sweep built from each part's own bounding box can only find clashes; the clearance to what passes above reads "none" | Build the column from the board face outward (n 0 to a few mm) over the part's footprint, and compare datasheet maximum heights with the nearest obstacle |
 
 KiCad keeps local history in `design/.history/` (git-ignored). `git log` there shows which save changed what.

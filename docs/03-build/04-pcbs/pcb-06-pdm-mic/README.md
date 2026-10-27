@@ -18,8 +18,8 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | In progress: placed and routed, DRC 0 errors / 0 unconnected; checks and outputs next | — | 2026-10-26 |
-| 2. Procure | — | — | — |
+| 1. Design | **Done: rev A.** Schematic, layout, fab outputs (L and R variants) and board STEP; D-066 records the strap, the mic source and the seal-ring clearance; the fit check passes at all four positions | [design/](design/), [fab/revA/](fab/revA/README.md), [cad/](cad/) | 2026-10-27 |
+| 2. Procure | Waits for the design batch ([D-064](../../decisions.md#d-064)) | — | — |
 | 3. Integrate | — | — | — |
 
 ## Inputs
@@ -220,6 +220,23 @@ KiCad loads only the rules file named after the board. The first scratch run, wi
 
 **DRC** (nightly `kicad-cli pcb drc --schematic-parity --severity-all`, 2026-10-27): **0 errors, 0 unconnected pads, 0 schematic-parity issues.** No keep-out, courtyard or clearance hits. Four warnings remain, `lib_footprint_mismatch` on C1, C2, R1 and R3. They are the cosmetic kind PCB-15 and PCB-11 found: only the rotated parts are flagged, and R2 (0°) is not. `audit()`: MK1 and the five 0402s each have their 3D model; P1–P4 and H1/H2 are out of the BOM and the position file (set again after F8). Reference labels moved to the fab layers (`refs_to_fab()`).
 
+## Checks and outputs (rev A)
+
+- **ERC** 0 errors, 0 warnings. **DRC** with schematic parity: 0 errors, 0 unconnected, and the 4 cosmetic warnings above. **`audit()`**: MK1 and the five 0402s have their 3D models. P1–P4 and H1/H2 are out of the BOM and the position file.
+- **Board STEP:** [`cad/pcb-06-pdm-mic-revA.step`](cad/pcb-06-pdm-mic-revA.step). It lists the board, MK1 (Infineon's package model) and the five 0402s. The board core runs Z 0–0.91; the parts sit 0.04 mm above the front mask. The sound hole and both screw holes are open in the solid.
+- **Outputs:** [`fab/revA/`](fab/revA/README.md) holds Gerber X2 and Excellon drill, both from the board-local origin, and one Gerber set with **two assembly variants**: L (R2 fitted) and R (R3 fitted), each with its own BOM and placement files in KiCad and JLCPCB CPL formats. It also holds a Gerber zip and the order parameters. The set has no silkscreen; the fitted strap resistor identifies the variant.
+- **Fit in the robot:** [`final/v1/cad/check_pcb06_fit.py`](../../final/v1/cad/check_pcb06_fit.py) places the STEP on all four bosses: FRONT_R and REAR_L upright, FRONT_L and REAR_R turned over, the lead side toward the body centre each time. It measures against the body CAD, the chassis reference, and the shell's 0–125 mm lowering path (about 8 min). **PASS at all four:**
+
+  | Check | Result (same at all four positions) |
+  |---|---|
+  | Outline and holes | Core matches the CAD placeholder's 12 × 14 outline to 0.01 mm. The sound hole is open on the port axis and both screw holes on the pilots |
+  | MK1 | Package centre on the CAD package (offset 0.000, 0.000), i.e. its port on the port axis |
+  | Seat | Core 0.045 mm from the boss, exactly the outer copper and mask; no clash |
+  | Static | Nearest part to anything: R1 0.97 mm to the frame post; C1/C2 1.04 mm to the shell. The core's 0.04–0.05 mm to the boss and screw heads is the copper and mask |
+  | Lowering path | Every part passes the upper side rail at n 2.30. With datasheet maximum heights (MK1 1.30 + 0.04, 0402s 0.55 + 0.04, wire joints 1.0), the worst is **MK1, 0.96 mm** |
+
+  `check_mic_mounts.py` (D-037) is unchanged by this board: the board keeps the placeholder's outline, holes, mic position and height.
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
@@ -230,3 +247,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-26:** lesson 3. Board set up: 12 × 14 outline, 1.0 mm stackup, origins at board-local (0, 0), envelope rule areas (post strip, outer face, gasket vias) and the wire-pad clearance rule, all proven on a scratch copy. Found: Infineon's sound-hole GND ring is 0.18 mm from the Ø0.8 NPTH, under JLCPCB's 0.2 mm and the fab-neutral 0.31 mm. Decision open.
 - **2026-10-26:** decision C2: MK1's seal ring pulled back to R 0.63 (0.23 mm from the hole), with a scoped 0.2 mm hole-clearance rule for MK1 alone; [D-066](../../decisions.md#d-066) amended. Re-proved on the scratch copy.
 - **2026-10-27:** lesson 4. Placed and routed by hand through KiPy on the nightly. The no-via circle round the port forces every net out of the mic on F.Cu, so the W27 pads went to a 2.2 mm pitch to take a via in each gap. Five vias, 0.2 mm octolinear tracks, B.Cu GND pour over the outer face. DRC 0 errors, 0 unconnected, parity clean; 4 cosmetic `lib_footprint_mismatch` warnings. Position-file flags set again after F8.
+- **2026-10-27:** lesson 5. Board STEP exported with parts; new fit check `final/v1/cad/check_pcb06_fit.py` PASS at all four positions (MK1 0.96 mm under the upper rail on the way down, seat 0.045 mm, holes on the port and pilots). Rev A outputs in `fab/revA/`: one origin, two assembly variants, no silkscreen. Stage 1 done.

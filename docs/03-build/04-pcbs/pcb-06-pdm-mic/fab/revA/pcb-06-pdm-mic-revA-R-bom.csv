@@ -1,0 +1,6 @@
+"Comment","Designator","Footprint","Quantity","MPN","Manufacturer","LCSC Part #"
+"1u X5R 10V","C1","Capacitor_SMD:C_0402_1005Metric","1","","",""
+"100n X7R 10V","C2","Capacitor_SMD:C_0402_1005Metric","1","","",""
+"IM73D122V01","MK1","pcb06:IM73D122V01_PG-LLGA-5-3","1","IM73D122V01XTMA1","Infineon",""
+"100","R1","Resistor_SMD:R_0402_1005Metric","1","","",""
+"1k","R3","Resistor_SMD:R_0402_1005Metric","1","","",""
