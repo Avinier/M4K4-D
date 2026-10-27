@@ -64,8 +64,13 @@ def library_models(fp):
     lib, name = fp.definition.id.library, fp.definition.id.name
     text = (_lib_path(lib) / f"{name}.kicad_mod").read_text()
     out = []
-    for m in re.finditer(r'\(model "([^"]+)"(.*?)\n\t\)', text, re.S):
-        vec = lambda key: tuple(float(v) for v in re.search(r"\(%s\s*\(xyz ([^)]*)\)" % key, m.group(2)).group(1).split())
+    for m in re.finditer(r'\(model "([^"]+)"', text):
+        depth, i = 1, m.end()   # balance parentheses: models may be one line or several
+        while depth:
+            depth += {"(": 1, ")": -1}.get(text[i], 0)
+            i += 1
+        body = text[m.end():i]
+        vec = lambda key: tuple(float(v) for v in re.search(r"\(%s\s*\(xyz ([^)]*)\)" % key, body).group(1).split())
         out.append((m.group(1), vec("offset"), vec("scale"), vec("rotate")))
     return out
 
@@ -167,3 +172,18 @@ def drc(out="/tmp/kp-drc.rpt"):
                     str(board_file())], capture_output=True)
     keep = ("[", "    @", "    Rule", "** Found")
     return "\n".join(l for l in open(out).read().splitlines() if l.startswith(keep))
+
+
+def remove_in(x0, y0, x1, y1, net=None):
+    """Delete tracks and vias with both ends (or the via) inside a KiCad-mm box, optionally of one net."""
+    inside = lambda p: x0 <= mm(p.x) <= x1 and y0 <= mm(p.y) <= y1
+    gone = []
+    for t in b.get_tracks():
+        if (net is None or t.net.name == net) and inside(t.start) and inside(t.end):
+            gone.append(t)
+    for v in b.get_vias():
+        if (net is None or v.net.name == net) and inside(v.position):
+            gone.append(v)
+    if gone:
+        b.remove_items(gone)
+    return len(gone)

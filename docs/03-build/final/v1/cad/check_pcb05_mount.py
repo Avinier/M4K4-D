@@ -5,7 +5,7 @@ Builds the chassis and body trees (about 1 min), not the head.
 
 PCB-05 hangs from the frame on three 8 mm M2 SMT spacers (Wurth 9774080243R) reflowed on
 its top face. ISO 7380 M2 screws go down from above through the front upper cross rail
-(two, into counterbores under the yaw housing seat) and the yaw plate (one). The board
+(one, into a counterbore under the yaw housing seat) and the yaw plate (two; D-067 amended). The board
 goes in after the compute tray and PCB-09: it slides in from the front 1 mm low, over the
 Pi's USB jacks, then lifts onto the bosses. The yaw cartridge, shell, panels, speaker and
 head come later. The vendor Pi and cooler leaves are tested as their boxes.
@@ -128,7 +128,7 @@ def main():
         engage = top - max(tip, MNT["board_top"])
         ok &= engage >= 3.0 and tip > MNT["board_top"] and _vol(head & frame) < 1e-3
         line = f"P{i + 1}: M2 x {length:.0f}, head Z {seat:.1f}-{seat + HEAD[1]:.1f}, tip Z {tip:.1f}, {engage:.1f} mm in the spacer"
-        if i < 2:
+        if i < MNT["rear"]:
             gap = head.distance(housing)
             r = ((x - B.BODY_AXIS_X) ** 2 + y ** 2) ** 0.5 + MNT["cbore"][0]
             seat_r = B.YAW_PLATE_POCKET[0]
@@ -200,7 +200,7 @@ def main():
     # 7. Driver paths from above at install time (no yaw cartridge, shell or head yet).
     rows, ok = [], True
     for i, ((x, y), (length, seat)) in enumerate(zip(MNT["points"], MNT["screws"])):
-        r = TOOL_R["rear" if i < 2 else "front"]
+        r = TOOL_R["rear" if i < MNT["rear"] else "front"]
         path = _cyl(r, seat + HEAD[1], 220.0, x, y)
         pb = _box(path)
         near = min(((path.distance(s) if s is not None else 0.0), p.split("/")[-1])

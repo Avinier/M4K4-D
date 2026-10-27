@@ -41,6 +41,8 @@
 # PCB-05 (README, Board set-up): the amplifier's supply and speaker nets carry 0.4 A average
 # and 0.7 A peak, behind a 2.0 A e-fuse. 0.5 mm of 1 oz copper carries them with a few
 # degrees' rise; the mic and logic nets draw milliamps and keep the fab-neutral minimum.
+# Inside U3's courtyard the tracks neck down to its 0.25 mm pins (0.5 mm pitch), so the
+# rule stops at the courtyard.
 (rule "PCB-05 amp power and speaker tracks"
-	(condition "A.Type == 'Track' && (A.NetName == '/+5V_AMP' || A.NetName == '/OUTP' || A.NetName == '/OUTN' || A.NetName == '/SPK_P' || A.NetName == '/SPK_N')")
+	(condition "A.Type == 'Track' && (A.NetName == '/+5V_AMP' || A.NetName == '/OUTP' || A.NetName == '/OUTN' || A.NetName == '/SPK_P' || A.NetName == '/SPK_N') && !A.intersectsCourtyard('U3')")
 	(constraint track_width (min 0.5mm)))

@@ -68,7 +68,7 @@ All converters run from the one Pi i2s0 clock (48 kHz, BCLK 3.072 MHz), so mic c
 | **W28** speaker | K 50 WP solder tabs → PCB-05 `J5-6` | Soldered at the speaker; GH 2 on PCB-05's +Y edge | 2 × AWG26, twisted | Under 150 mm (EMI limit) |
 | **W12** amp power | PCB-04 `J4-5` → PCB-05 `J5-7` | Micro-Fit 3.0 2×1 right-angle, both ends; `J5-7` on PCB-05's −Y edge | 5 V, GND; 2 × AWG22 | ~120 mm |
 
-Pin order inside each connector is set by the board schematics. **W27** is set by [PCB-06's schematic](../../../04-pcbs/pcb-06-pdm-mic/README.md#schematic): GH pin 1 3V3, 2 CLK, 3 GND, 4 DATA, with GND between the clock and the data line. PCB-05's `J5-2…5` use the same order. The [PCB-05 schematic](../../../04-pcbs/pcb-05-audio-front-end/README.md#schematic) sets the rest: **W26** (`J5-1`, `J9-3` wired 1:1) 1 3V3, 2 GND, 3 BCLK, 4 GND, 5 LRCLK, 6 SDO0, 7 SDI0, 8 SDI1, 9 AMP_SD, 10 spare (5V_SENSE); **W28** (`J5-6`) 1 SPK+, 2 SPK−; **W12** (`J5-7`) 1 +5 V, 2 GND, which PCB-04's `J4-5` must match.
+Pin order inside each connector is set by the board schematics. **W27** is set by [PCB-06's schematic](../../../04-pcbs/pcb-06-pdm-mic/README.md#schematic): GH pin 1 3V3, 2 CLK, 3 GND, 4 DATA, with GND between the clock and the data line. PCB-05's `J5-2…5` use the same order. The [PCB-05 schematic](../../../04-pcbs/pcb-05-audio-front-end/README.md#schematic) sets the rest: **W26** (`J5-1`, `J9-3` wired 1:1) 1 3V3, 2 LRCLK, 3 GND, 4 BCLK, 5 GND, 6 SDO0, 7 SDI1, 8 SDI0, 9 AMP_SD, 10 spare (5V_SENSE) (reordered at routing, D-067); **W28** (`J5-6`) 1 SPK+, 2 SPK−; **W12** (`J5-7`) 1 +5 V, 2 GND, which PCB-04's `J4-5` must match.
 
 Crimp tools: GH needs its own tool (terminal `SSHL-002T-P0.2`), and Micro-Fit 3.0 needs another.
 
@@ -104,7 +104,7 @@ On PCB-05, the DATA pins of a pair's two GH 4 headers are tied into that ADAU700
 
 | Edge | Connectors, X start (mm) | Faces |
 |---|---|---|
-| Rear (X 45) | `J5-1` GH 10, centred on Y 0 | −X, towards PCB-09 |
+| Rear (X 45) | `J5-1` GH 10, centred on Y −2.0 (moved 2 mm for the rear spacer, [D-067](../../../decisions.md#d-067)) | −X, towards PCB-09 |
 | +Y (Y 19) | `J5-2` GH 4 (X 46), `J5-3` GH 4 (X 55.25), `J5-6` GH 2 (X 64.5) | +Y |
 | −Y (Y −19) | `J5-4` GH 4 (X 46), `J5-5` GH 4 (X 55.25), `J5-7` Micro-Fit 3.0 (X 64.5–74.8) | −Y |
 
@@ -112,12 +112,12 @@ Mic to header ([D-067](../../../decisions.md#d-067)): **`J5-2` REAR_L, `J5-3` FR
 
 ### 2.4 Layout notes (`E`, recommendations for the schematic and layout)
 
-- **Layers:** two, 1.6 mm, with a near-solid ground plane on the bottom, which carries no parts ([D-067](../../../decisions.md#d-067)). Every ADAU7002 ball is on the outside of its 2 × 4 array, so it fans out on the surface. The fab-neutral rules are 2-layer rules.
+- **Layers:** four, 1.6 mm: parts and signals on top, a solid GND plane on In1, GND on In2, signals on the bottom, which carries no parts ([D-067](../../../decisions.md#d-067), amended at routing). Two layers would have needed 12–16 hops through the ground plane: each converter's two clock balls are neighbours, and each converter feeds both board edges across the clock bus.
 - **Amplifier:** ground the exposed pad with thermal vias. Put 10 µF + 0.1 µF right at VDD, close to `J5-7`. Keep the OUTP/OUTN pair short to `J5-6`.
 - **EMI:** leave unpopulated footprints for a ferrite bead + capacitor on each speaker output. Fit them only if the camera or radios pick up noise (the peripheral selection's rule).
 - **Gain:** the MAX98357A's `GAIN_SLOT` pin sets 3–15 dB by strapping. Open is 9 dB. Choose the value after the bench listen on BO-007 (D-034 asks for a capped gain). Lay out a resistor footprint so any setting can be fitted.
 - **Test points:** BCLK, LRCLK, SDI0, SDI1, SDO0, AMP_SD, both PDM clocks, 3V3 (before and after the filter), 5 V and GND.
-- **Mounting** ([D-067](../../../decisions.md#d-067)): three M2 SMT spacers (Würth 9774080243R, 8 mm) on the top face, at (48.5, ±11.0) under the front upper cross and (63, 0) under the yaw plate, onto printed bosses on the frame. ISO 7380 M2 screws are driven from above after the compute tray and PCB-09, before the yaw cartridge. The board slides in from the front over the Pi's USB jacks (2.1 mm below), so it goes in after the compute tray, whose insertion passes 0.10 mm under it. CAD: `final/v1/cad` (`PCB05_MOUNT`, `check_pcb05_mount.py`).
+- **Mounting** ([D-067](../../../decisions.md#d-067)): three M2 SMT spacers (Würth 9774080243R, 8 mm) on the top face, at (48.5, 9.8) under the front upper cross and (61.3, ±9.8) under the yaw plate (amended at placement), onto printed bosses on the frame. ISO 7380 M2 screws are driven from above after the compute tray and PCB-09, before the yaw cartridge. The board slides in from the front over the Pi's USB jacks (2.1 mm below), so it goes in after the compute tray, whose insertion passes 0.10 mm under it. CAD: `final/v1/cad` (`PCB05_MOUNT`, `check_pcb05_mount.py`).
 
 ---
 

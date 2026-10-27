@@ -72,4 +72,16 @@ How one custom board goes from spec to a committed revision. The steps were work
 | No-via zone round a feature | Vias banned within 3.8 mm of the port forced every net out of the mic on F.Cu, which fixed the pin escape order. At a 1.4 mm wire-pad pitch, two nets had to cross at the middle pads | Plan the routing before fixing a connector's pad pitch. Here the pads went to 2.2 mm, so a via fits in each gap |
 | Fit-check columns | A lowering sweep built from each part's own bounding box can only find clashes; the clearance to what passes above reads "none" | Build the column from the board face outward (n 0 to a few mm) over the part's footprint, and compare datasheet maximum heights with the nearest obstacle |
 
+## Traps found on PCB-05
+
+| Trap | What happens | Handling |
+|---|---|---|
+| Envelope checked against CAD placeholder bodies | The lesson-1 spacer check passed against the CAD's GH header boxes, but the real footprints' pads run 1.1 mm further inboard, so the spacers' rings landed on signal pads; the Micro-Fit block was 2.4 mm narrower than the part. Found only at placement, after the CAD fixing was committed (D-067 amended) | When freezing the inputs, place the fixed parts' real footprints (connectors, mounting) on a scratch board and DRC them before committing CAD that depends on their positions |
+| Stock land patterns that fail fab rules | KiCad's Würth WA-SMSI spacer footprints put their solder ring at their own NPTH's edge (0 mm) | DRC every stock footprint on the scratch board at set-up; copy and fix it in the project library (PCB-05 plated the hole) |
+| Through-hole parts over something close below | THT tails stick out about 1.6 mm under a 1.6 mm board | A B.Cu rule area with pads not allowed over the low-clearance zone; notch it only for parts with a recorded decision |
+| One-line `(model …)` in a project footprint | `kp.library_models()` parsed only the multi-line form, so `place()` never restored the ADAU7002's model and U1/U2 had none; the board STEP would have lost both chips | Fixed in `kp.py` (balances parentheses); run `audit()` before the fit check, and expect n/n for every project part |
+| The fab-neutral via rule is via copper to other copper | 0.31 mm from the via's ring, not its hole: two vias can't sit between In2 rows 1.25 mm apart, and five vias failed by 0.01–0.12 mm | Plan via sites at ≥ 0.31 + 0.335 + half the track width from neighbours; leave via room when spacing parallel rows |
+| Signal layer next to the plane you think is the reference | On a 1.6 mm 4-layer board, B.Cu is 0.21 mm from In2 and 1.3 mm from In1, so tracks on In2 slot the return path of a B.Cu bus where they cross under it | Keep the layer next to a fast bus free of crossings, or stitch GND vias beside each slot |
+| Test-pad courtyards | `TestPoint_Pad_D1.0mm` has a Ø2 courtyard, twice the pad, so test pads crowd small parts | Place test pads last, at ≥ 1 mm courtyard radius from everything |
+
 KiCad keeps local history in `design/.history/` (git-ignored). `git log` there shows which save changed what.

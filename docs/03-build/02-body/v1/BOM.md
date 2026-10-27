@@ -88,7 +88,7 @@ The Pi's four M2.5 holes are modeled over tray bosses; the Active Cooler's push-
 | BO-012 | [Infineon IM73D122V01XTMA1 PDM mic](https://in.element14.com/infineon/im73d122v01xtma1/mems-microphone-pdm-122db-pg-llga/dp/4125831) (element14 India 4125831), one per BO-005 board; buy 6 for reflow spares ([D-036](../../decisions.md#d-036)); bought by the builder and supplied to the PCB-06 fab ([D-066](../../decisions.md#d-066)) | 4 | SELECTED |
 | BO-013 | M2 × 4 pan-head thread-forming screw for plastics, two per mic board into the shell boss ([D-037](../../decisions.md#d-037)) | 8 | CANDIDATE |
 | BO-014 | Mic port gasket, closed-cell foam ring Ø6.5/Ø2.0 × 1.0 mm, compressed 30% in the boss pocket ([D-037](../../decisions.md#d-037)); cut from Robu EVA foam tape, 50 mm × 5 m, 1 mm (builder-reported 2026-10-04) | 4 | CANDIDATE |
-| BO-064 | PCB-05 fixing screws: 2 × ISO 7380 M2 × 16 through the front upper cross rail and 1 × M2 × 20 through the yaw plate, into the board's SMT spacers ([D-067](../../decisions.md#d-067)) | 3 | CANDIDATE |
+| BO-064 | PCB-05 fixing screws: 1 × ISO 7380 M2 × 16 through the front upper cross rail and 2 × M2 × 20 through the yaw plate, into the board's SMT spacers ([D-067](../../decisions.md#d-067)) | 3 | CANDIDATE |
 | BO-051 | 0.8 mm annular silicone speaker-flange bond/seal behind the front-panel lip | 1 application | HOLD |
 
 **Bench articles** (not installed; not counted in `BODY_AUDIO`):

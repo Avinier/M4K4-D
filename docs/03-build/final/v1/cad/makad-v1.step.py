@@ -80,20 +80,23 @@ def pcb11_socket_local():
     return socket - _x_cylinder(s["bore"][0], s["bore"][1], s["bore"][2])
 
 
-# D-067: PCB-05 hangs from the frame on three Wurth 9774080243R M2 SMT spacers (8 mm,
-# reflowed on its top face), one ISO 7380 M2 screw each, driven from above after the
-# compute tray and PCB-09 are in. World mm. The two rear screws pass the front upper
-# cross rail (Z 126-135.5) and seat in counterbores under the yaw housing seat (Z 135.5,
-# R36.6 about the yaw axis); the front one passes the yaw plate (Z 134-138), open above.
+# D-067 (amended at placement): PCB-05 hangs from the frame on three Wurth 9774080243R M2
+# SMT spacers (8 mm, reflowed on its top face), one ISO 7380 M2 screw each, driven from
+# above after the compute tray and PCB-09 are in. World mm. The rear screw passes the
+# front upper cross rail (Z 126-135.5) and seats in a counterbore under the yaw housing
+# seat (Z 135.5, R36.6 about the yaw axis); the front two pass the yaw plate (Z 134-138),
+# open above. The rear corners hold no second spacer: J5-1 and the J5-2/J5-4 footprints
+# leave 4.3 mm there for a 5.8 mm courtyard.
 # Printed bosses on the frame meet the spacer tops. check_pcb05_mount.py measures it.
 PCB05_MOUNT = dict(
-    points=((48.5, 11.0), (48.5, -11.0), (63.0, 0.0)),
+    points=((48.5, 9.8), (61.3, 9.8), (61.3, -9.8)),
+    rear=1,                              # the first `rear` points are under the cross rail
     board_top=115.6,
     spacer=(2.175, 0.8, 8.0),            # outer r, modelled bore r (M2 thread), length
-    boss=(3.5, (126.0, 126.0, 134.0)),   # r, frame underside above each point
+    boss=(3.5, (126.0, 134.0, 134.0)),   # r, frame underside above each point
     bore=1.2,                            # M2 clearance, Ø2.4
     cbore=(2.0, 134.0, 135.6),           # rear only: r, floor Z, open into the housing seat
-    screws=((16.0, 134.0), (16.0, 134.0), (20.0, 138.0)),  # length, head seat Z
+    screws=((16.0, 134.0), (20.0, 138.0), (20.0, 138.0)),  # length, head seat Z
 )
 
 
@@ -111,7 +114,7 @@ def pcb05_mount_parts():
         spacers.append(_z_cyl(sr, m["board_top"], top, x, y) - _z_cyl(sb, m["board_top"] - 0.1, top + 0.1, x, y))
         bosses.append(_z_cyl(m["boss"][0], top, roof, x, y) - _z_cyl(m["bore"], top - 0.1, roof + 0.1, x, y))
         bores.append(_z_cyl(m["bore"], roof - 0.1, 138.1, x, y))
-    cbores = [_z_cyl(m["cbore"][0], m["cbore"][1], m["cbore"][2], x, y) for x, y in m["points"][:2]]
+    cbores = [_z_cyl(m["cbore"][0], m["cbore"][1], m["cbore"][2], x, y) for x, y in m["points"][:m["rear"]]]
     return spacers, bosses, bores + cbores
 
 
@@ -127,6 +130,9 @@ DROID_CUTS = [
     (r"BALL_POD_PRINTED_SEAT", (126.1, 126.5, 6.9, 13.1, 30.3, 35.01)),
     # D-067: M2 clearance bores through the cross rail and yaw plate, rear counterbores.
     *[(r"BODY_FRAME_MAIN_PRINT", cut) for cut in _PCB05_CUTS],
+    # D-067 amended: the J5-7 placeholder is 10 mm tall; the mated Micro-Fit is 6.98 (Molex), so
+    # the block stops at Z 122.6, 1.0 mm under the front -Y boss (Z 123.6).
+    (r"PCB05_J5_7_MICROFIT3_2P_(RA_HEADER|MATED_PLUG)", (60.0, 80.0, -35.0, -5.0, 122.6, 130.0)),
 ]
 DROID_ADDS = [
     # D-063: the slot's front wall moves 0.4 mm back too (X 127.5 -> 127.1), beside the
@@ -138,8 +144,18 @@ DROID_ADDS = [
     # D-067: PCB-05 bosses under the frame, and the SMT spacers reflowed on the board.
     *[(r"BODY_FRAME_MAIN_PRINT", boss) for boss in _PCB05_BOSSES],
     *[(r"PCB05_AUDIO_FRONT_END_PCB", spacer) for spacer in _PCB05_SPACERS],
+    # D-067 amended: the Micro-Fit 43650-0200 housing is 9.65 mm wide (Molex SD-43650-001), not the
+    # placeholder's 7.26, and sits 1.5 mm further forward; header and plug grow to X 64.8-74.46, at
+    # Molex's 6.98 mm mated height (the placeholder's 10 mm block is cut back in DROID_CUTS).
+    (r"PCB05_J5_7_MICROFIT3_2P_RA_HEADER", (64.8, 74.46, -19.0, -9.0, 115.6, 122.6)),
+    (r"PCB05_J5_7_MICROFIT3_2P_MATED_PLUG", (64.8, 74.46, -31.0, -19.0, 115.6, 122.6)),
 ]
 DROID_MOVES = [
+    # D-067 amended: J5-1 slides 2 mm toward -Y so the rear spacer fits between it and J5-2;
+    # J5-2/J5-4 and J5-6 move 0.225 mm apart (their footprint courtyards touched).
+    (r"PCB05_J5_1_(JST_GH_SM10B_HEADER|GHR10_MATED_PLUG)|PCB05_REAR_EDGE_PLUG_RESERVE", (0.0, -2.0, 0.0)),
+    (r"PCB05_J5_[24]_(JST_GH_SM04B_HEADER|GHR04_MATED_PLUG)", (-0.225, 0.0, 0.0)),
+    (r"PCB05_J5_6_(JST_GH_SM02B_HEADER|GHR02_MATED_PLUG)", (0.225, 0.0, 0.0)),
     # D-063: PCB-15 sits 0.4 mm further back (X 126.2-127.0), so U1 clears the magnet
     # at the cap's 3 mm stop.
     (r"BALL_NOSE_HALL_(CARRIER_PCB|DRV5055A3_SOT23)", (-0.4, 0.0, 0.0)),

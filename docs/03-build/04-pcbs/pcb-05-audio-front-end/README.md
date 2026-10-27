@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | In progress: board set up, DRC 0 on the empty board (D-067 amended: H1, I1); placement next | — | 2026-10-27 |
+| 1. Design | In progress: placed (D-067 amended again: one rear and two front spacers), no placement violations; routing next | — | 2026-10-27 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -74,7 +74,7 @@ ADI's PDFs time out with a plain `curl`. They download with a full Safari header
 
 | Connector | Part | Edge, position (CAD) | Pins |
 |---|---|---|---|
-| `J5-1` host | JST GH SM10B-GHS-TB, side entry | Rear (−X), X 45–49.95, Y ±7.88 | BCLK, LRCLK, SDI0, SDI1, SDO0, AMP_SD, 3V3, 2 × GND, spare (5V-present, unfitted); **no 5 V** (W26 to PCB-09 `J9-3`). Order set in the schematic; PCB-09 told |
+| `J5-1` host | JST GH SM10B-GHS-TB, side entry | Rear (−X), X 45–49.95, Y −9.88…5.88 (centred Y −2.0, D-067 amended at placement) | BCLK, LRCLK, SDI0, SDI1, SDO0, AMP_SD, 3V3, 2 × GND, spare (5V-present, unfitted); **no 5 V** (W26 to PCB-09 `J9-3`). Order set in the schematic; PCB-09 told |
 | `J5-2…5` mics | SM04B-GHS-TB, side entry | +Y: `J5-2` X 46–54.25, `J5-3` 55.25–63.5. −Y: `J5-4`, `J5-5` the same | **1 3V3, 2 CLK, 3 GND, 4 DATA** (fixed by the PCB-06 schematic). **`J5-2` REAR_L, `J5-3` FRONT_L, `J5-4` REAR_R, `J5-5` FRONT_R** (decision D) |
 | `J5-6` speaker | SM02B-GHS-TB, side entry | +Y, X 64.5–70.25 | OUTP, OUTN (W28, twisted, < 150 mm) |
 | `J5-7` amp power | Molex Micro-Fit 3.0 43650-0200, 2 × 1 right angle, through hole | −Y, X 64.5–71.76, 10 mm deep (Y −19…−9) | +5V_AMP, GND (W12 from PCB-04 `J4-5`, `PB-AUDIO-OUT`) |
@@ -170,6 +170,7 @@ Taken 2026-10-27 by the builder, the recommended option of each ([D-067](../../d
 
 **E. Fixing points.** None in CAD. Constraints: no screwdriver can reach the underside (the Pi is 2.1 mm below); the board must go in after the compute tray; the frame's front upper cross is 10.4 mm above the rear band, and the yaw plate 18.4 mm above the middle.
 - **E1 (chosen):** hang the board from the frame, as built in `final/v1/cad` (`PCB05_MOUNT`):
+  - **Superseded at placement (decision J below):** the points are now (48.5, 9.8), (61.3, ±9.8). As first chosen:
   - **Spacers:** three Würth 9774080243R M2 SMT steel spacers, Ø4.35 × 8 mm, through thread, reflowed on the top face. World (48.5, ±11.0) and (63.0, 0.0); **board-local (3.5, 30.0), (3.5, 8.0) and (18.0, 19.0)** from the corner at (45, −19). The rear pair sits between `J5-1` and the `J5-2`/`J5-4` headers; the front one where the amp's third of the board begins.
   - **Frame:** Ø7 printed bosses on `BODY_FRAME_MAIN_PRINT` meet the spacer tops at Z 123.6: 2.4 mm under the front upper cross rail, 10.4 mm under the yaw plate. Ø2.4 bores above them.
   - **Screws** (BO-064): ISO 7380 M2, driven from above. Two M2 × 16 from Ø4.0 × 1.5 counterbores in the rail top (head seat Z 134.0), which stay under the yaw housing seat (Z 135.5) and inside its R36.6; one M2 × 20 from the yaw plate top (Z 138.0), open above. Each ends 5.6 mm into its spacer (tip Z 118.0). 0.2 N·m maximum.
@@ -183,7 +184,7 @@ Taken 2026-10-27 by the builder, the recommended option of each ([D-067](../../d
 - F2: a 3.0 V LDO from the Pi 3V3. It gives a hard ceiling whatever the Pi does and better low-frequency rejection, but costs dropout margin (3.3 → 3.0 V needs < 0.3 V) and one more part. The ADAU7002's I²S inputs still see the Pi's 3.3 V, within their 3.6 V absolute rating.
 
 **G. Layers.** §2.4 suggested four.
-- **G1 (chosen): two layers, 1.6 mm.** The bottom is a near-solid ground plane, since it carries no parts. The WLCSP fans out on the surface (every ball is on the outside of the array). The fab-neutral rules are written for 2-layer boards, and all three fabs make them.
+- **G1 (chosen at first, replaced by four layers at routing, decision L below): two layers, 1.6 mm.** The bottom is a near-solid ground plane, since it carries no parts. The WLCSP fans out on the surface (every ball is on the outside of the array). The fab-neutral rules are written for 2-layer boards, and all three fabs make them.
 - G2: four layers (signal, GND, power, signal). Easier routing, but more cost, and the fab-neutral rules would need 4-layer limits for all three fabs.
 
 ## Schematic
@@ -204,7 +205,7 @@ Taken 2026-10-27 by the builder, the recommended option of each ([D-067](../../d
 
 | Ref | Part | Nets |
 |---|---|---|
-| J1 (`J5-1`) | JST SM10B-GHS-TB, W26 | **1 +3V3, 2 GND, 3 BCLK, 4 GND, 5 LRCLK, 6 SDO0, 7 SDI0, 8 SDI1, 9 AMP_SD, 10 5V_SENSE**; MP GND. BCLK, the edge everything is clocked on, has a ground wire on each side; the supply sits next to its return. PCB-09 `J9-3` must match |
+| J1 (`J5-1`) | JST SM10B-GHS-TB, W26 | **1 +3V3, 2 LRCLK, 3 GND, 4 BCLK, 5 GND, 6 SDO0, 7 SDI1, 8 SDI0, 9 AMP_SD, 10 5V_SENSE**; MP GND (reordered at routing, D-067). BCLK, the edge everything is clocked on, has a ground wire on each side; LRCLK above it is the order the converters' balls and the amp's inputs have, so the bus leaves J1 without a crossing. SDI1 above SDI0: U2's row back to J1 is the upper one, so U1's passes under U2's drop. PCB-09 `J9-3` must match |
 | J2–J5 (`J5-2…5`) | SM04B-GHS-TB, W27 | 1 +3V3_MIC, 2 CLK, 3 GND, 4 DATA (PCB-06 order). J2 REAR_L, J3 FRONT_L, J4 REAR_R, J5 FRONT_R (D-067 D) |
 | J6 (`J5-6`) | SM02B-GHS-TB, W28 | 1 SPK_P, 2 SPK_N |
 | J7 (`J5-7`) | Molex 43650-0200, W12 | 1 +5V_AMP, 2 GND. PCB-04 `J4-5` must match. `Assembly` field: tails clipped to ≤ 0.5 mm and peg cut flush after soldering (D-067 H1) |
@@ -233,16 +234,16 @@ Taken 2026-10-27 by the builder, the recommended option of each ([D-067](../../d
 | Input (lesson 1, D-067) | Netlist | Result |
 |---|---|---|
 | Mic rail: Pi 3V3 → bead → 2.2 Ω → +3V3_MIC with 10 µF; 100 nF at each converter and mic connector | `+3V3`: J1.1, FB1.1, TP9. `MIC_FILT`: FB1.2, R1.1. `+3V3_MIC`: R1.2, C1, C2, C3, C4–C7, J2–J5 pin 1, U1/U2 D1 and D2, TP10 | Match |
-| Front pair → U1 → SDI0, rear pair → U2 → SDI1 (§2.2, D-067 D) | `PDM_DAT1`: J3.4, J5.4, U1.A1. `PDM_DAT2`: J2.4, J4.4, U2.A1. `SDI0`: U1.B1, J1.7, R6, TP3. `SDI1`: U2.B1, J1.8, R7, TP4 | Match |
+| Front pair → U1 → SDI0, rear pair → U2 → SDI1 (§2.2, D-067 D) | `PDM_DAT1`: J3.4, J5.4, U1.A1. `PDM_DAT2`: J2.4, J4.4, U2.A1. `SDI0`: U1.B1, J1.8 (J1.7 before the reorder), R6, TP3. `SDI1`: U2.B1, J1.7 (was J1.8), R7, TP4 | Match |
 | One series resistor per mic clock | `PDM_CLK1`: U1.A2, R2, R3, TP7 → `CLK_FL` J3.2, `CLK_FR` J5.2. `PDM_CLK2`: U2.A2, R4, R5, TP8 → `CLK_RL` J2.2, `CLK_RR` J4.2 | Match |
-| One Pi clock to all three chips; 100 Ω at the amp | `BCLK`: J1.3, U1.B2, U2.B2, R8, TP1 → `BCLK_AMP` U3.16. `LRCLK`: J1.5, U1.C2, U2.C2, R9, TP2 → `LRCLK_AMP` U3.14. `SDO0`: J1.6, R10, TP5 → `DIN_AMP` U3.1 | Match |
+| One Pi clock to all three chips; 100 Ω at the amp | `BCLK`: J1.4 (J1.3 before the reorder), U1.B2, U2.B2, R8, TP1 → `BCLK_AMP` U3.16. `LRCLK`: J1.2 (was J1.5), U1.C2, U2.C2, R9, TP2 → `LRCLK_AMP` U3.14. `SDO0`: J1.6, R10, TP5 → `DIN_AMP` U3.1 | Match |
 | CONFIG to IOVDD (I²S) | U1.D2, U2.D2 on `+3V3_MIC` | Match |
 | AMP_SD through 2.2 kΩ, 100 kΩ pull-down | `AMP_SD`: J1.9, R11, TP6. `SD_MODE`: R11, R12, U3.4 | Match |
 | 5 V on W12 only (D-067 A) | `+5V_AMP`: J7.1, U3.7, U3.8, C8, C9, R14 (DNP), R15 (DNP), TP11. No J1 pin | Match |
 | Speaker pair, EMI option | `OUTP` U3.9 → FB2 → `SPK_P` J6.1, C10 (DNP); `OUTN` U3.10 → FB3 → `SPK_N` J6.2, C11 (DNP) | Match |
 | Gain strap footprints, 9 dB default | `GAIN_SLOT`: U3.2, R13 (DNP to GND), R14 (DNP to +5V_AMP) | Match |
 | Spare pin, unfitted divider | `5V_SENSE`: J1.10, R15, R16 (both DNP) | Match |
-| One ground: chips, EP, connectors, mounting pads | `GND`: J1.2, J1.4, J7.2, all J MP pads, U1/U2.C1, U3.3/11/15/17, every capacitor and pull-down | Match |
+| One ground: chips, EP, connectors, mounting pads | `GND`: J1.3, J1.5 (J1.2, J1.4 before the reorder), J7.2, all J MP pads, U1/U2.C1, U3.3/11/15/17, every capacitor and pull-down | Match |
 | Fixings no net; amp NC pins open | H1–H3 pad 1, U3 5/6/12/13 unconnected | Match |
 
 ## Layout
@@ -254,8 +255,8 @@ KiCad 10.99 nightly, laid out by hand through KiPy, with no autorouter ([D-060](
 | Item | Value | Why |
 |---|---|---|
 | Outline | KiCad x 100–130, y 100–138 | World X = x − 55, Y = 119 − y, so the +Y edge (`J5-2`, `J5-3`, `J5-6`) is the top, `J5-1` the left. Board-local xb = x − 100, yb = 138 − y, from the corner at world (45, −19); aux and grid origins at local (0, 0), so the position file reads in board-local mm. Spacers H1–H3 at KiCad (103.5, 108), (103.5, 130), (118, 119) |
-| Faces | **F.Cu: all parts. B.Cu: none**, a ground plane | Lesson 1: the board is 2.10 mm above the USB jacks, and single-sided assembly is cheaper |
-| Stackup | 1.6 mm: 35 µm copper, 1.51 mm FR4 core, mask, HASL lead-free | BO-002; Molex's recommended thickness for the Micro-Fit (1.57) |
+| Faces | **F.Cu: all parts. B.Cu: none**; B.Cu carries signals only, In1/In2 are the ground planes | Lesson 1: the board is 2.10 mm above the USB jacks, and single-sided assembly is cheaper |
+| Stackup | 1.6 mm, **4 layers** (decision L): F.Cu 35 µm, prepreg 0.2104, In1.Cu 15.2 µm GND plane, core 1.065, In2.Cu 15.2 µm GND, prepreg 0.2104, B.Cu 35 µm; HASL lead-free. Set up first as 2 layers (1.51 mm core) | BO-002; Molex's recommended thickness for the Micro-Fit (1.57); the JLCPCB 7628 build |
 | Rules | Fab-neutral (D-062) in the `.kicad_pro` and `.kicad_dru`, plus one PCB-05 rule: **tracks on +5V_AMP, OUTP/OUTN and SPK_P/SPK_N at least 0.5 mm** | 0.4 A average, 0.7 A peak, behind a 2.0 A e-fuse; the logic and mic nets draw milliamps |
 | Rule areas | `BOTTOM_NO_PARTS` (B.Cu, whole board): no footprints. `USB_JACKS_NO_THT_1/2` (B.Cu, over the two USB stacks): no footprints and **no pads**, so no through-hole pin can come through over a jack; vias stay allowed (flush). `_1` is notched round J7 (tails clipped, H1) and spacer H3 (plated, flush ring, I1) | The jacks are 2.10 mm below |
 | WLCSP mask | The ADAU7002 footprint carries `allow_soldermask_bridges`, so DRC accepts its one shared mask opening, and only there | Lesson 2 |
@@ -289,6 +290,60 @@ Taken 2026-10-27 by the builder: **H1 and I1** ([D-067](../../decisions.md#d-067
 - I2: pull the ring back to R 1.81 (0.31 mm from the hole). Fab-neutral, but the solder area under the spacer drops to about 59 %, and at the rated 0.2 N·m the joint's shear stress rises from about 14 to 22 MPa, near tin solder's strength.
 - I3: keep Würth's pattern with a DRC exception for that hole and confirm at each fab's DFM, as PCB-06's option C1 would have.
 
+### Decision J (placement)
+
+Placing the fixed parts showed the lesson-1 fixing collided with the real footprints: spacer H1's Ø5.3 ring overlapped `J5-2`'s signal pads (H2 `J5-4`'s) by up to 0.1 mm, both spacers' Ø5.8 courtyards overlapped `J5-1`'s and the corner headers', and `J5-7`'s housing is 9.65 mm wide where the CAD block had 7.26. The lesson-1 mount check had measured the spacers against the CAD's connector bodies, and the GH pads run 1.1 mm further inboard than those bodies. A rear corner leaves 4.3 mm between `J5-1`'s courtyard and the corner header's for a 5.8 mm spacer courtyard, and the counterbore must stay inside the yaw housing's R36.6 seat, so two rear spacers cannot fit.
+
+**Taken 2026-10-27 by the builder: J1** ([D-067](../../decisions.md#d-067), amended again). One rear spacer, two front:
+
+| Spacer | World (X, Y) | KiCad | Board-local | Above |
+|---|---|---|---|---|
+| H1 | (48.5, 9.8) | (103.5, 109.2) | (3.5, 28.8) | Cross rail; M2 × 16 from a counterbore (edge R35.95 in the R36.6 seat) |
+| H2 | (61.3, 9.8) | (116.3, 109.2) | (16.3, 28.8) | Yaw plate; M2 × 20; open above until the yaw cartridge's flange covers it |
+| H3 | (61.3, −9.8) | (116.3, 128.8) | (16.3, 9.2) | Yaw plate; M2 × 20; open above until the yaw cartridge's flange covers it |
+
+`J5-1` slides 2.0 mm toward −Y; `J5-7` moves 1.5 mm forward for its real housing; `J5-2`/`J5-4` and `J5-6` move 0.225 mm apart. H2 and H3 sit over the USB stacks, so both USB rule areas are notched round them (plated rings, flush). Options not taken: J2, two rear spacers with `J5-1` split into two GH 5 (W26 and PCB-09 change); J3, the old points with a smaller ring and accepted courtyard overlaps. `final/v1/cad` and `check_pcb05_mount.py` are updated: 7/7 pass. The bosses fuse into the one frame print (local volumes exact). The three bores are open with 1 mm walls (10.4, 14.4, 14.4 mm of print). Each screw ends 5.6 mm into its spacer; the rear head sits 0.40 mm under the yaw housing, its counterbore edge at R35.95 in the R36.6 seat. The spacers are at least 1.03 mm from every CAD connector (their solder rings 0.55). The board slides in from the front 1 mm low and lifts into place with at least 0.50 mm to every part fitted by then. The driver paths are open from above; the yaw cartridge covers all three later. The first run failed the slide on the CAD's 10 mm `J5-7` block, which met the front −Y boss; the real Micro-Fit is 6.98 mm tall mated (Molex), 1.0 mm under the boss, so the block is cut to that height (`DROID_CUTS`).
+
+### Decision L (routing)
+
+The amplifier corner routed cleanly on two layers. The left half could not: each ADAU7002's BCLK and LRCLK balls are neighbours on one side while both clocks run on to the next chip, so each chip needs one crossing; and each converter feeds a header on both edges, so every mic clock and data line to the far edge crosses the clock bus, as do the slow lines back to J1. That is about 12–16 hops through the bottom ground plane, each one slotting the plane under the clock lines whose return current it carries. Lesson 1's G1 had looked only at the WLCSP fan-out.
+
+**Taken 2026-10-27 by the builder: L2 and the J1 reorder** ([D-067](../../decisions.md#d-067), amended again). Four layers: F.Cu parts and signals, In1 solid GND, In2 GND, B.Cu signals with no parts; crossings become vias to B.Cu over an unbroken plane. J1 becomes 1 +3V3, 2 LRCLK, 3 GND, 4 BCLK, 5 GND, 6 SDO0, 7 SDI1, 8 SDI0, 9 AMP_SD, 10 5V_SENSE (SDI1 above SDI0 was set while routing; see below). Lion Circuits' MII makes 4 layers with its 2-layer limits, so the fab-neutral rules stand. Not taken: L1 (two layers with the hops), L3 (re-pair the mic lanes by side).
+
+**Placement** (2026-10-27, through KiPy, one functional group at a time; KiCad coordinates):
+
+| Group | Parts and positions | Notes |
+|---|---|---|
+| Fixed | J1 (103.0, 121.0) 270°; J2 (104.9, 103.0), J3 (114.375, 103.0), J6 (122.6, 103.0) at 180°; J4 (104.9, 135.0), J5 (114.375, 135.0) at 0°; J7 (126.13, 128.1) 180°; H1–H3 as above | GH mating faces 0.55 mm inside the board edge, so their mounting tabs keep 0.3 mm of copper to the edge. J1 pins top to bottom 1–10 at x 104.85, y 115.375–126.625 |
+| Converters | U2 (109.6, 120.0) 180°, C3, R4 (CLK_RL up to J2), R5 (CLK_RR down to J4); U1 (116.3, 119.4) 180°, C2, R2 (up to J3), R3 (down to J5) | Rotated so BCLK/LRCLK face J1. U2 between `J5-2`/`J5-4`, U1 between `J5-3`/`J5-5` and between spacers H2/H3. Each clock resistor sits at its converter |
+| Mic rail and bypass | FB1 (107.9, 113.3), R1 (110.4, 113.3), C1 (110.6, 111.2) beside J1's 3V3 pin; C4 (108.2, 107.8), C5 (120.08, 106.05), C6 (102.545, 130.6) 180°, C7 (112.02, 130.6) 180° at the mic connectors' pin 1; R7 (111.5, 119.6) 90° and R6 (118.8, 119.3) at their converters' SDATA vias | Positions as routed. R6/R7 started by J1 pins 7/8 and moved at routing: their ground via had no legal spot between the In2 rows |
+| Amplifier | U3 (124.6, 115.6) 90°: outputs up toward J6 (OUTP/OUTN in J6's order, no crossing), supply right, clocks left, DIN/GAIN/SD_MODE down. C9 at pins 7/8, C8 on the way to J7. FB2/FB3 (series 0 Ω) and C10/C11 (DNP) between U3 and J6. R8–R10 left of U3; R14, R13, R12 below it (GAIN branches left, SD_MODE right); R11 right | The class-D loop: J7 → C8/C9 → pins 7/8 → EP/GND, all in the right third; the outputs run 10 mm straight up to J6 |
+| Others | R15/R16 (DNP 5V sense) by J7; TP1–TP12 by their nets: TP4/TP3 (SDI1/SDI0) beside J1's vias, TP7/TP8 off the PDM clock branches, TP10 on the C4 feed | Test pads have Ø2 courtyards, so several moved at routing |
+
+**DRC after placement** (nightly, with schematic parity): **no copper, clearance or courtyard violations.** What remains is routing (114 unconnected), the cosmetic `lib_footprint_mismatch` on rotated parts, and silkscreen reference text, which moves to the fab layer at the end.
+
+### Routing (lesson 4)
+
+Routed by hand through KiPy on four layers (decision L), 2026-10-27. Track widths: 0.2 mm for signals, 0.3 mm for grounds and the mic supply, 0.5 mm for the amplifier's 5 V and speaker nets (the PCB-05 rule).
+
+| Layer | Carries |
+|---|---|
+| F.Cu | All parts. J1's pad-to-via stubs, the converter escapes and taps, the whole amplifier corner, the PDM clock branches, the down-feeds `CLK_RR` and `CLK_FR`, every header's supply, ground and shell pads |
+| In1.Cu | **Solid GND, no tracks.** The reference every layer can reach in one via |
+| In2.Cu | GND pour, plus the slow rows back to J1 (SDI1 y 122.875, SDI0 124.125, `AMP_SD` 125.375, `5V_SENSE` 125.8), the four up-feeds to J2/J3 (`CLK_RL`/`PDM_DAT2` and `PDM_DAT1`/`CLK_FL`), and the +3V3_MIC feed down the west side to J4/J5 |
+| B.Cu | The clock bus from J1's vias east to R8–R10 (LRCLK y 115.35, BCLK 116.6, SDO0 117.85; no vias within 0.745 mm of it), the data down-feeds to J4/J5, and the short hop for the unfitted R14/R15 5 V branch |
+
+**What this board teaches** (the parts new since PCB-15, PCB-11 and PCB-06):
+
+- **Class-D output.** The amplifier's high current is confined to the right third: J7 → C8 → C9 at pins 7/8 → the exposed pad's ground vias, a loop a few mm across, all at 0.5 mm. OUTP/OUTN leave the top of U3 in J6's order and run as a pair straight up to J6 through FB2/FB3, with no other net between them and nothing routed under them. The PWM edges then stay between the two wires to the speaker and never travel through the converters' ground.
+- **PDM clock distribution.** Each mic lead has its own 100 Ω series resistor at its converter, so each 200 mm lead is source-terminated on its own: one resistor can't match two leads hanging off it in parallel. The clock splits at the converter ball, not at a header. Where each pair crosses the bus band, its clock and data run as neighbours on In2 (0.75–0.9 mm apart). Spacer H2 and the header vias part them elsewhere.
+- **Mixed-signal grounding.** One ground, never split. Every ground pad, shell pad and decoupler has its own via into In1/In2 right beside it. The mic supply is filtered once (FB1 → R1 → C1) and fans out from C1 to the four connectors and both converters. **Found while routing:** the B.Cu clock bus is 0.21 mm from In2, so In2, not In1, carries its return current, and the four up-feeds slot In2 where they cross under the bus (x 111.55/112.3 and 118.4/119.3). The bus is about 14 mm long against edges about a metre long, so the effect is small. Still, four GND stitching vias beside the slots, (113.1, 118.9), (113.2, 113.4), (117.6, 113.4) and (120.4, 113.4), plus the existing ones at (110.75, 119.15) and (117.45, 118.65), give the return current a path down to the solid In1 plane and back up round each slot. On a later board where that matters more, swap the roles of In2 and B.Cu: bus on In2 against In1, feeds on B.Cu.
+- **The via rule is via copper to other copper, 0.31 mm** (D-062's Lion MII spacing), not hole to copper. Five vias failed it on the first run and moved 0.05–0.1 mm. Two vias can't sit between rows 1.25 mm apart, which is why the pull-downs moved to the converters.
+
+Totals: 296 mm of track on F.Cu, 171 mm on In2, 84 mm on B.Cu; 59 vias, all 0.67/0.35.
+
+**DRC** (nightly `kicad-cli pcb drc --schematic-parity --severity-all`, fab-neutral `.kicad_dru`, 2026-10-27): **0 errors, 0 unconnected pads, 0 schematic-parity issues**, and no keep-out, courtyard or clearance hits. Reference labels are on the fab layers (`refs_to_fab()`), so the silkscreen findings are gone. 30 warnings remain, all `lib_footprint_mismatch`, on parts that were turned at some point during placement, including some turned back to 0°. R2 was diffed against the library: identical pads, and outlines 1 nm off (`0.469999` against `0.47`), the round-off PCB-15 found. `audit()`: every footprint has its 3D model; TP1–TP12 are out of the BOM and position file. **U1 and U2 had none:** the project ADAU7002 footprint writes its `(model …)` on one line, and `kp.library_models()` only parsed the multi-line form, so `place()` could never restore it. The parser now balances parentheses, and the models are back (the board STEP would otherwise have left out both converters, PCB-11's trap).
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
@@ -298,3 +353,6 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-27:** lesson 2. Schematic drawn for the KiCad 10.99 nightly, generated pin end by pin end from the library symbols: J1–J7, U1/U2 ADAU7002, U3 MAX98357A, the mic-rail filter, PDM clock resistors, SDATA pull-downs, amp damping and SD_MODE network, unfitted gain, EMI and 5V-sense parts, 12 test points, H1–H3 spacers. New project parts: an ADAU7002 symbol, its WLCSP footprint (Ø0.23 pads, one mask opening) and a 3D model from Fig. 22; the stock MAX98357A with its pad typed passive. `J5-1` order set: 1 +3V3, 2 GND, 3 BCLK, 4 GND, 5 LRCLK, 6 SDO0, 7 SDI0, 8 SDI1, 9 AMP_SD, 10 5V_SENSE. ERC 0 errors, 0 warnings; the netlist matches the inputs row by row.
 - **2026-10-27:** lesson 3. Board set up: 30 × 38 outline, 1.6 mm stackup, origins at board-local (0, 0), rule areas for the bare bottom face and for no pins over the USB jacks, a 0.5 mm minimum on the amp's power and speaker tracks, the envelope on user layers; all proven on a scratch copy. Found: J5-7's through-hole pins and peg land about 0.5 mm above a USB jack (decision H), and Würth's spacer land pattern puts copper at its own hole's edge (decision I).
 - **2026-10-27:** decisions H1 and I1 taken ([D-067](../../decisions.md#d-067) amended): J7 stays the through-hole 43650-0200 with its tails clipped and its peg cut flush; the spacers sit on plated Ø3 holes (project footprint from Würth's). USB rule area notched round J7 and H3; DRC re-proved on a scratch copy; ERC still 0/0. BO-002 updated.
+- **2026-10-27:** lesson 4, placement. F8 by the builder; parts placed through KiPy in groups. The fixed parts collided with the D-067 fixing (spacer rings on GH pads, courtyards, J7's real 9.65 mm housing): decision J1 taken, one rear spacer at (48.5, 9.8) and two front at (61.3, ±9.8), `J5-1` 2 mm toward −Y; D-067 amended, CAD and mount check updated, USB rule areas re-notched. All parts placed; no copper, clearance or courtyard violations. Routing next.
+- **2026-10-27:** routing started. The amp corner routed on two layers (0.5 mm 5 V trunk and speaker pair, a B.Cu hop for the unfitted R14/R15 branch, ground vias) and a B.Cu GND plane poured. The left half needed 12–16 plane hops on two layers: decision L2 taken (four layers, In1/In2 GND) and J1 reordered (LRCLK above BCLK); D-067 amended. Mount check for decision J: 7/7 after cutting the CAD's J5-7 block to Molex's 6.98 mm mated height.
+- **2026-10-27:** routing finished on four layers. The bus runs on B.Cu, the slow rows and mic up-feeds on In2, and the down-feeds on F.Cu and B.Cu. J1 pins 7/8 swapped while routing (7 SDI1, 8 SDI0) so the In2 rows don't cross; D-067, audiosystem.md and PCB-09 updated. Moved while routing: R6/R7 to the converters, C5–C7 and TP3/4/6/7/8/10. Found and fixed: the 0.31 mm via-copper rule (five vias moved), J6's shell pads unconnected, U1/U2 without 3D models (`kp.library_models()` one-line parse), In2 slotted under the clock bus (four stitching vias). DRC 0 errors, 0 unconnected, parity clean; 30 cosmetic `lib_footprint_mismatch`.
