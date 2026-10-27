@@ -4,7 +4,7 @@
 (property "Reference" "REF**" (at 0 -1.5 0) (layer "F.Fab") (uuid "6994938e-6979-5316-89ce-bfb3b8717398") (effects (font (size 0.4 0.4) (thickness 0.06))))
 (property "Value" "ADAU7002_WLCSP-8_0.76x1.56mm_P0.4mm" (at 0 1.5 0) (layer "F.Fab") (uuid "01c7bc32-8265-5262-9835-578326090701") (effects (font (size 0.3 0.3) (thickness 0.05))))
 (property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/ADAU7002.pdf" (at 0 0 0) (layer "F.Fab") (hide yes) (uuid "e55d55a3-ecc0-55d2-957c-23c43e0e46f1") (effects (font (size 1.27 1.27))))
-(attr smd)
+(attr smd allow_soldermask_bridges)
 (fp_line (start -0.28 -0.78) (end 0.38 -0.78) (stroke (width 0.05) (type solid)) (layer "F.Fab") (uuid "13e03bc1-3644-5995-a7b2-58f534dda8ea"))
 (fp_line (start 0.38 -0.78) (end 0.38 0.78) (stroke (width 0.05) (type solid)) (layer "F.Fab") (uuid "0ffa9375-c77a-54ff-82c2-39dcf4527945"))
 (fp_line (start 0.38 0.78) (end -0.38 0.78) (stroke (width 0.05) (type solid)) (layer "F.Fab") (uuid "31b1297b-bf07-5a82-bbcd-f95f986275f0"))

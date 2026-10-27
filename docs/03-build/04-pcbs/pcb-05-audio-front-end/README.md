@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | In progress: schematic drawn, ERC 0 errors / 0 warnings; board set-up next | — | 2026-10-27 |
+| 1. Design | In progress: board set up, DRC 0 on the empty board (D-067 amended: H1, I1); placement next | — | 2026-10-27 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -146,7 +146,7 @@ The route (consign the ICs from element14 India as PCB-06 does, or let the fab b
 3. **PDM_CLK duty** at 3.072 MHz is unspecified for the ADAU7002 and must be 48–52 % at the mic: bench (§5.3, with PCB-06 gap 9).
 4. **WLCSP on fab-neutral rules:** pads ≤ 0.24 mm, one mask opening, X-ray at JLCPCB. **Lion Circuits MII's WLCSP capability is unverified**, and its assembly minimum is 50 × 100 mm (panelise). Check before the fab DFM.
 5. **The +Y leads cross PCB-09's top-entry plugs** (36 mm³ reserve overlap). Route the W26/W27 harness in stage 3.
-6. **Micro-Fit 43650-0200 height** from its drawing (the CAD uses a 10 mm block); read it at the schematic.
+6. **Closed (lesson 3): Micro-Fit height.** Molex gives 6.98 mm mated; the CAD's 10 mm block is conservative. Its pins are decision H.
 7. **Spacer assembly.** The 8 mm WA-SMSI comes on 24 mm tape with a polyimide pick-up tape; check each fab can place it (or hand-solder the three). Use Würth's KiCad footprint (WA-SMSI library) at board set-up.
 
 ### Decisions
@@ -198,7 +198,7 @@ Taken 2026-10-27 by the builder, the recommended option of each ([D-067](../../d
 | `sym-lib-table`, `pcb05.kicad_sym` | Project symbol library `pcb05`. `ADAU7002` is new: KiCad has none. Pins from Rev. C Fig. 2/Table 4, typed from Table 4 (SDATA tri-state, since it floats outside its 20 bits). `MAX98357A` is KiCad's stock `Audio:MAX98357A` (pins checked against Rev 16) with the exposed pad (pin 17) typed passive: the stock "unspecified" type draws an ERC warning on GND |
 | `fp-lib-table`, `pcb05.pretty/` | Project footprint `ADAU7002_WLCSP-8_0.76x1.56mm_P0.4mm`: KiCad has no 0.4 mm 2 × 4 WLCSP. Balls at ±0.2 × ±0.2/±0.6 mm, A1 top left (Fig. 2/22). **Ø0.23 mm non-solder-mask-defined pads** (0.8 × the Ø0.26 ball), so the copper gap is 0.17 mm against the fab-neutral 0.16. A 0.16 mm mask web can't fit between them, so the pads carry no mask margin and **one mask opening covers the array** (0.80 × 1.60 mm), the usual answer for 0.4 mm WLCSP. Courtyard 0.25 mm outside the package's maximum size |
 | `pcb05.3dshapes/ADAU7002_WLCSP-8_0.76x1.56mm_P0.4mm.step` | Built from Fig. 22 nominals: body 0.76 × 1.56, 0.50 tall, Ø0.26 × 0.20 balls, A1 mark. So the board STEP shows the part (the PCB-11 trap) |
-| Stock footprints | `TQFN-16-1EP_3x3mm_P0.5mm_EP1.23x1.23mm` (U3; the T1633+4 pad is 0.95–1.25), JST GH `SM10B/SM04B/SM02B-GHS-TB` side entry, `Molex_Micro-Fit_3.0_43650-0200`, `Mounting_Wuerth_WA-SMSI-M2_H8mm_9774080243` (with Würth's STEP and its Ø3 NPTH), 0402/0603/0805 passives, `TestPoint_Pad_D1.0mm` |
+| Stock footprints | `TQFN-16-1EP_3x3mm_P0.5mm_EP1.23x1.23mm` (U3; the T1633+4 pad is 0.95–1.25), JST GH `SM10B/SM04B/SM02B-GHS-TB` side entry, `Molex_Micro-Fit_3.0_43650-0200`, `Mounting_Wuerth_WA-SMSI-M2_H8mm_9774080243`'s STEP (its land pattern is copied as `pcb05:Wurth_WA-SMSI-M2_H8mm_9774080243_PTH` with the Ø3 hole plated, D-067 I1), 0402/0603/0805 passives, `TestPoint_Pad_D1.0mm` |
 
 **Circuit** (references as drawn):
 
@@ -207,7 +207,7 @@ Taken 2026-10-27 by the builder, the recommended option of each ([D-067](../../d
 | J1 (`J5-1`) | JST SM10B-GHS-TB, W26 | **1 +3V3, 2 GND, 3 BCLK, 4 GND, 5 LRCLK, 6 SDO0, 7 SDI0, 8 SDI1, 9 AMP_SD, 10 5V_SENSE**; MP GND. BCLK, the edge everything is clocked on, has a ground wire on each side; the supply sits next to its return. PCB-09 `J9-3` must match |
 | J2–J5 (`J5-2…5`) | SM04B-GHS-TB, W27 | 1 +3V3_MIC, 2 CLK, 3 GND, 4 DATA (PCB-06 order). J2 REAR_L, J3 FRONT_L, J4 REAR_R, J5 FRONT_R (D-067 D) |
 | J6 (`J5-6`) | SM02B-GHS-TB, W28 | 1 SPK_P, 2 SPK_N |
-| J7 (`J5-7`) | Molex 43650-0200, W12 | 1 +5V_AMP, 2 GND. PCB-04 `J4-5` must match |
+| J7 (`J5-7`) | Molex 43650-0200, W12 | 1 +5V_AMP, 2 GND. PCB-04 `J4-5` must match. `Assembly` field: tails clipped to ≤ 0.5 mm and peg cut flush after soldering (D-067 H1) |
 | FB1, R1, C1 | 600 Ω at 100 MHz 0603; 2.2 Ω; 10 µF X5R 10 V 0805 | +3V3 → MIC_FILT → +3V3_MIC (D-067 F) |
 | C4–C7 | 100 nF at each mic connector | +3V3_MIC to GND |
 | U1, U2 | ADAU7002ACBZ-R7 | U1: PDM_DAT1 ← J3/J5 DATA, PDM_CLK1, SDATA → SDI0. U2: PDM_DAT2 ← J2/J4 DATA, PDM_CLK2, SDATA → SDI1. Both: BCLK, LRCLK, IOVDD and CONFIG on +3V3_MIC (I²S), GND. C2, C3 100 nF at IOVDD (Fig. 11) |
@@ -222,7 +222,7 @@ Taken 2026-10-27 by the builder, the recommended option of each ([D-067](../../d
 | C10, C11 | unfitted 1 nF | SPK_P, SPK_N to GND (EMI option) |
 | R15, R16 | unfitted 10 kΩ / 15 kΩ | +5V_AMP → 5V_SENSE → GND: 5.0 V → 3.0 V on J1 pin 10 (D-067 C) |
 | TP1–TP12 | Ø1.0 pads, not in the BOM | BCLK, LRCLK, SDI0, SDI1, SDO0, AMP_SD, PDM_CLK1, PDM_CLK2, +3V3, +3V3_MIC, +5V_AMP, GND |
-| H1–H3 | Würth 9774080243R | No net; assembled (in the BOM and the position file) |
+| H1–H3 | Würth 9774080243R | No net; assembled (in the BOM and the position file); plated Ø3 holes (D-067 I1) |
 
 `PWR_FLAG` sits on +3V3 and +5V_AMP (they enter through connectors), on +3V3_MIC (it is made of passives, but the ADAU7002s' IOVDD pins are power inputs), and on GND. Unfitted parts carry KiCad's DNP flag; the fab outputs leave them out of the BOM and position file (lesson 5).
 
@@ -245,6 +245,50 @@ Taken 2026-10-27 by the builder, the recommended option of each ([D-067](../../d
 | One ground: chips, EP, connectors, mounting pads | `GND`: J1.2, J1.4, J7.2, all J MP pads, U1/U2.C1, U3.3/11/15/17, every capacitor and pull-down | Match |
 | Fixings no net; amp NC pins open | H1–H3 pad 1, U3 5/6/12/13 unconnected | Match |
 
+## Layout
+
+KiCad 10.99 nightly, laid out by hand through KiPy, with no autorouter ([D-060](../../decisions.md#d-060), [layout rules](../README.md#layout-rules)).
+
+**Board set-up** (`design/pcb-05-audio-front-end.kicad_pcb`, written before any part is placed):
+
+| Item | Value | Why |
+|---|---|---|
+| Outline | KiCad x 100–130, y 100–138 | World X = x − 55, Y = 119 − y, so the +Y edge (`J5-2`, `J5-3`, `J5-6`) is the top, `J5-1` the left. Board-local xb = x − 100, yb = 138 − y, from the corner at world (45, −19); aux and grid origins at local (0, 0), so the position file reads in board-local mm. Spacers H1–H3 at KiCad (103.5, 108), (103.5, 130), (118, 119) |
+| Faces | **F.Cu: all parts. B.Cu: none**, a ground plane | Lesson 1: the board is 2.10 mm above the USB jacks, and single-sided assembly is cheaper |
+| Stackup | 1.6 mm: 35 µm copper, 1.51 mm FR4 core, mask, HASL lead-free | BO-002; Molex's recommended thickness for the Micro-Fit (1.57) |
+| Rules | Fab-neutral (D-062) in the `.kicad_pro` and `.kicad_dru`, plus one PCB-05 rule: **tracks on +5V_AMP, OUTP/OUTN and SPK_P/SPK_N at least 0.5 mm** | 0.4 A average, 0.7 A peak, behind a 2.0 A e-fuse; the logic and mic nets draw milliamps |
+| Rule areas | `BOTTOM_NO_PARTS` (B.Cu, whole board): no footprints. `USB_JACKS_NO_THT_1/2` (B.Cu, over the two USB stacks): no footprints and **no pads**, so no through-hole pin can come through over a jack; vias stay allowed (flush). `_1` is notched round J7 (tails clipped, H1) and spacer H3 (plated, flush ring, I1) | The jacks are 2.10 mm below |
+| WLCSP mask | The ADAU7002 footprint carries `allow_soldermask_bridges`, so DRC accepts its one shared mask opening, and only there | Lesson 2 |
+| Drawings | `Connectors.CAD` (the seven connectors where the body CAD has them), `Below.Board` (USB stacks, Ethernet, cooler, push-pin head, PCB-09, blower circle, each with its gap), `Frame.Bosses` (Ø7 bosses over Ø4.35 spacers), `Above.Board` (cross rail 10.4, yaw plate 18.4, shell 22.0), `Leads.Exit` | User layers, not in the fab set |
+
+**DRC on the empty board** (nightly, 2026-10-27): 0 violations. A scratch copy with deliberate bad placements beside clean controls proved every rule:
+
+| Test | Result |
+|---|---|
+| 0402 on the bottom face / on the top | `items_not_allowed`, `BOTTOM_NO_PARTS` / clean |
+| Via over a USB stack | Clean (allowed) |
+| `+5V_AMP` track 0.3 mm / 0.5 mm | `track_width`, PCB-05 rule / clean |
+| ADAU7002 footprint (shared mask opening) | Clean |
+| **J5-7 as drawn, Molex 43650-0200 through hole, at its CAD position** | **Both pins and the snap-in peg: `items_not_allowed`, `USB_JACKS_NO_THT_1`** (decision H) |
+| **Würth spacer footprint (KiCad stock, as H1)** | **`hole_clearance` 0.254 mm (its four paste-anchor pads) and 0 mm (its solder ring) to its own Ø3 hole**, against the fab-neutral 0.31 (decision I) |
+| After H1/I1: J7 at its CAD position / the same header elsewhere over the jacks | Clean (notch) / both pins and peg flagged, `USB_JACKS_NO_THT_1` |
+| After I1: `pcb05:Wurth_WA-SMSI-M2_H8mm_9774080243_PTH` at H1 and H3 | Clean |
+
+### Decisions (lesson 3)
+
+Taken 2026-10-27 by the builder: **H1 and I1** ([D-067](../../decisions.md#d-067), amended). J7 carries an `Assembly` field with the clipping instruction; H1–H3 use the plated-hole footprint, a copy of Würth's with the Ø3 hole as pad 1. The options are kept as the record.
+
+
+**H. J5-7 is through hole, and its pins land over a USB jack.** The 43650-0200's pins are 9.9 mm in from its mating face, so at the −Y edge they sit at world Y −9.1, over the Pi's USB stack (Y −12.0…3.8, top 2.10 mm below the board). Molex's drawing (SD-43650-001) gives 3.18 mm tails: 1.6 mm out of the bottom of a 1.57 mm board, plus solder, so about **0.5 mm** to the jack. The Ø3 snap-in peg (about 3.3 mm long) sits on the stack's edge, about 0.4 mm above it. That is under the 0.5 mm margin, with no tolerance. (Molex gives a 6.98 mm mated height, so lesson-1 gap 6 is closed: the CAD's 10 mm block is conservative.)
+- **H1 (chosen): keep the 43650-0200, clip the tails and the peg.** After soldering, the two tails are clipped to ≤ 0.5 mm below the board and the peg is cut flush. That leaves about 1.2 mm to the jack. A work instruction on the fab order (or the builder solders J5-7 by hand: one 2-pin THT part on an SMT board), and the USB rule area gets an exception for J5-7's own pads. Measure the clipped board at receipt.
+- H2: the surface-mount 43650-0212 (element14 India 2614956, 8,715 in stock, ₹214.53). No tails at all, but its solder tabs make it 15.2 mm wide; the −Y edge has about 11 mm between `J5-5` and the front edge. It fits only if `J5-4`/`J5-5` move or the board grows: an envelope change.
+- H3: swap `J5-7` with `J5-4` along the −Y edge, so its pins land over the cooler plate (7.0 mm below). It stays inside the existing −Y plug reserve, but spacer H2 at (48.5, −11.0) is in the way, so the D-067 fixing moves, and the amp's 5 V then enters at the rear while the speaker leaves at the front.
+
+**I. The Würth spacer's own solder ring meets its hole.** Würth's land pattern (KiCad's `Mounting_Wuerth_WA-SMSI-M2_H8mm_9774080243`) is a copper ring R 1.50–2.65 round a Ø3 non-plated hole: 0 mm of copper-to-hole clearance, and 0.254 mm from four small anchor pads. JLCPCB publishes "NPTH to copper 0.2 mm", the fab-neutral rule is 0.31. The spacer's base is an annulus about R 1.40–2.18 and is rated 0.2 N·m.
+- **I1 (chosen): plate the hole.** A project copy of the footprint with the Ø3 hole plated and the ring as its annular ring. A plated hole with a pad is ordinary for every fab, so no exception is needed, and the barrel adds solder area. Solder may wick a little into the barrel; nothing passes through it (the screw ends 2.4 mm above the board, inside the spacer).
+- I2: pull the ring back to R 1.81 (0.31 mm from the hole). Fab-neutral, but the solder area under the spacer drops to about 59 %, and at the rated 0.2 N·m the joint's shear stress rises from about 14 to 22 MPa, near tin solder's strength.
+- I3: keep Würth's pattern with a DRC exception for that hole and confirm at each fab's DFM, as PCB-06's option C1 would have.
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
@@ -252,3 +296,5 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-27:** design started (lesson 1). Read the ADAU7002 (Rev. C), MAX98357A (Rev 16), IM73D122 and RP1 datasheets; measured the board's neighbourhood in the built body CAD. Found: ADAU7002 Fig. 12 latches L on the rising edge, so the PCB-06 straps are right; the amp's data inputs are 6 V-tolerant with VDD off, but SD_MODE needs ~2 kΩ in series; GPIO22 is RP1's I2S0_SDI[1]; the compute shift put the cooler and the Pi's USB jacks under the board (2.10 mm), and the tray's insertion sweep passes 0.10 mm under it, so PCB-05 goes in after the tray; the frame cross rail is 10.4 mm above. The ICs are in stock at element14 India (UK stock); the GH headers are not. Decisions A–G raised.
 - **2026-10-27:** decisions A–G taken, the recommended option of each ([D-067](../../decisions.md#d-067)): 5 V on W12 only; CR-01 accepted; no power-good path (2.2 kΩ into SD_MODE, unfitted 5V-present divider on the spare pin); mic map `J5-2` REAR_L, `J5-3` FRONT_L, `J5-4` REAR_R, `J5-5` FRONT_R; ferrite + 2.2 Ω + 10 µF mic rail; two layers. Mounting built in `final/v1/cad`: Würth's M2 SMT spacers stop at 8 mm, so three 8 mm spacers meet printed frame bosses, with ISO 7380 M2 screws from above; `check_pcb05_mount.py` added. audiosystem.md, the body BOM, BO-002 and BO-006 updated, BO-064 added, PCB-09 told about `J9-3`. Inputs frozen.
 - **2026-10-27:** lesson 2. Schematic drawn for the KiCad 10.99 nightly, generated pin end by pin end from the library symbols: J1–J7, U1/U2 ADAU7002, U3 MAX98357A, the mic-rail filter, PDM clock resistors, SDATA pull-downs, amp damping and SD_MODE network, unfitted gain, EMI and 5V-sense parts, 12 test points, H1–H3 spacers. New project parts: an ADAU7002 symbol, its WLCSP footprint (Ø0.23 pads, one mask opening) and a 3D model from Fig. 22; the stock MAX98357A with its pad typed passive. `J5-1` order set: 1 +3V3, 2 GND, 3 BCLK, 4 GND, 5 LRCLK, 6 SDO0, 7 SDI0, 8 SDI1, 9 AMP_SD, 10 5V_SENSE. ERC 0 errors, 0 warnings; the netlist matches the inputs row by row.
+- **2026-10-27:** lesson 3. Board set up: 30 × 38 outline, 1.6 mm stackup, origins at board-local (0, 0), rule areas for the bare bottom face and for no pins over the USB jacks, a 0.5 mm minimum on the amp's power and speaker tracks, the envelope on user layers; all proven on a scratch copy. Found: J5-7's through-hole pins and peg land about 0.5 mm above a USB jack (decision H), and Würth's spacer land pattern puts copper at its own hole's edge (decision I).
+- **2026-10-27:** decisions H1 and I1 taken ([D-067](../../decisions.md#d-067) amended): J7 stays the through-hole 43650-0200 with its tails clipped and its peg cut flush; the spacers sit on plated Ø3 holes (project footprint from Würth's). USB rule area notched round J7 and H3; DRC re-proved on a scratch copy; ERC still 0/0. BO-002 updated.
