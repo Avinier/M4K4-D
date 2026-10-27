@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | In progress: schematic ERC clean; board set up with envelope keep-outs; ring clearance C2 ([D-066](../../decisions.md#d-066) amended); placement next | — | 2026-10-26 |
+| 1. Design | In progress: placed and routed, DRC 0 errors / 0 unconnected; checks and outputs next | — | 2026-10-26 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -193,6 +193,33 @@ KiCad loads only the rules file named after the board. The first scratch run, wi
 
 **Decided: C2** (builder, 2026-10-26; [D-066](../../decisions.md#d-066) amended). The project footprint's ring is R 0.63–1.04: a 0.835 mm-radius circle 0.41 mm wide, with the pad anchor moved onto it. The seal still overlaps 0.37 mm of the mic's 0.40 mm port ring (R 0.6–1.0). The stencil's six ring apertures are unchanged. Rule `PCB-06 MK1 sound hole to its own seal ring` gives MK1's own hole 0.2 mm in place of the fab-neutral 0.31 mm, and nothing else. Re-run on the scratch copy: the ring measures 0.235 mm and passes; with the rule tightened to 0.3 mm it is flagged, so the rule is live. PCBWay and Lion Circuits publish no NPTH-to-copper limit, so confirm it in their DFM checks.
 
+**Placement** (2026-10-27, through KiPy, one functional group at a time). KiCad coordinates, mm:
+
+| Part | Position, rotation | Notes |
+|---|---|---|
+| MK1 | (105.32, 107.0), 0° | Its sound hole lands on the port, (106.0, 107.0); the package extends toward the post side, as in the CAD. Pins: 1 MIC_DATA (103.82, 106.15), 2 +3V3 (104.52, 106.15), 3 CLK (103.82, 107.85), 4 LR (104.52, 107.85), 5 GND ring round the port |
+| H1, H2 | (106, 102), (106, 112) | The M2 holes, ±5 mm from the port on its axis |
+| C2 100 nF, C1 1 µF | (103.6, 104.6) 180°, (102.8, 103.6) 180° | Just above the mic's pins, their +3V3 pads toward VDD: C2 is about 1 mm of track from pin 2. They fit between MK1's courtyard and H1's (C1 clears H1's by 0.11 mm) |
+| R1 100 Ω | (101.6, 107.0), 90° | Post side, beside pin 1: MIC_DATA at the top pad, DATA at the bottom |
+| R2, R3 (L/R strap) | (108.6, 108.2) 0°, (108.6, 109.2) 180° | Between the mic and the pads. Their LR pads face each other and share one stub |
+| P1–P4 | x 110.6 at y 103.7 / 105.9 / 108.1 / 110.3, 90° | +3V3, CLK, GND, DATA: the W27 GH order, lying along the lead direction (u 3.6–5.6). **2.2 mm pitch**, so a via fits in each gap. The four wires fan out to v ±3.3 from the CAD's v ±2 reserve, all on the board |
+
+**Why the pads are 2.2 mm apart.** No via may sit within 3.835 mm of the port: the Ø7.0 rule area plus the via's own radius. The mic's pins are 2.3 mm from the port, so every net leaves the mic on F.Cu. Each pin row then has a forced order: the pin nearer the port must take the inner track (VDD on the top row, LR on the bottom). At a 1.4 mm pitch nothing fits between the pads, so the two middle pads could be reached only from the left on F.Cu, where CLK and GND would cross. At 2.2 mm each gap takes a 0.67 mm via with 0.315 mm clearance either side, and any pad can be fed from B.Cu.
+
+**Routing** (by hand through KiPy, no autorouter). Every track is 0.2 mm (the mic draws about 1 mA), and every segment is horizontal, vertical or 45°.
+
+| Net | Route |
+|---|---|
+| +3V3 | Pin 2 up to C2, then C1. Along the top band (y 105.04, under H1) and up 45° into P1. Via in the P1/P2 gap (111.0, 104.8), straight down B.Cu to a via in the P3/P4 gap (111.0, 109.2), then F.Cu to R3 |
+| GND | C1, C2 to a via on the post side (101.7, 104.4). From the seal ring's anchor (106.0, 106.165) round to R2 and P3, and a via in the P2/P3 gap (110.0, 107.0). The B.Cu pour `GND_OUTER_FACE` joins both vias and covers the whole outer face |
+| MIC_DATA → DATA | Pin 1 left to R1. R1 down the post side and along the bottom (y 110.4, between the ring and H2) into P4 |
+| LR | Pin 4 down, along under the mic (y 108.75) to the R2/R3 stub |
+| CLK | Pin 3 left to a via (102.6, 108.9), 3.9 mm from the port. On B.Cu up the post side and across the top at y 103.6, between H1's hole and the gasket's outer edge. Via in the P1/P2 gap (109.9, 104.8), then down into P2 |
+
+**Outer face.** B.Cu is the GND pour plus two tracks: CLK across the top and +3V3 down the pad column. The pour keeps 0.31 mm from the sound hole, so a bare Ø1.42 mm ring surrounds the hole, inside the gasket's Ø2.0 bore. The gasket's contact ring (Ø2.0–6.5) lands on plain poured copper under mask. The edge of the CLK track's 0.2 mm clearance channel reaches 0.15 mm inside the gasket's outer edge, at the top only. That is a 35 µm step under foam compressed 0.3 mm, which is negligible.
+
+**DRC** (nightly `kicad-cli pcb drc --schematic-parity --severity-all`, 2026-10-27): **0 errors, 0 unconnected pads, 0 schematic-parity issues.** No keep-out, courtyard or clearance hits. Four warnings remain, `lib_footprint_mismatch` on C1, C2, R1 and R3. They are the cosmetic kind PCB-15 and PCB-11 found: only the rotated parts are flagged, and R2 (0°) is not. `audit()`: MK1 and the five 0402s each have their 3D model; P1–P4 and H1/H2 are out of the BOM and the position file (set again after F8). Reference labels moved to the fab layers (`refs_to_fab()`).
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
@@ -202,3 +229,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-26:** lesson 2. Schematic drawn for the KiCad 10.99 nightly: MK1, C1, C2, R1, R2/R3 (L/R variants), P1–P4 and H1/H2. Project symbol (IM69D120 body, pin 4 LR) and footprint (PG-LLGA-5-1 land pattern, pads widened to Fig. 13's 0.75 mm, Infineon STEP). W27 pin order set: 1 +3V3, 2 CLK, 3 GND, 4 DATA. ERC 0 errors, 0 warnings; the netlist matches the spec row by row.
 - **2026-10-26:** lesson 3. Board set up: 12 × 14 outline, 1.0 mm stackup, origins at board-local (0, 0), envelope rule areas (post strip, outer face, gasket vias) and the wire-pad clearance rule, all proven on a scratch copy. Found: Infineon's sound-hole GND ring is 0.18 mm from the Ø0.8 NPTH, under JLCPCB's 0.2 mm and the fab-neutral 0.31 mm. Decision open.
 - **2026-10-26:** decision C2: MK1's seal ring pulled back to R 0.63 (0.23 mm from the hole), with a scoped 0.2 mm hole-clearance rule for MK1 alone; [D-066](../../decisions.md#d-066) amended. Re-proved on the scratch copy.
+- **2026-10-27:** lesson 4. Placed and routed by hand through KiPy on the nightly. The no-via circle round the port forces every net out of the mic on F.Cu, so the W27 pads went to a 2.2 mm pitch to take a via in each gap. Five vias, 0.2 mm octolinear tracks, B.Cu GND pour over the outer face. DRC 0 errors, 0 unconnected, parity clean; 4 cosmetic `lib_footprint_mismatch` warnings. Position-file flags set again after F8.

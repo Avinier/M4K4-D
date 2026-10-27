@@ -12,7 +12,7 @@ PCB-01 has no folder. It is the bought TIFPS0629 ([D-019](../decisions.md#d-019)
 | [pcb-03-motor-gate](pcb-03-motor-gate/README.md) | Motor gate and head 5 V rail | CH-042 | Not started | — | — |
 | [pcb-04-branch-converters](pcb-04-branch-converters/README.md) | Five branch converters | CH-043 | Not started | — | — |
 | [pcb-05-audio-front-end](pcb-05-audio-front-end/README.md) | Audio front end | BO-002 | Not started | — | — |
-| [pcb-06-pdm-mic](pcb-06-pdm-mic/README.md) | PDM microphone board ×4 | BO-005 | In progress (board set-up done; placement next) | — | — |
+| [pcb-06-pdm-mic](pcb-06-pdm-mic/README.md) | PDM microphone board ×4 | BO-005 | In progress (placed and routed, DRC clean) | — | — |
 | [pcb-07-base-imu](pcb-07-base-imu/README.md) | Base IMU | CH-021 | Not started | — | — |
 | [pcb-08-yaw-junction](pcb-08-yaw-junction/README.md) | Yaw junction | CH-083 | Not started | — | — |
 | [pcb-09-c0-link-adapter](pcb-09-c0-link-adapter/README.md) | C0 link adapter | CH-084 | Not started | — | — |
