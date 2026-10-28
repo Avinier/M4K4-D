@@ -1,0 +1,68 @@
+pose roll=-21.0 pitch=-25.0: 0 cumulative hits
+pose roll=-21.0 pitch=-15.0: 0 cumulative hits
+pose roll=-21.0 pitch=-5.0: 0 cumulative hits
+pose roll=-21.0 pitch=0.0: 0 cumulative hits
+pose roll=-21.0 pitch=10.0: 0 cumulative hits
+pose roll=-21.0 pitch=20.0: 0 cumulative hits
+pose roll=-21.0 pitch=30.0: 0 cumulative hits
+pose roll=-21.0 pitch=43.0: 0 cumulative hits
+pose roll=-15.0 pitch=-25.0: 0 cumulative hits
+pose roll=-15.0 pitch=-15.0: 0 cumulative hits
+pose roll=-15.0 pitch=-5.0: 0 cumulative hits
+pose roll=-15.0 pitch=0.0: 0 cumulative hits
+pose roll=-15.0 pitch=10.0: 0 cumulative hits
+pose roll=-15.0 pitch=20.0: 0 cumulative hits
+pose roll=-15.0 pitch=30.0: 0 cumulative hits
+pose roll=-15.0 pitch=43.0: 0 cumulative hits
+pose roll=-6.0 pitch=-25.0: 0 cumulative hits
+pose roll=-6.0 pitch=-15.0: 0 cumulative hits
+pose roll=-6.0 pitch=-5.0: 0 cumulative hits
+pose roll=-6.0 pitch=0.0: 0 cumulative hits
+pose roll=-6.0 pitch=10.0: 0 cumulative hits
+pose roll=-6.0 pitch=20.0: 0 cumulative hits
+pose roll=-6.0 pitch=30.0: 0 cumulative hits
+pose roll=-6.0 pitch=43.0: 0 cumulative hits
+pose roll=0.0 pitch=-25.0: 0 cumulative hits
+pose roll=0.0 pitch=-15.0: 0 cumulative hits
+pose roll=0.0 pitch=-5.0: 0 cumulative hits
+pose roll=0.0 pitch=0.0: 0 cumulative hits
+pose roll=0.0 pitch=10.0: 0 cumulative hits
+pose roll=0.0 pitch=20.0: 0 cumulative hits
+pose roll=0.0 pitch=30.0: 0 cumulative hits
+pose roll=0.0 pitch=43.0: 0 cumulative hits
+pose roll=6.0 pitch=-25.0: 0 cumulative hits
+pose roll=6.0 pitch=-15.0: 0 cumulative hits
+pose roll=6.0 pitch=-5.0: 0 cumulative hits
+pose roll=6.0 pitch=0.0: 0 cumulative hits
+pose roll=6.0 pitch=10.0: 0 cumulative hits
+pose roll=6.0 pitch=20.0: 0 cumulative hits
+pose roll=6.0 pitch=30.0: 0 cumulative hits
+pose roll=6.0 pitch=43.0: 0 cumulative hits
+pose roll=15.0 pitch=-25.0: 0 cumulative hits
+pose roll=15.0 pitch=-15.0: 0 cumulative hits
+pose roll=15.0 pitch=-5.0: 0 cumulative hits
+pose roll=15.0 pitch=0.0: 0 cumulative hits
+pose roll=15.0 pitch=10.0: 0 cumulative hits
+pose roll=15.0 pitch=20.0: 0 cumulative hits
+pose roll=15.0 pitch=30.0: 0 cumulative hits
+pose roll=15.0 pitch=43.0: 0 cumulative hits
+pose roll=21.0 pitch=-25.0: 0 cumulative hits
+pose roll=21.0 pitch=-15.0: 0 cumulative hits
+pose roll=21.0 pitch=-5.0: 0 cumulative hits
+pose roll=21.0 pitch=0.0: 0 cumulative hits
+pose roll=21.0 pitch=10.0: 0 cumulative hits
+pose roll=21.0 pitch=20.0: 0 cumulative hits
+pose roll=21.0 pitch=30.0: 0 cumulative hits
+pose roll=21.0 pitch=43.0: 0 cumulative hits
+{
+  "poses": 56,
+  "pairs_per_pose": 156,
+  "worst_by_pair": {},
+  "static_package_hits": [],
+  "active_area_excluded_mm3": 0.0,
+  "outer_cap_face_area_mm2": {
+    "-1": 389.4463382078727,
+    "1": 385.74269649635164
+  },
+  "lowest_sampled_shell_z": -28.37147445132647
+}

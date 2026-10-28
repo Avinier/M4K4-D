@@ -1,0 +1,72 @@
+{
+  "mass": {
+    "input": "646d684df39beccbab263f1c7518d6da77c47c185ace8d42dd5f21e5b96310a8",
+    "output": "38f6922d1be60e01ccb28ed2685837edfae5f9a82ec5815e5aa4d40646b95dbe",
+    "passed": true,
+    "runtime_s": 73.048,
+    "log": "/Users/avinier/robotics/makad/docs/03-build/03-head/v1/cad/.cache/logs/mass.log"
+  },
+  "envelope": {
+    "input": "4530b1965d13c67655b1354b4a1353eb07a6197ca780790e345154d8aba8c376",
+    "output": "f4dbf72ebc0a5e39dbe5e1c09b46644adb097b0de68bfa35bfe7867de41d8fef",
+    "passed": true,
+    "runtime_s": 38.26,
+    "log": "/Users/avinier/robotics/makad/docs/03-build/03-head/v1/cad/.cache/logs/envelope.log"
+  },
+  "revision": {
+    "input": "e8710fd3767d197c882a4d4d411b6b2450aa364039d41a3d07ea05d433895de1",
+    "output": "9201629bd59213784d1832bfb04125afd89c48487092f6c27490487de0fd2fc9",
+    "passed": true,
+    "runtime_s": 153.85,
+    "log": "/Users/avinier/robotics/makad/docs/03-build/03-head/v1/cad/.cache/logs/revision.log"
+  },
+  "mounts": {
+    "input": "1a0b427f8cf52cd17dc7f403998adfcd32b70e780eb7b406fce3e3ca49c01126",
+    "output": "bb938d70f6f2911898842cd1aaab7c325cf4ff8bd18b9dcacb2114fedeb9a967",
+    "passed": true,
+    "runtime_s": 6375.861,
+    "log": "/Users/avinier/robotics/makad/docs/03-build/03-head/v1/cad/.cache/logs/mounts.log"
+  },
+  "integration": {
+    "input": "d3e82c4e483f476a8f1d12781a0b5ff4be0eece653190563e84b0ee90ab4c738",
+    "output": "aa9273401982a3f309ccf01a27dc13374d9c2ffd424757a0412eb5ac740078c1",
+    "passed": true,
+    "runtime_s": 4.454,
+    "log": "/Users/avinier/robotics/makad/docs/03-build/03-head/v1/cad/.cache/logs/integration.log"
+  },
+  "busy_minute": {
+    "input": "10f4ea5a525958a23b96d62a6bf110660d0bbcd0c1661a71975b38f412e1a03a",
+    "output": "3a7e4e1755b80003a6781e8a50a694634ea4ddb5889123efef9e28579cf4aff9",
+    "passed": false,
+    "runtime_s": 0.099,
+    "log": "/Users/avinier/robotics/makad/docs/03-build/03-head/v1/cad/.cache/logs/busy_minute.log"
+  },
+  "clearance": {
+    "input": "72e6f69892b387718e7c9f5dd272581ea4255fa5bc3b91678935ec0c8e0c3983",
+    "output": "038800a589755487f4c1c9f73ec52f8a6e6bf1b6f0877a332fd74a3c7351711e",
+    "passed": true,
+    "runtime_s": 51.291,
+    "log": "/Users/avinier/robotics/makad/docs/03-build/03-head/v1/cad/.cache/logs/clearance.log"
+  },
+  "fasteners": {
+    "input": "ea7c8ecc00d72a79a7c826210340d062580eff18aa7b8178eaa65f61c2266834",
+    "output": "e18f6bca60d3977cb8dacbac186a1221df0629c37d6d74e2abf23e8794023930",
+    "passed": true,
+    "runtime_s": 199.312,
+    "log": "/Users/avinier/robotics/makad/docs/03-build/03-head/v1/cad/.cache/logs/fasteners.log"
+  },
+  "body_layout": {
+    "input": "04e9b00b09f87d23949a3262f366ec7648bf52debe67868e7bd76bb67926735e",
+    "output": "4589205a9a26c07f6839e5e6882b21b22fc23d8bf66e34a814db8a0fe5a7d276",
+    "passed": true,
+    "runtime_s": 23.571,
+    "log": "/Users/avinier/robotics/makad/docs/03-build/03-head/v1/cad/.cache/logs/body_layout.log"
+  },
+  "yaw_stage": {
+    "input": "d23225587e4725594be052ef6164deba8ed0e42b1b6c139095f2245bfbd81da4",
+    "output": "76c261266a3963e9473575801414e726086c68b84edd4593e39b6bdd03156592",
+    "passed": true,
+    "runtime_s": 601.285,
+    "log": "/Users/avinier/robotics/makad/docs/03-build/03-head/v1/cad/.cache/logs/yaw_stage.log"
+  }
+}

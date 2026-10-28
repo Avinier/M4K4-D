@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/avinier/robotics/makad/docs/03-build/03-head/v1/cad/busy_minute.py", line 20, in <module>
+    import openpyxl
+ModuleNotFoundError: No module named 'openpyxl'

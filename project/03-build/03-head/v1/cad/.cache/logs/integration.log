@@ -1,0 +1,26 @@
+{
+  "yaw_datum_world_mm": [
+    16.0,
+    0.0,
+    140.0
+  ],
+  "body_yaw_datum_mm": [
+    16.0,
+    0.0,
+    140.0
+  ],
+  "head_disc_top_world_mm": 155.0,
+  "body_disc_top_mm": 155.0,
+  "disc_bottom_world_mm": 151.0,
+  "hub_top_mm": 151.0,
+  "head_hole_to_body_boss_error_mm": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "bolt_shaft_to_pinion_outer_gap_full_yaw_mm": 10.468896355422796,
+  "screw_head_below_disc_top_mm": 0.15000000000000013,
+  "screw_insert_engagement_mm": 3.8,
+  "swept_head_to_disc_gap_mm": 4.0,
+  "head_crown_world_mm": 293.5
+}

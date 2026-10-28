@@ -1,0 +1,125 @@
+pose -21.0/-25.0: mechanism hits 0, jacket hits 0
+pose -21.0/-15.0: mechanism hits 0, jacket hits 0
+pose -21.0/-5.0: mechanism hits 0, jacket hits 0
+pose -21.0/+0.0: mechanism hits 0, jacket hits 0
+pose -21.0/+10.0: mechanism hits 0, jacket hits 0
+pose -21.0/+20.0: mechanism hits 0, jacket hits 0
+pose -21.0/+30.0: mechanism hits 0, jacket hits 0
+pose -21.0/+43.0: mechanism hits 0, jacket hits 0
+pose -15.0/-25.0: mechanism hits 0, jacket hits 0
+pose -15.0/-15.0: mechanism hits 0, jacket hits 0
+pose -15.0/-5.0: mechanism hits 0, jacket hits 0
+pose -15.0/+0.0: mechanism hits 0, jacket hits 0
+pose -15.0/+10.0: mechanism hits 0, jacket hits 0
+pose -15.0/+20.0: mechanism hits 0, jacket hits 0
+pose -15.0/+30.0: mechanism hits 0, jacket hits 0
+pose -15.0/+43.0: mechanism hits 0, jacket hits 0
+pose -6.0/-25.0: mechanism hits 0, jacket hits 0
+pose -6.0/-15.0: mechanism hits 0, jacket hits 0
+pose -6.0/-5.0: mechanism hits 0, jacket hits 0
+pose -6.0/+0.0: mechanism hits 0, jacket hits 0
+pose -6.0/+10.0: mechanism hits 0, jacket hits 0
+pose -6.0/+20.0: mechanism hits 0, jacket hits 0
+pose -6.0/+30.0: mechanism hits 0, jacket hits 0
+pose -6.0/+43.0: mechanism hits 0, jacket hits 0
+pose +0.0/-25.0: mechanism hits 0, jacket hits 0
+pose +0.0/-15.0: mechanism hits 0, jacket hits 0
+pose +0.0/-5.0: mechanism hits 0, jacket hits 0
+pose +0.0/+0.0: mechanism hits 0, jacket hits 0
+pose +0.0/+10.0: mechanism hits 0, jacket hits 0
+pose +0.0/+20.0: mechanism hits 0, jacket hits 0
+pose +0.0/+30.0: mechanism hits 0, jacket hits 0
+pose +0.0/+43.0: mechanism hits 0, jacket hits 0
+pose +6.0/-25.0: mechanism hits 0, jacket hits 0
+pose +6.0/-15.0: mechanism hits 0, jacket hits 0
+pose +6.0/-5.0: mechanism hits 0, jacket hits 0
+pose +6.0/+0.0: mechanism hits 0, jacket hits 0
+pose +6.0/+10.0: mechanism hits 0, jacket hits 0
+pose +6.0/+20.0: mechanism hits 0, jacket hits 0
+pose +6.0/+30.0: mechanism hits 0, jacket hits 0
+pose +6.0/+43.0: mechanism hits 0, jacket hits 0
+pose +15.0/-25.0: mechanism hits 0, jacket hits 0
+pose +15.0/-15.0: mechanism hits 0, jacket hits 0
+pose +15.0/-5.0: mechanism hits 0, jacket hits 0
+pose +15.0/+0.0: mechanism hits 0, jacket hits 0
+pose +15.0/+10.0: mechanism hits 0, jacket hits 0
+pose +15.0/+20.0: mechanism hits 0, jacket hits 0
+pose +15.0/+30.0: mechanism hits 0, jacket hits 0
+pose +15.0/+43.0: mechanism hits 0, jacket hits 0
+pose +21.0/-25.0: mechanism hits 0, jacket hits 0
+pose +21.0/-15.0: mechanism hits 0, jacket hits 0
+pose +21.0/-5.0: mechanism hits 0, jacket hits 0
+pose +21.0/+0.0: mechanism hits 0, jacket hits 0
+pose +21.0/+10.0: mechanism hits 0, jacket hits 0
+pose +21.0/+20.0: mechanism hits 0, jacket hits 0
+pose +21.0/+30.0: mechanism hits 0, jacket hits 0
+pose +21.0/+43.0: mechanism hits 0, jacket hits 0
+{
+  "passed": true,
+  "service_extraction_hits": [],
+  "retention_misses": [],
+  "insert_mouth_plastic": [],
+  "same_frame_hits": [],
+  "motion_hits": [],
+  "harness_pinches": [],
+  "C2_service_hits": [],
+  "hard_stops": [
+    {
+      "axis": "roll",
+      "angle": -21.0,
+      "at_limit": true,
+      "overlap_mm3": 0,
+      "distance_mm": 0.0
+    },
+    {
+      "axis": "roll",
+      "angle": -22.0,
+      "at_limit": false,
+      "overlap_mm3": 0.5924689382453044,
+      "distance_mm": 0.0
+    },
+    {
+      "axis": "roll",
+      "angle": 21.0,
+      "at_limit": true,
+      "overlap_mm3": 0,
+      "distance_mm": 0.0
+    },
+    {
+      "axis": "roll",
+      "angle": 22.0,
+      "at_limit": false,
+      "overlap_mm3": 0.5924689382453098,
+      "distance_mm": 0.0
+    },
+    {
+      "axis": "pitch",
+      "angle": -25.0,
+      "at_limit": true,
+      "overlap_mm3": 0,
+      "distance_mm": 0.0
+    },
+    {
+      "axis": "pitch",
+      "angle": -26.0,
+      "at_limit": false,
+      "overlap_mm3": 0.6972357625536737,
+      "distance_mm": 0.0
+    },
+    {
+      "axis": "pitch",
+      "angle": 43.0,
+      "at_limit": true,
+      "overlap_mm3": 0,
+      "distance_mm": 0.0
+    },
+    {
+      "axis": "pitch",
+      "angle": 44.0,
+      "at_limit": false,
+      "overlap_mm3": 0.6972357625536063,
+      "distance_mm": 0.0
+    }
+  ],
+  "old_aperture_conservative_vignetting_mm3": 285.3487925594356
+}

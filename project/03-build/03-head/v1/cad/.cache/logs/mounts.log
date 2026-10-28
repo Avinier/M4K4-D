@@ -1,0 +1,122 @@
+/Users/avinier/robotics/makad/docs/03-build/03-head/v1/cad/check_feetech_mounts.py:181: DeprecationWarning: to_tuple is deprecated and will be removed in a future version.  Use 'tuple(Vector)' instead.
+  if any(ba.min.to_tuple()[i] > bb.max.to_tuple()[i] + 3 or bb.min.to_tuple()[i] > ba.max.to_tuple()[i] + 3 for i in range(3)):
+pose -21/-25 pairs 155
+pose -21/-15 pairs 155
+pose -21/-5 pairs 155
+pose -21/+5 pairs 155
+pose -21/+15 pairs 164
+pose -21/+25 pairs 188
+pose -21/+35 pairs 218
+pose -21/+43 pairs 232
+pose -14/-25 pairs 233
+pose -14/-15 pairs 233
+pose -14/-5 pairs 233
+pose -14/+5 pairs 233
+pose -14/+15 pairs 233
+pose -14/+25 pairs 234
+pose -14/+35 pairs 234
+pose -14/+43 pairs 235
+pose -7/-25 pairs 236
+pose -7/-15 pairs 236
+pose -7/-5 pairs 236
+pose -7/+5 pairs 236
+pose -7/+15 pairs 236
+pose -7/+25 pairs 236
+pose -7/+35 pairs 236
+pose -7/+43 pairs 236
+pose +0/-25 pairs 236
+pose +0/-15 pairs 236
+pose +0/-5 pairs 236
+pose +0/+5 pairs 236
+pose +0/+15 pairs 237
+pose +0/+25 pairs 237
+pose +0/+35 pairs 237
+pose +0/+43 pairs 237
+pose +7/-25 pairs 237
+pose +7/-15 pairs 237
+pose +7/-5 pairs 237
+pose +7/+5 pairs 237
+pose +7/+15 pairs 237
+pose +7/+25 pairs 238
+pose +7/+35 pairs 238
+pose +7/+43 pairs 238
+pose +14/-25 pairs 238
+pose +14/-15 pairs 238
+pose +14/-5 pairs 238
+pose +14/+5 pairs 238
+pose +14/+15 pairs 239
+pose +14/+25 pairs 239
+pose +14/+35 pairs 239
+pose +14/+43 pairs 239
+pose +21/-25 pairs 243
+pose +21/-15 pairs 243
+pose +21/-5 pairs 243
+pose +21/+5 pairs 243
+pose +21/+15 pairs 245
+pose +21/+25 pairs 245
+pose +21/+35 pairs 245
+pose +21/+43 pairs 245
+{
+ "roll_spline_engagement_mm": 2.906,
+ "roll_spline_tip_to_coupler_floor_mm": 0.2,
+ "roll_coupler_face_to_boss_mm": 0.3,
+ "roll_centre_screw_thread_in_output_mm": 3.8,
+ "roll_spindle_in_coupler_bore_mm": 9.0,
+ "roll_spindle_to_centre_screw_head_mm": 0.5,
+ "roll_clamp_zone_on_spindle": -74.6,
+ "roll_case_to_rear_cover_mm": 1.0,
+ "roll_coupler_to_rear_retainer_mm": 1.097,
+ "roll_coupler_to_cartridge_mm": 0.997,
+ "pitch_spline_engagement_mm": 3.3,
+ "pitch_centre_screw_thread_in_output_mm": 3.8,
+ "pitch_case_to_horn_mm": 0.3,
+ "horn_seated_on_leg_pocket_floor": 0.0,
+ "frame_float_minus_horn_pocket_mm": 0.4,
+ "pitch_horn_to_leg_M3x6_45_thread_in_horn_mm": 2.0,
+ "pitch_horn_to_leg_M3x6_45_to_servo_mm": 2.419,
+ "pitch_horn_to_leg_M3x6_135_thread_in_horn_mm": 2.0,
+ "pitch_horn_to_leg_M3x6_135_to_servo_mm": 2.419,
+ "pitch_horn_to_leg_M3x6_225_thread_in_horn_mm": 2.0,
+ "pitch_horn_to_leg_M3x6_225_to_servo_mm": 2.419,
+ "pitch_horn_to_leg_M3x6_315_thread_in_horn_mm": 2.0,
+ "pitch_horn_to_leg_M3x6_315_to_servo_mm": 2.419,
+ "pitch_case_bottom_to_flange_plane_mm": 2.36,
+ "roll_ear_1_shank_clear_of_slot_mm": 1.1,
+ "roll_ear_1_washer_overlaps_slot_edge_mm": 0.9,
+ "roll_ear_1_washer_on_ear_mm": 0.0,
+ "roll_ear_2_shank_clear_of_slot_mm": 1.1,
+ "roll_ear_2_washer_overlaps_slot_edge_mm": 0.9,
+ "roll_ear_2_washer_on_ear_mm": 0.0,
+ "roll_ear_3_shank_clear_of_slot_mm": 1.1,
+ "roll_ear_3_washer_overlaps_slot_edge_mm": 0.9,
+ "roll_ear_3_washer_on_ear_mm": 0.0,
+ "roll_ear_4_shank_clear_of_slot_mm": 1.1,
+ "roll_ear_4_washer_overlaps_slot_edge_mm": 0.9,
+ "roll_ear_4_washer_on_ear_mm": 0.0,
+ "pitch_ear_1_shank_clear_of_slot_mm": 1.1,
+ "pitch_ear_1_washer_overlaps_slot_edge_mm": 0.9,
+ "pitch_ear_1_washer_on_ear_mm": 0.0,
+ "pitch_ear_2_shank_clear_of_slot_mm": 1.1,
+ "pitch_ear_2_washer_overlaps_slot_edge_mm": 0.9,
+ "pitch_ear_2_washer_on_ear_mm": 0.0,
+ "pitch_ear_3_shank_clear_of_slot_mm": 1.1,
+ "pitch_ear_3_washer_overlaps_slot_edge_mm": 0.9,
+ "pitch_ear_3_washer_on_ear_mm": 0.0,
+ "pitch_ear_4_shank_clear_of_slot_mm": 1.1,
+ "pitch_ear_4_washer_overlaps_slot_edge_mm": 0.9,
+ "pitch_ear_4_washer_on_ear_mm": 0.0,
+ "roll_insert_wall_to_case_window_mm": 1.4,
+ "roll_insert_wall_to_ear_end_mm": 1.5,
+ "pitch_insert_wall_to_case_window_mm": 1.4,
+ "pitch_insert_wall_to_ear_end_mm": 1.5,
+ "driver_path_roll_servo_ear_1": [],
+ "driver_path_roll_servo_ear_2": [],
+ "driver_path_roll_servo_ear_3": [],
+ "driver_path_roll_servo_ear_4": [],
+ "driver_path_pitch_servo_ear_1": [],
+ "driver_path_pitch_servo_ear_2": [],
+ "driver_path_pitch_servo_ear_3": [],
+ "driver_path_pitch_servo_ear_4": []
+}
+LOW []
+PASS
