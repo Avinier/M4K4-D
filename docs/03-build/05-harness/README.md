@@ -145,7 +145,8 @@ Each GH cable puts GND at pin 1 where it carries no supply, and keeps each diffe
 | `J2-5` ↔ `J3-6` (`W21`) | GND | CHARGE_ABSENT | ENERGY_OK | SYSTEM_ARM | MOTOR_PRESENT | GND | | | | |
 | `J3-8` ↔ `J8-3` (`W23a`) | SIG_REF | SERVO_DATA | C2_READY_H | C2_READY_L | spare (was E_STOP_STATUS, D-041) | MOTOR_PRESENT | HEAD_OC | HEAD_PGOOD | | |
 | `J2-6` ↔ `J8-5` (`W23b`) | SIG_GND | V_PACK_ANA | SIG_GND | STAT | INT_PB | KILL | CHG_ABSENT_3V3 | spare | | |
-| `J9-1` ↔ `J8-4`, `J9-2` ↔ `J10-2` | GND | TX+ | TX− | RX+ | RX− | spare | | | | |
+| `J9-1` ↔ `J8-4` | GND | TX+ | TX− | RX+ | RX− | spare | | | | |
+| `J9-2` ↔ `J10-2` (`W25`, wired 1:1; set by [PCB-10](../04-pcbs/pcb-10-c3-carrier/README.md#connectors-and-who-owns-each-pin-order), 2026-10-27) | GND | C3TX+ | C3TX− | C0TX+ | C0TX− | spare | | | | |
 | `J10-3`/`J10-4` (`W30`/`W31`) | GND | +3V3_ENC | ENC_A | ENC_B | | | | | | |
 | `J10-5`/`J10-6` (`W32`/`W33`) | SLP | IN1 | IN2 | FLT | GND | spare | | | | |
 | `J10-7` (`W29`) | +3V3 | GND | SCLK | MOSI | MISO | CS | INT1 | INT2 | | |

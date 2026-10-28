@@ -26,6 +26,8 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 Fill this in when design starts: spec sources, pinout, supply and protection, CAD envelope.
 
+**Set by other boards.** The watchdog is **TPS3436CCCBGDDFRQ1** ([D-068](../../decisions.md#d-068), with PCB-10): the `BD-10` CFDBE part cannot be bought. Same pinout C and DDF footprint; tWC 5 ms, tWO 15 ms at `SET[1:0]` = 00 (feed every 10 ms, late fault ≤ 22 ms), 500 ms startup, 200 ms assert. Source: Mouser India.
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.

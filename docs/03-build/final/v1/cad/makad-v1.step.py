@@ -121,6 +121,89 @@ def pcb05_mount_parts():
 _PCB05_SPACERS, _PCB05_BOSSES, _PCB05_CUTS = pcb05_mount_parts()
 
 
+# D-068: PCB-10 C3 carrier mounting and the Espressif DevKitC. World frame, mm. The carrier
+# (X -14..56, Y -58.4..-56.8, Z 82..125.5) keeps its two lower M2.5 screws (Z 86); the two
+# upper ones sat under the DevKitC, where no driver reaches, and are deleted. Instead each
+# printed upright gets a hook over the board's top edge: the module goes in 2 mm low,
+# slides up under the hooks, and the lower screws fix it. Each upright also gets a relief
+# under both header rows for the DevKitC pin tails (clipped to 1.5 mm), long enough for the
+# 2 mm slide. The subsystem's DevKitC is a generic board's STEP (rows 25.4 mm apart); it is
+# replaced by Espressif's ESP32-S3-DevKitC-1 v1.1, built from Espressif's dimension drawing
+# (DXF_ESP32-S3-DevKitC-1_V1.1_20220429; Espressif publishes no 3D model): rows 22.86 mm apart,
+# keeping the subsystem's pin columns. check_pcb10_mount.py measures all of it.
+PCB10_MOUNT = dict(
+    uprights=((-12.0, -4.0), (20.0, 28.0)),   # X spans (C3_CARRIER_UPRIGHTS)
+    board=(-14.0, 56.0, -58.4, -56.8, 82.0, 125.5),
+    slide=2.0,                                # install drop below the final position
+    relief=(3.0, 3.7, 1.75),                  # depth into the upright; below and above each row
+    lip=(0.1, 1.7, 123.6),                    # gap to the board face, thickness, lip bottom Z
+    bridge=(-60.0, 0.1, 128.0),               # Y of the rail's inboard face, gap over the edge, top Z
+    pin1_x=44.853, pitch=2.54, pins=22,       # J1-1/J3-1 at the antenna end (+X)
+    rows=(98.92, 121.78),                     # J1 (3V3 ... 5V, G), J3 (G, TX ... G)
+    header=2.5, pcb=1.6, tail=1.5, pin=0.64,  # plastic, DevKitC board, clipped tail, pin square
+)
+
+
+def _blk(x0, x1, y0, y1, z0, z1, label=None):
+    shape = Box(x1 - x0, y1 - y0, z1 - z0).moved(Location(((x0 + x1) / 2.0, (y0 + y1) / 2.0, (z0 + z1) / 2.0)))
+    if label:
+        shape.label = label
+    return shape
+
+
+def pcb10_upright_edits():
+    """D-068 world-frame boxes: header-row reliefs cut from, and edge hooks added to, each upright."""
+    m = PCB10_MOUNT
+    face, front, top = m["board"][2], m["board"][3], m["board"][5]
+    depth, below, above = m["relief"]
+    gap, thick, lip_z = m["lip"]
+    rail_y, over, roof = m["bridge"]
+    cuts, adds = [], []
+    for k, (x0, x1) in enumerate(m["uprights"], start=1):
+        label = rf"BODY_FRAME_C3_CARRIER_UPRIGHT_{k}"
+        cuts += [(label, (x0, x1, face - depth, face, z - below, z + above)) for z in m["rows"]]
+        adds += [(label, (x0, x1, front + gap, front + gap + thick, lip_z, top + over)),   # lip on F
+                 (label, (x0, x1, rail_y, front + gap + thick, top + over, roof))]          # bridge over the edge
+    return cuts, adds
+
+
+def pcb10_devkitc():
+    """Espressif ESP32-S3-DevKitC-1 v1.1 (N8) as soldered on PCB-10, from Espressif's drawing."""
+    m = PCB10_MOUNT
+    p1, pitch, n = m["pin1_x"], m["pitch"], m["pins"]
+    p22 = p1 - pitch * (n - 1)
+    y0 = m["board"][3] + m["header"]          # DevKitC underside
+    y1 = y0 + m["pcb"]                        # its component face
+    zc = sum(m["rows"]) / 2.0
+    parts = [
+        _blk(p22 - 8.0, p1 + 1.4, y0, y1, zc - 12.7, zc + 12.7, "C3_DEVKITC_V11_PCB"),            # 62.74 x 25.40
+        _blk(p1 + 1.4 + 6.4 - 25.5, p1 + 1.4 + 6.4, y1, y1 + 3.1, zc - 9.0, zc + 9.0,
+             "C3_DEVKITC_V11_ESP32_S3_WROOM_1_N8"),                                              # 25.5 x 18 x 3.1
+    ]
+    for name, dz in (("UART", 5.7), ("USB", 19.4)):                                              # from the J1 edge
+        z = zc - 12.7 + dz
+        parts.append(_blk(p22 - 8.0, p22 - 8.0 + 7.35, y1, y1 + 3.26, z - 4.47, z + 4.47, f"C3_DEVKITC_V11_USB_C_{name}"))
+    for row, z in zip(("J1", "J3"), m["rows"]):
+        parts.append(_blk(p22 - pitch / 2.0, p1 + pitch / 2.0, m["board"][3], y0, z - 1.27, z + 1.27,
+                          f"C3_DEVKITC_V11_HEADER_{row}"))
+        tails = [_blk(p1 - k * pitch - m["pin"] / 2.0, p1 - k * pitch + m["pin"] / 2.0,
+                      m["board"][2] - m["tail"], y1 + 1.0, z - m["pin"] / 2.0, z + m["pin"] / 2.0) for k in range(n)]
+        parts.append(Compound(label=f"C3_DEVKITC_V11_PINS_{row}", children=tails))
+    return Compound(label="C3_ESP32_S3_DEVKITC_1_V11_ESPRESSIF", children=parts)
+
+
+_PCB10_CUTS, _PCB10_ADDS = pcb10_upright_edits()
+# Parts dropped whole (label fully matched, leaf or group), and parts inserted, world frame,
+# as new children of the group whose label fully matches.
+DROID_REMOVES = [
+    # D-068: the generic DevKitC STEP and its header blocks; the two upper screws.
+    r"C3_ESP32_S3_DEVKITC_STEP", r"C3_DEVKIT_HEADER_ROW_[12]", r"C3_CARRIER_M25_SCREW_(HEAD|SHANK)_[24]",
+]
+DROID_INSERTS = [
+    (r"C3_CARRIER_PCB10_WITH_DEVKITC", pcb10_devkitc()),
+]
+
+
 DROID_CUTS = [
     # D-059: PCB-15 component relief behind the nose Hall board, open at the top and
     # into the lead groove. D-063 deepens it 0.4 mm (to 1.3 mm) with the board.
@@ -133,8 +216,12 @@ DROID_CUTS = [
     # D-067 amended: the J5-7 placeholder is 10 mm tall; the mated Micro-Fit is 6.98 (Molex), so
     # the block stops at Z 122.6, 1.0 mm under the front -Y boss (Z 123.6).
     (r"PCB05_J5_7_MICROFIT3_2P_(RA_HEADER|MATED_PLUG)", (60.0, 80.0, -35.0, -5.0, 122.6, 130.0)),
+    # D-068: PCB-10 header-row reliefs in the C3 carrier uprights.
+    *_PCB10_CUTS,
 ]
 DROID_ADDS = [
+    # D-068: PCB-10 top-edge hooks on the C3 carrier uprights.
+    *_PCB10_ADDS,
     # D-063: the slot's front wall moves 0.4 mm back too (X 127.5 -> 127.1), beside the
     # sensor notch (Y 8.3-11.7), so the slot stays 1.0 mm wide and locates the board.
     (r"BALL_POD_PRINTED_SEAT", (127.1, 127.5, 6.9, 8.3, 30.3, 35.0)),
@@ -174,8 +261,18 @@ def _cut_parts(node, parent_location, hits):
     children = list(node.children) if getattr(node, "children", None) else []
     if children:
         here = parent_location * node.location
-        kept = [_cut_parts(child, here, hits) for child in children]
-        if all(k is c for k, c in zip(kept, children)):
+        kept = []
+        for child in children:
+            gone = [r for r in DROID_REMOVES if re.fullmatch(r, child.label or "")]
+            for r in gone:
+                hits["remove", r] += 1
+            if not gone:
+                kept.append(_cut_parts(child, here, hits))
+        for pattern, shape in DROID_INSERTS:
+            if re.fullmatch(pattern, node.label or ""):
+                hits["insert", pattern] += 1
+                kept.append(shape.moved(here.inverse()))
+        if len(kept) == len(children) and all(k is c for k, c in zip(kept, children)):
             return node
         return _relabel(node.label, kept, node.location, node.color)
     label = node.label or ""
@@ -197,15 +294,19 @@ def _cut_parts(node, parent_location, hits):
 
 
 def _apply_droid_cuts(robot, strict=True):
-    """Apply DROID_CUTS, DROID_ADDS and DROID_MOVES; every entry must hit a part.
+    """Apply DROID_CUTS, DROID_ADDS, DROID_MOVES, DROID_REMOVES and DROID_INSERTS; every entry must hit.
 
     strict=False is for check scripts that build one subsystem tree: entries for
     parts outside it are skipped.
     """
     tables = (("cut", DROID_CUTS), ("add", DROID_ADDS), ("move", DROID_MOVES))
     hits = {(kind, value): 0 for kind, table in tables for _, value in table}
+    hits.update({("remove", r): 0 for r in DROID_REMOVES})
+    hits.update({("insert", r): 0 for r, _ in DROID_INSERTS})
     robot = _cut_parts(robot, Location(), hits)
     missing = [pattern for kind, table in tables for pattern, value in table if not hits[kind, value]]
+    missing += [r for r in DROID_REMOVES if not hits["remove", r]]
+    missing += [r for r, _ in DROID_INSERTS if not hits["insert", r]]
     assert not (strict and missing), f"droid change labels not found: {missing}"
     return robot
 
