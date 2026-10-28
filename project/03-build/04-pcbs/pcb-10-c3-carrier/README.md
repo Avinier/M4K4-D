@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | **In progress: board set up** (outline, rules, rule areas, 3D models); placement next. Schematic ERC clean; inputs frozen with [D-068](../../decisions.md#d-068) | [`check_pcb10_mount.py`](../../final/v1/cad/check_pcb10_mount.py) 8/8 pass | 2026-10-27 |
+| 1. Design | **In progress: routed** (lesson 4); 3D fit check and fab outputs next. DRC 0 errors, 0 unconnected, parity clean; inputs frozen with [D-068](../../decisions.md#d-068) | [`check_pcb10_mount.py`](../../final/v1/cad/check_pcb10_mount.py) 9/9 pass | 2026-10-28 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -240,7 +240,7 @@ India-held window watchdogs on element14 (TPS3813K33, MAX6323) have windows of h
 
 5. GPIO map v0.2: `HALL_OUT` on GPIO10, `TCRT_LED_EN` on GPIO47, IMU `INT2` not connected, GPIO38 left to the v1.1 LED. Superseded at layout by v0.3 (*GPIO map*).
 6. `J10-2`, `J10-8`, `J10-10` orders above. Recorded at PCB-09 and in 05-harness §5.2.
-7. `MR`: no safety-converter power-good reaches C3 (`PG_BASE` goes to PCB-02 on `W20`). Pull `MR` up to 3V3 with a test point. The watchdog then starts with the DevKitC's 3.3 V.
+7. `MR`: no safety-converter power-good reaches C3 (`PG_BASE` goes to PCB-02 on `W20`). Pull `MR` up to 3V3 (its test point was dropped at layout: a static pull-up). The watchdog then starts with the DevKitC's 3.3 V.
 8. GP2Y bypass: Sharp asks for ≥ 10 µF "near this product", but its end of `W34` is wires soldered to the S3B-PH pins (D-027). Its LED pulses return on the same GND wire as the Hall, which offsets the Hall reading (`E`: a 300 mA pulse × about 75 mΩ of AWG30 ≈ 22 mV ≈ 1.5 mT, an eighth of the 12 mT trip). Proposed: 10 µF at `J10-8` on PCB-10, a 10 µF 0805 tacked across the S3B-PH pins, and Hall sampling between GP2Y pulses. Bench item 19 measures it.
 9. GP2Y `Vo` scaling into GPIO1 (series resistor or divider), and the `HALL_OUT` open-wire pull (1 MΩ to GND): values at lesson 2.
 10. `JP_SVC` must be reachable with the module fitted, so not under the DevKitC: a 2-pin header or solder jumper in the GH band's free corner.
@@ -299,7 +299,7 @@ KiCad ships no 3D model for the DDF package (`Texas_DDF0008A…`) or the Micro-F
 | R40, R41, C12 | 1 MΩ, 1 kΩ, 1 nF | `HALL_OUT` open-wire pull-down (reads 0 V = fault), series and sample cap into GPIO10 (gap 9) |
 | J12 (`J10-12`) | BM04B-GHS-TBT | 1 GND, 2 `C3_READY`, 3 `MOTOR_PRESENT`, 4 GND |
 | R42, R43 | 1 kΩ, 100 kΩ | `MOTOR_PRESENT` series into GPIO40, pull-down (fail-inactive) |
-| TP1–TP15 | Ø1.0 pads, not in the BOM | `+5V_IN`, `+5V_DK`, `+3V3`, GND, `C3TX_P/N`, `C0TX_P/N`, `WDI`, `WDO`, `READY`, `SLP`, `FLT`, `MR`, `WD_EN`. Placed outside the DevKitC's shadow (lesson 1) |
+| TP1–TP4, TP9–TP12 | Ø1.0 pads, not in the BOM | `+5V_IN`, `+5V_DK`, `+3V3`, GND, `WDI`, `WDO`, `C3_READY`, `SLP`. Placed outside the DevKitC's shadow (lesson 1). Cut at layout (2026-10-28) from 15: the RS-422 pairs are probed on U2's pins, FLT on R16, WD_EN on JP1; MR is a static pull-up; TP11 moved from `READY` to `C3_READY`, the signal PCB-03 actually sees |
 | H1, H2 | Ø2.7 mm holes | The two lower M2.5 screws (D-068 A); no net |
 
 `PWR_FLAG` sits on `+5V_IN` (enters on J1), `+5V_DK` (the diode's output), `+3V3` (the DevKitC's regulator, whose pins Espressif types as power inputs) and GND. Unfitted parts carry KiCad's DNP flag.
@@ -313,10 +313,10 @@ KiCad ships no 3D model for the DDF package (`Texas_DDF0008A…`) or the Micro-F
 | GPIO map v0.3 (re-checked after each layout change) | `TCRT_LED_EN` U1.4, `TCRT_ADC` U1.5, `ENC_R_A/B` U1.6/7, `ENC_L_A/B` U1.8/9, `MOTOR_PRESENT_MCU` U1.10, `NFAULT` U1.11, `IMU_SCLK_MCU` U1.12, `IMU_MOSI/MISO/CS/INT1_MCU` U1.15–18, `UART_RX/TX` U1.19/20, `NSLEEP` U1.27, `MCU_RDY` U1.28, `WDI` U1.29, `IN2_L/IN1_L_MCU` U1.33/34, `IN2_R/IN1_R_MCU` U1.38/39, `HALL_ADC` U1.40, `GP2Y_ADC` U1.41 | Match |
 | Unused pins open | U1 8, 9, 13, 14, 25, 26, 30, 31, 35, 36, 42, 43 unconnected (GPIO15, 16, 3, 46, 19, 20, 45, 0, 38, 39, 44, 43) | Match |
 | 5 V in, back-feed diode | `+5V_IN`: J1.1, D1.2 (A), C1, C2, C10, J8.1, TP1. `+5V_DK`: D1.1 (K), U1.21, TP2 | Match |
-| Watchdog pinout C, SET 00 | `WDI` U3.3, R1, U1.29, TP9. `WDO` U3.7, R2, U1.3 (EN), U5.1, TP10. `WD_EN` U3.6, R3, JP1.1, U5.3, TP15. `MR` U3.2, R4, TP14. U3.1, U3.5, U3.4 on GND | Match |
-| READY = WDO ∧ WD-EN ∧ MCU_RDY; 1k out | `MCU_RDY` U5.6, R5, U1.40. `READY` U5.4, R6, R8, U4.2, TP11. `C3_READY` R6, J12.2 | Match |
+| Watchdog pinout C, SET 00 | `WDI` U3.3, R1, U1.29, TP9. `WDO` U3.7, R2, U1.3 (EN), U5.1, TP10. `WD_EN` U3.6, R3, JP1.1, U5.3. `MR` U3.2, R4. U3.1, U3.5, U3.4 on GND | Match |
+| READY = WDO ∧ WD-EN ∧ MCU_RDY; 1k out | `MCU_RDY` U5.6, R5, U1.40. `READY` U5.4, R6, R8, U4.2. `C3_READY` R6, J12.2, TP11 | Match |
 | SLP = NSLEEP ∧ READY, pulled down | `NSLEEP` U1.27, R7, U4.1. `SLP` U4.4, R9, R10, TP12 → `SLP_L` J5.1, `SLP_R` J6.1 | Match |
-| `FLT` wired-OR, 10k pull-up, GPIO9 | `FLT` J5.4, J6.4, R15, R16, TP13. `NFAULT` R16, U1.15 | Match |
+| `FLT` wired-OR, 10k pull-up, GPIO9 | `FLT` J5.4, J6.4, R15, R16. `NFAULT` R16, U1.15 | Match |
 | `J10-2` by direction, 120 Ω at this receiver | `C3TX_P/N` U2.5/6 → J2.5/4. `C0TX_P/N` J2.2/3 → U2.8/7, R17 across, R18/R19 (DNP). J2.6 open (order as reordered at layout) | Match |
 | `J10-8` order; nose circuits | J8.1 `+5V_IN`, J8.2 GND, J8.3 `GP2Y_VO` → R38 → `GP2Y_ADC` (R39, C11), J8.4 `+3V3`, J8.5 `HALL_OUT` (R40) → R41 → `HALL_ADC` (C12) | Match |
 | `J10-10` order; TCRT circuit | J10.1 `LED_A` ← R34 ← `+3V3`. J10.2 `LED_K` → Q1.3 (D); Q1.1 (G) `TCRT_LED_EN` with R35; Q1.2 (S) GND. J10.3 `TCRT_OUT` R36, C9, R37 → `TCRT_ADC` | Match |
@@ -358,7 +358,7 @@ It is the PCB-05 lesson again: placeholder bodies are not footprints. Fixes:
 | Item | Value |
 |---|---|
 | Outline | `Edge.Cuts` polygon: x 100–170, y 100–149.5, notch x 105–113.5 up to y 146.5 |
-| Stackup | PCB-06's, 2 layers, 1 oz; core 1.51 mm, so the board is **1.6 mm** (the CAD's) |
+| Stackup | **4 layers since placement** (D-068 amended; see *Layout*): PCB-05's, 1.6 mm, 1 oz outer, 0.5 oz inner. Set up first as PCB-06's 2 layers |
 | Rules | `pcb-10-c3-carrier.kicad_dru`: the fab-neutral set, copied from PCB-15 |
 | `UPRIGHT_1/2_B_NO_PARTS` | B.Cu rule areas over the printed uprights (x 160–168 and 128–136, full height): no footprints. Pads stay allowed: the DevKitC's pins go into the uprights' header-row reliefs, and the screws go through |
 | `HOOK_1/2_F_NO_PARTS` | F.Cu rule areas under the hooks' lips (same x, Z 123.6 to the top edge): no footprints, no pads |
@@ -378,6 +378,51 @@ It is the PCB-05 lesson again: placeholder bodies are not footprints. Fixes:
 | J10-1 Micro-Fit 43650-0200 | Project footprint `pcb10:Molex_Micro-Fit_3.0_43650-0200_1x02_P3.00mm_Horizontal` with `pcb10.3dshapes/Molex_Micro-Fit_3.0_43650-0200_full_tails.step`, built from Molex SD-43650-001: housing 9.65 × 9.90 × 6.98 (solid), 0.64 mm pins with the full **3.18 mm tails** (not clipped as on PCB-05: 10 mm of air behind this board), Ø3 peg 3.3 mm long (`E`, drawing text) | In a scratch STEP the pins sit on both pads, the peg on its hole, and the housing on the footprint's fab outline |
 | U1 DevKitC | Built at lesson 5 from `pcb10_devkitc()`, the same code as the robot CAD | — |
 
+## Layout
+
+### Four layers (decision at placement)
+
+On two layers PCB-10 would not route. Under the DevKitC, every net from the top header row (motor IN lines, GP2Y, Hall, watchdog) has to cross every net from the bottom row on its way down to the connector rows, and each THT gap is 0.54 mm wide, room for one 0.2 mm track per layer. That leaves no room for ground. **Taken 2026-10-28 by the builder: four layers** ([D-068](../../decisions.md#d-068) amended): F.Cu parts and signals, In1.Cu solid GND (`GND_IN1`), In2.Cu the +3V3 plane (`P3V3_IN2`), B.Cu signals with no parts. It's PCB-05's stackup: 1.6 mm, 35 µm outer and 15 µm inner copper.
+
+**Placement** (KiPy, KiCad coordinates; connectors, holes and U1 as in *Board set-up*):
+
+| Group | Parts and positions | Why there |
+|---|---|---|
+| Bottom-row band | One series resistor flat over each DevKitC pin it serves, at y 124.4 (R37, R22, R23, R20, R21, R42, R16, R28–R32); pull-ups and pull-downs above them at y 122.6 (R24–R27, R43, R15, R33) | Each MCU end drops straight onto its pin, and each connector end leaves through the gap beside it. This is what GPIO map v0.3 is built around |
+| Top-row band | R38, R41, R12, R14, R11, R13, R7 at y 105.8; C11, R39, C12, R40 below | The same idea for the top row |
+| TCRT | R34 (112.42, 118.0), Q1 (117.9, 120.5), R35, R36, C9 by pins 1–5 | The LED switch and the receiver load sit next to the pins and J10-10 |
+| Watchdog and READY gate | U3 (148, 114), U5 (154, 114), U4 (160.6, 114) left to right in signal order, with C5–C7 above, R4 (MR), R1/R5/R7 under pins 29/28/27, R8 and R6 below | WDO → U5 → U4 → SLP flows left to right; nothing doubles back |
+| Supply | D1, C1, C2, C10 and TP1 by `J10-1`; C3/C4 on DevKitC pins 1/2 | |
+| RS-422 | U2 (160, 146.1) 180° under `J10-2`; R17 across the C0 pair; R18/R19 (DNP bias) beside them | U2's bus pins face `J10-2` in its own order (which is why `J10-2` was reordered) |
+| Test points | TP1–TP4 (rails) on the left edge, TP9 (WDI) above the top row, TP10 (WDO) left edge, TP11 (C3_READY), TP12 (SLP) on their tracks below the DevKitC, JP1 + R3 (WD_EN) right | Nothing to probe under the DevKitC. RS-422 is probed on U2's SOIC pins, FLT on R16 or `J10-5` pin 4. TP5–TP8 and TP13–TP15 were dropped |
+
+### Routing (lesson 4)
+
+Routed by hand through KiPy, 2026-10-28; every segment 0°, 45° or 90° (D-060). Track widths: 0.2 mm signals, 0.25 mm ground and +3V3 stubs, 0.4 mm the DevKitC 3V3 pins, 0.5 mm `+5V_IN`, 0.8 mm `+5V_DK`.
+
+| Layer | Carries |
+|---|---|
+| F.Cu | All parts. The bottom-row band (each resistor's drop onto its pin, then down its gap to the connector), the encoder, TCRT and IMU fans into row A, the FLT channel at y 135.7 between rows A and B, `SLP_R`'s channel at y 142.45 between rows B and C, the watchdog cluster, RS-422 from U2 to `J10-2`, `+5V_IN` |
+| In1.Cu | **Solid GND, no tracks.** One polygon over the whole board |
+| In2.Cu | +3V3 plane, plus three slow, static nets as tracks: `WDO` (y 112.25 across under the DevKitC, then down to pin 3), `C3_READY` (TP11 → `J10-12` pin 2) and `SLP` (TP12 → R9/R10). The plane still fills as one polygon |
+| B.Cu | The six top-row descents (GP2Y_VO, HALL_OUT, IN1/2_R, IN1/2_L), each in its own gap; `WDI`, `NSLEEP`, `WD_EN`; UART RX/TX from pins 19/20 under U2; `MOTOR_PRESENT` to row C; `+5V_DK` round the top and left edges to D1 |
+
+**What this board teaches** (new since PCB-05):
+
+- **Use each layer for what it's good at.** Ground is one unbroken plane (In1), so every ground pad, shell pad and decoupler gets its own via straight into it, and every signal on F has its return path directly underneath. The +3V3 plane can carry a few tracks, but only for nets that change rarely (a watchdog output, a readiness flag, a sleep line). Each track cuts a slot in the plane, but these nets carry almost no edges, and the plane stays joined around both ends of every slot. The fast nets (SPI at 33 Ω, UART, RS-422) stay on F/B over the solid ground.
+- **THT header rows are fences.** The DevKitC's two rows are 22 pins each at 2.54 mm pitch with 2.0 mm pads, so each gap holds one 0.2 mm track per layer. The pin map (v0.3) and the resistor positions were chosen together so that each gap carries at most one net on F and one on B, and no two nets need the same gap.
+- **Order is a topology problem.** Where two nets have to swap left-right order between their source and their connector, they must cross, and a crossing costs a via. Three of these were solved by moving parts instead: `J10-2` reordered to U2's pin order, so the pairs never cross; the IMU staircase, where the net that shifts furthest turns first; and TCRT, where `LED_K` and `TCRT_OUT` run as nested 45° lines past `J10-10`'s shell pad (0.28 mm clearance at the corner). Where a crossing can't be avoided (C3_READY and MOTOR_PRESENT both heading for `J10-12`), one net changes layer.
+- **Power takes the long way when the short way is full.** `+5V_DK` (D1 → DevKitC 5V pin, up to about 0.5 A) has no room through the middle, so it runs on B round the board edges: about 190 mm at 0.8 mm, roughly 0.12 Ω, so 60 mV at 0.5 A. The DevKitC's 3.3 V regulator has plenty of headroom after D1's 0.4 V.
+- **Via spacing is copper to copper.** A via (Ø0.67) next to a 0.2 mm track needs its centre 0.745 mm from the track's centreline (0.335 + 0.31 + 0.1). That is why most plane vias sit off-axis from their pads: they had to clear a B or In2 line running under them.
+
+Totals: 610 mm of track on F.Cu, 121 mm on In2, 469 mm on B.Cu; 96 vias, all 0.67/0.35.
+
+**DRC** (nightly `kicad-cli pcb drc --schematic-parity --severity-all`, fab-neutral `.kicad_dru`, 2026-10-28): **0 errors, 0 unconnected pads, 0 schematic-parity issues**, no keep-out, courtyard or clearance hits, first time through. Both planes refilled before the check and fill as one polygon each. What remains:
+- 57 `lib_footprint_mismatch` warnings, the 1 nm round-off on parts that were turned during placement;
+- 4 `silk_edge_clearance` warnings on J1's housing outline, which overhangs the +X edge by design so the plug can mate (the fab clips silkscreen at the edge).
+
+Reference labels are on the fab layers (`refs_to_fab()`). `audit()`: every part has its 3D model except U1, whose model is built at lesson 5. TP1–TP4 and TP9–TP12 are out of the BOM and position file, and so is U1 (the DevKitC is plugged in, not assembled).
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
@@ -387,3 +432,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-28:** schematic drawn (lesson 2): Espressif's DevKitC symbol, a new TPS3436CCCBG symbol, a flattened AO3400A, and a DevKitC footprint from Espressif's pads with 1.0 mm holes. ERC 0 errors, 0 warnings; netlist checked row by row against the inputs.
 - **2026-10-28:** board set up (lesson 3). The real connector footprints gave 23 courtyard overlaps at the CAD positions: the board grows 6 mm down for a third row, notched over the right DRV8833's terminal block, with `J10-1` at its real size (D-068 amended; `check_pcb10_mount.py` 9/9). Rule areas over the uprights and under the hooks, proved on a scratch copy. 3D models: TSOT-23-8 for the DDF watchdog, a full-tail Micro-Fit from Molex's drawing; both checked against their pads in a STEP.
 - **2026-10-28:** placement (lesson 4, part 1). Connectors, holes and DevKitC on their proved origins; every part placed with DRC clean (no courtyard, edge or parity errors). Layout-driven changes: `J10-2` reordered to U2's own pin order (pairs run straight), and the GPIO map reassigned to **v0.3** so each track runs to its connector without crossings (both recorded above and at PCB-09 / 05-harness). Routing in progress.
+- **2026-10-28:** routed (lesson 4, part 2) on four layers: In1 solid GND, In2 +3V3 with WDO, C3_READY and SLP as tracks, B for the top-row descents, UART and `+5V_DK` round the edges. Test points cut to the rails plus WDI, WDO, C3_READY and SLP (TP11 retargeted from READY to C3_READY). DRC 0 errors, 0 unconnected, parity clean.
