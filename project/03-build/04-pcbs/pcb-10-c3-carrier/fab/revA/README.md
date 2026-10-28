@@ -68,6 +68,7 @@ Exported 2026-10-28 from `../../design/pcb-10-c3-carrier.kicad_pcb` with the KiC
 
 ## Open for stage 2
 
+- **DFM check.** Upload the zip to each quoting fab's DFM check. Watch U3's 0.65 mm pitch, the notched outline and the via tenting.
 - **Consign U2 and U3.** Neither is at LCSC with stock. Order them from Mouser India with the build's other Mouser parts (one GST business invoice ships DDP), and consign them to the fab, as PCB-06 does with its mic.
 - **The DevKitC goes on last.** Solder it after assembly, by hand, through its own header pins: check it sits flat on its plastic, then clip the tails to 1.5 mm below the board. Before soldering, confirm it is the genuine Espressif v1.1 (LED on GPIO38).
 - **Quantity.** One board is installed; order at least 3 (a spare and a bench board).

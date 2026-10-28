@@ -443,6 +443,28 @@ Reference labels are on the fab layers (`refs_to_fab()`). `audit()`: every part 
 
   Reserves touched at 0.00, by design, as with the CAD carrier: the DevKitC against its own USB service corridor and the head-riser harness route, and the GH headers against the plug-layer reserve their plugs fill. `check_pcb10_mount.py` owns the uprights, hooks, reliefs and screws, and passed 9/9 at set-up; this board changes none of them.
 
+## Open items (after rev A)
+
+Everything still to do for PCB-10, by stage. Design is closed; nothing here changes the board unless stage 2 or 3 finds a fault.
+
+**Stage 2 (procure, with the batch, D-064)** — details in [`fab/revA/README.md`](fab/revA/README.md):
+1. Upload `pcb-10-c3-carrier-revA-gerbers.zip` to each quoting fab's DFM check; watch U3's 0.65 mm pitch, the notch and the 96 tented vias.
+2. Choose stocked MPNs for every resistor and capacitor (values and voltages are in the fab parts table).
+3. Look up the LCSC parts for the JST GH headers (BM04B/05B/06B/08B-GHS-TBT), or source them.
+4. Buy U2 (THVD1451DR) and U3 (TPS3436CCCBGDDFRQ1) from Mouser India on a GST business invoice (DDP), and consign them to the fab.
+5. Buy the genuine Espressif ESP32-S3-DevKitC-1-N8 v1.1 (CH-045; Tech Depot, Sharvi or Compoindia) and the JP1 header and shunt.
+6. Order at least 3 boards (one installed, a spare, a bench board).
+
+**Stage 3 (integrate):**
+7. On receipt, confirm the DevKitC is v1.1 (LED on GPIO38) and measure its bottom-side protrusions against the 2.0 mm limit (gap 11). Hand-solder it after assembly, seated flat, and clip the tails to 1.5 mm.
+8. Harness: the connectors moved at set-up (three rows, D-068 amended), so the robot CAD's harness reserves still end at the old positions. Re-route and re-measure:
+   - **head riser** (`HARNESS_HEAD_RISER_LOWER`): touches the DevKitC's UART USB-C and crosses its USB service corridor (gap 13);
+   - **nose `W34`** (`HARNESS_NOSE_J10_8_*`, GH5 300 mm): its end moves to `J10-8` in row C;
+   - **rear TCRT `W36`** (350 mm, CH-020): its end moves to `J10-10` in row A.
+   Confirm each lead length still reaches with slack.
+9. `W25` (`J10-2` ↔ PCB-09 `J9-2`): wire it 1:1 in the reordered pin order (recorded at PCB-09 and 05-harness §5.2).
+10. Bench: the unfitted R18/R19 (RS-422 bias) and R24–R27 (encoder pull-ups) are fitted only if the bench shows a need.
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
