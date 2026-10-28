@@ -68,35 +68,34 @@ Two facts the pin map v0.1 did not have:
 
 GPIO35–37 are free on the N8 module (they go to octal PSRAM only on R8 variants, `CA-03`).
 
-### GPIO map (build v0.2, D-068)
+### GPIO map (v0.3, set at layout)
 
-Pin map v0.1 (RP-03 §3.2) plus the changes since: power-boards §2.4 (D-038), D-013, D-016, D-041 and board-specs §7. Strapping pins 0/45/46 and USB 19/20/43/44 stay unconnected on the carrier.
+v0.2 (D-068) assigned the pins by function; v0.3 reassigns them at placement (lesson 4, 2026-10-28) so that every track runs from its DevKitC pin to its connector without crossing another. The bottom pin row (J1, nearest the connectors) feeds the connectors in their left-to-right order; the top row (J3) carries the signals that go further down (row B and C connectors) and the watchdog cluster. The roles are unchanged and every rule still holds: no strapping or USB pins, the three analog inputs on ADC1, `MCU_RDY`/`WDI`/`NSLEEP` on plain GPIO, LEDC, PCNT, UART1 and the IMU's SPI through the GPIO matrix (the IMU runs at 10 MHz or less).
 
-| Function | GPIO | DevKitC pin | Carrier net / connector | Change from v0.1 |
-|---|---:|---|---|---|
-| `ENC_L_A`, `ENC_L_B` | 4, 5 | J1-4, J1-5 | `J10-3` pins 3, 4 | — |
-| `ENC_R_A`, `ENC_R_B` | 6, 7 | J1-6, J1-7 | `J10-4` pins 3, 4 | — |
-| `IN1_L`, `IN1_R` (LEDC) | 11, 12 | J1-17, J1-18 | `J10-5`/`J10-6` pin 2 | Was `PWM_L/R` (D-038) |
-| `IN2_L`, `IN2_R` (LEDC) | 13, 14 | J1-19, J1-20 | `J10-5`/`J10-6` pin 3 | Was `DIR_L/R`; now a second LEDC output (D-038) |
-| `nSLEEP` | 21 | J3-18 | AND gate U4 input A | Now gated with `C3_READY` (D-038) |
-| `nFAULT` | 9 | J1-15 | `J10-5`/`J10-6` pin 4, wired-OR, 10 kΩ pull-up | — |
-| `GP2Y_VO` (ADC1_CH0) | 1 | J3-4 | `J10-8` pin 3 | Was `OBST_IR`; same pin |
-| `HALL_OUT` (ADC1_CH9) | 10 | J1-16 | `J10-8` pin 5 | **New** (D-013; was the touch switch on `BUMP`). Takes spare 10, an ADC1 pin |
-| `TCRT_OUT` (ADC1_CH7) | 8 | J1-12 | `J10-10` pin 3 | Was `CLIFF_REAR` digital; same pin, now analog (D-016) |
-| `TCRT_LED_EN` | 47 | J3-17 | Q1 gate | **New** (D-016). Takes `BUMP`'s pin, freed by D-013 |
-| IMU `MOSI`, `MISO`, `SCLK` | 35, 36, 37 | J3-13, J3-12, J3-11 | `J10-7` pins 4, 5, 3 | — |
-| IMU `CS`, `INT1` | 41, 42 | J3-7, J3-6 | `J10-7` pins 6, 7 | — |
-| IMU `INT2` | — | — | `J10-7` pin 8: not connected | v0.1 has one IMU interrupt. PCB-07 is HOLD |
-| C0 link `TX`, `RX` (UART1) | 17, 18 | J1-10, J1-11 | THVD1451 `D`, `R` | — |
-| `WDI` | 48 | J3-16 | TPS3436 `WDI`, 10 kΩ pull-up | — (free on v1.1, see above) |
-| `MCU_RDY` | 2 | J3-5 | READY gate input, 10 kΩ pull-down | Takes spare 2 (board-specs §7, `BD-10`) |
-| `MOTOR_PRESENT` | 40 | J3-8 | `J10-12` pin 3 | — |
-| `ENERGY_OK` | 39 | J3-9 | Not connected | **No cable brings it to C3 in the build** (`J10-12` has only `C3_READY` and `MOTOR_PRESENT`). Kept reserved |
-| `ESTOP_N` | 3 | J1-13 | Not connected | Deleted by D-041. GPIO3 is unassigned strapping again |
-| `CLIFF_FL`, `CLIFF_FR` | 15, 16 | J1-8, J1-9 | Not connected | No front cliff hardware in v1 (testsystem §9 hold) |
-| Board RGB LED | 38 | J3-10 | Not connected | On the v1.1 board |
+| Function | GPIO | DevKitC pin | Carrier net / connector | v0.2 |
+|---|---:|---|---|---:|
+| `TCRT_LED_EN` | 4 | J1-4 | Q1 gate (100 kΩ pull-down) | 47 |
+| `TCRT_ADC` (ADC1_CH4) | 5 | J1-5 | R37 1 kΩ from `TCRT_OUT`, `J10-10` pin 3 | 8 |
+| `ENC_R_A`, `ENC_R_B` | 6, 7 | J1-6, J1-7 | `J10-4` pins 3, 4 | 6, 7 |
+| `ENC_L_A`, `ENC_L_B` | 15, 16 | J1-8, J1-9 | `J10-3` pins 3, 4 | 4, 5 |
+| `MOTOR_PRESENT` | 17 | J1-10 | `J10-12` pin 3 (1 kΩ, 100 kΩ pull-down) | 40 |
+| `nFAULT` | 18 | J1-11 | `FLT` (`J10-5`/`J10-6` pin 4) through 1 kΩ, 10 kΩ pull-up | 9 |
+| IMU `SCLK` | 8 | J1-12 | `J10-7` pin 3 | 37 |
+| IMU `MOSI`, `MISO` | 9, 10 | J1-15, J1-16 | `J10-7` pins 4, 5 | 35, 36 |
+| IMU `CS`, `INT1` | 11, 12 | J1-17, J1-18 | `J10-7` pins 6, 7 (CS 10 kΩ pull-up) | 41, 42 |
+| C0 link `RX`, `TX` (UART1) | 13, 14 | J1-19, J1-20 | THVD1451 `R`, `D` | 18, 17 |
+| `GP2Y_VO` (ADC1_CH0) | 1 | J3-4 | `J10-8` pin 3 through the 10k/22k divider | 1 |
+| `HALL_OUT` (ADC1_CH1) | 2 | J3-5 | `J10-8` pin 5 (1 kΩ, 1 MΩ open-wire pull-down) | 10 |
+| `IN1_R`, `IN2_R` (LEDC) | 42, 41 | J3-6, J3-7 | `J10-6` pins 2, 3 | 12, 14 |
+| `IN1_L`, `IN2_L` (LEDC) | 37, 36 | J3-11, J3-12 | `J10-5` pins 2, 3 | 11, 13 |
+| `WDI` | 48 | J3-16 | TPS3436 `WDI`, 10 kΩ pull-up | 48 |
+| `MCU_RDY` | 47 | J3-17 | READY gate input, pull-down | 2 |
+| `nSLEEP` | 21 | J3-18 | Sleep gate U4 input A, 100 kΩ pull-down | 21 |
+| IMU `INT2` | — | — | `J10-7` pin 8: not connected (PCB-07 is HOLD) | — |
+| Unused | 0, 3, 45, 46 (strapping); 19, 20, 43, 44 (USB) | | Not connected | |
+| Spare | **35, 39, 40**; 38 drives the v1.1 RGB LED | J3-13, J3-9, J3-8; J3-10 | Not connected | 15, 16, 39 |
 
-**Budget.** 24 of the 28 assignable GPIO are used. Unassigned and safe: **15, 16, 39** (39 while no `ENERGY_OK` cable exists), plus 38 behind the board LED. The `CA` §3 gate of at least two safe spares holds. ADC1 pins are now all used except GPIO3 (strapping), so any future analog look-down channel needs change control. The firmware's `c3_board_role.h` (RP-02 phase A) still has v0.1 and is regenerated from this table when the map is accepted (`CA-14`).
+**Budget.** 24 of the 28 assignable GPIO are used, as in v0.2. Unassigned and safe: **35, 39, 40**, plus 38 behind the board LED, so the `CA` §3 gate of at least two safe spares holds. ADC1 left free: GPIO6–10 are used digitally but stay ADC1-capable. `ENERGY_OK` (v0.1 GPIO39) still has no cable to C3; `ESTOP_N` (GPIO3) was deleted by D-041. The firmware's `c3_board_role.h` (RP-02 phase A) still has v0.1 and is regenerated from this table when the board is released (`CA-14`).
 
 ### Circuit
 
@@ -149,7 +148,7 @@ Ten GH headers and one Micro-Fit, as in the CAD (`C3_GH_ROWS`): row Z 86 `J10-2`
 | Conn. | Pins, 1 → n | Order owned by |
 |---|---|---|
 | `J10-1` (MF3 1×2) | +5V (`PB-SAFE-BASE`), GND | 05-harness §5.1 (D-039), mates PCB-04 `J4-4` |
-| **`J10-2`** (GH6) | GND, `C3TX+`, `C3TX−`, `C0TX+`, `C0TX−`, spare | **Set here (below)**; PCB-09 `J9-2` follows |
+| **`J10-2`** (GH6) | GND, `C0TX+`, `C0TX−`, `C3TX−`, `C3TX+`, spare (reordered at layout) | **Set here (below)**; PCB-09 `J9-2` follows |
 | `J10-3`/`J10-4` (GH4) | GND, +3V3_ENC, ENC_A, ENC_B | 05-harness §5.2 (D-039); single-ended lead re-crimped on the motor |
 | `J10-5`/`J10-6` (GH6) | SLP, IN1, IN2, FLT, GND, spare | power-boards §2.4 (fixed) |
 | `J10-7` (GH8) | +3V3, GND, SCLK, MOSI, MISO, CS, INT1, INT2 | 05-harness §5.2; PCB-07 follows when it leaves HOLD |
@@ -162,10 +161,12 @@ Ten GH headers and one Micro-Fit, as in the CAD (`C3_GH_ROWS`): row Z 86 `J10-2`
 | Pin | Net | At PCB-10 (THVD1451) | At PCB-09 `J9-2` |
 |---:|---|---|---|
 | 1 | GND | Signal reference | Signal reference |
-| 2 | `C3TX+` | Y (driver, non-inverting) | A (receiver) + 120 Ω |
-| 3 | `C3TX−` | Z | B |
-| 4 | `C0TX+` | A (receiver) + 120 Ω | Y (driver) |
-| 5 | `C0TX−` | B | Z |
+| 2 | `C0TX+` | A (receiver) + 120 Ω | Y (driver) |
+| 3 | `C0TX−` | B | Z |
+| 4 | `C3TX−` | Z | B |
+| 5 | `C3TX+` | Y (driver, non-inverting) | A (receiver) + 120 Ω |
+
+**Reordered at layout (2026-10-28).** The first order (C3 pair on 2–3, C0 pair on 4–5) made the pairs cross between U2 and J2. This one is U2's own pin order seen from J2, so the four tracks run straight with no vias. The cable is still 1:1 and the pairs still adjacent, so nothing else changes.
 | 6 | spare | Not connected | Not connected |
 
 `W25` is wired 1:1 (pin n to pin n), with 2–3 and 4–5 twisted. Each pair sits next to the other, and GND is on pin 1, as 05-harness §5.2 asks. PCB-09's `J9-1` head link may use the same rule; that is PCB-09's to decide.
@@ -237,7 +238,7 @@ India-held window watchdogs on element14 (TPS3813K33, MAX6323) have windows of h
 
 **Adopted with D-068 (values at lesson 2):**
 
-5. GPIO map v0.2 above: `HALL_OUT` on GPIO10, `TCRT_LED_EN` on GPIO47, IMU `INT2` not connected, GPIO38 left to the v1.1 LED.
+5. GPIO map v0.2: `HALL_OUT` on GPIO10, `TCRT_LED_EN` on GPIO47, IMU `INT2` not connected, GPIO38 left to the v1.1 LED. Superseded at layout by v0.3 (*GPIO map*).
 6. `J10-2`, `J10-8`, `J10-10` orders above. Recorded at PCB-09 and in 05-harness §5.2.
 7. `MR`: no safety-converter power-good reaches C3 (`PG_BASE` goes to PCB-02 on `W20`). Pull `MR` up to 3V3 with a test point. The watchdog then starts with the DevKitC's 3.3 V.
 8. GP2Y bypass: Sharp asks for ≥ 10 µF "near this product", but its end of `W34` is wires soldered to the S3B-PH pins (D-027). Its LED pulses return on the same GND wire as the Hall, which offsets the Hall reading (`E`: a 300 mA pulse × about 75 mΩ of AWG30 ≈ 22 mV ≈ 1.5 mT, an eighth of the 12 mT trip). Proposed: 10 µF at `J10-8` on PCB-10, a 10 µF 0805 tacked across the S3B-PH pins, and Hall sampling between GP2Y pulses. Bench item 19 measures it.
@@ -267,7 +268,7 @@ KiCad ships no 3D model for the DDF package (`Texas_DDF0008A…`) or the Micro-F
 
 | Ref | Part | Nets |
 |---|---|---|
-| U1 | Espressif ESP32-S3-DevKitC-1-N8 v1.1 (CH-045) | GPIO map v0.2. 3V3 (pads 1, 2) is the carrier's `+3V3`; 5V (21) on `+5V_DK`; RST/EN (3) on `WDO`; G (22, 23, 24, 44). Unused pads 8, 9, 13, 14, 25, 26, 30, 31, 35, 36, 42, 43 carry no-connect flags. Not in the position file: hand-soldered after PCBA, tails clipped to 1.5 mm |
+| U1 | Espressif ESP32-S3-DevKitC-1-N8 v1.1 (CH-045) | GPIO map v0.3 (set at layout). 3V3 (pads 1, 2) is the carrier's `+3V3`; 5V (21) on `+5V_DK`; RST/EN (3) on `WDO`; G (22, 23, 24, 44). Unused pads 13, 14, 25, 26, 30, 31, 32, 35, 36, 37, 42, 43 carry no-connect flags. Not in the position file: hand-soldered after PCBA, tails clipped to 1.5 mm |
 | J1 (`J10-1`) | Molex 43650-0200, W11 | 1 `+5V_IN`, 2 GND |
 | D1 | B5819W Schottky, SOD-123 (LCSC C8598) | `+5V_IN` → `+5V_DK` (D-068 E) |
 | C1, C2 / C3, C4 | 10 µF 0805 + 100 nF | `+5V_IN` / `+3V3` bulk |
@@ -281,7 +282,7 @@ KiCad ships no 3D model for the DDF package (`Texas_DDF0008A…`) or the Micro-F
 | J5, J6 (`J10-5/6`) | BM06B-GHS-TBT | 1 SLP, 2 IN1, 3 IN2, 4 `FLT`, 5 GND, 6 no connect |
 | R11–R14 | 100 Ω | GPIO11/12 → `IN1_L/R`, GPIO13/14 → `IN2_L/R` |
 | R15, R16 | 10 kΩ, 1 kΩ | `FLT` pull-up; `FLT` → `NFAULT` (GPIO9) |
-| J2 (`J10-2`) | BM06B-GHS-TBT | 1 GND, 2 `C3TX_P`, 3 `C3TX_N`, 4 `C0TX_P`, 5 `C0TX_N`, 6 no connect |
+| J2 (`J10-2`) | BM06B-GHS-TBT | 1 GND, 2 `C0TX_P`, 3 `C0TX_N`, 4 `C3TX_N`, 5 `C3TX_P`, 6 no connect (reordered at layout) |
 | U2 | THVD1451DR (alternate MAX3490EESA+) | D (3) ← `UART_TX` GPIO17, R (2) → `UART_RX` GPIO18, Y/Z (5/6) → `C3TX_P/N`, A/B (8/7) ← `C0TX_P/N`; C8 100 nF |
 | R17 | 120 Ω | Across `C0TX_P/N`: this end's receiver termination |
 | R18, R19 | 560 Ω, DNP | Idle bias `C0TX_P` to 3V3 and `C0TX_N` to GND, fitted only with the MAX3490 (about 0.32 V across 120 Ω) |
@@ -309,14 +310,14 @@ KiCad ships no 3D model for the DDF package (`Texas_DDF0008A…`) or the Micro-F
 
 | Input (lesson 1, D-068) | Netlist | Result |
 |---|---|---|
-| GPIO map v0.2 | `ENC_L_A/B` U1.4/5, `ENC_R_A/B` U1.6/7, `UART_TX/RX` U1.10/11, `TCRT_ADC` U1.12 (GPIO8), `NFAULT` U1.15, `HALL_ADC` U1.16 (GPIO10), `IN1_L/R` U1.17/18, `IN2_L/R` U1.19/20, `NSLEEP` U1.27 (GPIO21), `TCRT_LED_EN` U1.28 (GPIO47), `WDI` U1.29 (GPIO48), IMU MOSI/MISO/SCLK U1.32/33/34 (GPIO35/36/37), `MOTOR_PRESENT_MCU` U1.37 (GPIO40), `IMU_CS_MCU` U1.38 (GPIO41), `IMU_INT1_MCU` U1.39 (GPIO42), `MCU_RDY` U1.40 (GPIO2), `GP2Y_ADC` U1.41 (GPIO1) | Match |
+| GPIO map v0.3 (re-checked after each layout change) | `TCRT_LED_EN` U1.4, `TCRT_ADC` U1.5, `ENC_R_A/B` U1.6/7, `ENC_L_A/B` U1.8/9, `MOTOR_PRESENT_MCU` U1.10, `NFAULT` U1.11, `IMU_SCLK_MCU` U1.12, `IMU_MOSI/MISO/CS/INT1_MCU` U1.15–18, `UART_RX/TX` U1.19/20, `NSLEEP` U1.27, `MCU_RDY` U1.28, `WDI` U1.29, `IN2_L/IN1_L_MCU` U1.33/34, `IN2_R/IN1_R_MCU` U1.38/39, `HALL_ADC` U1.40, `GP2Y_ADC` U1.41 | Match |
 | Unused pins open | U1 8, 9, 13, 14, 25, 26, 30, 31, 35, 36, 42, 43 unconnected (GPIO15, 16, 3, 46, 19, 20, 45, 0, 38, 39, 44, 43) | Match |
 | 5 V in, back-feed diode | `+5V_IN`: J1.1, D1.2 (A), C1, C2, C10, J8.1, TP1. `+5V_DK`: D1.1 (K), U1.21, TP2 | Match |
 | Watchdog pinout C, SET 00 | `WDI` U3.3, R1, U1.29, TP9. `WDO` U3.7, R2, U1.3 (EN), U5.1, TP10. `WD_EN` U3.6, R3, JP1.1, U5.3, TP15. `MR` U3.2, R4, TP14. U3.1, U3.5, U3.4 on GND | Match |
 | READY = WDO ∧ WD-EN ∧ MCU_RDY; 1k out | `MCU_RDY` U5.6, R5, U1.40. `READY` U5.4, R6, R8, U4.2, TP11. `C3_READY` R6, J12.2 | Match |
 | SLP = NSLEEP ∧ READY, pulled down | `NSLEEP` U1.27, R7, U4.1. `SLP` U4.4, R9, R10, TP12 → `SLP_L` J5.1, `SLP_R` J6.1 | Match |
 | `FLT` wired-OR, 10k pull-up, GPIO9 | `FLT` J5.4, J6.4, R15, R16, TP13. `NFAULT` R16, U1.15 | Match |
-| `J10-2` by direction, 120 Ω at this receiver | `C3TX_P/N` U2.5/6 → J2.2/3. `C0TX_P/N` J2.4/5 → U2.8/7, R17 across, R18/R19 (DNP). J2.6 open | Match |
+| `J10-2` by direction, 120 Ω at this receiver | `C3TX_P/N` U2.5/6 → J2.5/4. `C0TX_P/N` J2.2/3 → U2.8/7, R17 across, R18/R19 (DNP). J2.6 open (order as reordered at layout) | Match |
 | `J10-8` order; nose circuits | J8.1 `+5V_IN`, J8.2 GND, J8.3 `GP2Y_VO` → R38 → `GP2Y_ADC` (R39, C11), J8.4 `+3V3`, J8.5 `HALL_OUT` (R40) → R41 → `HALL_ADC` (C12) | Match |
 | `J10-10` order; TCRT circuit | J10.1 `LED_A` ← R34 ← `+3V3`. J10.2 `LED_K` → Q1.3 (D); Q1.1 (G) `TCRT_LED_EN` with R35; Q1.2 (S) GND. J10.3 `TCRT_OUT` R36, C9, R37 → `TCRT_ADC` | Match |
 | `J10-3/4`, `J10-5/6`, `J10-7`, `J10-12` orders | J3/J4 1 GND, 2 `+3V3`, 3 A, 4 B. J5/J6 1 SLP, 2 IN1, 3 IN2, 4 FLT, 5 GND, 6 open. J7 1 `+3V3`, 2 GND, 3–7 SCLK, MOSI, MISO, CS, INT1, 8 open. J12 1 GND, 2 `C3_READY`, 3 `MOTOR_PRESENT`, 4 GND | Match |
@@ -385,3 +386,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-27:** inputs frozen with [D-068](../../decisions.md#d-068): two screws and two edge hooks with pin-tail reliefs (CAD in `final/v1/cad`, `check_pcb10_mount.py` 8/8 pass), the Espressif v1.1 DevKitC in the final CAD, TPS3436CCCBG from Mouser India, SOIC-8 transceiver footprint, Schottky against USB back-feed.
 - **2026-10-28:** schematic drawn (lesson 2): Espressif's DevKitC symbol, a new TPS3436CCCBG symbol, a flattened AO3400A, and a DevKitC footprint from Espressif's pads with 1.0 mm holes. ERC 0 errors, 0 warnings; netlist checked row by row against the inputs.
 - **2026-10-28:** board set up (lesson 3). The real connector footprints gave 23 courtyard overlaps at the CAD positions: the board grows 6 mm down for a third row, notched over the right DRV8833's terminal block, with `J10-1` at its real size (D-068 amended; `check_pcb10_mount.py` 9/9). Rule areas over the uprights and under the hooks, proved on a scratch copy. 3D models: TSOT-23-8 for the DDF watchdog, a full-tail Micro-Fit from Molex's drawing; both checked against their pads in a STEP.
+- **2026-10-28:** placement (lesson 4, part 1). Connectors, holes and DevKitC on their proved origins; every part placed with DRC clean (no courtyard, edge or parity errors). Layout-driven changes: `J10-2` reordered to U2's own pin order (pairs run straight), and the GPIO map reassigned to **v0.3** so each track runs to its connector without crossings (both recorded above and at PCB-09 / 05-harness). Routing in progress.
