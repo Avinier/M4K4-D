@@ -11,9 +11,8 @@ It covers the printed parts of [chassis v1](../../01-chassis/v1/BOM.md),
 
 **Status:** draft, being written one section at a time. The lab was visited on
 2026-10-28: the ISDI rapid-prototyping lab at Atlas SkillTech University
-([§1](#1-the-lab)). Its machines, rules and rates are recorded; a few
-permissions and the stock colours are still open
-([§9](#9-lab-visit-checklist)).
+([§1](#1-the-lab)). Its machines, rules, rates and open
+permissions are in [04-print/lab.md](../../../04-print/lab.md).
 
 The BOM and [decisions](../../decisions.md) stay the authority for part
 geometry and material decisions. This guide collects them in one place. Where
@@ -34,63 +33,18 @@ it proposes something the decisions do not yet record, it says **proposed**.
 ## 1. The lab
 
 The ISDI rapid-prototyping lab, Atlas SkillTech University, Mumbai, visited
-2026-10-28. The rules and rates come from the lab poster, the machines from
-photos of their labels.
+2026-10-28. Its rules, machines, rates, cost estimate and open permissions now
+live in [04-print/lab.md](../../../04-print/lab.md). What matters for the
+material choices in this guide:
 
-### Confirmed from the lab poster (2026-10-28)
-
-The lab is the ISDI rapid-prototyping lab at Atlas SkillTech University. Requests
-go to `rapidprototyping@atlasuniversity.edu.in`. The poster lists FDM printing
-and a separate resin area.
-
-| Item | What the poster says | What it means for Makad |
-|---|---|---|
-| Build volume | 250 × 250 × 250 mm maximum; larger parts must be split | Every part fits. The largest, the body shell, is 162 × 182 × 110 mm |
-| Wall thickness | 1.2 mm preferred minimum | Two printed parts are thinner: the head pivot retainer (1.0 mm, D-051) and the keel's TCRT height shims (1 mm, D-014). Ask whether they will print them |
-| Files | STL, STEP or OBJ; watertight, no non-manifold edges; own designs only | Export a per-part STL or STEP |
-| Requests | Email with the purpose, dimensions, material and print type; academic prints CC a faculty member; submit at least 4 days ahead | Plan print batches a week out |
-| Printing | Slicing is done at the lab. A print starts only with the Lab Manager present. The student stays for the first 5 layers and leaves an ID card | Each plate costs a supervised start, so group parts into few plates |
-| Drying | A heated dryer at 60 °C that holds 4 spools; drying 4–6 h before printing | Covers PETG, TPU and nylon drying |
-| Lab filament | PLA ₹5.5/g, special PLA ₹6–10/g, PETG ₹6/g, ABS ₹8/g, TPU ₹9/g | TPU is offered, so the tyres (D-005) are likely printable. ABS is offered, so an enclosed printer probably exists. **No ASA or CF is listed** |
-| Own filament | Academic prints are free with your own filament. Approved brands: Elegoo, Polymaker, Sunlu, Numakers, Brahma, eSun, Fibreel, Dream Polymers; others need the Lab Manager's approval | ASA and PA-CF have to be your own spools, from an approved brand (Polymaker and eSun make both). Damage to the printers is the student's responsibility, which matters for abrasive CF |
-
-### Machines seen in the lab (photos, 2026-10-28)
-
-Read from the printer labels. "Label" means the lab's own sticker; the rest is
-the maker's specification.
-
-| Machine | Count seen | Volume | Label materials | What it is for in Makad |
-|---|---|---|---|---|
-| **Bambu Lab X1E with AMS** | 1 | 256 × 256 × 256 mm | PETG, PLA, ABS, TPU, nylon | **The key machine.** Enclosed, heated chamber, built-in fume filter, hardened-steel nozzle, 4-spool AMS. The ASA skins (body shell included), two-tone parts (ears, rear panel), and possibly the PA-CF yoke legs |
-| **QIDI X-CF Pro** | 1 | about 300 × 250 × 300 mm | (label not legible) | A printer built for carbon-fibre nylon: enclosed, hardened nozzle. **The first choice for the PA-CF yoke legs (D-049)** |
-| Flashforge Guider II | 2 | 300 × 300 × 300 mm (label) | TPU, PLA, ABS, PETG | Enclosed, large. PETG frames; a backup for ABS or ASA |
-| Bambu Lab A1, some with AMS Lite | several | 256 × 256 × 256 mm | — | Open frame, direct drive, textured PEI plates seen. PETG and PLA parts; **TPU tyres (D-005)** |
-| Bambu Lab A1 mini | 2 | 180 × 180 × 180 mm | — | Small parts only; the shell does not fit |
-| Enclosed Bambu (model not confirmed), Creality enclosed printer, small Flashforge | 1 each | — | — | Spare capacity |
-| Vacuum-forming machine | 1 | sheet frame about 400 mm | — | Not a printer. Could form a clear display window (M003) over a printed buck |
-
-This answers most of §1's assumptions: an enclosed, filtered printer exists for
-ASA; there is CF-capable kit; TPU has a direct-drive printer; textured PEI plates
-are in use. Who may use the X1E and the X-CF Pro, and with which filaments, is
-still to ask.
-
-### Printing cost estimate (2026-10-28)
-
-Finished printed mass, from the CAD mass registers: about 360 g ASA, 420 g PETG,
-140 g PLA, 30 g PA-CF and 40 g TPU, about **1.0 kg** in all. Supports, brims,
-AMS purge and failed prints add about 40–50 %, and test coupons about 200 g, so
-one complete set uses about **1.6 kg** of filament. Section 8 replaces these
-masses with per-part figures.
-
-| Route | Estimate | Notes |
-|---|---|---|
-| A. All lab filament (ABS in place of ASA, no CF) | about ₹10,000 | Lab colours only; the yoke legs cannot be made |
-| B. Lab PETG, PLA and TPU, plus own ASA and PA-CF spools | about ₹5,500 lab + ₹9,000–11,000 spools ≈ ₹15,000 | Lab colours may not match §4 |
-| **C. All own filament, as an academic project (recommended)** | ₹0 printing + ₹13,000–16,000 spools | Needs a faculty member CC'd. Matches the §4 palette; the leftover spools cover reprints |
-| Paint (primer, matte colours, clear coat, wash) | + ₹2,000–3,000 | Any route |
-
-Spool prices are estimates from Indian retail, not quotes. Plan for 1.5–2 sets
-of prints in total: the yaw gears, tight fits and the CF leg will need reprints.
+- **ASA is printable:** the Bambu X1E is enclosed, with a heated chamber and a
+  fume filter. Permission for own-spool ASA is still to confirm.
+- **CF is printable:** a QIDI X-CF Pro and the X1E both have hardened nozzles.
+  PA-CF must be an own spool from an approved brand (Polymaker or eSun).
+- **TPU is printable:** the A1 printers are direct drive, and TPU is a lab
+  filament.
+- **Walls under 1.2 mm** are below the lab's preferred minimum: the head pivot
+  retainer (1.0 mm, D-051) and the keel TCRT shims (1 mm, D-014).
 
 ### Pre-visit assumptions (superseded)
 
@@ -362,37 +316,7 @@ render.
 
 ## 9. Lab-visit checklist
 
-### Answered on 2026-10-28
-
-- **TPU 95A:** offered as lab filament (₹9/g), and the Bambu A1 printers are
-  direct drive. The tyre hold on [D-005](../../decisions.md#d-005) can lift
-  after one test tyre prints and fits; until then the O-ring fallback stands.
-- **CF for the yoke legs ([D-049](../../decisions.md#d-049)):** the lab has a
-  QIDI X-CF Pro (built for CF nylon) and an X1E (hardened nozzle). No CF
-  filament is stocked; bring an approved-brand PA-CF (Polymaker or eSun). The
-  ≥ 4.5 GPa coupon is still to be printed and tested.
-- **Largest bed:** 300 × 300 × 300 mm (Flashforge Guider II); the poster caps
-  parts at 250 mm. The shell (162 × 182 × 110 mm) fits every machine except the
-  A1 mini.
-- **ASA:** the X1E is enclosed with a heated chamber and a fume filter, and ABS
-  is a lab filament, so ASA is physically possible. Permission is still to
-  confirm (below).
-- **Textured PEI:** seen on the A1 printers.
-- **Drying:** a 60 °C four-spool dryer; the poster asks for 4–6 h before printing.
-- **Two-tone parts:** the X1E has a 4-spool AMS; several A1s have AMS Lite.
-
-### Still open
-
-- **ASA on the X1E with an own spool:** is the X1E open to students, and is ASA
-  allowed?
-- **PA-CF on the X-CF Pro:** allowed, given that printer damage is the
-  student's responsibility?
-- **Slicer:** Bambu Studio or Orca, and can a prepared 3MF project be submitted
-  in place of an STL? Fuzzy skin painting and colour assignment live in it.
-- **Walls under 1.2 mm:** the head pivot retainer (1.0 mm) and the keel TCRT
-  shims (1 mm). Will the lab print them, or do they thicken?
-- **Academic status:** which faculty member to CC so own-filament prints are free.
-- Filament colours in stock, by brand and material, against the [§4 palette](#4-colour-scheme): ivory or white **ASA** and a warm taupe or khaki-grey **ASA**, matte amber or ochre, a very dark blue-grey (deep slate) in **PETG** and **PLA**, a lighter blue-grey (slate blue) **PETG** for the wheels, taupe **PETG** for the keel, matte gunmetal, black TPU 95A. Take photos next to a printed colour card. Screen hex values are only a guide. Numakers and Polymaker spools were seen on the shelves.
-- Heat-set insert tip, a spray area for primer and paint, and use of the
-  vacuum former (a possible clear display window, M003).
-- Whether any lab on campus has a UTM for the CF modulus coupon.
+The visit answered most of this list. The answers and the remaining questions
+(own-spool ASA and PA-CF permissions, slicer, thin walls, faculty sponsor, stock
+colours against the [palette](#4-colour-scheme), inserts, paint) are tracked in
+[04-print/lab.md](../../../04-print/lab.md#still-open).
