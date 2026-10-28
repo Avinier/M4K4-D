@@ -1574,7 +1574,7 @@
 		(path "/9683eaea-6d12-53b2-b0a6-a3535e67eb8b")
 		(sheetname "/")
 		(sheetfile "pcb-10-c3-carrier.kicad_sch")
-		(attr exclude_from_bom)
+		(attr exclude_from_pos_files exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -8660,7 +8660,7 @@
 		(path "/a1269971-bebd-598a-a6f8-45e4e65f1686")
 		(sheetname "/")
 		(sheetfile "pcb-10-c3-carrier.kicad_sch")
-		(attr exclude_from_bom)
+		(attr exclude_from_pos_files exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -17370,6 +17370,17 @@
 			(uuid "e4d476a4-422e-4fd8-a0d7-72e96abe4d36")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/pcb10.3dshapes/ESP32-S3-DevKitC-1_v1.1.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Resistor_SMD:R_0402_1005Metric"
 		(layer "F.Cu")

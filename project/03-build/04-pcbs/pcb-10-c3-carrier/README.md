@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | **In progress: routed** (lesson 4); 3D fit check and fab outputs next. DRC 0 errors, 0 unconnected, parity clean; inputs frozen with [D-068](../../decisions.md#d-068) | [`check_pcb10_mount.py`](../../final/v1/cad/check_pcb10_mount.py) 9/9 pass | 2026-10-28 |
+| 1. Design | **Done: rev A** (lesson 5). DRC 0 errors, 0 unconnected, parity clean; fit in the robot 7/7; fab outputs in [`fab/revA/`](fab/revA/README.md); inputs frozen with [D-068](../../decisions.md#d-068) | [`check_pcb10_mount.py`](../../final/v1/cad/check_pcb10_mount.py) 9/9, [`check_pcb10_fit.py`](../../final/v1/cad/check_pcb10_fit.py) 7/7 | 2026-10-28 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -376,7 +376,7 @@ It is the PCB-05 lesson again: placeholder bodies are not footprints. Fixes:
 |---|---|---|
 | U3 TPS3436 (DDF0008A) | Project footprint `pcb10:Texas_DDF0008A_SOT-8_1.6x2.9mm_P0.65mm`: the stock land pattern pointing at KiCad's `TSOT-23-8.step` (KiCad ships none for DDF0008A) | Against TI drawing 4222047/E: body 2.86 (2.85–2.95), width about 1.5–1.6 (1.55–1.65), lead span 2.80 (2.65–2.95), leads 0.30 (0.22–0.38), pitch 0.65. Height 0.95 against TI's **1.1 max**: the fit check uses 1.1. Leads land at ±1.225 mm inside the ±1.3 mm pads in a scratch STEP |
 | J10-1 Micro-Fit 43650-0200 | Project footprint `pcb10:Molex_Micro-Fit_3.0_43650-0200_1x02_P3.00mm_Horizontal` with `pcb10.3dshapes/Molex_Micro-Fit_3.0_43650-0200_full_tails.step`, built from Molex SD-43650-001: housing 9.65 × 9.90 × 6.98 (solid), 0.64 mm pins with the full **3.18 mm tails** (not clipped as on PCB-05: 10 mm of air behind this board), Ø3 peg 3.3 mm long (`E`, drawing text) | In a scratch STEP the pins sit on both pads, the peg on its hole, and the housing on the footprint's fab outline |
-| U1 DevKitC | Built at lesson 5 from `pcb10_devkitc()`, the same code as the robot CAD | — |
+| U1 DevKitC | `pcb10.3dshapes/ESP32-S3-DevKitC-1_v1.1.step`, built at lesson 5 from `pcb10_devkitc()`, the same code as the robot CAD, moved into the footprint frame: (X, Y, Z) → (Z − 98.92, X − 44.853, Y + 56.8), pad 1 at the origin | Its pins land on pads 1–22 at x 0 and 23–44 at x 22.86; the fit check finds it on the CAD's DevKitC to 0.000 mm |
 
 ## Layout
 
@@ -421,7 +421,27 @@ Totals: 610 mm of track on F.Cu, 121 mm on In2, 469 mm on B.Cu; 96 vias, all 0.6
 - 57 `lib_footprint_mismatch` warnings, the 1 nm round-off on parts that were turned during placement;
 - 4 `silk_edge_clearance` warnings on J1's housing outline, which overhangs the +X edge by design so the plug can mate (the fab clips silkscreen at the edge).
 
-Reference labels are on the fab layers (`refs_to_fab()`). `audit()`: every part has its 3D model except U1, whose model is built at lesson 5. TP1–TP4 and TP9–TP12 are out of the BOM and position file, and so is U1 (the DevKitC is plugged in, not assembled).
+Reference labels are on the fab layers (`refs_to_fab()`). `audit()`: every part has its 3D model except U1, whose model is built at lesson 5. TP1–TP4 and TP9–TP12 are out of the BOM and position file, and so is U1 (the DevKitC is hand-soldered after assembly, not placed by the fab).
+
+## Checks and outputs (rev A)
+
+- **ERC** 0 errors, 0 warnings. **DRC** with schematic parity: 0 errors, 0 unconnected, plus the cosmetic warnings explained under Routing. **`audit()`**: every part that is placed has its 3D model, U1 included; TP1–TP4, TP9–TP12 and the holes are out of the position file.
+- **DevKitC model:** built from `pcb10_devkitc()` in `final/v1/cad/makad-v1.step.py`, so the board STEP and the robot CAD can't disagree about the DevKitC. Only a rotation and a shift into the footprint's frame (pad 1 at the origin, Z up from the F face) separate the two.
+- **Board STEP:** [`cad/pcb-10-c3-carrier-revA.step`](cad/pcb-10-c3-carrier-revA.step) (`--user-origin 0x0mm`): the board and all 73 modelled parts, unfitted ones included (the worst case for fit). The core runs Z 0–1.516, and parts sit 0.04 mm proud of the copper.
+- **Outputs:** [`fab/revA/`](fab/revA/README.md): Gerber X2 for the four copper layers, both masks, front paste and silkscreen; Excellon drill (plated: 96 vias, the DevKitC's 44 holes, JP1, the Micro-Fit; non-plated: the two screw holes and the Micro-Fit's peg); the BOM and placement (66 parts each, U1 and the unfitted parts out) in KiCad and JLCPCB CPL formats; a Gerber zip and the order parameters. Everything is from the board-local origin, and vias are tented both sides.
+- **Fit in the robot:** [`final/v1/cad/check_pcb10_fit.py`](../../final/v1/cad/check_pcb10_fit.py) places the STEP where the droid CAD has the carrier (droid edits applied) and measures the real parts against the chassis and body (about 6 min). **PASS, 7/7:**
+
+  | Check | Result |
+  |---|---|
+  | Board | Core on the CAD board to 0.000 mm, F face at Y −56.800; area 3383.8 mm² plus 55.7 of drilled holes against the CAD's 3439.5, so the notch matches |
+  | DevKitC | On the CAD's DevKitC to 0.000 mm, 0.043 higher (KiCad's part offset); pin tails to Y −59.86 |
+  | Connectors | All ten (`J10-1` … `J10-12`) on the CAD headers to 0.00 mm, tops 0.04 higher, so the CAD's mated plugs and harness reserves stand as drawn |
+  | Under the DevKitC | 49 parts. Tallest by datasheet: U4/U5 (SOT-23-5/6) **1.45 max** (KiCad's models 1.59), C1/C3 0805 1.45, Q1 1.45; U3 TPS3436 1.10. All ≤ 2.0 (D-068 B), so at least **0.91 mm** to the DevKitC's underside even with KiCad's tall models. The nearest model to the DevKitC itself is 0.56 mm away |
+  | Clear of the droid | Nearest: the board edge **0.50** to the frame; the notch **0.53** to the right DRV8833's terminal block; `J10-8` 1.74 to it; D1 2.00 to the compute tray |
+  | Behind the board | Micro-Fit tails to Y −60.06, **6.10** from the frame; DevKitC tails 3.90; JP1's 14.35 from the shell |
+  | Install | The 2 mm slide up under the hooks is clear; the approach toward the wall is clear for 5.0 mm (2.5 needed), then the DevKitC meets the yaw junction board, PCB-08 |
+
+  Reserves touched at 0.00, by design, as with the CAD carrier: the DevKitC against its own USB service corridor and the head-riser harness route, and the GH headers against the plug-layer reserve their plugs fill. `check_pcb10_mount.py` owns the uprights, hooks, reliefs and screws, and passed 9/9 at set-up; this board changes none of them.
 
 ## Log
 
@@ -433,3 +453,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-28:** board set up (lesson 3). The real connector footprints gave 23 courtyard overlaps at the CAD positions: the board grows 6 mm down for a third row, notched over the right DRV8833's terminal block, with `J10-1` at its real size (D-068 amended; `check_pcb10_mount.py` 9/9). Rule areas over the uprights and under the hooks, proved on a scratch copy. 3D models: TSOT-23-8 for the DDF watchdog, a full-tail Micro-Fit from Molex's drawing; both checked against their pads in a STEP.
 - **2026-10-28:** placement (lesson 4, part 1). Connectors, holes and DevKitC on their proved origins; every part placed with DRC clean (no courtyard, edge or parity errors). Layout-driven changes: `J10-2` reordered to U2's own pin order (pairs run straight), and the GPIO map reassigned to **v0.3** so each track runs to its connector without crossings (both recorded above and at PCB-09 / 05-harness). Routing in progress.
 - **2026-10-28:** routed (lesson 4, part 2) on four layers: In1 solid GND, In2 +3V3 with WDO, C3_READY and SLP as tracks, B for the top-row descents, UART and `+5V_DK` round the edges. Test points cut to the rails plus WDI, WDO, C3_READY and SLP (TP11 retargeted from READY to C3_READY). DRC 0 errors, 0 unconnected, parity clean.
+- **2026-10-28:** rev A design complete (lesson 5). DevKitC 3D model from `pcb10_devkitc()`; board STEP; `check_pcb10_fit.py` 7/7; fab outputs in `fab/revA/`. The first fit run failed on the script, not the board: KiCad writes model names with `_` for `.`, and the STEP cuts holes from the core.

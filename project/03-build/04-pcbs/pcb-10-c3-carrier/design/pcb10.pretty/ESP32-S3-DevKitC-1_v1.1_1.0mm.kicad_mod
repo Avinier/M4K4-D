@@ -55,4 +55,7 @@
   (pad "42" thru_hole oval (at 22.86 5.08) (size 1.7 2.0) (drill 1.0) (layers "*.Cu" "*.Mask") (uuid "c9a75c73-a4e1-561f-b0f9-fcf57aeb1a39"))
   (pad "43" thru_hole oval (at 22.86 2.54) (size 1.7 2.0) (drill 1.0) (layers "*.Cu" "*.Mask") (uuid "f98164f6-1ea8-5267-aa90-0656b568ece9"))
   (pad "44" thru_hole oval (at 22.86 0.00) (size 1.7 2.0) (drill 1.0) (layers "*.Cu" "*.Mask") (uuid "303d6cc3-ceca-500f-babb-3cb07991f1dd"))
+  (model "${KIPRJMOD}/pcb10.3dshapes/ESP32-S3-DevKitC-1_v1.1.step"
+    (offset (xyz 0 0 0)) (scale (xyz 1 1 1)) (rotate (xyz 0 0 0))
+  )
 )
