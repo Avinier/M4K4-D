@@ -2,7 +2,7 @@
 (symbol "TPS3436CCCBGDDFRQ1" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
   (property "Reference" "U" (at -7.62 11.43 0) (effects (font (size 1.27 1.27)) (justify left)))
   (property "Value" "TPS3436CCCBGDDFRQ1" (at -7.62 -11.43 0) (effects (font (size 1.27 1.27)) (justify left)))
-  (property "Footprint" "Package_TO_SOT_SMD:Texas_DDF0008A_SOT-8_1.6x2.9mm_P0.65mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+  (property "Footprint" "pcb10:Texas_DDF0008A_SOT-8_1.6x2.9mm_P0.65mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
   (property "Datasheet" "https://www.ti.com/lit/ds/symlink/tps3436-q1.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
   (property "Description" "Window watchdog, pinout C, open-drain WDO; CCCBG: 500 ms startup, tWC 5 ms, ratio 4/8/32, 200 ms assert (SLVSGF1A)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
   (symbol "TPS3436CCCBGDDFRQ1_0_1" (rectangle (start -7.62 7.62) (end 7.62 -7.62) (stroke (width 0.254) (type default)) (fill (type background))))

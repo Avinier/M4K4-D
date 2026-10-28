@@ -192,15 +192,55 @@ def pcb10_devkitc():
     return Compound(label="C3_ESP32_S3_DEVKITC_1_V11_ESPRESSIF", children=parts)
 
 
+# D-068 amended (lesson 3, board set-up): the real connector footprints don't fit the CAD's two
+# rows 6 mm apart (GH courtyards are 6.6 mm deep; the real Micro-Fit is 9.65 x 9.9 mm, not the
+# 7.26 mm placeholder): 23 courtyard overlaps on a scratch board. The board grows 6 mm down
+# (Z 76..125.5, 70 x 49.5) and the connectors go in three rows, courtyard bands A Z 89.85-96.45,
+# B 83.15-89.75 (with the screws), C 76.3-82.9; J10-1 spans B and C at the +X edge. The right
+# DRV8833's terminal block (chassis, X 43.5-50.5, top Z 76.1) sits 0.11 mm in front of the board
+# plane, so the bottom edge is notched over it (X 42.5-51 up to Z 79) and J10-1 rises 1.8 mm: the
+# 2 mm-low install position clears it. Body centres (X, Z) of each GH header, from the PCB-10
+# placement proved by KiCad DRC.
+PCB10_GH = {"J10-7": (13.13, 93.15), "J10-3": (25.19, 93.15), "J10-4": (34.73, 93.15), "J10-10": (44.29, 93.15),
+            "J10-2": (1.03, 86.45), "J10-5": (13.09, 86.45), "J10-6": (33.03, 86.45),
+            "J10-12": (26.0, 79.6), "J10-8": (37.0, 79.6)}
+PCB10_J10_1 = dict(header=(46.1, 56.0, -56.8, -49.82, 78.6, 88.255),   # Molex SD-43650-001: 9.65 x 9.90 x 6.98
+                   plug=(56.0, 68.0, -56.8, -46.8, 78.6, 88.255))
+PCB10_BOARD_GROWTH = [(-14.0, 42.5, -58.4, -56.8, 76.0, 82.01), (51.0, 56.0, -58.4, -56.8, 76.0, 82.01),
+                      (42.5, 51.0, -58.4, -56.8, 79.0, 82.01)]          # notched over the terminal block
+
+
+def pcb10_connector_moves():
+    """DROID_MOVES for the C3 GH headers and their mated plugs, from C3_GH_ROWS to PCB10_GH."""
+    from body_v1_model import C3_GH_ROWS
+    moves = []
+    for z_old, row in C3_GH_ROWS.items():
+        for cid, n, x0 in row:
+            x_old = x0 + (1.25 * (n - 1) + 4.5) / 2.0      # header body width (BM0nB-GHS-TBT)
+            x_new, z_new = PCB10_GH[cid]
+            tag = cid.replace("-", "_")
+            moves.append((rf"C3_{tag}_(JST_GH_BM{n:02d}B_HEADER|GHR{n:02d}_MATED_PLUG)",
+                          (round(x_new - x_old, 3), 0.0, round(z_new - z_old, 3))))
+    return moves
+
+
+def pcb10_j10_1():
+    m = PCB10_J10_1
+    return [_blk(*m["header"], "C3_J10_1_MICROFIT3_2P_RA_HEADER"), _blk(*m["plug"], "C3_J10_1_MICROFIT3_2P_MATED_PLUG")]
+
+
 _PCB10_CUTS, _PCB10_ADDS = pcb10_upright_edits()
 # Parts dropped whole (label fully matched, leaf or group), and parts inserted, world frame,
 # as new children of the group whose label fully matches.
 DROID_REMOVES = [
     # D-068: the generic DevKitC STEP and its header blocks; the two upper screws.
     r"C3_ESP32_S3_DEVKITC_STEP", r"C3_DEVKIT_HEADER_ROW_[12]", r"C3_CARRIER_M25_SCREW_(HEAD|SHANK)_[24]",
+    # D-068 amended: the 7.26 mm Micro-Fit placeholder blocks, replaced by the real housing below.
+    r"C3_J10_1_MICROFIT3_2P_(RA_HEADER|MATED_PLUG)",
 ]
 DROID_INSERTS = [
     (r"C3_CARRIER_PCB10_WITH_DEVKITC", pcb10_devkitc()),
+    *[(r"C3_CARRIER_PCB10_WITH_DEVKITC", shape) for shape in pcb10_j10_1()],
 ]
 
 
@@ -222,6 +262,10 @@ DROID_CUTS = [
 DROID_ADDS = [
     # D-068: PCB-10 top-edge hooks on the C3 carrier uprights.
     *_PCB10_ADDS,
+    # D-068 amended: the carrier grows 6 mm down for a third connector row; the plug-layer reserve follows.
+    *[(r"C3_CARRIER_PCB10_BOARD", b) for b in PCB10_BOARD_GROWTH],
+    *[(r"C3_CARRIER_TOP_ENTRY_SIGNAL_PLUG_LAYER_RESERVE", (x0, x1, -56.8, -46.0, max(z0, 76.2), z1))
+      for x0, x1, _, _, z0, z1 in PCB10_BOARD_GROWTH],
     # D-063: the slot's front wall moves 0.4 mm back too (X 127.5 -> 127.1), beside the
     # sensor notch (Y 8.3-11.7), so the slot stays 1.0 mm wide and locates the board.
     (r"BALL_POD_PRINTED_SEAT", (127.1, 127.5, 6.9, 8.3, 30.3, 35.0)),
@@ -238,6 +282,10 @@ DROID_ADDS = [
     (r"PCB05_J5_7_MICROFIT3_2P_MATED_PLUG", (64.8, 74.46, -31.0, -19.0, 115.6, 122.6)),
 ]
 DROID_MOVES = [
+    # D-068 amended: C3 GH headers and plugs into the three proved rows; the J10-1 plug reserve down
+    # with the real Micro-Fit (centre Z 89.5 -> 83.43).
+    *pcb10_connector_moves(),
+    (r"C3_CARRIER_EDGE_CONNECTOR_J101_RESERVE", (0.0, 0.0, -6.07)),
     # D-067 amended: J5-1 slides 2 mm toward -Y so the rear spacer fits between it and J5-2;
     # J5-2/J5-4 and J5-6 move 0.225 mm apart (their footprint courtyards touched).
     (r"PCB05_J5_1_(JST_GH_SM10B_HEADER|GHR10_MATED_PLUG)|PCB05_REAR_EDGE_PLUG_RESERVE", (0.0, -2.0, 0.0)),

@@ -86,3 +86,13 @@ How one custom board goes from spec to a committed revision. The steps were work
 | Stock models that don't ship, again | PCB-11's trap hit twice: `TQFN-16-1EP_3x3mm_P0.5mm_EP1.23x1.23mm` names a model the library lacks (only EP1.6 ships), and KiCad has no Micro-Fit models at all. `audit()` passed, because it compares the board with the library's *names*; only the STEP export's "File not found" and its `PRODUCT` list showed the gap | At set-up, check every footprint's model file exists on disk, not just that one is named. `audit()` now flags a named model whose file is missing. Fix with a project footprint copy: a stock model of the same body, or one built from the drawing |
 
 KiCad keeps local history in `design/.history/` (git-ignored). `git log` there shows which save changed what.
+
+## Traps found on PCB-10
+
+| Trap | What happens | Handling |
+|---|---|---|
+| Vendor STEP of a module is a clone | The CAD's DevKitC STEP was a generic board with rows 25.4 mm apart; Espressif's v1.1 has 22.86. Holes drawn from the CAD would have been 2.5 mm off | Take module geometry from the maker's drawing and footprint, and say where it came from. Check that the model's pins sit on the real footprint's pads |
+| Pin tails and fixings under a module | Neither model had header pins (14 tails on the printed uprights), and two of the four fixing screws sat under the soldered-on module, where no driver reaches | Model pins and tails; check that every fixing can be reached in the installed order |
+| CAD connector rows | The CAD's two GH rows were 6 mm apart against 6.6 mm courtyards, and the power header was a block smaller than the part: 23 courtyard overlaps once the real footprints went in | At lesson 3, paste the real footprints at the CAD positions on a scratch board and run DRC before trusting a placeholder layout |
+| Surveying only the body | Growing the board was checked against the frame only; a chassis DRV8833 terminal block sat 0.11 mm in front of the new edge | Survey every subsystem's parts round a board, chassis included, and re-run the targeted fit check after any envelope change |
+| `Shape.cast()` on compounds | In cadgen 0.4.28's build123d, `Shape.cast` returns None for a `TopoDS_Compound` | Downcast explicitly (`TopoDS.Compound_s`); see `_place()` in `check_pcb10_mount.py` |

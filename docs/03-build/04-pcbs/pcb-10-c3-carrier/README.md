@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | **In progress: schematic done, ERC clean**; board set-up next. Inputs frozen with [D-068](../../decisions.md#d-068) | [`check_pcb10_mount.py`](../../final/v1/cad/check_pcb10_mount.py) 8/8 pass | 2026-10-27 |
+| 1. Design | **In progress: board set up** (outline, rules, rule areas, 3D models); placement next. Schematic ERC clean; inputs frozen with [D-068](../../decisions.md#d-068) | [`check_pcb10_mount.py`](../../final/v1/cad/check_pcb10_mount.py) 8/8 pass | 2026-10-27 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -180,7 +180,7 @@ Measured 2026-10-27 in the built body v1 CAD (`body_v1_model.py` with the legacy
 
 | Item | Value |
 |---|---|
-| Board | 70 × 43.5 × 1.6 mm: X −14…56, Z 82…125.5, Y −58.4 (B) … −56.8 (F) |
+| Board | 70 × 43.5 × 1.6 mm in the CAD: X −14…56, Z 82…125.5, Y −58.4 (B) … −56.8 (F). **Grown to Z 76 (70 × 49.5), notched over the DRV8833 terminal block, at board set-up** (D-068 amended, *Board set-up*) |
 | Mounting | Four M2.5 at (X, Z) (−8, 86), (−8, 116), (24, 86), (24, 116), into heat-set inserts in two printed uprights (X −12…−4 and 20…28, Y −66…−58.4, Z 69…126). Heads Ø4.5 × 1.8 on F |
 | F, under the DevKitC | 2.5 mm to the DevKitC's bottom (header plastic). Between the header rows: X −9.9…46.4, Z 100.2…120.5 |
 | F, under the module overhang | X 46.7…53, 4.15 mm to the module |
@@ -324,6 +324,59 @@ KiCad ships no 3D model for the DDF package (`Texas_DDF0008A…`) or the Micro-F
 | `+3V3` from the DevKitC | `+3V3`: U1.1/2, U2–U5 VCC, C3–C8, J3.2, J4.2, J7.1, J8.4, all pull-ups, R34, R36, TP3 | Match |
 | Fixings no net | H1, H2 have no pins | Match |
 
+## Board set-up
+
+[`design/pcb-10-c3-carrier.kicad_pcb`](design/pcb-10-c3-carrier.kicad_pcb), no parts yet (they arrive with F8 at lesson 4).
+
+**Coordinates.** The board is seen from its F face, the DevKitC side, which faces the robot's inside (world +Y). World +X is then to the left. KiCad x = 156 − X, y = 225.5 − Z. Board-local xb = x − 100 (= 56 − X) and yb = 149.5 − y (= Z − 76), with the aux and grid origins at local (0, 0), the bottom-left corner in KiCad's view. KiCad's STEP puts the F face at +Z, which becomes world +Y.
+
+**The connectors didn't fit: [D-068](../../decisions.md#d-068) amended.** Placed at the CAD positions on a scratch board, the real footprints gave **23 courtyard overlaps** in KiCad DRC:
+- the CAD's two GH rows are 6 mm apart, but a GH courtyard is 6.6 mm deep;
+- neighbours in each row overlap by 0.2–0.7 mm;
+- the real Micro-Fit (9.65 × 9.9 mm, Molex SD-43650-001) lands on `J10-8`, `J10-10` and `J10-12`, where the CAD had a 7.26 mm block.
+
+It is the PCB-05 lesson again: placeholder bodies are not footprints. Fixes:
+
+- **The board grows 6 mm down, to Z 76** (70 × 49.5 mm), for a third connector row. Courtyard bands: A Z 89.85–96.45 (`J10-7`, `J10-3`, `J10-4`, `J10-10`), B 83.15–89.75 with the two screws (`J10-2`, `J10-5`, `J10-6`), C 76.3–82.9 (`J10-12`, `J10-8`). `J10-1`, still the right-angle Micro-Fit mating +X at the front edge, spans B and C.
+- **Notched over the right DRV8833's terminal block** (chassis; X 43.5–50.5, top Z 76.1, 0.11 mm in front of the board plane), which the first try ran into in the 2 mm-low install position: the bottom edge steps up to Z 79 over X 42.5–51, `J10-1` rises 1.8 mm (housing Z 78.6–88.26) and `J10-8`/`J10-12` move about 2 mm toward −X.
+- The scratch-board DRC of the final arrangement: **no courtyard, edge or copper violations** (only the scratch board's library-link and silkscreen-thickness flags).
+- The CAD follows in `final/v1/cad` (`PCB10_GH`, `PCB10_J10_1`, `PCB10_BOARD_GROWTH`; `DROID_ADDS`, `DROID_MOVES`, `DROID_REMOVES`/`INSERTS`). **`check_pcb10_mount.py`: 9/9 pass**, including the grown board 0.52 mm from the terminal block, `J10-1` 0.7 mm above it, the slide and approach clear, and the screws reachable.
+
+| Connector | Footprint origin (KiCad) | Rot. | Courtyard band |
+|---|---|---|---|
+| `J10-7` BM08B | (142.87, 132.35) | 0 | A |
+| `J10-3`, `J10-4`, `J10-10` BM04B | (130.81 / 121.27 / 111.71, 132.35) | 0 | A |
+| `J10-2`, `J10-5`, `J10-6` BM06B | (154.97 / 142.91 / 122.97, 139.05) | 0 | B |
+| `J10-12` BM04B, `J10-8` BM05B | (130.0 / 119.0, 145.9) | 0 | C |
+| `J10-1` Micro-Fit 43650-0200 | (108.92, 143.57) | 90 | B + C, mates +X |
+| H1, H2 M2.5 | (164.0 / 132.0, 139.5) | — | B |
+| U1 DevKitC | pad 1 at (111.147, 126.58) | 90 | J1 row low, J3 high |
+
+**Set-up.**
+
+| Item | Value |
+|---|---|
+| Outline | `Edge.Cuts` polygon: x 100–170, y 100–149.5, notch x 105–113.5 up to y 146.5 |
+| Stackup | PCB-06's, 2 layers, 1 oz; core 1.51 mm, so the board is **1.6 mm** (the CAD's) |
+| Rules | `pcb-10-c3-carrier.kicad_dru`: the fab-neutral set, copied from PCB-15 |
+| `UPRIGHT_1/2_B_NO_PARTS` | B.Cu rule areas over the printed uprights (x 160–168 and 128–136, full height): no footprints. Pads stay allowed: the DevKitC's pins go into the uprights' header-row reliefs, and the screws go through |
+| `HOOK_1/2_F_NO_PARTS` | F.Cu rule areas under the hooks' lips (same x, Z 123.6 to the top edge): no footprints, no pads |
+| User.1 `Connectors.Placed` | The proved connector courtyards and screw holes, with each footprint's origin, to place against at lesson 4 |
+| User.2 `DevKitC.Shadow` | The v1.1 board and the module overhang: **parts under it ≤ 2.0 mm, no test points**. KiCad has no height rule; the lesson 5 fit check measures it |
+| User.3 `Frame.Uprights` | Uprights, hooks and the header-row reliefs |
+| User.4 `Back.Ceiling` | 10 mm of air behind the board; the Micro-Fit's 1.6 mm tails and 3.3 mm peg come through |
+| User.5 `Edges` | The frame lug 0.5 mm above the top edge; the notch; `J10-1` mating at the +X edge |
+
+**DRC** (nightly `kicad-cli pcb drc --severity-all`, 2026-10-28): empty board **0 violations**. **Rule areas proved** on a scratch copy with its own `.kicad_pro`/`.kicad_dru` (the PCB-06 trap): an 0402 on B over upright 1 is flagged (`UPRIGHT_1_B_NO_PARTS`); one under hook 2 is flagged with both pads (`HOOK_2_F_NO_PARTS`); one in open space is not; a 0.12 mm track is flagged by the custom rule (`fab-neutral track width`).
+
+**3D models** (the gap from lesson 2):
+
+| Part | Model | Check |
+|---|---|---|
+| U3 TPS3436 (DDF0008A) | Project footprint `pcb10:Texas_DDF0008A_SOT-8_1.6x2.9mm_P0.65mm`: the stock land pattern pointing at KiCad's `TSOT-23-8.step` (KiCad ships none for DDF0008A) | Against TI drawing 4222047/E: body 2.86 (2.85–2.95), width about 1.5–1.6 (1.55–1.65), lead span 2.80 (2.65–2.95), leads 0.30 (0.22–0.38), pitch 0.65. Height 0.95 against TI's **1.1 max**: the fit check uses 1.1. Leads land at ±1.225 mm inside the ±1.3 mm pads in a scratch STEP |
+| J10-1 Micro-Fit 43650-0200 | Project footprint `pcb10:Molex_Micro-Fit_3.0_43650-0200_1x02_P3.00mm_Horizontal` with `pcb10.3dshapes/Molex_Micro-Fit_3.0_43650-0200_full_tails.step`, built from Molex SD-43650-001: housing 9.65 × 9.90 × 6.98 (solid), 0.64 mm pins with the full **3.18 mm tails** (not clipped as on PCB-05: 10 mm of air behind this board), Ø3 peg 3.3 mm long (`E`, drawing text) | In a scratch STEP the pins sit on both pads, the peg on its hole, and the housing on the footprint's fab outline |
+| U1 DevKitC | Built at lesson 5 from `pcb10_devkitc()`, the same code as the robot CAD | — |
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
@@ -331,3 +384,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-27:** design started (lesson 1). Inputs drafted from the sources above and measured in the body CAD. Found the upper mounting screws under the DevKitC, the DevKitC pin tails on the uprights, the CAD DevKitC's 25.4 mm rows (v1.1 is 22.86 mm), the v1.1 LED on GPIO38 and the USB back-feed through `VCC_5V`. `J10-2` named by direction for a straight `W25`; `J10-8` and `J10-10` kept. Gaps 1–4 raised for the builder.
 - **2026-10-27:** inputs frozen with [D-068](../../decisions.md#d-068): two screws and two edge hooks with pin-tail reliefs (CAD in `final/v1/cad`, `check_pcb10_mount.py` 8/8 pass), the Espressif v1.1 DevKitC in the final CAD, TPS3436CCCBG from Mouser India, SOIC-8 transceiver footprint, Schottky against USB back-feed.
 - **2026-10-28:** schematic drawn (lesson 2): Espressif's DevKitC symbol, a new TPS3436CCCBG symbol, a flattened AO3400A, and a DevKitC footprint from Espressif's pads with 1.0 mm holes. ERC 0 errors, 0 warnings; netlist checked row by row against the inputs.
+- **2026-10-28:** board set up (lesson 3). The real connector footprints gave 23 courtyard overlaps at the CAD positions: the board grows 6 mm down for a third row, notched over the right DRV8833's terminal block, with `J10-1` at its real size (D-068 amended; `check_pcb10_mount.py` 9/9). Rule areas over the uprights and under the hooks, proved on a scratch copy. 3D models: TSOT-23-8 for the DDF watchdog, a full-tail Micro-Fit from Molex's drawing; both checked against their pads in a STEP.

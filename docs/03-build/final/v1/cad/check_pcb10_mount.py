@@ -1,7 +1,7 @@
 """D-068: measure the PCB-10 C3 carrier mounting that the droid edits make.
 
 Run from this folder with the legacy runtime and the PYTHONPATH in ../README.md.
-Builds the chassis and body trees (about 1.5 min), not the head.
+Builds the chassis and body trees (about 3 min), not the head.
 
 The carrier keeps its two lower M2.5 screws (Z 86). Each printed upright gets a header-row
 relief for the DevKitC pin tails and a hook over the board's top edge; the module goes in
@@ -204,7 +204,25 @@ def main():
            "; ".join(f"screw {k} at ({x:.0f}, {z:.0f}): driver {d[0]:.2f} mm from {d[1]}; reach with the tray in {r:.1f} mm"
                      for k, x, z, d, r in rows))
 
-    # 6. Installed: DevKitC and hooks against everything else; reserves reported.
+    # 6. D-068 amended: the board grown to Z 76, the GH headers and plugs in their three rows and the real
+    #    J10-1 Micro-Fit, against every fixed part (the board bears on the uprights by design).
+    bb = _box(board)
+    j101 = _box(part["C3_J10_1_MICROFIT3_2P_RA_HEADER"])
+    conn = [(p[-1], s) for p, s in own if p[-1].startswith("C3_J10_") or p[-1] == "C3_CARRIER_PCB10_BOARD"]
+    worst = []
+    for l, s in conn:
+        sb = _box(s)
+        for p, f in fixed:
+            if (l == "C3_CARRIER_PCB10_BOARD" and p[-1].startswith(UPRIGHT)) or not _hit(sb, _box(f), pad=2.0):
+                continue
+            worst.append((s.distance(f), l, p[-1]))
+    worst.sort()
+    report("grown board, connectors and plugs clear of fixed parts",
+           abs(bb[2] - 76.0) < 0.01 and abs((j101[5] - j101[2]) - 9.655) < 0.01 and abs(j101[2] - 78.6) < 0.01 and (not worst or worst[0][0] >= MIN_GAP),
+           f"board Z {bb[2]:.2f}..{bb[5]:.2f}; J10-1 housing X {j101[0]:.2f}..{j101[3]:.2f}, Z {j101[2]:.2f}..{j101[5]:.2f}; nearest: "
+           + ("; ".join(f"{l} {d:.2f} to {o}" for d, l, o in worst[:3]) or "nothing within 2 mm"))
+
+    # 7. Installed: DevKitC and hooks against everything else; reserves reported.
     dev = [(p[-1], s) for p, s in own if any("C3_DEVKITC_V11" in n for n in p)]
     hard, soft = [], []
     for l, s in dev:
