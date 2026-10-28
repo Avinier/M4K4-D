@@ -45,8 +45,8 @@ still to ask.
 
 Finished printed mass, from the CAD mass registers: about 360 g ASA, 420 g PETG,
 140 g PLA, 30 g PA-CF and 40 g TPU, about **1.0 kg** in all. Supports, brims,
-AMS purge and failed prints add about 40–50 %, and test coupons about 200 g, so
-one complete set uses about **1.6 kg** of filament. The [print guide §8](../03-build/final/v1/printguide.md)
+AMS purge and failed prints add about 40–50 %, so one complete set uses about
+**1.5 kg** of filament. The [print guide §8](../03-build/final/v1/printguide.md)
 replaces these masses with per-part figures.
 
 | Route | Estimate | Notes |
@@ -67,7 +67,7 @@ of prints in total: the yaw gears, tight fits and the CF leg will need reprints.
 - **CF for the yoke legs ([D-049](../03-build/decisions.md#d-049)):** the lab has a
   QIDI X-CF Pro (built for CF nylon) and an X1E (hardened nozzle). No CF
   filament is stocked; bring an approved-brand PA-CF (Polymaker or eSun). The
-  ≥ 4.5 GPa coupon is still to be printed and tested.
+  ≥ 4.5 GPa stiffness test bar is still to be printed and tested.
 - **Largest bed:** 300 × 300 × 300 mm (Flashforge Guider II); the poster caps
   parts at 250 mm. The shell (162 × 182 × 110 mm) fits every machine except the
   A1 mini.
@@ -95,4 +95,4 @@ Ask by email or on the next visit; record the answer here with its date.
 - Filament colours in stock, by brand and material, against the [palette](../03-build/final/v1/printguide.md#4-colour-scheme): ivory or white **ASA** and a warm taupe or khaki-grey **ASA**, matte amber or ochre, a very dark blue-grey (deep slate) in **PETG** and **PLA**, a lighter blue-grey (slate blue) **PETG** for the wheels, taupe **PETG** for the keel, matte gunmetal, black TPU 95A. Take photos next to a printed colour card. Screen hex values are only a guide. Numakers and Polymaker spools were seen on the shelves.
 - Heat-set insert tip, a spray area for primer and paint, and use of the
   vacuum former (a possible clear display window, M003).
-- Whether any lab on campus has a UTM for the CF modulus coupon.
+- Whether any lab on campus has a UTM for the CF stiffness test bar.

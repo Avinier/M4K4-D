@@ -2,14 +2,14 @@
 
 `03-build` designs Makad. `04-print` turns the designed parts into printed
 parts. It holds only the raw STL files exported from the CAD, and the READMEs
-and logs around them: part cards, coupons, print logs and measured results. It starts where a `03-build` part is marked `DESIGN` and
-ends when the part is printed, inspected and weighed.
+and logs around them: part cards, print logs and measured results. It starts
+where a `03-build` part is marked `DESIGN` and ends when the part is printed,
+inspected and weighed.
 
 | File | What it holds |
 |---|---|
 | [lab.md](lab.md) | The lab: rules, machines, rates, cost estimate and open permissions |
 | [workflow.md](workflow.md) | The steps every part goes through, the part card, file names and what "print-ready" means |
-| [00-calibration/](00-calibration/README.md) | Coupons that set fits and settings before any real part: tolerances, inserts, bearing seats, TPU, CF, colour swatches |
 | [01-chassis/](01-chassis/README.md) | Chassis v1 prints |
 | `02-body/` | Body v1 prints (not started) |
 | `03-head/` | Head v1 prints (not started) |
@@ -38,10 +38,12 @@ ends when the part is printed, inspected and weighed.
 4. **One decision ledger.** Material, process and fit decisions are recorded
    in [03-build/decisions.md](../03-build/decisions.md). This folder cites
    them. Print settings, results and measurements stay here.
-5. **Fits are tuned in the slicer first.** Hole and clearance offsets found on
-   the calibration coupons go into the slicer (XY hole compensation, per
-   material and printer). The CAD changes, under rule 2, only if a fit cannot
-   be reached that way.
+5. **No separate test prints.** Small real parts go first and are the test:
+   their holes, bearing seats and insert bosses show whether the fits are
+   right before the big parts are printed. A wrong fit is corrected in the
+   slicer (XY hole compensation) if it is a printer offset, or in the CAD
+   under rule 2 if it is a design error. A part whose fit depends on a
+   purchased part waits until that part is in hand and measured.
 6. **Measure and weigh every print.** A part's mass and key dimensions go in
    its subsystem log. The mass registers in `03-build` are hand-kept tables, so
    a measured mass reaches them only when someone updates them.
@@ -57,16 +59,15 @@ the parts that depend on it are printed.
 | Phase | What | Printers | Ends with | Status |
 |---|---|---|---|---|
 | 0. Access | Lab sign-off, faculty sponsor, spools bought and dried; open questions in [lab.md](lab.md#still-open) answered | — | Permission for ASA on the X1E and PA-CF on the X-CF Pro | Open |
-| 1. Calibration | [Coupons](00-calibration/README.md): tolerance, inserts, 688 ZZ seat, J04 junction, a TPU tyre section, colour swatches | A1, X1E | Slicer offsets per printer and material; the D-005 tyre hold settled | Not started |
-| 2. Chassis | [Frame, axle stack, wheels, nose and keel](01-chassis/README.md), about 20 parts, mostly PETG | A1, Guider II; A1 for TPU | The rolling-chassis tests in [chassis testsystem.md](../03-build/01-chassis/v1/testsystem.md) | Not started |
-| 3. Body structure | Body frame and foot cassette, compute tray, yaw stage and gears (PETG) | A1, Guider II | Frame on the chassis; the yaw stage bench test (D-044) | Not started |
-| 4. Body skins | Shell, service panels, wheel-arch pods, trims (ASA, ivory and taupe) | X1E | The shell lowered over the frame; panels and mics fitted | Not started |
-| 5. Head | PLA frames, PA-CF yoke legs (after the modulus coupon), ASA skins, two-tone ears | X1E, X-CF Pro, A1 | Head assembled on the yaw disc; the D-053 assembly paths tried | Not started |
-| 6. Finish | Primer, paint, clear coat, weathering | — | The finished look in the print guide §3 | Not started |
+| 1. Chassis | [Frame, axle stack, wheels, nose and keel](01-chassis/README.md), about 20 parts, mostly PETG. Small parts and one tyre first | A1, Guider II; A1 for TPU | The rolling-chassis tests in [chassis testsystem.md](../03-build/01-chassis/v1/testsystem.md) | Not started |
+| 2. Body structure | Body frame and foot cassette, compute tray, yaw stage and gears (PETG) | A1, Guider II | Frame on the chassis; the yaw stage bench test (D-044) | Not started |
+| 3. Body skins | Shell, service panels, wheel-arch pods, trims (ASA, ivory and taupe) | X1E | The shell lowered over the frame; panels and mics fitted | Not started |
+| 4. Head | PLA frames, PA-CF yoke legs (after a stiffness test bar, D-049), ASA skins, two-tone ears | X1E, X-CF Pro, A1 | Head assembled on the yaw disc; the D-053 assembly paths tried | Not started |
+| 5. Finish | Primer, paint, clear coat, weathering | — | The finished look in the print guide §3 | Not started |
 
-Phases 3 and 5 can overlap with phase 2 once the calibration offsets exist,
-but skins wait until the structure under them fits: a structure change usually
-changes a skin.
+Phases 2 and 4 can overlap with phase 1 once the chassis small parts have shown
+the fits are right, but skins wait until the structure under them fits: a
+structure change usually changes a skin.
 
-**Budget:** about 1.6 kg of filament per complete set and 1.5–2 sets in all.
+**Budget:** about 1.5 kg of filament per complete set and 1.5–2 sets in all.
 See [lab.md § Cost](lab.md#cost).

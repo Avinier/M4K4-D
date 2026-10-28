@@ -13,7 +13,7 @@ BOM to a weighed part in the robot.
    faces that must stay clean (mating faces, bearing seats, insert bosses).
    Check the 1.2 mm minimum wall and the lab's 250 mm limit.
 3. **Settings.** Write the slicer settings on the part card: material profile,
-   walls, infill, the calibration offsets, where fuzzy skin goes, and the
+   walls, infill, any hole offset, where fuzzy skin goes, and the
    colour split for two-tone parts. The lab slices at the printer from the STL
    and these notes.
 4. **Request.** Email the lab at least 4 days ahead with the purpose,
@@ -76,6 +76,7 @@ A part is print-ready when:
 
 - its STL matches the current final v1 CAD (exported after the last change);
 - its orientation, supports and clean faces are on its part card;
-- its slicer settings, with the calibration offsets for that printer and
-  material, are on its part card;
-- the coupons it depends on have passed.
+- its slicer settings, with any hole offset for that printer and material, are
+  on its part card;
+- the purchased parts it must fit (bearings, motors, inserts) are in hand and
+  measured.

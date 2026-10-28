@@ -16,11 +16,11 @@ Orientation, critical dimensions and settings are filled in when each part is ex
 | CH-001 | `CHASSIS_FRAME_REAR_MODULE` (deck, rear rails, skid crossmember) | 1 | PETG, deep slate | A1 or Guider II | | J04 rail ends; keel insert bores | | TODO |
 | CH-001 | `AXLE_MOTOR_CARRIER_L`, `_R` (plate and cheeks, keyed) | 2 | PETG, deep slate | A1 | | Motor face pattern and pilot; J04 key | | TODO |
 | CH-011 | `BATTERY_TUB_BOTTOM_HATCH` | 1 | PETG, deep slate | A1 | | Strap slots; four screw holes | | TODO |
-| CH-051 | `AXLE_BEARING_HOUSING_L`, `_R` | 2 | PETG, deep slate | A1 | | 688 ZZ bores (from the seat coupon) | | TODO |
+| CH-051 | `AXLE_BEARING_HOUSING_L`, `_R` | 2 | PETG, deep slate | A1 | | 688 ZZ bores, tried with the real bearings | | TODO |
 | CH-004 | `WHEEL_L_RIM_PETG`, `WHEEL_R_RIM_PETG` | 2 | PETG, slate blue | A1 | | Hub bore on the stub flange; tyre seat; 12 insert bosses | | TODO |
 | CH-004 | `WHEEL_L_CLAMP_RING_PETG`, `WHEEL_R_CLAMP_RING_PETG` | 2 | PETG, slate blue | A1 | | Clamp face; screw holes | | TODO |
 | CH-058 | `WHEEL_L_HUB_CAP_PETG`, `WHEEL_R_HUB_CAP_PETG` | 2 | PETG, gunmetal | A1 | | Centre screw seat | | TODO |
-| CH-005 | `WHEEL_L_TYRE_TPU95A_L`, `WHEEL_R_TYRE_TPU95A_R` (handed) | 2 | TPU 95A, black | A1 (direct drive) | | Seat bore; keyway; chevron direction per side | | TODO, after the TPU coupon |
+| CH-005 | `WHEEL_L_TYRE_TPU95A_L`, `WHEEL_R_TYRE_TPU95A_R` (handed) | 2 | TPU 95A, black | A1 (direct drive) | | Seat bore; keyway; chevron direction per side | | TODO |
 | CH-002 | `BALL_POD_PRINTED_SEAT` | 1 | PETG, deep slate | A1 | | Caster flange seat; three insert bosses; sensor pocket | | TODO |
 | CH-003 | `BALL_POD_SENSOR_LID` | 1 | PETG, deep slate | A1 | | Rear tongue; lead hump | | TODO |
 | CH-007 | `BALL_NOSE_TOUCH_CAP` | 1 | ASA, ivory | X1E | | 3 mm slide; snap fingers; magnet pocket | | TODO |
@@ -44,19 +44,27 @@ The lab lays the STLs out on the plate; this list is what to ask for together.
 | P03 | Rims and clamp rings | PETG slate blue | |
 | P04 | Hub caps | PETG gunmetal | Small; can share an AMS plate with P03 |
 | P05 | Keel body and TCRT bezel | PETG taupe | |
-| P06 | Tyres | TPU 95A black | After the TPU coupon passes |
+| P06 | Tyres | TPU 95A black | One tyre first; the second once it grips and clamps |
 | P07 | Touch cap | ASA ivory | Prints with the first body-skin plate on the X1E |
 
 ## Order
 
-1. **Coupons first** ([calibration](../00-calibration/README.md)): the PETG
-   tolerance and insert coupons, the 688 ZZ seat, the J04 junction and the TPU
-   tyre section.
-2. **P01 and P02:** the frame and axle stack. They are enough for the first
-   tests in the [chassis test system](../../03-build/01-chassis/v1/testsystem.md):
-   receiving inspection, the axle rig and the J04 joint.
-3. **P03, P04 and P06:** the wheels, for the rolling tests.
-4. **P05 and P07:** the nose and keel, for the sensor tests.
+No separate test prints: the small parts go first and are the test.
+
+1. **First visit: P02 and one tyre.** The bearing housings, motor carriers,
+   hatch and pod seat are small and carry the fits that matter: the 688 ZZ
+   bores, the motor face pattern and the insert bosses. Try them with the real
+   bearings, motor and inserts. One tyre settles the TPU question (D-005): if
+   it grips and clamps, the printed tyre goes ahead; if not, the O-ring
+   fallback. The carriers and housings wait until a motor and the bearings are
+   in hand.
+2. **Fix and re-export** anything that did not fit (slicer offset or a
+   `final/v1` edit), before the big parts.
+3. **Second visit: P01, P03, P04 and the second tyre.** The frame modules
+   (several hours each) and the wheels. Then the first tests in the
+   [chassis test system](../../03-build/01-chassis/v1/testsystem.md):
+   receiving inspection, the axle rig, the J04 joint, rolling.
+4. **Then P05 and P07:** the nose and keel, for the sensor tests.
 
 ## Inserts to have on hand
 
