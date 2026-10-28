@@ -157,13 +157,20 @@ def save():
     b.save()
 
 
+def model_path(filename):
+    """A footprint model's file on disk, with KiCad's path variables resolved."""
+    return Path(filename.replace("${KICAD10_3DMODEL_DIR}", str(APP / "3dmodels")).replace("${KIPRJMOD}", str(design_dir())))
+
+
 def audit():
-    """Footprints missing models, and bare-copper parts still in the position file."""
+    """Footprints missing models (named, or named but not on disk), and bare-copper parts in the position file."""
     for ref, fp in sorted(fps().items()):
         lib = library_models(fp)
+        lost = [m.filename for m in fp.definition.models if not model_path(m.filename).exists()]
         print(f"{ref:5} models {len(fp.definition.models)}/{len(lib)}"
               f"  pos-excluded {fp.attributes.exclude_from_position_files}"
-              f"  bom-excluded {fp.attributes.exclude_from_bill_of_materials}")
+              f"  bom-excluded {fp.attributes.exclude_from_bill_of_materials}"
+              + (f"  MISSING FILE {lost}" if lost else ""))
 
 
 def drc(out="/tmp/kp-drc.rpt"):

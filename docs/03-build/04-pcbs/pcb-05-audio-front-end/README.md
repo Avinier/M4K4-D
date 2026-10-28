@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | In progress: placed (D-067 amended again: one rear and two front spacers), no placement violations; routing next | — | 2026-10-27 |
+| 1. Design | **Done (rev A)**: 4 layers, DRC clean, fit check passes in the droid CAD | [`cad/pcb-05-audio-front-end-revA.step`](cad/pcb-05-audio-front-end-revA.step), [`fab/revA/`](fab/revA/README.md), [`check_pcb05_fit.py`](../../final/v1/cad/check_pcb05_fit.py) | 2026-10-28 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -199,7 +199,8 @@ Taken 2026-10-27 by the builder, the recommended option of each ([D-067](../../d
 | `sym-lib-table`, `pcb05.kicad_sym` | Project symbol library `pcb05`. `ADAU7002` is new: KiCad has none. Pins from Rev. C Fig. 2/Table 4, typed from Table 4 (SDATA tri-state, since it floats outside its 20 bits). `MAX98357A` is KiCad's stock `Audio:MAX98357A` (pins checked against Rev 16) with the exposed pad (pin 17) typed passive: the stock "unspecified" type draws an ERC warning on GND |
 | `fp-lib-table`, `pcb05.pretty/` | Project footprint `ADAU7002_WLCSP-8_0.76x1.56mm_P0.4mm`: KiCad has no 0.4 mm 2 × 4 WLCSP. Balls at ±0.2 × ±0.2/±0.6 mm, A1 top left (Fig. 2/22). **Ø0.23 mm non-solder-mask-defined pads** (0.8 × the Ø0.26 ball), so the copper gap is 0.17 mm against the fab-neutral 0.16. A 0.16 mm mask web can't fit between them, so the pads carry no mask margin and **one mask opening covers the array** (0.80 × 1.60 mm), the usual answer for 0.4 mm WLCSP. Courtyard 0.25 mm outside the package's maximum size |
 | `pcb05.3dshapes/ADAU7002_WLCSP-8_0.76x1.56mm_P0.4mm.step` | Built from Fig. 22 nominals: body 0.76 × 1.56, 0.50 tall, Ø0.26 × 0.20 balls, A1 mark. So the board STEP shows the part (the PCB-11 trap) |
-| Stock footprints | `TQFN-16-1EP_3x3mm_P0.5mm_EP1.23x1.23mm` (U3; the T1633+4 pad is 0.95–1.25), JST GH `SM10B/SM04B/SM02B-GHS-TB` side entry, `Molex_Micro-Fit_3.0_43650-0200`, `Mounting_Wuerth_WA-SMSI-M2_H8mm_9774080243`'s STEP (its land pattern is copied as `pcb05:Wurth_WA-SMSI-M2_H8mm_9774080243_PTH` with the Ø3 hole plated, D-067 I1), 0402/0603/0805 passives, `TestPoint_Pad_D1.0mm` |
+| Project copies of stock footprints (lesson 5) | `pcb05:TQFN-16-1EP_3x3mm_P0.5mm_EP1.23x1.23mm` (U3; the T1633+4 pad is 0.95–1.25) names a model KiCad doesn't ship, so the copy uses the stock EP1.6 TQFN-16 3 × 3 body (the exposed pad is under the part and doesn't change the fit). `pcb05:Molex_Micro-Fit_3.0_43650-0200…`: KiCad has no Micro-Fit models, so `pcb05.3dshapes/Molex_Micro-Fit_3.0_43650-0200_clipped.step` is built from the footprint's fab outline and Molex's 9.65 × 6.98 mm: a solid housing, the two pins with tails clipped to 0.5 mm, and the peg cut flush (decision H1). Same pads as the stock footprints |
+| Stock footprints | JST GH `SM10B/SM04B/SM02B-GHS-TB` side entry, `Mounting_Wuerth_WA-SMSI-M2_H8mm_9774080243`'s STEP (its land pattern is copied as `pcb05:Wurth_WA-SMSI-M2_H8mm_9774080243_PTH` with the Ø3 hole plated, D-067 I1), 0402/0603/0805 passives, `TestPoint_Pad_D1.0mm` |
 
 **Circuit** (references as drawn):
 
@@ -344,6 +345,27 @@ Totals: 296 mm of track on F.Cu, 171 mm on In2, 84 mm on B.Cu; 59 vias, all 0.67
 
 **DRC** (nightly `kicad-cli pcb drc --schematic-parity --severity-all`, fab-neutral `.kicad_dru`, 2026-10-27): **0 errors, 0 unconnected pads, 0 schematic-parity issues**, and no keep-out, courtyard or clearance hits. Reference labels are on the fab layers (`refs_to_fab()`), so the silkscreen findings are gone. 30 warnings remain, all `lib_footprint_mismatch`, on parts that were turned at some point during placement, including some turned back to 0°. R2 was diffed against the library: identical pads, and outlines 1 nm off (`0.469999` against `0.47`), the round-off PCB-15 found. `audit()`: every footprint has its 3D model; TP1–TP12 are out of the BOM and position file. **U1 and U2 had none:** the project ADAU7002 footprint writes its `(model …)` on one line, and `kp.library_models()` only parsed the multi-line form, so `place()` could never restore it. The parser now balances parentheses, and the models are back (the board STEP would otherwise have left out both converters, PCB-11's trap).
 
+## Checks and outputs (rev A)
+
+- **ERC** 0 errors, 0 warnings. **DRC** with schematic parity: 0 errors, 0 unconnected, and the 30 cosmetic `lib_footprint_mismatch` warnings explained under Routing. **`audit()`**: every footprint has its 3D model and every model file exists (`audit()` now checks the file too); TP1–TP12 are out of the BOM and the position file.
+- **Two models were missing** and showed up only at the STEP export: U3's stock TQFN footprint and J7's Micro-Fit name models KiCad doesn't ship. Both now use project footprint copies (Schematic, project set-up); the schematic's footprint fields and the board's library IDs were changed together, so parity stays clean without an F8.
+- **Board STEP:** [`cad/pcb-05-audio-front-end-revA.step`](cad/pcb-05-audio-front-end-revA.step): the board and all 43 modelled parts, unfitted ones included (the worst case for fit). The core runs Z 0–1.516; parts sit 0.085 above it.
+- **Outputs:** [`fab/revA/`](fab/revA/README.md): Gerber X2 for the four copper layers, both masks, front paste and silkscreen; Excellon drill (plated: 59 vias, J7's pins, the three Ø3 spacer holes; non-plated: J7's peg); the BOM and placement in KiCad and JLCPCB CPL formats; all from the board-local origin; a Gerber zip and the order parameters. Vias are tented both sides.
+- **Fit in the robot:** [`final/v1/cad/check_pcb05_fit.py`](../../final/v1/cad/check_pcb05_fit.py) places the STEP where the droid CAD has the board (droid edits applied) and measures it against the chassis and body, the shell, yaw cartridge and panels included (about 8 min). **PASS, 8/8:**
+
+  | Check | Result |
+  |---|---|
+  | Board | Core on the CAD board to 0.000 mm; top face Z 115.600 |
+  | Spacers | All three on the D-067 points (offset 0.000); tops at Z 123.64, the boss undersides plus KiCad's 0.04 mm part offset |
+  | Connectors | J5-1…J5-6 mating faces 0.52 mm inside the CAD faces, centred to 0.00; J5-7 0.98 inside, 0.15 along the edge. Every plug and lead stays inside the CAD's plug and edge reserves |
+  | Parts reserve | Tallest part (C1/C8 0805) to Z 116.89, against the reserve's 123.00 |
+  | Clear of the droid | Nearest: J7's housing **0.98 mm** under the front −Y boss; the core 2.13 mm and the spacers 2.33 mm above the Pi |
+  | Other reserves | None within 3 mm |
+  | Under the board | J7's clipped tails and flush peg **1.63 mm** above the Pi's USB jack (decision H's 0.5 mm margin); the core's underside 2.13 mm |
+  | Install slide | From 40 mm in front, 1 mm low, then up: nearest a spacer 0.46 mm under the frame at the last step |
+
+  `check_pcb05_mount.py` is unchanged by this board: it owns the bosses, bores, screws and driver paths, and passed 7/7 at placement.
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
@@ -356,3 +378,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-27:** lesson 4, placement. F8 by the builder; parts placed through KiPy in groups. The fixed parts collided with the D-067 fixing (spacer rings on GH pads, courtyards, J7's real 9.65 mm housing): decision J1 taken, one rear spacer at (48.5, 9.8) and two front at (61.3, ±9.8), `J5-1` 2 mm toward −Y; D-067 amended, CAD and mount check updated, USB rule areas re-notched. All parts placed; no copper, clearance or courtyard violations. Routing next.
 - **2026-10-27:** routing started. The amp corner routed on two layers (0.5 mm 5 V trunk and speaker pair, a B.Cu hop for the unfitted R14/R15 branch, ground vias) and a B.Cu GND plane poured. The left half needed 12–16 plane hops on two layers: decision L2 taken (four layers, In1/In2 GND) and J1 reordered (LRCLK above BCLK); D-067 amended. Mount check for decision J: 7/7 after cutting the CAD's J5-7 block to Molex's 6.98 mm mated height.
 - **2026-10-27:** routing finished on four layers. The bus runs on B.Cu, the slow rows and mic up-feeds on In2, and the down-feeds on F.Cu and B.Cu. J1 pins 7/8 swapped while routing (7 SDI1, 8 SDI0) so the In2 rows don't cross; D-067, audiosystem.md and PCB-09 updated. Moved while routing: R6/R7 to the converters, C5–C7 and TP3/4/6/7/8/10. Found and fixed: the 0.31 mm via-copper rule (five vias moved), J6's shell pads unconnected, U1/U2 without 3D models (`kp.library_models()` one-line parse), In2 slotted under the clock bus (four stitching vias). DRC 0 errors, 0 unconnected, parity clean; 30 cosmetic `lib_footprint_mismatch`.
+- **2026-10-28:** lesson 5, checks and outputs. The board STEP showed two stock footprints naming models KiCad doesn't ship (U3's TQFN, J7's Micro-Fit); both got project copies, J7 a model built from Molex's dimensions with clipped tails. `kp.audit()` now checks model files exist. Fab outputs in `fab/revA/` (4-layer Gerbers, drill, BOM, placement, CPL, zip, order parameters). `check_pcb05_fit.py` added: 8/8 pass (its first run's under-board row measured J7 against the boss above, and was fixed to crop below the board). **Rev A design done.**
