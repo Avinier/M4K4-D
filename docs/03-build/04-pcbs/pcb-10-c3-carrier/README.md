@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | **In progress: inputs frozen** ([D-068](../../decisions.md#d-068)); schematic next | [`check_pcb10_mount.py`](../../final/v1/cad/check_pcb10_mount.py) 8/8 pass | 2026-10-27 |
+| 1. Design | **In progress: schematic done, ERC clean**; board set-up next. Inputs frozen with [D-068](../../decisions.md#d-068) | [`check_pcb10_mount.py`](../../final/v1/cad/check_pcb10_mount.py) 8/8 pass | 2026-10-27 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -68,7 +68,7 @@ Two facts the pin map v0.1 did not have:
 
 GPIO35–37 are free on the N8 module (they go to octal PSRAM only on R8 variants, `CA-03`).
 
-### GPIO map (build v0.2, proposed)
+### GPIO map (build v0.2, D-068)
 
 Pin map v0.1 (RP-03 §3.2) plus the changes since: power-boards §2.4 (D-038), D-013, D-016, D-041 and board-specs §7. Strapping pins 0/45/46 and USB 19/20/43/44 stay unconnected on the carrier.
 
@@ -247,9 +247,87 @@ India-held window watchdogs on element14 (TPS3813K33, MAX6323) have windows of h
 12. CAD: the body source keeps the clone DevKitC and four screws (subsystem sources are not edited); the final CAD replaces them (D-068 `DROID_REMOVES`/`DROID_INSERTS`). Espressif's footprint (`espressif/kicad-libraries`, `ESP32-S3-DevKitC`) is the DevKitC footprint, with the drill opened to about 1.0 mm for 0.64 mm square pins.
 13. **Stage 3 harness:** the v1.1 board's UART USB-C touches `HARNESS_HEAD_RISER_LOWER` (0.5 × 0.6 mm), and that reserve already crosses the USB service corridor. Re-route the head riser.
 
+## Schematic
+
+[`design/pcb-10-c3-carrier.kicad_sch`](design/pcb-10-c3-carrier.kicad_sch), with a PDF print, [`pcb-10-c3-carrier-schematic.pdf`](design/pcb-10-c3-carrier-schematic.pdf). One A2 sheet, written for the KiCad 10.99 nightly. As on PCB-05, every pin end carries a short wire and a local label, and nets join by label name; the notes are in one column at the right.
+
+**Project set-up.**
+
+| File | Holds |
+|---|---|
+| `pcb-10-c3-carrier.kicad_pro` | PCB-06's project, renamed: the fab-neutral board minimums and default net class |
+| `pcb-10-c3-carrier.kicad_dru` | The fab-neutral rules ([D-062](../../decisions.md#d-062)), copied from PCB-15 |
+| `sym-lib-table`, `pcb10.kicad_sym` | Project symbol library `pcb10`. **`ESP32-S3-DevKitC`** is Espressif's own symbol (`espressif/kicad-libraries`, `Espressif.kicad_sym`), with only its footprint field changed. Pads 1–22 are J1 pins 1–22; pads 23–44 are J3 pins 22–1 (pad *n* = J3 pin 45 − *n*), as Espressif's footprint numbers them. **`TPS3436CCCBGDDFRQ1`** is new (KiCad has only the TPS3430): pinout C from SLVSGF1A Fig. 6-3 and Table 6-1, `WDO` typed open collector. **`AO3400A`** is KiCad's `Q_NMOS_GSD` body with AO3400A's fields: the stock AO3400A is a derived symbol (the playbook's ERC library-mismatch trap) |
+| `fp-lib-table`, `pcb10.pretty/` | **`ESP32-S3-DevKitC-1_v1.1_1.0mm`**: Espressif's `ESP32-S3-DevKitC` pad positions (2 × 22 at 2.54 mm, rows 22.86 mm apart), with holes opened from 0.8 to **1.0 mm** for the pre-soldered 0.64 mm square pins (0.9 mm diagonal) and pads grown to 1.7 × 2.0 mm (0.35 mm ring). F.Fab draws the v1.1 board and module from Espressif's drawing. The courtyard covers only the two header-plastic rows, because parts may sit in the 2.5 mm gap under the board; lesson 3 sets that height limit as a rule area |
+| Stock parts | THVD1451D (`Interface_UART`), 74LVC1G08 and 74LVC1G11 (`74xGxx`), all checked against the datasheet pinouts in *Inputs*; JST GH `BM0nB-GHS-TBT` top entry; Molex `43650-0200` right angle; SOD-123, SOT-23/-5/-6, `Texas_DDF0008A`, SOIC-8; 0402/0603/0805 passives; `TestPoint_Pad_D1.0mm`; `MountingHole_2.7mm_M2.5`; 2.00 mm 1 × 2 header for `JP_SVC` |
+
+KiCad ships no 3D model for the DDF package (`Texas_DDF0008A…`) or the Micro-Fit, and none exists for the DevKitC. They get project models at lesson 5, so the board STEP shows them (the PCB-11 trap).
+
+**Circuit** (references as drawn):
+
+| Ref | Part | Nets |
+|---|---|---|
+| U1 | Espressif ESP32-S3-DevKitC-1-N8 v1.1 (CH-045) | GPIO map v0.2. 3V3 (pads 1, 2) is the carrier's `+3V3`; 5V (21) on `+5V_DK`; RST/EN (3) on `WDO`; G (22, 23, 24, 44). Unused pads 8, 9, 13, 14, 25, 26, 30, 31, 35, 36, 42, 43 carry no-connect flags. Not in the position file: hand-soldered after PCBA, tails clipped to 1.5 mm |
+| J1 (`J10-1`) | Molex 43650-0200, W11 | 1 `+5V_IN`, 2 GND |
+| D1 | B5819W Schottky, SOD-123 (LCSC C8598) | `+5V_IN` → `+5V_DK` (D-068 E) |
+| C1, C2 / C3, C4 | 10 µF 0805 + 100 nF | `+5V_IN` / `+3V3` bulk |
+| U3 | TPS3436CCCBGDDFRQ1 | `WDI` (3) ← GPIO48, `MR` (2), `WD_EN` (6), SET0 (1) and SET1 (5) to GND, `WDO` (7), VDD (8) `+3V3`; C5 100 nF |
+| R1–R4 | 10 kΩ | Pull-ups on `WDI`, `WDO`, `WD_EN`, `MR` (board-specs §7; `MR` per gap 7) |
+| JP1 | 2.00 mm 1 × 2 header | `JP_SVC`: `WD_EN` to GND = watchdog off and READY low |
+| U5 | 74LVC1G11 | `READY` = `WDO` (A) ∧ `WD_EN` (B) ∧ `MCU_RDY` (C); C6 100 nF; R5 10 kΩ pull-down on `MCU_RDY` (GPIO2) |
+| R6 | 1 kΩ | `READY` → `C3_READY` (`J10-12` pin 2) |
+| U4 | 74LVC1G08 | `SLP` = `NSLEEP` (GPIO21) ∧ `READY`; C7 100 nF; R7, R8 100 kΩ pull-downs on both inputs (power-boards §2.4) |
+| R9, R10 | 1 kΩ | `SLP` → `SLP_L` (`J10-5` pin 1), `SLP_R` (`J10-6` pin 1) |
+| J5, J6 (`J10-5/6`) | BM06B-GHS-TBT | 1 SLP, 2 IN1, 3 IN2, 4 `FLT`, 5 GND, 6 no connect |
+| R11–R14 | 100 Ω | GPIO11/12 → `IN1_L/R`, GPIO13/14 → `IN2_L/R` |
+| R15, R16 | 10 kΩ, 1 kΩ | `FLT` pull-up; `FLT` → `NFAULT` (GPIO9) |
+| J2 (`J10-2`) | BM06B-GHS-TBT | 1 GND, 2 `C3TX_P`, 3 `C3TX_N`, 4 `C0TX_P`, 5 `C0TX_N`, 6 no connect |
+| U2 | THVD1451DR (alternate MAX3490EESA+) | D (3) ← `UART_TX` GPIO17, R (2) → `UART_RX` GPIO18, Y/Z (5/6) → `C3TX_P/N`, A/B (8/7) ← `C0TX_P/N`; C8 100 nF |
+| R17 | 120 Ω | Across `C0TX_P/N`: this end's receiver termination |
+| R18, R19 | 560 Ω, DNP | Idle bias `C0TX_P` to 3V3 and `C0TX_N` to GND, fitted only with the MAX3490 (about 0.32 V across 120 Ω) |
+| J3, J4 (`J10-3/4`) | BM04B-GHS-TBT | 1 GND, 2 `+3V3`, 3 A, 4 B |
+| R20–R23; R24–R27 | 100 Ω; 10 kΩ DNP | Encoder series into GPIO4–7; pull-ups to 3V3 until the encoder output type is known |
+| J7 (`J10-7`) | BM08B-GHS-TBT | 1 `+3V3`, 2 GND, 3 SCLK, 4 MOSI, 5 MISO, 6 CS, 7 INT1, 8 (INT2) no connect |
+| R28–R31; R32; R33 | 33 Ω; 1 kΩ; 10 kΩ | SPI series (GPIO37, 35, 36, 41); INT1 into GPIO42; CS pull-up so the IMU is deselected at boot |
+| J10 (`J10-10`) | BM04B-GHS-TBT | 1 `LED_A`, 2 `LED_K`, 3 `TCRT_OUT`, 4 GND |
+| R34, Q1, R35 | 100 Ω 0603, AO3400A, 100 kΩ | LED from 3V3, low-side switch on GPIO47, gate pull-down (rear-tcrt-lead.md R1, Q1, R3) |
+| R36, C9, R37 | 10 kΩ 0603 (bench value), 1 nF, 1 kΩ | `TCRT_OUT` load and fail-safe pull-up (R2), ADC filter (C3), series into GPIO8 |
+| J8 (`J10-8`) | BM05B-GHS-TBT | 1 `+5V_IN`, 2 GND, 3 `GP2Y_VO`, 4 `+3V3`, 5 `HALL_OUT` |
+| C10 | 10 µF 0805 | `+5V_IN` at J8 pin 1 (GP2Y bypass, gap 8) |
+| R38, R39, C11 | 10 kΩ, 22 kΩ, 100 nF | `GP2Y_VO` → `GP2Y_ADC` (GPIO1): × 0.69, so 2.70 V at 10 cm reads 1.86 V and a 5 V fault 3.44 V (under the S3's 3.6 V). The GP2Y updates every ~38 ms, so the 0.7 ms filter costs nothing (gap 9) |
+| R40, R41, C12 | 1 MΩ, 1 kΩ, 1 nF | `HALL_OUT` open-wire pull-down (reads 0 V = fault), series and sample cap into GPIO10 (gap 9) |
+| J12 (`J10-12`) | BM04B-GHS-TBT | 1 GND, 2 `C3_READY`, 3 `MOTOR_PRESENT`, 4 GND |
+| R42, R43 | 1 kΩ, 100 kΩ | `MOTOR_PRESENT` series into GPIO40, pull-down (fail-inactive) |
+| TP1–TP15 | Ø1.0 pads, not in the BOM | `+5V_IN`, `+5V_DK`, `+3V3`, GND, `C3TX_P/N`, `C0TX_P/N`, `WDI`, `WDO`, `READY`, `SLP`, `FLT`, `MR`, `WD_EN`. Placed outside the DevKitC's shadow (lesson 1) |
+| H1, H2 | Ø2.7 mm holes | The two lower M2.5 screws (D-068 A); no net |
+
+`PWR_FLAG` sits on `+5V_IN` (enters on J1), `+5V_DK` (the diode's output), `+3V3` (the DevKitC's regulator, whose pins Espressif types as power inputs) and GND. Unfitted parts carry KiCad's DNP flag.
+
+**ERC** (nightly `kicad-cli sch erc --severity-all`, 2026-10-28): **0 errors, 0 warnings.**
+
+**Check against the inputs**, row by row, from the exported netlist:
+
+| Input (lesson 1, D-068) | Netlist | Result |
+|---|---|---|
+| GPIO map v0.2 | `ENC_L_A/B` U1.4/5, `ENC_R_A/B` U1.6/7, `UART_TX/RX` U1.10/11, `TCRT_ADC` U1.12 (GPIO8), `NFAULT` U1.15, `HALL_ADC` U1.16 (GPIO10), `IN1_L/R` U1.17/18, `IN2_L/R` U1.19/20, `NSLEEP` U1.27 (GPIO21), `TCRT_LED_EN` U1.28 (GPIO47), `WDI` U1.29 (GPIO48), IMU MOSI/MISO/SCLK U1.32/33/34 (GPIO35/36/37), `MOTOR_PRESENT_MCU` U1.37 (GPIO40), `IMU_CS_MCU` U1.38 (GPIO41), `IMU_INT1_MCU` U1.39 (GPIO42), `MCU_RDY` U1.40 (GPIO2), `GP2Y_ADC` U1.41 (GPIO1) | Match |
+| Unused pins open | U1 8, 9, 13, 14, 25, 26, 30, 31, 35, 36, 42, 43 unconnected (GPIO15, 16, 3, 46, 19, 20, 45, 0, 38, 39, 44, 43) | Match |
+| 5 V in, back-feed diode | `+5V_IN`: J1.1, D1.2 (A), C1, C2, C10, J8.1, TP1. `+5V_DK`: D1.1 (K), U1.21, TP2 | Match |
+| Watchdog pinout C, SET 00 | `WDI` U3.3, R1, U1.29, TP9. `WDO` U3.7, R2, U1.3 (EN), U5.1, TP10. `WD_EN` U3.6, R3, JP1.1, U5.3, TP15. `MR` U3.2, R4, TP14. U3.1, U3.5, U3.4 on GND | Match |
+| READY = WDO ∧ WD-EN ∧ MCU_RDY; 1k out | `MCU_RDY` U5.6, R5, U1.40. `READY` U5.4, R6, R8, U4.2, TP11. `C3_READY` R6, J12.2 | Match |
+| SLP = NSLEEP ∧ READY, pulled down | `NSLEEP` U1.27, R7, U4.1. `SLP` U4.4, R9, R10, TP12 → `SLP_L` J5.1, `SLP_R` J6.1 | Match |
+| `FLT` wired-OR, 10k pull-up, GPIO9 | `FLT` J5.4, J6.4, R15, R16, TP13. `NFAULT` R16, U1.15 | Match |
+| `J10-2` by direction, 120 Ω at this receiver | `C3TX_P/N` U2.5/6 → J2.2/3. `C0TX_P/N` J2.4/5 → U2.8/7, R17 across, R18/R19 (DNP). J2.6 open | Match |
+| `J10-8` order; nose circuits | J8.1 `+5V_IN`, J8.2 GND, J8.3 `GP2Y_VO` → R38 → `GP2Y_ADC` (R39, C11), J8.4 `+3V3`, J8.5 `HALL_OUT` (R40) → R41 → `HALL_ADC` (C12) | Match |
+| `J10-10` order; TCRT circuit | J10.1 `LED_A` ← R34 ← `+3V3`. J10.2 `LED_K` → Q1.3 (D); Q1.1 (G) `TCRT_LED_EN` with R35; Q1.2 (S) GND. J10.3 `TCRT_OUT` R36, C9, R37 → `TCRT_ADC` | Match |
+| `J10-3/4`, `J10-5/6`, `J10-7`, `J10-12` orders | J3/J4 1 GND, 2 `+3V3`, 3 A, 4 B. J5/J6 1 SLP, 2 IN1, 3 IN2, 4 FLT, 5 GND, 6 open. J7 1 `+3V3`, 2 GND, 3–7 SCLK, MOSI, MISO, CS, INT1, 8 open. J12 1 GND, 2 `C3_READY`, 3 `MOTOR_PRESENT`, 4 GND | Match |
+| One ground; every GH mounting pad on GND | `GND`: U1.22/23/24/44, U2–U5 grounds, J1.2, every J pin and MP named GND, JP1.2, Q1.2, all pull-downs and capacitors | Match |
+| `+3V3` from the DevKitC | `+3V3`: U1.1/2, U2–U5 VCC, C3–C8, J3.2, J4.2, J7.1, J8.4, all pull-ups, R34, R36, TP3 | Match |
+| Fixings no net | H1, H2 have no pins | Match |
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
 
 - **2026-10-27:** design started (lesson 1). Inputs drafted from the sources above and measured in the body CAD. Found the upper mounting screws under the DevKitC, the DevKitC pin tails on the uprights, the CAD DevKitC's 25.4 mm rows (v1.1 is 22.86 mm), the v1.1 LED on GPIO38 and the USB back-feed through `VCC_5V`. `J10-2` named by direction for a straight `W25`; `J10-8` and `J10-10` kept. Gaps 1–4 raised for the builder.
 - **2026-10-27:** inputs frozen with [D-068](../../decisions.md#d-068): two screws and two edge hooks with pin-tail reliefs (CAD in `final/v1/cad`, `check_pcb10_mount.py` 8/8 pass), the Espressif v1.1 DevKitC in the final CAD, TPS3436CCCBG from Mouser India, SOIC-8 transceiver footprint, Schottky against USB back-feed.
+- **2026-10-28:** schematic drawn (lesson 2): Espressif's DevKitC symbol, a new TPS3436CCCBG symbol, a flattened AO3400A, and a DevKitC footprint from Espressif's pads with 1.0 mm holes. ERC 0 errors, 0 warnings; netlist checked row by row against the inputs.

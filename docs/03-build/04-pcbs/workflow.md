@@ -16,7 +16,7 @@ PCB-01 has no folder. It is the bought TIFPS0629 ([D-019](../decisions.md#d-019)
 | [pcb-07-base-imu](pcb-07-base-imu/README.md) | Base IMU | CH-021 | Not started | — | — |
 | [pcb-08-yaw-junction](pcb-08-yaw-junction/README.md) | Yaw junction | CH-083 | Not started | — | — |
 | [pcb-09-c0-link-adapter](pcb-09-c0-link-adapter/README.md) | C0 link adapter | CH-084 | Not started | — | — |
-| [pcb-10-c3-carrier](pcb-10-c3-carrier/README.md) | C3 controller carrier | CH-044 | In progress (inputs frozen, D-068) | — | — |
+| [pcb-10-c3-carrier](pcb-10-c3-carrier/README.md) | C3 controller carrier | CH-044 | In progress (schematic, ERC clean) | — | — |
 | [pcb-11-status-led](pcb-11-status-led/README.md) | Status LED carrier | CH-085 | Done (rev A) | Waits for the design batch | — |
 | [pcb-12-c2-head-carrier](pcb-12-c2-head-carrier/README.md) | C2 head carrier | CH-086 | Not started | — | — |
 | [pcb-13-charge-inlet](pcb-13-charge-inlet/README.md) | Charge inlet | BO-015 | Not started | — | — |

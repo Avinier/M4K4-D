@@ -1,0 +1,39 @@
+(version 1)
+
+# Fab-neutral rules (04-pcbs README, "Fab-neutral design rules", D-062): the strictest
+# standard 2-layer 1 oz limits of JLCPCB, PCBWay and Lion Circuits' MII (Make in India)
+# service, read from their capability pages on 2026-10-25. Lion MII sets every via rule.
+# Later rules in this file take precedence over earlier ones.
+
+(rule "fab-neutral copper clearance"
+	(constraint clearance (min 0.16mm)))
+
+(rule "fab-neutral track width"
+	(condition "A.Type == 'Track'")
+	(constraint track_width (min 0.16mm)))
+
+(rule "fab-neutral via size"
+	(condition "A.Type == 'Via'")
+	(constraint hole_size (min 0.35mm))
+	(constraint annular_width (min 0.16mm))
+	(constraint via_diameter (min 0.67mm)))
+
+# Lion MII: 12 mil from a via to a trace, read as via copper to other-net copper (the
+# stricter reading), and kept from the drilled hole as well.
+(rule "fab-neutral via to other copper"
+	(condition "A.Type == 'Via' && A.Net != B.Net")
+	(constraint clearance (min 0.31mm)))
+
+(rule "fab-neutral hole to other copper"
+	(constraint hole_clearance (min 0.31mm)))
+
+(rule "fab-neutral copper to board edge"
+	(constraint edge_clearance (min 0.3mm)))
+
+(rule "fab-neutral hole to hole"
+	(constraint hole_to_hole (min 0.31mm)))
+
+(rule "fab-neutral silkscreen text"
+	(layer "?.Silkscreen")
+	(constraint text_height (min 1.0mm))
+	(constraint text_thickness (min 0.16mm)))
