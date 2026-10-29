@@ -5,7 +5,7 @@
 | Status | Circuit closed on paper, 2026-10-04 ([D-040](../decisions.md#d-040)). No schematic capture, layout, NVM image or bench result. Every value below is `D` or arithmetic on `D` unless marked |
 | Scope | Everything between the adapter and the pack's `BATBUS` entry: inlet, PD negotiation, input switch, charger, battery sense, pack temperature, status. The `OFF/OPERATE/CHARGE` latch, `SYS` gating and pack sensing on PCB-02 stay as RP-02 [board-specs.md §4.1–4.2](../../02-prototypes/RP-02-electrical/board-specs.md) |
 | Supersedes | RP-02 board-specs §4.1 rows "Charge inlet" and "Input switch", and §4.5.1 values for `TS`, the `VBUS`/`PMID` capacitor voltage, `D+`/`D−` and `QON`. Everything else in §4 stands |
-| Sources read | TI BQ25798 SLUSDV2C (June 2026); ST STUSB4500 DS12499 Rev 3; TI TVS2200 SLVSED5C; GCT USB4140 drawing (2024-08-29); Würth 74437346022; SEMITEC catalogue 129M (103AT table); ST ESDA25W and STL6P3LLH6 distributor summaries (ST's own PDFs did not download) |
+| Sources read | TI BQ25798 SLUSDV2C (June 2026); ST STUSB4500 DS12499 Rev 3; TI TVS2200 SLVSED5C; GCT USB4140 drawing (2024-08-29); Würth 74437346022; SEMITEC catalogue 129M (103AT table); ST ESDAxxxWx Rev 2 (ESDA25W) and STL6P3LLH6 DS9257 Rev 4, read from mirrors of ST's PDFs on 2026-10-28 (CP-OI-03) |
 | Evidence labels | `D` datasheet, `E` estimate, `U` unknown, `W` measured. No `W` value exists |
 
 ## 1. What changed
@@ -49,19 +49,19 @@ Nothing upstream of `VSNK` is live until a source attaches and a 9 V or 15 V con
 |---|---|---|---|---|
 | J1 | GCT **USB4140-GF-0170-C** | Vertical, 6-pin power-only, H 6.50 mm; 3 A on `VBUS`, 4.25 A on `GND`, 1.25 A on CC; 48 V; 5–20 N mating; 20k cycles; four 1.70 mm shell stakes (`D`) | A9/B9 `VBUS`, A12/B12 `GND`, A5 `CC1`, B5 `CC2`, shell to `GND` | Through-hole stakes carry the plug loads; no D+/D− to route; the 1.70 mm stake suits a 1.6 mm board |
 | D1 | TI **TVS2200DRVR** | 22 V standoff, 24.6–27.6 V breakdown, 28 V maximum clamp at 40 A 8/20 µs, level-4 ESD (`D`) | `VBUS`–`GND` at J1 | Lets a 20 V source through and clamps below the BQ25798's 30 V `VBUS`/`VAC` absolute maximum. The ESDA25P35 cannot do both |
-| D2 | ST **ESDA25W** | Dual, 24 V standoff, 25 V minimum breakdown, 65 pF, IEC 61000-4-2 level 4 (`D`, distributor) | `CC1`, `CC2` to `GND`, beside J1 | ST's own STUSB4500 reference part; the standoff is above the 22 V CC short-to-`VBUS` tolerance |
+| D2 | ST **ESDA25W** | Dual, 24 V standoff, 25 V minimum breakdown, 65 pF, IEC 61000-4-2 level 4 (`D`) | `CC1`, `CC2` to `GND`, beside J1 | ST's own STUSB4500 reference part; the standoff is above the 22 V CC short-to-`VBUS` tolerance |
 | C1 | 4.7 µF 50 V X7R 1206 | | `VBUS`–`GND` | ST reference value; inside the USB PD 1–10 µF pre-switch sink limit together with C2 |
 | C2 | 1 µF 50 V X7R 0603 | | U1 `VDD` | |
 | U1 | ST **STUSB4500QTR** | `VDD` 4.1–22 V, 28 V absolute maximum; CC 22 V tolerant (`D`) | `VDD` ← `VBUS`; `VSYS` → `GND`; `CC1DB`–`CC1`, `CC2DB`–`CC2` (dead battery) | A flat pack must still negotiate |
 | C3, C4 | 1 µF 10 V 0402 | | `VREG_1V2`, `VREG_2V7` | Datasheet value |
 | R1 | 1 kΩ 0603 | 20 mA at 20 V, below the 50 mA pin limit | `VBUS_VS_DISCH` → `VBUS` | Senses and discharges the receptacle side |
 | R2 | 470 Ω 1206 anti-surge, ≥ 0.5 W (ERJ-P08 class) | 32 mA, 0.48 W at 15 V | `DISCH` → `VSNK` | Bleeds the PCB-02 input capacitors on detach. Also on during a PDO step-down, for up to 756 ms with the source still on |
-| Q1 | ST **STL6P3LLH6** | −30 V, ±20 V `VGS`, 6 A, 30 mΩ maximum, PowerFLAT 3.3 × 3.3 (`D`, distributor) | Source on `VBUS`, drain on `VSNK` | ST reference part. Its body diode points `VSNK` → `VBUS`, so it blocks the 5 V before the contract |
+| Q1 | ST **STL6P3LLH6** | −30 V, ±20 V `VGS`, 6 A, 30 mΩ maximum, PowerFLAT 3.3 × 3.3 (`D`) | Source on `VBUS`, drain on `VSNK` | ST reference part. Its body diode points `VSNK` → `VBUS`, so it blocks the 5 V before the contract |
 | R3 | 100 kΩ | | Q1 gate–source | Holds Q1 off |
 | R4 | 33 kΩ | | Q1 gate → U1 `VBUS_EN_SNK` | **Added.** With R3 it sets `VGS` = −0.75 × `VBUS`: −6.8 V at 9 V, −11.3 V at 15 V, −15.0 V at 20 V, −16.5 V at the TVS standoff. Directly driven, `VGS` would reach −20 V at a 20 V source |
 | C5 | 100 nF 50 V | | Q1 gate–source | Soft turn-on: τ = (100 k ∥ 33 k) × 100 nF = 2.5 ms, so the PCB-02 input capacitors draw about 0.15 A |
 | R5–R7 | 100 kΩ | | `ADDR0`, `ADDR1`, `RESET` to `GND` | Address 0x28; pads let the programming jig drive them |
-| TP | Pads, 1.27 mm grid | | `VBUS`, `VSNK`, `CC1`, `CC2`, `SCL`, `SDA`, `RESET`, `ATTACH`, `POWER_OK2`, `GND` | NVM programming and bench probing. `ALERT`, `GPIO`, `POWER_OK3`, `A_B_SIDE`: no connection |
+| TP | Pads, 2.54 mm grid for P75 pogos ([D-069](../decisions.md#d-069); was 1.27 mm) | | `VBUS`, `VSNK`, `CC1`, `CC2`, `SCL`, `SDA`, `RESET`, `ATTACH`, `POWER_OK2`, `GND` | NVM programming and bench probing. `ALERT`, `GPIO`, `POWER_OK3`, `A_B_SIDE`: no connection |
 | W16 | 2 × AWG22, 150 mm, soldered at the +Y end of the +X face, tied through two slots | | `VSNK`, `GND` → Micro-Fit 3.0 2-way plug (43025 + 43030) | The live side has the female contacts. `VSNK` is dead unless a contract exists |
 
 Layout:

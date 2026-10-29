@@ -18,14 +18,209 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | Not started | — | — |
+| 1. Design | In progress: inputs frozen ([D-069](../../decisions.md#d-069)); schematic next | This README, *Inputs*; `check_pcb13_relief.py` 13/13 | 2026-10-29 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
 ## Inputs
 
-Fill this in when design starts: spec sources, pinout, supply and protection, CAD envelope.
+Drafted 2026-10-28 (lesson 1). **Frozen 2026-10-29 with [D-069](../../decisions.md#d-069)**: the builder took the recommended option for gaps 1, 3, 4 and 5, and chose to hand-solder J1 (gap 2).
+
+**Spec sources.**
+
+- [charge-path.md](../charge-path.md) §2 (power path), §3 (this board's parts and layout rules), §5.3 (voltage ratings), §6 (the inlet on the panel), §7 (sequence and faults), §8 (NVM image), §9 (bench CP-01 to CP-03, CP-13, CP-14).
+- [D-040](../../decisions.md#d-040); [open items](../open-items.md) CP-OI-01, CP-OI-03 (closed here), CP-OI-04, CP-OI-05.
+- BOM rows BO-015 (this board), BO-016 (adapter and cable), BO-017 (M2 × 5 screws), HN-003 (Micro-Fit housings for `J2-8`).
+- [05-harness §5](../../05-harness/README.md#5-pinouts): `J2-8` is 1 VSNK, 2 GND, with the female contacts on the `W16` side.
+- CAD: the `CHARGE_INLET_*`, `PCB13_*` and `USB4140_*` constants, `rear_panel_charge_inlet()` and `charge_inlet_pcb13()` in [`body_v1_model.py`](../../02-body/v1/cad/body_v1_model.py); [`check_charge_inlet.py`](../../02-body/v1/cad/check_charge_inlet.py). Measured in the droid tree (`makad-v1.step.py` with its droid edits), see *Envelope*.
+
+**Datasheets read** (2026-10-28):
+
+- GCT [USB4140](https://gct.co/files/drawings/usb4140.pdf), drawing revision A3, 29/08/24 (sheets 1–2: part, recommended PCB layout, pin table).
+- TI [TVS2200](https://www.ti.com/lit/ds/symlink/tvs2200.pdf), SLVSED5C (August 2023), with the DRV0006A outline 4222173/C.
+- ST STUSB4500 DS12499 Rev 3 ([SparkFun mirror](https://cdn.sparkfun.com/assets/b/6/e/8/9/DS-15801-STUSB4500.pdf)).
+- ST ESDAxxxWx Rev 2, August 2005 ([mirror](https://media.bostk.com/Datasheet/ST/1037976----ESDA25W.pdf)): the ESDA25W's own datasheet, which closes the CP-OI-03 gap.
+- ST STL6P3LLH6 DS9257 Rev 4, March 2020 ([mirror](https://www.semiconductors-chips.com/files/00/stl6p3llh6.pdf)).
+
+st.com still times out; the mirrors are copies of ST's own PDFs (document numbers and revisions shown above).
+
+### Circuit
+
+The circuit is charge-path §3 unchanged. Every part was checked against its maker's datasheet:
+
+| Ref | Part | Package (max height) | Pins (datasheet) | Ratings confirmed (`D`) | Footprint |
+|---|---|---|---|---|---|
+| J1 | GCT USB4140-GF-0170-C | Vertical, 6.50 above the board, on the −X face | One row of six SMT tails: B12 GND, B9 VBUS, A5 CC1, B5 CC2, A9 VBUS, A12 GND (left to right in GCT's layout view), at x = −2.75, −1.52, −0.50, +0.50, +1.52, +2.75. Shell (four stakes) GND | VBUS 3.00 A together, GND 4.25 A together, CC 1.25 A; 48 V DC; 40 mΩ maximum per contact initially, 50 mΩ after test; mating 5–20 N; 20k cycles (plug replaced at 10k in GCT's test); −25…+85 °C. Stake S = 1.70 ± 0.15 | **Project footprint** (KiCad has no USB4140); see *J1 land pattern* |
+| D1 | TI TVS2200DRVR | WSON-6 DRV 2 × 2, 0.8 | 1–3 GND, 4–6 IN, thermal pad GND | VRWM 22 V; VBR 24.6–27.6 V; clamp 28.0 V maximum at 40 A (8/20 µs, 27 °C), **28.35 V** maximum at 35 A from VRWM at 125 °C; 105 pF | Stock `WSON-6-1EP_2x2mm_P0.65mm_EP1x1.6mm` (TI's example layout: pad 1.0 × 1.6, pitch 0.65) |
+| D2 | ST ESDA25W | SOT-323-3L, 1.1 | 1, 2 cathodes (lines), 3 common anode (GND) | VRM 24 V; VBR 25–30 V; 65 pF typical at 0 V; IEC 61000-4-2 level 4 (8 kV contact, 15 kV air); 400 W (8/20 µs). It is ST's own CC part in the STUSB4500 application diagram | Stock `SOT-323_SC-70` |
+| U1 | ST STUSB4500QTR | QFN-24 4 × 4, EP 2.70; A 1.00 maximum | 1 CC1DB, 2 CC1, 3 NC, 4 CC2, 5 CC2DB, 6 RESET, 7 SCL, 8 SDA, 9 DISCH, 10 GND, 11 ATTACH, 12 ADDR0, 13 ADDR1, 14 POWER_OK3, 15 GPIO, 16 VBUS_EN_SNK, 17 A_B_SIDE, 18 VBUS_VS_DISCH, 19 ALERT, 20 POWER_OK2, 21 VREG_1V2, 22 VSYS, 23 VREG_2V7, 24 VDD, EP GND | VDD 28 V; CC 22 V; VBUS-side pins (`VBUS_EN_SNK`, `VBUS_VS_DISCH`, `DISCH`, `POWER_OK2`) 28 V; every other I/O −0.3…6 V. `VBUS_VS_DISCH` 50 mA maximum (R1: 20 mA at 20 V); `DISCH` 500 mA maximum (R2: 32 mA at 15 V). `VSYS` to GND when unused (as §3) | Stock `QFN-24-1EP_4x4mm_P0.5mm_EP2.7x2.7mm`; check it against ST's Fig. 12 at set-up |
+| Q1 | ST STL6P3LLH6 | PowerFLAT 3.3 × 3.3 type F, 0.90 | 1–3 S, 4 G, 5–8 D (pad) | VDS −30 V; VGS ±20 V; RDS(on) 24/**30 mΩ** at −10 V and 38/**50 mΩ** at −4.5 V (typ./max, 3 A); VGS(th) ≥ 1 V; ID 6 A; Rthj-pcb 42.8 °C/W on 1 in² of 2 oz copper | **Project footprint** from ST's Fig. 16 (KiCad has no PowerFLAT 3.3 × 3.3) |
+
+So `D2` and `Q1` move from "distributor summary" to `D`, and charge-path §3 is right on both. Two notes for the record:
+
+- The TVS2200's clamp reaches 28.35 V at 125 °C after a 35 A surge, a little above the 28 V in charge-path §5.3. The conclusion does not change: only a 35–40 A surge on a hot part reaches the STUSB4500's 28 V `VDD` rating.
+- The TVS2200 starts to conduct on edges faster than 2.5 V/µs (0.7 V/µs at 125 °C). TI says this does no harm unless it repeats. USB PD sources slew `VBUS` at 0.03 V/µs at most, so it never happens in normal use.
+
+### J1 land pattern (GCT recommended layout, ±0.05)
+
+Coordinates are in the part's frame: x along the 8.94 mm shell, y = 0 on the shell's centre line through the outer stakes, +y toward the SMT tails.
+
+| Feature | Centres | Copper | Hole |
+|---|---|---|---|
+| SMT pads, six | x as above; y +1.20 (pad top at +2.20) | 2.00 tall; 0.70 wide (A5, B5), 0.76 (A9, B9), 0.80 (A12, B12) | — |
+| Outer shell stakes, two | x ±4.32, y 0 | 1.10 × 1.50, plated | Slot 0.60 × 1.00 |
+| Inner shell stakes, two | x ±2.30, y −1.43 | 1.60 × 1.10, plated | Slot 1.10 × 0.60 |
+| Locating pegs (Ø0.55 ± 0.05) | x ±3.875, y −1.80 | None | Ø0.70 hole at −x; 1.00 × 0.70 slot at +x |
+
+The copper spans x ±4.87, y −2.15…+2.20. The stake, 1.55–1.85 long, passes through a 1.44–1.76 board (1.6 ± 10 %), so it ends between 0.06 mm below and 0.41 mm above the +X face. Board thickness does not move the mouth, because J1 stands on the −X face, which seats on the pad.
+
+### Envelope (measured in the droid CAD)
+
+Survey of the droid tree built from `makad-v1.step.py` with its droid edits: 595 leaves, 40 within the region X −75…−25, Y −35…50, Z 40…95. The script is in the session scratchpad; the results are below. The droid edits touch nothing near the inlet.
+
+| Item | World box (X; Y; Z) | Note |
+|---|---|---|
+| Board `PCB13_CHARGE_INLET_PCB` | −55.10…−53.50; −14.0…14.0; 56.5…71.5 | 28 × 15 × 1.6, long axis Y. −X face on the pad seat at X −55.10 |
+| Holes | Ø2.2 at (Y, Z) (±11.0, 64.0) | On J1's centre line, as CP-OI-01 asks |
+| J1 shell | −61.60…−55.10; ±4.47; 62.42…65.58 | Axis Y 0, Z 64. Mouth flush with the pocket floor at X −61.60 |
+| Screw heads (BO-017) | X −53.5…−52.2, Ø3.8 at each hole | On the +X face |
+| Parts envelope (CAD) | −53.5…−51.5; −14.0…9.0; 57.0…71.0 | +X face, 2.0 mm |
+| `W16` lead reserve 1 | −53.5…−50.0; 10.0…41.0; 66.0…71.0 | Starts on the +X face over Y 10–14, Z 66–71: the solder-pad area |
+
+Facing each face:
+
+| Face | Nearest | Gap | What it limits |
+|---|---|---|---|
+| +X (parts) | PCB-02's board (its −X face) at X −49.6, over the whole of PCB-13 | **3.9 mm** from the +X copper | Parts ≤ 2.0 mm leave 1.9 mm, as D-040 has it. **PCB-02's −X face is bare in its placeholder** (its parts envelope is on +X). PCB-02 must keep it so over PCB-13's area: see *Interface to PCB-02* |
+| +X, beyond | PCB-02 parts envelope X −48; frame main print X −36 | 5.5 / 17.5 | — |
+| −X (J1) | Rear-panel pad (the seat) | 0 | Only J1 and its land pattern may touch; the rest of the −X face sits on print |
+| Edges | Shell 2.5 mm away; chassis rear module 10.1 mm below | — | Nothing near |
+| +Y end | `W16` reserve, `J2-8` plug at Y 25–37 | — | — |
+
+**Courtyards on the +X face.** The board has 420 mm². Not usable:
+
+- J1's land pattern, about 10 × 4.6 mm, round the four stake slots and two pegs (only stake copper on this side);
+- two screw-head keep-outs, Ø3.8 head + 0.4 mm, so about Ø4.6 at (±11, 64);
+- the `W16` pads, Y 10–14, Z 66–71, above the +Y screw;
+- the 0.3 mm edge rule.
+
+That leaves about 300 mm². The parts' courtyards add up to about 105 mm²:
+
+| Parts | Courtyard (stock footprint, approx.) |
+|---|---|
+| U1 QFN-24 | 5.0 × 5.0 |
+| Q1 PowerFLAT | 4.3 × 4.0 |
+| D1, D2 | 2.6 × 2.6 each |
+| C1, R2 (1206) | 4.0 × 2.2 each |
+| C2, R1 (0603) | 2.3 × 1.5 each |
+| C3–C5, R3–R7 (0402) | 1.9 × 1.0 each |
+
+The test pads take another 40–65 mm² (gap 4). That fits, but at about 55–60 % fill it is the densest board yet. **Heights:** C1 (4.7 µF 50 V X7R 1206) is the tallest SMD, 1.6 ± 0.2 mm on most makers' 50 V values, so it fits under 2.0, just. Confirm the chosen part's thickness at schematic. Then come D2 at 1.1, U1 at 1.0 and Q1 at 0.9; the stake tips with solder stand under 1 mm. Every part sits under the 2.0 mm envelope. The screw heads, at 1.3 mm, are lower than the parts.
+
+**−X face against the pad: one clash.** The pad's pin relief, `CHARGE_INLET_PIN_RELIEF`, is 9.60 × 5.60 × 1.2 mm, so it spans Y ±4.80. GCT's outer stake copper reaches Y **±4.87**. Each outer ring therefore lands 0.07 mm onto the printed seat, and so does its solder fillet on the −X side. Probes of the real land pattern against the built panel:
+
+| Probe | Copper and mask only (0.05 thick) | With a 0.3 mm fillet |
+|---|---|---|
+| Outer stake rings | **0.005 mm³** | **0.032 mm³** |
+| Inner stake rings | 0 | 0 |
+| SMT pad row (either way up) | 0 | 0 |
+
+The board would sit on two solder fillets, not flat on the pad. That was gap 1. D-069 widens the relief to 10.60 mm in `final/v1/cad` (`DROID_CUTS`); [`check_pcb13_relief.py`](../../final/v1/cad/check_pcb13_relief.py) now measures 0.430 mm from the copper to the wall, with no overlap in either orientation. In Z the relief clears the copper (−2.15…+2.20) by 0.6 mm either way up.
+
+**Removal path.** The board comes off with the panel along −X; `W16` is unplugged at `J2-8` first. Nothing on the board's −X side moves relative to it, and `check_charge_inlet.py`'s 40 mm sweep of the pad and board is clean (D-040). Two things the sweep does not cover:
+
+- **Hand room to unplug `J2-8`**: it sits at Y 25–37, 11 mm beyond the board's +Y end.
+- **The `W16` loop**: the lead must reach `J2-8` while the panel is drawn out. charge-path §6 says reach in and unplug, and 150 mm gives the slack.
+
+Neither needs a CAD change before layout.
+
+### Power path and copper
+
+This is the first board that carries real current. Design current is **3 A**, J1's `VBUS` rating. The normal current is 0.84–0.95 A at 15 V and at most 1.38 A, the BQ25798 input clamp (charge-path §5.2). Voltage is at most 20 V (blank NVM) and 28 V in a surge.
+
+| Item | At 1.38 A | At 3 A | Rule |
+|---|---|---|---|
+| Track width, outer layer, IPC-2221, 1 oz | 0.47 mm (ΔT 10 °C) | **1.37 mm** (ΔT 10 °C); 0.90 mm (ΔT 20 °C) | `VBUS`/`VSNK`/`GND` as pours ≥ 2 mm wide; no power track below 1.4 mm |
+| Same, 2 oz | — | 0.69 mm (ΔT 10 °C) | Not needed (gap 3) |
+| Vias −X ↔ +X (0.35 hole, about 20 µm plating; ≈ 1.7 A each, taken as 1 A) | 2 | **≥ 4 per net** for `VBUS`, and ≥ 4 for `GND` beside the shell stakes | Stakes and their plated slots also join the two `GND` layers |
+| Q1 loss, RDS(on) maximum × 1.5 for a hot junction | 0.14 W at 9 V (75 mΩ); 0.09 W at 15 V (45 mΩ) | 0.68 W at 9 V; 0.41 W at 15 V | Drain pad on a `VSNK` pour on both layers. At 3 A and 9 V, about 60 °C rise on ≈ 80–100 °C/W, which is acceptable for a case that is not a normal one |
+| Copper, `VBUS` + `GND` loop, ≈ 20 mm of 2 mm pour each | ≈ 10 mΩ | 90 mW | — |
+| `W16` 2 × AWG22, 150 mm (52.9 mΩ/m) | 16 mΩ, 30 mW | 0.14 W | Micro-Fit 3.0 AWG22 crimp 8.5 A maximum (05-harness) |
+| R2 470 Ω 1206 anti-surge (DISCH) | 0.48 W pulses up to 756 ms (§3) | — | ERJ-P08 class (0.66 W), as specified |
+| Spacing at ≤ 30 V | — | — | IPC-2221 B2: 0.1 mm; the fab-neutral 0.16 mm rules |
+
+**Copper weight: 1 oz on both outer layers, two layers, 1.6 mm** (recommended, gap 3). 3 A fits in pours on 1 oz, and the [fab-neutral rules](../README.md#fab-neutral-design-rules) are written for 1 oz. 2 oz would put the QFN-24's 0.5 mm pitch (0.2–0.25 mm gaps) at the fabs' 2 oz spacing limits, and it costs more for nothing. 1.6 mm is fixed by the 1.70 mm stake and the screw engagement: 5 − 1.76 = 3.24 mm at +10 %, which is still ≥ 3.0. So the standard ±10 % thickness is fine and need not be stated on the order.
+
+### NVM test pads and programming jig (CP-OI-05 plan)
+
+Program before PCB-13 goes on the panel (charge-path §8). The STUSB4500's NVM is written over I²C with the chip powered from `VDD`. A plain 5 V on `VBUS` is enough; no PD contract is needed.
+
+- **Pads (10).**
+  - Programming: `VBUS`, `GND`, `SCL`, `SDA`, `RESET`.
+  - Bench probing: `VSNK`, `CC1`, `CC2`, `ATTACH`, `POWER_OK2`.
+  - All are on the +X face. `ALERT`, `GPIO`, `POWER_OK3` and `A_B_SIDE` have no connection.
+  - `SCL`, `SDA`, `ATTACH` and `POWER_OK2` are open-drain or input-only, with no pull-ups on the board. The jig supplies 3.3 V pull-ups; these pins are rated 6 V at most. `RESET` keeps its 100 kΩ to GND (R7), so the jig can drive it high.
+- **Pitch (gap 4).** Spec §3 says a 1.27 mm grid. Recommended: **2.54 mm, Ø1.0 pads**, for P75-series pogo pins (Ø1.02 barrel), which are common in India (Robu, Evelta). P50 pins for 1.27 mm are fragile and harder to buy. A 2 × 5 block takes about 12.7 × 5.1 mm. If it doesn't fit whole, the five programming pads stay on the 2.54 grid and the five probe pads may sit anywhere.
+- **Jig.** A printed base with a pocket for J1, which hangs 6.5 mm below the board, and two Ø2.0 pins through the M2 holes. A printed top plate carries the pogos and locates on the same two pins. J1 standing on the base takes the pogo force.
+  - **Host:** a bench Raspberry Pi on 3.3 V I²C (smbus2), or the ST STSW-STUSB002 GUI.
+  - **Script:** writes the five NVM banks from the image, power-cycles the chip by switching 5 V off and on, then reads all banks back and compares them byte for byte (CP-01).
+  - The image file and its checksum go beside charge-path.md (CP-OI-05).
+  - The jig is drawn after layout, because it needs the pad positions.
+
+### India sourcing (CP-OI-04, PCB-13 parts)
+
+Checked 2026-10-28. element14 India counts as an India source; Mouser India is the next best.
+
+| Part | India source | Stock / price | LCSC (JLCPCB) |
+|---|---|---|---|
+| USB4140-GF-0170-C | element14 India **3955430** | 157, US stock, 5–7 days; ₹74.99 (1+). Order code 3973078 is the same part, lead time only | C5452033: JLCPCB 0, LCSC 8; "assembly difficulty High" |
+| STUSB4500QTR | element14 India **2980889** | 5,554, UK stock, 4–6 days; ₹226.95 | C2678061: 4,494, Extended |
+| STL6P3LLH6 | element14 India **3132757** | 1,602, UK stock; ₹79.55 (5+, multiples of 5) | C457492: 1 in stock |
+| ESDA25W | element14 India **2341655** | 25,148, UK stock; ₹40.97 (5+), ₹20.60 (10+) | 3,340 |
+| TVS2200DRVR | **Not at element14 India.** Mouser India 595-TVS2200DRVR | 527; US$1.41 (1+), US$0.877 (10+) | **No genuine TI part.** Only clones carry the name: ElecSuper, Wuxi Maxinmicro, Leiditech, with other clamp ratings. Not accepted |
+| Passives, 0402–1206 | Fab stock (JLCPCB basic and extended parts) | — | — |
+
+So the actives are bought in India (D-069): J1 by the builder, who solders it; the other four are consigned to the fab, as on PCB-06 and PCB-10. JLCPCB's own stock can't build even one board: USB4140 0, STL6P3LLH6 1, and no genuine TVS2200. CH-041's BQ25798 and Würth inductor belong to PCB-02, so CP-OI-04 stays open for them.
+
+### Interface to PCB-02 (fixed here)
+
+| Item | Value |
+|---|---|
+| Connector | `W16`: 2 × AWG22, 150 mm, soldered to PCB-13, Micro-Fit 3.0 43025-0200 receptacle with 43030 female terminals at the PCB-02 end, into **`J2-8`** (43045-0200 class, right angle) on PCB-02's +Y edge, plug exiting +Y |
+| **Pin order** | **`J2-8` pin 1 `VSNK`, pin 2 `GND`** (05-harness §5, confirmed). PCB-13's solder pads: **P1 `VSNK`, P2 `GND`**; final pad positions at layout. Wire colours red = `VSNK`, black = `GND` |
+| `VSNK` voltage | 0 V until a contract exists (Q1 off; `POWER_ONLY_ABOVE_5V`). 9 or 15 V in normal use. 20 V on a blank NVM. Surges up to the TVS2200 clamp, 28.35 V maximum (PCB-02 parts ≥ 30 V absolute maximum; 50 V capacitors, as §4) |
+| `VSNK` current | 0.84–1.38 A normal (BQ25798 input clamp); design 3 A (J1 rating) |
+| Turn-on | Q1 ramps with τ ≈ 2.5 ms (R3 ∥ R4 × C5), so PCB-02's 2 × 10 µF + 100 nF input draws about 0.15 A |
+| Turn-off | U1 `DISCH` bleeds `VSNK` through R2 470 Ω on PCB-13: 32 mA at 15 V, for up to 756 ms after a detach or PDO step-down |
+| No other signals | No D+/D−, CC or status on `W16`. PCB-02 ties its own D+ to D− (charge-path §4) |
+| PCB-02 mechanical | PCB-02's −X face is 3.9 mm from PCB-13's +X face over Y −14…14, Z 56.5…71.5 (world). **Over that area PCB-02 may carry no parts on its −X face, and no through-hole tails longer than 1.0 mm** (PCB-05 trap: Micro-Fit THT tails stand 1.6 mm proud). That keeps at least 0.9 mm to PCB-13's 2.0 mm parts |
+
+### Gaps (settled 2026-10-29, D-069)
+
+1. **Pin relief in the rear-panel pad.** GCT's outer stake rings land 0.07 mm on the printed seat (measured above). Recommended: **widen the relief from 9.60 to 10.60 mm** (Y ±5.30). That leaves 0.43 mm beyond the copper for a fillet, with 4.9 mm to the screw pilots. Keep 5.60 × 1.2 in Z and depth. This is a droid CAD change: a `DROID_CUTS` entry on `REAR_SERVICE_PANEL_OCTAGONAL` in `final/v1/cad/makad-v1.step.py`, plus a new `check_pcb13_relief.py`. The check probes the GCT land pattern and fillets against the panel, checks the panel stays one solid with the relief walls clear, and plants a clash to prove the probes work. It needs a decision entry.
+2. **J1 assembly.** J1 is alone on the −X face, so the board is two-sided. Options:
+   - (a) **The fab assembles both sides**, with J1 consigned (recommended). JLCPCB's two-sided assembly is its Standard service, not Economic.
+   - (b) The fab assembles +X; the builder hand-solders J1 (six SMT tails plus four stakes from the +X side).
+3. **Copper:** 1 oz, two layers, 1.6 mm (recommended), or 2 oz.
+4. **Test-pad pitch:** 2.54 mm for P75 pogos (recommended), or charge-path §3's 1.27 mm.
+5. **Sourcing:** the four ST/GCT actives from element14 India and the TVS2200DRVR from Mouser India, consigned to the fab (recommended). Mouser India ships DDP only on a GST business invoice; on a card invoice, duty is paid at delivery.
+
+**Settled (D-069):**
+
+1. Relief **10.60 mm**: `PCB13_RELIEF` in `DROID_CUTS`; `check_pcb13_relief.py` 13/13, the planted old relief caught.
+2. **J1 hand-soldered by the builder.** The fab assembles the +X face only, so the order can be single-sided. At layout, J1 is excluded from the fab BOM and the position file. Its six SMT tails reach 0.62 mm past the shell (pad top at +2.20, shell at +1.58), so an iron can reach them. Solder the stakes from the +X side.
+3. **1 oz, two layers, 1.6 mm.**
+4. **2.54 mm test-pad grid**, Ø1.0, P75 pogos.
+5. **element14 India** for USB4140, STUSB4500, STL6P3LLH6 and ESDA25W, and **Mouser India** for TVS2200DRVR. All but J1 are consigned.
 
 ## Log
 
-Record dated entries: decisions raised, revisions, orders, bench results.
+- **2026-10-28 — Lesson 1, inputs.**
+  - Read all five makers' datasheets: GCT direct; TI direct; ST via mirrors of ST's own PDFs. **CP-OI-03 closed**: ESDA25W and STL6P3LLH6 confirmed, now `D`.
+  - Measured the envelope in the droid tree. The pin relief is 0.07 mm short of GCT's outer stake copper (gap 1). PCB-02's −X face must stay bare over PCB-13.
+  - Sized the power path for 3 A: 1 oz pours ≥ 2 mm, ≥ 4 vias per net.
+  - Planned the NVM pads and jig.
+  - Checked India sourcing for all five actives: JLCPCB stock can't build the board, and LCSC has no genuine TVS2200.
+  - Fixed the `W16`/`J2-8` interface for PCB-02.
+  - Gaps 1–5 raised.
+- **2026-10-29 — Inputs frozen ([D-069](../../decisions.md#d-069)).** Builder: relief widened (gap 1), J1 hand-soldered (gap 2), 1 oz two layers (gap 3), 2.54 mm P75 pads (gap 4), element14 India and Mouser India (gap 5). `DROID_CUTS` relief plus `check_pcb13_relief.py` 13/13. BO-015 sources updated.

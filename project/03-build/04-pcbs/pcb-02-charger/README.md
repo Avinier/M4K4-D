@@ -29,3 +29,5 @@ Fill this in when design starts: spec sources, pinout, supply and protection, CA
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
+
+- **2026-10-28 — Charge-inlet interface fixed by PCB-13** ([PCB-13 inputs](../pcb-13-charge-inlet/README.md#interface-to-pcb-02-fixed-here)): `J2-8` pin 1 `VSNK`, pin 2 `GND` (as 05-harness §5); `VSNK` 9/15 V, 20 V on a blank NVM, 28.35 V surge maximum; 1.38 A normal, 3 A design. **PCB-02's −X face must stay bare over PCB-13** (world Y −14…14, Z 56.5…71.5, 3.9 mm away): no parts there and no through-hole tails over 1.0 mm.

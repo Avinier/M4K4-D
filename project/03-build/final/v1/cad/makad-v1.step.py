@@ -210,6 +210,12 @@ PCB10_BOARD_GROWTH = [(-14.0, 42.5, -58.4, -56.8, 76.0, 82.01), (51.0, 56.0, -58
                       (42.5, 51.0, -58.4, -56.8, 79.0, 82.01)]          # notched over the terminal block
 
 
+# D-069: PCB-13 pin relief in the rear-panel inlet pad, world frame. The body source's
+# CHARGE_INLET_PIN_RELIEF (9.60 x 5.60 x 1.2) is cut from the seat at X -55.1 round the
+# receptacle axis (Y 0, Z 64); this box widens it to 10.60 and runs 0.1 past the seat.
+PCB13_RELIEF = (-56.3, -55.0, -5.3, 5.3, 61.2, 66.8)
+
+
 def pcb10_connector_moves():
     """DROID_MOVES for the C3 GH headers and their mated plugs, from C3_GH_ROWS to PCB10_GH."""
     from body_v1_model import C3_GH_ROWS
@@ -258,6 +264,9 @@ DROID_CUTS = [
     (r"PCB05_J5_7_MICROFIT3_2P_(RA_HEADER|MATED_PLUG)", (60.0, 80.0, -35.0, -5.0, 122.6, 130.0)),
     # D-068: PCB-10 header-row reliefs in the C3 carrier uprights.
     *_PCB10_CUTS,
+    # D-069: the inlet pad's pin relief widens 9.60 -> 10.60 mm (Y +-5.30), so GCT's outer
+    # USB4140 stake copper (Y +-4.87) and its fillets clear the PCB-13 seat; Z and depth unchanged.
+    (r"REAR_SERVICE_PANEL_OCTAGONAL", PCB13_RELIEF),
 ]
 DROID_ADDS = [
     # D-068: PCB-10 top-edge hooks on the C3 carrier uprights.

@@ -72,6 +72,7 @@ The central record of every decision and change made during the build phase. New
 | [D-066](#d-066) | 2026-10-26 | Body / audio: PCB-06 L/R strap and mic source (BO-005, BO-012) | One PCB-06 design serves all four positions; the LR strap is an **assembly variant**: two 0402 1 kΩ footprints, R_L (LR to GND) and R_R (LR to 3V3), and the fab fits exactly one. The mic is **bought by the builder from element14 India** (4125831, UK stock) and supplied to the fab, not bought by the fab from its own stock. Amended: MK1's sound-hole seal ring pulled back to R 0.63 (0.23 mm from the hole), with a scoped 0.2 mm rule | ACTIVE; PCB-06 board set up, placement next |
 | [D-067](#d-067) | 2026-10-27 | Body / audio: PCB-05 inputs, mounting and CR-01 (BO-002, BO-006, BO-064; final v1 CAD) | PCB-05 takes **5 V on W12 only**; `CA-06` **CR-01 is accepted** (GPIO22 SDI1, GPIO23 `AMP_SD`); **no power-good path**: `AMP_SD` drives SD_MODE through 2.2 kΩ; mics map `J5-2` REAR_L, `J5-3` FRONT_L, `J5-4` REAR_R, `J5-5` FRONT_R; ferrite + 2.2 Ω + 10 µF mic rail; two layers. The board **hangs from the frame** on three 8 mm M2 SMT spacers and ISO 7380 M2 screws from above, and goes in after the compute tray. Amended at board set-up (J7 tails clipped, spacer holes plated) and at placement (one rear and two front spacers; `J5-1` 2 mm toward −Y) | ACTIVE; PCB-05 rev A designed, 4 layers (amended at routing), fit check passes |
 | [D-068](#d-068) | 2026-10-27 | Body / electronics: PCB-10 C3 carrier inputs, mounting, DevKitC and parts (CH-044, CH-045; final v1 CAD) | The C3 module is held by the **two lower M2.5 screws and two printed hooks** over the board's top edge (the upper screws sat under the DevKitC); the uprights get **pin-tail reliefs**. The DevKitC is **genuine Espressif ESP32-S3-DevKitC-1-N8 v1.1** only, modelled from Espressif's drawing (rows 22.86 mm, not the CAD clone's 25.4). Watchdog: **TPS3436CCCBGDDFRQ1** (the BD-10 fallback; the CFDBE has no stock anywhere reachable) from **Mouser India**; link transceiver on a SOIC-8 footprint (THVD1451DR or MAX3490EESA+); Schottky in the `J10-1` feed against USB back-feed; GPIO map v0.2; `J10-2` named by direction. Amended at board set-up: the board grows 6 mm down (70 × 49.5, notched over a DRV8833 terminal block) for a third connector row; at placement: **four layers** (In1 GND, In2 +3V3), `J10-2` reordered, GPIO map v0.3 | ACTIVE; `check_pcb10_mount.py` 9/9; PCB-10 placed, routing |
+| [D-069](#d-069) | 2026-10-29 | Body / electronics: PCB-13 charge inlet inputs (BO-015; final v1 CAD) | The rear-panel pin relief widens **9.60 → 10.60 mm** so GCT's USB4140 stake copper clears the seat (`DROID_CUTS`); J1 **hand-soldered** by the builder, the fab assembles the +X face only; **1 oz, two layers, 1.6 mm**; NVM test pads on a **2.54 mm grid** for P75 pogos; actives from **element14 India** (USB4140, STUSB4500, STL6P3LLH6, ESDA25W) and **Mouser India** (TVS2200DRVR); `W16`/`J2-8` interface and PCB-02 back-face keep-out fixed | ACTIVE; `check_pcb13_relief.py` 13/13; PCB-13 inputs frozen, schematic next |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -2845,3 +2846,62 @@ The amplifier corner routed on two layers carries over unchanged. **BOM changed:
 - **Four layers** (builder, the recommended option): F.Cu parts and signals, **In1.Cu solid GND**, **In2.Cu +3V3 plane**, B.Cu signals with no parts; 1.6 mm, 35 µm outer and 15.2 µm inner copper, 0.2104 mm prepregs and a 1.065 mm core (PCB-05's build). Why: under the DevKitC the front is full of parts and a fence of 44 header pins splits the board from the three connector rows; on two layers the +3V3 and GND networks (about 40 points) and about 25 crossing signals would not route without long detours and a broken ground return. With the planes every supply pad is one via, and only signals are routed. The fab-neutral rules stand (all three fabs make 4 layers to the same limits, as for PCB-05).
 - **`J10-2` reordered** to 1 GND, 2 `C0TX+`, 3 `C0TX−`, 4 `C3TX−`, 5 `C3TX+`, 6 spare: U2's own pin order seen from J2, so the pairs run straight (PCB-09 `J9-2` and 05-harness §5.2 follow).
 - **GPIO map v0.3**: the roles of v0.2, with the pins reassigned so each track runs from its DevKitC pin to its connector without crossings (table in the PCB-10 README). Same rules: no strapping or USB pins, analog on ADC1, at least two safe spares (35, 39, 40).
+
+## D-069
+
+**2026-10-29 · Body / electronics: PCB-13 charge inlet inputs (BO-015; final v1 CAD) · ACTIVE; `check_pcb13_relief.py` passes; PCB-13 inputs frozen, schematic next**
+
+**Why.** Freezing PCB-13's stage-1 inputs ([PCB-13 README](04-pcbs/pcb-13-charge-inlet/README.md#inputs)) against the makers' datasheets and the built droid CAD found:
+
+- **The pin relief is narrower than GCT's land pattern.** D-040 cut the relief in the rear-panel inlet pad 9.60 mm wide (`CHARGE_INLET_PIN_RELIEF`, Y ±4.80). GCT's recommended layout (USB4140 drawing A3, 29/08/24) puts the outer shell-stake copper at Y **±4.87**. Probing the real land pattern against the built panel gave 0.005 mm³ of overlap for the copper alone and 0.032 mm³ with a 0.3 mm fillet. So PCB-13 would sit on two solder fillets, not flat on its seat. The inner stakes and the SMT pad row clear in either orientation.
+- **J1 is the only part on the −X face**, so a fab-assembled board would be two-sided.
+- **The board carries 3 A** (J1's `VBUS` rating; 1.38 A normal), the first to do so.
+- **JLCPCB/LCSC cannot supply the actives:** USB4140 0 at JLCPCB, STL6P3LLH6 1, and no genuine TI TVS2200 (clones only). element14 India has the USB4140 (3955430), STUSB4500 (2980889), STL6P3LLH6 (3132757) and ESDA25W (2341655). Mouser India has the TVS2200DRVR.
+- **PCB-02's −X face is 3.9 mm from PCB-13's +X face**, over the whole board.
+
+**Decision** (builder, 2026-10-29, gaps 1–5 of the PCB-13 inputs):
+
+1. **Relief 10.60 mm wide** (Y ±5.30), Z 5.60 and depth 1.2 unchanged. That leaves 0.43 mm from the copper to the wall and 4.9 mm of print to the screw pilots.
+2. **J1 is hand-soldered by the builder**: the six SMT tails, which reach 0.62 mm past the shell, and the four stakes from the +X side. The fab assembles the +X face only. J1 is left out of the fab's BOM and position file, and the builder buys it.
+3. **Copper: 1 oz on two layers, 1.6 mm board.** Power nets are pours ≥ 2 mm wide, with ≥ 4 vias per net between layers (IPC-2221: 1.37 mm for 3 A at ΔT 10 °C). 1.6 mm suits the 1.70 mm stake and keeps the screw engagement ≥ 3.24 mm at +10 %.
+4. **NVM test pads on a 2.54 mm grid**, Ø1.0, for P75 pogo pins (Robu, Evelta). This replaces charge-path §3's 1.27 mm grid. The five programming pads (`VBUS`, `GND`, `SCL`, `SDA`, `RESET`) stay on the grid; the five probe pads (`VSNK`, `CC1`, `CC2`, `ATTACH`, `POWER_OK2`) may sit anywhere. The jig is a printed base and pogo plate located on the two M2 holes, drawn after layout (CP-OI-05).
+5. **Sourcing:**
+   - element14 India: USB4140-GF-0170-C, STUSB4500QTR, STL6P3LLH6, ESDA25W.
+   - Mouser India: TVS2200DRVR.
+   - All but J1 are consigned to the fab; passives come from fab stock.
+
+**Interface fixed for PCB-02** (recorded in the PCB-02 log):
+
+- `J2-8` pin 1 `VSNK`, pin 2 `GND`, as in 05-harness §5. PCB-13's pads are P1 `VSNK`, P2 `GND`.
+- `VSNK` is 9 or 15 V, 20 V on a blank NVM, 28.35 V at most in a surge.
+- 1.38 A normal, 3 A design.
+- PCB-02 carries no parts and no through-hole tails over 1.0 mm on its −X face over PCB-13's area (world Y −14…14, Z 56.5…71.5).
+
+**Datasheets** (CP-OI-03 closed): the ESDA25W (ESDAxxxWx Rev 2) and STL6P3LLH6 (DS9257 Rev 4), read from mirrors of ST's PDFs, confirm charge-path §3; their labels are now `D`. The TVS2200's clamp is 28.35 V at most at 125 °C after a 35 A surge from VRWM, against the 28 V in charge-path §5.3. Only a hot-part surge reaches the STUSB4500's 28 V `VDD` rating, as before.
+
+**CAD changed** (`final/v1/cad/makad-v1.step.py` only; the body source keeps the 9.60 relief and the droid edit supersedes it):
+
+- `PCB13_RELIEF` = X −56.3…−55.0, Y ±5.3, Z 61.2…66.8.
+- The `DROID_CUTS` entry on `REAR_SERVICE_PANEL_OCTAGONAL`.
+
+**Checks:**
+
+- New `final/v1/cad/check_pcb13_relief.py` (about 10 s): **13/13 PASS**.
+  - The panel stays one solid.
+  - Exactly the two 0.5 mm strips are removed (6.720 mm³).
+  - The land pattern and 0.3 mm fillets are clear with the SMT pads toward +Z and toward −Z.
+  - Relief wall to copper 0.430 mm.
+  - The board still seats (0.000 mm) with no overlap.
+  - 4.90 mm of print to the screw pilots.
+- **Planted:** the same probes against the panel without the cut catch the old relief (0.0104 mm³, both orientations).
+- `check_charge_inlet.py` is unaffected: it builds the body source, and the cut only removes print beside the relief.
+
+**BOM changed:** BO-015's supplier and procurement fields name the sources above, with J1 bought and hand-fitted by the builder.
+
+**Open:**
+
+- PCB-13 schematic and layout (CP-OI-01).
+- Project footprints for J1 (from GCT's drawing) and Q1 (ST Fig. 16).
+- NVM image, jig and read-back (CP-OI-05).
+- The BQ25798 and Würth inductor sourcing for PCB-02 (CP-OI-04 stays open for them).
+- Full `makad-v1.step` rebuild after the next droid change.

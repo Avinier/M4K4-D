@@ -98,3 +98,10 @@ KiCad keeps local history in `design/.history/` (git-ignored). `git log` there s
 | `Shape.cast()` on compounds | In cadgen 0.4.28's build123d, `Shape.cast` returns None for a `TopoDS_Compound` | Downcast explicitly (`TopoDS.Compound_s`); see `_place()` in `check_pcb10_mount.py` |
 | Names and holes in KiCad's STEP | The STEP writes model names with `_` for `.` (`ESP32-S3-DevKitC-1_v1_1`), and it cuts every drilled hole (not the vias) from the core. A fit check matching by exact name, or comparing the core's area with a CAD board that has no holes, fails on the script, not the board | Match model names by prefix; add the drilled-hole area before comparing areas |
 | Module models for the board STEP | Drawing a plug-in module twice (once in the robot CAD, once for KiCad) lets them drift apart | Build the KiCad model from the robot CAD's own function, moved into the footprint frame, and let the fit check compare the two |
+
+## Traps found on PCB-13
+
+| Trap | What happens | Handling |
+|---|---|---|
+| A board face seated flat on print | PCB-13's −X face sits on the rear-panel pad, so only J1's land pattern may meet the panel, inside a relief. The relief was cut round the CAD's 8.64 × 4.70 pin block; GCT's real stake copper reaches 0.07 mm further a side, so the board would have sat on two solder fillets (D-069) | Where a board face bears on a part, probe the real land pattern (copper, plus a fillet allowance) against that part in lesson 1, both ways up if the orientation is still open |
+| Fab stock for the actives | JLCPCB had 0 USB4140, 1 STL6P3LLH6 and only clones of the TVS2200 under the TI name | Check India sources part by part (element14 India, then Mouser India) and plan to consign; reject LCSC listings whose maker is not the datasheet's |
