@@ -346,6 +346,17 @@
 			(uuid "f6c71059-6f76-44cf-a746-e906721ec931")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/pcb13.3dshapes/ST_PowerFLAT-3.3x3.3_TypeF.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Resistor_SMD:R_0402_1005Metric"
 		(layer "F.Cu")
@@ -1725,7 +1736,7 @@
 		(path "/06c15260-7d5a-588c-a538-6c0c5416e16c")
 		(sheetname "/")
 		(sheetfile "pcb-13-charge-inlet.kicad_sch")
-		(attr exclude_from_bom)
+		(attr exclude_from_pos_files exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -3163,7 +3174,7 @@
 		(path "/730eed78-e844-5e5c-80e8-f949dc636306")
 		(sheetname "/")
 		(sheetfile "pcb-13-charge-inlet.kicad_sch")
-		(attr exclude_from_bom)
+		(attr exclude_from_pos_files exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -4798,6 +4809,17 @@
 			(uuid "b2f5b3e5-9280-479e-a378-9f89eac3346c")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/pcb13.3dshapes/GCT_USB4140-GF-0170-C.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(gr_rect
 		(start 100 100)

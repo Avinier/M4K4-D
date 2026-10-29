@@ -25,4 +25,9 @@
 	(fp_rect (start -5.15 -2.45) (end 5.15 2.45) (stroke (width 0.05) (type solid)) (fill no) (layer "F.CrtYd") (uuid "32835c9a-bb60-5954-8f42-de1a5ce590db"))
 	(fp_rect (start -4.47 -1.58) (end 4.47 1.58) (stroke (width 0.1) (type solid)) (fill no) (layer "F.Fab") (uuid "8d041d3b-c0a6-59d2-b29e-1258eb4b9a39"))
 	(fp_rect (start -4.17 -1.28) (end 4.17 1.28) (stroke (width 0.1) (type solid)) (fill no) (layer "F.Fab") (uuid "ed29fa4d-1a8b-55b3-8a97-874fe2f00d9e"))
+	(model "${KIPRJMOD}/pcb13.3dshapes/GCT_USB4140-GF-0170-C.step"
+		(offset (xyz 0 0 0))
+		(scale (xyz 1 1 1))
+		(rotate (xyz 0 0 0))
+	)
 )

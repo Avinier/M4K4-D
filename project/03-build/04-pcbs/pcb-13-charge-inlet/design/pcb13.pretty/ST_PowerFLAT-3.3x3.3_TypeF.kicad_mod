@@ -21,4 +21,9 @@
 	(pad "4" smd rect (at 0.975 1.525) (size 0.4 0.75) (layers "F.Cu" "F.Mask" "F.Paste") (uuid "ee3516f4-0037-5b6e-8b06-4104dbff8edd"))
 	(fp_rect (start -2 -2.15) (end 2 2.15) (stroke (width 0.05) (type solid)) (fill no) (layer "F.CrtYd") (uuid "23d0efb0-19d7-554e-bd8a-c9cda27a2c25"))
 	(fp_rect (start -1.65 -1.65) (end 1.65 1.65) (stroke (width 0.1) (type solid)) (fill no) (layer "F.Fab") (uuid "19be3d6b-b5a2-5791-8192-a823128d5c54"))
+	(model "${KIPRJMOD}/pcb13.3dshapes/ST_PowerFLAT-3.3x3.3_TypeF.step"
+		(offset (xyz 0 0 0))
+		(scale (xyz 1 1 1))
+		(rotate (xyz 0 0 0))
+	)
 )

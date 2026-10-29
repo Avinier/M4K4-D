@@ -18,8 +18,8 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | In progress: placed and routed (DRC 0 errors, 0 unconnected, parity clean); checks and outputs next | *Inputs* to *Layout*; `check_pcb13_relief.py` 13/13 | 2026-10-29 |
-| 2. Procure | — | — | — |
+| 1. Design | **Done, rev A** | ERC 0/0; DRC 0 errors, 0 unconnected, parity clean; `check_pcb13_fit.py` 11/11, `check_pcb13_relief.py` 13/13; [fab outputs](fab/revA/README.md); [board STEP](cad/pcb-13-charge-inlet-revA.step) | 2026-10-29 |
+| 2. Procure | Waits for the design batch (D-064) | — | — |
 | 3. Integrate | — | — | — |
 
 ## Inputs
@@ -391,6 +391,46 @@ The reference text moved to the fab layers with `kp.refs_to_fab()`. J1, J2 and t
 
 **Trap found on this board.** KiPy's `Zone.is_rule_area` is a method. Testing `not z.is_rule_area` is always False, so the "remove the old pours" step removed nothing and every rerun added another copy of each pour (three of each before it was caught). Call `z.is_rule_area()`, and count the zones after every routing run.
 
+## Checks and outputs (rev A)
+
+**Final checks** (nightly `kicad-cli`, 2026-10-29):
+- ERC: **0 errors, 0 warnings**.
+- DRC with `--schematic-parity`: **0 errors, 0 unconnected, parity clean**. 10 warnings, all `lib_footprint_mismatch` on rotated footprints (round-off).
+- **`audit()`**: every fitted part has its 3D model (n/n). J1, J2, the test pads and H1/H2 are excluded from the position files.
+
+**3D models** (KiCad has none for J1 or Q1; PCB-11 trap):
+
+| Part | Model | Built from |
+|---|---|---|
+| J1 | `pcb13.3dshapes/GCT_USB4140-GF-0170-C.step` | GCT drawing A3: shell 8.94 × 3.16 × 6.50 with the 8.34 × 2.56 mouth; four stakes at the **1.85 mm maximum** (T 0.30), Ø0.55 pegs, six SMT tails |
+| Q1 | `pcb13.3dshapes/ST_PowerFLAT-3.3x3.3_TypeF.step` | ST DS9257 Table 7: 3.30 × 3.30 × **0.90 (maximum)** body |
+
+**Board STEP**: [`cad/pcb-13-charge-inlet-revA.step`](cad/pcb-13-charge-inlet-revA.step), exported with `--user-origin 0x0mm` in 0.46 s. Its `PRODUCT` list carries all 14 fitted parts (J1 and Q1 from the project models). In it, the core sits at Zs 0–1.51, parts 0.085 mm off it, and J1 on B from Zs −6.585 (mouth) to +1.765 (stake tips).
+
+**Fit in the robot**: [`final/v1/cad/check_pcb13_fit.py`](../../final/v1/cad/check_pcb13_fit.py), about 35 s. It places the STEP with world Y = Xs − 114, Z = Ys + 171.5, X = Zs + offset, with the core centred on the CAD board's mid-plane. **11/11 PASS:**
+
+| Check | Result |
+|---|---|
+| Outline against `PCB13_BOARD` | Y −14…14, Z 56.5…71.5, error 0.000 mm |
+| M2 holes on `PCB13_SCREW_YZ` | Clear (no core in Ø1.8 probes) |
+| J1's mouth against the pocket floor (X −61.6) | **−61.640**: 0.04 mm past the floor into the pocket (copper and solder under J1), so the plug seats |
+| J1 against the rear panel, with the D-069 relief | No overlap; 0.280 mm gap (shell to the panel hole) |
+| Board core against the panel | No overlap; 0.045 mm (the B copper and mask, not modelled) |
+| F parts against the panel | None |
+| Tallest F part ≤ 2.0 mm | C1: model 1.64, **datasheet maximum 1.8** |
+| F parts to PCB-02's bare back face (X −49.6) | **2.10 mm** at the datasheet maximum (≥ 1.0) |
+| J1's stake tails on F | Model 0.21 mm; worst case 0.71 mm (1.85 stake on a −10 % board, plus a 0.3 fillet) |
+| Screws (BO-017) against the parts | None |
+| Removal: pad and board 40 mm along −X past the shell, the rear panel frame and the fixed electronics | Clear |
+
+**Planted, both caught**: J1 shifted 0.6 mm sideways into the panel hole wall gave a 5.09 mm³ overlap. C1 given a 4 mm height failed both the 2.0 mm limit and the PCB-02 gap (−0.10 mm). `check_pcb13_relief.py` still passes 13/13.
+
+**Fab outputs**: [`fab/revA/`](fab/revA/README.md).
+- Gerbers (F/B copper and mask, F paste, F silk, outline), Excellon drill in mm (PTH with J1's four plated slots, NPTH), drill maps and the job file, in one zip.
+- The position file and JLCPCB CPL (13 top parts), and the fab BOM (12 lines).
+- One origin throughout: the outline runs 0–28 × 0–15, and the holes fall at (3.0, 7.5) and (25.0, 7.5) in both drill and Gerber.
+- One-sided assembly. J1 is hand-soldered by the builder (steps in the fab README).
+
 ## Log
 
 - **2026-10-28 — Lesson 1, inputs.**
@@ -419,3 +459,8 @@ The reference text moved to the fab layers with `kp.refs_to_fab()`. J1, J2 and t
   - Routed by hand, octolinear. `VBUS`/`VSNK` as pours: narrowest 2.41 mm and 1.29 mm.
   - DRC 0 errors, 0 unconnected, parity clean; 10 round-off warnings on rotated footprints.
   - New trap: KiPy `is_rule_area` is a method; duplicate pours removed.
+- **2026-10-29 — Lesson 5, checks and outputs. Rev A complete.**
+  - J1 and Q1 models built from the makers' drawings; `audit()` n/n.
+  - Board STEP with all 14 fitted parts.
+  - `check_pcb13_fit.py` 11/11 (mouth 0.04 mm into the pocket, 2.10 mm to PCB-02, removal clear); planted faults caught.
+  - Fab outputs in `fab/revA/`: one-sided assembly, J1 by hand.
