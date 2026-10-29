@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | In progress: board set up (DRC 0, rule areas proved); placement next (builder: F8 in the nightly) | *Inputs*, *Schematic*, *Board set-up*; `check_pcb13_relief.py` 13/13 | 2026-10-29 |
+| 1. Design | In progress: placed and routed (DRC 0 errors, 0 unconnected, parity clean); checks and outputs next | *Inputs* to *Layout*; `check_pcb13_relief.py` 13/13 | 2026-10-29 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -252,7 +252,7 @@ So the actives are bought in India (D-069): J1 by the builder, who solders it; t
 | J1 | GCT USB4140-GF-0170-C, hand-soldered by the builder (D-069) | A9, B9 `VBUS`; A12, B12, SH `GND`; A5 `CC1`; B5 `CC2` |
 | D1 | TVS2200DRVR | IN (4–6) `VBUS`; GND (1–3, 7) |
 | C1 | 4.7 µF 50 V X7R 1206, Samsung CL31B475KBHNNNE (1.6 ± 0.2 mm: the tallest part) | `VBUS`–`GND` |
-| D2 | ESDA25W | 1 `CC1`, 2 `CC2`, 3 `GND` |
+| D2 | ESDA25W | 1 `CC2`, 2 `CC1` (swapped at placement), 3 `GND` |
 | U1 | STUSB4500QTR | 1 CC1DB + 2 CC1 → `CC1`; 4 CC2 + 5 CC2DB → `CC2` (dead battery); 6 `RESET`; 7 `SCL`; 8 `SDA`; 9 `DISCH`; 10, 22 (VSYS), 25 (EP) `GND`; 11 `ATTACH`; 12 `ADDR0`; 13 `ADDR1`; 16 `EN_SNK`; 18 `VS_DISCH`; 20 `POWER_OK2`; 21 `VREG_1V2`; 23 `VREG_2V7`; 24 VDD `VBUS`. No connection: 3 NC, 14 POWER_OK3, 15 GPIO, 17 A_B_SIDE, 19 ALERT |
 | C2 | 1 µF 50 V X7R 0603 (CL10B105KB8NNNC) | U1 VDD (`VBUS`)–`GND` |
 | C3, C4 | 1 µF 10 V 0402 (CL05A105KP5NNNC) | `VREG_1V2`, `VREG_2V7` |
@@ -260,10 +260,10 @@ So the actives are bought in India (D-069): J1 by the builder, who solders it; t
 | R2 | 470 Ω 1206 anti-surge, ERJ-P08J471V | `DISCH`–`VSNK` |
 | Q1 | STL6P3LLH6 | S (1–3) `VBUS`, G (4) `GATE`, D (5) `VSNK` |
 | R3, C5, R4 | 100 kΩ 0402; 100 nF 50 V 0603 (CL10B104KB8NNNC); 33 kΩ 0402 | `VBUS`–`GATE`; `VBUS`–`GATE`; `GATE`–`EN_SNK` |
-| R5, R6, R7 | 100 kΩ 0402 | `ADDR0`, `ADDR1`, `RESET` to `GND` (address 0x28) |
+| (R5–R7) | Deleted at placement | `ADDR0`, `ADDR1`, `RESET` tied straight to `GND` at the QFN (address 0x28); see *Layout* |
 | J2 | `W16` lap pads | 1 `VSNK`, 2 `GND` → PCB-02 `J2-8` 1, 2 |
-| TP1–TP5 | Ø1.0 pads, 2.54 mm grid (P75 pogos), not in the BOM | `VBUS`, `GND`, `SCL`, `SDA`, `RESET` (programming) |
-| TP6–TP10 | Ø1.0 pads, not in the BOM | `VSNK`, `CC1`, `CC2`, `ATTACH`, `POWER_OK2` (probing) |
+| TP1–TP4 | Ø1.0 pads, 2.54 mm grid (P75 pogos), not in the BOM | `VBUS`, `GND`, `SCL`, `SDA` (programming; TP5 `RESET` deleted at placement) |
+| TP9, TP10 | Ø1.0 pads, not in the BOM | `ATTACH`, `POWER_OK2` (probing; TP6–TP8 deleted at placement: `VSNK` on J2 pad 1, CC on D2's leads) |
 | H1, H2 | Ø2.2 holes | M2 × 5 screws (BO-017); no net |
 
 **R1, rated at last.** At 20 V, `VBUS_VS_DISCH` draws 20 mA through R1, which is **0.4 W** in R1. That happens during every discharge: on detach, on a PDO step-down, and after a hard reset. The 50 mA pin limit was checked in charge-path §3, but R1's own dissipation was not. A standard 0603 is rated 0.1 W (about 0.25 W for 5 s as an overload). The ERJ-P06 anti-surge 0805 is rated 0.5 W. ST's Fig. 9 also spreads this path over two resistors (470 Ω + 1 kΩ). Recorded in charge-path §3 and as a D-069 amendment.
@@ -272,7 +272,7 @@ So the actives are bought in India (D-069): J1 by the builder, who solders it; t
 
 **ERC** (nightly `kicad-cli sch erc --severity-all`, 2026-10-29): **0 errors, 0 warnings.**
 
-**Check against the inputs**, from the exported netlist (2026-10-29): **all 18 nets match charge-path §3 pin for pin.** The nets are `VBUS` (15 pins), `GND` (20), `VSNK`, `CC1`, `CC2`, `GATE`, `EN_SNK`, `VS_DISCH`, `DISCH`, `VREG_1V2`, `VREG_2V7`, `SCL`, `SDA`, `RESET`, `ADDR0`, `ADDR1`, `ATTACH` and `POWER_OK2`. The only one-pin nets are U1's five no-connects.
+**Check against the inputs**, from the exported netlist (2026-10-29): **all 18 nets match charge-path §3 pin for pin.** After the placement changes (*Layout*), 15 nets remain and all match; ERC is still 0/0. The nets are `VBUS` (15 pins), `GND` (20), `VSNK`, `CC1`, `CC2`, `GATE`, `EN_SNK`, `VS_DISCH`, `DISCH`, `VREG_1V2`, `VREG_2V7`, `SCL`, `SDA`, `RESET`, `ADDR0`, `ADDR1`, `ATTACH` and `POWER_OK2`. The only one-pin nets are U1's five no-connects.
 
 ### Gap 6 (settled 2026-10-29: option a): `W16` strain relief
 
@@ -332,6 +332,65 @@ charge-path §3 says `W16` is "tied through two slots". A cable tie through two 
 - then place by group: protection at J1 (D1, C1, D2 within 3 mm), Q1 and its gate parts, U1 and its capacitors, the test pads last;
 - leave J1, J2 and the test pads out of the position files.
 
+## Layout
+
+Placed and routed 2026-10-29 with [`tools/kp.py`](../tools/kp.py) in the open nightly, after the builder's F8. The design is two layers at 1.6 mm, 1 oz. No autorouter was used: every track was placed by hand and is 0°, 45° or 90° (`kp.track()` refuses anything else).
+
+**Floor plan, and why the first two failed.** The deciding fact is that U1's pads span 4.75 mm, and every side of the QFN has used pins.
+
+1. **U1 below J1:** between J1's stakes and the board edge, the pads came within 0.03 mm of the 0.3 mm edge rule. Five signal pins faced the edge with no room for a track, and a track can't pass between 0.5 mm-pitch pads.
+2. **U1 above J1 with J1's pad row up:** U1's I²C side faced Q1 and its `VBUS` feed, and the CC lines crossed.
+3. **Final:**
+   - **J1 on B at rot 0**, pad row down: CC1 at x 113.5 and CC2 at x 114.5, the same order as U1's CC pins. The inner stakes and pegs are up.
+   - **U1 at rot 90 in the top band** (114.0, 103.05). Its CC side faces J1, its `VDD`/`VREG` side faces the capacitors on the left, and its I²C/DISCH side faces the test pads on the right. The side toward the top edge (pins 13–18) has only three used pins.
+   - **Q1 at the bottom right**, so the 3 A path is J1 → back bar → 4 vias → front pour → Q1 → right-edge strip → J2.
+
+**Schematic changes made at placement** ([D-069](../../decisions.md#d-069) amended; ERC 0/0; the netlist matches on all 15 nets):
+
+| Change | Why |
+|---|---|
+| **ADDR0, ADDR1 and RESET tied straight to GND** at the QFN (pins 12, 13, 6 by stubs to the exposed pad); **R5–R7 deleted** | All three are corner pins with no room for an exit track. ST: "to ground if no MCU". The address stays 0x28. NVM programming over I²C does not need RESET: the jig cycles the 5 V |
+| **TP5 (RESET), TP6 (`VSNK`), TP7/TP8 (CC1/CC2) deleted** | RESET is now GND. `VSNK` is probed on J2 pad 1. There is no room beside the CC vias; CC is scoped on D2's leads, or with an inline PD tester as bench CP-02 uses |
+| **D2 pins swapped**: 1 `CC2`, 2 `CC1` | The ESDA25W's two diodes are identical with a common anode. The swap lets D2's GND lead face outward to its own via |
+| **J2 turned 180°**: pad 1 `VSNK` now lower (126.0, 103.95), pad 2 `GND` upper | The `VSNK` strip comes up the right edge. The pin numbers and the `J2-8` order are unchanged |
+
+**Placement** (KiCad mm; board 100–128 × 100–115):
+
+| Group | Parts |
+|---|---|
+| Fixed | J1 (114, 107.5) B rot 0; H1 (103, 107.5), H2 (125, 107.5); J2 (126.0, 102.7) rot 180 |
+| U1 and support (top left) | U1 (114.0, 103.05) rot 90; C3 (110.2, 102.8) and C4 (110.2, 103.8), the `VREG` capacitors, 1.3 mm from their pins; C2 (108.3, 104.0) at `VDD`; R1 (108.5, 101.1) on `VS_DISCH`; TP10 `POWER_OK2` (106.4, 103.3) |
+| Programming block (top right, 2.54 mm grid) | TP1 `VBUS` (119.6, 102.95), TP2 `GND` (122.14, 102.95), TP3 SCL (119.6, 105.49), TP4 SDA (122.14, 105.49); TP9 `ATTACH` (119.6, 100.9) |
+| CC protection (over J1) | D2 (111.6, 108.4) rot 180, 1.3 mm from the CC vias |
+| `VBUS` protection (bottom left) | D1 TVS2200 (110.6, 111.6), C1 (107.6, 112.4) rot 90, both within 3 mm of J1's `VBUS` pads |
+| Switch and bleed | Q1 (124.9, 112.4) rot 270, source left, drain right; R2 (120.9, 108.9) rot 270, `DISCH` top, `VSNK` bottom; R3 (121.2, 113.6), C5 (119.3, 113.4), R4 (117.5, 113.6), standing along the bottom edge |
+
+Fine margins found: U1's corner pads clear J1's inner stake rings by 0.20 mm; TP3 clears the right peg by 0.45 mm and the stake ring by 0.24 mm; TP4's courtyard clears H2's by 0.05 mm; J2's clears H2's by 0.05 mm.
+
+**Routing.**
+
+| Net | Route |
+|---|---|
+| `VBUS` (3 A) | J1 A9/B9 (B) → `VBUS_B_BAR` pour below the pad row → **4 vias** (112.6–115.6, 111.3) → `VBUS_F` pour across the bottom band → Q1 source, D1, C1, C5, R3. The narrowest poured section between the vias and Q1 is **2.41 mm** (needs 1.37 at ΔT 10 °C) |
+| `VSNK` (3 A) | Q1 drain → `VSNK_F` pour up the right edge, past H2's hole → J2 pad 1. The strip between the hole's 0.31 mm keep-out and the 0.3 mm edge rule is **1.29 mm** wide and about 4 mm long: IPC-2221 gives 2.9 A at ΔT 10 °C. At the real 1.4 A it is a fraction of that |
+| `GND` | Solid `GND_B` plane over the whole B face. It is cut only by the `VBUS` bar and two thin tracks right of J1, and joins J1's GND pads and four stakes directly. `GND_F` fills the rest of F. Vias: 4 in U1's exposed pad, one for each of the capacitor group, D2, D1 (in its pad), C1 and TP2, and 2 in J2's GND lap pad. All vias are tented |
+| `VDD`, `R1` feed | `VBUS` 0.3 mm from D1 up the left channel between H1 and J1's left stake, to C2, then U1 pin 24; a branch to R1 |
+| CC1, CC2 | J1 pads (B) up 0.8 mm to vias at (113.5/114.5, 106.9). On F, up to U1 pins 1–2 and 4–5 (each pair joined at its tips) and down to D2. No crossing |
+| SCL, SDA, DISCH, ATTACH | Out of U1's right side in lanes at y 104.95, 104.4, 103.85 and 102.3/101.3, to TP3, TP4, R2 (down the gap left of H2) and TP9. The SCL lane clears the peg by 0.32 mm |
+| `EN_SNK`, `VS_DISCH` | The single 0.16 mm lane above U1: `VS_DISCH` left to R1; `EN_SNK` right to a via at (117.3, 100.9), down the B face right of J1, then up to R4 |
+| `GATE` | One bus along y 114.3: R4 → C5 → R3 → Q1 pin 4 |
+| TP1 `VBUS` | B track right of J1 (x 119.2), via at (119.0, 102.15) |
+
+Track widths: 0.16 mm on slow signals, 0.2 mm on CC and `GATE`, 0.25–0.3 mm on `VDD`, `VREG` and the grounds, pours on the power path.
+
+**DRC** (nightly `kicad-cli pcb drc --schematic-parity --severity-all`, 2026-10-29):
+- **0 errors, 0 unconnected pads, schematic parity clean.**
+- The 10 warnings left are all `lib_footprint_mismatch` on the ten rotated footprints. That is the playbook's 1 nm round-off trap; the unrotated C1 and D1 are not flagged.
+
+The reference text moved to the fab layers with `kp.refs_to_fab()`. J1, J2 and the test pads are excluded from the position files (`kp.exclude_from_pos`): J1 is fitted by the builder, and J2 and the test pads are bare copper.
+
+**Trap found on this board.** KiPy's `Zone.is_rule_area` is a method. Testing `not z.is_rule_area` is always False, so the "remove the old pours" step removed nothing and every rerun added another copy of each pour (three of each before it was caught). Call `z.is_rule_area()`, and count the zones after every routing run.
+
 ## Log
 
 - **2026-10-28 — Lesson 1, inputs.**
@@ -355,3 +414,8 @@ charge-path §3 says `W16` is "tied through two slots". A cable tie through two 
   - Rule areas: B face no footprints outside the relief; no vias under the screw heads.
   - Envelope drawn on User.1–5.
   - Empty-board DRC 0. Fixed parts (J1 on B both ways round, H1, H2, J2) DRC-clean at their CAD places; every planted violation caught.
+- **2026-10-29 — Lesson 4, layout.**
+  - Placed after two failed floor plans (U1 has no room below J1). D-069 amended: ADDR0/ADDR1/RESET to GND (R5–R7 out); TP5–TP8 out; D2 inputs swapped; J2 turned 180°.
+  - Routed by hand, octolinear. `VBUS`/`VSNK` as pours: narrowest 2.41 mm and 1.29 mm.
+  - DRC 0 errors, 0 unconnected, parity clean; 10 round-off warnings on rotated footprints.
+  - New trap: KiPy `is_rule_area` is a method; duplicate pours removed.

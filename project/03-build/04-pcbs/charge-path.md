@@ -60,8 +60,8 @@ Nothing upstream of `VSNK` is live until a source attaches and a 9 V or 15 V con
 | R3 | 100 kΩ | | Q1 gate–source | Holds Q1 off |
 | R4 | 33 kΩ | | Q1 gate → U1 `VBUS_EN_SNK` | **Added.** With R3 it sets `VGS` = −0.75 × `VBUS`: −6.8 V at 9 V, −11.3 V at 15 V, −15.0 V at 20 V, −16.5 V at the TVS standoff. Directly driven, `VGS` would reach −20 V at a 20 V source |
 | C5 | 100 nF 50 V | | Q1 gate–source | Soft turn-on: τ = (100 k ∥ 33 k) × 100 nF = 2.5 ms, so the PCB-02 input capacitors draw about 0.15 A |
-| R5–R7 | 100 kΩ | | `ADDR0`, `ADDR1`, `RESET` to `GND` | Address 0x28; pads let the programming jig drive them |
-| TP | Pads, 2.54 mm grid for P75 pogos ([D-069](../decisions.md#d-069); was 1.27 mm) | | `VBUS`, `VSNK`, `CC1`, `CC2`, `SCL`, `SDA`, `RESET`, `ATTACH`, `POWER_OK2`, `GND` | NVM programming and bench probing. `ALERT`, `GPIO`, `POWER_OK3`, `A_B_SIDE`: no connection |
+| (R5–R7) | Deleted ([D-069](../decisions.md#d-069) amended at placement) | | `ADDR0`, `ADDR1`, `RESET` tied straight to `GND` | Address 0x28. Corner pins with no room for an exit track; programming does not need RESET (the jig cycles 5 V) |
+| TP | Pads, 2.54 mm grid for P75 pogos ([D-069](../decisions.md#d-069); was 1.27 mm) | | `VBUS`, `GND`, `SCL`, `SDA` (programming), `ATTACH`, `POWER_OK2` (probing). `VSNK` on the `W16` pad, CC on D2's leads ([D-069](../decisions.md#d-069) amended) | NVM programming and bench probing. `ALERT`, `GPIO`, `POWER_OK3`, `A_B_SIDE`: no connection |
 | W16 | 2 × AWG22, 150 mm, lap-soldered at the +Y end of the +X face, held by a bead of neutral-cure silicone (no tie: its strap would cross the seated −X face; [D-069](../decisions.md#d-069) amended) | | `VSNK`, `GND` → Micro-Fit 3.0 2-way plug (43025 + 43030) | The live side has the female contacts. `VSNK` is dead unless a contract exists |
 
 Layout:

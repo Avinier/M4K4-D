@@ -2909,3 +2909,11 @@ The amplifier corner routed on two layers carries over unchanged. **BOM changed:
 **Amended 2026-10-29 (PCB-13 schematic): R1 is a 1 kΩ 0805 anti-surge resistor (Panasonic ERJ-P06J102V, 0.5 W), not a 0603.** It drops the whole `VBUS_VS_DISCH` discharge: 20 mA at 20 V is 0.4 W, four times a standard 0603's rating. charge-path §3 checked only the pin's 50 mA limit. Schematic: ERC 0/0, and all 18 nets match §3 ([PCB-13 README](04-pcbs/pcb-13-charge-inlet/README.md#schematic)).
 
 **Amended 2026-10-29 (PCB-13 `W16` strain relief, builder: the recommended option).** `W16` is lap-soldered to two SMD pads (J2) and held by a bead of neutral-cure silicone over the joints and 5 mm of insulation. D-040's tie through two slots is dropped: its strap would cross PCB-13's −X face, which sits flat on the printed pad, and the slots would leave thin webs at the board's +Y edge. No CAD change: the bead stays inside the `W16` reserve, 0.4 mm short of PCB-02.
+
+**Amended 2026-10-29 (PCB-13 placement, builder: the recommended options).** U1's 4.75 mm pad span left no room for exit tracks from its corner pins, so:
+
+- **ADDR0, ADDR1 and RESET are tied straight to GND** at the QFN, and R5–R7 are deleted. ST says to ground them with no MCU; the address stays 0x28, and NVM programming over I²C does not need RESET.
+- **TP5 (RESET), TP6 (`VSNK`), TP7 and TP8 (CC) are deleted.** `VSNK` is probed on J2's lap pad, and CC on D2's leads or with an inline PD tester. The programming block is TP1–TP4 (`VBUS`, `GND`, SCL, SDA) on the 2.54 mm grid.
+- **D2's two identical inputs are swapped** (1 CC2, 2 CC1), and **J2 is turned 180°**. Neither changes the circuit or the `J2-8` pin order.
+
+Layout: DRC 0 errors, 0 unconnected, parity clean ([PCB-13 README](04-pcbs/pcb-13-charge-inlet/README.md#layout)).
