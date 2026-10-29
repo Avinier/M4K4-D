@@ -1,0 +1,4 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "pcb13") (type "KiCad") (uri "${KIPRJMOD}/pcb13.kicad_sym") (options "") (descr "PCB-13 project symbols"))
+)

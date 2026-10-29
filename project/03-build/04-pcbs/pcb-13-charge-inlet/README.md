@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | In progress: inputs frozen ([D-069](../../decisions.md#d-069)); schematic next | This README, *Inputs*; `check_pcb13_relief.py` 13/13 | 2026-10-29 |
+| 1. Design | In progress: schematic done (ERC 0/0, 18/18 nets; gap 6 settled); board set-up next | *Inputs*, *Schematic*; `check_pcb13_relief.py` 13/13 | 2026-10-29 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -213,6 +213,76 @@ So the actives are bought in India (D-069): J1 by the builder, who solders it; t
 4. **2.54 mm test-pad grid**, Ø1.0, P75 pogos.
 5. **element14 India** for USB4140, STUSB4500, STL6P3LLH6 and ESDA25W, and **Mouser India** for TVS2200DRVR. All but J1 are consigned.
 
+## Schematic
+
+[`design/pcb-13-charge-inlet.kicad_sch`](design/pcb-13-charge-inlet.kicad_sch), with a PDF print, [`pcb-13-charge-inlet-schematic.pdf`](design/pcb-13-charge-inlet-schematic.pdf). It is one A3 sheet, written for the KiCad 10.99 nightly. As on PCB-05 and PCB-10, every pin end carries a short wire and a local label, nets join by label name, and the notes sit in one block at the bottom left.
+
+**Project set-up.**
+
+| File | Holds |
+|---|---|
+| `pcb-13-charge-inlet.kicad_pro` | PCB-06's two-layer project, renamed: the fab-neutral board minimums and the default net class |
+| `pcb-13-charge-inlet.kicad_dru` | The fab-neutral rules ([D-062](../../decisions.md#d-062)), copied from PCB-15 |
+| `sym-lib-table`, `pcb13.kicad_sym` | Project symbol library `pcb13`, all three flattened from stock bodies, so ERC sees no library mismatch: <br>• **`TVS2200DRV`**: the stock symbol derives from `TVS0500DRV`, so the base body is embedded with TVS2200's fields (the playbook's derived-symbol trap). Pins 1–3 and 7 (pad) GND, 4–6 IN. <br>• **`ESDA25W`**: KiCad has no ESDA25W, so it uses `SP0502BAHT`'s body (dual common-anode TVS: 1, 2 cathodes, 3 anode) with the SOT-323 footprint and ST's fields. <br>• **`STL6P3LLH6`**: `SiS415DNT`'s P-FET body; pins 1–3 S (stacked), 4 G, 5 D, which is ST's pinout |
+| `fp-lib-table`, `pcb13.pretty/` | Three project footprints, below |
+| Stock parts | `Interface_USB:STUSB4500QTR`, whose pins match DS12499 Table 1 one for one, EP = 25 GND. `Connector:USB_C_Receptacle_PowerOnly_6P` (A5, A9, A12, B5, B9, B12, SH). Footprints `QFN-24-1EP_4x4mm_P0.5mm_EP2.7x2.7mm`, `WSON-6-1EP_2x2mm_P0.65mm_EP1x1.6mm`, `SOT-323_SC-70`, 0402–1206 passives, `TestPoint_Pad_D1.0mm`, `MountingHole_2.2mm_M2` |
+
+**Project footprints** (`pcb13.pretty/`):
+
+- **`GCT_USB4140-GF-0170-C`**: GCT's recommended layout (drawing A3, 29/08/24), as tabled in *J1 land pattern*. Six SMT pads, B12 B9 A5 B5 A9 A12. Four plated slots, all numbered `SH`: 1.10 × 1.50 copper round a 0.60 × 1.00 slot at x ±4.32; 1.60 × 1.10 round 1.10 × 0.60 at x ±2.30, y +1.43. The two peg holes are NPTH: Ø0.70, and a 1.00 × 0.70 slot. F.Fab draws the 8.94 × 3.16 shell. The courtyard is 10.3 × 4.9. J1 goes on B.Cu at layout (the −X face). No 3D model yet: lesson 5 builds one from the drawing.
+- **`ST_PowerFLAT-3.3x3.3_TypeF`**: ST's Fig. 16.
+  - Drain pad `5`: 2.45 × 2.40 with two 0.53 × 0.40 side tabs, and four paste windows (about 65 %).
+  - Pads 1–4: 0.40 × 0.75 at 0.65 pitch, 0.65 mm below the drain pad, 3.80 overall.
+  - No 3D model yet (lesson 5).
+- **`W16_SolderPads_2x_AWG22`**: two 3.2 × 1.6 mm lap pads 2.5 mm apart, 1 `VSNK`, 2 `GND`. No paste, so they are left out of the BOM and position files: the builder solders the lead. Wires lie along the pad, toward +Y in the robot. **Strain relief: a silicone bead, gap 6 (a).**
+
+**Footprints on a scratch board** (playbook set-up step, 2026-10-29):
+
+- Every footprint above sat on a scratch board with this board's `.kicad_dru` copied under the scratch name, which is the PCB-06 trap. The pads carry their real nets: with no nets, DRC skips pad pairs and proves nothing.
+- **No clearance, hole or mask violation in any footprint.** GCT's 1.00 mm oval peg slot comes closest: it clears the inner stake copper by 0.33 mm. Both ends are rounded, so this is above the 0.31 mm hole rule, not the 0.275 a straight-edge sum gives.
+- **Planted:** a via 0.20 mm from another net's pad was caught by `fab-neutral via to other copper` (0.31), so the custom rules were live.
+- The remaining warnings are stock reference text at 0.15 mm stroke; `kp.refs_to_fab()` handles them at layout.
+- Every stock footprint's 3D model file exists on disk (PCB-05 trap).
+- Stock QFN-24 against ST's Fig. 12: KiCad's pads are 0.825 long against ST's 0.6. They run 0.175 further out (toe) and keep 0.20 to the 2.70 exposed pad. Kept.
+
+**Circuit** (references as drawn; charge-path §3 unchanged except R1):
+
+| Ref | Part | Nets |
+|---|---|---|
+| J1 | GCT USB4140-GF-0170-C, hand-soldered by the builder (D-069) | A9, B9 `VBUS`; A12, B12, SH `GND`; A5 `CC1`; B5 `CC2` |
+| D1 | TVS2200DRVR | IN (4–6) `VBUS`; GND (1–3, 7) |
+| C1 | 4.7 µF 50 V X7R 1206, Samsung CL31B475KBHNNNE (1.6 ± 0.2 mm: the tallest part) | `VBUS`–`GND` |
+| D2 | ESDA25W | 1 `CC1`, 2 `CC2`, 3 `GND` |
+| U1 | STUSB4500QTR | 1 CC1DB + 2 CC1 → `CC1`; 4 CC2 + 5 CC2DB → `CC2` (dead battery); 6 `RESET`; 7 `SCL`; 8 `SDA`; 9 `DISCH`; 10, 22 (VSYS), 25 (EP) `GND`; 11 `ATTACH`; 12 `ADDR0`; 13 `ADDR1`; 16 `EN_SNK`; 18 `VS_DISCH`; 20 `POWER_OK2`; 21 `VREG_1V2`; 23 `VREG_2V7`; 24 VDD `VBUS`. No connection: 3 NC, 14 POWER_OK3, 15 GPIO, 17 A_B_SIDE, 19 ALERT |
+| C2 | 1 µF 50 V X7R 0603 (CL10B105KB8NNNC) | U1 VDD (`VBUS`)–`GND` |
+| C3, C4 | 1 µF 10 V 0402 (CL05A105KP5NNNC) | `VREG_1V2`, `VREG_2V7` |
+| R1 | **1 kΩ 0805 anti-surge, Panasonic ERJ-P06J102V** (was 0603) | `VBUS`–`VS_DISCH` |
+| R2 | 470 Ω 1206 anti-surge, ERJ-P08J471V | `DISCH`–`VSNK` |
+| Q1 | STL6P3LLH6 | S (1–3) `VBUS`, G (4) `GATE`, D (5) `VSNK` |
+| R3, C5, R4 | 100 kΩ 0402; 100 nF 50 V 0603 (CL10B104KB8NNNC); 33 kΩ 0402 | `VBUS`–`GATE`; `VBUS`–`GATE`; `GATE`–`EN_SNK` |
+| R5, R6, R7 | 100 kΩ 0402 | `ADDR0`, `ADDR1`, `RESET` to `GND` (address 0x28) |
+| J2 | `W16` lap pads | 1 `VSNK`, 2 `GND` → PCB-02 `J2-8` 1, 2 |
+| TP1–TP5 | Ø1.0 pads, 2.54 mm grid (P75 pogos), not in the BOM | `VBUS`, `GND`, `SCL`, `SDA`, `RESET` (programming) |
+| TP6–TP10 | Ø1.0 pads, not in the BOM | `VSNK`, `CC1`, `CC2`, `ATTACH`, `POWER_OK2` (probing) |
+| H1, H2 | Ø2.2 holes | M2 × 5 screws (BO-017); no net |
+
+**R1, rated at last.** At 20 V, `VBUS_VS_DISCH` draws 20 mA through R1, which is **0.4 W** in R1. That happens during every discharge: on detach, on a PDO step-down, and after a hard reset. The 50 mA pin limit was checked in charge-path §3, but R1's own dissipation was not. A standard 0603 is rated 0.1 W (about 0.25 W for 5 s as an overload). The ERJ-P06 anti-surge 0805 is rated 0.5 W. ST's Fig. 9 also spreads this path over two resistors (470 Ω + 1 kΩ). Recorded in charge-path §3 and as a D-069 amendment.
+
+`PWR_FLAG` sits on `VBUS` (enters on J1) and `GND`. `VSNK` has no power-input pins, so it needs none. The two holes carry no net.
+
+**ERC** (nightly `kicad-cli sch erc --severity-all`, 2026-10-29): **0 errors, 0 warnings.**
+
+**Check against the inputs**, from the exported netlist (2026-10-29): **all 18 nets match charge-path §3 pin for pin.** The nets are `VBUS` (15 pins), `GND` (20), `VSNK`, `CC1`, `CC2`, `GATE`, `EN_SNK`, `VS_DISCH`, `DISCH`, `VREG_1V2`, `VREG_2V7`, `SCL`, `SDA`, `RESET`, `ADDR0`, `ADDR1`, `ATTACH` and `POWER_OK2`. The only one-pin nets are U1's five no-connects.
+
+### Gap 6 (settled 2026-10-29: option a): `W16` strain relief
+
+charge-path §3 says `W16` is "tied through two slots". A cable tie through two slots wraps round the board, so its strap would cross the −X face. That face sits flat on the printed pad, so the board would rock on the tie, as it would have on the stake fillets (gap 1). There is also little room: the pads fill Y 10–14, Z 66–71 above the +Y screw head, and slots would sit within 0.5 mm of the board edge.
+
+| Option | What it needs |
+|---|---|
+| **(a) Lap pads + a bead of neutral-cure silicone (or hot-melt) over the joints and 5 mm of insulation, on the +X face** (recommended) | No CAD change. The bead stays inside the `W16` reserve: 3.5 mm from the board face, 0.4 mm short of PCB-02. `J2-8` is unplugged by its housing and latch, so the lead itself carries little pull |
+| (b) The tie, as in D-040, through two NPTH slots | A 1.2 mm groove in the pad under the strap (`DROID_CUTS`, added to `check_pcb13_relief.py`). It also takes board area at the +Y end and leaves thin webs at the edge |
+
 ## Log
 
 - **2026-10-28 — Lesson 1, inputs.**
@@ -224,3 +294,10 @@ So the actives are bought in India (D-069): J1 by the builder, who solders it; t
   - Fixed the `W16`/`J2-8` interface for PCB-02.
   - Gaps 1–5 raised.
 - **2026-10-29 — Inputs frozen ([D-069](../../decisions.md#d-069)).** Builder: relief widened (gap 1), J1 hand-soldered (gap 2), 1 oz two layers (gap 3), 2.54 mm P75 pads (gap 4), element14 India and Mouser India (gap 5). `DROID_CUTS` relief plus `check_pcb13_relief.py` 13/13. BO-015 sources updated.
+- **2026-10-29 — Lesson 2, schematic.**
+  - Project set up; three flattened project symbols and three project footprints.
+  - ERC 0/0; the netlist matches charge-path §3 on all 18 nets.
+  - All footprints DRC-clean on a scratch board with the rules (planted via caught); every stock model file present.
+  - R1 moved to a 0805 anti-surge part: 0.4 W at 20 V, not rated before.
+  - Gap 6 raised: the `W16` tie would cross the seated −X face.
+- **2026-10-29 — Gap 6 settled** (builder: "whatever is recommended"): option (a). `W16` is lap-soldered to J2 and held by a bead of neutral-cure silicone over the joints and 5 mm of insulation on the +X face. No tie and no slots, so no CAD change. D-069 amended.

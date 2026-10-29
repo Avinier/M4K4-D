@@ -54,7 +54,7 @@ Nothing upstream of `VSNK` is live until a source attaches and a 9 V or 15 V con
 | C2 | 1 µF 50 V X7R 0603 | | U1 `VDD` | |
 | U1 | ST **STUSB4500QTR** | `VDD` 4.1–22 V, 28 V absolute maximum; CC 22 V tolerant (`D`) | `VDD` ← `VBUS`; `VSYS` → `GND`; `CC1DB`–`CC1`, `CC2DB`–`CC2` (dead battery) | A flat pack must still negotiate |
 | C3, C4 | 1 µF 10 V 0402 | | `VREG_1V2`, `VREG_2V7` | Datasheet value |
-| R1 | 1 kΩ 0603 | 20 mA at 20 V, below the 50 mA pin limit | `VBUS_VS_DISCH` → `VBUS` | Senses and discharges the receptacle side |
+| R1 | 1 kΩ **0805 anti-surge** (ERJ-P06J102V, 0.5 W; was 0603, [D-069](../decisions.md#d-069) amended) | 20 mA at 20 V, below the 50 mA pin limit; **0.4 W** in R1 during a discharge | `VBUS_VS_DISCH` → `VBUS` | Senses and discharges the receptacle side |
 | R2 | 470 Ω 1206 anti-surge, ≥ 0.5 W (ERJ-P08 class) | 32 mA, 0.48 W at 15 V | `DISCH` → `VSNK` | Bleeds the PCB-02 input capacitors on detach. Also on during a PDO step-down, for up to 756 ms with the source still on |
 | Q1 | ST **STL6P3LLH6** | −30 V, ±20 V `VGS`, 6 A, 30 mΩ maximum, PowerFLAT 3.3 × 3.3 (`D`) | Source on `VBUS`, drain on `VSNK` | ST reference part. Its body diode points `VSNK` → `VBUS`, so it blocks the 5 V before the contract |
 | R3 | 100 kΩ | | Q1 gate–source | Holds Q1 off |
@@ -62,7 +62,7 @@ Nothing upstream of `VSNK` is live until a source attaches and a 9 V or 15 V con
 | C5 | 100 nF 50 V | | Q1 gate–source | Soft turn-on: τ = (100 k ∥ 33 k) × 100 nF = 2.5 ms, so the PCB-02 input capacitors draw about 0.15 A |
 | R5–R7 | 100 kΩ | | `ADDR0`, `ADDR1`, `RESET` to `GND` | Address 0x28; pads let the programming jig drive them |
 | TP | Pads, 2.54 mm grid for P75 pogos ([D-069](../decisions.md#d-069); was 1.27 mm) | | `VBUS`, `VSNK`, `CC1`, `CC2`, `SCL`, `SDA`, `RESET`, `ATTACH`, `POWER_OK2`, `GND` | NVM programming and bench probing. `ALERT`, `GPIO`, `POWER_OK3`, `A_B_SIDE`: no connection |
-| W16 | 2 × AWG22, 150 mm, soldered at the +Y end of the +X face, tied through two slots | | `VSNK`, `GND` → Micro-Fit 3.0 2-way plug (43025 + 43030) | The live side has the female contacts. `VSNK` is dead unless a contract exists |
+| W16 | 2 × AWG22, 150 mm, lap-soldered at the +Y end of the +X face, held by a bead of neutral-cure silicone (no tie: its strap would cross the seated −X face; [D-069](../decisions.md#d-069) amended) | | `VSNK`, `GND` → Micro-Fit 3.0 2-way plug (43025 + 43030) | The live side has the female contacts. `VSNK` is dead unless a contract exists |
 
 Layout:
 - D1, D2 and C1 go within 3 mm of J1, with their ground straight to the stake pads.
