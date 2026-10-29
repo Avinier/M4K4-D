@@ -12,8 +12,8 @@ The model basis is [chassis-v1.step.py](cad/chassis-v1.step.py) and [body_chassi
 | CH-002 | Printed caster and sensor mount pod (not the caster) | 1 | DESIGN |
 | CH-003 | Ball pod sensor lid (rear tongue + one M2 screw, D-011) | 1 | DESIGN |
 | CH-004 | Wheel rim, six framed spokes ([D-008](../../decisions.md#d-008)) | 2 | DESIGN |
-| CH-005 | Tyre: printed TPU 95A chevron, clamped; one left, one right ([D-009](../../decisions.md#d-009)) | 2 | DESIGN |
-| CH-058 | Wheel hub cap, dark PETG ([D-008](../../decisions.md#d-008)) | 2 | DESIGN |
+| CH-005 | Tyre: printed TPU 95A chevron, clamped; one part printed twice, fitted with the V at the top pointing forward; printed Ø73.6 bore, 19.3 wide ([D-009](../../decisions.md#d-009), [D-070](../../decisions.md#d-070)) | 2 | DESIGN |
+| CH-058 | Wheel hub cap, dark PETG ([D-008](../../decisions.md#d-008)); clocking holes in the cap, pegs on the rim hub, prints underside down ([D-070](../../decisions.md#d-070)) | 2 | DESIGN |
 | CH-007 | Touch cap with two snap fingers and magnet pocket (D-011, D-013) | 1 | DESIGN |
 | CH-008 | Rear skid and TCRT keel ([D-014](../../decisions.md#d-014)) | 1 | DESIGN |
 | CH-009 | Replaceable dovetail wear shoe, PETG recommended ([D-017](../../decisions.md#d-017)) | 1 | DESIGN |
@@ -94,7 +94,7 @@ The canonical [project BOM](../../BOM.csv) and this chassis snapshot are the sou
 | CH-053 | ISO 7380 M3 × 18 bearing housing and cap screw | 8 | CANDIDATE |
 | CH-054 | [M3 × 4 mm motor plate heat-set insert](https://onlyscrews.in/products/m3-x-4mm-3d-printing-brass-threaded-inserts-dia-3mm-length-4mm) | 8 | CANDIDATE |
 | CH-055 | [ISO 4029 M3 × 3 cup-point set screw, SS304](https://onlyscrews.in/products/m3-x-3mm-grub-screw-ss304-dia-3mm-length-3mm), faced to 2.5 mm (D-030) | 2 | CANDIDATE |
-| CH-056 | [ISO 7380 M3 × 6 wheel-to-stub screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-6-screw-pack-of-20) | 6 | CANDIDATE |
+| CH-056 | [ISO 7380 M3 × 6 wheel-to-stub screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-6-screw-pack-of-20), Loctite 222 ([D-070](../../decisions.md#d-070)) | 6 | CANDIDATE |
 | CH-057 | [Loctite 222 and 641](https://onlyscrews.in/products/loctite%C2%AE-222-low-strength-thread-sealant-50-ml) | 1 lot | CANDIDATE |
 | CH-059 | [ISO 7380 M3 × 10 central hub-cap screw into the tapped stub end](https://onlyscrews.in/products/hex-allen-button-head-m3-x-10-screw-pack-of-20) (D-033; was 12 × M2 × 6) | 2 | CANDIDATE |
 | CH-060 | [ISO 7380 M3 × 8 button-head J04 carrier-to-rail screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-8-screw-pack-of-20) (D-030) | 8 | CANDIDATE |

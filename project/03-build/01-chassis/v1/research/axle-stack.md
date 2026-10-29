@@ -52,7 +52,7 @@ face |            | stub ━━━━━━━┿━━━━━━━━━━�
 | 69.7–89.35 | **Cap screws** ×8 | CH-053 | ISO 7380 M3 × 18 | Through cap and housing into the plate inserts; they clamp the housing and hold the outer rings outboard. |
 | 70.0–74.0 | **Inserts** ×8 | CH-054 | M3 × 4 brass heat-set | In the plate. |
 | 93.0–97.0 | **Wheel web** | CH-004 | PETG print | Pocket R 18 to 93; the stub flange turns inside it. Ø10 H7 bore through, 3 × Ø3.4 at PCD 16, flat seats for the heads. Adopted by the handed left/right [wheel model](../cad/wheel/README.md) and imported into the chassis assembly. |
-| 91.0–98.65 | **Wheel screws** ×6 | CH-056 | ISO 7380 M3 × 6 | Through the web into the flange. The full 2 mm flange is threaded, with the tip flush at 91. Overall width over the heads is 197.3 mm, inside the 205 mm target. |
+| 91.0–98.65 | **Wheel screws** ×6 | CH-056 | ISO 7380 M3 × 6, Loctite 222 ([D-070](../../../decisions.md#d-070)) | Through the web into the flange. The full 2 mm flange is threaded, with the tip flush at 91. Overall width over the heads is 197.3 mm, inside the 205 mm target. |
 
 **Load paths.**
 
@@ -96,13 +96,14 @@ face |            | stub ━━━━━━━┿━━━━━━━━━━�
 4. Offer the housing to the plate. Turn the stub until its tapped hole lines up with the shaft flat, then slide it onto the shaft. Fit the four cap screws.
 5. Fit the set screw through the slot and tighten it.
 6. Turn the stub by hand so the motor centres itself. Tighten both face screws through the key slots with a long 2 mm ball-end key.
-7. Check drag and end play. Fit the wheel on the spigot and tighten its three screws.
+7. Check drag and end play. Fit the wheel on the spigot and tighten its three screws with Loctite 222 (D-070). Fit the hub cap last. The full wheel sequence is on the [wheels page](../../../../04-print/01-chassis/wheels/README.md#4-assembly-one-wheel).
 
 **Service paths**
 
 | Replace | Remove first | Tools |
 |---|---|---|
-| Wheel or tyre | 3 wheel screws | 2 mm hex |
+| Wheel | hub-cap screw and cap (D-033) → 3 wheel screws | 2 mm hex |
+| Tyre | 6 clamp-ring screws; the wheel stays on | 2 mm hex |
 | Bearing pair | wheel → loosen set screw → 4 cap screws → housing and cartridge slide off outboard → press the bearings off | 2 mm and 1.5 mm hex, press |
 | Motor | as for bearings → 2 face screws → motor out (exit direction set by J04) | as above |
 

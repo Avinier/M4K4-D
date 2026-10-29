@@ -207,8 +207,8 @@
 ### J14 — TPU tyre to wheel rim
 
 - **Parts/load path:** handed TPU 95A tyre on PETG rim; torque/traction transferred through 12 keyed ribs and clamped sidewalls.
-- **Location/joint:** twelve 0.8 mm ribs on Ø74 seat engage tyre slots; integral 2 mm inboard lip and 3 mm outboard clamp ring overlap tyre by 2 mm. Target tyre bore Ø73.6 (~0.5% stretch), width 19.3 mm (~0.3 mm clamp); print fit unproven.
-- **Hardware/clamp:** 6 × ISO 7380 M3 × 8 screws into 12 M3 × 4 heat-set inserts per wheel, Ø68 BCD (CH-048/049; 12 each total). Insert article/process fit open. Spin index removed; no separate index joint.
+- **Location/joint:** twelve 0.8 mm ribs on Ø74 seat engage tyre slots; integral 2 mm inboard lip and 3 mm outboard clamp ring overlap tyre by 2 mm. Tyre printed with a Ø73.6 bore (0.54 % stretch) and 19.3 mm wide (0.3 mm clamp), modelled in final v1 ([D-070](../../decisions.md#d-070)); print fit unproven. Left and right tyres are one part.
+- **Hardware/clamp:** 6 × ISO 7380 M3 × 8 screws into 6 M3 × 4 heat-set inserts per wheel, Ø68 BCD (CH-048/049; 12 each in all). Insert article/process fit open. Spin index removed; no separate index joint.
 - **Material/access/service:** TPU 95A availability unknown; D-005 records an unmodeled three-O-ring fallback. Remove six ring screws to change tyre without wheel removal.
 - **Proof/state:** coupon tyre/rim and inserts; measure loaded radius, L/R diameter match (~0.3 mm target), runout, clamp retention, stall creep and grip. **Designed; material/physical proof open.**
 

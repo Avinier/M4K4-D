@@ -1,6 +1,8 @@
 """Makad v1, the whole robot: chassis v1, body v1 and head v1 from their live sources."""
 
 from pathlib import Path
+import importlib.util
+import math
 import re
 import sys
 
@@ -236,6 +238,81 @@ def pcb10_j10_1():
 
 
 _PCB10_CUTS, _PCB10_ADDS = pcb10_upright_edits()
+
+
+# D-070: wheel print fixes. Wheel frame as in wheel_model.py (axis Y, +y outboard); on the
+# droid X = x, Z = 42 + z and Y = +-(85 + y), the right wheel being the left mirrored in XZ.
+# (1) The hub cap's two clocking pegs move onto the hub, so the cap's underside is flat at
+# y 12 and it prints underside down with no supports. Each Ø2.1 x 1.8 hub hole is filled
+# and carries a Ø1.8 x 1.5 peg. The cap gets the Ø2.1 x 1.8 holes, each in a Ø3.7 boss
+# because a bare hole would break 0.05 mm into the R11.2 screw-head recess, and its centre
+# column is trimmed flush (it stood 0.4 mm into the hub bore). (2) The TPU tyre is printed
+# in its free state, Ø73.6 bore and 19.3 mm wide, so it stretches 0.54 % onto the Ø74 seat
+# and the ring squeezes it 0.3 mm; the assembly keeps the fitted state (PRINT_STATES).
+# check_wheel_print.py measures both.
+WHEEL_PEGS = dict(
+    r=12.2, angles=(30.0, 210.0),       # wheel_model CAP_PEG: toward two hex corners
+    face=12.0,                          # hub face = cap underside (wheel_model Y_OUT)
+    peg=0.9, peg_len=1.5,               # Ø1.8 x 1.5 peg, now on the hub
+    hole=1.05, depth=1.8, fill=1.1,     # Ø2.1 x 1.8 hole, now in the cap; hub hole fill
+    boss=1.85, recess_top=13.9,         # boss round each cap hole, up to the recess roof
+    column=(4.6, 11.5),                 # cut radius and bottom: trims the cap column to y 12
+)
+WHEEL_TYRE_PRINT = dict(seat_radius=36.8, y=(-10.15, 9.15))  # assembled: R37, y -10..9
+_WHEEL_HALF_TRACK, _WHEEL_AXLE_Z = 85.0, 42.0
+
+
+def _wheel_cyl(side, r, y0, y1, x=0.0, z=0.0):
+    """World cylinder on the wheel axis (side +1 left, -1 right) over wheel-frame y0..y1, at (x, z)."""
+    a, b = sorted(side * (_WHEEL_HALF_TRACK + y) for y in (y0, y1))
+    return Cylinder(r, b - a, rotation=(90, 0, 0)).moved(Location((x, (a + b) / 2.0, _WHEEL_AXLE_Z + z)))
+
+
+def wheel_peg_edits():
+    """D-070 world-frame (label, shape) lists for both wheels: rim adds, cap cuts, cap adds."""
+    m = WHEEL_PEGS
+    rim_adds, cap_cuts, cap_adds = [], [], []
+    for side, tag in ((1, "L"), (-1, "R")):
+        rim, cap = rf"WHEEL_{tag}_RIM_PETG", rf"WHEEL_{tag}_HUB_CAP_PETG"
+        cap_cuts.append((cap, _wheel_cyl(side, m["column"][0], m["column"][1], m["face"])))
+        for angle in m["angles"]:
+            x, z = m["r"] * math.sin(math.radians(angle)), m["r"] * math.cos(math.radians(angle))
+            rim_adds.append((rim, _wheel_cyl(side, m["fill"], m["face"] - m["depth"] - 0.1, m["face"], x, z)
+                             + _wheel_cyl(side, m["peg"], m["face"], m["face"] + m["peg_len"], x, z)))
+            # Cuts run before adds, so the hole is cut first (taking the old peg with it)
+            # and the boss is added with its own hole.
+            hole_top = m["face"] + m["depth"]
+            cap_cuts.append((cap, _wheel_cyl(side, m["hole"], m["face"] - m["peg_len"] - 0.1, hole_top, x, z)))
+            cap_adds.append((cap, _wheel_cyl(side, m["boss"], m["face"], m["recess_top"], x, z)
+                             - _wheel_cyl(side, m["hole"], m["face"] - 0.1, hole_top, x, z)))
+    return rim_adds, cap_cuts, cap_adds
+
+
+_WHEEL_RIM_ADDS, _WHEEL_CAP_CUTS, _WHEEL_CAP_ADDS = wheel_peg_edits()
+
+
+def _wheel_model():
+    """A private copy of the chassis wheel source, so print-state parameters can be set on it."""
+    path = BUILD / "01-chassis" / "v1" / "cad" / "wheel" / "wheel_model.py"
+    spec = importlib.util.spec_from_file_location("makad_v1_wheel_print_state", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def wheel_tyre_print():
+    """D-070: the tyre as printed (free state), in the wheel frame. One part serves both
+    sides: the right tyre is the left one turned over, so this is the left tyre."""
+    W = _wheel_model()
+    W.SEAT_RADIUS, W.TYRE_Y = WHEEL_TYRE_PRINT["seat_radius"], WHEEL_TYRE_PRINT["y"]
+    return W.tyre("L")
+
+
+# Parts printed in another state than the assembly shows: label pattern -> function
+# returning the print-state part in its own frame. The STL export uses it for those labels.
+PRINT_STATES = [
+    (r"WHEEL_[LR]_TYRE_TPU95A_[LR]", wheel_tyre_print),  # D-070
+]
 # Parts dropped whole (label fully matched, leaf or group), and parts inserted, world frame,
 # as new children of the group whose label fully matches.
 DROID_REMOVES = [
@@ -267,6 +344,8 @@ DROID_CUTS = [
     # D-069: the inlet pad's pin relief widens 9.60 -> 10.60 mm (Y +-5.30), so GCT's outer
     # USB4140 stake copper (Y +-4.87) and its fillets clear the PCB-13 seat; Z and depth unchanged.
     (r"REAR_SERVICE_PANEL_OCTAGONAL", PCB13_RELIEF),
+    # D-070: hub-cap peg holes (taking the old pegs) and the column trimmed flush.
+    *_WHEEL_CAP_CUTS,
 ]
 DROID_ADDS = [
     # D-068: PCB-10 top-edge hooks on the C3 carrier uprights.
@@ -289,6 +368,9 @@ DROID_ADDS = [
     # Molex's 6.98 mm mated height (the placeholder's 10 mm block is cut back in DROID_CUTS).
     (r"PCB05_J5_7_MICROFIT3_2P_RA_HEADER", (64.8, 74.46, -19.0, -9.0, 115.6, 122.6)),
     (r"PCB05_J5_7_MICROFIT3_2P_MATED_PLUG", (64.8, 74.46, -31.0, -19.0, 115.6, 122.6)),
+    # D-070: hub holes filled and pegs on the hub; a boss round each cap hole.
+    *_WHEEL_RIM_ADDS,
+    *_WHEEL_CAP_ADDS,
 ]
 DROID_MOVES = [
     # D-068 amended: C3 GH headers and plugs into the three proved rows; the J10-1 plug reserve down
@@ -312,6 +394,21 @@ def _cut_box(x0, x1, y0, y1, z0, z1):
 
 def _tool(value):
     return value if isinstance(value, Shape) else _cut_box(*value)
+
+
+def _shifted(part, location):
+    """part.moved(location) without build123d's deepcopy: on a leaf still in the tree it
+    copies the whole assembly through the parent link, about 5 s per move on the body
+    alone and past 90 GB with the head (2026-10-29). The OCC move shares the geometry."""
+    from OCP.TopAbs import TopAbs_COMPOUND, TopAbs_SOLID
+    from OCP.TopoDS import TopoDS
+    from build123d import Solid
+    shape = part.wrapped.Moved(location.wrapped)
+    if shape.ShapeType() == TopAbs_SOLID:
+        return Solid(TopoDS.Solid_s(shape))
+    if shape.ShapeType() == TopAbs_COMPOUND:
+        return Compound(TopoDS.Compound_s(shape))
+    return part.moved(location)
 
 
 def _cut_parts(node, parent_location, hits):
@@ -345,7 +442,7 @@ def _cut_parts(node, parent_location, hits):
         elif kind == "add":
             part = part + _tool(value).moved(parent_location.inverse())
         else:  # world-frame shift of a part placed under parent_location
-            part = part.moved(parent_location.inverse() * Location(value) * parent_location)
+            part = _shifted(part, parent_location.inverse() * Location(value) * parent_location)
     part.label, part.color = node.label, node.color
     return part
 

@@ -15,7 +15,7 @@ The central record of every decision and change made during the build phase. New
 | [D-005](#d-005) | 2026-09-29 | Chassis / motor interface | No motor on hand; proceed with documented assumptions and replaceable interface | ACTIVE |
 | [D-007](#d-007) | 2026-09-29 | Chassis / axle | Axle stack architecture: turned steel stub, paired bearings, set-screw motor coupling, floating motor | ACTIVE for architecture; bearing selection superseded by D-012; HOLD on quote, coupons, rig and motor receipt |
 | [D-008](#d-008) | 2026-09-29 | Chassis / wheels | Wheel face: six framed spokes, 12-sided vented beadlock ring and a proud hex hub cap, after the builder's reference; hub on the D-007 interface | ACTIVE, HOLD with D-005 and D-007 |
-| [D-009](#d-009) | 2026-09-29 | Chassis / wheels | Handed left/right tyres; D-008 wheel merged into chassis-v1 as the single wheel source | ACTIVE; full `check_layout.py` rerun pending |
+| [D-009](#d-009) | 2026-09-29 | Chassis / wheels | Handed left/right tyres; D-008 wheel merged into chassis-v1 as the single wheel source | ACTIVE; full `check_layout.py` rerun pending; "handed" amended by D-070 (one part) |
 | [D-010](#d-010) | 2026-09-29 | Chassis / axle/frame | Keyed single-print motor carriers join to split rails through J04 | ACTIVE for J04; bearing selection superseded by D-012; HOLD on fit coupons, full clearance rerun and physical rig |
 | [D-011](#d-011) | 2026-09-30 | Chassis / nose (J07, J08) | Ball-transfer nose closed in CAD: caster screwed from below into seat inserts, sliding snap-retained touch cap on a constant nose, ESE22MV21 switch, screwed lid, J10-8 cable exit | ACTIVE; switch superseded by D-013; HOLD on received-caster measurement, coupons and physical tests |
 | [D-012](#d-012) | 2026-09-30 | Chassis / axle | Select 688 ZZ, 8 × 16 × 5, from the OnlyScrews listing; revise paired-bearing seats | ACTIVE; HOLD on supplier stock/lot evidence, drawing/load data, fit coupons, clearance rerun and retention test |
@@ -73,6 +73,7 @@ The central record of every decision and change made during the build phase. New
 | [D-067](#d-067) | 2026-10-27 | Body / audio: PCB-05 inputs, mounting and CR-01 (BO-002, BO-006, BO-064; final v1 CAD) | PCB-05 takes **5 V on W12 only**; `CA-06` **CR-01 is accepted** (GPIO22 SDI1, GPIO23 `AMP_SD`); **no power-good path**: `AMP_SD` drives SD_MODE through 2.2 kΩ; mics map `J5-2` REAR_L, `J5-3` FRONT_L, `J5-4` REAR_R, `J5-5` FRONT_R; ferrite + 2.2 Ω + 10 µF mic rail; two layers. The board **hangs from the frame** on three 8 mm M2 SMT spacers and ISO 7380 M2 screws from above, and goes in after the compute tray. Amended at board set-up (J7 tails clipped, spacer holes plated) and at placement (one rear and two front spacers; `J5-1` 2 mm toward −Y) | ACTIVE; PCB-05 rev A designed, 4 layers (amended at routing), fit check passes |
 | [D-068](#d-068) | 2026-10-27 | Body / electronics: PCB-10 C3 carrier inputs, mounting, DevKitC and parts (CH-044, CH-045; final v1 CAD) | The C3 module is held by the **two lower M2.5 screws and two printed hooks** over the board's top edge (the upper screws sat under the DevKitC); the uprights get **pin-tail reliefs**. The DevKitC is **genuine Espressif ESP32-S3-DevKitC-1-N8 v1.1** only, modelled from Espressif's drawing (rows 22.86 mm, not the CAD clone's 25.4). Watchdog: **TPS3436CCCBGDDFRQ1** (the BD-10 fallback; the CFDBE has no stock anywhere reachable) from **Mouser India**; link transceiver on a SOIC-8 footprint (THVD1451DR or MAX3490EESA+); Schottky in the `J10-1` feed against USB back-feed; GPIO map v0.2; `J10-2` named by direction. Amended at board set-up: the board grows 6 mm down (70 × 49.5, notched over a DRV8833 terminal block) for a third connector row; at placement: **four layers** (In1 GND, In2 +3V3), `J10-2` reordered, GPIO map v0.3 | ACTIVE; `check_pcb10_mount.py` 9/9; PCB-10 placed, routing |
 | [D-069](#d-069) | 2026-10-29 | Body / electronics: PCB-13 charge inlet inputs (BO-015; final v1 CAD) | The rear-panel pin relief widens **9.60 → 10.60 mm** so GCT's USB4140 stake copper clears the seat (`DROID_CUTS`); J1 **hand-soldered** by the builder, the fab assembles the +X face only; **1 oz, two layers, 1.6 mm**; NVM test pads on a **2.54 mm grid** for P75 pogos; actives from **element14 India** (USB4140, STUSB4500, STL6P3LLH6, ESDA25W) and **Mouser India** (TVS2200DRVR); `W16`/`J2-8` interface and PCB-02 back-face keep-out fixed | ACTIVE; `check_pcb13_relief.py` 13/13; PCB-13 inputs frozen, schematic next |
+| [D-070](#d-070) | 2026-10-29 | Chassis / wheels: print fixes (CH-004, CH-005, CH-056, CH-058; J03, J14; final v1 CAD) | The hub-cap clocking **pegs move onto the hub** and the holes into the cap (each in a Ø3.7 boss), and the cap column is trimmed flush, so the cap prints underside down with no supports; the **tyre is printed in its free state** (Ø73.6 bore, 19.3 wide; `PRINT_STATES`), the assembly keeps the fitted state; the **rim prints lip side down**; **Loctite 222** on the wheel screws; left and right tyres are **one part** (amends D-009's "not interchangeable") | ACTIVE; `check_wheel_print.py` 29/29; physical fits open |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -332,7 +333,7 @@ The wheel model has not been changed by this entry.
 
 **Decision:** the builder asked for a second tyre and for the D-008 wheel to be merged into the chassis-v1 CAD.
 
-- **Handed tyres.** The right wheel is the left one turned round. With identical tyres, the right chevrons would point backward relative to travel. The right tyre is now the left one **mirrored**, so on the robot both chevrons lead forward, apex at the top toward +X (tractor convention). The chevron was flipped to lead forward on the left as well. Rim, clamp ring, hub cap and hardware are symmetric and identical on both sides. CH-005 becomes one left and one right tyre; they are not interchangeable.
+- **Handed tyres.** The right wheel is the left one turned round. With identical tyres, the right chevrons would point backward relative to travel. The right tyre is now the left one **mirrored**, so on the robot both chevrons lead forward, apex at the top toward +X (tractor convention). The chevron was flipped to lead forward on the left as well. Rim, clamp ring, hub cap and hardware are symmetric and identical on both sides. CH-005 becomes one left and one right tyre; they are not interchangeable. **Amended by [D-070](#d-070) (2026-10-29):** the tyre is symmetric about its mid-plane, so the "right" tyre is the left one turned over: one part, printed twice and fitted with the V at the top pointing forward. The CAD and the forward-leading check stand.
 - **Merged into chassis-v1.** [`wheel/wheel_model.py`](01-chassis/v1/cad/wheel/wheel_model.py) is now the single source for the wheel. `wheel_assembly()` in [`body_chassis_model.py`](01-chassis/v1/cad/body_chassis_model.py) places its `mounted_leaves(side, …)` and keeps D-007's stub and set screw. A new `_check_wheel_interface()` stops the build if the wheel's hub constants drift from the D-007 ones: pocket, bore, spigot, flange, and screw PCD, length, head and angles. The placeholder tyre and rim and the spin-index inlay (and its constants) are gone.
 
 **Checks:**
@@ -2917,3 +2918,57 @@ The amplifier corner routed on two layers carries over unchanged. **BOM changed:
 - **D2's two identical inputs are swapped** (1 CC2, 2 CC1), and **J2 is turned 180°**. Neither changes the circuit or the `J2-8` pin order.
 
 Layout: DRC 0 errors, 0 unconnected, parity clean ([PCB-13 README](04-pcbs/pcb-13-charge-inlet/README.md#layout)).
+
+## D-070
+
+**2026-10-29 · Chassis / wheels: print fixes (CH-004, CH-005, CH-056, CH-058; J03, J14; final v1 CAD) · ACTIVE; `check_wheel_print.py` 29/29; physical fits open**
+
+**Why.** Walking the wheel's assembly and print steps against the CAD before the chassis STL export ([wheels page](../04-print/01-chassis/wheels/README.md#6-gaps-found-on-2026-10-29-and-their-fixes)) found:
+
+- **The rim's print orientation leaves a fit face on supports.** The wheel README said "outer face down". That way, the ring-seat face, which holds the six insert holes, floats 3 mm above the bed (1,137 mm²), and the lip's tyre face is a bare 2 mm ledge 22 mm up.
+- **The hub cap can't print without supports on its visible face.** Face down, its outer ring is 1 mm above the bed (364 mm²). Underside down, the two pegs (1.5 mm) and the screw column (0.4 mm) stand out below it.
+- **The tyre fit is only in the README.** The Ø73.6 bore and 19.3 mm width were print notes; the CAD is line-to-line. Applying them in the slicer would change geometry outside the CAD ([04-print rule 2](../04-print/README.md#rules)).
+- **The "handed" tyres are one part.** D-009 assumed the right wheel is the left one turned round, so identical tyres would lead backward. But the tyre is symmetric about its mid-plane. The right tyre in the CAD is the left one moved across, unturned (0.000 mm³ difference), and `tyre("R")` is `tyre("L")` turned over. Both lead forward on the robot; the CAD was right, the wording wasn't.
+- **Nothing locks the three wheel screws.** The heads clamp on PETG, which creeps, with 2 mm of thread in the stub flange.
+
+**Decision** (builder, 2026-10-29: "make b and c in cad … do the doc changes"):
+
+1. **Hub-cap pegs onto the hub** (`DROID_ADDS`/`DROID_CUTS`, `WHEEL_PEGS`):
+   - Each Ø2.1 × 1.8 hub hole is filled and carries a Ø1.8 × 1.5 peg at R12.2, 30° and 210°.
+   - The cap gets the Ø2.1 × 1.8 holes. Each sits in a Ø3.7 boss up to the recess roof, because a bare hole broke 0.05 mm into the R11.2 screw-head recess.
+   - The cap's centre column is trimmed flush at its underside; it stood 0.4 mm into the hub bore.
+   - The fit is unchanged: 0.15 mm radial, 0.3 mm at the tip.
+   - The cap prints underside down with no supports. The recess roof bridges 6.7 mm.
+2. **Tyre print state** (`WHEEL_TYRE_PRINT`, `wheel_tyre_print()`, `PRINT_STATES`):
+   - The tyre is built from the wheel source with a Ø73.6 bore and 19.3 width: a 0.54 % stretch onto the Ø74 seat and a 0.3 mm squeeze by the ring, which stops on the rim.
+   - The droid assembly keeps the fitted state. The STL export uses `PRINT_STATES` for the tyre labels.
+3. **Rim prints lip side down.** Only the spoke backs (1,188 mm²) and the hub web's underside (766 mm²) need support. The web face carries the stub flange, so it gets a PLA support interface or a flatness check.
+4. **One STL per wheel part.** The rim, clamp ring, hub cap and tyre each serve both sides. The tyre's fitting rule is "the chevron V at the top points forward", checked on each wheel. There is no face mark, because the same face goes outboard on one side and inboard on the other. D-009's "one left and one right, not interchangeable" is withdrawn; its CAD stays.
+5. **Loctite 222 on the three wheel screws (CH-056)**, re-checked after the first runs.
+
+**CAD:** `makad-v1.step` rebuilt with this change (2026-10-30, 5 min). `makad-v1.step.py` gains `WHEEL_PEGS`, `wheel_peg_edits()` (two rim adds, three cap cuts and two cap adds per side), `WHEEL_TYRE_PRINT`, `wheel_tyre_print()` and `PRINT_STATES`. The wheel source (`01-chassis/v1/cad/wheel/wheel_model.py`) is unchanged, so `check_wheel.py` still describes the subsystem wheel.
+
+**Checks:** [`final/v1/cad/check_wheel_print.py`](final/v1/cad/check_wheel_print.py) passes 29/29 on the chassis tree with the droid edits:
+
+- Cap underside flat at y 12.000. The old pegs and the column stub are gone. The holes are open, roofed and walled 0.80 mm.
+- The hub holes are filled and the pegs stand on the face.
+- The cap is clear of the rim, the wheel screws, the cap screw and the stub.
+- The print-orientation overhangs are only the faces listed above.
+- One print serves both sides for all four parts (0.000 mm³).
+- Tyre print state: Ø73.60, 19.30 wide, no rib overlap. The assembled tyres are unchanged.
+- **Planted:** the unedited subsystem cap fails the flat-underside test (it reaches y 10.5).
+
+**Docs:** the [wheels page](../04-print/01-chassis/wheels/README.md) holds the parts, printing, joints, assembly, service and the gap table. Corrected to match:
+
+- The [wheel README](01-chassis/v1/cad/wheel/README.md) print notes and tyre wording.
+- J14 in the [joint register](01-chassis/v1/joint-register.md): 6 inserts per wheel, not 12.
+- [axle-stack.md](01-chassis/v1/research/axle-stack.md): Loctite on the wheel screws, and the cap comes off before the wheel.
+- The chassis [BOM](01-chassis/v1/BOM.md), `BOM.csv` rows CH-005, CH-056 and CH-058, and the [chassis print parts](../04-print/01-chassis/README.md).
+
+**BOM changed:** CH-005 is one part printed twice (was one left, one right), with the print state. CH-058's pegs are now on the hub (CH-004). CH-056 gets Loctite 222 (CH-057).
+
+**Open:**
+
+- The fitted tyre's OD is about 84.4 (the stretch moves the tread out about 0.2 mm). That's an estimate, folded into the open loaded-radius measurement.
+- The CH-049 insert: the ordered OnlyScrews M3 × 4 slant-knurled insert is listed at OD 4.4 (0.2 mm bite in Ø4.0, 0.8 mm left under the seat, under a rib). Measure one on arrival.
+- First-print fits: tyre on and clamped, the pegs, the web's flatness and runout.

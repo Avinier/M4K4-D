@@ -23,7 +23,7 @@ Wheel CAD for joint **J14** and BOM rows CH-004/005/058/059, per [D-005](../../.
 - **Clamp ring:** 12 sides, alternating six M3 screw flats with six recessed vent slots (9 × 2.7 × 1.2 mm). The corners are chamfered and the flats are not.
 - **Two-tone:** rim and clamp ring in light PETG, hub cap in dark PETG.
 
-**Tyre: printed TPU 95A, handed.** There are two tyres: the right one is the left one mirrored, so on the robot both chevrons lead forward (+X). A right tyre that is just the left one turned round would lead backward; the check `both_tyres_lead_forward_when_mounted` catches that (+7.0 mm on each side; −7.0 for an un-mirrored tyre). Rim, clamp ring, hub cap and hardware are symmetric and identical on both sides.
+**Tyre: printed TPU 95A, one part for both sides.** On the robot both chevrons lead forward (+X); the check `both_tyres_lead_forward_when_mounted` measures +7.0 mm on each side (−7.0 for a tyre fitted the wrong way round). D-009 called the tyres handed, but the tyre is symmetric about its mid-plane: `tyre("R")` is `tyre("L")` turned over, so the left and right tyres are the same print. What matters is which way round it is fitted: the V at the top points forward ([D-070](../../../../decisions.md#d-070)). Rim, clamp ring, hub cap and hardware are also identical on both sides.
 
 
 - **Tread:** 18 chevrons 1.5 mm tall on a 3.5 mm carcass, bars at 40° to the axle, apexes on the centre line. The apex leads at the top when driving forward (tractor convention). The angle is chosen so each V overlaps the next along the contact line: 72 of 72 probe angles land on a lug, so the ride is smooth on hard floors.
@@ -34,13 +34,13 @@ Wheel CAD for joint **J14** and BOM rows CH-004/005/058/059, per [D-005](../../.
 - **Service:** remove six screws and the tyre slides off. The wheel stays on the stub.
 - **Width:** the hub cap stands 4.0 mm proud and its recessed screw adds nothing (the ring screws stand 1.65 mm), so the robot is 202.0 mm wide, within the 205 mm target.
 
-**Print notes (not modelled):**
+**Print notes.** Corrected by [D-070](../../../../decisions.md#d-070) (2026-10-29). The print orientations, the print-state tyre and the moved cap pegs are droid edits in `final/v1`, not in this source. Printing and assembly are on the [wheels page](../../../../../04-print/01-chassis/wheels/README.md).
 
-- **Tyre:** print one left and one right (`tyre("L")`, `tyre("R")`); they are not interchangeable. Print on the side face, axis vertical; the chevrons and slots are vertical walls. Print the bore at Ø73.6 (about 0.5% stretch onto the seat) and the width at 19.3 mm (0.3 mm axial clamp). Confirm both on a coupon.
-- **Rim:** print outer face down. The spoke chamfers and ring bevel then print as 45° walls, and the spoke slots as floors.
+- **Tyre:** one STL, printed twice. Print on the side face, axis vertical; the chevrons and slots are vertical walls. The bore is Ø73.6 (0.54 % stretch onto the seat) and the width 19.3 mm (0.3 mm axial clamp). Both are modelled in `final/v1` (`wheel_tyre_print()`), not applied in the slicer. The first printed tyre is the fit test.
+- **Rim:** print **lip side down**, not outer face down. Outer face down leaves the ring-seat face, with its insert holes, floating 3 mm above the bed. Lip side down, only the hidden spoke backs and the hub web's underside need supports. The web's underside seats on the stub flange, so it must come out flat.
 - **Clamp ring:** print flat, face up.
-- **Hub cap:** print face down, so the recess prints as an open pocket.
-- **Cap pegs and hub holes:** Ø1.8 pegs in Ø2.1 × 1.8 mm holes (0.15 mm radial). Tune the hole on a coupon so the cap drops on without play.
+- **Hub cap:** print underside down, with no supports. That only became possible when D-070 moved the pegs onto the hub and trimmed the column. Face down, its visible outer ring needed supports.
+- **Hub pegs and cap holes** (swapped by D-070): Ø1.8 × 1.5 pegs on the hub in Ø2.1 × 1.8 mm holes in the cap (0.15 mm radial). The first printed cap is the test; tune the hole with the slicer's XY hole compensation so the cap drops on without play.
 
 **Fallback (not modelled):** if the lab can't print TPU 95A, use three 70 × 5 mm NBR 70A O-rings in grooves on a one-piece rim. The design is recorded in [D-005](../../../../decisions.md#d-005).
 

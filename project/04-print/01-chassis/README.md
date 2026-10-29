@@ -3,7 +3,9 @@
 The printed parts of [chassis v1](../../03-build/01-chassis/v1/BOM.md): the
 frame, the axle stack, the wheels, the nose and the rear keel. Most are PETG.
 The tyres are TPU and the nose touch cap is ASA. The steps and the status
-values are in the [workflow](../workflow.md).
+values are in the [workflow](../workflow.md). The wheels have their own page,
+[wheels/](wheels/README.md): parts, printing, how each joint holds, assembly,
+service and the 2026-10-29 gap review (D-070).
 
 ## Parts
 
@@ -17,10 +19,10 @@ Orientation, critical dimensions and settings are filled in when each part is ex
 | CH-001 | `AXLE_MOTOR_CARRIER_L`, `_R` (plate and cheeks, keyed) | 2 | PETG, deep slate | A1 | | Motor face pattern and pilot; J04 key | | TODO |
 | CH-011 | `BATTERY_TUB_BOTTOM_HATCH` | 1 | PETG, deep slate | A1 | | Strap slots; four screw holes | | TODO |
 | CH-051 | `AXLE_BEARING_HOUSING_L`, `_R` | 2 | PETG, deep slate | A1 | | 688 ZZ bores, tried with the real bearings | | TODO |
-| CH-004 | `WHEEL_L_RIM_PETG`, `WHEEL_R_RIM_PETG` | 2 | PETG, slate blue | A1 | | Hub bore on the stub flange; tyre seat; 12 insert bosses | | TODO |
-| CH-004 | `WHEEL_L_CLAMP_RING_PETG`, `WHEEL_R_CLAMP_RING_PETG` | 2 | PETG, slate blue | A1 | | Clamp face; screw holes | | TODO |
-| CH-058 | `WHEEL_L_HUB_CAP_PETG`, `WHEEL_R_HUB_CAP_PETG` | 2 | PETG, gunmetal | A1 | | Centre screw seat | | TODO |
-| CH-005 | `WHEEL_L_TYRE_TPU95A_L`, `WHEEL_R_TYRE_TPU95A_R` (handed) | 2 | TPU 95A, black | A1 (direct drive) | | Seat bore; keyway; chevron direction per side | | TODO |
+| CH-004 | `WHEEL_L_RIM_PETG` (one STL serves both sides) | 2 | PETG, slate blue | A1 | Lip side down; tree supports inside the dish under the spoke backs and hub web, PLA interface on the web | Ø10 bore; web underside flat (seats on the stub flange); Ø74 seat and 12 ribs; 6 insert holes (1.0 mm wall to the seat); two hub pegs | | TODO |
+| CH-004 | `WHEEL_L_CLAMP_RING_PETG` (both sides) | 2 | PETG, slate blue | A1 | Flat inboard face down, no supports | Clamp face flat; Ø63.4 bore on the rim spigot; screw holes | | TODO |
+| CH-058 | `WHEEL_L_HUB_CAP_PETG` (both sides) | 2 | PETG, gunmetal | A1 | Underside down, no supports (D-070) | Drops onto the hub pegs without play; centre counterbore | | TODO |
+| CH-005 | `WHEEL_L_TYRE_TPU95A_L` in its print state, `PRINT_STATES` (both sides, D-070) | 2 | TPU 95A, black | A1 (direct drive) | On a side face, axis vertical, no supports | Bore Ø73.6 and 12 slots; width 19.3; fit with the V at the top forward | | TODO |
 | CH-002 | `BALL_POD_PRINTED_SEAT` | 1 | PETG, deep slate | A1 | | Caster flange seat; three insert bosses; sensor pocket | | TODO |
 | CH-003 | `BALL_POD_SENSOR_LID` | 1 | PETG, deep slate | A1 | | Rear tongue; lead hump | | TODO |
 | CH-007 | `BALL_NOSE_TOUCH_CAP` | 1 | ASA, ivory | X1E | | 3 mm slide; snap fingers; magnet pocket | | TODO |
@@ -70,7 +72,7 @@ No separate test prints: the small parts go first and are the test.
 
 | Article | Used in | Qty |
 |---|---|---|
-| M3 × 4 heat-set | Rims (CH-049), motor plates (CH-054) | 20 |
+| M3 × 4 heat-set | Rims (CH-049, 6 per rim), motor plates (CH-054) | 20 |
 | M3 × 6 heat-set | J04 rail ends (CH-061), hatch bosses (CH-077) | 12 |
 | CNC Kitchen M3 × 5.7 | Pod seat (CH-063), keel crossmember (CH-067) | 7 |
 | M2.5 heat-set | Driver posts on the deck | 4 |
@@ -80,9 +82,21 @@ No separate test prints: the small parts go first and are the test.
 - An export script, kept in `final/v1/cad` with the other droid scripts, that
   builds the chassis tree, applies the droid edits with
   `_apply_droid_cuts(tree, strict=False)` from `makad-v1.step.py`, picks each
-  leaf above by label, and writes its STL in print orientation to
-  `04-print/01-chassis/stl/`. It needs the legacy CAD runtime (cadgen 0.4.28); see the
+  leaf above by label, swaps in the print state for labels in `PRINT_STATES`
+  (the tyre, D-070), and writes its STL in print orientation to
+  `04-print/01-chassis/stl/`. One STL per wheel part serves both sides. It needs the legacy CAD runtime (cadgen 0.4.28); see the
   [final v1 README](../../03-build/final/v1/README.md).
+- **Frame insert pilots (raised 2026-10-30, at the frame review).** The ordered
+  M3 × 6 slant-knurled insert (OnlyScrews, CH-061/CH-077) is listed at OD 4.4.
+  The chassis CAD gives it a Ø4.3 pilot (D-030), so the knurl bites only
+  0.05 mm per side, and the J04 rail-end and hatch inserts could pull out or
+  spin. The rims and motor plates use Ø4.0 for the same OD. Fix: a `final/v1`
+  droid edit to Ø4.0, with a decision and a check, before the frame modules,
+  carriers and hatch are exported.
+- **CNC Kitchen M3 × 5.7 positions** (pod seat CH-033/CH-063, keel crossmember
+  CH-067; 9 in all) are not ordered. The ordered M3 × 6 (OD 4.4) fits their
+  Ø4.0 holes. Check that each bore takes 6 mm instead of 5.7, or order the
+  CNC Kitchen part.
 - The shims: ask the lab about 1.0 mm walls, or make them 1.2 mm with a
   decision entry and a `final/v1` edit (two shims would then set Z 9.6, not
   Z 10).
