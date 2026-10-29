@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | In progress: schematic done (ERC 0/0, 18/18 nets; gap 6 settled); board set-up next | *Inputs*, *Schematic*; `check_pcb13_relief.py` 13/13 | 2026-10-29 |
+| 1. Design | In progress: board set up (DRC 0, rule areas proved); placement next (builder: F8 in the nightly) | *Inputs*, *Schematic*, *Board set-up*; `check_pcb13_relief.py` 13/13 | 2026-10-29 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -283,6 +283,55 @@ charge-path §3 says `W16` is "tied through two slots". A cable tie through two 
 | **(a) Lap pads + a bead of neutral-cure silicone (or hot-melt) over the joints and 5 mm of insulation, on the +X face** (recommended) | No CAD change. The bead stays inside the `W16` reserve: 3.5 mm from the board face, 0.4 mm short of PCB-02. `J2-8` is unplugged by its housing and latch, so the lead itself carries little pull |
 | (b) The tie, as in D-040, through two NPTH slots | A 1.2 mm groove in the pad under the strap (`DROID_CUTS`, added to `check_pcb13_relief.py`). It also takes board area at the +Y end and leaves thin webs at the edge |
 
+## Board set-up
+
+[`design/pcb-13-charge-inlet.kicad_pcb`](design/pcb-13-charge-inlet.kicad_pcb), with no parts yet; they arrive with F8 at lesson 4.
+
+**Coordinates.**
+- The board is seen from its F face, the parts face, which is world +X (toward PCB-02). World +Y is then to the right and +Z up.
+- KiCad x = 114 + Y, y = 171.5 − Z. Board-local u = x − 100 (= Y + 14) and v = 115 − y (= Z − 56.5). The aux and grid origins sit at local (0, 0), the bottom-left corner in KiCad's view.
+- B.Cu is the −X face, seated on the rear-panel pad; J1 is the only part there. KiCad's STEP puts the F face at +Z, which becomes world +X.
+
+| Feature | World (Y, Z) | KiCad (x, y) | Note |
+|---|---|---|---|
+| Outline | Y −14…14, Z 56.5…71.5 | 100…128, 100…115 | 28 × 15 |
+| J1 (on B.Cu) | (0, 64) | (114, 107.5) | Shell along x. Its pad row sits 1.2 mm above or below the centre, chosen at placement; both orientations are proved below |
+| H1, H2 (Ø2.2, M2 × 5) | (∓11, 64) | (103, 107.5), (125, 107.5) | Stock `MountingHole_2.2mm_M2`: its Ø4.9 courtyard covers the Ø3.8 screw head, so courtyard DRC keeps parts off the head |
+| J2 (`W16` lap pads) | Y 10.4…13.6, Z 66.5…71.0 | origin (126.0, 102.7), rot 0 | Inside the `W16` reserve (Y 10–14, Z 66–71); pad 1 `VSNK` on top; wires leave +x. Its courtyard clears H2's by 0.05 mm |
+| Pad relief (B face) | Y ±5.30, Z 61.2…66.8 | 108.7…119.3, 104.7…110.3 | D-069; J1's courtyard (10.3 × 4.9) lies inside it with 0.15/0.35 mm to spare |
+
+**Set-up.**
+
+| Item | Value |
+|---|---|
+| Stackup | Two layers, **1.6 mm** (FR-4 core 1.51), 1 oz (35 µm) copper both sides (D-069). PCB-06's two-layer stackup with the core thickened, because no earlier board had 2 layers at 1.6 mm. **Vias tented on both faces**, so the B face stays flat under mask on the printed seat |
+| Rules | `pcb-13-charge-inlet.kicad_dru`: the fab-neutral set, copied from PCB-15 |
+| `B_SEAT_LEFT/RIGHT/TOP/BOTTOM` | B.Cu rule areas over the whole B face except the relief: **no footprints**. Tracks, vias and pads (J1's slots, through-hole rings) stay allowed: tented copper is flat |
+| `F_SCREW_HEAD_1/2_NO_VIAS` | F.Cu, Ø4.4 round each hole: **no vias** under the screw heads, so they seat on flat mask. Tracks allowed |
+| User.1 `Panel.Relief` | The 10.60 × 5.60 relief outline |
+| User.2 `Screw.Heads` | The Ø3.8 heads |
+| User.3 `W16.Reserve` | The lead reserve and exit direction |
+| User.4 `F.Ceiling` | Parts ≤ 2.0 mm on F; PCB-02's bare back face 3.9 mm away. KiCad has no height rule, so the lesson 5 fit check measures it |
+| User.5 `J1.Shell` | The 8.94 × 3.16 shell on B |
+
+**DRC** (nightly `kicad-cli pcb drc --severity-all`, 2026-10-29): the empty board gives **0 violations**.
+
+**Fixed parts and rule areas proved** on scratch copies with their own `.kicad_pro`/`.kicad_dru` (PCB-06 trap):
+- **Fixed parts at their CAD places** (PCB-10 trap, real footprints with real nets): J1 on B, both ways round, plus H1, H2 and J2. Result: **no courtyard, keep-out, clearance or hole violation**. The only flags were back-side text warnings from the hand-made flip; F8 and a real flip mirror the text.
+- **Planted, all caught:**
+  - a via 1.9 mm from H1's centre (`F_SCREW_HEAD_1_NO_VIAS`);
+  - an 0402 on B over the seat (`B_SEAT_LEFT`);
+  - a 0.12 mm track (`fab-neutral track width`).
+- **Planted, correctly passed:** an 0402 on F in open space.
+
+**Area left for placement on F** (lesson 1 budget): about 300 mm² after J1's stake rings, the two head courtyards, J2 and the edge rule. The parts' courtyards take about 105 mm², and the test pads 40–65 mm² (TP1–TP5 on the 2.54 mm grid).
+
+**Next (lesson 4).** The builder opens `pcb-13-charge-inlet.kicad_pro` in the **nightly**, opens the PCB editor, presses **F8** (Update PCB from Schematic) and saves. The layout then starts with `tools/kp.py`:
+- flip J1 to B at (114, 107.5);
+- place H1, H2 and J2 at their proved origins;
+- then place by group: protection at J1 (D1, C1, D2 within 3 mm), Q1 and its gate parts, U1 and its capacitors, the test pads last;
+- leave J1, J2 and the test pads out of the position files.
+
 ## Log
 
 - **2026-10-28 — Lesson 1, inputs.**
@@ -301,3 +350,8 @@ charge-path §3 says `W16` is "tied through two slots". A cable tie through two 
   - R1 moved to a 0805 anti-surge part: 0.4 W at 20 V, not rated before.
   - Gap 6 raised: the `W16` tie would cross the seated −X face.
 - **2026-10-29 — Gap 6 settled** (builder: "whatever is recommended"): option (a). `W16` is lap-soldered to J2 and held by a bead of neutral-cure silicone over the joints and 5 mm of insulation on the +X face. No tie and no slots, so no CAD change. D-069 amended.
+- **2026-10-29 — Lesson 3, board set-up.**
+  - Outline 28 × 15 mm, origins at local (0, 0), two layers at 1.6 mm, vias tented.
+  - Rule areas: B face no footprints outside the relief; no vias under the screw heads.
+  - Envelope drawn on User.1–5.
+  - Empty-board DRC 0. Fixed parts (J1 on B both ways round, H1, H2, J2) DRC-clean at their CAD places; every planted violation caught.
