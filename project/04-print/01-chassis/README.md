@@ -17,8 +17,8 @@ Orientation, critical dimensions and settings are filled in when each part is ex
 
 | ID | Label in the CAD | Qty | Material, colour | Printer | Orientation | Critical | Settings | Status |
 |---|---|---|---|---|---|---|---|---|
-| CH-001 | `CHASSIS_FRAME_FRONT_MODULE` (deck, battery tub, front rails, crossmember, fuse bracket) | 1 | PETG, deep slate | A1 or Guider II | Tub bottom down, as it sits (D-074); tree supports under the deck's X 17–24 ledge, the corner pockets and the fuse shelf (1299 mm²) | J04 rail ends and inserts; tub; J13 holes | | TODO |
-| CH-001 | `CHASSIS_FRAME_REAR_MODULE` (deck, rear rails, skid crossmember) | 1 | PETG, deep slate | A1 or Guider II | Deck top down (D-074); supports only under the four crossmember ends (202 mm²); drill the rear pin hole Ø4.1 | J04 rail ends; keel insert bores | | TODO |
+| CH-001 | `CHASSIS_FRAME_FRONT_MODULE` (deck, battery tub, front rails, crossmember, fuse bracket) | 1 | PETG, deep slate | A1 or Guider II | Tub bottom down, as it sits (D-074); tree supports under the deck's X 17–24 ledge, the corner pockets and the fuse shelf (1131 mm², after D-075) | J04 rail ends and inserts; tub; J13 holes | | TODO |
+| CH-001 | `CHASSIS_FRAME_REAR_MODULE` (deck, rear rails, skid crossmember) | 1 | PETG, deep slate | A1 or Guider II | Deck top down (D-074); supports only under the four crossmember ends (194 mm²); drill the rear pin hole Ø4.1 | J04 rail ends; keel insert bores | | TODO |
 | CH-001 | `AXLE_MOTOR_CARRIER_L`, `_R` (plate and cheeks, keyed; mirror images) | 2 | PETG, deep slate | A1 | Outboard plate face down; supports only under the square plate's corners (2.5 mm up) | Plate face flat (the housing seats on it); Ø7.6 pilot; 4 insert holes Ø4.0; face-screw counterbores; J04 keys and cheek faces; set-screw notch (D-071) | | TODO |
 | CH-011 | `BATTERY_TUB_BOTTOM_HATCH` | 1 | PETG, deep slate | A1 | Outer face down, no supports (D-074) | Strap slots; four screw holes | | TODO |
 | CH-051 | `AXLE_BEARING_HOUSING_L`, `_R` (mirror images) | 2 | PETG, deep slate | A1 | Inboard face down, no supports (D-071) | Ø16 seat, tried with the real bearings; shoulder; 4 × Ø3.2 holes (close fit, D-071); key slots | | TODO |
@@ -80,6 +80,7 @@ No separate test prints: the small parts go first and are the test.
 | M3 × 6 heat-set | J04 rail ends (CH-061), hatch bosses (CH-077) | 12 |
 | CNC Kitchen M3 × 5.7 | Pod seat (CH-063), keel crossmember (CH-067) | 7 |
 | M2.5 × 4 heat-set, OD 3.9 (CH-080, not bought) | Driver posts on the deck, Ø3.5 pilots (D-073) | 4 |
+| M4 × 8 heat-set, OD 5.9 (CH-095, not bought) | J13 body bolts in the deck, Ø5.5 pilots (D-075) | 3 |
 
 ## Before the first export
 

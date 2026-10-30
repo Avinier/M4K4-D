@@ -3165,3 +3165,34 @@ Option B2, locating the motor by a close-fit plate pilot and tightening the face
 **Mass:** +14.6 cm³ of printed volume, about +8.4 g at the register's 0.571 g/cm³, low in the frame (front fill Z 32–35, rear strip Z 48–56). The hand-kept mass register (`CHASSIS_PRIMARY_FRAME`, 219.1 g) is not updated here: it lives in the chassis source, which print fixes don't edit (04-print rule 2). Weigh the printed modules (rule 6) and update it from the scale.
 
 **Check:** `final/v1/cad/check_frame_print.py` **36/36** (2026-10-30, about 15 min): D-073's 29 rows plus bed and support area per print (a face sample counts as bridged with walls within 15 mm on both sides, or as a ledge within 2 mm), the sockets and bore open through the fill, the fills clear of every chassis and body part by 1.5 mm (the J04 carriers may touch the rail ends, never overlap), and the unedited modules planted (469 mm² of bed; the rear strip open at Z 54).
+
+## D-075
+
+**2026-10-31 · Chassis / J13 body bolts into M4 deck inserts; rear J04 key seats restored; frame assembly order (CH-035, CH-036, CH-095; J04, J13; final v1 CAD) · ACTIVE; `check_frame_assembly.py` 48/48; M4 inserts to buy**
+
+**Why.** Checking tool access for every frame joint in the state it is done in ([frame page §6](../04-print/01-chassis/frame/README.md#6-assembly-and-service)) found:
+
+- **The rear J13 nuts can't be held.** The three top-driven J13 bolts (−22, ±48) and (64, −48) went into plain M4 nuts held from below through a Ø10.4 socket in the rail. At the rear (X −22) that socket reaches the rail end at X −17, where the J04 key pocket is. The carriers are fitted before the body, and the carrier's key tongue then stands inside the socket: a 7 mm socket (OD 9.5) hits it (4.1 mm³), and the nut itself passes only turned flat-on. Nothing could hold the nut while the bolt was tightened.
+- **The rear J04 keys had lost their seat.** The same socket had cut away the rail round the rear key pocket: 6 % of the inner wall and 40 % of the floor and roof were left, against 60–80 % at the front. The rear key did not stop the carrier moving inboard, so the wheel's toe rested on the screws' friction.
+- **The front-right nut was reachable only with the hatch off** (the socket overlaps the hatch edge), so every body removal meant dropping the pack.
+
+**Decision** (builder, 2026-10-31: "M4 inserts in the deck"):
+
+1. **M4 × 8 heat-set inserts in the deck** at the three top-driven bolts (CH-095: OnlyScrews, OD 5.9, ₹3.60), pressed flush from the deck top into a **Ø5.5 × 9 mm** pilot (OD − 0.4, as D-073). The M4 × 12 bolt (CH-035) is unchanged: 6 mm of thread in the insert, its tip 3 mm above the pilot floor. The plain nuts at these three points are dropped (CH-036 4 → 1).
+2. **The three sockets are filled** back to the rail, rib and deck they were cut from, and the rear J04 key pockets re-cut: the rear keys are walled like the front ones (60 / 80 / 80 / 80 %).
+3. **A 45° cone boss under the deck** round each pilot: the old socket ran past the rail's inner face, so the lower half of the pilot stood in air. The boss gives 1.2 mm of wall at the pilot floor (R 3.95 at Z 47), widens to R 8.95 at the deck underside and comes to a point at Z 43.05, so it prints without support on the front module. At the rear it is clipped at the rail end (X −17). The rear and front locating-pin holes stay through.
+4. **The front-left bolt (64, +48) is unchanged:** driven from below into the nut in the body frame's foot cassette, its socket kept open. Its 2.5 mm key passes the hatch edge by 0.06 mm, so that bolt can be reached with the hatch on.
+5. CAD: `J13_FIX` and `j13_insert_edits()` in `makad-v1.step.py`: `DROID_CUTS` (pilots), `DROID_ADDS` (fills and bosses), `DROID_REMOVES` (`BODY_CHASSIS_M4_NUT_[123]`), `DROID_INSERTS` (`J13_DECK_INSERT_M4X8_[1-3]`). The chassis and body sources are unchanged; body v1's `check_body_frame_fit.py` still models the nuts.
+
+**Frame assembly order** (frame page §6), from the tool paths:
+
+- inserts into the loose modules (the inner driver posts backed with a Ø3 dowel through the open tub);
+- the ballast bar, from below, while the hatch is off; its screws from above, before the body;
+- the IMU and the driver boards, from above, before the body;
+- the carriers before the motors (the motor covers every J04 key);
+- the body frame (body assembly step 1) before the body electronics and the shell, which cover the top-driven J13 keys.
+- **Service:** the hatch and pack come off from below with the body on (J11A keys clear); the ballast, IMU, drivers and J13 need the body off, and the ballast also the hatch.
+
+**Check:** `final/v1/cad/check_frame_assembly.py` **48/48** (2026-10-31): the J13 fills, pilots, engagement, inserts and bosses (1.0 mm from every other part, out of the carriers, pin holes through); the rear key walls, with the unedited rear module planted (6 %); and every tool path in its state, with the motor planted against the J04 keys and the hatch against the ballast. `check_frame_print.py` re-run with the fills and bosses: **36/36**; the front module's support falls from 1299 to 1131 mm² (the J13 pockets are filled; the bosses need none), bed 2901 mm²; the rear 3551 / 194 mm². Printed volume +0.8 cm³ front, +1.4 cm³ rear on D-074 (front 83.97, rear 59.16 cm³).
+
+**BOM changed:** CH-035 (three into inserts, one into the cassette nut), CH-036 4 → 1, new CH-095 M4 × 8 insert (3, not ordered).

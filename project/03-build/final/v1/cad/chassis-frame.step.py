@@ -56,7 +56,8 @@ GROUPS = [
     ("J12 ballast screws, M3 x 12 CSK from the deck top", ("BALLAST_M3_",), (0.0, 0.0, 30.0), True),
     ("J13 body bolts M4 x 12 and pins (body side)", ("BODY_CHASSIS_M4_SHANK_", "BODY_CHASSIS_M4_HEAD_", "BODY_CHASSIS_LOCATING_PIN_"),
      (0.0, 0.0, 45.0), True),
-    ("J13 M4 nuts, held from below", ("BODY_CHASSIS_M4_NUT_",), (0.0, 0.0, -20.0), True),
+    ("J13 M4 x 8 deck inserts (CH-095, D-075)", ("J13_DECK_INSERT_",), (0.0, 0.0, 0.0), False),
+    ("J13 front-left nut, in the body cassette", ("BODY_CHASSIS_M4_NUT_",), (0.0, 0.0, 20.0), True),
     ("J15A IMU board PCB-07 and its M2 x 5 screws", ("IMU_",), (0.0, 0.0, 30.0), True),
     ("J15B driver post inserts, M2.5 x 4 (CH-080, not bought)", ("DRIVER_POST_INSERT_M25_",), (0.0, 0.0, 0.0), False),
     ("J15B driver boards (Adafruit 3297) and M2.5 x 6 screws",
@@ -104,7 +105,7 @@ def _group(leaves, explode):
 
 def gen_step():
     leaves = _leaves(_robot._apply_droid_cuts(B.chassis_v1_reference(), strict=False))
-    leaves.update(_leaves(B.body_chassis_mount_hardware()))
+    leaves.update(_leaves(_robot._apply_droid_cuts(B.body_chassis_mount_hardware(), strict=False)))
     assembled = Compound(label="1 assembled", children=_group(leaves, False))
     exploded = Compound(label="2 exploded (260 mm to -Y)", children=_group(leaves, True))
     return {"shape": Compound(label="Chassis primary frame (print review)", children=[assembled, exploded])}

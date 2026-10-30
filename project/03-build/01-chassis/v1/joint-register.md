@@ -26,7 +26,7 @@
 | J11A | Battery hatch to tub | CAD defined (D-028, D-030) | Boss insert coupon; retention test with the strapped pack |
 | J11B | Battery pack to tub | CAD defined: strapped to the hatch (D-030) | Shock/inversion test, strap and foam sourcing, safe removal |
 | J12 | Ballast bar to deck | M3 × 12 CSK modeled (D-026); source identified (D-030) | Verify received head against the seat, tool/load check |
-| J13 | Body frame to chassis deck | Stack defined: M4 × 12, plain nut, Loctite 222 (D-030) | Verify head seat, pin fits, nut access and lift-off |
+| J13 | Body frame to chassis deck | M4 × 12 into deck inserts at three bolts, cassette nut at the front-left (D-030, D-075) | Verify head seat, pin fits, insert fit and lift-off |
 | J14 | TPU tyre to wheel rim | Designed in wheel CAD | Material/process fit, clamp, creep and runout |
 | J15A | IMU board to deck | Modeled | Board-hole confirmation and screw fit |
 | J15B | Driver boards and motor-lead restraint | CAD defined (D-030, D-031) | Insert coupon, tug/vibration test, service dry run |
@@ -200,8 +200,8 @@
 
 - **Parts/load path:** body-frame feet/pads to the decks of the two frame modules. Four M4 bolts clamp; two diagonal pins carry repeatable lateral location/shear.
 - **Location/joint:** four Ø4.5 clearance holes at modeled points; two Ø4 pins in Ø4.1 nominal holes; pins establish XY datum, bolts clamp pads to deck.
-- **Hardware/clamp ([D-030](../../decisions.md#d-030)):** 4 × M4 × 12 button-head through-bolts and four accessible M4 plain hex nuts (CH-035/036), plus 2 × Ø4 × 8 mm pins (CH-037). The stack is 4 mm frame foot + 4 mm deck + 3.2 mm nut = 11.2 mm, leaving 0.8 mm of thread past the nut, more than one 0.7 mm pitch. There are no washers. Loctite 222 (CH-057) on the nut thread is the locking method; a Nyloc would need a longer bolt and a different socket path. Confirm actual head seat, nut height and projection on the received parts.
-- **Material/access/service:** printed frame candidates. Bolt heads from above; nuts held from below through rail socket paths. Remove bolts and lift body vertically off pins. Verify slim-socket access with tub/rails/shell installed.
+- **Hardware/clamp ([D-030](../../decisions.md#d-030), [D-075](../../decisions.md#d-075)):** 4 × M4 × 12 button-head bolts (CH-035) and 2 × Ø4 × 8 mm pins (CH-037). Three bolts, at (−22, ±48) and (64, −48), are driven from above into M4 × 8 heat-set inserts (CH-095, OD 5.9) pressed flush into Ø5.5 × 9 pilots in the deck top: 6 mm of thread, the tip 3 mm above the pilot floor. The front-left bolt (64, +48) is driven from below into a plain nut (CH-036, 1) in the body frame's foot cassette. No washers; Loctite 222 (CH-057) on the bolt threads. In the final CAD only (droid edits); the chassis source still draws the four nut sockets and nuts.
+- **Material/access/service:** bolt heads from above with a 2.5 mm key once the body frame is down (body assembly step 1), before the body electronics and shell; the front-left bolt from below, past the hatch edge (0.06 mm). Remove the bolts and lift the body vertically off the pins. The rear nut sockets the inserts replace could not be reached with the J04 carriers on, and they had cut away the rear J04 key seats ([D-075](../../decisions.md#d-075)).
 - **Proof/state:** check pin/hole fit and foot coplanarity; dry-run access/lift-off; test clamp retention, deck crushing and body shear under representative mass. **Candidate stack defined; fit/proof open.**
 
 ### J14 — TPU tyre to wheel rim

@@ -49,7 +49,7 @@ The view includes the body frame, shell, service panels and their internal frame
 
 Assembly order in the CAD design:
 
-1. Lower the main print onto the chassis rear locating pin and its three feet. Fasten those feet with three M4 × 12 button-head bolts from above and plain nuts from below.
+1. Lower the main print onto the chassis rear locating pin and its three feet. Fasten those feet with three M4 × 12 button-head bolts from above, into M4 heat-set inserts in the chassis deck in the final CAD ([D-075](../../../decisions.md#d-075); this source still models plain nuts from below).
 2. Press the two M3 inserts into the cassette from its +Y face and place an M4 plain nut in its hexagonal pocket. Slide the cassette outward along +Y, under the fuse shelf, until its face meets the main frame's front-left side rail. Fit the two M3 × 16 side screws from the outboard face of the rail into those inserts before fitting the body shell.
 3. Insert the front-left Ø4 × 8 locating pin from below. Insert the fourth M4 × 12 bolt upward through the existing chassis hole into the trapped nut. The chassis rail has the existing Ø10.4 relief around this bolt axis for underside access.
 4. Remove the front-left bolt and pin, undo the two M3 side screws, slide the cassette toward −Y, then lift the main frame off the rear pin.

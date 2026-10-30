@@ -24,8 +24,8 @@ robot-left, +Z up. The deck top is Z 56.
 
 | Print | BOM | Size (X × Y × Z) | Volume | Material, colour | Joins to |
 |---|---|---|---|---|---|
-| **Front module** `CHASSIS_FRAME_FRONT_MODULE` | CH-001 | 75 × 128 × 41 mm (X 17–92, Z 32–73) | 83.2 cm³ (75.8 before D-074) | PETG, deep slate | Carriers (J04), hatch (J11A), ballast (J12), body (J13), IMU (J15A), drivers (J15B), nose pod (J07B) |
-| **Rear module** `CHASSIS_FRAME_REAR_MODULE` | CH-001 | 34 × 132 × 22 mm (X −51 to −17, Z 34–56) | 57.8 cm³ (50.4 before D-074) | PETG, deep slate | Carriers (J04), body (J13), keel (J09A) |
+| **Front module** `CHASSIS_FRAME_FRONT_MODULE` | CH-001 | 75 × 128 × 41 mm (X 17–92, Z 32–73) | 84.0 cm³ (75.8 before D-074 and D-075) | PETG, deep slate | Carriers (J04), hatch (J11A), ballast (J12), body (J13), IMU (J15A), drivers (J15B), nose pod (J07B) |
+| **Rear module** `CHASSIS_FRAME_REAR_MODULE` | CH-001 | 34 × 132 × 22 mm (X −51 to −17, Z 34–56) | 59.2 cm³ (50.4 before D-074 and D-075) | PETG, deep slate | Carriers (J04), body (J13), keel (J09A) |
 | **Battery hatch** `BATTERY_TUB_BOTTOM_HATCH` | CH-011 | 54 × 93 × 1.5 mm (X 21–75, Z 30.5–32) | 7.4 cm³ | PETG, deep slate | Tub bosses (J11A), pack straps (J11B) |
 
 The modules touch nothing but the two J04 carriers. Between them, X −17 to +17, is the open
@@ -42,8 +42,8 @@ motor bay: the motors sit in it, and the deck has no plate there.
 | 4 hatch bosses, 7 × 7 mm | (28, ±39.5) and (71.5, ±34.35), Z 32–39.5; Ø4.0 insert pilots from below (D-073; were Ø4.3) | J11A inserts |
 | Front rails, 8 mm wide | X 17–80, Y ±50 to ±58, Z 32–52 (Z 35 before D-074) | Carry the deck into the carriers and the crossmember |
 | J04 rail ends | X 17 face: two Ø4.0 × 7 axial pilots at Y ±54, Z 38/48 (D-073); key pocket 3.2 × 2.4 × 3.4 at Y ±51.5 | Carrier screws and key |
-| J13 rib and socket | X 57.5–70.5, out to Y ±64; Ø10.4 vertical socket at (64, ±48) | Socket path for the M4 nut under the deck |
-| J13 deck holes | Ø4.5 at (64, ±48); pin hole Ø4.1 at (59, 42) | Body bolts and the front locating pin |
+| J13 rib, insert and socket | X 57.5–70.5, out to Y ±64. At (64, −48): an M4 × 8 insert pilot Ø5.5 × 9 from the deck top, walled below the deck by a 45° boss ([D-075](../../../03-build/decisions.md#d-075)). At (64, +48): the Ø10.4 socket, open, for the bolt driven from below | Body bolts |
+| J13 deck holes | Ø4.5 at (64, +48); pin hole Ø4.1 at (59, 42), through | Front-left bolt and the front locating pin |
 | Front crossmember | X 80–92, Y ±62, Z 35–52; Z 32 up to X 90.5 (D-074) | Nose pod seat (J07B); takes caster loads into the rails |
 | Pod insert pilots | Ø4.0 axial, X 85–93, at (Y ±10, Z 42) | J07B inserts (nose review) |
 | J10-8 cable bore | Ø5 vertical at (86, −31), through crossmember and deck | Nose sensor cable riser |
@@ -58,10 +58,10 @@ motor bay: the motors sit in it, and the deck has no plate there.
 | Feature | Where | What it is for |
 |---|---|---|
 | Deck plate, 4 mm | X −41 to −17, Y ±56, Z 52–56 | Body feet (J13) |
-| J13 deck holes | Ø4.5 at (−22, ±48); pin hole Ø4.1 at (−27, −42) | Body bolts and the rear locating pin |
+| J13 deck holes | Pin hole Ø4.1 at (−27, −42), through the deck and boss | Rear locating pin |
 | Rear rails | X −32 to −17, Y ±50 to ±58, Z 35–52; gusset X −32 to −23 out to Y ±66 | Into the carriers and the crossmember |
 | J04 rail ends | X −17 face: two Ø4.0 × 7 pilots at Y ±58.5, Z 38/48 (D-073); key pocket at Y ±51.5 | Carrier screws and key |
-| J13 rib and socket | Ø10.4 socket at (−22, ±48) | M4 nut access |
+| J13 inserts | M4 × 8 insert pilots Ø5.5 × 9 at (−22, ±48), from the deck top, walled by 45° bosses; the old sockets filled, so the J04 keys are walled again ([D-075](../../../03-build/decisions.md#d-075)) | Body bolts |
 | Skid crossmember | X −48 to −32, Y ±66, Z 34–48, rising to the deck (Z 52) at X −41 to −32; the strip X −48 to −41 up to the deck top, Z 56 (D-074) | Keel seat (J09A) |
 | Keel insert pilots, 4 | Ø4.0 from below at (−36.5, ±5.5) and (−44, ±5.5) | J09A inserts (keel review) |
 | Cable-tie lug | X −51 to −48, Y −33 to −27, Z 36–44 | Holds the J10-10 TCRT cable |
@@ -80,7 +80,7 @@ body shell's floor with 0.5 mm all round.
 | **J11A** | Hatch to the 4 tub bosses | 4 × ISO 7380 M3 × 6 (CH-076) into 4 × M3 × 6 inserts (CH-077) | Below, robot on its back or raised | [J11A](../../../03-build/01-chassis/v1/joint-register.md#j11a--battery-hatch-to-tub) |
 | **J11B** | Pack strapped to the hatch; both drop out together | 2 hook-and-loop straps (CH-078), 2 foam pads (CH-079) | Below | [J11B](../../../03-build/01-chassis/v1/joint-register.md#j11b--battery-pack-to-tub) |
 | **J12** | Steel ballast bar (9 × 60 × 19, about 80 g) to the deck underside, between the tub's front wall and the crossmember | 2 × M3 × 12 CSK (CH-038) from the deck top into tapped holes in the bar | Above | [J12](../../../03-build/01-chassis/v1/joint-register.md#j12--ballast-bar-to-front-deck) |
-| **J13** | Body frame feet to both decks; 2 diagonal pins locate, 4 bolts clamp | 4 × M4 × 12 button (CH-035), 4 × M4 nuts (CH-036), 2 × Ø4 × 8 pins (CH-037), Loctite 222 | Bolts from above, nuts from below through the rail sockets. The front-left one (64, 48) is reversed: head in the rail socket, nut in the body cassette (body v1) | [J13](../../../03-build/01-chassis/v1/joint-register.md#j13--body-frame-to-chassis-deck) |
+| **J13** | Body frame feet to both decks; 2 diagonal pins locate, 4 bolts clamp | 4 × M4 × 12 button (CH-035): three into M4 × 8 deck inserts (CH-095), one into the cassette nut (CH-036); 2 × Ø4 × 8 pins (CH-037); Loctite 222 | Three bolts from above into the deck inserts ([D-075](../../../03-build/decisions.md#d-075)). The front-left one (64, 48) is reversed: head in the rail socket, nut in the body cassette (body v1) | [J13](../../../03-build/01-chassis/v1/joint-register.md#j13--body-frame-to-chassis-deck) |
 | **J15A** | IMU board PCB-07 flat on the deck | 2 × M2 × 5 thread-forming (CH-039) | Above | [J15A](../../../03-build/01-chassis/v1/joint-register.md#j15a--imu-board-to-deck) |
 | **J15B** | Two Adafruit #3297 driver boards on 4 posts; motor leads tied to the deck | 4 × M2.5 × 6 (CH-081) into 4 × M2.5 × 4 inserts (CH-080); 2 zip ties (CH-082) | Above | [J15B](../../../03-build/01-chassis/v1/joint-register.md#j15b--driver-boards-and-motor-lead-restraint) |
 
@@ -98,7 +98,8 @@ the nose and the keel.
 | ISO 7380 M3 × 8 | CH-060 | 8 | Ø3.4 in the carrier cheeks | |
 | ISO 7380 M3 × 6 | CH-076 | 4 | Ø3.4 in the hatch | |
 | M3 × 12 CSK, black oxide | CH-038 | 2 | Ø3.4 + 90° × Ø6.5 | |
-| M4 × 12 button, M4 nut, Ø4 × 8 pin | CH-035/036/037 | 4, 4, 2 | Ø4.5 deck, Ø10.4 socket, Ø4.1 pin | |
+| M4 × 12 button, M4 nut (cassette only), Ø4 × 8 pin | CH-035/036/037 | 4, 1, 2 | Ø4.5 deck at (64, 48), Ø4.1 pins | |
+| M4 × 8 brass insert, OD 5.9 (OnlyScrews) | CH-095 | 3 | Ø5.5 × 9 from the deck top (D-075) | **Not bought** |
 | M2 × 5 thread-forming | CH-039 | 2 | Ø1.6 through the deck (D-073) | |
 | M2.5 × 6 low button | CH-081 | 4 | — | |
 
@@ -133,8 +134,8 @@ filaments, the J04 inserts pull along the layers and the J13 bolts clamp across 
 
 | Print | Face on the bed | Bed | Support (tree, PETG) | Faces that must come out clean |
 |---|---|---|---|---|
-| Front module | **Tub bottom** (Z 32), as it sits in the robot | 2879 mm² | 1299 mm²: deck underside at X 17–24 (7 mm ledge on the motor bay), the two corner pockets beside the tub's front corners and round the J13 sockets, the fuse shelf, the tub window head | J04 rail-end faces, keys and pilots; deck top (J13 feet, posts); the four hatch bosses (on the bed); J13 sockets; pod pilots and the crossmember front face |
-| Rear module | **Deck top** (Z 56) | 3567 mm² | 202 mm²: the four crossmember ends beyond the deck (\|Y\| 56–66) and the tie lug | Deck top (on the bed: J13 seat); J04 rail-end faces, keys and pilots; keel pilots and the crossmember underside |
+| Front module | **Tub bottom** (Z 32), as it sits in the robot | 2901 mm² | 1131 mm²: deck underside at X 17–24 (7 mm ledge on the motor bay), the two corner pockets beside the tub's front corners and round the front-left J13 socket, the fuse shelf, the tub window head. The D-075 J13 bosses print without support | J04 rail-end faces, keys and pilots; deck top (J13 feet, posts); the four hatch bosses (on the bed); J13 sockets; pod pilots and the crossmember front face |
+| Rear module | **Deck top** (Z 56) | 3551 mm² | 194 mm²: the four crossmember ends beyond the deck (\|Y\| 56–66) and the tie lug | Deck top (on the bed: J13 seat); J04 rail-end faces, keys and pilots; keel pilots and the crossmember underside |
 | Hatch | **Outer face** (Z 30.5) | 4915 mm² | None | Flat both sides; four screw holes; strap slots |
 
 - **The two fills (D-074).** The front rails, J13 ribs and crossmember ran down only to Z 35,
@@ -160,8 +161,91 @@ filaments, the J04 inserts pull along the layers and the J13 bolts clamp across 
   Settings (walls, infill, hole compensation) go in with the settings column for the whole
   chassis list.
 
+## 6. Assembly and service
+
+Every step's tool path is modelled across the key's corners and checked against the CAD in the
+state the step is done in, by [`check_frame_assembly.py`](../../../03-build/final/v1/cad/check_frame_assembly.py)
+(48/48 on 2026-10-31). That check found that the rear J13 nuts couldn't be held once the carriers
+were on, and that their sockets had cut away the rear J04 key seats: the three top-driven J13
+bolts now go into M4 inserts in the deck ([D-075](../../../03-build/decisions.md#d-075)).
+
+**Tools:**
+- 2 mm hex key, straight and L (16 mm short leg): J04 and J11A (ISO 7380 M3).
+- 2.5 mm hex key: J13 (ISO 7380 M4).
+- 1.5 mm hex key: J15B (M2.5 low button heads).
+- PH1 screwdriver: J12 (M3 countersunk). PH0 or T6, to suit the screws received: J15A.
+- Soldering iron with M2.5, M3 and M4 insert tips. A Ø3 dowel or drill blank to back the inner driver posts.
+- Ø4.1 drill (by hand) for the rear pin hole; torque screwdriver for J04 (0.3 N·m, [D-072](../../../03-build/decisions.md#d-072)).
+
+**Consumables:** Loctite 222 (J13 bolts).
+
+### A. The modules on the bench
+
+1. **Clean up the prints:** remove the supports (§5), and run the Ø4.1 drill through the rear
+   pin hole by hand.
+2. **Inserts, each flush:**
+   - J04, 8 × M3 × 6: from the rail-end faces (X ±17), along X, before the carriers.
+   - J11A, 4 × M3 × 6: into the tub bosses from below.
+   - J13, 3 × M4 × 8: from the deck top at (−22, ±48) and (64, −48).
+   - J15B, 4 × M2.5 × 4: from above into the post tops. Back the two inner posts, which stand
+     half over the battery opening, with the dowel from below through the open tub.
+   - The pod (2) and keel (4) inserts: see the nose and keel pages.
+
+### B. Before the modules are joined
+
+3. **Ballast (J12).** Push the bar up from below into the pocket between the tub's front wall
+   and the crossmember, its flat face against the deck underside. Drive the two M3 × 12
+   countersunk screws from the deck top with the PH1. The hatch must be off: the bar drops
+   past its front edge.
+4. **IMU (J15A).** Board flat on the deck, connector to −X, two M2 × 5 thread-forming screws into
+   the Ø1.6 pilots. Drive them gently: they cut their own thread.
+
+### C. Join the modules (J04)
+
+5. **Carriers.** As in the [axle page §4B](../axle/README.md#b-carrier-and-motor), step 4:
+   keys into the rail-end pockets, then the four M3 × 8 per carrier from the motor bay with the
+   L-key, short leg in the screw, long leg up through the open bay, at 0.3 N·m. Do it before the
+   motors: a motor body blocks every one of these keys.
+6. **Check the deck tops across the bay.** A straightedge across both decks at each side and
+   along the centre: no gap over 0.20 mm (issue 4, the J13 seat).
+
+### D. Axle, drivers, nose and keel
+
+7. **Motors and axle stacks:** the [axle page](../axle/README.md) §4B–§4E.
+8. **Driver boards (J15B).** Each board on its two posts, terminal block as drawn, two
+   M2.5 × 6 with the 1.5 mm key. Tie the motor leads through the deck bridge behind each board.
+9. **Nose pod and keel:** their own pages (next reviews).
+
+### E. Body frame (J13)
+
+10. **Body assembly step 1** ([body CAD README](../../../03-build/02-body/v1/cad/README.md)):
+    lower the main body frame onto the rear pin and its three feet, and drive the three M4 × 12
+    into the deck inserts from above with the 2.5 mm key, a drop of Loctite 222 on each. This
+    comes before the body electronics and the shell: they cover these keys.
+11. Slide in the front-left foot cassette, fit its pin from below, and drive its M4 × 12 up
+    from below into the cassette's nut. The key passes the hatch edge by 0.06 mm, so the hatch
+    can be on or off.
+
+### F. Pack and hatch (J11B, J11A), last
+
+12. Strap the pack to the hatch (J11B), plug the CN-05 disconnect through the tub's +Y window,
+    lift the hatch into the tub and drive its four M3 × 6 from below with the 2 mm key. The
+    keys reach them with the body on.
+
+### Service
+
+| To do | Steps | Body |
+|---|---|---|
+| **Pack** | Robot on its back. Four hatch screws out from below; lower the hatch with the pack strapped on; unplug CN-05 through the +Y window | On |
+| **Ballast** | Body off; pack and hatch out; two screws out from above; drop the bar | Off |
+| **IMU, driver boards** | Body off; unplug; screws out from above | Off |
+| **Body** | Reverse §E and the body steps after it (shell and electronics first, then the front-left bolt from below and the cassette, then the three bolts from above); lift off the pins | — |
+| **Carrier or modules apart** | Motor out (axle page §5), then the four J04 screws from the bay | Off |
+
+- **Inserts are reusable;** a stripped one is reheated and replaced with the iron.
+- **Loctite 222** on the J13 bolts breaks loose with a hand key; clean and re-apply when refitting.
+
 ## Next
 
-6. Assembly and service order, with tool access per joint.
-7. Gap table and fixes (droid edits in `final/v1`), with a check script.
+7. Gap table and fixes for anything left from §1–§6, with the checks.
 8. Still open (physical).

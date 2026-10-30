@@ -210,9 +210,9 @@ def main():
 
     for label in ("CHASSIS_FRAME_FRONT_MODULE", "CHASSIS_FRAME_REAR_MODULE"):
         n, dv = len(edited[label].solids()), (edited[label].volume - raw[label].volume) / 1000.0
-        fill = sum(sh.volume for lab, sh in entry._FRAME_PRINT_ADDS if lab == label) / 1000.0
-        check(f"{label} is one solid, volume change = fills + pilot rings", n == 1 and abs(dv - fill) < 0.2,
-              f"{n} solid; {raw[label].volume / 1000:.2f} -> {edited[label].volume / 1000:.2f} cm3 ({dv:+.3f}; D-074 fills {fill:.3f})")
+        fill = sum(sh.volume for lab, sh in entry._FRAME_PRINT_ADDS + entry._J13_ADDS if lab == label) / 1000.0
+        check(f"{label} is one solid, volume change = fills + pilot rings", n == 1 and abs(dv - fill) < 0.4,
+              f"{n} solid; {raw[label].volume / 1000:.2f} -> {edited[label].volume / 1000:.2f} cm3 ({dv:+.3f}; D-074 and D-075 fills {fill:.3f})")
 
     old = []
     for name, shape, axis, c, a0, a1 in pilots(raw):
@@ -236,9 +236,10 @@ def main():
             print(f"        support: {row[0]} mm2, {row[1]} mm up, {row[2]}")
     front = edited["CHASSIS_FRAME_FRONT_MODULE"]
     z = (P["front_floor"] + P["front_old"]) / 2.0
-    holes = [(x, y, P["j13_socket_r"]) for x, y in P["j13_sockets"]] + [P["nose_bore"]]
+    # D-075 fills the top-driven J13 sockets; only the front-left one (bolt from below) stays open.
+    holes = [(x, y, P["j13_socket_r"]) for x, y in P["j13_sockets"] if (x, y) not in entry.J13_FIX["points"]] + [P["nose_bore"]]
     open_ = {f"({x}, {y})": all(not solid_at(front, p) for p in ring("z", (x, y, 0.0), r - GAP, z)) for x, y, r in holes}
-    check("front fill keeps the J13 nut sockets and the J10-8 bore open", all(open_.values()), f"{open_}")
+    check("front fill keeps the front-left J13 socket and the J10-8 bore open", all(open_.values()), f"{open_}")
 
     # 8. Clearance of the fills.
     others = body_parts()

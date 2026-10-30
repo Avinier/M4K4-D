@@ -465,6 +465,74 @@ def frame_print_edits():
 _FRAME_PRINT_ADDS = frame_print_edits()
 
 
+# D-075: J13 bolts into M4 heat-set inserts in the deck. The Ø10.4 nut sockets under the three
+# top-driven bolts let a socket hold the plain nut from below, but at the rear (X -22) the socket
+# overlaps the J04 key pocket at the rail end: the key had 6 % of its inner wall, and with the
+# carriers on, the key tongue stands in the socket so the nut can't be held. The sockets are filled
+# back to the rail, rib and deck they were cut from, the rear key pockets re-cut, and an OnlyScrews
+# M4 x 8 insert (OD 5.9) goes into a Ø5.5 x 9 pilot from the deck top, flush. The M4 x 12 bolt keeps
+# 6 mm of thread and stops 3 mm above the pilot bottom. The front-left bolt (64, +48) is driven from
+# below into the body cassette's nut and keeps its socket.
+J13_FIX = dict(
+    points=((-22.0, -48.0), (-22.0, 48.0), (64.0, -48.0)), socket_r=5.2,
+    pilot_r=2.75, pilot_z=(47.0, 56.0), insert=(2.95, 2.0, 48.0, 56.0),  # OD/2, ID/2, Z span
+    deck_slab=(51.9, 53.1),                     # the socket ran 1 mm into the deck underside
+    # Material each socket was cut from: (x0, x1, |y0|, |y1|, z0, z1) per region.
+    envelope=dict(FRONT=((17.0, 80.0, 50.0, 58.0, 32.0, 52.0), (57.5, 70.5, 52.0, 64.0, 32.0, 51.0)),
+                  REAR=((-32.0, -17.0, 50.0, 58.0, 35.0, 52.0), (-28.5, -17.0, 52.0, 64.0, 35.0, 51.0),
+                        (-32.0, -23.0, 50.0, 66.0, 35.0, 52.0))),
+    rear_key=(-20.2, -17.0, 50.3, 52.7, 41.3, 44.7),  # J04 key pocket, |Y|
+    # The old socket ran past the rail's inner face, so half the pilot below the deck stood in air.
+    # A 45° cone boss under the deck closes it: R 3.95 (1.2 mm wall) at the pilot floor, Z 47,
+    # widening to R 8.95 at the deck underside, apex at Z 43.05 so it prints without support.
+    boss=(47.0, 3.95, 52.0),
+    boss_x=dict(FRONT=(17.0, 80.0), REAR=(-41.0, -17.0)),
+    # The rear-right boss reaches the rear locating pin's Ø4.1 hole (-27, -42); it stays through.
+    pin_holes=((-27.0, -42.0, 2.05), (59.0, 42.0, 2.05)),
+)
+
+
+def j13_insert_edits():
+    """D-075 (cuts, adds, inserts) for the three top-driven J13 points."""
+    from build123d import Align, Box, Cone
+    m = J13_FIX
+
+    def box(x0, x1, y0, y1, z0, z1):
+        return Box(x1 - x0, y1 - y0, z1 - z0).moved(Location(((x0 + x1) / 2.0, (y0 + y1) / 2.0, (z0 + z1) / 2.0)))
+
+    cuts, adds, inserts = [], [], []
+    for k, (x, y) in enumerate(m["points"], start=1):
+        region = "FRONT" if x > 0 else "REAR"
+        label = rf"CHASSIS_FRAME_{region}_MODULE"
+        sy = 1.0 if y > 0 else -1.0
+        env = None
+        for x0, x1, a, b, z0, z1 in m["envelope"][region]:
+            piece = box(x0, x1, *sorted((sy * a, sy * b)), z0, z1)
+            env = piece if env is None else env + piece
+        sx0, sx1 = (17.0, 92.0) if region == "FRONT" else (-41.0, -17.0)
+        env = env + box(sx0, sx1, -56.0, 56.0, *m["deck_slab"])
+        fill = _z_cyl(m["socket_r"] + 0.05, 31.0, m["deck_slab"][1], x, y) & env
+        zf, rf, zt = m["boss"]
+        r_top, apex = rf + (zt - zf), zf - rf
+        cone = Cone(0.0, r_top, zt + 0.05 - apex, align=(Align.CENTER, Align.CENTER, Align.MIN)).moved(Location((x, y, apex)))
+        fill = fill + (cone & box(*m["boss_x"][region], y - 10.0, y + 10.0, apex - 1.0, zt + 0.05))
+        fill = fill - _z_cyl(m["pilot_r"], m["pilot_z"][0], m["pilot_z"][1] + 1.0, x, y)
+        for px, py, pr in m["pin_holes"]:
+            fill = fill - _z_cyl(pr, 30.0, 57.0, px, py)
+        if region == "REAR":
+            kx0, kx1, ka, kb, kz0, kz1 = m["rear_key"]
+            fill = fill - box(kx0, kx1, *sorted((sy * ka, sy * kb)), kz0, kz1)
+        adds.append((label, fill))
+        cuts.append((label, _z_cyl(m["pilot_r"], m["pilot_z"][0], m["pilot_z"][1] + 0.1, x, y)))
+        r_out, r_in, z0, z1 = m["insert"]
+        ring = _z_cyl(r_out, z0, z1, x, y) - _z_cyl(r_in, z0 - 0.1, z1 + 0.1, x, y)
+        inserts.append((r"CHASSIS_PRIMARY_FRAME", _body._paint(ring, f"J13_DECK_INSERT_M4X8_{k}", _body.BRONZE, 1.0)))
+    return cuts, adds, inserts
+
+
+_J13_CUTS, _J13_ADDS, _J13_INSERTS = j13_insert_edits()
+
+
 # D-072: the M3 x 18 housing screws ended 0.2 mm short of the bottom of their blind holes,
 # 0.51 mm above the gearbox face. ISO 7380's length tolerance on 18 mm is +-0.35 (js15), so a
 # long screw could bottom out before its head clamped the cap, and push the skin onto the
@@ -529,11 +597,14 @@ DROID_REMOVES = [
     r"C3_J10_1_MICROFIT3_2P_(RA_HEADER|MATED_PLUG)",
     # D-072: the M3 x 18 housing screws, replaced by M3 x 16 below.
     r"AXLE_CAP_SCREW_M3X18_[LR]_[1-4]",
+    # D-075: the plain nuts under the three top-driven J13 bolts; the bolts go into deck inserts.
+    r"BODY_CHASSIS_M4_NUT_[123]",
 ]
 DROID_INSERTS = [
     (r"C3_CARRIER_PCB10_WITH_DEVKITC", pcb10_devkitc()),
     *[(r"C3_CARRIER_PCB10_WITH_DEVKITC", shape) for shape in pcb10_j10_1()],
     *_AXLE_SCREW_INSERTS,  # D-072: M3 x 16 housing screws
+    *_J13_INSERTS,  # D-075: M4 x 8 deck inserts at the three top-driven J13 bolts
 ]
 
 
@@ -560,6 +631,8 @@ DROID_CUTS = [
     *_AXLE_CUTS,
     # D-073: J04 rail pilots run Ø4.0 to 7 mm deep; Ø1.6 IMU screw pilots through the front deck.
     *_FRAME_CUTS,
+    # D-075: Ø5.5 x 9 M4 insert pilots from the deck top at the three top-driven J13 bolts.
+    *_J13_CUTS,
 ]
 DROID_ADDS = [
     # D-068: PCB-10 top-edge hooks on the C3 carrier uprights.
@@ -592,6 +665,8 @@ DROID_ADDS = [
     # D-074: the front module's rails, J13 ribs and crossmember down to the tub's Z 32 (prints tub
     # bottom down on one flat face); the rear crossmember strip behind the deck up to Z 56 (deck down).
     *_FRAME_PRINT_ADDS,
+    # D-075: the three J13 nut sockets filled back to the rail, rib and deck (rear J04 key pockets kept).
+    *_J13_ADDS,
 ]
 DROID_MOVES = [
     # D-068 amended: C3 GH headers and plugs into the three proved rows; the J10-1 plug reserve down
