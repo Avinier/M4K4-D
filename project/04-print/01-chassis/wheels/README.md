@@ -84,7 +84,7 @@ The axle is the **turned steel stub** (CH-012), not a printed part. From the mot
 1. A Ø4.05 bore on the motor's D-shaft, 8 mm deep, locked by an M3 set screw on the flat.
 2. Two 688 ZZ bearings in the printed housing.
 3. A Ø9.5 shoulder.
-4. A **Ø24 × 2 mm flange** with three tapped M3 holes on a Ø16 circle.
+4. A **Ø21 × 2 mm flange** ([D-071](../../../03-build/decisions.md#d-071); was Ø24) with three tapped M3 holes on a Ø16 circle.
 5. A **Ø10 × 3 mm spigot** with an M3 hole tapped 8 mm into its end.
 
 The rim's hub is a 4 mm web with a Ø10 bore:
@@ -220,3 +220,18 @@ as in the [final v1 README](../../../03-build/final/v1/README.md). **29/29 pass 
 - **The web's flatness** where the flange clamps, and the **runout** of the assembled wheel. Match the left and right ODs within about 0.3 mm.
 - **Retention:** the wheel screws and the cap screw after the first runs, and tyre creep at motor stall.
 - From the [wheel README](../../../03-build/01-chassis/v1/cad/wheel/README.md#open-physical-not-closable-in-cad): loaded radius, and grip on tile, laminate and rug.
+
+## 9. To order or make
+
+For the two wheels. The stub, bearings and motor are on the [axle page §7](../axle/README.md#7-to-order-or-make).
+
+| What | Qty for the robot | Where | Note |
+|---|---|---|---|
+| Rims and clamp rings, CH-004 | 2 + 2 | 3D lab, own PETG slate blue (CH-091) | Rim lip side down; PLA interface (CH-094) under the web |
+| Hub caps, CH-058 | 2 | 3D lab, own PETG gunmetal (CH-092) | |
+| Tyres, CH-005 | 2 (one first) | 3D lab, TPU 95A black (CH-093, own spool or the lab's) | Direct-drive A1; dry the spool |
+| M3 × 4 slant-knurled inserts, CH-049 | 12 | OnlyScrews, in hand 2026-10-30, enough for the build | Measure the OD on arrival (gap F) |
+| M3 × 8 button heads, CH-048 | 12 | OnlyScrews (pack of 20, the same listing as the J04 CH-060) | |
+| M3 × 6 button heads, CH-056 | 6 | OnlyScrews (the same listing as the motor face screws CH-030) | |
+| M3 × 10 button heads, CH-059 | 2 | OnlyScrews | |
+| Loctite 222, CH-057 | shared | OnlyScrews | On the three wheel screws |

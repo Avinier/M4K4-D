@@ -200,13 +200,15 @@ and print orientation. Keys are modelled across their corners: 2 mm hex r 1.155,
 | What | Qty for the robot | Where | Note |
 |---|---|---|---|
 | Stub, CH-012 | 3 (2 + 1 spare) | A local turning shop | Send [CH-012_stub_drawing.pdf](../../../03-build/final/v1/fab/CH-012_stub_drawing.pdf) and [CH-012_stub.step](../../../03-build/final/v1/fab/CH-012_stub.step). EN8 or C45; k5, g6 and H8 limits are on the sheet |
-| 688 ZZ bearings, CH-015 | 4 | OnlyScrews listing (sold out at the last check) | Confirm the maker, ZZ shields and dimensions on the delivered lot |
+| 688 ZZ bearings, CH-015 | 4 | [OnlyScrews listing](https://onlyscrews.in/products/688-zz-deep-groove-ball-bearing-8x16x5) (page showed in stock 2026-09-30) | Confirm the maker, ZZ shields and dimensions on the delivered lot |
 | Aluminium caps, CH-052 | 2 (+2 spare) | Laser or waterjet cutting from 1.2 mm aluminium, 5052-H32 or 6061-T6 | Send [CH-052_cap.dxf](../../../03-build/final/v1/fab/CH-052_cap.dxf) (mm, layer CUT): OD 32, ID 12.5, 4 × Ø3.4 on R12, 2 × Ø2.6 on R8.5. Deburr; the ID face bears on the outer rings |
 | Gearmotors, CH-014 | 2 | ThinkRobotics MOT3001-6V230RPM | Measure the face holes, pilot and shaft flat on arrival (axle-stack.md §7) |
 | M3 × 16 button heads, CH-053 | 8 | [OnlyScrews](https://onlyscrews.in/products/hex-allen-button-head-m3-x-16-screw-pack-of-20), SS304 | Not M3 × 18: it can bottom out in the plate (D-072) |
 | M3 × 6 button heads, CH-030 | 4 | OnlyScrews (the same as the wheel screws) | |
 | M3 × 3 cup-point set screws, CH-055 | 2 (+2 spare) | OnlyScrews | Ground to 2.5 mm |
-| M3 × 4 slant-knurled inserts, CH-054 | 8 | Ordered | |
+| M3 × 4 slant-knurled inserts, CH-054 | 8 | OnlyScrews, in hand 2026-10-30, enough for the build | The same article as the rims (CH-049) |
+| M3 × 8 button heads, CH-060 (J04, carrier to rails) | 8 | OnlyScrews (the same listing as the clamp-ring screws CH-048) | Needed to fit the carrier |
+| M3 × 6 slant-knurled inserts, CH-061 (J04 rail ends) | 8 | OnlyScrews, in hand 2026-10-30, enough for the build | The Ø4.3 rail pilot is too loose for OD 4.4; fixed at the frame review |
 | Loctite 222 and 641, CH-057 | 1 each | | |
 
 ## 8. Check and proof (CAD)
@@ -226,9 +228,9 @@ tree with and without the droid edits, in about 1.5 min. Run it as in the
 6. **Print orientation:** housing and plug have no overhangs; the carrier's are listed in §2.
 7. **Planted:** the unedited Ø24 flange blocks every housing-screw key (4.126 mm³ each), and the unedited carrier blocks the set-screw key (0.338 mm³).
 8. **Housing screws, M3 × 16 (D-072):** the tips are 2.20 mm above the bottom of their blind holes, against a 0.93 mm worst-case stack (length +0.35, cap −0.08, 0.5 for insert melt), and a screw at its short limit keeps 1.94 mm in the insert (1.5 minimum). Planted: the old M3 × 18 sits 0.20 mm above the bottom.
+9. **Alignment budget (D-072):** the plug leaves the motor at most 0.045 mm off the bearing axis (0.020 in the seat + 0.025 on the shaft), within the 0.05 limit, and the housing's 0.11 mm refit float is larger, so the refit error is taken up. Planted: the D-071 plug (Ø15.8) allowed 0.125 mm.
 
 **Physical proof still to come** ([axle-stack.md §9](../../../03-build/01-chassis/v1/research/axle-stack.md#coupon-and-assembly-gates), and §9 below):
-9. **Alignment budget (D-072):** the plug leaves the motor at most 0.045 mm off the bearing axis (0.020 in the seat + 0.025 on the shaft), within the 0.05 limit, and the housing's 0.11 mm refit float is larger, so the refit error is taken up. Planted: the D-071 plug (Ø15.8) allowed 0.125 mm.
 - The 100 N bearing pull test.
 - The first housing with the real bearings.
 - The J04 carrier to the rails.

@@ -91,15 +91,15 @@ The canonical [project BOM](../../BOM.csv) and this chassis snapshot are the sou
 | CH-038 | [M3 × 12 Phillips CSK mild-steel black-oxide ballast screw](https://onlyscrews.in/products/m3-x-12mm-phillips-countersunk-csk-mild-steel-black-oxide-screw-dia-3mm-length-12mm) | 2 | CANDIDATE |
 | CH-039 | M2 × 5 IMU screw | 2 | CANDIDATE |
 | CH-048 | [ISO 7380 M3 × 8 tyre clamp-ring screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-8-screw-pack-of-20) | 12 | CANDIDATE |
-| CH-049 | [M3 × ~4 mm rim heat-set insert](https://onlyscrews.in/products/m3-x-4mm-3d-printing-brass-threaded-inserts-dia-3mm-length-4mm) | 12 | CANDIDATE |
+| CH-049 | [M3 × ~4 mm rim heat-set insert](https://onlyscrews.in/products/m3-x-4mm-3d-printing-brass-threaded-inserts-dia-3mm-length-4mm) | 12 | CANDIDATE; in hand 2026-10-30, enough for the build |
 | CH-053 | [ISO 7380 M3 × 16 bearing housing and cap screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-16-screw-pack-of-20), SS304 ([D-072](../../decisions.md#d-072); was M3 × 18) | 8 | CANDIDATE |
-| CH-054 | [M3 × 4 mm motor plate heat-set insert](https://onlyscrews.in/products/m3-x-4mm-3d-printing-brass-threaded-inserts-dia-3mm-length-4mm) | 8 | CANDIDATE |
+| CH-054 | [M3 × 4 mm motor plate heat-set insert](https://onlyscrews.in/products/m3-x-4mm-3d-printing-brass-threaded-inserts-dia-3mm-length-4mm) | 8 | CANDIDATE; in hand 2026-10-30, enough for the build |
 | CH-055 | [ISO 4029 M3 × 3 cup-point set screw, SS304](https://onlyscrews.in/products/m3-x-3mm-grub-screw-ss304-dia-3mm-length-3mm), faced to 2.5 mm (D-030) | 2 | CANDIDATE |
 | CH-056 | [ISO 7380 M3 × 6 wheel-to-stub screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-6-screw-pack-of-20), Loctite 222 ([D-070](../../decisions.md#d-070)) | 6 | CANDIDATE |
 | CH-057 | [Loctite 222 and 641](https://onlyscrews.in/products/loctite%C2%AE-222-low-strength-thread-sealant-50-ml) | 1 lot | CANDIDATE |
 | CH-059 | [ISO 7380 M3 × 10 central hub-cap screw into the tapped stub end](https://onlyscrews.in/products/hex-allen-button-head-m3-x-10-screw-pack-of-20) (D-033; was 12 × M2 × 6) | 2 | CANDIDATE |
 | CH-060 | [ISO 7380 M3 × 8 button-head J04 carrier-to-rail screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-8-screw-pack-of-20) (D-030) | 8 | CANDIDATE |
-| CH-061 | [M3, 6 mm axial heat-set J04 rail insert](https://onlyscrews.in/products/m3-x-6mm-3d-printing-brass-threaded-inserts-dia-3mm-length-6mm) | 8 | CANDIDATE |
+| CH-061 | [M3, 6 mm axial heat-set J04 rail insert](https://onlyscrews.in/products/m3-x-6mm-3d-printing-brass-threaded-inserts-dia-3mm-length-6mm) | 8 | CANDIDATE; in hand 2026-10-30, enough for the build |
 | CH-062 | M2 × 8 countersunk thread-forming pod lid screw (D-011) | 1 | CANDIDATE |
 | CH-063 | CNC Kitchen M3 × 5.7 pod-seat insert for caster (D-011) | 3 | CANDIDATE |
 | CH-067 | CNC Kitchen M3 × 5.7 rear-crossmember insert for the keel (D-014) | 4 | CANDIDATE |
@@ -107,7 +107,7 @@ The canonical [project BOM](../../BOM.csv) and this chassis snapshot are the sou
 | CH-070 | M2 × 6 thread-forming wear-shoe screw (D-014) | 1 | CANDIDATE |
 | CH-072 | 2.5 × 100 mm nylon zip tie, J10-10 strain relief (D-014) | 1 | CANDIDATE |
 | CH-076 | [ISO 7380 M3 × 6 J11A hatch screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-6-screw-pack-of-20) (D-030) | 4 | CANDIDATE |
-| CH-077 | [M3 × 6 frame heat-set insert](https://onlyscrews.in/products/m3-x-6mm-3d-printing-brass-threaded-inserts-dia-3mm-length-6mm), as CH-061: J11A bosses (D-030; the J05/J06/J16 inserts were removed by D-033) | 4 | CANDIDATE |
+| CH-077 | [M3 × 6 frame heat-set insert](https://onlyscrews.in/products/m3-x-6mm-3d-printing-brass-threaded-inserts-dia-3mm-length-6mm), as CH-061: J11A bosses (D-030; the J05/J06/J16 inserts were removed by D-033) | 4 | CANDIDATE; in hand 2026-10-30, enough for the build |
 | CH-078 | 10 mm hook-and-loop pack strap, J11B (D-030) | 2 | CANDIDATE |
 | CH-079 | 1.5 mm closed-cell foam cell-end pad, J11B (D-030) | 2 | CANDIDATE |
 | CH-080 | M2.5 × 4 heat-set insert in the driver posts, J15B (D-030) | 4 | CANDIDATE |

@@ -37,7 +37,7 @@ All positions are **|Y| from the robot centre plane**, the same convention as th
      | plate      |recess|  set  |shoulder                   |cap|heads |flange| web  |
 motor|====(pilot) |      |screw |[ 688ZZ ][ 688ZZ ]|     |===|      |      |      |
 face |            | stub ━━━━━━━┿━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━┳━spigot━┫
-                       (Ø8; Ø4.05 bore 73–82)             Ø9.5 shoulder  Ø24     Ø10
+                       (Ø8; Ø4.05 bore 73–82)             Ø9.5 shoulder  Ø21     Ø10
 ```
 
 | \|Y\| (mm) | Item | BOM | Material and process | Key features |
@@ -108,7 +108,7 @@ face |            | stub ━━━━━━━┿━━━━━━━━━━�
 
 | # | Hold raised in review (2026-09-29) | Status |
 |---|---|---|
-| 1 | Bearing family was previously specified as MR148ZZ/L-1480ZZ, 8 × 14 × 4. | **Superseded by D-012:** use 688 ZZ, 8 × 16 × 5. The housing seat and axial bearing positions were revised in CAD. The supplier page currently says sold out; manufacturer, drawing and load rating remain to be confirmed for the received lot. |
+| 1 | Bearing family was previously specified as MR148ZZ/L-1480ZZ, 8 × 14 × 4. | **Superseded by D-012:** use 688 ZZ, 8 × 16 × 5. The housing seat and axial bearing positions were revised in CAD. The supplier page showed it in stock on 2026-09-30 (CH-015); manufacturer, drawing and load rating remain to be confirmed for the received lot. |
 | 2 | The set-screw hole touched the stub end. | **Fixed:** stub starts at 73; current 688 ZZ layout moves the hole to 74.8, leaving 0.55 mm from the Ø2.5 tap drill to the stub end and 0.46 mm to the first bearing face. Verify these narrow lands on the turned drawing and part. |
 | 3 | Insert 0.5 mm from the plate edge; 1.3 mm housing wall; 0.2 mm skin at the key holes. | **Fixed:** 4 diagonal screws at R 12 (≥ 4.5 mm margin); Ø32 housing (2.3 mm wall); key paths opened as slots. |
 | 4 | No positive outward retention of the inner rings. | **Open, by design:** there is no room for a circlip. Retention is k5 + 641, with a 100 N axial hold test on the bearing/stub assembly; this test can use a standalone fixture and does not need the motor. If it fails, the fallback is a DIN 6799 clip plus shim, which needs about 1.5 mm and moves the set screw. **Closed by calculation (D-071 amended):** Loctite 641 ≥ 6.5 N/mm² (TDS) gives ≥ 1,630 N on two rings and about 410 N on one ring at half strength, about 4× the 100 N load; the pull test checks workmanship ([axle page §9](../../../../04-print/01-chassis/axle/README.md#9-outward-retention-of-the-bearings-gap-g)). |
