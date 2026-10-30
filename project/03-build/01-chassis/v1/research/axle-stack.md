@@ -127,7 +127,8 @@ face |            | stub ━━━━━━━┿━━━━━━━━━━�
 | Face holes | 2 × M3 at ±8.5 mm on the axle line, 5 mm deep | Motor plate only | Reprint the plate (carrier) |
 | Pilot | Ø7 × 2.5 | Plate hole and recess | Reprint the plate |
 | Shaft | Ø4, 3.5 across the flat, 12 mm long, flat on the last 8 mm | Stub bore depth and set-screw position (74.8 must land on the flat) | Re-turn the stub, or move the set screw if the flat is still under it |
-| Gearbox length | 21 mm | Carrier cradle (J04), not this stack | Adjust the carrier |
+| Gearbox length | 21 mm (the drawing gives 19–27 by ratio) | Only where the motor's rear ends (\|Y\| 8 at 21 mm); the carrier holds the motor by its face alone | Nothing to change. Checked on the chassis tree 2026-10-30 ([D-072](../../../decisions.md#d-072)): at 27 mm both rears end at \|Y\| 2, 4 mm apart, still 6.9 mm from the IMU board, with the plug 3.0 mm from the rear module; at 19 mm everything moves away |
+| Encoder plug direction ([sheet](motor-interface-sheet.md) row B6) | The 6-pin header on the encoder board's edge, on the face-hole line, so the plug points −X (rearward) | `MOTOR_CONNECTOR_X`; the cable reserve `MOTOR_[LR]_PIGTAIL_RESERVE` (X −21 to −1, Z 56.5–62.5, under PCB-04); harness W08/W09 and W30/W31 | Two face holes let the motor sit only at 0° or 180°. Checked on the chassis and body trees 2026-10-30 (D-072), for the plug in each other direction: **+X** (header 180° off, motor turned over): 3.0 mm to the front module, battery-tub hatch and IMU screw, as −X has 3.0 mm to the rear module; the cable reserve and harness move forward. **Header at 90° to the holes:** mount the motor so the plug points **down** (−Z): nothing within 5 mm; route the cable up past the gearbox (not checked). Up (+Z) is out: the plug meets PCB-04's underside (Z 63). Only a header at some other angle would need the face holes turned, which puts a key slot on the set-screw slot at +Z: a new decision |
 
 ## 8. Next
 

@@ -42,7 +42,7 @@ Take the **output faceplate** as Y = 0, with + toward the shaft tip. The **flat*
 | B3 | Can diameter | 24.4 | | | |
 | B4 | Faceplate to encoder board rear face | 61.0 | | | |
 | B5 | Faceplate to rear of mated plug / cable exit | ~65 | | | Include the plug in the mated state |
-| B6 | Connector position: angle from the flat datum, and radial reach | rearward, 6-pin | | | Photo |
+| B6 | Connector position: angle from the flat datum, and radial reach | rearward, 6-pin | | | Photo. Also its angle from the face holes: it sets how the motor is clocked ([axle-stack.md §7](axle-stack.md#7-motor-assumptions-and-where-they-live), D-072) |
 | B7 | Lead length and wire gauge | — | | | |
 | B8 | Mass with the supplied lead | 110 g | | | Scale reading |
 

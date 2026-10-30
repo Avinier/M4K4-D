@@ -26,6 +26,8 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 Fill this in when design starts: spec sources, pinout, supply and protection, CAD envelope.
 
+- **Underside keep-out over the motor cables** ([D-072](../../decisions.md#d-072), 2026-10-30). The board's underside (Z 63.0) sits 0.5 mm above both motors' cable reserves, `MOTOR_[LR]_PIGTAIL_RESERVE` (X −21 to −1, \|Y\| 6–18, Z 56.5–62.5), where each encoder cable bends up out of its plug. No THT tails or bottom-side parts over those two areas (Micro-Fit THT tails stand 1.6 mm below a board), or raise the board.
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
