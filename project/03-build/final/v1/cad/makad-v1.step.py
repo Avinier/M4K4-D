@@ -336,7 +336,10 @@ AXLE_FIX = dict(
     housing_hole=(1.6, 74.0, 86.35),            # radius (was 1.7), |Y| span of the housing
     screw_r=12.0, screw_angles=(45.0, 135.0, 225.0, 315.0),  # housing screws, deg in XZ from +X
     key_x=8.5,                                  # face screws at X +-8.5 on the axle line
-    plug_body=(7.9, 76.6, 86.4),                # radius, |Y|: in the Ø16 seat, under the cap
+    # D-072: the body was R7.9 (0.10 radial in the seat), which let the plug set the motor up
+    # to 0.125 mm off the bearing axis. It is now a close sliding fit, printed after the seat
+    # is tuned to the real bearings; see ALIGN_BUDGET.
+    plug_body=(7.98, 76.6, 86.4),               # radius, |Y|: in the Ø16 seat, under the cap
     plug_nose=(6.1, 74.1, 76.6),                # in the housing's Ø12.5 inboard cavity
     plug_bore=2.025,                            # Ø4.05, as the stub: 6.9 mm on the shaft
     plug_notch=(7.2, 1.4),                      # cut outside R7.2 within +-1.4 of each key axis
@@ -406,6 +409,22 @@ def axle_alignment_plug(side=1):
         plug = plug - _cut_box(x0, x1, lo, hi, _WHEEL_AXLE_Z - half, _WHEEL_AXLE_Z + half)
     plug.label = "AXLE_ALIGNMENT_PLUG"
     return plug
+
+
+# D-072: how far off the bearing axis the alignment leaves the motor shaft, mm radial. The
+# plug sets the shaft within (seat - body) + (bore - shaft) of the housing's axis wherever the
+# housing sat. At the refit the housing screws are left loose and the stub is turned so the
+# housing moves onto the shaft within its hole float; that takes up the refit error, but in
+# the worst case (the housing sat at the edge of its float at the alignment step) not the
+# plug's own error. So the plug's error is what the gearbox shaft is forced through. The
+# budget is the stub bore's own clearance on the shaft (Ø4.05 H8 on Ø4: 0.025 to 0.034
+# radial), which the set screw already pushes the shaft across when it is tightened.
+ALIGN_BUDGET = dict(
+    seat_r=8.0,                # housing bearing seat, tuned to the bearings' Ø16 OD
+    shaft_r=2.0,               # motor shaft, Ø4
+    housing_float=(1.6, 1.49),  # Ø3.2 hole, M3 6g major max Ø2.98: the least float
+    limit=0.05,                # mm radial
+)
 
 
 # Printed tools, not robot parts: (BOM ID, label, function giving the tool in the world frame).

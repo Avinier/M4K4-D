@@ -92,7 +92,7 @@ face |            | stub ━━━━━━━┿━━━━━━━━━━�
 1. On the bench: plate inserts; set screw ground to 2.5 mm; both 688 ZZ pressed onto the stub with Loctite 641, on the **inner ring only**, against the Ø9.5 shoulder.
 2. Carrier onto the rails (J04), then the motor into the carrier, face screws finger-tight.
 3. **Align:** the printed alignment plug (CH-089) goes in the housing seat, under the cap. The housing goes onto the plate, the plug's bore takes the shaft, and the face screws are tightened through the cap, the housing slots and the plug's notches. The housing comes off again.
-4. The cartridge goes into the housing, then the cap. The housing goes back on its four Ø3.2 holes, with the stub on the shaft. Then the set screw.
+4. The cartridge goes into the housing, then the cap. The housing goes back on its four Ø3.2 holes, with the stub on the shaft and the screws **loose**. Then the set screw, a few turns of the stub, and the housing screws tightened in two passes ([D-072](../../../decisions.md#d-072)): the housing moves onto the shaft, so its refit error doesn't bend the shaft.
 5. Check drag and end play. Then the wheel: [wheels page](../../../../04-print/01-chassis/wheels/README.md#4-assembly-one-wheel), with Loctite 222 on the wheel screws (D-070) and the hub cap last.
 
 **Service paths**
@@ -118,6 +118,7 @@ face |            | stub ━━━━━━━┿━━━━━━━━━━�
 | 8 | The floating-motor alignment is unproven. | **Open:** rig, with drag, current and runout measured before and after tightening. |
 | 9 | (2026-10-30) The housing screws and the motor face screws could not be reached in the documented order. | **Fixed by D-071:** Ø21 flange, the alignment plug and Ø3.2 housing holes; `final/v1/cad/check_axle_stack.py` 21/21. |
 | 10 | (2026-10-30) The set-screw key grazed the plate hub (0.07 mm). | **Fixed by D-071:** a 0.5 mm notch in the carrier hub. |
+| 11 | (2026-10-30, second pass) The alignment had no error budget: the D-071 plug sat 0.1 mm loose in the seat and the housing refits within ~0.1 mm, against 0.025 mm of shaft-to-bore play. | **Fixed by D-072:** plug Ø15.96, a close sliding fit printed after the seat is tuned; housing screws tightened only after the set screw is in and the stub has turned. Budget 0.05 mm, `check_axle_stack.py` §9. The rig (hold 8) still proves it. |
 
 ## 7. Motor assumptions and where they live
 

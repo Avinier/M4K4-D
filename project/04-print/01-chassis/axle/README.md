@@ -6,7 +6,7 @@ the stack works, how to put one side together and take it apart, and the gaps fo
 the 2026-10-30 review with their fixes ([D-071](../../../03-build/decisions.md#d-071)).
 
 - **Geometry:** chassis v1, [`body_chassis_model.py`](../../../03-build/01-chassis/v1/cad/body_chassis_model.py). The design reasoning is in [axle-stack.md](../../../03-build/01-chassis/v1/research/axle-stack.md) (D-007, D-012, D-030). The D-071 fixes are droid edits in [`makad-v1.step.py`](../../../03-build/final/v1/cad/makad-v1.step.py). STLs are exported from the final assembly with those edits.
-- **Check:** [`check_axle_stack.py`](../../../03-build/final/v1/cad/check_axle_stack.py), 25/25 on 2026-10-30 (D-071, D-072).
+- **Check:** [`check_axle_stack.py`](../../../03-build/final/v1/cad/check_axle_stack.py), 27/27 on 2026-10-30 (D-071, D-072).
 - **Fabrication files** (non-printed parts) in [`final/v1/fab/`](../../../03-build/final/v1/fab/): the stub drawing and STEP (CH-012), and the cap DXF and STEP (CH-052) (§7).
 - **View:** [`axle-alignment.step.py`](http://127.0.0.1:3245/Users/avinier/robotics/makad/project/03-build/final/v1/cad?file=axle-alignment.step.py) shows the left side twice: the alignment step (§4C) and the finished stack.
 - **Wheel side:** the wheel goes on after this; see the [wheels page](../wheels/README.md).
@@ -28,7 +28,7 @@ For one side. The robot has two, so double every quantity.
 | Heat-set insert, M3 × 4 slant knurled, OD 4.4 (ordered; the same as the rims), in the plate's Ø4.0 holes | CH-054 | Buy | Brass | 4 |
 | Set screw, ISO 4029 M3 × 3 cup point, ground to 2.5 mm at the hex end | CH-055 | Buy, then grind | SS304 | 1 |
 | Loctite 641 (bearings on the stub) and 222 (set screw, face screws) | CH-057 | Buy | — | — |
-| **Alignment plug**: a printed tool, kept for every motor refit (D-071) | CH-089 | Print | PETG, any colour | 1 for the robot |
+| **Alignment plug**: a printed tool, kept for every motor refit (D-071). Ø15.96 body, a close sliding fit in the tuned bearing seat (D-072) | CH-089 | Print | PETG, any colour | 1 for the robot |
 
 **Printed for the robot:** 2 carriers, 2 housings, 1 alignment plug. The two carriers and housings are mirror images: one STL each for left and right.
 
@@ -38,16 +38,21 @@ For one side. The robot has two, so double every quantity.
 |---|---|---|---|
 | Housing | **Inboard face** (the one that sits on the plate) | **None** (check §6: no overhang faces) | Ø16 bearing seat and its shoulder (both vertical or facing up); the inboard face (it seats on the plate); the four Ø3.2 holes (they set where the housing refits) |
 | Carrier | **Outboard face of the motor plate** (the housing face) | Only under the corners of the square plate, 2.5 mm up (260 mm²). The rest are small bridges: counterbore floors, insert-hole roofs, the set-screw notch | The plate's outboard face (the housing seats on it); Ø7.6 pilot hole; insert holes; the cheek faces and keys that seat on the frame rails |
-| Alignment plug | Its outboard end | None | Ø4.05 bore (on the motor shaft); Ø15.8 body (in the bearing seat) |
+| Alignment plug | Its outboard end | None | Ø4.05 bore (on the motor shaft); Ø15.96 body (in the bearing seat) |
 
 - **Why the housing goes inboard face down:** printed the other way up, the shoulder the bearings sit against becomes a 75 mm² overhang.
 - **Why the carrier goes outboard face down:** printed on its cheek ends, the motor plate would bridge the whole motor bay (828 mm², 19 mm up). Printed on its bottom, the plate's holes print sideways.
 - **Fits:** the housings are the test parts ([04-print rule 5](../../README.md#rules)): no separate bore coupons. Try the real bearings in the first housing. If the seat is tight or loose, correct it with the slicer's XY hole compensation for that printer, and reprint.
+- **The plug's fit sets how well the motor is aligned** ([D-072](../../../03-build/decisions.md#d-072)). Print it **after** the housing seat is right, with the same printer settings.
+  - **Body in the seat:** it slides in by hand, and you can't feel it rock when you push its end sideways. If it rocks, reprint it 0.04 mm larger in diameter; if it won't go in, 0.04 mm smaller. It is a tool, so reprinting it is fine.
+  - **Bore on the shaft:** run a Ø4.0 drill through it by hand after printing, so the bore is round and clean. It slides onto the motor shaft with no rock you can feel.
+  - Why it matters: the plug's play in the seat plus its play on the shaft is how far off the bearing axis the motor ends up. The budget is 0.05 mm (§3); the D-071 plug, Ø15.8, allowed 0.125 mm.
 
 ## 3. How it works
 
 - **The steel stub is the only rotating datum.** The two bearings hold it in the housing, and the wheel centres on its spigot.
 - **The motor floats until it is aligned.**
+  - **Alignment budget (D-072):** the motor ends up at most 0.05 mm off the bearing axis, the same as the stub bore's own play on the shaft (Ø4.05 on Ø4). The plug's play in the seat (0.02) and on the shaft (0.025) is what can't be taken up later. The housing's refit error is taken up at step 12 because its screws are left loose until the stub is on the shaft and the set screw is in.
   - The plate's pilot hole is Ø7.6 for the motor's Ø7 pilot, a 0.3 mm float.
   - The two face screws are tightened only once the motor shaft is held on the bearing axis, by the alignment plug since D-071.
   - That keeps print error from bending the Ø4 gearbox shaft into its bushing.
@@ -90,7 +95,7 @@ For one side. The robot has two, so double every quantity.
 
 ### C. Align the motor (D-071)
 
-6. **Plug into the housing.** Put the alignment plug in the housing's bearing seat with its small nose toward the plate. Put the aluminium cap over it: the plug can't fall out now.
+6. **Plug into the housing.** Put the alignment plug in the housing's bearing seat with its small nose toward the plate. It must slide in with no rock you can feel (§2). Put the aluminium cap over it: the plug can't fall out now.
 7. **Housing onto the plate.**
    - Offer the housing (with the plug and cap) to the plate. The plug's bore slides onto the motor shaft, and the motor moves to the housing's axis.
    - Drive the four M3 × 16 screws into the plate inserts, snug.
@@ -100,7 +105,7 @@ For one side. The robot has two, so double every quantity.
    - Take the cap off and push the plug out.
    - **Keep the plug:** a motor refit needs it again.
 
-The housing goes back on the same four screws in close-fit Ø3.2 holes. It returns to within about 0.1 mm of where the motor was aligned to it.
+The housing goes back on the same four screws in close-fit Ø3.2 holes, within about 0.1 mm of where the motor was aligned to it. Steps 12–15 take up that 0.1 mm: the housing moves onto the shaft before its screws are tightened.
 
 ### D. The cartridge in
 
@@ -110,11 +115,14 @@ The housing goes back on the same four screws in close-fit Ø3.2 holes. It retur
 11. **Line up the set screw.**
     - Turn the stub so its tapped hole points at the housing's slot (+Z, up).
     - Turn the motor shaft so its D-flat also faces up. Turn it gently by hand through the gearbox, or with a short pulse of power.
-12. **Housing onto the plate.**
+12. **Housing onto the plate, screws loose.**
     - Slide the stub onto the shaft and seat the housing on the plate.
-    - Drive the four M3 × 16 screws with a straight 2 mm key. Since D-071 the Ø21 flange leaves the key 0.35 mm clear.
-13. **Set screw.** With Loctite 222, drive it through the housing slot onto the flat with the 1.5 mm key. The key passes the plate through the D-071 notch.
-14. **Check:**
+    - Start the four M3 × 16 screws with a straight 2 mm key, **finger-tight only**: the housing must still be able to shift sideways. Since D-071 the Ø21 flange leaves the key 0.35 mm clear.
+13. **Set screw.** With Loctite 222, drive it through the housing slot onto the flat with the 1.5 mm key, and tighten it. The key passes the plate through the D-071 notch. The housing is still loose, so the set screw's push on the shaft moves the housing, not the shaft.
+14. **Let the housing settle on the shaft.** Turn the stub by its flange through a few turns, or run the motor for a few seconds at about 3 V. Stop it.
+15. **Tighten the housing screws** diagonally, in two passes: snug, then tight. Turn the stub between the passes. Never tighten while the motor is running: the key sits 0.35 mm from the flange.
+    - The stub must turn as freely after the second pass as before the first. If it got stiffer, loosen all four and repeat steps 14–15.
+16. **Check:**
     - The stub turns freely, and there's no end play you can feel.
     - Then, powered, the motor's no-load current at 6.0 V is within max(0.05 A, 10 %) of the motor on its own ([axle-stack.md §9](../../../03-build/01-chassis/v1/research/axle-stack.md#coupon-and-assembly-gates), gate 7).
 
@@ -153,6 +161,7 @@ and print orientation. Keys are modelled across their corners: 2 mm hex r 1.155,
 | # | Gap | Effect | Fix | Status |
 |---|---|---|---|---|
 | H | **The M3 × 18 housing screws ended 0.2 mm above the bottom of their blind holes**, 0.51 mm over the gearbox face. Their length tolerance is ±0.35 | A long screw bottoms out before its head clamps the cap: it feels tight, but the bearings aren't held, and the tip can push the plastic onto the gearbox | **M3 × 16**: the tip is 2.2 mm above the hole bottom, with 2.29 mm in the insert | **Fixed**, check §8, planted |
+| I | **The motor alignment had no error budget.** The D-071 plug sat 0.1 mm loose in the seat, and the housing refits within about 0.1 mm, against 0.025 mm of play between the shaft and the stub bore | The motor could be fixed up to about 0.2 mm off the bearing axis. A Ø4 steel shaft can't take that up; the gearbox bushing or the plastic would | **Plug Ø15.8 → Ø15.96**, a close sliding fit printed after the seat is tuned, bore drilled Ø4.0 (§2). **Steps 12–15:** housing screws loose until the set screw is in and the stub has turned, then tightened in two passes. The budget is 0.05 mm (§3) | **Fixed**, check §9, planted |
 | N | **The wheels page still had the pre-D-071 axle order** (M3 × 18, face screws tightened last with the stub in) | Two pages gave different build orders, and one couldn't be done | The wheels page §4B now points here | **Fixed** |
 
 **What passed without change:**
@@ -178,7 +187,7 @@ and print orientation. Keys are modelled across their corners: 2 mm hex r 1.155,
 
 [`check_axle_stack.py`](../../../03-build/final/v1/cad/check_axle_stack.py) builds the chassis
 tree with and without the droid edits, in about 1.5 min. Run it as in the
-[final v1 README](../../../03-build/final/v1/README.md). **25/25 pass on 2026-10-30:**
+[final v1 README](../../../03-build/final/v1/README.md). **27/27 pass on 2026-10-30:**
 
 1. **Flange Ø21:** nothing outside R10.5, the rest of the flange intact, 1.0 mm of steel outside the wheel-screw threads.
 2. **Housing screws:** all four reachable with a straight 2 mm key with the stub in, 0.345 mm off the flange.
@@ -186,13 +195,14 @@ tree with and without the droid edits, in about 1.5 min. Run it as in the
 4. **Set screw:** a straight 1.5 mm key from +Z is clear.
 5. **Alignment plug:**
    - It's clear of all 18–19 parts present when it's used.
-   - Fits: 6.9 mm on the shaft (0.025 radial); body 0.1 mm radial in the seat; held in by the cap, with 0.2 mm axial play.
+   - Fits: 6.9 mm on the shaft (0.025 radial); body 0.02 mm radial in the seat (D-072; was 0.1); held in by the cap, with 0.2 mm axial play.
    - Both face-screw keys are clear through it. With the bearings and stub in its place they're blocked, which is why the plug exists.
 6. **Print orientation:** housing and plug have no overhangs; the carrier's are listed in §2.
 7. **Planted:** the unedited Ø24 flange blocks every housing-screw key (4.126 mm³ each), and the unedited carrier blocks the set-screw key (0.338 mm³).
 8. **Housing screws, M3 × 16 (D-072):** the tips are 2.20 mm above the bottom of their blind holes, against a 0.93 mm worst-case stack (length +0.35, cap −0.08, 0.5 for insert melt), and a screw at its short limit keeps 1.94 mm in the insert (1.5 minimum). Planted: the old M3 × 18 sits 0.20 mm above the bottom.
 
 **Physical proof still to come** ([axle-stack.md §9](../../../03-build/01-chassis/v1/research/axle-stack.md#coupon-and-assembly-gates), and §9 below):
+9. **Alignment budget (D-072):** the plug leaves the motor at most 0.045 mm off the bearing axis (0.020 in the seat + 0.025 on the shaft), within the 0.05 limit, and the housing's 0.11 mm refit float is larger, so the refit error is taken up. Planted: the D-071 plug (Ø15.8) allowed 0.125 mm.
 - The 100 N bearing pull test.
 - The first housing with the real bearings.
 - The J04 carrier to the rails.
@@ -235,7 +245,7 @@ pessimistic case is about 4× the design load.
 
 **Bench pull test** (per side, once the cartridge has cured; no motor needed):
 
-1. Build the side up to step 13 without the motor: carrier, housing with the cartridge, cap and four screws.
+1. Build the side through step 15 without the motor (no set screw, no settling run): carrier, housing with the cartridge, cap and four screws.
 2. Clamp the carrier in a vice, axle vertical, spigot down.
 3. Screw an M3 screw with a wire loop, or an M3 eye bolt, into the spigot's tapped end, at least 6 mm deep.
 4. Mark or measure the flange-to-cap gap with feeler gauges or a dial gauge.

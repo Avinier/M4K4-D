@@ -22,6 +22,9 @@ The axle is the line X 0, Z 42; |Y| runs outboard. Keys are modelled across thei
 8. Housing screws, M3 x 16 (D-072): the tip stays clear of the bottom of its blind hole by
    more than the worst-case stack (TIP_STACK), and a screw at its short limit still
    engages the insert by MIN_ENGAGE. Planted: the old M3 x 18 does not.
+9. Alignment budget (D-072): the plug's own error, seat-to-body plus bore-to-shaft, is
+   within ALIGN_BUDGET's limit, and the housing's float at the refit is larger than it.
+   Planted: the D-071 plug body (R7.9) is not.
 """
 
 import importlib.util
@@ -209,7 +212,8 @@ def main():
         engage = max(abs(shaft.min.Y), abs(shaft.max.Y)) - M["plug_nose"][1]
         cap_id = 6.25
         check(f"{tag} alignment plug fits", engage > 6.0 and M["plug_body"][0] > cap_id,
-              f"{engage:.1f} mm on the shaft (Ø{2 * M['plug_bore']:.2f} bore, 0.025 radial); body R{M['plug_body'][0]} in the R8.0 seat; "
+              f"{engage:.1f} mm on the shaft (Ø{2 * M['plug_bore']:.2f} bore, 0.025 radial); body R{M['plug_body'][0]} in the R8.0 seat "
+              f"({8.0 - M['plug_body'][0]:.2f} radial); "
               f"nose R{M['plug_nose'][0]} in the R6.25 cavity; held in by the cap (ID R{cap_id}); "
               f"{(M['plug_body'][1] - 76.51) + (86.51 - M['plug_body'][2]):.2f} mm axial play")
         both = {}
@@ -229,6 +233,15 @@ def main():
         print(f"        plug, outboard end down: {overhangs(plug, side, M['plug_body'][2], -1) or 'none'}")
         check(f"{tag} housing prints inboard face down with no support", not overhangs(housing, side, 74.0, +1), "no overhang faces")
         check(f"{tag} plug prints on its outboard end with no support", not overhangs(plug, side, M["plug_body"][2], -1), "no overhang faces")
+
+    A = entry.ALIGN_BUDGET
+    plug_error = lambda body_r: (A["seat_r"] - body_r) + (M["plug_bore"] - A["shaft_r"])
+    error, float_min = plug_error(M["plug_body"][0]), A["housing_float"][0] - A["housing_float"][1]
+    check("alignment budget: the plug sets the motor within the limit", error <= A["limit"] + TOL and float_min > error,
+          f"{error:.3f} mm radial (body {A['seat_r'] - M['plug_body'][0]:.3f} + bore {M['plug_bore'] - A['shaft_r']:.3f}) "
+          f"against {A['limit']}; the housing's refit float {float_min:.2f} mm is larger, so the refit error is taken up")
+    check("planted: the D-071 plug body (R7.9) is outside the budget", plug_error(7.9) > A["limit"],
+          f"{plug_error(7.9):.3f} mm radial")
 
     blocked = {}
     for name in [k for k in parts if k.startswith(f"{SCREW}L_")]:
