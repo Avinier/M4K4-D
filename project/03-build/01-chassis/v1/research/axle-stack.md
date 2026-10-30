@@ -147,7 +147,7 @@ Each rail end has a 2.0 × 3.0 × 2.5 mm locating key and matching 2.4 × 3.4 ×
 
 The assembly datum is the carrier-to-rail cheek face at X = ±17 mm, with the asymmetric key setting Y/Z position. Screws clamp the faces; the key, not screw friction, locates the carrier. Load path: tyre → rim/stub → bearing pair → housing/cap screws → carrier plate and cheeks → keyed rail faces and J04 screws/inserts → rails → deck/crossmembers/body. The screws are reachable from the motor-relief opening after the motor and wheel-side stack are removed; the carrier withdraws toward the chassis centre once both rail-end joints are released.
 
-These dimensions are starting print geometry, not calibrated fits. The 0.2 mm key allowance and Ø4.3 mm insert pilots must be adjusted from coupons for the selected printer and material. Motor-face dimensions remain assumptions until the motor is measured.
+These dimensions are starting print geometry, not calibrated fits. The 0.2 mm key allowance must be confirmed on the first prints; the rail insert pilots are Ø4.0 × 7 in the final CAD and are tried first in the pod seat, with no coupons ([D-073](../../../decisions.md#d-073)). Motor-face dimensions remain assumptions until the motor is measured.
 
 ### Coupon and assembly gates
 

@@ -209,7 +209,7 @@ and print orientation. Keys are modelled across their corners: 2 mm hex r 1.155,
 | M3 × 3 cup-point set screws, CH-055 | 2 (+2 spare) | OnlyScrews | Ground to 2.5 mm |
 | M3 × 4 slant-knurled inserts, CH-054 | 8 | OnlyScrews, in hand 2026-10-30, enough for the build | The same article as the rims (CH-049) |
 | M3 × 8 button heads, CH-060 (J04, carrier to rails) | 8 | OnlyScrews (the same listing as the clamp-ring screws CH-048) | Needed to fit the carrier |
-| M3 × 6 slant-knurled inserts, CH-061 (J04 rail ends) | 8 | OnlyScrews, in hand 2026-10-30, enough for the build | The Ø4.3 rail pilot is too loose for OD 4.4; fixed at the frame review |
+| M3 × 6 slant-knurled inserts, CH-061 (J04 rail ends) | 8 | OnlyScrews, in hand 2026-10-30, enough for the build | Rail pilots Ø4.0 × 7 since [D-073](../../../03-build/decisions.md#d-073) (were Ø4.3) |
 | Loctite 222 and 641, CH-057 | 1 each | | |
 
 ## 8. Check and proof (CAD)

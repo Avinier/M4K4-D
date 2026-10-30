@@ -3104,3 +3104,36 @@ Option B2, locating the motor by a close-fit plate pilot and tightening the face
 - The 27 mm gearbox (the drawing gives 19–27) was checked in the same pass: both rears end at |Y| 2, 4 mm apart, 6.9 mm from the IMU board, the plug still 3.0 mm from the rear module. Nothing to change; §7's row said "adjust the carrier", but the carrier holds only the face.
 - **PCB-04 underside keep-out.** The cable reserves (`MOTOR_[LR]_PIGTAIL_RESERVE`, Z 56.5–62.5) sit 0.5 mm under PCB-04 (underside Z 63.0). PCB-04 isn't designed yet; its README now carries the keep-out: no THT tails or bottom-side parts over those areas, or raise the board.
 - Docs: axle-stack.md §7 (two rows), the motor sheet's B6, the axle page §6 and order list, and the [PCB-04 README](04-pcbs/pcb-04-branch-converters/README.md).
+
+## D-073
+
+**2026-10-30 · Chassis / frame print review: insert and screw pilots, coupons, hatch (CH-001, CH-011, CH-039, CH-061, CH-077, CH-080; J04, J11A, J15A, J15B; final v1 CAD) · ACTIVE; `check_frame_print.py` 29/29; module orientation and physical proof open**
+
+**Why.** Laying out the frame for the print review ([frame page](../04-print/01-chassis/frame/README.md)) found:
+
+- **The M3 × 6 frame inserts barely grip.** The 8 J04 rail-end and 4 J11A boss pilots are Ø4.3 (D-030) for the OnlyScrews insert in hand, OD 4.4: 0.05 mm of knurl a side. The rims, motor plates, pod seat and keel use Ø4.0 for the same OD. The J04 pilots were also only 0.1 mm deeper than the 6 mm insert, leaving nowhere for the plastic it pushes ahead.
+- **The M2.5 × 4 driver-post inserts (CH-080) sit in Ø3.9, their own listed OD:** no bite at all.
+- **The IMU's M2 × 5 thread-forming screws (CH-039) had no pilot** in the deck, while the BOM spoke of a "current Ø1.6 pilot".
+- **D-033 still asked for junction and insert coupons**, which [04-print rule 5](../04-print/README.md#rules) replaces with the real parts as the test (as D-071 did for the axle).
+- **The 1.5 mm hatch carries the strapped pack** on four screws through 1.5 mm of PETG; its strength had not been looked at.
+
+**Decision** (builder, 2026-10-30: address the frame issues before the orientation review):
+
+1. **Pilots** (droid edits, `FRAME_FIX` and `frame_pilot_edits()` in `makad-v1.step.py`; the chassis source is unchanged):
+   - J04 rail ends, 8: **Ø4.3 → Ø4.0**, and **7.0 mm deep** (was 6.1 plus a Ø3.4 tip relief): the 6 mm insert plus 1 mm. A ring fills the old pilot; a Ø4.0 cut runs on to the new bottom.
+   - J11A tub bosses, 4: **Ø4.3 → Ø4.0**, depth unchanged (6.5 mm for the 6 mm insert; the boss wall grows from 1.35 to 1.5 mm).
+   - J15B driver posts, 4: **Ø3.9 → Ø3.5** (insert OD − 0.4, the rule the M3 pilots follow), 4.1 mm deep.
+   - J15A IMU: **Ø1.6 through the 4 mm deck** at (22, ±7.5) for the M2 thread-forming screws (0.8 × d, the usual pilot for thread-forming screws in plastics). The tip ends at the deck underside, with nothing below it.
+   - Volumes: front module 75.84 → 75.94 cm³, rear 50.37 → 50.41 cm³; both stay one solid. The mass register is not changed for 0.15 cm³.
+2. **No frame coupons** (D-033's coupon hold is lifted for the pilots and junctions). The fits are tested on the real parts first:
+   - The M3 × 6 insert in a Ø4.0 pilot is first tried in the pod seat (CH-063, plate P02), which uses the same insert in the same hole; the modules are printed after.
+   - The M2.5 × 4 has no small stand-in. It is measured when bought (rule 5) and the post pilots corrected before export if the OD is not 3.9.
+   - The rail-to-crossmember junctions are proved on the assembled frame by the [chassis test system](01-chassis/v1/testsystem.md) load tests, as the register already plans.
+3. **The hatch is closed by calculation.** Pack (about 110 g) and hatch (about 9 g) at a 10 g shock is about 12 N, 3 N per screw. Pulling an ISO 7380 head (Ø5.7) through 1.5 mm of PETG shears about 27 mm²; at a conservative 15 MPa across printed layers that is about 400 N per screw, over 100× the load. The plate is 1.5 mm, above the lab's 1.2 mm minimum, and prints flat. The inversion and shock test in J11B stays the physical proof.
+4. **Tracked, not changed here:** deck coplanarity across the two modules (J13, ≤ 0.20 mm) is measured at the J04 dry fit; the module orientation (the D-033 hold) and the fuse-shelf cantilever go to the orientation review.
+
+**Check:** `final/v1/cad/check_frame_print.py` **29/29** (2026-10-30). Every pilot is probed at three depths and eight directions: open inside the new radius, material just outside it. The J04 bottoms sit 0.3 mm past 7.0 mm. Both modules stay one solid. Planted: the unedited pilots are open at Ø4.2 / Ø3.8, and the unedited deck is solid at the IMU screws.
+
+**BOM changed:** CH-061 and CH-077 Ø4.0 pilots (J04 7 mm deep); CH-080 Ø3.5 pilot; CH-039 Ø1.6 pilot modelled.
+
+**Not changed:** the body's service-panel inserts (BO-063) are the same OD 4.4 insert in Ø4.3 pilots. They belong to the body print review.

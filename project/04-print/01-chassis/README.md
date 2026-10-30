@@ -79,7 +79,7 @@ No separate test prints: the small parts go first and are the test.
 | M3 × 4 heat-set | Rims (CH-049, 6 per rim), motor plates (CH-054) | 20 |
 | M3 × 6 heat-set | J04 rail ends (CH-061), hatch bosses (CH-077) | 12 |
 | CNC Kitchen M3 × 5.7 | Pod seat (CH-063), keel crossmember (CH-067) | 7 |
-| M2.5 heat-set | Driver posts on the deck | 4 |
+| M2.5 × 4 heat-set, OD 3.9 (CH-080, not bought) | Driver posts on the deck, Ø3.5 pilots (D-073) | 4 |
 
 ## Before the first export
 
@@ -92,13 +92,12 @@ No separate test prints: the small parts go first and are the test.
   `04-print/01-chassis/stl/`. One STL per wheel part serves both sides; the
   carriers and housings need one each for left and right. It needs the legacy CAD runtime (cadgen 0.4.28); see the
   [final v1 README](../../03-build/final/v1/README.md).
-- **Frame insert pilots (raised 2026-10-30, at the frame review).** The ordered
-  M3 × 6 slant-knurled insert (OnlyScrews, CH-061/CH-077) is listed at OD 4.4.
-  The chassis CAD gives it a Ø4.3 pilot (D-030), so the knurl bites only
-  0.05 mm per side, and the J04 rail-end and hatch inserts could pull out or
-  spin. The rims and motor plates use Ø4.0 for the same OD. Fix: a `final/v1`
-  droid edit to Ø4.0, with a decision and a check, before the frame modules,
-  carriers and hatch are exported.
+- **Frame insert pilots: fixed ([D-073](../../03-build/decisions.md#d-073)).**
+  The J04 rail-end and hatch-boss pilots are Ø4.0 (were Ø4.3) for the OD 4.4
+  M3 × 6, the J04 ones 7 mm deep; the driver posts Ø3.5 (were Ø3.9) for the
+  M2.5 × 4; the IMU gets Ø1.6 pilots. Droid edits, checked by
+  `final/v1/cad/check_frame_print.py`. The pod seat tries the M3 × 6 in Ø4.0
+  first, before the modules ([frame page](frame/README.md)).
 - **CNC Kitchen M3 × 5.7 positions** (pod seat CH-033/CH-063, keel crossmember
   CH-067; 9 in all) are not ordered. The ordered M3 × 6 (OD 4.4) fits their
   Ø4.0 holes. Check that each bore takes 6 mm instead of 5.7, or order the

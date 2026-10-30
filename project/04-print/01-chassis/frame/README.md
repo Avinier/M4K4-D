@@ -39,19 +39,19 @@ motor bay: the motors sit in it, and the deck has no plate there.
 | Battery aperture | 39.5 × 68 mm over the pack | The pack sits flush with the deck top; the BMS is in the opening |
 | Battery tub, 1.5 mm walls | X 24–68.5, Y ±36.5, Z 32–52, open at the bottom | Holds the pack sideways (J11B foam); the hatch closes the floor |
 | Tub service window | +Y wall, X 26.9–49.5, Z 40–50 | The pack disconnect (CN-05) passes through it |
-| 4 hatch bosses, 7 × 7 mm | (28, ±39.5) and (71.5, ±34.35), Z 32–39.5; Ø4.3 insert pilots from below | J11A inserts |
+| 4 hatch bosses, 7 × 7 mm | (28, ±39.5) and (71.5, ±34.35), Z 32–39.5; Ø4.0 insert pilots from below (D-073; were Ø4.3) | J11A inserts |
 | Front rails, 8 mm wide | X 17–80, Y ±50 to ±58, Z 35–52 | Carry the deck into the carriers and the crossmember |
-| J04 rail ends | X 17 face: two Ø4.3 × 6.1 axial pilots at Y ±54, Z 38/48; key pocket 3.2 × 2.4 × 3.4 at Y ±51.5 | Carrier screws and key |
+| J04 rail ends | X 17 face: two Ø4.0 × 7 axial pilots at Y ±54, Z 38/48 (D-073); key pocket 3.2 × 2.4 × 3.4 at Y ±51.5 | Carrier screws and key |
 | J13 rib and socket | X 57.5–70.5, out to Y ±64; Ø10.4 vertical socket at (64, ±48) | Socket path for the M4 nut under the deck |
 | J13 deck holes | Ø4.5 at (64, ±48); pin hole Ø4.1 at (59, 42) | Body bolts and the front locating pin |
 | Front crossmember | X 80–92, Y ±62, Z 35–52 | Nose pod seat (J07B); takes caster loads into the rails |
 | Pod insert pilots | Ø4.0 axial, X 85–93, at (Y ±10, Z 42) | J07B inserts (nose review) |
 | J10-8 cable bore | Ø5 vertical at (86, −31), through crossmember and deck | Nose sensor cable riser |
 | Ballast screw holes | Ø3.4 with a 90° countersink Ø6.5 at (74, ±20) | J12 |
-| Driver posts, 4 × Ø7 | Z 56–66 at (41.05, ±34.04) and (41.05, ±54.36); Ø3.9 × 4.1 insert pilot | J15B |
+| Driver posts, 4 × Ø7 | Z 56–66 at (41.05, ±34.04) and (41.05, ±54.36); Ø3.5 × 4.1 insert pilot (D-073; was Ø3.9) | J15B |
 | Motor-lead tie bridges, 2 | X 19–24, \|Y\| 37–43, Z 56–59 | One zip tie each (CH-082) |
 | Fuse bracket (D-032) | Column X 75–81, Y 40–48, up to Z 71; shelf X 52–82, Y 39–49, Z 71–73 | Main-fuse holder (ATOF) on the +Y side |
-| IMU seat | Flat deck at X 13–29, Y ±10; screws at (22, ±7.5) | J15A, no pilot holes modelled |
+| IMU seat | Flat deck at X 13–29, Y ±10; Ø1.6 pilots through the deck at (22, ±7.5) (D-073) | J15A |
 
 ### 1.2 Rear module, feature by feature
 
@@ -60,7 +60,7 @@ motor bay: the motors sit in it, and the deck has no plate there.
 | Deck plate, 4 mm | X −41 to −17, Y ±56, Z 52–56 | Body feet (J13) |
 | J13 deck holes | Ø4.5 at (−22, ±48); pin hole Ø4.1 at (−27, −42) | Body bolts and the rear locating pin |
 | Rear rails | X −32 to −17, Y ±50 to ±58, Z 35–52; gusset X −32 to −23 out to Y ±66 | Into the carriers and the crossmember |
-| J04 rail ends | X −17 face: two Ø4.3 × 6.1 pilots at Y ±58.5, Z 38/48; key pocket at Y ±51.5 | Carrier screws and key |
+| J04 rail ends | X −17 face: two Ø4.0 × 7 pilots at Y ±58.5, Z 38/48 (D-073); key pocket at Y ±51.5 | Carrier screws and key |
 | J13 rib and socket | Ø10.4 socket at (−22, ±48) | M4 nut access |
 | Skid crossmember | X −48 to −32, Y ±66, Z 34–48, rising to the deck (Z 52) at X −41 to −32 | Keel seat (J09A) |
 | Keel insert pilots, 4 | Ø4.0 from below at (−36.5, ±5.5) and (−44, ±5.5) | J09A inserts (keel review) |
@@ -92,41 +92,36 @@ the nose and the keel.
 
 | Item | BOM | Qty | Hole in the print | State |
 |---|---|---|---|---|
-| M3 × 6 slant-knurled insert, OD 4.4 (OnlyScrews) | CH-061 (J04), CH-077 (J11A) | 8 + 4 | Ø4.3 | In hand |
+| M3 × 6 slant-knurled insert, OD 4.4 (OnlyScrews) | CH-061 (J04), CH-077 (J11A) | 8 + 4 | Ø4.0 (D-073) | In hand |
 | M3 × 6 insert, used for the CNC Kitchen M3 × 5.7 positions | CH-063 (pod), CH-067 (keel) | 2 front + 4 rear here | Ø4.0 | In hand (nose and keel reviews) |
-| M2.5 × 4 insert, OD 3.9 | CH-080 | 4 | Ø3.9 | **Not bought** |
+| M2.5 × 4 insert, OD 3.9 | CH-080 | 4 | Ø3.5 (D-073) | **Not bought** |
 | ISO 7380 M3 × 8 | CH-060 | 8 | Ø3.4 in the carrier cheeks | |
 | ISO 7380 M3 × 6 | CH-076 | 4 | Ø3.4 in the hatch | |
 | M3 × 12 CSK, black oxide | CH-038 | 2 | Ø3.4 + 90° × Ø6.5 | |
 | M4 × 12 button, M4 nut, Ø4 × 8 pin | CH-035/036/037 | 4, 4, 2 | Ø4.5 deck, Ø10.4 socket, Ø4.1 pin | |
-| M2 × 5 thread-forming | CH-039 | 2 | None modelled | |
+| M2 × 5 thread-forming | CH-039 | 2 | Ø1.6 through the deck (D-073) | |
 | M2.5 × 6 low button | CH-081 | 4 | — | |
 
-## 4. Issues going in
+## 4. Issues going in and what was done ([D-073](../../../03-build/decisions.md#d-073))
 
 Carried over from the [chassis print list](../README.md#before-the-first-export), plus what the
-layout above turned up. Each gets a row in the gap table once it is checked.
+layout above turned up. Fixes are droid edits in `final/v1`, checked by
+[`check_frame_print.py`](../../../03-build/final/v1/cad/check_frame_print.py): **29/29** on
+2026-10-30.
 
-1. **Insert pilots Ø4.3 for an OD 4.4 insert** (8 J04 rail ends, 4 hatch bosses): 0.05 mm of
-   bite per side. Everywhere else in the chassis the same insert goes in Ø4.0. To fix as a
-   droid edit to Ø4.0, deeper than the insert.
-2. **Module print orientation** has been on hold since D-033. These are the two largest prints.
-   Neither face is obviously the bed: deck-down puts the posts, fuse bracket and tie bridges
-   under the deck, and deck-up leaves the deck spanning the open tub and the rail bays.
-3. **D-033's coupon requirement** (junction and insert coupons) conflicts with the 04-print
-   rule that the small parts are the test prints. To settle in the gap table.
-4. **J13 pins and deck flatness** across the two modules once the carriers join them (register
-   target: coplanar to 0.20 mm).
-5. **M2.5 × 4 inserts (CH-080) not bought.** Their Ø3.9 pilot also equals the insert's listed
-   OD 3.9, the same zero-bite problem as item 1.
-6. **No IMU pilot holes.** The two M2 thread-forming screws are modelled straight into the solid
-   deck (probed solid at (22, ±7.5), 2026-10-30), while the CH-039 BOM row speaks of a "current
-   Ø1.6 pilot" that the CAD does not have. The rear 4 mm of the IMU board (X 13–17) overhangs
-   the motor bay.
-7. **The hatch is a 1.5 mm plate carrying the 110 g pack** on four screws through 1.5 mm.
-   Whether it sags or cracks at the screw holes is part of the J11A/J11B check.
-8. **The fuse shelf** is a 30 mm cantilever at Z 71–73 on one 6 × 8 mm column: a print and
-   stiffness question for the orientation review.
+| # | Issue | Outcome |
+|---|---|---|
+| 1 | M3 × 6 insert pilots Ø4.3 for an OD 4.4 insert (8 J04 rail ends, 4 hatch bosses): 0.05 mm of bite a side. The J04 pilots were also only 0.1 mm deeper than the insert | **Fixed.** Ø4.0, as everywhere else in the chassis. J04 pilots 7 mm deep (insert plus 1 mm); boss walls 1.35 → 1.5 mm |
+| 2 | Module print orientation, on hold since D-033 | **Next step** (§5). Deck-down puts the posts, fuse bracket and tie bridges under the deck; deck-up leaves the deck spanning the open tub |
+| 3 | D-033's coupon requirement against the no-test-print rule | **Settled: no coupons.** The pod seat (plate P02) tries the same M3 × 6 in the same Ø4.0 pilot before the modules print. The junctions are proved on the assembled frame by the test system |
+| 4 | J13 pins and deck flatness across the two modules (≤ 0.20 mm) | **Tracked** to the J04 dry fit (measure on the real parts) |
+| 5 | M2.5 × 4 inserts (CH-080) not bought; pilot Ø3.9 equals their listed OD | **Fixed in CAD** (Ø3.5, OD − 0.4). Still to buy; measure the OD on arrival and correct the pilot before export if it isn't 3.9 |
+| 6 | No IMU pilots; the BOM spoke of a Ø1.6 pilot the CAD didn't have. The board's rear 4 mm (X 13–17) overhangs the motor bay | **Fixed:** Ø1.6 through the deck. The overhang is the connector end; the plug is pushed in along X, so the two screws take it. Kept |
+| 7 | The 1.5 mm hatch carries the about 110 g pack | **Closed by calculation:** about 3 N per screw at 10 g; head pull-through about 400 N. The J11B inversion and shock test stays |
+| 8 | Fuse shelf, a 30 mm cantilever on one 6 × 8 mm column | **Next step** (§5), with the orientation |
+
+Not ours but found here: the body's service-panel inserts (BO-063) are the same OD 4.4 insert in
+Ø4.3 pilots. They go to the body print review.
 
 ## Next
 

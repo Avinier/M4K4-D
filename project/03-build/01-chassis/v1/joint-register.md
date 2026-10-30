@@ -62,7 +62,7 @@
 
 - **Parts/load path:** one integrated printed motor plate/front cheek/rear cheek carrier per side joins the rail ends of the front and rear frame modules (D-033); the carriers are the only parts joining the two modules. Load path: tyre/stub/bearings → housing/cap → carrier → keyed rail faces and screws/inserts → rails → crossmembers/deck/body.
 - **Location/joint:** datum at X = ±17 mm. Each cheek has a 2 × 3 × 2.5 mm key; rail pocket 2.4 × 3.4 × 3.2 mm (0.2 mm nominal side clearance, 0.7 mm end allowance). Key locates Y/Z; screws clamp faces.
-- **Hardware/clamp:** two ISO 7380 M3 × 8 button heads at Z = 38/48 at each of two interfaces ([D-030](../../decisions.md#d-030); was DIN 7984); 6 mm axial M3 rail inserts. Four screws/inserts per side, eight each total (CH-060/061). Cheek holes R1.7, recess R2.95 × 2.1 for the Ø5.7 head; insert pilot Ø4.3 with 1 mm tip relief.
+- **Hardware/clamp:** two ISO 7380 M3 × 8 button heads at Z = 38/48 at each of two interfaces ([D-030](../../decisions.md#d-030); was DIN 7984); 6 mm axial M3 rail inserts. Four screws/inserts per side, eight each total (CH-060/061). Cheek holes R1.7, recess R2.95 × 2.1 for the Ø5.7 head; insert pilot Ø4.0 × 7 mm in the final CAD ([D-073](../../decisions.md#d-073); the chassis source still draws Ø4.3 × 6.1 with a 1 mm tip relief).
 - **Material/access/service:** one printed carrier per side and four rail print units; structural material/process unselected. Screws are reached from motor-relief bay after removing motor and wheel-side stack; carrier withdraws toward chassis centre. Tool path and cheek strength unproven.
 - **Proof/state:** nominal CAD architecture defined. Coupon targets: key seats by hand, face gap ≤0.10 mm, rails coplanar ≤0.20 mm, no bottoming/cracks/spin after three cycles. Insert pull-out ≥100 N. At service loads 31 N radial/8 N lateral: deflection ≤0.25 mm and wheel gap ≥1.5 mm; at 2× proof no crack/movement and residual set ≤0.10 mm. **Physical gates open.**
 
@@ -174,7 +174,7 @@
 
 - **Parts/load path:** removable bottom hatch (CH-011) closes the tub floor. Since [D-030](../../decisions.md#d-030) it also carries the strapped pack (J11B), so pack weight and inertia go hatch → four screws → tub bosses → front deck.
 - **Location/joint:** four external bosses ([D-028](../../decisions.md#d-028)). The rear pair sits outside the side walls at (28, ±39.5), the front pair on the front wall's face at (71.5, ±34.35). All stop at Z 39.5. The hatch sits in a shell floor opening 0.5 mm larger all round.
-- **Hardware/clamp ([D-030](../../decisions.md#d-030)):** 4 × ISO 7380 M3 × 6 button heads from below (CH-076) through the 1.5 mm hatch into M3 × 6 inserts (CH-077) pressed up into the Ø4.3 boss pilots; 4.5 mm of thread. The tip stays 2 mm under the pilot roof. No washer. The heads stand 1.65 mm below the shell floor.
+- **Hardware/clamp ([D-030](../../decisions.md#d-030)):** 4 × ISO 7380 M3 × 6 button heads from below (CH-076) through the 1.5 mm hatch into M3 × 6 inserts (CH-077) pressed up into the boss pilots, Ø4.0 in the final CAD ([D-073](../../decisions.md#d-073); Ø4.3 in the chassis source); 4.5 mm of thread. The tip stays 2 mm under the pilot roof. No washer. The heads stand 1.65 mm below the shell floor.
 - **Material/access/service:** candidate structural prints. Support the robot, open the pack disconnect (J11B), then reach all four screws from below. The 7 mm bosses leave 1.35 mm of wall round the insert.
 - **Proof/state:** CAD defined; `check_frame_fasteners.py` checks the hardware and the drop-out path. **Open:** boss insert coupon (thin walls), hatch cycles, inversion/shock retention with the pack strapped on.
 
@@ -216,14 +216,14 @@
 
 - **Parts/load path:** PCB-07 IMU to deck crossbar; board vibration/mass passes through two screws into deck.
 - **Location/joint:** 16 × 20 × 1 mm board flat on deck; two holes modeled at X = 22, Y = ±7.5.
-- **Hardware/clamp:** 2 × M2 × 5 thread-forming screws (CH-039) into nominal 4 mm deck; CAD assumes 4 mm thread engagement. Confirm PCB clearance and head/component stand-off.
+- **Hardware/clamp:** 2 × M2 × 5 thread-forming screws (CH-039) into Ø1.6 pilots through the 4 mm deck (final CAD, [D-073](../../decisions.md#d-073)); CAD assumes 4 mm thread engagement. Confirm PCB clearance and head/component stand-off.
 - **Material/access/proof:** connector points −X; install before body/electronics closure. Verify tool access, board flatness/interference and vibration retention. **Modeled; fit unconfirmed.**
 
 ### J15B — driver boards and motor-lead restraint
 
 - **Parts/load path:** two Adafruit #3297 boards (CH-017) to the front deck. Board mass and harness pull go through posts and screws into the deck. Motor-lead pull goes into a deck tie, not the terminal block.
 - **Location/joint ([D-030](../../decisions.md#d-030), [D-031](../../decisions.md#d-031)):** each board's two plated Ø2.5 holes lie 2.54 mm in from one long edge, 20.32 mm apart. The boards lie with their long side along Y at X 38.5–56.3, |Y| 31.3–56.9: the 17.8 mm width fits between the PCB-03 edge plugs (X 37) and the body-mount doglegs (X 58). The hole edge faces rearward on both, so the terminal block is inboard on the left board and outboard on the right. Four Ø7 × 10 mm posts on the front deck at (41.05, ±34.04) and (41.05, ±54.36) carry the PCBs at Z 66, behind the body M4 feet (X 54). The motor-branch harness reserve runs across the deck at X 30–37, behind the posts.
-- **Hardware/clamp:** 4 × M2.5 × 4 heat-set inserts (CH-080) flush with the post tops; 4 × M2.5 × 6 low button heads (CH-081) through the boards, 4 mm of thread. One 2.5 mm tie (CH-082) per side through a printed bridge at X 19–24, Y ±37–43 holds the motor leads where they drop to the motors.
+- **Hardware/clamp:** 4 × M2.5 × 4 heat-set inserts (CH-080) in Ø3.5 pilots ([D-073](../../decisions.md#d-073); was Ø3.9), flush with the post tops; 4 × M2.5 × 6 low button heads (CH-081) through the boards, 4 mm of thread. One 2.5 mm tie (CH-082) per side through a printed bridge at X 19–24, Y ±37–43 holds the motor leads where they drop to the motors.
 - **Access/service:** fit before the body. Remove the two screws and lift the board after unplugging its PCB-03 connectors and the terminal-block leads.
 - **Not covered:** the PCB-03/04 and C3 boards stay full-system proposals (CH-041–CH-047). Their mounts are not part of this chassis joint.
 - **Proof/state:** CAD defined; `check_frame_fasteners.py` checks that the boards sit on the posts and nothing clashes. **Open:** confirm the M2.5 head diameter, post coupon, tug test (20 N on a motor lead), vibration retention.

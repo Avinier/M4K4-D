@@ -376,6 +376,55 @@ def axle_edits():
 _AXLE_CUTS, _AXLE_ADDS = axle_edits()
 
 
+# D-073: frame insert and screw pilots. The M3 x 6 inserts in hand (OnlyScrews, OD 4.4) sat in
+# Ø4.3 pilots, 0.05 mm of bite a side; every other M3 insert in the robot uses Ø4.0. The M2.5 x 4
+# (OD 3.9) sat in Ø3.9, no bite at all; it gets OD - 0.4 like the M3s. The IMU's thread-forming
+# M2 x 5 had no pilot in the deck. Rings fill the old pilots down to the new diameter.
+FRAME_FIX = dict(
+    insert_r=2.0,                               # M3 x 6 pilot Ø4.0 (was Ø4.3)
+    j04_y=dict(FRONT=54.0, REAR=58.5), j04_z=(38.0, 48.0),
+    j04_x=(17.0, 23.1, 24.0),                   # |X|: rail face, old pilot end, new pilot end (7 mm)
+    boss_xy=((28.0, -39.5), (28.0, 39.5), (71.5, -34.35), (71.5, 34.35)), boss_z=(32.0, 38.5),
+    post_r=1.75, post_xy=((41.05, 34.04), (41.05, 54.36), (41.05, -34.04), (41.05, -54.36)),
+    post_z=(61.9, 66.0),                        # M2.5 x 4 pilot Ø3.5 (was Ø3.9), 4.1 deep
+    imu_r=0.8, imu_xy=((22.0, 7.5), (22.0, -7.5)), imu_z=(51.9, 56.1),  # M2 thread-forming, Ø1.6 through the deck
+)
+
+
+def _x_cyl(r, x0, x1, y, z):
+    return Cylinder(r, x1 - x0, rotation=(0, 90, 0)).moved(Location(((x0 + x1) / 2.0, y, z)))
+
+
+def frame_pilot_edits():
+    """D-073 world-frame (label, shape) cuts and adds on the two frame modules."""
+    m, r = FRAME_FIX, FRAME_FIX["insert_r"]
+    cuts, adds = [], []
+    for region, sx in (("FRONT", 1.0), ("REAR", -1.0)):
+        label = rf"CHASSIS_FRAME_{region}_MODULE"
+        face, old, new = m["j04_x"]
+        for sy in (1.0, -1.0):
+            for z in m["j04_z"]:
+                y = sy * m["j04_y"][region]
+                lo, hi = sorted((sx * face, sx * old))
+                adds.append((label, _x_cyl(2.2, lo, hi, y, z) - _x_cyl(r, lo - 0.1, hi + 0.1, y, z)))
+                lo, hi = sorted((sx * (old - 0.05), sx * new))
+                cuts.append((label, _x_cyl(r, lo, hi, y, z)))
+    front = r"CHASSIS_FRAME_FRONT_MODULE"
+    z0, z1 = m["boss_z"]
+    for x, y in m["boss_xy"]:
+        adds.append((front, _z_cyl(2.2, z0, z1, x, y) - _z_cyl(r, z0 - 0.1, z1 + 0.1, x, y)))
+    z0, z1 = m["post_z"]
+    for x, y in m["post_xy"]:
+        adds.append((front, _z_cyl(1.98, z0, z1, x, y) - _z_cyl(m["post_r"], z0 - 0.1, z1 + 0.1, x, y)))
+    z0, z1 = m["imu_z"]
+    for x, y in m["imu_xy"]:
+        cuts.append((front, _z_cyl(m["imu_r"], z0, z1, x, y)))
+    return cuts, adds
+
+
+_FRAME_CUTS, _FRAME_ADDS = frame_pilot_edits()
+
+
 # D-072: the M3 x 18 housing screws ended 0.2 mm short of the bottom of their blind holes,
 # 0.51 mm above the gearbox face. ISO 7380's length tolerance on 18 mm is +-0.35 (js15), so a
 # long screw could bottom out before its head clamped the cap, and push the skin onto the
@@ -469,6 +518,8 @@ DROID_CUTS = [
     *_WHEEL_CAP_CUTS,
     # D-071: stub flange Ø24 -> Ø21; set-screw key notch in the carrier hub.
     *_AXLE_CUTS,
+    # D-073: J04 rail pilots run Ø4.0 to 7 mm deep; Ø1.6 IMU screw pilots through the front deck.
+    *_FRAME_CUTS,
 ]
 DROID_ADDS = [
     # D-068: PCB-10 top-edge hooks on the C3 carrier uprights.
@@ -496,6 +547,8 @@ DROID_ADDS = [
     *_WHEEL_CAP_ADDS,
     # D-071: housing screw holes Ø3.4 -> Ø3.2, so the housing refits where the motor was aligned.
     *_AXLE_ADDS,
+    # D-073: frame insert pilots Ø4.3 -> Ø4.0 (J04 rail ends, J11A bosses), driver posts Ø3.9 -> Ø3.5.
+    *_FRAME_ADDS,
 ]
 DROID_MOVES = [
     # D-068 amended: C3 GH headers and plugs into the three proved rows; the J10-1 plug reserve down
