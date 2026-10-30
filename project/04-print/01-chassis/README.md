@@ -5,7 +5,9 @@ frame, the axle stack, the wheels, the nose and the rear keel. Most are PETG.
 The tyres are TPU and the nose touch cap is ASA. The steps and the status
 values are in the [workflow](../workflow.md). The wheels have their own page,
 [wheels/](wheels/README.md): parts, printing, how each joint holds, assembly,
-service and the 2026-10-29 gap review (D-070).
+service and the 2026-10-29 gap review (D-070). So does the axle stack,
+[axle/](axle/README.md), including the motor-alignment step and the 2026-10-30
+gap review (D-071).
 
 ## Parts
 
@@ -16,9 +18,10 @@ Orientation, critical dimensions and settings are filled in when each part is ex
 |---|---|---|---|---|---|---|---|---|
 | CH-001 | `CHASSIS_FRAME_FRONT_MODULE` (deck, battery tub, front rails, crossmember, fuse bracket) | 1 | PETG, deep slate | A1 or Guider II | | J04 rail ends and inserts; tub; J13 holes | | TODO |
 | CH-001 | `CHASSIS_FRAME_REAR_MODULE` (deck, rear rails, skid crossmember) | 1 | PETG, deep slate | A1 or Guider II | | J04 rail ends; keel insert bores | | TODO |
-| CH-001 | `AXLE_MOTOR_CARRIER_L`, `_R` (plate and cheeks, keyed) | 2 | PETG, deep slate | A1 | | Motor face pattern and pilot; J04 key | | TODO |
+| CH-001 | `AXLE_MOTOR_CARRIER_L`, `_R` (plate and cheeks, keyed; mirror images) | 2 | PETG, deep slate | A1 | Outboard plate face down; supports only under the square plate's corners (2.5 mm up) | Plate face flat (the housing seats on it); Ø7.6 pilot; 4 insert holes Ø4.0; face-screw counterbores; J04 keys and cheek faces; set-screw notch (D-071) | | TODO |
 | CH-011 | `BATTERY_TUB_BOTTOM_HATCH` | 1 | PETG, deep slate | A1 | | Strap slots; four screw holes | | TODO |
-| CH-051 | `AXLE_BEARING_HOUSING_L`, `_R` | 2 | PETG, deep slate | A1 | | 688 ZZ bores, tried with the real bearings | | TODO |
+| CH-051 | `AXLE_BEARING_HOUSING_L`, `_R` (mirror images) | 2 | PETG, deep slate | A1 | Inboard face down, no supports (D-071) | Ø16 seat, tried with the real bearings; shoulder; 4 × Ø3.2 holes (close fit, D-071); key slots | | TODO |
+| CH-089 | `AXLE_ALIGNMENT_PLUG` (a tool, `PRINT_TOOLS`; not in the robot) | 1 | PETG, any colour | A1 | Outboard end down, no supports | Ø4.05 bore slides on the motor shaft; Ø15.8 body slides into the housing seat | | TODO |
 | CH-004 | `WHEEL_L_RIM_PETG` (one STL serves both sides) | 2 | PETG, slate blue | A1 | Lip side down; tree supports inside the dish under the spoke backs and hub web, PLA interface on the web | Ø10 bore; web underside flat (seats on the stub flange); Ø74 seat and 12 ribs; 6 insert holes (1.0 mm wall to the seat); two hub pegs | | TODO |
 | CH-004 | `WHEEL_L_CLAMP_RING_PETG` (both sides) | 2 | PETG, slate blue | A1 | Flat inboard face down, no supports | Clamp face flat; Ø63.4 bore on the rim spigot; screw holes | | TODO |
 | CH-058 | `WHEEL_L_HUB_CAP_PETG` (both sides) | 2 | PETG, gunmetal | A1 | Underside down, no supports (D-070) | Drops onto the hub pegs without play; centre counterbore | | TODO |
@@ -42,7 +45,7 @@ The lab lays the STLs out on the plate; this list is what to ask for together.
 | Plate | Parts | Filament | Notes |
 |---|---|---|---|
 | P01 | Front and rear frame modules | PETG deep slate | One or two plates, decided at export by their footprint |
-| P02 | Motor carriers, bearing housings, hatch, pod seat, lid, wear shoe, shims | PETG deep slate | |
+| P02 | Motor carriers, bearing housings, alignment plug, hatch, pod seat, lid, wear shoe, shims | PETG deep slate | The plug can be any PETG colour |
 | P03 | Rims and clamp rings | PETG slate blue | |
 | P04 | Hub caps | PETG gunmetal | Small; can share an AMS plate with P03 |
 | P05 | Keel body and TCRT bezel | PETG taupe | |
@@ -83,8 +86,10 @@ No separate test prints: the small parts go first and are the test.
   builds the chassis tree, applies the droid edits with
   `_apply_droid_cuts(tree, strict=False)` from `makad-v1.step.py`, picks each
   leaf above by label, swaps in the print state for labels in `PRINT_STATES`
-  (the tyre, D-070), and writes its STL in print orientation to
-  `04-print/01-chassis/stl/`. One STL per wheel part serves both sides. It needs the legacy CAD runtime (cadgen 0.4.28); see the
+  (the tyre, D-070), adds the tools in `PRINT_TOOLS` (the axle alignment
+  plug, D-071), and writes its STL in print orientation to
+  `04-print/01-chassis/stl/`. One STL per wheel part serves both sides; the
+  carriers and housings need one each for left and right. It needs the legacy CAD runtime (cadgen 0.4.28); see the
   [final v1 README](../../03-build/final/v1/README.md).
 - **Frame insert pilots (raised 2026-10-30, at the frame review).** The ordered
   M3 × 6 slant-knurled insert (OnlyScrews, CH-061/CH-077) is listed at OD 4.4.

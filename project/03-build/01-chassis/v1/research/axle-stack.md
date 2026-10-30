@@ -44,8 +44,8 @@ face |            | stub ━━━━━━━┿━━━━━━━━━━�
 |---|---|---|---|---|
 | 69.0–74.0 | **Motor plate**, the outboard wall of the motor carrier | CH-001 | Candidate structural print; integral with the front/rear cheeks in one J04 carrier | 34 × 30 square to 71.5, then an R 16.5 hub to 74. Inside the wheel pocket, 1.5 mm clear of it. Ø7.6 pilot hole (0.3 mm float). R 6 × 2.5 recess on the outboard face, floor at the pilot end. 2 × Ø3.6 face-screw holes at R 8.5 with Ø6.5 × 2.2 counterbores. 4 × M3 × 4 inserts at R 12, 45°/135°/225°/315°, ≥ 4.5 mm from the plate edges. |
 | 65.8–73.8 | **Face screws** ×2 | CH-030 | ISO 7380 M3 × 6 button head, Loctite 222 (D-030; was DIN 7984) | Ø5.7 × 1.65 heads 0.55 mm below the plate face. 2.8 mm clamp, 3.2 mm thread in an assumed 5 mm tapped hole. Tightened **last**, through the housing key slots. |
-| 74.0–86.35 | **Bearing housing** ×2, mirrored | CH-051 | PETG print, axle vertical | Ø32. Inboard cavity and outer-ring shoulder Ø12.5 (74–76.51). 688ZZ seat Ø16, coupon-tuned (76.51–86.35); bearings stand 0.16 mm proud at 86.51 for the cap. The 0.01 mm datum offset avoids a degenerate mirrored housing boolean; it is below process tolerance and preserves cap/wheel alignment. Set-screw slot Ø3.4 at +Z, open to the base. Face-screw key paths Ø2.6 at R 8.5 (0°/180°), opened into the bore as slots, off the vertical load line. 4 × Ø3.4 at R 12, leaving 2.3 mm of wall outside. |
-| 73.0–96.0 | **Stub** ×2 | CH-012 | EN8/C45, turned in one setup | Ø8 from 73 (1.5 mm off the motor pilot). **k5** bearing seats 76.51–86.51. Ø4.05 H8 bore 73–82, giving **8 mm** on the shaft. M3 tapped radial hole at 74.8 onto the D-flat; its Ø2.5 tap-drill edge is 0.46 mm from the first bearing face. Ø9.5 shoulder 86.51–91. Ø24 × 2 flange 91–93 with 3 × M3 tapped at PCD 16 (30°/150°/270°). Ø10 g6 spigot 93–96. |
+| 74.0–86.35 | **Bearing housing** ×2, mirrored | CH-051 | PETG print, axle vertical, inboard face down (no overhangs; [D-071](../../../decisions.md#d-071)) | Ø32. Inboard cavity and outer-ring shoulder Ø12.5 (74–76.51). 688ZZ seat Ø16, tuned on the first housing with the real bearings (76.51–86.35); bearings stand 0.16 mm proud at 86.51 for the cap. The 0.01 mm datum offset avoids a degenerate mirrored housing boolean; it is below process tolerance and preserves cap/wheel alignment. Set-screw slot Ø3.4 at +Z, open to the base. Face-screw key paths Ø2.6 at R 8.5 (0°/180°), opened into the bore as slots, off the vertical load line. 4 × Ø3.2 at R 12 (D-071, was Ø3.4: close fit, so the housing refits where the motor was aligned), leaving 2.4 mm of wall outside. |
+| 73.0–96.0 | **Stub** ×2 | CH-012 | EN8/C45, turned in one setup | Ø8 from 73 (1.5 mm off the motor pilot). **k5** bearing seats 76.51–86.51. Ø4.05 H8 bore 73–82, giving **8 mm** on the shaft. M3 tapped radial hole at 74.8 onto the D-flat; its Ø2.5 tap-drill edge is 0.46 mm from the first bearing face. Ø9.5 shoulder 86.51–91. **Ø21** × 2 flange 91–93 (D-071, was Ø24, which blocked the housing-screw key) with 3 × M3 tapped at PCD 16 (30°/150°/270°), 1.0 mm of steel outside the threads. Ø10 g6 spigot 93–96. |
 | 74.8 | **Set screw** ×2 | CH-055 | ISO 4029 M3 × 3 cup point faced to 2.5 mm, Loctite 222 (D-030; 2.5 is not a standard length) | Bears on the flat and sits flush with the Ø8. Fitted and driven through the housing slot with a 1.5 mm key once the wheel is off. The revised hole location requires edge-break inspection on the turned stub. |
 | 76.51–86.51 | **Bearings** ×4 | CH-015 | **688 ZZ** 8 × 16 × 5, double metal shield, chrome steel per [OnlyScrews listing](https://onlyscrews.in/products/688-zz-deep-groove-ball-bearing-8x16x5) | Inner rings: k5 press + Loctite 641 against the shoulder. Outer rings: slip to light press, between housing shoulder and cap. Listing does not identify the manufacturer or state load ratings; obtain the actual drawing/data with the delivered lot. |
 | 86.51–87.71 | **Retaining cap** ×2 | CH-052 | 1.2 mm aluminium | ID Ø12.5 bears on the outer ring only. OD Ø32. 4 × Ø3.4 at R 12; 2 × Ø2.6 key holes at R 8.5. |
@@ -87,16 +87,13 @@ face |            | stub ━━━━━━━┿━━━━━━━━━━�
 
 ## 5. Assembly and service (one side)
 
-**Bench subassembly**
-1. Press both 688 ZZ bearings onto the stub from the inboard end, pushing on the **inner ring only**, until they sit against the Ø9.5 shoulder. Use Loctite 641.
+**Superseded by [D-071](../../../decisions.md#d-071) (2026-10-30).** The sequence that was here could not be done. With the stub in, the Ø24 flange blocked the housing-screw key, and the bearings and flange blocked the face-screw keys, so "tighten the face screws last" was impossible. The step-by-step sequence is now on the [axle page](../../../../04-print/01-chassis/axle/README.md#4-assembly-one-side). In short:
 
-**Install**
-2. Put the motor in the carrier, pilot in the plate hole. Start both face screws finger-tight.
-3. Push the stub cartridge into the housing until outer ring 1 meets the shoulder. Fit the cap.
-4. Offer the housing to the plate. Turn the stub until its tapped hole lines up with the shaft flat, then slide it onto the shaft. Fit the four cap screws.
-5. Fit the set screw through the slot and tighten it.
-6. Turn the stub by hand so the motor centres itself. Tighten both face screws through the key slots with a long 2 mm ball-end key.
-7. Check drag and end play. Fit the wheel on the spigot and tighten its three screws with Loctite 222 (D-070). Fit the hub cap last. The full wheel sequence is on the [wheels page](../../../../04-print/01-chassis/wheels/README.md#4-assembly-one-wheel).
+1. On the bench: plate inserts; set screw ground to 2.5 mm; both 688 ZZ pressed onto the stub with Loctite 641, on the **inner ring only**, against the Ø9.5 shoulder.
+2. Carrier onto the rails (J04), then the motor into the carrier, face screws finger-tight.
+3. **Align:** the printed alignment plug (CH-089) goes in the housing seat, under the cap. The housing goes onto the plate, the plug's bore takes the shaft, and the face screws are tightened through the cap, the housing slots and the plug's notches. The housing comes off again.
+4. The cartridge goes into the housing, then the cap. The housing goes back on its four Ø3.2 holes, with the stub on the shaft. Then the set screw.
+5. Check drag and end play. Then the wheel: [wheels page](../../../../04-print/01-chassis/wheels/README.md#4-assembly-one-wheel), with Loctite 222 on the wheel screws (D-070) and the hub cap last.
 
 **Service paths**
 
@@ -105,7 +102,7 @@ face |            | stub ━━━━━━━┿━━━━━━━━━━�
 | Wheel | hub-cap screw and cap (D-033) → 3 wheel screws | 2 mm hex |
 | Tyre | 6 clamp-ring screws; the wheel stays on | 2 mm hex |
 | Bearing pair | wheel → loosen set screw → 4 cap screws → housing and cartridge slide off outboard → press the bearings off | 2 mm and 1.5 mm hex, press |
-| Motor | as for bearings → 2 face screws → motor out (exit direction set by J04) | as above |
+| Motor | as for bearings → 2 face screws → motor out (exit direction set by J04); on refit, align again with the plug (D-071) | as above |
 
 ## 6. Proposal review holds and their status
 
@@ -119,6 +116,8 @@ face |            | stub ━━━━━━━┿━━━━━━━━━━�
 | 6 | Fits and strength are provisional. | **Open:** coupons and rig. |
 | 7 | No shop quote for the stub. | **Open:** drawing, then a quote. |
 | 8 | The floating-motor alignment is unproven. | **Open:** rig, with drag, current and runout measured before and after tightening. |
+| 9 | (2026-10-30) The housing screws and the motor face screws could not be reached in the documented order. | **Fixed by D-071:** Ø21 flange, the alignment plug and Ø3.2 housing holes; `final/v1/cad/check_axle_stack.py` 21/21. |
+| 10 | (2026-10-30) The set-screw key grazed the plate hub (0.07 mm). | **Fixed by D-071:** a 0.5 mm notch in the carrier hub. |
 
 ## 7. Motor assumptions and where they live
 
@@ -132,7 +131,7 @@ face |            | stub ━━━━━━━┿━━━━━━━━━━�
 ## 8. Next
 
 1. **Stub drawing, then a quote** from a local turning shop.
-2. **Coupons**, on the lab printer: bearing bores Ø15.90–16.10 in 0.05 mm steps; spigot bore Ø9.9–10.1; M3 × 4/6 insert sections; plate counterbore section; and J04 key/rail-end pair. Record printer, material, orientation, settings and measured fits.
+2. **First real parts as the fit test** ([D-071](../../../decisions.md#d-071), [04-print rule 5](../../../../04-print/README.md#rules); this replaces the coupon series that was planned here): try the real bearings in the first housing, the stub spigot in the first rim, and inserts in the first plate. Correct a printer offset with XY hole compensation. Record printer, material, orientation, settings and measured fits in the [print log](../../../../04-print/01-chassis/README.md).
 3. **Wheel model port.** Done in D-009; rerun `check_wheel_on_chassis.py` after the new J04 cheeks and complete `check_layout.py` against this revision before release.
 4. **Axle rig** once motor, bearings and stubs arrive. The fixture concept and numeric criteria are specified in §9.
 
@@ -151,7 +150,7 @@ These dimensions are starting print geometry, not calibrated fits. The 0.2 mm ke
 ### Coupon and assembly gates
 
 1. **Supplier part and drawing.** Procure four 688 ZZ bearings through the selected [OnlyScrews listing](https://onlyscrews.in/products/688-zz-deep-groove-ball-bearing-8x16x5) when it is available. Confirm the maker, ZZ shields, dimensions, lot and drawing/load data; the listing currently says sold out and does not publish a maker or ratings. Keep the delivered-lot evidence with CH-015.
-2. **Fit coupons.** After printer/material/orientation are selected, print outer-bearing-seat coupons at Ø15.90, 15.95, 16.00, 16.05 and 16.10 mm, plus the stub-spigot bore, insert sections and J04 key/rail pair. Record post-print bore, actual bearing insertion force, race drag and shield clearance. Verify the turned stub's Ø8 k5 seat with the received bearing. Select a free-to-light-press outer fit captured by the shoulder/cap; do not force a distorted bearing into the housing.
+2. **Fits on the first real parts** (D-071; no coupon series). Try the received bearings in the first printed housing, and correct the seat with XY hole compensation if needed. Record post-print bore, actual bearing insertion force, race drag and shield clearance. Verify the turned stub's Ø8 k5 seat with the received bearing. Select a free-to-light-press outer fit captured by the shoulder/cap; do not force a distorted bearing into the housing.
 3. **100 N inner-ring retention test (motor-independent).** Assemble the actual bearing pair on the finished stub using the selected k5 seat and Loctite 641 cured per its datasheet. Capture the outer rings with the selected housing/cap and clamp that stationary stack in a guarded axial test fixture. Pull the stub outward to 100 N for 10 s with a calibrated force readout; measure inner-ring-to-stub relative movement. Pass: <0.10 mm movement, no bearing damage or loss of free rotation after unloading. Test both side assemblies and record bearing lot, stub dimensions, compound/cure, fixture and readings. A motor is not part of this load path.
 4. Pull each candidate M3 insert coupon axially to 100 N. Pass: no insert movement, boss split or permanent bore growth. Record the insert SKU, print orientation and result in BOM CH-054/CH-061.
 5. Assemble one carrier to two rail coupons. Pass: key seats by hand without forcing; datum-face gap ≤0.10 mm; both rails coplanar within 0.20 mm; screws reach full insert engagement without bottoming; no cracking or insert spin after three assembly cycles.

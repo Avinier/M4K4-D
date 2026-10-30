@@ -313,6 +313,80 @@ def wheel_tyre_print():
 PRINT_STATES = [
     (r"WHEEL_[LR]_TYRE_TPU95A_[LR]", wheel_tyre_print),  # D-070
 ]
+
+
+# D-071: axle-stack assembly fixes, both sides. The axle is the line X 0, Z 42; |Y| runs
+# outboard, and the right side is the left mirrored in XZ.
+# (A) The stub flange shrinks from Ø24 to Ø21. At Ø24 it covered half the socket of each
+#     housing screw (R12), 1.6 mm in front of the heads, so the housing could not be bolted
+#     on with the stub inside it. Ø21 leaves a 2 mm key 0.35 mm clear and 1.0 mm of steel
+#     outside the wheel-screw threads.
+# (B) The motor face screws cannot be reached once the bearings and stub are in: both
+#     bearings (R8) and the flange sit across the key path at R8.5. So the motor is
+#     aligned with a printed tool, the alignment plug (CH-089), in the housing's bearing
+#     seat. Housing, plug and cap go on, the plug's bore takes the motor shaft, and the face
+#     screws are tightened through the key slots and the plug's notches. The housing then
+#     comes off for the bearings and stub; its four screw holes close from Ø3.4 to Ø3.2, so
+#     it goes back where the motor was aligned to it.
+# (C) A notch in the carrier hub over the set screw: the 1.5 mm key grazed it by 0.07 mm.
+# check_axle_stack.py measures all of it.
+AXLE_FIX = dict(
+    flange=(10.5, 91.0, 93.0),                  # radius (was 12.0), |Y| span
+    housing_hole=(1.6, 74.0, 86.35),            # radius (was 1.7), |Y| span of the housing
+    screw_r=12.0, screw_angles=(45.0, 135.0, 225.0, 315.0),  # housing screws, deg in XZ from +X
+    key_x=8.5,                                  # face screws at X +-8.5 on the axle line
+    plug_body=(7.9, 76.6, 86.4),                # radius, |Y|: in the Ø16 seat, under the cap
+    plug_nose=(6.1, 74.1, 76.6),                # in the housing's Ø12.5 inboard cavity
+    plug_bore=2.025,                            # Ø4.05, as the stub: 6.9 mm on the shaft
+    plug_notch=(7.2, 1.4),                      # cut outside R7.2 within +-1.4 of each key axis
+    set_notch=(1.5, 73.5, 45.0, 59.0),          # half width X, |Y| from (to the face), Z span
+)
+
+
+def _axle_cyl(side, r, a0, a1, x=0.0, z=0.0):
+    """World cylinder along Y over |Y| a0..a1 on one side (+1 left, -1 right), at (x, Z 42 + z)."""
+    lo, hi = sorted((side * a0, side * a1))
+    return Cylinder(r, hi - lo, rotation=(90, 0, 0)).moved(Location((x, (lo + hi) / 2.0, _WHEEL_AXLE_Z + z)))
+
+
+def axle_edits():
+    """D-071 world-frame (label, shape) lists for both sides: cuts and adds."""
+    m = AXLE_FIX
+    cuts, adds = [], []
+    for side, tag in ((1, "L"), (-1, "R")):
+        r, a0, a1 = m["flange"]
+        cuts.append((rf"WHEEL_{tag}_STUB_SHAFT_8MM", _axle_cyl(side, 13.0, a0 - 0.1, a1 + 0.1) - _axle_cyl(side, r, a0 - 0.2, a1 + 0.2)))
+        hole, h0, h1 = m["housing_hole"]
+        for angle in m["screw_angles"]:
+            x, z = m["screw_r"] * math.cos(math.radians(angle)), m["screw_r"] * math.sin(math.radians(angle))
+            adds.append((rf"AXLE_BEARING_HOUSING_{tag}", _axle_cyl(side, 1.75, h0, h1, x, z) - _axle_cyl(side, hole, h0 - 0.1, h1 + 0.1, x, z)))
+        w, y0, z0, z1 = m["set_notch"]
+        lo, hi = sorted((side * y0, side * 74.01))
+        cuts.append((rf"AXLE_MOTOR_CARRIER_{tag}", (-w, w, lo, hi, z0, z1)))
+    return cuts, adds
+
+
+_AXLE_CUTS, _AXLE_ADDS = axle_edits()
+
+
+def axle_alignment_plug(side=1):
+    """D-071 tool CH-089, placed in the left (or right) housing as it is used, world frame."""
+    m = AXLE_FIX
+    plug = _axle_cyl(side, *m["plug_body"]) + _axle_cyl(side, *m["plug_nose"])
+    plug = plug - _axle_cyl(side, m["plug_bore"], m["plug_nose"][1] - 1.0, m["plug_body"][2] + 1.0)
+    r, half = m["plug_notch"]
+    lo, hi = sorted((side * (m["plug_nose"][1] - 1.0), side * (m["plug_body"][2] + 1.0)))
+    for sx in (1, -1):
+        x0, x1 = sorted((sx * r, sx * 9.0))
+        plug = plug - _cut_box(x0, x1, lo, hi, _WHEEL_AXLE_Z - half, _WHEEL_AXLE_Z + half)
+    plug.label = "AXLE_ALIGNMENT_PLUG"
+    return plug
+
+
+# Printed tools, not robot parts: (BOM ID, label, function giving the tool in the world frame).
+PRINT_TOOLS = [
+    ("CH-089", "AXLE_ALIGNMENT_PLUG", axle_alignment_plug),  # D-071
+]
 # Parts dropped whole (label fully matched, leaf or group), and parts inserted, world frame,
 # as new children of the group whose label fully matches.
 DROID_REMOVES = [
@@ -346,6 +420,8 @@ DROID_CUTS = [
     (r"REAR_SERVICE_PANEL_OCTAGONAL", PCB13_RELIEF),
     # D-070: hub-cap peg holes (taking the old pegs) and the column trimmed flush.
     *_WHEEL_CAP_CUTS,
+    # D-071: stub flange Ø24 -> Ø21; set-screw key notch in the carrier hub.
+    *_AXLE_CUTS,
 ]
 DROID_ADDS = [
     # D-068: PCB-10 top-edge hooks on the C3 carrier uprights.
@@ -371,6 +447,8 @@ DROID_ADDS = [
     # D-070: hub holes filled and pegs on the hub; a boss round each cap hole.
     *_WHEEL_RIM_ADDS,
     *_WHEEL_CAP_ADDS,
+    # D-071: housing screw holes Ø3.4 -> Ø3.2, so the housing refits where the motor was aligned.
+    *_AXLE_ADDS,
 ]
 DROID_MOVES = [
     # D-068 amended: C3 GH headers and plugs into the three proved rows; the J10-1 plug reserve down

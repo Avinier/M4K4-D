@@ -74,6 +74,7 @@ The central record of every decision and change made during the build phase. New
 | [D-068](#d-068) | 2026-10-27 | Body / electronics: PCB-10 C3 carrier inputs, mounting, DevKitC and parts (CH-044, CH-045; final v1 CAD) | The C3 module is held by the **two lower M2.5 screws and two printed hooks** over the board's top edge (the upper screws sat under the DevKitC); the uprights get **pin-tail reliefs**. The DevKitC is **genuine Espressif ESP32-S3-DevKitC-1-N8 v1.1** only, modelled from Espressif's drawing (rows 22.86 mm, not the CAD clone's 25.4). Watchdog: **TPS3436CCCBGDDFRQ1** (the BD-10 fallback; the CFDBE has no stock anywhere reachable) from **Mouser India**; link transceiver on a SOIC-8 footprint (THVD1451DR or MAX3490EESA+); Schottky in the `J10-1` feed against USB back-feed; GPIO map v0.2; `J10-2` named by direction. Amended at board set-up: the board grows 6 mm down (70 × 49.5, notched over a DRV8833 terminal block) for a third connector row; at placement: **four layers** (In1 GND, In2 +3V3), `J10-2` reordered, GPIO map v0.3 | ACTIVE; `check_pcb10_mount.py` 9/9; PCB-10 placed, routing |
 | [D-069](#d-069) | 2026-10-29 | Body / electronics: PCB-13 charge inlet inputs (BO-015; final v1 CAD) | The rear-panel pin relief widens **9.60 → 10.60 mm** so GCT's USB4140 stake copper clears the seat (`DROID_CUTS`); J1 **hand-soldered** by the builder, the fab assembles the +X face only; **1 oz, two layers, 1.6 mm**; NVM test pads on a **2.54 mm grid** for P75 pogos; actives from **element14 India** (USB4140, STUSB4500, STL6P3LLH6, ESDA25W) and **Mouser India** (TVS2200DRVR); `W16`/`J2-8` interface and PCB-02 back-face keep-out fixed | ACTIVE; `check_pcb13_relief.py` 13/13; PCB-13 inputs frozen, schematic next |
 | [D-070](#d-070) | 2026-10-29 | Chassis / wheels: print fixes (CH-004, CH-005, CH-056, CH-058; J03, J14; final v1 CAD) | The hub-cap clocking **pegs move onto the hub** and the holes into the cap (each in a Ø3.7 boss), and the cap column is trimmed flush, so the cap prints underside down with no supports; the **tyre is printed in its free state** (Ø73.6 bore, 19.3 wide; `PRINT_STATES`), the assembly keeps the fitted state; the **rim prints lip side down**; **Loctite 222** on the wheel screws; left and right tyres are **one part** (amends D-009's "not interchangeable") | ACTIVE; `check_wheel_print.py` 29/29; physical fits open |
+| [D-071](#d-071) | 2026-10-30 | Chassis / axle stack: assembly fixes (CH-001, CH-012, CH-051, CH-089; J01, J02, J03; final v1 CAD) | The stub flange shrinks **Ø24 → Ø21** so a straight key reaches the housing screws with the stub in; the motor is aligned with a printed **alignment plug** (CH-089, a tool) in the bearing seat, because the face screws cannot be reached once the bearings and stub are in; the housing's screw holes close **Ø3.4 → Ø3.2** so it refits where the motor was aligned; a **notch** in the carrier hub clears the set-screw key; print orientations recorded (housing inboard face down, carrier outboard face down); the housings are the fit test, no bore coupons | ACTIVE; `check_axle_stack.py` 21/21; stub drawing and physical proof open |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -2972,3 +2973,66 @@ Layout: DRC 0 errors, 0 unconnected, parity clean ([PCB-13 README](04-pcbs/pcb-1
 - The fitted tyre's OD is about 84.4 (the stretch moves the tread out about 0.2 mm). That's an estimate, folded into the open loaded-radius measurement.
 - The CH-049 insert: the ordered OnlyScrews M3 × 4 slant-knurled insert is listed at OD 4.4 (0.2 mm bite in Ø4.0, 0.8 mm left under the seat, under a rib). Measure one on arrival.
 - First-print fits: tyre on and clamped, the pegs, the web's flatness and runout.
+
+## D-071
+
+**2026-10-30 · Chassis / axle stack: assembly fixes (CH-001, CH-012, CH-051, CH-089; J01, J02, J03; final v1 CAD) · ACTIVE; `check_axle_stack.py` 21/21; stub drawing and physical proof open**
+
+**Why.** Checking every step of the D-007 assembly against the CAD, with keys modelled across their corners ([axle page](../04-print/01-chassis/axle/README.md#6-gaps-found-on-2026-10-30-and-their-fixes)), found:
+
+- **The housing screws can't be reached with the stub in.** The four M3 × 18 sit at R12. The stub's Ø24 flange (R12) sits 1.6 mm in front of their heads and covers half of each socket: a straight 2 mm key hits it (4.1 mm³), and a ball-end key would need about 30°. The screws clamp the cap, so they can only go in with the stub already in the housing. The documented order (§5 step 4) could not be done.
+- **The motor face screws can't be reached once the bearings and stub are in.** At R8.5 the key path is crossed by both 688 ZZ outer rings (R8, 0.65 mm into the key) and by the flange. D-007's "motor floats, face screws tightened last" (§5 step 6, J01) was impossible.
+- **The set-screw key rubs the plate hub** by 0.07 mm (0.34 mm³).
+- **No print orientation was recorded** for the housing or carrier. The housing printed outboard face down puts the bearing shoulder (75 mm²) on supports.
+- **axle-stack.md still planned bore coupons**, which [04-print rule 5](../04-print/README.md#rules) replaces with the real parts as the test.
+
+**Decision** (builder, 2026-10-30: "fix everything and commit properly"; option B1 of the review):
+
+1. **Stub flange Ø24 → Ø21** (`DROID_CUTS` on `WHEEL_[LR]_STUB_SHAFT_8MM`). A straight 2 mm key clears it by 0.345 mm at the housing screws. 1.0 mm of steel stays outside the wheel-screw threads (M3 at R8). The wheel web's clamp face on the flange becomes R5–10.5. The stub has no drawing or quote yet, so this costs nothing.
+2. **Motor alignment with a printed plug** (CH-089, `axle_alignment_plug()`, listed in `PRINT_TOOLS`):
+   - A Ø15.8 body in the bearing seat and a Ø12.2 nose in the housing's inboard cavity, with a Ø4.05 bore that takes 6.9 mm of the motor shaft.
+   - Notches outside R7.2 at the two face-screw key paths.
+   - Housing, plug and cap go on, and the face screws are tightened through the cap key holes, housing slots and notches. The housing then comes off for the cartridge.
+   - The cap holds the plug in, with 0.2 mm axial play.
+   - This keeps D-007's intent: the motor is fixed only once its shaft is on the bearing axis.
+3. **Housing screw holes Ø3.4 → Ø3.2** (`DROID_ADDS`), 0.1 mm radial on the M3 shank. The housing refits to within about 0.1 mm of where the motor was aligned to it.
+4. **Set-screw key notch** in the carrier hub over the set screw, 3 × 0.5 mm (`DROID_CUTS`).
+5. **Print orientations:**
+   - Housing: inboard face down, no overhangs.
+   - Carrier: outboard plate face down, supports only under the square plate's corners (260 mm², 2.5 mm up).
+   - Plug: on its outboard end, no overhangs.
+6. **No bore coupons.** The first housing is tried with the real bearings, and the seat is corrected with the slicer's XY hole compensation. This replaces axle-stack §8 item 2 and §9 gate 2's coupon series.
+
+Option B2, locating the motor by a close-fit plate pilot and tightening the face screws first, was not taken. It reintroduces the over-constraint D-007 removed.
+
+**CAD:** `makad-v1.step.py` gains `AXLE_FIX`, `_axle_cyl()`, `axle_edits()` (per side: one stub cut, one carrier cut, four housing adds), `axle_alignment_plug()` and `PRINT_TOOLS`. A new view, [`axle-alignment.step.py`](final/v1/cad/axle-alignment.step.py), shows the left side at the alignment step beside the finished stack. The chassis source is unchanged; its `_check_wheel_interface()` still holds the subsystem flange at R12, and the droid overrides it. `makad-v1.step` was rebuilt with this change.
+
+**Checks:** [`final/v1/cad/check_axle_stack.py`](final/v1/cad/check_axle_stack.py) passes 21/21, both sides:
+
+- Flange Ø21.
+- All four housing screws reachable with a straight key with the stub in.
+- Ø3.2 holes over the full housing.
+- Set-screw key clear.
+- The plug clear of every part present when it's used, with its fits.
+- Both face-screw keys clear through the plug, and blocked by the bearings and stub without it.
+- Housing and plug print with no overhangs.
+- **Planted:** the Ø24 flange blocks every housing-screw key (4.126 mm³), and the unedited carrier blocks the set-screw key (0.338 mm³).
+
+**Docs:**
+
+- The [axle page](../04-print/01-chassis/axle/README.md): parts, printing, how it works, the full assembly and service sequence, gaps and order list.
+- Corrected: [axle-stack.md](01-chassis/v1/research/axle-stack.md) §3, §5, §6, §8 and §9; J01, J02 and J03 in the [joint register](01-chassis/v1/joint-register.md); the chassis [BOM](01-chassis/v1/BOM.md); `BOM.csv` rows CH-001, CH-012, CH-051 and the new CH-089; and the [chassis print parts](../04-print/01-chassis/README.md).
+
+**BOM changed:**
+
+- CH-012: flange Ø21.
+- CH-051: Ø3.2 holes, printed inboard face down, no coupons.
+- CH-001: the carriers' set-screw notch and print orientation.
+- New **CH-089**: the axle alignment plug, a printed tool.
+
+**Open:**
+
+- **The stub drawing**, then a quote. This is the critical path.
+- The DXF for the aluminium caps (CH-052).
+- Ordering the bearings and motors.
+- The physical gates in axle-stack §9: the 100 N bearing pull test, the J04 carrier fit, the axle rig, and powered acceptance including no-load current after the face screws are tightened.
