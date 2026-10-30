@@ -7,7 +7,8 @@ values are in the [workflow](../workflow.md). The wheels have their own page,
 [wheels/](wheels/README.md): parts, printing, how each joint holds, assembly,
 service and the 2026-10-29 gap review (D-070). So does the axle stack,
 [axle/](axle/README.md), including the motor-alignment step and the 2026-10-30
-gap review (D-071).
+gap review (D-071). The frame review has started on [frame/](frame/README.md):
+the parts and joints are laid out; printing, assembly and the gap table follow.
 
 ## Parts
 
