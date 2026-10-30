@@ -75,7 +75,7 @@ The central record of every decision and change made during the build phase. New
 | [D-069](#d-069) | 2026-10-29 | Body / electronics: PCB-13 charge inlet inputs (BO-015; final v1 CAD) | The rear-panel pin relief widens **9.60 → 10.60 mm** so GCT's USB4140 stake copper clears the seat (`DROID_CUTS`); J1 **hand-soldered** by the builder, the fab assembles the +X face only; **1 oz, two layers, 1.6 mm**; NVM test pads on a **2.54 mm grid** for P75 pogos; actives from **element14 India** (USB4140, STUSB4500, STL6P3LLH6, ESDA25W) and **Mouser India** (TVS2200DRVR); `W16`/`J2-8` interface and PCB-02 back-face keep-out fixed | ACTIVE; `check_pcb13_relief.py` 13/13; PCB-13 inputs frozen, schematic next |
 | [D-070](#d-070) | 2026-10-29 | Chassis / wheels: print fixes (CH-004, CH-005, CH-056, CH-058; J03, J14; final v1 CAD) | The hub-cap clocking **pegs move onto the hub** and the holes into the cap (each in a Ø3.7 boss), and the cap column is trimmed flush, so the cap prints underside down with no supports; the **tyre is printed in its free state** (Ø73.6 bore, 19.3 wide; `PRINT_STATES`), the assembly keeps the fitted state; the **rim prints lip side down**; **Loctite 222** on the wheel screws; left and right tyres are **one part** (amends D-009's "not interchangeable") | ACTIVE; `check_wheel_print.py` 29/29; physical fits open |
 | [D-071](#d-071) | 2026-10-30 | Chassis / axle stack: assembly fixes (CH-001, CH-012, CH-051, CH-089; J01, J02, J03; final v1 CAD) | The stub flange shrinks **Ø24 → Ø21** so a straight key reaches the housing screws with the stub in; the motor is aligned with a printed **alignment plug** (CH-089, a tool) in the bearing seat, because the face screws cannot be reached once the bearings and stub are in; the housing's screw holes close **Ø3.4 → Ø3.2** so it refits where the motor was aligned; a **notch** in the carrier hub clears the set-screw key; print orientations recorded (housing inboard face down, carrier outboard face down); the housings are the fit test, no bore coupons | ACTIVE; `check_axle_stack.py` 21/21; stub drawing and physical proof open |
-| [D-072](#d-072) | 2026-10-30 | Chassis / axle stack: motor-to-axle follow-up (CH-053, CH-089; J01, J02; final v1 CAD) | The housing screws go **M3 × 18 → M3 × 16**: an 18 mm screw at its long limit bottomed out in its blind hole before it clamped the cap; the alignment gets an **error budget** of 0.05 mm: the plug becomes a close sliding fit (Ø15.8 → Ø15.96) and the housing screws are tightened only after the set screw is in and the stub has turned | ACTIVE; `check_axle_stack.py` 27/27 |
+| [D-072](#d-072) | 2026-10-30 | Chassis / axle stack: motor-to-axle follow-up (CH-053, CH-055, CH-089; J01, J02, J03; final v1 CAD) | The housing screws go **M3 × 18 → M3 × 16**: an 18 mm screw at its long limit bottomed out in its blind hole before it clamped the cap; the alignment gets an **error budget** of 0.05 mm: the plug becomes a close sliding fit (Ø15.8 → Ø15.96) and the housing screws are tightened only after the set screw is in and the stub has turned; **tightening torques** for every axle screw (0.2–0.6 N·m) and one **check of the face screws after the run-in**; the motor's rear needs no support (closed by calculation) | ACTIVE; `check_axle_stack.py` 27/27 |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -3056,7 +3056,7 @@ Option B2, locating the motor by a close-fit plate pilot and tightening the face
 
 ## D-072
 
-**2026-10-30 · Chassis / axle stack: motor-to-axle follow-up (CH-053, CH-089; J01, J02; final v1 CAD) · ACTIVE; `check_axle_stack.py` 27/27**
+**2026-10-30 · Chassis / axle stack: motor-to-axle follow-up (CH-053, CH-055, CH-089; J01, J02, J03; final v1 CAD) · ACTIVE; `check_axle_stack.py` 27/27; set-screw reversals open on the rig**
 
 **Why.** A second pass over the motor assembly after D-071, checked against the source, the docs and a clearance probe on the chassis tree, found gaps D-071 left open. The builder (2026-10-30): "fix all the gaps, so do it properly, and commit step by step". Each gap is fixed in its own commit and recorded here as it lands.
 
@@ -3081,3 +3081,15 @@ Option B2, locating the motor by a close-fit plate pilot and tightening the face
 - The axle rig (axle-stack.md §6 hold 8: drag, current and runout before and after tightening) remains the physical proof.
 
 **BOM changed:** CH-089 body Ø15.96, printed after the seat is tuned.
+
+**3. Tightening torques, the run-in check, the set screw and the motor's rear (J01, J02, J03; no CAD change).**
+
+- **No axle screw had a torque.** Most clamp printed PETG, which creeps if over-tightened, and the face screws can't be reached once the housing is on, so a relaxed clamp would go unseen until the motor shifted. The [axle page §4](../04-print/01-chassis/axle/README.md#4-assembly-one-side) now sets them (K ≈ 0.2):
+  - Motor face screws (CH-030), wheel screws (CH-056) and J04 screws (CH-060): **0.3 N·m**, about 500 N each, 33 MPa under an M3 button head on PETG (yield ~50 MPa). Relaxed to half, the face clamp holds about 3× the 0.4 N·m reaction torque and each wheel screw about 4× its 17 N.
+  - Housing screws (CH-053): **0.4 N·m**, head on the aluminium cap; the limit is the insert turning.
+  - Set screw (CH-055): **0.6 N·m**, about 1 kN on the flat, 3× the 300 N design load and well under the ~3 kN that strips 2 mm of steel thread.
+  - Hub-cap screw (CH-059): **0.2 N·m**.
+  - A torque screwdriver covering 0.2–0.6 N·m joins the tools.
+- **One check of the face screws after the run-in** (axle page §4E): wheel off, set screw loose, housing off, face screws checked at 0.3 N·m, refit by steps 12–16. Re-tightening a screw in place doesn't move the motor, so the plug is needed only if a screw was found loose.
+- **The set screw** (one cup point on the D-flat, 2 mm of thread) stays as designed: 0.6 N·m, Loctite 222 (Henkel's grade for set screws) and a painted witness mark. The axle rig's 200 reversals (axle-stack.md §9 gate 7) remain the proof; this gap stays open until then.
+- **The motor's rear is unsupported** (the clearance probe: the cheeks 1 mm off the gearbox, the J04 heads 1.5 mm, nothing below). Closed by calculation: 110 g with its centre 28.8 mm behind the face (mass register Y 40.2, face 69), at 5 g, is 0.16 N·m. The face screws sit on the motor's horizontal centreline, so the clamp resists it about the gearbox edge on a 12.5 mm lever: 12.5 N against 500 N of preload relaxed to half (40×), and 5.4 N of shear against 150 N of friction (28×). No support is added; the torque and the run-in check keep the clamp.

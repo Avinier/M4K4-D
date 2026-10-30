@@ -68,11 +68,23 @@ For one side. The robot has two, so double every quantity.
 **Tools:**
 - 2 mm hex key: every M3 button head. A straight key reaches all of them since D-071.
 - 1.5 mm hex key: the set screw.
+- Torque screwdriver, adjustable over at least 0.2–0.6 N·m, with 1.5 mm and 2 mm hex bits (torques below).
 - Soldering iron with an M3 insert tip.
 - A bench vice or arbor press with a tube that pushes on a bearing's inner ring only.
 - A file or grinder for the set screw.
 
 **Consumables:** Loctite 641 and 222.
+
+**Tightening torques** ([D-072](../../../03-build/decisions.md#d-072)). Most of these screws clamp printed PETG, which creeps under a high load, so the torques are low and set, not "as tight as it goes":
+
+| Screw | Into | Torque | Why this value |
+|---|---|---|---|
+| Motor face screws, M3 × 6 (CH-030) | The motor's tapped face; head on the 2.8 mm plate | **0.3 N·m** | About 500 N per screw, 33 MPa under the Ø5.7 head, below PETG's ~50 MPa compressive yield. Relaxed to half, the clamp still holds about 3× the 0.4 N·m reaction torque |
+| Housing screws, M3 × 16 (CH-053) | Brass inserts in the plate; head on the aluminium cap | **0.4 N·m** | The head sits on aluminium; the limit is an insert turning in the plate. Stop if one turns |
+| Set screw, M3 × 2.5 (CH-055) | The stub; cup point on the shaft flat | **0.6 N·m** | About 1 kN on the flat, 3× the 300 N it carries at the design torque, and well under the ~3 kN that strips its 2 mm of steel thread |
+| Wheel screws, M3 × 6 (CH-056) | The stub flange; head on the PETG web | **0.3 N·m** | As the face screws. Friction carries about 4× the 17 N each needs, even relaxed to half |
+| Hub-cap screw, M3 × 10 (CH-059) | The stub's spigot end; head on the PETG cap | **0.2 N·m** | It holds only the cap |
+| J04 carrier screws, M3 × 8 (CH-060) | Rail inserts; head in the PETG cheek recess | **0.3 N·m** | As the face screws |
 
 ### A. On the bench
 
@@ -99,7 +111,7 @@ For one side. The robot has two, so double every quantity.
 7. **Housing onto the plate.**
    - Offer the housing (with the plug and cap) to the plate. The plug's bore slides onto the motor shaft, and the motor moves to the housing's axis.
    - Drive the four M3 × 16 screws into the plate inserts, snug.
-8. **Tighten the face screws.** Put the 2 mm key straight in through each cap key hole, housing slot and plug notch, into the face-screw head. Tighten both. The motor is now fixed on the housing's axis.
+8. **Tighten the face screws.** Put the 2 mm key straight in through each cap key hole, housing slot and plug notch, into the face-screw head. Tighten both to 0.3 N·m. The motor is now fixed on the housing's axis.
 9. **Housing off.**
    - Take out the four housing screws and slide the housing (with the cap and plug) off the shaft.
    - Take the cap off and push the plug out.
@@ -118,15 +130,26 @@ The housing goes back on the same four screws in close-fit Ø3.2 holes, within a
 12. **Housing onto the plate, screws loose.**
     - Slide the stub onto the shaft and seat the housing on the plate.
     - Start the four M3 × 16 screws with a straight 2 mm key, **finger-tight only**: the housing must still be able to shift sideways. Since D-071 the Ø21 flange leaves the key 0.35 mm clear.
-13. **Set screw.** With Loctite 222, drive it through the housing slot onto the flat with the 1.5 mm key, and tighten it. The key passes the plate through the D-071 notch. The housing is still loose, so the set screw's push on the shaft moves the housing, not the shaft.
+13. **Set screw.** With Loctite 222, drive it through the housing slot onto the flat with the 1.5 mm key, and tighten it to 0.6 N·m. Then paint a thin line across the screw and the stub: the witness mark that shows if it slips (axle rig, gate 7). The key passes the plate through the D-071 notch. The housing is still loose, so the set screw's push on the shaft moves the housing, not the shaft.
 14. **Let the housing settle on the shaft.** Turn the stub by its flange through a few turns, or run the motor for a few seconds at about 3 V. Stop it.
-15. **Tighten the housing screws** diagonally, in two passes: snug, then tight. Turn the stub between the passes. Never tighten while the motor is running: the key sits 0.35 mm from the flange.
+15. **Tighten the housing screws** diagonally, in two passes: snug, then 0.4 N·m. Turn the stub between the passes. Never tighten while the motor is running: the key sits 0.35 mm from the flange.
     - The stub must turn as freely after the second pass as before the first. If it got stiffer, loosen all four and repeat steps 14–15.
 16. **Check:**
     - The stub turns freely, and there's no end play you can feel.
     - Then, powered, the motor's no-load current at 6.0 V is within max(0.05 A, 10 %) of the motor on its own ([axle-stack.md §9](../../../03-build/01-chassis/v1/research/axle-stack.md#coupon-and-assembly-gates), gate 7).
 
 Then the wheel: [wheels page §4C–D](../wheels/README.md#c-the-wheel-onto-the-stub).
+
+### E. After the run-in (once per side, D-072)
+
+The plastic under the face-screw heads relaxes a little in the first hours, and once the housing is on, those screws can't be reached. So check them once, after the axle rig or the first 30 minutes of driving:
+
+17. Take the wheel off ([wheels page §5](../wheels/README.md#5-disassembly-and-service)), loosen the set screw, and slide the housing off with the cartridge and cap (§5).
+18. Check each face screw at **0.3 N·m**.
+    - If it turns a little before the driver clicks, that's the plastic relaxing. Leave it at 0.3 N·m. Tightening a screw in place doesn't move the motor, so the plug isn't needed.
+    - If a face screw was loose enough to turn by hand, the motor may have shifted. Loosen both and realign with the plug (§4C).
+19. Refit by steps 12–16, with a new drop of Loctite 222 on the set screw and a new witness mark.
+20. Put the wheel back, with the wheel screws at 0.3 N·m (D-070's first-run check).
 
 ## 5. Disassembly and service
 
@@ -162,6 +185,9 @@ and print orientation. Keys are modelled across their corners: 2 mm hex r 1.155,
 |---|---|---|---|---|
 | H | **The M3 × 18 housing screws ended 0.2 mm above the bottom of their blind holes**, 0.51 mm over the gearbox face. Their length tolerance is ±0.35 | A long screw bottoms out before its head clamps the cap: it feels tight, but the bearings aren't held, and the tip can push the plastic onto the gearbox | **M3 × 16**: the tip is 2.2 mm above the hole bottom, with 2.29 mm in the insert | **Fixed**, check §8, planted |
 | I | **The motor alignment had no error budget.** The D-071 plug sat 0.1 mm loose in the seat, and the housing refits within about 0.1 mm, against 0.025 mm of play between the shaft and the stub bore | The motor could be fixed up to about 0.2 mm off the bearing axis. A Ø4 steel shaft can't take that up; the gearbox bushing or the plastic would | **Plug Ø15.8 → Ø15.96**, a close sliding fit printed after the seat is tuned, bore drilled Ø4.0 (§2). **Steps 12–15:** housing screws loose until the set screw is in and the stub has turned, then tightened in two passes. The budget is 0.05 mm (§3) | **Fixed**, check §9, planted |
+| J | **No tightening torques for any axle screw**, and the face screws can't be checked once the housing is on | Over-tightened, the plastic under the heads creeps and the clamp relaxes, and nothing shows it until the motor shifts | A torque table (§4) and one planned check of the face screws after the run-in (§4E): housing off, no plug needed unless a screw was loose | **Fixed** |
+| K | **One set screw on the D-flat carries all the drive torque**: about 300 N on 2 mm of steel thread | Set screws on flats can work loose under reversals | 0.6 N·m with Loctite 222, and a witness mark (step 13). The axle rig's 200 reversals ([axle-stack.md §9](../../../03-build/01-chassis/v1/research/axle-stack.md#coupon-and-assembly-gates), gate 7) prove it | **Open:** rig test, tracked |
+| L | **Nothing supports the back of the motor.** It hangs from two face screws on its horizontal centreline; the cheeks stand 1 mm off it and nothing is under it | A bump tips the motor about the screw line | **Calculated:** 110 g with its centre 28.8 mm behind the face, at 5 g, is 0.16 N·m. The face clamp resists it on a 12.5 mm lever: 12.5 N against 500 N of preload even relaxed to half (40×); the 5.4 N of shear against 150 N of friction (28×). No support is needed while the clamp holds, which J's torque and run-in check keep | **Closed by calculation** |
 | N | **The wheels page still had the pre-D-071 axle order** (M3 × 18, face screws tightened last with the stub in) | Two pages gave different build orders, and one couldn't be done | The wheels page §4B now points here | **Fixed** |
 
 **What passed without change:**

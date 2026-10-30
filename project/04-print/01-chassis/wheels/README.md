@@ -120,6 +120,7 @@ The motor also has **two screws** of its own, the face screws (CH-030). The gear
 **Tools:**
 - 2 mm hex key: every M3 button head here.
 - 1.5 mm hex key: the set screw.
+- Torque screwdriver, 0.2–0.6 N·m, with a 2 mm hex bit ([axle page §4](../axle/README.md#4-assembly-one-side) torques).
 - Soldering iron with an M3 insert tip.
 - Flat steel or glass plate.
 
@@ -153,13 +154,13 @@ bearings and stub go in, because the face screws can't be reached once they are 
 
 1. Push the rim's Ø10 bore onto the spigot until the web sits flat on the flange.
 2. Turn the wheel until the three Ø3.4 holes line up with the flange's tapped holes. There are three positions.
-3. Put a drop of Loctite 222 on each M3 × 6. Drive them in turn, a little at a time, with the 2 mm key until snug.
+3. Put a drop of Loctite 222 on each M3 × 6. Drive them in turn, a little at a time, with the 2 mm key, to 0.3 N·m ([D-072](../../../03-build/decisions.md#d-072)).
 4. Spin the wheel and watch the tyre's edge against something fixed. Wobble means the web isn't flat on the flange.
 
 ### D. The hub cap
 
 1. Set the cap on the hub with its holes over the two pegs (two positions, 180° apart). It should drop flat with no rock.
-2. Drive the M3 × 10 into the stub's centre with the 2 mm key. Hold the tyre while you tighten, so the torque doesn't go into the gearbox. Snug is enough: the screw only holds the cap.
+2. Drive the M3 × 10 into the stub's centre with the 2 mm key. Hold the tyre while you tighten, so the torque doesn't go into the gearbox. 0.2 N·m is enough: the screw only holds the cap.
 
 ## 5. Disassembly and service
 
