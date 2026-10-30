@@ -3137,3 +3137,31 @@ Option B2, locating the motor by a close-fit plate pilot and tightening the face
 **BOM changed:** CH-061 and CH-077 Ø4.0 pilots (J04 7 mm deep); CH-080 Ø3.5 pilot; CH-039 Ø1.6 pilot modelled.
 
 **Not changed:** the body's service-panel inserts (BO-063) are the same OD 4.4 insert in Ø4.3 pilots. They belong to the body print review.
+
+## D-074
+
+**2026-10-30 · Chassis / frame print orientation; flat-bottom fills (CH-001, CH-011; D-033 orientation hold; final v1 CAD) · ACTIVE; `check_frame_print.py` 36/36; first print open**
+
+**Why.** D-033 left the frame modules' print orientation on hold. Every face facing the bed was measured for all six orientations of the three frame prints ([frame page §5](../04-print/01-chassis/frame/README.md#5-printing)):
+
+- **Front module:** deck-down is impossible (the driver posts, fuse bracket and tie bridges stand on the deck top). On an end or a side, the tub walls become 1400–2000 mm² ledges 20 mm deep. Printed as it sits (tub bottom down), the rails, J13 ribs and crossmember stopped at Z 35, 3 mm above the tub's Z 32, so the part stood on the 1.5 mm tub walls alone (477 mm² of bed) with 2588 mm² of underside floating 3 mm up.
+- **Rear module:** deck-down puts the J13 seat face on the bed, but the crossmember strip behind the deck (X −48 to −41) stopped at Z 48, a 924 mm² ledge 8 mm off the bed. Printed bottom down, the deck is a 15 mm cantilever over the motor bay (1499 mm²) and the rails sit 1 mm above the crossmember.
+- **Hatch:** a flat plate; either face down.
+
+**Decision** (builder, 2026-10-30: "let's move to next", the orientation step of the frame review):
+
+1. **Front module prints tub bottom down** (as it sits). The rails, J13 ribs and crossmember run down to **Z 32** (`FRAME_PRINT`, `frame_print_edits()` in `makad-v1.step.py`: +7.23 cm³). The J13 nut sockets and the J10-8 bore stay open; the crossmember fill stops at X 90.5, so its front face keeps 2.2 mm to the shell (a 1.5 mm ledge at its foot, under the 2 mm that prints unsupported). Nothing else is within 1.5 mm: the shell is 11.7 mm below the rails, and the carriers only meet the rail ends at X 17, as before. Bed: 469 → **2879 mm²**.
+2. **Rear module prints deck top down.** The crossmember strip behind the deck rises to the deck top, **Z 56** (+7.39 cm³; body frame and PCB-02 2.0 mm away, shell 2.6 mm). Bed 3567 mm², all of it the J13 seat face and the strip.
+3. **Hatch prints outer face down** (the visible face takes the bed texture). No support.
+4. **What still needs support** (tree supports, PETG; all hidden faces, all open from below or the side for removal):
+   - front: the deck underside at X 17–24, a 7 mm ledge on the motor bay; the two corner pockets beside the tub's front corners and round the J13 sockets (1040 mm² together); the fuse shelf (215 mm², 15 mm up); the tub window head (28 mm²); 1299 mm² in all;
+   - rear: the four crossmember ends beyond the deck (|Y| 56–66) and the tie lug, 202 mm². Filling them up to the deck would touch the carriers and the body frame.
+   - A 45° wedge under the X 17–24 ledge was considered and dropped: it would meet the encoder plug if the motor arrives with its header turned +X (D-072 §4).
+5. **Layers suit the loads.** Both modules print with their layers in the XY plane: the rails bend along the filaments under the wheel loads, the J04 inserts pull along the layers, and the J13 bolts clamp across them. The hatch-boss and driver-post pilots are vertical (round); the J04 and pod pilots are horizontal, 4 mm arches.
+6. **Bed-face care:** the rear module's J13 bolt holes (Ø4.5) and rear pin hole (Ø4.1) open on the bed, where elephant's foot narrows them. Run a Ø4.1 drill through the pin hole by hand after printing; use the slicer's elephant-foot compensation.
+
+**Found, not changed:** the two inner driver posts (Y ±34.04, Ø7) stand half over the battery aperture (edge |Y| 34.0). They print on a little support and carry only a 3 g board, but back each one with a dowel through the aperture (pack out) while pressing its insert. A local deck pad would sit 0.1 mm above the pack strap (J11B).
+
+**Mass:** +14.6 cm³ of printed volume, about +8.4 g at the register's 0.571 g/cm³, low in the frame (front fill Z 32–35, rear strip Z 48–56). The hand-kept mass register (`CHASSIS_PRIMARY_FRAME`, 219.1 g) is not updated here: it lives in the chassis source, which print fixes don't edit (04-print rule 2). Weigh the printed modules (rule 6) and update it from the scale.
+
+**Check:** `final/v1/cad/check_frame_print.py` **36/36** (2026-10-30, about 15 min): D-073's 29 rows plus bed and support area per print (a face sample counts as bridged with walls within 15 mm on both sides, or as a ledge within 2 mm), the sockets and bore open through the fill, the fills clear of every chassis and body part by 1.5 mm (the J04 carriers may touch the rail ends, never overlap), and the unedited modules planted (469 mm² of bed; the rear strip open at Z 54).

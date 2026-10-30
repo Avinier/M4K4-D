@@ -17,10 +17,10 @@ Orientation, critical dimensions and settings are filled in when each part is ex
 
 | ID | Label in the CAD | Qty | Material, colour | Printer | Orientation | Critical | Settings | Status |
 |---|---|---|---|---|---|---|---|---|
-| CH-001 | `CHASSIS_FRAME_FRONT_MODULE` (deck, battery tub, front rails, crossmember, fuse bracket) | 1 | PETG, deep slate | A1 or Guider II | | J04 rail ends and inserts; tub; J13 holes | | TODO |
-| CH-001 | `CHASSIS_FRAME_REAR_MODULE` (deck, rear rails, skid crossmember) | 1 | PETG, deep slate | A1 or Guider II | | J04 rail ends; keel insert bores | | TODO |
+| CH-001 | `CHASSIS_FRAME_FRONT_MODULE` (deck, battery tub, front rails, crossmember, fuse bracket) | 1 | PETG, deep slate | A1 or Guider II | Tub bottom down, as it sits (D-074); tree supports under the deck's X 17–24 ledge, the corner pockets and the fuse shelf (1299 mm²) | J04 rail ends and inserts; tub; J13 holes | | TODO |
+| CH-001 | `CHASSIS_FRAME_REAR_MODULE` (deck, rear rails, skid crossmember) | 1 | PETG, deep slate | A1 or Guider II | Deck top down (D-074); supports only under the four crossmember ends (202 mm²); drill the rear pin hole Ø4.1 | J04 rail ends; keel insert bores | | TODO |
 | CH-001 | `AXLE_MOTOR_CARRIER_L`, `_R` (plate and cheeks, keyed; mirror images) | 2 | PETG, deep slate | A1 | Outboard plate face down; supports only under the square plate's corners (2.5 mm up) | Plate face flat (the housing seats on it); Ø7.6 pilot; 4 insert holes Ø4.0; face-screw counterbores; J04 keys and cheek faces; set-screw notch (D-071) | | TODO |
-| CH-011 | `BATTERY_TUB_BOTTOM_HATCH` | 1 | PETG, deep slate | A1 | | Strap slots; four screw holes | | TODO |
+| CH-011 | `BATTERY_TUB_BOTTOM_HATCH` | 1 | PETG, deep slate | A1 | Outer face down, no supports (D-074) | Strap slots; four screw holes | | TODO |
 | CH-051 | `AXLE_BEARING_HOUSING_L`, `_R` (mirror images) | 2 | PETG, deep slate | A1 | Inboard face down, no supports (D-071) | Ø16 seat, tried with the real bearings; shoulder; 4 × Ø3.2 holes (close fit, D-071); key slots | | TODO |
 | CH-089 | `AXLE_ALIGNMENT_PLUG` (a tool, `PRINT_TOOLS`; not in the robot) | 1 | PETG, any colour | A1 | Outboard end down, no supports | Ø4.05 bore slides on the motor shaft; Ø15.8 body slides into the housing seat | | TODO |
 | CH-004 | `WHEEL_L_RIM_PETG` (one STL serves both sides) | 2 | PETG, slate blue | A1 | Lip side down; tree supports inside the dish under the spoke backs and hub web, PLA interface on the web | Ø10 bore; web underside flat (seats on the stub flange); Ø74 seat and 12 ribs; 6 insert holes (1.0 mm wall to the seat); two hub pegs | | TODO |

@@ -425,6 +425,46 @@ def frame_pilot_edits():
 _FRAME_CUTS, _FRAME_ADDS = frame_pilot_edits()
 
 
+# D-074: frame print orientation. The front module prints as it sits (tub bottom down), but its
+# rails, J13 ribs and crossmember stopped at Z 35, 3 mm above the tub's Z 32: 2588 mm2 of floating
+# underside on 477 mm2 of bed. They now run down to Z 32. The J13 nut sockets and the J10-8 bore
+# stay open; the crossmember fill stops 1.5 mm short of its front face (shell 2.2 mm away). The rear
+# module prints deck down; the crossmember strip behind the deck (X -48 to -41) stopped at Z 48,
+# a 7 mm ledge 8 mm off the bed, and now rises to the deck top (Z 56; body frame and PCB-02 2.0 mm
+# away, shell 2.6 mm).
+FRAME_PRINT = dict(
+    front_floor=32.0, front_old=35.0,
+    front_fill=((17.0, 80.0, 50.0, 58.0), (57.5, 70.5, 58.0, 64.0), (80.0, 90.5, -62.0, 62.0)),  # x0, x1, |y|/y spans
+    j13_sockets=((64.0, 48.0), (64.0, -48.0)), j13_socket_r=5.2,
+    nose_bore=(86.0, -31.0, 2.5),
+    rear_fill=(-48.0, -41.0, -66.0, 66.0, 48.0, 56.0),
+)
+
+
+def frame_print_edits():
+    """D-074 world-frame (label, shape) adds: the front module's flat bottom, the rear deck plane."""
+    from build123d import Box
+    p = FRAME_PRINT
+    z0, z1 = p["front_floor"], p["front_old"] + 0.01
+
+    def box(x0, x1, y0, y1, za, zb):
+        return Box(x1 - x0, y1 - y0, zb - za).moved(Location(((x0 + x1) / 2.0, (y0 + y1) / 2.0, (za + zb) / 2.0)))
+
+    fill = None
+    for x0, x1, y0, y1 in p["front_fill"]:
+        spans = ((y0, y1),) if y0 < 0 else ((y0, y1), (-y1, -y0))
+        for a, b in spans:
+            fill = box(x0, x1, a, b, z0, z1) if fill is None else fill + box(x0, x1, a, b, z0, z1)
+    for x, y in p["j13_sockets"]:
+        fill = fill - _z_cyl(p["j13_socket_r"], z0 - 1.0, z1 + 1.0, x, y)
+    x, y, r = p["nose_bore"]
+    fill = fill - _z_cyl(r, z0 - 1.0, z1 + 1.0, x, y)
+    return [(r"CHASSIS_FRAME_FRONT_MODULE", fill), (r"CHASSIS_FRAME_REAR_MODULE", box(*p["rear_fill"]))]
+
+
+_FRAME_PRINT_ADDS = frame_print_edits()
+
+
 # D-072: the M3 x 18 housing screws ended 0.2 mm short of the bottom of their blind holes,
 # 0.51 mm above the gearbox face. ISO 7380's length tolerance on 18 mm is +-0.35 (js15), so a
 # long screw could bottom out before its head clamped the cap, and push the skin onto the
@@ -549,6 +589,9 @@ DROID_ADDS = [
     *_AXLE_ADDS,
     # D-073: frame insert pilots Ø4.3 -> Ø4.0 (J04 rail ends, J11A bosses), driver posts Ø3.9 -> Ø3.5.
     *_FRAME_ADDS,
+    # D-074: the front module's rails, J13 ribs and crossmember down to the tub's Z 32 (prints tub
+    # bottom down on one flat face); the rear crossmember strip behind the deck up to Z 56 (deck down).
+    *_FRAME_PRINT_ADDS,
 ]
 DROID_MOVES = [
     # D-068 amended: C3 GH headers and plugs into the three proved rows; the J10-1 plug reserve down
