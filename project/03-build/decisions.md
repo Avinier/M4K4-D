@@ -3036,3 +3036,19 @@ Option B2, locating the motor by a close-fit plate pilot and tightening the face
 - The DXF for the aluminium caps (CH-052).
 - Ordering the bearings and motors.
 - The physical gates in axle-stack §9: the 100 N bearing pull test, the J04 carrier fit, the axle rig, and powered acceptance including no-load current after the face screws are tightened.
+
+**Amended 2026-10-30 (builder: "so do the f and g"): fabrication files, and the outward retention closed by calculation.**
+
+- **F, fabrication files:** generated from the final droid geometry into `final/v1/fab/` by [`export_axle_fab.py`](final/v1/cad/export_axle_fab.py) and [`stub_drawing.py`](final/v1/cad/stub_drawing.py).
+  - The stub: [`CH-012_stub_drawing.pdf`](final/v1/fab/CH-012_stub_drawing.pdf) (rev A, A3 2:1) and `CH-012_stub.step`.
+    - The sheet carries Ø8 k5 (8.001/8.007), Ø10 g6 (9.986/9.995) and the Ø4.05 H8 bore (4.050/4.068), all turned in one setup and concentric within 0.02.
+    - The shoulder and flange faces are square to the axis within 0.02, and the shoulder corner is sharp or undercut (≤ R0.15).
+    - Threads: the radial M3 through one wall only, 3 × M3 on Ø16 PCD, and the spigot end M3 8 deep.
+    - Material EN8 or C45, quantity 3, ISO 2768-m.
+  - The cap: `CH-052_cap.dxf` (eight circles, mm) and `CH-052_cap.step`, in 1.2 mm 5052-H32 or 6061-T6.
+  - Placing orders and getting quotes is the builder's ([axle page §7](../04-print/01-chassis/axle/README.md#7-to-order-or-make)).
+- **G, outward retention:** the [Loctite 641 TDS](https://datasheets.tdx.henkel.com/LOCTITE-641-en_GL.pdf) gives ≥ 6.5 N/mm² on steel (ISO 10123, 24 h at 22 °C).
+  - Two inner rings (251 mm²) hold ≥ 1,630 N. One ring at half strength holds about 410 N, about 4× the 100 N design load, without counting the k5 friction.
+  - The cap: about 35 MPa bending at 100 N, against ≥ 160 MPa yield (about 4.5×), a rough screen.
+  - No load for 24 h at about 22 °C after pressing.
+  - G is closed by calculation. The bench pull test (10.2 kg hung from the spigot, < 0.10 mm movement; [axle page §9](../04-print/01-chassis/axle/README.md#9-outward-retention-of-the-bearings-gap-g)) checks workmanship when the parts arrive. The DIN 6799 clip stays the fallback.

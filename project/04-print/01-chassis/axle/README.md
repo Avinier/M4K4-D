@@ -7,6 +7,7 @@ the 2026-10-30 review with their fixes ([D-071](../../../03-build/decisions.md#d
 
 - **Geometry:** chassis v1, [`body_chassis_model.py`](../../../03-build/01-chassis/v1/cad/body_chassis_model.py). The design reasoning is in [axle-stack.md](../../../03-build/01-chassis/v1/research/axle-stack.md) (D-007, D-012, D-030). The D-071 fixes are droid edits in [`makad-v1.step.py`](../../../03-build/final/v1/cad/makad-v1.step.py). STLs are exported from the final assembly with those edits.
 - **Check:** [`check_axle_stack.py`](../../../03-build/final/v1/cad/check_axle_stack.py), 21/21 on 2026-10-30.
+- **Fabrication files** (non-printed parts) in [`final/v1/fab/`](../../../03-build/final/v1/fab/): the stub drawing and STEP (CH-012), and the cap DXF and STEP (CH-052) (§7).
 - **View:** [`axle-alignment.step.py`](http://127.0.0.1:3245/Users/avinier/robotics/makad/project/03-build/final/v1/cad?file=axle-alignment.step.py) shows the left side twice: the alignment step (§4C) and the finished stack.
 - **Wheel side:** the wheel goes on after this; see the [wheels page](../wheels/README.md).
 
@@ -144,8 +145,8 @@ and print orientation. Keys are modelled across their corners: 2 mm hex r 1.155,
 | C | **The set-screw key rubbed the edge of the plate hub by 0.07 mm** | The key binds on the plate | **A notch** 3 mm wide and 0.5 mm deep in the carrier hub over the set screw | **Fixed**, check §4, planted |
 | D | **Print orientations weren't recorded** (the BOM said only "axle vertical") | The lab might print the housing upside down, putting the bearing shoulder on supports | Housing inboard face down (no overhangs); carrier outboard face down; plug on its end (§2) | **Fixed** |
 | E | **axle-stack.md still planned test coupons:** bearing bores Ø15.90–16.10 in 0.05 mm steps, plus spigot and insert sections | Conflicts with the no-test-print rule | The housings and rims are the test parts; correct with XY hole compensation | **Fixed** in the docs |
-| F | **Long-lead parts not started:** the stub has no drawing or quote; the bearings, motor and screws aren't ordered; the aluminium caps have no maker; the set screws need grinding | **The stub is the critical path**, since it has to be drawn, quoted and turned | §7 lists what to order and make | **Open**: the stub drawing is the next step |
-| G | **No positive outward stop for the bearing inner rings** (k5 plus Loctite 641, no circlip) | Known, by design (D-007) | The 100 N pull test on the bench (§8); the fallback is a DIN 6799 clip and shim | **Open**, by design |
+| F | **Long-lead parts not started:** the stub had no drawing or quote; the bearings, motor and screws aren't ordered; the aluminium caps had no maker or cut file; the set screws need grinding | **The stub is the critical path**, since it has to be drawn, quoted and turned | **Made:** the stub's shop drawing ([CH-012_stub_drawing.pdf](../../../03-build/final/v1/fab/CH-012_stub_drawing.pdf), rev A, A3 2:1, with fits, threads and turning notes) and its STEP; the cap's laser-cut DXF ([CH-052_cap.dxf](../../../03-build/final/v1/fab/CH-052_cap.dxf), eight circles) and STEP. All are generated from the final droid geometry by `export_axle_fab.py` and `stub_drawing.py`. §7 is the order list | **Ready to send.** Placing the orders and getting quotes is yours (§7) |
+| G | **No positive outward stop for the bearing inner rings** (k5 plus Loctite 641, no circlip) | Known, by design (D-007) | **Calculated (§9):** at least 3.7× the 100 N design load even with one ring at half strength. The aluminium cap is about 4.5× on yield, as a rough estimate. The bench pull test (§9) checks the workmanship. The DIN 6799 clip stays the fallback if a test fails | **Closed by calculation**; the test runs when the parts arrive |
 
 **What passed without change:**
 - The motor drops into the carrier from above or below with nothing in the way.
@@ -156,9 +157,9 @@ and print orientation. Keys are modelled across their corners: 2 mm hex r 1.155,
 
 | What | Qty for the robot | Where | Note |
 |---|---|---|---|
-| Stub, CH-012 | 2 (+1 spare) | A local turning shop | Needs a drawing from the CAD first, with the flange at Ø21 (D-071) |
+| Stub, CH-012 | 3 (2 + 1 spare) | A local turning shop | Send [CH-012_stub_drawing.pdf](../../../03-build/final/v1/fab/CH-012_stub_drawing.pdf) and [CH-012_stub.step](../../../03-build/final/v1/fab/CH-012_stub.step). EN8 or C45; k5, g6 and H8 limits are on the sheet |
 | 688 ZZ bearings, CH-015 | 4 | OnlyScrews listing (sold out at the last check) | Confirm the maker, ZZ shields and dimensions on the delivered lot |
-| Aluminium caps, CH-052 | 2 | Laser cutting from 1.2 mm aluminium | Needs a DXF from the CAD |
+| Aluminium caps, CH-052 | 2 (+2 spare) | Laser or waterjet cutting from 1.2 mm aluminium, 5052-H32 or 6061-T6 | Send [CH-052_cap.dxf](../../../03-build/final/v1/fab/CH-052_cap.dxf) (mm, layer CUT): OD 32, ID 12.5, 4 × Ø3.4 on R12, 2 × Ø2.6 on R8.5. Deburr; the ID face bears on the outer rings |
 | Gearmotors, CH-014 | 2 | ThinkRobotics MOT3001-6V230RPM | Measure the face holes, pilot and shaft flat on arrival (axle-stack.md §7) |
 | M3 × 18 button heads, CH-053 | 8 | OnlyScrews | |
 | M3 × 6 button heads, CH-030 | 4 | OnlyScrews (the same as the wheel screws) | |
@@ -166,7 +167,7 @@ and print orientation. Keys are modelled across their corners: 2 mm hex r 1.155,
 | M3 × 4 slant-knurled inserts, CH-054 | 8 | Ordered | |
 | Loctite 222 and 641, CH-057 | 1 each | | |
 
-## 8. Check and proof
+## 8. Check and proof (CAD)
 
 [`check_axle_stack.py`](../../../03-build/final/v1/cad/check_axle_stack.py) builds the chassis
 tree with and without the droid edits, in about 1.5 min. Run it as in the
@@ -183,9 +184,54 @@ tree with and without the droid edits, in about 1.5 min. Run it as in the
 6. **Print orientation:** housing and plug have no overhangs; the carrier's are listed in §2.
 7. **Planted:** the unedited Ø24 flange blocks every housing-screw key (4.126 mm³ each), and the unedited carrier blocks the set-screw key (0.338 mm³).
 
-**Physical proof still to come** ([axle-stack.md §9](../../../03-build/01-chassis/v1/research/axle-stack.md#coupon-and-assembly-gates)):
+**Physical proof still to come** ([axle-stack.md §9](../../../03-build/01-chassis/v1/research/axle-stack.md#coupon-and-assembly-gates), and §9 below):
 - The 100 N bearing pull test.
 - The first housing with the real bearings.
 - The J04 carrier to the rails.
 - The axle rig: deflection, then running clearance, then proof loads.
 - Powered acceptance: runout ≤ 0.30 mm, end play ≤ 0.10 mm, current within the limit after the face screws are tightened, and 200 reversals with no set-screw shift.
+
+## 9. Outward retention of the bearings (gap G)
+
+Pulling the wheel outward, by lifting the robot by one wheel or by a side knock, tries
+to pull the stub out through the bearings. Nothing positive stops that. What holds it is
+the bond between the stub and the two inner rings (k5 press fit plus Loctite 641), then
+the outer rings on the aluminium cap, and the cap on the four housing screws. D-007 sets
+the design load at **100 N**, about 4× the load of lifting the robot by one wheel.
+
+**Bond.** The [Loctite 641 datasheet](https://datasheets.tdx.henkel.com/LOCTITE-641-en_GL.pdf)
+(Henkel TDS, May 2004) gives a compressive shear strength of **≥ 6.5 N/mm²** on steel pins
+and collars (ISO 10123, after 24 h at 22 °C). At 50 °C it keeps about 90 % of that.
+
+| Case | Bonded area | Hold | Against 100 N |
+|---|---|---|---|
+| Both inner rings, datasheet strength | 2 × π × 8 × 5 = 251 mm² | ≥ 1,630 N | 16× |
+| One ring only, at half strength (poor coverage on a press fit, part cure, warm) | 126 mm² × 3.25 N/mm² | ≈ 410 N | **≈ 4×** |
+
+This doesn't count the k5 press fit's own friction. G is closed by calculation: even the
+pessimistic case is about 4× the design load.
+
+**The rest of the path** (rough screens):
+
+- **Cap.** 1.2 mm aluminium, clamped by four screws at R12, loaded by the outer rings at R6.25–8. Treated as a strip about 60 mm round and 5 mm in lever arm, 100 N gives about 35 MPa of bending, against 160–275 MPa yield for 5052-H32 or 6061-T6: about 4.5×.
+- **Housing screws.** Four, so 25 N each into the brass inserts.
+- The pull test below proves all of it together.
+
+**Assembly rules from the datasheet:**
+
+- Clean both surfaces first.
+- Coat both the stub seat and the inner-ring bore.
+- Press in one steady stroke on the inner ring.
+- No load for **24 h at about 22 °C**: steel reaches near full strength by then and full strength by 72 h. Cold slows it a lot: at 5 °C it reaches most of its strength only after about a day.
+- To take it apart later, heat to about 250 °C.
+
+**Bench pull test** (per side, once the cartridge has cured; no motor needed):
+
+1. Build the side up to step 13 without the motor: carrier, housing with the cartridge, cap and four screws.
+2. Clamp the carrier in a vice, axle vertical, spigot down.
+3. Screw an M3 screw with a wire loop, or an M3 eye bolt, into the spigot's tapped end, at least 6 mm deep.
+4. Mark or measure the flange-to-cap gap with feeler gauges or a dial gauge.
+5. Hang **10.2 kg** (100 N) on the loop for 10 s: a bag of rice or water bottles, weighed. Lower it gently; don't drop it.
+6. **Pass:** the gap changes by less than 0.10 mm and is back after unloading; the stub still turns freely; nothing cracks and no insert moves.
+7. **If it fails:** the fallback is a DIN 6799 clip and shim inboard of the first bearing. That needs about 1.5 mm and moves the set screw, so it means a new decision and a stub revision.
+
