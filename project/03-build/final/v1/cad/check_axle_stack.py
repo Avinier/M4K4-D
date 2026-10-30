@@ -19,6 +19,9 @@ The axle is the line X 0, Z 42; |Y| runs outboard. Keys are modelled across thei
    outboard end; the faces that would need support are listed.
 7. Planted: the unedited stub blocks the housing-screw key, and the unedited carrier the
    set-screw key.
+8. Housing screws, M3 x 16 (D-072): the tip stays clear of the bottom of its blind hole by
+   more than the worst-case stack (TIP_STACK), and a screw at its short limit still
+   engages the insert by MIN_ENGAGE. Planted: the old M3 x 18 does not.
 """
 
 import importlib.util
@@ -37,6 +40,11 @@ spec.loader.exec_module(entry)
 
 M = entry.AXLE_FIX
 KEY2, KEY15 = 1.155, 0.87
+SCREW = "AXLE_CAP_SCREW_M3X16_"   # D-072; the subsystem tree has AXLE_CAP_SCREW_M3X18_
+# Tip stack for the housing screws, mm: ISO 7380 length +0.35 (js15, 10-18 mm), 1.2 mm
+# aluminium cap -0.08, and 0.5 for plastic pushed below the insert when it is melted in.
+TIP_STACK = 0.35 + 0.08 + 0.5
+MIN_ENGAGE = 1.5                  # thread in the insert with the screw 0.35 short: 3 pitches
 TOL = 1e-3
 results = []
 
@@ -102,6 +110,22 @@ def overhangs(shape, side, bed, up):
     return res
 
 
+def screw_tip(tree, name, carrier, insert):
+    """(tip to hole bottom, thread in the insert, plastic skin under the hole), mm.
+
+    The hole bottom is found by probing the carrier along the screw axis, from the gearbox
+    face (|Y| 69) to the tip, with a thin rod: whatever plastic it meets is the skin.
+    """
+    bb = tree[name].bounding_box()
+    x, z, tip = bb.center().X, bb.center().Z, min(abs(bb.min.Y), abs(bb.max.Y))
+    side = 1 if bb.center().Y > 0 else -1
+    rod = entry._axle_cyl(side, 0.5, 69.0, tip, x, z - 42.0)
+    skin = common(carrier, rod) / (math.pi * 0.25)
+    ib = insert.bounding_box()
+    insert_top = max(abs(ib.min.Y), abs(ib.max.Y))
+    return tip - (69.0 + skin), insert_top - max(tip, min(abs(ib.min.Y), abs(ib.max.Y))), skin
+
+
 def near_axle(parts, side, tag):
     """Leaves of one side's axle and wheel, by label."""
     keep = ("AXLE_", "BEARING_688ZZ", "MOTOR_", f"WHEEL_{tag}_", "J04_")
@@ -126,7 +150,7 @@ def main():
               f"{outside:.4f} mm3 outside R{r_new}; ring R9.6-{r_new} {ring:.2f}/{ring_full:.2f} mm3; "
               f"{r_new - 8.0 - 1.5:.1f} mm of steel outside the wheel-screw threads")
 
-        screws = [k for k in local if k.startswith(f"AXLE_CAP_SCREW_M3X18_{tag}_")]
+        screws = [k for k in local if k.startswith(f"{SCREW}{tag}_")]
         blocked = {}
         for name in screws:
             bb = local[name].bounding_box()
@@ -153,6 +177,20 @@ def main():
         check(f"{tag} housing screw holes Ø{2 * hole:.1f}", abs(filled - full) < 0.05 and clash < TOL,
               f"wall R{hole}-1.7 {filled:.2f}/{full:.2f} mm3; screws in the housing {clash:.4f} mm3; "
               f"{hole - 1.5:.2f} mm radial on the M3 shank")
+
+        tips = {}
+        for prefix, tree in ((SCREW, local), ("AXLE_CAP_SCREW_M3X18_", before)):
+            tips[prefix] = [screw_tip(tree, name, tree[f"AXLE_MOTOR_CARRIER_{tag}"],
+                                      tree[f"AXLE_PLATE_INSERT_M3_{tag}_{name[-1]}"])
+                            for name in sorted(k for k in tree if k.startswith(f"{prefix}{tag}_"))]
+        new, old = tips[SCREW], tips["AXLE_CAP_SCREW_M3X18_"]
+        margin, engage = min(t[0] for t in new), min(t[1] for t in new) - 0.35
+        check(f"{tag} housing screw tips clear of the hole bottom, M3 x 16", len(new) == 4 and margin > TIP_STACK
+              and engage >= MIN_ENGAGE,
+              f"tip {margin:.2f} mm above the hole bottom (stack {TIP_STACK:.2f}); {engage:.2f} mm in the insert "
+              f"at the short limit (min {MIN_ENGAGE}); {min(t[2] for t in new):.2f} mm of plastic over the gearbox face")
+        check(f"{tag} planted: the M3 x 18 tip is within the stack", len(old) == 4 and min(t[0] for t in old) < TIP_STACK,
+              f"{min(t[0] for t in old):.2f} mm above the hole bottom")
 
         ss = local[f"WHEEL_{tag}_SET_SCREW_M3X2_5"].bounding_box()
         key = zcyl(KEY15, ss.max.Z + 0.05, 75.0, 0.0, side * 74.8)
@@ -193,7 +231,7 @@ def main():
         check(f"{tag} plug prints on its outboard end with no support", not overhangs(plug, side, M["plug_body"][2], -1), "no overhang faces")
 
     blocked = {}
-    for name in [k for k in parts if k.startswith("AXLE_CAP_SCREW_M3X18_L_")]:
+    for name in [k for k in parts if k.startswith(f"{SCREW}L_")]:
         bb = parts[name].bounding_box()
         key = entry._axle_cyl(1, KEY2, bb.max.Y + 0.05, 130.0, bb.center().X, bb.center().Z - 42.0)
         blocked[name] = round(common(key, before["WHEEL_L_STUB_SHAFT_8MM"]), 3)

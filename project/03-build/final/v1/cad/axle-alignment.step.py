@@ -27,7 +27,7 @@ def _load(name, filename):
 _robot = _load("makad_v1_entry", "makad-v1.step.py")
 import body_v1_model as B  # noqa: E402  (path set up by the entry)
 
-ALIGN = ("AXLE_MOTOR_CARRIER_L", "AXLE_BEARING_HOUSING_L", "AXLE_BEARING_CAP_L", "AXLE_CAP_SCREW_M3X18_L_",
+ALIGN = ("AXLE_MOTOR_CARRIER_L", "AXLE_BEARING_HOUSING_L", "AXLE_BEARING_CAP_L", "AXLE_CAP_SCREW_M3X16_L_",
          "AXLE_PLATE_INSERT_M3_L_", "AXLE_MOTOR_SCREW_M3X6_L_", "MOTOR_L_MOT3001", "MOTOR_L_OUTPUT_SHAFT")
 BUILT = ALIGN + ("BEARING_688ZZ_L_", "WHEEL_L_STUB_SHAFT_8MM", "WHEEL_L_SET_SCREW")
 

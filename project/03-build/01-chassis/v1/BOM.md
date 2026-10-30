@@ -92,7 +92,7 @@ The canonical [project BOM](../../BOM.csv) and this chassis snapshot are the sou
 | CH-039 | M2 × 5 IMU screw | 2 | CANDIDATE |
 | CH-048 | [ISO 7380 M3 × 8 tyre clamp-ring screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-8-screw-pack-of-20) | 12 | CANDIDATE |
 | CH-049 | [M3 × ~4 mm rim heat-set insert](https://onlyscrews.in/products/m3-x-4mm-3d-printing-brass-threaded-inserts-dia-3mm-length-4mm) | 12 | CANDIDATE |
-| CH-053 | ISO 7380 M3 × 18 bearing housing and cap screw | 8 | CANDIDATE |
+| CH-053 | [ISO 7380 M3 × 16 bearing housing and cap screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-16-screw-pack-of-20), SS304 ([D-072](../../decisions.md#d-072); was M3 × 18) | 8 | CANDIDATE |
 | CH-054 | [M3 × 4 mm motor plate heat-set insert](https://onlyscrews.in/products/m3-x-4mm-3d-printing-brass-threaded-inserts-dia-3mm-length-4mm) | 8 | CANDIDATE |
 | CH-055 | [ISO 4029 M3 × 3 cup-point set screw, SS304](https://onlyscrews.in/products/m3-x-3mm-grub-screw-ss304-dia-3mm-length-3mm), faced to 2.5 mm (D-030) | 2 | CANDIDATE |
 | CH-056 | [ISO 7380 M3 × 6 wheel-to-stub screw](https://onlyscrews.in/products/hex-allen-button-head-m3-x-6-screw-pack-of-20), Loctite 222 ([D-070](../../decisions.md#d-070)) | 6 | CANDIDATE |

@@ -26,6 +26,7 @@ import layout_model
 from layout_model import build_parts
 from inspection_scene import parts_scene
 import details, harness, mass_layout, motion_envelope, optics
+import body_v1_model as _body
 from body_v1_model import (build_body_assembly, chassis_v1_reference,
                            HEAD_ORIGIN_IN_CHASSIS, yaw_drive_moving_local)
 
@@ -340,6 +341,9 @@ AXLE_FIX = dict(
     plug_bore=2.025,                            # Ø4.05, as the stub: 6.9 mm on the shaft
     plug_notch=(7.2, 1.4),                      # cut outside R7.2 within +-1.4 of each key axis
     set_notch=(1.5, 73.5, 45.0, 59.0),          # half width X, |Y| from (to the face), Z span
+    # D-072: ISO 7380 M3 x 16 housing screws (were M3 x 18): length, head seat |Y| (cap top),
+    # head radius and height. The tip moves from |Y| 69.71 to 71.71.
+    cap_screw=(16.0, 87.71, 2.85, 1.65),
 )
 
 
@@ -369,6 +373,27 @@ def axle_edits():
 _AXLE_CUTS, _AXLE_ADDS = axle_edits()
 
 
+# D-072: the M3 x 18 housing screws ended 0.2 mm short of the bottom of their blind holes,
+# 0.51 mm above the gearbox face. ISO 7380's length tolerance on 18 mm is +-0.35 (js15), so a
+# long screw could bottom out before its head clamped the cap, and push the skin onto the
+# gearbox. M3 x 16 ends 2.2 mm short of the hole bottom and keeps 2.29 mm in the 4 mm insert.
+def axle_cap_screws():
+    """D-072 (group pattern, labelled world-frame screw) inserts: four M3 x 16 per side."""
+    length, seat, head_r, head_h = AXLE_FIX["cap_screw"]
+    out = []
+    for side, tag in ((1, "L"), (-1, "R")):
+        for index, angle in enumerate(AXLE_FIX["screw_angles"], start=1):
+            x = AXLE_FIX["screw_r"] * math.cos(math.radians(angle))
+            z = AXLE_FIX["screw_r"] * math.sin(math.radians(angle))
+            screw = _axle_cyl(side, head_r, seat, seat + head_h, x, z) + _axle_cyl(side, 1.5, seat - length, seat, x, z)
+            out.append((rf"AXLE_HOUSING_HARDWARE_{tag}",
+                        _body._paint(screw, f"AXLE_CAP_SCREW_M3X16_{tag}_{index}", _body.STEEL, 1.0)))
+    return out
+
+
+_AXLE_SCREW_INSERTS = axle_cap_screws()
+
+
 def axle_alignment_plug(side=1):
     """D-071 tool CH-089, placed in the left (or right) housing as it is used, world frame."""
     m = AXLE_FIX
@@ -394,10 +419,13 @@ DROID_REMOVES = [
     r"C3_ESP32_S3_DEVKITC_STEP", r"C3_DEVKIT_HEADER_ROW_[12]", r"C3_CARRIER_M25_SCREW_(HEAD|SHANK)_[24]",
     # D-068 amended: the 7.26 mm Micro-Fit placeholder blocks, replaced by the real housing below.
     r"C3_J10_1_MICROFIT3_2P_(RA_HEADER|MATED_PLUG)",
+    # D-072: the M3 x 18 housing screws, replaced by M3 x 16 below.
+    r"AXLE_CAP_SCREW_M3X18_[LR]_[1-4]",
 ]
 DROID_INSERTS = [
     (r"C3_CARRIER_PCB10_WITH_DEVKITC", pcb10_devkitc()),
     *[(r"C3_CARRIER_PCB10_WITH_DEVKITC", shape) for shape in pcb10_j10_1()],
+    *_AXLE_SCREW_INSERTS,  # D-072: M3 x 16 housing screws
 ]
 
 

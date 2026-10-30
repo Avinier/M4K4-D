@@ -6,7 +6,7 @@ the stack works, how to put one side together and take it apart, and the gaps fo
 the 2026-10-30 review with their fixes ([D-071](../../../03-build/decisions.md#d-071)).
 
 - **Geometry:** chassis v1, [`body_chassis_model.py`](../../../03-build/01-chassis/v1/cad/body_chassis_model.py). The design reasoning is in [axle-stack.md](../../../03-build/01-chassis/v1/research/axle-stack.md) (D-007, D-012, D-030). The D-071 fixes are droid edits in [`makad-v1.step.py`](../../../03-build/final/v1/cad/makad-v1.step.py). STLs are exported from the final assembly with those edits.
-- **Check:** [`check_axle_stack.py`](../../../03-build/final/v1/cad/check_axle_stack.py), 21/21 on 2026-10-30.
+- **Check:** [`check_axle_stack.py`](../../../03-build/final/v1/cad/check_axle_stack.py), 25/25 on 2026-10-30 (D-071, D-072).
 - **Fabrication files** (non-printed parts) in [`final/v1/fab/`](../../../03-build/final/v1/fab/): the stub drawing and STEP (CH-012), and the cap DXF and STEP (CH-052) (§7).
 - **View:** [`axle-alignment.step.py`](http://127.0.0.1:3245/Users/avinier/robotics/makad/project/03-build/final/v1/cad?file=axle-alignment.step.py) shows the left side twice: the alignment step (§4C) and the finished stack.
 - **Wheel side:** the wheel goes on after this; see the [wheels page](../wheels/README.md).
@@ -24,7 +24,7 @@ For one side. The robot has two, so double every quantity.
 | 688 ZZ bearing, 8 × 16 × 5 | CH-015 | Buy | Chrome steel | 2 |
 | Gearmotor, ThinkRobotics MOT3001-6V230RPM with encoder | CH-014 | Buy | — | 1 |
 | Motor face screw, ISO 7380 M3 × 6 | CH-030 | Buy | Steel | 2 |
-| Housing screw, ISO 7380 M3 × 18, through cap and housing into the plate | CH-053 | Buy | Steel | 4 |
+| Housing screw, ISO 7380 M3 × 16 (D-072; was M3 × 18), through cap and housing into the plate | CH-053 | Buy | SS304 | 4 |
 | Heat-set insert, M3 × 4 slant knurled, OD 4.4 (ordered; the same as the rims), in the plate's Ø4.0 holes | CH-054 | Buy | Brass | 4 |
 | Set screw, ISO 4029 M3 × 3 cup point, ground to 2.5 mm at the hex end | CH-055 | Buy, then grind | SS304 | 1 |
 | Loctite 641 (bearings on the stub) and 222 (set screw, face screws) | CH-057 | Buy | — | — |
@@ -93,7 +93,7 @@ For one side. The robot has two, so double every quantity.
 6. **Plug into the housing.** Put the alignment plug in the housing's bearing seat with its small nose toward the plate. Put the aluminium cap over it: the plug can't fall out now.
 7. **Housing onto the plate.**
    - Offer the housing (with the plug and cap) to the plate. The plug's bore slides onto the motor shaft, and the motor moves to the housing's axis.
-   - Drive the four M3 × 18 screws into the plate inserts, snug.
+   - Drive the four M3 × 16 screws into the plate inserts, snug.
 8. **Tighten the face screws.** Put the 2 mm key straight in through each cap key hole, housing slot and plug notch, into the face-screw head. Tighten both. The motor is now fixed on the housing's axis.
 9. **Housing off.**
    - Take out the four housing screws and slide the housing (with the cap and plug) off the shaft.
@@ -112,7 +112,7 @@ The housing goes back on the same four screws in close-fit Ø3.2 holes. It retur
     - Turn the motor shaft so its D-flat also faces up. Turn it gently by hand through the gearbox, or with a short pulse of power.
 12. **Housing onto the plate.**
     - Slide the stub onto the shaft and seat the housing on the plate.
-    - Drive the four M3 × 18 screws with a straight 2 mm key. Since D-071 the Ø21 flange leaves the key 0.35 mm clear.
+    - Drive the four M3 × 16 screws with a straight 2 mm key. Since D-071 the Ø21 flange leaves the key 0.35 mm clear.
 13. **Set screw.** With Loctite 222, drive it through the housing slot onto the flat with the 1.5 mm key. The key passes the plate through the D-071 notch.
 14. **Check:**
     - The stub turns freely, and there's no end play you can feel.
@@ -148,6 +148,13 @@ and print orientation. Keys are modelled across their corners: 2 mm hex r 1.155,
 | F | **Long-lead parts not started:** the stub had no drawing or quote; the bearings, motor and screws aren't ordered; the aluminium caps had no maker or cut file; the set screws need grinding | **The stub is the critical path**, since it has to be drawn, quoted and turned | **Made:** the stub's shop drawing ([CH-012_stub_drawing.pdf](../../../03-build/final/v1/fab/CH-012_stub_drawing.pdf), rev A, A3 2:1, with fits, threads and turning notes) and its STEP; the cap's laser-cut DXF ([CH-052_cap.dxf](../../../03-build/final/v1/fab/CH-052_cap.dxf), eight circles) and STEP. All are generated from the final droid geometry by `export_axle_fab.py` and `stub_drawing.py`. §7 is the order list | **Ready to send.** Placing the orders and getting quotes is yours (§7) |
 | G | **No positive outward stop for the bearing inner rings** (k5 plus Loctite 641, no circlip) | Known, by design (D-007) | **Calculated (§9):** at least 3.7× the 100 N design load even with one ring at half strength. The aluminium cap is about 4.5× on yield, as a rough estimate. The bench pull test (§9) checks the workmanship. The DIN 6799 clip stays the fallback if a test fails | **Closed by calculation**; the test runs when the parts arrive |
 
+**Found on the second pass, 2026-10-30 ([D-072](../../../03-build/decisions.md#d-072)):**
+
+| # | Gap | Effect | Fix | Status |
+|---|---|---|---|---|
+| H | **The M3 × 18 housing screws ended 0.2 mm above the bottom of their blind holes**, 0.51 mm over the gearbox face. Their length tolerance is ±0.35 | A long screw bottoms out before its head clamps the cap: it feels tight, but the bearings aren't held, and the tip can push the plastic onto the gearbox | **M3 × 16**: the tip is 2.2 mm above the hole bottom, with 2.29 mm in the insert | **Fixed**, check §8, planted |
+| N | **The wheels page still had the pre-D-071 axle order** (M3 × 18, face screws tightened last with the stub in) | Two pages gave different build orders, and one couldn't be done | The wheels page §4B now points here | **Fixed** |
+
 **What passed without change:**
 - The motor drops into the carrier from above or below with nothing in the way.
 - The set-screw key's long arm has a clear path outboard once the wheel is off.
@@ -161,7 +168,7 @@ and print orientation. Keys are modelled across their corners: 2 mm hex r 1.155,
 | 688 ZZ bearings, CH-015 | 4 | OnlyScrews listing (sold out at the last check) | Confirm the maker, ZZ shields and dimensions on the delivered lot |
 | Aluminium caps, CH-052 | 2 (+2 spare) | Laser or waterjet cutting from 1.2 mm aluminium, 5052-H32 or 6061-T6 | Send [CH-052_cap.dxf](../../../03-build/final/v1/fab/CH-052_cap.dxf) (mm, layer CUT): OD 32, ID 12.5, 4 × Ø3.4 on R12, 2 × Ø2.6 on R8.5. Deburr; the ID face bears on the outer rings |
 | Gearmotors, CH-014 | 2 | ThinkRobotics MOT3001-6V230RPM | Measure the face holes, pilot and shaft flat on arrival (axle-stack.md §7) |
-| M3 × 18 button heads, CH-053 | 8 | OnlyScrews | |
+| M3 × 16 button heads, CH-053 | 8 | [OnlyScrews](https://onlyscrews.in/products/hex-allen-button-head-m3-x-16-screw-pack-of-20), SS304 | Not M3 × 18: it can bottom out in the plate (D-072) |
 | M3 × 6 button heads, CH-030 | 4 | OnlyScrews (the same as the wheel screws) | |
 | M3 × 3 cup-point set screws, CH-055 | 2 (+2 spare) | OnlyScrews | Ground to 2.5 mm |
 | M3 × 4 slant-knurled inserts, CH-054 | 8 | Ordered | |
@@ -171,7 +178,7 @@ and print orientation. Keys are modelled across their corners: 2 mm hex r 1.155,
 
 [`check_axle_stack.py`](../../../03-build/final/v1/cad/check_axle_stack.py) builds the chassis
 tree with and without the droid edits, in about 1.5 min. Run it as in the
-[final v1 README](../../../03-build/final/v1/README.md). **21/21 pass on 2026-10-30:**
+[final v1 README](../../../03-build/final/v1/README.md). **25/25 pass on 2026-10-30:**
 
 1. **Flange Ø21:** nothing outside R10.5, the rest of the flange intact, 1.0 mm of steel outside the wheel-screw threads.
 2. **Housing screws:** all four reachable with a straight 2 mm key with the stub in, 0.345 mm off the flange.
@@ -183,6 +190,7 @@ tree with and without the droid edits, in about 1.5 min. Run it as in the
    - Both face-screw keys are clear through it. With the bearings and stub in its place they're blocked, which is why the plug exists.
 6. **Print orientation:** housing and plug have no overhangs; the carrier's are listed in §2.
 7. **Planted:** the unedited Ø24 flange blocks every housing-screw key (4.126 mm³ each), and the unedited carrier blocks the set-screw key (0.338 mm³).
+8. **Housing screws, M3 × 16 (D-072):** the tips are 2.20 mm above the bottom of their blind holes, against a 0.93 mm worst-case stack (length +0.35, cap −0.08, 0.5 for insert melt), and a screw at its short limit keeps 1.94 mm in the insert (1.5 minimum). Planted: the old M3 × 18 sits 0.20 mm above the bottom.
 
 **Physical proof still to come** ([axle-stack.md §9](../../../03-build/01-chassis/v1/research/axle-stack.md#coupon-and-assembly-gates), and §9 below):
 - The 100 N bearing pull test.

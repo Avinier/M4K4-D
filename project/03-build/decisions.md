@@ -75,6 +75,7 @@ The central record of every decision and change made during the build phase. New
 | [D-069](#d-069) | 2026-10-29 | Body / electronics: PCB-13 charge inlet inputs (BO-015; final v1 CAD) | The rear-panel pin relief widens **9.60 → 10.60 mm** so GCT's USB4140 stake copper clears the seat (`DROID_CUTS`); J1 **hand-soldered** by the builder, the fab assembles the +X face only; **1 oz, two layers, 1.6 mm**; NVM test pads on a **2.54 mm grid** for P75 pogos; actives from **element14 India** (USB4140, STUSB4500, STL6P3LLH6, ESDA25W) and **Mouser India** (TVS2200DRVR); `W16`/`J2-8` interface and PCB-02 back-face keep-out fixed | ACTIVE; `check_pcb13_relief.py` 13/13; PCB-13 inputs frozen, schematic next |
 | [D-070](#d-070) | 2026-10-29 | Chassis / wheels: print fixes (CH-004, CH-005, CH-056, CH-058; J03, J14; final v1 CAD) | The hub-cap clocking **pegs move onto the hub** and the holes into the cap (each in a Ø3.7 boss), and the cap column is trimmed flush, so the cap prints underside down with no supports; the **tyre is printed in its free state** (Ø73.6 bore, 19.3 wide; `PRINT_STATES`), the assembly keeps the fitted state; the **rim prints lip side down**; **Loctite 222** on the wheel screws; left and right tyres are **one part** (amends D-009's "not interchangeable") | ACTIVE; `check_wheel_print.py` 29/29; physical fits open |
 | [D-071](#d-071) | 2026-10-30 | Chassis / axle stack: assembly fixes (CH-001, CH-012, CH-051, CH-089; J01, J02, J03; final v1 CAD) | The stub flange shrinks **Ø24 → Ø21** so a straight key reaches the housing screws with the stub in; the motor is aligned with a printed **alignment plug** (CH-089, a tool) in the bearing seat, because the face screws cannot be reached once the bearings and stub are in; the housing's screw holes close **Ø3.4 → Ø3.2** so it refits where the motor was aligned; a **notch** in the carrier hub clears the set-screw key; print orientations recorded (housing inboard face down, carrier outboard face down); the housings are the fit test, no bore coupons | ACTIVE; `check_axle_stack.py` 21/21; stub drawing and physical proof open |
+| [D-072](#d-072) | 2026-10-30 | Chassis / axle stack: motor-to-axle follow-up (CH-053; J02; final v1 CAD) | The housing screws go **M3 × 18 → M3 × 16**: an 18 mm screw at its long limit bottomed out in its blind hole before it clamped the cap | ACTIVE; `check_axle_stack.py` 25/25 |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -3052,3 +3053,20 @@ Option B2, locating the motor by a close-fit plate pilot and tightening the face
   - The cap: about 35 MPa bending at 100 N, against ≥ 160 MPa yield (about 4.5×), a rough screen.
   - No load for 24 h at about 22 °C after pressing.
   - G is closed by calculation. The bench pull test (10.2 kg hung from the spigot, < 0.10 mm movement; [axle page §9](../04-print/01-chassis/axle/README.md#9-outward-retention-of-the-bearings-gap-g)) checks workmanship when the parts arrive. The DIN 6799 clip stays the fallback.
+
+## D-072
+
+**2026-10-30 · Chassis / axle stack: motor-to-axle follow-up (CH-053; J02; final v1 CAD) · ACTIVE; `check_axle_stack.py` 25/25**
+
+**Why.** A second pass over the motor assembly after D-071, checked against the source, the docs and a clearance probe on the chassis tree, found gaps D-071 left open. The builder (2026-10-30): "fix all the gaps, so do it properly, and commit step by step". Each gap is fixed in its own commit and recorded here as it lands.
+
+**1. Housing screws M3 × 18 → M3 × 16 (CH-053).**
+
+- The M3 × 18 tip sat at |Y| 69.71. The plate's blind tip hole ends at 69.51, leaving 0.51 mm of plastic over the gearbox face (69.0); the screws sit at R12, over the R12.5 gearbox face.
+- ISO 7380's length tolerance on 18 mm is ±0.35 (js15), the 1.2 mm cap can be 0.08 thin, and plastic pushed down when the insert is melted in collects below it. A long screw could bottom out before its head clamped the cap, so it would feel tight with the bearings unclamped, and could push the skin onto the gearbox.
+- M3 × 16 puts the tip at 71.71: 2.20 mm above the hole bottom against a 0.93 mm stack, and 2.29 mm in the 4 mm insert (1.94 mm with the screw at its short limit, against 1.5 mm minimum). The load is about 21 N per screw (axle-stack.md §4).
+- Source: the [OnlyScrews M3 × 16 SS304 button head](https://onlyscrews.in/products/hex-allen-button-head-m3-x-16-screw-pack-of-20), the same shop and family as the M3 × 6 (CH-030, CH-056). The listing was live on 2026-10-30; ISO 7380 head dimensions are checked on the sample. This drops the UAVstore M3 × 18 lead.
+- CAD: `makad-v1.step.py` gains `AXLE_FIX["cap_screw"]` and `axle_cap_screws()`: `DROID_REMOVES` drops `AXLE_CAP_SCREW_M3X18_[LR]_[1-4]`, and `DROID_INSERTS` puts `AXLE_CAP_SCREW_M3X16_[LR]_[1-4]` into `AXLE_HOUSING_HARDWARE_[LR]`. The chassis source is unchanged. The blind tip hole stays as it is, 2.2 mm below the new tip. Mass: −0.9 g for the eight screws, not re-totalled in the hand-kept mass rows.
+- Check: `check_axle_stack.py` §8, both sides, with the M3 × 18 planted (0.20 mm above the hole bottom, inside the 0.93 mm stack).
+
+**BOM changed:** CH-053 is ISO 7380 M3 × 16 (8), OnlyScrews.
