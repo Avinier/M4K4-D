@@ -10,7 +10,7 @@ on the 2026-10-29 review with their fixes ([D-070](../../../03-build/decisions.m
   (D-070). STLs are exported from the final assembly with those edits, never from the wheel source alone.
 - **Check:** [`check_wheel_print.py`](../../../03-build/final/v1/cad/check_wheel_print.py), 29/29 on 2026-10-29.
 - **Axle side:** the stub, bearings and motor are the D-007 axle stack, described in
-  [axle-stack.md](../../../03-build/01-chassis/v1/research/axle-stack.md). §4B below summarises its build order.
+  [axle-stack.md](../../../03-build/01-chassis/v1/research/axle-stack.md). It is built and serviced by the [axle page](../axle/README.md).
 
 ## 1. Parts
 
@@ -113,14 +113,13 @@ The rim's hub is a 4 mm web with a Ø10 bore:
   - D-033 replaced the cap's six M2 screws into plastic with this one screw into steel.
   - One centre screw could not drive the wheel: it would hold by friction alone, and reversing the motor would work it loose.
 
-The motor also has **two screws** of its own, the face screws (CH-030). The gearmotor's face has just two tapped holes. They are tightened last, so the motor can line itself up with the stub (§4B).
+The motor also has **two screws** of its own, the face screws (CH-030). The gearmotor's face has just two tapped holes. They are tightened while the alignment plug holds the motor shaft on the bearing axis, before the bearings and stub go in ([axle page §4C](../axle/README.md#c-align-the-motor-d-071)).
 
 ## 4. Assembly, one wheel
 
 **Tools:**
 - 2 mm hex key: every M3 button head here.
 - 1.5 mm hex key: the set screw.
-- Long 2 mm ball-end key: the motor face screws.
 - Soldering iron with an M3 insert tip.
 - Flat steel or glass plate.
 
@@ -146,15 +145,9 @@ The motor also has **two screws** of its own, the face screws (CH-030). The gear
 
 ### B. The axle stack (once per side, before the wheel)
 
-From [axle-stack.md §5](../../../03-build/01-chassis/v1/research/axle-stack.md#5-assembly-and-service-one-side):
-
-1. Press both 688 ZZ bearings onto the stub from its inboard end, with Loctite 641, pushing on the **inner ring only**, until they sit against the Ø9.5 shoulder.
-2. Put the motor in its carrier, pilot in the plate hole, and start both face screws finger-tight.
-3. Push the stub and bearings into the bearing housing until the first outer ring meets the shoulder. Fit the aluminium cap.
-4. Offer the housing to the motor plate. Turn the stub until its set-screw hole lines up with the shaft flat, slide it onto the shaft, and fit the four M3 × 18 cap screws.
-5. Fit the set screw through the housing slot, with Loctite 222, and tighten it with the 1.5 mm key.
-6. Turn the stub by hand so the motor centres itself. Then tighten both face screws through the key slots with the long ball-end key.
-7. Check that the stub turns freely, with no end play you can feel.
+Build it by the [axle page §4](../axle/README.md#4-assembly-one-side). The order matters: since
+[D-071](../../../03-build/decisions.md#d-071) the motor is aligned with the printed alignment plug before the
+bearings and stub go in, because the face screws can't be reached once they are in.
 
 ### C. The wheel onto the stub
 
@@ -174,7 +167,7 @@ From [axle-stack.md §5](../../../03-build/01-chassis/v1/research/axle-stack.md#
 |---|---|---|
 | **Change a tyre** (wheel stays on the robot) | Take out the six ring screws and lift the ring off. Slide the tyre off outboard, then fit the new one by §4A steps 2–3 | 2 mm hex |
 | **Take a wheel off** | Take out the cap screw and lift the cap off the pegs. Take out the three wheel screws. Pull the wheel straight off the spigot | 2 mm hex |
-| **Bearings or motor** | Take the wheel off. Loosen the set screw through the housing slot. Take out the four cap screws; the housing, stub and bearings slide off outboard. Press the bearings off the stub, or take out the two face screws to free the motor | 2 mm and 1.5 mm hex, press |
+| **Bearings or motor** | Take the wheel off, then follow the [axle page §5](../axle/README.md#5-disassembly-and-service). A motor refit needs the alignment plug again | 2 mm and 1.5 mm hex, press |
 
 - The inserts and the stub's steel threads are reusable.
 - Loctite 222 is low-strength and breaks loose with a hand key. Clean the old compound off and put a new drop on when refitting.
