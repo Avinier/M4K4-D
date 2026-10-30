@@ -120,7 +120,9 @@ layout above turned up. Each gets a row in the gap table once it is checked.
 5. **M2.5 × 4 inserts (CH-080) not bought.** Their Ø3.9 pilot also equals the insert's listed
    OD 3.9, the same zero-bite problem as item 1.
 6. **No IMU pilot holes.** The two M2 thread-forming screws are modelled straight into the solid
-   deck. The rear 4 mm of the IMU board (X 13–17) overhangs the motor bay.
+   deck (probed solid at (22, ±7.5), 2026-10-30), while the CH-039 BOM row speaks of a "current
+   Ø1.6 pilot" that the CAD does not have. The rear 4 mm of the IMU board (X 13–17) overhangs
+   the motor bay.
 7. **The hatch is a 1.5 mm plate carrying the 110 g pack** on four screws through 1.5 mm.
    Whether it sags or cracks at the screw holes is part of the J11A/J11B check.
 8. **The fuse shelf** is a 30 mm cantilever at Z 71–73 on one 6 × 8 mm column: a print and
