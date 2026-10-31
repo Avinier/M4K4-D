@@ -226,7 +226,7 @@ def main():
     # 7. Orientation (D-074).
     plan = (("CHASSIS_FRAME_FRONT_MODULE", (0, 0, -1), "tub bottom down", 2800.0, 2200.0),
             ("CHASSIS_FRAME_REAR_MODULE", (0, 0, 1), "deck top down", 3500.0, 500.0),
-            ("BATTERY_TUB_BOTTOM_HATCH", (0, 0, -1), "outer face down", 4900.0, 0.0))
+            ("BATTERY_TUB_BOTTOM_HATCH", (0, 0, -1), "outer face down", 4850.0, 0.0))
     for label, down, how, bed_min, support_max in plan:
         bed, need = bed_and_overhang(edited[label], down)
         area = sum(a for a, _, _ in need)

@@ -165,7 +165,7 @@ filaments, the J04 inserts pull along the layers and the J13 bolts clamp across 
 
 Every step's tool path is modelled across the key's corners and checked against the CAD in the
 state the step is done in, by [`check_frame_assembly.py`](../../../03-build/final/v1/cad/check_frame_assembly.py)
-(48/48 on 2026-10-31). That check found that the rear J13 nuts couldn't be held once the carriers
+(50/50 on 2026-10-31). That check found that the rear J13 nuts couldn't be held once the carriers
 were on, and that their sockets had cut away the rear J04 key seats: the three top-driven J13
 bolts now go into M4 inserts in the deck ([D-075](../../../03-build/decisions.md#d-075)).
 
@@ -175,7 +175,19 @@ bolts now go into M4 inserts in the deck ([D-075](../../../03-build/decisions.md
 - 1.5 mm hex key: J15B (M2.5 low button heads).
 - PH1 screwdriver: J12 (M3 countersunk). PH0 or T6, to suit the screws received: J15A.
 - Soldering iron with M2.5, M3 and M4 insert tips. A Ø3 dowel or drill blank to back the inner driver posts.
-- Ø4.1 drill (by hand) for the rear pin hole; torque screwdriver for J04 (0.3 N·m, [D-072](../../../03-build/decisions.md#d-072)).
+- Ø4.1 drill (by hand) for the rear pin hole.
+- Torque screwdriver covering 0.15–0.6 N·m with 1.5, 2 and 2.5 mm hex and PH1 bits.
+
+**Torques** ([D-076](../../../03-build/decisions.md#d-076); J04 from [D-072](../../../03-build/decisions.md#d-072)). Most of these screws clamp printed PETG or an insert in it, so they are low and set, not "as tight as it goes":
+
+| Screw | Into | Torque |
+|---|---|---|
+| J04 carrier, M3 × 8 | Rail insert | 0.3 N·m |
+| J11A hatch, M3 × 6 | Boss insert, through the 1.5 mm hatch | 0.2 N·m |
+| J12 ballast, M3 × 12 countersunk | Tapped bar, head in the deck seat | 0.3 N·m |
+| J13 body, M4 × 12 | Deck insert, or the cassette nut | 0.6 N·m, Loctite 222 |
+| J15B driver board, M2.5 × 6 | Post insert, through the board | 0.15 N·m |
+| J15A IMU, M2 × 5 thread-forming | The deck, Ø1.6 pilot | Snug: stop when the head seats |
 
 **Consumables:** Loctite 222 (J13 bolts).
 
@@ -223,8 +235,8 @@ bolts now go into M4 inserts in the deck ([D-075](../../../03-build/decisions.md
     into the deck inserts from above with the 2.5 mm key, a drop of Loctite 222 on each. This
     comes before the body electronics and the shell: they cover these keys.
 11. Slide in the front-left foot cassette, fit its pin from below, and drive its M4 × 12 up
-    from below into the cassette's nut. The key passes the hatch edge by 0.06 mm, so the hatch
-    can be on or off.
+    from below into the cassette's nut. A notch in the hatch edge ([D-076](../../../03-build/decisions.md#d-076)) lets the bolt and
+    its key pass with the hatch on.
 
 ### F. Pack and hatch (J11B, J11A), last
 
@@ -239,13 +251,58 @@ bolts now go into M4 inserts in the deck ([D-075](../../../03-build/decisions.md
 | **Pack** | Robot on its back. Four hatch screws out from below; lower the hatch with the pack strapped on; unplug CN-05 through the +Y window | On |
 | **Ballast** | Body off; pack and hatch out; two screws out from above; drop the bar | Off |
 | **IMU, driver boards** | Body off; unplug; screws out from above | Off |
-| **Body** | Reverse §E and the body steps after it (shell and electronics first, then the front-left bolt from below and the cassette, then the three bolts from above); lift off the pins | — |
+| **Body** | Reverse §E and the body steps after it: shell and electronics first, then the front-left bolt from below (hatch on, through its notch) and the cassette, then the three bolts from above; lift off the pins. The pack stays in | — |
 | **Carrier or modules apart** | Motor out (axle page §5), then the four J04 screws from the bay | Off |
 
 - **Inserts are reusable;** a stripped one is reheated and replaced with the iron.
 - **Loctite 222** on the J13 bolts breaks loose with a hand key; clean and re-apply when refitting.
 
-## Next
+## 7. Gaps found on 2026-10-30/31 and their fixes
 
-7. Gap table and fixes for anything left from §1–§6, with the checks.
-8. Still open (physical).
+All fixes are droid edits in [`makad-v1.step.py`](../../../03-build/final/v1/cad/makad-v1.step.py);
+the chassis source is unchanged. Checks: [`check_frame_print.py`](../../../03-build/final/v1/cad/check_frame_print.py)
+(pilots and printing) and [`check_frame_assembly.py`](../../../03-build/final/v1/cad/check_frame_assembly.py)
+(J13 and tool access).
+
+| # | Gap | Fix | Decision | Checked by |
+|---|---|---|---|---|
+| A | M3 × 6 insert pilots Ø4.3 for OD 4.4 (J04 ×8, J11A ×4); J04 pilots 0.1 mm deeper than the insert | Ø4.0; J04 7 mm deep | [D-073](../../../03-build/decisions.md#d-073) | print §1–2 |
+| B | M2.5 × 4 pilots Ø3.9 = the insert's OD | Ø3.5 | [D-073](../../../03-build/decisions.md#d-073) | print §3 |
+| C | No IMU pilots (the BOM spoke of Ø1.6) | Ø1.6 through the deck | [D-073](../../../03-build/decisions.md#d-073) | print §4 |
+| D | D-033 asked for coupons, against 04-print rule 5 | No coupons; the pod seat tries the M3 × 6 first | [D-073](../../../03-build/decisions.md#d-073) | — |
+| E | 1.5 mm hatch carrying the pack | Closed by calculation: about 3 N per screw, about 400 N pull-through | [D-073](../../../03-build/decisions.md#d-073) | — |
+| F | Module orientation on hold since D-033 | Front tub bottom down, rear deck down, hatch outer face down | [D-074](../../../03-build/decisions.md#d-074) | print §7 |
+| G | The front module stood on its tub walls (469 mm² of bed) | Rails, ribs and crossmember down to Z 32: 2901 mm² | [D-074](../../../03-build/decisions.md#d-074) | print §7–8 |
+| H | Rear crossmember strip an 8 mm ledge off the bed | Up to the deck top | [D-074](../../../03-build/decisions.md#d-074) | print §7–8 |
+| I | Fuse shelf, a 30 mm cantilever | Printed on support; a gusset would fill the body's foot cassette | [D-074](../../../03-build/decisions.md#d-074) | print §7 |
+| J | Inner driver posts half over the battery opening | Kept; back with a Ø3 dowel while pressing the insert | [D-074](../../../03-build/decisions.md#d-074) | assembly §8 |
+| K | Rear J13 nuts can't be held with the carriers on; their sockets had cut away the rear J04 key seats (6 % inner wall) | M4 × 8 inserts in the deck at the three top-driven bolts; sockets filled; key pockets re-cut | [D-075](../../../03-build/decisions.md#d-075) | assembly §1–2, §6 |
+| L | Half of each new insert pilot stood in air below the deck | 45° cone bosses; pin holes kept through | [D-075](../../../03-build/decisions.md#d-075) | assembly §1 |
+| M | Front-right J13 nut reachable only with the hatch off | Same inserts as K | [D-075](../../../03-build/decisions.md#d-075) | assembly §6 |
+| N | Front-left J13 bolt can't come out with the hatch on | Ø9.2 hatch-edge notch | [D-076](../../../03-build/decisions.md#d-076) | assembly §6 |
+| O | No torques except J04 | Set for J11A, J12, J13, J15A, J15B (§6) | [D-076](../../../03-build/decisions.md#d-076) | — |
+
+**Not fixed here:**
+- **Mass register:** the fills, bosses and inserts add about 17 cm³ of PETG (about 10 g at the
+  register's 0.571 g/cm³), low in the frame. `CHASSIS_PRIMARY_FRAME` (219.1 g) lives in the
+  chassis source; update it from the scale when the modules are weighed.
+- **Body side:** the body's `check_body_frame_fit.py` still models the J13 nuts (it reads the
+  chassis source), and the body's service-panel inserts (BO-063) sit in Ø4.3 pilots. Both go to
+  the body print review.
+
+## 8. Still open (physical)
+
+| What | How | Where |
+|---|---|---|
+| M3 × 6 in Ø4.0 | First on the pod seat (plate P02): flush, square, no spin at the screw's torque. If loose or tight, slicer hole compensation, then the modules | Rule 5 |
+| M2.5 × 4 (CH-080) and M4 × 8 (CH-095) inserts | Buy; measure the OD. If it isn't 3.9 / 5.9, correct the pilot (OD − 0.4) before export | D-073, D-075 |
+| J04 key fit and deck flatness | Keys seat by hand; deck tops coplanar to 0.20 mm across the bay (§6 step 6) | J04, issue 4 |
+| J13 | Pins go into their Ø4.1 holes after the rear one is drilled; body lifts off cleanly; inserts hold 0.6 N·m without turning | J13 |
+| J11B | Inversion and shock with the strapped pack; strap and foam sourcing (CH-078, CH-079) | J11B |
+| J12 | Received countersunk head against the 90° seat | J12 |
+| J15A | M2 × 5 thread-forming sample (CH-039, still a candidate) in the Ø1.6 pilot | J15A |
+| J15B | 20 N tug on a motor lead goes into the tie, not the terminal block | J15B |
+| Junctions | Rail-to-crossmember and deck loads, on the assembled frame | [Test system](../../../03-build/01-chassis/v1/testsystem.md) |
+| Mass | Weigh both modules and the hatch (rule 6); update the register | Rule 6 |
+
+The frame review is complete in CAD. Next on the chassis list: the nose (ball transfer) review.

@@ -3181,7 +3181,7 @@ Option B2, locating the motor by a close-fit plate pilot and tightening the face
 1. **M4 × 8 heat-set inserts in the deck** at the three top-driven bolts (CH-095: OnlyScrews, OD 5.9, ₹3.60), pressed flush from the deck top into a **Ø5.5 × 9 mm** pilot (OD − 0.4, as D-073). The M4 × 12 bolt (CH-035) is unchanged: 6 mm of thread in the insert, its tip 3 mm above the pilot floor. The plain nuts at these three points are dropped (CH-036 4 → 1).
 2. **The three sockets are filled** back to the rail, rib and deck they were cut from, and the rear J04 key pockets re-cut: the rear keys are walled like the front ones (60 / 80 / 80 / 80 %).
 3. **A 45° cone boss under the deck** round each pilot: the old socket ran past the rail's inner face, so the lower half of the pilot stood in air. The boss gives 1.2 mm of wall at the pilot floor (R 3.95 at Z 47), widens to R 8.95 at the deck underside and comes to a point at Z 43.05, so it prints without support on the front module. At the rear it is clipped at the rail end (X −17). The rear and front locating-pin holes stay through.
-4. **The front-left bolt (64, +48) is unchanged:** driven from below into the nut in the body frame's foot cassette, its socket kept open. Its 2.5 mm key passes the hatch edge by 0.06 mm, so that bolt can be reached with the hatch on.
+4. **The front-left bolt (64, +48) is unchanged:** driven from below into the nut in the body frame's foot cassette, its socket kept open. Its 2.5 mm key passes the hatch edge by 0.06 mm, but the bolt's head does not: [D-076](#d-076) notches the hatch.
 5. CAD: `J13_FIX` and `j13_insert_edits()` in `makad-v1.step.py`: `DROID_CUTS` (pilots), `DROID_ADDS` (fills and bosses), `DROID_REMOVES` (`BODY_CHASSIS_M4_NUT_[123]`), `DROID_INSERTS` (`J13_DECK_INSERT_M4X8_[1-3]`). The chassis and body sources are unchanged; body v1's `check_body_frame_fit.py` still models the nuts.
 
 **Frame assembly order** (frame page §6), from the tool paths:
@@ -3196,3 +3196,25 @@ Option B2, locating the motor by a close-fit plate pilot and tightening the face
 **Check:** `final/v1/cad/check_frame_assembly.py` **48/48** (2026-10-31): the J13 fills, pilots, engagement, inserts and bosses (1.0 mm from every other part, out of the carriers, pin holes through); the rear key walls, with the unedited rear module planted (6 %); and every tool path in its state, with the motor planted against the J04 keys and the hatch against the ballast. `check_frame_print.py` re-run with the fills and bosses: **36/36**; the front module's support falls from 1299 to 1131 mm² (the J13 pockets are filled; the bosses need none), bed 2901 mm²; the rear 3551 / 194 mm². Printed volume +0.8 cm³ front, +1.4 cm³ rear on D-074 (front 83.97, rear 59.16 cm³).
 
 **BOM changed:** CH-035 (three into inserts, one into the cassette nut), CH-036 4 → 1, new CH-095 M4 × 8 insert (3, not ordered).
+
+## D-076
+
+**2026-10-31 · Chassis / frame review close-out: hatch notch for the front-left J13 bolt, frame screw torques (CH-011; J11A, J12, J13, J15A, J15B; final v1 CAD) · ACTIVE; `check_frame_assembly.py` 50/50; physical proof open (frame page §8)**
+
+**Why.** Two items were left after D-075 ([frame page §7](../04-print/01-chassis/frame/README.md#7-gaps-found-on-2026-1030-31-and-their-fixes)):
+
+- **The front-left J13 bolt can't come out with the hatch on.** It is driven from below into the body cassette's nut. Its key passed the hatch edge by 0.06 mm, but the bolt's Ø8 head overlaps the hatch (edge Y 46.5) by 2.5 mm, so taking the body off still meant dropping the pack.
+- **Only the J04 screws had a torque** (D-072). The others clamp printed PETG or an insert in it, which creeps or strips if over-tightened.
+
+**Decision** (builder, 2026-10-31: "proceed"):
+
+1. **A Ø9.2 notch in the hatch edge** round the bolt axis (64, +48) (`HATCH_NOTCH`, `DROID_CUTS` on `BATTERY_TUB_BOTTOM_HATCH`). The head passes with 0.60 mm all round; the key with 3.16 mm. It is in the hatch flange outside the tub, away from the bosses and strap slots. The hatch loses 19 mm² (bed 4915 → 4896 mm²).
+2. **Torques** (frame page §6), nut factor 0.2 as D-072, PETG yield about 50 MPa:
+   - J11A hatch screws, M3 button on the 1.5 mm hatch: **0.2 N·m**, about 330 N, 20 MPa under the head.
+   - J12 ballast screws, M3 countersunk in the deck's 90° seat: **0.3 N·m**, about 500 N, about 23 MPa over the seat's projected area.
+   - J13 body bolts, M4 button into the M4 inserts and the cassette nut: **0.6 N·m**, about 750 N, 25 MPa under the head on the body foot. Loctite 222.
+   - J15B driver screws, M2.5 into the post inserts: **0.15 N·m**.
+   - J15A IMU screws, M2 thread-forming: **snug only**, no torque driver; stop when the head seats.
+   - J04 stays at 0.3 N·m (D-072).
+
+**Check:** `check_frame_assembly.py` gains the bolt's path out downward (head R 4.0) past the notched hatch, the key 1.0 mm clear, and the unnotched hatch planted: **50/50** (2026-10-31). `check_frame_print.py` 36/36 with the hatch's bed minimum lowered to 4850 mm² for the notch.

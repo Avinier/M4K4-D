@@ -20,8 +20,9 @@ r 0.87, PH1 shaft r 2.25, PH0 / T6 shaft r 1.5, a Ø3 backing dowel. Checks:
 5. J12: the ballast bar drops out with the hatch off (planted: the hatch blocks it); a PH1
    reaches each screw from above with the body off.
 6. J13: a 2.5 mm key reaches each top-driven bolt from above with only the body frame and its
-   cassette fitted (body assembly step 1); the front-left bolt's key reaches it from below past
-   the hatch, by at least 0.0 mm.
+   cassette fitted (body assembly step 1); the front-left bolt's key reaches it from below 1 mm
+   clear of the hatch, and the bolt itself comes out downward through the D-076 hatch notch
+   (planted: the unnotched hatch).
 7. J15A, J15B: the IMU driver and the 1.5 mm key reach their screws from above, body off.
 8. J15B inner posts: a Ø3 dowel backs each post from below through the open tub (hatch and pack
    out) while its insert is pressed.
@@ -221,10 +222,17 @@ def main():
         h = hits(zc(1.443, head.max.Z - 1.5, 200.0, x, y), frame_on, skip=("BODY_CHASSIS_M4_",))
         check(f"J13 ({x}, {y}) 2.5 mm key from above, body frame only", not h, f"{h or 'clear'}")
     head = body["BODY_CHASSIS_M4_HEAD_4"]
-    key = zc(1.443, -20.0, head.bounding_box().min.Z + 1.5, 64.0, 48.0)
+    hb = head.bounding_box()
+    key = zc(1.443, -20.0, hb.min.Z + 1.5, 64.0, 48.0)
     h = hits(key, everything, skip=("BODY_CHASSIS_M4_",))
     gap = BRepExtrema_DistShapeShape(key.wrapped, chassis["BATTERY_TUB_BOTTOM_HATCH"].wrapped).Value()
-    check("J13 front-left (64, 48) 2.5 mm key from below, hatch on", not h, f"{h or 'clear'}; {gap:.2f} mm to the hatch edge")
+    check("J13 front-left (64, 48) 2.5 mm key from below, hatch on", not h and gap >= 1.0, f"{h or 'clear'}; {gap:.2f} mm to the hatch")
+    # D-076: the bolt itself (head R4.0) comes out downward past the notched hatch.
+    path = zc(4.0, -20.0, hb.max.Z, 64.0, 48.0)
+    h = hits(path, everything, skip=("BODY_CHASSIS_M4_",))
+    gap = BRepExtrema_DistShapeShape(path.wrapped, chassis["BATTERY_TUB_BOTTOM_HATCH"].wrapped).Value()
+    check("J13 front-left bolt comes out downward with the hatch on (D-076)", not h and gap >= 0.5, f"{h or 'clear'}; {gap:.2f} mm to the hatch notch")
+    check("planted: the unnotched hatch blocks that bolt", bool(hits(path, {"hatch": raw["BATTERY_TUB_BOTTOM_HATCH"]})), "head meets the hatch")
 
     # 7. J15A, J15B from above, body off.
     for name, head in subset(chassis, ("IMU_M2_SCREW_HEAD_",)).items():

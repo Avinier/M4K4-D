@@ -490,6 +490,10 @@ J13_FIX = dict(
     # The rear-right boss reaches the rear locating pin's Ø4.1 hole (-27, -42); it stays through.
     pin_holes=((-27.0, -42.0, 2.05), (59.0, 42.0, 2.05)),
 )
+# D-076: the front-left J13 bolt (64, +48) goes in from below, and its Ø8 head overlapped the
+# hatch edge (Y 46.5) by 2.5 mm, so the body could not come off with the hatch on. A Ø9.2 notch
+# in the hatch edge, round the bolt axis, lets the head pass with 0.6 mm all round.
+HATCH_NOTCH = (64.0, 48.0, 4.6, 29.0, 33.5)  # x, y, r, z0, z1
 
 
 def j13_insert_edits():
@@ -633,6 +637,8 @@ DROID_CUTS = [
     *_FRAME_CUTS,
     # D-075: Ø5.5 x 9 M4 insert pilots from the deck top at the three top-driven J13 bolts.
     *_J13_CUTS,
+    # D-076: hatch-edge notch so the front-left J13 bolt comes out from below with the hatch on.
+    (r"BATTERY_TUB_BOTTOM_HATCH", _z_cyl(HATCH_NOTCH[2], HATCH_NOTCH[3], HATCH_NOTCH[4], HATCH_NOTCH[0], HATCH_NOTCH[1])),
 ]
 DROID_ADDS = [
     # D-068: PCB-10 top-edge hooks on the C3 carrier uprights.
