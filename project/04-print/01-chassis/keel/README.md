@@ -133,3 +133,86 @@ the case seats facing upward and the locating pin vertical.
 | Shoe | 107.5 / 0 | 66.0 / 0 | 12.5 / 6 | 31.0 / 0 | 17.5 / 38 | 17.5 / 38 |
 | Bezel | 53.7 / 26 | 2.5 / 84 | 30.0 / 44 | 22.5 / 41 | 21.0 / 7 | 21.0 / 7 |
 | Shim | 112.7 / 0 | 112.7 / 0 | 18.0 / 0 | 18.0 / 0 | 16.8 / 0 | 16.8 / 0 |
+
+## 6. Assembly and service (D-079)
+
+The check models the body fitted and wheels on, with each removed component stated explicitly.
+The 2.5 mm key uses a radius 1.443 mm across corners; PH0 uses a Ø3 shaft. A Ø6 iron envelope
+reaches the crossmember insert mouths with the loose rear module on the bench. Flexible cable
+routing, tool handles and hands still need a physical dry run.
+
+**Tools:** straight 2.5 mm hex key; PH0 (confirm against CH-069/070 samples); M3 insert iron;
+flat plate; torque driver to 0.3 N·m; cutters and a replacement 2.5 mm zip tie for TCRT service.
+
+| Screw | Torque | Basis, as D-076 |
+|---|---|---|
+| J09A keel, M3 × 30 socket | 0.3 N·m | About 500 N at nut factor 0.2, about 35 MPa under a Ø5.5 head around a Ø3.4 bore, below the review's approximately 50 MPa PETG yield assumption |
+| J09B bezel, M2 × 10 thread-forming | Snug only | Stop when the bezel and stack seat, without crushing the cradles or splitting the 0.75 mm pocket wall |
+| J10A shoe, M2 × 6 thread-forming | Snug only | Stop when the retaining screw seats; do not split the dovetail tongue |
+
+### On the bench, before the body
+
+1. Clean the keel supports, check the crossmember seat flat and dry-slide the shoe to its stop.
+2. With the rear module loose, melt four M3 × 6 inserts **up from below** into its Ø4 × 7 mm
+   pilots, flush with Z 34. The module prints deck-down, so these pilots open upward in its
+   print orientation. The iron reaches with the keel off.
+3. Offer the keel up against the crossmember. Drive four M3 × 30 from below using the 2.5 mm
+   key, diagonally to 0.3 N·m. The front pair engage 5.5 mm, the rear pair the full 6 mm; tip
+   relief remains above both. Do not use the screws to pull a warped mounting face flat.
+4. Slide the shoe in from the front to the groove end; drive CH-070 from +Y, snug.
+5. Feed the soldered TCRT lead up through the pocket, seat the TCRT in the bezel's contoured end cradles,
+   then put **two 1.2 mm shims** above the bezel. Lift this stack onto the recessed flat,
+   locating pin in its hole. Drive CH-069 from below, snug. Face Z 10, guard lips Z 7.
+6. Route the cable with its 30 mm slack loop, restrain it at the crossmember lug with CH-072,
+   and connect J10-10 at PCB-10. Check no load reaches the sensor's soldered legs.
+
+### Service, body fitted
+
+| To do | Sequence | Access |
+|---|---|---|
+| Wear shoe | CH-070 out from +Y; slide shoe forward 15 mm out of the groove | PH0 shaft path checked with wheels on; retained screw is a planted blocker |
+| Bezel/shims | CH-069 out; lower bezel and shims 30 mm | PH0 from below; keel remains fitted |
+| TCRT | Bezel/shims off; rear service panel off; unplug J10-10 and cut the crossmember tie; release slack and draw sensor/lead down through the pocket | Lead is continuous to PCB-10; do not pull against the tie or plug. Bezel is a planted blocker |
+| Keel | TCRT and lead out first; four M3 × 30 out; keel and shoe down 40 mm through the shell slot | 2.5 mm key from below with shoe/bezel fitted; screw retained is a planted blocker |
+
+**Shim limits.** Optical height is `12.4 − 1.2 × count` mm. Counts 0/1/2 give 12.4/11.2/10 mm.
+Counts 3/4 give 8.8/7.6 mm, but the lowered lips hit the floor before the shoe on tip-back.
+At the nominal stack the shoe contacts at 6.05°, guards at 6.49°, keel at 8.97° and sensor at
+10.43°. Keep two shims until real-floor optical and snag tests justify a different stack.
+The 0.44° nominal shoe/guard margin must be verified with loaded tyre radius and real floors.
+Z 10 is the existing CAD datum at the lowest projecting feature of the vendor STEP, not proof
+that the whole case has a flat underside there. The new cradles seat on its curved case; check
+the actual optical standoff and the received package on the first cartridge.
+
+## 7. Gap table
+
+| Gap | Fix or disposition | Decision | Check |
+|---|---|---|---|
+| Rear insert bores too short for insert + 1 mm | Ø4 × 7 mm pilots; replacement M3 × 6 models | D-077 | print: four pilots, walls and engagement; raw geometry planted |
+| Shims below lab minimum | 1.2 mm plus flat recessed 0.4 mm, nominal sensor position retained | D-077 | print: thickness, flat, optical stack and contact order |
+| Bezel screw/pin bottoming at zero shims | Pilot/hole extended 1 mm beyond each tip | D-077 | print: depths; raw pilot planted |
+| Thin shoe tongue above pilot | Tongue and groove +1 mm; roof 1.45 mm | D-077 | print: pilot roof/groove; raw shoe planted |
+| Vendor case not supported at the declared datum | Contoured end cradles; shim windows widened; keel pockets clear all shim settings; sensor pose unchanged | D-077 | print: actual contact at 0.05 mm, static clearance at all stacks; raw bezel planted |
+| Orientation undecided | Seat-down keel, sole-down shoe, lips-down bezel, flat shims | D-078 | print: six directions and selected orientation limits |
+| Tool and service sequence unproved on final geometry | State-specific keys, screw access and removal sweeps | D-079 | assembly: positive paths and retained-part blockers |
+| No keel torques | M3 0.3 N·m; M2 snug only | D-079 | Calculation above; physical insert/strip proof remains open |
+
+
+Verified on 2026-11-01 with the legacy runtime: **print 42/42**, **assembly 53/53**; regressions
+**frame print 36/36**, **frame assembly 50/50**, **axle 27/27**. The strict `makad-v1.step.py`
+build passed with every droid edit hitting. The review STEP has **104 valid leaf occurrences**
+(topology, closure and positive volumes; full self-intersection search skipped), and four
+opposed/orthographic snapshots were reviewed. The all-six-direction survey above uses the
+final printed geometry. Physical release items remain in §8.
+
+## 8. Still open (physical)
+
+| What | How |
+|---|---|
+| Inserts and mounting face | Measure in-hand OD; check no spin at 0.3 N·m, face flat and keel seated; impact/bending tests on the assembled chassis, no coupons |
+| CH-069/070 candidates | Receive samples; confirm PH0/head envelopes, Ø1.6 pilots, strip torque and repeated-service retention in PETG |
+| TCRT | Check sensor fit, solder sleeves, cable pull-through and bend/slack at each service step; test real-floor signal and cliff stop |
+| Shim stack / guards | Measure thickness, loaded optical height, shoe-first tip order and snag behavior; three/four-shim settings need explicit requalification |
+| Shoe | Pull/abrasion test and service cycles; verify enlarged tongue still slides after printing |
+| Supports | Inspect pocket, groove, mounting face and bezel ledges on actual slice/print |
+| Mass | Measure key dimensions and weigh keel, shoe, bezel and shims; update register under rule 6 |

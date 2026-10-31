@@ -226,7 +226,7 @@ bolts now go into M4 inserts in the deck ([D-075](../../../03-build/decisions.md
 7. **Motors and axle stacks:** the [axle page](../axle/README.md) §4B–§4E.
 8. **Driver boards (J15B).** Each board on its two posts, terminal block as drawn, two
    M2.5 × 6 with the 1.5 mm key. Tie the motor leads through the deck bridge behind each board.
-9. **Nose pod and keel:** their own pages (next reviews).
+9. **Nose pod and keel:** the [nose](../nose/README.md) and [keel](../keel/README.md) pages.
 
 ### E. Body frame (J13)
 
@@ -305,4 +305,5 @@ the chassis source is unchanged. Checks: [`check_frame_print.py`](../../../03-bu
 | Junctions | Rail-to-crossmember and deck loads, on the assembled frame | [Test system](../../../03-build/01-chassis/v1/testsystem.md) |
 | Mass | Weigh both modules and the hatch (rule 6); update the register | Rule 6 |
 
-The frame review is complete in CAD. Next on the chassis list: the nose (ball transfer) review.
+The frame review is complete in CAD. The combined [nose](../nose/README.md) and
+[keel](../keel/README.md) review continues J07–J10 with the final droid edits.

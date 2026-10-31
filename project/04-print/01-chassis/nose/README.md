@@ -138,3 +138,91 @@ No separate coupons (rule 5): the pod seat on P02 tries the M3 × 6 / Ø4.0 fit 
 | Seat | 1264.4 / 0 | 185.3 / 644 | 624.3 / 436 | 255.8 / 679 | 110.2 / 374 | 110.2 / 367 |
 | Lid | 18.0 / 901 | 284.6 / 621 | 50.0 / 89 | 67.2 / 89 | 0.0 / 277 | 0.0 / 277 |
 | Cap | 99.9 / 114 | 144.8 / 33 | 138.6 / 453 | 577.7 / 70 | 104.5 / 39 | 104.5 / 37 |
+
+## 6. Assembly and service (D-079)
+
+Tools are checked against the final chassis and body in each stated assembly condition.
+Whole-pod J07B tool entry needs the body off; the smaller nose service steps keep it fitted.
+Hex cylinders enclose the key across its corners: 2 mm key radius 1.155 mm. The PH0 envelope
+is a Ø3 shaft; confirm the bit against the actual candidate screw. Sweeps sample removal at
+1 mm steps; lead flexibility, fingers spreading and hands are physical checks.
+
+**Tools:** straight 2 mm hex key plus a shortened 2 mm L-key for J07B (8 mm from
+the screw-head face to the bend, approximately 10 mm short leg including engagement); PH0 for the specified candidate lid screw; M3 insert iron
+with a Ø6 tip envelope; flat backing plate; torque driver covering 0.2–0.3 N·m. For J07B with the L-key, 4 N
+perpendicular to a 50 mm lever arm gives 0.2 N·m; use a force gauge or a calibrated adapter.
+
+| Screw | Torque | Basis, as D-076 |
+|---|---|---|
+| J07A caster, M3 × 8 | 0.3 N·m | About 500 N per screw using nut factor 0.2; head bears on the vendor flange. Limit remains insert retention in the seat |
+| J07B pod, M3 × 8 | 0.2 N·m | About 333 N; roughly 20 MPa under the Ø5.7 head around the Ø3.3 hole, below the review's approximately 50 MPa PETG yield assumption |
+| J08C lid, M2 × 8 thread-forming | Snug only | Stop when the countersunk head seats; sample and repeat-service qualification remain open |
+
+### On the bench, before the body
+
+1. Clean the prints and dry-fit the lid tongue, sensor and cap. Do not glue a binding cap.
+2. Install the three M3 × 6 seat inserts **from below**, flush on a flat backing surface.
+   These are through bores: no blind-hole bottom clearance is needed. The insert occupies the
+   full 6 mm seat. Clean the relief over insert 1 and check the sensor still sits flat; check
+   the lead groove beside insert 2. Check no spin at the chosen screw torque before P01.
+3. With the pod off, install the two front-crossmember inserts along −X from the front.
+   The Ø6 iron envelope reaches both mouths with the loose frame on the bench. Their Ø4 pilots
+   are 7 mm deep and the inserts finish flush with X 92.
+4. Fit the caster base to the pod from below, housing and ball unsnapped. Drive its three
+   M3 × 8 screws with the 2 mm key to 0.3 N·m (5.3 mm thread engagement), then snap the housing,
+   rollers and ball onto the base. Confirm the received caster matches the modeled flange.
+5. Offer the pod against the crossmember at X 92. Cap, lid and GP2Y are out. Use the shortened 2 mm L-key, short leg along −X into each head and long leg up
+   through the pocket; the bend is at X 104.65. Swing the long leg **inward across the pocket**, 5–65°
+   from upright toward the centre, then withdraw/re-index. Drive to 0.2 N·m, with 5 mm thread engagement.
+   A straight key hits the lid boss on the −Y side; do not cut the boss for access.
+   Fit this before the body. For service take the body off first: the shell band blocks the
+   L-key entering from above, even with the front panel removed.
+6. Install PCB-15 in the retained D-059/D-063 slot. Route its leads in the groove; fit the
+   trimmed-ear GP2Y on the floor with its soldered lead routed through the rear channel.
+   Check the actual PCB-15 board fit and magnet polarity before retaining the cap.
+7. Fit the lid by reversing the checked removal path; screw snug. Install the two return
+   springs, the magnet in the cap, and spread the fingers to slide the cap on from the front.
+   Check full 3 mm travel and positive return without a trapped wire.
+
+### Service
+
+| To do | Sequence | Access |
+|---|---|---|
+| Caster | Unsnap housing, ball and rollers; three screws out; base down 40 mm | 2 mm key from below. Housing blocks all three keys if left on |
+| Cap | Spread both fingers to disengage hooks, slide forward 20 mm; catch springs | From front. Hooks left engaged are a planted blocker |
+| Lid | Cap off; lid screw out; slide forward **12 mm**, then lift 40 mm | PH0 from above; 0.5 mm in X past the panel. Do not over-slide: GP2Y hit begins at 13 mm |
+| GP2Y | Cap and lid off; release cable slack and unplug J10-8 before pulling the tether; sensor out along the checked path | Sensor and Hall board share a routed cable; do not pull a fixed harness |
+| Hall board | GP2Y out first, then board up 30 mm | The GP2Y stands over the slot and is a planted blocker |
+| Whole pod (body off) | Take body off by frame page §6E/service; cap, lid and GP2Y out; two pod screws out; pod and caster forward 40 mm | Short 2 mm L-key enters from above, body off, with a 60° inward swing. The GP2Y blocks a straight key; retained screws block removal |
+
+## 7. Gap table
+
+| Gap | Fix or disposition | Decision | Check |
+|---|---|---|---|
+| CNC Kitchen inserts unbought; 6 mm replacement not represented | Nine M3 × 6 models, nose bores and walls measured | D-077 | print: insert bores, walls and engagement |
+| GP2Y over the through insert's far end | Ø5 × 0.5 relief and floor cleanup | D-077 | print: relief, PCB-15 preservation |
+| Candidate M2 screw | Ø1.6 actual pilot; manufacturer/sample qualification | D-077 | print: lid boss |
+| Wrong cap orientation | Top down; fingers start from supported material | D-078 | print: all-six survey and planted face-down case |
+| Lid short lift meets speaker panel | 12 mm forward then 40 mm up; no sensor move | D-079 | assembly: short path planted, replacement path |
+| Straight −Y pod key meets the lid boss; fitted shell blocks L-key entry | Short L-key: 8 mm from head face to bend, long leg up; whole-pod service with body off | D-079 | assembly: L-key clear; straight key planted |
+| No nose torques | J07A 0.3, J07B 0.2 N·m; lid snug | D-079 | Calculation above; physical retention remains open |
+
+
+Verified on 2026-11-01 with the legacy runtime: **print 42/42**, **assembly 53/53**; regressions
+**frame print 36/36**, **frame assembly 50/50**, **axle 27/27**. The strict `makad-v1.step.py`
+build passed with every droid edit hitting. The review STEP has **104 valid leaf occurrences**
+(topology, closure and positive volumes; full self-intersection search skipped), and four
+opposed/orthographic snapshots were reviewed. The all-six-direction survey above uses the
+final printed geometry. Physical release items remain in §8.
+
+## 8. Still open (physical)
+
+| What | How |
+|---|---|
+| First P02 pod seat / in-hand inserts | Measure OD; install square and flush; check no spin at torque, no bulged sensor floor or Hall-lead groove; then print modules |
+| Caster | Measure the received flange, web and holes; prove snap service and clear screw heads; static/drop/threshold loads at the test-system limits |
+| CH-062 thread-former | Buy the candidate sample; confirm PH0/head angle, Ø1.6 PETG pilot, strip resistance and repeated service |
+| Cap | Obtain ASA permission; print in ASA; verify slide, spring return, hook release and fatigue; no unqualified material swap |
+| Sensing | PCB-15 board fit, magnet orientation, trip point, return force, sensor retention and lens alignment; check J10-8 cable slack through the full service path |
+| Supports and bed finish | Inspect the lid hump, finger slits and visible cap top on the actual slice and print |
+| Mass | Measure key dimensions and weigh all three prints; update the hand-kept register (rule 6) |

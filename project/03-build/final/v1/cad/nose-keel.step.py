@@ -69,8 +69,8 @@ GROUPS = [
     ("J08B return springs (CH-066)", ("BALL_NOSE_RETURN_SPRING_",), _at(POD, 12.0), True),
     ("J08B touch cap (CH-007), slides forward off the nose", ("BALL_NOSE_TOUCH_CAP",), _at(POD, 30.0), False),
     ("J08B cap magnet (CH-065), in the cap wall", ("BALL_NOSE_MAGNET_",), _at(POD, 30.0), True),
-    ("J08C sensor lid (CH-003): 11 mm forward, then up", ("BALL_POD_SENSOR_LID",), _at(POD, 11.0, dz=60.0), False),
-    ("J08C lid screw, M2 x 8 countersunk thread-forming (CH-062)", ("BALL_POD_LID_M2X8",), _at(POD, 11.0, dz=80.0), True),
+    ("J08C sensor lid (CH-003): 12 mm forward, then up", ("BALL_POD_SENSOR_LID",), _at(POD, 12.0, dz=60.0), False),
+    ("J08C lid screw, M2 x 8 countersunk thread-forming (CH-062)", ("BALL_POD_LID_M2X8",), _at(POD, 12.0, dz=80.0), True),
     # Keel.
     ("Keel body (CH-008)", ("REAR_KEEL_FACETED_BODY",), KEEL, False),
     ("J09A keel inserts in the crossmember, M3 x 6 (CH-067)", ("REAR_KEEL_HEATSET_INSERT_",), (0.0, 0.0, 0.0), False),

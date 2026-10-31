@@ -82,26 +82,26 @@
 
 - **Parts/load path:** the vendor base's top face seats on the 6 mm pod seat (Z 29–35). Ball reaction goes into the pod through that face; the screws only clamp.
 - **Location/joint:** three holes at 120° on the 14.08 mm bolt circle (0°, 120° and 240° about X 110). Pololu's drawing 2691 shows a 2.7 mm web with Ø6.3 counterbores from the ball side, and the model now includes them.
-- **Hardware/clamp:** 3 × ISO 7380 M3 × 8 (CH-031), driven from below through the web into 3 × CNC Kitchen M3 × 5.7 inserts (CH-063). The inserts are pressed from the seat face into Ø4.0 bores and sit flush with it. Thread engagement is 5.3 mm. Button heads sit 0.43 mm off the ball ([D-011](../../decisions.md#d-011)).
+- **Hardware/clamp:** 3 × ISO 7380 M3 × 8 (CH-031), driven from below through the web into 3 × OnlyScrews M3 × 6 inserts, OD 4.4 (CH-063, D-077). The inserts are pressed from the seat face into Ø4.0 bores and sit flush with it. Thread engagement is 5.3 mm. Button heads sit 0.43 mm off the ball ([D-011](../../decisions.md#d-011)).
 - **Access/service:** from below with the body on and nothing else removed.
   1. Unsnap the housing (ball and rollers come with it).
   2. Undo the three screws with a 2 mm hex key.
   3. Lower the base.
 
-  `cad/check_nose_service.py` sweeps each of these steps clear.
-- **Print:** pod seat face down (3.4 % support area).
+  `final/v1/cad/check_nose_keel_assembly.py` checks the final geometry, keys and removal paths (D-079).
+- **Print:** pod seat face down, 1264 mm² bed, no support (D-078).
 - **Proof/state:** CAD defined; `check_layout.py` → `ball_screws_thread_into_seat_inserts`. **Open:**
   - measure the received #2691 (web, counterbore, hole Ø);
-  - insert pull-out coupon;
+  - first P02 seat insert fit and retention, no coupon (D-073, D-077);
   - static, drop and threshold tests at 2.55 kg with limits set first.
 
 ### J07B — pod to front crossmember
 
 - **Parts/load path:** the pod's rear face bears on the crossmember front face at X 92. The caster and nose loads enter the crossmember.
 - **Location/joint:** two horizontal M3 axes at Y ±10, Z 42, driven +X → −X from inside the sensor pocket.
-- **Hardware/clamp:** 2 × ISO 7380 M3 × 8 (CH-032): 3 mm of pod wall plus 5 mm in 2 × CNC Kitchen M3 × 5.7 inserts (CH-033). The inserts sit in Ø4.0 crossmember bores, which give 0.3 mm/side of knurl interference. This closes the old insert-location conflict: the inserts are in the crossmember.
-- **Access/service:** sensor and lid out. A 2 mm L-key has about 12 mm between the heads and the GP2Y body, so check tool reach at the dry run.
-- **Proof/state:** CAD defined. **Open:** insert coupon, dry-run access and load test.
+- **Hardware/clamp:** 2 × ISO 7380 M3 × 8 (CH-032): 3 mm of pod wall plus 5 mm in 2 × OnlyScrews M3 × 6 inserts, OD 4.4 (CH-033, D-077). The inserts sit in Ø4.0 crossmember bores, 7 mm deep, giving 0.2 mm/side of knurl interference. This closes the old insert-location conflict: the inserts are in the crossmember.
+- **Access/service:** sensor and lid out. Use a shortened 2 mm L-key: 8 mm from the head face to bend at X 104.65, long leg up. The −Y lid boss blocks a straight key. **Body off** for tool entry: the shell band blocks it even with the front panel removed. Both entry paths and a 60° inward swing (toward the pocket centre) are checked (D-079).
+- **Proof/state:** CAD defined. **Open:** first-part insert retention, dry-run access and load test.
 
 ### J08A — front range sensor to pod
 
@@ -117,13 +117,13 @@
 ### J08B — nose touch cap and contact sensing to pod
 
 - **Parts/load path:** the cap (CH-007) slides on the pod's constant-section nose (X 122.5–128.5) with a 0.5 mm running gap. A push travels 3.0 mm rearward until the cap's inner face stops on the pod face.
-- **Retention and return:** two vertical snap fingers, 2.0 × 16.5 mm, hold the cap. Their 0.8 mm hooks ride in flank slots, at about 2.2 % strain for a 1 mm spread. Two Ø3 × 10 stainless springs (CH-066) in seat pockets at Y ±3 push the cap back against the hooks: about 0.4 N preload, about 1.6 N at the stop.
+- **Retention and return:** two vertical snap fingers, 2.0 × 16.5 mm, hold the cap. Their 0.8 mm hooks ride in flank slots, at about 2.2 % strain for a 1 mm spread. Two selected RS PRO 821245 springs (CH-066: OD 2.75, wire 0.25, free length 15.7 mm) sit at Y ±3, with modeled installed gaps 9 mm at rest and 6 mm at the stop. Preload, stop force, unsupported-length behavior and return need physical checks; the old Ø3 × 10 / force estimate does not describe the selected spring.
 - **Removal:** spread the finger tips and slide the cap forward.
 - **Sensing ([D-013](../../decisions.md#d-013)):** contactless, so nothing bottoms out.
-  - A Ø2 × 1 N35 magnet (CH-065) sits in the cap wall.
-  - A DRV5055A3 linear Hall sensor (CH-019) sits on a 6.0 × 4.6 mm board (CH-064) in a slot in the seat's front face. It clears the magnet by 3.1 mm at rest and 0.1 mm at the stop.
-  - C3 trips at rest + 5 mT: 0.71 mm of cap travel nominal, 0.50–0.95 mm across tolerances. See [nose-hall-board.md](research/nose-hall-board.md).
-- **Print:** nose face down (2.8 % support area).
+  - A selected Ø3 × 1.5 N35 magnet (CH-065) sits in the cap wall.
+  - A DRV5055A3 linear Hall sensor (CH-019) sits on a 6.0 × 4.6 mm board (CH-064) in a slot in the seat's front face. The final slot/relief retain D-059 and D-063; use the PCB-15 final-fit checks for the moved board and magnet clearances.
+  - The current source treats +12 mT as a bench starting threshold only; measure the selected magnet/board/spring assembly before choosing the released trip point. See [nose-hall-board.md](research/nose-hall-board.md).
+- **Print:** top down (+Z): 145 mm² bed and 33 mm² support at the visor underside; keep finger slits free. Nose face down leaves the fingers starting over their slits (D-078).
 - **Proof/state:** CAD defined; `check_nose_joints.py` → `touch_cap_sweeps_3mm_rearward` (includes the magnet clearance at the stop), `touch_cap_running_clearance`. **Open:**
   - bench trip point 0.4–1.2 mm;
   - spring rate and return;
@@ -138,31 +138,31 @@
   - a rear 12 × 1.5 × 2 mm tongue drops into a pod-wall groove that is open forward;
   - the shell band overhangs the lid top by 0.5 mm with the body on;
   - one M2 × 8 countersunk thread-forming screw (CH-062) goes into a pod boss at (111.8, −11.8), behind the sensor body (D-027; it was at X 124.6, inside the real sensor's footprint);
-  - a hump over the sensor header (to Z 57.6, under the front panel's Z 58 lift-off path; 2 mm soldered-lead reserve, [D-029](../../decisions.md#d-029)), open 11.5 mm rearward so the lid can make its 11 mm forward slide; the cap has a matching top notch that clears the hump through its 3 mm travel.
-- **Access/service:** cap off, screw out, slide forward 11 mm, lift. With the body off, the rear is held only by the tongue.
-- **Print:** on its side (3.4 % support area).
-- **Proof/state:** CAD defined. **Open:** dry-fit, removal cycles, and screw strip torque in PETG.
+  - a hump over the sensor header (to Z 57.6, under the front panel's Z 58 lift-off path; 2 mm soldered-lead reserve, [D-029](../../decisions.md#d-029)), open 11.5 mm rearward so the lid can make its forward slide; the cap has a matching top notch that clears the hump through its 3 mm travel.
+- **Access/service:** cap off, screw out, slide forward **12 mm**, then lift 40 mm (D-079). At 11 mm the lid hits the speaker panel on lifting; at 13 mm forward it hits the GP2Y. The body stays on. With the body off, the rear is held only by the tongue.
+- **Print:** front end (+X) down, 67 mm² bed and 89 mm² support inside the hump (D-078).
+- **Proof/state:** CAD defined. **Open:** candidate CH-062 head/PH0 and Ø1.6 PETG pilot qualification; dry-fit, removal cycles and strip resistance. Snug only (D-079).
 
 ### J09A — rear keel to rear crossmember
 
 - **Parts/load path:** printed keel (CH-008) seats flat on the rear crossmember underside at Z 34; skid load goes through four screws into the crossmember and on to both rails.
 - **Location/joint:** four vertical screws at X −36.5 / −44.0, Y ±5.5. The rear pair moved 1.5 mm forward of the old X −45.5 so the insert keeps a wall to the crossmember's rear face.
-- **Hardware/clamp:** four ISO 4762 M3 × 30 (CH-034) into CNC Kitchen M3 × 5.7 inserts (CH-067) pressed from below; engagement 5.5 mm (front pair) and 5.7 mm (rear pair), limited by the insert length. Heads sit in Ø6.5 counterbores, recessed 0.5 and 1.5 mm. The old Ø6 cable bore through the crossmember is closed.
-- **Material/access/service:** screws drive from below with the keel, shoe and bezel fitted (hex-key paths clear in CAD). Keel removal: pull the sensor and its lead out below (J09B), then undo four screws.
-- **Proof/state:** CAD defined ([D-014](../../decisions.md#d-014)); `cad/check_rear_keel.py` passes. **Open:** insert pull-out coupon, strip torque, skid impact and bending test.
+- **Hardware/clamp:** four ISO 4762 M3 × 30 (CH-034) into OnlyScrews M3 × 6 inserts, OD 4.4, in Ø4 × 7 mm pilots (CH-067, D-077) pressed from below; engagement 5.5 mm (front pair) and 6.0 mm (rear pair), limited by the insert length. Heads sit in Ø6.5 counterbores, recessed 0.5 and 1.5 mm. The old Ø6 cable bore through the crossmember is closed.
+- **Material/access/service:** screws drive from below with the keel, shoe and bezel fitted (2.5 mm key across corners checked on final CAD, D-079; 0.3 N·m). Keel removal: pull the sensor and its lead out below (J09B), then undo four screws.
+- **Proof/state:** CAD defined ([D-014](../../decisions.md#d-014)); `cad/check_rear_keel.py` passes. **Open:** first-part insert fit and assembled retention, no coupon (D-073), strip torque, skid impact and bending test.
 
 ### J09B — rear TCRT cartridge to keel
 
-- **Parts/load path:** the TCRT5000 sits in a pocket open below the keel belly, face down on 0.6 mm end ledges of a printed bezel (CH-010). A 4-wire GH lead is soldered to its legs under heat-shrink (CH-020, [spec](research/rear-tcrt-lead.md), D-016) and leaves straight up through the pocket, which runs out through the keel top.
-- **Location/joint:** optical height = keel belly (Z 12) minus 1 mm shims (CH-068): two shims give the nominal Z 10; zero to four give Z 12 to 8 (±2 mm). The shims have a window, so nothing bears on the leads; the flexible lead and its slack loop take up the travel.
-- **Hardware/access/service:** one M2 × 10 thread-forming screw (CH-069) and a moulded Ø1.8 pin fix bezel and shims. Sensor swap from below with the keel on: screw out, bezel and shims off, unplug J10-10 at PCB-10 (rear panel off), cut the zip tie, and pull the sensor and lead down through the pocket. The keel comes off only after that; there is no disconnect at the keel. The lead rises behind the crossmember, with a 30 mm slack loop, a zip tie (CH-072) at a lug on the crossmember's rear face, and a route beside PCB-02 and over PCB-04 to C3 J10-10.
+- **Parts/load path:** the TCRT5000 sits in a pocket open below the keel belly, face down in contoured end cradles of a printed bezel (D-077) (CH-010). A 4-wire GH lead is soldered to its legs under heat-shrink (CH-020, [spec](research/rear-tcrt-lead.md), D-016) and leaves straight up through the pocket, which runs out through the keel top.
+- **Location/joint:** nominal sensor datum = recessed keel flat Z 12.4 minus 1.2 mm shims (CH-068, D-077): two retain Z 10; zero to four give Z 12.4 to 7.6. Keep two for normal use: three/four lower the guards enough to lose shoe-first tip contact. Z 10 is the existing lowest-STEP-feature datum; actual optical standoff needs a received-sensor check. The original flat ledges allowed about 4 mm of drop before supporting the rounded case; the cradles contact within 0.05 mm without moving the sensor. The shim windows are widened to 11.8 × 7.6 for the cradles; the bezel keeps its 9 × 7.6 optical window. The shims have a window, so nothing bears on the leads; the flexible lead and its slack loop take up the travel.
+- **Hardware/access/service:** one candidate M2 × 10 thread-forming screw (CH-069), snug only, and a moulded Ø1.8 pin fix bezel and shims (D-079). The Ø1.6 pilot ends at Z 21.9 and the pin hole at Z 19.4 (D-077), 1 mm beyond their zero-shim tips. Sensor swap from below with the keel on: screw out, bezel and shims off, unplug J10-10 at PCB-10 (rear panel off), cut the zip tie, and pull the sensor and lead down through the pocket. The keel comes off only after that; there is no disconnect at the keel. The lead rises behind the crossmember, with a 30 mm slack loop, a zip tie (CH-072) at a lug on the crossmember's rear face, and a route beside PCB-02 and over PCB-04 to C3 J10-10.
 - **Proof/state:** CAD defined (D-014). **Open:** PCB-10 J10-10 circuit, optical height on real floors, joint sleeve and lead bend in hardware.
 
 ### J10A — wear shoe to keel
 
-- **Parts/load path:** 12 × 10 × 2.5 mm shoe (CH-009) backed by the flat keel belly; a 2.5 mm dovetail tongue on its top runs in a groove open at the keel's front.
-- **Location/joint:** the shoe slides in from the front and stops on the groove end. One M2 × 6 thread-forming screw (CH-070) crosses the tongue from the keel's +Y side, with clearance in the keel and threads in the shoe.
-- **Material/access/proof:** PETG recommended ([D-017](../../decisions.md#d-017)). Swap: screw out, slide forward. **Open:** retention and abrasion test.
+- **Parts/load path:** 12 × 10 × 2.5 mm shoe (CH-009) backed by the flat keel belly; a 3.5 mm tongue (D-077: the upper 1 mm is straight-sided above the original 2.5 mm dovetail) on its top runs in a groove open at the keel's front.
+- **Location/joint:** the shoe slides in from the front and stops on the groove end. One M2 × 6 thread-forming screw (CH-070) crosses the tongue from the keel's +Y side, with clearance in the keel and threads in the shoe. D-077 retains the Ø1.6 pilot and screw axis, with a 1.45 mm roof. Candidate screw head/PH0 and PETG pilot still need qualification; snug only.
+- **Material/access/proof:** PETG recommended ([D-017](../../decisions.md#d-017)). Swap: PH0 from +Y with wheels on; screw out, slide forward 15 mm (final CAD checked, D-079). **Open:** retention and abrasion test.
 
 ### J10B — TCRT guards to keel
 

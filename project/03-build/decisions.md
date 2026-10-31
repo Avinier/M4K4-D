@@ -3281,3 +3281,27 @@ Option B2, locating the motor by a close-fit plate pilot and tightening the face
 **Materials.** Existing print-guide choices: nose seat/lid PETG deep slate, cap ASA ivory on X1E, keel/bezel PETG taupe, shoe/shims PETG deep slate. ASA permission remains open in `04-print/lab.md`. No alternative material is qualified by an unchanged CAD fit alone: shrinkage, sliding friction and snap fatigue need the actual print. No material swap is made here.
 
 **Proof.** `check_nose_keel_print.py` **42/42** (2026-11-01); all 42 bed-direction measurements completed on final prints. Selected-orientation limits and the bad cap orientation are in `check_nose_keel_print.py`; slice inspection, bed finish, support removal and first-part fits remain physical. STLs must be exported from final geometry with droid edits (04-print rules 2/3); no STL export or fabrication release is made by this review.
+
+## D-079
+
+**2026-11-01 · Chassis / nose and keel assembly, service and torques (J07–J10; final v1 CAD) · ACTIVE; physical tool/hand access and screw qualification remain open**
+
+**Why.** The initial final-tree service check found that lifting the lid after an 11 mm slide meets the speaker panel, and a straight key to the −Y pod screw meets the lid-screw boss. A 45 mm alternative lid slide meets the GP2Y starting at 13 mm. These are access problems; no sensor move or hardware swap is needed.
+
+**Decision.**
+
+1. **Lid:** cap off and lid screw out; slide **12 mm forward**, then lift 40 mm. This puts its rear edge at X 104, 0.5 mm beyond the panel's X 103.5 extent, while staying below the 13 mm first collision with the GP2Y. The body stays on. Keep both the 11 mm lift and over-slide as planted failures; do not over-slide the lid during service.
+2. **Pod screws:** use a shortened **2 mm L-key**, 8 mm from the screw-head face to the bend (X 104.65), long leg up through the open sensor pocket; roughly 10 mm short leg including engagement. Cap/lid/GP2Y out in the checked state. A straight key remains blocked by the −Y boss. Whole-pod service needs the **body off**: the lower shell band blocks vertical key entry even with the front panel removed. Initial assembly is before the body. Check the actual bend radius and handle access at the dry run; the model encloses the hex across corners at radius 1.155. Entry and an inward 60° operating arc are checked in the body-off state (0..65° at +Y, −65..0° at −Y, 1° samples; use the 5..65° span for re-indexing).
+3. **Assembly order:** install inserts in loose prints/modules; caster housing and ball unsnapped for its three keys; mount pod with pocket open; Hall board before GP2Y, then lid, springs and cap. At the rear, crossmember inserts before keel; seat the TCRT in its contoured bezel cradles, two shims initially, then retain with the pin and screw. The pages §6 describe each fitting direction and state.
+4. **Service:** caster from below with body on; cap from front with hooks released; lid by item 1; GP2Y up before Hall; pod forward with screws out, after body removal for key entry. Keel keys from below with shoe/bezel fitted; remove the TCRT cable first, then keel down through the shell slot. Bezel/shims and TCRT withdraw below; release PCB-10 J10-10 and the crossmember tie first. Shoe screw from +Y with wheels on, then shoe forward. Cable slack and hands remain physical checks.
+5. **Torques, by the D-076 method:** nut factor 0.2, PETG yield assumption about 50 MPa. J07A caster M3 × 8 **0.3 N·m**, about 500 N (head on vendor flange, insert retention limits it). J07B pod M3 × 8 **0.2 N·m**, about 333 N and 20 MPa under a Ø5.7 head around its Ø3.3 hole. J09A keel M3 × 30 **0.3 N·m**, about 500 N and 35 MPa under a Ø5.5 head around a Ø3.4 bore. For J07B use a calibrated adapter or 4 N tangential force at a 50 mm L-key lever arm. All M2 thread-formers (lid, bezel, shoe) **snug only**, stop at seating; CH-062/069/070 samples and PETG pilot/strip/service qualification remain open. No new thread locker is specified for these joints.
+
+**Check.** `check_nose_keel_assembly.py` **53/53** (2026-11-01) builds final chassis and body trees, models 2/2.5 mm keys across corners, a Ø3 PH0 shaft and Ø6 insert-iron tip, and samples removal in 1 mm steps. Planted cases retain the housing, cap, lid, GP2Y, pod/keel/shoe screws and bezel, and use the wrong lid paths and straight pod key. The TCRT support test uses a separate 0.05 mm displacement so service-step sampling cannot miss its free play. Current register text also follows the already-selected Ø3 × 1.5 magnet and RS PRO 821245 springs; no hardware change, and old force/trip estimates are not treated as qualified values. The print check plants the unedited bezel and other unfixed geometry. The check does not prove hands, handle grip, snap deformation or flexible cable behavior.
+
+**Close-out verification:** frame print **36/36**, frame assembly **50/50**, axle **27/27**;
+strict final robot build and updated nose-keel STEP passed. The review STEP validates all 104
+leaf occurrences (topology/closure/positive volume, self-intersection search skipped), with four
+reviewed snapshots. The frame checker now reuses solid classifiers and measures only bed
+contact for its raw planted case; its assertions and selected-orientation figures are unchanged.
+The nose/keel survey uses ray intersections to find candidate boundaries, then classifies the
+same 0.5 mm sample grid; six explicit boundary/thin-feature cases matched the original sampler.
