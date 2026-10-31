@@ -8,7 +8,8 @@ values are in the [workflow](../workflow.md). The wheels have their own page,
 service and the 2026-10-29 gap review (D-070). So does the axle stack,
 [axle/](axle/README.md), including the motor-alignment step and the 2026-10-30
 gap review (D-071). The frame has its own page, [frame/](frame/README.md): parts, joints, printing,
-assembly, service and the 2026-10-30/31 gap review (D-073 to D-076).
+assembly, service and the 2026-10-30/31 gap review (D-073 to D-076). The combined
+[nose](nose/README.md) and [keel](keel/README.md) review covers J07–J10 (D-077 to D-079).
 
 ## Parts
 
@@ -27,13 +28,13 @@ Orientation, critical dimensions and settings are filled in when each part is ex
 | CH-004 | `WHEEL_L_CLAMP_RING_PETG` (both sides) | 2 | PETG, slate blue | A1 | Flat inboard face down, no supports | Clamp face flat; Ø63.4 bore on the rim spigot; screw holes | | TODO |
 | CH-058 | `WHEEL_L_HUB_CAP_PETG` (both sides) | 2 | PETG, gunmetal | A1 | Underside down, no supports (D-070) | Drops onto the hub pegs without play; centre counterbore | | TODO |
 | CH-005 | `WHEEL_L_TYRE_TPU95A_L` in its print state, `PRINT_STATES` (both sides, D-070) | 2 | TPU 95A, black | A1 (direct drive) | On a side face, axis vertical, no supports | Bore Ø73.6 and 12 slots; width 19.3; fit with the V at the top forward | | TODO |
-| CH-002 | `BALL_POD_PRINTED_SEAT` | 1 | PETG, deep slate | A1 | | Caster flange seat; three insert bosses; sensor pocket | | TODO |
-| CH-003 | `BALL_POD_SENSOR_LID` | 1 | PETG, deep slate | A1 | | Rear tongue; lead hump | | TODO |
-| CH-007 | `BALL_NOSE_TOUCH_CAP` | 1 | ASA, ivory | X1E | | 3 mm slide; snap fingers; magnet pocket | | TODO |
-| CH-008 | `REAR_KEEL_FACETED_BODY` | 1 | PETG, taupe | A1 | | Four M3 × 30 bores; dovetail | | TODO |
-| CH-009 | `REAR_KEEL_REPLACEABLE_WEAR_SHOE` | 1 | PETG, deep slate | A1 | | Dovetail slide | | TODO |
-| CH-010 | `REAR_TCRT_BEZEL_WITH_GUARDS` | 1 | PETG, taupe | A1 | | Sensor seat; guard lips | | TODO |
-| CH-068 | `REAR_TCRT_HEIGHT_SHIM_*` | 2 (print 4) | PETG, deep slate | A1 | | 1.0 mm thickness: below the lab's 1.2 mm preferred minimum | | TODO |
+| CH-002 | `BALL_POD_PRINTED_SEAT` | 1 | PETG, deep slate | A1 | Caster seat down (−Z), no supports (D-078) | | TODO |
+| CH-003 | `BALL_POD_SENSOR_LID` | 1 | PETG, deep slate | A1 | Front end down (+X); brim; 89 mm² support inside the hump (D-078) | | TODO |
+| CH-007 | `BALL_NOSE_TOUCH_CAP` | 1 | ASA, ivory | X1E | Top down (+Z); 33 mm² support at the visor underside; keep finger slits free (D-078); ASA permission pending | | TODO |
+| CH-008 | `REAR_KEEL_FACETED_BODY` | 1 | PETG, taupe | A1 | Crossmember seat down (+Z); 312 mm² supports in upper cavity/end recesses (D-078) | | TODO |
+| CH-009 | `REAR_KEEL_REPLACEABLE_WEAR_SHOE` | 1 | PETG, deep slate | A1 | Sole down (−Z), no supports (D-078) | | TODO |
+| CH-010 | `REAR_TCRT_BEZEL_WITH_GUARDS` | 1 | PETG, taupe | A1 | Guard lips down (−Z); 26 mm² support under bezel plate (D-078) | | TODO |
+| CH-068 | `REAR_TCRT_HEIGHT_SHIM_*` | 2 (print 4) | PETG, deep slate | A1 | Flat (±Z), no supports (D-078) | 1.2 ±0.05 mm thickness; two fitted preserve face Z 10 (D-077); three/four need requalification
 
 The body's wheel-arch pods and trims are in the chassis CAD file but belong to
 the body BOM, so they print with the body skins.
@@ -77,8 +78,7 @@ No separate test prints: the small parts go first and are the test.
 | Article | Used in | Qty |
 |---|---|---|
 | M3 × 4 heat-set | Rims (CH-049, 6 per rim), motor plates (CH-054) | 20 |
-| M3 × 6 heat-set | J04 rail ends (CH-061), hatch bosses (CH-077) | 12 |
-| CNC Kitchen M3 × 5.7 | Pod seat (CH-063), keel crossmember (CH-067) | 7 |
+| M3 × 6 heat-set, OD 4.4 (OnlyScrews, in hand) | J04 rail ends (CH-061), hatch bosses (CH-077), pod seat (CH-063), front pod pilots (CH-033), keel pilots (CH-067); Ø4.0 throughout | 21 |
 | M2.5 × 4 heat-set, OD 3.9 (CH-080, not bought) | Driver posts on the deck, Ø3.5 pilots (D-073) | 4 |
 | M4 × 8 heat-set, OD 5.9 (CH-095, not bought) | J13 body bolts in the deck, Ø5.5 pilots (D-075) | 3 |
 
@@ -99,10 +99,11 @@ No separate test prints: the small parts go first and are the test.
   M2.5 × 4; the IMU gets Ø1.6 pilots. Droid edits, checked by
   `final/v1/cad/check_frame_print.py`. The pod seat tries the M3 × 6 in Ø4.0
   first, before the modules ([frame page](frame/README.md)).
-- **CNC Kitchen M3 × 5.7 positions** (pod seat CH-033/CH-063, keel crossmember
-  CH-067; 9 in all) are not ordered. The ordered M3 × 6 (OD 4.4) fits their
-  Ø4.0 holes. Check that each bore takes 6 mm instead of 5.7, or order the
-  CNC Kitchen part.
-- The shims: ask the lab about 1.0 mm walls, or make them 1.2 mm with a
-  decision entry and a `final/v1` edit (two shims would then set Z 9.6, not
-  Z 10).
+- **Nose/keel insert positions resolved (D-077).** The in-hand M3 × 6 replaces all nine
+  CNC Kitchen positions (CH-033/063/067). Seat bores are through 6 mm; crossmember pilots
+  7 mm. The pod seat on P02 is the first insert fit check; no coupons.
+- **Shims resolved (D-077).** 1.2 mm shims, sensor flat recessed 0.4 mm: two retain optical
+  face Z 10. Print four, fit two; three/four lose shoe-first contact on tip-back and need
+  requalification before running.
+- **Nose/keel remaining physical holds:** candidate M2 thread-formers and ASA permission,
+  first-part fit, cable slack, sensing and floor tests; see the two review pages §8.

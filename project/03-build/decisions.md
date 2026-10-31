@@ -3218,3 +3218,66 @@ Option B2, locating the motor by a close-fit plate pilot and tightening the face
    - J04 stays at 0.3 N·m (D-072).
 
 **Check:** `check_frame_assembly.py` gains the bolt's path out downward (head R 4.0) past the notched hatch, the key 1.0 mm clear, and the unnotched hatch planted: **50/50** (2026-10-31). `check_frame_print.py` 36/36 with the hatch's bed minimum lowered to 4850 mm² for the notch.
+
+## D-077
+
+**2026-11-01 · Chassis / nose and keel print review: inserts, pilots, TCRT shims, wear-shoe tongue (CH-002, CH-008, CH-009, CH-010, CH-033, CH-062, CH-063, CH-067, CH-068, CH-069, CH-070; J07A, J07B, J08C, J09A, J09B, J10A; final v1 CAD) · ACTIVE; `check_nose_keel_print.py` **42/42**; physical fits open**
+
+**Why.** Laying out the nose and keel for the print review ([nose page](../04-print/01-chassis/nose/README.md), [keel page](../04-print/01-chassis/keel/README.md)) found:
+
+- **Nine insert positions are drawn for the CNC Kitchen M3 × 5.7**, which isn't bought: 3 in the pod seat (CH-063), 2 in the front crossmember (CH-033), 4 in the rear crossmember (CH-067). The OnlyScrews M3 × 6 (OD 4.4) is in hand and fits their Ø4.0 bores (OD − 0.4, as D-073), but it is 0.3 mm longer:
+  - the caster seat is 6.0 mm and its bores run through it, so the M3 × 6 fills it, flush at the seat face (where the flange bears on the insert ends) and at the pocket floor, where the GP2Y stands over insert 1;
+  - the keel pilots were 6.5 mm deep, 0.5 mm past the insert (D-073 asks for 1 mm);
+  - the crossmember pod pilots are already 7.0 mm.
+- **The TCRT height shims are 1.0 mm**, under the lab's 1.2 mm minimum wall ([lab.md](../04-print/lab.md)).
+- **The M2 thread-forming pilots** are Ø1.6 (0.8 × d) everywhere, but the bezel's ended 0.05 mm past the screw tip at zero shims, so a long screw would bottom before its head seated, and the wear shoe's crossed its 2.5 mm tongue with 0.45 mm of plastic above it: one or two layers, which a thread-former splits.
+
+**Decision** (builder, 2026-11-01: 1.2 mm shims with the sensor flat raised 0.4 mm; plain pilot fixes made directly):
+
+1. **Inserts:** the M3 × 6 (CH-061 stock) goes in all nine positions; CH-033, CH-063 and CH-067 become that part. Droid edits (`NOSE_KEEL_FIX`, `nose_keel_edits()` in `makad-v1.step.py`; the chassis source is unchanged):
+   - caster seat: bores unchanged (Ø4.0 through), the insert pressed flush with the seat face; a **Ø5.0 × 0.5 relief** in the pocket floor over insert 1, under the GP2Y, takes the plastic the insert pushes out at the top. Inserts 2 and 3 open on bare floor;
+   - rear crossmember: keel pilots **6.5 → 7.0 mm** (Ø4.0), Ø3.4 beyond for the screw tips;
+   - the insert models become OD 4.4 × 6.0.
+2. **TCRT shims 1.0 → 1.2 mm**, and the keel's sensor flat is **recessed 0.4 mm** under the bezel and shims (belly Z 12 → 12.4, X −61.6 to −47.4, the keel's full width). Two shims still set the optical face at **Z 10** and the guard lips at **Z 7**, so the D-014 nominal and the tip-back order are unchanged. The range becomes Z 12.4 (no shims) to 7.6 (four). The nominal optical working distance is unchanged; other shim counts need real-floor signal qualification.
+3. **M2 pilots (Ø1.6, 0.8 × d):**
+   - bezel pilot in the keel runs to **Z 21.9**, 1 mm past the M2 × 10's tip at zero shims; the pin hole to Z 19.4, 1 mm past the pin;
+   - wear shoe: the tongue grows **1 mm straight up** (Z 8.5 → 9.5, at its top half-width 3.0) and the keel groove with it, so the pilot has 1.45 mm above it. The screw, its axis and its holes are unchanged;
+   - the lid boss pilot (J08C) is already right: 13 mm deep, 1.15 mm wall.
+4. **TCRT support at the existing pose.** The real rounded vendor case does not contact the old flat end ledges: the sensor can drop 0.2 mm freely and the 1 mm-step sweep first contacts at 4 mm. The earlier bounding-box ledge test did not prove support. Two 1.3 mm-wide **contoured end cradles** rise from the bezel to Z 14 at X −59.8..−58.5 and −49.5..−48.2, Y ±3.8. Subtract the unchanged vendor sensor solid from these pads to make the case seats. The 9 × 7.6 optical window remains open. Widen the shim window to X −59.9..−48.1; clear the keel around the cradles through Z 16.5 for the zero-shim stack. No sensor move or hardware swap. The final check requires zero initial sensor overlap and positive contact after just 0.05 mm downward motion; the unedited bezel is planted. The register's Z 10 remains the existing CAD datum at the lowest projecting STEP feature; qualify actual optical standoff on the received sensor.
+5. **GP2Y topology:** the vendor STEP itself validates, but the existing subsystem ear-trim boolean leaves an invalid inspection solid. Replace that leaf via `DROID_REMOVES`/`DROID_INSERTS` with its healed solid (`fix()`), at the same pose. The check requires unchanged bounds within 1e-6 mm, volume change under 0.001 mm³ and valid topology; the unedited trimmed part is planted. No sensor movement. Restore the existing D-027 soldered-lead inspection reserve, which `build_chassis_v1()` had filtered out, into the final chassis tree so the final service sweeps actually include it.
+6. **M2 sourcing** (CH-062, CH-069, CH-070), like CH-039 in D-073: the JCPlas B4B66/B4B67 thread-formers are still candidates. The Ø1.6 pilots stand for the usual 0.8 × d; confirm against the maker's PETG pilot when the sample comes, before export.
+
+**Found, kept:**
+- Insert 2's knurl leaves 1.15 mm of seat to the Hall-lead groove over the groove's 1.5 mm depth. Press it slowly and check the groove after.
+- The bezel pilot has 0.75 mm of keel past its thread toward the TCRT pocket (0.25 mm clearance a side round the sensor). Drive the screw snug only, and check the TCRT still drops freely out of the pocket.
+- At three or four shims the guard lips meet the floor before the shoe when the robot tips back (5.39° / 4.28°, against the shoe's 6.05°). This was already so at 1.0 mm. Keep two fitted. Three/four are experimental stacks requiring contact-order and floor-signal requalification before running.
+
+**Mass:** measured CAD changes: seat −0.021 cm³, keel −0.175 cm³, shoe +0.066 cm³, bezel +0.077 cm³, two shims +0.030 cm³ total. Weigh the prints and update the hand-kept register under rule 6; CAD volume is not a measured print mass.
+
+**Check:** `final/v1/cad/check_nose_keel_print.py` **42/42** (2026-11-01).
+
+**BOM changed:** CH-033, CH-063, CH-067 → the OnlyScrews M3 × 6, OD 4.4 (in hand); CH-068 1.2 mm; CH-008/CH-009/CH-010 notes; CH-062/069/070 pilot note.
+
+## D-078
+
+**2026-11-01 · Chassis / nose and keel print orientations (CH-002/003/007/008/009/010/068; final v1 CAD) · ACTIVE; actual slicing and physical print checks remain open**
+
+**Why.** The nose and keel needed the same bed/support/critical-face review as the frame. The register's nose-face-down cap starts the snap fingers 5 mm up, over their slits. The lid's broad faces create large overhangs; the keel and bezel have competing bed and support areas.
+
+**Decision.** Use the final geometry with all droid edits. `check_nose_keel_print.py --survey` surveys six orthogonal bed directions per print. Each downward triangle is measured; the nominal 45° limit uses a 44° normal threshold to allow meshing tolerance. Flat faces bridge within 15 mm between supports or form ledges within 2 mm; short sloped ledges also use 2 mm. Only concave bores under 3 mm radius get the small-hole exemption; convex pins remain in the survey. These geometric surface areas guide the lab's slice, rather than promising a support volume or surface finish.
+
+| Print | Bed direction in chassis coordinates | Critical faces |
+|---|---|---|
+| Pod seat | −Z, caster seat down | Caster seat, insert mouths, sensor floor, Hall slot and cable groove |
+| Lid | +X, front end down, brim | Tongue, pod seating rim, lead hump interior and countersink |
+| ASA touch cap | +Z, top down | Finger roots/slits, running faces, magnet pocket, visor; visible bed finish |
+| Keel | +Z, crossmember seat down, brim if needed | Crossmember seat, counterbores, sensor/cradle pockets, groove and recessed flat |
+| Shoe | −Z, sole down | Tongue flanks/top and M2 pilot |
+| Bezel with guards and case cradles | −Z, guard lips down, brim if needed | Case seats, shim face, locating pin and screw recess |
+| 1.2 mm shims | ±Z, flat | Thickness, parallel faces, cradle window and holes |
+
+**Support locations.** Lid: the interior hump end wall. Cap: visor underside; keep support out of the finger slits. Keel: upper lead cavity and end recesses. Bezel: underside of the plate between its lips. Seat, shoe and flat shims: no support under the stated survey rules. Bed and support areas, the full six-direction tables and the limits repeated by the check are in the nose and keel pages §5.
+
+**Materials.** Existing print-guide choices: nose seat/lid PETG deep slate, cap ASA ivory on X1E, keel/bezel PETG taupe, shoe/shims PETG deep slate. ASA permission remains open in `04-print/lab.md`. No alternative material is qualified by an unchanged CAD fit alone: shrinkage, sliding friction and snap fatigue need the actual print. No material swap is made here.
+
+**Proof.** `check_nose_keel_print.py` **42/42** (2026-11-01); all 42 bed-direction measurements completed on final prints. Selected-orientation limits and the bad cap orientation are in `check_nose_keel_print.py`; slice inspection, bed finish, support removal and first-part fits remain physical. STLs must be exported from final geometry with droid edits (04-print rules 2/3); no STL export or fabrication release is made by this review.

@@ -13,7 +13,7 @@ and its colour, stays in the [print guide](../03-build/final/v1/printguide.md).
 | Item | What the poster says | What it means for Makad |
 |---|---|---|
 | Build volume | 250 × 250 × 250 mm maximum; larger parts must be split | Every part fits. The largest, the body shell, is 162 × 182 × 110 mm |
-| Wall thickness | 1.2 mm preferred minimum | Two printed parts are thinner: the head pivot retainer (1.0 mm, D-051) and the keel's TCRT height shims (1 mm, D-014). Ask whether they will print them |
+| Wall thickness | 1.2 mm preferred minimum | The head pivot retainer is thinner (1.0 mm, D-051); ask whether they will print it. Keel TCRT shims are now 1.2 mm with a recessed sensor flat (D-077) |
 | Files | STL, STEP or OBJ; watertight, no non-manifold edges; own designs only | Export a per-part STL or STEP |
 | Requests | Email with the purpose, dimensions, material and print type; academic prints CC a faculty member; submit at least 4 days ahead | Plan print batches a week out |
 | Printing | Slicing is done at the lab. A print starts only with the Lab Manager present. The student stays for the first 5 layers and leaves an ID card | Each plate costs a supervised start, so group parts into few plates |
@@ -89,8 +89,9 @@ Ask by email or on the next visit; record the answer here with its date.
 - **Slicer:** Bambu Studio or Orca? Makad hands over raw STLs with the settings
   written on each part card, so ask whether the lab can paint fuzzy skin onto
   chosen faces and split colours for the AMS at slicing time.
-- **Walls under 1.2 mm:** the head pivot retainer (1.0 mm) and the keel TCRT
-  shims (1 mm). Will the lab print them, or do they thicken?
+- **Walls under 1.2 mm:** the head pivot retainer (1.0 mm). Will the lab print it,
+  or does it thicken? The keel TCRT shims were raised to 1.2 mm on 2026-11-01
+  (D-077), with the sensor flat recessed 0.4 mm to retain the nominal sensor height.
 - **Academic status:** which faculty member to CC so own-filament prints are free.
 - Filament colours in stock, by brand and material, against the [palette](../03-build/final/v1/printguide.md#4-colour-scheme): ivory or white **ASA** and a warm taupe or khaki-grey **ASA**, matte amber or ochre, a very dark blue-grey (deep slate) in **PETG** and **PLA**, a lighter blue-grey (slate blue) **PETG** for the wheels, taupe **PETG** for the keel, matte gunmetal, black TPU 95A. Take photos next to a printed colour card. Screen hex values are only a guide. Numakers and Polymaker spools were seen on the shelves.
 - Heat-set insert tip, a spray area for primer and paint, and use of the

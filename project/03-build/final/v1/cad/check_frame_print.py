@@ -67,8 +67,19 @@ def modules(tree):
     return out
 
 
+_classifiers = {}
+
+
 def solid_at(shape, p):
-    return any(BRepClass3d_SolidClassifier(s.wrapped, gp_Pnt(*p), 1e-6).State() == TopAbs_IN for s in shape.solids())
+    key = id(shape)
+    if key not in _classifiers:
+        _classifiers[key] = (shape, [BRepClass3d_SolidClassifier(s.wrapped) for s in shape.solids()])
+    point = gp_Pnt(*p)
+    for classifier in _classifiers[key][1]:
+        classifier.Perform(point, 1e-6)
+        if classifier.State() == TopAbs_IN:
+            return True
+    return False
 
 
 def ring(axis, centre, r, a):
@@ -260,7 +271,12 @@ def main():
               f"nearest: {[(g, n) for g, n, _ in near[:6]]}; failing: {bad}")
 
     # 9. Planted.
-    bed_raw, _ = bed_and_overhang(raw["CHASSIS_FRAME_FRONT_MODULE"], (0, 0, -1))
+    # This planted case only asserts bed contact, not raw support area. Do not
+    # spend minutes classifying an overhang survey whose result is discarded.
+    raw_front = raw["CHASSIS_FRAME_FRONT_MODULE"]
+    bed_z = raw_front.bounding_box().min.Z
+    bed_raw = sum(f.area for f in raw_front.faces() if f.geom_type == GeomType.PLANE
+                  and f.normal_at(f.center()).Z <= -0.999 and abs(f.center().Z - bed_z) < 1e-3)
     strip = solid_at(raw["CHASSIS_FRAME_REAR_MODULE"], (-44.5, 0.0, 54.0))
     check("planted: unedited front module stands on its tub walls only; unedited rear strip is open at Z 54",
           bed_raw < 600 and not strip, f"bed {bed_raw:.0f} mm2; rear strip solid at Z 54: {strip}")

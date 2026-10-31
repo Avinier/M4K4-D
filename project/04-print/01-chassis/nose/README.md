@@ -1,9 +1,9 @@
-# Nose (ball transfer) — parts, joints and the review layout
+# Nose (ball transfer) — parts, printing, assembly and service
 
 The nose of [chassis v1](../README.md): the printed pod that carries the ball caster and the
 front range sensor, its sensor lid and the sliding touch cap, and every joint they carry. This
 page reviews the nose for printing, together with the [rear keel](../keel/README.md), the same
-way as the [frame](../frame/README.md) (2026-10-31). §1–§3 lay out the parts and joints.
+way as the [frame](../frame/README.md) (2026-10-31). The CAD review and its checks are recorded below (2026-11-01).
 
 - **Geometry:** chassis v1, [`body_chassis_model.py`](../../../03-build/01-chassis/v1/cad/body_chassis_model.py)
   (`ball_pod()`, `ball_pod_lid()`, `ball_pod_hardware()`, `tactile_ball_nose()`, `ball_transfer()`).
@@ -12,10 +12,10 @@ way as the [frame](../frame/README.md) (2026-10-31). §1–§3 lay out the parts
   review go in as droid edits in [`makad-v1.step.py`](../../../03-build/final/v1/cad/makad-v1.step.py).
   The PCB-15 slot edits ([D-059](../../../03-build/decisions.md#d-059), [D-063](../../../03-build/decisions.md#d-063)) are already droid edits.
 - **Joints:** the [joint register](../../../03-build/01-chassis/v1/joint-register.md) (J07A, J07B, J08A, J08B, J08C).
-- **View:** [`nose-keel.step.py`](http://127.0.0.1:3245/Users/avinier/robotics/makad/project/03-build/final/v1/cad?file=nose-keel.step.py),
+- **View:** [`nose-keel.step.py`](../../../03-build/final/v1/cad/nose-keel.step.py),
   shared with the keel. Two copies: **1 assembled** and **2 exploded** (150 mm to −Y), with every
   part pulled out along the direction it is fitted: the pod forward off the crossmember, the
-  caster down, the sensor and Hall board up, the lid 11 mm forward then up, the cap forward. Each
+  caster down, the sensor and Hall board up, the lid 12 mm forward then up, the cap forward. Each
   joint is its own group in the tree. The three nose prints are solid colours (seat slate, lid
   lighter slate, cap ivory); bought parts and the front module (already reviewed) are pale.
 
@@ -75,7 +75,7 @@ face at (Y 10, Z 32.6).
 | **J07B** | Pod's back face (X 92) to the crossmember front face | 2 × ISO 7380 M3 × 8 (CH-032) through the 3 mm back wall into 2 × M3 × 6 inserts in the crossmember (CH-033) | Inside the pocket, along −X: cap, lid and sensor out | [J07B](../../../03-build/01-chassis/v1/joint-register.md#j07b--pod-to-front-crossmember) |
 | **J08A** | GP2Y0A21YK0F (CH-018) on the pocket floor; the pocket walls locate it in Y, the lid holds it down | None: the lid retains it | Above, cap and lid off | [J08A](../../../03-build/01-chassis/v1/joint-register.md#j08a--front-range-sensor-to-pod) |
 | **J08B** | Cap slides 3 mm rearward on the constant nose; snap hooks hold it on, two springs push it back; a magnet in the cap passes the Hall board in the seat | 2 springs (CH-066), Ø3 × 1.5 magnet (CH-065), PCB-15 (CH-064, CH-019) | Front: spread the fingers, slide forward | [J08B](../../../03-build/01-chassis/v1/joint-register.md#j08b--nose-touch-cap-and-contact-sensing-to-pod) |
-| **J08C** | Lid on the pod: rear tongue in the groove, front screw; the shell band holds the rear down | 1 × M2 × 8 countersunk thread-forming (CH-062) into the boss | Above; cap off to slide the lid forward 11 mm and lift | [J08C](../../../03-build/01-chassis/v1/joint-register.md#j08c--sensor-lid-to-pod) |
+| **J08C** | Lid on the pod: rear tongue in the groove, front screw; the shell band holds the rear down | 1 × M2 × 8 countersunk thread-forming (CH-062) into the boss | Above; cap off to slide the lid forward 12 mm and lift | [J08C](../../../03-build/01-chassis/v1/joint-register.md#j08c--sensor-lid-to-pod) |
 
 ## 3. Hardware going into the nose prints
 
@@ -86,3 +86,55 @@ face at (Y 10, Z 32.6).
 | M2 × 8 countersunk thread-forming | CH-062 | 1 | Ø1.6 pilot in the boss; Ø2.2 + 90° countersink in the lid | Candidate (JCPlas B4B67) |
 | Return spring, RS PRO 821245 | CH-066 | 2 | Ø3.3 pockets | |
 | Magnet, N35 Ø3 × 1.5 axial | CH-065 | 1 | Ø3.06 × 1.5 pocket in the cap | |
+
+
+## 4. Issues going in and what was done (D-077)
+
+All geometry fixes are droid edits in `final/v1`; the subsystem source stays unchanged.
+The final-tree checks are `check_nose_keel_print.py` and `check_nose_keel_assembly.py`.
+
+| Issue | Outcome |
+|---|---|
+| Five nose inserts specified as the unbought CNC Kitchen M3 × 5.7 | Use the in-hand OnlyScrews M3 × 6, OD 4.4, in the existing Ø4.0 bores: three through the 6 mm seat, two in 7 mm crossmember pilots. Models and BOM now agree |
+| The insert under the GP2Y finishes at the sensor floor | A Ø5 × 0.5 relief around its upper end takes displaced plastic. Press from below, flush with the caster seat, and clean the floor before fitting the sensor |
+| Seat insert 2 is close to the Hall-lead groove | Least wall past the knurl is 1.15 mm; keep, press slowly, inspect the groove after installation |
+| Lid thread-former sourcing | Existing Ø1.6 pilot is real, with 1.15 mm minimum wall beyond the thread. CH-062 remains a JCPlas B4B67 candidate; qualify the received head and PETG pilot before export, as CH-039 in D-073 |
+| Nose-face-down cap orientation starts the snap fingers above their slits | Print top down; keep support out of the finger slits (D-078) |
+| ASA on the X1E awaits permission | Still open. Keep ASA and the existing geometry; an alternative material needs fit and snap-fatigue qualification before adoption |
+| The documented 11 mm lid slide does not provide a clear upward path past the speaker panel | 12 mm forward then up is clear; 11 mm then up hits the panel, and sliding 13 mm hits the GP2Y. Both wrong paths are planted (D-079) |
+| Trimmed GP2Y inspection solid had invalid topology | Heal its trimmed solid in the droid tables at the same pose and bounds; printed geometry and sensor position unchanged |
+| PCB-15 slot and relief could be lost in new edits | D-059 and D-063 retained and checked on the final seat |
+
+## 5. Printing (D-078)
+
+The check surveys all six axis directions. Bed area is contact with the bed; support area is
+surface requiring support, not filament volume or slicer time. Downward triangles beyond the
+45° rule count unless bridged within 15 mm, a ledge within 2 mm, or a small cylindrical hole.
+The 44° normal threshold tolerates tessellation at nominal 45° chamfers. The lab must still
+check the actual slice, especially the cap's fingers and small horizontal holes.
+
+| Print | Face on the bed | Bed | Support area | Faces that must come out clean |
+|---|---|---|---|---|
+| Pod seat | **Caster seat, −Z** | 1264 mm² | None | Caster flange seat; Ø4 bores; sensor floor; Hall slot and lead groove; crossmember back face |
+| Lid | **Front end, +X** | 67 mm² | 89 mm² | Rear tongue; pod seat rim; hump interior for the soldered lead; countersink |
+| Cap | **Top, +Z** | 145 mm² | 33 mm² | Snap fingers and 0.6 mm slits; running faces; magnet pocket; visor opening |
+
+Use a brim for the lid's small end face, kept off the fitting tongue. Remove support through
+the lid's open underside. On the cap, support only the surveyed interior overhangs; never bridge
+support across a finger slit. The top is visible and on the bed: confirm the lab's bed finish
+is acceptable for ivory ASA. Remove elephant's foot from running edges without widening the
+nominal 0.5 mm gap. The pod's horizontal crossmember clearance holes and spring pockets need a
+clean slice; do not enlarge the insert pilots by drilling.
+
+The seat prints flat on the A1; the lid stands on its front end. The cap uses the enclosed X1E,
+with the lab's permission for ASA. A material fallback is not qualified by CAD: shrinkage,
+sliding friction and finger fatigue must be checked on the real part before changing material.
+No separate coupons (rule 5): the pod seat on P02 tries the M3 × 6 / Ø4.0 fit before the modules.
+
+**Six-direction survey, final geometry (bed / support, mm²).** Direction is toward the bed.
+
+| Print | −Z | +Z | −X | +X | −Y | +Y |
+|---|---|---|---|---|---|---|
+| Seat | 1264.4 / 0 | 185.3 / 644 | 624.3 / 436 | 255.8 / 679 | 110.2 / 374 | 110.2 / 367 |
+| Lid | 18.0 / 901 | 284.6 / 621 | 50.0 / 89 | 67.2 / 89 | 0.0 / 277 | 0.0 / 277 |
+| Cap | 99.9 / 114 | 144.8 / 33 | 138.6 / 453 | 577.7 / 70 | 104.5 / 39 | 104.5 / 37 |
