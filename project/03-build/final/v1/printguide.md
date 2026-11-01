@@ -44,7 +44,7 @@ material choices in this guide:
 - **TPU is printable:** the A1 printers are direct drive, and TPU is a lab
   filament.
 - **Walls under 1.2 mm** are below the lab's preferred minimum: the head pivot
-  retainer (1.0 mm, D-051) and the keel TCRT shims (1 mm, D-014).
+  retainer (1.0 mm, D-051). The keel TCRT shims are now 1.2 mm (D-077); the keel flat is recessed 0.4 mm so two shims retain the nominal sensor datum.
 
 ### Pre-visit assumptions (superseded)
 

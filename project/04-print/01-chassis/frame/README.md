@@ -93,7 +93,7 @@ the nose and the keel.
 | Item | BOM | Qty | Hole in the print | State |
 |---|---|---|---|---|
 | M3 × 6 slant-knurled insert, OD 4.4 (OnlyScrews) | CH-061 (J04), CH-077 (J11A) | 8 + 4 | Ø4.0 (D-073) | In hand |
-| M3 × 6 insert, used for the CNC Kitchen M3 × 5.7 positions | CH-063 (pod), CH-067 (keel) | 2 front + 4 rear here | Ø4.0 | In hand (nose and keel reviews) |
+| M3 × 6 insert, used for the CNC Kitchen M3 × 5.7 positions | CH-033 (front), CH-067 (rear) | 2 front + 4 rear here | Ø4.0 | In hand (nose and keel reviews) |
 | M2.5 × 4 insert, OD 3.9 | CH-080 | 4 | Ø3.5 (D-073) | **Not bought** |
 | ISO 7380 M3 × 8 | CH-060 | 8 | Ø3.4 in the carrier cheeks | |
 | ISO 7380 M3 × 6 | CH-076 | 4 | Ø3.4 in the hatch | |
@@ -101,7 +101,7 @@ the nose and the keel.
 | M4 × 12 button, M4 nut (cassette only), Ø4 × 8 pin | CH-035/036/037 | 4, 1, 2 | Ø4.5 deck at (64, 48), Ø4.1 pins | |
 | M4 × 8 brass insert, OD 5.9 (OnlyScrews) | CH-095 | 3 | Ø5.5 × 9 from the deck top (D-075) | **Not bought** |
 | M2 × 5 thread-forming | CH-039 | 2 | Ø1.6 through the deck (D-073) | |
-| M2.5 × 6 low button | CH-081 | 4 | — | |
+| M2.5 × 6 Phillips round head (ordered candidate) | CH-081 | 4 | — | 15 ordered, shared stock; head/driver envelope pending |
 
 ## 4. Issues going in and what was done ([D-073](../../../03-build/decisions.md#d-073))
 
@@ -172,7 +172,7 @@ bolts now go into M4 inserts in the deck ([D-075](../../../03-build/decisions.md
 **Tools:**
 - 2 mm hex key, straight and L (16 mm short leg): J04 and J11A (ISO 7380 M3).
 - 2.5 mm hex key: J13 (ISO 7380 M4).
-- 1.5 mm hex key: J15B (M2.5 low button heads).
+- Phillips driver to suit the ordered CH-081 M2.5 × 6 round heads: J15B. The CAD check used the modelled low-head screw/key; confirm the received head and actual driver envelope before assembly.
 - PH1 screwdriver: J12 (M3 countersunk). PH0 or T6, to suit the screws received: J15A.
 - Soldering iron with M2.5, M3 and M4 insert tips. A Ø3 dowel or drill blank to back the inner driver posts.
 - Ø4.1 drill (by hand) for the rear pin hole.
@@ -306,4 +306,5 @@ the chassis source is unchanged. Checks: [`check_frame_print.py`](../../../03-bu
 | Mass | Weigh both modules and the hatch (rule 6); update the register | Rule 6 |
 
 The frame review is complete in CAD. The combined [nose](../nose/README.md) and
-[keel](../keel/README.md) review continues J07–J10 with the final droid edits.
+[keel](../keel/README.md) review also completed J07–J10 (D-077–D-079). See the
+[hardware order reconciliation](../hardware-order.md) for current ordered quantities and remaining hardware.

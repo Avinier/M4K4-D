@@ -23,18 +23,18 @@ Orientation, critical dimensions and settings are filled in when each part is ex
 | CH-001 | `AXLE_MOTOR_CARRIER_L`, `_R` (plate and cheeks, keyed; mirror images) | 2 | PETG, deep slate | A1 | Outboard plate face down; supports only under the square plate's corners (2.5 mm up) | Plate face flat (the housing seats on it); Ø7.6 pilot; 4 insert holes Ø4.0; face-screw counterbores; J04 keys and cheek faces; set-screw notch (D-071) | | TODO |
 | CH-011 | `BATTERY_TUB_BOTTOM_HATCH` | 1 | PETG, deep slate | A1 | Outer face down, no supports (D-074) | Strap slots; four screw holes | | TODO |
 | CH-051 | `AXLE_BEARING_HOUSING_L`, `_R` (mirror images) | 2 | PETG, deep slate | A1 | Inboard face down, no supports (D-071) | Ø16 seat, tried with the real bearings; shoulder; 4 × Ø3.2 holes (close fit, D-071); key slots | | TODO |
-| CH-089 | `AXLE_ALIGNMENT_PLUG` (a tool, `PRINT_TOOLS`; not in the robot) | 1 | PETG, any colour | A1 | Outboard end down, no supports | Ø4.05 bore slides on the motor shaft; Ø15.8 body slides into the housing seat | | TODO |
+| CH-089 | `AXLE_ALIGNMENT_PLUG` (a tool, `PRINT_TOOLS`; not in the robot) | 1 | PETG, any colour | A1 | Outboard end down, no supports | Ø4.05 bore slides on the motor shaft; Ø15.96 body slides into the tuned housing seat (D-072) | | TODO |
 | CH-004 | `WHEEL_L_RIM_PETG` (one STL serves both sides) | 2 | PETG, slate blue | A1 | Lip side down; tree supports inside the dish under the spoke backs and hub web, PLA interface on the web | Ø10 bore; web underside flat (seats on the stub flange); Ø74 seat and 12 ribs; 6 insert holes (1.0 mm wall to the seat); two hub pegs | | TODO |
 | CH-004 | `WHEEL_L_CLAMP_RING_PETG` (both sides) | 2 | PETG, slate blue | A1 | Flat inboard face down, no supports | Clamp face flat; Ø63.4 bore on the rim spigot; screw holes | | TODO |
 | CH-058 | `WHEEL_L_HUB_CAP_PETG` (both sides) | 2 | PETG, gunmetal | A1 | Underside down, no supports (D-070) | Drops onto the hub pegs without play; centre counterbore | | TODO |
 | CH-005 | `WHEEL_L_TYRE_TPU95A_L` in its print state, `PRINT_STATES` (both sides, D-070) | 2 | TPU 95A, black | A1 (direct drive) | On a side face, axis vertical, no supports | Bore Ø73.6 and 12 slots; width 19.3; fit with the V at the top forward | | TODO |
-| CH-002 | `BALL_POD_PRINTED_SEAT` | 1 | PETG, deep slate | A1 | Caster seat down (−Z), no supports (D-078) | | TODO |
-| CH-003 | `BALL_POD_SENSOR_LID` | 1 | PETG, deep slate | A1 | Front end down (+X); brim; 89 mm² support inside the hump (D-078) | | TODO |
-| CH-007 | `BALL_NOSE_TOUCH_CAP` | 1 | ASA, ivory | X1E | Top down (+Z); 33 mm² support at the visor underside; keep finger slits free (D-078); ASA permission pending | | TODO |
-| CH-008 | `REAR_KEEL_FACETED_BODY` | 1 | PETG, taupe | A1 | Crossmember seat down (+Z); 312 mm² supports in upper cavity/end recesses (D-078) | | TODO |
-| CH-009 | `REAR_KEEL_REPLACEABLE_WEAR_SHOE` | 1 | PETG, deep slate | A1 | Sole down (−Z), no supports (D-078) | | TODO |
-| CH-010 | `REAR_TCRT_BEZEL_WITH_GUARDS` | 1 | PETG, taupe | A1 | Guard lips down (−Z); 26 mm² support under bezel plate (D-078) | | TODO |
-| CH-068 | `REAR_TCRT_HEIGHT_SHIM_*` | 2 (print 4) | PETG, deep slate | A1 | Flat (±Z), no supports (D-078) | 1.2 ±0.05 mm thickness; two fitted preserve face Z 10 (D-077); three/four need requalification
+| CH-002 | `BALL_POD_PRINTED_SEAT` | 1 | PETG, deep slate | A1 | Caster seat down (−Z), no supports (D-078) | Caster seat; Ø4 insert bores; sensor floor; Hall slot; crossmember face |  | TODO |
+| CH-003 | `BALL_POD_SENSOR_LID` | 1 | PETG, deep slate | A1 | Front end down (+X); brim; 89 mm² support inside the hump (D-078) | Tongue; hump interior; countersink |  | TODO |
+| CH-007 | `BALL_NOSE_TOUCH_CAP` | 1 | ASA, ivory | X1E | Top down (+Z); 33 mm² support at the visor underside; keep finger slits free (D-078); ASA permission pending | Snap fingers/slits; slide; magnet pocket; visor |  | TODO |
+| CH-008 | `REAR_KEEL_FACETED_BODY` | 1 | PETG, taupe | A1 | Crossmember seat down (+Z); 312 mm² supports in upper cavity/end recesses (D-078) | Mounting face; insert/screw paths; sensor pocket and shoe groove |  | TODO |
+| CH-009 | `REAR_KEEL_REPLACEABLE_WEAR_SHOE` | 1 | PETG, deep slate | A1 | Sole down (−Z), no supports (D-078) | Sliding tongue; Ø1.6 pilot; sole |  | TODO |
+| CH-010 | `REAR_TCRT_BEZEL_WITH_GUARDS` | 1 | PETG, taupe | A1 | Guard lips down (−Z); 26 mm² support under bezel plate (D-078) | Contoured sensor cradles; optical window; screw/pin fits |  | TODO |
+| CH-068 | `REAR_TCRT_HEIGHT_SHIM_*` | 2 (print 4) | PETG, deep slate | A1 | Flat (±Z), no supports (D-078) | 1.2 ±0.05 mm thickness; two fitted preserve face Z 10 (D-077); three/four need requalification | | TODO |
 
 The body's wheel-arch pods and trims are in the chassis CAD file but belong to
 the body BOM, so they print with the body skins.
@@ -73,16 +73,22 @@ No separate test prints: the small parts go first and are the test.
    receiving inspection, the axle rig, the J04 joint, rolling.
 4. **Then P05 and P07:** the nose and keel, for the sensor tests.
 
-## Inserts to have on hand
+## Hardware order and inserts
+
+The [2026-11-01 order reconciliation](hardware-order.md) records the builder's actual list, shared pools and remaining items. It includes 25 bearings (four installed), 35 M3 × 4 inserts (20 installed), 15 selected slant-knurled M3 × 6 inserts plus 10 other M3 × 6 inserts (21 positions total). Both M3 × 6 listings give OD 4.4, but the other article needs qualification before sharing the reviewed positions. Earlier receipt reports are distinct from this order evidence.
+
+Inserts needed for one chassis:
 
 | Article | Used in | Qty |
 |---|---|---|
 | M3 × 4 heat-set | Rims (CH-049, 6 per rim), motor plates (CH-054) | 20 |
-| M3 × 6 heat-set, OD 4.4 (OnlyScrews, in hand) | J04 rail ends (CH-061), hatch bosses (CH-077), pod seat (CH-063), front pod pilots (CH-033), keel pilots (CH-067); Ø4.0 throughout | 21 |
+| M3 × 6 heat-set, OD 4.4 (selected slant-knurled article; see order reconciliation) | J04 rail ends (CH-061), hatch bosses (CH-077), pod seat (CH-063), front pod pilots (CH-033), keel pilots (CH-067); Ø4.0 throughout | 21 |
 | M2.5 × 4 heat-set, OD 3.9 (CH-080, not bought) | Driver posts on the deck, Ø3.5 pilots (D-073) | 4 |
 | M4 × 8 heat-set, OD 5.9 (CH-095, not bought) | J13 body bolts in the deck, Ø5.5 pilots (D-075) | 3 |
 
 ## Before the first export
+
+**Builder sequencing, 2026-11-01:** settle hardware and documentation now. Filament planning and ASA permission wait for the lab discussion; exports and slicer settings wait until this session is finalised. Fit, tyre/grip and load tests happen on the first real prints, not as separate coupons. These deferred steps remain tracked, without treating all of them as prerequisites to every initial print.
 
 - An export script, kept in `final/v1/cad` with the other droid scripts, that
   builds the chassis tree, applies the droid edits with
