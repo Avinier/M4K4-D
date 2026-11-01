@@ -30,7 +30,7 @@ Orientation, critical dimensions and settings are filled in when each part is ex
 | CH-005 | `WHEEL_L_TYRE_TPU95A_L` in its print state, `PRINT_STATES` (both sides, D-070) | 2 | TPU 95A, black | A1 (direct drive) | On a side face, axis vertical, no supports | Bore Ø73.6 and 12 slots; width 19.3; fit with the V at the top forward | | TODO |
 | CH-002 | `BALL_POD_PRINTED_SEAT` | 1 | PETG, deep slate | A1 | Caster seat down (−Z), no supports (D-078) | Caster seat; Ø4 insert bores; sensor floor; Hall slot; crossmember face |  | TODO |
 | CH-003 | `BALL_POD_SENSOR_LID` | 1 | PETG, deep slate | A1 | Front end down (+X); brim; 89 mm² support inside the hump (D-078) | Tongue; hump interior; countersink |  | TODO |
-| CH-007 | `BALL_NOSE_TOUCH_CAP` | 1 | ASA, ivory | X1E | Top down (+Z); 33 mm² support at the visor underside; keep finger slits free (D-078); ASA permission pending | Snap fingers/slits; slide; magnet pocket; visor |  | TODO |
+| CH-007 | `BALL_NOSE_TOUCH_CAP` | 1 | ASA, ivory | X1E | Top down (+Z); 33 mm² support at the visor underside; keep finger slits free (D-078); ASA assumed allowed by builder for planning | Snap fingers/slits; slide; magnet pocket; visor |  | TODO |
 | CH-008 | `REAR_KEEL_FACETED_BODY` | 1 | PETG, taupe | A1 | Crossmember seat down (+Z); 312 mm² supports in upper cavity/end recesses (D-078) | Mounting face; insert/screw paths; sensor pocket and shoe groove |  | TODO |
 | CH-009 | `REAR_KEEL_REPLACEABLE_WEAR_SHOE` | 1 | PETG, deep slate | A1 | Sole down (−Z), no supports (D-078) | Sliding tongue; Ø1.6 pilot; sole |  | TODO |
 | CH-010 | `REAR_TCRT_BEZEL_WITH_GUARDS` | 1 | PETG, taupe | A1 | Guard lips down (−Z); 26 mm² support under bezel plate (D-078) | Contoured sensor cradles; optical window; screw/pin fits |  | TODO |
@@ -51,28 +51,33 @@ The lab lays the STLs out on the plate; this list is what to ask for together.
 | P03 | Rims and clamp rings | PETG slate blue | |
 | P04 | Hub caps | PETG gunmetal | Small; can share an AMS plate with P03 |
 | P05 | Keel body and TCRT bezel | PETG taupe | |
-| P06 | Tyres | TPU 95A black | One tyre first; the second once it grips and clamps |
+| P06 | Both tyres | TPU 95A black | Batch together per builder sequencing below; fit and grip checked during assembly |
 | P07 | Touch cap | ASA ivory | Prints with the first body-skin plate on the X1E |
 
 ## Order
 
-No separate test prints: the small parts go first and are the test.
+**Builder revision, 2026-11-01: minimise lab visits.** Prepare the full chassis
+STL package and request the complete quantities, including both tyres. Use the
+reviewed CAD nominal interfaces; unrecorded motor, bearing and insert
+measurements do not hold up export or the batch request. This does not record
+physical fit acceptance. The builder prioritises fewer visits and accepts the
+possibility of corrective reprints.
 
-1. **First visit: P02 and one tyre.** The bearing housings, motor carriers,
-   hatch and pod seat are small and carry the fits that matter: the 688 ZZ
-   bores, the motor face pattern and the insert bosses. Try them with the real
-   bearings, motor and inserts. One tyre settles the TPU question (D-005): if
-   it grips and clamps, the printed tyre goes ahead; if not, the O-ring
-   fallback. The motors and bearings are now reported in hand (2026-11-01). Measure
-   the motor interface and check the first housing against the real bearings
-   alongside early printing; resolve any mismatch before the full batch.
-2. **Fix and re-export** anything that did not fit (slicer offset or a
-   `final/v1` edit), before the big parts.
-3. **Second visit: P01, P03, P04 and the second tyre.** The frame modules
-   (several hours each) and the wheels. Then the first tests in the
-   [chassis test system](../../03-build/01-chassis/v1/testsystem.md):
-   receiving inspection, the axle rig, the J04 joint, rolling.
-4. **Then P05 and P07:** the nose and keel, for the sensor tests.
+1. Export and validate all reviewed parts, recording any unresolved geometry
+   separately. The battery restraint route remains unresolved if adapting the
+   proposed 20 × 2 mm strap; no wider-slot redesign is implemented or implied.
+2. Submit all released parts together with quantities, materials, orientations,
+   supports and critical surfaces. Use the recorded lab machines; the lab applies
+   its actual machine/filament profiles. OrcaSlicer is installed on the builder's Mac.
+3. Run PETG groups on available A1/Guider II machines, TPU on a separate A1,
+   and the ASA touch cap on the X1E, subject to lab allocation and supervised
+   starts. Assume ASA is allowed for planning, per builder instruction; this is
+   not a recorded lab approval. Do not reserve a separate visit for a first tyre
+   or first housing, or gate the other parts on those checks.
+4. Inspect fits while removing supports and assembling at home or during the
+   scheduled visit. Obtain missing screws/inserts and fabricate the metal axle
+   parts in parallel. Correct a demonstrated mismatch if one occurs; physical
+   acceptance is still required before operating the assembled chassis.
 
 ## Hardware order and inserts
 
@@ -89,7 +94,11 @@ Inserts needed for one chassis:
 
 ## Before the first export
 
-**Builder sequencing, 2026-11-01:** settle hardware and documentation now. Filament planning and ASA permission wait for the lab discussion; exports and slicer settings wait until this session is finalised. Fit, tyre/grip and load tests happen on the first real prints, not as separate coupons. These deferred steps remain tracked, without treating all of them as prerequisites to every initial print.
+**Current sequencing:** the batch plan above supersedes the earlier staged
+first-part/second-visit proposal and the earlier deferral of export planning.
+ASA is assumed allowed for planning. Use the existing lab record and nominal
+CAD specifications; do not add a separate measurement or proof visit before
+preparing the lab package. Exact lab profiles are not stored in this repository.
 
 - An export script, kept in `final/v1/cad` with the other droid scripts, that
   builds the chassis tree, applies the droid edits with
@@ -104,13 +113,15 @@ Inserts needed for one chassis:
   The J04 rail-end and hatch-boss pilots are Ø4.0 (were Ø4.3) for the OD 4.4
   M3 × 6, the J04 ones 7 mm deep; the driver posts Ø3.5 (were Ø3.9) for the
   M2.5 × 4; the IMU gets Ø1.6 pilots. Droid edits, checked by
-  `final/v1/cad/check_frame_print.py`. The pod seat tries the M3 × 6 in Ø4.0
-  first, before the modules ([frame page](frame/README.md)).
+  `final/v1/cad/check_frame_print.py`. Check the M3 × 6 installation during assembly
+  ([frame page](frame/README.md)); it does not gate the module batch.
 - **Nose/keel insert positions resolved (D-077).** The in-hand M3 × 6 replaces all nine
   CNC Kitchen positions (CH-033/063/067). Seat bores are through 6 mm; crossmember pilots
-  7 mm. The pod seat on P02 is the first insert fit check; no coupons.
+  7 mm. Check the pod seat insert fit during assembly; no coupons or separate visit.
 - **Shims resolved (D-077).** 1.2 mm shims, sensor flat recessed 0.4 mm: two retain optical
   face Z 10. Print four, fit two; three/four lose shoe-first contact on tip-back and need
   requalification before running.
-- **Nose/keel remaining physical holds:** candidate M2 thread-formers and ASA permission,
-  first-part fit, cable slack, sensing and floor tests; see the two review pages §8.
+- **Nose/keel assembly acceptance:** obtain the specified M2 thread-formers; check
+  fit, cable slack, sensing and floor contact during assembly. ASA is assumed
+  allowed for planning. These checks do not impose a separate first-part visit;
+  see the two review pages §8 for the acceptance details.

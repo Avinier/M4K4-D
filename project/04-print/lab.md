@@ -78,6 +78,16 @@ of prints in total: the yaw gears, tight fits and the CF leg will need reprints.
 - **Drying:** a 60 °C four-spool dryer; the poster asks for 4–6 h before printing.
 - **Two-tone parts:** the X1E has a 4-spool AMS; several A1s have AMS Lite.
 
+## Builder planning update — 2026-11-01
+
+The builder instructs that ASA be assumed allowed for planning and reports
+OrcaSlicer installed. Batch the chassis request to minimise visits; the current
+[chassis sequence](01-chassis/README.md#order) replaces a separate first-part
+visit. The machine inventory and lab rules above remain the documented basis.
+No saved machine/filament profiles or confirmed nozzle diameters are recorded
+here; the lab applies its real profiles when slicing the submitted STLs.
+Assumed ASA access is not a recorded response from the lab.
+
 ## Still open
 
 Ask by email or on the next visit; record the answer here with its date.

@@ -118,13 +118,16 @@ Source checks for the screw/insert distinctions:
 
 ## Builder sequencing
 
-Hardware reconciliation and documentation cleanup happen now. Filament
-selection/procurement and ASA permission wait for the lab discussion. The
-builder will handle exports and slicing after this session is finalised.
-Motor and bearing receiving measurements can proceed alongside early
-printing. Check motor face pattern, shaft, boss and thread depth before
-accepting carrier geometry; check the first printed housing against the real
-bearings. A mismatch may require print or CAD correction before the full batch.
-Fit, grip, retention and load tests happen after printing the relevant real
-parts. Electrical commissioning is a later staged powered check, not a
-prerequisite to exporting or printing passive chassis parts.
+The builder revised sequencing on 2026-11-01 to minimise lab visits: prepare
+one complete chassis STL/material/instruction package and batch the prints,
+including both tyres. Use reviewed CAD nominal interfaces for export without
+requiring a separate receiving-measurement or proof visit. OrcaSlicer is
+installed, and ASA is assumed allowed for planning (not recorded lab approval).
+The current [chassis order](README.md#order) supersedes the earlier staged plan.
+
+Purchase the missing specified inserts and plastic thread-formers in parallel;
+nominal thread size alone does not identify the insert outside diameter or screw
+head envelope. Motor/bearing/insert fit, grip, retention and load acceptance
+remain assembly work, without gating the batch on the first printed example.
+A real mismatch may require a corrective reprint. Electrical commissioning is a
+later staged powered check, not a prerequisite to printing passive chassis parts.
