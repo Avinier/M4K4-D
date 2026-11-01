@@ -1,6 +1,6 @@
 # Chassis v1 joint register
 
-**Status:** working engineering register, not a fabrication release. It records the joint architecture in current CAD and source documents, including gaps between them. “Defined in CAD” means geometry and intended load path exist; it does not mean fit, strength, service access or physical tests have passed. Materials and orientations are defined by the completed 04-print reviews (D-070–D-079); printer-specific settings and per-part exports remain. The 2026-11-01 builder order includes 25 bearings; motor receipt/measurement is not recorded. See the [hardware order reconciliation](../../../04-print/01-chassis/hardware-order.md).
+**Status:** working engineering register, not a fabrication release. It records the joint architecture in current CAD and source documents, including gaps between them. “Defined in CAD” means geometry and intended load path exist; it does not mean fit, strength, service access or physical tests have passed. Materials and orientations are defined by the completed 04-print reviews (D-070–D-079); printer-specific settings and per-part exports remain. The builder reports motors, bearings and 1.5 mm EVA foam received on 2026-11-01; motor/bearing measurements and first-part fits remain open. See the [hardware order reconciliation](../../../04-print/01-chassis/hardware-order.md).
 
 **Coordinates:** chassis origin at axle line on floor; +X forward, +Y robot-left, +Z up. Counts are for one chassis unless noted. “Open” names detail or evidence still required before release.
 
@@ -24,7 +24,7 @@
 | J10A | Wear shoe to keel | CAD defined (D-014); PETG recommended (D-017) | Retention and abrasion test |
 | J10B | TCRT guards to keel | CAD defined in the J09B bezel (D-014) | Floor-strike and sensor-protection test |
 | J11A | Battery hatch to tub | CAD defined (D-028, D-030) | First-part boss insert fit; retention test with the strapped pack |
-| J11B | Battery pack to tub | CAD defined: strapped to the hatch (D-030) | Shock/inversion test, strap and foam sourcing, safe removal |
+| J11B | Battery pack to tub | CAD defined: strapped to the hatch (D-030) | Shock/inversion test, hook-and-loop strap sourcing and received foam fit, safe removal |
 | J12 | Ballast bar to deck | M3 × 12 CSK modeled (D-026); source identified (D-030) | Verify received head against the seat, tool/load check |
 | J13 | Body frame to chassis deck | M4 × 12 into deck inserts at three bolts, cassette nut at the front-left (D-030, D-075) | Verify head seat, pin fits, insert fit and lift-off |
 | J14 | TPU tyre to wheel rim | Designed in wheel CAD | Material/process fit, clamp, creep and runout |
@@ -48,7 +48,7 @@
 - **Location/joint:** Ø8 k5 stub seats at |Y| 76.51–86.51; Ø9.5 shoulder locates inner rings. Housing outer seat Ø16 × 10 mm is tuned on the first housing with the real bearings (D-071, no coupons); housing screw holes Ø3.2 (D-071); outer rings captured between housing shoulder and cap. Cap Ø12.5 land must contact outer ring only. No preload intended. Set-screw station is |Y| 74.8 so its Ø2.5 tap drill clears the first bearing face by 0.46 mm; verify the actual turned hole edge and bearing-land transition before release. A shared 0.01 mm axial datum offset avoids a degenerate mirrored housing boolean and is far below process tolerance.
 - **Hardware/clamp:** 4 × ISO 7380 M3 × 16 screws ([D-072](../../decisions.md#d-072); were M3 × 18) and four M3 × 4 heat-set inserts per side (CH-053/054; eight each total). Outward inner-ring retention is Ø8 k5 plus Loctite 641; no circlip modeled. Loctite 222 proposed on screws/set screw (CH-057). Housing screws 0.4 N·m (D-072).
 - **Material/fit/access/service:** housing is PETG with printer-specific fit settings pending; cap 1.2 mm aluminium. Try the real bearings in the first housing and correct with XY hole compensation (D-071); housing printed inboard face down. Replace by removing wheel, set screw, four cap screws, then slide housing/cartridge outboard; press bearings off via inner rings.
-- **Proof/state:** D-012 selects the OnlyScrews 688 ZZ listing, with stock observed on 2026-09-30 and recorded in the [project BOM](../../BOM.csv); the page still omits maker, drawing and load rating. Confirm the supplied lot; check fit, shield contact, race drag, runout, endplay ≤0.10 mm target and the 0.46 mm set-screw-hole edge margin. Pull inner-ring/stub joint to 100 N for 10 s with <0.10 mm relative motion. **Designed; 25 ordered per builder list (four installed); receipt, physical fit and retention open.**
+- **Proof/state:** D-012 selects the OnlyScrews 688 ZZ listing, with stock observed on 2026-09-30 and recorded in the [project BOM](../../BOM.csv); the page still omits maker, drawing and load rating. Confirm the supplied lot; check fit, shield contact, race drag, runout, endplay ≤0.10 mm target and the 0.46 mm set-screw-hole edge margin. Pull inner-ring/stub joint to 100 N for 10 s with <0.10 mm relative motion. **Designed; bearings received per builder (four installed); measured lot, physical fit and retention open.**
 
 ### J03 L/R — motor shaft to stub to wheel
 
@@ -186,7 +186,7 @@
   - two 1.5 mm closed-cell foam pads (CH-079) on the tub's Y-end walls. They fill the 1.5 mm gaps at the cell ends; the +Y pad stops at X 50.5, clear of the service window.
   - Fore-aft, the 1.2 mm strap risers sit in the 1.5–1.8 mm gaps between the pack and the tub walls.
 - **Access/service:** support the robot. Remove the four J11A screws and lower the hatch with the pack strapped to it. With the hatch open and the pack lowered, unplug the CN-05 disconnect through the +Y window, as before. `check_frame_fasteners.py` sweeps hatch, straps and pack 60 mm down clear of everything else.
-- **Proof/state:** CAD defined. **Open:** strap and foam sourcing; strap thickness ≤ 1.5 mm; inversion and shock test with no load on the BMS or cell ends; slot-edge chafe; insulation of the strap-to-cell-end contact; lead slack for the lowered pack.
+- **Proof/state:** CAD defined. **Open:** hook-and-loop strap sourcing; received 1.5 mm EVA sheet cut-pad/adhesive fit; strap thickness ≤ 1.5 mm; inversion and shock test with no load on the BMS or cell ends; slot-edge chafe; insulation of the strap-to-cell-end contact; lead slack for the lowered pack.
 
 ### J12 — ballast bar to front deck
 
@@ -237,7 +237,7 @@
 ## Release actions
 
 1. CAD receiver gaps are closed: J07/J08 by D-011, J09A/B and J10A/B by D-014. Confirm the J07B and J09A crossmember insert fit and screw engagement with the real hardware.
-2. Done by [D-030](../../decisions.md#d-030): J11A, J11B and J15B hardware is in CAD and the BOM, the J12 source is identified and the J13 stack is closed. Source the straps and the foam. [D-033](../../decisions.md#d-033) then integrated J05, J06 and J16 into two frame-module prints, removing their hardware.
+2. Done by [D-030](../../decisions.md#d-030): J11A, J11B and J15B hardware is in CAD and the BOM, the J12 source is identified and the J13 stack is closed. Source the hook-and-loop straps; cut and check the received EVA foam. [D-033](../../decisions.md#d-033) then integrated J05, J06 and J16 into two frame-module prints, removing their hardware.
 3. Use the completed material/orientation reviews and final droid geometry; choose printer-specific settings at export/slicing. No separate coupons: first real housing, carrier, pod seat and tyre establish the fits; the alignment plug follows the tuned housing. Record measured dimensions and retention results (D-071/D-073).
 4. Update J01/J03 using measured motor/stub hardware when received. Build axle rig and record test results separately from CAD checks.
 5. Physically dry-run each documented service state after printing, including wiring disconnects and battery removal. Keep the body on only where the final CAD review allows it: whole-pod access requires the body off and a short L-key (D-079). Per-part exports/slicer settings, filament discussion and ASA permission are deferred by the builder; fit, load and tyre tests follow printing.

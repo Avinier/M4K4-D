@@ -1,8 +1,9 @@
 # Chassis hardware order reconciliation — 2026-11-01
 
 Evidence: the builder pasted the OnlyScrews order lines in this session. This
-records ordered quantities, not new receipt, dimensional measurement or fit
-acceptance. Earlier records reported M3 inserts in hand on 2026-10-30; that
+records ordered quantities. The builder subsequently reported the motors,
+bearings and 1.5 mm EVA foam received on 2026-11-01. No dimensional
+measurement or fit acceptance is recorded. Earlier records reported M3 inserts in hand on 2026-10-30; that
 history is retained in the [project BOM](../../03-build/BOM.csv). An item absent
 from this list may have been bought elsewhere; no such purchase is assumed.
 Installed quantities below cover one chassis, excluding body/head allocations
@@ -12,7 +13,7 @@ and spares. Shared stock is counted once, not once per BOM ID.
 
 | Ordered article | Ordered quantity | Chassis installed quantity | BOM allocation / remaining check |
 |---|---:|---:|---|
-| 688 ZZ, 8 × 16 × 5 mm, double metal shield | 25 | 4 | CH-015, two per side. Standard purchased bearing; no custom manufacture. Received lot/fit not recorded |
+| 688 ZZ, 8 × 16 × 5 mm, double metal shield | 25 | 4 | CH-015, two per side. Standard purchased bearing; no custom manufacture. Received per builder; markings, measurements and first-housing fit pending |
 | M3 × 4 slant-knurled brass inserts | 35 | 20 | CH-049 rims 12 + CH-054 motor plates 8; measure OD on use |
 | M3 × 6 slant-knurled brass inserts | 15 | 21 positions shared with the next line, conditionally | CH-061 rails 8 + CH-077 hatch 4 + CH-033 front crossmember 2 + CH-063 pod 3 + CH-067 rear crossmember 4 |
 | Other M3 × 6 brass inserts, ₹2.80 article | 10 | No automatic allocation | Both this and the selected slant-knurled listing specify OD 4.4 × L6. The order has 25 nominally sized inserts, but only 15 of the selected article. Qualify the other article's installation/retention for at least six positions, or obtain six more selected inserts. Do not silently treat different knurls as proven equivalent |
@@ -48,11 +49,11 @@ chassis screw lengths below.
 | M3 × 3 cup-point set screw, shortened to 2.5 | 2 | CH-055, motor shaft to turned stub; shop operation per axle drawing/instructions |
 | Plain M4 nut | 1 | CH-036, front-left body-foot cassette only |
 | Loctite 222 and Loctite 641 | Shared lot | CH-057: screw locking and bearing retention are distinct uses |
-| 10 mm hook-and-loop one-wrap strap, ≥150 mm, ≤1.5 mm thick | 2 | CH-078, battery pack to hatch; target about 1.2 mm thickness |
-| 1.5 mm adhesive closed-cell EVA/neoprene pads | 2 cut pads | CH-079, tub end-wall padding: 36 × 17 and 13.5 × 17 mm; keep service window clear |
+| 10 mm hook-and-loop one-wrap strap, ≥150 mm, ≤1.5 mm thick | 2 | CH-078, battery pack to hatch; target about 1.2 mm thickness. Bought flexible straps, not prints; source still open |
+| 1.5 mm adhesive closed-cell EVA/neoprene pads | 2 cut pads | CH-079: builder reports 1.5 mm EVA foam received; cut 36 × 17 and 13.5 × 17 mm pads, keep service window clear; adhesive backing/fit to confirm |
 | 2.5 × 100 mm cable ties | 3 | CH-072 rear sensor lead 1 + CH-082 motor leads 2 |
 
-Purchased motors, caster, springs, sensors, electronics and pack parts remain
+Motors are now reported received; caster, springs, sensors, electronics and pack parts remain
 in their own BOM rows. This fastener-order record does not establish their
 order/receipt status.
 
@@ -120,6 +121,10 @@ Source checks for the screw/insert distinctions:
 Hardware reconciliation and documentation cleanup happen now. Filament
 selection/procurement and ASA permission wait for the lab discussion. The
 builder will handle exports and slicing after this session is finalised.
+Motor and bearing receiving measurements can proceed alongside early
+printing. Check motor face pattern, shaft, boss and thread depth before
+accepting carrier geometry; check the first printed housing against the real
+bearings. A mismatch may require print or CAD correction before the full batch.
 Fit, grip, retention and load tests happen after printing the relevant real
 parts. Electrical commissioning is a later staged powered check, not a
 prerequisite to exporting or printing passive chassis parts.

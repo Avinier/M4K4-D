@@ -63,8 +63,9 @@ No separate test prints: the small parts go first and are the test.
    bores, the motor face pattern and the insert bosses. Try them with the real
    bearings, motor and inserts. One tyre settles the TPU question (D-005): if
    it grips and clamps, the printed tyre goes ahead; if not, the O-ring
-   fallback. The carriers and housings wait until a motor and the bearings are
-   in hand.
+   fallback. The motors and bearings are now reported in hand (2026-11-01). Measure
+   the motor interface and check the first housing against the real bearings
+   alongside early printing; resolve any mismatch before the full batch.
 2. **Fix and re-export** anything that did not fit (slicer offset or a
    `final/v1` edit), before the big parts.
 3. **Second visit: P01, P03, P04 and the second tyre.** The frame modules
@@ -75,7 +76,7 @@ No separate test prints: the small parts go first and are the test.
 
 ## Hardware order and inserts
 
-The [2026-11-01 order reconciliation](hardware-order.md) records the builder's actual list, shared pools and remaining items. It includes 25 bearings (four installed), 35 M3 × 4 inserts (20 installed), 15 selected slant-knurled M3 × 6 inserts plus 10 other M3 × 6 inserts (21 positions total). Both M3 × 6 listings give OD 4.4, but the other article needs qualification before sharing the reviewed positions. Earlier receipt reports are distinct from this order evidence.
+The [2026-11-01 order reconciliation](hardware-order.md) records the builder's actual list, shared pools and remaining items. It includes 25 bearings (four installed), 35 M3 × 4 inserts (20 installed), 15 selected slant-knurled M3 × 6 inserts plus 10 other M3 × 6 inserts (21 positions total). Both M3 × 6 listings give OD 4.4, but the other article needs qualification before sharing the reviewed positions. The builder reports motors, bearings and 1.5 mm EVA foam received on 2026-11-01; measurements remain open. The hatch straps are purchased hook-and-loop material threaded through the print, not printed themselves.
 
 Inserts needed for one chassis:
 
