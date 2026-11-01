@@ -1,0 +1,168 @@
+{
+  "result": "PASS",
+  "source_main_sha256": "5019d1801a19c6f9056b4d1ecf43d39c02629e293114bb9b04602c48b158bdf0",
+  "material_note": "Side widths describe the new pocket below its junction with the pre-existing full-width header-row groove.",
+  "added_material_mm3": 0.0,
+  "removed_material_mm3": 46.955999999999676,
+  "old_clash_mm3": 0.5524083333333313,
+  "new_clash_mm3": 0.0,
+  "relief_box": [
+    -8.52,
+    -5.92,
+    -61.4,
+    -58.4,
+    89.2,
+    95.8
+  ],
+  "remaining_material": {
+    "left_mm": 3.4800000000000004,
+    "right_mm": 1.92,
+    "back_mm": 4.600000000000001,
+    "to_lower_screw_bore_mm": 1.9500000000000028
+  },
+  "min_sampled_clearance_mm": 1.0499999999999972,
+  "samples": [
+    {
+      "dz_mm": -2.0,
+      "clearance_mm": 1.0499999999999972,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -1.9,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -1.8,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -1.7,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -1.6,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -1.5,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -1.4,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -1.3,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -1.2,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -1.1,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -1.0,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -0.9,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -0.8,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -0.7,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -0.6,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -0.5,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -0.4,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -0.3,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -0.2,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": -0.1,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dz_mm": 0.0,
+      "clearance_mm": 1.049999999999999,
+      "clash_mm3": 0.0
+    },
+    {
+      "dy_mm": 0,
+      "dz_mm": -2,
+      "clearance_mm": 1.0499999999999972,
+      "clash_mm3": 0.0
+    },
+    {
+      "dy_mm": 0.5,
+      "dz_mm": -2,
+      "clearance_mm": 1.0499999999999972,
+      "clash_mm3": 0.0
+    },
+    {
+      "dy_mm": 1,
+      "dz_mm": -2,
+      "clearance_mm": 1.0499999999999972,
+      "clash_mm3": 0.0
+    },
+    {
+      "dy_mm": 2,
+      "dz_mm": -2,
+      "clearance_mm": 1.4281868260140176,
+      "clash_mm3": 0.0
+    },
+    {
+      "dy_mm": 4,
+      "dz_mm": -2,
+      "clearance_mm": 3.076335906561569,
+      "clash_mm3": 0.0
+    },
+    {
+      "dy_mm": 8,
+      "dz_mm": -2,
+      "clearance_mm": 6.9432443864522,
+      "clash_mm3": 0.0
+    }
+  ],
+  "scope": "JP1 against upright 1; static plus sampled 2 mm vertical slide and front approach; structural strength and other installation paths not asserted"
+}

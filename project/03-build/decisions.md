@@ -76,6 +76,8 @@ The central record of every decision and change made during the build phase. New
 | [D-070](#d-070) | 2026-10-29 | Chassis / wheels: print fixes (CH-004, CH-005, CH-056, CH-058; J03, J14; final v1 CAD) | The hub-cap clocking **pegs move onto the hub** and the holes into the cap (each in a Ø3.7 boss), and the cap column is trimmed flush, so the cap prints underside down with no supports; the **tyre is printed in its free state** (Ø73.6 bore, 19.3 wide; `PRINT_STATES`), the assembly keeps the fitted state; the **rim prints lip side down**; **Loctite 222** on the wheel screws; left and right tyres are **one part** (amends D-009's "not interchangeable") | ACTIVE; `check_wheel_print.py` 29/29; physical fits open |
 | [D-071](#d-071) | 2026-10-30 | Chassis / axle stack: assembly fixes (CH-001, CH-012, CH-051, CH-089; J01, J02, J03; final v1 CAD) | The stub flange shrinks **Ø24 → Ø21** so a straight key reaches the housing screws with the stub in; the motor is aligned with a printed **alignment plug** (CH-089, a tool) in the bearing seat, because the face screws cannot be reached once the bearings and stub are in; the housing's screw holes close **Ø3.4 → Ø3.2** so it refits where the motor was aligned; a **notch** in the carrier hub clears the set-screw key; print orientations recorded (housing inboard face down, carrier outboard face down); the housings are the fit test, no bore coupons | ACTIVE; `check_axle_stack.py` 21/21; stub drawing and physical proof open |
 | [D-072](#d-072) | 2026-10-30 | Chassis / axle stack: motor-to-axle follow-up (CH-053, CH-055, CH-089; J01, J02, J03; final v1 CAD) | The housing screws go **M3 × 18 → M3 × 16**: an 18 mm screw at its long limit bottomed out in its blind hole before it clamped the cap; the alignment gets an **error budget** of 0.05 mm: the plug becomes a close sliding fit (Ø15.8 → Ø15.96) and the housing screws are tightened only after the set screw is in and the stub has turned; **tightening torques** for every axle screw (0.2–0.6 N·m) and one **check of the face screws after the run-in**; the motor's rear needs no support (closed by calculation); the **encoder plug's direction** joins the motor assumptions, with every direction checked (up is out: PCB-04), and PCB-04 gets an underside keep-out over the motor cables | ACTIVE; `check_axle_stack.py` 27/27 |
+| [D-073](#d-073) | 2026-10-31 | Body / electronics: PCB-09 header audit (CH-084; CA-06) | Preserve I²C1 on labelled SDA/SCL/GND service pads without added pull-ups; fit 4.7 kΩ pull-ups on both UART TX lines; retain GPIO24 and the 100 kΩ fan-gate pull-down | ACTIVE for design inputs; CR-02 OPEN pending boot/overlay and fan-current checks |
+| [D-074](#d-074) | 2026-10-31 | Body / electronics: PCB-09 socket strip (CH-084; final v1 CAD) | Extend only the strip's +Y edge from world Y 20.9 to 22.4 mm so both socket rows carry full copper and edge margin; core Z, bridge and wide area unchanged | ACTIVE; 40-pad edge and static body/chassis checks pass; other mechanical inputs OPEN |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -1631,7 +1633,7 @@ This entry changed:
 - [02-body BOM](02-body/v1/BOM.md): the fan-choice note, BO-042 and the cooling open item.
 
 **Open:**
-- **CR-02:** accept GPIO24 `FAN_EN` against the final PCB-09 pin audit, and add the switch and `J9-4` to the PCB-09 schematic.
+- **CR-02:** accept GPIO24 `FAN_EN` against the final PCB-09 pin audit, and add the switch and `J9-4` to the PCB-09 schematic. **2026-10-31 update ([D-073](#d-073)):** the builder retained GPIO24 and the 100 kΩ gate pull-down as design inputs; CR-02 remains OPEN until boot/overlay and fan-current checks pass. Allocation agreement is not complete audit acceptance.
 - **BO-040 on receipt:** measure hole size and pitch, current, airflow against a known restriction, and mass, then update the CAD and `check_cooling_path.py`.
 - **AR-61 noise:** this fan is on/off at full speed, with the grille edge 14 mm from FRONT_L. Run it with the yaw servo and compare FRONT_L/REAR_L against the −Y pair. If it is too loud, options are a series resistor or a second GPIO speed step on PCB-09, holding the fan off while listening (firmware), or narrowing the grille's front half.
 - **Bench thermal test:** sustained `stress-ng` with the shell on, at a measured room temperature. Log the SoC temperature, `vcgencmd get_throttled`, the internal air near the cooler intake and the cooler RPM, with the enclosure fan on and off. Set the `gpio-fan` threshold from it. Pass: no throttle flag at 35 °C room equivalent under the typical load.
@@ -2850,6 +2852,12 @@ The amplifier corner routed on two layers carries over unchanged. **BOM changed:
 - **`J10-2` reordered** to 1 GND, 2 `C0TX+`, 3 `C0TX−`, 4 `C3TX−`, 5 `C3TX+`, 6 spare: U2's own pin order seen from J2, so the pairs run straight (PCB-09 `J9-2` and 05-harness §5.2 follow).
 - **GPIO map v0.3**: the roles of v0.2, with the pins reassigned so each track runs from its DevKitC pin to its connector without crossings (table in the PCB-10 README). Same rules: no strapping or USB pins, analog on ADC1, at least two safe spares (35, 39, 40).
 
+### CAD integration follow-up — 2026-11-01
+
+Replacing PCB-10's placeholder with its released KiCad STEP exposed JP1's two pin tails intersecting upright 1 by 0.5524 mm³; the earlier DevKitC-row reliefs did not cover this header. The builder requested integrating the completed boards and checking the final assembly. Add a local upright relief at world X −8.52…−5.92, Y −61.4…−58.4, Z 89.2…95.8 mm. This uses the existing 3 mm relief depth and covers the header's bounding box plus 0.3 mm and the 2 mm installation drop. The released PCB and mounting datums stay unchanged.
+
+`final/v1/cad/check_pcb10_jp1_relief.py` reproduces the old collision and verifies zero corrected overlap, ≥1.05 mm sampled pin/header clearance, one valid upright solid, 4.6 mm back material, ≥1.92 mm side material and 1.95 mm to the lower screw bore. This is a geometric fit correction, not a strength certification or received-board acceptance. The final CAD source alone carries the cut; subsystem CAD remains unchanged.
+
 ## D-069
 
 **2026-10-29 · Body / electronics: PCB-13 charge inlet inputs (BO-015; final v1 CAD) · ACTIVE; `check_pcb13_relief.py` passes; PCB-13 inputs frozen, schematic next**
@@ -3104,3 +3112,45 @@ Option B2, locating the motor by a close-fit plate pilot and tightening the face
 - The 27 mm gearbox (the drawing gives 19–27) was checked in the same pass: both rears end at |Y| 2, 4 mm apart, 6.9 mm from the IMU board, the plug still 3.0 mm from the rear module. Nothing to change; §7's row said "adjust the carrier", but the carrier holds only the face.
 - **PCB-04 underside keep-out.** The cable reserves (`MOTOR_[LR]_PIGTAIL_RESERVE`, Z 56.5–62.5) sit 0.5 mm under PCB-04 (underside Z 63.0). PCB-04 isn't designed yet; its README now carries the keep-out: no THT tails or bottom-side parts over those areas, or raise the board.
 - Docs: axle-stack.md §7 (two rows), the motor sheet's B6, the axle page §6 and order list, and the [PCB-04 README](04-pcbs/pcb-04-branch-converters/README.md).
+
+
+## D-073
+
+**2026-10-31 · Body / electronics: PCB-09 header-audit dispositions (CH-084; CA-06; D-042 / D-067) · ACTIVE for design inputs; CR-02 OPEN pending boot/overlay and fan-current checks**
+
+**Decision.** The builder selected “Use all three recommendations” after reviewing the [PCB-09 header audit](04-pcbs/pcb-09-c0-link-adapter/README.md#pi-5-header-audit--2026-10-31):
+
+1. **Preserve I²C1 access** on PCB-09 with labelled **SDA, SCL and GND service pads**. Header pin 3 / GPIO2 goes to SDA, pin 5 / GPIO3 to SCL. Add no pull-ups: the Pi already has fixed ones. CA-06's housekeeping reservation remains; no attached v1 consumer, connector or bus harness is selected by this decision.
+2. **Fit 4.7 kΩ pull-ups on both UART TX lines**, GPIO14 / header pin 8 (head) and GPIO4 / header pin 7 (base), to the same Pi 3V3 rail powering the two transceivers. The head TX defaults pulled down, which an always-enabled THVD1451 forwards as a UART break; the base TX otherwise relies on a weak internal pull-up. Verify worst-case Pi-specific bias and startup waveform before release. Pull-ups do not suppress actively transmitted console text.
+3. **Retain GPIO24 / header pin 18 as FAN_EN**, with D-042's 100 Ω series gate resistor and **100 kΩ gate-to-source pull-down**. GPIO24's reset pull-down agrees with off. The 100 kΩ resistor does not overpower an internal pull-up; firmware and overlays must not enable one or take this pin for another function. Keep the flyback diode, local bypass and D-043's actual 3010 fan as the design basis. **CR-02 remains OPEN until the remaining boot/overlay and fan-current checks pass.**
+
+**Why.** PCB-09 covers the whole Pi header, so reserved buses need deliberate access. The official header map and RP1 function table show no collision among the two UARTs, audio and GPIO24, but pin allocation alone does not establish safe behaviour from power-on. GPIO23 must stay a plain AMP_SD output and GPIO24 a fan output when the custom audio pin group adds GPIO22 for the second capture lane.
+
+**Scope.** These choices establish PCB-09's allocation baseline v0.2 and circuit requirements. They do not claim that a schematic, layout or physical board implements them. CR-01 remains accepted under D-067. RP-02 remains read-only. J9-3.10 remains an isolated test pad with no Pi GPIO connection; any future sense input still needs CR-03.
+
+**Docs changed:** PCB-09 README (40-row allocation map, findings and log), the PCB register and workflow tracker, and D-042's CR-02 cross-reference. No BOM procurement status or CAD geometry changed.
+
+**Open / next:** measure the CAD envelope and check socket orientation/physical numbering, then carry these inputs into the schematic. Before audit/release closure, compile and inspect the audio overlay on the exact target device tree; verify console/getty configuration and pin ownership; scope TX, AMP_SD and FAN_EN through cold boot, reboot and halt; measure the selected fan's running/start/stall current and compute-rail margin; verify bias, switch ratings and rail sequencing. D-042/D-043's thermal and noise bench gates remain open.
+
+
+**2026-10-31 follow-up evidence (no new envelope decision):** the [PCB-09 mechanical input survey](04-pcbs/pcb-09-c0-link-adapter/README.md#mechanical-inputs-and-socket-orientation--2026-10-31) found that 16 stock socket pads extend past the 4.6 mm strip, the head IC overlaps socket copper, the GH rows' courtyards overlap by 0.1 mm, and the base-IC placeholder occupies the fan-header reserve. A proposed strip edge at world Y 22.4 (was 20.9) passes the 0.3 mm pad-edge screen and has no static body/chassis clash; builder decision is pending. The selected socket/installed height, real-footprint packing, support and assembly checks remain open. The survey changed no robot geometry and does not close CR-02.
+
+
+## D-074
+
+**2026-10-31 · Body / electronics: PCB-09 strip widened for the complete Pi socket land pattern (CH-084; final v1 CAD) · ACTIVE; socket pad-edge and static-core checks pass; remaining mechanical inputs OPEN**
+
+**Decision.** The builder approved the recommended strip extension after the mechanical input survey: move only PCB-09's strip +Y edge from world **Y 20.9 to 22.4 mm**, a width change **4.6 → 6.1 mm**, over X −4.7…36.0. Keep board Z 106.4…108.0, the bridge and the wide connector area unchanged.
+
+**Why.** With the stock 1.7 mm socket pads aligned to the actual Pi header, outer-row pads 2, 4, …, 32 reached Y 21.451690, outside the old edge. The fab-neutral 0.3 mm copper-edge clearance requires at least Y 21.751690. The selected 22.4 edge supports all 40 pads and preserves space around the nominal socket body.
+
+**CAD.** A `DROID_ADDS` entry unions X −4.7…36.0, Y 20.9…22.4, Z 106.4…108.0 into `C0_LINK_ADAPTER_PCB09_BOARD` in `final/v1/cad/makad-v1.step.py`. No subsystem or historical RP source changes. Added core volume **97.68 mm³**, final core **1,299.344 mm³**, one solid; unchanged thickness 1.6 mm and overall bounding box.
+
+**Checks.** `check_pcb09_inputs.py` applies the current droid edits to body/chassis and verifies all 40 numbered socket positions, full pad envelopes with 0.3 mm edge margin, added volume and one-solid core, and zero static core intersections with external body/chassis solids or reserves. The original outline is planted as a failing case (the same 16 pads); a wrong row reflection fails on 20 pins. Measurements are in [mechanical-audit.json](04-pcbs/pcb-09-c0-link-adapter/mechanical-audit.json). The focused `pcb09-inputs.step.py` review model shows the updated core, the vendor Pi header, numbered land markers and an orange highlight over the addition; it is not a KiCad layout or drilled PCB.
+
+**Open.** This fixes ME-01 only. The head SOIC/socket copper conflict, GH courtyard overlap, base-IC/fan-header conflict, exact socket MPN/mating height, retention and populated-board/harness/assembly checks remain ME-02…07 in the [PCB-09 README](04-pcbs/pcb-09-c0-link-adapter/README.md#mechanical-inputs-and-socket-orientation--2026-10-31). CR-02 remains OPEN. Recheck final copper and courtyards using the selected parts' real footprints; no schematic, fabrication release, purchase or commit is implied.
+
+**Focused artifact verification:** CAD inspection reports 43 occurrences and zero validity failures; the core face area is 812.09 mm² and the measured distance between its Z faces is 1.600 mm. The [top snapshot](final/v1/cad/snapshots/pcb09-strip-d074-top.png) was rendered and visually checked: both pad rows sit inside the extended strip; the orange overlay identifies the addition and red marks pin 1. The whole-robot STEP was not regenerated.
+
+
+**KiCad implementation follow-up (2026-10-31 session):** the actual [PCB-09 Nightly project](04-pcbs/pcb-09-c0-link-adapter/README.md#schematic) now contains the D-073 review circuit and D-074 outline. Created through the Nightly project manager, circuit transferred with GUI F8, footprints/outline placed through KiPy, socket-only B-side rule proved with a planted scratch component, and native library refresh used to clear post-flip warnings. ERC 0 errors / 0 warnings; placement DRC 0 violations and 0 schematic-parity issues, **67 unrouted**. Numbered socket positions and 111 exported circuit pins checked. D1 candidate is package-matched 1N5819HW/SOD-123. This records implementation work, not a release: socket installed height, retention, populated fit, component sourcing/ratings, head far-end contract and CR-02 evidence remain open.

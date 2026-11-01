@@ -20,7 +20,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 |---|---|---|---|
 | 1. Design | **Done: rev A.** Schematic, layout, fab outputs and board STEP; the envelope change has its decision ([D-065](../../decisions.md#d-065)) and the fit check passes | [design/](design/), [fab/revA/](fab/revA/README.md), [cad/](cad/) | 2026-10-26 |
 | 2. Procure | Waits for the design batch ([D-064](../../decisions.md#d-064)) | — | — |
-| 3. Integrate | — | — | — |
+| 3. Integrate | CAD replacement complete; physical integration/acceptance open | [Final CAD and verification](../../final/v1/README.md#pcb-geometry-in-the-whole-robot-assembly) | 2026-11-01 |
 
 ## Inputs
 
@@ -185,3 +185,5 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-26:** board set up for layout: 5 × 5 mm outline, 0.8 mm stackup, fab-neutral rules, socket keep-outs (front shoulder, back bracket side). DRC on the empty board: 0 violations. The keep-outs were proven on a scratch copy.
 - **2026-10-26:** placed and routed by hand through KiPy on the nightly. C1 and R1 do not fit beside the centred LED (courtyards), so the builder moved them to the back's right half ([D-065](../../decisions.md#d-065) amended). Three vias, all 0.2 mm tracks. DRC 0 errors, 0 unconnected, parity clean; 2 cosmetic `lib_footprint_mismatch` warnings. The wire pads' position-file flag was set again after F8.
 - **2026-10-26:** lesson 5. Models audited; board STEP exported with parts; new fit check `final/v1/cad/check_pcb11_fit.py` PASS (LED on axis, 0.76 mm to the lip at worst, back parts 0.41 mm from the bracket). Rev A outputs exported to `fab/revA/`: one origin throughout, no silkscreen. Stage 1 done.
+
+- **2026-11-01:** rev-A KiCad STEP replaces the board/component placeholder in the final inspection and presentation assemblies. Mounting hardware, mated plugs and cable reserves are retained; DNP models are omitted according to the layout. Shared [integration verification](../../final/v1/cad/pcb-integration-report.json) records the nine-board placement/static check and the corrected PCB-10 JP1/upright clash. This completes CAD replacement, not procurement or physical acceptance.

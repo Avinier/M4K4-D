@@ -20,7 +20,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 |---|---|---|---|
 | 1. Design | **Done: rev A.** Schematic, layout, fab outputs (L and R variants) and board STEP; D-066 records the strap, the mic source and the seal-ring clearance; the fit check passes at all four positions | [design/](design/), [fab/revA/](fab/revA/README.md), [cad/](cad/) | 2026-10-27 |
 | 2. Procure | Waits for the design batch ([D-064](../../decisions.md#d-064)) | — | — |
-| 3. Integrate | — | — | — |
+| 3. Integrate | CAD replacement complete; physical integration/acceptance open | [Final CAD and verification](../../final/v1/README.md#pcb-geometry-in-the-whole-robot-assembly) | 2026-11-01 |
 
 ## Inputs
 
@@ -248,3 +248,5 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-26:** decision C2: MK1's seal ring pulled back to R 0.63 (0.23 mm from the hole), with a scoped 0.2 mm hole-clearance rule for MK1 alone; [D-066](../../decisions.md#d-066) amended. Re-proved on the scratch copy.
 - **2026-10-27:** lesson 4. Placed and routed by hand through KiPy on the nightly. The no-via circle round the port forces every net out of the mic on F.Cu, so the W27 pads went to a 2.2 mm pitch to take a via in each gap. Five vias, 0.2 mm octolinear tracks, B.Cu GND pour over the outer face. DRC 0 errors, 0 unconnected, parity clean; 4 cosmetic `lib_footprint_mismatch` warnings. Position-file flags set again after F8.
 - **2026-10-27:** lesson 5. Board STEP exported with parts; new fit check `final/v1/cad/check_pcb06_fit.py` PASS at all four positions (MK1 0.96 mm under the upper rail on the way down, seat 0.045 mm, holes on the port and pilots). Rev A outputs in `fab/revA/`: one origin, two assembly variants, no silkscreen. Stage 1 done.
+
+- **2026-11-01:** rev-A KiCad STEP replaces the board/component placeholder in the final inspection and presentation assemblies. Mounting hardware, mated plugs and cable reserves are retained; DNP models are omitted according to the layout. Shared [integration verification](../../final/v1/cad/pcb-integration-report.json) records the nine-board placement/static check and the corrected PCB-10 JP1/upright clash. This completes CAD replacement, not procurement or physical acceptance.

@@ -11,17 +11,17 @@ PCB-01 has no folder. It is the bought TIFPS0629 ([D-019](../decisions.md#d-019)
 | [pcb-02-charger](pcb-02-charger/README.md) | Charger, latch and pack sense | CH-041 | Not started | — | — |
 | [pcb-03-motor-gate](pcb-03-motor-gate/README.md) | Motor gate and head 5 V rail | CH-042 | Not started | — | — |
 | [pcb-04-branch-converters](pcb-04-branch-converters/README.md) | Five branch converters | CH-043 | Not started | — | — |
-| [pcb-05-audio-front-end](pcb-05-audio-front-end/README.md) | Audio front end | BO-002 | Done (rev A) | Waits for the design batch | — |
-| [pcb-06-pdm-mic](pcb-06-pdm-mic/README.md) | PDM microphone board ×4 | BO-005 | Done (rev A) | Waits for the design batch | — |
+| [pcb-05-audio-front-end](pcb-05-audio-front-end/README.md) | Audio front end | BO-002 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
+| [pcb-06-pdm-mic](pcb-06-pdm-mic/README.md) | PDM microphone board ×4 | BO-005 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
 | [pcb-07-base-imu](pcb-07-base-imu/README.md) | Base IMU | CH-021 | Not started | — | — |
 | [pcb-08-yaw-junction](pcb-08-yaw-junction/README.md) | Yaw junction | CH-083 | Not started | — | — |
-| [pcb-09-c0-link-adapter](pcb-09-c0-link-adapter/README.md) | C0 link adapter | CH-084 | Not started | — | — |
-| [pcb-10-c3-carrier](pcb-10-c3-carrier/README.md) | C3 controller carrier | CH-044 | Done, rev A | — | — |
-| [pcb-11-status-led](pcb-11-status-led/README.md) | Status LED carrier | CH-085 | Done (rev A) | Waits for the design batch | — |
+| [pcb-09-c0-link-adapter](pcb-09-c0-link-adapter/README.md) | C0 link adapter | CH-084 | Review placement (provisional); ERC 0/0, placement DRC 0/0; 67 unrouted; input freeze open | — | — |
+| [pcb-10-c3-carrier](pcb-10-c3-carrier/README.md) | C3 controller carrier | CH-044 | Done, rev A | — | CAD replacement complete; physical acceptance open |
+| [pcb-11-status-led](pcb-11-status-led/README.md) | Status LED carrier | CH-085 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
 | [pcb-12-c2-head-carrier](pcb-12-c2-head-carrier/README.md) | C2 head carrier | CH-086 | Not started | — | — |
-| [pcb-13-charge-inlet](pcb-13-charge-inlet/README.md) | Charge inlet | BO-015 | Done (rev A) | Waits for the design batch | — |
+| [pcb-13-charge-inlet](pcb-13-charge-inlet/README.md) | Charge inlet | BO-015 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
 | [pcb-14-yaw-rotor-joiner](pcb-14-yaw-rotor-joiner/README.md) | Yaw rotor joiner ×3 | BO-062 | Not started | — | — |
-| [pcb-15-nose-hall](pcb-15-nose-hall/README.md) | Nose Hall carrier | CH-064 | Done (rev A) | Waits for the design batch | — |
+| [pcb-15-nose-hall](pcb-15-nose-hall/README.md) | Nose Hall carrier | CH-064 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
 
 Update this table and the board's README together. The [board register](README.md#board-register) keeps the board's specification status and the work it still needs.
 

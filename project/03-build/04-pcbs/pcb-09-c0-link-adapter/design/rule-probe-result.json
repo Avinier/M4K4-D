@@ -1,0 +1,22 @@
+{
+  "result": "PASS",
+  "planted_part": "R1",
+  "scratch_only": true,
+  "detected_rule_violations": [
+    {
+      "description": "Items not allowed (rule 'PCB09 socket-only underside')",
+      "items": [
+        {
+          "description": "Footprint R1",
+          "pos": {
+            "x": 115.74,
+            "y": 119.66831
+          },
+          "uuid": "071e6663-2eed-4266-a26f-9b980f87d20d"
+        }
+      ],
+      "severity": "error",
+      "type": "items_not_allowed"
+    }
+  ]
+}

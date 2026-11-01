@@ -20,7 +20,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 |---|---|---|---|
 | 1. Design | **Done, rev A** | ERC 0/0; DRC 0 errors, 0 unconnected, parity clean; `check_pcb13_fit.py` 11/11, `check_pcb13_relief.py` 13/13; [fab outputs](fab/revA/README.md); [board STEP](cad/pcb-13-charge-inlet-revA.step) | 2026-10-29 |
 | 2. Procure | Waits for the design batch (D-064) | — | — |
-| 3. Integrate | — | — | — |
+| 3. Integrate | CAD replacement complete; physical integration/acceptance open | [Final CAD and verification](../../final/v1/README.md#pcb-geometry-in-the-whole-robot-assembly) | 2026-11-01 |
 
 ## Inputs
 
@@ -464,3 +464,5 @@ The reference text moved to the fab layers with `kp.refs_to_fab()`. J1, J2 and t
   - Board STEP with all 14 fitted parts.
   - `check_pcb13_fit.py` 11/11 (mouth 0.04 mm into the pocket, 2.10 mm to PCB-02, removal clear); planted faults caught.
   - Fab outputs in `fab/revA/`: one-sided assembly, J1 by hand.
+
+- **2026-11-01:** rev-A KiCad STEP replaces the board/component placeholder in the final inspection and presentation assemblies. Mounting hardware, mated plugs and cable reserves are retained; DNP models are omitted according to the layout. Shared [integration verification](../../final/v1/cad/pcb-integration-report.json) records the nine-board placement/static check and the corrected PCB-10 JP1/upright clash. This completes CAD replacement, not procurement or physical acceptance.

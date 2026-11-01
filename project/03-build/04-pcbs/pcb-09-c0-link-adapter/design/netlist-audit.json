@@ -1,0 +1,13 @@
+{
+  "result": "PASS",
+  "exported_component_pins_checked": 111,
+  "checks": [
+    "manifest versus Nightly-exported netlist",
+    "40-pin header allocation",
+    "GPIO0/1 unconnected",
+    "5V_SENSE isolated to J4.10 and TP4",
+    "both transceivers powered by Pi 3V3",
+    "fan and flyback polarity"
+  ],
+  "diode_value": "1N5819HW"
+}

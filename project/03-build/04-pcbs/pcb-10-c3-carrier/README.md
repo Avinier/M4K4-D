@@ -20,7 +20,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 |---|---|---|---|
 | 1. Design | **Done: rev A** (lesson 5). DRC 0 errors, 0 unconnected, parity clean; fit in the robot 7/7; fab outputs in [`fab/revA/`](fab/revA/README.md); inputs frozen with [D-068](../../decisions.md#d-068) | [`check_pcb10_mount.py`](../../final/v1/cad/check_pcb10_mount.py) 9/9, [`check_pcb10_fit.py`](../../final/v1/cad/check_pcb10_fit.py) 7/7 | 2026-10-28 |
 | 2. Procure | — | — | — |
-| 3. Integrate | — | — | — |
+| 3. Integrate | CAD replacement complete; physical integration/acceptance open | [Final CAD and verification](../../final/v1/README.md#pcb-geometry-in-the-whole-robot-assembly) | 2026-11-01 |
 
 ## Inputs
 
@@ -476,3 +476,5 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-28:** placement (lesson 4, part 1). Connectors, holes and DevKitC on their proved origins; every part placed with DRC clean (no courtyard, edge or parity errors). Layout-driven changes: `J10-2` reordered to U2's own pin order (pairs run straight), and the GPIO map reassigned to **v0.3** so each track runs to its connector without crossings (both recorded above and at PCB-09 / 05-harness). Routing in progress.
 - **2026-10-28:** routed (lesson 4, part 2) on four layers: In1 solid GND, In2 +3V3 with WDO, C3_READY and SLP as tracks, B for the top-row descents, UART and `+5V_DK` round the edges. Test points cut to the rails plus WDI, WDO, C3_READY and SLP (TP11 retargeted from READY to C3_READY). DRC 0 errors, 0 unconnected, parity clean.
 - **2026-10-28:** rev A design complete (lesson 5). DevKitC 3D model from `pcb10_devkitc()`; board STEP; `check_pcb10_fit.py` 7/7; fab outputs in `fab/revA/`. The first fit run failed on the script, not the board: KiCad writes model names with `_` for `.`, and the STEP cuts holes from the core.
+
+- **2026-11-01:** rev-A KiCad STEP replaces the board/component placeholder in the final inspection and presentation assemblies. Mounting hardware, mated plugs and cable reserves are retained; DNP models are omitted according to the layout. Shared [integration verification](../../final/v1/cad/pcb-integration-report.json) records the nine-board placement/static check and the corrected PCB-10 JP1/upright clash. D-068 adds a local JP1 tail relief to upright 1: zero overlap and ≥1.05 mm sampled installation clearance; the released PCB is unchanged. This completes CAD replacement, not procurement or physical acceptance.

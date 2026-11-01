@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-01",
+  "target": "pcbs-integrated.step.py",
+  "validation_command": "scripts/inspect validate pcbs-integrated.step.py --skip-self-intersection --format json",
+  "validation_result": {
+    "ok": true,
+    "occurrenceCount": 166,
+    "failureCount": 0,
+    "parts": [],
+    "errors": []
+  },
+  "self_intersection_boolean_checked": false,
+  "scope": "Nine completed boards only; topological validity, closed solid geometry and positive volume. Full robot static interference is recorded separately.",
+  "inspection": {
+    "kind": "assembly",
+    "occurrenceCount": 328,
+    "leafOccurrenceCount": 166,
+    "shapeCount": 288,
+    "faceCount": 8930,
+    "edgeCount": 23427,
+    "bounds": {
+      "min": [
+        -61.64,
+        -71.255,
+        30.4
+      ],
+      "max": [
+        128.24,
+        71.255,
+        283.8
+      ]
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "result": "PASS",
+  "check": "each populated model: preserved assembly branch versus direct OCC world transform",
+  "instances": [
+    {
+      "board": 5,
+      "instance": "MAIN",
+      "models_checked": 38,
+      "max_bbox_error_mm": 0.0
+    },
+    {
+      "board": 6,
+      "instance": "FRONT_L",
+      "models_checked": 7,
+      "max_bbox_error_mm": 0.0
+    },
+    {
+      "board": 6,
+      "instance": "FRONT_R",
+      "models_checked": 7,
+      "max_bbox_error_mm": 0.0
+    },
+    {
+      "board": 6,
+      "instance": "REAR_L",
+      "models_checked": 7,
+      "max_bbox_error_mm": 0.0
+    },
+    {
+      "board": 6,
+      "instance": "REAR_R",
+      "models_checked": 7,
+      "max_bbox_error_mm": 0.0
+    },
+    {
+      "board": 10,
+      "instance": "MAIN",
+      "models_checked": 68,
+      "max_bbox_error_mm": 0.0
+    },
+    {
+      "board": 11,
+      "instance": "CROWN",
+      "models_checked": 4,
+      "max_bbox_error_mm": 0.0
+    },
+    {
+      "board": 13,
+      "instance": "MAIN",
+      "models_checked": 15,
+      "max_bbox_error_mm": 0.0
+    },
+    {
+      "board": 15,
+      "instance": "NOSE",
+      "models_checked": 5,
+      "max_bbox_error_mm": 0.0
+    }
+  ],
+  "models_checked": 158
+}

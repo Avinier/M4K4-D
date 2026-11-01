@@ -20,7 +20,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 |---|---|---|---|
 | 1. Design | **Done (rev A)**: 4 layers, DRC clean, fit check passes in the droid CAD | [`cad/pcb-05-audio-front-end-revA.step`](cad/pcb-05-audio-front-end-revA.step), [`fab/revA/`](fab/revA/README.md), [`check_pcb05_fit.py`](../../final/v1/cad/check_pcb05_fit.py) | 2026-10-28 |
 | 2. Procure | — | — | — |
-| 3. Integrate | — | — | — |
+| 3. Integrate | CAD replacement complete; physical integration/acceptance open | [Final CAD and verification](../../final/v1/README.md#pcb-geometry-in-the-whole-robot-assembly) | 2026-11-01 |
 
 ## Inputs
 
@@ -379,3 +379,5 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-27:** routing started. The amp corner routed on two layers (0.5 mm 5 V trunk and speaker pair, a B.Cu hop for the unfitted R14/R15 branch, ground vias) and a B.Cu GND plane poured. The left half needed 12–16 plane hops on two layers: decision L2 taken (four layers, In1/In2 GND) and J1 reordered (LRCLK above BCLK); D-067 amended. Mount check for decision J: 7/7 after cutting the CAD's J5-7 block to Molex's 6.98 mm mated height.
 - **2026-10-27:** routing finished on four layers. The bus runs on B.Cu, the slow rows and mic up-feeds on In2, and the down-feeds on F.Cu and B.Cu. J1 pins 7/8 swapped while routing (7 SDI1, 8 SDI0) so the In2 rows don't cross; D-067, audiosystem.md and PCB-09 updated. Moved while routing: R6/R7 to the converters, C5–C7 and TP3/4/6/7/8/10. Found and fixed: the 0.31 mm via-copper rule (five vias moved), J6's shell pads unconnected, U1/U2 without 3D models (`kp.library_models()` one-line parse), In2 slotted under the clock bus (four stitching vias). DRC 0 errors, 0 unconnected, parity clean; 30 cosmetic `lib_footprint_mismatch`.
 - **2026-10-28:** lesson 5, checks and outputs. The board STEP showed two stock footprints naming models KiCad doesn't ship (U3's TQFN, J7's Micro-Fit); both got project copies, J7 a model built from Molex's dimensions with clipped tails. `kp.audit()` now checks model files exist. Fab outputs in `fab/revA/` (4-layer Gerbers, drill, BOM, placement, CPL, zip, order parameters). `check_pcb05_fit.py` added: 8/8 pass (its first run's under-board row measured J7 against the boss above, and was fixed to crop below the board). **Rev A design done.**
+
+- **2026-11-01:** rev-A KiCad STEP replaces the board/component placeholder in the final inspection and presentation assemblies. Mounting hardware, mated plugs and cable reserves are retained; DNP models are omitted according to the layout. Shared [integration verification](../../final/v1/cad/pcb-integration-report.json) records the nine-board placement/static check and the corrected PCB-10 JP1/upright clash. This completes CAD replacement, not procurement or physical acceptance.

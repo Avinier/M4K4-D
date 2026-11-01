@@ -42,7 +42,11 @@ def build_robot(label="Makad v1"):
     robot = Compound(label=label, children=[
         chassis_v1_reference(), build_body_assembly(), head,
     ])
-    return _group_custom_pcbs(_apply_droid_cuts(robot))
+    # Apply legacy mount edits before replacing their board placeholders. Existing
+    # subsystem fit checks intentionally still exercise _apply_droid_cuts alone.
+    from pcb_integration import replace_completed_boards
+    return replace_completed_boards(_group_custom_pcbs(_apply_droid_cuts(robot)),
+                                    _body, HEAD_ORIGIN_IN_CHASSIS)
 
 
 # Droid-level CAD changes. From 2026-10-14 the droid's CAD changes are made in
@@ -211,6 +215,13 @@ PCB10_J10_1 = dict(header=(46.1, 56.0, -56.8, -49.82, 78.6, 88.255),   # Molex S
                    plug=(56.0, 68.0, -56.8, -46.8, 78.6, 88.255))
 PCB10_BOARD_GROWTH = [(-14.0, 42.5, -58.4, -56.8, 76.0, 82.01), (51.0, 56.0, -58.4, -56.8, 76.0, 82.01),
                       (42.5, 51.0, -58.4, -56.8, 79.0, 82.01)]          # notched over the terminal block
+
+# Integration follow-up, 2026-11-01 (D-068): JP1's two tails were not in the
+# DevKitC-row reliefs. Clear its entire bbox plus 0.3 mm, swept 2 mm down.
+# Same 3 mm depth as the existing row relief; leaves 4.6 mm of upright behind
+# it and at least 1.92 mm at the sides. No released PCB geometry changes.
+PCB10_JP1_RELIEF = (-8.52, -5.92, -61.4, -58.4, 89.2, 95.8)
+
 
 
 # D-069: PCB-13 pin relief in the rear-panel inlet pad, world frame. The body source's
@@ -462,6 +473,7 @@ DROID_CUTS = [
     (r"PCB05_J5_7_MICROFIT3_2P_(RA_HEADER|MATED_PLUG)", (60.0, 80.0, -35.0, -5.0, 122.6, 130.0)),
     # D-068: PCB-10 header-row reliefs in the C3 carrier uprights.
     *_PCB10_CUTS,
+    (r"BODY_FRAME_C3_CARRIER_UPRIGHT_1", PCB10_JP1_RELIEF),
     # D-069: the inlet pad's pin relief widens 9.60 -> 10.60 mm (Y +-5.30), so GCT's outer
     # USB4140 stake copper (Y +-4.87) and its fillets clear the PCB-13 seat; Z and depth unchanged.
     (r"REAR_SERVICE_PANEL_OCTAGONAL", PCB13_RELIEF),
@@ -471,6 +483,9 @@ DROID_CUTS = [
     *_AXLE_CUTS,
 ]
 DROID_ADDS = [
+    # D-074: PCB-09's strip must carry both rows of socket copper plus edge margin.
+    # Grow only its +Y edge (20.9 -> 22.4); bridge, bay and board Z stay fixed.
+    (r"C0_LINK_ADAPTER_PCB09_BOARD", (-4.7, 36.0, 20.9, 22.4, 106.4, 108.0)),
     # D-068: PCB-10 top-edge hooks on the C3 carrier uprights.
     *_PCB10_ADDS,
     # D-068 amended: the carrier grows 6 mm down for a third connector row; the plug-layer reserve follows.

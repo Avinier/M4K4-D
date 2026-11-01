@@ -1,0 +1,24 @@
+{
+  "result": "PASS",
+  "part": "BALL_POD_PRINTED_SEAT",
+  "method": "Exact OCC Boolean differences in both directions on BReps retained from the two actual exported STEP documents",
+  "documents": [
+    {
+      "step_sha256": "eace4e55d6939d46506faef134719728a4ea41ac16c026154550275b1cba20ef",
+      "tree": "ae3174cd8335877bbf825e24d46c3bc1ca332feb67e0fa40285fdc7752026dd1",
+      "brep": "340d5182d7004bb89ea36a199dad835c74430c4b9d67f4e30e8ea0d28f8022a3",
+      "volume_mm3": 12433.476746981194
+    },
+    {
+      "step_sha256": "b14c537a94f0005320e3862a84cf75d22f037d06abd9ae05e8eadcd16f33a95b",
+      "tree": "8a1d0fbf0d458f7b71e1f1a1e10e3f905abd0fea992fba39c73377ce16e74632",
+      "brep": "340d5182d7004bb89ea36a199dad835c74430c4b9d67f4e30e8ea0d28f8022a3",
+      "volume_mm3": 12433.476746981194
+    }
+  ],
+  "symmetric_difference_mm3": [
+    0.0,
+    0.0
+  ],
+  "tolerance_mm3": 1e-06
+}
