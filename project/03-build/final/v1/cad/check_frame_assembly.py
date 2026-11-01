@@ -1,5 +1,5 @@
 """Frame assembly and service (frame page §6): tool access per joint in the state each step is
-done in, and the D-075 J13 deck inserts, measured on the chassis and body trees with the droid
+done in, and the D-077 J13 deck inserts, measured on the chassis and body trees with the droid
 edits applied.
 
 Run from this folder with the legacy runtime and the PYTHONPATH in ../README.md.
@@ -8,7 +8,7 @@ Builds the chassis tree twice and the body once, about 5 min.
 Tools are modelled across their corners: 2 mm hex r 1.155, 2.5 mm hex r 1.443, 1.5 mm hex
 r 0.87, PH1 shaft r 2.25, PH0 / T6 shaft r 1.5, a Ø3 backing dowel. Checks:
 
-1. J13 (D-075), three top-driven points: the nut socket is filled back to the rail and deck, the
+1. J13 (D-077), three top-driven points: the nut socket is filled back to the rail and deck, the
    Ø5.5 insert pilot is open 9 mm from the deck top, the M4 x 12 keeps at least 5 mm of thread
    in the insert and stops at least 1 mm above the pilot bottom, the plain nut is gone and an
    insert is in its place. The front-left socket (bolt from below into the body foot cassette) stays open.
@@ -21,7 +21,7 @@ r 0.87, PH1 shaft r 2.25, PH0 / T6 shaft r 1.5, a Ø3 backing dowel. Checks:
    reaches each screw from above with the body off.
 6. J13: a 2.5 mm key reaches each top-driven bolt from above with only the body frame and its
    cassette fitted (body assembly step 1); the front-left bolt's key reaches it from below 1 mm
-   clear of the hatch, and the bolt itself comes out downward through the D-076 hatch notch
+   clear of the hatch, and the bolt itself comes out downward through the D-078 hatch notch
    (planted: the unnotched hatch).
 7. J15A, J15B: the IMU driver and the 1.5 mm key reach their screws from above, body off.
 8. J15B inner posts: a Ø3 dowel backs each post from below through the open tub (hatch and pack
@@ -128,7 +128,7 @@ def main():
     body = leaves(entry._apply_droid_cuts(B.build_body_assembly(), strict=False))
     front, rear = chassis["CHASSIS_FRAME_FRONT_MODULE"], chassis["CHASSIS_FRAME_REAR_MODULE"]
 
-    # 1. J13 deck inserts (D-075).
+    # 1. J13 deck inserts (D-077).
     for k, (x, y) in enumerate(J["points"], start=1):
         mod = front if x > 0 else rear
         sy = 1.0 if y > 0 else -1.0
@@ -227,11 +227,11 @@ def main():
     h = hits(key, everything, skip=("BODY_CHASSIS_M4_",))
     gap = BRepExtrema_DistShapeShape(key.wrapped, chassis["BATTERY_TUB_BOTTOM_HATCH"].wrapped).Value()
     check("J13 front-left (64, 48) 2.5 mm key from below, hatch on", not h and gap >= 1.0, f"{h or 'clear'}; {gap:.2f} mm to the hatch")
-    # D-076: the bolt itself (head R4.0) comes out downward past the notched hatch.
+    # D-078: the bolt itself (head R4.0) comes out downward past the notched hatch.
     path = zc(4.0, -20.0, hb.max.Z, 64.0, 48.0)
     h = hits(path, everything, skip=("BODY_CHASSIS_M4_",))
     gap = BRepExtrema_DistShapeShape(path.wrapped, chassis["BATTERY_TUB_BOTTOM_HATCH"].wrapped).Value()
-    check("J13 front-left bolt comes out downward with the hatch on (D-076)", not h and gap >= 0.5, f"{h or 'clear'}; {gap:.2f} mm to the hatch notch")
+    check("J13 front-left bolt comes out downward with the hatch on (D-078)", not h and gap >= 0.5, f"{h or 'clear'}; {gap:.2f} mm to the hatch notch")
     check("planted: the unnotched hatch blocks that bolt", bool(hits(path, {"hatch": raw["BATTERY_TUB_BOTTOM_HATCH"]})), "head meets the hatch")
 
     # 7. J15A, J15B from above, body off.

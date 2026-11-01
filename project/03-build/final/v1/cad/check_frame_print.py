@@ -1,4 +1,4 @@
-"""Frame prints (D-073, D-074): insert and screw pilots and print orientation of the two frame
+"""Frame prints (D-075, D-076): insert and screw pilots and print orientation of the two frame
 modules, measured on the chassis tree with the droid edits applied.
 
 Run from this folder with the legacy runtime and the PYTHONPATH in ../README.md.
@@ -12,13 +12,13 @@ at three depths along the pilot, eight directions round it. Checks:
 2. J11A tub bosses, 4 pilots: Ø4.0 over the 6.5 mm pilot.
 3. J15B driver posts, 4 pilots: Ø3.5 over the 4.1 mm pilot (M2.5 x 4 insert, OD 3.9).
 4. J15A IMU: a Ø1.6 pilot through the 4 mm deck at each screw.
-5. Each module is still one solid; the volume change is the rings, pilots and D-074 fills.
+5. Each module is still one solid; the volume change is the rings, pilots and D-076 fills.
 6. Planted: the unedited modules have Ø4.3 / Ø3.9 pilots and no IMU pilot.
-7. Orientation (D-074): the front module prints tub bottom down (-Z), the rear deck down (+Z),
+7. Orientation (D-076): the front module prints tub bottom down (-Z), the rear deck down (+Z),
    the hatch outer face down. Bed contact and the faces that need support are measured: planar
    faces facing the bed but above it, less the ones a printer bridges (both ends supported and
    at most BRIDGE long). The front's J13 sockets and J10-8 bore stay open through its fill.
-8. The D-074 fills keep CLEAR from every chassis and body part.
+8. The D-076 fills keep CLEAR from every chassis and body part.
 9. Planted: the unedited front module stands on its tub walls only (477 mm2), and the unedited
    rear crossmember strip sits 8 mm off the bed.
 """
@@ -44,7 +44,7 @@ spec.loader.exec_module(entry)
 F = entry.FRAME_FIX
 GAP = 0.05          # probe this far inside / outside the nominal radius
 P = entry.FRAME_PRINT
-CLEAR = 1.5         # mm from a D-074 fill to any other part
+CLEAR = 1.5         # mm from a D-076 fill to any other part
 results = []
 
 
@@ -99,7 +99,7 @@ def pilot(shape, axis, centre, r, a0, a1):
 
 
 def pilots(mods):
-    """(name, module, axis, centre, a0, a1) for every pilot D-073 touches; a0..a1 from the open end."""
+    """(name, module, axis, centre, a0, a1) for every pilot D-075 touches; a0..a1 from the open end."""
     out = []
     face, _, deep = F["j04_x"]
     for region, sx in (("FRONT", 1.0), ("REAR", -1.0)):
@@ -223,7 +223,7 @@ def main():
         n, dv = len(edited[label].solids()), (edited[label].volume - raw[label].volume) / 1000.0
         fill = sum(sh.volume for lab, sh in entry._FRAME_PRINT_ADDS + entry._J13_ADDS if lab == label) / 1000.0
         check(f"{label} is one solid, volume change = fills + pilot rings", n == 1 and abs(dv - fill) < 0.4,
-              f"{n} solid; {raw[label].volume / 1000:.2f} -> {edited[label].volume / 1000:.2f} cm3 ({dv:+.3f}; D-074 and D-075 fills {fill:.3f})")
+              f"{n} solid; {raw[label].volume / 1000:.2f} -> {edited[label].volume / 1000:.2f} cm3 ({dv:+.3f}; D-076 and D-077 fills {fill:.3f})")
 
     old = []
     for name, shape, axis, c, a0, a1 in pilots(raw):
@@ -234,7 +234,7 @@ def main():
           f"{sum(old)}/{len(old)} old pilots open at the old radius; IMU solid: {imu_raw}")
 
 
-    # 7. Orientation (D-074).
+    # 7. Orientation (D-076).
     plan = (("CHASSIS_FRAME_FRONT_MODULE", (0, 0, -1), "tub bottom down", 2800.0, 2200.0),
             ("CHASSIS_FRAME_REAR_MODULE", (0, 0, 1), "deck top down", 3500.0, 500.0),
             ("BATTERY_TUB_BOTTOM_HATCH", (0, 0, -1), "outer face down", 4850.0, 0.0))
@@ -247,7 +247,7 @@ def main():
             print(f"        support: {row[0]} mm2, {row[1]} mm up, {row[2]}")
     front = edited["CHASSIS_FRAME_FRONT_MODULE"]
     z = (P["front_floor"] + P["front_old"]) / 2.0
-    # D-075 fills the top-driven J13 sockets; only the front-left one (bolt from below) stays open.
+    # D-077 fills the top-driven J13 sockets; only the front-left one (bolt from below) stays open.
     holes = [(x, y, P["j13_socket_r"]) for x, y in P["j13_sockets"] if (x, y) not in entry.J13_FIX["points"]] + [P["nose_bore"]]
     open_ = {f"({x}, {y})": all(not solid_at(front, p) for p in ring("z", (x, y, 0.0), r - GAP, z)) for x, y, r in holes}
     check("front fill keeps the front-left J13 socket and the J10-8 bore open", all(open_.values()), f"{open_}")
@@ -267,7 +267,7 @@ def main():
                 near.append((round(gap, 2), name, round(sum(x.volume for x in (fill & part).solids()), 4) if gap < 1e-3 else 0.0))
         near.sort()
         bad = [n for n in near if n[2] > 1e-3 or (n[0] < CLEAR - 1e-3 and not n[1].startswith(MATES))]
-        check(f"{label} D-074 fill clear by {CLEAR} mm (J04 mates may touch, not overlap)", not bad,
+        check(f"{label} D-076 fill clear by {CLEAR} mm (J04 mates may touch, not overlap)", not bad,
               f"nearest: {[(g, n) for g, n, _ in near[:6]]}; failing: {bad}")
 
     # 9. Planted.

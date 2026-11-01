@@ -88,7 +88,7 @@ face at (Y 10, Z 32.6).
 | Magnet, N35 Ø3 × 1.5 axial | CH-065 | 1 | Ø3.06 × 1.5 pocket in the cap | |
 
 
-## 4. Issues going in and what was done (D-077)
+## 4. Issues going in and what was done (D-079)
 
 All geometry fixes are droid edits in `final/v1`; the subsystem source stays unchanged.
 The final-tree checks are `check_nose_keel_print.py` and `check_nose_keel_assembly.py`.
@@ -98,14 +98,14 @@ The final-tree checks are `check_nose_keel_print.py` and `check_nose_keel_assemb
 | Five nose inserts specified as the unbought CNC Kitchen M3 × 5.7 | Use the in-hand OnlyScrews M3 × 6, OD 4.4, in the existing Ø4.0 bores: three through the 6 mm seat, two in 7 mm crossmember pilots. Models and BOM now agree |
 | The insert under the GP2Y finishes at the sensor floor | A Ø5 × 0.5 relief around its upper end takes displaced plastic. Press from below, flush with the caster seat, and clean the floor before fitting the sensor |
 | Seat insert 2 is close to the Hall-lead groove | Least wall past the knurl is 1.15 mm; keep, press slowly, inspect the groove after installation |
-| Lid thread-former sourcing | Existing Ø1.6 pilot is real, with 1.15 mm minimum wall beyond the thread. CH-062 remains a JCPlas B4B67 candidate; qualify the received head and PETG pilot before export, as CH-039 in D-073 |
-| Nose-face-down cap orientation starts the snap fingers above their slits | Print top down; keep support out of the finger slits (D-078) |
+| Lid thread-former sourcing | Existing Ø1.6 pilot is real, with 1.15 mm minimum wall beyond the thread. CH-062 remains a JCPlas B4B67 candidate; qualify the received head and PETG pilot before export, as CH-039 in D-075 |
+| Nose-face-down cap orientation starts the snap fingers above their slits | Print top down; keep support out of the finger slits (D-080) |
 | ASA on the X1E awaits permission | Still open. Keep ASA and the existing geometry; an alternative material needs fit and snap-fatigue qualification before adoption |
-| The documented 11 mm lid slide does not provide a clear upward path past the speaker panel | 12 mm forward then up is clear; 11 mm then up hits the panel, and sliding 13 mm hits the GP2Y. Both wrong paths are planted (D-079) |
+| The documented 11 mm lid slide does not provide a clear upward path past the speaker panel | 12 mm forward then up is clear; 11 mm then up hits the panel, and sliding 13 mm hits the GP2Y. Both wrong paths are planted (D-081) |
 | Trimmed GP2Y inspection solid had invalid topology | Heal its trimmed solid in the droid tables at the same pose and bounds; printed geometry and sensor position unchanged |
 | PCB-15 slot and relief could be lost in new edits | D-059 and D-063 retained and checked on the final seat |
 
-## 5. Printing (D-078)
+## 5. Printing (D-080)
 
 The check surveys all six axis directions. Bed area is contact with the bed; support area is
 surface requiring support, not filament volume or slicer time. Downward triangles beyond the
@@ -139,7 +139,7 @@ No separate coupons (rule 5): the pod seat on P02 tries the M3 × 6 / Ø4.0 fit 
 | Lid | 18.0 / 901 | 284.6 / 621 | 50.0 / 89 | 67.2 / 89 | 0.0 / 277 | 0.0 / 277 |
 | Cap | 99.9 / 114 | 144.8 / 33 | 138.6 / 453 | 577.7 / 70 | 104.5 / 39 | 104.5 / 37 |
 
-## 6. Assembly and service (D-079)
+## 6. Assembly and service (D-081)
 
 Tools are checked against the final chassis and body in each stated assembly condition.
 Whole-pod J07B tool entry needs the body off; the smaller nose service steps keep it fitted.
@@ -152,7 +152,7 @@ the screw-head face to the bend, approximately 10 mm short leg including engagem
 with a Ø6 tip envelope; flat backing plate; torque driver covering 0.2–0.3 N·m. For J07B with the L-key, 4 N
 perpendicular to a 50 mm lever arm gives 0.2 N·m; use a force gauge or a calibrated adapter.
 
-| Screw | Torque | Basis, as D-076 |
+| Screw | Torque | Basis, as D-078 |
 |---|---|---|
 | J07A caster, M3 × 8 | 0.3 N·m | About 500 N per screw using nut factor 0.2; head bears on the vendor flange. Limit remains insert retention in the seat |
 | J07B pod, M3 × 8 | 0.2 N·m | About 333 N; roughly 20 MPa under the Ø5.7 head around the Ø3.3 hole, below the review's approximately 50 MPa PETG yield assumption |
@@ -199,13 +199,13 @@ perpendicular to a 50 mm lever arm gives 0.2 N·m; use a force gauge or a calibr
 
 | Gap | Fix or disposition | Decision | Check |
 |---|---|---|---|
-| CNC Kitchen inserts unbought; 6 mm replacement not represented | Nine M3 × 6 models, nose bores and walls measured | D-077 | print: insert bores, walls and engagement |
-| GP2Y over the through insert's far end | Ø5 × 0.5 relief and floor cleanup | D-077 | print: relief, PCB-15 preservation |
-| Candidate M2 screw | Ø1.6 actual pilot; manufacturer/sample qualification | D-077 | print: lid boss |
-| Wrong cap orientation | Top down; fingers start from supported material | D-078 | print: all-six survey and planted face-down case |
-| Lid short lift meets speaker panel | 12 mm forward then 40 mm up; no sensor move | D-079 | assembly: short path planted, replacement path |
-| Straight −Y pod key meets the lid boss; fitted shell blocks L-key entry | Short L-key: 8 mm from head face to bend, long leg up; whole-pod service with body off | D-079 | assembly: L-key clear; straight key planted |
-| No nose torques | J07A 0.3, J07B 0.2 N·m; lid snug | D-079 | Calculation above; physical retention remains open |
+| CNC Kitchen inserts unbought; 6 mm replacement not represented | Nine M3 × 6 models, nose bores and walls measured | D-079 | print: insert bores, walls and engagement |
+| GP2Y over the through insert's far end | Ø5 × 0.5 relief and floor cleanup | D-079 | print: relief, PCB-15 preservation |
+| Candidate M2 screw | Ø1.6 actual pilot; manufacturer/sample qualification | D-079 | print: lid boss |
+| Wrong cap orientation | Top down; fingers start from supported material | D-080 | print: all-six survey and planted face-down case |
+| Lid short lift meets speaker panel | 12 mm forward then 40 mm up; no sensor move | D-081 | assembly: short path planted, replacement path |
+| Straight −Y pod key meets the lid boss; fitted shell blocks L-key entry | Short L-key: 8 mm from head face to bend, long leg up; whole-pod service with body off | D-081 | assembly: L-key clear; straight key planted |
+| No nose torques | J07A 0.3, J07B 0.2 N·m; lid snug | D-081 | Calculation above; physical retention remains open |
 
 
 Verified on 2026-11-01 with the legacy runtime: **print 42/42**, **assembly 53/53**; regressions

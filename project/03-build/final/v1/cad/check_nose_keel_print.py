@@ -212,7 +212,7 @@ N = entry.NOSE_KEEL_FIX
 GAP = 0.05
 SEAT, FRONT, REAR, KEEL = "BALL_POD_PRINTED_SEAT", "CHASSIS_FRAME_FRONT_MODULE", "CHASSIS_FRAME_REAR_MODULE", "REAR_KEEL_FACETED_BODY"
 SHOE, BEZEL = "REAR_KEEL_REPLACEABLE_WEAR_SHOE", "REAR_TCRT_BEZEL_WITH_GUARDS"
-# (label, bed direction, how, min bed mm2, max support mm2): D-078.
+# (label, bed direction, how, min bed mm2, max support mm2): D-080.
 PLAN = ((SEAT, (0, 0, -1), "seat face down", 1200.0, 0.0),
         ("BALL_POD_SENSOR_LID", (1, 0, 0), "front end down", 60.0, 100.0),
         ("BALL_NOSE_TOUCH_CAP", (0, 0, 1), "top down", 140.0, 40.0),
@@ -352,7 +352,7 @@ def main():
     groove = all(not solid_at(keel, (M.SKID_PAD_CENTER[0] + dx, 0.0, N["tongue_top"] + 0.05)) for dx in (-4.0, 0.0, 4.0))
     check("J10A keel groove clears the taller tongue", groove, f"groove open at Z {N['tongue_top'] + 0.05}: {groove}")
 
-    # 6. Shims and the sensor flat (D-077 2).
+    # 6. Shims and the sensor flat (D-079 2).
     shims = [parts[f"REAR_TCRT_HEIGHT_SHIM_{k}"].bounding_box() for k in (1, 2)]
     t = [round(b.max.Z - b.min.Z, 3) for b in shims]
     bez = parts[BEZEL].bounding_box()
@@ -434,7 +434,7 @@ def main():
           max(deep) < 6.9 and old_pilot - old_tip < 0.5 and old_roof < 0.6 and old_t.max.Z - old_t.min.Z < 1.1,
           f"keel pilots {deep}; bezel pilot Z {old_pilot:.2f} vs tip {old_tip:.1f}; roof {old_roof:.2f}; shim {old_t.max.Z - old_t.min.Z:.2f}")
 
-    # 10. Orientation (D-078).
+    # 10. Orientation (D-080).
     for label, down, how, bed_min, support_max in PLAN:
         bed, need = bed_and_overhang(parts[label], down)
         area = sum(a for a, _, _ in need)

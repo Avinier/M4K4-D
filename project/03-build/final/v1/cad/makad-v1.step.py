@@ -376,7 +376,7 @@ def axle_edits():
 _AXLE_CUTS, _AXLE_ADDS = axle_edits()
 
 
-# D-073: frame insert and screw pilots. The M3 x 6 inserts in hand (OnlyScrews, OD 4.4) sat in
+# D-075: frame insert and screw pilots. The M3 x 6 inserts in hand (OnlyScrews, OD 4.4) sat in
 # Ø4.3 pilots, 0.05 mm of bite a side; every other M3 insert in the robot uses Ø4.0. The M2.5 x 4
 # (OD 3.9) sat in Ø3.9, no bite at all; it gets OD - 0.4 like the M3s. The IMU's thread-forming
 # M2 x 5 had no pilot in the deck. Rings fill the old pilots down to the new diameter.
@@ -396,7 +396,7 @@ def _x_cyl(r, x0, x1, y, z):
 
 
 def frame_pilot_edits():
-    """D-073 world-frame (label, shape) cuts and adds on the two frame modules."""
+    """D-075 world-frame (label, shape) cuts and adds on the two frame modules."""
     m, r = FRAME_FIX, FRAME_FIX["insert_r"]
     cuts, adds = [], []
     for region, sx in (("FRONT", 1.0), ("REAR", -1.0)):
@@ -425,7 +425,7 @@ def frame_pilot_edits():
 _FRAME_CUTS, _FRAME_ADDS = frame_pilot_edits()
 
 
-# D-074: frame print orientation. The front module prints as it sits (tub bottom down), but its
+# D-076: frame print orientation. The front module prints as it sits (tub bottom down), but its
 # rails, J13 ribs and crossmember stopped at Z 35, 3 mm above the tub's Z 32: 2588 mm2 of floating
 # underside on 477 mm2 of bed. They now run down to Z 32. The J13 nut sockets and the J10-8 bore
 # stay open; the crossmember fill stops 1.5 mm short of its front face (shell 2.2 mm away). The rear
@@ -442,7 +442,7 @@ FRAME_PRINT = dict(
 
 
 def frame_print_edits():
-    """D-074 world-frame (label, shape) adds: the front module's flat bottom, the rear deck plane."""
+    """D-076 world-frame (label, shape) adds: the front module's flat bottom, the rear deck plane."""
     from build123d import Box
     p = FRAME_PRINT
     z0, z1 = p["front_floor"], p["front_old"] + 0.01
@@ -465,7 +465,7 @@ def frame_print_edits():
 _FRAME_PRINT_ADDS = frame_print_edits()
 
 
-# D-075: J13 bolts into M4 heat-set inserts in the deck. The Ø10.4 nut sockets under the three
+# D-077: J13 bolts into M4 heat-set inserts in the deck. The Ø10.4 nut sockets under the three
 # top-driven bolts let a socket hold the plain nut from below, but at the rear (X -22) the socket
 # overlaps the J04 key pocket at the rail end: the key had 6 % of its inner wall, and with the
 # carriers on, the key tongue stands in the socket so the nut can't be held. The sockets are filled
@@ -490,14 +490,14 @@ J13_FIX = dict(
     # The rear-right boss reaches the rear locating pin's Ø4.1 hole (-27, -42); it stays through.
     pin_holes=((-27.0, -42.0, 2.05), (59.0, 42.0, 2.05)),
 )
-# D-076: the front-left J13 bolt (64, +48) goes in from below, and its Ø8 head overlapped the
+# D-078: the front-left J13 bolt (64, +48) goes in from below, and its Ø8 head overlapped the
 # hatch edge (Y 46.5) by 2.5 mm, so the body could not come off with the hatch on. A Ø9.2 notch
 # in the hatch edge, round the bolt axis, lets the head pass with 0.6 mm all round.
 HATCH_NOTCH = (64.0, 48.0, 4.6, 29.0, 33.5)  # x, y, r, z0, z1
 
 
 def j13_insert_edits():
-    """D-075 (cuts, adds, inserts) for the three top-driven J13 points."""
+    """D-077 (cuts, adds, inserts) for the three top-driven J13 points."""
     from build123d import Align, Box, Cone
     m = J13_FIX
 
@@ -561,7 +561,7 @@ def _chassis_model():
     return module
 
 
-# D-077: nose and keel pilots and shims. (1) The nine CNC Kitchen M3 x 5.7 positions take the M3 x 6
+# D-079: nose and keel pilots and shims. (1) The nine CNC Kitchen M3 x 5.7 positions take the M3 x 6
 # in hand (OnlyScrews, OD 4.4) in their Ø4.0 bores. The caster seat is 6.0 mm, so the insert fills it:
 # its bores stay through, the flange bears on the insert ends at the seat face, and under the GP2Y
 # (insert 1) a Ø5.0 x 0.5 relief in the pocket floor takes the plastic pushed out at the top. The
@@ -580,7 +580,7 @@ NOSE_KEEL_FIX = dict(
     shim_t=1.2, belly=12.4,
     flat_recess=(-61.6, -47.4, 11.9, 12.4),     # x0, x1, z0, z1 under the bezel and shims (full keel width)
     bezel_pilot=(0.8, 20.4, 21.9), pin_hole=(1.0, 18.4, 19.4),
-    # End cradles contact the real rounded TCRT case at its existing datum (D-077).
+    # End cradles contact the real rounded TCRT case at its existing datum (D-079).
     cradle_x=((-59.8, -58.5), (-49.5, -48.2)),
     cradle_half_y=3.8, cradle_top=14.0, shim_window_x=(-59.9, -48.1),
     tongue_top=9.5,                             # shoe tongue Z 8.5 -> 9.5, straight sides at the top width
@@ -588,7 +588,7 @@ NOSE_KEEL_FIX = dict(
 
 
 def nose_keel_edits():
-    """D-077 (cuts, adds, removes, inserts) for the nose and keel."""
+    """D-079 (cuts, adds, removes, inserts) for the nose and keel."""
     M, m = _chassis_model(), NOSE_KEEL_FIX
     r_out, r_in, length = m["insert"]
     cuts, adds, inserts = [], [], []
@@ -735,17 +735,17 @@ DROID_REMOVES = [
     r"C3_J10_1_MICROFIT3_2P_(RA_HEADER|MATED_PLUG)",
     # D-072: the M3 x 18 housing screws, replaced by M3 x 16 below.
     r"AXLE_CAP_SCREW_M3X18_[LR]_[1-4]",
-    # D-075: the plain nuts under the three top-driven J13 bolts; the bolts go into deck inserts.
+    # D-077: the plain nuts under the three top-driven J13 bolts; the bolts go into deck inserts.
     r"BODY_CHASSIS_M4_NUT_[123]",
-    # D-077: the CNC Kitchen M3 x 5.7 insert models (OnlyScrews M3 x 6 below) and the 1.0 mm TCRT shims (1.2 mm below).
+    # D-079: the CNC Kitchen M3 x 5.7 insert models (OnlyScrews M3 x 6 below) and the 1.0 mm TCRT shims (1.2 mm below).
     *_NOSE_KEEL_REMOVES,
 ]
 DROID_INSERTS = [
     (r"C3_CARRIER_PCB10_WITH_DEVKITC", pcb10_devkitc()),
     *[(r"C3_CARRIER_PCB10_WITH_DEVKITC", shape) for shape in pcb10_j10_1()],
     *_AXLE_SCREW_INSERTS,  # D-072: M3 x 16 housing screws
-    *_J13_INSERTS,  # D-075: M4 x 8 deck inserts at the three top-driven J13 bolts
-    *_NOSE_KEEL_INSERTS,  # D-077: M3 x 6 inserts in the pod seat and both crossmembers; 1.2 mm TCRT shims
+    *_J13_INSERTS,  # D-077: M4 x 8 deck inserts at the three top-driven J13 bolts
+    *_NOSE_KEEL_INSERTS,  # D-079: M3 x 6 inserts in the pod seat and both crossmembers; 1.2 mm TCRT shims
 ]
 
 
@@ -770,13 +770,13 @@ DROID_CUTS = [
     *_WHEEL_CAP_CUTS,
     # D-071: stub flange Ø24 -> Ø21; set-screw key notch in the carrier hub.
     *_AXLE_CUTS,
-    # D-073: J04 rail pilots run Ø4.0 to 7 mm deep; Ø1.6 IMU screw pilots through the front deck.
+    # D-075: J04 rail pilots run Ø4.0 to 7 mm deep; Ø1.6 IMU screw pilots through the front deck.
     *_FRAME_CUTS,
-    # D-075: Ø5.5 x 9 M4 insert pilots from the deck top at the three top-driven J13 bolts.
+    # D-077: Ø5.5 x 9 M4 insert pilots from the deck top at the three top-driven J13 bolts.
     *_J13_CUTS,
-    # D-076: hatch-edge notch so the front-left J13 bolt comes out from below with the hatch on.
+    # D-078: hatch-edge notch so the front-left J13 bolt comes out from below with the hatch on.
     (r"BATTERY_TUB_BOTTOM_HATCH", _z_cyl(HATCH_NOTCH[2], HATCH_NOTCH[3], HATCH_NOTCH[4], HATCH_NOTCH[0], HATCH_NOTCH[1])),
-    # D-077: relief over the caster insert under the GP2Y; keel pilots 7 mm deep; keel sensor flat to Z 12.4,
+    # D-079: relief over the caster insert under the GP2Y; keel pilots 7 mm deep; keel sensor flat to Z 12.4,
     # bezel pilot and pin hole deeper; shoe groove 1 mm deeper.
     *_NOSE_KEEL_CUTS,
 ]
@@ -806,14 +806,14 @@ DROID_ADDS = [
     *_WHEEL_CAP_ADDS,
     # D-071: housing screw holes Ø3.4 -> Ø3.2, so the housing refits where the motor was aligned.
     *_AXLE_ADDS,
-    # D-073: frame insert pilots Ø4.3 -> Ø4.0 (J04 rail ends, J11A bosses), driver posts Ø3.9 -> Ø3.5.
+    # D-075: frame insert pilots Ø4.3 -> Ø4.0 (J04 rail ends, J11A bosses), driver posts Ø3.9 -> Ø3.5.
     *_FRAME_ADDS,
-    # D-074: the front module's rails, J13 ribs and crossmember down to the tub's Z 32 (prints tub
+    # D-076: the front module's rails, J13 ribs and crossmember down to the tub's Z 32 (prints tub
     # bottom down on one flat face); the rear crossmember strip behind the deck up to Z 56 (deck down).
     *_FRAME_PRINT_ADDS,
-    # D-075: the three J13 nut sockets filled back to the rail, rib and deck (rear J04 key pockets kept).
+    # D-077: the three J13 nut sockets filled back to the rail, rib and deck (rear J04 key pockets kept).
     *_J13_ADDS,
-    # D-077: the wear shoe's tongue 1 mm taller over its M2 pilot.
+    # D-079: the wear shoe's tongue 1 mm taller over its M2 pilot.
     *_NOSE_KEEL_ADDS,
 ]
 DROID_MOVES = [
