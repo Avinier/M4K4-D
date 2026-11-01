@@ -3154,3 +3154,204 @@ Option B2, locating the motor by a close-fit plate pilot and tightening the face
 
 
 **KiCad implementation follow-up (2026-10-31 session):** the actual [PCB-09 Nightly project](04-pcbs/pcb-09-c0-link-adapter/README.md#schematic) now contains the D-073 review circuit and D-074 outline. Created through the Nightly project manager, circuit transferred with GUI F8, footprints/outline placed through KiPy, socket-only B-side rule proved with a planted scratch component, and native library refresh used to clear post-flip warnings. ERC 0 errors / 0 warnings; placement DRC 0 violations and 0 schematic-parity issues, **67 unrouted**. Numbered socket positions and 111 exported circuit pins checked. D1 candidate is package-matched 1N5819HW/SOD-123. This records implementation work, not a release: socket installed height, retention, populated fit, component sourcing/ratings, head far-end contract and CR-02 evidence remain open.
+
+## D-075
+
+**2026-10-30 · Chassis / frame print review: insert and screw pilots, coupons, hatch (CH-001, CH-011, CH-039, CH-061, CH-077, CH-080; J04, J11A, J15A, J15B; final v1 CAD) · ACTIVE; `check_frame_print.py` 29/29; module orientation and physical proof open**
+
+**Why.** Laying out the frame for the print review ([frame page](../04-print/01-chassis/frame/README.md)) found:
+
+- **The M3 × 6 frame inserts barely grip.** The 8 J04 rail-end and 4 J11A boss pilots are Ø4.3 (D-030) for the OnlyScrews insert in hand, OD 4.4: 0.05 mm of knurl a side. The rims, motor plates, pod seat and keel use Ø4.0 for the same OD. The J04 pilots were also only 0.1 mm deeper than the 6 mm insert, leaving nowhere for the plastic it pushes ahead.
+- **The M2.5 × 4 driver-post inserts (CH-080) sit in Ø3.9, their own listed OD:** no bite at all.
+- **The IMU's M2 × 5 thread-forming screws (CH-039) had no pilot** in the deck, while the BOM spoke of a "current Ø1.6 pilot".
+- **D-033 still asked for junction and insert coupons**, which [04-print rule 5](../04-print/README.md#rules) replaces with the real parts as the test (as D-071 did for the axle).
+- **The 1.5 mm hatch carries the strapped pack** on four screws through 1.5 mm of PETG; its strength had not been looked at.
+
+**Decision** (builder, 2026-10-30: address the frame issues before the orientation review):
+
+1. **Pilots** (droid edits, `FRAME_FIX` and `frame_pilot_edits()` in `makad-v1.step.py`; the chassis source is unchanged):
+   - J04 rail ends, 8: **Ø4.3 → Ø4.0**, and **7.0 mm deep** (was 6.1 plus a Ø3.4 tip relief): the 6 mm insert plus 1 mm. A ring fills the old pilot; a Ø4.0 cut runs on to the new bottom.
+   - J11A tub bosses, 4: **Ø4.3 → Ø4.0**, depth unchanged (6.5 mm for the 6 mm insert; the boss wall grows from 1.35 to 1.5 mm).
+   - J15B driver posts, 4: **Ø3.9 → Ø3.5** (insert OD − 0.4, the rule the M3 pilots follow), 4.1 mm deep.
+   - J15A IMU: **Ø1.6 through the 4 mm deck** at (22, ±7.5) for the M2 thread-forming screws (0.8 × d, the usual pilot for thread-forming screws in plastics). The tip ends at the deck underside, with nothing below it.
+   - Volumes: front module 75.84 → 75.94 cm³, rear 50.37 → 50.41 cm³; both stay one solid. The mass register is not changed for 0.15 cm³.
+2. **No frame coupons** (D-033's coupon hold is lifted for the pilots and junctions). The fits are tested on the real parts first:
+   - The M3 × 6 insert in a Ø4.0 pilot is first tried in the pod seat (CH-063, plate P02), which uses the same insert in the same hole; the modules are printed after.
+   - The M2.5 × 4 has no small stand-in. It is measured when bought (rule 5) and the post pilots corrected before export if the OD is not 3.9.
+   - The rail-to-crossmember junctions are proved on the assembled frame by the [chassis test system](01-chassis/v1/testsystem.md) load tests, as the register already plans.
+3. **The hatch is closed by calculation.** Pack (about 110 g) and hatch (about 9 g) at a 10 g shock is about 12 N, 3 N per screw. Pulling an ISO 7380 head (Ø5.7) through 1.5 mm of PETG shears about 27 mm²; at a conservative 15 MPa across printed layers that is about 400 N per screw, over 100× the load. The plate is 1.5 mm, above the lab's 1.2 mm minimum, and prints flat. The inversion and shock test in J11B stays the physical proof.
+4. **Tracked, not changed here:** deck coplanarity across the two modules (J13, ≤ 0.20 mm) is measured at the J04 dry fit; the module orientation (the D-033 hold) and the fuse-shelf cantilever go to the orientation review.
+
+**Check:** `final/v1/cad/check_frame_print.py` **29/29** (2026-10-30). Every pilot is probed at three depths and eight directions: open inside the new radius, material just outside it. The J04 bottoms sit 0.3 mm past 7.0 mm. Both modules stay one solid. Planted: the unedited pilots are open at Ø4.2 / Ø3.8, and the unedited deck is solid at the IMU screws.
+
+**BOM changed:** CH-061 and CH-077 Ø4.0 pilots (J04 7 mm deep); CH-080 Ø3.5 pilot; CH-039 Ø1.6 pilot modelled.
+
+**Not changed:** the body's service-panel inserts (BO-063) are the same OD 4.4 insert in Ø4.3 pilots. They belong to the body print review.
+
+## D-076
+
+**2026-10-30 · Chassis / frame print orientation; flat-bottom fills (CH-001, CH-011; D-033 orientation hold; final v1 CAD) · ACTIVE; `check_frame_print.py` 36/36; first print open**
+
+**Why.** D-033 left the frame modules' print orientation on hold. Every face facing the bed was measured for all six orientations of the three frame prints ([frame page §5](../04-print/01-chassis/frame/README.md#5-printing)):
+
+- **Front module:** deck-down is impossible (the driver posts, fuse bracket and tie bridges stand on the deck top). On an end or a side, the tub walls become 1400–2000 mm² ledges 20 mm deep. Printed as it sits (tub bottom down), the rails, J13 ribs and crossmember stopped at Z 35, 3 mm above the tub's Z 32, so the part stood on the 1.5 mm tub walls alone (477 mm² of bed) with 2588 mm² of underside floating 3 mm up.
+- **Rear module:** deck-down puts the J13 seat face on the bed, but the crossmember strip behind the deck (X −48 to −41) stopped at Z 48, a 924 mm² ledge 8 mm off the bed. Printed bottom down, the deck is a 15 mm cantilever over the motor bay (1499 mm²) and the rails sit 1 mm above the crossmember.
+- **Hatch:** a flat plate; either face down.
+
+**Decision** (builder, 2026-10-30: "let's move to next", the orientation step of the frame review):
+
+1. **Front module prints tub bottom down** (as it sits). The rails, J13 ribs and crossmember run down to **Z 32** (`FRAME_PRINT`, `frame_print_edits()` in `makad-v1.step.py`: +7.23 cm³). The J13 nut sockets and the J10-8 bore stay open; the crossmember fill stops at X 90.5, so its front face keeps 2.2 mm to the shell (a 1.5 mm ledge at its foot, under the 2 mm that prints unsupported). Nothing else is within 1.5 mm: the shell is 11.7 mm below the rails, and the carriers only meet the rail ends at X 17, as before. Bed: 469 → **2879 mm²**.
+2. **Rear module prints deck top down.** The crossmember strip behind the deck rises to the deck top, **Z 56** (+7.39 cm³; body frame and PCB-02 2.0 mm away, shell 2.6 mm). Bed 3567 mm², all of it the J13 seat face and the strip.
+3. **Hatch prints outer face down** (the visible face takes the bed texture). No support.
+4. **What still needs support** (tree supports, PETG; all hidden faces, all open from below or the side for removal):
+   - front: the deck underside at X 17–24, a 7 mm ledge on the motor bay; the two corner pockets beside the tub's front corners and round the J13 sockets (1040 mm² together); the fuse shelf (215 mm², 15 mm up); the tub window head (28 mm²); 1299 mm² in all;
+   - rear: the four crossmember ends beyond the deck (|Y| 56–66) and the tie lug, 202 mm². Filling them up to the deck would touch the carriers and the body frame.
+   - A 45° wedge under the X 17–24 ledge was considered and dropped: it would meet the encoder plug if the motor arrives with its header turned +X (D-072 §4).
+5. **Layers suit the loads.** Both modules print with their layers in the XY plane: the rails bend along the filaments under the wheel loads, the J04 inserts pull along the layers, and the J13 bolts clamp across them. The hatch-boss and driver-post pilots are vertical (round); the J04 and pod pilots are horizontal, 4 mm arches.
+6. **Bed-face care:** the rear module's J13 bolt holes (Ø4.5) and rear pin hole (Ø4.1) open on the bed, where elephant's foot narrows them. Run a Ø4.1 drill through the pin hole by hand after printing; use the slicer's elephant-foot compensation.
+
+**Found, not changed:** the two inner driver posts (Y ±34.04, Ø7) stand half over the battery aperture (edge |Y| 34.0). They print on a little support and carry only a 3 g board, but back each one with a dowel through the aperture (pack out) while pressing its insert. A local deck pad would sit 0.1 mm above the pack strap (J11B).
+
+**Mass:** +14.6 cm³ of printed volume, about +8.4 g at the register's 0.571 g/cm³, low in the frame (front fill Z 32–35, rear strip Z 48–56). The hand-kept mass register (`CHASSIS_PRIMARY_FRAME`, 219.1 g) is not updated here: it lives in the chassis source, which print fixes don't edit (04-print rule 2). Weigh the printed modules (rule 6) and update it from the scale.
+
+**Check:** `final/v1/cad/check_frame_print.py` **36/36** (2026-10-30, about 15 min): D-075's 29 rows plus bed and support area per print (a face sample counts as bridged with walls within 15 mm on both sides, or as a ledge within 2 mm), the sockets and bore open through the fill, the fills clear of every chassis and body part by 1.5 mm (the J04 carriers may touch the rail ends, never overlap), and the unedited modules planted (469 mm² of bed; the rear strip open at Z 54).
+
+## D-077
+
+**2026-10-31 · Chassis / J13 body bolts into M4 deck inserts; rear J04 key seats restored; frame assembly order (CH-035, CH-036, CH-095; J04, J13; final v1 CAD) · ACTIVE; `check_frame_assembly.py` 48/48; M4 inserts to buy**
+
+**Why.** Checking tool access for every frame joint in the state it is done in ([frame page §6](../04-print/01-chassis/frame/README.md#6-assembly-and-service)) found:
+
+- **The rear J13 nuts can't be held.** The three top-driven J13 bolts (−22, ±48) and (64, −48) went into plain M4 nuts held from below through a Ø10.4 socket in the rail. At the rear (X −22) that socket reaches the rail end at X −17, where the J04 key pocket is. The carriers are fitted before the body, and the carrier's key tongue then stands inside the socket: a 7 mm socket (OD 9.5) hits it (4.1 mm³), and the nut itself passes only turned flat-on. Nothing could hold the nut while the bolt was tightened.
+- **The rear J04 keys had lost their seat.** The same socket had cut away the rail round the rear key pocket: 6 % of the inner wall and 40 % of the floor and roof were left, against 60–80 % at the front. The rear key did not stop the carrier moving inboard, so the wheel's toe rested on the screws' friction.
+- **The front-right nut was reachable only with the hatch off** (the socket overlaps the hatch edge), so every body removal meant dropping the pack.
+
+**Decision** (builder, 2026-10-31: "M4 inserts in the deck"):
+
+1. **M4 × 8 heat-set inserts in the deck** at the three top-driven bolts (CH-095: OnlyScrews, OD 5.9, ₹3.60), pressed flush from the deck top into a **Ø5.5 × 9 mm** pilot (OD − 0.4, as D-075). The M4 × 12 bolt (CH-035) is unchanged: 6 mm of thread in the insert, its tip 3 mm above the pilot floor. The plain nuts at these three points are dropped (CH-036 4 → 1).
+2. **The three sockets are filled** back to the rail, rib and deck they were cut from, and the rear J04 key pockets re-cut: the rear keys are walled like the front ones (60 / 80 / 80 / 80 %).
+3. **A 45° cone boss under the deck** round each pilot: the old socket ran past the rail's inner face, so the lower half of the pilot stood in air. The boss gives 1.2 mm of wall at the pilot floor (R 3.95 at Z 47), widens to R 8.95 at the deck underside and comes to a point at Z 43.05, so it prints without support on the front module. At the rear it is clipped at the rail end (X −17). The rear and front locating-pin holes stay through.
+4. **The front-left bolt (64, +48) is unchanged:** driven from below into the nut in the body frame's foot cassette, its socket kept open. Its 2.5 mm key passes the hatch edge by 0.06 mm, but the bolt's head does not: [D-078](#d-078) notches the hatch.
+5. CAD: `J13_FIX` and `j13_insert_edits()` in `makad-v1.step.py`: `DROID_CUTS` (pilots), `DROID_ADDS` (fills and bosses), `DROID_REMOVES` (`BODY_CHASSIS_M4_NUT_[123]`), `DROID_INSERTS` (`J13_DECK_INSERT_M4X8_[1-3]`). The chassis and body sources are unchanged; body v1's `check_body_frame_fit.py` still models the nuts.
+
+**Frame assembly order** (frame page §6), from the tool paths:
+
+- inserts into the loose modules (the inner driver posts backed with a Ø3 dowel through the open tub);
+- the ballast bar, from below, while the hatch is off; its screws from above, before the body;
+- the IMU and the driver boards, from above, before the body;
+- the carriers before the motors (the motor covers every J04 key);
+- the body frame (body assembly step 1) before the body electronics and the shell, which cover the top-driven J13 keys.
+- **Service:** the hatch and pack come off from below with the body on (J11A keys clear); the ballast, IMU, drivers and J13 need the body off, and the ballast also the hatch.
+
+**Check:** `final/v1/cad/check_frame_assembly.py` **48/48** (2026-10-31): the J13 fills, pilots, engagement, inserts and bosses (1.0 mm from every other part, out of the carriers, pin holes through); the rear key walls, with the unedited rear module planted (6 %); and every tool path in its state, with the motor planted against the J04 keys and the hatch against the ballast. `check_frame_print.py` re-run with the fills and bosses: **36/36**; the front module's support falls from 1299 to 1131 mm² (the J13 pockets are filled; the bosses need none), bed 2901 mm²; the rear 3551 / 194 mm². Printed volume +0.8 cm³ front, +1.4 cm³ rear on D-076 (front 83.97, rear 59.16 cm³).
+
+**BOM changed:** CH-035 (three into inserts, one into the cassette nut), CH-036 4 → 1, new CH-095 M4 × 8 insert (3, not ordered).
+
+## D-078
+
+**2026-10-31 · Chassis / frame review close-out: hatch notch for the front-left J13 bolt, frame screw torques (CH-011; J11A, J12, J13, J15A, J15B; final v1 CAD) · ACTIVE; `check_frame_assembly.py` 50/50; physical proof open (frame page §8)**
+
+**Why.** Two items were left after D-077 ([frame page §7](../04-print/01-chassis/frame/README.md#7-gaps-found-on-2026-1030-31-and-their-fixes)):
+
+- **The front-left J13 bolt can't come out with the hatch on.** It is driven from below into the body cassette's nut. Its key passed the hatch edge by 0.06 mm, but the bolt's Ø8 head overlaps the hatch (edge Y 46.5) by 2.5 mm, so taking the body off still meant dropping the pack.
+- **Only the J04 screws had a torque** (D-072). The others clamp printed PETG or an insert in it, which creeps or strips if over-tightened.
+
+**Decision** (builder, 2026-10-31: "proceed"):
+
+1. **A Ø9.2 notch in the hatch edge** round the bolt axis (64, +48) (`HATCH_NOTCH`, `DROID_CUTS` on `BATTERY_TUB_BOTTOM_HATCH`). The head passes with 0.60 mm all round; the key with 3.16 mm. It is in the hatch flange outside the tub, away from the bosses and strap slots. The hatch loses 19 mm² (bed 4915 → 4896 mm²).
+2. **Torques** (frame page §6), nut factor 0.2 as D-072, PETG yield about 50 MPa:
+   - J11A hatch screws, M3 button on the 1.5 mm hatch: **0.2 N·m**, about 330 N, 20 MPa under the head.
+   - J12 ballast screws, M3 countersunk in the deck's 90° seat: **0.3 N·m**, about 500 N, about 23 MPa over the seat's projected area.
+   - J13 body bolts, M4 button into the M4 inserts and the cassette nut: **0.6 N·m**, about 750 N, 25 MPa under the head on the body foot. Loctite 222.
+   - J15B driver screws, M2.5 into the post inserts: **0.15 N·m**.
+   - J15A IMU screws, M2 thread-forming: **snug only**, no torque driver; stop when the head seats.
+   - J04 stays at 0.3 N·m (D-072).
+
+**Check:** `check_frame_assembly.py` gains the bolt's path out downward (head R 4.0) past the notched hatch, the key 1.0 mm clear, and the unnotched hatch planted: **50/50** (2026-10-31). `check_frame_print.py` 36/36 with the hatch's bed minimum lowered to 4850 mm² for the notch.
+
+## D-079
+
+**2026-11-01 · Chassis / nose and keel print review: inserts, pilots, TCRT shims, wear-shoe tongue (CH-002, CH-008, CH-009, CH-010, CH-033, CH-062, CH-063, CH-067, CH-068, CH-069, CH-070; J07A, J07B, J08C, J09A, J09B, J10A; final v1 CAD) · ACTIVE; `check_nose_keel_print.py` **42/42**; physical fits open**
+
+**Why.** Laying out the nose and keel for the print review ([nose page](../04-print/01-chassis/nose/README.md), [keel page](../04-print/01-chassis/keel/README.md)) found:
+
+- **Nine insert positions are drawn for the CNC Kitchen M3 × 5.7**, which isn't bought: 3 in the pod seat (CH-063), 2 in the front crossmember (CH-033), 4 in the rear crossmember (CH-067). The OnlyScrews M3 × 6 (OD 4.4) is in hand and fits their Ø4.0 bores (OD − 0.4, as D-075), but it is 0.3 mm longer:
+  - the caster seat is 6.0 mm and its bores run through it, so the M3 × 6 fills it, flush at the seat face (where the flange bears on the insert ends) and at the pocket floor, where the GP2Y stands over insert 1;
+  - the keel pilots were 6.5 mm deep, 0.5 mm past the insert (D-075 asks for 1 mm);
+  - the crossmember pod pilots are already 7.0 mm.
+- **The TCRT height shims are 1.0 mm**, under the lab's 1.2 mm minimum wall ([lab.md](../04-print/lab.md)).
+- **The M2 thread-forming pilots** are Ø1.6 (0.8 × d) everywhere, but the bezel's ended 0.05 mm past the screw tip at zero shims, so a long screw would bottom before its head seated, and the wear shoe's crossed its 2.5 mm tongue with 0.45 mm of plastic above it: one or two layers, which a thread-former splits.
+
+**Decision** (builder, 2026-11-01: 1.2 mm shims with the sensor flat raised 0.4 mm; plain pilot fixes made directly):
+
+1. **Inserts:** the M3 × 6 (CH-061 stock) goes in all nine positions; CH-033, CH-063 and CH-067 become that part. Droid edits (`NOSE_KEEL_FIX`, `nose_keel_edits()` in `makad-v1.step.py`; the chassis source is unchanged):
+   - caster seat: bores unchanged (Ø4.0 through), the insert pressed flush with the seat face; a **Ø5.0 × 0.5 relief** in the pocket floor over insert 1, under the GP2Y, takes the plastic the insert pushes out at the top. Inserts 2 and 3 open on bare floor;
+   - rear crossmember: keel pilots **6.5 → 7.0 mm** (Ø4.0), Ø3.4 beyond for the screw tips;
+   - the insert models become OD 4.4 × 6.0.
+2. **TCRT shims 1.0 → 1.2 mm**, and the keel's sensor flat is **recessed 0.4 mm** under the bezel and shims (belly Z 12 → 12.4, X −61.6 to −47.4, the keel's full width). Two shims still set the optical face at **Z 10** and the guard lips at **Z 7**, so the D-014 nominal and the tip-back order are unchanged. The range becomes Z 12.4 (no shims) to 7.6 (four). The nominal optical working distance is unchanged; other shim counts need real-floor signal qualification.
+3. **M2 pilots (Ø1.6, 0.8 × d):**
+   - bezel pilot in the keel runs to **Z 21.9**, 1 mm past the M2 × 10's tip at zero shims; the pin hole to Z 19.4, 1 mm past the pin;
+   - wear shoe: the tongue grows **1 mm straight up** (Z 8.5 → 9.5, at its top half-width 3.0) and the keel groove with it, so the pilot has 1.45 mm above it. The screw, its axis and its holes are unchanged;
+   - the lid boss pilot (J08C) is already right: 13 mm deep, 1.15 mm wall.
+4. **TCRT support at the existing pose.** The real rounded vendor case does not contact the old flat end ledges: the sensor can drop 0.2 mm freely and the 1 mm-step sweep first contacts at 4 mm. The earlier bounding-box ledge test did not prove support. Two 1.3 mm-wide **contoured end cradles** rise from the bezel to Z 14 at X −59.8..−58.5 and −49.5..−48.2, Y ±3.8. Subtract the unchanged vendor sensor solid from these pads to make the case seats. The 9 × 7.6 optical window remains open. Widen the shim window to X −59.9..−48.1; clear the keel around the cradles through Z 16.5 for the zero-shim stack. No sensor move or hardware swap. The final check requires zero initial sensor overlap and positive contact after just 0.05 mm downward motion; the unedited bezel is planted. The register's Z 10 remains the existing CAD datum at the lowest projecting STEP feature; qualify actual optical standoff on the received sensor.
+5. **GP2Y topology:** the vendor STEP itself validates, but the existing subsystem ear-trim boolean leaves an invalid inspection solid. Replace that leaf via `DROID_REMOVES`/`DROID_INSERTS` with its healed solid (`fix()`), at the same pose. The check requires unchanged bounds within 1e-6 mm, volume change under 0.001 mm³ and valid topology; the unedited trimmed part is planted. No sensor movement. Restore the existing D-027 soldered-lead inspection reserve, which `build_chassis_v1()` had filtered out, into the final chassis tree so the final service sweeps actually include it.
+6. **M2 sourcing** (CH-062, CH-069, CH-070), like CH-039 in D-075: the JCPlas B4B66/B4B67 thread-formers are still candidates. The Ø1.6 pilots stand for the usual 0.8 × d; confirm against the maker's PETG pilot when the sample comes, before export.
+
+**Found, kept:**
+- Insert 2's knurl leaves 1.15 mm of seat to the Hall-lead groove over the groove's 1.5 mm depth. Press it slowly and check the groove after.
+- The bezel pilot has 0.75 mm of keel past its thread toward the TCRT pocket (0.25 mm clearance a side round the sensor). Drive the screw snug only, and check the TCRT still drops freely out of the pocket.
+- At three or four shims the guard lips meet the floor before the shoe when the robot tips back (5.39° / 4.28°, against the shoe's 6.05°). This was already so at 1.0 mm. Keep two fitted. Three/four are experimental stacks requiring contact-order and floor-signal requalification before running.
+
+**Mass:** measured CAD changes: seat −0.021 cm³, keel −0.175 cm³, shoe +0.066 cm³, bezel +0.077 cm³, two shims +0.030 cm³ total. Weigh the prints and update the hand-kept register under rule 6; CAD volume is not a measured print mass.
+
+**Check:** `final/v1/cad/check_nose_keel_print.py` **42/42** (2026-11-01).
+
+**BOM changed:** CH-033, CH-063, CH-067 → the OnlyScrews M3 × 6, OD 4.4 (in hand); CH-068 1.2 mm; CH-008/CH-009/CH-010 notes; CH-062/069/070 pilot note.
+
+## D-080
+
+**2026-11-01 · Chassis / nose and keel print orientations (CH-002/003/007/008/009/010/068; final v1 CAD) · ACTIVE; actual slicing and physical print checks remain open**
+
+**Why.** The nose and keel needed the same bed/support/critical-face review as the frame. The register's nose-face-down cap starts the snap fingers 5 mm up, over their slits. The lid's broad faces create large overhangs; the keel and bezel have competing bed and support areas.
+
+**Decision.** Use the final geometry with all droid edits. `check_nose_keel_print.py --survey` surveys six orthogonal bed directions per print. Each downward triangle is measured; the nominal 45° limit uses a 44° normal threshold to allow meshing tolerance. Flat faces bridge within 15 mm between supports or form ledges within 2 mm; short sloped ledges also use 2 mm. Only concave bores under 3 mm radius get the small-hole exemption; convex pins remain in the survey. These geometric surface areas guide the lab's slice, rather than promising a support volume or surface finish.
+
+| Print | Bed direction in chassis coordinates | Critical faces |
+|---|---|---|
+| Pod seat | −Z, caster seat down | Caster seat, insert mouths, sensor floor, Hall slot and cable groove |
+| Lid | +X, front end down, brim | Tongue, pod seating rim, lead hump interior and countersink |
+| ASA touch cap | +Z, top down | Finger roots/slits, running faces, magnet pocket, visor; visible bed finish |
+| Keel | +Z, crossmember seat down, brim if needed | Crossmember seat, counterbores, sensor/cradle pockets, groove and recessed flat |
+| Shoe | −Z, sole down | Tongue flanks/top and M2 pilot |
+| Bezel with guards and case cradles | −Z, guard lips down, brim if needed | Case seats, shim face, locating pin and screw recess |
+| 1.2 mm shims | ±Z, flat | Thickness, parallel faces, cradle window and holes |
+
+**Support locations.** Lid: the interior hump end wall. Cap: visor underside; keep support out of the finger slits. Keel: upper lead cavity and end recesses. Bezel: underside of the plate between its lips. Seat, shoe and flat shims: no support under the stated survey rules. Bed and support areas, the full six-direction tables and the limits repeated by the check are in the nose and keel pages §5.
+
+**Materials.** Existing print-guide choices: nose seat/lid PETG deep slate, cap ASA ivory on X1E, keel/bezel PETG taupe, shoe/shims PETG deep slate. ASA permission remains open in `04-print/lab.md`. No alternative material is qualified by an unchanged CAD fit alone: shrinkage, sliding friction and snap fatigue need the actual print. No material swap is made here.
+
+**Proof.** `check_nose_keel_print.py` **42/42** (2026-11-01); all 42 bed-direction measurements completed on final prints. Selected-orientation limits and the bad cap orientation are in `check_nose_keel_print.py`; slice inspection, bed finish, support removal and first-part fits remain physical. STLs must be exported from final geometry with droid edits (04-print rules 2/3); no STL export or fabrication release is made by this review.
+
+## D-081
+
+**2026-11-01 · Chassis / nose and keel assembly, service and torques (J07–J10; final v1 CAD) · ACTIVE; physical tool/hand access and screw qualification remain open**
+
+**Why.** The initial final-tree service check found that lifting the lid after an 11 mm slide meets the speaker panel, and a straight key to the −Y pod screw meets the lid-screw boss. A 45 mm alternative lid slide meets the GP2Y starting at 13 mm. These are access problems; no sensor move or hardware swap is needed.
+
+**Decision.**
+
+1. **Lid:** cap off and lid screw out; slide **12 mm forward**, then lift 40 mm. This puts its rear edge at X 104, 0.5 mm beyond the panel's X 103.5 extent, while staying below the 13 mm first collision with the GP2Y. The body stays on. Keep both the 11 mm lift and over-slide as planted failures; do not over-slide the lid during service.
+2. **Pod screws:** use a shortened **2 mm L-key**, 8 mm from the screw-head face to the bend (X 104.65), long leg up through the open sensor pocket; roughly 10 mm short leg including engagement. Cap/lid/GP2Y out in the checked state. A straight key remains blocked by the −Y boss. Whole-pod service needs the **body off**: the lower shell band blocks vertical key entry even with the front panel removed. Initial assembly is before the body. Check the actual bend radius and handle access at the dry run; the model encloses the hex across corners at radius 1.155. Entry and an inward 60° operating arc are checked in the body-off state (0..65° at +Y, −65..0° at −Y, 1° samples; use the 5..65° span for re-indexing).
+3. **Assembly order:** install inserts in loose prints/modules; caster housing and ball unsnapped for its three keys; mount pod with pocket open; Hall board before GP2Y, then lid, springs and cap. At the rear, crossmember inserts before keel; seat the TCRT in its contoured bezel cradles, two shims initially, then retain with the pin and screw. The pages §6 describe each fitting direction and state.
+4. **Service:** caster from below with body on; cap from front with hooks released; lid by item 1; GP2Y up before Hall; pod forward with screws out, after body removal for key entry. Keel keys from below with shoe/bezel fitted; remove the TCRT cable first, then keel down through the shell slot. Bezel/shims and TCRT withdraw below; release PCB-10 J10-10 and the crossmember tie first. Shoe screw from +Y with wheels on, then shoe forward. Cable slack and hands remain physical checks.
+5. **Torques, by the D-078 method:** nut factor 0.2, PETG yield assumption about 50 MPa. J07A caster M3 × 8 **0.3 N·m**, about 500 N (head on vendor flange, insert retention limits it). J07B pod M3 × 8 **0.2 N·m**, about 333 N and 20 MPa under a Ø5.7 head around its Ø3.3 hole. J09A keel M3 × 30 **0.3 N·m**, about 500 N and 35 MPa under a Ø5.5 head around a Ø3.4 bore. For J07B use a calibrated adapter or 4 N tangential force at a 50 mm L-key lever arm. All M2 thread-formers (lid, bezel, shoe) **snug only**, stop at seating; CH-062/069/070 samples and PETG pilot/strip/service qualification remain open. No new thread locker is specified for these joints.
+
+**Check.** `check_nose_keel_assembly.py` **53/53** (2026-11-01) builds final chassis and body trees, models 2/2.5 mm keys across corners, a Ø3 PH0 shaft and Ø6 insert-iron tip, and samples removal in 1 mm steps. Planted cases retain the housing, cap, lid, GP2Y, pod/keel/shoe screws and bezel, and use the wrong lid paths and straight pod key. The TCRT support test uses a separate 0.05 mm displacement so service-step sampling cannot miss its free play. Current register text also follows the already-selected Ø3 × 1.5 magnet and RS PRO 821245 springs; no hardware change, and old force/trip estimates are not treated as qualified values. The print check plants the unedited bezel and other unfixed geometry. The check does not prove hands, handle grip, snap deformation or flexible cable behavior.
+
+**Close-out verification:** frame print **36/36**, frame assembly **50/50**, axle **27/27**;
+strict final robot build and updated nose-keel STEP passed. The review STEP validates all 104
+leaf occurrences (topology/closure/positive volume, self-intersection search skipped), with four
+reviewed snapshots. The frame checker now reuses solid classifiers and measures only bed
+contact for its raw planted case; its assertions and selected-orientation figures are unchanged.
+The nose/keel survey uses ray intersections to find candidate boundaries, then classifies the
+same 0.5 mm sample grid; six explicit boundary/thin-feature cases matched the original sampler.

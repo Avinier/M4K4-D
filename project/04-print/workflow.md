@@ -70,6 +70,16 @@ All of it is in Git. STL names use the BOM ID and the CAD label:
 a CAD change in `final/v1`, never edited; the commit that replaces it names the
 decision.
 
+## Chassis batch exception — 2026-11-01
+
+For this chassis batch, the builder prioritises limited lab visits. Prepare
+exports and the lab request from the reviewed nominal CAD without requiring
+recorded receiving measurements or a separate first-part visit. Print both
+tyres in the batch. Carry out fit and functional acceptance during assembly;
+do not mark untested parts ACCEPTED. This overrides the receiving-measurement
+release condition below for this batch. The lab uses its actual machine and
+filament profiles; software defaults are not recorded lab profiles.
+
 ## Print-ready means
 
 A part is print-ready when:

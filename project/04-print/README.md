@@ -43,7 +43,11 @@ inspected and weighed.
    right before the big parts are printed. A wrong fit is corrected in the
    slicer (XY hole compensation) if it is a printer offset, or in the CAD
    under rule 2 if it is a design error. A part whose fit depends on a
-   purchased part waits until that part is in hand and measured.
+   purchased part normally waits until that part is in hand and measured.
+   **Chassis batch exception (builder, 2026-11-01):** use reviewed nominal CAD
+   interfaces and batch all quantities, including both tyres, to minimise lab
+   visits. Receiving measurements and first-part fits do not gate this batch;
+   physical acceptance remains assembly work. See the chassis order and workflow.
 6. **Measure and weigh every print.** A part's mass and key dimensions go in
    its subsystem log. The mass registers in `03-build` are hand-kept tables, so
    a measured mass reaches them only when someone updates them.
