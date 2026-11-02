@@ -1,0 +1,268 @@
+[
+  {
+    "file": "CH-001_CHASSIS_FRAME_FRONT_MODULE.stl",
+    "bom": "CH-001",
+    "cad_label": "CHASSIS_FRAME_FRONT_MODULE",
+    "quantity": 1,
+    "material": "PETG deep slate",
+    "bed_down": "-Z",
+    "size_mm": [
+      75.0,
+      128.0,
+      41.0
+    ],
+    "volume_mm3": 83965.598
+  },
+  {
+    "file": "CH-001_CHASSIS_FRAME_REAR_MODULE.stl",
+    "bom": "CH-001",
+    "cad_label": "CHASSIS_FRAME_REAR_MODULE",
+    "quantity": 1,
+    "material": "PETG deep slate",
+    "bed_down": "+Z",
+    "size_mm": [
+      34.0,
+      132.0,
+      22.0
+    ],
+    "volume_mm3": 59157.313
+  },
+  {
+    "file": "CH-001_AXLE_MOTOR_CARRIER_L.stl",
+    "bom": "CH-001",
+    "cad_label": "AXLE_MOTOR_CARRIER_L",
+    "quantity": 1,
+    "material": "PETG deep slate",
+    "bed_down": "+Y",
+    "size_mm": [
+      39.0,
+      33.0,
+      24.0
+    ],
+    "volume_mm3": 6009.827
+  },
+  {
+    "file": "CH-001_AXLE_MOTOR_CARRIER_R.stl",
+    "bom": "CH-001",
+    "cad_label": "AXLE_MOTOR_CARRIER_R",
+    "quantity": 1,
+    "material": "PETG deep slate",
+    "bed_down": "-Y",
+    "size_mm": [
+      39.0,
+      33.0,
+      24.0
+    ],
+    "volume_mm3": 6009.827
+  },
+  {
+    "file": "CH-011_BATTERY_TUB_BOTTOM_HATCH.stl",
+    "bom": "CH-011",
+    "cad_label": "BATTERY_TUB_BOTTOM_HATCH",
+    "quantity": 1,
+    "material": "PETG deep slate",
+    "bed_down": "-Z",
+    "size_mm": [
+      54.0,
+      93.0,
+      1.5
+    ],
+    "volume_mm3": 7343.395
+  },
+  {
+    "file": "CH-051_AXLE_BEARING_HOUSING_L.stl",
+    "bom": "CH-051",
+    "cad_label": "AXLE_BEARING_HOUSING_L",
+    "quantity": 1,
+    "material": "PETG deep slate",
+    "bed_down": "-Y",
+    "size_mm": [
+      32.0,
+      32.0,
+      12.35
+    ],
+    "volume_mm3": 7069.966
+  },
+  {
+    "file": "CH-051_AXLE_BEARING_HOUSING_R.stl",
+    "bom": "CH-051",
+    "cad_label": "AXLE_BEARING_HOUSING_R",
+    "quantity": 1,
+    "material": "PETG deep slate",
+    "bed_down": "+Y",
+    "size_mm": [
+      32.0,
+      32.0,
+      12.35
+    ],
+    "volume_mm3": 7069.822
+  },
+  {
+    "file": "CH-089_AXLE_ALIGNMENT_PLUG.stl",
+    "bom": "CH-089",
+    "cad_label": "AXLE_ALIGNMENT_PLUG",
+    "quantity": 1,
+    "material": "PETG any colour",
+    "bed_down": "+Y",
+    "size_mm": [
+      15.712,
+      15.96,
+      12.3
+    ],
+    "volume_mm3": 2053.81
+  },
+  {
+    "file": "CH-004_WHEEL_L_RIM_PETG.stl",
+    "bom": "CH-004",
+    "cad_label": "WHEEL_L_RIM_PETG",
+    "quantity": 2,
+    "material": "PETG slate blue",
+    "bed_down": "-Y",
+    "size_mm": [
+      78.0,
+      78.0,
+      25.5
+    ],
+    "volume_mm3": 43276.049
+  },
+  {
+    "file": "CH-004_WHEEL_L_CLAMP_RING_PETG.stl",
+    "bom": "CH-004",
+    "cad_label": "WHEEL_L_CLAMP_RING_PETG",
+    "quantity": 2,
+    "material": "PETG slate blue",
+    "bed_down": "+Y",
+    "size_mm": [
+      78.0,
+      78.0,
+      3.0
+    ],
+    "volume_mm3": 4847.156
+  },
+  {
+    "file": "CH-058_WHEEL_L_HUB_CAP_PETG.stl",
+    "bom": "CH-058",
+    "cad_label": "WHEEL_L_HUB_CAP_PETG",
+    "quantity": 2,
+    "material": "PETG gunmetal",
+    "bed_down": "-Y",
+    "size_mm": [
+      30.022,
+      26.0,
+      4.0
+    ],
+    "volume_mm3": 1264.073
+  },
+  {
+    "file": "CH-005_WHEEL_L_TYRE_TPU95A_L.stl",
+    "bom": "CH-005",
+    "cad_label": "WHEEL_L_TYRE_TPU95A_L",
+    "quantity": 2,
+    "material": "TPU 95A black",
+    "bed_down": "-Y",
+    "size_mm": [
+      84.0,
+      84.0,
+      19.3
+    ],
+    "volume_mm3": 20305.284
+  },
+  {
+    "file": "CH-002_BALL_POD_PRINTED_SEAT.stl",
+    "bom": "CH-002",
+    "cad_label": "BALL_POD_PRINTED_SEAT",
+    "quantity": 1,
+    "material": "PETG deep slate",
+    "bed_down": "-Z",
+    "size_mm": [
+      36.5,
+      49.0,
+      20.0
+    ],
+    "volume_mm3": 12429.942
+  },
+  {
+    "file": "CH-003_BALL_POD_SENSOR_LID.stl",
+    "bom": "CH-003",
+    "cad_label": "BALL_POD_SENSOR_LID",
+    "quantity": 1,
+    "material": "PETG deep slate",
+    "bed_down": "+X",
+    "size_mm": [
+      10.6,
+      35.6,
+      36.5
+    ],
+    "volume_mm3": 2541.814
+  },
+  {
+    "file": "CH-007_BALL_NOSE_TOUCH_CAP.stl",
+    "bom": "CH-007",
+    "cad_label": "BALL_NOSE_TOUCH_CAP",
+    "quantity": 1,
+    "material": "ASA ivory",
+    "bed_down": "+Z",
+    "size_mm": [
+      7.8,
+      40.6,
+      24.5
+    ],
+    "volume_mm3": 2120.316
+  },
+  {
+    "file": "CH-008_REAR_KEEL_FACETED_BODY.stl",
+    "bom": "CH-008",
+    "cad_label": "REAR_KEEL_FACETED_BODY",
+    "quantity": 1,
+    "material": "PETG taupe",
+    "bed_down": "+Z",
+    "size_mm": [
+      50.0,
+      19.0,
+      28.0
+    ],
+    "volume_mm3": 14467.854
+  },
+  {
+    "file": "CH-009_REAR_KEEL_REPLACEABLE_WEAR_SHOE.stl",
+    "bom": "CH-009",
+    "cad_label": "REAR_KEEL_REPLACEABLE_WEAR_SHOE",
+    "quantity": 1,
+    "material": "PETG deep slate",
+    "bed_down": "-Z",
+    "size_mm": [
+      12.0,
+      10.0,
+      6.0
+    ],
+    "volume_mm3": 462.299
+  },
+  {
+    "file": "CH-010_REAR_TCRT_BEZEL_WITH_GUARDS.stl",
+    "bom": "CH-010",
+    "cad_label": "REAR_TCRT_BEZEL_WITH_GUARDS",
+    "quantity": 1,
+    "material": "PETG taupe",
+    "bed_down": "-Z",
+    "size_mm": [
+      14.0,
+      15.0,
+      9.0
+    ],
+    "volume_mm3": 379.623
+  },
+  {
+    "file": "CH-068_REAR_TCRT_HEIGHT_SHIM_1.stl",
+    "bom": "CH-068",
+    "cad_label": "REAR_TCRT_HEIGHT_SHIM_1",
+    "quantity": 4,
+    "material": "PETG deep slate",
+    "bed_down": "-Z",
+    "size_mm": [
+      14.0,
+      15.0,
+      1.2
+    ],
+    "volume_mm3": 135.261
+  }
+]
