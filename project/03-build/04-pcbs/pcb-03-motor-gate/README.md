@@ -26,6 +26,10 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 Fill this in when design starts: spec sources, pinout, supply and protection, CAD envelope.
 
+### Cross-board `ENERGY_OK` receiver requirement
+
+PCB-03 must include a physical pull-down at the `ENERGY_OK` receiver so an open signal wire or a collapsed `+5V_C2` pull-up leaves the motor-permit chain inactive. Size it during PCB-03 design against PCB-02's pull-up, receiver threshold/leakage, harness leakage, and the asserted-high margin; do not rely on MCU internal pulls. Verify the receiver low state with the signal wire open and `+5V_C2` absent. This pull-down alone does **not** protect against PCB-02 comparator power loss while `+5V_C2` remains present; PCB-02 must resolve that failure path before its schematic is released.
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
