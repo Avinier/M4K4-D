@@ -6,7 +6,7 @@ import math
 import re
 import sys
 
-from build123d import Box, Compound, Cylinder, Location, Plane, Polygon, Shape, extrude
+from build123d import Axis, Box, Compound, Cylinder, Location, Plane, Polygon, Shape, extrude
 
 BUILD = Path(__file__).resolve().parents[3]
 HEAD_CAD = BUILD / "03-head" / "v1" / "cad"
@@ -105,6 +105,80 @@ PCB05_MOUNT = dict(
     cbore=(2.0, 134.0, 135.6),           # rear only: r, floor Z, open into the housing seat
     screws=((16.0, 134.0), (20.0, 138.0), (20.0, 138.0)),  # length, head seat Z
 )
+
+# PCB-02 edge frame, CP-OI-09. The charger board stays at the frozen 50 x 36 mm
+# datum and is held at four non-plated M2 holes. Its edge rails sit outside the
+# board outline; corner pads bear on the bare back face. Two feet tie the rails
+# into the existing rear lower cross rail below the board. The +Y rail is
+# interrupted at the W16 lead corridor. World coordinates, mm.
+PCB02_MOUNT = dict(
+    board=(-49.6, -48.0, -25.0, 25.0, 58.0, 94.0),
+    holes=((-20.5, 60.5), (20.5, 60.5), (-20.5, 91.5), (20.5, 91.5)),
+    hole_r=1.1,
+    edge_rail_x=(-50.6, -49.6),
+    edge_rail_y=(( -28.0, -25.5), (25.5, 28.0)),
+    boss_x=(-53.8, -49.6),
+    boss_r=2.5,
+    boss_z=((58.0, 63.0), (89.0, 94.0)),
+    insert=(1.6, 1.0, 3.5),  # outer radius, core radius, length
+    screw=(5.0, 1.0, 1.9, 1.3),  # M2 length, shank radius, head radius, head thickness
+    lead_notch_z=(65.5, 71.5),
+    courtyard_r=3.5,
+)
+
+
+def _pcb02_block(bounds):
+    x0, x1, y0, y1, z0, z1 = bounds
+    return Box(x1 - x0, y1 - y0, z1 - z0).moved(
+        Location(((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2)))
+
+
+def _pcb02_x_cylinder(radius, x0, x1, y, z):
+    return Cylinder(radius, x1 - x0).rotate(Axis.Y, 90).moved(
+        Location(((x0 + x1) / 2, y, z)))
+
+
+def pcb02_mount_holes():
+    """World-frame drills used on the placeholder until the KiCad STEP replaces it."""
+    b = PCB02_MOUNT["board"]
+    return Compound(children=[_pcb02_x_cylinder(PCB02_MOUNT["hole_r"], b[0] - 0.1, b[1] + 0.1, y, z)
+                              for y, z in PCB02_MOUNT["holes"]])
+
+
+def pcb02_mount_frame():
+    """Frame edge rails, four rear standoffs and four modelled metal inserts."""
+    m = PCB02_MOUNT
+    parts = []
+    # Side rails remain outside the board and plug outlines. The positive rail
+    # has a 6 mm opening for W16, routed behind PCB-13.
+    for sign, yrange in ((-1, m["edge_rail_y"][0]), (1, m["edge_rail_y"][1])):
+        rail = _pcb02_block((*m["edge_rail_x"], yrange[0], yrange[1], m["board"][4], m["board"][5]))
+        if sign > 0:
+            rail = rail - _pcb02_block((m["edge_rail_x"][0] - 0.1, m["edge_rail_x"][1] + 0.1,
+                                        yrange[0] - 0.1, yrange[1] + 0.1,
+                                        m["lead_notch_z"][0], m["lead_notch_z"][1]))
+        parts.append(rail)
+
+        # A lower foot runs below the board edge. Its riser fuses into the
+        # lower cross rail at X -36..-34, Z 61..69.
+        yc = sign * 26.75
+        parts.append(_pcb02_block((-50.6, -35.9, yc - 0.75, yc + 0.75, 57.0, 58.5)))
+        parts.append(_pcb02_block((-36.1, -34.0, yc - 0.75, yc + 0.75, 57.0, 69.0)))
+
+        for (y, z), (z0, z1) in zip((p for p in m["holes"] if (p[0] > 0) == (sign > 0)), m["boss_z"]):
+            pad = _pcb02_block((m["boss_x"][0], m["boss_x"][1],
+                                min(sign * 17.5, sign * 25.5), max(sign * 17.5, sign * 25.5), z0, z1))
+            bore = _pcb02_x_cylinder(m["insert"][0] + 0.1, m["boss_x"][0] - 0.1,
+                                      m["boss_x"][1] + 0.1, y, z)
+            parts.append(pad - bore)
+            # Insert is a separate hollow solid with 0.1 mm radial fit in the
+            # printed boss. It remains visible in the assembly tree.
+            ix0 = m["boss_x"][1] - m["insert"][2]
+            outer = _pcb02_x_cylinder(m["insert"][0], ix0, m["boss_x"][1], y, z)
+            inner = _pcb02_x_cylinder(m["insert"][1], ix0 - 0.1, m["boss_x"][1] + 0.1, y, z)
+            parts.append(outer - inner)
+
+    return Compound(children=parts)
 
 
 def _z_cyl(r, z0, z1, x, y):
@@ -761,6 +835,9 @@ DROID_INSERTS = [
 
 
 DROID_CUTS = [
+    # CP-OI-09: four M2 clearances in the PCB-02 placeholder; the KiCad board
+    # will carry the same holes when it replaces this core.
+    (r"PCB02_CHARGE_AND_SYSTEM_POWER_PCB", pcb02_mount_holes()),
     # D-059: PCB-15 component relief behind the nose Hall board, open at the top and
     # into the lead groove. D-063 deepens it 0.4 mm (to 1.3 mm) with the board.
     (r"BALL_POD_PRINTED_SEAT", (125.3, 126.6, 7.8, 12.2, 30.3, 35.01)),
@@ -793,6 +870,10 @@ DROID_CUTS = [
     *_NOSE_KEEL_CUTS,
 ]
 DROID_ADDS = [
+    # CP-OI-09: edge rails and four rear standoffs tie PCB-02 into the rear lower
+    # cross rail. The rails stay outside the board and plug outlines; the +Y W16
+    # corridor has its own opening. The four hollow M2 inserts are separate solids.
+    (r"BODY_FRAME_MAIN_PRINT", pcb02_mount_frame()),
     # D-074: PCB-09's strip must carry both rows of socket copper plus edge margin.
     # Grow only its +Y edge (20.9 -> 22.4); bridge, bay and board Z stay fixed.
     (r"C0_LINK_ADAPTER_PCB09_BOARD", (-4.7, 36.0, 20.9, 22.4, 106.4, 108.0)),
