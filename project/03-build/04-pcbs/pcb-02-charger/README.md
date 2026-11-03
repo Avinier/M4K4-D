@@ -259,6 +259,13 @@ DRC has no clearance, short or keepout errors at this stage; 227 connections rem
 - **Status.** 106 connections are unrouted after this second rip-up; DRC has no errors, only warnings.
 - **Next.** The J7 pin field: J7 pins 5–8 need vias in the same columns that the SDA/SCL/GND gap tracks use. Stagger the J7 pin vias upward under the J7 body and turn the gap tracks outward above them. Then the J5/J6 channel vias, then the hookups (pattern helper plus hand routes) and probe-pad placement next to each net.
 
+**Routing pass 4 — J7 fan and probe pads (2026-11-04).**
+
+- **J7 fan.** The nine tracks leaving J7's pins 3–8 and pad gaps (PG_C2, PG_BASE, SEQ_EN, SDA, PG_COMPUTE, SCL, PG_DISPLAY, PG_AUDIO, GND) rise to y 121.0 and turn 45°, spreading from 0.625 mm to 1.1 mm pitch. They end in one row of vias at y 118.6 under the J7 body; PG_C2 sits at x 116.6, clear of the B.Cu SYS riser. R35/R36/R39 were re-packed out of that row.
+- **Probe pads.** TP2–TP15 sit next to existing copper of their own net where a straight 45° stub clears everything; otherwise in the nearest free back-face spot.
+- **Status.** Dangling fan-out vias were removed, and pattern rounds brought the board to **50 unrouted connections with no DRC errors** (warnings only: 12 dangling stubs, 2 nightly no-connect name conflicts).
+- **What remains.** Mostly short back-side logic hookups (2–10 mm) among densely packed SOT/0402 parts. The long ones: TS to J3, PB_SW to J9, SEQ_EN to U9, PG_C2 to U11, SDA/SCL to J4, STAT to J5, VSNK to R16/U1 pin 9, OPBUS sense to R29/R35, plus the islands of the B.Cu +5V pour.
+
 **Fit-study findings.** All courtyards are legal, with 64% front fill. Before routing:
 
 1. **U2 footprint — done.** The stock TSOT-23-8 leaves 0.15 mm between pads, below the fab-neutral 0.16 mm. U2 now uses `pcb02:TSOT-23-8_LTC_TS8`, built from ADI's TS8 recommended pad layout (LTC DWG 05-08-1637 Rev A: 0.40 mm pads at 0.65 mm pitch, 1.22 mm long, 1.4 mm between rows), which leaves 0.25 mm gaps.
