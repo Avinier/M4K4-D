@@ -2,6 +2,8 @@
 
 Stationary end of the clock spring: body-side power and signal connectors to the cassette FFCs (`J8-6`, `J8-7`).
 
+**D-082 interface:** `J8-5` pin 8 is now `ARM_REQ` from C2, carried through the 22-pin W43 sideband FFC and PCB-14 to PCB-02 `J2-6` pin 8. It is a new active conductor, not a spare. Freeze its FFC pin and adjacent signal return at PCB-08/12 design; prove continuity and no cross-connection through both joiners and the yaw sweep before motor arming is allowed.
+
 | | |
 |---|---|
 | Register | [04-pcbs board register](../README.md#board-register) |

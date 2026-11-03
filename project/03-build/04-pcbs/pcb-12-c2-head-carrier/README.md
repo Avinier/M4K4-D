@@ -28,6 +28,8 @@ Fill this in when design starts: spec sources, pinout, supply and protection, CA
 
 **Set by other boards.** The watchdog is **TPS3436CCCBGDDFRQ1** ([D-068](../../decisions.md#d-068), with PCB-10): the `BD-10` CFDBE part cannot be bought. Same pinout C and DDF footprint; tWC 5 ms, tWO 15 ms at `SET[1:0]` = 00 (feed every 10 ms, late fault ≤ 22 ms), 500 ms startup, 200 ms assert. Source: Mouser India.
 
+**D-082 fresh-arm output.** Allocate a C2 GPIO and a physical default-low driver for `ARM_REQ`. It passes through W43, PCB-14 and PCB-08 to `J8-5.8`/PCB-02 `J2-6.8`. It must issue a new edge only after C2 has checked local READY, charge absence, pack state, and the operator's arm action; boot, watchdog reset, return of a fault or an open wire must not create an arm edge. Freeze the GPIO and the exact W43 conductor with PCB-08 before layout, and bench the full yaw-cassette path.
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.

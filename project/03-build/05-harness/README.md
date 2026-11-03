@@ -79,7 +79,7 @@ Lengths are `E`: Manhattan routes through CAD waypoints plus service slack. Cut 
 | Cable | From → to | Leads | Length | Notes |
 |---|---|---|---|---|
 | `W20` | PCB-02 `J2-4` ↔ PCB-04 `J4-6` | GH10, double-ended | 60 | |
-| `W21` | `J2-5` ↔ PCB-03 `J3-6` | GH6, double-ended | 110 | |
+| `W21` | `J2-5` ↔ PCB-03 `J3-6` | GH8, double-ended | 110 | D-082 adds `PERMIT_OK` and its return on pins 7–8; recheck both board-edge courtyards before layout. |
 | ~~`W22` E-stop~~ | Deleted ([D-041](../decisions.md#d-041)): there is no E-stop and no `J3-7` | — | — | |
 | `W23a` | PCB-08 `J8-3` ↔ `J3-8` | GH8, double-ended | 200 | −Y riser |
 | `W23b` | `J8-5` ↔ `J2-6` | GH8, double-ended | 160 | −Y riser |
@@ -93,7 +93,7 @@ Lengths are `E`: Manhattan routes through CAD waypoints plus service slack. Cut 
 | `W36` rear TCRT | TCRT5000 legs (S) → `J10-10` | GH4, 350 mm single-ended (CH-020) | 350 | [rear-tcrt-lead.md](../01-chassis/v1/research/rear-tcrt-lead.md) |
 | `W37` CSI | Pi 5 ↔ PCB-14 (head side: PCB-14 ↔ Camera Module 3) | 22-pin 0.5 mm FFC, about 200 mm (Raspberry Pi 5 camera cable), through the yaw cassette | — | Changed by [D-044](../decisions.md#d-044): it now crosses yaw in the FFC cassette (BO-050) and demates at PCB-14. [D-052](../decisions.md#d-052): enters the drum through the 0° slit, one 45° fold, into its joiner board's lower ZIF; the head-side cable must stay 22-pin width (11.5 mm) through the Ø21 disc bore and channel, so any 15-pin transition to the Camera Module 3 is inside the head |
 | `W42` yaw power FFC | PCB-08 `J8-6` ↔ PCB-14 (head side: a 22-pin 0.5 mm FFC from PCB-14 through the disc channel, D-052) | 22-pin 0.5 mm FFC, about 200 mm, in the cassette | — | Carries the three `J8-1` power pairs (7 + 7 head-servo, 2 + 2 C2, 2 + 2 display conductors). The 2.8 A aligned head stall divides to 0.40 A per parallel head conductor **only with verified equal sharing**; check FFC/contact ampacity and heat. The 12 V yaw supply stays on the body side |
-| `W43` yaw sideband FFC | PCB-08 `J8-7` ↔ PCB-14 (head side: a 22-pin 0.5 mm FFC from PCB-14 through the disc channel, D-052) | 22-pin 0.5 mm FFC, about 200 mm, in the cassette | — | D-044: the `J8-3`, `J8-5` and `J8-4` signals, spares dropped |
+| `W43` yaw sideband FFC | PCB-08 `J8-7` ↔ PCB-14 (head side: a 22-pin 0.5 mm FFC from PCB-14 through the disc channel, D-052) | 22-pin 0.5 mm FFC, about 200 mm, in the cassette | — | D-044: the `J8-3`, `J8-5` and `J8-4` signals; D-082 carries the newly used `ARM_REQ` from `J8-5.8` through PCB-08/W43/PCB-14 to the C2 carrier. Allocate a dedicated conductor and adjacent return; freeze the exact 22-pin map during PCB-08/12 design. |
 | ~~`W38`~~ | Not fitted (D-041): `J10-11` carried the E-stop status | — | — | |
 | `W39` | `J10-12` ↔ `J3-9` | GH4, double-ended | 100 | |
 | `W40` power button ([D-041](../decisions.md#d-041)) | Mushroom NO terminals (S, heat-shrink) → PCB-02 `J2-9` | GH2, single-ended | 150 | Out past the contact block, +Y beside the Pi's rear edge, back above the PCB-02 +Y edge and down to `J2-9` (`POWER_BUTTON_W40_LEAD_RESERVE_1…4`). Rides with the rear panel; unplug at `J2-9` before lifting the panel away |
@@ -142,9 +142,9 @@ Each GH cable puts GND at pin 1 where it carries no supply, and keeps each diffe
 | Connector | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
 |---|---|---|---|---|---|---|---|---|---|---|
 | `J2-4` ↔ `J4-6` (`W20`) | GND | +5V_C2 (pull-up supply to PCB-02) | PG_C2 | PG_BASE | SEQ_EN (latch out) | PG_COMPUTE | PG_DISPLAY | PG_AUDIO | spare | GND |
-| `J2-5` ↔ `J3-6` (`W21`) | GND | CHARGE_ABSENT | ENERGY_OK | SYSTEM_ARM | MOTOR_PRESENT | GND | | | | |
+| `J2-5` ↔ `J3-6` (`W21`, **GH8**, D-082) | GND | CHARGE_ABSENT | ENERGY_OK | SYSTEM_ARM | MOTOR_PRESENT | GND | PERMIT_OK | GND | | |
 | `J3-8` ↔ `J8-3` (`W23a`) | SIG_REF | SERVO_DATA | C2_READY_H | C2_READY_L | spare (was E_STOP_STATUS, D-041) | MOTOR_PRESENT | HEAD_OC | HEAD_PGOOD | | |
-| `J2-6` ↔ `J8-5` (`W23b`) | SIG_GND | V_PACK_ANA | SIG_GND | STAT | INT_PB | KILL | CHG_ABSENT_3V3 | spare | | |
+| `J2-6` ↔ `J8-5` (`W23b`, D-082) | SIG_GND | V_PACK_ANA | SIG_GND | STAT | INT_PB | KILL | CHG_ABSENT_3V3 | ARM_REQ | | |
 | `J9-1` ↔ `J8-4` | GND | TX+ | TX− | RX+ | RX− | spare | | | | |
 | `J9-2` ↔ `J10-2` (`W25`, wired 1:1; set by [PCB-10](../04-pcbs/pcb-10-c3-carrier/README.md#connectors-and-who-owns-each-pin-order), 2026-10-27, reordered at layout 2026-10-28) | GND | C0TX+ | C0TX− | C3TX− | C3TX+ | spare | | | | |
 | `J10-3`/`J10-4` (`W30`/`W31`) | GND | +3V3_ENC | ENC_A | ENC_B | | | | | | |

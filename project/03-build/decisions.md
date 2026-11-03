@@ -3355,3 +3355,25 @@ reviewed snapshots. The frame checker now reuses solid classifiers and measures 
 contact for its raw planted case; its assertions and selected-orientation figures are unchanged.
 The nose/keel survey uses ray intersections to find candidate boundaries, then classifies the
 same 0.5 mm sample grid; six explicit boundary/thin-feature cases matched the original sampler.
+
+## D-082
+
+**2026-11-02 · PCB-02 fresh-arm and permit-loss feedback (CH-041/CH-042, W21/W23b) · ACTIVE; PCB-02/03/C2 circuit and harness build checks open**
+
+**Why.** PCB-02 must set `SYSTEM_ARM` only on a fresh C2 request and clear it on the D-041 button press or loss of any other motor-permit term. The frozen W23b sideband had no fresh-arm request, and W21 carried `SYSTEM_ARM` out but no permit-loss feedback. `MOTOR_PRESENT` means installation status and cannot stand in for all permit terms. The latch was therefore not implementable as registered.
+
+**Decision** (builder approved, 2026-11-02). W23b/J2-6/J8-5 GH8 pin 8 becomes `ARM_REQ` from C2; pins 1–7 are unchanged. W21/J2-5/J3-6 changes from GH6 to GH8: pins 1–6 are unchanged, pin 7 is `PERMIT_OK` from PCB-03 to PCB-02, and pin 8 is a paired GND return. `PERMIT_OK` is the conjunction of all *other* hardware permit terms and excludes `SYSTEM_ARM`, avoiding a circular latch. It must fail low on a missing term, lost local supply or open return. PCB-02's latch has a physical default-clear and an independent `INT_PB` clear path; `ARM_REQ` is accepted only after `PERMIT_OK` is valid and only as a fresh edge. Release of the button or recovery of a transient is never an arm event.
+
+**Required follow-through.** Update the PCB-02 and PCB-03 schematics, C2-side `J8-5` input/output map, W21/W23b harness build instructions, and board-edge courtyards. Prove the truth table with button, watchdog/READY loss, charge insertion, open W21, loss of `+5V_C2`, and return of each fault. No board layout or harness order using the old GH6 W21 is released.
+
+**Electrical level freeze for follow-through (2026-11-02).** `PERMIT_OK` is actively driven high at **3.3 V nominal, never above 3.6 V** by PCB-03 only when every other permit term is valid. PCB-02 provides a physical pull-down, so an open W21 returns low. This prevents a 5 V PCB-03 output from overdriving the 3.3 V `SN74LVC1G74` clear input. PCB-03 must include the required level conversion or local 3.3 V logic supply; a 5 V direct push-pull output is not acceptable.
+
+## D-083
+
+**2026-11-02 · PCB-02 upper +Y mount-hole correction against J2-9 courtyard · ACTIVE; populated-board fit pending**
+
+The real stock JST GH2 side-entry courtyard at D-041's fixed J2-9 centre (board +Y edge, Z 88.6 mm) intersects the 3.5 mm keepout around the frame mount's original upper +Y hole at Y 20.5, Z 91.5 mm. The first frame checker used CAD plug-reserve blocks and did not include this footprint courtyard. A planted check of the old hole reproduces the collision.
+
+**Decision** (builder approved, 2026-11-02): move only that hole to **Y 15.0, Z 91.5 mm**; extend its rear boss inward to the moved hole while keeping it tied to the +Y edge rail. The board outline remains 50 × 36 mm and J2-9 stays at the D-041 position. The conservative rectangular courtyard calculation gives 0.85 mm keepout clearance; the actual stepped footprint boundary gives about 1.09 mm. The change is in `final/v1/cad/makad-v1.step.py`, with a dedicated planted-case `check_pcb02_j9_courtyard.py`. The full `check_pcb02_mount.py` passes the revised four-hole mount, inserts, reserves, body/chassis clearance, crossrail tie-in, edge support and fastener stack.
+
+**Remaining gate:** locate the real J2-9 footprint and all other parts on the PCB-02 board, export the populated STEP, and check complete courtyard/height/service clearances against the rear panel, lower rail, PCB-13 and W40. CP-OI-15's 50 × 36 mm packing decision remains open.

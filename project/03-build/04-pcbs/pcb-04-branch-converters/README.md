@@ -27,6 +27,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 Fill this in when design starts: spec sources, pinout, supply and protection, CAD envelope.
 
 - **Underside keep-out over the motor cables** ([D-072](../../decisions.md#d-072), 2026-10-30). The board's underside (Z 63.0) sits 0.5 mm above both motors' cable reserves, `MOTOR_[LR]_PIGTAIL_RESERVE` (X −21 to −1, \|Y\| 6–18, Z 56.5–62.5), where each encoder cable bends up out of its plug. No THT tails or bottom-side parts over those two areas (Micro-Fit THT tails stand 1.6 mm below a board), or raise the board.
+- **PCB-02 sequencing receiver** (2026-11-02): W20/J4-6 pin 5 `SEQ_EN` is a 3.3 V push-pull retained-state output from PCB-02. Fit a physical receiver pull-down at PCB-04 so a broken W20 or an unpowered PCB-02 logic rail leaves compute/display/audio branch enables inactive. PCB-02 sets it after `PG_C2` and a valid `OPBUS`; it stays set through later `PG_C2` dips and clears when `OPBUS` falls. Verify input VIH/VIL, leakage and cable behavior before choosing the receiver value.
 
 ## Log
 

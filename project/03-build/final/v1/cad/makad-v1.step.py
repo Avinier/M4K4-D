@@ -113,7 +113,7 @@ PCB05_MOUNT = dict(
 # interrupted at the W16 lead corridor. World coordinates, mm.
 PCB02_MOUNT = dict(
     board=(-49.6, -48.0, -25.0, 25.0, 58.0, 94.0),
-    holes=((-20.5, 60.5), (20.5, 60.5), (-20.5, 91.5), (20.5, 91.5)),
+    holes=((-20.5, 60.5), (20.5, 60.5), (-20.5, 91.5), (15.0, 91.5)),
     hole_r=1.1,
     edge_rail_x=(-50.6, -49.6),
     edge_rail_y=(( -28.0, -25.5), (25.5, 28.0)),
@@ -167,7 +167,7 @@ def pcb02_mount_frame():
 
         for (y, z), (z0, z1) in zip((p for p in m["holes"] if (p[0] > 0) == (sign > 0)), m["boss_z"]):
             pad = _pcb02_block((m["boss_x"][0], m["boss_x"][1],
-                                min(sign * 17.5, sign * 25.5), max(sign * 17.5, sign * 25.5), z0, z1))
+                                min(y - 3.0, sign * 25.5), max(y + 3.0, sign * 25.5), z0, z1))
             bore = _pcb02_x_cylinder(m["insert"][0] + 0.1, m["boss_x"][0] - 0.1,
                                       m["boss_x"][1] + 0.1, y, z)
             parts.append(pad - bore)
