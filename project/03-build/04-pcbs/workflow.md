@@ -8,7 +8,7 @@ PCB-01 has no folder. It is the bought TIFPS0629 ([D-019](../decisions.md#d-019)
 
 | Folder | Board | BOM | Design | Procure | Integrate |
 |---|---|---|---|---|---|
-| [pcb-02-charger](pcb-02-charger/README.md) | Charger, latch and pack sense | CH-041 | Not started | — | — |
+| [pcb-02-charger](pcb-02-charger/README.md) | Charger, latch and pack sense | CH-041 | Design in progress (ERC 0/0, fit-study placement D-084) | — | — |
 | [pcb-03-motor-gate](pcb-03-motor-gate/README.md) | Motor gate and head 5 V rail | CH-042 | Not started | — | — |
 | [pcb-04-branch-converters](pcb-04-branch-converters/README.md) | Five branch converters | CH-043 | Not started | — | — |
 | [pcb-05-audio-front-end](pcb-05-audio-front-end/README.md) | Audio front end | BO-002 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |

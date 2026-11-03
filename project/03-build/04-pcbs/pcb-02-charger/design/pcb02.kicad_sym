@@ -1,0 +1,222 @@
+(kicad_symbol_lib (version 20251024) (generator "kicad_symbol_editor") (generator_version "10.99") (symbol "LTC2954ITS8-2" (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (duplicate_pin_numbers_are_jumpers no) (property "Reference" "U" (at 0 12.70 0) (effects (font (size 1.27 1.27)))) (property "Value" "LTC2954ITS8-2" (at 0 -5.08 0) (effects (font (size 1.27 1.27)))) (property "Footprint" "pcb02:TSOT-23-8_LTC_TS8" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes))) (property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/2954fb.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes))) (symbol "LTC2954ITS8-2_0_1" (rectangle (start -7.62 10.16) (end 7.62 -2.54) (stroke (width 0.254) (type default)) (fill (type background)))) (symbol "LTC2954ITS8-2_1_1" (pin power_in line (at -10.16 7.62 0) (length 2.54) (name "VIN" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27))))) (pin input line (at -10.16 5.08 0) (length 2.54) (name "PB" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27))))) (pin input line (at -10.16 2.54 0) (length 2.54) (name "ONT" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27))))) (pin power_in line (at -10.16 0.00 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27))))) (pin open_collector line (at 10.16 7.62 180) (length 2.54) (name "~{INT}" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27))))) (pin open_collector line (at 10.16 5.08 180) (length 2.54) (name "~{EN}" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27))))) (pin input line (at 10.16 2.54 180) (length 2.54) (name "PDT" (effects (font (size 1.27 1.27)))) (number "7" (effects (font (size 1.27 1.27))))) (pin input line (at 10.16 0.00 180) (length 2.54) (name "KILL" (effects (font (size 1.27 1.27)))) (number "8" (effects (font (size 1.27 1.27))))))  (embedded_fonts no)) (symbol "SQS407ENW" (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (duplicate_pin_numbers_are_jumpers no) (property "Reference" "Q" (at 0 10.16 0) (effects (font (size 1.27 1.27)))) (property "Value" "SQS407ENW-T1_GE3" (at 0 -6.35 0) (effects (font (size 1.27 1.27)))) (property "Footprint" "pcb02:Vishay_PowerPAK_1212-8_Single_D5678" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes))) (property "Datasheet" "https://www.vishay.com/docs/66801/si4401dd.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes))) (symbol "SQS407ENW_0_1" (rectangle (start -7.62 7.62) (end 7.62 -5.08) (stroke (width 0.254) (type default)) (fill (type background)))) (symbol "SQS407ENW_1_1" (pin passive line (at -10.16 5.08 0) (length 2.54) (name "S" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27))))) (pin passive line (at -10.16 2.54 0) (length 2.54) (name "S" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27))))) (pin passive line (at -10.16 0.00 0) (length 2.54) (name "S" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27))))) (pin passive line (at -10.16 -2.54 0) (length 2.54) (name "G" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27))))) (pin passive line (at 10.16 5.08 180) (length 2.54) (name "D" (effects (font (size 1.27 1.27)))) (number "8" (effects (font (size 1.27 1.27))))) (pin passive line (at 10.16 2.54 180) (length 2.54) (name "D" (effects (font (size 1.27 1.27)))) (number "7" (effects (font (size 1.27 1.27))))) (pin passive line (at 10.16 0.00 180) (length 2.54) (name "D" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27))))) (pin passive line (at 10.16 -2.54 180) (length 2.54) (name "D" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))) (embedded_fonts no)) (symbol "TPS7A0233PDQNR" (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (duplicate_pin_numbers_are_jumpers no) (property "Reference" "U" (at 0 10.16 0) (effects (font (size 1.27 1.27)))) (property "Value" "TPS7A0233PDQNR" (at 0 -10.16 0) (effects (font (size 1.27 1.27)))) (property "Footprint" "pcb02:Texas_X2SON-4_1x1mm_P0.65mm_EP0.48" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes))) (symbol "TPS7A0233PDQNR_0_1" (rectangle (start -7.62 7.62) (end 7.62 -7.62) (stroke (width 0.254) (type default)) (fill (type background)))) (symbol "TPS7A0233PDQNR_1_1" (pin power_in line (at -10.16 5.08 0) (length 2.54) (name "IN" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27))))) (pin power_in line (at -10.16 0.00 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27))))) (pin passive line (at -10.16 0.00 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27))))) (pin input line (at -10.16 -5.08 0) (length 2.54) (name "EN" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))  (pin power_out line (at 10.16 5.08 180) (length 2.54) (name "OUT" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27))))) ) (embedded_fonts no)) (symbol "SN74LVC1G74RSER" (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (duplicate_pin_numbers_are_jumpers no) (property "Reference" "U" (at 0 12.70 0) (effects (font (size 1.27 1.27)))) (property "Value" "SN74LVC1G74RSER" (at 0 -10.16 0) (effects (font (size 1.27 1.27)))) (property "Footprint" "Package_DFN_QFN:Texas_UQFN-8_1.5x1.5mm_P0.5mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes))) (symbol "SN74LVC1G74RSER_0_1" (rectangle (start -7.62 10.16) (end 7.62 -7.62) (stroke (width 0.254) (type default)) (fill (type background)))) (symbol "SN74LVC1G74RSER_1_1" (pin input line (at -10.16 7.62 0) (length 2.54) (name "~{PRE}" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27))))) (pin input line (at -10.16 5.08 0) (length 2.54) (name "~{CLR}" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27))))) (pin output line (at 10.16 5.08 180) (length 2.54) (name "Q" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27))))) (pin power_in line (at -10.16 -5.08 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27))))) (pin output line (at 10.16 2.54 180) (length 2.54) (name "~{Q}" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27))))) (pin input line (at -10.16 2.54 0) (length 2.54) (name "D" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27))))) (pin input line (at -10.16 0.00 0) (length 2.54) (name "CLK" (effects (font (size 1.27 1.27)))) (number "7" (effects (font (size 1.27 1.27))))) (pin power_in line (at 10.16 7.62 180) (length 2.54) (name "VCC" (effects (font (size 1.27 1.27)))) (number "8" (effects (font (size 1.27 1.27))))) ) (embedded_fonts no)) (symbol "TPS3808G30DRVR" (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (duplicate_pin_numbers_are_jumpers no) (property "Reference" "U" (at 0 10.16 0) (effects (font (size 1.27 1.27)))) (property "Value" "TPS3808G30DRVR" (at 0 -7.62 0) (effects (font (size 1.27 1.27)))) (property "Footprint" "Package_SON:WSON-6-1EP_2x2mm_P0.65mm_EP1x1.6mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes))) (symbol "TPS3808G30DRVR_0_1" (rectangle (start -7.62 7.62) (end 7.62 -7.62) (stroke (width 0.254) (type default)) (fill (type background)))) (symbol "TPS3808G30DRVR_1_1" (pin open_collector line (at 10.16 5.08 180) (length 2.54) (name "~{RESET}" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27))))) (pin power_in line (at -10.16 -5.08 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27))))) (pin passive line (at -10.16 -5.08 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "7" (effects (font (size 1.27 1.27))))) (pin input line (at -10.16 0.00 0) (length 2.54) (name "~{MR}" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27))))) (pin input line (at -10.16 2.54 0) (length 2.54) (name "CT" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27))))) (pin input line (at -10.16 5.08 0) (length 2.54) (name "SENSE" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27))))) (pin power_in line (at 10.16 -5.08 180) (length 2.54) (name "VDD" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27))))) ) (embedded_fonts no)) (symbol "Reset_Diode" (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (duplicate_pin_numbers_are_jumpers no) (property "Reference" "D" (at 3.81 2.54 0) (effects (font (size 1.27 1.27)))) (property "Value" "1N4148WS" (at 3.81 0 0) (effects (font (size 1.27 1.27)))) (property "Footprint" "Diode_SMD:D_SOD-323" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes))) (symbol "Reset_Diode_0_1" (polyline (pts (xy -1.27 1.27) (xy 1.27 1.27)) (stroke (width 0.254) (type default)) (fill (type none))) (polyline (pts (xy -1.27 -1.27) (xy 0 1.27) (xy 1.27 -1.27) (xy -1.27 -1.27)) (stroke (width 0.254) (type default)) (fill (type none)))) (symbol "Reset_Diode_1_1" (pin passive line (at 0 -3.81 90) (length 2.54) (name "A" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27))))) (pin passive line (at 0 3.81 270) (length 2.54) (name "K" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27))))))) (symbol "MIC833YM5" (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (duplicate_pin_numbers_are_jumpers no) (property "Reference" "U" (at 0 11.43 0) (effects (font (size 1.27 1.27)))) (property "Value" "MIC833YM5-TR" (at 0 -8.89 0) (effects (font (size 1.27 1.27)))) (property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes))) (property "Datasheet" "https://ww1.microchip.com/downloads/aemDocuments/documents/MSLD/ProductDocuments/DataSheets/MIC833-Comparator-and-Reference-with-Adjustable-Hysteresis-DS20006336A.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes))) (symbol "MIC833YM5_0_1" (rectangle (start -7.62 7.62) (end 7.62 -7.62) (stroke (width 0.254) (type default)) (fill (type background)))) (symbol "MIC833YM5_1_1" (pin input line (at -10.16 5.08 0) (length 2.54) (name "HTH" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27))))) (pin power_in line (at -10.16 -5.08 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27))))) (pin input line (at -10.16 2.54 0) (length 2.54) (name "LTH" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27))))) (pin open_collector line (at 10.16 2.54 180) (length 2.54) (name "OUT" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27))))) (pin power_in line (at -10.16 0.00 0) (length 2.54) (name "VDD" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))))  (symbol "SN74LVC1G17DCKR" (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (duplicate_pin_numbers_are_jumpers no) (property "Reference" "U" (at 0 10.16 0) (effects (font (size 1.27 1.27)))) (property "Value" "SN74LVC1G17DCKR" (at 0 -7.62 0) (effects (font (size 1.27 1.27)))) (property "Footprint" "Package_TO_SOT_SMD:SOT-353_SC-70-5" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes))) (symbol "SN74LVC1G17DCKR_0_1" (rectangle (start -7.62 7.62) (end 7.62 -7.62) (stroke (width 0.254) (type default)) (fill (type background)))) (symbol "SN74LVC1G17DCKR_1_1" (pin no_connect line (at -10.16 -5.08 0) (length 2.54) (name "NC" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27))))) (pin input line (at -10.16 2.54 0) (length 2.54) (name "A" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27))))) (pin power_in line (at -10.16 -2.54 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27))))) (pin output line (at 10.16 2.54 180) (length 2.54) (name "Y" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27))))) (pin power_in line (at -10.16 0.00 0) (length 2.54) (name "VCC" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27))))))) (symbol "SN74LVC1G08DCKR" (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (duplicate_pin_numbers_are_jumpers no) (property "Reference" "U" (at 0 10.16 0) (effects (font (size 1.27 1.27)))) (property "Value" "SN74LVC1G08DCKR" (at 0 -7.62 0) (effects (font (size 1.27 1.27)))) (property "Footprint" "Package_TO_SOT_SMD:SOT-353_SC-70-5" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes))) (symbol "SN74LVC1G08DCKR_0_1" (rectangle (start -7.62 7.62) (end 7.62 -7.62) (stroke (width 0.254) (type default)) (fill (type background)))) (symbol "SN74LVC1G08DCKR_1_1" (pin input line (at -10.16 2.54 0) (length 2.54) (name "A" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27))))) (pin input line (at -10.16 0.00 0) (length 2.54) (name "B" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27))))) (pin power_in line (at -10.16 -2.54 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27))))) (pin output line (at 10.16 2.54 180) (length 2.54) (name "Y" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27))))) (pin power_in line (at 10.16 -2.54 180) (length 2.54) (name "VCC" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27))))))) (symbol "TPS22810DRVR"
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "U2"
+			(at 0 10.16 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TPS22810DRVR"
+			(at 0 7.62 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_SON:WSON-6-1EP_2x2mm_P0.65mm_EP1x1.6mm"
+			(at 0 -17.78 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tps22810.pdf"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "2.7..18V, 2A, 79mohms On-Resistance Load Switch With Thermal Protection, SOT-23-6"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "thermal-protection QOD quick-output-discharge"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "SOT?23*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "TPS22810DRVR_1_1"
+			(rectangle
+				(start -7.62 5.08)
+				(end 7.62 -5.08)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin power_in line
+				(at -10.16 2.54 0)
+				(length 2.54)
+				(name "VIN"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at 0 -7.62 90)
+				(length 2.54)
+				(name "GND"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			) (pin passive line
+				(at 0 -7.62 90)
+				(length 2.54)
+				(name "GND"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -10.16 0 0)
+				(length 2.54)
+				(name "EN/UVLO"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output line
+				(at 10.16 -2.54 180)
+				(length 2.54)
+				(name "CT"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin open_collector line
+				(at 10.16 0 180)
+				(length 2.54)
+				(name "QOD"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_out line
+				(at 10.16 2.54 180)
+				(length 2.54)
+				(name "VOUT"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+)

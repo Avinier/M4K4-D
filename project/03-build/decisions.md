@@ -3377,3 +3377,75 @@ The real stock JST GH2 side-entry courtyard at D-041's fixed J2-9 centre (board 
 **Decision** (builder approved, 2026-11-02): move only that hole to **Y 15.0, Z 91.5 mm**; extend its rear boss inward to the moved hole while keeping it tied to the +Y edge rail. The board outline remains 50 × 36 mm and J2-9 stays at the D-041 position. The conservative rectangular courtyard calculation gives 0.85 mm keepout clearance; the actual stepped footprint boundary gives about 1.09 mm. The change is in `final/v1/cad/makad-v1.step.py`, with a dedicated planted-case `check_pcb02_j9_courtyard.py`. The full `check_pcb02_mount.py` passes the revised four-hole mount, inserts, reserves, body/chassis clearance, crossrail tie-in, edge support and fastener stack.
 
 **Remaining gate:** locate the real J2-9 footprint and all other parts on the PCB-02 board, export the populated STEP, and check complete courtyard/height/service clearances against the rear panel, lower rail, PCB-13 and W40. CP-OI-15's 50 × 36 mm packing decision remains open.
+
+## D-084
+
+**2026-11-03 · PCB-02 one-face packing at 50 × 36 mm (CP-OI-15) and J2-8 tail over PCB-13 · ACTIVE; routing and populated-STEP fit pending**
+
+**Why.** A KiCad fit study placed the real footprints of J2-1/J2-3/J2-8/J2-9 and the four top-entry GH headers at their CAD positions, with the four 3.5 mm D-083 mount keepouts. That left 971 mm² of front face for 697 mm² of other courtyards (72% fill before routing). Separately, the stock right-angle Micro-Fit 3.0 at J2-8 (KiCad J1) must put its inboard pin 2 (GND) inside the back-face zone over PCB-13, where tails longer than 1.0 mm are not allowed (D-040).
+
+**Decision** (builder approved, 2026-11-03).
+
+1. Keep the 50 × 36 mm board with one-sided assembly. Change only footprints that were oversized: C24 (1 µF 25 V, `SYS`), C26 (1 µF 10 V) and C27 (2.2 µF 10 V) to 0603, and C28/C29 (100 nF) to 0402. C37 (the `Q_dis` timing capacitor) stays 1206 so DC bias does not move the delay. J4, the bench-only charger header, becomes four bare 1.6 mm pads at 2.54 mm pitch (`pcb02:BenchPads_1x4_P2.54mm_SMD`), fitted with nothing and left out of the BOM and position files. J4 and TP1–TP15 go on the back face outside the PCB-13 zone, so probing is a bench operation with the board removed. This brings the front fill to 64%.
+2. J2-8 tails are **flush-trimmed to ≤ 1.0 mm after soldering** (assembly step). The back-face PCB-13 rule area is notched around J1 pin 2 only, so the rest of the zone stays bare. The 3.9 mm board gap then leaves at least 2.9 mm.
+
+**Check.** All 119 footprints have legal courtyards. On-board DRC with the fab-neutral rules (D-062) has no courtyard, keepout or edge errors. The remaining items are the U2 stock TSOT-23-8 pad gap (0.15 mm, below 0.16 mm), cosmetic footprint text/label mismatches, and two nightly no-connect name conflicts. The placement is a fit study, not a routed layout.
+
+3. **J2-9 inset** (builder approved, 2026-11-03): the stock GH2 side-entry mount tabs reach 0.25 mm past its mating face, so J9 sits **0.55 mm inboard** of the +Y edge with tab copper 0.3 mm from the edge. Its courtyard is then **0.3 mm** from the H4 keepout; the builder accepted that margin. `check_pcb02_j9_courtyard.py` models the inset and asserts ≥ 0.3 mm (old hole still collides). If routing fails at 50 × 36 mm, return to CP-OI-15 as an envelope decision before growing the board or moving to two-sided assembly.
+
+## D-085
+
+**2026-11-03 · PCB-02 smaller packages for routing room (CP-OI-15) · ACTIVE; footprint placement, routing and procurement checks pending**
+
+**Why.** After the D-084 placement and three routing passes, 71 PCB-02 connections remained, almost all logic signals. The pads in the top band and the strip under J6/J3 had no room for escape vias, while B.Cu stayed largely free. A dual flip-flop to merge U5/U9 gives no saving: SN74LVC2G74 is still a single flip-flop, and the dual with preset/clear (SN74LVC74A) is a 14-pin package.
+
+**Decision** (builder approved, 2026-11-03). Same circuit; smaller packages:
+
+| Ref | Was | Now | Footprint |
+|---|---|---|---|
+| Q1 | Si4401DDY-T1-GE3 (SOIC-8) | **Vishay SQS407ENW-T1_GE3** (PowerPAK 1212-8W, P-ch 30 V, 16 A, 10.8 mΩ at 10 V, AEC-Q101) | `pcb02:Vishay_PowerPAK_1212-8_Single_D5678` (stock land pattern; drain pads 6–8 stacked on pad 5) |
+| U6, U8 | TPS3808G30DBVT (SOT-23-6) | **TPS3808G30DRVR** (WSON-6 2 × 2) | WSON-6-1EP 2 × 2; DRV pins 1 VDD, 2 SENSE, 3 CT, 4 MR, 5 GND, 6 RESET, pad → GND (datasheet Rev N Table 5-1) |
+| U4 | TPS7A0233PDBVR (SOT-23-5) | **TPS7A0233PDQNR** (X2SON-4 1 × 1) | `pcb02:Texas_X2SON-4_1x1mm_P0.65mm_EP0.48` (stock land pattern, thermal pad 0.58 → 0.48 mm for the 0.16 mm clearance); DQN pins 1 OUT, 2 GND, 3 EN, 4 IN, pad → GND (Rev C Table 5-1); the DBV NC pin is gone |
+| U3 | TPS22810DBVR (SOT-23-6) | **TPS22810DRVR** (WSON-6 2 × 2, rated 3 A vs 2 A) | WSON-6-1EP 2 × 2; DRV pins 1 VOUT, 2 QOD, 3 CT, 4 GND, 5 EN/UVLO, 6 VIN; pad → GND (TI E2E and EVM, not stated in the datasheet) |
+| U10, U11 | SN74LVC1G17DBVR / 1G08DBVR (SOT-23-5) | **SN74LVC1G17DCKR / SN74LVC1G08DCKR** (SC-70-5) | SOT-353 SC-70-5; same pinout |
+
+The 2N7002BK/BSS84AK FETs stay in SOT-23; Nexperia lists 2N7002BKW as not for design-in. About 73 mm² of courtyard is freed.
+
+**Check.** Nightly ERC 0/0. Comparing the old and new netlists by pin function matched every named net on all seven parts. The only differences are auto-named unconnected-pin nets and the removed TPS7A02 NC pin.
+
+**Open.** SQS407ENW gate drive: the LTC2954 `EN` pulls Q1's gate toward GND from BATBUS, so VGS ≈ −6…−8.4 V, inside ±20 V. Recheck its turn-on and RDS(on) at the minimum pack voltage on the bench. Sourcing: Mouser holds about 70,000 (Mouser India route, D-068); LCSC showed none. No element14 India count was confirmed for SQS407ENW or for the DRV/DQN/DCK suffixes. Recheck all six at the PCB batch order (D-064).
+
+## D-086
+
+**2026-11-03 · PCB-02 two-sided assembly: small logic on the back face (CP-OI-15) · ACTIVE; back placement, routing and fab quote pending**
+
+**Why.** After D-085's package shrink, the front of the one-sided 50 × 36 mm board still had no escape channels around the logic (README "Logic re-placement after D-085"). With a 0.2 mm keep-clear margin, 16 parts landed 10–25 mm from their ICs. The compact placement left 128 connections with no legal via spots.
+
+**Decision** (builder approved, 2026-11-03). Keep 50 × 36 mm and put the small logic on the back face: U2, U4–U11, Q2–Q6, D1–D3 and their R/C. The charger block, every connector, Q1 and U3 stay on the front, so every high-current path stays on the front. This supersedes D-084 item 1's one-sided assembly. JLCPCB/Lion two-sided pricing and the stencil for both faces are open items for the batch quote (D-064).
+
+**Back-face envelope** (`final/v1/cad/check_pcb02_back_face.py`, PASS 2026-11-03). Two back-face no-parts zones:
+
+- the PCB-13 facing zone (world Y −14…14, Z ≤ 71.5; D-040/D-084, notched at J1 pin 2);
+- a new rear-panel strip (world Y −14…14, Z ≥ 87.5), where the rear service panel comes within 0.5 mm of the back face (2 mm grid map).
+
+Outside them, slabs of 1.0–3.0 mm behind the back face clear every body/chassis solid. Back-side parts are at most 1.2 mm tall, so the gate is 2.0 mm. Planted cases: a 3 mm slab over the PCB-13 zone hits PCB-13, and a 1 mm slab in the panel strip hits the panel. Flush copper (vias, tracks, bare probe pads) is allowed in both zones. The check does not cover cable dress behind the board or assembly hands.
+
+## D-087
+
+**2026-11-03 · PCB-02 back face over PCB-13: 0402 R/C allowed (amends D-040/D-084 "bare face") · ACTIVE**
+
+**Why.** U1's 0.4 mm-pitch support pins (TS, ILIM, BATP, BTST2, PROG, CHG_INT, SDRV on the left face; QON, CE, SCL, SDA on top) cannot escape on the front. Fab-neutral vias (0.67/0.35 mm, 0.31 mm to other copper, D-062) need about 1 mm spacing, and the only space behind U1 is the PCB-13 facing zone.
+
+**Decision** (builder approved, 2026-11-03). On the back face inside the PCB-13 zone, 0402 resistors and capacitors (≤ 0.55 mm installed height) are allowed. Everything else stays out, as do THT tails over 1.0 mm (J2-8 tails trimmed, D-084). Fab-neutral vias stay; the builder left the via choice open and smaller vias were not adopted, keeping D-062 and the Lion MII route.
+
+**Check.** `check_pcb02_back_face.py` PASS (2026-11-03): 0.55 mm and 1.0 mm slabs over the PCB-13 zone clear every body/chassis solid, including PCB-13's parts envelope and screws; the planted 3.0 mm slab still hits them. KiCad cannot enforce part height in a rule area, so the KiCad rule area is relaxed to allow footprints there. The populated-STEP fit check must confirm that only 0402 parts sit in that zone.
+
+## D-088
+
+**2026-11-03 · PCB-02: BQ25798 CE tied low, QON left open (routing escape) · ACTIVE**
+
+**Why.** On U1's top face, SDA and SCL can escape through the gaps between J7's pads on two 0.16 mm track levels. CE, QON and the two GND pins (10, 11) need the same gaps and their paths cross, and D-087 kept fab-neutral vias.
+
+**Decision** (builder approved, 2026-11-03). Delete R4 and tie U1 pin 13 (CE, active low) straight to GND. Charging remains switchable over I²C (`EN_CHG`); the datasheet requires CE pulled high or low, never floating, and tying it low satisfies that. Delete TP1 and leave U1 pin 12 (QON) unconnected: the pin has an internal pull-up (datasheet Rev C Table 5-1), so it stays inactive. Lost on the bench only: hardware charge disable through CE, and ship-mode exit/system reset through QON. Neither is used in normal operation. CHG_INT, SCL, SDA, STAT, SDRV (1 nF 0402, as the datasheet requires when the ship FET is unused) and every other U1 connection are unchanged.
+
+**Check.** Nightly ERC 0/0. Old/new netlist diff: only R4 and TP1 removed, U1.13 /CE_N → /GND, U1.12 /QON → unconnected.
