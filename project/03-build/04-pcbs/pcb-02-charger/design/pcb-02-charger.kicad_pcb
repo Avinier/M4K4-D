@@ -27540,14 +27540,6 @@
 		(uuid "14f4c639-4301-4685-bfb4-f35a73615a8b")
 	)
 	(segment
-		(start 125.155 112.0075)
-		(end 123.962499 113.2)
-		(width 0.15)
-		(layer "F.Cu")
-		(net "/BATBUS-C")
-		(uuid "164250d1-0b85-4e6f-a218-1919f035396e")
-	)
-	(segment
 		(start 119.85 127)
 		(end 119.95 127.1)
 		(width 0.45)
@@ -27596,14 +27588,6 @@
 		(uuid "6538b394-e135-47b3-a615-745c7e676b5a")
 	)
 	(segment
-		(start 123.962499 113.2)
-		(end 123.04 113.2)
-		(width 0.15)
-		(layer "F.Cu")
-		(net "/BATBUS-C")
-		(uuid "787f2af3-9f66-4e78-a7ef-fa832e44ea98")
-	)
-	(segment
 		(start 123.891 106.376)
 		(end 130.6385 106.376)
 		(width 0.2)
@@ -27620,14 +27604,6 @@
 		(uuid "887ce295-923a-4773-9126-e0bd669589d1")
 	)
 	(segment
-		(start 125.155 112.0075)
-		(end 123.3125 113.85)
-		(width 0.2)
-		(layer "F.Cu")
-		(net "/BATBUS-C")
-		(uuid "9580d975-947b-4760-a63d-2fbfd8abbecb")
-	)
-	(segment
 		(start 114.0463 104.64)
 		(end 114.0463 105.24)
 		(width 0.25)
@@ -27636,12 +27612,28 @@
 		(uuid "9e4a5d71-3473-4d7f-a933-274be429afc7")
 	)
 	(segment
+		(start 123.9625 113.2)
+		(end 125.155 112.0075)
+		(width 0.15)
+		(layer "F.Cu")
+		(net "/BATBUS-C")
+		(uuid "a741c35a-db02-483a-911d-cffe8e5411e3")
+	)
+	(segment
 		(start 123.891 106.376)
 		(end 124.2446 106.0224)
 		(width 0.2)
 		(layer "F.Cu")
 		(net "/BATBUS-C")
 		(uuid "aec89e93-be82-478c-8e56-6efce4523d90")
+	)
+	(segment
+		(start 123.04 113.2)
+		(end 123.9625 113.2)
+		(width 0.15)
+		(layer "F.Cu")
+		(net "/BATBUS-C")
+		(uuid "c69f9c27-e822-4085-85b7-865b8609f77a")
 	)
 	(segment
 		(start 114.0463 103.32)
