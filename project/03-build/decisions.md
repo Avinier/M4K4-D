@@ -3449,3 +3449,23 @@ Outside them, slabs of 1.0–3.0 mm behind the back face clear every body/chassi
 **Decision** (builder approved, 2026-11-03). Delete R4 and tie U1 pin 13 (CE, active low) straight to GND. Charging remains switchable over I²C (`EN_CHG`); the datasheet requires CE pulled high or low, never floating, and tying it low satisfies that. Delete TP1 and leave U1 pin 12 (QON) unconnected: the pin has an internal pull-up (datasheet Rev C Table 5-1), so it stays inactive. Lost on the bench only: hardware charge disable through CE, and ship-mode exit/system reset through QON. Neither is used in normal operation. CHG_INT, SCL, SDA, STAT, SDRV (1 nF 0402, as the datasheet requires when the ship FET is unused) and every other U1 connection are unchanged.
 
 **Check.** Nightly ERC 0/0. Old/new netlist diff: only R4 and TP1 removed, U1.13 /CE_N → /GND, U1.12 /QON → unconnected.
+
+## D-089
+
+**2026-11-04 · PCB-02 uses JLCPCB-class design rules instead of the fab-neutral set (amends D-062 for this board) · ACTIVE**
+
+**Why.** With fab-neutral vias (0.67/0.35 mm, 0.31 mm via-to-other copper, D-062), 39 of the 104 remaining PCB-02 endpoints had no legal via spot. The back face could not open wider channels: only 45 of 61 logic parts fit with a 0.5 mm margin.
+
+**Decision** (builder approved, 2026-11-04). PCB-02 only uses rules inside JLCPCB's standard 4-layer capability (capabilities page read 2026-11-04), with margin above its minimums:
+
+| Rule | PCB-02 | JLC standard minimum | Fab-neutral (D-062) |
+|---|---|---|---|
+| Track width / copper clearance | 0.127 / 0.127 mm | 0.09 / 0.09 mm (multilayer, 1 oz) | 0.16 / 0.16 mm |
+| Via (drill / diameter) | 0.25 / 0.45 mm | 0.15 / 0.25 mm; no surcharge from 0.25 drill at ≥ 0.45 mm | 0.35 / 0.67 mm |
+| Via copper to other copper | 0.127 mm | via hole to track 0.2 mm (0.1 mm copper at this via) | 0.31 mm |
+| Hole to hole | 0.25 mm | 0.2 mm (vias) | 0.31 mm |
+| Copper to routed edge | 0.3 mm (unchanged) | 0.2 mm | 0.3 mm |
+
+Existing 0.67 mm vias stay where placed. The other boards keep D-062.
+
+**Consequence.** PCB-02 can no longer be built at Lion Circuits' MII service (6/6 mil, 12 mil via rules); JLCPCB, or a fab with equal rules, is required. The board's stage-2 fab choice in the README is updated accordingly.

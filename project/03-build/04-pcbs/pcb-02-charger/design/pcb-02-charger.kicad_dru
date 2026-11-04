@@ -1,39 +1,40 @@
 (version 1)
 
-# Fab-neutral rules (04-pcbs README, "Fab-neutral design rules", D-062): the strictest
-# standard 2-layer 1 oz limits of JLCPCB, PCBWay and Lion Circuits' MII (Make in India)
-# service, read from their capability pages on 2026-10-25. Lion MII sets every via rule.
+# PCB-02 design rules (D-089, 2026-11-04): JLCPCB standard 4-layer capability with margin,
+# replacing the fab-neutral set (D-062) for this board only. Read from jlcpcb.com/capabilities
+# on 2026-11-04: multilayer 1 oz track/space 0.09/0.09 mm, via 0.15/0.25 mm min (0.25 mm drill
+# at >= 0.45 mm diameter has no surcharge), via hole to track 0.2 mm, via hole-to-hole 0.2 mm,
+# pad to track 0.1 mm, routed edge 0.2 mm. Lion Circuits MII cannot build this board.
 # Later rules in this file take precedence over earlier ones.
 
-(rule "fab-neutral copper clearance"
-	(constraint clearance (min 0.16mm)))
+(rule "PCB-02 copper clearance"
+	(constraint clearance (min 0.127mm)))
 
-(rule "fab-neutral track width"
+(rule "PCB-02 track width"
 	(condition "A.Type == 'Track'")
-	(constraint track_width (min 0.16mm)))
+	(constraint track_width (min 0.127mm)))
 
-(rule "fab-neutral via size"
+(rule "PCB-02 via size"
 	(condition "A.Type == 'Via'")
-	(constraint hole_size (min 0.35mm))
-	(constraint annular_width (min 0.16mm))
-	(constraint via_diameter (min 0.67mm)))
+	(constraint hole_size (min 0.25mm))
+	(constraint annular_width (min 0.1mm))
+	(constraint via_diameter (min 0.45mm)))
 
-# Lion MII: 12 mil from a via to a trace, read as via copper to other-net copper (the
-# stricter reading), and kept from the drilled hole as well.
-(rule "fab-neutral via to other copper"
+# via hole to track 0.2 mm = 0.1 mm copper at a 0.45/0.25 via; 0.127 mm kept for margin
+(rule "PCB-02 via to other copper"
 	(condition "A.Type == 'Via' && A.Net != B.Net")
-	(constraint clearance (min 0.31mm)))
+	(constraint clearance (min 0.127mm)))
 
-(rule "fab-neutral hole to other copper"
-	(constraint hole_clearance (min 0.31mm)))
+(rule "PCB-02 hole to other copper"
+	(constraint hole_clearance (min 0.2mm)))
 
-(rule "fab-neutral copper to board edge"
+(rule "PCB-02 copper to board edge"
 	(constraint edge_clearance (min 0.3mm)))
 
-(rule "fab-neutral hole to hole"
-	(constraint hole_to_hole (min 0.31mm)))
+(rule "PCB-02 hole to hole"
+	(constraint hole_to_hole (min 0.25mm)))
 
-(rule "fab-neutral silkscreen text"
+(rule "PCB-02 silkscreen text"
 	(layer "?.Silkscreen")
 	(constraint text_height (min 1.0mm))
 	(constraint text_thickness (min 0.16mm)))
