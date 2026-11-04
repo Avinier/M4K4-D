@@ -266,6 +266,32 @@ DRC has no clearance, short or keepout errors at this stage; 227 connections rem
 - **Status.** Dangling fan-out vias were removed, and pattern rounds brought the board to **50 unrouted connections with no DRC errors** (warnings only: 12 dangling stubs, 2 nightly no-connect name conflicts).
 - **What remains.** Mostly short back-side logic hookups (2–10 mm) among densely packed SOT/0402 parts. The long ones: TS to J3, PB_SW to J9, SEQ_EN to U9, PG_C2 to U11, SDA/SCL to J4, STAT to J5, VSNK to R16/U1 pin 9, OPBUS sense to R29/R35, plus the islands of the B.Cu +5V pour.
 
+**Routing pass 5 — highways, via shrink and power repairs (2026-11-04).**
+
+- **Highways.** Three corridors are kept free of vias: F y 104.2–105.4, In2 y 113.45–114.25 under the J5/J6 bodies, and B y 134.2–135.5. ARM_REQ uses the In2 lane at y 113.75 and SEQ_EN the one at y 114.03. Short N–S crossings of the In2 lane go on F between the header pads.
+- **Vias.** Signal, +3V3 and logic-area GND vias are now the D-089 0.45/0.25 mm size. GND and power vias in the charger band and round J1 stay 0.67/0.35 mm. KILL's three stacked vias under J5.6 collapsed to one, and redundant OPBUS_DIV and ARM_CLR_N vias were removed.
+- **Long runs routed.**
+  - SEQ_EN: In2 lane into U9.
+  - PG_C2: J7.3 → In2 west column → B HB1 → In2 bottom lane (y 135.1, clear of H2) → U11.
+  - PG_DISPLAY: F y 117.6 → TP13.
+  - SCL_BENCH: B/In2/B through the In2 channel between PG_AUDIO and SDA_BENCH → J4.2.
+  - ARM_CLR_N, MIC_FAULT_N and OPBUS_OK: short F/B/In2 hops round the U5/U8/U9 corner.
+- **+5V_C2.** J7.2 now feeds along F y 117.0–117.2, north of the J7 fan, into the 5V_B island under R18. F jumpers join that island to the rest and to R32; R10 takes a via off the same F row.
+- **BATBUS charge path (fixed).** SDA_BENCH's In2 run along y 122.95 had cut U1's BAT pins (22/23) and the bulk cap C15 off from J2 in the BATBUS_IN2 pour; only a 0.15 mm B track joined them. A dedicated F strap now runs J2.1 → C15 at 0.6 mm and C15 → U1 BAT at 0.45 mm, for the 1 A PROG charge current. The old B link was removed, which also merged C18's GND island into GND_B_U1_PATCH.
+- **Moves.**
+  - TP5 (VSNK) moved from the north-west corner to (140.25, 128.5) beside a VSNK pour via.
+  - R16 moved to (139.6, 125.5) on B, rot 90. Its VSNK pad ties straight to J1.1 and its CP_DIV pad to R17.1. This removed a CP_DIV In2 L that sliced the VSNK pour.
+- **Status.** 20 unrouted connections, no DRC errors. Warnings only: 11 dangling stubs, 18 dangling fan-out vias, 2 nightly no-connect name conflicts.
+- **Open checks.**
+  - VSNK carries up to 3 A from J1 to U1 on In2. Measure the narrowest neck of VSNK_IN2 once routing settles.
+  - The SDA_BENCH In2 run still divides BATBUS_IN2. The F strap carries the charge path, but the pour should be re-checked at the end.
+- **What remains.**
+  - Header signals to J5/J6: STAT, INT_PB, CHG_ABSENT_3V3, CHARGE_ABSENT (TP8), ENERGY_OK, MOTOR_PRESENT (TP15).
+  - TS to J3; PB_SW to J9.
+  - CP_DIV: 4 groups (U3/Q3, Q4, R40, Q2 with R16/R17).
+  - Q_OP_GATE ×2, Q_DIS_GATE, LTH, OPBUS sense.
+  - SW1 at C8, the bootstrap cap's link to the SW1 wedge.
+
 **Fit-study findings.** All courtyards are legal, with 64% front fill. Before routing:
 
 1. **U2 footprint — done.** The stock TSOT-23-8 leaves 0.15 mm between pads, below the fab-neutral 0.16 mm. U2 now uses `pcb02:TSOT-23-8_LTC_TS8`, built from ADI's TS8 recommended pad layout (LTC DWG 05-08-1637 Rev A: 0.40 mm pads at 0.65 mm pitch, 1.22 mm long, 1.4 mm between rows), which leaves 0.25 mm gaps.
