@@ -3486,3 +3486,38 @@ Existing 0.67 mm vias stay where placed. The other boards keep D-062.
 R41 sits inside the D-087 back-face zone; it is a 0402, so the zone allows it. Both are signal links: STAT is an open-drain status line and CP_DIV is a 100 kΩ divider node. A 0 Ω part adds no measurable error to either.
 
 **Check.** Exported netlist: STAT = U1.1 + R41.2; STAT_HDR = J5.4 + R41.1; CP_DIV = Q2.1, R16.2, R17.1, R42.2; CP_DIV_L = Q3.1, Q4.1, R40.1, R42.1, U3.5. ERC is unchanged from before the edit.
+
+## D-091
+
+**2026-11-06 · PCB-09 input freeze: Samtec SSW-120-01-T-D socket, HAT standoffs on the Pi's header-side holes, J9-1 order, four layers, headless layout · ACTIVE; CR-02 and the bench items stay open**
+
+**Why.** PCB-09's lesson-1 inputs were still open (README ME-05, ME-06, HA-08). The socket had no MPN or height, and the board hung on the header alone, with its connector bay cantilevered 17 mm off the header line. The J9-1 order was undecided. The D-074 strip is 6.1 mm wide: between and beside the two socket rows, each copper layer fits four 0.16 mm tracks, but ten nets must run along it to the bay (+5V_PI, +3V3_PI, BASE_TX, HEAD_TX, HEAD_RX, BCLK, SDI1, AMP_SD, FAN_EN, BASE_RX). The KiCad Nightly GUI is in use for PCB-02 in a parallel session.
+
+**Decision** (builder approved, 2026-11-06):
+
+1. **Socket: Samtec SSW-120-01-T-D** (2 × 20, 2.54 mm, through-hole, 8.51 mm insulator, matte tin, 2.64 mm tails; Samtec SSW through-hole catalog page). It accepts 3.68–6.35 mm of pin insertion. The Pi 5 header measures 2.5 mm of plastic and 6.11 mm of pin above it in the vendor STEP, so the socket bottoms on the plastic at 6.11 mm insertion. element14 lists the SSW-120-01 family from UK stock (an India source, D-066). The builder chose tin over the gold `-G-D`. Tin contacts on the Pi's gold-flashed pins can fret under vibration; this is accepted, and the bench adds a contact-resistance check after vibration (stage 2).
+2. **Retention: two M2.5 × 11 mm round male-female standoffs (Ø ≤ 4.5 mm, 6 mm male thread) at Pi holes 3 and 4** (world (−7.8, 19.33) and (50.2, 19.33)), as on a HAT: 2.5 + 8.51 = 11.01 mm. They replace the Pi's M2.5 × 6 screws there and screw into the same tray inserts (4.0 mm of thread in the insert). M2.5 × 5 DIN 912 screws go down through PCB-09 into them. A hex standoff touches the Active Cooler at hole 4 (planted case), so the standoffs are round. The board rises 0.05 mm onto them, to Z 106.45–108.05.
+3. **Outline tabs** to the holes (world XY): (−11.0…−4.7, 16.3…22.4) at the −X end of the strip, and (47.1…53.4, 17.2…22.5) beyond the bridge. The +X tab's −Y edge is raised to Y 17.2 because the cooler reaches Y 16.83 there (Z 104–108.1); that leaves a 0.78 mm web from the Ø2.7 hole.
+4. **Assembly order.** The frame's cross rail is 15.4 mm over the hole-4 screw head, so no driver reaches it in place. PCB-09 is screwed to the standoffs on the bench, with the Pi on the compute tray, before the tray slides in (amends the 02-body README step 1 and D-042's sequence: PCB-09 now goes in with the tray, not after it). Harness plugs (W24, W25, W26, W41) still go in afterwards.
+5. **J9-1 pin order** follows the W25 rule: 1 GND, 2 `C0TX+`, 3 `C0TX−`, 4 `C2TX−`, 5 `C2TX+`, 6 spare. The THVD1451's Y, Z, B, A pins (5–8) come out straight, and W24 is wired 1:1. PCB-08 `J8-4` and PCB-12 must follow it; the 05-harness row is updated.
+6. **Four layers**, as on PCB-05 and PCB-10: F.Cu, In1 solid GND, In2 signal/power, B.Cu, 1.6 mm, on the fab-neutral rules (D-062). That gives 12 track places along the strip and an unbroken return plane under the RS-422 and I²S lines.
+7. **Headless layout for this board** (amends D-060's KiPy/GUI route for PCB-09 only). Tracks, vias and zones are written into the `.kicad_pcb` by a script, on coordinates planned by hand: still no autorouter. The Nightly `kicad-cli` refills zones, runs DRC with schematic parity and exports. The builder reviews the result in the Nightly GUI before release.
+
+**CAD** (final/v1/cad only, rule D-063): `PCB09_MOUNT` and `pcb09_mount_parts()` in `makad-v1.step.py`. DROID_REMOVES drops `PI5_M25X6_SCREW_[34]`; DROID_INSERTS adds the standoffs and screws to the PCB-09 group; DROID_ADDS adds the two tabs; DROID_MOVES lifts the placeholder board and its parts 0.05 mm. `check_pcb09_inputs.py` now counts the tabs separately from D-074's growth.
+
+**Check.** `check_pcb09_mount.py` 7/7 PASS (2026-11-06; record in `04-pcbs/pcb-09-c0-link-adapter/mount-check.json`):
+- the socket stack is 106.447 vs the standoff top 106.450;
+- the standoffs are coaxial with inserts 3/4;
+- both tabs carry the Ø2.7 hole with a ≥ 0.5 mm web;
+- standoffs, screw heads and tabs clear every body/chassis part (the Pi and cooler as real solids) by 0.2 mm;
+- the planted hex standoff and an un-raised +X tab both hit the cooler;
+- the bench-assembled unit (board rectangles, standoffs, screws and top/underside part envelopes) sweeps 90 mm along −X at the 2 mm install lift with no clash; PCB-05, the C3 carrier, harness and reserves go in later.
+
+`check_pcb09_inputs.py` reruns with zero core clashes.
+
+**Open.**
+- CR-02: boot/overlay and the measured fan current.
+- The orderable round standoff (brass or nylon, Ø ≤ 4.5 mm) at the batch order.
+- Socket seating on a real Pi and the vibration contact check.
+- PCB-08/12 adopt the J9-1 order at their design.
+- Populated KiCad STEP fit and integration at stage 3.

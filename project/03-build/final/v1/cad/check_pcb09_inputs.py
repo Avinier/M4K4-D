@@ -116,7 +116,9 @@ def main():
     assert all(supported(p, proposed, EDGE) for p in placed)
     old_core = B._c0_link_adapter().children[0]
     assert len(core.solids()) == 1
-    added = core.volume-old_core.volume
+    # D-091 adds two standoff tabs beyond the D-074 strip growth; count only D-074's here.
+    tabs = sum((x1-x0)*(y1-y0)*1.6 for x0, x1, y0, y1 in entry.PCB09_MOUNT["tabs"])
+    added = core.volume-old_core.volume-tabs
     assert abs(added-40.7*1.5*1.6) < 1e-4
     # Check a real SOIC-8 at the old SOIC-14 placeholder's centre. A roundrect
     # contains a full-height central rectangle (corner radius = 0.15 mm), so

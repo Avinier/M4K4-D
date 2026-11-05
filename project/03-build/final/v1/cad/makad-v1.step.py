@@ -807,6 +807,43 @@ ALIGN_BUDGET = dict(
 )
 
 
+# D-091: PCB-09 sits on two M2.5 x 11 mm round male-female standoffs at the Pi's header-side
+# holes (Pi holes 3 and 4), as a HAT does: the Pi header's 2.5 mm plastic plus Samtec
+# SSW-120-01-T-D's 8.51 mm insulator is 11.01 mm. The standoffs take the place of the Pi's
+# M2.5 x 6 screws there (a 6 mm male thread into the same tray inserts); M2.5 x 5 socket-head
+# screws hold the board. The board rises 0.05 mm onto them (Z 106.45-108.05), and two outline
+# tabs reach the holes. The +X tab's -Y edge stays 0.37 mm off the Active Cooler, and a hex
+# standoff would hit the cooler there, so they are round. check_pcb09_mount.py measures it.
+PCB09_MOUNT = dict(
+    holes=((3, _body.PI_MOUNT_HOLES[2]), (4, _body.PI_MOUNT_HOLES[3])),
+    standoff=(2.25, 11.0, 6.0, 5.0),   # body radius, height, male thread length, female bore depth
+    screw=(2.25, 2.5, 5.0),            # DIN 912 M2.5 head radius, head height, length
+    lift=0.05,                         # placeholder board Z 106.4 -> 106.45
+    tabs=((-11.0, -4.7, 16.3, 22.4), (47.1, 53.4, 17.2, 22.5)),  # world XY, on the board's Z
+)
+
+
+def pcb09_mount_parts():
+    """D-091 world-frame standoffs and screws, labelled, for DROID_INSERTS."""
+    m = PCB09_MOUNT
+    r, height, thread, bore = m["standoff"]
+    head_r, head_h, length = m["screw"]
+    top = _body.PI_PCB_TOP_Z
+    under = top + height
+    over = under + _body.PCB_THICKNESS
+    parts = []
+    for k, (x, y) in m["holes"]:
+        stand = (_z_cyl(r, top, under, x, y) + _z_cyl(1.25, top - thread, top, x, y)
+                 - _z_cyl(1.25, under - bore, under + 0.1, x, y))
+        screw = _z_cyl(1.25, over - length, over, x, y) + _z_cyl(head_r, over, over + head_h, x, y)
+        parts += [_body._paint(stand, f"PCB09_M25X11_ROUND_STANDOFF_{k}", _body.BRONZE, 1.0),
+                  _body._paint(screw, f"PCB09_M25X5_SOCKET_SCREW_{k}", _body.STEEL, 1.0)]
+    return parts
+
+
+PCB09_MOVED = r"C0_(LINK_ADAPTER_PCB09_BOARD|GPIO_2X20_SOCKET_BODY|THVD1451_\w+|J9_\d_\w+)"
+
+
 # Printed tools, not robot parts: (BOM ID, label, function giving the tool in the world frame).
 PRINT_TOOLS = [
     ("CH-089", "AXLE_ALIGNMENT_PLUG", axle_alignment_plug),  # D-071
@@ -824,6 +861,8 @@ DROID_REMOVES = [
     r"BODY_CHASSIS_M4_NUT_[123]",
     # D-079: the CNC Kitchen M3 x 5.7 insert models (OnlyScrews M3 x 6 below) and the 1.0 mm TCRT shims (1.2 mm below).
     *_NOSE_KEEL_REMOVES,
+    # D-091: the Pi's header-side M2.5 x 6 screws, replaced by PCB-09's standoffs below.
+    r"PI5_M25X6_SCREW_[34]",
 ]
 DROID_INSERTS = [
     (r"C3_CARRIER_PCB10_WITH_DEVKITC", pcb10_devkitc()),
@@ -831,6 +870,7 @@ DROID_INSERTS = [
     *_AXLE_SCREW_INSERTS,  # D-072: M3 x 16 housing screws
     *_J13_INSERTS,  # D-077: M4 x 8 deck inserts at the three top-driven J13 bolts
     *_NOSE_KEEL_INSERTS,  # D-079: M3 x 6 inserts in the pod seat and both crossmembers; 1.2 mm TCRT shims
+    *[(r"C0_LINK_ADAPTER_PCB09", part) for part in pcb09_mount_parts()],  # D-091: standoffs and screws
 ]
 
 
@@ -877,6 +917,8 @@ DROID_ADDS = [
     # D-074: PCB-09's strip must carry both rows of socket copper plus edge margin.
     # Grow only its +Y edge (20.9 -> 22.4); bridge, bay and board Z stay fixed.
     (r"C0_LINK_ADAPTER_PCB09_BOARD", (-4.7, 36.0, 20.9, 22.4, 106.4, 108.0)),
+    # D-091: tabs out to the Pi's header-side holes, at the placeholder's Z (lifted with it below).
+    *[(r"C0_LINK_ADAPTER_PCB09_BOARD", (x0, x1, y0, y1, 106.4, 108.0)) for x0, x1, y0, y1 in PCB09_MOUNT["tabs"]],
     # D-068: PCB-10 top-edge hooks on the C3 carrier uprights.
     *_PCB10_ADDS,
     # D-068 amended: the carrier grows 6 mm down for a third connector row; the plug-layer reserve follows.
@@ -925,6 +967,8 @@ DROID_MOVES = [
     # D-063: PCB-15 sits 0.4 mm further back (X 126.2-127.0), so U1 clears the magnet
     # at the cap's 3 mm stop.
     (r"BALL_NOSE_HALL_(CARRIER_PCB|DRV5055A3_SOT23)", (-0.4, 0.0, 0.0)),
+    # D-091: PCB-09 and its placeholder parts rise 0.05 mm onto the 11 mm standoffs.
+    (PCB09_MOVED, (0.0, 0.0, PCB09_MOUNT["lift"])),
 ]
 
 
