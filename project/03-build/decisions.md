@@ -3469,3 +3469,20 @@ Outside them, slabs of 1.0–3.0 mm behind the back face clear every body/chassi
 Existing 0.67 mm vias stay where placed. The other boards keep D-062.
 
 **Consequence.** PCB-02 can no longer be built at Lion Circuits' MII service (6/6 mil, 12 mil via rules); JLCPCB, or a fab with equal rules, is required. The board's stage-2 fab choice in the README is updated accordingly.
+
+## D-090
+
+**2026-11-06 · PCB-02: two 0 Ω layout links (R41 STAT, R42 CP_DIV) · ACTIVE**
+
+**Why.** After hand rip-up and re-placement, two PCB-02 connections remained with no legal path. STAT runs from J5.4 to U1.1; KILL's B.Cu column (R11 → R10 → TP6) and the J7 fan's In2 runs wall off J5.4. CP_DIV's divider (R16/R17, Q2) is south of the J5/J6 header, and its loads (U3, Q3, Q4, R40) are north of it; every layer between them is used.
+
+**Decision** (builder approved 0 Ω back jumpers, 2026-11-06). Add two 0 Ω 0402 links; each one straddles a single track:
+
+| Ref | Splits | Placement | Straddles |
+|---|---|---|---|
+| R41 | `STAT_HDR` (J5.4) / `STAT` (U1.1) | B.Cu (122.455, 117.75), 0° | KILL B.Cu column x 122.455 |
+| R42 | `CP_DIV_L` (U3.5, Q3.1, Q4.1, R40.1) / `CP_DIV` (R16.2, R17.1, Q2.1) | F.Cu (135.85, 119.8), 270° | OPBUS_OK F.Cu row y 119.8 |
+
+R41 sits inside the D-087 back-face zone; it is a 0402, so the zone allows it. Both are signal links: STAT is an open-drain status line and CP_DIV is a 100 kΩ divider node. A 0 Ω part adds no measurable error to either.
+
+**Check.** Exported netlist: STAT = U1.1 + R41.2; STAT_HDR = J5.4 + R41.1; CP_DIV = Q2.1, R16.2, R17.1, R42.2; CP_DIV_L = Q3.1, Q4.1, R40.1, R42.1, U3.5. ERC is unchanged from before the edit.
