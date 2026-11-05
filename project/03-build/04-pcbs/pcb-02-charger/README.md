@@ -292,6 +292,29 @@ DRC has no clearance, short or keepout errors at this stage; 227 connections rem
   - Q_OP_GATE ×2, Q_DIS_GATE, LTH, OPBUS sense.
   - SW1 at C8, the bootstrap cap's link to the SW1 wedge.
 
+**Routing pass 6 — header-band nets and part moves (2026-11-05/06).**
+
+- **Routed:**
+  - INT_PB, F from J5.5 to U2 and F rows y 106.7/106.4 to D2/R28.
+  - PB_SW, F highway y 104.8 and under the H4 keepout at y 106.12 into J9.1.
+  - TS, B/In2/F from the R5/C19/R6 cluster under the charger band, then up the east edge into J3.1.
+  - SW1 at the bootstrap cap.
+  - CHG_ABSENT_3V3, F y 113.8 under the header bodies, then In2 to Q4.3 and B to R26.
+  - Q_OP_GATE (all three groups): its column moved from In2 to F between the J5/J6 mounting pads; In2 rows y 107.6 and 109.77.
+  - Q_DIS_GATE, along the west half of the In2 header lane at y 113.75.
+  - CP_DIV from Q4 to Q3/U3 (In2 y 111.1) and from Q2 to R16/R17 (B).
+  - Two thin F bridges rejoin the BATBUS_IN2 islands cut by these In2 rows. Both feed only U2's microamp VIN.
+- **Moved:** C8 (BTST1–SW1 bootstrap cap) from 6 mm east of U1 to the back face under U1's west pins, making the bootstrap loop short.
+- **Removed as redundant:** the +5V F jumper at y 118.2 and its vias, a dangling +5V via at Q4, a dangling PB In2 stub, and LTH's In2 star (now B-only).
+- **Status:** 5 unrouted connections, no DRC errors.
+  - STAT: a 0 Ω 0402 on B at (122.455, 117.75) straddling KILL's B column is designed and checked. It still needs the schematic split and an Update PCB from Schematic.
+  - CP_DIV ×2 (R40 to the Q4 group and to the Q2 group).
+  - The OPBUS sense link (R29.1 to R35/the OPBUS In2 via).
+  - LTH from D3.2.
+
+  These four sit in the corridor between the J5/J6 header and U7/U8, walled by SYSTEM_ARM (F), ENERGY_OK (In2), CHARGE_ABSENT/CHG_ABSENT_3V3 (B) and the TP8/TP15/R18 pads. They need part moves there plus one to three more 0 Ω jumpers.
+- **Power checks still open:** the VSNK In2 neck, and the BATBUS_IN2 fragmentation. The main J2–Q1 west corridor and the F charge strap are intact; the U2-VIN islands now hang on thin bridges.
+
 **Fit-study findings.** All courtyards are legal, with 64% front fill. Before routing:
 
 1. **U2 footprint — done.** The stock TSOT-23-8 leaves 0.15 mm between pads, below the fab-neutral 0.16 mm. U2 now uses `pcb02:TSOT-23-8_LTC_TS8`, built from ADI's TS8 recommended pad layout (LTC DWG 05-08-1637 Rev A: 0.40 mm pads at 0.65 mm pitch, 1.22 mm long, 1.4 mm between rows), which leaves 0.25 mm gaps.
