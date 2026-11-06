@@ -28,7 +28,7 @@
 | PCB-01 | Bought TIFPS0629 | **Unchanged.** Now the main safety device | §3 bench acceptance (power-boards §3) |
 | PCB-02 charger, latch, sense | Routed | **Bought modules** (switch + monitor) | — |
 | PCB-03 motor gate, head/yaw rails | Not started | **Bought modules** (two buck-boosts) | — |
-| PCB-04 branch converters | Not started | **Bought modules** (2–4 bucks) | — |
+| PCB-04 branch converters | Not started | **Bought modules**: 2 × S13V30F5 5 V buck-boost (D-094) | — |
 | PCB-05 audio front end | Rev A | **Bought** MAX98357A breakout (BO-007 promoted) | — |
 | PCB-06 ×4 mics | Rev A | **Bought**: 4 I²S mic breakouts on two lanes (Q6) | — |
 | PCB-07 base IMU | HOLD | **Bought** SPI 6-axis breakout | — |
@@ -37,7 +37,7 @@
 | PCB-09 C0 link adapter | Rev A (branch) | **Kept, no change**; merge the branch | Procure |
 | PCB-10 C3 carrier | Rev A | **Kept, no re-spin.** `J10-12` unused; its watchdog + AND gate become the motor kill | Procure |
 | PCB-11 status LED | Rev A | **Kept** | Procure |
-| PCB-12 C2 head carrier | Not started | **Fit-check the Waveshare ESP32 Servo Driver first** (Q5); else a simpler custom carrier (no watchdog, `ARM_REQ` or READY pair) | Fit check, then design if needed |
+| PCB-12 C2 head carrier | Not started | **Custom, simpler** (no watchdog, `ARM_REQ` or READY pair). The Waveshare board doesn't fit the C2 bay (D-094) | Design |
 | PCB-14 ×3 yaw joiners | HOLD | **Kept custom** (passive; ZIF pick still open) | Design |
 | PCB-15 nose Hall | Rev A | **Kept** | Procure |
 
@@ -61,8 +61,8 @@
                ├─ monitor (INA226/219, I²C)
                ├─ buck-boost → 5.5 V head pitch/roll (W13 → J8-1)
                ├─ buck-boost → 11.1 V yaw (→ PCB-08 → W15)
-               ├─ buck 5.1 V ≥ 5 A → Pi 5 (W10 USB-C)
-               └─ buck 5 V → C3 (W11, via a diode), amp (W12), C2 + display (W14 → J8-1)
+               ├─ buck-boost 5 V 3 A → Pi 5 (W10 USB-C; a non-PD Pi 5 assumes 3 A)
+               └─ buck-boost 5 V → C3 (W11, via a diode), amp (W12), C2 + display (W14 → J8-1)
 ```
 
 ### Modes
@@ -262,21 +262,22 @@ These are system records, outside `03-build`. The [03-build rule](README.md) say
 |---|---|
 | CP-01 to CP-14, PB-01 to PB-06, CP-OI-05 NVM jig, the PCB-02/03/04 truth-table, fault, inrush, regeneration, start-up, hold-up, breaker and back-feed tests, brownout-contract tests, PCB-05 two-lane PDM bench, PCB-06 array tap and boss coupon | TIFPS0629 acceptance (two units), MOT3001 R/L on receipt, PCB-09/10/11/15 bench, the speaker/cavity listen |
 
-**New tests**
+**New tests.** This table is the bench register: the pass criteria below are what gets followed. Other pages ([module-selection.md](module-selection.md) §3) cite test IDs, not their own versions.
 
-| # | Test | Pass |
-|---|---|---|
-| N1 | Power switch | On/off from the mushroom; 10 A for 10 s without overheating; OFF current recorded |
-| N2 | Each module | Output at no load and full load, at 6.0 V and 8.4 V in |
-| N3 | Yaw rail | Below 12.6 V at the servo through a stall and a fast stop |
-| N4 | Drive `VM` | Below 11.8 V when both motors release at the chopping limit |
-| N5 | Charge in place | Full balance charge through the rear ports in `OFF`; nothing in the body gets warm |
-| N6 | Low battery | Firmware stops and shuts down before the pack trips |
-| N7 | Start together | Pi, C2, C3 and display start cleanly, 20 cycles |
-| N8 | C3 USB back-feed | Service USB on the DevKitC with the robot `OFF`: the switched bus stays at 0 V |
-| N9 | Audio | Speaker plays and all four mics capture at the same time on I²S0, each mic in its own channel (tap test) |
-| N11 | Mic array timing | A clap from known directions gives consistent inter-mic delays across the four channels |
-| N10 | IMU | SPI read at C3 on `J10-7` |
+| # | Test | Setup | Pass |
+|---|---|---|---|
+| N1 | Power switch (M1) | Switch installed in its CAD position inside the closed body, shell on; bench supply or pack at 7.4 V; thermocouple on the switch board | (a) On from the mushroom, off from the OFF input (firmware pulse). (b) 10 A for 10 s. (c) A realistic duty cycle for 30 min: drive, head and Pi loads as in a demo, with the peaks as logged on the bench. (d) OFF current recorded. **Board temperature stays below 70 °C** in (b) and (c), clear of the PETG frame's softening range; record the peak |
+| N2 | Module capacity (M2, M4, M5) | Each module at 6.0 V and 8.4 V in, inside the body, on its real lead | (a) Output at no load and at its design load. (b) **M2 head rail:** both head servos stalled at once with the Feetech protection current set; record each servo's set limit; the rail stays ≥ 5.23 V at the servo terminals and the module doesn't thermal-limit for the time the servos take to trip. (c) **M5 shared 5 V:** simultaneous power-up of C3, amp, C2 and display, then full-volume audio with the display on; stays ≥ 4.75 V at each load |
+| N3 | Yaw rail (M3) | Pack at 6.0 V and at 8.4 V; servo current limit set below the module's measured capability | (a) Sustained yaw load (continuous back-and-forth sweeps for 10 min): rail holds 11.1 V ±4 % and the module doesn't thermal-limit. (b) Stall and a hard stop at full speed: **< 12.6 V at the servo terminals** at every instant (scope) |
+| N4 | Drive `VM` | Both #3297 boards on the switched bus, real motors, SMBJ8.5A + 100 µF + 0.1 µF at each `VM` | Both motors released at the chopping limit (permit loss and `nSLEEP` low): **`VM` peak < 11.8 V** on a scope |
+| N5 | Charge in place | Robot `OFF`; charger on the rear ports | Full balance charge completes; cells end within the charger's balance band; nothing in the body gets warm |
+| N6 | Low battery | Pack drawn down under a demo load | Firmware stops motion at 6.0 V and shuts down before the TIFPS0629 under-voltage trip |
+| N7 | Start together | Robot on from `OFF`, 20 cycles | Pi, C2, C3 and display start cleanly every time |
+| N8 | C3 supply and back-feed (M13 Schottky) | Schottky in `W11` | (a) **Loaded:** C3 running with its peripherals, robot `ON` at 6.0 V pack: DevKitC 5 V pin ≥ 4.5 V and its 3.3 V rail in tolerance. (b) **Back-feed:** service USB on the DevKitC with the robot `OFF`: the switched bus and the M5 output stay at 0 V |
+| N9 | Audio | Amp, four mics, audio hub with 100 kΩ SD pull-downs | Speaker plays while all four mics capture on I²S0, each mic in its own channel (tap each mic) |
+| N10 | IMU | Adafruit LSM6DSOX on `J10-7` | SPI WHO_AM_I and data read at C3 |
+| N11 | Mic array timing | Four mics in their shell bosses | A clap from known directions gives consistent inter-mic delays across the four channels |
+| N12 | Pi supply voltage (M4) | Scope or logging meter **at the Pi's USB-C input**; pack at 6.0 V and 8.4 V | (a) M4 output at no load ≥ 4.90 V at the module, else reject that unit; a shorter `W10` cannot fix a low module. (b) **≥ 4.80 V at the Pi** through boot and through a CPU stress run with the camera and fan on, with no dip below 4.80 V. (c) `vcgencmd get_throttled` shows no under-voltage, now or since boot. **The 5.1 V recommendation:** Raspberry Pi recommends a 5.1 V supply to cover cable drop; M4 is a 5.0 V part, and the Pi flags under-voltage at 4.63 V ±5 % (up to about 4.86 V). M4 is accepted only if N12 passes; if it fails, choose a ≥ 3 A regulator settable to 5.1–5.2 V, by decision |
 
 ### 4.13 Memory and housekeeping
 
@@ -288,7 +289,7 @@ Update the memories for the PCB workflow tracker, the power distribution design,
 
 | # | Risk | Mitigation |
 |---|---|---|
-| R1 | **Power switch current.** Pololu's Big Pushbutton Power Switch **MP** is 4.5–40 V, about 8 A continuous. Peak pack current is about 10.2 A (11 A upper corner, power-boards §4); the average is far lower | Pick the **HP** version (rating to read, `U`) or prove the MP on test N1 at the real duty |
+| R1 | **Power switch current.** The HP (#2813, D-094) is rated "16 A continuous at 12 V without exceeding 150 °C"; the MP is 6 A continuous. Peak pack current is about 10.2 A, the average far lower | HP chosen; **open as a thermal check**: test N1 in the closed body |
 | R2 | **Yaw rail margin.** A fixed 12 V ±4 % module reaches 12.48 V against the ST3215-HS 12.6 V maximum | Adjustable buck-boost set to 11.1 V (Q8); servo current limit below 2 A |
 | R3 | **Balance lead in the pack channel.** H-07: the channel holds nothing wider than about 8 mm; a JST-XH 3P housing is about 10 mm | Narrower break (2.0 mm pitch or soldered pigtails) or a re-route; CAD check before the frame print |
 | R4 | **C3 USB back-feed.** PCB-10's DevKitC feeds `VCC_5V` from USB through its diodes, then out `J10-1` into `W11` (PCB-10 README). A bought buck's output may conduct back to its input and wake the switched bus | Series Schottky in `W11`; test N8 |
@@ -308,7 +309,7 @@ Update the memories for the PCB workflow tracker, the power distribution design,
 | Q2 | Who reads the monitor | **The Pi** |
 | Q3 | Number of 5 V bucks | **Two:** the Pi alone; one shared by C3, amp, C2 and display |
 | Q4 | Pack NTC | **Dropped**; the AC72ABD breaker stays |
-| Q5 | PCB-12 | **Fit-check the Waveshare ESP32 Servo Driver first**; design the simpler custom carrier only if it doesn't fit |
+| Q5 | PCB-12 | **Fit-check the Waveshare ESP32 Servo Driver first**; design the simpler custom carrier only if it doesn't fit. **Result (D-094): doesn't fit (65 × 30 mm against an 18 × 23.5 mm bay); custom carrier** |
 | Q6 | Microphones | **4 I²S mics on two lanes** (SDI0 front pair, SDI1 rear pair). Keeps `CAND-01` spatial hearing; needs the custom overlay (R8) and an audio hub (R9) |
 | Q7 | Charge connection | **Rear-panel charge port + balance port** (XT30-class + 3-pin) |
 | Q8 | Yaw rail | **Adjustable buck-boost at 11.1 V** |
@@ -323,7 +324,7 @@ The changes are applied in these levels. Q1–Q9 are decided (§6).
 | 0 | **Decisions:** [D-093](decisions.md#d-093) in the ledger; PCB-09 branch merged to `main` | Record | — | **Done 2026-11-06** |
 | 1 | **Architecture docs:** superseded banners on [power-boards.md](04-pcbs/power-boards.md) and [charge-path.md](04-pcbs/charge-path.md); CP-OI-01 to -15 closed as superseded in [open-items.md](04-pcbs/open-items.md) | Doc cleanup | — | **Done 2026-11-06** |
 | 2 | **Board docs:** [04-pcbs](04-pcbs/README.md) register and [workflow](04-pcbs/workflow.md) tracker; superseded banners on PCB-02, 03, 04, 05, 06, 07, 13; new inputs in the PCB-08, 10, 12 READMEs (§4.3) | Doc cleanup | — | **Done 2026-11-06** |
-| 3 | **Modules:** pick each part, check India stock, get dimensions and STEPs (§2, risks R1, R2, R7) | New design | — | To do |
+| 3 | **Modules:** pick each part, check India stock, get dimensions and STEPs (§2, risks R1, R2, R7) | New design | — | **Done 2026-11-07**: [D-094](decisions.md#d-094), [module-selection.md](module-selection.md) |
 | 4 | **CAD** in `final/v1/cad`: module bays, rear-panel ports, balance-lead channel, mic and amp mounts, IMU adapter; targeted checks; mass/CoM (§4.5–4.8) | New design | 3 | Waits |
 | 5 | **Harness:** rewrite [05-harness](05-harness/README.md) power tree, wire list, pinouts, service procedures and buy list (§4.4) | New design | 3, 4 | Waits |
 | 6 | **BOM:** retire, promote and add rows (§4.10) | Records | 3 | Waits |

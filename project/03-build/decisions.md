@@ -79,6 +79,7 @@ The central record of every decision and change made during the build phase. New
 | [D-073](#d-073) | 2026-10-31 | Body / electronics: PCB-09 header audit (CH-084; CA-06) | Preserve I²C1 on labelled SDA/SCL/GND service pads without added pull-ups; fit 4.7 kΩ pull-ups on both UART TX lines; retain GPIO24 and the 100 kΩ fan-gate pull-down | ACTIVE for design inputs; CR-02 OPEN pending boot/overlay and fan-current checks |
 | [D-074](#d-074) | 2026-10-31 | Body / electronics: PCB-09 socket strip (CH-084; final v1 CAD) | Extend only the strip's +Y edge from world Y 20.9 to 22.4 mm so both socket rows carry full copper and edge margin; core Z, bridge and wide area unchanged | ACTIVE; 40-pad edge and static body/chassis checks pass; other mechanical inputs OPEN |
 | [D-093](#d-093) | 2026-11-06 | Architecture: minimal safety and bought modules | Replaces RP-02 `BD-01`: minimal safety, pack charged outside the robot; PCB-02/03/04/05/06/07 bought, PCB-13 deleted; custom boards are PCB-08, 09, 10, 11, 12, 14, 15 | ACTIVE; changes not yet applied ([plan](simplification-plan.md)) |
+| [D-094](#d-094) | 2026-11-07 | Bought module selection for D-093 | Pololu HP switch, 2 × S18V20ALV (head 5.5 V, yaw 11.1 V), 2 × S13V30F5 (Pi, shared 5 V), INA226, LSM6DSOX, MAX98357A, 4 × INMP441, ISDT PD60; PCB-12 stays custom | SELECTED, not ordered |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -3600,3 +3601,52 @@ The PCB-02, 05, 06 and 13 KiCad work is archived in place as v2 reference.
 3. Rewrite the harness and update the docs.
 4. Design PCB-08, 12 (after the Waveshare fit check) and 14; one fab order for the seven boards.
 5. Bench: TIFPS0629 acceptance, the four-mic overlay with loose breakouts before the shell is printed, then tests N1–N11.
+
+## D-094
+
+**2026-11-07 · Bought module selection for D-093 (CH-021, CH-041–CH-043, CH-086, BO-002, BO-005, BO-007, BO-016; [module-selection.md](module-selection.md)) · SELECTED, not ordered; not a purchase list yet: M1–M5, M9 and M13 are bench-gated, M6 and M10–M12 have their source open**
+
+**Why.** D-093 replaced seven custom boards with bought modules. Level 3 of the [plan](simplification-plan.md#7-levels-of-work) picked each part, read the India listings and the vendor data, and checked each part against the robot's rails and connectors.
+
+**Decision** (builder approved, 2026-11-07). Details, sizes and sources are in [module-selection.md](module-selection.md) §1.
+
+| # | Function | Part | India source |
+|---|---|---|---|
+| M1 | On/off latch | Pololu #2813 Big Pushbutton Power Switch **HP** (4.5–40 V; "16 A continuous at 12 V without exceeding 150 °C"; OFF < 0.2 µA), wired press-to-on; firmware turns it off through its OFF input | Fab.to.Lab ₹1,275 |
+| M2 | Head pitch/roll 5.5 V | Pololu #2572 S18V20ALV set to 5.5 V | Fab.to.Lab ₹2,700 |
+| M3 | Yaw 11.1 V | Pololu #2572 S18V20ALV set to 11.1 V | Fab.to.Lab ₹2,700 |
+| M4 | Pi 5 | Pololu #4082 S13V30F5, 5 V buck-boost | Fab.to.Lab |
+| M5 | C3, amp, C2, display | Pololu #4082 S13V30F5 | Fab.to.Lab |
+| M6 | Pack voltage/current | INA226 board with a stated R010 2512 shunt (8.2 A full scale), on the switched bus, read by the Pi | Open (Probots out of stock, shunt unstated) |
+| M7 | Base IMU | Adafruit #4438 LSM6DSOX on `J10-7` (SPI) | ThingBits, Fab.to.Lab, Mouser India |
+| M8 | Speaker amp | SmartElex MAX98357A breakout (BO-007, promoted to installed) | Robocraze |
+| M9 | Mics | 4 + 1 spare INMP441 I²S modules (front pair SDI0, rear pair SDI1) | RoboBazar, Techiesms, Robocraze and others |
+| M10 | Charger (off-board) | ISDT PD60, LiPo mode (4.20 V/cell), 1–2 A; fallback ToolkitRC M4 or genuine SkyRC iMAX B6 class | Open (pre-order / sold out) |
+| M11 | Charger supply | BO-016 USB-C PD adapter (≥ 30 W, 15 V PDO, BIS), kept; exact model still to choose | Open |
+| M12, M13 | Ports and small parts | XT30 panel port + JST-XH 3P balance port + XT60→XT30 lead; SMBJ8.5A + bulk at each `VM`; SS34-class Schottky in `W11`; perfboard audio hub | Generic |
+
+**Amends D-093:**
+1. **Pi supply** is a 5 V, 3 A buck-boost (S13V30F5), not a 5.1 V ≥ 5 A buck. The D24V50F5 needs 6 V in and drops about 1.5 V at 5 A, so it falls out of regulation before the 6.0 V low-battery stop. A Pi 5 on a non-PD supply assumes 5 V / 3 A and limits USB to 600 mA (Raspberry Pi RP-009856).
+2. **The shared 5 V rail** uses the same S13V30F5.
+3. **Q5 resolves to the simplified custom PCB-12.** The Waveshare ESP32 Servo Driver is 65 × 30 mm against the head's 18 × 23.5 mm C2 bay, and it carries a plain ESP32.
+4. **Risk R1 stays open as a thermal check.** The HP's 16 A is rated at a 150 °C board, which a closed PETG body can't accept; test N1 sets the usable rating.
+
+**Changed.**
+- [module-selection.md](module-selection.md) is SELECTED.
+- [simplification-plan.md](simplification-plan.md) level 3 is done.
+- The 04-pcbs register, workflow tracker, and PCB-04 and PCB-12 READMEs are updated for the Pi supply and PCB-12.
+- BOM rows follow at plan level 6.
+
+**Unverified** (acceptance gates in [module-selection.md](module-selection.md) §3, pass criteria in the plan's bench register (§4.12); a second review on 2026-11-07 corrected the M1 rating, prices and STEP note before this entry was committed):
+- M1 temperature in the closed body (N1).
+- M2 head-stall capacity (N2(b), with the servo current limits set; no rated ≥ 3 A fallback chosen yet).
+- M3 yaw load and braking at a 6 V pack (N3).
+- M4 voltage at the Pi (new N12: ≥ 4.90 V at the module unloaded, ≥ 4.80 V at the Pi through boot and stress, no throttling flag; a ≥ 3 A regulator settable to 5.1–5.2 V if it fails).
+- M5 start-up and peak loads.
+- `VM` peak under 11.8 V (N4; the SMBJ8.5A alone clamps up to 14.4 V).
+- The `W11` Schottky (N8).
+- Sources for M6 and M10–M12.
+- Outlines of M6, M7 and M9.
+- Pololu publishes a STEP for the S13V30F5; the others are checked at level 4.
+
+**Next.** Plan level 4 (CAD) with these outlines, and level 6 (BOM).

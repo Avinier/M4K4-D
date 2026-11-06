@@ -1,6 +1,6 @@
 # PCB-04 — Branch converters
 
-> **Superseded by [D-093](../../decisions.md#d-093) (2026-11-06).** Replaced by two bought 5 V buck modules: one for the Pi (5.1 V, ≥ 5 A), one shared by C3, amp, C2 and display. No e-fuses, hold-up or sequencing (`SEQ_EN` and `W20` are deleted). Nothing here is built or ordered; the folder is kept as the record.
+> **Superseded by [D-093](../../decisions.md#d-093) (2026-11-06).** Replaced by two bought Pololu S13V30F5 5 V buck-boost modules ([D-094](../../decisions.md#d-094)): one for the Pi (a non-PD Pi 5 assumes 5 V / 3 A), one shared by C3, amp, C2 and display. No e-fuses, hold-up or sequencing (`SEQ_EN` and `W20` are deleted). Nothing here is built or ordered; the folder is kept as the record.
 
 Five branch converters: C2, base, Pi, display and audio.
 
@@ -36,3 +36,4 @@ Fill this in when design starts: spec sources, pinout, supply and protection, CA
 Record dated entries: decisions raised, revisions, orders, bench results.
 
 - **2026-11-06:** superseded by [D-093](../../decisions.md#d-093) before design started: two bought 5 V buck modules.
+- **2026-11-07:** [D-094](../../decisions.md#d-094): the replacements are two Pololu S13V30F5 5 V buck-boost modules.

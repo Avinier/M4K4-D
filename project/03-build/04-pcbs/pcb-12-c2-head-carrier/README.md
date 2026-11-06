@@ -26,10 +26,11 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 Fill this in when design starts: spec sources, pinout, supply and protection, CAD envelope.
 
-**[D-093](../../decisions.md#d-093) scope (2026-11-06).** Minimal safety: **no TPS3436 watchdog, no `ARM_REQ` output, no `C2_READY_H/L` pair** (PCB-03 and its permit chain are gone). **First, fit-check the bought Waveshare ESP32 Servo Driver** (ESP32 with ST/SC bus-servo interface) in the head's C2 tray; design this carrier only if it doesn't fit. A custom carrier keeps the servo bus half-duplex interface, the RS-422 head link (J9-1 order per D-092) and the display link.
+**[D-093](../../decisions.md#d-093) scope (2026-11-06).** Minimal safety: **no TPS3436 watchdog, no `ARM_REQ` output, no `C2_READY_H/L` pair** (PCB-03 and its permit chain are gone). The bought Waveshare ESP32 Servo Driver was checked and **does not fit** the head's C2 bay: it is 65 × 30 mm against the 18 × 23.5 mm vertical board envelope, and it carries a plain ESP32, not the S3 ([D-094](../../decisions.md#d-094)). So this carrier is designed. A custom carrier keeps the servo bus half-duplex interface, the RS-422 head link (J9-1 order per D-092) and the display link.
 
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
 
 - **2026-11-06:** rescoped by [D-093](../../decisions.md#d-093): watchdog, `ARM_REQ` and READY pair dropped; Waveshare ESP32 Servo Driver fit check comes first.
+- **2026-11-07:** [D-094](../../decisions.md#d-094): Waveshare board doesn't fit the C2 bay; this stays a simplified custom carrier.
