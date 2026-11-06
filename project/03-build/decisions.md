@@ -78,6 +78,7 @@ The central record of every decision and change made during the build phase. New
 | [D-072](#d-072) | 2026-10-30 | Chassis / axle stack: motor-to-axle follow-up (CH-053, CH-055, CH-089; J01, J02, J03; final v1 CAD) | The housing screws go **M3 × 18 → M3 × 16**: an 18 mm screw at its long limit bottomed out in its blind hole before it clamped the cap; the alignment gets an **error budget** of 0.05 mm: the plug becomes a close sliding fit (Ø15.8 → Ø15.96) and the housing screws are tightened only after the set screw is in and the stub has turned; **tightening torques** for every axle screw (0.2–0.6 N·m) and one **check of the face screws after the run-in**; the motor's rear needs no support (closed by calculation); the **encoder plug's direction** joins the motor assumptions, with every direction checked (up is out: PCB-04), and PCB-04 gets an underside keep-out over the motor cables | ACTIVE; `check_axle_stack.py` 27/27 |
 | [D-073](#d-073) | 2026-10-31 | Body / electronics: PCB-09 header audit (CH-084; CA-06) | Preserve I²C1 on labelled SDA/SCL/GND service pads without added pull-ups; fit 4.7 kΩ pull-ups on both UART TX lines; retain GPIO24 and the 100 kΩ fan-gate pull-down | ACTIVE for design inputs; CR-02 OPEN pending boot/overlay and fan-current checks |
 | [D-074](#d-074) | 2026-10-31 | Body / electronics: PCB-09 socket strip (CH-084; final v1 CAD) | Extend only the strip's +Y edge from world Y 20.9 to 22.4 mm so both socket rows carry full copper and edge margin; core Z, bridge and wide area unchanged | ACTIVE; 40-pad edge and static body/chassis checks pass; other mechanical inputs OPEN |
+| [D-093](#d-093) | 2026-11-06 | Architecture: minimal safety and bought modules | Replaces RP-02 `BD-01`: minimal safety, pack charged outside the robot; PCB-02/03/04/05/06/07 bought, PCB-13 deleted; custom boards are PCB-08, 09, 10, 11, 12, 14, 15 | ACTIVE; changes not yet applied ([plan](simplification-plan.md)) |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -1176,7 +1177,7 @@ The review's other proposals are not adopted here. They need physical evidence f
 
 ## D-036
 
-**2026-10-03 · Body / audio microphones (BO-012, BO-005) · ACTIVE; SELECTED, not ordered; HOLD on PCB-06 layout and the array tap test**
+**2026-10-03 · Body / audio microphones (BO-012, BO-005) · SUPERSEDED by [D-093](#d-093)**
 
 **Decision:** the builder locked the body microphone as the **Infineon IM73D122V01XTMA1** (PDM, PG-LLGA-5-4, bottom port), bought from [element14 India, order code 4125831](https://in.element14.com/infineon/im73d122v01xtma1/mems-microphone-pdm-122db-pg-llga/dp/4125831). It is the new row BO-012: four installed, one on each BO-005 (PCB-06) board. Buy six (two reflow spares). The array stays at **four mics**: FRONT_L/R and REAR_L/R.
 
@@ -1212,7 +1213,7 @@ The review's other proposals are not adopted here. They need physical evidence f
 
 ## D-037
 
-**2026-10-03 · Body / microphone mounting (BO-005, BO-006; BO-013, BO-014 new) · ACTIVE; DESIGN in CAD, checks green; HOLD on a printed boss coupon and the PCB-06 layout**
+**2026-10-03 · Body / microphone mounting (BO-005, BO-006; BO-013, BO-014 new) · PARTLY SUPERSEDED by [D-093](#d-093): the mic part and boss design are replaced; the four port positions stay**
 
 **Decision:** the four PCB-06 mic boards mount on the **shell**, not the body frame.
 - Each board lands on a printed boss on the inner skin, coaxial with its side port.
@@ -1286,7 +1287,7 @@ This replaces "screwed to the body frame" in BO-005 and RP-06 [peripheral select
 
 ## D-038
 
-**2026-10-03 · Power boards (PCB-01, PCB-03, PCB-10; CH-017, CH-023, CH-041–CH-043; CH-083–CH-086 new) · ACTIVE; DESIGN; HOLD on TIFPS0629 bench acceptance and MOT3001 winding R/L**
+**2026-10-03 · Power boards (PCB-01, PCB-03, PCB-10; CH-017, CH-023, CH-041–CH-043; CH-083–CH-086 new) · PARTLY SUPERSEDED by [D-093](#d-093): only the DRV8833 facts, the `VM` TVS/bulk and the TIFPS0629 acceptance stand**
 
 **Why:** the whole-system power review found that the RP-02 power-board spec still assumes the custom PCB-01, Pololu DRV8874 carriers and the Pololu #4804 motor. The build uses the bought TIFPS0629 (D-019), Adafruit #3297 DRV8833 boards (D-019) and the MOT3001-6V230RPM (D-003). RP-02 is read-only, so the build deltas now live in [04-pcbs/power-boards.md](04-pcbs/power-boards.md).
 
@@ -1393,7 +1394,7 @@ The document also holds the full wire list with estimated lengths, every pinout,
 
 ## D-040
 
-**2026-10-04 · Charge path: inlet board PCB-13 and the PCB-02 charger block (CH-041, HN-003; BO-015–BO-017 registered) · ACTIVE; DESIGN; HOLD on schematic capture, the STUSB4500 NVM image and bench CP-01 to CP-14**
+**2026-10-04 · Charge path: inlet board PCB-13 and the PCB-02 charger block (CH-041, HN-003; BO-015–BO-017 registered) · SUPERSEDED by [D-093](#d-093)**
 
 **Decision:** the charge path is specified in [04-pcbs/charge-path.md](04-pcbs/charge-path.md). It replaces RP-02 board-specs §4.1 "Charge inlet" and "Input switch" and corrects §4.5.1. Builder request (2026-10-04): design the inlet properly and close the recharging circuit.
 
@@ -1461,7 +1462,7 @@ The chassis model's Layout 02 body copy (`body_chassis_model.py`) still has the 
 
 ## D-041
 
-**2026-10-04 · Body / power button: the rear mushroom is the power button and there is no E-stop (BO-018 registered; CH-041, CH-042, CH-046, HN-001, HN-004; W40, J2-9 added; W22, J3-7 removed; W38, J10-11 not fitted) · ACTIVE; DESIGN; HOLD on the received part's fit in the well and bench PB-01 to PB-06**
+**2026-10-04 · Body / power button: the rear mushroom is the power button and there is no E-stop (BO-018 registered; CH-041, CH-042, CH-046, HN-001, HN-004; W40, J2-9 added; W22, J3-7 removed; W38, J10-11 not fitted) · PARTLY SUPERSEDED by [D-093](#d-093): the mushroom stays and drives a bought power switch; the `LTC2954` latch, `J2-9` and the `SYSTEM_ARM` reset are gone**
 
 **Decision:** Makad has **no E-stop**. The red mushroom in the rear-panel well is now the **power button**. Builder (2026-10-04): "remove the newly made power button, and rewire the red mushroom to be the power button, instead of the estop button".
 
@@ -2728,7 +2729,7 @@ So a full press could drive the magnet into U1.
 
 ## D-066
 
-**2026-10-26 · Body / audio: PCB-06 L/R strap, mic source and sound-hole ring (BO-005, BO-012) · ACTIVE; PCB-06 board set up, placement next**
+**2026-10-26 · Body / audio: PCB-06 L/R strap, mic source and sound-hole ring (BO-005, BO-012) · SUPERSEDED by [D-093](#d-093)**
 
 **Why.** Freezing PCB-06's stage-1 inputs ([PCB-06 README](04-pcbs/pcb-06-pdm-mic/README.md#inputs)) left two choices open:
 
@@ -2760,7 +2761,7 @@ So a full press could drive the magnet into U1.
 
 ## D-067
 
-**2026-10-27 · Body / audio: PCB-05 inputs, mounting and CR-01 (BO-002, BO-006, BO-064 new; final v1 CAD) · ACTIVE; PCB-05 rev A designed, 4 layers (amended at routing), fit check passes**
+**2026-10-27 · Body / audio: PCB-05 inputs, mounting and CR-01 (BO-002, BO-006, BO-064 new; final v1 CAD) · PARTLY SUPERSEDED by [D-093](#d-093): PCB-05 is replaced by bought breakouts; CR-01 (GPIO22 SDI1, GPIO23 `AMP_SD`) stands**
 
 **Why.** Freezing PCB-05's stage-1 inputs ([PCB-05 README](04-pcbs/pcb-05-audio-front-end/README.md#inputs)) left the open items of [audiosystem.md §6](02-body/v1/research/audiosystem.md#6-open-items-for-the-pcbs), two new ones from the datasheets, and one from the CAD:
 
@@ -2860,7 +2861,7 @@ Replacing PCB-10's placeholder with its released KiCad STEP exposed JP1's two pi
 
 ## D-069
 
-**2026-10-29 · Body / electronics: PCB-13 charge inlet inputs (BO-015; final v1 CAD) · ACTIVE; `check_pcb13_relief.py` passes; PCB-13 inputs frozen, schematic next**
+**2026-10-29 · Body / electronics: PCB-13 charge inlet inputs (BO-015; final v1 CAD) · SUPERSEDED by [D-093](#d-093)**
 
 **Why.** Freezing PCB-13's stage-1 inputs ([PCB-13 README](04-pcbs/pcb-13-charge-inlet/README.md#inputs)) against the makers' datasheets and the built droid CAD found:
 
@@ -3358,7 +3359,7 @@ same 0.5 mm sample grid; six explicit boundary/thin-feature cases matched the or
 
 ## D-082
 
-**2026-11-02 · PCB-02 fresh-arm and permit-loss feedback (CH-041/CH-042, W21/W23b) · ACTIVE; PCB-02/03/C2 circuit and harness build checks open**
+**2026-11-02 · PCB-02 fresh-arm and permit-loss feedback (CH-041/CH-042, W21/W23b) · SUPERSEDED by [D-093](#d-093)**
 
 **Why.** PCB-02 must set `SYSTEM_ARM` only on a fresh C2 request and clear it on the D-041 button press or loss of any other motor-permit term. The frozen W23b sideband had no fresh-arm request, and W21 carried `SYSTEM_ARM` out but no permit-loss feedback. `MOTOR_PRESENT` means installation status and cannot stand in for all permit terms. The latch was therefore not implementable as registered.
 
@@ -3370,7 +3371,7 @@ same 0.5 mm sample grid; six explicit boundary/thin-feature cases matched the or
 
 ## D-083
 
-**2026-11-02 · PCB-02 upper +Y mount-hole correction against J2-9 courtyard · ACTIVE; populated-board fit pending**
+**2026-11-02 · PCB-02 upper +Y mount-hole correction against J2-9 courtyard · SUPERSEDED by [D-093](#d-093)**
 
 The real stock JST GH2 side-entry courtyard at D-041's fixed J2-9 centre (board +Y edge, Z 88.6 mm) intersects the 3.5 mm keepout around the frame mount's original upper +Y hole at Y 20.5, Z 91.5 mm. The first frame checker used CAD plug-reserve blocks and did not include this footprint courtyard. A planted check of the old hole reproduces the collision.
 
@@ -3380,7 +3381,7 @@ The real stock JST GH2 side-entry courtyard at D-041's fixed J2-9 centre (board 
 
 ## D-084
 
-**2026-11-03 · PCB-02 one-face packing at 50 × 36 mm (CP-OI-15) and J2-8 tail over PCB-13 · ACTIVE; routing and populated-STEP fit pending**
+**2026-11-03 · PCB-02 one-face packing at 50 × 36 mm (CP-OI-15) and J2-8 tail over PCB-13 · SUPERSEDED by [D-093](#d-093)**
 
 **Why.** A KiCad fit study placed the real footprints of J2-1/J2-3/J2-8/J2-9 and the four top-entry GH headers at their CAD positions, with the four 3.5 mm D-083 mount keepouts. That left 971 mm² of front face for 697 mm² of other courtyards (72% fill before routing). Separately, the stock right-angle Micro-Fit 3.0 at J2-8 (KiCad J1) must put its inboard pin 2 (GND) inside the back-face zone over PCB-13, where tails longer than 1.0 mm are not allowed (D-040).
 
@@ -3395,7 +3396,7 @@ The real stock JST GH2 side-entry courtyard at D-041's fixed J2-9 centre (board 
 
 ## D-085
 
-**2026-11-03 · PCB-02 smaller packages for routing room (CP-OI-15) · ACTIVE; footprint placement, routing and procurement checks pending**
+**2026-11-03 · PCB-02 smaller packages for routing room (CP-OI-15) · SUPERSEDED by [D-093](#d-093)**
 
 **Why.** After the D-084 placement and three routing passes, 71 PCB-02 connections remained, almost all logic signals. The pads in the top band and the strip under J6/J3 had no room for escape vias, while B.Cu stayed largely free. A dual flip-flop to merge U5/U9 gives no saving: SN74LVC2G74 is still a single flip-flop, and the dual with preset/clear (SN74LVC74A) is a 14-pin package.
 
@@ -3417,7 +3418,7 @@ The 2N7002BK/BSS84AK FETs stay in SOT-23; Nexperia lists 2N7002BKW as not for de
 
 ## D-086
 
-**2026-11-03 · PCB-02 two-sided assembly: small logic on the back face (CP-OI-15) · ACTIVE; back placement, routing and fab quote pending**
+**2026-11-03 · PCB-02 two-sided assembly: small logic on the back face (CP-OI-15) · SUPERSEDED by [D-093](#d-093)**
 
 **Why.** After D-085's package shrink, the front of the one-sided 50 × 36 mm board still had no escape channels around the logic (README "Logic re-placement after D-085"). With a 0.2 mm keep-clear margin, 16 parts landed 10–25 mm from their ICs. The compact placement left 128 connections with no legal via spots.
 
@@ -3432,7 +3433,7 @@ Outside them, slabs of 1.0–3.0 mm behind the back face clear every body/chassi
 
 ## D-087
 
-**2026-11-03 · PCB-02 back face over PCB-13: 0402 R/C allowed (amends D-040/D-084 "bare face") · ACTIVE**
+**2026-11-03 · PCB-02 back face over PCB-13: 0402 R/C allowed (amends D-040/D-084 "bare face") · SUPERSEDED by [D-093](#d-093)**
 
 **Why.** U1's 0.4 mm-pitch support pins (TS, ILIM, BATP, BTST2, PROG, CHG_INT, SDRV on the left face; QON, CE, SCL, SDA on top) cannot escape on the front. Fab-neutral vias (0.67/0.35 mm, 0.31 mm to other copper, D-062) need about 1 mm spacing, and the only space behind U1 is the PCB-13 facing zone.
 
@@ -3442,7 +3443,7 @@ Outside them, slabs of 1.0–3.0 mm behind the back face clear every body/chassi
 
 ## D-088
 
-**2026-11-03 · PCB-02: BQ25798 CE tied low, QON left open (routing escape) · ACTIVE**
+**2026-11-03 · PCB-02: BQ25798 CE tied low, QON left open (routing escape) · SUPERSEDED by [D-093](#d-093)**
 
 **Why.** On U1's top face, SDA and SCL can escape through the gaps between J7's pads on two 0.16 mm track levels. CE, QON and the two GND pins (10, 11) need the same gaps and their paths cross, and D-087 kept fab-neutral vias.
 
@@ -3452,7 +3453,7 @@ Outside them, slabs of 1.0–3.0 mm behind the back face clear every body/chassi
 
 ## D-089
 
-**2026-11-04 · PCB-02 uses JLCPCB-class design rules instead of the fab-neutral set (amends D-062 for this board) · ACTIVE**
+**2026-11-04 · PCB-02 uses JLCPCB-class design rules instead of the fab-neutral set (amends D-062 for this board) · SUPERSEDED by [D-093](#d-093)**
 
 **Why.** With fab-neutral vias (0.67/0.35 mm, 0.31 mm via-to-other copper, D-062), 39 of the 104 remaining PCB-02 endpoints had no legal via spot. The back face could not open wider channels: only 45 of 61 logic parts fit with a 0.5 mm margin.
 
@@ -3472,7 +3473,7 @@ Existing 0.67 mm vias stay where placed. The other boards keep D-062.
 
 ## D-090
 
-**2026-11-06 · PCB-02: two 0 Ω layout links (R41 STAT, R42 CP_DIV) · ACTIVE**
+**2026-11-06 · PCB-02: two 0 Ω layout links (R41 STAT, R42 CP_DIV) · SUPERSEDED by [D-093](#d-093)**
 
 **Why.** After hand rip-up and re-placement, two PCB-02 connections remained with no legal path. STAT runs from J5.4 to U1.1; KILL's B.Cu column (R11 → R10 → TP6) and the J7 fan's In2 runs wall off J5.4. CP_DIV's divider (R16/R17, Q2) is south of the J5/J6 header, and its loads (U3, Q3, Q4, R40) are north of it; every layer between them is used.
 
@@ -3489,7 +3490,7 @@ R41 sits inside the D-087 back-face zone; it is a 0402, so the zone allows it. B
 
 ## D-091
 
-**2026-11-06 · PCB-02: bench pads J4 replaced by three test pads beside U1 (clears the 10 A strip) · ACTIVE**
+**2026-11-06 · PCB-02: bench pads J4 replaced by three test pads beside U1 (clears the 10 A strip) · SUPERSEDED by [D-093](#d-093)**
 
 **Why.** Q1 carries the full operating current, about 10 A peak (power-boards.md §4). Its only copper corridor from J2 is the board's west strip. J4, the 1×4 bench pads at the west edge, pulled SDA_BENCH, SCL_BENCH and CHG_INT runs straight across that strip, and BATBUS was necked to 1.51 mm on In2 and 0.61 mm on B. A 1×4 row near U1 cannot be routed planar: SDA and SCL would have to cross inside U1's thermal-via field.
 
@@ -3546,3 +3547,56 @@ R41 sits inside the D-087 back-face zone; it is a 0402, so the zone allows it. B
   - the socket model sits on the Pi header plastic (−0.03 mm, model 8.5 mm);
   - every part and plug clears the robot by 0.2 mm;
   - the real parts slide in with the tray.
+
+## D-093
+
+**2026-11-06 · Architecture: minimal safety, off-board charging, bought power and audio modules (replaces RP-02 `BD-01`; CH-021, CH-025, CH-041–CH-043, CH-083, CH-086, BO-002–BO-005, BO-007, BO-012–BO-017) · ACTIVE; nothing applied to BOM, CAD, harness or board folders yet; HOLD on module selection and India stock**
+
+**Why.** Fourteen custom boards, each needing fab, assembly, bring-up and possible revisions, is too slow for v1. The count and almost all of the bring-up risk came from the RP-02 safety architecture, not from the robot's needs. That architecture asks for a hardware permit chain with an LTC4368 surge stopper, latching e-fuses with hold-up and sequencing, a hostless JEITA charger, watchdogs on both carriers, a fresh-arm latch and an `ENERGY_OK` comparator. RP-02 `BD-01` made the power boards custom because no module gives that behaviour. [constraints.md](../00-foundation/constraints.md) asks for safety "proportional to Makad's plausible hazards", which for a ~1 kg desk robot with 1.8 A-stall gearmotors, small servos, a fused 2S1P pack and a bought protection board is much less. The full review and change map are in [simplification-plan.md](simplification-plan.md).
+
+**Decision** (builder, 2026-11-06):
+
+1. **Minimal, scrappy safety.** No permit chain, arm latch, e-fuses, hold-up, sequencing, current comparators or C2 watchdog. **Replaces RP-02 `BD-01`** for the build: bought modules may be installed in the robot, and a custom board is made only where nothing bought fits the geometry or the interface. Kept: PCB-01 TIFPS0629 ([D-019](#d-019)), the 15 A fuse, the AC72ABD cell breaker, the PCB-10 watchdog and AND gate that hold both DRV8833 `nSLEEP` low, and the SMBJ8.5A + bulk at each #3297 `VM` (power-boards §2.2).
+2. **The pack is charged outside the robot** by a bought 2S balance charger with a Li-ion 4.20 V/cell mode, through a rear-panel **charge port + balance port** (XT30-class + 3-pin). Modes are `OFF` and `ON`; charging happens only in `OFF` (an operating rule). This closes foundation item CON-TBD-09.
+3. **Bought, not designed:** PCB-02 (pushbutton power switch module + INA226/219 monitor; the charger is gone), PCB-03 (two buck-boost modules), PCB-04 (two 5 V bucks), PCB-05 (MAX98357A breakout, BO-007 promoted from bench to installed), PCB-06 (four I²S mic breakouts with an L/R pin, INMP441 class) and PCB-07 (SPI 6-axis breakout on the existing `J10-7` pinout). **PCB-13 is deleted.**
+4. **Custom boards that remain:** PCB-08, 09, 10, 11, 12, 14, 15. PCB-09, 10, 11 and 15 keep rev A with no re-spin. PCB-08 drops the permit/status sideband and gains the yaw servo plug (`+11V1_YAW`, GND, `SERVO_DATA`; was PCB-03 `J3-5`). PCB-12 drops the TPS3436 watchdog, `ARM_REQ` and the READY pair. PCB-14 is unchanged. Boards already designed keep their connectors; each module gets a pigtail ending in the connector the board expects.
+5. **Sub-decisions:**
+   - **Power button:** press-to-on, firmware off. The button is also read by a GPIO; firmware shuts the Pi down, then drives the switch's OFF input. `J-PK` stays the hard isolator.
+   - **Monitor:** read by the Pi.
+   - **5 V bucks:** two. One for the Pi (5.1 V, ≥ 5 A); one shared by C3, amp, C2 and display.
+   - **Pack NTC** (CH-025): dropped.
+   - **PCB-12:** fit-check the Waveshare ESP32 Servo Driver in the head first; design the simpler carrier only if it doesn't fit.
+   - **Mics:** four, on two I²S lanes (SDI0 front pair, SDI1 rear pair). Spatial hearing (`CAND-01`) stays possible. Needs a custom overlay adapted from the HiFiBerry DAC8x/ADC8x one, on its own GPIO 18–22 group, and an audio hub with a series resistor per clock branch.
+   - **Yaw rail:** adjustable buck-boost set to 11.1 V.
+   - **IMU mount:** a printed adapter on the existing J15A holes.
+
+**Supersedes:**
+- RP-02 `BD-01`, `BD-05`, `BD-07`, `BD-09`, `BD-11`, `BD-13` and `brownout-restart-contract.md`, for the build. `BD-10` stays on PCB-10 only.
+- [D-036](#d-036), [D-040](#d-040), [D-066](#d-066), [D-069](#d-069), [D-082](#d-082) to [D-091](#d-091).
+- In part: [D-037](#d-037) (the four mic port positions stay), [D-038](#d-038) (DRV8833 facts, `VM` TVS/bulk and TIFPS0629 acceptance stand), [D-041](#d-041) (the mushroom stays and drives the power switch) and [D-067](#d-067) (CR-01 stands).
+
+**Amends:**
+- [D-035](#d-035): the bench amp is the installed amp.
+- [D-047](#d-047): yaw rail from a bought module at 11.1 V, servo current limit below the module's 2 A.
+- [D-064](#d-064): the design batch is PCB-08, 12 and 14.
+- [D-068](#d-068): PCB-10 `J10-12` unused; a series Schottky in `W11` against USB back-feed.
+
+The PCB-02, 05, 06 and 13 KiCad work is archived in place as v2 reference.
+
+**Changed now.** This ledger entry, and the PCB-09 branch merged to `main` (D-092 kept). [simplification-plan.md](simplification-plan.md) holds the change map by area (§4).
+
+**Unverified / risks** (plan §5):
+- The Pololu Big Pushbutton Power Switch MP is about 8 A continuous against a ~10.2 A peak; pick HP or prove MP on the bench.
+- A balance-lead break must fit the ≈ 8 mm pack channel (H-07).
+- C3 USB can back-feed a buck output through `J10-1`.
+- The four-channel overlay is unproven on RP1.
+- I²S clocks fan out to five loads.
+- Pololu stock in India is patchy (D-066 source rule).
+- Module volume in the PCB-03/04 bays.
+
+**Next.**
+1. Select modules and check India stock.
+2. CAD in `final/v1/cad`: bays, rear panel, pack channel, mic/amp mounts, IMU adapter, mass/CoM.
+3. Rewrite the harness and update the docs.
+4. Design PCB-08, 12 (after the Waveshare fit check) and 14; one fab order for the seven boards.
+5. Bench: TIFPS0629 acceptance, the four-mic overlay with loose breakouts before the shell is printed, then tests N1–N11.
