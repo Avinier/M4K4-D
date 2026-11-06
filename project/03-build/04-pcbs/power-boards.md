@@ -1,5 +1,7 @@
 # Power boards — build deltas (PCB-01 to PCB-04)
 
+> **Superseded by [D-093](../decisions.md#d-093) (2026-11-06), except §2.1, §2.2 and §3.** PCB-02, PCB-03 and PCB-04 are replaced by bought modules (a pushbutton power switch, a voltage/current monitor, two buck-boosts and two 5 V bucks), and the pack is charged outside the robot. These still stand: the DRV8833 facts (§2.1), the SMBJ8.5A + 100 µF + 0.1 µF at each #3297 `VM` (§2.2) and the TIFPS0629 bench acceptance (§3). The rest of this page is kept as the record of the RP-02-based design. The new architecture is in [simplification-plan.md §3](../simplification-plan.md#3-system-architecture-after-the-change).
+
 | Field | Value |
 |---|---|
 | Status | Working design, 2026-10-03 ([D-038](../decisions.md#d-038)). No schematic, layout or bench result |

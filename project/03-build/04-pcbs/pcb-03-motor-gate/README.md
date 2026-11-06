@@ -1,5 +1,7 @@
 # PCB-03 — Motor gate and head 5 V rail
 
+> **Superseded by [D-093](../../decisions.md#d-093) (2026-11-06).** Replaced by two bought buck-boost modules (head pitch/roll 5.5 V, yaw 11.1 V). There is no motor gate or permit chain; drive feeds run from the switched bus with the SMBJ8.5A and bulk at each #3297 `VM`. The yaw servo plug moves to PCB-08. Nothing here is built or ordered; the folder is kept as the record.
+
 Motor gate, permit chain (0 Ω link, no E-stop loop), head 5 V rail and the DRV8833 drive feeds.
 
 | | |
@@ -37,3 +39,5 @@ W21 `J3-6` is now GH8: pins 1–6 retain GND, `CHARGE_ABSENT`, `ENERGY_OK`, `SYS
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
+
+- **2026-11-06:** superseded by [D-093](../../decisions.md#d-093) before design started: bought buck-boost modules; yaw servo plug moves to PCB-08.

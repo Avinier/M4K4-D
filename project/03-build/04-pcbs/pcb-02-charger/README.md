@@ -1,5 +1,7 @@
 # PCB-02 — Charger, latch and pack sense
 
+> **Superseded by [D-093](../../decisions.md#d-093) (2026-11-06).** Replaced by bought modules: a pushbutton power switch and an INA226/219 voltage/current monitor. The pack is charged outside the robot, so there is no charger. The routed layout below is archived as reference for a later in-robot charger. Nothing here is built or ordered; the folder is kept as the record.
+
 BQ25798 2S charger, on/off latch, pack sense, `ENERGY_OK` and the power-button input `J2-9`.
 
 | | |
@@ -346,3 +348,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-11-03 — Fit study and D-084**: builder chose to keep 50 × 36 mm with one-sided assembly after slimming C24/C26–C29 and moving J4/TP1–TP15 to back-face bare pads; J2-8 tails trimmed to ≤ 1.0 mm with a keepout notch. All 119 footprints placed; front fill 64%; routing next.
 
 - **2026-10-28 — Charge-inlet interface fixed by PCB-13** ([PCB-13 inputs](../pcb-13-charge-inlet/README.md#interface-to-pcb-02-fixed-here)): `J2-8` pin 1 `VSNK`, pin 2 `GND` (as 05-harness §5); `VSNK` 9/15 V, 20 V on a blank NVM, 28.35 V surge maximum; 1.38 A normal, 3 A design. **PCB-02's −X face must stay bare over PCB-13** (world Y −14…14, Z 56.5…71.5, 3.9 mm away): no parts there and no through-hole tails over 1.0 mm.
+- **2026-11-06:** superseded by [D-093](../../decisions.md#d-093): bought power switch + monitor; charging moved outside the robot. Routed layout archived, no outputs released.

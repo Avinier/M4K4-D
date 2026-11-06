@@ -1,5 +1,7 @@
 # PCB-06 (×4) — PDM microphone board
 
+> **Superseded by [D-093](../../decisions.md#d-093) (2026-11-06).** Replaced by four bought I²S mic breakouts with an L/R pin (INMP441 class), two per lane on SDI0/SDI1. The four shell port positions (D-037) stay; the bosses are redesigned for the breakout. Rev A is archived. Nothing here is built or ordered; the folder is kept as the record.
+
 One IM73D122 bottom-port PDM microphone per board; four boards form the array.
 
 | | |
@@ -250,3 +252,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-27:** lesson 5. Board STEP exported with parts; new fit check `final/v1/cad/check_pcb06_fit.py` PASS at all four positions (MK1 0.96 mm under the upper rail on the way down, seat 0.045 mm, holes on the port and pilots). Rev A outputs in `fab/revA/`: one origin, two assembly variants, no silkscreen. Stage 1 done.
 
 - **2026-11-01:** rev-A KiCad STEP replaces the board/component placeholder in the final inspection and presentation assemblies. Mounting hardware, mated plugs and cable reserves are retained; DNP models are omitted according to the layout. Shared [integration verification](../../final/v1/cad/pcb-integration-report.json) records the nine-board placement/static check and the corrected PCB-10 JP1/upright clash. This completes CAD replacement, not procurement or physical acceptance.
+- **2026-11-06:** superseded by [D-093](../../decisions.md#d-093): four bought I²S mic breakouts; rev A archived, not ordered.

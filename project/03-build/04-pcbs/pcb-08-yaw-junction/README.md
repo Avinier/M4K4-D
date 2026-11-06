@@ -2,7 +2,7 @@
 
 Stationary end of the clock spring: body-side power and signal connectors to the cassette FFCs (`J8-6`, `J8-7`).
 
-**D-082 interface:** `J8-5` pin 8 is now `ARM_REQ` from C2, carried through the 22-pin W43 sideband FFC and PCB-14 to PCB-02 `J2-6` pin 8. It is a new active conductor, not a spare. Freeze its FFC pin and adjacent signal return at PCB-08/12 design; prove continuity and no cross-connection through both joiners and the yaw sweep before motor arming is allowed.
+**[D-093](../../decisions.md#d-093) scope (2026-11-06).** PCB-02 and PCB-03 are bought modules now, so the `W23a` (`J8-3`) and `W23b` (`J8-5`) permit and status cables and the D-082 `ARM_REQ` conductor are gone. PCB-08 **gains the yaw servo plug** that was PCB-03 `J3-5`: Feetech 5264-3P, 1 GND, 2 `+11V1_YAW` (from the bought yaw buck-boost, 11.1 V), 3 `SERVO_DATA` (from C2 through W43). It keeps `J8-1` (head power from the bought modules), `J8-4` (RS-422 head link, J9-1 order per D-092) and the `J8-6`/`J8-7` cassette FFCs. Reassign the freed W43 conductors at design.
 
 | | |
 |---|---|
@@ -31,3 +31,5 @@ Fill this in when design starts: spec sources, pinout, supply and protection, CA
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
+
+- **2026-11-06:** rescoped by [D-093](../../decisions.md#d-093): loses the `W23a`/`W23b` permit and status sideband and `ARM_REQ`; gains the yaw servo plug.

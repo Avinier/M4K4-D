@@ -1,5 +1,7 @@
 # PCB-07 — Base IMU
 
+> **Superseded by [D-093](../../decisions.md#d-093) (2026-11-06).** Replaced by a bought SPI 6-axis IMU breakout at 3.3 V that matches PCB-10's `J10-7` pinout (+3V3, GND, SCLK, MOSI, MISO, CS, INT1, INT2), on a printed adapter on the existing J15A holes. Nothing here is built or ordered; the folder is kept as the record.
+
 ICM-42688-P IMU for the base (HOLD: sensor and SPI vs I²C interface).
 
 | | |
@@ -29,3 +31,5 @@ Fill this in when design starts: spec sources, pinout, supply and protection, CA
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
+
+- **2026-11-06:** superseded by [D-093](../../decisions.md#d-093) while on HOLD: bought SPI IMU breakout on `J10-7`, printed adapter on J15A.

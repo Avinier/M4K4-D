@@ -2,8 +2,8 @@
 
 | Field | Value |
 |---|---|
-| Status | **PLAN, 2026-11-06.** Builder decisions taken; this page reviews them and maps every change they cause. Nothing in the ledger, BOM, CAD, harness or board folders has been changed yet. The changes are applied level by level after review |
-| Ledger entry | To be written as the next free D-number: D-093 (D-092 is used on the unmerged `pcb-09-c0-link-adapter` branch) |
+| Status | **PLAN, 2026-11-06.** Builder decisions D1–D6 and sub-decisions Q1–Q9 taken (§6); this page reviews them and maps every change they cause. The changes are applied level by level; §7 tracks which levels are done |
+| Ledger entry | **[D-093](decisions.md#d-093)**, written 2026-11-06 (Level 0 done; the PCB-09 branch is merged to `main`) |
 | Print state | Nothing is printed: [04-print](../04-print/README.md) phase 0 (access) is still open. Every CAD change below lands before any part is printed |
 
 ---
@@ -16,7 +16,7 @@
 | D2 | **Charge the pack outside the robot** with a bought balance charger | **Sound.** It closes foundation item CON-TBD-09 ("charging method and whether operation while charging is allowed"): an off-board balance charger, with no operation while charging. CON-10 (battery-powered, untethered, ≥ 20 min) is unaffected. The only physical risk is fitting the balance lead in the pack channel (§5 R3) |
 | D3 | **PCB-03, PCB-04 and PCB-07 are bought** | **Sound.** They are the hardest power board, the second-largest and a HOLD board. Watch: the bays' volume, the yaw rail's margin and USB back-feed from the C3 (§5) |
 | D4 | **PCB-02 is bought**: the simplified charging leaves only the on/off latch and pack sense | **Sound.** It is not one module but three jobs: on/off → pushbutton power switch module; pack sense → monitor module; charger → gone (D2). It discards the most work (D-082 to D-091 and the routing), but also the riskiest bring-up |
-| D5 | **PCB-05 bought; PCB-06 bought too** | **Sound, with one choice to make (§6 Q6).** It removes the WLCSP assembly with X-ray. PCB-09 needs no re-spin: its `J9-3` already carries the I²S signals a bought amp and I²S mics need. You lose PCB-05's job as the audio wiring hub, which becomes harness splices. Spatial hearing is only a Candidate (`CAND-01`, [v1-scope.md](../00-foundation/v1-scope.md)), so a 2-mic setup meets Core |
+| D5 | **PCB-05 bought; PCB-06 bought too** | **Sound. Q6 chose 4 I²S mics on two lanes, which keeps the spatial-hearing candidate.** It removes the WLCSP assembly with X-ray. PCB-09 needs no re-spin: its `J9-3` already carries the I²S signals a bought amp and I²S mics need. You lose PCB-05's job as the audio wiring hub, which becomes a small perfboard hub or splices. Its SDI0/SDI1 lanes carry the four mics as two stereo pairs, as PCB-05 did. Spatial hearing (`CAND-01`, [v1-scope.md](../00-foundation/v1-scope.md)) stays possible |
 | D6 | **PCB-13 is gone** | Follows from D2 |
 
 ---
@@ -30,14 +30,14 @@
 | PCB-03 motor gate, head/yaw rails | Not started | **Bought modules** (two buck-boosts) | — |
 | PCB-04 branch converters | Not started | **Bought modules** (2–4 bucks) | — |
 | PCB-05 audio front end | Rev A | **Bought** MAX98357A breakout (BO-007 promoted) | — |
-| PCB-06 ×4 mics | Rev A | **Bought** I²S mic breakouts (2 or 4, Q6) | — |
+| PCB-06 ×4 mics | Rev A | **Bought**: 4 I²S mic breakouts on two lanes (Q6) | — |
 | PCB-07 base IMU | HOLD | **Bought** SPI 6-axis breakout | — |
 | PCB-13 charge inlet | Rev A | **Deleted** | — |
 | PCB-08 yaw junction | Not started | **Custom, simpler**: drops the permit/status sideband, **gains the yaw servo plug** (was PCB-03 `J3-5`) | Design |
 | PCB-09 C0 link adapter | Rev A (branch) | **Kept, no change**; merge the branch | Procure |
 | PCB-10 C3 carrier | Rev A | **Kept, no re-spin.** `J10-12` unused; its watchdog + AND gate become the motor kill | Procure |
 | PCB-11 status LED | Rev A | **Kept** | Procure |
-| PCB-12 C2 head carrier | Not started | **Custom, simpler** (no watchdog, `ARM_REQ` or READY pair), or the Waveshare ESP32 servo board (Q5) | Design or fit check |
+| PCB-12 C2 head carrier | Not started | **Fit-check the Waveshare ESP32 Servo Driver first** (Q5); else a simpler custom carrier (no watchdog, `ARM_REQ` or READY pair) | Fit check, then design if needed |
 | PCB-14 ×3 yaw joiners | HOLD | **Kept custom** (passive; ZIF pick still open) | Design |
 | PCB-15 nose Hall | Rev A | **Kept** | Procure |
 
@@ -166,7 +166,7 @@ These are system records, outside `03-build`. The [03-build rule](README.md) say
 | `W23a` | **Deleted**; `SERVO_DATA` for yaw now stays on PCB-08 |
 | `W40` power button | To the power switch's button input |
 | `W43` sideband FFC | Fewer conductors; reassign at PCB-08/12 design |
-| `W26` audio (`J9-3` GH10) | **Changed**: `J9-3` → fan-out splices → amp breakout and the mic breakouts. BCLK, LRCLK, 3V3 and GND go to every mic; SD goes per lane; SDO0 and `AMP_SD` go to the amp |
+| `W26` audio (`J9-3` GH10) | **Changed**: `J9-3` → a small audio hub (perfboard or splices) → amp breakout and the four mic breakouts. BCLK, LRCLK, 3V3 and GND go to every mic, with a 33–100 Ω series resistor per clock branch at the hub (as PCB-05 had); SDI0 from the front pair, SDI1 from the rear pair; SDO0 and `AMP_SD` go to the amp |
 | `W27` mic leads | **Changed**: 6 wires per I²S mic (VDD, GND, SCK, WS, SD, L/R strap) instead of the PDM GH4 |
 | `W28` speaker | To the breakout's screw terminal |
 | **New** I²C to the monitor | Monitor → the Pi (Q2) |
@@ -196,7 +196,7 @@ These are system records, outside `03-build`. The [03-build rule](README.md) say
 | PCB-03 bay (above the tub) | Remove the placeholder; place two buck-boost modules. Re-check the −Y head riser and `HARNESS_*` reserves |
 | PCB-04 bay (under the compute tray, 70 × 44, Z 60–77) | Remove the placeholder; place 2–4 bucks. Keep the D-072 underside keep-out over the motor cable reserves |
 | PCB-05 place (above the Pi, three M2 SMT spacers on frame bosses, D-067) | Swap to the amp breakout. Reuse one or two of the D-067 frame bosses with a printed adapter, or move the amp near the speaker |
-| Mic bosses (D-037, BO-013/014) and sound-hole rings (D-066) on the shell | Redesign for the I²S breakout's outline and port. If Q6 picks 2 mics, fill or drop two ports |
+| Mic bosses (D-037, BO-013/014) and sound-hole rings (D-066) on the shell | Keep all four D-037 port positions (Q6); redesign the bosses for the I²S breakout's outline and port |
 | Rear panel | Remove the PCB-13 pad and USB4140 pocket (`PCB13_RELIEF`); add the charge port and balance port cut-outs. The mushroom well (D-041) is unchanged |
 | Enclosure fan vs mic ports (D-043) | Re-check once the mic positions are final |
 | Mass | New mass rows and a re-run of the CoM / `a_tip` check (D-026 margin 1.763 against 1.582) |
@@ -240,7 +240,7 @@ These are system records, outside `03-build`. The [03-build rule](README.md) say
 | CH-021 | Bought SPI IMU breakout |
 | CH-046 IDEC E-stop | Retire if still open (dead since D-041) |
 | CH-083, CH-086 | Rescoped (§4.3) |
-| **New** | Pushbutton power switch; 2 buck-boosts; Pi buck; 1–2 small bucks; INA226/219; 2S balance charger; charge port (XT30-class panel pair); balance port and break; 2 or 4 I²S mic breakouts; Schottky for `W11`; 2 × SMBJ8.5A + 2 × 100 µF if not already listed |
+| **New** | Pushbutton power switch; 2 buck-boosts; Pi buck; 1 shared 5 V buck; INA226/219; 2S balance charger; charge port (XT30-class panel pair); balance port and break; 4 I²S mic breakouts with an L/R select pin (INMP441 class); audio hub perfboard; Schottky for `W11`; 2 × SMBJ8.5A + 2 × 100 µF if not already listed |
 | Unchanged | CH-017, CH-023, CH-024, CH-027–CH-029, BO-001, BO-018, CH-044, CH-045, CH-064, CH-084, CH-085, BO-062 |
 
 ### 4.11 Firmware and software
@@ -254,7 +254,7 @@ These are system records, outside `03-build`. The [03-build rule](README.md) say
 | Power-up | `SEQ_EN` latch | None; everything starts together (test N7) |
 | Motor permission | Permit chain | C3 `nSLEEP` + the PCB-10 watchdog/AND gate (already designed) |
 | Servo overload | `HEAD_OC` comparator | Feetech limit registers and load reads |
-| Audio | Custom 5-pin I²S0 overlay with two capture lanes (PCB-09 notes) | With 2 mics on one lane: the standard I²S0 group (GPIO 18–21) and a stock overlay for I²S mics + MAX98357A (the Google AIY Voice HAT pattern; **confirm on Pi 5**). With 4 mics: the custom overlay is still needed |
+| Audio | Custom 5-pin I²S0 overlay with two capture lanes (PCB-09 notes) | **Still needed (Q6: 4 mics).** Define a five-pin I²S0 group on GPIO 18–22, keep GPIO 23/24 out of it, and bind one clock with four capture channels on SDI0/SDI1 plus SDO0 playback (PCB-09 README, audio overlay row). This is the main software risk of the audio path |
 
 ### 4.12 Tests
 
@@ -274,7 +274,8 @@ These are system records, outside `03-build`. The [03-build rule](README.md) say
 | N6 | Low battery | Firmware stops and shuts down before the pack trips |
 | N7 | Start together | Pi, C2, C3 and display start cleanly, 20 cycles |
 | N8 | C3 USB back-feed | Service USB on the DevKitC with the robot `OFF`: the switched bus stays at 0 V |
-| N9 | Audio | Speaker plays and mics capture at the same time on I²S0 |
+| N9 | Audio | Speaker plays and all four mics capture at the same time on I²S0, each mic in its own channel (tap test) |
+| N11 | Mic array timing | A clap from known directions gives consistent inter-mic delays across the four channels |
 | N10 | IMU | SPI read at C3 on `J10-7` |
 
 ### 4.13 Memory and housekeeping
@@ -294,36 +295,42 @@ Update the memories for the PCB workflow tracker, the power distribution design,
 | R5 | **Hard power-off on the Pi.** Without the `LTC2954` interrupt, a press may cut the Pi mid-write | Q1, plus an overlay root filesystem |
 | R6 | **More volume and wire.** Modules are larger than custom parts, and the hub boards (PCB-04, PCB-05) become splices | Bay fit checks in CAD before ordering; one splice point per rail |
 | R7 | **India stock for Pololu.** The distributors listed are Fab.to.Lab and MG Super Labs; stock is patchy and TME is an import (D-066) | Check stock before freezing the CAD; for each module, name a second-source part with the same footprint class |
-| R8 | **Lost spatial hearing** if Q6 picks 2 mics | It is only Candidate `CAND-01`; Core needs wake word and speech, which 2 mics cover |
+| R8 | **Custom I²S overlay** for four capture channels on two lanes (Q6) is not written yet. The kernel path exists: Raspberry Pi's I2S white paper (RP-009699) shows RP1 multi-lane I²S through `rpi-simple-soundcard`, used by the HiFiBerry DAC8x and ADC8x (8-channel capture, Pi 5 only). Their overlay muxes GPIO 18–27, which would take `AMP_SD` (23) and `FAN_EN` (24), so Makad needs its own GPIO 18–22 pin group and a 4-in/2-out channel setup | Adapt the DAC8x/ADC8x overlay (about a day). Prove it on the bench with loose breakouts before the shell bosses are printed. Fallback: the front pair on SDI0 alone, with a stock 2-channel path |
+| R9 | **I²S clock fan-out** to five loads over ~200 mm leads | Series resistor per clock branch at the hub; short, twisted clock/ground pairs; test N9 |
 
 ---
 
-## 6. Open sub-decisions (for the builder)
+## 6. Sub-decisions (builder, 2026-11-06)
 
-| # | Question | Recommendation |
+| # | Question | Decision |
 |---|---|---|
-| Q1 | Button: toggle, or press-to-on with firmware off (button also read by a GPIO; firmware drives the switch's OFF input after shutdown) | Press-to-on, firmware off; `J-PK` stays the hard isolator |
-| Q2 | Who reads the monitor | The Pi (it owns shutdown) |
-| Q3 | Number of 5 V bucks | Two: Pi alone; one shared for C3, amp, C2 and display |
-| Q4 | Keep the pack NTC for firmware | No; the AC72ABD stays |
-| Q5 | PCB-12: simplified custom carrier or the Waveshare ESP32 Servo Driver (₹1,375 at Zbotic) | Fit-check the Waveshare board in the head first |
-| Q6 | Mics: **2** I²S mics on one lane (stock overlay, simplest) or **4** on two lanes (custom overlay, keeps the spatial-hearing candidate) | **2**: the AIY Voice HAT pattern (I²S MEMS mics + MAX98357A). Revisit 4 only if `CAND-01` is promoted |
-| Q7 | Charge port: main + balance (XT30 + 3-pin), balance-only charging below 1 A, or no ports (hatch off, pack out) | Main + balance on the rear panel |
-| Q8 | Yaw rail voltage | 11.1 V adjustable |
-| Q9 | IMU mount: printed adapter on J15A, or new frame holes | Adapter; the frame stays as designed |
+| Q1 | Power button | **Press-to-on; firmware off.** The button is also read by a GPIO; firmware shuts the Pi down, then drives the switch's OFF input. `J-PK` stays the hard isolator |
+| Q2 | Who reads the monitor | **The Pi** |
+| Q3 | Number of 5 V bucks | **Two:** the Pi alone; one shared by C3, amp, C2 and display |
+| Q4 | Pack NTC | **Dropped**; the AC72ABD breaker stays |
+| Q5 | PCB-12 | **Fit-check the Waveshare ESP32 Servo Driver first**; design the simpler custom carrier only if it doesn't fit |
+| Q6 | Microphones | **4 I²S mics on two lanes** (SDI0 front pair, SDI1 rear pair). Keeps `CAND-01` spatial hearing; needs the custom overlay (R8) and an audio hub (R9) |
+| Q7 | Charge connection | **Rear-panel charge port + balance port** (XT30-class + 3-pin) |
+| Q8 | Yaw rail | **Adjustable buck-boost at 11.1 V** |
+| Q9 | IMU mount | **Printed adapter on the existing J15A holes**; no frame change |
 
----
+## 7. Levels of work
 
-## 7. Order of work (proposed)
+The changes are applied in these levels. Q1–Q9 are decided (§6).
 
-1. **Level 0, decisions:** write D-093; merge the PCB-09 branch.
-2. **Q1–Q9:** answer them, since several set CAD and harness.
-3. **Modules:** pick the parts, check India stock, get dimensions and STEPs.
-4. **CAD:** bays, rear panel, pack channel, mic and amp mounts, IMU adapter; targeted checks; mass/CoM.
-5. **Harness:** rewrite §2, §4, §5 and §7 of 05-harness.
-6. **Boards:** design PCB-08, 12 (or Q5) and 14, then one fab order for all 7.
-7. **Docs:** banners, register, tracker, BOM, system ledgers.
-8. **Bench:** TIFPS0629 acceptance, then tests N1–N10.
+| Level | What | Kind | Depends on | Status |
+|---|---|---|---|---|
+| 0 | **Decisions:** [D-093](decisions.md#d-093) in the ledger; PCB-09 branch merged to `main` | Record | — | **Done 2026-11-06** |
+| 1 | **Architecture docs:** superseded banners on [power-boards.md](04-pcbs/power-boards.md) and [charge-path.md](04-pcbs/charge-path.md); CP-OI-01 to -15 closed as superseded in [open-items.md](04-pcbs/open-items.md) | Doc cleanup | — | **Done 2026-11-06** |
+| 2 | **Board docs:** [04-pcbs](04-pcbs/README.md) register and [workflow](04-pcbs/workflow.md) tracker; superseded banners on PCB-02, 03, 04, 05, 06, 07, 13; new inputs in the PCB-08, 10, 12 READMEs (§4.3) | Doc cleanup | — | **Done 2026-11-06** |
+| 3 | **Modules:** pick each part, check India stock, get dimensions and STEPs (§2, risks R1, R2, R7) | New design | — | To do |
+| 4 | **CAD** in `final/v1/cad`: module bays, rear-panel ports, balance-lead channel, mic and amp mounts, IMU adapter; targeted checks; mass/CoM (§4.5–4.8) | New design | 3 | Waits |
+| 5 | **Harness:** rewrite [05-harness](05-harness/README.md) power tree, wire list, pinouts, service procedures and buy list (§4.4) | New design | 3, 4 | Waits |
+| 6 | **BOM:** retire, promote and add rows (§4.10) | Records | 3 | Waits |
+| 7 | **Other docs:** foundation CON-TBD-09, the power/energy and mass ledgers, head BOM yaw-rail note, print READMEs, final v1 README (§4.1, 4.7, 4.9) | Doc cleanup | 3–6 | Waits |
+| 8 | **Firmware requirements** in `04-software`: low-battery stop, button-off, servo limits, the four-mic overlay (§4.11) | Software | — | Can start any time |
+| 9 | **Custom boards:** design PCB-08, PCB-12 (after the Waveshare fit check) and PCB-14; one fab order for all seven | New design | 4, 5 | Waits |
+| 10 | **Bench:** TIFPS0629 acceptance, the four-mic overlay on loose breakouts (before the shell is printed), tests N1–N11 (§4.12) | Physical | Parts in hand | Waits |
 
 ---
 

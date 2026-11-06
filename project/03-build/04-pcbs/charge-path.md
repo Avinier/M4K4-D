@@ -1,5 +1,7 @@
 # Charge path — PCB-13 inlet and the PCB-02 charger
 
+> **Superseded by [D-093](../decisions.md#d-093) (2026-11-06).** The pack is charged outside the robot by a bought 2S balance charger, through a rear-panel charge port and balance port. PCB-13 is deleted, and PCB-02 is replaced by bought modules with no charger. This page is kept as the record of the in-robot USB-C charge design, for reference if a later version brings charging back inside.
+
 | Field | Value |
 |---|---|
 | Status | Circuit closed on paper, 2026-10-04 ([D-040](../decisions.md#d-040)). No schematic capture, layout, NVM image or bench result. Every value below is `D` or arithmetic on `D` unless marked |

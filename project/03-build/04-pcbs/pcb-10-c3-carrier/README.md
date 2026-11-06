@@ -114,7 +114,7 @@ v0.2 (D-068) assigned the pins by function; v0.3 reassigns them at placement (le
 | Inputs from other boards | ≥ 1 kΩ series and 100 kΩ pull-down on `MOTOR_PRESENT` | Fail-inactive; harness rule `PA-11.6` |
 | Test points | Every rail, both link pairs, `WDI`, `WDO`, `C3_READY`, `SLP`, `FLT` | Not under the DevKitC: they would be unreachable once it is soldered |
 
-**Supply.** 5 V comes in on `J10-1` (`PB-SAFE-BASE`, Micro-Fit 3.0, from PCB-04 `J4-4`). The 3.3 V logic comes from the DevKitC's own SGM2212-3.3 (800 mA).
+**Supply.** 5 V comes in on `J10-1` (`PB-SAFE-BASE`, Micro-Fit 3.0, from PCB-04 `J4-4`). The 3.3 V logic comes from the DevKitC's own SGM2212-3.3 (800 mA). Since [D-093](../../decisions.md#d-093), `J10-1` is fed by the shared bought 5 V buck through `W11`, which needs a series Schottky so the DevKitC's USB `VCC_5V` (above) cannot back-feed the buck output.
 
 | 3.3 V load | Current (`D` datasheet, `E` estimate) |
 |---|---|
@@ -154,7 +154,7 @@ Ten GH headers and one Micro-Fit, as in the CAD (`C3_GH_ROWS`): row Z 86 `J10-2`
 | `J10-7` (GH8) | +3V3, GND, SCLK, MOSI, MISO, CS, INT1, INT2 | 05-harness §5.2; PCB-07 follows when it leaves HOLD |
 | **`J10-8`** (GH5) | +5V, GND, GP2Y_VO, +3V3, HALL_OUT | **Set here (below)**; PCB-15 pads fixed (rev A) |
 | **`J10-10`** (GH4) | LED_A, LED_K, TCRT_OUT, GND | **Set here (below)**; the TCRT lead follows |
-| `J10-12` (GH4) | GND, C3_READY, MOTOR_PRESENT, GND | 05-harness §5.2, mates PCB-03 `J3-9` |
+| `J10-12` (GH4) | GND, C3_READY, MOTOR_PRESENT, GND | 05-harness §5.2, mates PCB-03 `J3-9`; **unused since [D-093](../../decisions.md#d-093)** (PCB-03 is gone). `MOTOR_PRESENT` then reads low through its 100 kΩ pull-down; firmware must not treat it as a fault. `C3_READY` still drives U4 on the board |
 
 **`J10-2`, base link (set by PCB-10).** The harness table named the pairs `TX±`/`RX±` at both ends of one row, and that only works with a crossed cable. The pairs are named by direction instead, so the cable is straight:
 
@@ -478,3 +478,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-28:** rev A design complete (lesson 5). DevKitC 3D model from `pcb10_devkitc()`; board STEP; `check_pcb10_fit.py` 7/7; fab outputs in `fab/revA/`. The first fit run failed on the script, not the board: KiCad writes model names with `_` for `.`, and the STEP cuts holes from the core.
 
 - **2026-11-01:** rev-A KiCad STEP replaces the board/component placeholder in the final inspection and presentation assemblies. Mounting hardware, mated plugs and cable reserves are retained; DNP models are omitted according to the layout. Shared [integration verification](../../final/v1/cad/pcb-integration-report.json) records the nine-board placement/static check and the corrected PCB-10 JP1/upright clash. D-068 adds a local JP1 tail relief to upright 1: zero overlap and ≥1.05 mm sampled installation clearance; the released PCB is unchanged. This completes CAD replacement, not procurement or physical acceptance.
+- **2026-11-06:** [D-093](../../decisions.md#d-093): no re-spin. `J10-12` is unused (PCB-03 is gone) and `MOTOR_PRESENT` reads low; the watchdog and U4 AND gate become the hardware motor stop; `W11` gets a series Schottky against USB back-feed.

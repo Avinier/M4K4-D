@@ -1,5 +1,7 @@
 # PCB-05 — Audio front end
 
+> **Superseded by [D-093](../../decisions.md#d-093) (2026-11-06).** Replaced by a bought MAX98357A breakout (BO-007, promoted from bench) and a small audio hub that fans the PCB-09 `J9-3` I²S signals out to the amp and four I²S mic breakouts. Rev A (schematic, layout, fab outputs, STEP) is archived. Nothing here is built or ordered; the folder is kept as the record.
+
 MAX98357A speaker amplifier and 2 × ADAU7002 PDM-to-I²S converters for the mic array.
 
 | | |
@@ -381,3 +383,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-10-28:** lesson 5, checks and outputs. The board STEP showed two stock footprints naming models KiCad doesn't ship (U3's TQFN, J7's Micro-Fit); both got project copies, J7 a model built from Molex's dimensions with clipped tails. `kp.audit()` now checks model files exist. Fab outputs in `fab/revA/` (4-layer Gerbers, drill, BOM, placement, CPL, zip, order parameters). `check_pcb05_fit.py` added: 8/8 pass (its first run's under-board row measured J7 against the boss above, and was fixed to crop below the board). **Rev A design done.**
 
 - **2026-11-01:** rev-A KiCad STEP replaces the board/component placeholder in the final inspection and presentation assemblies. Mounting hardware, mated plugs and cable reserves are retained; DNP models are omitted according to the layout. Shared [integration verification](../../final/v1/cad/pcb-integration-report.json) records the nine-board placement/static check and the corrected PCB-10 JP1/upright clash. This completes CAD replacement, not procurement or physical acceptance.
+- **2026-11-06:** superseded by [D-093](../../decisions.md#d-093): bought MAX98357A breakout + audio hub; rev A archived, not ordered. CR-01 (GPIO22 SDI1, GPIO23 `AMP_SD`) still stands for the bought audio.

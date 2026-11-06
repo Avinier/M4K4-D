@@ -2,26 +2,35 @@
 
 Each custom board goes through three stages: **design** it, **procure** its parts and the assembled board, then **integrate** the real board into the final CAD. **Every board is designed first, one at a time; procurement starts only when the design batch is done, and boards are then ordered together where they share a fab** ([D-064](../decisions.md#d-064)). A board starts a stage only after it has finished the stage before. How to design one board, step by step, is in [design-playbook.md](design-playbook.md). Each board has a folder in `04-pcbs/`. Its README records where the board is in this workflow.
 
+Since [D-093](../decisions.md#d-093) (2026-11-06) the design batch is seven boards: PCB-08, 09, 10, 11, 12, 14 and 15. PCB-08, 12 and 14 are still to be designed. PCB-02, 03, 04, 05, 06 and 07 became bought modules and PCB-13 was deleted.
+
 PCB-01 has no folder. It is the bought TIFPS0629 ([D-019](../decisions.md#d-019)), and its acceptance stays in [power-boards.md §3](power-boards.md#3-pcb-01--tifps0629-acceptance-before-cells-are-connected).
 
 ## Board folders
 
+**Custom boards** after [D-093](../decisions.md#d-093):
+
 | Folder | Board | BOM | Design | Procure | Integrate |
 |---|---|---|---|---|---|
-| [pcb-02-charger](pcb-02-charger/README.md) | Charger, latch and pack sense | CH-041 | Layout routed (2026-11-06): ERC 0/0, DRC 0 unconnected / 0 errors with parity; 10 A BATBUS→Q1→OPBUS path sized (D-090, D-091); populated-STEP fit check and outputs open | — | — |
-| [pcb-03-motor-gate](pcb-03-motor-gate/README.md) | Motor gate and head 5 V rail | CH-042 | Not started | — | — |
-| [pcb-04-branch-converters](pcb-04-branch-converters/README.md) | Five branch converters | CH-043 | Not started | — | — |
-| [pcb-05-audio-front-end](pcb-05-audio-front-end/README.md) | Audio front end | BO-002 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
-| [pcb-06-pdm-mic](pcb-06-pdm-mic/README.md) | PDM microphone board ×4 | BO-005 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
-| [pcb-07-base-imu](pcb-07-base-imu/README.md) | Base IMU | CH-021 | Not started | — | — |
-| [pcb-08-yaw-junction](pcb-08-yaw-junction/README.md) | Yaw junction | CH-083 | Not started | — | — |
+| [pcb-08-yaw-junction](pcb-08-yaw-junction/README.md) | Yaw junction | CH-083 | Not started; rescoped by D-093 | — | — |
 | [pcb-09-c0-link-adapter](pcb-09-c0-link-adapter/README.md) | C0 link adapter | CH-084 | Done (rev A, D-092) | Waits for the design batch | CAD replacement complete; physical acceptance open |
 | [pcb-10-c3-carrier](pcb-10-c3-carrier/README.md) | C3 controller carrier | CH-044 | Done, rev A | — | CAD replacement complete; physical acceptance open |
 | [pcb-11-status-led](pcb-11-status-led/README.md) | Status LED carrier | CH-085 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
-| [pcb-12-c2-head-carrier](pcb-12-c2-head-carrier/README.md) | C2 head carrier | CH-086 | Not started | — | — |
-| [pcb-13-charge-inlet](pcb-13-charge-inlet/README.md) | Charge inlet | BO-015 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
+| [pcb-12-c2-head-carrier](pcb-12-c2-head-carrier/README.md) | C2 head carrier | CH-086 | Not started; Waveshare fit check first (D-093) | — | — |
 | [pcb-14-yaw-rotor-joiner](pcb-14-yaw-rotor-joiner/README.md) | Yaw rotor joiner ×3 | BO-062 | Not started | — | — |
 | [pcb-15-nose-hall](pcb-15-nose-hall/README.md) | Nose Hall carrier | CH-064 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
+
+**Superseded boards** ([D-093](../decisions.md#d-093), 2026-11-06). Their folders and KiCad work are kept as the record:
+
+| Folder | Board | BOM | Replaced by |
+|---|---|---|---|
+| [pcb-02-charger](pcb-02-charger/README.md) | Charger, latch and pack sense | CH-041 | Bought: pushbutton power switch + voltage/current monitor |
+| [pcb-03-motor-gate](pcb-03-motor-gate/README.md) | Motor gate and head 5 V rail | CH-042 | Bought: head 5.5 V and yaw 11.1 V buck-boost modules |
+| [pcb-04-branch-converters](pcb-04-branch-converters/README.md) | Five branch converters | CH-043 | Bought: two 5 V buck modules |
+| [pcb-05-audio-front-end](pcb-05-audio-front-end/README.md) | Audio front end | BO-002 | Bought: MAX98357A breakout (BO-007) + audio hub; rev A archived |
+| [pcb-06-pdm-mic](pcb-06-pdm-mic/README.md) | PDM microphone board ×4 | BO-005 | Bought: four I²S mic breakouts; rev A archived |
+| [pcb-07-base-imu](pcb-07-base-imu/README.md) | Base IMU | CH-021 | Bought: SPI IMU breakout on `J10-7` |
+| [pcb-13-charge-inlet](pcb-13-charge-inlet/README.md) | Charge inlet | BO-015 | Deleted: charging moved outside the robot; rev A archived |
 
 Update this table and the board's README together. The [board register](README.md#board-register) keeps the board's specification status and the work it still needs.
 

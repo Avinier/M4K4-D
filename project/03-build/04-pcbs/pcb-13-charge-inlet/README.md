@@ -1,5 +1,7 @@
 # PCB-13 — Charge inlet
 
+> **Superseded by [D-093](../../decisions.md#d-093) (2026-11-06).** Deleted: the pack is charged outside the robot by a bought 2S balance charger, through rear-panel charge and balance ports. Rev A (schematic, layout, fab outputs, STEP) is archived as reference for a later in-robot charger. Nothing here is built or ordered; the folder is kept as the record.
+
 USB-C inlet: GCT USB4140, STUSB4500 PD sink, TVS2200/ESDA25W protection and the input P-FET.
 
 | | |
@@ -466,3 +468,4 @@ The reference text moved to the fab layers with `kp.refs_to_fab()`. J1, J2 and t
   - Fab outputs in `fab/revA/`: one-sided assembly, J1 by hand.
 
 - **2026-11-01:** rev-A KiCad STEP replaces the board/component placeholder in the final inspection and presentation assemblies. Mounting hardware, mated plugs and cable reserves are retained; DNP models are omitted according to the layout. Shared [integration verification](../../final/v1/cad/pcb-integration-report.json) records the nine-board placement/static check and the corrected PCB-10 JP1/upright clash. This completes CAD replacement, not procurement or physical acceptance.
+- **2026-11-06:** deleted by [D-093](../../decisions.md#d-093): charging moved outside the robot; rev A archived, not ordered.

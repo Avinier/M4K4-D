@@ -1,6 +1,6 @@
 # PCB-12 — C2 head carrier
 
-Castellated carrier for the ESP32-S3-Zero (C2): head link and display transceivers, Feetech servo bus, TPS3436 watchdog.
+Castellated carrier for the ESP32-S3-Zero (C2): head-link and display transceivers and the Feetech servo bus. No watchdog since [D-093](../../decisions.md#d-093).
 
 | | |
 |---|---|
@@ -26,10 +26,10 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 Fill this in when design starts: spec sources, pinout, supply and protection, CAD envelope.
 
-**Set by other boards.** The watchdog is **TPS3436CCCBGDDFRQ1** ([D-068](../../decisions.md#d-068), with PCB-10): the `BD-10` CFDBE part cannot be bought. Same pinout C and DDF footprint; tWC 5 ms, tWO 15 ms at `SET[1:0]` = 00 (feed every 10 ms, late fault ≤ 22 ms), 500 ms startup, 200 ms assert. Source: Mouser India.
-
-**D-082 fresh-arm output.** Allocate a C2 GPIO and a physical default-low driver for `ARM_REQ`. It passes through W43, PCB-14 and PCB-08 to `J8-5.8`/PCB-02 `J2-6.8`. It must issue a new edge only after C2 has checked local READY, charge absence, pack state, and the operator's arm action; boot, watchdog reset, return of a fault or an open wire must not create an arm edge. Freeze the GPIO and the exact W43 conductor with PCB-08 before layout, and bench the full yaw-cassette path.
+**[D-093](../../decisions.md#d-093) scope (2026-11-06).** Minimal safety: **no TPS3436 watchdog, no `ARM_REQ` output, no `C2_READY_H/L` pair** (PCB-03 and its permit chain are gone). **First, fit-check the bought Waveshare ESP32 Servo Driver** (ESP32 with ST/SC bus-servo interface) in the head's C2 tray; design this carrier only if it doesn't fit. A custom carrier keeps the servo bus half-duplex interface, the RS-422 head link (J9-1 order per D-092) and the display link.
 
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
+
+- **2026-11-06:** rescoped by [D-093](../../decisions.md#d-093): watchdog, `ARM_REQ` and READY pair dropped; Waveshare ESP32 Servo Driver fit check comes first.
