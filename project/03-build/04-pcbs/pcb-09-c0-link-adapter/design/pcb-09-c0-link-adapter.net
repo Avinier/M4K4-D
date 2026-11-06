@@ -1,22 +1,22 @@
 (export
 	(version "E")
 	(design
-		(source "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-09-c0-link-adapter/design/pcb-09-c0-link-adapter.kicad_sch")
-		(date "2026-11-01T10:46:24")
+		(source "/Users/avinier/robotics/makad/.claude/worktrees/pcb-09/project/03-build/04-pcbs/pcb-09-c0-link-adapter/design/pcb-09-c0-link-adapter.kicad_sch")
+		(date "2026-11-06T12:21:18")
 		(tool "Eeschema 10.99.0-5923-gde08734017")
 		(sheet
 			(number "1")
 			(name "/")
 			(tstamps "/")
 			(title_block
-				(title "PCB-09 C0 link adapter - review schematic")
+				(title "PCB-09 C0 link adapter")
 				(company "Makad")
-				(rev "A-draft")
-				(date "2026-10-31")
+				(rev "A")
+				(date "2026-11-06")
 				(source "pcb-09-c0-link-adapter.kicad_sch")
 				(comment
 					(number "1")
-					(value "D-073 / D-074; socket mating height, retention and CR-02 evidence remain open")
+					(value "D-073 / D-074 / D-092; CR-02 boot/overlay and fan-current evidence remain open")
 				)
 				(comment
 					(number "2")
@@ -326,7 +326,7 @@
 		)
 		(comp
 			(ref "J1")
-			(value "Pi_40_pin_socket_MPN_OPEN")
+			(value "SSW-120-01-T-D")
 			(footprint "Connector_PinSocket_2.54mm:PinSocket_2x20_P2.54mm_Vertical")
 			(fields
 				(field
@@ -705,10 +705,10 @@
 		(comp
 			(ref "J5")
 			(value "J9-4_FAN")
-			(footprint "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical")
+			(footprint "Connector_JST:JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical")
 			(fields
 				(field
-					(name "Footprint") "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical")
+					(name "Footprint") "Connector_JST:JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical")
 				(field
 					(name "Datasheet")
 				)

@@ -83,6 +83,21 @@
       "transform_bbox_error_mm": 0.0
     },
     {
+      "board": 9,
+      "instance": "MAIN",
+      "components": 19,
+      "dnp_omitted": [],
+      "core_bbox": [
+        -11.0,
+        16.299999999999997,
+        106.4919,
+        65.99999999999999,
+        39.0,
+        108.0081
+      ],
+      "transform_bbox_error_mm": 0.0
+    },
+    {
       "board": 10,
       "instance": "MAIN",
       "components": 67,
@@ -110,14 +125,14 @@
       "components": 3,
       "dnp_omitted": [],
       "core_bbox": [
-        50.473740768777,
+        50.47374076877715,
         12.700000000000003,
         278.8,
-        51.183740768777,
+        51.18374076877715,
         17.700000000000003,
         283.8
       ],
-      "transform_bbox_error_mm": 1.4921397450962104e-13
+      "transform_bbox_error_mm": 0.0
     },
     {
       "board": 13,
@@ -140,17 +155,17 @@
       "components": 4,
       "dnp_omitted": [],
       "core_bbox": [
-        126.245,
+        126.24499999999999,
         7.0,
         30.400000000000006,
-        126.955,
+        126.95499999999998,
         13.0,
         35.0
       ],
-      "transform_bbox_error_mm": 1.4210854715202004e-14
+      "transform_bbox_error_mm": 0.0
     }
   ],
-  "board_count": 9,
+  "board_count": 10,
   "cross_board_neighbours": [],
   "cross_board_collisions": [],
   "static_interferences": [],
@@ -218,217 +233,34 @@
   ],
   "sources": {
     "5": {
-      "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-05-audio-front-end/cad/pcb-05-audio-front-end-revA.step",
+      "path": "/Users/avinier/robotics/makad/.claude/worktrees/pcb-09/project/03-build/04-pcbs/pcb-05-audio-front-end/cad/pcb-05-audio-front-end-revA.step",
       "sha256": "562decf49829e71287b95b978d3d10cefeee8c7edb11e4e368672b92361cd0d2"
     },
     "6": {
-      "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-06-pdm-mic/cad/pcb-06-pdm-mic-revA.step",
+      "path": "/Users/avinier/robotics/makad/.claude/worktrees/pcb-09/project/03-build/04-pcbs/pcb-06-pdm-mic/cad/pcb-06-pdm-mic-revA.step",
       "sha256": "1eba1396476c9d9dd9b24319acb4822361adb4b3c4e3564e2d857b103ceb5731"
     },
+    "9": {
+      "path": "/Users/avinier/robotics/makad/.claude/worktrees/pcb-09/project/03-build/04-pcbs/pcb-09-c0-link-adapter/cad/pcb-09-c0-link-adapter-revA.step",
+      "sha256": "c2ff6786044555e3694433fd501725a22d3bdddf9d3bc1580d083f8fcb2ed4b2"
+    },
     "10": {
-      "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-10-c3-carrier/cad/pcb-10-c3-carrier-revA.step",
+      "path": "/Users/avinier/robotics/makad/.claude/worktrees/pcb-09/project/03-build/04-pcbs/pcb-10-c3-carrier/cad/pcb-10-c3-carrier-revA.step",
       "sha256": "fc69d35bfdbda3a954bb12a4d42932fe6323b64aae9245c81350c6df1573181a"
     },
     "11": {
-      "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-11-status-led/cad/pcb-11-status-led-revA.step",
+      "path": "/Users/avinier/robotics/makad/.claude/worktrees/pcb-09/project/03-build/04-pcbs/pcb-11-status-led/cad/pcb-11-status-led-revA.step",
       "sha256": "f09936ce268fe6aa65814cfb2f623cecaf45f3b2a9f2669a4d237ab8e3640b06"
     },
     "13": {
-      "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-13-charge-inlet/cad/pcb-13-charge-inlet-revA.step",
+      "path": "/Users/avinier/robotics/makad/.claude/worktrees/pcb-09/project/03-build/04-pcbs/pcb-13-charge-inlet/cad/pcb-13-charge-inlet-revA.step",
       "sha256": "638ac05f426f0e641d1a69e032e23cd7c19d14de8d1ec03bc053695ea239dbf9"
     },
     "15": {
-      "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-15-nose-hall/cad/pcb-15-nose-hall-revA.step",
+      "path": "/Users/avinier/robotics/makad/.claude/worktrees/pcb-09/project/03-build/04-pcbs/pcb-15-nose-hall/cad/pcb-15-nose-hall-revA.step",
       "sha256": "26a8aefa1c8b48197edd1d0451418a6e0ba96f506b7c78133e7ab31d4a70fd15"
     }
   },
-  "scope": "replacement count, core transforms, duplicate placeholder removal and static cross-board and robot interference; intentional own fixing/plug contacts and PCB05 spacer/boss contacts excluded; PCB09 remains a placeholder; per-board installation sweeps are separate",
-  "checked_step": {
-    "path": "/Users/avinier/robotics/makad/project/03-build/final/v1/cad/makad-v1.step",
-    "sha256": "b14c537a94f0005320e3862a84cf75d22f037d06abd9ae05e8eadcd16f33a95b"
-  },
-  "result": "PASS",
-  "verification_method": "Full before-fix static matrix plus exported occurrence delta and targeted after-fix upright check; not a second full-matrix run",
-  "changed_occurrences": [
-    [
-      "o1.2.5.4.1",
-      "BODY_FRAME_C3_CARRIER_UPRIGHT_1"
-    ]
-  ],
-  "geometry_equivalent_render_differences": [
-    [
-      "o1.1.1.35.1",
-      "BALL_POD_PRINTED_SEAT"
-    ]
-  ],
-  "unchanged_occurrences": 2236,
-  "jp1_relief": {
-    "result": "PASS",
-    "source_main_sha256": "5019d1801a19c6f9056b4d1ecf43d39c02629e293114bb9b04602c48b158bdf0",
-    "material_note": "Side widths describe the new pocket below its junction with the pre-existing full-width header-row groove.",
-    "added_material_mm3": 0.0,
-    "removed_material_mm3": 46.955999999999676,
-    "old_clash_mm3": 0.5524083333333313,
-    "new_clash_mm3": 0.0,
-    "relief_box": [
-      -8.52,
-      -5.92,
-      -61.4,
-      -58.4,
-      89.2,
-      95.8
-    ],
-    "remaining_material": {
-      "left_mm": 3.4800000000000004,
-      "right_mm": 1.92,
-      "back_mm": 4.600000000000001,
-      "to_lower_screw_bore_mm": 1.9500000000000028
-    },
-    "min_sampled_clearance_mm": 1.0499999999999972,
-    "samples": [
-      {
-        "dz_mm": -2.0,
-        "clearance_mm": 1.0499999999999972,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -1.9,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -1.8,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -1.7,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -1.6,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -1.5,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -1.4,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -1.3,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -1.2,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -1.1,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -1.0,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -0.9,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -0.8,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -0.7,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -0.6,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -0.5,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -0.4,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -0.3,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -0.2,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": -0.1,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dz_mm": 0.0,
-        "clearance_mm": 1.049999999999999,
-        "clash_mm3": 0.0
-      },
-      {
-        "dy_mm": 0,
-        "dz_mm": -2,
-        "clearance_mm": 1.0499999999999972,
-        "clash_mm3": 0.0
-      },
-      {
-        "dy_mm": 0.5,
-        "dz_mm": -2,
-        "clearance_mm": 1.0499999999999972,
-        "clash_mm3": 0.0
-      },
-      {
-        "dy_mm": 1,
-        "dz_mm": -2,
-        "clearance_mm": 1.0499999999999972,
-        "clash_mm3": 0.0
-      },
-      {
-        "dy_mm": 2,
-        "dz_mm": -2,
-        "clearance_mm": 1.4281868260140176,
-        "clash_mm3": 0.0
-      },
-      {
-        "dy_mm": 4,
-        "dz_mm": -2,
-        "clearance_mm": 3.076335906561569,
-        "clash_mm3": 0.0
-      },
-      {
-        "dy_mm": 8,
-        "dz_mm": -2,
-        "clearance_mm": 6.9432443864522,
-        "clash_mm3": 0.0
-      }
-    ],
-    "scope": "JP1 against upright 1; static plus sampled 2 mm vertical slide and front approach; structural strength and other installation paths not asserted"
-  },
-  "baseline_report": "pcb-integration-before-relief.json"
+  "scope": "replacement count, core transforms, duplicate placeholder removal and static cross-board and robot interference; intentional own fixing/plug contacts, PCB05 spacer/boss contacts and the PCB09 socket on the Pi header excluded; per-board installation sweeps are separate",
+  "result": "PASS"
 }

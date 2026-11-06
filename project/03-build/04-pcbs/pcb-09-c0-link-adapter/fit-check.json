@@ -1,0 +1,27 @@
+[
+ {
+  "check": "board on the droid board",
+  "pass": true,
+  "detail": "core X -11.00..66.00, Y 16.30..39.00 (offset 0.000); underside Z 106.450; area 940.6 + 42.9 of holes against the droid's 983.5 mm2"
+ },
+ {
+  "check": "socket on the Pi header",
+  "pass": true,
+  "detail": "socket model centre 0.000 mm off the header's; its bottom -0.030 mm from the plastic top Z 97.937 (model 8.5 mm, SSW-120 8.51 mm); pin tips Z 104.045; overlap with the header solid 113.7 mm3 (40 pins of 0.64 x 0.64 over 6.11 mm = 100.1 mm3, plus the 0.03 mm seat); nearest other Pi part 1.11 mm"
+ },
+ {
+  "check": "parts clear of the droid by 0.2 mm",
+  "pass": true,
+  "detail": "clear"
+ },
+ {
+  "check": "mated plugs clear of the droid",
+  "pass": true,
+  "detail": "C0_J9_4_GHR02_MATED_PLUG X 47.1..50.9 Y 32.9..37.1 Z to 115.5: clear; C0_J9_1_GHR06_MATED_PLUG X 33.9..42.7 Y 39.0..42.2 Z to 112.2: clear; C0_J9_3_GHR10_MATED_PLUG X 49.9..63.7 Y 25.6..29.8 Z to 115.5: clear; C0_J9_2_GHR06_MATED_PLUG X 55.4..64.2 Y 33.6..37.8 Z to 115.5: clear"
+ },
+ {
+  "check": "real parts slide in with the tray",
+  "pass": true,
+  "detail": "19 parts' boxes swept clear"
+ }
+]

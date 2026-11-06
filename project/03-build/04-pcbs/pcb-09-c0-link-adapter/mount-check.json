@@ -1,0 +1,37 @@
+[
+ {
+  "check": "socket stack meets the standoffs",
+  "pass": true,
+  "detail": "Pi top 95.450 + 11.0 = 106.450; header plastic top 97.937 + SSW-120-01-T-D 8.51 = 106.447 (diff -0.003); board core Z 106.450-108.050; pin insertion 6.11 mm in the 3.68-6.35 range"
+ },
+ {
+  "check": "standoffs replace Pi screws 3 and 4",
+  "pass": true,
+  "detail": "hole 3 (-7.800000000000001, 19.33): screw removed True, standoff axis 0.0000 off the insert, top Z 106.450, 4.00 mm of thread in the insert; hole 4 (50.2, 19.33): screw removed True, standoff axis 0.0000 off the insert, top Z 106.450, 4.00 mm of thread in the insert"
+ },
+ {
+  "check": "tabs carry the holes",
+  "pass": true,
+  "detail": "hole 3: web 1.68 mm to the nearest tab edge, 100.0 % of the \u00d83.7 disc on the board; hole 4: web 0.78 mm to the nearest tab edge, 100.0 % of the \u00d83.7 disc on the board"
+ },
+ {
+  "check": "mount clears its neighbours by 0.2 mm",
+  "pass": true,
+  "detail": "hole 3 standoff: clear; hole 3 screw head: clear; hole 4 standoff: clear; hole 4 screw head: clear; tab 1 grown 0.2 mm: clear; tab 2 grown 0.2 mm: clear"
+ },
+ {
+  "check": "planted cases fail",
+  "pass": true,
+  "detail": "hex standoff at hole 4: [('PI5_ACTIVE_COOLER_STEP', 0.0429)]; +X tab down to Y 16.3: [('PI5_ACTIVE_COOLER_STEP', 3.0917)]"
+ },
+ {
+  "check": "bench-assembled unit slides in",
+  "pass": true,
+  "detail": "18 PCB-09 boxes swept +90 mm X, 2.0 mm lift: clear"
+ },
+ {
+  "check": "driver column above each screw (information)",
+  "pass": true,
+  "detail": "hole 3: [(134.0, 'BODY_FRAME_MAIN_PRINT'), (135.5, 'YAW_CARTRIDGE_HOUSING'), (137.0, 'YAW_BEARING_61810_2Z'), (144.0, 'YAW_BEARING_CLAMP_RING')]; hole 4: [(114.0, 'PCB05_AUDIO_FRONT_END_PCB'), (115.6, 'PCB05_AUDIO_FRONT_END_PARTS_RESERVE'), (115.6, 'PCB05_J5_2_GHR04_MATED_PLUG'), (115.6, 'PCB05_J5_2_JST_GH_SM04B_HEADER'), (115.6, 'PCB05_PY_EDGE_PLUG_RESERVE'), (126.0, 'BODY_FRAME_MAIN_PRINT'), (138.0, 'YAW_CARTRIDGE_HOUSING')]"
+ }
+]

@@ -64,7 +64,7 @@ The shell is one printable, open-bottom piece. Only the rear keeps a 4 mm lower 
 
 Assembly order after the first three frame/chassis steps above:
 
-1. Fit the four shell-joint inserts to the frame posts. Fit the enclosure fan to its web (its lead plugs into PCB-09 `J9-4` later), then slide in the compute tray with the Pi and screw it down (D-042), then the C3 carrier. Install and test the frame-mounted body electronics and wiring. Leave the rear service panel with its power button, the other service panels, and the head/yaw moving parts off.
+1. Fit the four shell-joint inserts to the frame posts. Fit the enclosure fan to its web (its lead plugs into PCB-09 `J9-4` later), then slide in the compute tray with the Pi and screw it down (D-042), then the C3 carrier. From [D-092](../../../decisions.md#d-092), PCB-09 is screwed to the Pi's two header-side standoffs on the bench, before the tray goes in (the final assembly carries that change). Install and test the frame-mounted body electronics and wiring. Leave the rear service panel with its power button, the other service panels, and the head/yaw moving parts off.
 2. On the bench, fit both wheel-arch pods and the four microphone boards to the loose shell (see below). Leave the mic leads hanging free.
 3. Lower the shell vertically over the assembled frame and chassis. The open floor passes the chassis, the shell bosses pass outside the posts, and the open-bottomed arches pass over the tyres. Fit the four outside-driven M3 × 16 screws.
 4. Through the open front service aperture, plug the four mic leads into PCB-05: the +Y boards into `J5-2`/`J5-3`, the −Y boards into `J5-4`/`J5-5`. Unplug them first when removing the shell.

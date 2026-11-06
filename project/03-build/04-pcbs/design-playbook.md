@@ -109,3 +109,17 @@ KiCad keeps local history in `design/.history/` (git-ignored). `git log` there s
 | Fab stock for the actives | JLCPCB had 0 USB4140, 1 STL6P3LLH6 and only clones of the TVS2200 under the TI name | Check India sources part by part (element14 India, then Mouser India) and plan to consign; reject LCSC listings whose maker is not the datasheet's |
 | KiPy `Zone.is_rule_area` is a method | `not z.is_rule_area` is always False, so a "clear the old pours" step removed nothing and each rerun of the routing script stacked another copy of every pour | Call `z.is_rule_area()`; count the zones by name after every routing run |
 | Corner pins of a QFN on a crowded board | Each side of the STUSB4500 had used pins, and a track can't pass between 0.5 mm-pitch pads. Pins facing an edge or a stake had no exit | Plan the QFN's orientation first: put the side with the fewest used pins toward the tightest edge. Tie static straps (address, reset) to the exposed pad with stubs where the datasheet allows |
+
+## Traps found on PCB-09
+
+| Trap | What happens | Handling |
+|---|---|---|
+| The Nightly GUI is busy | A parallel session had PCB-02 open; KiPy only talks to the open board, so F8 and `kp.py` were unavailable | Lay the board out headless with [`tools/kfile.py`](tools/kfile.py): it parses the `.kicad_pcb`, moves footprints, swaps land patterns and writes tracks, vias and zones under its own UUID namespace (reruns replace them). The Nightly `kicad-cli pcb drc --refill-zones --save-board --schematic-parity` refills and checks. Work on a branch in its own worktree |
+| Pad angles are absolute in the Nightly format | Changing a footprint's `(transform (rotate …))` alone left the SOIC pads unrotated, so they shorted each other | `kfile.move()` turns every pad's `(at x y angle)` by the same delta |
+| A narrow strip is a set of lanes | Between and beside two rows of Ø1.7 mm pads at 2.54 mm there are four channels per layer (A over the outer row, U/L between, W under the inner row). Outer pins reach only A/U and inner pins L/W without crossing, and the lanes leave the strip in the order A, U, L, W | Tabulate every long net's lane, layer and exit before drawing. Check that each layer arrives at its connector in that connector's pin order; where it can't, hop the net to another layer by via |
+| A through-hole connector in the only path | J9-4's XH pins blocked the 11 mm bridge on all four layers | Use an SMD connector there (GH 2-way, D-092 amended), and widen the path if the envelope allows |
+| Moving a bottom part to the top | KiPy's `flip_items` isn't available headless | `kfile.replace_footprint(..., side="F")` places the stock land pattern on top, keeping the UUID, schematic path and pad nets; parity stays clean |
+| THT pins among lanes | The F/B GND pours in the strip are slivers, so the socket's GND pins report `starved_thermal` | Join them to the In1 plane only, with a `zone_connection none` rule for F/B zones (see the board's `.kicad_dru`) |
+| A plane cut off by its own lanes | AMP_SD's In2 lane separated In2's 3V3 in the strip from the bay's 3V3 plane | Carry the supply on another layer's lane to a via in the bay, and link the strip's same-rail pins explicitly |
+| Small pad offsets break octolinear checks | A via 0.03 mm off a GH pad's centre made a non-45° stub | End the stub inside the pad on the via's own x or y |
+| STEP labels by reference | cadgen's importer names KiCad parts `J2`, `R3`…, while build123d's names them after the model | Key per-part logic (plugs, exclusions) by reference in `pcb_integration.py` |

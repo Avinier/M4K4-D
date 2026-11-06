@@ -42,3 +42,9 @@
 (rule "PCB09 socket-only underside"
   (condition "A.Type == 'Footprint' && A.Reference != 'J1' && A.Layer == 'B.Cu' && A.intersectsArea('SOCKET_ONLY_B')")
   (constraint disallow footprint))
+
+# D-092 layout: the socket's ground pins join the In1 plane only. In the strip, the F and B
+# pours are slivers between lanes and cannot reach them with two thermal spokes.
+(rule "J1 grounds on In1 only"
+  (condition "A.Parent == 'J1' && B.Type == 'Zone' && B.Name != 'GND_IN1'")
+  (constraint zone_connection none))
