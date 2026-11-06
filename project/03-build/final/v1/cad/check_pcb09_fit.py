@@ -95,10 +95,19 @@ def main():
     sb = sock[2]
     dxy = max(abs((sb[0] + sb[3]) / 2 - (hb[0] + hb[3]) / 2), abs((sb[1] + sb[4]) / 2 - (hb[1] + hb[4]) / 2))
     seat = sb[2] - plastic
-    ok = dxy < 0.05 and -0.1 <= seat <= 0.1
+    # The mate: the socket model holds the Pi's pins, so it overlaps only the header solid. Everything else
+    # on the Pi (and the cooler) must clear the socket model by MIN_GAP.
+    mate = _vol(sock[1], header.wrapped)
+    pins = len(header.solids()) and 40 * 0.64 * 0.64 * (tip - plastic)
+    from OCP.BRepExtrema import BRepExtrema_DistShapeShape
+    rest = min((BRepExtrema_DistShapeShape(sock[1], r).Value() for p_, r, b in pi_parts
+                if not p_.endswith("/" + str(list(pi.solids()).index(header))) and _hit(b, sb, 1.0)), default=99.0)
+    ok = dxy < 0.05 and -0.1 <= seat <= 0.1 and rest >= MIN_GAP
     out.append(("socket on the Pi header", ok,
                 f"socket model centre {dxy:.3f} mm off the header's; its bottom {seat:+.3f} mm from the plastic top "
-                f"Z {plastic:.3f} (model 8.5 mm, SSW-120 8.51 mm); pin tips Z {tip:.3f}"))
+                f"Z {plastic:.3f} (model 8.5 mm, SSW-120 8.51 mm); pin tips Z {tip:.3f}; overlap with the header solid "
+                f"{mate:.1f} mm3 (40 pins of 0.64 x 0.64 over {tip - plastic:.2f} mm = {pins:.1f} mm3, plus the 0.03 mm seat); "
+                f"nearest other Pi part {rest:.2f} mm"))
 
     # 3. Every real part clear of the droid by MIN_GAP. The socket meets the Pi header by design (2);
     #    the core and the socket clear the standoffs and screws (D-092 holes); reserves are reported.

@@ -127,7 +127,7 @@ def check(robot,body,head_origin):
                 # independently in check_pcb05_mount/fit, not a duplicate part.
                 if n==5 and any(part.label.endswith('__H'+str(k)) for k in (1,2,3)) and path[-1]=='BODY_FRAME_MAIN_PRINT':continue
                 # D-092: PCB-09's socket mates the Pi header by design; check_pcb09_fit.py measures the stack.
-                if n==9 and part.label.endswith('__J1') and path[-1]=='C0_RASPBERRY_PI5_EXACT_STEP':continue
+                if n==9 and part.label.endswith('__J1') and 'C0_RASPBERRY_PI5_EXACT_STEP' in path:continue
                 d=part.distance(o)
                 if d<0.3:contacts.append(dict(part=part.label,obstacle='/'.join(path),gap_mm=d))
                 if d<1e-6:
