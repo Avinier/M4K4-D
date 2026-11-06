@@ -13,11 +13,10 @@ from cadgen.step_scene import import_step
 from OCP.gp import gp_Trsf
 
 ROOT = Path(__file__).resolve().parents[3]
-BOARDS = {5:"pcb-05-audio-front-end", 6:"pcb-06-pdm-mic", 9:"pcb-09-c0-link-adapter", 10:"pcb-10-c3-carrier",
-          11:"pcb-11-status-led", 13:"pcb-13-charge-inlet", 15:"pcb-15-nose-hall"}
-GROUPS = {5:"PCB-05 audio front end", 6:"PCB-06 PDM microphone boards x4", 9:"PCB-09 C0 link adapter",
-          10:"PCB-10 C3 controller carrier", 11:"PCB-11 status LED carrier",
-          13:"PCB-13 charge inlet", 15:"PCB-15 nose Hall carrier"}
+# D-093/D-095: PCB-05 and PCB-06 became bought modules and PCB-13 was deleted.
+BOARDS = {9:"pcb-09-c0-link-adapter", 10:"pcb-10-c3-carrier", 11:"pcb-11-status-led", 15:"pcb-15-nose-hall"}
+GROUPS = {9:"PCB-09 C0 link adapter", 10:"PCB-10 C3 controller carrier", 11:"PCB-11 status LED carrier",
+          15:"PCB-15 nose Hall carrier"}
 
 
 def source_path(number):
@@ -44,17 +43,6 @@ def placements(number, body, head_origin):
     """(instance, STEP-to-world Location), shared with integration verification."""
     bb = core_bounds(number)
     core = bb.max.Z - bb.min.Z
-    if number == 5:
-        return [("MAIN", Location((-55,119,115.6-1.6+(1.6-core)/2-bb.min.Z)))]
-    if number == 6:
-        out=[]
-        inner = body.MIC_BOARD_OUTER_Y - body.MIC_BOARD_SIZE[1]
-        for x,y,z,pos in body.MICROPHONE_PORTS:
-            sign = 1 if y > 0 else -1
-            centre = -1 if x > body.BODY_AXIS_X else 1
-            frame=Location(Plane(origin=(x,sign*inner,z),x_dir=(centre,0,0),z_dir=(0,-sign,0)))
-            out.append((pos,frame*Location((-106,107,-0.955))))
-        return out
     if number == 9:
         # D-092: STEP exported with --user-origin 0x0mm, (Xs, Ys) = (KiCad x, -y); KiCad x = X + 104.7,
         # y = 139 - Y. The board's underside is on the standoffs at Pi top + 11.0 = Z 106.45.
@@ -66,11 +54,6 @@ def placements(number, body, head_origin):
     if number == 11:
         loc=Location(Plane(origin=(-7.2-0.035-core,-87.3,194.3),x_dir=(0,1,0),z_dir=(1,0,0)))
         return [("CROWN",Location(head_origin)*loc)]
-    if number == 13:
-        t=gp_Trsf()
-        t.SetValues(0,0,1,body.CHARGE_INLET_BOARD_SEAT_X+(body.PCB_THICKNESS-core)/2-bb.min.Z,
-                    1,0,0,-114, 0,1,0,171.5)
-        return [("MAIN",Location(t))]
     if number == 15:
         return [("NOSE",Location(Plane(origin=(126.6-core/2-bb.min.Z,-93,135),x_dir=(0,1,0),z_dir=(1,0,0))))]
     raise KeyError(number)
@@ -141,16 +124,10 @@ def leaves(node, parent=Location()):
 
 def retain(number,label):
     """Explicit hardware/plug whitelist; the KiCad input owns mounted parts."""
-    if number == 5:
-        return "MATED_PLUG" in label
-    if number == 6:
-        return any(s in label for s in ("GASKET","M2_SCREW","PIGTAIL_RESERVE"))
     if number == 9:
         return label.startswith(("PCB09_M25X11_ROUND_STANDOFF_","PCB09_M25X5_SOCKET_SCREW_"))
     if number == 10:
         return "MATED_PLUG" in label or label.startswith("C3_CARRIER_M25_SCREW_")
-    if number == 13:
-        return label.startswith("PCB13_M2X5_THREAD_FORMING_SCREW_")
     return False
 
 
@@ -190,7 +167,7 @@ def replace_completed_boards(robot,body,head_origin):
     for number,name in GROUPS.items():
         old=next(c for c in custom.children if c.label==name)
         hardware=[placed_copy(node,parent) for node,parent in leaves(old) if retain(number,node.label or "")]
-        expected={5:7,6:24,9:4,10:14,11:0,13:2,15:0}[number]
+        expected={9:4,10:14,11:0,15:0}[number]
         assert len(hardware)==expected,(number,"retained hardware count",len(hardware),[s.label for s in hardware])
         boards=[installed_board(number,instance,loc) for instance,loc in placements(number,body,head_origin)]
         if number == 9:

@@ -1,0 +1,164 @@
+{
+ "script": "check_bay_rear",
+ "passed": 23,
+ "total": 23,
+ "rows": [
+  {
+   "check": "arms_on_rail_no_overlap",
+   "ok": true,
+   "overlap_mm3": 0.0,
+   "gap": 0.0
+  },
+  {
+   "check": "rail_behind_arm_-21",
+   "ok": true,
+   "points": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "check": "rail_behind_arm_+21",
+   "ok": true,
+   "points": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "check": "rail_pilot_walls_-21",
+   "ok": true,
+   "wall_fraction_1p4mm": 1.0,
+   "material_in_pilot_mm3": 0.0
+  },
+  {
+   "check": "rail_pilot_walls_+21",
+   "ok": true,
+   "wall_fraction_1p4mm": 1.0,
+   "material_in_pilot_mm3": 0.0
+  },
+  {
+   "check": "m3x16_engagement_in_insert",
+   "ok": true,
+   "engaged_mm": 6.0,
+   "tip_x": -29.6,
+   "pilot_end_x": -29.3
+  },
+  {
+   "check": "driver_path_from_rear_-21",
+   "ok": true,
+   "radial_head_clearance": 0.35,
+   "clashes": []
+  },
+  {
+   "check": "driver_path_from_rear_+21",
+   "ok": true,
+   "radial_head_clearance": 0.35,
+   "clashes": []
+  },
+  {
+   "check": "in_cradle_M1_POLOLU_2813_PUSHBUTTON_POWER_SWITCH_HP_STEP",
+   "ok": true,
+   "board_back_x": -46.1009,
+   "pad_top_x": -46.1,
+   "overlap_mm3": 0.0,
+   "distance_to_plate": 0.0
+  },
+  {
+   "check": "in_cradle_M6_INA226_R010_BOARD_UNMEASURED",
+   "ok": true,
+   "board_back_x": -46.1,
+   "pad_top_x": -46.1,
+   "overlap_mm3": 0.0,
+   "distance_to_plate": 0.0
+  },
+  {
+   "check": "switch_terminal_edge_open",
+   "ok": true,
+   "switch_y_max": -1.5991,
+   "ina_y_min": 1.0
+  },
+  {
+   "check": "clear_REAR_BAY_MODULE_PLATE",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 0.4,
+   "nearest": "REAR_SERVICE_PANEL_OCTAGONAL"
+  },
+  {
+   "check": "clear_REAR_BAY_PLATE_M3X16_SCREW_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_REAR_BAY_RAIL_INSERT_M3X6_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_REAR_BAY_PLATE_M3X16_SCREW_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_REAR_BAY_RAIL_INSERT_M3X6_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M1_POLOLU_2813_PUSHBUTTON_POWER_SWITCH_HP_STEP",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": "POWER_BUTTON_MUSHROOM_HEX_LOCKNUT_20_AF_ESTIMATED"
+  },
+  {
+   "check": "clear_M6_INA226_R010_BOARD_UNMEASURED",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": "POWER_BUTTON_MUSHROOM_HEX_LOCKNUT_20_AF_ESTIMATED"
+  },
+  {
+   "check": "clear_M6_INA226_PARTS_ENVELOPE_UNMEASURED",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_CHARGE_SPLICE_HEATSHRUNK_AWG16",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "splice_reserve_clear",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "slides_in_from_rear_panel_off",
+   "ok": true,
+   "first_hit": null
+  },
+  {
+   "check": "body_lowering_with_rear_bay",
+   "ok": true,
+   "first_hit": null
+  }
+ ]
+}

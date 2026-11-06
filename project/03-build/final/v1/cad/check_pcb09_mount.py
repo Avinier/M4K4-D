@@ -23,7 +23,7 @@ from OCP.BRepGProp import BRepGProp
 from OCP.GProp import GProp_GProps
 
 import body_v1_model as B
-from check_pcb05_mount import _box, _hit, _leaves
+from module_checks import _box, _hit, _leaves
 
 spec = importlib.util.spec_from_file_location("makad_v1_entry", Path(__file__).resolve().with_name("makad-v1.step.py"))
 entry = importlib.util.module_from_spec(spec)

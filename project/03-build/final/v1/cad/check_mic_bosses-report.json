@@ -1,0 +1,417 @@
+{
+ "script": "check_mic_bosses",
+ "passed": 64,
+ "total": 64,
+ "rows": [
+  {
+   "check": "shell_one_solid",
+   "ok": true,
+   "solids": 1
+  },
+  {
+   "check": "no_new_material_outside_skin",
+   "ok": true,
+   "outside_mm3_source": 328.7824,
+   "outside_mm3_droid": 328.7643
+  },
+  {
+   "check": "FRONT_L_board_in_pocket",
+   "ok": true,
+   "overlap_mm3": 0.0,
+   "lateral_clearance": 0.5,
+   "floor_contact_gap": 0.0
+  },
+  {
+   "check": "FRONT_L_gasket_in_pocket",
+   "ok": true,
+   "overlap_mm3": 0.0
+  },
+  {
+   "check": "FRONT_L_port_open_to_outside",
+   "ok": true,
+   "material_beyond_floor": []
+  },
+  {
+   "check": "FRONT_L_pilot_-8.9",
+   "ok": true,
+   "pilot_end_abs_y": 75.3,
+   "shell_outer_abs_y": 76.1765,
+   "material_in_pilot": []
+  },
+  {
+   "check": "FRONT_L_pilot_+8.9",
+   "ok": true,
+   "pilot_end_abs_y": 75.3,
+   "shell_outer_abs_y": 76.1765,
+   "material_in_pilot": []
+  },
+  {
+   "check": "FRONT_L_screw_engagement",
+   "ok": true,
+   "engaged": 3.5,
+   "tip_abs_y": 74.8
+  },
+  {
+   "check": "FRONT_L_washer_overlap_worst_case",
+   "ok": true,
+   "overlap_mm": 0.6,
+   "washer_inner_reach": 5.9
+  },
+  {
+   "check": "FRONT_L_nothing_inboard_of_68p5",
+   "ok": true,
+   "innermost_abs_y": 71.3
+  },
+  {
+   "check": "clear_M9_INMP441_FRONT_L_BOARD_UNMEASURED",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 2.3,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M9_INMP441_FRONT_L_MIC_PACKAGE",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.6712,
+   "nearest": "BODY_SHELL"
+  },
+  {
+   "check": "clear_M9_INMP441_FRONT_L_GASKET",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M9_INMP441_FRONT_L_M2_WASHER_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M9_INMP441_FRONT_L_M2X4_SCREW_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M9_INMP441_FRONT_L_M2_WASHER_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.8,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M9_INMP441_FRONT_L_M2X4_SCREW_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 0.5,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "FRONT_R_board_in_pocket",
+   "ok": true,
+   "overlap_mm3": 0.0,
+   "lateral_clearance": 0.5,
+   "floor_contact_gap": 0.0
+  },
+  {
+   "check": "FRONT_R_gasket_in_pocket",
+   "ok": true,
+   "overlap_mm3": 0.0
+  },
+  {
+   "check": "FRONT_R_port_open_to_outside",
+   "ok": true,
+   "material_beyond_floor": []
+  },
+  {
+   "check": "FRONT_R_pilot_-8.9",
+   "ok": true,
+   "pilot_end_abs_y": 75.3,
+   "shell_outer_abs_y": 76.1765,
+   "material_in_pilot": []
+  },
+  {
+   "check": "FRONT_R_pilot_+8.9",
+   "ok": true,
+   "pilot_end_abs_y": 75.3,
+   "shell_outer_abs_y": 76.1765,
+   "material_in_pilot": []
+  },
+  {
+   "check": "FRONT_R_screw_engagement",
+   "ok": true,
+   "engaged": 3.5,
+   "tip_abs_y": 74.8
+  },
+  {
+   "check": "FRONT_R_washer_overlap_worst_case",
+   "ok": true,
+   "overlap_mm": 0.6,
+   "washer_inner_reach": 5.9
+  },
+  {
+   "check": "FRONT_R_nothing_inboard_of_68p5",
+   "ok": true,
+   "innermost_abs_y": 71.3
+  },
+  {
+   "check": "clear_M9_INMP441_FRONT_R_BOARD_UNMEASURED",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 2.3,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M9_INMP441_FRONT_R_MIC_PACKAGE",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.6712,
+   "nearest": "BODY_SHELL"
+  },
+  {
+   "check": "clear_M9_INMP441_FRONT_R_GASKET",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M9_INMP441_FRONT_R_M2_WASHER_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M9_INMP441_FRONT_R_M2X4_SCREW_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M9_INMP441_FRONT_R_M2_WASHER_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.8,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M9_INMP441_FRONT_R_M2X4_SCREW_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 0.5,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "REAR_L_board_in_pocket",
+   "ok": true,
+   "overlap_mm3": 0.0,
+   "lateral_clearance": 0.5,
+   "floor_contact_gap": 0.0
+  },
+  {
+   "check": "REAR_L_gasket_in_pocket",
+   "ok": true,
+   "overlap_mm3": 0.0
+  },
+  {
+   "check": "REAR_L_port_open_to_outside",
+   "ok": true,
+   "material_beyond_floor": []
+  },
+  {
+   "check": "REAR_L_pilot_-8.9",
+   "ok": true,
+   "pilot_end_abs_y": 75.3,
+   "shell_outer_abs_y": 77.3529,
+   "material_in_pilot": []
+  },
+  {
+   "check": "REAR_L_pilot_+8.9",
+   "ok": true,
+   "pilot_end_abs_y": 75.3,
+   "shell_outer_abs_y": 77.3529,
+   "material_in_pilot": []
+  },
+  {
+   "check": "REAR_L_screw_engagement",
+   "ok": true,
+   "engaged": 3.5,
+   "tip_abs_y": 74.8
+  },
+  {
+   "check": "REAR_L_washer_overlap_worst_case",
+   "ok": true,
+   "overlap_mm": 0.6,
+   "washer_inner_reach": 5.9
+  },
+  {
+   "check": "REAR_L_nothing_inboard_of_68p5",
+   "ok": true,
+   "innermost_abs_y": 71.3
+  },
+  {
+   "check": "clear_M9_INMP441_REAR_L_BOARD_UNMEASURED",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 2.3,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M9_INMP441_REAR_L_MIC_PACKAGE",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.6712,
+   "nearest": "BODY_SHELL"
+  },
+  {
+   "check": "clear_M9_INMP441_REAR_L_GASKET",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M9_INMP441_REAR_L_M2_WASHER_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.8,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M9_INMP441_REAR_L_M2X4_SCREW_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 0.5,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M9_INMP441_REAR_L_M2_WASHER_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M9_INMP441_REAR_L_M2X4_SCREW_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "REAR_R_board_in_pocket",
+   "ok": true,
+   "overlap_mm3": 0.0,
+   "lateral_clearance": 0.5,
+   "floor_contact_gap": 0.0
+  },
+  {
+   "check": "REAR_R_gasket_in_pocket",
+   "ok": true,
+   "overlap_mm3": 0.0
+  },
+  {
+   "check": "REAR_R_port_open_to_outside",
+   "ok": true,
+   "material_beyond_floor": []
+  },
+  {
+   "check": "REAR_R_pilot_-8.9",
+   "ok": true,
+   "pilot_end_abs_y": 75.3,
+   "shell_outer_abs_y": 77.3529,
+   "material_in_pilot": []
+  },
+  {
+   "check": "REAR_R_pilot_+8.9",
+   "ok": true,
+   "pilot_end_abs_y": 75.3,
+   "shell_outer_abs_y": 77.3529,
+   "material_in_pilot": []
+  },
+  {
+   "check": "REAR_R_screw_engagement",
+   "ok": true,
+   "engaged": 3.5,
+   "tip_abs_y": 74.8
+  },
+  {
+   "check": "REAR_R_washer_overlap_worst_case",
+   "ok": true,
+   "overlap_mm": 0.6,
+   "washer_inner_reach": 5.9
+  },
+  {
+   "check": "REAR_R_nothing_inboard_of_68p5",
+   "ok": true,
+   "innermost_abs_y": 71.3
+  },
+  {
+   "check": "clear_M9_INMP441_REAR_R_BOARD_UNMEASURED",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 2.3,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M9_INMP441_REAR_R_MIC_PACKAGE",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.6712,
+   "nearest": "BODY_SHELL"
+  },
+  {
+   "check": "clear_M9_INMP441_REAR_R_GASKET",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M9_INMP441_REAR_R_M2_WASHER_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.8,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M9_INMP441_REAR_R_M2X4_SCREW_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 0.5,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M9_INMP441_REAR_R_M2_WASHER_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M9_INMP441_REAR_R_M2X4_SCREW_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "shell_lowering_with_mics",
+   "ok": true,
+   "first_hit": null
+  },
+  {
+   "check": "rear_left_mic_to_fan_d043",
+   "ok": true,
+   "distance_mm": 26.2977,
+   "note": "report only; D-043 re-check"
+  }
+ ]
+}

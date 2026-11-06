@@ -54,7 +54,7 @@ def check(robot,body,head_origin):
         real=[c for c in group.children if c.label.startswith(f"PCB{n:02d}_KICAD_REVA_")]
         expected=P.placements(n,body,head_origin)
         assert len(real)==len(expected),(n,len(real))
-        assert not any(any(t in '/'.join(path) for t in ('C3_DEVKITC_V11_','PCB05_AUDIO_FRONT_END_PCB','status_LED_PCB08','PCB13_CHARGE_INLET_PCB','BALL_NOSE_HALL_CARRIER_PCB')) for path,s in walk(group) if not any('_KICAD_REVA_' in label for label in path))
+        assert not any(any(t in '/'.join(path) for t in ('C3_DEVKITC_V11_','status_LED_PCB08','BALL_NOSE_HALL_CARRIER_PCB')) for path,s in walk(group) if not any('_KICAD_REVA_' in label for label in path))
         for board,(instance,loc) in zip(real,expected):
             assert len(board.children)==len(P.raw_parts(n))-len(P.dnp_refs(n))
             cores=[s for s in board.children if s.label.endswith('_PCB')]
@@ -65,14 +65,7 @@ def check(robot,body,head_origin):
             # Independent installed datum checks against the frozen envelopes,
             # rather than checking only that the placement helper agrees with itself.
             bb=bbox(cores[0]);centre=tuple((bb[k]+bb[k+3])/2 for k in range(3))
-            if n==5:
-                assert max(abs(a-b) for a,b in zip((bb[0],bb[1],bb[3],bb[4]),(45,-19,75,19)))<0.01
-                assert abs(centre[2]-114.8)<0.01
-            elif n==6:
-                x,y,z,_=next(row for row in body.MICROPHONE_PORTS if row[3]==instance)
-                assert abs(centre[0]-x)<0.01 and abs(centre[2]-z)<0.01
-                assert abs(abs(centre[1])-(body.MIC_BOARD_OUTER_Y-body.MIC_BOARD_SIZE[1]/2))<0.01
-            elif n==9:
+            if n==9:
                 # D-092 outline: strip X -11 (tab), bay to X 66, Y 16.3..39; core centred in the 1.6 mm board on the standoffs
                 assert max(abs(a-b) for a,b in zip((bb[0],bb[1],bb[3],bb[4]),(-11,16.3,66,39)))<0.01
                 assert abs(centre[2]-107.25)<0.01
@@ -82,14 +75,11 @@ def check(robot,body,head_origin):
             elif n==11:
                 assert abs(centre[1]-15.2)<0.01 and abs(centre[2]-(91.8+head_origin[2]))<0.01
                 assert abs(bb[3]+0.035-(-7.2+head_origin[0]))<0.01
-            elif n==13:
-                assert abs(centre[0]-(body.CHARGE_INLET_BOARD_SEAT_X+0.8))<0.01
-                assert max(abs(a-b) for a,b in zip((bb[1],bb[4],bb[2],bb[5]),(-14,14,56.5,71.5)))<0.01
             elif n==15:
                 assert abs(centre[0]-126.6)<0.01 and abs(centre[1]-10)<0.01 and abs(centre[2]-32.7)<0.01
             boards.append((n,instance,board))
             records.append(dict(board=n,instance=instance,components=len(board.children)-1,dnp_omitted=sorted(P.dnp_refs(n)),core_bbox=bbox(cores[0]),transform_bbox_error_mm=err))
-    assert len(boards)==10
+    assert len(boards)==4  # D-093/D-095: PCB-05, PCB-06 x4 and PCB-13 are no longer custom boards
     # All completed boards against each other, not against their old envelopes.
     pairs=[];collisions=[]
     for i,(n,inst,a) in enumerate(boards):
@@ -122,10 +112,6 @@ def check(robot,body,head_origin):
             pb=bbox(part)
             for path,o,ob in nearby:
                 if gap(pb,ob)>=0.3:continue
-                # D-067: the KiCad spacers sit 0.04 mm proud of copper;
-                # their intended contact with the printed bosses is measured
-                # independently in check_pcb05_mount/fit, not a duplicate part.
-                if n==5 and any(part.label.endswith('__H'+str(k)) for k in (1,2,3)) and path[-1]=='BODY_FRAME_MAIN_PRINT':continue
                 # D-092: PCB-09's socket mates the Pi header by design; check_pcb09_fit.py measures the stack.
                 if n==9 and part.label.endswith('__J1') and 'C0_RASPBERRY_PI5_EXACT_STEP' in path:continue
                 d=part.distance(o)
@@ -135,7 +121,7 @@ def check(robot,body,head_origin):
                     if v>1e-5:static.append(dict(part=part.label,obstacle='/'.join(path),volume_mm3=v))
     return dict(installed_boards=records,board_count=len(boards),cross_board_neighbours=pairs,cross_board_collisions=collisions,static_interferences=static,static_near_contacts=contacts,
                 sources={str(n):dict(path=str(P.source_path(n)),sha256=hashlib.sha256(P.source_path(n).read_bytes()).hexdigest()) for n in P.BOARDS},
-                scope="replacement count, core transforms, duplicate placeholder removal and static cross-board and robot interference; intentional own fixing/plug contacts, PCB05 spacer/boss contacts and the PCB09 socket on the Pi header excluded; per-board installation sweeps are separate")
+                scope="replacement count, core transforms, duplicate placeholder removal and static cross-board and robot interference; intentional own fixing/plug contacts and the PCB09 socket on the Pi header excluded; the D-095 bought modules are obstacles; per-board installation sweeps are separate")
 
 
 def main():
@@ -150,7 +136,7 @@ def main():
     else:
         print('Building current final assembly...',flush=True)
         robot=m.build_robot()
-    print('Checking ten installed boards...',flush=True)
+    print('Checking the four installed boards...',flush=True)
     result=check(robot,m._body,m.HEAD_ORIGIN_IN_CHASSIS)
     if args.from_step:result['checked_step']=dict(path=str(args.from_step),sha256=hashlib.sha256(args.from_step.read_bytes()).hexdigest())
     result['result']='PASS' if not result['cross_board_collisions'] and not result['static_interferences'] else 'FAIL'

@@ -21,7 +21,7 @@ from OCP.BRepAlgoAPI import BRepAlgoAPI_Common
 
 import body_v1_model as B
 import pcb_integration as P
-from check_pcb05_mount import _box, _hit, _leaves
+from module_checks import _box, _hit, _leaves
 from check_pcb09_mount import _header_plastic_top, _hits, _vol
 
 HERE = Path(__file__).resolve().parent

@@ -20,7 +20,7 @@ entry = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(entry)
 
 import body_v1_model as B
-from check_pcb05_mount import _box, _hit, _leaves
+from module_checks import _box, _hit, _leaves
 
 LIB = Path("/Applications/KiCad-nightly/KiCad.app/Contents/SharedSupport/footprints")
 SOCKET = "Connector_PinSocket_2.54mm.pretty/PinSocket_2x20_P2.54mm_Vertical.kicad_mod"

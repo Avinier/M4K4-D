@@ -1,0 +1,167 @@
+{
+ "script": "check_balance_channel",
+ "passed": 15,
+ "total": 15,
+ "rows": [
+  {
+   "check": "pa_pair_clear_in_channel",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 0.6,
+   "nearest": "BODY_CHASSIS_M4_HEAD_4"
+  },
+  {
+   "check": "channel_width_at_break",
+   "ok": true,
+   "free_width": 13.5,
+   "pair_width": 6.3,
+   "loop_width": 2.0,
+   "samples": [
+    [
+     55.0,
+     41.5,
+     36.5,
+     50.0
+    ],
+    [
+     55.0,
+     45.0,
+     36.5,
+     50.0
+    ],
+    [
+     55.0,
+     48.5,
+     36.5,
+     50.0
+    ],
+    [
+     64.0,
+     41.5,
+     36.5,
+     53.2
+    ],
+    [
+     64.0,
+     45.0,
+     36.5,
+     53.2
+    ],
+    [
+     64.0,
+     48.5,
+     36.5,
+     53.2
+    ],
+    [
+     73.0,
+     41.5,
+     -50.0,
+     50.0
+    ],
+    [
+     73.0,
+     45.0,
+     -50.0,
+     50.0
+    ],
+    [
+     73.0,
+     48.5,
+     -50.0,
+     50.0
+    ]
+   ]
+  },
+  {
+   "check": "pa_pair_slides_back_to_window",
+   "ok": true,
+   "first_hit": null,
+   "travel": 26.1
+  },
+  {
+   "check": "pa_pair_passes_tub_window",
+   "ok": true,
+   "pair_box_at_window": [
+    27.9,
+    41.0,
+    41.0,
+    47.9,
+    47.3,
+    49.0
+   ],
+   "window": [
+    26.9,
+    49.5,
+    40.0,
+    50.0
+   ],
+   "first_hit": null
+  },
+  {
+   "check": "deck_hole_open_with_walls",
+   "ok": true,
+   "material_in_hole_mm3": 0.0,
+   "wall_fraction_1mm": 1.0
+  },
+  {
+   "check": "reserve_clear_M12_BALANCE_PACK_LEAD_RESERVE_1",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "reserve_clear_M12_BALANCE_PACK_LEAD_RESERVE_2",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "reserve_clear_M12_BALANCE_BODY_LEAD_RESERVE_1",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "reserve_clear_M12_BALANCE_BODY_LEAD_RESERVE_2",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "reserve_clear_M12_BALANCE_BODY_LEAD_RESERVE_3",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "reserve_clear_M12_BALANCE_BODY_LEAD_RESERVE_4",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "reserve_clear_M12_BALANCE_BODY_LEAD_RESERVE_5",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "reserve_clear_M12_BALANCE_BODY_LEAD_RESERVE_6",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "reserve_clear_M12_BALANCE_BODY_LEAD_RESERVE_7",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "planted_xh_3p_does_not_fit",
+   "ok": true,
+   "clashes": [
+    [
+     "CHASSIS_FRAME_FRONT_MODULE",
+     56.1262
+    ],
+    [
+     "loop",
+     152.0
+    ]
+   ]
+  }
+ ]
+}

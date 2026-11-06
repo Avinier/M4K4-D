@@ -1,0 +1,168 @@
+{
+ "script": "check_bay_tray",
+ "passed": 24,
+ "total": 24,
+ "rows": [
+  {
+   "check": "standoff_land_and_hole_-16.8_+19.5",
+   "ok": true,
+   "land_fraction": 1.0,
+   "wall_fraction": 1.0,
+   "material_in_hole_mm3": 0.0
+  },
+  {
+   "check": "standoff_land_and_hole_+1.7_+19.5",
+   "ok": true,
+   "land_fraction": 1.0,
+   "wall_fraction": 1.0,
+   "material_in_hole_mm3": 0.0
+  },
+  {
+   "check": "standoff_land_and_hole_+1.7_-33.0",
+   "ok": true,
+   "land_fraction": 1.0,
+   "wall_fraction": 1.0,
+   "material_in_hole_mm3": 0.0
+  },
+  {
+   "check": "standoff_land_and_hole_-16.8_-33.0",
+   "ok": true,
+   "land_fraction": 1.0,
+   "wall_fraction": 1.0,
+   "material_in_hole_mm3": 0.0
+  },
+  {
+   "check": "standoff_thread_engagement",
+   "ok": true,
+   "top_engaged": 2.0,
+   "bottom_engaged": 2.43,
+   "gap_between_tips": 0.57
+  },
+  {
+   "check": "clear_M4_POLOLU_4082_S13V30F5_PI5_STEP",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.0,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M4_M2X5_FF_ROUND_STANDOFF_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.31,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M4_M2X5_TRAY_SCREW_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 2.36,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M4_M2X4_BOARD_SCREW_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.2619,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M4_M2X5_FF_ROUND_STANDOFF_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M4_M2X5_TRAY_SCREW_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M4_M2X4_BOARD_SCREW_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 2.6009,
+   "nearest": "COMPUTE_TRAY"
+  },
+  {
+   "check": "clear_M5_POLOLU_4082_S13V30F5_SHARED_5V_STEP",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M5_M2X5_FF_ROUND_STANDOFF_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M5_M2X5_TRAY_SCREW_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M5_M2X4_BOARD_SCREW_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 2.6009,
+   "nearest": "COMPUTE_TRAY"
+  },
+  {
+   "check": "clear_M5_M2X5_FF_ROUND_STANDOFF_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M5_M2X5_TRAY_SCREW_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M5_M2X4_BOARD_SCREW_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 2.6009,
+   "nearest": "COMPUTE_TRAY"
+  },
+  {
+   "check": "tray_screw_heads_under_pi",
+   "ok": true,
+   "min_gap_to_pi_box": 3.2897
+  },
+  {
+   "check": "d072_motor_cable_keep_out",
+   "ok": true,
+   "lowest_module_z": 69.9243,
+   "pigtail_reserve_top": 62.5,
+   "vertical_margin": 7.4243,
+   "new_parts_over_reserves": []
+  },
+  {
+   "check": "pin_row_solder_room_M4",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "pin_row_solder_room_M5",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "body_lowering_with_tray_modules",
+   "ok": true,
+   "first_hit": null
+  }
+ ]
+}

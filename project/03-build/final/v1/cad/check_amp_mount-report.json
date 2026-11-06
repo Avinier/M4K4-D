@@ -1,0 +1,95 @@
+{
+ "script": "check_amp_mount",
+ "passed": 14,
+ "total": 14,
+ "rows": [
+  {
+   "check": "frame_one_solid_with_bracket",
+   "ok": true,
+   "solids": 1
+  },
+  {
+   "check": "bracket_in_frame",
+   "ok": true,
+   "fraction": 0.9935
+  },
+  {
+   "check": "bracket_fused_to_post",
+   "ok": true,
+   "post_fraction": 1.0,
+   "root_mm3": 50.6
+  },
+  {
+   "check": "amp_on_cradle_pads",
+   "ok": true,
+   "board_back_x": 69.8,
+   "pad_top_x": 69.8,
+   "overlap_mm3": 0.0
+  },
+  {
+   "check": "hub_screw_engagement",
+   "ok": true,
+   "engaged": 2.4,
+   "tip_x": 67.2
+  },
+  {
+   "check": "clear_M8_MAX98357A_BOARD_UNMEASURED",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M8_MAX98357A_PARTS_ENVELOPE_UNMEASURED",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.8868,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M8_SPEAKER_SCREW_TERMINAL_UNMEASURED",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 0.3294,
+   "nearest": "BODY_SHELL"
+  },
+  {
+   "check": "clear_M13_AUDIO_HUB_PERFBOARD",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.0,
+   "nearest": "C0_LINK_ADAPTER_PCB09_BOARD"
+  },
+  {
+   "check": "clear_M13_AUDIO_HUB_PARTS_ENVELOPE",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.5,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "clear_M13_AUDIO_HUB_M2X4_SCREW_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M13_AUDIO_HUB_M2X4_SCREW_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "speaker_cavity_clear",
+   "ok": true,
+   "min_gap": 17.3304
+  },
+  {
+   "check": "shell_lowers_over_bracket",
+   "ok": true,
+   "first_hit": null
+  }
+ ]
+}

@@ -59,9 +59,9 @@ The pass criteria for every N-test are in the plan's bench register ([simplifica
 | **M6 board** | A seller with a stated R010 board in stock, or a measured shunt swap; shunt value calibrated against a meter |
 | **M10 charger** | A seller in stock, or the fallback charger chosen |
 | **M11 adapter** | A specific BIS-registered adapter with its PDO list confirmed |
-| **M12 ports** | Exact XT30 holder, balance-port article, polarity and lead chosen in CAD (level 4) |
-| **Outlines** | M6, M7 and M9 measured on receipt |
-| **STEP models** | Pololu publishes a STEP for the S13V30F5 ([resources](https://www.pololu.com/product/4082/resources), 0J1808); check the S18V20ALV and #2813 resource pages at level 4. Model anything without one as a box from its dimension drawing |
+| **M12 ports** | CAD placed (D-095): XT30U female epoxied in a panel opening, the body-side lead's XHP-3 plug parked face-out in a slot, and a JST PA 3P wire-to-wire balance break (PAP-03V-S + PALR-03VF) in the pack channel. Exact articles, polarity marks and the XT60→XT30 lead still to buy |
+| **Outlines** | M6 and M9 (and M8) measured on receipt; their CAD outlines are UNMEASURED envelopes in cradles or pockets with clearance (D-095). M7 is drawn from Adafruit's EAGLE board file (25.4 × 17.78, two Ø2.5 holes 20.32 apart) |
+| **STEP models** | Closed (D-095): Pololu publishes STEPs for all three Pololu modules (S13V30F5 0J1808, S18V20x 0J1416, #2813 0J1405); they are in `final/v1/cad/purchased/`. The #2813 has no mounting holes, so it sits in a printed cradle |
 
 ## Sources
 

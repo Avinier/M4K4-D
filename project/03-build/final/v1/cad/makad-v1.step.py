@@ -44,9 +44,13 @@ def build_robot(label="Makad v1"):
     ])
     # Apply legacy mount edits before replacing their board placeholders. Existing
     # subsystem fit checks intentionally still exercise _apply_droid_cuts alone.
+    if str(Path(__file__).resolve().parent) not in sys.path:   # cadgen restores sys.path after loading
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
     from pcb_integration import replace_completed_boards
-    return replace_completed_boards(_group_custom_pcbs(_apply_droid_cuts(robot)),
-                                    _body, HEAD_ORIGIN_IN_CHASSIS)
+    robot = replace_completed_boards(_group_custom_pcbs(_apply_droid_cuts(robot)),
+                                     _body, HEAD_ORIGIN_IN_CHASSIS)
+    # D-095: the D-093 bought modules, one group each, beside the custom PCBs.
+    return _relabel(robot.label, [*robot.children, bought_modules()], robot.location)
 
 
 # Droid-level CAD changes. From 2026-10-14 the droid's CAD changes are made in
@@ -87,119 +91,8 @@ def pcb11_socket_local():
     return socket - _x_cylinder(s["bore"][0], s["bore"][1], s["bore"][2])
 
 
-# D-067 (amended at placement): PCB-05 hangs from the frame on three Wurth 9774080243R M2
-# SMT spacers (8 mm, reflowed on its top face), one ISO 7380 M2 screw each, driven from
-# above after the compute tray and PCB-09 are in. World mm. The rear screw passes the
-# front upper cross rail (Z 126-135.5) and seats in a counterbore under the yaw housing
-# seat (Z 135.5, R36.6 about the yaw axis); the front two pass the yaw plate (Z 134-138),
-# open above. The rear corners hold no second spacer: J5-1 and the J5-2/J5-4 footprints
-# leave 4.3 mm there for a 5.8 mm courtyard.
-# Printed bosses on the frame meet the spacer tops. check_pcb05_mount.py measures it.
-PCB05_MOUNT = dict(
-    points=((48.5, 9.8), (61.3, 9.8), (61.3, -9.8)),
-    rear=1,                              # the first `rear` points are under the cross rail
-    board_top=115.6,
-    spacer=(2.175, 0.8, 8.0),            # outer r, modelled bore r (M2 thread), length
-    boss=(3.5, (126.0, 134.0, 134.0)),   # r, frame underside above each point
-    bore=1.2,                            # M2 clearance, Ø2.4
-    cbore=(2.0, 134.0, 135.6),           # rear only: r, floor Z, open into the housing seat
-    screws=((16.0, 134.0), (20.0, 138.0), (20.0, 138.0)),  # length, head seat Z
-)
-
-# PCB-02 edge frame, CP-OI-09. The charger board stays at the frozen 50 x 36 mm
-# datum and is held at four non-plated M2 holes. Its edge rails sit outside the
-# board outline; corner pads bear on the bare back face. Two feet tie the rails
-# into the existing rear lower cross rail below the board. The +Y rail is
-# interrupted at the W16 lead corridor. World coordinates, mm.
-PCB02_MOUNT = dict(
-    board=(-49.6, -48.0, -25.0, 25.0, 58.0, 94.0),
-    holes=((-20.5, 60.5), (20.5, 60.5), (-20.5, 91.5), (15.0, 91.5)),
-    hole_r=1.1,
-    edge_rail_x=(-50.6, -49.6),
-    edge_rail_y=(( -28.0, -25.5), (25.5, 28.0)),
-    boss_x=(-53.8, -49.6),
-    boss_r=2.5,
-    boss_z=((58.0, 63.0), (89.0, 94.0)),
-    insert=(1.6, 1.0, 3.5),  # outer radius, core radius, length
-    screw=(5.0, 1.0, 1.9, 1.3),  # M2 length, shank radius, head radius, head thickness
-    lead_notch_z=(65.5, 71.5),
-    courtyard_r=3.5,
-)
-
-
-def _pcb02_block(bounds):
-    x0, x1, y0, y1, z0, z1 = bounds
-    return Box(x1 - x0, y1 - y0, z1 - z0).moved(
-        Location(((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2)))
-
-
-def _pcb02_x_cylinder(radius, x0, x1, y, z):
-    return Cylinder(radius, x1 - x0).rotate(Axis.Y, 90).moved(
-        Location(((x0 + x1) / 2, y, z)))
-
-
-def pcb02_mount_holes():
-    """World-frame drills used on the placeholder until the KiCad STEP replaces it."""
-    b = PCB02_MOUNT["board"]
-    return Compound(children=[_pcb02_x_cylinder(PCB02_MOUNT["hole_r"], b[0] - 0.1, b[1] + 0.1, y, z)
-                              for y, z in PCB02_MOUNT["holes"]])
-
-
-def pcb02_mount_frame():
-    """Frame edge rails, four rear standoffs and four modelled metal inserts."""
-    m = PCB02_MOUNT
-    parts = []
-    # Side rails remain outside the board and plug outlines. The positive rail
-    # has a 6 mm opening for W16, routed behind PCB-13.
-    for sign, yrange in ((-1, m["edge_rail_y"][0]), (1, m["edge_rail_y"][1])):
-        rail = _pcb02_block((*m["edge_rail_x"], yrange[0], yrange[1], m["board"][4], m["board"][5]))
-        if sign > 0:
-            rail = rail - _pcb02_block((m["edge_rail_x"][0] - 0.1, m["edge_rail_x"][1] + 0.1,
-                                        yrange[0] - 0.1, yrange[1] + 0.1,
-                                        m["lead_notch_z"][0], m["lead_notch_z"][1]))
-        parts.append(rail)
-
-        # A lower foot runs below the board edge. Its riser fuses into the
-        # lower cross rail at X -36..-34, Z 61..69.
-        yc = sign * 26.75
-        parts.append(_pcb02_block((-50.6, -35.9, yc - 0.75, yc + 0.75, 57.0, 58.5)))
-        parts.append(_pcb02_block((-36.1, -34.0, yc - 0.75, yc + 0.75, 57.0, 69.0)))
-
-        for (y, z), (z0, z1) in zip((p for p in m["holes"] if (p[0] > 0) == (sign > 0)), m["boss_z"]):
-            pad = _pcb02_block((m["boss_x"][0], m["boss_x"][1],
-                                min(y - 3.0, sign * 25.5), max(y + 3.0, sign * 25.5), z0, z1))
-            bore = _pcb02_x_cylinder(m["insert"][0] + 0.1, m["boss_x"][0] - 0.1,
-                                      m["boss_x"][1] + 0.1, y, z)
-            parts.append(pad - bore)
-            # Insert is a separate hollow solid with 0.1 mm radial fit in the
-            # printed boss. It remains visible in the assembly tree.
-            ix0 = m["boss_x"][1] - m["insert"][2]
-            outer = _pcb02_x_cylinder(m["insert"][0], ix0, m["boss_x"][1], y, z)
-            inner = _pcb02_x_cylinder(m["insert"][1], ix0 - 0.1, m["boss_x"][1] + 0.1, y, z)
-            parts.append(outer - inner)
-
-    return Compound(children=parts)
-
-
 def _z_cyl(r, z0, z1, x, y):
     return Cylinder(r, z1 - z0).moved(Location((x, y, (z0 + z1) / 2.0)))
-
-
-def pcb05_mount_parts():
-    """D-067 world-frame shapes: spacers on the board, bosses and bores in the frame."""
-    m = PCB05_MOUNT
-    sr, sb, sl = m["spacer"]
-    top = m["board_top"] + sl
-    spacers, bosses, bores = [], [], []
-    for (x, y), roof in zip(m["points"], m["boss"][1]):
-        spacers.append(_z_cyl(sr, m["board_top"], top, x, y) - _z_cyl(sb, m["board_top"] - 0.1, top + 0.1, x, y))
-        bosses.append(_z_cyl(m["boss"][0], top, roof, x, y) - _z_cyl(m["bore"], top - 0.1, roof + 0.1, x, y))
-        bores.append(_z_cyl(m["bore"], roof - 0.1, 138.1, x, y))
-    cbores = [_z_cyl(m["cbore"][0], m["cbore"][1], m["cbore"][2], x, y) for x, y in m["points"][:m["rear"]]]
-    return spacers, bosses, bores + cbores
-
-
-_PCB05_SPACERS, _PCB05_BOSSES, _PCB05_CUTS = pcb05_mount_parts()
 
 
 # D-068: PCB-10 C3 carrier mounting and the Espressif DevKitC. World frame, mm. The carrier
@@ -296,12 +189,6 @@ PCB10_BOARD_GROWTH = [(-14.0, 42.5, -58.4, -56.8, 76.0, 82.01), (51.0, 56.0, -58
 # it and at least 1.92 mm at the sides. No released PCB geometry changes.
 PCB10_JP1_RELIEF = (-8.52, -5.92, -61.4, -58.4, 89.2, 95.8)
 
-
-
-# D-069: PCB-13 pin relief in the rear-panel inlet pad, world frame. The body source's
-# CHARGE_INLET_PIN_RELIEF (9.60 x 5.60 x 1.2) is cut from the seat at X -55.1 round the
-# receptacle axis (Y 0, Z 64); this box widens it to 10.60 and runs 0.1 past the seat.
-PCB13_RELIEF = (-56.3, -55.0, -5.3, 5.3, 61.2, 66.8)
 
 
 def pcb10_connector_moves():
@@ -847,6 +734,601 @@ def pcb09_mount_parts():
 PCB09_MOVED = r"C0_(LINK_ADAPTER_PCB09_BOARD|GPIO_2X20_SOCKET_BODY|THVD1451_\w+|J9_\d_\w+)"
 
 
+# D-095 (D-093 plan level 4): the bought modules of D-093/D-094 replace PCB-02, 03, 04, 05, 06,
+# 07 and PCB-13 in the droid. World frame, mm. Pololu STEPs (S13V30F5, S18V20x, #2813) are in
+# purchased/; the INA226, MAX98357A, INMP441 and LSM6DSOX outlines are drawn from vendor drawings
+# or listings with a clearance margin and are UNMEASURED until the parts arrive (labels carry
+# "UNMEASURED"). Boards without mounting holes sit in printed cradles: a rim 0.25 mm clear of the
+# board, open on the wire edge, with 1.5 mm pads under the corners for the solder tails, the board
+# held on the pads with VHB foam (E). Check scripts: check_bay_rear/tub/tray.py,
+# check_rear_panel_ports.py, check_balance_channel.py, check_mic_bosses.py, check_amp_mount.py,
+# check_imu_adapter.py and check_d095_mass.py.
+PURCHASED = Path(__file__).resolve().with_name("purchased")
+VENDOR_STEPS = {
+    "S13V30F5": "5v-step-up-step-down-voltage-regulator-s13v30f5.step",     # Pololu 0J1808
+    "S18V20X": "s18v20x-step-up-step-down-voltage-regulator.step",          # Pololu 0J1416
+    "PSW_2813": "big-pushbutton-power-switch-with-reverse-voltage-protection.step",  # Pololu 0J1405
+}
+# Mounting holes in each STEP's own frame (board underside on z 0), from the STEP's Ø2.18 bores.
+VENDOR_HOLES = {
+    "S13V30F5": ((2.16, 2.16), (20.7, 2.16)),
+    "S18V20X": ((2.16, 2.16), (2.16, 18.8), (41.02, 2.16), (41.02, 18.8)),
+    "PSW_2813": (),                      # no mounting holes: the four Ø2.18 are its power terminals
+}
+PCB_T = 1.57                             # Pololu board thickness
+M2_HEAD = (1.9, 1.3)                     # pan/button head radius, height (BO-013 family)
+M3_BUTTON = (2.85, 1.65)                 # ISO 7380 M3 head radius, height (as D-072)
+
+# Tub bay (was PCB-03, above the battery tub): one printed plate on the deck carries both
+# S18V20ALVs (M2 head 5.5 V, M3 yaw 11.1 V), long axis along Y, terminals at the Y ends.
+TUB_BAY = dict(
+    plate=(30.0, 85.0, -28.0, 28.0, 56.0, 58.5),          # body over the tub opening
+    arms=((18.5, 30.01, 21.0, 28.0),),                     # x0, x1, |y0|, |y1|: back to the rear deck strip
+    modules=(("M2", 31.5), ("M3", 54.5)),                  # module X min; board Y -21.59..21.59
+    boss=(2.5, 2.5),                                       # radius, height on the plate
+    pilot=(0.8, 4.5),                                      # Ø1.6 M2 thread-forming pilot, depth from the boss top
+    screw_len=5.0,                                         # M2 x 5 thread-forming, 3.4 mm engagement
+    fix_rear=((21.0, 24.5), (21.0, -24.5)),                # M3 x 6 into M3 x 4 inserts through the 4 mm deck
+    fix_front=((83.0, 20.0), (83.0, -20.0)),               # M3 x 8 into M3 x 6 inserts in the front crossmember
+    insert_rear=(2.2, 1.25, 4.0), insert_front=(2.2, 1.25, 6.0),  # OD/2, modelled ID/2, length (in hand)
+    pilot_r=2.0, plate_hole=1.7,
+    ballast_relief=(3.4, 0.6),                             # Ø6.8 x 0.6 under the plate over the ballast CSK heads
+)
+TUB_BOARD_Z = TUB_BAY["plate"][5] + TUB_BAY["boss"][1]   # S18V20 underside, Z 61.0
+
+# Tray bay (was PCB-04, under the compute tray): the two S13V30F5s (M4 Pi, M5 shared 5 V) hang
+# from the tray, components down, on M2 x 5 F-F round standoffs; M2 x 5 from the tray top, M2 x 4
+# from below. Both stay above Z 69.9, 7 mm over the motor cable reserves (D-072 keep-out).
+TRAY_BAY = dict(
+    tray_z=84.5, standoff=(1.85, 5.0),                     # tray underside; standoff radius, length
+    modules=(("M4", (-19.0, 21.66), (1, 0, 0)),            # origin X, Y; local x direction (holes on Y 19.5)
+             ("M5", (3.86, -35.16), (-1, 0, 0))),          # holes on Y -33.0
+    hole_r=1.2, top_screw=5.0, bottom_screw=4.0,
+)
+TRAY_BOARD_TOP = TRAY_BAY["tray_z"] - TRAY_BAY["standoff"][1]   # Z 79.5
+
+# Rear bay (was PCB-02, behind the rear panel): a printed plate in PCB-02's plane carries the power
+# switch (M1) and the INA226 monitor (M6) in cradles on its +X face; two legs and arms bolt to the
+# rear lower cross rail (X -36 face) with M3 x 16 into M3 x 6 inserts. The charge splice is tied
+# beside its -Y edge.
+REAR_BAY = dict(
+    plate=(-49.6, -47.6, -27.0, 28.0, 70.0, 93.0),
+    legs=((-26.0, -16.5), (16.5, 26.0)), leg_z=(60.3, 70.01),
+    arms=((-25.5, -16.5), (16.5, 25.5)), arm_x=(-47.61, -36.0), arm_z=(60.3, 71.0),
+    screw_yz=((-21.0, 65.5), (21.0, 65.5)), screw_len=16.0,
+    cbore=(3.2, -45.6), clear_r=1.7,                       # counterbore radius, head seat X; shank clearance
+    rail_face=-36.0, rail_pilot=(2.0, 6.7), insert=(2.2, 1.25, 6.0),
+)
+CRADLE = dict(rim=1.2, gap=0.25, pad=1.5, pad_size=3.0, lip=0.8)
+REAR_SWITCH = dict(y0=-27.0, z_top=92.5)                  # board Y -27..-1.6, Z 72.18..92.5, terminals toward +Y
+INA226_BOARD = (25.5, 20.5, 1.6, 3.0)                     # UNMEASURED: Y, Z, thickness, parts height (+X)
+INA226_AT = (1.0, 72.0)                                    # board Y min, Z min
+CHARGE_SPLICE = dict(axis=(-45.6, -34.0), r=3.5, z=(62.0, 88.0),
+                     reserve=(-49.6, -41.6, -38.0, -30.0, 60.0, 90.0))
+
+# Rear panel (D-093 Q7): the PCB-13 pad keeps its outline; the USB-C pocket, receptacle hole, pin
+# relief and screw pilots are filled, and an XT30 charge port and a JST-XH 3P balance port go in.
+# XT30U female (AMASS) 10.2 x 5.2, 16 long with solder cups (E), epoxied in a 0.2 mm-clear hole,
+# mouth 0.5 mm inside the outer face. The balance port is the body-side lead's XHP-3 plug parked in
+# a slot, face out; the charger's balance lead plugs onto it. Polarity marks are printed on the
+# panel at the print stage.
+PORTS = dict(
+    xt30=dict(yz=(-8.0, 64.0), body=(10.2, 5.2, 16.0), clear=0.2),
+    xh=dict(yz=(8.5, 64.0), body=(9.9, 5.75, 9.8), clear=0.2),
+    face_x=-62.0, recess=0.5,                              # mouth plane: outer skin ~X -62.2..-63.2 here
+    corridor=(30.0, 14.0, 10.0),                           # mating plug and lead outside: length, Y, Z
+    skin_x=-63.4,                                          # the corridor starts outside the sloped skin
+)
+
+# Balance lead (D-093 R3). The pack-side 3 x AWG24 lead leaves the cells with W01, through the
+# +Y tub window, and breaks at a JST PA 2.0 mm wire-to-wire pair (PAP-03V-S 8.0 x 5.8 D, PALR-03VF
+# 7.4 x 6.3 E; 3 A, locking) lying in the channel where the NTC break was, 8.0 wide turned along
+# Z (6.3 across Y). It slides back to the window like J-PK (pack out). The body-side lead loops
+# back along the channel's outer wall, rises through a Ø5 hole in the deck, runs aft under the
+# left driver and the cross rail, and ends in the XHP-3 balance port.
+BALANCE = dict(
+    pair=(54.0, 74.0, 41.0, 47.3, 41.0, 49.0),            # mated PA pair, X 20 (E)
+    pack_lead=((44.0, 49.0, 34.1, 37.2, 40.6, 44.4), (44.0, 54.0, 37.2, 39.3, 40.6, 44.4)),
+    body_lead=((50.5, 76.5, 47.5, 49.4, 42.0, 46.0),      # loop back along the channel wall
+               (50.3, 53.7, 45.7, 49.1, 42.0, 60.0),      # rise through the deck hole
+               (14.0, 54.0, 44.5, 48.5, 56.5, 60.0),      # aft under the left driver
+               (14.0, 18.0, 33.0, 48.5, 56.5, 60.0),      # jog inboard of the body side rail
+               (-47.0, 18.0, 33.0, 38.5, 56.5, 60.0),     # under the cross rail, inboard of the frame's lower side rail
+               (-47.0, -40.0, 8.5, 38.5, 56.5, 60.0),     # across the rear deck
+               (-51.7, -45.0, 4.0, 13.0, 56.5, 66.0)),    # up to the port's rear
+    deck_hole=(52.0, 47.4, 2.5),                           # x, y, r through the front deck
+)
+
+# Microphones (D-093 Q6): four INMP441 modules at the four D-037 port axes. UNMEASURED module:
+# 14 x 14 x 1.6 board, port on its centre, INMP441 4.72 x 3.76 x 1.0 inboard over the port. The
+# board sits 1.6 mm deep in a 15 x 15 pocket in a larger boss (its inboard face flush with the old
+# seat at |Y| 71.3, so nothing passes |Y| 68.5); a foam gasket ring in the pocket floor seals the
+# port; two M2 x 4 thread-forming screws (as PCB-06) with Ø6 DIN 9021 washers beside the board clamp its edges.
+MIC = dict(
+    board=(14.0, 14.0, 1.6), pocket=(15.0, 15.0), seat=71.3,
+    package=(4.72, 3.76, 1.0),
+    boss_half=(11.6, 9.6),
+    gasket=(3.25, 1.0, 0.7), gasket_pocket=3.5,           # OD/2, ID/2, compressed thickness; pocket radius
+    screw_u=8.9, screw_len=4.0, pilot=(0.8, 4.0), washer=(3.0, 0.5),    # DIN 9021 M2 washer Ø6 x 0.5
+    pigtail=(1.0, 2.0, 10.0),                              # thickness, half height, run past the board edge
+)
+MIC_FLOOR = MIC["seat"] + MIC["board"][2]                  # |Y| 72.9
+
+# Amplifier (M8) and audio hub (M13): a printed bracket fused to the frame's front +Y post, the amp
+# (UNMEASURED, Adafruit #3006 class 17.8 x 19.4) in a cradle on its +X face facing the speaker, the
+# perfboard hub on its -X face on two M2 x 4 thread-forming screws (holes drilled by the builder).
+AMP = dict(
+    bracket=(66.3, 68.3, 39.5, 59.6, 100.0, 123.0),
+    board=(17.8, 19.4, 1.6), at=(40.6, 102.0),             # Y, Z, thickness; board Y min, Z min
+    parts=3.0, terminal=(7.0, 7.6, 8.5),                   # chip/passives height; screw terminal Y, Z, height (E)
+)
+HUB = dict(board=(18.5, 22.0, 1.6), at=(40.0, 100.5), boss=(2.5, 1.5), parts=5.0, screw=4.0,
+           holes=((2.5, 11.0), (16.0, 11.0)))              # local (y, z) of the two drilled holes
+
+# IMU (M7): Adafruit #4438 LSM6DSOX (Adafruit EAGLE board: 25.4 x 17.78, two Ø2.5 holes 20.32
+# apart on one long edge, SH4 STEMMA connectors on the short edges) on a printed adapter screwed to
+# the deck at the existing J15A M2 pilots (22, +-7.5). Long axis along Y; the chip lands 0.1 mm
+# from PCB-07's, and the board stays behind the tub-bay plate (X 30) so either can go on first.
+IMU = dict(
+    adapter=(12.0, 29.5, -13.0, 13.0, 56.0, 58.0),
+    board=(25.4, 17.78, 1.6), board_x1=29.78, boss=(2.5, 2.0),
+    holes_v=15.24, holes_u=(2.54, 22.86), chip=(12.7, 8.89, 2.5, 3.0, 0.86),
+    sh4=(6.0, 4.25, 2.95),                                 # JST SH 4P side entry: width, depth, height (E)
+    j15a=((22.0, 7.5), (22.0, -7.5)), j15a_screw=6.0,
+)
+IMU_BOARD_Z = IMU["adapter"][5] + IMU["boss"][1]           # Z 60.0
+
+# PCB-08 (D-093): the W23a/W23b sideband headers J8-3 and J8-5 go; the yaw servo plug moves here
+# from PCB-03 J3-5: a Feetech 5264-3P (2.5 mm) top-entry header where J8-3 was, mated plug above.
+PCB08_SERVO = dict(header=(-9.5, 0.4, -42.6, -36.85, 113.6, 119.6),
+                   plug=(-9.0, -0.1, -42.2, -37.25, 116.6, 126.0))
+
+
+def _place(shape, location):
+    """A free shape at a world location, sharing its OCC geometry."""
+    return _shifted(shape, location)
+
+
+def _tag(shape, label, color, alpha=1.0):
+    return _body._paint(shape, label, color, alpha)
+
+
+_VENDOR_CACHE = {}
+
+
+def vendor_solid(key):
+    """One Pololu STEP as one solid or compound in its own frame (board underside on z 0)."""
+    if key not in _VENDOR_CACHE:
+        from cadgen.step_scene import import_step
+        solids = list(import_step(str(PURCHASED / VENDOR_STEPS[key])).solids())
+        _VENDOR_CACHE[key] = solids[0] if len(solids) == 1 else Compound(solids)
+    return _VENDOR_CACHE[key]
+
+
+def _frame(origin, x_dir, z_dir):
+    return Location(Plane(origin=origin, x_dir=x_dir, z_dir=z_dir))
+
+
+def tub_module_frames():
+    """(name, Location) of the two S18V20ALVs: local x along +Y, local y along -X, board on Z 61."""
+    y0 = -43.18 / 2.0
+    return [(name, _frame((x0 + 20.96, y0, TUB_BOARD_Z), (0, 1, 0), (0, 0, 1))) for name, x0 in TUB_BAY["modules"]]
+
+
+def tray_module_frames():
+    """(name, Location) of the two S13V30F5s hanging under the tray, components down."""
+    return [(name, _frame((x, y, TRAY_BOARD_TOP), xd, (0, 0, -1))) for name, (x, y), xd in TRAY_BAY["modules"]]
+
+
+def _world(loc, x, y, z=0.0):
+    p = loc * Location((x, y, z))
+    return tuple(p.position)
+
+
+def tub_bosses():
+    """World (x, y) of the eight S18V20 hole bosses."""
+    return [_world(loc, x, y)[:2] for _, loc in tub_module_frames() for x, y in VENDOR_HOLES["S18V20X"]]
+
+
+def tray_holes():
+    """World (x, y) of the four S13V30F5 standoffs."""
+    return [_world(loc, x, y)[:2] for _, loc in tray_module_frames() for x, y in VENDOR_HOLES["S13V30F5"]]
+
+
+def tub_bay_plate():
+    """The tub-bay plate (one print, PETG), with its bosses and pilots."""
+    m = TUB_BAY
+    plate = _blk(*m["plate"])
+    for x0, x1, a, b in m["arms"]:
+        for sy in (1, -1):
+            plate = plate + _blk(x0, x1, *sorted((sy * a, sy * b)), m["plate"][4], m["plate"][5])
+    top = m["plate"][5]
+    for x, y in tub_bosses():
+        plate = plate + _z_cyl(m["boss"][0], top - 0.01, top + m["boss"][1], x, y)
+    for x, y in tub_bosses():
+        plate = plate - _z_cyl(m["pilot"][0], top + m["boss"][1] - m["pilot"][1], top + m["boss"][1] + 0.1, x, y)
+    for x, y in (*m["fix_rear"], *m["fix_front"]):
+        plate = plate - _z_cyl(m["plate_hole"], m["plate"][4] - 0.1, top + 0.1, x, y)
+    # The ballast bar's M3 countersunk heads (CH-038) sit only 0.1 mm under the deck top.
+    r, depth = m["ballast_relief"]
+    for y in (-20.0, 20.0):
+        plate = plate - _z_cyl(r, m["plate"][4] - 0.1, m["plate"][4] + depth, 74.0, y)
+    return _tag(plate, "TUB_BAY_MODULE_PLATE", "#4F575B")
+
+
+def tub_bay_hardware():
+    """The plate's four M3 screws and the four inserts in the deck."""
+    m, out = TUB_BAY, []
+    z0, top = m["plate"][4], m["plate"][5]
+    for k, ((x, y), length, ins) in enumerate([*[(p, 6.0, m["insert_rear"]) for p in m["fix_rear"]],
+                                                *[(p, 8.0, m["insert_front"]) for p in m["fix_front"]]], start=1):
+        screw = _z_cyl(M3_BUTTON[0], top, top + M3_BUTTON[1], x, y) + _z_cyl(1.5, top - length, top, x, y)
+        out.append(_tag(screw, f"TUB_BAY_PLATE_M3X{int(length)}_SCREW_{k}", _body.STEEL))
+        r_out, r_in, l = ins
+        ring = _z_cyl(r_out, z0 - l, z0, x, y) - _z_cyl(r_in, z0 - l - 0.1, z0 + 0.1, x, y)
+        out.append(_tag(ring, f"TUB_BAY_DECK_INSERT_M3X{int(l)}_{k}", _body.BRONZE))
+    return out
+
+
+def tub_bay_deck_pilots():
+    """CHASSIS_FRAME_FRONT_MODULE cuts: Ø4.0 insert pilots for the plate screws."""
+    m, z0 = TUB_BAY, TUB_BAY["plate"][4]
+    out = [_z_cyl(m["pilot_r"], z0 - m["insert_rear"][2] - 0.1, z0 + 0.1, x, y) for x, y in m["fix_rear"]]
+    out += [_z_cyl(m["pilot_r"], z0 - m["insert_front"][2] - 0.6, z0 + 0.1, x, y) for x, y in m["fix_front"]]
+    return out
+
+
+def tub_modules():
+    """M2 and M3 groups: each S18V20ALV and its four M2 x 5 screws."""
+    groups = []
+    for (name, loc), what in zip(tub_module_frames(), ("5V5_HEAD", "11V1_YAW")):
+        board_top = TUB_BOARD_Z + PCB_T
+        parts = [_tag(_place(vendor_solid("S18V20X"), loc), f"{name}_POLOLU_2572_S18V20ALV_{what}_STEP", "#2D6B3F")]
+        for k, (lx, ly) in enumerate(VENDOR_HOLES["S18V20X"], start=1):
+            x, y, _ = _world(loc, lx, ly)
+            screw = _z_cyl(M2_HEAD[0], board_top, board_top + M2_HEAD[1], x, y) + _z_cyl(0.75, board_top - TUB_BAY["screw_len"], board_top, x, y)
+            parts.append(_tag(screw, f"{name}_M2X5_THREAD_FORMING_SCREW_{k}", _body.STEEL))
+        groups.append(parts)
+    return groups
+
+
+def tray_modules():
+    """M4 and M5 groups: each S13V30F5 with two standoffs and four screws."""
+    m, groups = TRAY_BAY, []
+    for (name, loc), what in zip(tray_module_frames(), ("PI5", "SHARED_5V")):
+        parts = [_tag(_place(vendor_solid("S13V30F5"), loc), f"{name}_POLOLU_4082_S13V30F5_{what}_STEP", "#2D6B3F")]
+        r, length = m["standoff"]
+        for k, (lx, ly) in enumerate(VENDOR_HOLES["S13V30F5"], start=1):
+            x, y, _ = _world(loc, lx, ly)
+            stand = _z_cyl(r, TRAY_BOARD_TOP, m["tray_z"], x, y) - _z_cyl(0.8, TRAY_BOARD_TOP - 0.1, m["tray_z"] + 0.1, x, y)
+            tray_top = m["tray_z"] + 3.0
+            top = _z_cyl(M2_HEAD[0], tray_top, tray_top + M2_HEAD[1], x, y) + _z_cyl(0.8, tray_top - m["top_screw"], tray_top, x, y)
+            under = TRAY_BOARD_TOP - PCB_T
+            bottom = _z_cyl(M2_HEAD[0], under - M2_HEAD[1], under, x, y) + _z_cyl(0.8, under, under + m["bottom_screw"], x, y)
+            parts += [_tag(stand, f"{name}_M2X5_FF_ROUND_STANDOFF_{k}", _body.BRONZE),
+                      _tag(top, f"{name}_M2X5_TRAY_SCREW_{k}", _body.STEEL),
+                      _tag(bottom, f"{name}_M2X4_BOARD_SCREW_{k}", _body.STEEL)]
+        groups.append(parts)
+    return groups
+
+
+def tray_holes_cuts():
+    """COMPUTE_TRAY cuts: Ø2.4 through holes for the standoff screws."""
+    z = TRAY_BAY["tray_z"]
+    return [_z_cyl(TRAY_BAY["hole_r"], z - 0.1, z + 3.1, x, y) for x, y in tray_holes()]
+
+
+def _cradle_x(face_x, sign, y0, y1, z0, z1, open_edge):
+    """A cradle on a plate face normal to X, opening toward sign*X, for a board spanning y0..y1, z0..z1.
+
+    open_edge is one of '+y', '-y', '+z', '-z' (the wire edge, left open).
+    """
+    c = CRADLE
+    g, rim, pad = c["gap"], c["rim"], c["pad"]
+    depth = pad + PCB_T + c["lip"]
+    xa, xb = sorted((face_x - sign * 0.01, face_x + sign * depth))
+    outer = _blk(xa, xb, y0 - g - rim, y1 + g + rim, z0 - g - rim, z1 + g + rim)
+    inner = _blk(xa - 1.0, xb + 1.0, y0 - g, y1 + g, z0 - g, z1 + g)
+    frame = outer - inner
+    cut = {"+y": (y1 - 1.0, y1 + 5.0, z0 + 2.0, z1 - 2.0), "-y": (y0 - 5.0, y0 + 1.0, z0 + 2.0, z1 - 2.0),
+           "+z": (y0 + 2.0, y1 - 2.0, z1 - 1.0, z1 + 5.0), "-z": (y0 + 2.0, y1 - 2.0, z0 - 5.0, z0 + 1.0)}[open_edge]
+    frame = frame - _blk(xa - 1.0, xb + 1.0, *cut)
+    pa, pb = sorted((face_x - sign * 0.01, face_x + sign * pad))
+    s = c["pad_size"]
+    for y, z in ((y0, z0), (y1 - s, z0), (y0, z1 - s), (y1 - s, z1 - s)):
+        frame = frame + _blk(pa, pb, y, y + s, z, z + s)
+    return frame
+
+
+def _switch_frame():
+    """#2813 STEP frame on the rear plate: local x down (-Z), local y along +Y, components +X."""
+    face = REAR_BAY["plate"][1] + CRADLE["pad"]
+    return _frame((face, REAR_SWITCH["y0"], REAR_SWITCH["z_top"]), (0, 0, -1), (1, 0, 0))
+
+
+def rear_bay_plate():
+    """The rear-bay plate with legs, rail arms, counterbored screw holes and two cradles."""
+    m = REAR_BAY
+    x0, x1 = m["plate"][0], m["plate"][1]
+    plate = _blk(*m["plate"])
+    for ya, yb in m["legs"]:
+        plate = plate + _blk(x0, x1, ya, yb, *m["leg_z"])
+    for ya, yb in m["arms"]:
+        plate = plate + _blk(*m["arm_x"], ya, yb, *m["arm_z"])
+    face = x1
+    sy0, zt = REAR_SWITCH["y0"], REAR_SWITCH["z_top"]
+    plate = plate + _cradle_x(face, 1, sy0, sy0 + 25.4, zt - 20.32, zt, "+y")
+    iy, iz = INA226_AT
+    w, h = INA226_BOARD[0], INA226_BOARD[1]
+    plate = plate + _cradle_x(face, 1, iy, iy + w, iz, iz + h, "-y")
+    cr, seat = m["cbore"]
+    for y, z in m["screw_yz"]:
+        plate = plate - _x_cyl(cr, x0 - 0.1, seat, y, z) - _x_cyl(m["clear_r"], seat - 0.1, m["arm_x"][1] + 0.1, y, z)
+    return _tag(plate, "REAR_BAY_MODULE_PLATE", "#4F575B")
+
+
+def rear_bay_hardware():
+    m, out = REAR_BAY, []
+    seat = m["cbore"][1]
+    for k, (y, z) in enumerate(m["screw_yz"], start=1):
+        screw = _x_cyl(M3_BUTTON[0], seat - M3_BUTTON[1], seat, y, z) + _x_cyl(1.5, seat, seat + m["screw_len"], y, z)
+        out.append(_tag(screw, f"REAR_BAY_PLATE_M3X16_SCREW_{k}", _body.STEEL))
+        r_out, r_in, l = m["insert"]
+        f = m["rail_face"]
+        ring = _x_cyl(r_out, f, f + l, y, z) - _x_cyl(r_in, f - 0.1, f + l + 0.1, y, z)
+        out.append(_tag(ring, f"REAR_BAY_RAIL_INSERT_M3X6_{k}", _body.BRONZE))
+    return out
+
+
+def rear_bay_rail_pilots():
+    m = REAR_BAY
+    r, depth = m["rail_pilot"]
+    return [_x_cyl(r, m["rail_face"] - 0.05, m["rail_face"] + depth, y, z) for y, z in m["screw_yz"]]
+
+
+def rear_modules():
+    """M1 (switch) and M6 (INA226) groups, and the charge splice."""
+    switch = [_tag(_place(vendor_solid("PSW_2813"), _switch_frame()), "M1_POLOLU_2813_PUSHBUTTON_POWER_SWITCH_HP_STEP", "#2D6B3F")]
+    iy, iz = INA226_AT
+    w, h, t, parts = INA226_BOARD
+    bx = REAR_BAY["plate"][1] + CRADLE["pad"]
+    ina = [_tag(_blk(bx, bx + t, iy, iy + w, iz, iz + h), "M6_INA226_R010_BOARD_UNMEASURED", _body.PCB_GREEN),
+           _tag(_blk(bx + t, bx + t + parts, iy + 2.0, iy + w - 2.0, iz + 2.0, iz + h - 2.0), "M6_INA226_PARTS_ENVELOPE_UNMEASURED", "#D38132", 0.55)]
+    s = CHARGE_SPLICE
+    splice = [_tag(_z_cyl(s["r"], *s["z"], *s["axis"]), "CHARGE_SPLICE_HEATSHRUNK_AWG16", "#202020"),
+              _tag(_blk(*s["reserve"]), "CHARGE_SPLICE_AND_LEADS_RESERVE", "#E7A95B", 0.25)]
+    return switch, ina, splice
+
+
+def _port_box(port, extra=0.0, x1=None):
+    p = PORTS[port]
+    (y, z), (w, h, length) = p["yz"], p["body"]
+    mouth = PORTS["face_x"] + PORTS["recess"]
+    return _blk(mouth - extra, (mouth + length if x1 is None else x1) + extra, y - w / 2 - extra, y + w / 2 + extra, z - h / 2 - extra, z + h / 2 + extra)
+
+
+def rear_panel_port_cuts():
+    """REAR_SERVICE_PANEL_OCTAGONAL cuts: the XT30 hole and the XH slot, through the pad and skin."""
+    out = []
+    for k in ("xt30", "xh"):
+        (y, z), (w, h, _), c = PORTS[k]["yz"], PORTS[k]["body"], PORTS[k]["clear"]
+        out.append(_blk(-66.0, -50.0, y - w / 2 - c, y + w / 2 + c, z - h / 2 - c, z + h / 2 + c))
+    return out
+
+
+def rear_panel_fill():
+    """REAR_SERVICE_PANEL_OCTAGONAL add: the PCB-13 pocket, hole, relief and pilots filled, ports kept open."""
+    pad, cuts = _body.rear_panel_charge_inlet()
+    fill = pad & cuts
+    for tool in rear_panel_port_cuts():
+        fill = fill - tool
+    return fill
+
+
+def port_parts():
+    """M12 parts: XT30 female, parked XHP-3 plug, PA break, and the lead and corridor reserves."""
+    out = [_tag(_port_box("xt30"), "M12_XT30U_FEMALE_CHARGE_PORT", "#E5C34B"),
+           _tag(_port_box("xh"), "M12_JST_XHP_3_BALANCE_PORT_PLUG", "#F4F1E6"),
+           _tag(_blk(*BALANCE["pair"]), "M12_JST_PA_3P_BALANCE_BREAK_MATED_PAIR", "#F4F1E6")]
+    length, w, h = PORTS["corridor"]
+    mouth = PORTS["face_x"] + PORTS["recess"]
+    for k in ("xt30", "xh"):
+        y, z = PORTS[k]["yz"]
+        skin = PORTS["skin_x"]
+        out.append(_tag(_blk(skin - length, skin, y - w / 2, y + w / 2, z - h / 2, z + h / 2),
+                        f"M12_{k.upper()}_MATING_PLUG_CORRIDOR_KEEP_OUT", "#79C4CB", 0.15))
+    for k, box in enumerate(BALANCE["pack_lead"], start=1):
+        out.append(_tag(_blk(*box), f"M12_BALANCE_PACK_LEAD_RESERVE_{k}", "#44BDD0", 0.42))
+    for k, box in enumerate(BALANCE["body_lead"], start=1):
+        out.append(_tag(_blk(*box), f"M12_BALANCE_BODY_LEAD_RESERVE_{k}", "#44BDD0", 0.42))
+    return out
+
+
+def balance_deck_hole():
+    x, y, r = BALANCE["deck_hole"]
+    return _z_cyl(r, 50.0, 58.0, x, y)
+
+
+def mic_boss_tools():
+    """(cuts, adds) on BODY_SHELL for the four INMP441 bosses (cuts run before adds)."""
+    m = MIC
+    outer = _body._shell_outer()
+    cuts, adds = [], []
+    hx, hz = m["boss_half"]
+    pw, ph = m["pocket"]
+    for x, y, z, _name in _body.MICROPHONE_PORTS:
+        sign = 1.0 if y > 0.0 else -1.0
+
+        def bore(r, a, b, xx=x, zz=z):
+            return _body._axial_bore_y(r, sign * a, sign * b, xx, zz)
+
+        far = 85.0
+        f = m["seat"]
+        pts = [(f, z - hz), (far, z - hz), (far, z + hz + (far - f)), (f, z + hz)]
+        boss = extrude((Plane.YZ * Polygon(*pts, align=None)).moved(Location((x - hx, 0.0, 0.0))), amount=2.0 * hx)
+        if sign < 0:
+            boss = boss.mirror(Plane.XZ)
+        boss = boss & outer
+        pocket = _blk(x - pw / 2, x + pw / 2, *sorted((sign * (f - 0.1), sign * MIC_FLOOR)), z - ph / 2, z + ph / 2)
+        gasket = bore(m["gasket_pocket"], MIC_FLOOR - 0.1, MIC_FLOOR + m["gasket"][2])
+        port = bore(_body.MIC_PORT_RADIUS, f - 0.1, 90.0)
+        pilots = [bore(m["pilot"][0], f - 0.1, f + m["pilot"][1], x + du) for du in (-m["screw_u"], m["screw_u"])]
+        voids = [pocket, gasket, port, *pilots]
+        cuts += [pocket, gasket, *pilots]
+        for v in voids:
+            boss = boss - v
+        adds.append(boss)
+    return cuts, adds
+
+
+def mic_modules():
+    """M9: four INMP441 modules with gasket, two M2 x 4 screws and washers, and a soldered pigtail."""
+    m, groups = MIC, []
+    bw, bh, bt = m["board"]
+    for x, y, z, name in _body.MICROPHONE_PORTS:
+        sign = 1.0 if y > 0.0 else -1.0
+        centre = -1.0 if x > _body.BODY_AXIS_X else 1.0
+        f = m["seat"]
+
+        def ys(a, b):
+            return sorted((sign * a, sign * b))
+
+        def bore(r, a, b, xx=x, zz=z):
+            return _body._axial_bore_y(r, sign * a, sign * b, xx, zz)
+
+        board = _blk(x - bw / 2, x + bw / 2, *ys(f, MIC_FLOOR), z - bh / 2, z + bh / 2) - bore(0.4, f - 0.5, MIC_FLOOR + 0.5)
+        pw, pz, pt = m["package"]
+        mic = _blk(x - pw / 2, x + pw / 2, *ys(f - pt, f), z - pz / 2, z + pz / 2)
+        go, gi, gt = m["gasket"]
+        gasket = bore(go, MIC_FLOOR, MIC_FLOOR + gt) - bore(gi, MIC_FLOOR - 0.1, MIC_FLOOR + gt + 0.1)
+        parts = [_tag(board, f"M9_INMP441_{name}_BOARD_UNMEASURED", _body.PCB_GREEN, 0.94),
+                 _tag(mic, f"M9_INMP441_{name}_MIC_PACKAGE", "#C9CDD0"),
+                 _tag(gasket, f"M9_INMP441_{name}_GASKET", _body.RUBBER, 0.9)]
+        wr, wt = m["washer"]
+        for k, du in enumerate((-m["screw_u"], m["screw_u"]), start=1):
+            xx = x + du
+            washer = bore(wr, f - wt, f, xx) - bore(1.1, f - wt - 0.1, f + 0.1, xx)
+            screw = bore(M2_HEAD[0], f - wt - M2_HEAD[1], f - wt, xx) + bore(0.75, f - wt, f - wt + m["screw_len"], xx)
+            parts += [_tag(washer, f"M9_INMP441_{name}_M2_WASHER_{k}", _body.STEEL),
+                      _tag(screw, f"M9_INMP441_{name}_M2X4_SCREW_{k}", _body.STEEL)]
+        t, hv, run = m["pigtail"]
+        xs = sorted((x + centre * 3.0, x + centre * (bw / 2 + run)))
+        parts.append(_tag(_blk(*xs, *ys(f - t, f), z + bh / 2 - 2.0 * hv, z + bh / 2), f"M9_INMP441_{name}_PIGTAIL_RESERVE", "#F4F1E6", 0.6))
+        groups.append((name, parts))
+    return groups
+
+
+def amp_bracket():
+    """BODY_FRAME_MAIN_PRINT add: the bracket on the front +Y post, the amp cradle and the hub bosses."""
+    a, h = AMP, HUB
+    x0, x1, y0, y1, z0, z1 = a["bracket"]
+    shape = _blk(*a["bracket"])
+    ay, az = a["at"]
+    bw, bh, _ = a["board"]
+    shape = shape + _cradle_x(x1, 1, ay, ay + bw, az, az + bh, "-z")
+    hy, hz = h["at"]
+    r, ht = h["boss"]
+    for u, v in h["holes"]:
+        shape = shape + _x_cyl(r, x0 - ht, x0 + 0.01, hy + u, hz + v) - _x_cyl(0.8, x0 - ht - 0.1, x0 + 1.5, hy + u, hz + v)
+    return shape
+
+
+def amp_parts():
+    """M8 amp and M13 hub groups."""
+    a, h = AMP, HUB
+    x1 = a["bracket"][1] + CRADLE["pad"]
+    ay, az = a["at"]
+    bw, bh, bt = a["board"]
+    tw, tz, th = a["terminal"]
+    amp = [_tag(_blk(x1, x1 + bt, ay, ay + bw, az, az + bh), "M8_MAX98357A_BOARD_UNMEASURED", _body.PCB_GREEN),
+           _tag(_blk(x1 + bt, x1 + bt + a["parts"], ay + 2.0, ay + bw - 2.0, az + 4.0, az + bh - tz - 1.0), "M8_MAX98357A_PARTS_ENVELOPE_UNMEASURED", "#D38132", 0.55),
+           _tag(_blk(x1 + bt, x1 + bt + th, ay + (bw - tw) / 2, ay + (bw + tw) / 2, az + bh - tz, az + bh), "M8_SPEAKER_SCREW_TERMINAL_UNMEASURED", "#2E7D4F")]
+    hx1 = a["bracket"][0] - h["boss"][1]
+    hw, hh, ht = h["board"]
+    hy, hz = h["at"]
+    hub = [_tag(_blk(hx1 - ht, hx1, hy, hy + hw, hz, hz + hh), "M13_AUDIO_HUB_PERFBOARD", "#C8A060"),
+           _tag(_blk(hx1 - ht - h["parts"], hx1 - ht, hy + 1.0, hy + hw - 1.0, hz + 1.0, hz + hh - 4.0), "M13_AUDIO_HUB_PARTS_ENVELOPE", "#D38132", 0.55)]
+    for k, (u, v) in enumerate(h["holes"], start=1):
+        screw = _x_cyl(M2_HEAD[0], hx1 - ht - M2_HEAD[1], hx1 - ht, hy + u, hz + v) + _x_cyl(0.75, hx1 - ht, hx1 - ht + h["screw"], hy + u, hz + v)
+        hub.append(_tag(screw, f"M13_AUDIO_HUB_M2X4_SCREW_{k}", _body.STEEL))
+    return amp, hub
+
+
+def imu_adapter():
+    """The printed LSM6DSOX adapter on the J15A pilots, with its two board bosses."""
+    m = IMU
+    shape = _blk(*m["adapter"])
+    top = m["adapter"][5]
+    x1 = m["board_x1"]
+    bw = m["board"][0]
+    hx = x1 - m["holes_v"]
+    for u in m["holes_u"]:
+        y = u - bw / 2.0
+        shape = shape + _z_cyl(m["boss"][0], top - 0.01, top + m["boss"][1], hx, y)
+        shape = shape - _z_cyl(0.8, m["adapter"][4] + 0.2, top + m["boss"][1] + 0.1, hx, y)
+    for x, y in m["j15a"]:
+        shape = shape - _z_cyl(1.1, m["adapter"][4] - 0.1, top + 0.1, x, y)
+    return _tag(shape, "IMU_ADAPTER_LSM6DSOX", "#4F575B")
+
+
+def imu_parts():
+    """M7: the LSM6DSOX board, chip, two SH4 connectors, two board screws, two J15A screws."""
+    m = IMU
+    bw, bv, bt = m["board"]
+    x1, z = m["board_x1"], IMU_BOARD_Z
+    hx = x1 - m["holes_v"]
+    board = _blk(x1 - bv, x1, -bw / 2, bw / 2, z, z + bt)
+    for u in m["holes_u"]:
+        board = board - _z_cyl(1.25, z - 0.1, z + bt + 0.1, hx, u - bw / 2)
+    cu, cv, cw, cl, ch = m["chip"]
+    chip = _blk(x1 - cv - cl / 2, x1 - cv + cl / 2, cu - bw / 2 - cw / 2, cu - bw / 2 + cw / 2, z + bt, z + bt + ch)
+    parts = [_tag(board, "M7_ADAFRUIT_4438_LSM6DSOX_BOARD", "#1D3F8A"), _tag(chip, "M7_LSM6DSOX_LGA14", "#202020")]
+    sw, sd, sh = m["sh4"]
+    for k, sy in enumerate((-1, 1), start=1):
+        ya, yb = sorted((sy * bw / 2, sy * (bw / 2 - sd)))
+        parts.append(_tag(_blk(x1 - 8.89 - sw / 2, x1 - 8.89 + sw / 2, ya, yb, z + bt, z + bt + sh), f"M7_STEMMA_QT_SH4_{k}", "#F4F1E6"))
+    top = z + bt
+    for k, u in enumerate(m["holes_u"], start=1):
+        y = u - bw / 2
+        screw = _z_cyl(M2_HEAD[0], top, top + M2_HEAD[1], hx, y) + _z_cyl(0.75, top - 5.0, top, hx, y)
+        parts.append(_tag(screw, f"M7_M2X5_THREAD_FORMING_SCREW_{k}", _body.STEEL))
+    at = m["adapter"][5]
+    for k, (x, y) in enumerate(m["j15a"], start=1):
+        screw = _z_cyl(M2_HEAD[0], at, at + M2_HEAD[1], x, y) + _z_cyl(0.75, at - m["j15a_screw"], at, x, y)
+        parts.append(_tag(screw, f"M7_J15A_M2X6_THREAD_FORMING_SCREW_{k}", _body.STEEL))
+    return parts
+
+
+def pcb08_servo_plug():
+    return [_tag(_blk(*PCB08_SERVO["header"]), "YAW_JUNCTION_J8_8_FEETECH_5264_3P_HEADER", "#F4F1E6"),
+            _tag(_blk(*PCB08_SERVO["plug"]), "YAW_JUNCTION_J8_8_YAW_SERVO_5264_3P_MATED_PLUG", "#F4F1E6")]
+
+
+def bought_modules():
+    """The 'Bought modules' group: one subgroup per D-094 module (M1-M9, M12, M13)."""
+    (m2, m3), (m4, m5) = tub_modules(), tray_modules()
+    switch, ina, splice = rear_modules()
+    amp, hub = amp_parts()
+    mics = [part for _, parts in mic_modules() for part in parts]
+    groups = [
+        ("M1 power switch, Pololu #2813 HP", switch),
+        ("M2 head 5.5 V, Pololu S18V20ALV", m2),
+        ("M3 yaw 11.1 V, Pololu S18V20ALV", m3),
+        ("M4 Pi 5 V, Pololu S13V30F5", m4),
+        ("M5 shared 5 V, Pololu S13V30F5", m5),
+        ("M6 INA226 monitor (unmeasured)", ina),
+        ("M7 IMU, Adafruit #4438 LSM6DSOX", imu_parts()),
+        ("M8 amplifier, MAX98357A breakout (unmeasured)", amp),
+        ("M9 microphones, INMP441 x4 (unmeasured)", mics),
+        ("M12 charge and balance ports, charge splice", [*port_parts(), *splice]),
+        ("M13 audio hub, perfboard", hub),
+    ]
+    return Compound(label="Bought modules", children=[Compound(label=name, children=parts) for name, parts in groups])
+
+
+_MIC_CUTS, _MIC_ADDS = mic_boss_tools()
+
+
 # Printed tools, not robot parts: (BOM ID, label, function giving the tool in the world frame).
 PRINT_TOOLS = [
     ("CH-089", "AXLE_ALIGNMENT_PLUG", axle_alignment_plug),  # D-071
@@ -866,6 +1348,10 @@ DROID_REMOVES = [
     *_NOSE_KEEL_REMOVES,
     # D-092: the Pi's header-side M2.5 x 6 screws, replaced by PCB-09's standoffs below.
     r"PI5_M25X6_SCREW_[34]",
+    # D-095 (D-093): the dropped boards' placeholders with their plugs and reserves (PCB-02, 03, 04,
+    # 05, 06 x4, 07, 13 and the W16 inlet lead), and PCB-08's J8-3/J8-5 sideband headers.
+    r"PCB0[2345]_\w+", r"J[234]_\d_(MICROFIT\w+|GHR\d\d_MATED_PLUG)", r"CHARGE_INLET_\w+", r"PDM_MIC_(FRONT|REAR)_[LR]", r"IMU_PCB07",
+    r"YAW_JUNCTION_J8_[35]_\w+",
 ]
 DROID_INSERTS = [
     (r"C3_CARRIER_PCB10_WITH_DEVKITC", pcb10_devkitc()),
@@ -874,30 +1360,27 @@ DROID_INSERTS = [
     *_J13_INSERTS,  # D-077: M4 x 8 deck inserts at the three top-driven J13 bolts
     *_NOSE_KEEL_INSERTS,  # D-079: M3 x 6 inserts in the pod seat and both crossmembers; 1.2 mm TCRT shims
     *[(r"C0_LINK_ADAPTER_PCB09", part) for part in pcb09_mount_parts()],  # D-092: standoffs and screws
+    # D-095: the tub-bay plate and the IMU adapter (chassis prints), the rear-bay plate (body print),
+    # their fixings, and PCB-08's yaw servo plug. The modules themselves are in "Bought modules".
+    (r"CHASSIS_PRIMARY_FRAME", tub_bay_plate()),
+    *[(r"CHASSIS_PRIMARY_FRAME", part) for part in tub_bay_hardware()],
+    (r"CHASSIS_PRIMARY_FRAME", imu_adapter()),
+    (r"BODY_PRIMARY_FRAME", rear_bay_plate()),
+    *[(r"BODY_PRIMARY_FRAME", part) for part in rear_bay_hardware()],
+    *[(r"YAW_JUNCTION_PCB08", part) for part in pcb08_servo_plug()],
 ]
 
 
 DROID_CUTS = [
-    # CP-OI-09: four M2 clearances in the PCB-02 placeholder; the KiCad board
-    # will carry the same holes when it replaces this core.
-    (r"PCB02_CHARGE_AND_SYSTEM_POWER_PCB", pcb02_mount_holes()),
     # D-059: PCB-15 component relief behind the nose Hall board, open at the top and
     # into the lead groove. D-063 deepens it 0.4 mm (to 1.3 mm) with the board.
     (r"BALL_POD_PRINTED_SEAT", (125.3, 126.6, 7.8, 12.2, 30.3, 35.01)),
     # D-063: the slot's back wall moves 0.4 mm back (X 126.5 -> 126.1); the board's
     # ends (local Y 0-0.8, 5.2-6.0) bear on it.
     (r"BALL_POD_PRINTED_SEAT", (126.1, 126.5, 6.9, 13.1, 30.3, 35.01)),
-    # D-067: M2 clearance bores through the cross rail and yaw plate, rear counterbores.
-    *[(r"BODY_FRAME_MAIN_PRINT", cut) for cut in _PCB05_CUTS],
-    # D-067 amended: the J5-7 placeholder is 10 mm tall; the mated Micro-Fit is 6.98 (Molex), so
-    # the block stops at Z 122.6, 1.0 mm under the front -Y boss (Z 123.6).
-    (r"PCB05_J5_7_MICROFIT3_2P_(RA_HEADER|MATED_PLUG)", (60.0, 80.0, -35.0, -5.0, 122.6, 130.0)),
     # D-068: PCB-10 header-row reliefs in the C3 carrier uprights.
     *_PCB10_CUTS,
     (r"BODY_FRAME_C3_CARRIER_UPRIGHT_1", PCB10_JP1_RELIEF),
-    # D-069: the inlet pad's pin relief widens 9.60 -> 10.60 mm (Y +-5.30), so GCT's outer
-    # USB4140 stake copper (Y +-4.87) and its fillets clear the PCB-13 seat; Z and depth unchanged.
-    (r"REAR_SERVICE_PANEL_OCTAGONAL", PCB13_RELIEF),
     # D-070: hub-cap peg holes (taking the old pegs) and the column trimmed flush.
     *_WHEEL_CAP_CUTS,
     # D-071: stub flange Ø24 -> Ø21; set-screw key notch in the carrier hub.
@@ -911,12 +1394,16 @@ DROID_CUTS = [
     # D-079: relief over the caster insert under the GP2Y; keel pilots 7 mm deep; keel sensor flat to Z 12.4,
     # bezel pilot and pin hole deeper; shoe groove 1 mm deeper.
     *_NOSE_KEEL_CUTS,
+    # D-095: tub-plate insert pilots and the balance-lead hole in the front deck; rear-bay insert pilots in
+    # the cross rail; standoff holes in the tray; XT30 and XH openings in the rear panel; INMP441 pockets.
+    *[(r"CHASSIS_FRAME_FRONT_MODULE", tool) for tool in tub_bay_deck_pilots()],
+    (r"CHASSIS_FRAME_FRONT_MODULE", balance_deck_hole()),
+    *[(r"BODY_FRAME_MAIN_PRINT", tool) for tool in rear_bay_rail_pilots()],
+    *[(r"COMPUTE_TRAY", tool) for tool in tray_holes_cuts()],
+    *[(r"REAR_SERVICE_PANEL_OCTAGONAL", tool) for tool in rear_panel_port_cuts()],
+    *[(r"BODY_SHELL", tool) for tool in _MIC_CUTS],
 ]
 DROID_ADDS = [
-    # CP-OI-09: edge rails and four rear standoffs tie PCB-02 into the rear lower
-    # cross rail. The rails stay outside the board and plug outlines; the +Y W16
-    # corridor has its own opening. The four hollow M2 inserts are separate solids.
-    (r"BODY_FRAME_MAIN_PRINT", pcb02_mount_frame()),
     # D-074: PCB-09's strip must carry both rows of socket copper plus edge margin.
     # Grow only its +Y edge (20.9 -> 22.4); bridge, bay and board Z stay fixed.
     (r"C0_LINK_ADAPTER_PCB09_BOARD", (-4.7, 36.0, 20.9, 22.4, 106.4, 108.0)),
@@ -935,14 +1422,6 @@ DROID_ADDS = [
     (r"BALL_POD_PRINTED_SEAT", (127.1, 127.5, 11.7, 13.1, 30.3, 35.0)),
     # D-065: PCB-11 socket and light-pipe sleeve inside the crown.
     (r"front_bezel_integral_camera_crown", pcb11_socket_local().moved(Location(HEAD_ORIGIN_IN_CHASSIS))),
-    # D-067: PCB-05 bosses under the frame, and the SMT spacers reflowed on the board.
-    *[(r"BODY_FRAME_MAIN_PRINT", boss) for boss in _PCB05_BOSSES],
-    *[(r"PCB05_AUDIO_FRONT_END_PCB", spacer) for spacer in _PCB05_SPACERS],
-    # D-067 amended: the Micro-Fit 43650-0200 housing is 9.65 mm wide (Molex SD-43650-001), not the
-    # placeholder's 7.26, and sits 1.5 mm further forward; header and plug grow to X 64.8-74.46, at
-    # Molex's 6.98 mm mated height (the placeholder's 10 mm block is cut back in DROID_CUTS).
-    (r"PCB05_J5_7_MICROFIT3_2P_RA_HEADER", (64.8, 74.46, -19.0, -9.0, 115.6, 122.6)),
-    (r"PCB05_J5_7_MICROFIT3_2P_MATED_PLUG", (64.8, 74.46, -31.0, -19.0, 115.6, 122.6)),
     # D-070: hub holes filled and pegs on the hub; a boss round each cap hole.
     *_WHEEL_RIM_ADDS,
     *_WHEEL_CAP_ADDS,
@@ -957,17 +1436,17 @@ DROID_ADDS = [
     *_J13_ADDS,
     # D-079: the wear shoe's tongue 1 mm taller over its M2 pilot.
     *_NOSE_KEEL_ADDS,
+    # D-095: the PCB-13 pocket, hole, relief and pilots filled round the new ports; the INMP441 bosses
+    # (built with their own voids, so the cuts above stay open); the amp bracket on the front +Y post.
+    (r"REAR_SERVICE_PANEL_OCTAGONAL", rear_panel_fill()),
+    *[(r"BODY_SHELL", tool) for tool in _MIC_ADDS],
+    (r"BODY_FRAME_MAIN_PRINT", amp_bracket()),
 ]
 DROID_MOVES = [
     # D-068 amended: C3 GH headers and plugs into the three proved rows; the J10-1 plug reserve down
     # with the real Micro-Fit (centre Z 89.5 -> 83.43).
     *pcb10_connector_moves(),
     (r"C3_CARRIER_EDGE_CONNECTOR_J101_RESERVE", (0.0, 0.0, -6.07)),
-    # D-067 amended: J5-1 slides 2 mm toward -Y so the rear spacer fits between it and J5-2;
-    # J5-2/J5-4 and J5-6 move 0.225 mm apart (their footprint courtyards touched).
-    (r"PCB05_J5_1_(JST_GH_SM10B_HEADER|GHR10_MATED_PLUG)|PCB05_REAR_EDGE_PLUG_RESERVE", (0.0, -2.0, 0.0)),
-    (r"PCB05_J5_[24]_(JST_GH_SM04B_HEADER|GHR04_MATED_PLUG)", (-0.225, 0.0, 0.0)),
-    (r"PCB05_J5_6_(JST_GH_SM02B_HEADER|GHR02_MATED_PLUG)", (0.225, 0.0, 0.0)),
     # D-063: PCB-15 sits 0.4 mm further back (X 126.2-127.0), so U1 clears the magnet
     # at the cap's 3 mm stop.
     (r"BALL_NOSE_HALL_(CARRIER_PCB|DRV5055A3_SOT23)", (-0.4, 0.0, 0.0)),
@@ -996,12 +1475,15 @@ def _cut_parts(node, parent_location, hits):
                 hits["remove", r] += 1
             if not gone:
                 kept.append(_cut_parts(child, here, hits))
+        kept = [k for k in kept if k is not None]   # D-095: a group emptied by removals goes too
         for pattern, shape in DROID_INSERTS:
             if re.fullmatch(pattern, node.label or ""):
                 hits["insert", pattern] += 1
                 kept.append(shape.moved(here.inverse()))
         if len(kept) == len(children) and all(k is c for k, c in zip(kept, children)):
             return node
+        if not kept:
+            return None
         return _relabel(node.label, kept, node.location, node.color)
     label = node.label or ""
     edits = [(kind, entry) for kind, table in (("cut", DROID_CUTS), ("add", DROID_ADDS), ("move", DROID_MOVES))
@@ -1043,21 +1525,15 @@ def _apply_droid_cuts(robot, strict=True):
 # into one "Custom PCBs" group so they can be shown or isolated together.
 # Each pattern must fully match the label of a node in the subsystem tree; the
 # node moves whole, keeping its global placement. PCB-01 is a bought BMS
-# (Robocraze TIFPS0629, D-019) and stays on the pack.
+# (Robocraze TIFPS0629, D-019) and stays on the pack. D-093 replaced PCB-02 to 07 and
+# deleted PCB-13; their bought modules are in the "Bought modules" group (D-095).
 CUSTOM_PCBS = [
-    ("PCB-02 charger, latch and pack sense", r"PCB02_CHARGE_AND_SYSTEM_POWER"),
-    ("PCB-03 motor gate and head 5 V rail", r"PCB03_MOTOR_GATE_AND_HEAD_RAIL"),
-    ("PCB-04 branch converters", r"PCB04_BRANCH_CONVERTERS"),
-    ("PCB-05 audio front end", r"PCB05_AUDIO_FRONT_END|PCB05_CONNECTORS"),
-    ("PCB-06 PDM microphone boards x4", r"PDM_MIC_(FRONT|REAR)_[LR]"),
-    ("PCB-07 base IMU", r"IMU_PCB07"),
     ("PCB-08 yaw junction", r"YAW_JUNCTION_PCB08"),
     ("PCB-09 C0 link adapter", r"C0_LINK_ADAPTER_PCB09"),
     ("PCB-10 C3 controller carrier", r"C3_CARRIER_PCB10_WITH_DEVKITC"),
     ("PCB-11 status LED carrier", r"status_LED_(PCB08_carrier_5x5|WS2812B_2020)"),
     # Only the ESP32-S3-Zero module is drawn; the carrier board is not modelled yet.
     ("PCB-12 C2 head controller", r"C2_ESP32_S3_Zero_23_5x18_footprint"),
-    ("PCB-13 charge inlet", r"CHARGE_INLET_PCB13"),
     ("PCB-14 yaw rotor joiners x3", r"PCB14_JOINER_(BOARD|LOWER_ZIF|UPPER_ZIF)_[1-3]"),
     ("PCB-15 nose Hall carrier", r"BALL_NOSE_HALL_(CARRIER_PCB|DRV5055A3_SOT23)"),
 ]

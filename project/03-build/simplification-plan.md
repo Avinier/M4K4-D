@@ -183,7 +183,7 @@ These are system records, outside `03-build`. The [03-build rule](README.md) say
 | Item | Change |
 |---|---|
 | Pack build (CH-022, CH-025, CH-026) | Add a 3-wire balance lead off the cell straps; drop the 103AT NTC |
-| Pack channel (H-07, X 52–76) | The balance break must fit the ≈ 8 mm channel (R3) |
+| Pack channel (H-07, X 52–76) | The balance break must fit the ≈ 8 mm channel (R3). **D-095:** the channel is 13.5 mm wide at the break (8 mm was the NTC reserve); a JST PA 3P wire-to-wire pair sits there with the body-side loop beside it |
 | IMU mount J15A ([joint-register](01-chassis/v1/joint-register.md#j15a--imu-board-to-deck)) | The 16 × 20 mm PCB-07 and its two M2 holes become a bought breakout (≈ 25 × 18 mm class). **Option A:** a small printed adapter on the existing J15A holes, so no frame change. **Option B:** move the holes before the frame is printed (phase 1) |
 | Driver boards (J15B) | Unchanged; the TVS and 100 µF are soldered at `VM` |
 | Chassis model copies (`body_chassis_model.py`, `check_layout.py`) | Already stale (CP-OI-13); leave them, `final/v1` governs |
@@ -291,7 +291,7 @@ Update the memories for the PCB workflow tracker, the power distribution design,
 |---|---|---|
 | R1 | **Power switch current.** The HP (#2813, D-094) is rated "16 A continuous at 12 V without exceeding 150 °C"; the MP is 6 A continuous. Peak pack current is about 10.2 A, the average far lower | HP chosen; **open as a thermal check**: test N1 in the closed body |
 | R2 | **Yaw rail margin.** A fixed 12 V ±4 % module reaches 12.48 V against the ST3215-HS 12.6 V maximum | Adjustable buck-boost set to 11.1 V (Q8); servo current limit below 2 A |
-| R3 | **Balance lead in the pack channel.** H-07: the channel holds nothing wider than about 8 mm; a JST-XH 3P housing is about 10 mm | Narrower break (2.0 mm pitch or soldered pigtails) or a re-route; CAD check before the frame print |
+| R3 | **Balance lead in the pack channel.** H-07: the channel holds nothing wider than about 8 mm; a JST-XH 3P housing is about 10 mm | Narrower break (2.0 mm pitch or soldered pigtails) or a re-route; CAD check before the frame print. **Closed in CAD (D-095):** JST PA 2.0 mm wire-to-wire break, `check_balance_channel.py` |
 | R4 | **C3 USB back-feed.** PCB-10's DevKitC feeds `VCC_5V` from USB through its diodes, then out `J10-1` into `W11` (PCB-10 README). A bought buck's output may conduct back to its input and wake the switched bus | Series Schottky in `W11`; test N8 |
 | R5 | **Hard power-off on the Pi.** Without the `LTC2954` interrupt, a press may cut the Pi mid-write | Q1, plus an overlay root filesystem |
 | R6 | **More volume and wire.** Modules are larger than custom parts, and the hub boards (PCB-04, PCB-05) become splices | Bay fit checks in CAD before ordering; one splice point per rail |
@@ -325,7 +325,7 @@ The changes are applied in these levels. Q1–Q9 are decided (§6).
 | 1 | **Architecture docs:** superseded banners on [power-boards.md](04-pcbs/power-boards.md) and [charge-path.md](04-pcbs/charge-path.md); CP-OI-01 to -15 closed as superseded in [open-items.md](04-pcbs/open-items.md) | Doc cleanup | — | **Done 2026-11-06** |
 | 2 | **Board docs:** [04-pcbs](04-pcbs/README.md) register and [workflow](04-pcbs/workflow.md) tracker; superseded banners on PCB-02, 03, 04, 05, 06, 07, 13; new inputs in the PCB-08, 10, 12 READMEs (§4.3) | Doc cleanup | — | **Done 2026-11-06** |
 | 3 | **Modules:** pick each part, check India stock, get dimensions and STEPs (§2, risks R1, R2, R7) | New design | — | **Done 2026-11-07**: [D-094](decisions.md#d-094), [module-selection.md](module-selection.md) |
-| 4 | **CAD** in `final/v1/cad`: module bays, rear-panel ports, balance-lead channel, mic and amp mounts, IMU adapter; targeted checks; mass/CoM (§4.5–4.8) | New design | 3 | Waits |
+| 4 | **CAD** in `final/v1/cad`: module bays, rear-panel ports, balance-lead channel, mic and amp mounts, IMU adapter; targeted checks; mass/CoM (§4.5–4.8) | New design | 3 | **Done 2026-11-07**: [D-095](decisions.md#d-095); outlines of M6, M8, M9 unmeasured |
 | 5 | **Harness:** rewrite [05-harness](05-harness/README.md) power tree, wire list, pinouts, service procedures and buy list (§4.4) | New design | 3, 4 | Waits |
 | 6 | **BOM:** retire, promote and add rows (§4.10) | Records | 3 | Waits |
 | 7 | **Other docs:** foundation CON-TBD-09, the power/energy and mass ledgers, head BOM yaw-rail note, print READMEs, final v1 README (§4.1, 4.7, 4.9) | Doc cleanup | 3–6 | Waits |

@@ -18,7 +18,7 @@ sys.modules[spec.name] = entry
 spec.loader.exec_module(entry)
 
 import body_v1_model as B
-from check_pcb05_mount import _box
+from module_checks import _box
 
 
 def gen_step():

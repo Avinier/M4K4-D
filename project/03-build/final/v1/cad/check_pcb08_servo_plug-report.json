@@ -1,0 +1,51 @@
+{
+ "script": "check_pcb08_servo_plug",
+ "passed": 5,
+ "total": 5,
+ "rows": [
+  {
+   "check": "sideband_headers_removed",
+   "ok": true,
+   "left": []
+  },
+  {
+   "check": "header_on_board_outline",
+   "ok": true,
+   "header": [
+    -9.5,
+    -42.6,
+    113.6,
+    0.4,
+    -36.85,
+    119.6
+   ],
+   "board": [
+    -22.0,
+    -44.0,
+    112.0,
+    10.0,
+    -23.0,
+    113.6
+   ]
+  },
+  {
+   "check": "clear_YAW_JUNCTION_J8_8_FEETECH_5264_3P_HEADER",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 2.5,
+   "nearest": "YAW_JUNCTION_J8_1_MICROFIT3_6P_RA_HEADER"
+  },
+  {
+   "check": "clear_YAW_JUNCTION_J8_8_YAW_SERVO_5264_3P_MATED_PLUG",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "plug_pulls_straight_up_6mm",
+   "ok": true,
+   "first_hit": null
+  }
+ ]
+}

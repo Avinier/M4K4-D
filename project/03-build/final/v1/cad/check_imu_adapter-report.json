@@ -1,0 +1,123 @@
+{
+ "script": "check_imu_adapter",
+ "passed": 18,
+ "total": 18,
+ "rows": [
+  {
+   "check": "adapter_on_deck",
+   "ok": true,
+   "overlap_mm3": 0.0
+  },
+  {
+   "check": "j15a_pilot_+7.5",
+   "ok": true,
+   "material_in_pilot": 0.0,
+   "wall_fraction": 1.0
+  },
+  {
+   "check": "j15a_pilot_-7.5",
+   "ok": true,
+   "material_in_pilot": 0.0,
+   "wall_fraction": 1.0
+  },
+  {
+   "check": "j15a_screw_engagement",
+   "ok": true,
+   "engaged": 4.0,
+   "tip_z": 52.0
+  },
+  {
+   "check": "board_screw_engagement",
+   "ok": true,
+   "engaged": 3.4,
+   "tip_z": 56.6
+  },
+  {
+   "check": "chip_near_pcb07_chip",
+   "ok": true,
+   "chip_xy": [
+    20.89,
+    0.0
+   ],
+   "offset_mm": 0.11
+  },
+  {
+   "check": "clear_IMU_ADAPTER_LSM6DSOX",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 0.5,
+   "nearest": "TUB_BAY_MODULE_PLATE"
+  },
+  {
+   "check": "clear_M7_ADAFRUIT_4438_LSM6DSOX_BOARD",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.516,
+   "nearest": "TUB_BAY_MODULE_PLATE"
+  },
+  {
+   "check": "clear_M7_LSM6DSOX_LGA14",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M7_STEMMA_QT_SH4_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M7_STEMMA_QT_SH4_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M7_M2X5_THREAD_FORMING_SCREW_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.8122,
+   "nearest": "CHASSIS_FRAME_FRONT_MODULE"
+  },
+  {
+   "check": "clear_M7_M2X5_THREAD_FORMING_SCREW_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.8122,
+   "nearest": "CHASSIS_FRAME_FRONT_MODULE"
+  },
+  {
+   "check": "clear_M7_J15A_M2X6_THREAD_FORMING_SCREW_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M7_J15A_M2X6_THREAD_FORMING_SCREW_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "wire_room_over_JP1_front",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "wire_room_over_JP2_rear",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "board_goes_on_from_above",
+   "ok": true,
+   "first_hit": null
+  }
+ ]
+}

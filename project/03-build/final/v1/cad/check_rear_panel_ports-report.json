@@ -1,0 +1,100 @@
+{
+ "script": "check_rear_panel_ports",
+ "passed": 15,
+ "total": 15,
+ "rows": [
+  {
+   "check": "panel_one_solid",
+   "ok": true,
+   "solids": 1
+  },
+  {
+   "check": "pcb13_pocket_hole_relief_pilots_filled",
+   "ok": true,
+   "fill_mm3": 225.5063,
+   "filled_fraction": 1.0
+  },
+  {
+   "check": "xt30_opening_through_with_clearance",
+   "ok": true,
+   "overlap_mm3": 0.0,
+   "radial_gap": 0.2,
+   "design": 0.2
+  },
+  {
+   "check": "xt30_walls_to_pad_edge",
+   "ok": true,
+   "minus_y": 1.7,
+   "plus_y": 17.7,
+   "minus_z": 5.7,
+   "plus_z": 5.7
+  },
+  {
+   "check": "xt30_ring_solid",
+   "ok": true,
+   "solid_fraction": 1.0
+  },
+  {
+   "check": "xt30_mouth_recess",
+   "ok": true,
+   "outer_face_x": -62.675,
+   "mouth_x": -61.5
+  },
+  {
+   "check": "xt30_body_clear_inside",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "xt30_mating_corridor_clear",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "xh_opening_through_with_clearance",
+   "ok": true,
+   "overlap_mm3": 0.0,
+   "radial_gap": 0.2,
+   "design": 0.2
+  },
+  {
+   "check": "xh_walls_to_pad_edge",
+   "ok": true,
+   "minus_y": 18.35,
+   "plus_y": 1.35,
+   "minus_z": 5.425,
+   "plus_z": 5.425
+  },
+  {
+   "check": "xh_ring_solid",
+   "ok": true,
+   "solid_fraction": 1.0
+  },
+  {
+   "check": "xh_mouth_recess",
+   "ok": true,
+   "outer_face_x": -62.675,
+   "mouth_x": -61.5
+  },
+  {
+   "check": "xh_body_clear_inside",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "xh_mating_corridor_clear",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "mushroom_well_unchanged",
+   "ok": true,
+   "source_mm3": 6312.6746,
+   "droid_mm3": 6312.6746
+  }
+ ]
+}

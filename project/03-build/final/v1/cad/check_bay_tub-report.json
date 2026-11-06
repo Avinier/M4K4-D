@@ -1,0 +1,253 @@
+{
+ "script": "check_bay_tub",
+ "passed": 37,
+ "total": 37,
+ "rows": [
+  {
+   "check": "plate_on_deck_no_overlap",
+   "ok": true,
+   "overlap_mm3": 0.0,
+   "gap": 0.0
+  },
+  {
+   "check": "deck_material_round_every_fixing",
+   "ok": true,
+   "points": {
+    "+21,+24": true,
+    "+21,-24": true,
+    "+83,+20": true,
+    "+83,-20": true
+   }
+  },
+  {
+   "check": "insert_pilot_walls_+21_+24",
+   "ok": true,
+   "wall_fraction": 1.0,
+   "material_in_pilot_mm3": 0.0
+  },
+  {
+   "check": "insert_pilot_walls_+21_-24",
+   "ok": true,
+   "wall_fraction": 1.0,
+   "material_in_pilot_mm3": 0.0
+  },
+  {
+   "check": "insert_pilot_walls_+83_+20",
+   "ok": true,
+   "wall_fraction": 0.9949,
+   "material_in_pilot_mm3": 0.0
+  },
+  {
+   "check": "insert_pilot_walls_+83_-20",
+   "ok": true,
+   "wall_fraction": 0.9949,
+   "material_in_pilot_mm3": 0.0
+  },
+  {
+   "check": "m3_thread_in_insert_+21_+24",
+   "ok": true,
+   "engaged_mm": 3.5,
+   "insert_mm": 4.0,
+   "tip_z": 52.5
+  },
+  {
+   "check": "m3_thread_in_insert_+21_-24",
+   "ok": true,
+   "engaged_mm": 3.5,
+   "insert_mm": 4.0,
+   "tip_z": 52.5
+  },
+  {
+   "check": "m3_thread_in_insert_+83_+20",
+   "ok": true,
+   "engaged_mm": 5.5,
+   "insert_mm": 6.0,
+   "tip_z": 50.5
+  },
+  {
+   "check": "m3_thread_in_insert_+83_-20",
+   "ok": true,
+   "engaged_mm": 5.5,
+   "insert_mm": 6.0,
+   "tip_z": 50.5
+  },
+  {
+   "check": "m2_boss_engagement",
+   "ok": true,
+   "engaged_mm": 3.43,
+   "tip_z": 57.57,
+   "pilot_bottom_z": 56.5,
+   "plate_bottom_z": 56.0
+  },
+  {
+   "check": "bosses_on_module_holes",
+   "ok": true,
+   "worst_offset_mm": 0.0,
+   "bosses": 8
+  },
+  {
+   "check": "clear_TUB_BAY_MODULE_PLATE",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 0.5,
+   "nearest": "IMU_ADAPTER_LSM6DSOX"
+  },
+  {
+   "check": "clear_TUB_BAY_PLATE_M3X6_SCREW_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_TUB_BAY_DECK_INSERT_M3X4_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 2.6019,
+   "nearest": "PACK_STRAP_HOOK_LOOP_L"
+  },
+  {
+   "check": "clear_TUB_BAY_PLATE_M3X6_SCREW_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_TUB_BAY_DECK_INSERT_M3X4_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 2.6019,
+   "nearest": "PACK_STRAP_HOOK_LOOP_R"
+  },
+  {
+   "check": "clear_TUB_BAY_PLATE_M3X8_SCREW_3",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_TUB_BAY_DECK_INSERT_M3X6_3",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 2.3,
+   "nearest": "BALLAST_STEEL_BAR"
+  },
+  {
+   "check": "clear_TUB_BAY_PLATE_M3X8_SCREW_4",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_TUB_BAY_DECK_INSERT_M3X6_4",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 2.3,
+   "nearest": "BALLAST_STEEL_BAR"
+  },
+  {
+   "check": "clear_M2_POLOLU_2572_S18V20ALV_5V5_HEAD_STEP",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.725,
+   "nearest": "M7_ADAFRUIT_4438_LSM6DSOX_BOARD"
+  },
+  {
+   "check": "clear_M2_M2X5_THREAD_FORMING_SCREW_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M2_M2X5_THREAD_FORMING_SCREW_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M2_M2X5_THREAD_FORMING_SCREW_3",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M2_M2X5_THREAD_FORMING_SCREW_4",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M3_POLOLU_2572_S18V20ALV_11V1_YAW_STEP",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M3_M2X5_THREAD_FORMING_SCREW_1",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.67,
+   "nearest": "BALLAST_M3_CSK_HEAD_L"
+  },
+  {
+   "check": "clear_M3_M2X5_THREAD_FORMING_SCREW_2",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "clear_M3_M2X5_THREAD_FORMING_SCREW_3",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.67,
+   "nearest": "BALLAST_M3_CSK_HEAD_R"
+  },
+  {
+   "check": "clear_M3_M2X5_THREAD_FORMING_SCREW_4",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 3.0,
+   "nearest": null
+  },
+  {
+   "check": "modules_under_signal_trunks",
+   "ok": true,
+   "module_top_z": 70.5772,
+   "trunk_bottom_z": 78.0
+  },
+  {
+   "check": "terminal_wire_room_M2_+y",
+   "ok": true,
+   "box_6mm": []
+  },
+  {
+   "check": "terminal_wire_room_M2_-y",
+   "ok": true,
+   "box_6mm": []
+  },
+  {
+   "check": "terminal_wire_room_M3_+y",
+   "ok": true,
+   "box_6mm": []
+  },
+  {
+   "check": "terminal_wire_room_M3_-y",
+   "ok": true,
+   "box_6mm": []
+  },
+  {
+   "check": "plate_lowers_onto_deck_body_off",
+   "ok": true,
+   "first_hit": null
+  }
+ ]
+}

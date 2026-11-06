@@ -80,6 +80,7 @@ The central record of every decision and change made during the build phase. New
 | [D-074](#d-074) | 2026-10-31 | Body / electronics: PCB-09 socket strip (CH-084; final v1 CAD) | Extend only the strip's +Y edge from world Y 20.9 to 22.4 mm so both socket rows carry full copper and edge margin; core Z, bridge and wide area unchanged | ACTIVE; 40-pad edge and static body/chassis checks pass; other mechanical inputs OPEN |
 | [D-093](#d-093) | 2026-11-06 | Architecture: minimal safety and bought modules | Replaces RP-02 `BD-01`: minimal safety, pack charged outside the robot; PCB-02/03/04/05/06/07 bought, PCB-13 deleted; custom boards are PCB-08, 09, 10, 11, 12, 14, 15 | ACTIVE; changes not yet applied ([plan](simplification-plan.md)) |
 | [D-094](#d-094) | 2026-11-07 | Bought module selection for D-093 | Pololu HP switch, 2 × S18V20ALV (head 5.5 V, yaw 11.1 V), 2 × S13V30F5 (Pi, shared 5 V), INA226, LSM6DSOX, MAX98357A, 4 × INMP441, ISDT PD60; PCB-12 stays custom | SELECTED, not ordered |
+| [D-095](#d-095) | 2026-11-07 | Final v1 CAD for D-093/D-094 (plan level 4) | Bought modules group; tub/tray/rear bays; XT30 + XH rear-panel ports; JST PA balance break in the 13.5 mm channel; INMP441 bosses; amp bracket; IMU adapter; PCB-08 servo plug; a_tip 1.670 neutral / 1.646 worst pose | ACTIVE; M6/M8/M9 outlines unmeasured |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -3650,3 +3651,91 @@ The PCB-02, 05, 06 and 13 KiCad work is archived in place as v2 reference.
 - Pololu publishes a STEP for the S13V30F5; the others are checked at level 4.
 
 **Next.** Plan level 4 (CAD) with these outlines, and level 6 (BOM).
+
+## D-095
+
+**2026-11-07 · Final v1 CAD for D-093/D-094: bought modules, three bays, rear-panel ports, balance lead, mics, amp, IMU, PCB-08 plug (plan level 4; `final/v1/cad`) · ACTIVE; CAD only: all module outlines but the Pololu STEPs and the LSM6DSOX are UNMEASURED; mounts not printed**
+
+**Why.** D-093 replaced PCB-02 to PCB-07 with bought modules and deleted PCB-13; D-094 chose the parts. Level 4 of the [plan](simplification-plan.md#7-levels-of-work) makes the whole-robot model match. The builder asked for it in ten steps (2026-11-07); every edit is in `final/v1/cad/makad-v1.step.py` (droid cuts, adds, inserts and removes); no subsystem source changed.
+
+**1. Module models.** Pololu publishes STEPs for all three Pololu modules (S13V30F5 0J1808, S18V20x 0J1416, #2813 0J1405), now in `final/v1/cad/purchased/` with their drawings; hole positions were read from the STEPs. The INA226 (M6), MAX98357A (M8) and INMP441 (M9) are boards drawn from listings and vendor drawings with a clearance margin, labelled `UNMEASURED`. The LSM6DSOX (M7) comes from Adafruit's EAGLE board file (25.4 × 17.78 mm, two Ø2.5 holes 20.32 apart). A new top-level group, `Bought modules`, holds one subgroup per module (M1–M9, M12, M13) with its fixings, beside `Custom PCBs`.
+
+**2. Dropped boards removed.** `DROID_REMOVES` drops the PCB-02, 03, 04, 05, 06 ×4, 07 and 13 placeholders with their plugs and reserves (and W16). The PCB-02 edge frame, the PCB-05 bosses, spacers and J5-7/J5-x edits, and the PCB-13 relief are gone from the tables. `pcb_integration.py` installs four KiCad boards now (PCB-09, 10, 11, 15). PCB-08 loses its J8-3/J8-5 sideband headers.
+
+**3. Bays.**
+- **Rear (was PCB-02).** A printed rear-bay plate in PCB-02's plane carries the switch (M1) and INA226 (M6) in cradles on its +X face: rims 0.25 mm clear, open on the wire edge, 1.5 mm pads for solder tails, board held with VHB foam (E). The #2813 has no mounting holes; its four Ø2.18 holes are the power terminals. Two legs and arms bolt to the rear lower cross rail's −X face with M3 × 16 into M3 × 6 inserts. The screws are driven from the rear through counterbores with the panel off. The charge splice (AWG16 butt splice, heat-shrunk) is tied beside the plate's −Y edge.
+- **Tub (was PCB-03).** One printed plate lies on the front deck strips over the tub opening. Its two rear arms run past the IMU to the rear deck strip. Fixings: M3 × 6 into M3 × 4 inserts through the 4 mm deck at the rear, and M3 × 8 into M3 × 6 inserts in the front crossmember. The plate has a 0.6 mm relief over the ballast's countersunk heads. Both S18V20ALVs sit on 2.5 mm bosses with M2 × 5 thread-forming screws, long axis along Y, terminals at the Y ends. The module tops are at Z 70.6, 7.4 mm under the signal trunks.
+- **Tray (was PCB-04).** Both S13V30F5s hang from the compute tray, components down, on M2 × 5 F-F round standoffs: M2 × 5 from the tray top, M2 × 4 from below. All four standoffs land on solid tray bars, clear of the vents. The lowest part is at Z 69.9, 7.4 mm over the motor-cable reserves. Nothing new is below Z 63 or over the pigtails (the D-072 keep-out).
+
+**4. Rear panel.** The PCB-13 pad keeps its outline. Its USB-C pocket, receptacle hole, pin relief and pilots are filled. An XT30U female (charge, Y −8) and the body-side balance lead's XHP-3 plug (Y +8.5), parked face-out, go in through openings 0.2 mm clear, with mouths about 1.2 mm inside the sloped skin. The XT30 is epoxied (E). The mushroom well is unchanged (measured against the body source). Polarity marks go on at the print stage.
+
+**5. Balance lead (R3).** The channel is **13.5 mm wide** where the break sits, not 8 mm: the 8 mm figure was the NTC break's reserve (H-07). The break is a **JST PA 2.0 mm wire-to-wire pair** (PAP-03V-S, 8.0 × 5.8 `D`; PALR-03VF, 7.4 × 6.3 `E`; 3 A, locking). It lies where the NTC break was, turned so 6.3 mm crosses the channel, leaving room for the body-side lead's loop beside it. It slides back to the tub window and through it with the pack out, like J-PK. The body-side lead loops back, rises through a new Ø5 hole in the front deck, runs aft under the left driver and under the cross rail, then across the rear deck to the port. A JST-XH 3P (9.9 mm) in the same place does not fit beside the loop (planted in the check). It would fit only with the loop routed elsewhere.
+
+**6. Audio.**
+- **Amp (M8).** It sits near the speaker, not on the old PCB-05 bosses (those were removed in step 2): a bracket fused to the frame's front +Y post, with the amp in a cradle facing the speaker.
+- **Audio hub (M13).** The perfboard is on the bracket's back on two M2 × 4 screws.
+- **Mic bosses.** Redesigned for 14 × 14 mm INMP441 boards at the same four D-037 ports. Each board sits 1.6 mm deep in a 15 × 15 pocket, its inboard face flush with the old seat at |Y| 71.3, so nothing passes |Y| 68.5. A foam gasket ring in the pocket floor seals the port. Two M2 × 4 screws (as PCB-06) with DIN 9021 Ø6 washers beside the board clamp its edges. Worst-case washer overlap is 0.6 mm.
+
+**7. IMU.** A printed adapter on the existing J15A pilots (two M2 × 6 thread-forming) carries the LSM6DSOX on two M2 × 5 into 2 mm bosses. The chip is within 0.1 mm of PCB-07's in XY. The board stays behind the tub-bay plate (X 30), so either can go on first.
+
+**8. PCB-08.** The yaw servo plug (Feetech 5264-3P, `J8-8` proposed) is a top-entry header where J8-3 was, with its mated plug above, clear of the yaw cassette and the riser.
+
+**9. Checks** (all in `final/v1/cad`, about 1–2 min each, JSON reports beside them):
+
+| Script | Result |
+|---|---|
+| `check_bay_rear.py` | 23/23 |
+| `check_bay_tub.py` | 37/37 |
+| `check_bay_tray.py` | 24/24 |
+| `check_rear_panel_ports.py` | 15/15 |
+| `check_balance_channel.py` | 15/15 |
+| `check_mic_bosses.py` | 64/64 |
+| `check_amp_mount.py` | 14/14 |
+| `check_imu_adapter.py` | 18/18 |
+| `check_pcb08_servo_plug.py` | 5/5 |
+| `check_d095_mass.py` | 5/5 |
+| `check_pcb_integration.py` | PASS: 4 boards (PCB-09, 10, 11, 15), no static or cross-board interference, bought modules as obstacles |
+
+Retired, in git history: `check_pcb02_back_face`, `check_pcb02_j9_courtyard`, `check_pcb02_mount`, `check_pcb05_fit`, `check_pcb05_mount`, `check_pcb06_fit`, `check_pcb13_fit`, `check_pcb13_relief`, and body `check_charge_inlet`. Their shared helpers moved to `module_checks.py`, and the PCB-09 checks now import from it. Body `check_mic_mounts.py` still tests the body source's PCB-06 bosses; `check_mic_bosses.py` covers the droid.
+
+**10. Mass and tipping.** The register is still the hand-kept `MASS_ROWS` in body v1. `check_d095_mass.py` applies D-095 on top of it:
+- removes the PCB-02, PCB-13, PCB-03, PCB-04 and PCB-07 rows (−94.0 g) and the PCB-05/06 shares of `BODY_AUDIO` (−9 g);
+- adds the modules (D for the Pololu parts, E for the rest), the measured prints and hardware, the balance lead and the measured printed-part volume changes against git HEAD.
+
+**Mass: 2647.8 → 2628.5 g. CoM (18.07, 1.15, 109.45) → (18.68, 1.28, 109.70) mm. a_tip neutral 1.620 → 1.670 m/s², worst head pose 1.596 → 1.646, against 1.582.** The heavy rear boards left, so the CoM moved forward.
+
+The 1.763 quoted for this step is the chassis-only D-026 figure. Body v1's whole-robot register had read 1.620 before this change.
+
+**Changed.**
+- `final/v1/cad`:
+  - `makad-v1.step.py` (D-095 section, tables, `Bought modules`; emptied groups now drop out);
+  - `pcb_integration.py`, `check_pcb_integration.py`;
+  - the new checks and `module_checks.py`;
+  - `finish_colours.py` (the three prints deep slate);
+  - `purchased/`.
+- [final/v1/README.md](final/v1/README.md).
+- [module-selection.md](module-selection.md) §3: STEPs, M12, outlines.
+- [PCB-08 README](04-pcbs/pcb-08-yaw-junction/README.md).
+- [simplification-plan.md](simplification-plan.md): level 4 done.
+- Both whole-robot STEPs rebuilt (`--force`, 2026-11-07; the build needed `makad-v1.step.py` to put its own folder on `sys.path` for `pcb_integration`).
+
+**Unverified.**
+- Every UNMEASURED outline (M6, M8, M9) and the INMP441 port position: re-measure on receipt and re-run `check_rear_panel_ports`, `check_bay_rear`, `check_amp_mount` and `check_mic_bosses`.
+- The JST PA plug dimensions (PALR-03VF read from a garbled datasheet table) and its India source.
+- XT30 epoxy retention and the cradle VHB hold.
+- Thread-forming M2 in PETG bosses (BO-013 family) and M2 × 5 F-F standoff engagement (2.0 mm).
+- Wire bend room at the S13V30F5 pins and the S18V20ALV terminals beyond the measured corridors.
+- The new mass rows are estimates except the Pololu masses and the measured prints and hardware.
+
+**New parts for level 6 (BOM).**
+- Rear bay: 2 × M3 × 16 ISO 7380, 2 × M3 × 6 inserts.
+- Tub plate: 2 × M3 × 6 and 2 × M3 × 8 ISO 7380, 2 × M3 × 4 and 2 × M3 × 6 inserts.
+- S18V20ALVs: 8 × M2 × 5 thread-forming.
+- S13V30F5s: 4 × M2 × 5 F-F standoffs, 4 × M2 × 5 and 4 × M2 × 4 screws.
+- IMU: 2 × M2 × 6 and 2 × M2 × 5 thread-forming.
+- Mics: 8 × M2 × 4 thread-forming, 8 × DIN 9021 M2 washers, 4 foam gaskets.
+- Audio hub: 2 × M2 × 4 thread-forming.
+- Balance and charge: JST PA pair (PAP-03V-S, PALR-03VF, SPHD/SPAL contacts), XHP-3 with SXH contacts, XT30U female, an AWG16 butt splice, VHB foam.
+- Three new prints: tub-bay plate (8.3 cm³), rear-bay plate (5.5 cm³), IMU adapter (1.0 cm³).
+
+**Next.** Level 5 (harness) routes from these reserves: the balance lead, the charge splice and the module pigtails. H-07's NTC break is now the balance break. Level 6 adds the parts above.
