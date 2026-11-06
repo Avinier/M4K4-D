@@ -3487,6 +3487,16 @@ R41 sits inside the D-087 back-face zone; it is a 0402, so the zone allows it. B
 
 **Check.** Exported netlist: STAT = U1.1 + R41.2; STAT_HDR = J5.4 + R41.1; CP_DIV = Q2.1, R16.2, R17.1, R42.2; CP_DIV_L = Q3.1, Q4.1, R40.1, R42.1, U3.5. ERC is unchanged from before the edit.
 
+## D-091
+
+**2026-11-06 · PCB-02: bench pads J4 replaced by three test pads beside U1 (clears the 10 A strip) · ACTIVE**
+
+**Why.** Q1 carries the full operating current, about 10 A peak (power-boards.md §4). Its only copper corridor from J2 is the board's west strip. J4, the 1×4 bench pads at the west edge, pulled SDA_BENCH, SCL_BENCH and CHG_INT runs straight across that strip, and BATBUS was necked to 1.51 mm on In2 and 0.61 mm on B. A 1×4 row near U1 cannot be routed planar: SDA and SCL would have to cross inside U1's thermal-via field.
+
+**Decision** (builder approved, 2026-11-06). Delete J4 (CP-OI-15 bench footprint). Add TP16 (CHG_INT), TP17 (SCL_BENCH) and TP18 (SDA_BENCH): TestPoint_Pad_D1.0mm, not fitted, on B.Cu beside the existing U1-side vias. Bench GND comes from any existing GND pad. The long bench runs are removed, which frees the west strip for BATBUS/OPBUS copper.
+
+**Check.** Exported netlist: CHG_INT = U1.21 + TP16; SCL_BENCH = U1.14 + TP17; SDA_BENCH = U1.15 + TP18; J4 absent. ERC is unchanged.
+
 ## D-092
 
 **2026-11-06 · PCB-09 input freeze: Samtec SSW-120-01-T-D socket, HAT standoffs on the Pi's header-side holes, J9-1 order, four layers, headless layout · ACTIVE; CR-02 and the bench items stay open**

@@ -315,6 +315,22 @@ DRC has no clearance, short or keepout errors at this stage; 227 connections rem
   These four sit in the corridor between the J5/J6 header and U7/U8, walled by SYSTEM_ARM (F), ENERGY_OK (In2), CHARGE_ABSENT/CHG_ABSENT_3V3 (B) and the TP8/TP15/R18 pads. They need part moves there plus one to three more 0 Ω jumpers.
 - **Power checks still open:** the VSNK In2 neck, and the BATBUS_IN2 fragmentation. The main J2–Q1 west corridor and the F charge strap are intact; the U2-VIN islands now hang on thin bridges.
 
+**Routing complete (2026-11-06).** All connections are routed. DRC with schematic parity reports 0 unconnected items, no dangling copper and no errors. The remaining findings are warnings: library-footprint mismatches, the 2 nightly no-connect name conflicts, and silkscreen edge clipping.
+
+- **Last nets:** LTH from D3 (F through the J6.8/mounting-pad gap); OPBUS sense (R36 moved beside R35/U10 so OPBUS_DIV needs no In2 column); CP_DIV; STAT. The two 0 Ω links R41 and R42 are in D-090.
+- **Clean-up:** spur copper from earlier passes was removed, with connectivity checked after each removal.
+- **Power path (fixed, D-091).** Q1 (SQS407ENW, 16 A) carries the full operating current, about 10 A peak (power-boards.md §4). The fix:
+  - The bench pads J4 and their long SDA/SCL/CHG_INT runs are gone. TP16/TP17/TP18 sit beside U1's vias instead.
+  - CHGBUS's In2 row moved to B, and Q1's gate link now runs east of its source vias.
+  - A BATBUS_B pour covers the west strip.
+  - A BATBUS_Q1 F pour joins Q1's source pins and C16 to seven vias.
+  - OPBUS_F is widened from 2.9 to 4.6 mm.
+
+  Worst horizontal cut between J2 and Q1: In2 7.63 mm + B 9.12 mm. VSNK_IN2 necks to 2.16 mm, for 1.38 A normal / 3 A design current. Bench-check Q1's case and source-pad temperature at full load.
+- **Final DRC (2026-11-06).** Schematic parity is clean: 0 unconnected, 0 dangling, no errors. Warnings only: 80 library-footprint mismatches, the 2 nightly no-connect name conflicts, and silkscreen edge/copper clipping.
+
+  Q1's source has only three 0.67 mm vias, and OPBUS reaches J8.1 through a 2.9 mm F pour. Separately, VSNK_IN2 necks to 2.16 mm for 1.38 A normal / 3 A design current; that is acceptable. The cause is that the bench-only J4 runs (SDA_BENCH, SCL_BENCH, CHG_INT) and several logic In2 columns cross the west strip, which is the only J2-to-Q1 corridor. A fix is pending a builder decision.
+
 **Fit-study findings.** All courtyards are legal, with 64% front fill. Before routing:
 
 1. **U2 footprint — done.** The stock TSOT-23-8 leaves 0.15 mm between pads, below the fab-neutral 0.16 mm. U2 now uses `pcb02:TSOT-23-8_LTC_TS8`, built from ADI's TS8 recommended pad layout (LTC DWG 05-08-1637 Rev A: 0.40 mm pads at 0.65 mm pitch, 1.22 mm long, 1.4 mm between rows), which leaves 0.25 mm gaps.
