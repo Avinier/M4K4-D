@@ -807,7 +807,7 @@ ALIGN_BUDGET = dict(
 )
 
 
-# D-091: PCB-09 sits on two M2.5 x 11 mm round male-female standoffs at the Pi's header-side
+# D-092: PCB-09 sits on two M2.5 x 11 mm round male-female standoffs at the Pi's header-side
 # holes (Pi holes 3 and 4), as a HAT does: the Pi header's 2.5 mm plastic plus Samtec
 # SSW-120-01-T-D's 8.51 mm insulator is 11.01 mm. The standoffs take the place of the Pi's
 # M2.5 x 6 screws there (a 6 mm male thread into the same tray inserts); M2.5 x 5 socket-head
@@ -820,11 +820,14 @@ PCB09_MOUNT = dict(
     screw=(2.25, 2.5, 5.0),            # DIN 912 M2.5 head radius, head height, length
     lift=0.05,                         # placeholder board Z 106.4 -> 106.45
     tabs=((-11.0, -4.7, 16.3, 22.4), (47.1, 53.4, 17.2, 22.5)),  # world XY, on the board's Z
+    # D-092 amendment: the connector bay grows 6 mm toward -X (X 30-36), from the strip's
+    # +Y edge to the bay's, so the strip's nets have a 17 mm path into it.
+    bay_extension=(30.0, 36.0, 22.4, 39.0),
 )
 
 
 def pcb09_mount_parts():
-    """D-091 world-frame standoffs and screws, labelled, for DROID_INSERTS."""
+    """D-092 world-frame standoffs and screws, labelled, for DROID_INSERTS."""
     m = PCB09_MOUNT
     r, height, thread, bore = m["standoff"]
     head_r, head_h, length = m["screw"]
@@ -861,7 +864,7 @@ DROID_REMOVES = [
     r"BODY_CHASSIS_M4_NUT_[123]",
     # D-079: the CNC Kitchen M3 x 5.7 insert models (OnlyScrews M3 x 6 below) and the 1.0 mm TCRT shims (1.2 mm below).
     *_NOSE_KEEL_REMOVES,
-    # D-091: the Pi's header-side M2.5 x 6 screws, replaced by PCB-09's standoffs below.
+    # D-092: the Pi's header-side M2.5 x 6 screws, replaced by PCB-09's standoffs below.
     r"PI5_M25X6_SCREW_[34]",
 ]
 DROID_INSERTS = [
@@ -870,7 +873,7 @@ DROID_INSERTS = [
     *_AXLE_SCREW_INSERTS,  # D-072: M3 x 16 housing screws
     *_J13_INSERTS,  # D-077: M4 x 8 deck inserts at the three top-driven J13 bolts
     *_NOSE_KEEL_INSERTS,  # D-079: M3 x 6 inserts in the pod seat and both crossmembers; 1.2 mm TCRT shims
-    *[(r"C0_LINK_ADAPTER_PCB09", part) for part in pcb09_mount_parts()],  # D-091: standoffs and screws
+    *[(r"C0_LINK_ADAPTER_PCB09", part) for part in pcb09_mount_parts()],  # D-092: standoffs and screws
 ]
 
 
@@ -917,8 +920,9 @@ DROID_ADDS = [
     # D-074: PCB-09's strip must carry both rows of socket copper plus edge margin.
     # Grow only its +Y edge (20.9 -> 22.4); bridge, bay and board Z stay fixed.
     (r"C0_LINK_ADAPTER_PCB09_BOARD", (-4.7, 36.0, 20.9, 22.4, 106.4, 108.0)),
-    # D-091: tabs out to the Pi's header-side holes, at the placeholder's Z (lifted with it below).
-    *[(r"C0_LINK_ADAPTER_PCB09_BOARD", (x0, x1, y0, y1, 106.4, 108.0)) for x0, x1, y0, y1 in PCB09_MOUNT["tabs"]],
+    # D-092: tabs out to the Pi's header-side holes, at the placeholder's Z (lifted with it below).
+    *[(r"C0_LINK_ADAPTER_PCB09_BOARD", (x0, x1, y0, y1, 106.4, 108.0))
+      for x0, x1, y0, y1 in (*PCB09_MOUNT["tabs"], PCB09_MOUNT["bay_extension"])],
     # D-068: PCB-10 top-edge hooks on the C3 carrier uprights.
     *_PCB10_ADDS,
     # D-068 amended: the carrier grows 6 mm down for a third connector row; the plug-layer reserve follows.
@@ -967,7 +971,7 @@ DROID_MOVES = [
     # D-063: PCB-15 sits 0.4 mm further back (X 126.2-127.0), so U1 clears the magnet
     # at the cap's 3 mm stop.
     (r"BALL_NOSE_HALL_(CARRIER_PCB|DRV5055A3_SOT23)", (-0.4, 0.0, 0.0)),
-    # D-091: PCB-09 and its placeholder parts rise 0.05 mm onto the 11 mm standoffs.
+    # D-092: PCB-09 and its placeholder parts rise 0.05 mm onto the 11 mm standoffs.
     (PCB09_MOVED, (0.0, 0.0, PCB09_MOUNT["lift"])),
 ]
 

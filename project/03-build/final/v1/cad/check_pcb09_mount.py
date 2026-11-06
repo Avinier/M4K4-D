@@ -1,4 +1,4 @@
-"""D-091: measure PCB-09's HAT-style fixing: socket stack, standoffs, screws and outline tabs.
+"""D-092: measure PCB-09's HAT-style fixing: socket stack, standoffs, screws and outline tabs.
 
 Run from this folder with the legacy runtime and the PYTHONPATH in ../README.md.
 Builds the chassis and body trees (about 1 min), not the head.
@@ -175,17 +175,18 @@ def main():
     # unit then slides in along -X from 90 mm out, 2 mm high (D-042), and drops. Each PCB-09 part
     # sweeps as its box over the whole path; the parts that go in later are left out, as in
     # check_compute_mount.py. Until the KiCad board replaces the placeholder, two envelopes stand
-    # for its parts: top side to the J9-4 XH header's 7.0 mm, underside to the SOIC's 1.75 mm.
+    # for its parts: top side to 7.0 mm (above the GH headers' 4.25 mm), underside to the SOIC's 1.75 mm.
     lift, travel = B.TRAY_INSTALL_LIFT, 90.0
     wx0, wx1, wy0, wy1 = 36.0, 66.0, 22.5, 39.0
+    ex0, ex1, ey0, ey1 = MNT["bay_extension"]
     movers = [(p.split("/")[-1], _box(raw)) for p, raw, box in parts
               if ("C0_LINK_ADAPTER_PCB09/" in p or "PCB09_M25" in p) and "MATED_PLUG" not in p
               and not p.endswith("C0_LINK_ADAPTER_PCB09_BOARD")]
     # The board is an L: sweep its rectangles, not its bounding box.
-    rects = [(-4.7, 36.0, 16.3, 22.4), (36.0, 47.1, 16.3, 22.5), (wx0, wx1, wy0, wy1), *MNT["tabs"]]
+    rects = [(-4.7, 36.0, 16.3, 22.4), (36.0, 47.1, 16.3, 22.5), (wx0, wx1, wy0, wy1), *MNT["tabs"], MNT["bay_extension"]]
     movers += [(f"BOARD_RECT_{i}", (x0, y0, under, x1, y1, over)) for i, (x0, x1, y0, y1) in enumerate(rects, start=1)]
-    movers += [("TOP_PARTS_ENVELOPE", (wx0, wy0, over, wx1, wy1, over + 7.0)),
-               ("UNDERSIDE_PARTS_ENVELOPE", (wx0, wy0, under - 1.75, wx1, wy1, under))]
+    movers += [("TOP_PARTS_ENVELOPE", (ex0, wy0, over, wx1, wy1, over + 7.0)),
+               ("UNDERSIDE_PARTS_ENVELOPE", (ex0, wy0, under - 1.75, wx1, wy1, under))]
     later = ("C3_", "BODY_FRAME_C3_", "HARNESS_", "SPEAKER_", "PCB05_", "RESERVE", "KEEP_OUT", "PLUG",
              "COMPUTE_TRAY", "PI5_", "PI5_VENDOR/", "C0_LINK_ADAPTER", "PCB09_")
     rows, ok = [], True

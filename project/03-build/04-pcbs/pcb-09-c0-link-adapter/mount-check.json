@@ -27,7 +27,7 @@
  {
   "check": "bench-assembled unit slides in",
   "pass": true,
-  "detail": "17 PCB-09 boxes swept +90 mm X, 2.0 mm lift: clear"
+  "detail": "18 PCB-09 boxes swept +90 mm X, 2.0 mm lift: clear"
  },
  {
   "check": "driver column above each screw (information)",

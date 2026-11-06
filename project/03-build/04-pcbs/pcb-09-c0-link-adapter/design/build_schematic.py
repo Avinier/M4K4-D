@@ -126,7 +126,7 @@ if __name__ == "__main__":
             7:"BASE_TX",8:"HEAD_TX",10:"HEAD_RX",12:"BCLK",15:"SDI1",16:"AMP_SD",
             17:"+3V3_PI",18:"FAN_EN",29:"BASE_RX",35:"LRCLK",38:"SDI0",40:"SDO0"}
     gpio.update({n:"GND" for n in (6,9,14,20,25,30,34,39)})
-    add("J1", "Connector_Generic:Conn_02x20_Odd_Even", "Pi_40_pin_socket_MPN_OPEN",
+    add("J1", "Connector_Generic:Conn_02x20_Odd_Even", "SSW-120-01-T-D",
         "Connector_PinSocket_2.54mm:PinSocket_2x20_P2.54mm_Vertical", 55.88, 76.2,
         {str(n):v for n,v in gpio.items()})
     for index, role, y in [(1,"HEAD",76.2),(2,"BASE",147.32)]:
@@ -149,7 +149,7 @@ if __name__ == "__main__":
     add("R5","Device:R","100",RFP,259.08,167.64,{"1":"FAN_EN","2":"FAN_GATE"})
     add("R6","Device:R","100k",RFP,299.72,208.28,{"1":"FAN_GATE","2":"GND"})
     add("J5","Connector_Generic:Conn_01x02","J9-4_FAN",
-        "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical",355.6,157.48,{"1":"+5V_PI","2":"FAN_SW"})
+        "Connector_JST:JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical",355.6,157.48,{"1":"+5V_PI","2":"FAN_SW"})
     add("D1","Device:D_Schottky","1N5819HW","Diode_SMD:D_SOD-123",345.44,187.96,{"1":"+5V_PI","2":"FAN_SW"})
     add("C3","Device:C","10u_10V","Capacitor_SMD:C_0805_2012Metric",345.44,218.44,{"1":"+5V_PI","2":"GND"})
     add("C4","Device:C","100n",CFP,375.92,218.44,{"1":"+5V_PI","2":"GND"})
@@ -158,7 +158,7 @@ if __name__ == "__main__":
     for n,net in enumerate(["+3V3_PI","+5V_PI","GND"],1):
         add(f"#FLG0{n}","power:PWR_FLAG","PWR_FLAG","",50.8+25.4*(n-1),269.24,{"1":net},False)
     head = f'(kicad_sch (version 20261015) (generator "eeschema") (generator_version "10.99") (uuid "{rootid}") (paper "A3") '
-    head += '(title_block (title "PCB-09 C0 link adapter - review schematic") (date "2026-10-31") (rev "A-draft") (company "Makad") (comment 1 "D-073 / D-074; socket mating height, retention and CR-02 evidence remain open"))'
+    head += '(title_block (title "PCB-09 C0 link adapter") (date "2026-11-06") (rev "A") (company "Makad") (comment 1 "D-073 / D-074 / D-092; CR-02 boot/overlay and fan-current evidence remain open"))'
     text = head+' (lib_symbols '+" ".join(dump(n) for n in defs.values())+') '
     text += " ".join(instances+wires+labels+ncs)
     for title, x, y in [("PI HEADER / D-073",30.48,30.48),("HEAD RS-422 / UART0",121.92,30.48),

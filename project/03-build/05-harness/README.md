@@ -97,13 +97,13 @@ Lengths are `E`: Manhattan routes through CAD waypoints plus service slack. Cut 
 | ~~`W38`~~ | Not fitted (D-041): `J10-11` carried the E-stop status | — | — | |
 | `W39` | `J10-12` ↔ `J3-9` | GH4, double-ended | 100 | |
 | `W40` power button ([D-041](../decisions.md#d-041)) | Mushroom NO terminals (S, heat-shrink) → PCB-02 `J2-9` | GH2, single-ended | 150 | Out past the contact block, +Y beside the Pi's rear edge, back above the PCB-02 +Y edge and down to `J2-9` (`POWER_BUTTON_W40_LEAD_RESERVE_1…4`). Rides with the rear panel; unplug at `J2-9` before lifting the panel away |
-| `W41` enclosure fan ([D-042](../decisions.md#d-042)) | BO-040 fan leads → PCB-09 `J9-4` | XH2.54-2P, the fan's own 2-wire lead (30 cm as bought), cut to ~80 mm and re-crimped into its housing | ~80 | Along `HARNESS_W41_FAN_LEAD_1/2`: from the fan's top-front corner along −Y above PCB-09's top-entry plugs to `J9-4`. `J9-4` pin 1 is FAN+ (5 V from the 40-pin header), pin 2 is FAN− (drain of the PCB-09 low-side MOSFET, switched by Pi GPIO24). Unplug at `J9-4` to remove the fan or PCB-09 |
+| `W41` enclosure fan ([D-042](../decisions.md#d-042), [D-092](../decisions.md#d-092) amended) | BO-040 fan leads → PCB-09 `J9-4` | GH2 (GHR-02V): the fan's own 2-wire lead cut to ~80 mm and joined (solder + heat-shrink) to a pre-crimped single-ended GH 2-way lead (HN-004; no GH crimping, D-039) | ~80 | Along `HARNESS_W41_FAN_LEAD_1/2`: from the fan's top-front corner along −Y above PCB-09's top-entry plugs to `J9-4`. `J9-4` pin 1 is FAN+ (5 V from the 40-pin header), pin 2 is FAN− (drain of the PCB-09 low-side MOSFET, switched by Pi GPIO24). Unplug at `J9-4` to remove the fan or PCB-09 |
 
 **Pre-crimped GH lead buy list** (lengths rounded up to the stock 50/100/150/200/300 mm, one spare of each):
 
 | Circuits | Double-ended | Single-ended |
 |---|---|---|
-| GH2 | — | 1 × 300 (`W02b`), 1 × 150 (`W40`) |
+| GH2 | — | 1 × 300 (`W02b`), 1 × 150 (`W40`), 1 × 100 (`W41`, joined to the fan lead; D-092 amended) |
 | GH3 | — (`W38` not fitted, D-041) | — |
 | GH4 | 1 × 150 (`W39`) | 2 × 300 (`W30`/`W31`); `W36` 350 already on CH-020 (`W22` deleted, D-041) |
 | GH5 | — | 1 × 300 (`W34`) |
@@ -145,7 +145,7 @@ Each GH cable puts GND at pin 1 where it carries no supply, and keeps each diffe
 | `J2-5` ↔ `J3-6` (`W21`, **GH8**, D-082) | GND | CHARGE_ABSENT | ENERGY_OK | SYSTEM_ARM | MOTOR_PRESENT | GND | PERMIT_OK | GND | | |
 | `J3-8` ↔ `J8-3` (`W23a`) | SIG_REF | SERVO_DATA | C2_READY_H | C2_READY_L | spare (was E_STOP_STATUS, D-041) | MOTOR_PRESENT | HEAD_OC | HEAD_PGOOD | | |
 | `J2-6` ↔ `J8-5` (`W23b`, D-082) | SIG_GND | V_PACK_ANA | SIG_GND | STAT | INT_PB | KILL | CHG_ABSENT_3V3 | ARM_REQ | | |
-| `J9-1` ↔ `J8-4` (`W24`, wired 1:1; set by [PCB-09](../04-pcbs/pcb-09-c0-link-adapter/README.md), [D-091](../decisions.md#d-091), the `W25` rule) | GND | C0TX+ | C0TX− | C2TX− | C2TX+ | spare | | | | |
+| `J9-1` ↔ `J8-4` (`W24`, wired 1:1; set by [PCB-09](../04-pcbs/pcb-09-c0-link-adapter/README.md), [D-092](../decisions.md#d-092), the `W25` rule) | GND | C0TX+ | C0TX− | C2TX− | C2TX+ | spare | | | | |
 | `J9-2` ↔ `J10-2` (`W25`, wired 1:1; set by [PCB-10](../04-pcbs/pcb-10-c3-carrier/README.md#connectors-and-who-owns-each-pin-order), 2026-10-27, reordered at layout 2026-10-28) | GND | C0TX+ | C0TX− | C3TX− | C3TX+ | spare | | | | |
 | `J10-3`/`J10-4` (`W30`/`W31`) | GND | +3V3_ENC | ENC_A | ENC_B | | | | | | |
 | `J10-5`/`J10-6` (`W32`/`W33`) | SLP | IN1 | IN2 | FLT | GND | spare | | | | |
@@ -154,7 +154,7 @@ Each GH cable puts GND at pin 1 where it carries no supply, and keeps each diffe
 | `J10-10` (`W36`) | LED_A | LED_K | TCRT_OUT | GND | | | | | | |
 | `J10-12` ↔ `J3-9` (`W39`) | GND | C3_READY | MOTOR_PRESENT | GND | | | | | | |
 | `J2-9` (`W40`) | PB_SW (10 kΩ to latch `VIN`, 5.1 kΩ to `PB`) | GND | | | | | | | | |
-| `J9-4` (`W41`, XH2.54) | FAN+ (+5 V, 40-pin header) | FAN− (low-side MOSFET drain; Pi GPIO24 `FAN_EN`) | | | | | | | | |
+| `J9-4` (`W41`, GH2, D-092 amended) | FAN+ (+5 V, 40-pin header) | FAN− (low-side MOSFET drain; Pi GPIO24 `FAN_EN`) | | | | | | | | |
 | `J3-5` (Feetech 5264-3P mating header; verify footprint) | GND | +12V_YAW | SERVO_DATA | | | | | | | |
 
 **Servo bus electrical check (D-046/D-047).** The STS3045M [specification](https://pages.switch-science.com/comparison/files/feetech/serial-sts/STS3045M_datasheet.pdf) defines a 5264-3P lead as GND / Vcc / signal and recognizes a 2–5 V data high. Its supply is independent of that TTL signal. The ST3215-HS is in Waveshare's [ST-series 5264-3PIN cable family](https://www.waveshare.com/sr-cable-5264-3pin.htm). C2, two 5.5 V STS3045Ms and the 12 V ST3215-HS can therefore share **one signal net in principle**, provided all their grounds share a signal reference and the PCB-12 transceiver and every servo drive only a 3.3–5 V logic level. This is an electrical *hypothesis*, not a mixed-supply bus pass: measure idle/high/low voltage, rise time, turnaround contention, return current and error rate on the assembled W43/PCB-08/PCB-12/W15 path, including yaw at 12 V and head at 5.23 V. No 12 V pull-up may reach `SERVO_DATA` or C2. Confirm the received ST3215-HS cable cavity orientation before applying 12 V; the three logical functions in the table are not a license to copy the ROBOTIS EH footprint.

@@ -3487,7 +3487,7 @@ R41 sits inside the D-087 back-face zone; it is a 0402, so the zone allows it. B
 
 **Check.** Exported netlist: STAT = U1.1 + R41.2; STAT_HDR = J5.4 + R41.1; CP_DIV = Q2.1, R16.2, R17.1, R42.2; CP_DIV_L = Q3.1, Q4.1, R40.1, R42.1, U3.5. ERC is unchanged from before the edit.
 
-## D-091
+## D-092
 
 **2026-11-06 · PCB-09 input freeze: Samtec SSW-120-01-T-D socket, HAT standoffs on the Pi's header-side holes, J9-1 order, four layers, headless layout · ACTIVE; CR-02 and the bench items stay open**
 
@@ -3521,3 +3521,18 @@ R41 sits inside the D-087 back-face zone; it is a 0402, so the zone allows it. B
 - Socket seating on a real Pi and the vibration contact check.
 - PCB-08/12 adopt the J9-1 order at their design.
 - Populated KiCad STEP fit and integration at stage 3.
+
+**Amended 2026-11-06 at layout** (builder approved). With the D-092 inputs, every strip net had to enter the connector bay through the 11 mm bridge. J9-4's 2.50 mm XH through-hole pins blocked that path on all four layers, and the XH header and plug are too tall to move from under the fan-lead reserve (PCB-05's lead reserve starts 7.6 mm above the board).
+
+8. **J9-4 becomes JST BM02B-GHS-TBT** (GH 2-way, top entry, SMD), like the other PCB-09 connectors. GH contacts are rated 1 A; the fan's current is still to be measured (HA-07). `W41` is the fan's own lead joined to a pre-crimped single-ended GH 2-way lead (HN-004; no GH crimping, D-039). The pin order is unchanged: 1 FAN+, 2 FAN−.
+9. **The bay grows 6 mm toward −X**, to world X 30–66 (Y 22.5–39, Z unchanged), from the strip's +Y edge. A real-geometry probe of board, both-side parts and top-entry headers to Z 115.5 is clear of every body/chassis part. The bridge path becomes 17 mm wide, with two more pin-row gaps. The CAD is `PCB09_MOUNT["bay_extension"]` (DROID_ADDS).
+10. **Placement**: J2 (J9-1) moves 3.5 mm toward −X to world X 38.3, so U1 (now on the top face) brings its 8–5 pins straight to J2's 5–2 pins. J4 (J9-3) moves to the bay's −Y half and J3 (J9-2) to its +Y half, with U2 under J3. All four mated plugs are rebuilt on the real headers in `pcb_integration.pcb09_mated_plugs()`. The J9-3 plug top (Z 115.5) is 0.1 mm under PCB-05's +Y edge plug reserve; W26's dress is a harness item (ME-07).
+
+**Check.**
+- `check_pcb09_mount.py` 7/7 PASS with the extension.
+- Nightly DRC with schematic parity, all severities: 0 violations, 0 unconnected, 0 parity issues.
+- `check_pcb09_fit.py` 5/5 PASS with the real KiCad parts:
+  - the core matches the droid board, underside at Z 106.450;
+  - the socket model sits on the Pi header plastic (−0.03 mm, model 8.5 mm);
+  - every part and plug clears the robot by 0.2 mm;
+  - the real parts slide in with the tray.

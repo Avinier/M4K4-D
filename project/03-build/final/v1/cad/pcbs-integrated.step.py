@@ -1,6 +1,6 @@
 """Released KiCad boards at the same world positions as the final robot.
 
-Focused geometry/visual review; nine installed boards, no provisional PCB-09.
+Focused geometry/visual review; ten installed boards (PCB-09 added by D-092).
 The full-robot integration report checks their surroundings separately.
 """
 from build123d import Compound

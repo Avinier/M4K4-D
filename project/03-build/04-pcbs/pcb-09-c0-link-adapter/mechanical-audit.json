@@ -9,7 +9,7 @@
     39.0000001,
     108.0500001
   ],
-  "core_volume_mm3": 1414.255999999995,
+  "core_volume_mm3": 1573.6159999999945,
   "outline_rectangles_xy": [
     [
       -4.699999999999999,
@@ -34,7 +34,7 @@
     106.4,
     108.0
   ],
-  "added_core_volume_mm3": 97.6799999999997,
+  "added_core_volume_mm3": 97.6799999999991,
   "core_solid_count": 1,
   "pi_header_bbox": [
     -4.200000049999992,

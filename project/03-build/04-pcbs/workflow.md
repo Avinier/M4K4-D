@@ -15,7 +15,7 @@ PCB-01 has no folder. It is the bought TIFPS0629 ([D-019](../decisions.md#d-019)
 | [pcb-06-pdm-mic](pcb-06-pdm-mic/README.md) | PDM microphone board ×4 | BO-005 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
 | [pcb-07-base-imu](pcb-07-base-imu/README.md) | Base IMU | CH-021 | Not started | — | — |
 | [pcb-08-yaw-junction](pcb-08-yaw-junction/README.md) | Yaw junction | CH-083 | Not started | — | — |
-| [pcb-09-c0-link-adapter](pcb-09-c0-link-adapter/README.md) | C0 link adapter | CH-084 | Review placement (provisional); ERC 0/0, placement DRC 0/0; 67 unrouted; input freeze open | — | — |
+| [pcb-09-c0-link-adapter](pcb-09-c0-link-adapter/README.md) | C0 link adapter | CH-084 | Done (rev A, D-092) | Waits for the design batch | CAD replacement complete; physical acceptance open |
 | [pcb-10-c3-carrier](pcb-10-c3-carrier/README.md) | C3 controller carrier | CH-044 | Done, rev A | — | CAD replacement complete; physical acceptance open |
 | [pcb-11-status-led](pcb-11-status-led/README.md) | Status LED carrier | CH-085 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
 | [pcb-12-c2-head-carrier](pcb-12-c2-head-carrier/README.md) | C2 head carrier | CH-086 | Not started | — | — |

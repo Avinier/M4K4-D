@@ -1,16 +1,16 @@
 # PCB-09 — C0 link adapter
 
-Pi-header board: 2 × RS-422 (THVD1451), audio pass-through and the enclosure-fan switch `J9-4`.
+Pi-header board: 2 × RS-422 (THVD1451), audio pass-through and the enclosure-fan switch `J9-4`. **Rev A designed** ([D-092](../../decisions.md#d-092)): 77 × 22.7 × 1.6 mm, four layers, on the Pi header through a Samtec SSW-120-01-T-D socket and two M2.5 × 11 mm standoffs.
 
 | | |
 |---|---|
 | Register | [04-pcbs board register](../README.md#board-register) |
 | Project BOM | CH-084 in [BOM.csv](../../BOM.csv) |
 | Location | Body, on the Pi header |
-| Specification | [audiosystem.md §4](../../02-body/v1/research/audiosystem.md#4-audio-functions-on-the-shared-boards)<br>[D-042](../../decisions.md#d-042) |
+| Specification | [audiosystem.md §4](../../02-body/v1/research/audiosystem.md#4-audio-functions-on-the-shared-boards)<br>[D-042](../../decisions.md#d-042), [D-073](../../decisions.md#d-073), [D-074](../../decisions.md#d-074), [D-092](../../decisions.md#d-092) |
 | CAD placeholder | `_c0_link_adapter()` in [`body_v1_model.py`](../../02-body/v1/cad/body_v1_model.py) |
 | CAD labels | `C0_LINK_ADAPTER_PCB09` |
-| Final CAD | `Custom PCBs › PCB-09 C0 link adapter` in [makad-v1.step.py](../../final/v1/cad/makad-v1.step.py) |
+| Final CAD | `Custom PCBs › PCB-09 C0 link adapter` in [makad-v1.step.py](../../final/v1/cad/makad-v1.step.py): the rev-A KiCad STEP, standoffs, screws and mated plugs ([pcb_integration.py](../../final/v1/cad/pcb_integration.py)) |
 
 ## Stages
 
@@ -18,13 +18,13 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | **In progress: review placement; inputs not frozen.** Lessons 2–4 explored provisionally; routing has not started | [design/](design/); ERC 0/0, placement DRC 0/0, parity clean; 67 unconnected items | 2026-11-01 |
-| 2. Procure | — | — | — |
-| 3. Integrate | — | — | — |
+| 1. Design | **Done, rev A** ([D-092](../../decisions.md#d-092)) | [design/](design/), [fab/revA](fab/revA/README.md), [cad/](cad/); ERC 0/0; DRC 0 violations, 0 unconnected, 0 parity; `check_pcb09_mount.py` 7/7, `check_pcb09_fit.py` 5/5 | 2026-11-06 |
+| 2. Procure | Waits for the design batch ([D-064](../../decisions.md#d-064)) | — | — |
+| 3. Integrate | **CAD replacement complete**; physical acceptance open | [pcb_integration.py](../../final/v1/cad/pcb_integration.py), `check_pcb_integration.py` | 2026-11-06 |
 
 ## Inputs
 
-Header audit started 2026-10-31. The electrical interface below is the **builder-agreed allocation baseline v0.2** ([D-073](../../decisions.md#d-073)); CR-02 and boot-safe audit closure remain open. The D-074 strip outline and all 40 socket pad positions have since been checked, and a review schematic and placement exist below. Socket selection, installed height, retention and populated fit still prevent the lesson-1 input freeze; no fabrication release is implied.
+Header audit started 2026-10-31. The electrical interface below is the **builder-agreed allocation baseline v0.2** ([D-073](../../decisions.md#d-073)); CR-02 and boot-safe audit closure remain open. The D-074 strip outline and all 40 socket pad positions have since been checked, and a review schematic and placement exist below. Socket selection, installed height, retention and populated fit were the remaining lesson-1 gaps; they are closed in the [input freeze](#input-freeze--2026-11-06-d-092) (D-092).
 
 **Set by PCB-05.** `J9-3` (audio, `W26` to PCB-05 `J5-1`) carries signals only: GPIO18 BCLK, GPIO19 LRCLK, GPIO20 SDI0, GPIO22 SDI1, GPIO21 SDO0, GPIO23 `AMP_SD`, the Pi's 3V3, two GND and one spare, and **no 5 V** ([D-067](../../decisions.md#d-067), PCB-05 2026-10-27; `CA-06` CR-01 accepted there). Pin order, set by the PCB-05 schematic (2026-10-27): **1 3V3, 2 LRCLK, 3 GND, 4 BCLK, 5 GND, 6 SDO0, 7 SDI1, 8 SDI0, 9 AMP_SD, 10 spare (5V_SENSE)** (reordered 2026-10-27 at PCB-05 routing, D-067); W26 is wired 1:1. Route the spare pin to a test pad: PCB-05 carries an unfitted 5V-present divider on it, which a later `CA-06` change could bring to a Pi GPIO.
 
@@ -222,56 +222,148 @@ This specifies correspondence, not a KiCad rotation command. When the footprint 
 
 **D-074 visual and artifact check:** the [rendered top view](../../final/v1/cad/snapshots/pcb09-strip-d074-top.png) was reviewed; all land markers sit inside the outline. CAD inspection reports 43 occurrences, zero geometry validity failures, core face area 812.09 mm² and measured thickness 1.600 mm. The review model intentionally omits unselected components and mounting.
 
+### Input freeze — 2026-11-06 (D-092)
+
+**Lesson.** Freezing the inputs means every fact the layout leans on has a source: the part that sets the height, the fixing that carries the plug forces, the pin orders the cables are wired to. Before this step the board could be routed, but any of those could have moved it.
+
+| Open item | Closed by |
+|---|---|
+| ME-05 socket MPN and height | **Samtec SSW-120-01-T-D**: 8.51 mm insulator, 3.68–6.35 mm pin insertion; the Pi header gives 6.11 mm. The stack, 2.5 + 8.51 = 11.01 mm, puts the board's underside at Z 106.45 (CAD 106.4 + 0.05 lift). Tin contacts are the builder's choice; a contact check after vibration goes on the bench list |
+| ME-06 retention | **Two M2.5 × 11 mm round male-female standoffs at Pi holes 3 and 4**, as on a HAT, replacing the Pi's screws there; M2.5 × 5 DIN 912 screws from the top. Outline tabs reach both holes (X −11…−4.7 and 47.1…53.4). They are round because a hex standoff hits the Active Cooler. The frame is 15.4 mm over hole 4's head, so **PCB-09 is screwed on at the bench, with the Pi on the tray, before the tray goes in** (`check_pcb09_mount.py` sweeps the unit in) |
+| ME-02…04 real footprints | Placed and routed with the real land patterns (below); J9-4 became a GH 2-way SMD header and the bay grew 6 mm toward −X (D-092 amended) |
+| ME-07 populated fit | `check_pcb09_fit.py` with the KiCad STEP: every part and the rebuilt plugs clear the robot by 0.2 mm, and the parts slide in with the tray. Harness dressing stays open (stage 3) |
+| HA-08 / J9-1 order | **1 GND, 2 C0TX+, 3 C0TX−, 4 C2TX−, 5 C2TX+, 6 spare** (the W25 rule); `W24` is 1:1 and the 05-harness row is updated. PCB-08 `J8-4` and PCB-12 follow it |
+| Layers | Four (F, In1 GND, In2 3V3 + three audio hops, B): the 6.1 mm strip holds four 0.16 mm tracks per layer and ten nets run its length |
+
+CR-02 (boot/overlay evidence and the measured fan current) and HA-05/06/07 stay open: they need the deployed Pi and the real fan.
+
 ## Schematic
 
-The working project is [design/pcb-09-c0-link-adapter.kicad_pro](design/pcb-09-c0-link-adapter.kicad_pro), with its [schematic](design/pcb-09-c0-link-adapter.kicad_sch), [schematic PDF](design/pcb-09-c0-link-adapter-schematic.pdf) and [PCB](design/pcb-09-c0-link-adapter.kicad_pcb). It was created in **KiCad Nightly 10.99.0-5923-gde08734017** through the project manager. The PCB is open in Nightly. Initial circuit transfer used the GUI **F8 / Update PCB from Schematic** dialog; placement, socket-area geometry and subsequent board edits used the open editor's KiPy API and `tools/kp.py`. The earlier CAD review scene is only an input survey, not this project.
+The project is [design/pcb-09-c0-link-adapter.kicad_pro](design/pcb-09-c0-link-adapter.kicad_pro), with its [schematic](design/pcb-09-c0-link-adapter.kicad_sch) and [schematic PDF](design/pcb-09-c0-link-adapter-schematic.pdf). It was created in **KiCad Nightly 10.99.0-5923-gde08734017**, and the first circuit transfer used F8 in the GUI (2026-10-31). Stock symbols are embedded, and `fp-lib-table` points to an empty `pcb09.pretty/`: every land pattern is stock. [build_schematic.py](design/build_schematic.py) authored the first draft; the saved schematic is the source.
 
-**Project set-up.** As on PCB-05/06/10/11/15, the basename is shared by `.kicad_pro`, `.kicad_sch`, `.kicad_pcb` and `.kicad_dru` in `design/`. `fp-lib-table` points to `pcb09.pretty/`; it currently contains no custom land patterns because the selected footprints are stock. Stock symbols are embedded, including the flattened derived AO3400A; no project symbol library is needed yet. [build_schematic.py](design/build_schematic.py) is an authoring helper, not a replacement for the saved schematic. Do not regenerate it over later GUI edits without reconciling them.
+The circuit is the D-073 allocation, with 25 board parts plus three power flags:
+- two THVD1451DR channels on Pi 3V3, each with a 100 nF bypass, a receiver-only 120 Ω termination and a 4.7 kΩ TX pull-up;
+- the fixed W26 audio interface;
+- GPIO24's 100 Ω / AO3400A / 100 kΩ fan switch, with a 1N5819HW flyback diode and 10 µF + 100 nF bypass;
+- six test pads.
 
-**Lesson.** ERC checks the circuit's electrical connections. Placement DRC checks real copper pads, courtyards, rules and outline. Neither proves that the board is routed or fits with its cables: an unrouted board can have zero placement violations and still have many connections left to make.
+Rev A changes:
+- J1's value is now the selected **SSW-120-01-T-D**.
+- J5 (J9-4) uses `JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical` (D-092 amended).
+- The title block reads rev A.
 
-The schematic contains 28 symbols (25 board footprints plus three power flags): two THVD1451DR channels on Pi 3V3, their 100 nF bypass capacitors and receiver-only 120 Ω terminations, both 4.7 kΩ TX pull-ups, the fixed W26 audio interface, GPIO24's 100 Ω / AO3400A / 100 kΩ fan switch, flyback diode and 10 µF + 100 nF bypass, and six test pads. D1 is **1N5819HW in SOD-123**, a package-matched candidate from [Diodes' product data](https://www.diodes.com/part/view/1N5819HW); exact orderable variant, availability and suitability for the measured fan remain sourcing/current gates. The initial SS14 name was corrected because it did not match the assigned SOD-123 footprint. J1's final socket MPN and mating height remain open.
+The pin roles are unchanged.
 
-| Schematic reference | Interface |
+| Ref | Interface |
 |---|---|
-| J1 | Pi underside 2×20 socket; all 40 pad positions verified in Nightly after bottom-side placement |
-| J2 | J9-1 head RS-422; draft order follows the base-link direction convention: GND, C0TX+, C0TX−, C2TX−, C2TX+, spare/NC; reconcile with PCB-08/12 and W24 before freeze |
-| J3 | J9-2 base RS-422, existing PCB-10 / W25 contract |
+| J1 | Pi underside 2 × 20 socket, Samtec SSW-120-01-T-D; all 40 pad positions verified after bottom-side placement |
+| J2 | J9-1 head RS-422, side entry: 1 GND, 2 C0TX+, 3 C0TX−, 4 C2TX−, 5 C2TX+, 6 spare (D-092, W25 rule) |
+| J3 | J9-2 base RS-422, PCB-10 / W25 contract |
 | J4 | J9-3 audio, exact PCB-05 / W26 1:1 order |
-| J5 | J9-4 fan: pin 1 +5V_PI, pin 2 FAN_SW; stock JST XH 2.50 mm footprint, purchased housing compatibility still to verify |
-| TP1…TP6 | SDA, SCL, GND, isolated 5V_SENSE, Pi 3V3, Pi 5 V; all excluded from BOM and position files |
+| J5 | J9-4 fan, GH 2-way top entry: 1 +5V_PI, 2 FAN_SW |
+| TP1…TP6 | SDA, SCL, GND, isolated 5V_SENSE, Pi 3V3, Pi 5 V; all left out of the BOM and position files |
+
+**Checks.** Nightly `kicad-cli sch erc --severity-all`: **0 errors, 0 warnings** ([schematic-erc.rpt](design/schematic-erc.rpt)). The exported [netlist](design/pcb-09-c0-link-adapter.net) gives the same pin-to-net map as [netlist-audit.json](design/netlist-audit.json) (111 pins). J5's two pins keep +5V_PI and FAN_SW, and only J5's footprint and J1's value differ.
 
 ## Board set-up
 
-**Board coordinates.** KiCad x = world X + 104.7; KiCad y = 139 − world Y. Aux/drill and grid origins are (100, 100). Eight `Edge.Cuts` segments implement the D-074 outline; nominal thickness 1.6 mm. J1 is on B.Cu; its actual readback uses rotation 270° in this Nightly/API version and matches all 40 numbered contacts. This was checked from returned pad positions, not inferred from a rotation name. Circuit ICs and fan-switch passives are candidates on the wide area's underside; the connectors are on top. Connector coordinates are **review placements**, with populated CAD and harness-fit validation still open.
+**Outline** (eight Edge.Cuts → ten, D-074 + D-092):
+- the strip, world X −4.7…36, Y 16.3…22.4;
+- the bridge, X 36…47.1, Y 16.3…22.5;
+- the bay, **X 30…66**, Y 22.5…39 (the 6 mm −X extension);
+- the standoff tabs, X −11…−4.7 (Y 16.3…22.4) and X 47.1…53.4 (Y 17.2…22.5).
 
-**Mechanical constraint.** The B.Cu `SOCKET_ONLY_B` rule area covers the header strip/bridge. Its scoped disallow rule permits J1 and rejects other B-side footprints. A paired scratch board, project and rules file placed R1 inside it; Nightly reported `items_not_allowed` under the named rule. The actual board passes that check. The scratch probe did not modify the project.
+It is one 1.6 mm core: 77.0 × 22.7 mm overall and 983.5 mm² of board. KiCad x = world X + 104.7, KiCad y = 139 − world Y. **The aux and grid origins are at the bottom-left corner as seen from the top**, KiCad (93.7, 122.7) = world (−11, 16.3). The Gerbers, drill and position files all use it.
+
+**Stackup**: PCB-10's 1.6 mm four-layer build: F.Cu 35 µm, prepreg 0.2104, In1 (power), core 1.065, In2 (signal), prepreg 0.2104, B.Cu 35 µm.
+
+**Rules** ([design/pcb-09-c0-link-adapter.kicad_dru](design/pcb-09-c0-link-adapter.kicad_dru)):
+- the fab-neutral set of D-062, unchanged: 0.16 mm track and gap, 0.67/0.35 mm vias, 0.31 mm from a via to other copper, 0.3 mm to the edge;
+- `PCB09 socket-only underside`: J1 is the only part allowed under the strip and the tabs on B;
+- `J1 grounds on In1 only`: the socket's eight GND pins join the In1 plane, not the F/B pour slivers between the strip's lanes, which cannot give them two thermal spokes.
+
+**Holes.** H1/H2 are `MountingHole_2.7mm_M2.5` NPTH holes, marked board-only and left out of the BOM and position files, at world (−7.8, 19.33) and (50.2, 19.33). Each has an all-layer rule area of R 2.6 that keeps copper away from the DIN 912 head and the Ø4.5 standoff face.
 
 ## Layout
 
-**Review placement only.** F8 populated the open Nightly PCB, then `tools/kp.py` and [place_review.py](design/place_review.py) placed functional groups and read the numbered pads back. References are on fabrication layers and TP1–TP6 are excluded from BOM and position files. [placement-readback.json](design/placement-readback.json) records the candidate coordinates and nets; the socket's actual 270° bottom-side transformation was checked against all 40 physical positions.
+**Lesson: the board as a set of lanes.** The socket's two rows of Ø1.7 mm pads, 2.54 mm apart, leave four narrow channels on every copper layer along the strip:
+- **A**, above the outer row (one track up to 0.49 mm);
+- **U** and **L**, two 0.16 mm tracks between the rows;
+- **W**, below the inner row (one track up to 0.45 mm).
 
-No autorouter has been used. There are no tracks or vias, no ground pour and no completed routing. Moving the circuits into the wide bay clears the current 2D placement checks, but does not establish that underside parts clear the robot. Revisit placement after the socket and support geometry are fixed, then route fan/power paths and fan-out by hand before the remaining nets, using the playbook's current and return-path checks.
+A net launched from an outer pin can only use A or U without crossing another lane, and an inner pin can only use L or W. A lane must also leave the strip in order: A turns up first, then U through a pin-row gap, then L, then W. Ten nets run the strip's length, so the lanes had to be planned before any track was drawn. Most of this lesson was choosing which net goes in which lane, so that each copper layer reaches its connector with no tracks crossing.
 
-## Checks and outputs (review draft)
+**Headless editing (D-092 item 7).** The KiCad Nightly GUI had PCB-02 open in a parallel session, and KiPy talks only to the open board. So [design/layout_pcb09.py](design/layout_pcb09.py) writes the set-up, placement, every track, via and pour into the `.kicad_pcb` through [../tools/kfile.py](../tools/kfile.py), the file-based counterpart of `kp.py`. The Nightly `kicad-cli` then refills the zones and runs DRC with parity. Every coordinate is written by hand in the script, and `kfile.track()` refuses any segment that isn't at 0°, 45° or 90°. **No autorouter was used.** Rerunning the script removes its own items (one UUID namespace) and writes them again; `--export` also writes the outputs.
 
-| Check | Actual result / evidence |
+**Placement** (KiCad x, y; world in brackets):
+- Top face:
+  - J2 (143.0, 103.6) r180, the side-entry header at the +Y edge;
+  - **U1** (143.045, 112.0) r90, the head THVD1451, its 8–5 pins under J2's 5–2 and its 1–4 pins facing the strip;
+  - C1 beside U1;
+  - J5 (153.7, 104.0) fan;
+  - J3 (164.5, 103.3) base;
+  - J4 (161.5, 111.3) audio, with its pads facing the audio band;
+  - TP3/TP5 in the bay extension, TP6 on the 5V track.
+- Bottom face:
+  - U2 (164.5, 110.9) r90 under J3, its 5–8 pins one via each from J3's 2–5 pins;
+  - R4 and R3 over the U2/J3 and U1/J2 vias;
+  - R1 under U1 (HEAD_TX reaches it by a via under U1's body);
+  - R2 and C2 beside U2;
+  - the fan switch Q1, R5, R6, D1, C3 and C4 under J5.
+
+**Strip lanes:**
+
+| Layer | A | U | L | W | Pad rises |
+|---|---|---|---|---|---|
+| F | HEAD_RX (pin 10 → U1 pin 2) | HEAD_TX (pin 8 → U1 pin 3) | LRCLK (pin 35, gap 146.22) | SDI1 (pin 15 → past the pins) | SDO0 (pin 40) |
+| In1 | 3V3 (pin 1 → U1's via) | — | — | 5V (pins 2/4 → the 5V via) | (GND plane) |
+| In2 | BCLK (pin 12 → via at 148.76) | SDI0 (pin 38 → via) | AMP_SD (pin 16 → via) | 3V3 link pins 1–17 | (3V3 bay plane) |
+| B | FAN_EN (pin 18 → R5) | — | BASE_TX (pin 7 → U2 pin 3) | BASE_RX (pin 29 → U2 pin 2) | 5V link pins 2–4 |
+
+In the bay:
+- The **F audio band** runs under J4's pads: six 0.16 mm tracks at 0.32 mm pitch, LRCLK on top. Each peels up into its pad. Entry order is the J4 order: LRCLK, then BCLK by via, SDO0, SDI1, then SDI0 and AMP_SD by via.
+- The **B band** carries BASE_TX over BASE_RX into U2's 1–4 row.
+- **5V**: In1 W lane → via → F, round U1's right side, through TP6 to J5.1, with a via to the fan parts on B.
+- **3V3**: the In2 plane covers the bay. In the strip, AMP_SD's lane cuts In2 off, so 3V3 also rides In1's A lane to U1's via.
+- **GND**: In1 is solid except the two power tracks; F and B are GND pours with stitching vias.
+
+Totals: 142 segments, 27 vias, 4 pours, 3 rule areas.
+
+## Checks and outputs (rev A, 2026-11-06)
+
+| Check | Result |
 |---|---|
-| Nightly schematic ERC, all severities | **0 errors, 0 warnings** — [schematic-erc.rpt](design/schematic-erc.rpt) |
-| Exported netlist against circuit and interfaces | **111 component pins checked**, including 3V3 transceiver supplies, isolated sense pad and fan polarity — [netlist-audit.json](design/netlist-audit.json), [netlist](design/pcb-09-c0-link-adapter.net) |
-| Numbered socket and placement readback | All 40 contact coordinates/nets agree with the map — [placement-readback.json](design/placement-readback.json) |
-| Nightly PCB placement DRC with schematic parity | **0 violations (0 errors / 0 warnings), 0 parity issues; 67 unconnected items** — [placement-drc.json](design/placement-drc.json) |
-| Mechanical rule's planted case | Rejected the misplaced R1 under `PCB09 socket-only underside` — [rule-probe-result.json](design/rule-probe-result.json) |
-| Footprint/model audit | All 19 component footprints retain their named, existing library models; six bare-copper test pads have no model and are excluded from BOM/position files |
-| Visual review | PCB reviewed in Nightly; schematic exported by Nightly and reviewed as [PNG](design/schematic-review.png) / [SVG](design/schematic-review.svg). Separate Schematic Editor native control was not approved by the computer-use tool; its file/ERC/render work used the CLI |
+| Nightly ERC, all severities | **0 errors, 0 warnings** |
+| Nightly DRC with schematic parity, all severities, zones refilled | **0 violations, 0 unconnected, 0 parity issues** ([design/layout-drc.json](design/layout-drc.json)) |
+| Footprint/model audit | All 21 fitted footprints name a stock 3D model that exists on disk; the six test pads and two holes have none. The STEP's `PRODUCT` list carries every model |
+| `check_pcb09_mount.py` (final/v1/cad) | **7/7**: socket stack 106.447 vs standoff top 106.450; standoffs coaxial with the Pi inserts; ≥ 0.5 mm webs round both holes; mount clears its neighbours by 0.2 mm; planted hex standoff and un-raised tab hit the cooler; the bench-assembled unit slides in ([mount-check.json](mount-check.json)) |
+| `check_pcb09_fit.py` (final/v1/cad) | **5/5**: the KiCad core is the droid board (offset 0.000, underside Z 106.450, area + holes = 983.5 mm²); the socket model is centred on the Pi header and seated on its plastic (−0.03 mm); every part and the four rebuilt plugs clear the robot by 0.2 mm; the real parts slide in with the tray. Info: the J9-3 plug top is 0.1 mm under PCB-05's +Y edge plug reserve |
+| `check_pcb09_inputs.py` | Reruns with the tabs and extension; zero core clashes ([mechanical-audit.json](mechanical-audit.json)) |
+| Final integration | PCB-09's KiCad STEP replaces the placeholder in `pcb_integration.py`; `check_pcb_integration.py` result in [final/v1/cad/pcb-integration-report.json](../../final/v1/cad/pcb-integration-report.json) |
 
-The 15 post-flip library mismatch warnings were resolved using Nightly's **Tools → Update Footprints from Library**, with **Match pad positions** enabled and text/fabrication resets disabled. Numbered pad coordinates and nets were rechecked unchanged; both duplicate MP pads on each GH connector were checked separately (the API helper's dictionary retains only one value for a duplicated pad number). Reapply position-file exclusions after every F8.
+Outputs:
+- the [board STEP](cad/pcb-09-c0-link-adapter-revA.step), exported with `--user-origin 0x0mm`;
+- [fab/revA](fab/revA/README.md): Gerbers, drill, BOM, position and CPL files, the zip and the order parameters.
 
-## Open items (before routing/release)
+## Open items
 
- select and prove the socket's installed height; design PCB retention; fit the real candidate connectors and underside parts in the robot with tails/plugs/cables; resolve the head-link far-end contract; finish the component ratings/sourcing checks and the CR-02 boot/overlay/fan-current evidence. Then freeze placement and route manually in Nightly. There are currently **zero tracks and 67 unrouted connections**, no fab outputs and no released revision. The 0-violation placement result is not a completed-board DRC pass.
+- **Stage 2 (procure):**
+  - quote **two-sided assembly** (SMD on both faces) plus J1, one THT part on B;
+  - source the SSW-120-01-T-D from element14;
+  - order THVD1451DR × 2 from Mouser India (consign them);
+  - find the round Ø ≤ 4.5 mm M2.5 × 11 standoffs (BO-065);
+  - take the GH headers from the fab's stock;
+  - run the DFM check.
+- **Bench:**
+  - CR-02 / HA-05…07: boot console, overlays, audio overlay and the measured fan run, start and stall current against the AO3400A, 1N5819HW and GH 1 A rating;
+  - TX idle level with the 4.7 kΩ pull-ups;
+  - socket seating on a real Pi, and a tin-on-gold contact-resistance check after vibration.
+- **Stage 3:**
+  - harness dressing for W24–W26 and W41 (the J9-3 plug sits under PCB-05's plug reserve);
+  - PCB-08 `J8-4` and PCB-12 adopt the J9-1 order;
+  - the builder's review of the board in the Nightly GUI.
 
-### Workflow comparison — 2026-11-01
+### Workflow comparison — 2026-11-01 (review stage, before D-092)
 
 Compared with the playbook and PCB-15, PCB-11, PCB-06, PCB-05 and PCB-10. Their lesson counts vary; the playbook's step numbers below are the common sequence.
 
@@ -303,3 +395,17 @@ Compared with the playbook and PCB-15, PCB-11, PCB-06, PCB-05 and PCB-10. Their 
 - **2026-11-01:** compared the project and README with PCB-05/06/10/11/15 and the playbook. Restored the common Schematic / Board set-up / Layout / Checks / Open items structure, corrected the stale lesson-1 status, added a schematic PDF and recorded the exact F8 → save → KiPy handoff. Found and corrected stock project routing presets after saving/closing Nightly; recorded the before/after comparison. Native control recovered after an initial timeout. No circuit, placement or input-freeze approval changed.
 
 - **2026-11-01:** the completed PCB-05/06/10/11/13/15 designs were integrated in the final assembly and both whole-robot exports rebuilt. PCB-09 remains a provisional placeholder with D-074’s strip extension; no populated PCB-09 fit or mechanical input freeze is claimed.
+
+- **2026-11-06:** inputs frozen and the board laid out on a separate branch (`pcb-09-c0-link-adapter`) while PCB-02 used the Nightly GUI (D-092).
+  - Builder choices:
+    - Samtec SSW-120-01-T-D (tin);
+    - HAT-style M2.5 × 11 round standoffs at Pi holes 3/4, with outline tabs and bench assembly;
+    - J9-1 on the W25 rule;
+    - four layers;
+    - headless layout;
+    - J9-4 as a GH 2-way SMD header;
+    - the bay 6 mm longer toward −X.
+  - CAD: `PCB09_MOUNT` in the final assembly, `check_pcb09_mount.py` 7/7, `check_pcb09_inputs.py` updated.
+  - Layout: written by hand in `layout_pcb09.py` (new `tools/kfile.py`); ERC 0/0; DRC 0/0/0.
+  - Outputs: fab/revA and the board STEP.
+  - Fit and integration: `check_pcb09_fit.py` 5/5; KiCad STEP installed in the final assembly with rebuilt plugs.

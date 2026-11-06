@@ -1,7 +1,7 @@
 """Install released KiCad rev-A STEP inputs in the final robot only.
 
 Millimetres. Static transforms are those proved by check_pcbNN_fit.py; no
-subsystem source or KiCad layout is changed. PCB-09 remains provisional.
+subsystem source or KiCad layout is changed.
 """
 from functools import lru_cache
 from pathlib import Path
@@ -13,9 +13,9 @@ from cadgen.step_scene import import_step
 from OCP.gp import gp_Trsf
 
 ROOT = Path(__file__).resolve().parents[3]
-BOARDS = {5:"pcb-05-audio-front-end", 6:"pcb-06-pdm-mic", 10:"pcb-10-c3-carrier",
+BOARDS = {5:"pcb-05-audio-front-end", 6:"pcb-06-pdm-mic", 9:"pcb-09-c0-link-adapter", 10:"pcb-10-c3-carrier",
           11:"pcb-11-status-led", 13:"pcb-13-charge-inlet", 15:"pcb-15-nose-hall"}
-GROUPS = {5:"PCB-05 audio front end", 6:"PCB-06 PDM microphone boards x4",
+GROUPS = {5:"PCB-05 audio front end", 6:"PCB-06 PDM microphone boards x4", 9:"PCB-09 C0 link adapter",
           10:"PCB-10 C3 controller carrier", 11:"PCB-11 status LED carrier",
           13:"PCB-13 charge inlet", 15:"PCB-15 nose Hall carrier"}
 
@@ -55,6 +55,10 @@ def placements(number, body, head_origin):
             frame=Location(Plane(origin=(x,sign*inner,z),x_dir=(centre,0,0),z_dir=(0,-sign,0)))
             out.append((pos,frame*Location((-106,107,-0.955))))
         return out
+    if number == 9:
+        # D-092: STEP exported with --user-origin 0x0mm, (Xs, Ys) = (KiCad x, -y); KiCad x = X + 104.7,
+        # y = 139 - Y. The board's underside is on the standoffs at Pi top + 11.0 = Z 106.45.
+        return [("MAIN",Location((-104.7,139.0,106.45+(1.6-core)/2-bb.min.Z)))]
     if number == 10:
         t=gp_Trsf()
         t.SetValues(-1,0,0,156, 0,0,1,-58.4+(1.6-core)/2-bb.min.Z, 0,1,0,225.5)
@@ -141,11 +145,43 @@ def retain(number,label):
         return "MATED_PLUG" in label
     if number == 6:
         return any(s in label for s in ("GASKET","M2_SCREW","PIGTAIL_RESERVE"))
+    if number == 9:
+        return label.startswith(("PCB09_M25X11_ROUND_STANDOFF_","PCB09_M25X5_SOCKET_SCREW_"))
     if number == 10:
         return "MATED_PLUG" in label or label.startswith("C3_CARRIER_M25_SCREW_")
     if number == 13:
         return label.startswith("PCB13_M2X5_THREAD_FORMING_SCREW_")
     return False
+
+
+# PCB-09's placeholder plugs stood on the review-placement headers; the KiCad headers moved
+# (D-092), so the mated GHR plugs are rebuilt on the installed headers, as the body model
+# draws them: top-entry plugs above BM headers, J9-1's side-entry plug beyond the +Y edge.
+PCB09_PLUGS = {"J5":("J9_4",2,"top"), "J3":("J9_2",6,"top"), "J4":("J9_3",10,"top"), "J2":("J9_1",6,"side")}  # KiCad refs
+
+
+def pcb09_mated_plugs(board,body):
+    from build123d import Box
+    out=[]
+    for part in board.children:
+        key=part.label.split("__")[-1]
+        if key not in PCB09_PLUGS:
+            continue
+        cid,n,entry=PCB09_PLUGS[key]
+        b=part.bounding_box()
+        cx=(b.min.X+b.max.X)/2
+        if entry=="side":                         # side entry, mating +Y over the board's +Y edge (Y 39)
+            size=(body.gh_plug_width(n),body.GH_PLUG_PROUD,body.GH_PLUG_THICKNESS)
+            centre=(cx,39.0+body.GH_PLUG_PROUD/2,b.min.Z+body.GH_PLUG_THICKNESS/2)
+        else:
+            size=(body.gh_plug_width(n),body.GH_PLUG_THICKNESS,body.GH_PLUG_PROUD)
+            centre=(cx,(b.min.Y+b.max.Y)/2,b.max.Z+body.GH_PLUG_PROUD/2)
+        plug=Box(*size).moved(Location(centre))
+        plug.label=f"C0_{cid}_GHR{n:02d}_MATED_PLUG"
+        plug.color=Color(0.957,0.945,0.902)
+        out.append(plug)
+    assert len(out)==4,[p.label for p in out]
+    return out
 
 
 def replace_completed_boards(robot,body,head_origin):
@@ -154,9 +190,11 @@ def replace_completed_boards(robot,body,head_origin):
     for number,name in GROUPS.items():
         old=next(c for c in custom.children if c.label==name)
         hardware=[placed_copy(node,parent) for node,parent in leaves(old) if retain(number,node.label or "")]
-        expected={5:7,6:24,10:14,11:0,13:2,15:0}[number]
+        expected={5:7,6:24,9:4,10:14,11:0,13:2,15:0}[number]
         assert len(hardware)==expected,(number,"retained hardware count",len(hardware),[s.label for s in hardware])
         boards=[installed_board(number,instance,loc) for instance,loc in placements(number,body,head_origin)]
+        if number == 9:
+            hardware+=pcb09_mated_plugs(boards[0],body)
         replacements[name]=Compound(label=name,children=[*boards,*hardware])
     newcustom=Compound(label="Custom PCBs",children=[replacements.get(c.label,c) for c in custom.children])
     return Compound(label=robot.label,children=[newcustom if c is custom else c for c in robot.children])
