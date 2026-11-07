@@ -94,7 +94,7 @@ Until RP-03 measures lift onset and dynamic compliance, commanded forward accele
 
 | Subsystem | Baseline placement / count | Reason |
 |---|---|---|
-| Microphones | **Four PDM MEMS microphones in the body** | Wider stable array baseline and less neck-servo noise |
+| Microphones | **Four INMP441 I²S breakouts in the body** | D-093/D-095: front pair SDI0, rear pair SDI1; wider stable array and less neck-servo noise |
 | Ear microphones | **None** | Ear pods remain free of acoustic/electronic function; concealed mechanical access is permitted as a candidate, not selected here |
 | Speaker | **Body-mounted** | More acoustic cavity volume and less moving-head mass |
 | Battery | **Low and forward of the drive axle** | Lowers `h_CoM` and increases the forward restoring arm `x_CoM`; behind-axle placement would reduce forward-acceleration tip resistance |

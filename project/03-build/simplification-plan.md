@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **PLAN, 2026-11-06.** Builder decisions D1–D6 and sub-decisions Q1–Q9 taken (§6); this page reviews them and maps every change they cause. The changes are applied level by level; §7 tracks which levels are done |
+| Status | **Applying; levels 0–4, 6–8 done (2026-11-07).** Builder decisions D1–D6 and sub-decisions Q1–Q9 taken (§6); §7 tracks implementation and the Level 5 electrical HOLD |
 | Ledger entry | **[D-093](decisions.md#d-093)**, written 2026-11-06 (Level 0 done; the PCB-09 branch is merged to `main`) |
 | Print state | Nothing is printed: [04-print](../04-print/README.md) phase 0 (access) is still open. Every CAD change below lands before any part is printed |
 
@@ -34,14 +34,14 @@
 | PCB-07 base IMU | HOLD | **Bought** SPI 6-axis breakout | — |
 | PCB-13 charge inlet | Rev A | **Deleted** | — |
 | PCB-08 yaw junction | Not started | **Custom, simpler**: drops the permit/status sideband, **gains the yaw servo plug** (was PCB-03 `J3-5`) | Design |
-| PCB-09 C0 link adapter | Rev A (branch) | **Kept, no change**; merge the branch | Procure |
+| PCB-09 C0 link adapter | Rev A (branch) | **Rev B (D-098)**; GPIO12/13 and accessible INA226 wiring selected | Implement rev B; rev A is not the release design |
 | PCB-10 C3 carrier | Rev A | **Kept, no re-spin.** `J10-12` unused; its watchdog + AND gate become the motor kill | Procure |
 | PCB-11 status LED | Rev A | **Kept** | Procure |
 | PCB-12 C2 head carrier | Not started | **Custom, simpler** (no watchdog, `ARM_REQ` or READY pair). The Waveshare board doesn't fit the C2 bay (D-094) | Design |
 | PCB-14 ×3 yaw joiners | HOLD | **Kept custom** (passive; ZIF pick still open) | Design |
 | PCB-15 nose Hall | Rev A | **Kept** | Procure |
 
-**Count:** 14 custom designs → **7** (PCB-08, 09, 10, 11, 12, 14, 15), or 6 if Q5 picks the Waveshare board. 4 are already designed; **3 are left to design** (08, 12, 14). All 7 go on one fab order ([D-064](decisions.md#d-064) batch). What's left to bring up is medium risk (PCB-09, 10, 12) or low (08, 11, 14, 15).
+**Count:** 14 custom designs → **7** (PCB-08, 09, 10, 11, 12, 14, 15). 4 have rev A designs; **3 are left to design** (08, 12, 14), and PCB-09 rev B remains to implement. All 7 go on one fab order ([D-064](decisions.md#d-064) batch). What's left to bring up is medium risk (PCB-09, 10, 12) or low (08, 11, 14, 15).
 
 **Interface rule.** Boards already designed keep their connectors. Each bought module gets a soldered pigtail ending in the connector the board expects. No designed board is re-spun.
 
@@ -327,7 +327,7 @@ The changes are applied in these levels. Q1–Q9 are decided (§6).
 | 4 | **CAD** in `final/v1/cad`: module bays, rear-panel ports, balance-lead channel, mic and amp mounts, IMU adapter; targeted checks; mass/CoM (§4.5–4.8) | New design | 3 | **Done 2026-11-07**: [D-095](decisions.md#d-095); outlines of M6, M8, M9 unmeasured |
 | 5 | **Harness:** rewrite [05-harness](05-harness/README.md) power tree, wire list, pinouts, service procedures and buy list (§4.4) | New design | 3, 4 | **Topology documented; electrical HOLD 2026-11-07**: [D-096](decisions.md#d-096). ~16 A coincident low-pack demand exceeds the assumed 13 A connector rating and R010 shunt minimum; cut lengths, PNs and break/star CAD fit also open; CAD reserves for the four body-lift plugs and star splices placed in [D-099](decisions.md#d-099) |
 | 6 | **BOM:** retire, promote and add rows (§4.10) | Records | 3 | **Done 2026-11-07**: [D-097](decisions.md#d-097); subsystem BOM snapshots not refreshed |
-| 7 | **Other docs:** foundation CON-TBD-09, the power/energy and mass ledgers, head BOM yaw-rail note, print READMEs, final v1 README (§4.1, 4.7, 4.9) | Doc cleanup | 3–6 | Waits |
+| 7 | **Other docs:** foundation CON-TBD-09, the power/energy and mass ledgers, head BOM yaw-rail note, print READMEs, final v1 README (§4.1, 4.7, 4.9) | Doc cleanup | 3–6 | **Done 2026-11-07** for documentation; power-ledger **peak budget remains D-096 HOLD** pending N1–N3 and CH-099 |
 | 8 | **Firmware requirements** in `04-software`: low-battery stop, button-off, servo limits, the four-mic overlay (§4.11) | Software | — | **Done 2026-11-07**: [firmware-requirements.md](04-software/firmware-requirements.md) ([D-097](decisions.md#d-097)); PCB-09 rev B interface selected by [D-098](decisions.md#d-098), physical implementation pending |
 | 9 | **Custom boards:** revise PCB-09 to rev B for GPIO12/13 and accessible, supported INA226 SDA/SCL/3V3/GND wiring ([D-098](decisions.md#d-098)); design PCB-08, PCB-12 (custom: the Waveshare board doesn't fit, D-094) and PCB-14; update final-v1 board STEP and fit checks before one fab order for all seven | New design | 4, 5 | Waits; rev A PCB-09 fab outputs are not the release design |
 | 10 | **Bench:** TIFPS0629 acceptance, the four-mic overlay on loose breakouts (before the shell is printed), tests N1–N11 (§4.12) | Physical | Parts in hand | Waits |

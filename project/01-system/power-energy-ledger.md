@@ -1,21 +1,21 @@
 # Makad V1 Power / Energy / Thermal Ledger
 
-> **Build architecture notice (2026-11-07).** The RP-02 onboard charger, CHGBUS, independent protected branches and 10.2 A pack-peak assumptions below are historical for v1 after [D-093](../03-build/decisions.md#d-093). The current design uses an external 2S balance charger through XT30 + XH ports with the robot OFF, bought converters and the [D-096 harness](../03-build/05-harness/README.md). Its low-pack coincident-load screen is about **16 A demand**, an unresolved electrical HOLD, so this ledger's numeric budget is **not an acceptance basis** until Level 7 rewrites it and the new load limits are measured.
+> **Peak budget HOLD (D-096, 2026-11-07).** The [harness](../03-build/05-harness/README.md#6-electrical-and-mass-estimates) screens about **16 A coincident demand** at low pack. This is not an accepted peak budget. N1–N3 and servo current limits must be measured; M6 shunt full-scale remains CH-099 OPEN. The load-energy estimate below remains a planning screen.
 
 | Field | Value |
 |---|---|
-| Status | **Living — Part-1 `CC/LP` vocabulary is registered under `RP02-P1-REG-01`, branch mapping/implementation under `RP02-P2-REG-01…03`, and compute/control identities under `RP02-P3-REG-01/02`; `LG-04`/`LG-10` envelopes refreshed from RP-03 `physics.md` as `E`/`U`. v0.15 records repeated-phrase heat duty and the 6.0 V vs 8.4 V drive note. Every numeric row remains `E`, `D`-cited or `U`. No `W` evidence exists.** |
-| Version | 0.15 |
+| Status | **Living — D-093/D-096 build topology applied. Energy remains a `D/E` planning screen; peak current is HOLD pending N1–N3 and CH-099. No `W` evidence exists.** |
+| Version | 0.16 |
 | Owner | Project builder |
 | Created | 2026-09-08 |
-| Last reviewed | 2026-09-18 |
+| Last reviewed | 2026-11-07 |
 | Governed by | `risk-prototype-plan.md` v1.12 §"Continuous sourcing and data workstream" (power/energy/thermal ledger deliverable) and §RP-02 (G02 invariant, G03 rehearsal) |
-| Consumes | `docs/02-prototypes/RP-02-electrical/state-register.md` (states, `MD-01`); registered `docs/02-prototypes/RP-02-electrical/power-architecture.md` and `power-branch-contracts.md`; `mass-envelope-ledger.md` (battery mass row); `system-design-brief.md` §7 power/energy, thermal, internal-communication budgets |
+| Consumes | `../02-prototypes/RP-02-electrical/state-register.md` (`MD-01` duty recipe only); [D-093](../03-build/decisions.md#d-093), [D-096](../03-build/decisions.md#d-096) and the [build harness](../03-build/05-harness/README.md); `mass-envelope-ledger.md` (battery mass row) |
 | Feeds | RP-02 (rig sizing, G02 invariant, G03 rehearsal and `power-calculation-ledger.md`); RP-03 (drive rail); RP-06 (thermal/airflow, battery volume); ADR-06 sizing |
 
-This ledger is to power what `mass-envelope-ledger.md` is to mass: the single place where per-load-group current, energy and heat live, with an evidence class on every number, ranges instead of zeros for unknowns, a trip-wire that forces a design review, and a standing invariant that must be re-verified when anything changes. RP-02 creates and first populates it; every prototype that energizes anything updates it; nothing else may carry a competing budget.
+This ledger is to power what `mass-envelope-ledger.md` is to mass: the place where per-load-group current, energy and heat live, with evidence classes and ranges for unknowns. RP-02 supplied the historical duty recipe; the D-093/D-096 build tree below governs the present hardware. Each energized prototype updates the measured rows.
 
-**Every number in v0.1 is a planning envelope to size the RP-02 rig, not the robot's pack.** The 490 g lesson applies: an `E` value treated as a target becomes a target. These ranges exist so the trip-wire has something to evaluate and the rig has fuses of roughly the right decade — nothing more.
+**Load numbers are planning envelopes, not accepted pack or component limits.** The 490 g lesson applies: an `E` value treated as a target becomes a target.
 
 ## 1. Evidence classes
 
@@ -36,30 +36,32 @@ Load-group codes are defined here once; `state-register.md`, `rig.md` and run-re
 |---|---|---|---|---|
 | `LG-01` | Main compute — Linux SBC | Application / `EC-C` | `PB-COMPUTE` | **Selected 2026-09-16:** Raspberry Pi 5 2 GB plus official Active Cooler; purchase, storage, input hardware, enclosure cooling/acoustics and workload measurement remain open |
 | `LG-02` | Head motion controller C2 + servo-bus transceiver | Safety supervision / `EC-S` | `PB-SAFE-C2` | Waveshare ESP32-S3-Zero (selected); DevKitC-1 twin on the bench |
-| `LG-03Y/P/R` | Head servos yaw / pitch / roll — **separately observable** | Hazardous motor / `EC-H` | `PB-HEAD-Y/P/R` via `PB-HEAD` | **Unselected.** First named paper candidate: XC330-M288-T (C01), 5 V class; paper OPEN |
-| `LG-04` | Drive — two gearmotors + driver | Hazardous motor / `EC-H` | `PB-DRIVE` and `PB-DRIVE-L/R` | **Unselected** (RP-03) |
+| `LG-03Y/P/R` | Head servos yaw / pitch / roll — separately observable | Hazardous motor / `EC-H` | `PB-HEAD-Y` and `PB-HEAD-P/R` | ST3215-HS yaw on M3 11.1 V; 2 × STS3045M pitch/roll on M2 5.5 V ([D-047](../03-build/decisions.md#d-047) as amended by D-093 Q8, [D-049](../03-build/decisions.md#d-049)); physical limits open |
+| `LG-04` | Drive — two gearmotors + drivers | Hazardous motor / `EC-H` | `PB-DRIVE-L/R` | 2 × MOT3001 with Adafruit #3297 DRV8833 ([D-003](../03-build/decisions.md#d-003)) |
 | `LG-05` | Display board (own ESP32-S3 + panel + backlight) + status light | Application / `EC-N` | `PB-DISPLAY` | SKU 30493 (selected); light unselected |
 | `LG-06` | Camera | Application / `EC-N` | `PB-CAMERA`, downstream of selected SBC interface | Camera Module 3 Wide (selected) |
-| `LG-07` | Microphones (4× PDM) + audio front end | Application / `EC-N` | `PB-AUDIO-IN`; source open | Unselected |
-| `LG-08` | Speaker + amplifier | Application / `EC-N` | `PB-AUDIO-OUT` | Unselected |
+| `LG-07` | Four I²S microphones + audio hub | Application / `EC-N` | `PB-AUDIO-IN` from Pi 3V3 | 4 × INMP441 breakouts (M9), front pair SDI0 and rear pair SDI1 through audio hub |
+| `LG-08` | Speaker + amplifier | Application / `EC-N` | `PB-AUDIO-OUT` from M5 | MAX98357A breakout (M8, BO-007 promoted) |
 | `LG-09` | Conversion and distribution losses | — | All `PB-*` paths | Derived: `i_in · v_in − Σ loads` |
-| `LG-10` | Base MCU + safety sensing (obstacle/edge) | Safety supervision / `EC-S` | `PB-SAFE-BASE` | **C3 prototype selected:** ESP32-S3-DevKitC-1-N8; sensors, carrier and measured load remain RP-03/RP-02 inputs |
+| `LG-10` | Base MCU + safety sensing (obstacle/edge) | Safety supervision / `EC-S` | `PB-SAFE-BASE` | C3 ESP32-S3-DevKitC-1-N8 on PCB-10, fed by M5 through W11 Schottky; sensors and measured load remain open |
 
 | Branch/source | Parent source | Domain | Notes |
 |---|---|---|---|
-| `PB-MAIN` | Battery pack through integral protection, removable isolation and main fuse | Source | Pack construction and voltage open under PA-03/04. Historical 2S, 6.0–8.4 V is an `E` planning case only; working selection 2026-09-24 (builder direction, unregistered): 2S1P Li-ion 18650, about 18 Wh, checked in RP-02 `power-calculation-ledger.md` §5.3. |
-| `PB-CHARGE-IN` | External certified low-voltage adapter | Charge | Charger/adapter/connector unselected; AC mains remains outside Makad. |
-| `PB-CHARGE-LOGIC` | Charger/load-sharing output | Charge | May feed only `PB-SAFE-C2` minimum supervision and `PB-DISPLAY` charge profile. |
-| `PB-SAFE-C2` | Operating or restricted charge source through exclusive/bounded selection | Safety supervision | Own converter/protection/return; independent of display and base safety (`PA-11`). |
-| `PB-SAFE-BASE` | Operating source | Safety supervision | Own converter/protection/return; off in charging (`PA-11`). |
-| `PB-COMPUTE` | Operating source | Application | Own converter/failure branch (`PA-05`); registered 5.1 V nominal endpoint with 5 A interface capability for selected Raspberry Pi 5 2 GB. |
-| `PB-DISPLAY` | Operating or restricted charge source | Application | Own converter/protection; independent of C2. |
-| `PB-AUDIO-OUT` | Operating source | Application | Noisy/crest load separately contained. |
+| `PB-MAIN` | 2S1P Samsung 25R pack → TIFPS0629 → 15 A fuse → J-PK | Source | D-026/D-019; ~18 Wh nominal, 6.0–8.4 V operating screen. External 2S balance charging through rear XT30 and XH ports only with robot OFF. |
+| `PB-CHARGE-IN` | **Retired by D-093** | Historical charge | No onboard charger input branch. |
+| `PB-CHARGE-LOGIC` | **Retired by D-093** | Historical charge | No load-sharing or charge-powered branch. |
+| `PB-SWITCHED` | `PB-MAIN` → M1 #2813 HP pushbutton switch → M6 INA226 shunt → positive/negative stars | Switched source | [D-096 harness](../03-build/05-harness/README.md); N1 and CH-099 open. |
+| `PB-SAFE-C2` | `PB-SWITCHED` → shared M5 S13V30F5 5 V | Safety supervision | Same M5 source as C3, display and amp; no independent protection. |
+| `PB-SAFE-BASE` | `PB-SWITCHED` → shared M5 → W11 Schottky → C3 on PCB-10 | Safety supervision | N8 checks voltage and USB back-feed. |
+| `PB-COMPUTE` | `PB-SWITCHED` → M4 S13V30F5 | Application | **5.0 V** Pi rail; N12 gates acceptance at the Pi. Pi under-voltage flag spans about 4.63–4.86 V. |
+| `PB-DISPLAY` | `PB-SWITCHED` → shared M5 | Application | No independent converter/protection. |
+| `PB-AUDIO-OUT` | `PB-SWITCHED` → shared M5 | Application | MAX98357A breakout; crest and shared-rail startup tested at N2. |
 | `PB-CAMERA` | Selected SBC camera interface | Application | Downstream load remains separately attributable. |
-| `PB-AUDIO-IN` | Operating source or compute downstream interface | Application | Source depends on RP-05 front-end selection. |
-| `PB-MOTOR` | Battery through system motor-arm plus dominant E-stop. **Build: no E-stop; a power-button press resets the motor-arm latch in hardware ([03-build D-041](../03-build/decisions.md#d-041))** | Hazardous motor | Cannot be sourced in system off, boot inhibit, hard stop or charging. |
-| `PB-HEAD` / `PB-HEAD-Y/P/R` | `PB-MOTOR`, direct or converted | Hazardous motor | Voltage decided by RP-01 servo family; C01 makes regulated 5 V from a 2S planning case a leading assumption only. |
-| `PB-DRIVE` / `PB-DRIVE-L/R` | `PB-MOTOR`, direct or converted | Hazardous motor | RP-03 selects and measures. |
+| `PB-AUDIO-IN` | Pi 3V3 through audio hub | Application | Four M9 I²S breakouts on SDI0/SDI1. |
+| `PB-MOTOR` | `PB-SWITCHED` | Hazardous motor | No arm latch or E-stop. PCB-10 watchdog + AND gate controls DRV8833 `nSLEEP`; D-041 mushroom drives M1. |
+| `PB-HEAD-P/R` | `PB-SWITCHED` → M2 S18V20ALV 5.5 V | Hazardous motor | Pitch/roll STS3045M; current limit and N2 capacity open. |
+| `PB-HEAD-Y` | `PB-SWITCHED` → M3 S18V20ALV 11.1 V → PCB-08 → W15 | Hazardous motor | ST3215-HS; current set below measured module capability and N3 requires <12.6 V at servo terminals on hard stop. |
+| `PB-DRIVE-L/R` | Directly from `PB-SWITCHED` | Hazardous motor | Each #3297 `VM` has SMBJ8.5A + 100 µF + 0.1 µF; N4 screens regen. |
 
 ## 3. Load-group ledger
 
@@ -67,16 +69,28 @@ Currents at the rail stated; power in W where the rail is open. "Transient" is t
 
 | Code | Idle | Average working | Peak / transient | Transient character | Class | Basis | Measured by |
 |---|---|---|---|---|---|---|---|
-| `LG-01` SBC | 2.5–3 W | 4–8 W | 10–12 W workload estimate; **selected Pi 5 2 GB interface is registered at 5.1 V nominal / 5 A capability. Active cooler and a vent path are part of the load, and the fan is a noise source for `LG-07`.** | Sustained compute peaks under perception; USB/CSI inrush at boot; SD-card corruption on an unclean brownout makes the PA-07 soft-shutdown a requirement, not a nicety | `D` interface; `E` load | Raspberry Pi manufacturer power/voltage guidance is registered in `power-implementation-basis.md`; exact board/camera/audio workload remains unmeasured | RP-02 Phase B; RP-07 workload profiling |
+| `LG-01` SBC | 2.5–3 W | 4–8 W | 10–12 W workload estimate; M4 is a **5.0 V** supply, accepted only after N12 | Sustained compute peaks under perception; USB/CSI inrush; firmware orderly shutdown before pack trip | `D` interface; `E` load | Pi 5 2 GB and active cooler; exact workload unmeasured; [N12](../03-build/simplification-plan.md#412-tests) verifies ≥4.80 V at Pi | RP-07 workload profiling and N12 |
 | `LG-02` C2 | 0.2–0.4 W | 0.3–0.5 W | ≤ 1.5 W if Wi-Fi TX ever enabled (it should not be — wired link) | Boot inrush; negligible otherwise | `E` load; `D` input envelope | ESP32-S3 current remains an estimate until installed measurement. [Waveshare specifies 3.7–6 V external input at the 5 V pad and at least 500 mA source capability](https://docs.waveshare.com/ESP32-S3-Zero); that is a supply requirement, not measured draw. | RP-02 Phase A on the twin (note bridge current), then the Zero |
-| `LG-03Y/P/R` servos | **sleep: torque off (`LP-03-OFF`, SD-02);** attentive hold 0.1–0.5 A each if gravity-loaded, lower if balanced | 0.3–0.8 A each during gestures | stall-class transient per unit at launch/reversal; **C01 XC330-M288-T eManual `D`: stall 1.80 A at 5.0 V, 1.34 A at 3.7 V, 2.15 A at 6.0 V**; operating current unmeasured | Launch/reversal/regenerative profiles | `U` (family), `D` C01 stall | RP-01 paper peaks 0.0953 / 0.0560 / 0.1099 N·m; sleep decision is not servo-family evidence | RP-01 busy-minute runs; RP-02 Phase B |
-| `LG-04` drive | 0 (inhibited) | 2–8 W in motion for two small encoder gearmotors | 20–40 W for both at stall/reversal; 1.5–3 A per motor class | `LP-04-LAUNCH/REV/BRAKE`; signed regenerative current required (0.3–1.5 A class `E`, opposite polarity). Repeated `BM-06`/`BM-07` are the thermal duty, not the follow-minute RMS. Stop-on-temperature: gearbox housing 85 °C candidate / driver thermal flag, C3 inhibit. 6 V winding on 2S: 8.4 V overspeeds Ø84 past 0.70 m/s no-load — compiled clamp mandatory | `E` (class) | RP-03 `physics.md` v0.2 2026-09-18: mechanical floor 0.4–1.4 W; box heat 0.2–2.1 W at 40–70 % η; spin/wiggle are the rise. JGA25-class D02 is a **reference unit, not a freeze**. Korad 5 A: Phase B stall/reversal is **per-motor**; both-motor composites wait Phase C. NFP ≤3 A at 6 V scales to ≤4.2 A at 8.4 V | RP-03; substitute profile in RP-02 until then |
+| `LG-03Y/P/R` servos | Sleep: torque off; attentive hold estimate 0.1–0.5 A each | 0.3–0.8 A each during gestures (`E`) | Stall/reversal transient; **coincident peak HOLD** pending measured Feetech limits and N2/N3 | Launch/reversal/regenerative profiles | `E/U` | 2 × STS3045M at 5.5 V; ST3215-HS at 11.1 V; no installed current profile yet | N2/N3 and busy-minute runs |
+| `LG-04` drive | 0 (inhibited) | 2–8 W in motion for two selected MOT3001 gearmotors (`E`) | Stall/reversal transient; **coincident switched-bus peak HOLD** (D-096) | Launch/reversal/brake and signed regeneration; measure N4 with both #3297 boards | `E/U` working envelope | 2 × selected MOT3001 with Adafruit #3297 DRV8833 (D-003); the older JGA25/NFP class screen is historical. | RP-03/N4 and D-096 N1 |
 | `LG-05` display + light | 1–1.5 W (dimmed idle, `E`) | **2.25 W published board consumption (`D`)**; 1.5–3 W profile range retained | 3–3.5 W full-reference planning range (`E`) | Backlight step at wake; source-transfer/boot transient unmeasured | `D` board nominal; `E/U` profiles/light | [Waveshare documents selected SKU 30493 as Type-C 5 V, 450 mA and 0–65 °C](https://docs.waveshare.com/ESP32-S3-Touch-LCD-4.3); status light and brightness/FPS profiles remain open. | RP-02 Phase A when the sample arrives |
 | `LG-06` camera | 0.1–0.3 W (streaming idle) | 0.3–1.0 W | ≤ 1.5 W (autofocus actuator + full-rate capture) | AF motor steps; small | `U`; `E` range | No official power figure; community CM3 measurements 200–300 mA at 3.3 V | RP-02 Phase B on selected Raspberry Pi 5 2 GB |
-| `LG-07` mics + front end | < 0.05 W | < 0.1 W | < 0.2 W (codec HAT) or ≤ 1 W (XMOS-class USB array with onboard DSP) | None material | `E` | PDM MEMS ≈ 1 mA each; codec/front end dominates. **A Pi-class SBC needs a 4-channel front end (2026-09-14 review); a USB-array option moves ~0.5–1 W onto `PB-COMPUTE` through the SBC's USB rail** | RP-05 |
-| `LG-08` speaker + amp | 0.1–0.3 W (amp idle) | 0.5–1.5 W (chirps, speech-level music) | 3–5 W electrical at registered peak level | `LP-08-MUSIC` RMS plus separate `LP-08-CREST` transients | `U`; `E` range | Small class-D amp + 3 W speaker class | RP-05/RP-06; RP-02 Phase B with a candidate |
-| `LG-09` losses | 10–15 % of load | 10–15 % | 15–20 % at peak (buck efficiency falls at high current) | Follows load | `E` | Typical buck-module efficiency 85–92 % at these currents | Derived from `i_in · v_in` minus Σ `W` rows |
+| `LG-07` four INMP441 I²S breakouts + hub | <0.05 W | <0.1 W | <0.2 W (`E` screen) | Clock and capture activity | `E/U` | Pi 3V3 supplies M9 ×4; actual board draw and audio-hub loss unmeasured | N9/N11 |
+| `LG-08` speaker + MAX98357A breakout | 0.1–0.3 W | 0.5–1.5 W | 3–5 W electrical at registered peak level | `LP-08-MUSIC` RMS plus separate `LP-08-CREST` transients | `E` range | M8 on shared M5 5 V; measure with actual speaker/duty | N2/N9 |
+| `LG-09` conversion and distribution losses | Rail-specific | Rail-specific | **Peak HOLD** | Follows each rail and current through M1/M6 | `D/E/U` | See efficiency and I²R method below; no generic buck percentage | N1–N3 and input/output power logs |
 | `LG-10` base MCU + safety sensing | 0.25–0.50 W | 0.4–0.8 W | ≤ 1.0 W if emitters pulsed; ≤ 1.2 W if ToF+IR continuous (flag) | Sensor emitter pulses | `U` | RP-03 `physics.md` / `sensing-screen-01.md`: C3 N8 + GPIO cliff + analog IR + SPI IMU. No `W`. Sensing SKU unselected | RP-03 |
+
+### OFF draw and shelf screen
+
+With M1 OFF, only the TIFPS0629 pack-protection electronics and M1 receive pack power. Pololu publishes **<0.2 µA** OFF for the #2813 HP ([manufacturer comparison](https://www.pololu.com/product/2813)); the TIFPS0629 seller publishes no quiescent-current specification, so its draw is `U`, **not a datasheet value**. The existing [PCB-01 acceptance](../03-build/04-pcbs/power-boards.md#3-pcb-01--tifps0629-acceptance-before-cells-are-connected) requires ≤16 µA from the cells. N1(d) measures the assembled OFF current, including the protection board.
+
+At the **16 µA acceptance ceiling plus 0.2 µA M1**, a nominal full 2.5 Ah 25R pack has 2.5 Ah / 0.0162 mA ≈ **6,430 days** of *electronics-only* drain. At a measured 50 µA protection-board draw, the same arithmetic gives ≈2,075 days. Neither is a storage-life claim: cell self-discharge, imbalance, temperature and protection trip dominate long before then. Record measured OFF current and set a practical storage/recharge interval from pack tests.
+
+### LG-09 conversion and series losses
+
+For each `MD-01` interval, use `P_in = P_5V,M4/η_S13 + P_5V,M5/η_S13 + P_5.5V,M2/η_S18 + P_11.1V,M3/η_S18 + P_drive`; sum `P_out(1/η−1)` as conversion heat. Pololu's [S13V30F5 curves](https://www.pololu.com/product/4082) span **85–95% typical** across input and load, and its [S18V20ALV curves](https://www.pololu.com/product/2572) span **80–90% typical**. The published graphs do not identify Makad's as-built average rail currents, so **6.0, 7.4 and 8.4 V point efficiencies remain `U`** until each rail's average load is measured; do not manufacture a point estimate from the family range. At each of those three inputs, log M4/M5 and M2/M3 input/output power at the measured `MD-01` average, then read/interpolate the corresponding curve and replace `U` with `W`.
+
+Series loss is additional: `P_M1 = I_bus² R_M1(V)` and `P_M6 = I_bus² R_shunt`, with harness/contact loss measured separately. Pololu publishes **13 mΩ at 4.5 V and 8.6 mΩ at 10 V** for M1 HP ([#2813 comparison](https://www.pololu.com/product/2813)); interpolation gives about 11.8/10.7/9.9 mΩ at 6.0/7.4/8.4 V (`E`, temperature dependent). An R010 M6 would add 10 mΩ, but **CH-099 shunt full-scale is OPEN**; this resistance is a scenario, not the selected design. At 1 A bus current these two scenario losses are about 22/21/20 mW; actual loss scales with the interval's mean-square current and must be logged at N1.
 
 ## 4. Qualification-case energy model — planning envelope
 
@@ -100,8 +114,8 @@ The state model now separates modes (`OM`), behaviours (`BS`), events (`EV`), qu
 Consequences already visible from the envelope, all `E`:
 
 - Historical `ST-01` could exceed the **Korad KA3005D's 5 A** at 2S. Phase B records the largest safe vector; full alignment waits on a protected suitable source.
-- The former 25% additive-reserve/80% usable-depth example gives 8.28 Wh only with lossless conversion. Including the present 85–95% system-efficiency sensitivity gives **8.72–9.74 Wh** from the 5.3 Wh high case. This is corrected and derived in `../02-prototypes/RP-02-electrical/power-calculation-ledger.md`; it is not a pack selection.
-- Servo and drive transients remain the largest unknowns. C01's 1.80 A at 5 V is stall `D`, not an operating profile; three-axis stall coincidence is stress/reference only.
+- **D-093/D-096 runtime recheck:** `MD-01` remains ~2.6–5.3 Wh **at loads** for 20 min. Conservatively putting all loads through the published Pololu efficiency envelope (80–95%; actual drive bypasses converters) gives **~2.74–6.63 Wh from the pack**, before M1/M6/wire losses. At 2S1P 25R ~18 Wh nominal and the earlier illustrative 80% usable-depth assumption, **14.4 Wh** is available. The high case uses ~46% of that energy. Retaining the earlier 25% additive reserve gives a **~8.28 Wh** high-case planning requirement, leaving ~6.12 Wh margin against 14.4 Wh. The 20-minute verdict therefore remains positive **on paper**, conditional on measured duty, low-voltage cutoff, converter points and pack energy; the reserve itself is not an approved target. The prior 85–95% sensitivity omitted the S18V20's 80–90% range and the Pi now runs from M4 at 5.0 V.
+- Servo and drive transients remain the largest unknowns. The [D-096](../03-build/decisions.md#d-096) ~16 A low-pack screen is a HOLD, not an accepted peak. Do not enter a coincident-current total until N1/N2/N3, servo protection limits and CH-099 shunt full-scale are measured.
 
 ## 5. Coexistence invariant (the reshaped RP02-G02)
 
@@ -133,14 +147,15 @@ Evaluated at every ledger revision; a trip forces a **mandatory design review** 
 - [ ] Replace every `E`-class datasheet reference in §3 with a cited `D` row (Espressif, Waveshare, ROBOTIS, SBC vendor) — one afternoon, no purchase.
 - [x] Register the `OM/EN/BS/PC/AL/HL/EV/CC/LP` set and `MD-01` definition — `RP02-P1-REG-01`, 2026-09-15.
 - [ ] Recompute §4 from run-bound profiles once the required real loads or admissible substitutes are frozen; registration did not convert `U/E/D` values into `W` evidence.
-- [ ] Servo family (RP-01) → servo rail voltage; per-unit stall/hold `D`; then `W` from the RP-01 busy-minute runs. C01 stall `D` is now cited; family freeze still required to collapse the rail.
+- [ ] Measure the selected Feetech servo hold, busy-minute and protection-limit currents on M2/M3 (N2/N3), then replace the `E/U` row.
 - [x] Select SBC and register its input interface — Raspberry Pi 5 2 GB, `RP02-P2-REG-02`, 2026-09-16.
 - [ ] Measure selected Raspberry Pi 5 2 GB as `W` under the RP-07 workload, including camera/audio peripherals, active cooler, boot and shutdown.
 - [ ] Display sample → `W` idle/average/peak on the RP-02 rig.
 - [ ] Pack-assembly internal resistance `D` for each candidate construction; `W` at `PB-MAIN` in Phase C.
 - [ ] Register per-component undervoltage limits so the invariant's "rail excursion" term is testable.
 - [ ] Drive `W` profiles from RP-03; until then `CC-09/09C/09R/10A/10B/10C/11/PEAK`, `CC-12C`, and the drive portion of `ST-01` use an explicit substitute record.
-- [ ] Retire `LG-09` as a lump once per-branch `W` rows allow the residual to be attributed.
+- [ ] Measure each rail's average input/output power at 6.0, 7.4 and 8.4 V; replace the `U` efficiency points and attribute `LG-09` per branch.
+- [ ] Close D-096 electrical HOLD: N1–N3 coincident demand, servo limits, CH-099 M6 shunt full-scale and body-lift harness ratings before accepting a peak budget.
 
 ## Change log
 
@@ -161,3 +176,4 @@ Evaluated at every ledger revision; a trip forces a **mandatory design review** 
 | 2026-09-16 | 0.13 | Consumed `RP02-P3-REG-02`: corrected the C3 prototype suffix to N8 to preserve GPIO35–37. No numeric envelope or evidence class changed. |
 | 2026-09-17 | 0.14 | Consumed RP-03 `physics.md` (`RP03-P2-REG-01`): refreshed `LG-04` average to 2–8 W and recorded signed regen 0.3–1.5 A class plus the Korad 5 A per-motor Phase B rule; widened `LG-10` idle/average slightly and flagged continuous-emitter peak. Class remains `E`/`U`. No `W` row, no motor freeze, no purchase. |
 | 2026-09-18 | 0.15 | Consumed RP-03 `physics.md` v0.2 (`RP03-P2-REG-02`): recorded repeated-phrase heat duty (spin/wiggle, not follow-minute RMS), stop-on-temperature inhibit, and the 6.0 V vs 8.4 V drive note (6 V winding overspeeds at 8.4 V; NFP stall current scales). `LG-04` 2–8 W band **unchanged**. No `W` row, no motor freeze, no purchase. |
+| 2026-11-07 | 0.16 | Applied D-093/D-096 load groups and switched-bus tree; retired charge branches; added OFF and rail-loss screens; rechecked 20-minute `MD-01` against ~18 Wh nominal 25R pack. Peak-current acceptance remains HOLD pending N1–N3 and CH-099. No `W` evidence added. |

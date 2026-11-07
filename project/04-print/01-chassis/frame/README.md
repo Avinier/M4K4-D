@@ -83,7 +83,7 @@ body shell's floor with 0.5 mm all round.
 | **J11B** | Pack strapped to the hatch; both drop out together | 2 hook-and-loop straps (CH-078), 2 foam pads (CH-079) | Below | [J11B](../../../03-build/01-chassis/v1/joint-register.md#j11b--battery-pack-to-tub) |
 | **J12** | Steel ballast bar (9 × 60 × 19, about 80 g) to the deck underside, between the tub's front wall and the crossmember | 2 × M3 × 12 CSK (CH-038) from the deck top into tapped holes in the bar | Above | [J12](../../../03-build/01-chassis/v1/joint-register.md#j12--ballast-bar-to-front-deck) |
 | **J13** | Body frame feet to both decks; 2 diagonal pins locate, 4 bolts clamp | 4 × M4 × 12 button (CH-035): three into M4 × 8 deck inserts (CH-095), one into the cassette nut (CH-036); 2 × Ø4 × 8 pins (CH-037); Loctite 222 | Three bolts from above into the deck inserts ([D-077](../../../03-build/decisions.md#d-077)). The front-left one (64, 48) is reversed: head in the rail socket, nut in the body cassette (body v1) | [J13](../../../03-build/01-chassis/v1/joint-register.md#j13--body-frame-to-chassis-deck) |
-| **J15A** | IMU board PCB-07 flat on the deck | 2 × M2 × 5 thread-forming (CH-039) | Above | [J15A](../../../03-build/01-chassis/v1/joint-register.md#j15a--imu-board-to-deck) |
+| **J15A** | M7 LSM6DSOX IMU on the CH-107 printed adapter, using the existing deck holes (D-093 Q9, D-095) | 2 × M2 × 5 thread-forming (CH-039), adapter fit to verify on receipt | Above | [J15A](../../../03-build/01-chassis/v1/joint-register.md#j15a--imu-board-to-deck) |
 | **J15B** | Two Adafruit #3297 driver boards on 4 posts; motor leads tied to the deck | 4 × M2.5 × 6 (CH-081) into 4 × M2.5 × 4 inserts (CH-080); 2 zip ties (CH-082) | Above | [J15B](../../../03-build/01-chassis/v1/joint-register.md#j15b--driver-boards-and-motor-lead-restraint) |
 
 The front module also receives the nose pod (J07B) and the rear module the keel (J09A). Their
@@ -144,7 +144,13 @@ filaments, the J04 inserts pull along the layers and the J13 bolts clamp across 
   3 mm above the tub, so the module stood on the 1.5 mm tub walls (469 mm²) with 2588 mm²
   floating. They now run down to Z 32. The rear crossmember strip behind the deck stopped 8 mm
   short of the deck top and now reaches it. Every fill keeps 1.5 mm from the shell, the
-  ballast, the pod seat, the body frame and PCB-02; the J13 sockets and J10-8 bore stay open.
+  ballast, the pod seat and the body frame; the J13 sockets and J10-8 bore stay open.
+  The old PCB-02 exclusion is retired. CH-108 is the D-095 rear-bay plate;
+  [`check_bay_rear.py`](../../../03-build/final/v1/cad/check_bay_rear.py) passes
+  non-interference and its 0.2 mm minimum check. A direct final-tree CAD distance
+  check on 2026-11-07 measured **4.3 mm** from the rear frame module to CH-108
+  (and 53.17 mm from the front module), so the stated 1.5 mm exclusion holds
+  for the frame modules and rear-bay plate as modeled.
   Together they add 14.6 cm³, about 8 g, low in the frame.
 - **Why not other faces.** Front deck-down: the posts and fuse bracket stand on the deck top.
   Front on an end or a side: the tub walls become 20 mm ledges (1400–2000 mm² each). Rear
@@ -211,8 +217,9 @@ bolts now go into M4 inserts in the deck ([D-077](../../../03-build/decisions.md
    and the crossmember, its flat face against the deck underside. Drive the two M3 × 12
    countersunk screws from the deck top with the PH1. The hatch must be off: the bar drops
    past its front edge.
-4. **IMU (J15A).** Board flat on the deck, connector to −X, two M2 × 5 thread-forming screws into
-   the Ø1.6 pilots. Drive them gently: they cut their own thread.
+4. **IMU (J15A).** Seat M7 on the CH-107 printed adapter and fasten the adapter to the
+   existing deck holes with two M2 × 5 thread-forming screws into the Ø1.6 pilots.
+   Check connector direction and received-board fit before tightening.
 
 ### C. Join the modules (J04)
 

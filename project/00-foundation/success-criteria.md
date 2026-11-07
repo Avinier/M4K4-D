@@ -102,7 +102,7 @@ Results from these Target or Candidate prototypes should be documented even when
 | SC-TBD-07 | Floor locomotion | Surfaces, speed, slope/threshold tolerance, stopping, and stability limits |
 | SC-TBD-08 | Obstacle protection | Obstacle set, approach speeds, test count, contact/clearance policy, and failure trials |
 | SC-TBD-09 | Tabletop protection | Surface/edge test geometry, permitted motion, detection coverage, and pass count |
-| SC-TBD-10 | Battery | Initial minimum runtime is 20 minutes; decide recharge expectation, reserve, low-battery behaviour, and whether later evidence justifies a longer runtime target |
+| SC-TBD-10 | Battery | Initial minimum runtime is 20 minutes. Recharge is off the robot through rear XT30 and balance ports with an external 2S balance charger; the robot is OFF while charging ([D-093](../03-build/decisions.md#d-093), D2/Q7). Low battery is handled by firmware: the Pi reads INA226, stops motion at the defined loaded-voltage threshold, and shuts down before the TIFPS0629 under-voltage trip ([firmware requirements](../03-build/04-software/firmware-requirements.md), [N6](../03-build/simplification-plan.md#412-tests)). Still open: runtime reserve and whether evidence justifies a target longer than 20 minutes. |
 | SC-TBD-11 | Endurance | Required continuous operating time and duty cycle |
 | SC-TBD-12 | Thermal | Maximum permitted component, battery, motor, and enclosure temperatures |
 | SC-TBD-13 | Astromech language | Minimum vocabulary, intended meanings, observer comprehension goal, and acoustic-quality bar |
@@ -123,3 +123,5 @@ Results from these Target or Candidate prototypes should be documented even when
 ### Review notes
 
 Approved by the project builder on 2026-08-14. Version 1.1 makes powered roll, pitch, and yaw Core and adopts the initial runtime and bounded household-following envelope. Detailed language design and remaining numeric thresholds remain later validation work.
+
+2026-11-07: SC-TBD-10 records the D-093/D-097 recharge and firmware low-battery decisions; reserve and a longer runtime target remain open.

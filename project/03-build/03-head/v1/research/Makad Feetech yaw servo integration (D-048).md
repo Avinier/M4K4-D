@@ -1,5 +1,7 @@
 # Makad: Feetech yaw servo integration (D-048)
 
+> **Historical D-048 research.** Its PCB-03, PCB-04 and 12 V yaw assumptions were superseded by D-093/D-094. The build uses M3 at 11.1 V via PCB-08; the current mass/stability screen is D-095.
+
 Oct 7, 2026 · @Aditya
 
 > **Review correction (2026-10-08):** The initial four case-mount screw axes

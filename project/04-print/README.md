@@ -31,8 +31,8 @@ inspected and weighed.
    is exported again and its old STL replaced.
 3. **STLs are exported from the final assembly, never from a subsystem model.**
    The droid edits in `final/v1` change printed parts that the subsystem models
-   do not know about; for example, `DROID_ADDS` fuses the PCB-05 bosses into the
-   body frame print (D-067). An STL exported from a subsystem model alone would
+   do not know about; for example, the D-095 amp bracket is fused to the front
+   +Y post in the final assembly. An STL exported from a subsystem model alone would
    miss them. The export builds the subsystem tree and applies
    `_apply_droid_cuts(tree, strict=False)` from the final entry first.
 4. **One decision ledger.** Material, process and fit decisions are recorded

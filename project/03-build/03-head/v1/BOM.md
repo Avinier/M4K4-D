@@ -66,7 +66,7 @@ The yaw servo sits in the body and is counted in the [body BOM](../../02-body/v1
 
 | ID | Part | Qty | State |
 |---|---|---:|---|
-| BO-043 | **Waveshare ST3215-HS** yaw servo: 6–12.6 V, 20 kg·cm (about 2.0 N·m) stall and 0.094 s/60° (106 rpm) no-load at 12 V, 2.4 A stall, 240 mA no-load, 68 g, about 45 × 25 × 35 mm (`E`, STS3215-class case), metal gears, 360° magnetic encoder, Feetech serial bus; on a 12 V yaw-only rail on PCB-03 ([D-047](../../decisions.md#d-047)) | 1 | CANDIDATE, first choice; integrated in the body CAD (D-048) |
+| BO-043 | **Waveshare ST3215-HS** yaw servo: 6–12.6 V, 20 kg·cm (about 2.0 N·m) stall and 0.094 s/60° (106 rpm) no-load at 12 V, 2.4 A stall, 240 mA no-load, 68 g, about 45 × 25 × 35 mm (`E`, STS3215-class case), metal gears, 360° magnetic encoder, Feetech serial bus; on the **11.1 V M3 rail via PCB-08** ([D-047](../../decisions.md#d-047) as amended by D-093) | 1 | CANDIDATE, first choice; integrated in the body CAD (D-048) |
 
 **Why the ST3215-HS ([D-047](../../decisions.md#d-047)).** Yaw's first priority is speed while accelerating the head's 0.0013 kg·m², and it is the tightest axis on paper. The HS has roughly 40% or more margin at 63 rpm, against about 16–27% for the XC330-M181 on the 5.5 V rail. It speaks the same Feetech protocol as HD-001, so the robot runs one servo protocol. It costs ₹2,050 at [ThinkRobotics](https://thinkrobotics.com/products/st3215-hs) (pre-order on 2026-10-07; regular ₹3,000), or $21.99 at [Waveshare](https://www.waveshare.com/product/robotics/motors-servos/motors/st3215-hs-servo-motor.htm).
 
@@ -79,7 +79,7 @@ The yaw servo sits in the body and is counted in the [body BOM](../../02-body/v1
 
 **What the ST3215-HS changes**
 
-- **Rail.** A second `LTC3119` on PCB-03 boosting to 12 V for yaw only. It gives about 2 A from a low pack (`E`), below the 2.4 A stall, so the servo's protection current is set under it. Nothing new crosses the cable cassette.
+- **Rail.** M3 is a Pololu S18V20ALV adjustable buck-boost set to **11.1 V** (D-093 Q8, D-094), feeding yaw through PCB-08 and W15. Set the servo protection current below the module's measured capability (2 A is a typical rating, not a verified low-pack limit). N3 gates hard-stop voltage **<12.6 V at the servo terminals**. Nothing new crosses the cable cassette.
 - **Yaw bay ([D-048](../../decisions.md#d-048)).** Done in the body CAD: the servo hangs horn-up on the pinion axis, 7.6 mm lower, on a frame clamp ring; the Pi, cooler and PCB-09 moved +10 mm X and −6 mm Y to make room and to recover the tip margin (a_tip 1.621 with the STS3045M head). The longer lever puts about 0.36 N·m of side load on the servo output (bench check).
 - **Lash.** Unmeasured for the HS; the STS3215 family measured 0.6–1.3°. The scissor pinion removes only the mesh lash, so bench B4 decides between the HS and the STS3250.
 
@@ -90,7 +90,7 @@ The yaw servo sits in the body and is counted in the [body BOM](../../02-body/v1
 | ID | Part | Qty | State |
 |---|---|---:|---|
 | CH-085 | Status LED carrier PCB-11 (WS2812B-2020-V6 with C1 and R1, in a socket fused inside the crown behind the light pipe, [D-065](../../decisions.md#d-065)) | 1 | Design |
-| CH-086 | C2 head carrier PCB-12 (ESP32-S3-Zero, head link and display transceivers, servo-bus interface, watchdog) | 1 | HOLD |
+| CH-086 | C2 head carrier PCB-12: simpler custom carrier for ESP32-S3-Zero, head link/display transceivers and Feetech servo-bus interface; no watchdog, `ARM_REQ` or READY pair. The Waveshare board does not fit (D-094) | 1 | HOLD |
 
 PCB-12's servo-bus interface must carry the Feetech protocol for HD-001 (D-046).
 

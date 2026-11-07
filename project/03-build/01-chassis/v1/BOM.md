@@ -1,6 +1,6 @@
 # Chassis v1 bill of materials — working snapshot
 
-> **D-093 supersession notice (2026-11-07).** The electrical/charging rows in this 2026-11-01 snapshot still describe PCB-02/03/04 and the pack NTC. They are historical for the current build; use the [new harness](../../05-harness/README.md) for topology; the [project BOM](../../BOM.csv) was reconciled at Level 6 ([D-097](../../decisions.md#d-097)), but this snapshot is not yet refreshed. The low-pack current path remains on electrical HOLD. Structural chassis part rows keep their prior scope, but the checked-in front-module STL predates the D-095 balance hole and tub-plate pilots.
+> **Snapshot before D-093 (2026-11-01).** [03-build/BOM.csv](../../BOM.csv) is the D-097 register; the [D-096 harness](../../05-harness/README.md) is the current power topology. Electrical/charging rows below marked retired are historical. The low-pack peak current remains on electrical HOLD. Structural rows keep their prior scope, but the checked-in front-module STL predates the D-095 balance hole and tub-plate pilots.
 
 Reconciled 2026-11-01 against D-070–D-081 and the builder's OnlyScrews order list, from the [project BOM](../../BOM.csv) for **one rolling chassis**. Quantities are installed quantities, with no spare or scrap allowance. This is a procurement and design worklist, **not a released order or fabrication package**. `DESIGN` means custom geometry exists; `CANDIDATE` means a part family or SKU is proposed; `SELECTED` means the build choice is settled, with receipt and test checks tracked separately; `HOLD` means do not order or fabricate until the blocker is resolved; `OPEN` means the design still needs a choice before release. Order quantities are reconciled in the [hardware order record](../../../04-print/01-chassis/hardware-order.md). Earlier M3-insert receipt reports are retained; the builder reports that the motors, bearings and 1.5 mm EVA foam have arrived (2026-11-01); their measurements and fit checks are still open. The pasted OnlyScrews order lists 25 bearings, four installed.
 
@@ -46,11 +46,11 @@ The purchased **Pololu #2691 caster** is a separate row (CH-016). It includes th
 | CH-065 | N35 Ø3 × 1.5 mm cap magnet | 1 | SELECTED |
 | CH-066 | [Industrybuying RS PRO 821245 stainless compression spring](https://www.industrybuying.com/compression-spring-rs-pro-OFF.STO.223805403), pack of 10 listing; OD 2.75 × 0.25 wire × 15.7 free, 0.18 N/mm | 2 | SELECTED |
 | CH-020 | Vishay TCRT5000 bare sensor with a soldered 350 mm GH4 lead to J10-10 ([spec](research/rear-tcrt-lead.md), D-016/D-021) | 1 assembly | SELECTED |
-| CH-021 | Proposed ICM-42688-P custom PCB-07; [Robokits MPU6050 ₹173 bench alternative](https://robokits.co.in/sensors/accelerometer-and-magnetometer/triple-axis-accelerometer-gyro-mpu-6050-breakout) | 1 assembly | HOLD on final runtime interface/mount |
+| CH-021 | Historical PCB-07 proposal; D-093/D-094 select a bought LSM6DSOX breakout on CH-107 adapter (see project BOM) | 1 assembly | HISTORICAL |
 | CH-022 | Samsung INR18650-25R cell, finalized by builder | 2 | SELECTED |
 | CH-023 | [Robocraze balanced 2S protection module TIFPS0629](https://robocraze.com/products/2-string-20a-lithium-battery-protection-module-balanced-version) | 1 assembly | SELECTED |
 | CH-024 | Bourns AC72ABD resettable thermal breaker | 1 | HOLD |
-| CH-025 | SEMITEC 103AT-2 10 kΩ NTC thermistor | 1 | HOLD |
+| CH-025 | SEMITEC 103AT-2 10 kΩ NTC thermistor — retired by D-093 | 1 | RETIRED |
 | CH-026 | Cell straps, insulation, heat-shrink sleeve, and AWG16 pack leads | 1 lot | HOLD |
 | CH-027 | Micro-Fit+ 1×2 pack disconnect with terminals | 1 pair | HOLD |
 | CH-028 | ATOF main fuse holder | 1 | HOLD |
@@ -129,20 +129,20 @@ D-030 also added all the hardware for J05, J06, J16, J11A and J15B; [D-033](../.
 
 ## Full-system electrical parts outside the chassis v1 CAD
 
-These rows describe the **full-system electrical architecture** shown in whole-robot CAD and the electrical plan. PCB-02, PCB-03, PCB-04 and PCB-10 are excluded from [the chassis v1 scoped export](cad/README.md), and are not all prerequisites for a supply-powered chassis bench test. The selected Adafruit driver boards and a temporary controller/harness can support that earlier test if current limits, encoder interface, default disable, physical stop and braking/transient behavior are verified. Keep these shared board rows for full-system integration; their presence here does not make them a chassis-test fabrication requirement. See the test-stage summary below and the release checks in the project BOM.
+These rows are a **historical pre-D-093 electrical snapshot**; PCB-02/03/04 are retired. PCB-10 remains in the build. The selected Adafruit driver boards and a temporary controller/harness can support a supply-powered chassis bench test if current limits, encoder interface, default disable, physical stop and braking/transient behavior are verified. Current full-system parts and release checks are in the project BOM and D-096 harness.
 
 | ID | Part | Qty | State |
 |---|---|---:|---|
 | CH-040 | Full-system wiring set | 1 set | HOLD |
-| CH-041 | Charge and system power PCB-02 | 1 assembly | HOLD |
-| CH-042 | Motor gate and distribution PCB-03 | 1 assembly | HOLD |
-| CH-043 | Branch converter PCB-04 | 1 assembly | HOLD |
+| CH-041 | Charge and system power PCB-02 — retired by D-093 | 1 assembly | RETIRED |
+| CH-042 | Motor gate and distribution PCB-03 — retired by D-093 | 1 assembly | RETIRED |
+| CH-043 | Branch converter PCB-04 — retired by D-093 | 1 assembly | RETIRED |
 | CH-044 | C3 carrier PCB-10 | 1 assembly | DESIGN (see canonical BOM and board record) |
 | CH-045 | ESP32-S3-DevKitC-1-N8 | 1 | SELECTED |
 | CH-046 | ~~IDEC XA1E-BV3U02KT-R E-stop~~: no E-stop; the rear mushroom is the momentary power button BO-018 ([D-041](../../decisions.md#d-041)) | — | SUPERSEDED |
 | CH-047 | C3 carrier M2.5 screw and insert | 4 sets | HOLD |
 
-`PCB-02` manages charge and system power; `PCB-03` provides motor gating and power distribution; `PCB-04` supplies protected voltage rails; `PCB-10` carries the C3 controller. The separate ESP32-S3 DevKit and the rear power button are part of that integrated electrical system; there is no E-stop ([D-041](../../decisions.md#d-041)). The [connector and wire schedule](../../../02-prototypes/RP-06-cad/connector-schedule.md) describes the full-system harness, not a minimal bench harness. Board positions appear in the full Layout 02 model, but not in the chassis v1 filtered STEP. Body and head mass stand-ins are test fixtures and are excluded from installed quantities.
+**Historical pre-D-093 only:** PCB-02 managed charging, PCB-03 motor gating and PCB-04 protected rails. The current M1/M6/modules and switched bus are in the [D-096 harness](../../05-harness/README.md); PCB-10 still carries C3. Body and head mass stand-ins are test fixtures and are excluded from installed quantities.
 
 ## Release blockers by stage
 

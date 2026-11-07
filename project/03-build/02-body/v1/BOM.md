@@ -1,6 +1,6 @@
 # Body v1 bill of materials — working inventory
 
-> **D-093 supersession notice (2026-11-07).** This snapshot predates [D-093](../../decisions.md#d-093)–[D-097](../../decisions.md#d-097). Its charge-inlet rows (BO-015, BO-017, PCB-13, `W16`), the PCB-05/06 audio boards (BO-002–BO-005, BO-012, BO-064) and the `LTC2954`/`J2-9` power-button wiring are historical: charging is off-board through rear XT30 and balance ports, audio is a bought amp and four INMP441 modules, and the mushroom drives the bought power switch. The [project BOM](../../BOM.csv) is reconciled (D-097); refresh this snapshot deliberately before a release.
+> **Snapshot before D-093.** [03-build/BOM.csv](../../BOM.csv) is the D-097 register and the [D-096 harness](../../05-harness/README.md) governs wiring. Its charge-inlet rows (BO-015–BO-017, PCB-13, `W16`), PCB-05/06 audio rows (BO-002–BO-005, BO-012–BO-014, BO-064) and `LTC2954`/`J2-9` power-button descriptions are **historical/retired**. The build charges off-board through rear XT30 and balance ports, uses BO-007 as the installed MAX98357A breakout with four INMP441 modules, and drives M1 from the mushroom. The old “bench articles” placement of BO-007 below is historical.
 
 Started 2026-10-03 from the [project BOM](../../BOM.csv) for **one body**; expanded 2026-10-04 against the body-v1 CAD. Quantities are installed quantities, with no spare or scrap allowance unless a row says otherwise. This is a procurement and design worklist, **not a released order or fabrication package**. The states are the same as in the [chassis v1 BOM](../../01-chassis/v1/BOM.md): `DESIGN`, `CANDIDATE`, `SELECTED`, `HOLD` and `OPEN`. `DESIGN` means geometry exists, not that a print is qualified. No row is marked received or measured.
 
@@ -82,15 +82,15 @@ The Pi's four M2.5 holes are modeled over tray bosses; the Active Cooler's push-
 | ID | Part | Qty | State |
 |---|---|---:|---|
 | BO-001 | [Visaton K 50 WP – 8 Ω speaker, art. 2915](https://in.element14.com/visaton/2915/speaker-k-50-wp-8-ohms/dp/1683894) (element14 India 1683894) ([D-034](../../decisions.md#d-034)) | 1 | SELECTED |
-| BO-002 | Audio front end PCB-05, 30 × 38 mm, hung from the frame on three M2 SMT spacers ([D-067](../../decisions.md#d-067)) | 1 assembly | HOLD |
-| BO-003 | MAX98357AETE+T I²S class-D amplifier, on PCB-05 | 1 | CANDIDATE |
-| BO-004 | [ADAU7002ACBZ-R7](https://in.element14.com/analog-devices/adau7002acbz-r7/tdm-conversion-ic-2-channel-wlcsp/dp/4028782) PDM-to-I²S converter, on PCB-05 (element14 India 4028782; LCSC C481886); distributor description "Audio Control, Sample Rate Converter, 1.62V to 3.6V, I2S, TDM, WLCSP, 8 Pins, -40 °C" | 2 | CANDIDATE |
-| BO-005 | Mic board PCB-06, 12 × 14 mm, with one Infineon IM73D122V01; shell-mounted ([D-037](../../decisions.md#d-037)); L and R assembly variants set the mic's LR strap ([D-066](../../decisions.md#d-066)) | 4 assemblies | HOLD |
+| BO-002 | Audio front end PCB-05, 30 × 38 mm, hung from the frame on three M2 SMT spacers ([D-067](../../decisions.md#d-067)); retired by D-093 | 1 assembly | RETIRED |
+| BO-003 | MAX98357AETE+T I²S class-D amplifier, on PCB-05; retired by D-093 | 1 | RETIRED |
+| BO-004 | [ADAU7002ACBZ-R7](https://in.element14.com/analog-devices/adau7002acbz-r7/tdm-conversion-ic-2-channel-wlcsp/dp/4028782) PDM-to-I²S converter, on PCB-05 (element14 India 4028782; LCSC C481886); distributor description "Audio Control, Sample Rate Converter, 1.62V to 3.6V, I2S, TDM, WLCSP, 8 Pins, -40 °C"; retired by D-093 | 2 | RETIRED |
+| BO-005 | Mic board PCB-06, 12 × 14 mm, with one Infineon IM73D122V01; shell-mounted ([D-037](../../decisions.md#d-037)); L and R assembly variants set the mic's LR strap ([D-066](../../decisions.md#d-066)); retired by D-093 | 4 assemblies | RETIRED |
 | BO-006 | Audio cable set: W12, W26, W27 × 4, W28 | 1 set | HOLD |
-| BO-012 | [Infineon IM73D122V01XTMA1 PDM mic](https://in.element14.com/infineon/im73d122v01xtma1/mems-microphone-pdm-122db-pg-llga/dp/4125831) (element14 India 4125831), one per BO-005 board; buy 6 for reflow spares ([D-036](../../decisions.md#d-036)); bought by the builder and supplied to the PCB-06 fab ([D-066](../../decisions.md#d-066)) | 4 | SELECTED |
-| BO-013 | M2 × 4 pan-head thread-forming screw for plastics, two per mic board into the shell boss ([D-037](../../decisions.md#d-037)) | 8 | CANDIDATE |
-| BO-014 | Mic port gasket, closed-cell foam ring Ø6.5/Ø2.0 × 1.0 mm, compressed 30% in the boss pocket ([D-037](../../decisions.md#d-037)); cut from Robu EVA foam tape, 50 mm × 5 m, 1 mm (builder-reported 2026-10-04) | 4 | CANDIDATE |
-| BO-064 | PCB-05 fixing screws: 1 × ISO 7380 M2 × 16 through the front upper cross rail and 2 × M2 × 20 through the yaw plate, into the board's SMT spacers ([D-067](../../decisions.md#d-067)) | 3 | CANDIDATE |
+| BO-012 | [Infineon IM73D122V01XTMA1 PDM mic](https://in.element14.com/infineon/im73d122v01xtma1/mems-microphone-pdm-122db-pg-llga/dp/4125831) (element14 India 4125831), one per BO-005 board; buy 6 for reflow spares ([D-036](../../decisions.md#d-036)); bought by the builder and supplied to the PCB-06 fab ([D-066](../../decisions.md#d-066)); retired by D-093 | 4 | RETIRED |
+| BO-013 | M2 × 4 pan-head thread-forming screw for plastics, two per mic board into the shell boss ([D-037](../../decisions.md#d-037)); retired by D-093 | 8 | RETIRED |
+| BO-014 | Mic port gasket, closed-cell foam ring Ø6.5/Ø2.0 × 1.0 mm, compressed 30% in the boss pocket ([D-037](../../decisions.md#d-037)); cut from Robu EVA foam tape, 50 mm × 5 m, 1 mm (builder-reported 2026-10-04); retired by D-093 | 4 | RETIRED |
+| BO-064 | PCB-05 fixing screws: 1 × ISO 7380 M2 × 16 through the front upper cross rail and 2 × M2 × 20 through the yaw plate, into the board's SMT spacers ([D-067](../../decisions.md#d-067)); retired by D-093 | 3 | RETIRED |
 | BO-051 | 0.8 mm annular silicone speaker-flange bond/seal behind the front-panel lip | 1 application | HOLD |
 
 **Bench articles** (not installed; not counted in `BODY_AUDIO`):
@@ -153,9 +153,9 @@ The pod and trim mass is in the `BODY_SHELL_AND_PANELS` row; the screws and inse
 
 | ID | Part | Qty | State |
 |---|---|---:|---|
-| BO-015 | Charge inlet PCB-13 with vertical power-only USB-C, PD sink and protection ([D-040](../../decisions.md#d-040)) | 1 assembly | HOLD |
-| BO-016 | BIS-registered USB-C PD wall adapter ≥30 W with a 15 V ≥1.5 A PDO, plus 1 m 3 A C-to-C cable | 1 set | CANDIDATE |
-| BO-017 | M2 × 5 thread-forming screw for PCB-13 into the rear-panel pad | 2 | CANDIDATE |
+| BO-015 | Charge inlet PCB-13 with vertical power-only USB-C, PD sink and protection ([D-040](../../decisions.md#d-040)); retired by D-093 | 1 assembly | RETIRED |
+| BO-016 | BIS-registered USB-C PD wall adapter ≥30 W with a 15 V ≥1.5 A PDO, plus 1 m 3 A C-to-C cable; retired charge accessory | 1 set | RETIRED |
+| BO-017 | M2 × 5 thread-forming screw for PCB-13 into the rear-panel pad; retired by D-093 | 2 | RETIRED |
 
 PCB-13 is mounted on the removable rear panel. Its W16 150 mm power lead is counted in HN-001/003/007. The adapter and cable are **external equipment**, not installed body mass. Board schematic, programmed PD NVM, plug fit and panel removal are release checks in [charge-path.md](../../04-pcbs/charge-path.md) and `check_charge_inlet.py`.
 
