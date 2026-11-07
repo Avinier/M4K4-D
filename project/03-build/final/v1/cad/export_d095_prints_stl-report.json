@@ -1,0 +1,235 @@
+{
+ "script": "export_d095_prints_stl",
+ "passed": 27,
+ "total": 27,
+ "rows": [
+  {
+   "check": "CH-106_mesh_closed",
+   "ok": true,
+   "open_edges": 0,
+   "degenerate_dropped": 0,
+   "triangles": 5596
+  },
+  {
+   "check": "CH-106_volume_matches_brep",
+   "ok": true,
+   "mesh_mm3": 8288.5381,
+   "brep_mm3": 8288.8467
+  },
+  {
+   "check": "CH-106_on_bed_at_origin",
+   "ok": true,
+   "size": [
+    66.5,
+    56.0,
+    5.0
+   ]
+  },
+  {
+   "check": "CH-106_fix_open_+21.0_+24.5",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.0,
+    2.5
+   ]
+  },
+  {
+   "check": "CH-106_fix_open_+21.0_-24.5",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.0,
+    2.5
+   ]
+  },
+  {
+   "check": "CH-106_fix_open_+83.0_+20.0",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.0,
+    2.5
+   ]
+  },
+  {
+   "check": "CH-106_fix_open_+83.0_-20.0",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.0,
+    2.5
+   ]
+  },
+  {
+   "check": "CH-106_pilot_open_+50.3_-19.4",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.7,
+    4.8
+   ]
+  },
+  {
+   "check": "CH-106_pilot_open_+33.7_-19.4",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.7,
+    4.8
+   ]
+  },
+  {
+   "check": "CH-106_pilot_open_+50.3_+19.4",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.7,
+    4.8
+   ]
+  },
+  {
+   "check": "CH-106_pilot_open_+33.7_+19.4",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.7,
+    4.8
+   ]
+  },
+  {
+   "check": "CH-106_pilot_open_+73.3_-19.4",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.7,
+    4.8
+   ]
+  },
+  {
+   "check": "CH-106_pilot_open_+56.7_-19.4",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.7,
+    4.8
+   ]
+  },
+  {
+   "check": "CH-106_pilot_open_+73.3_+19.4",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.7,
+    4.8
+   ]
+  },
+  {
+   "check": "CH-106_pilot_open_+56.7_+19.4",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.7,
+    4.8
+   ]
+  },
+  {
+   "check": "CH-107_mesh_closed",
+   "ok": true,
+   "open_edges": 0,
+   "degenerate_dropped": 0,
+   "triangles": 1532
+  },
+  {
+   "check": "CH-107_volume_matches_brep",
+   "ok": true,
+   "mesh_mm3": 957.9741,
+   "brep_mm3": 958.0538
+  },
+  {
+   "check": "CH-107_on_bed_at_origin",
+   "ok": true,
+   "size": [
+    17.5,
+    26.0,
+    4.0
+   ]
+  },
+  {
+   "check": "CH-107_j15a_open_+22.0_+7.5",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.0,
+    2.0
+   ]
+  },
+  {
+   "check": "CH-107_j15a_open_+22.0_-7.5",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.0,
+    2.0
+   ]
+  },
+  {
+   "check": "CH-107_pilot_open_+14.5_-10.2",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.4,
+    3.8
+   ]
+  },
+  {
+   "check": "CH-107_pilot_open_+14.5_+10.2",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.4,
+    3.8
+   ]
+  },
+  {
+   "check": "CH-108_mesh_closed",
+   "ok": true,
+   "open_edges": 0,
+   "degenerate_dropped": 0,
+   "triangles": 1328
+  },
+  {
+   "check": "CH-108_volume_matches_brep",
+   "ok": true,
+   "mesh_mm3": 5540.3606,
+   "brep_mm3": 5539.6449
+  },
+  {
+   "check": "CH-108_on_bed_at_origin",
+   "ok": true,
+   "size": [
+    33.65,
+    56.45,
+    13.6
+   ]
+  },
+  {
+   "check": "CH-108_m3_open_-21.0_+65.5",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.0,
+    13.6
+   ]
+  },
+  {
+   "check": "CH-108_m3_open_+21.0_+65.5",
+   "ok": true,
+   "crossings_in_band": [],
+   "band": [
+    0.0,
+    13.6
+   ]
+  }
+ ]
+}

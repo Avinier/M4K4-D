@@ -1,0 +1,17 @@
+[
+  {
+    "file": "CH-108_REAR_BAY_MODULE_PLATE.stl",
+    "bom": "CH-108",
+    "cad_label": "REAR_BAY_MODULE_PLATE",
+    "quantity": 1,
+    "material": "PETG deep slate",
+    "bed_down": "-X",
+    "size_mm": [
+      33.7,
+      56.5,
+      13.6
+    ],
+    "volume_mm3": 5540.361,
+    "source": "final/v1/cad/export_d095_prints_stl.py (D-095 print; exported 2026-11-07)"
+  }
+]

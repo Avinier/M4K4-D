@@ -265,5 +265,35 @@
       1.2
     ],
     "volume_mm3": 135.261
+  },
+  {
+    "file": "CH-106_TUB_BAY_MODULE_PLATE.stl",
+    "bom": "CH-106",
+    "cad_label": "TUB_BAY_MODULE_PLATE",
+    "quantity": 1,
+    "material": "PETG deep slate",
+    "bed_down": "-Z",
+    "size_mm": [
+      66.5,
+      56.0,
+      5.0
+    ],
+    "volume_mm3": 8288.538,
+    "source": "final/v1/cad/export_d095_prints_stl.py (D-095 print; exported 2026-11-07)"
+  },
+  {
+    "file": "CH-107_IMU_ADAPTER_LSM6DSOX.stl",
+    "bom": "CH-107",
+    "cad_label": "IMU_ADAPTER_LSM6DSOX",
+    "quantity": 1,
+    "material": "PETG deep slate",
+    "bed_down": "-Z",
+    "size_mm": [
+      17.5,
+      26.0,
+      4.0
+    ],
+    "volume_mm3": 957.974,
+    "source": "final/v1/cad/export_d095_prints_stl.py (D-095 print; exported 2026-11-07)"
   }
 ]

@@ -3879,3 +3879,13 @@ Volume 83,965.6 → 83,620.6 mm³ (−345 mm³, the hole plus four pilots); size
 - Hand reach for the 11 body-lift plugs is checked at first build.
 - Connector part numbers, and therefore exact sizes, are still open (05-harness §3).
 - Plug and splice masses sit inside the D-096 harness allowance and are not added to `check_d095_mass.py`.
+
+**Amended 2026-11-07: the three D-095 mount prints exported.** `export_d095_prints_stl.py` writes CH-106 (tub-bay plate, 66.5 × 56 × 5 mm, 8.3 cm³) and CH-107 (IMU adapter, 17.5 × 26 × 4 mm, 1.0 cm³) to `04-print/01-chassis/stl/`, and CH-108 (rear-bay plate, 33.7 × 56.5 × 13.6 mm, 5.5 cm³) to a new `04-print/02-body/stl/`, with manifest rows. **27/27:**
+- every mesh is closed and within 0.01 % of its B-rep volume, on the bed at the origin;
+- all 14 holes and pilots are open on their axis rays.
+
+All three print flat with no supports in PETG deep slate:
+- CH-106 and CH-107 bottom down, as they sit;
+- CH-108 on its back (−X) face, with the counterbores on the bed.
+
+CH-108's cradles are drawn around the UNMEASURED switch and INA226 outlines; re-check them on the received parts before printing it. The BOM rows CH-106–CH-108 note the STLs; [04-print/02-body](../04-print/02-body/README.md) is started for CH-108.

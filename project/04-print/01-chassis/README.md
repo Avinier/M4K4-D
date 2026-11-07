@@ -1,6 +1,6 @@
 # Chassis prints
 
-> **D-095 front module regenerated (2026-11-07, [D-099](../../03-build/decisions.md#d-099)).** `CH-001_CHASSIS_FRAME_FRONT_MODULE.stl` and its manifest row are re-exported from `final/v1/cad/makad-v1.step.py` by `final/v1/cad/export_chassis_front_stl.py`, with the D-095 balance-lead Ø5 deck hole and the tub-bay plate's insert pilots (two M3 × 4 through the deck strip at X 21, two M3 × 6 in the front crossmember at X 83). The script checks both the B-rep and the mesh (13/13): hole open, pilots open with walls over the insert depth, mesh closed, volume within 0.0001 % of the B-rep. Orientation and supports are unchanged; the new holes are vertical. No other existing chassis print changed in D-095. **Not yet in this package:** the two new chassis-side prints, the tub-bay plate (CH-106) and the IMU adapter (CH-107).
+> **D-095 front module regenerated (2026-11-07, [D-099](../../03-build/decisions.md#d-099)).** `CH-001_CHASSIS_FRAME_FRONT_MODULE.stl` and its manifest row are re-exported from `final/v1/cad/makad-v1.step.py` by `final/v1/cad/export_chassis_front_stl.py`, with the D-095 balance-lead Ø5 deck hole and the tub-bay plate's insert pilots (two M3 × 4 through the deck strip at X 21, two M3 × 6 in the front crossmember at X 83). The script checks both the B-rep and the mesh (13/13): hole open, pilots open with walls over the insert depth, mesh closed, volume within 0.0001 % of the B-rep. Orientation and supports are unchanged; the new holes are vertical. No other existing chassis print changed in D-095. The two new chassis-side prints, the tub-bay plate (CH-106) and the IMU adapter (CH-107), are exported by `final/v1/cad/export_d095_prints_stl.py` (rows below); the body-side rear-bay plate (CH-108) is in [02-body](../02-body/README.md).
 
 The printed parts of [chassis v1](../../03-build/01-chassis/v1/BOM.md): the
 frame, the axle stack, the wheels, the nose and the rear keel. Most are PETG.
@@ -37,6 +37,8 @@ Orientation, critical dimensions and settings are filled in when each part is ex
 | CH-009 | `REAR_KEEL_REPLACEABLE_WEAR_SHOE` | 1 | PETG, deep slate | A1 | Sole down (−Z), no supports (D-080) | Sliding tongue; Ø1.6 pilot; sole | | EXPORTED |
 | CH-010 | `REAR_TCRT_BEZEL_WITH_GUARDS` | 1 | PETG, taupe | A1 | Guard lips down (−Z); 26 mm² support under bezel plate (D-080) | Contoured sensor cradles; optical window; screw/pin fits | | EXPORTED |
 | CH-068 | `REAR_TCRT_HEIGHT_SHIM_*` | 2 (print 4) | PETG, deep slate | A1 | Flat (±Z), no supports (D-080) | 1.2 ±0.05 mm thickness; two fitted preserve face Z 10 (D-079); three/four need requalification | | EXPORTED |
+| CH-106 | `TUB_BAY_MODULE_PLATE` (D-095: carries both S18V20ALV over the tub) | 1 | PETG, deep slate | A1 | Bottom down, as it sits; no supports. The Ø6.8 × 0.6 ballast-head reliefs on the underside bridge | Four Ø3.4 fixing holes; eight Ø1.6 M2 pilots in the 2.5 mm bosses | | EXPORTED (2026-11-07, D-099) |
+| CH-107 | `IMU_ADAPTER_LSM6DSOX` (D-095: LSM6DSOX on the J15A pilots) | 1 | PETG, deep slate | A1 | Bottom down, as it sits; no supports | Two Ø2.2 J15A holes; two Ø1.6 M2 pilots in the bosses | | EXPORTED (2026-11-07, D-099) |
 
 The body's wheel-arch pods and trims are in the chassis CAD file but belong to
 the body BOM, so they print with the body skins.
