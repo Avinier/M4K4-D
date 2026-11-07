@@ -1,5 +1,7 @@
 # Body v1 CAD
 
+> **Final-CAD override notice (2026-11-07).** This body source still models PCB-02, PCB-13 with its USB-C inlet, PCB-05/06 and the `J2-8`/`J2-9` plugs, and its `check_charge_inlet.py` and `check_power_button.py` test them. Subsystem sources are not edited for droid changes (rule D-063). [D-095](../../../decisions.md#d-095) removes those parts in [final/v1/cad](../../../final/v1/README.md) and adds the bought modules, rear XT30/balance ports and new mic bosses there; use the final-v1 checks (`check_rear_panel_ports.py`, `check_bay_rear.py`, `check_balance_channel.py`, `check_mic_bosses.py`) for the current robot.
+
 This directory follows the chassis v1 CAD layout: an editable model and STEP entry point at the root, `generated/` for derived reports, `snapshots/` for review images, and `purchased/` for vendor-reference provenance. Subsystem folders are added when a body component has its own model. The current body is one scoped assembly, so its source remains in the root. `body-v1.step` is the body alone; the chassis it sits on is `chassis_v1_reference()`, which the fit checks still load. Build the complete chassis, body and head view in [final v1](../../../final/v1/README.md).
 
 | Path | Purpose |

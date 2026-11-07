@@ -1,5 +1,7 @@
 # Body v1 bill of materials — working inventory
 
+> **D-093 supersession notice (2026-11-07).** This snapshot predates [D-093](../../decisions.md#d-093)–[D-097](../../decisions.md#d-097). Its charge-inlet rows (BO-015, BO-017, PCB-13, `W16`), the PCB-05/06 audio boards (BO-002–BO-005, BO-012, BO-064) and the `LTC2954`/`J2-9` power-button wiring are historical: charging is off-board through rear XT30 and balance ports, audio is a bought amp and four INMP441 modules, and the mushroom drives the bought power switch. The [project BOM](../../BOM.csv) is reconciled (D-097); refresh this snapshot deliberately before a release.
+
 Started 2026-10-03 from the [project BOM](../../BOM.csv) for **one body**; expanded 2026-10-04 against the body-v1 CAD. Quantities are installed quantities, with no spare or scrap allowance unless a row says otherwise. This is a procurement and design worklist, **not a released order or fabrication package**. The states are the same as in the [chassis v1 BOM](../../01-chassis/v1/BOM.md): `DESIGN`, `CANDIDATE`, `SELECTED`, `HOLD` and `OPEN`. `DESIGN` means geometry exists, not that a print is qualified. No row is marked received or measured.
 
 The model basis is [body_v1_model.py](cad/body_v1_model.py). The project BOM carries the specification, source and release check for every ID below. The working-tree compute mount and cooling geometry is included as a **provisional CAD basis**; it has not been released by a recorded decision or physical test.
