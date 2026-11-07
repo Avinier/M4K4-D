@@ -3700,7 +3700,7 @@ Retired, in git history: `check_pcb02_back_face`, `check_pcb02_j9_courtyard`, `c
 
 **10. Mass and tipping.** The register is still the hand-kept `MASS_ROWS` in body v1. `check_d095_mass.py` applies D-095 on top of it:
 - removes the PCB-02, PCB-13, PCB-03, PCB-04 and PCB-07 rows (−94.0 g) and the PCB-05/06 shares of `BODY_AUDIO` (−9 g);
-- adds the modules (D for the Pololu parts, E for the rest), the measured prints and hardware, the balance lead and the measured printed-part volume changes against git HEAD.
+- adds the modules (D for the Pololu parts, E for the rest), the measured prints and hardware, the balance lead and the measured printed-part volume changes against `a6affd42`, the last commit before D-095 (pinned, since HEAD now includes D-095).
 
 **Mass: 2647.8 → 2628.5 g. CoM (18.07, 1.15, 109.45) → (18.68, 1.28, 109.70) mm. a_tip neutral 1.620 → 1.670 m/s², worst head pose 1.596 → 1.646, against 1.582.** The heavy rear boards left, so the CoM moved forward.
 

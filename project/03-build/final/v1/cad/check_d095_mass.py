@@ -10,7 +10,7 @@ manual). Subsystem sources stay unchanged, so this script applies D-095's rows o
   near-solid PETG figure) and every new screw, insert and standoff (steel 7.85, brass 8.50);
 - added, D (vendor) or E (estimate): each bought module at its CAD centroid;
 - printed-part changes: the frame, shell, rear panel, tray and front deck measured before (the
-  committed makad-v1.step.py, from git HEAD) and after D-095, at their register densities.
+  makad-v1.step.py at BASELINE, the last commit before D-095) and after D-095, at their register densities.
 
 Then CoM, a_tip = g x / z at the neutral pose, and the conservative worst head pose exactly as
 body check_body_layout.py computes them, against the 1.582 m/s2 minimum (BA-06).
@@ -51,6 +51,8 @@ MODULE_MASS = {
 # Leads with no solid: (mass g, centroid, evidence)
 EXTRA = {"BALANCE_LEAD_3XAWG24": (4.3, None, "E 3 x AWG24 x 0.55 m at 2.6 g/m, at the lead reserves' centroid")}
 PRINTS = ("TUB_BAY_MODULE_PLATE", "REAR_BAY_MODULE_PLATE", "IMU_ADAPTER_LSM6DSOX")
+# The last commit before D-095. Pinned: HEAD stopped being "before" once D-095 was committed.
+BASELINE = "a6affd42"
 EDITED = {"BODY_FRAME_MAIN_PRINT": PETG_BODY, "BODY_SHELL": PETG_BODY, "REAR_SERVICE_PANEL_OCTAGONAL": PETG_BODY,
           "COMPUTE_TRAY": PETG_BODY, "CHASSIS_FRAME_FRONT_MODULE": PETG_CHASSIS}
 
@@ -64,9 +66,10 @@ def centroid(shape):
     return p.Mass(), (c.X(), c.Y(), c.Z())
 
 
-def head_entry():
-    """The committed makad-v1.step.py (git HEAD), loaded as a module in this folder's place."""
-    src = subprocess.run(["git", "show", "HEAD:./makad-v1.step.py"], cwd=C.HERE, capture_output=True, text=True, check=True).stdout
+def baseline_entry():
+    """makad-v1.step.py at BASELINE (before D-095), loaded as a module in this folder's place."""
+    src = subprocess.run(["git", "show", f"{BASELINE}:./makad-v1.step.py"], cwd=C.HERE, capture_output=True, text=True, check=True).stdout
+    assert src != (C.HERE / "makad-v1.step.py").read_text(), f"{BASELINE} matches the current source: no before/after to compare"
     mod = types.ModuleType("makad_v1_head")
     mod.__file__ = str(C.HERE / "makad-v1.step.py")
     exec(compile(src, mod.__file__, "exec"), mod.__dict__)
@@ -138,9 +141,9 @@ def main():
     # Old PCB-08 sideband headers and plugs (J8-3, J8-5): about 1 g out of the PCB-08 row.
     delta.append(("YAW_JUNCTION_PCB08: J8-3/J8-5 removed", -1.0, (-3.4, -36.5, 117.0), "E two GH8 headers and plugs"))
 
-    C.log("measuring printed-part changes against git HEAD")
+    C.log(f"measuring printed-part changes against {BASELINE}")
     after = edited_volumes(entry)
-    prior = edited_volumes(head_entry())
+    prior = edited_volumes(baseline_entry())
     for name, rho in EDITED.items():
         (va, ca), (vb, cb) = after[name], prior[name]
         dv = va - vb
