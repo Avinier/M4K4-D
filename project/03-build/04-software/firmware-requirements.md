@@ -21,7 +21,7 @@
 | FW-P8 | No sequencing logic: every rail comes up together. Each controller must tolerate the others starting in any order | D-093 | N7 |
 | FW-P9 | Charging happens only in `OFF`. Firmware cannot see the charger; the operating rule is in the user notes | D-093 | N5 |
 
-**Open interface (blocks FW-P1, FW-P4 and FW-P5 wiring).** D-096 puts the button sense on GPIO12 (header pin 32) and the M1 OFF drive on GPIO13 (pin 33). On [PCB-09 rev A](../04-pcbs/pcb-09-c0-link-adapter/README.md) both pins are **not connected**, and the full SSW-120 socket covers the header, so nothing else can reach them (PCB-09 HA-02). I²C1 is reachable only on PCB-09's labelled SDA/SCL/GND service pads (D-073); the INA226's 3.3 V supply also needs an accessible pad. **Resolution needed before harness build:** a PCB-09 rev B adding pads for GPIO12, GPIO13 and 3V3 (PCB-09 is not fabricated yet, so this costs a layout edit, not a scrapped board), or reassign these jobs to another controller, by decision.
+**Board interface selected; physical wiring blocked.** [D-098](../decisions.md#d-098) keeps button sense on GPIO12 (header pin 32), M1 OFF on GPIO13 (pin 33), and INA226 SDA/SCL on I²C1. PCB-09 rev A leaves GPIO12/13 unconnected under its full socket. Its Pi 3.3 V TP5 and I²C TP1/TP2 are 1 mm probe pads; TP1/TP2 are in the socket strip. PCB-09 rev B must expose the two GPIOs and provide an accessible, mechanically supported SDA/SCL/3V3/GND harness termination. GPIO12 sees only the qualified 0–3.3 V output of the button-sense interface; GPIO13's inactive boot/halt state and M1 OFF drive must be proved. FW-P1, FW-P4 and FW-P5 can be specified, but their harness build waits for the rev B board and N1 evidence.
 
 ## 2. Servos (C2)
 

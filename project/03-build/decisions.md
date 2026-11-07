@@ -80,7 +80,8 @@ The central record of every decision and change made during the build phase. New
 | [D-074](#d-074) | 2026-10-31 | Body / electronics: PCB-09 socket strip (CH-084; final v1 CAD) | Extend only the strip's +Y edge from world Y 20.9 to 22.4 mm so both socket rows carry full copper and edge margin; core Z, bridge and wide area unchanged | ACTIVE; 40-pad edge and static body/chassis checks pass; other mechanical inputs OPEN |
 | [D-093](#d-093) | 2026-11-06 | Architecture: minimal safety and bought modules | Replaces RP-02 `BD-01`: minimal safety, pack charged outside the robot; PCB-02/03/04/05/06/07 bought, PCB-13 deleted; custom boards are PCB-08, 09, 10, 11, 12, 14, 15 | ACTIVE; changes not yet applied ([plan](simplification-plan.md)) |
 | [D-094](#d-094) | 2026-11-07 | Bought module selection for D-093 | Pololu HP switch, 2 × S18V20ALV (head 5.5 V, yaw 11.1 V), 2 × S13V30F5 (Pi, shared 5 V), INA226, LSM6DSOX, MAX98357A, 4 × INMP441, ISDT PD60; PCB-12 stays custom | SELECTED, not ordered |
-| [D-097](#d-097) | 2026-11-07 | BOM and firmware for D-093 | BOM reconciled (14 superseded, 12 rescoped, 18 new rows); firmware requirements in 04-software; PCB-09 rev A can't reach GPIO12/13 (open) | ACTIVE; D-096 HOLD stands |
+| [D-097](#d-097) | 2026-11-07 | BOM and firmware for D-093 | BOM reconciled (14 superseded, 12 rescoped, 18 new rows); firmware requirements in 04-software; PCB-09 rev A GPIO access gap found | ACTIVE; gap disposition in D-098; D-096 HOLD stands |
+| [D-098](#d-098) | 2026-11-07 | PCB-09 rev B service access for D-096 | Keep button sense and M1 OFF under Pi control; revise PCB-09 to expose GPIO12/13 and a qualified INA226 I²C/3V3/GND termination | SELECTED design input; rev B layout and fit unproved |
 | [D-095](#d-095) | 2026-11-07 | Final v1 CAD for D-093/D-094 (plan level 4) | Bought modules group; tub/tray/rear bays; XT30 + XH rear-panel ports; JST PA balance break in the 13.5 mm channel; INMP441 bosses; amp bracket; IMU adapter; PCB-08 servo plug; a_tip 1.670 neutral / 1.646 worst pose | ACTIVE; M6/M8/M9 outlines unmeasured |
 | [D-096](#d-096) | 2026-11-07 | D-093 harness power stars and body-lift breaks (plan level 5) | Rear insulated switched star after M6; one fused chassis→body feed and one switched body→chassis feeder; two S18 output breaks; seven chassis signal breaks, 11 body-lift plugs after pack removal | TOPOLOGY ONLY; electrical HOLD on ~16 A coincident demand, R010 dissipation, connector/fuse coordination; physical fit open |
 
@@ -3813,11 +3814,23 @@ The SELECTED rows are design choices with bench gates in their `release_check`; 
 
 **Found: PCB-09 rev A cannot reach D-096's control pins.**
 - D-096 puts the button sense on GPIO12 (header pin 32) and the M1 OFF drive on GPIO13 (pin 33). PCB-09 rev A leaves both unconnected, and its full SSW-120 socket covers the header (PCB-09 HA-02).
-- I²C1 reaches the INA226 only through PCB-09's SDA/SCL/GND service pads (D-073), and the INA226 also needs an accessible 3.3 V pad.
-- **Open, by decision before harness build:** a PCB-09 rev B adding GPIO12, GPIO13 and 3V3 pads (the board is not fabricated, so this is a layout edit), or move these jobs to another controller. This is the first change to a designed board since D-093 promised none.
+- I²C1 reaches the INA226 only through PCB-09's SDA/SCL/GND service pads (D-073). TP5 already carries Pi 3.3 V, but it and the I²C points are 1 mm probe pads, not qualified permanent harness terminations; TP1/TP2 lie in the socket strip.
+- **Disposition:** [D-098](#d-098) selects PCB-09 rev B. The board is not fabricated; rev B must be designed, checked and integrated before W40/W44 can be built.
 
 **Also corrected.** The other session's D-096 work added supersession banners to `02-prototypes/RP-02-electrical/README.md` and `power-calculation-ledger.md`. They were reverted before commit (`40a1f8c`) because `02-prototypes/` is read-only ([D-001](#d-001)). The 01-system ledger and 00-foundation edits were kept.
 
 **Not done.**
 - The dated subsystem BOM snapshots (01-chassis/v1/BOM.md, 02-body/v1/BOM.md) are not refreshed; refresh them deliberately before a release.
 - Plan level 7 (other docs) and level 9 (custom boards) are next on paper. The D-096 electrical HOLD needs bench measurements.
+
+## D-098
+
+**2026-11-07 · PCB-09 rev B service access for D-096 · SELECTED design input; rev B board and CAD proof pending**
+
+**Decision.** Revise PCB-09 before fabrication. Route Pi header physical 32 / GPIO12 to a labelled button-sense termination and physical 33 / GPIO13 to a labelled M1 OFF termination. Provide a mechanically supported, accessible four-wire INA226 termination for I²C1 SDA (physical 3), SCL (physical 5), Pi 3.3 V and GND. A separate controller would add a shutdown command and power-state dependency to an interface the Pi already owns. This is the first deliberate revision of a designed board under D-093; rev A remains the historical verified design, not the fabrication release.
+
+**Why more than three nominal pads.** Rev A already has +3V3_PI on TP5, but TP5 is a 1 mm probe pad. TP1/TP2 are also 1 mm pads inside the full socket's strip and cannot be treated as accessible solder lands after assembly. A design that adds only GPIO12/13 pads while referring W44 to those rev-A points would still leave the INA226 harness unresolved. Rev B may use a compact low-current connector if the populated bay and cable exit pass CAD, or dedicated wire lands with positive strain relief. Freeze its exact footprint, pin order, insulation and service access at level 9; do not count a bare probe pad as a wire termination.
+
+**Electrical boundary.** The M1 ON node may sit at pack voltage. W40 must sense it only through the measured, high-impedance level-shift/buffer interface; the PCB-09 GPIO12 net itself must remain in the 0–3.3 V domain and must not back-power an unpowered Pi when the button is pressed. GPIO13 drives OFF only through a verified M1-compatible interface, with a defined inactive state during Pi reset, boot and halt; check that M1 cannot inject current into GPIO13 while the Pi is unpowered. Do not route pack voltage or switched load current through PCB-09. Confirm INA226 pull-ups, address, and Pi 3.3 V current allowance; label the four service nets so 3.3 V cannot be mistaken for Pi 5 V.
+
+**Release gate.** Update the PCB-09 schematic, layout, generated board outputs and final-v1 assembly model as rev B. Pass ERC/DRC, continuity and short checks on the six nets, populated connector/wire-exit clearance and body-lift access checks, then N1 button/OFF and INA226 tests. W40/W44 and PCB-09 fabrication wait for that evidence. This decision does not lift the separate D-096 pack-current, shunt, fuse, switch or balance-tap HOLD.

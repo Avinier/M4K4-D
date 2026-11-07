@@ -1,16 +1,16 @@
 # PCB-09 — C0 link adapter
 
-Pi-header board: 2 × RS-422 (THVD1451), audio pass-through and the enclosure-fan switch `J9-4`. **Rev A designed** ([D-092](../../decisions.md#d-092)): 77 × 22.7 × 1.6 mm, four layers, on the Pi header through a Samtec SSW-120-01-T-D socket and two M2.5 × 11 mm standoffs.
+Pi-header board: 2 × RS-422 (THVD1451), audio pass-through and the enclosure-fan switch `J9-4`. **Rev A designed** ([D-092](../../decisions.md#d-092)): 77 × 22.7 × 1.6 mm, four layers, on the Pi header through a Samtec SSW-120-01-T-D socket and two M2.5 × 11 mm standoffs. **Rev B selected, not yet designed** ([D-098](../../decisions.md#d-098)): add the D-096 button/OFF and INA226 service interface before fabrication. The rev A fab files are historical outputs, not the board to order.
 
 | | |
 |---|---|
 | Register | [04-pcbs board register](../README.md#board-register) |
 | Project BOM | CH-084 in [BOM.csv](../../BOM.csv) |
 | Location | Body, on the Pi header |
-| Specification | [audiosystem.md §4](../../02-body/v1/research/audiosystem.md#4-audio-functions-on-the-shared-boards)<br>[D-042](../../decisions.md#d-042), [D-073](../../decisions.md#d-073), [D-074](../../decisions.md#d-074), [D-092](../../decisions.md#d-092) |
+| Specification | [audiosystem.md §4](../../02-body/v1/research/audiosystem.md#4-audio-functions-on-the-shared-boards)<br>[D-042](../../decisions.md#d-042), [D-073](../../decisions.md#d-073), [D-074](../../decisions.md#d-074), [D-092](../../decisions.md#d-092), [D-098](../../decisions.md#d-098) |
 | CAD placeholder | `_c0_link_adapter()` in [`body_v1_model.py`](../../02-body/v1/cad/body_v1_model.py) |
 | CAD labels | `C0_LINK_ADAPTER_PCB09` |
-| Final CAD | `Custom PCBs › PCB-09 C0 link adapter` in [makad-v1.step.py](../../final/v1/cad/makad-v1.step.py): the rev-A KiCad STEP, standoffs, screws and mated plugs ([pcb_integration.py](../../final/v1/cad/pcb_integration.py)) |
+| Final CAD | `Custom PCBs › PCB-09 C0 link adapter` in [makad-v1.step.py](../../final/v1/cad/makad-v1.step.py): currently the rev-A KiCad STEP, standoffs, screws and mated plugs ([pcb_integration.py](../../final/v1/cad/pcb_integration.py)); rev B update and populated cable-exit fit pending |
 
 ## Stages
 
@@ -18,9 +18,15 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | **Done, rev A** ([D-092](../../decisions.md#d-092)) | [design/](design/), [fab/revA](fab/revA/README.md), [cad/](cad/); ERC 0/0; DRC 0 violations, 0 unconnected, 0 parity; `check_pcb09_mount.py` 7/7, `check_pcb09_fit.py` 5/5 | 2026-11-06 |
-| 2. Procure | Waits for the design batch ([D-064](../../decisions.md#d-064)) | — | — |
-| 3. Integrate | **CAD replacement complete**; physical acceptance open | [pcb_integration.py](../../final/v1/cad/pcb_integration.py), `check_pcb_integration.py` | 2026-11-06 |
+| 1. Design | **Rev A done; rev B required and pending** ([D-098](../../decisions.md#d-098)) | Rev A: [design/](design/), [fab/revA](fab/revA/README.md), [cad/](cad/); ERC 0/0; DRC 0 violations, 0 unconnected, 0 parity; `check_pcb09_mount.py` 7/7, `check_pcb09_fit.py` 5/5. These results do not validate rev B | 2026-11-07 |
+| 2. Procure | Waits for rev B and the design batch ([D-064](../../decisions.md#d-064)) | Do not order fab/revA | — |
+| 3. Integrate | Rev A CAD replacement complete; rev B integration and physical acceptance open | [pcb_integration.py](../../final/v1/cad/pcb_integration.py), `check_pcb_integration.py`; rerun with rev B STEP and harness exit | 2026-11-07 |
+
+### Rev B input — D-098
+
+Preserve the rev A functions, socket, mounting and existing connector pinouts. Add accessible service access to **GPIO12 / header 32** for the qualified 0–3.3 V button-sense signal and **GPIO13 / header 33** for the M1 OFF command. Also provide a permanent four-wire INA226 connection to I²C1 SDA, I²C1 SCL, Pi 3.3 V and GND. TP5 already carries +3V3_PI electrically, but is only a 1 mm probe pad. TP1/TP2 are 1 mm I²C probe pads in the socket strip. None of those is a released harness termination.
+
+Select a compact low-current connector if the fully populated fit allows it; otherwise provide labelled solder lands and positive wire strain relief with an assembly method and pull check. Freeze the actual footprint, pin order and cable exit in the rev B schematic/layout, then check the STEP in the final-v1 assembly. Keep the M1 ON pack-voltage node off this board: GPIO12 receives only the output of the measured high-impedance interface, with no back-power path into an unpowered Pi. Check GPIO13's inactive state through Pi reset, boot and halt, and any M1-to-GPIO13 injection with Pi power absent, before connecting OFF. ERC/DRC, six-net continuity/no-short checks and N1 are release gates. D-096's separate electrical HOLD still applies.
 
 ## Inputs
 
@@ -51,7 +57,7 @@ Read on 2026-10-31. RP-02 is read-only; build changes belong here and in [decisi
 | B | Official [UART configuration](https://www.raspberrypi.com/documentation/computers/configuration.html#configuring-uarts) and [BOOT_UART](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#BOOT_UART) | Pi 5 debug UART is normally UART10 on the separate debug connector; configuration can change the primary UART, so silence on GPIO14 must be checked on the installed image |
 | C | RP-02 [CA-06](../../../02-prototypes/RP-02-electrical/compute-control-architecture.md#ca-06--pi-gpio-allocation-reserves-independent-transports), [D-042](../../decisions.md#d-042), [D-043](../../decisions.md#d-043), [D-067](../../decisions.md#d-067), PCB-05/PCB-10 READMEs linked above | Existing allocations, fan circuit, selected 3010 fan, connector contracts and audio power ownership |
 
-#### 40-row header interface (allocation baseline v0.2)
+#### 40-row header interface (rev A allocation baseline v0.2)
 
 Directions are relative to the Pi. `N↑`/`N↓` mean **NULL function, output disabled, input buffer disabled**, with the indicated weak pull at RP1 reset (R/P); they do not promise an unchanged state throughout firmware, Linux or a warm reboot. Voltages are nominal signal/rail domains, not absolute maximum ratings. `NC` means a socket contact with **no trace, via, test pad or other load on PCB-09**, apart from its own land. Reserved contacts remain reserved even when NC. Supply rows are shared rail contacts, not competing GPIO owners.
 
@@ -98,7 +104,7 @@ Directions are relative to the Pi. `N↑`/`N↓` mean **NULL function, output di
 | 39 | — | GND | Common return | Return | GND | 0 V |
 | 40 | 21 | SDO0 → J9-3.6 | CA-06 / D-067 I²S0 | Out | N↓ | 3.3 V |
 
-**Count:** 11 functional GPIO (including FAN_EN with CR-02 open), 2 reserved I²C1 GPIO exposed on service pads, 15 other GPIO contacts, 4 supply contacts and 8 grounds = 40. GPIO0/1 have no adapter EEPROM or test points. Both contacts of each supply rail join that rail; all eight grounds join the common plane. J9-3.1 gets +3V3_PI; J9-3.3/.5 get GND. J9-3.10 goes **only to an isolated 5V_SENSE test pad**, never to a Pi GPIO or either supply. Its name does not make it a 5 V power connection. PCB-05's divider remains DNP; fitting it and connecting a GPIO needs CR-03.
+**Rev A count:** 11 functional GPIO (including FAN_EN with CR-02 open), 2 reserved I²C1 GPIO exposed on service pads, 15 other GPIO contacts, 4 supply contacts and 8 grounds = 40. [D-098](../../decisions.md#d-098) directs rev B to route physical 32/33 to GPIO12/13 service terminations and retain the 40 contacts; the rev B map must be checked against the actual schematic. GPIO0/1 have no adapter EEPROM or test points. Both contacts of each supply rail join that rail; all eight grounds join the common plane. J9-3.1 gets +3V3_PI; J9-3.3/.5 get GND. J9-3.10 goes **only to an isolated 5V_SENSE test pad**, never to a Pi GPIO or either supply. Its name does not make it a 5 V power connection. PCB-05's divider remains DNP; fitting it and connecting a GPIO needs CR-03.
 
 #### Function selection and software ownership
 
@@ -112,6 +118,7 @@ Table 4 (R) confirms UART0 on GPIO14/15 at **a4**, UART2 on GPIO4/5 at **a2**, a
 | Amp control | 23 only | Start low; assert only after valid playback clocks/data; lower before stopping clocks and at orderly shutdown. One software owner; do not combine a permanent GPIO hog with a driver that also requests it |
 | `gpio-fan` | 24 only | Proposed `dtoverlay=gpio-fan,gpiopin=24,temp=60000,hyst=5000`: 60 °C on / 55 °C off. Explicit pin required: the default is GPIO12. Temperatures remain bench starting points |
 | I²C1 | 2, 3 reserved; SDA/SCL/GND service pads (D-073) | No additional pull-ups, attached consumer or bus cable. Keep the controller disabled until a consumer is deliberately configured |
+| Button sense and M1 OFF (rev B) | 12 input, 13 output (D-098) | Button sense must be 0–3.3 V after a qualified interface; verify GPIO13 does not assert OFF at boot/halt. Rev B service termination and cable fit pending |
 | SPI0 | None | Reservation preserved; no adapter traces or access. SPI0's usual second CS is GPIO7, outside CA-06's 8–11 shorthand; leave SPI disabled unless deliberately configured |
 
 **Console check is a release condition.** Pi 5 normally sends debug output through UART10, not GPIO14/15 (B); that is not proof that every EEPROM/image configuration is silent. Require EEPROM `BOOT_UART=0`, disable firmware debug output (`uart_2ndstage`), remove any kernel `console=`/`earlycon` targeting either link (including aliases), and disable serial getty/debug applications on both resolved ports. Preserve CA-06's stable udev names and boot mux self-test. Capture the installed EEPROM settings, `config.txt`, `cmdline.txt`, resolved aliases and enabled services; scope HEAD_TX through cold boot, warm reboot and shutdown. `enable_uart=1` alone is not the pin-ownership proof.
@@ -409,4 +416,4 @@ Compared with the playbook and PCB-15, PCB-11, PCB-06, PCB-05 and PCB-10. Their 
   - Layout: written by hand in `layout_pcb09.py` (new `tools/kfile.py`); ERC 0/0; DRC 0/0/0.
   - Outputs: fab/revA and the board STEP.
   - Fit and integration: `check_pcb09_fit.py` 5/5; KiCad STEP installed in the final assembly with rebuilt plugs.
-- **2026-11-07:** [D-097](../../decisions.md#d-097): D-096 needs GPIO12 (button sense), GPIO13 (M1 OFF) and a 3V3 pad for the INA226, but rev A leaves GPIO12/13 unconnected under the full socket. Open: rev B with three pads, or move the jobs to another controller, by decision before the harness build.
+- **2026-11-07:** [D-097](../../decisions.md#d-097) found the D-096 GPIO12/13 access gap. [D-098](../../decisions.md#d-098) selects rev B. TP5 already has 3V3, but TP1/TP2/TP5 are probe pads, not qualified wire terminations; rev B needs a supported six-net service interface. Schematic, layout, fab outputs and final-v1 CAD fit remain pending.
