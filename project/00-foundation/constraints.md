@@ -72,7 +72,7 @@ Where an identified behaviour or component can cause harm or damage, safety take
 | CON-TBD-03 | Available electrical tools and acquisition plan | Not yet established |
 | CON-TBD-04 | External fabrication access | Not yet established |
 | CON-TBD-06 | Maximum acceptable mass | To be derived and approved; moderate weight is acceptable |
-| CON-TBD-09 | Charging method and whether operation while charging is allowed | Not yet selected |
+| CON-TBD-09 | Charging method and whether operation while charging is allowed | **Selected for v1 by [D-093](../03-build/decisions.md#d-093): external 2S balance charger through rear XT30 + 3-pin balance ports; robot OFF during charging.** Electrical/harness release remains on HOLD under [D-096](../03-build/decisions.md#d-096) |
 | CON-TBD-13 | First complete project cost range | Produce from candidate components, prototype quantities, tools, fabrication, shipping, replacements, and contingency before major procurement |
 | CON-TBD-14 | Exact tabletop test/calibration footprint | Set radius, speed, stopping margin, and edge-test geometry after the locomotion prototype |
 

@@ -1,235 +1,227 @@
-# 05 — Harness: connectors, wires and service breaks
+# 05 — Harness: D-093 bought-module build
 
 | Field | Value |
 |---|---|
-| Status | Working design, 2026-10-04 ([D-039](../decisions.md#d-039)). Nothing bought, crimped or bench-tested |
-| Governs | Every installed cable in the body and chassis, from the pack lead to the yaw junction (PCB-08). Head-internal wiring stays with RP-01 Layout 04 |
-| Replaces | RP-06 [connector-schedule.md](../../02-prototypes/RP-06-cad/connector-schedule.md) §3 and §5 for the build. That schedule stays read-only reference; §8 lists the rows changed here |
-| Inputs | [04-pcbs/power-boards.md](../04-pcbs/power-boards.md), RP-02 [board-specs.md](../../02-prototypes/RP-02-electrical/board-specs.md), the chassis and body CAD |
-| Check | [`check_harness.py`](../01-chassis/v1/cad/check_harness.py) (about 30 s): connector reserves and bodies, edge fit, slide path, NTC break and splices. Result: `generated/harness-checks.json`, **ALL PASS** on 2026-10-04 |
-| Evidence labels | `D` vendor data read, `E` estimate, `U` unknown, `W` measured. No `W` value exists yet |
+| Status | **Electrical HOLD**, 2026-11-07: the D-093 low-pack coincident-load screen in §6 exceeds the assumed 13 A Micro-Fit+ contact rating and R010 shunt thermal allowance. No wire cut, crimped or tested. [D-096](../decisions.md#d-096) sets topology only; lengths are estimates |
+| Basis | [D-093](../decisions.md#d-093), [D-094](../decisions.md#d-094), [D-095](../decisions.md#d-095), [module selection](../module-selection.md), [simplification plan](../simplification-plan.md#44-harness), final-v1 CAD |
+| Scope | Installed body/chassis wiring. Head-internal wiring stays with the head design |
+| Evidence | `D` vendor/documented, `E` estimate, `U` verify on receipt, `W` measured. No `W` values yet |
+
+PCB-02/03/04/05/06/07/13 are superseded. The remaining custom boards keep their designed connectors; bought modules get soldered pigtails to those connectors. All lengths below are millimetres.
 
 ## 1. Decisions
 
-| ID | Decision | Why |
-|---|---|---|
-| H-01 | **The fused pack feed splits at the fuse** (builder, 2026-10-04). Fuse output and pack negative each fork at a crimped butt splice above the PCB-03 +Y edge. One branch goes to PCB-03 `J3-1` (motors, head), the other to PCB-02 `J2-1` (charger, `OPBUS`). **`W04` and `J2-2` are deleted.** The negative splice is the power star (`PA-15`) | The old path (pack → fuse → PCB-02 on the rear panel → back to PCB-03) had four mated connectors and about 0.5 m of wire. The split halves the pack-to-gate resistance (§6) |
-| H-02 | **`J-PK` is the isolator.** Unplug it before mating or unmating `J2-1` or `J3-1`. Every other connector mates and unmates only in `OFF` with the charger unplugged | In `OFF` every body rail is dead (`OPBUS` open, gate open), so a half-mated plug cannot back-power a domain. Only `BATBUS` is live, and it reaches `J2-1`/`J3-1` alone. Micro-Fit parts have no first-mate pins, so the rule is procedural, not mechanical |
-| H-03 | **Power and signal never share a housing.** Power is on Micro-Fit+ and Micro-Fit 3.0; signals are on JST GH. The only supplies inside a GH housing are a sensor's own low-current feed (encoder, IMU, nose, TCRT) | `power-implementation-basis.md` §4 and CN-02 |
-| H-04 | **Two crimp families, one tool each.** Micro-Fit+ carries only AWG16/18 (Molex 213309-4400). Micro-Fit 3.0 carries only AWG20–24 (one 20–24 AWG tool). **No GH crimping:** every GH cable is a pre-crimped JST GH lead, single-ended where the far end is soldered | A Micro-Fit+ tool covers one gauge pair. AWG20/24 on Micro-Fit+ would need two more tools. GH crimping by hand is unreliable |
-| H-05 | **Micro-Fit+ leads use thin-wall wire, UL1061 class (insulation OD ≤ 2.0 mm), not silicone.** This includes the pack lead `W01` | The 206460 16 AWG terminal is specified for 2.00 mm insulation (`D`), and the Molex hand tool for UL1061 wire (`D`). Fine-strand silicone AWG16 is about 2.3–2.6 mm, so the insulation grip would not close |
-| H-06 | **`J3-4` and `J8-1` move from Micro-Fit+ to Micro-Fit 3.0.** `J8-1` becomes a 2×3 (43045-0600 class) carrying the pitch/roll pair from `J3-4` and the C2 and display pairs from `J4-2`, all AWG22 | The head trunk's design current is 1.0 A (3.6 A worst stall). Micro-Fit 3.0 at AWG22 carries it, and every head-side power conductor stays on one tool. `J3-4` frees 1.0 mm of PCB-03 −Y edge (margin 0.4 → 1.44 mm) |
-| H-07 | **Pack NTC break: a JST SM 2-way wire-to-wire pair**, pre-wired pigtails soldered on, lying in the +Y channel ahead of `J-PK` (X 52–76, Z 41.6–47.4) | GH has no wire-to-wire housing, and the channel holds nothing wider than about 8 mm. The space was freed when the fuse moved up (D-032). The pair's 6.5 × 5.8 mm section passes the 22.6 × 10 mm tub window |
-| H-08 | **The body lifts off after 11 plugs (12 with the IMU) are pulled at the body-side boards** (§7.2). There is no separate chassis-body bulkhead connector | The shell must come off to reach the J13 bolts anyway, and that opens access to PCB-02/03 and the C3 carrier. A bulkhead would put two more mated contacts in every chassis lead, including the motor feeds |
-| H-09 | **Encoders run from the C3 carrier 3V3, not 5 V** | The MOT3001 Hall board accepts 3.3–5 V (`E`, family data). On 5 V its pulled-up outputs would exceed the ESP32-S3's 3.6 V input limit |
+| ID | Decision |
+|---|---|
+| H-01 | The 15 A fuse remains on the chassis front. Its output crosses the body joint once, then forms an **unswitched** charge splice in the rear bay. The rear-panel XT30 and M1 VIN leave that splice. Pack negative reaches the matching rear negative splice and XT30 negative. Charge current bypasses M1 and M6. |
+| H-02 | `J-PK` is the isolator. Unplug the charger and open `J-PK` before changing any other power connection. M1 OFF does **not** de-energize the charge splice. |
+| H-03 | An insulated, supported AWG16 positive star lies beside M6 in the rear bay, **after** M6 `IN−`; a matching negative star lies beside it. One positive/negative feeder crosses to a tub-plate distribution feeding both #3297 drivers and M2/M3. M4/M5 branch in the body. Rated multiwire crimp splices are used, with no exposed bus bar. |
+| H-04 | Micro-Fit+ carries AWG16/18, Micro-Fit 3.0 AWG20–24, GH purchased pre-crimped signal leads. Balance PA/XH contacts are bought as **pre-crimped AWG24 leads** and joined with staggered solder and adhesive sleeve; no PA crimp tool for one break. Qualify each joint by pull test. |
+| H-05 | Micro-Fit+ uses thin-wall UL1061-class wire, insulation OD ≤2.0 mm. Do not substitute silicone wire. Exact housing/contact/tool combinations must be checked at order. |
+| H-06 | Head power remains `J8-1` Micro-Fit 3.0 2×3. Yaw is PCB-08 `J8-8` 5264-3P; check actual cable orientation before energizing. |
+| H-07 | JST PA 3-way replaces the NTC/SM break in the pack channel. The body lead follows D-095 `M12_BALANCE_*_RESERVE`: channel loop, Ø5 front-deck hole, under left driver and cross rail, rear XHP-3 port. |
+| H-08 | After pack removal, **11 body-lift plugs**: fused feed, switched chassis feeder, two S18 outputs, and seven signals (`W29/30/31/32/33/34/36`). The PA and `J-PK` were opened for pack removal. No bulkhead. Accessibility and slack are first-build checks. |
+| H-09 | Encoders remain on C3 3V3. PCB-10 `J10-12` stays unmated. No old permit, arm, NTC or PCB-02 signal is carried. |
 
 ## 2. Power tree as wired
 
+```text
+CHASSIS                                     BODY / REAR PANEL
+cells → PCB-01 → W01 → J-PK → W03a → FUSE 15 A → W03b → J-BAT → (+) charge splice ┬→ XT30 charge + (unswitched)
+       balance taps → W02P → PA 3p → W02B → XHP-3                         └→ M1 VIN → VOUT → M6 IN+ → R010 → IN− → +STAR
+pack − ─────────────────────────── J-PK − ───────────── J-BAT − → (−) charge splice ─→ XT30 −                  → −STAR
+
++/− STAR ┬→ J-CHASSIS → tub distribution ┬→ #3297 L/R VM/GND (SMBJ8.5A + 100 µF + 0.1 µF at each VM)
+         │                               ├→ M2 S18V20ALV 5.5 V → W13 → J8-1 → pitch/roll
+         │                               └→ M3 S18V20ALV 11.1 V → W17 → PCB-08 J8-8 → W15 yaw
+         ├→ M4 S13V30F5 5 V → W10 USB-C → Pi 5
+         └→ M5 S13V30F5 5 V ┬→ W11 + SS34 → C3 J10-1
+                            ├→ W12 → MAX98357A amp
+                            └→ W14 → J8-1 C2/display
 ```
- CHASSIS                                                   BODY (frame-mounted)
- cells ─ PCB-01 ─W01─ J-PK ─W03a─ FUSE 15 A ─W03b─ (+)splice ─W03c─ J3-1  PCB-03 ─J3-2/3─W06/07─ #3297 L/R (chassis)
-                        │                                 └──────W03d─ J2-1  PCB-02 ─J2-3─W05─ J4-3 PCB-04
-                        └────────────W03a−──────────── (−)STAR splice ─W03c/d (−)
- NTC ─W02a─ SM 2p break ─W02b───────────────────────────────────── J2-7  PCB-02 (BQ25798 TS)
- USB-C adapter ─ PCB-13 (rear panel; STUSB4500, input switch) ─W16─────── J2-8  PCB-02 (BQ25798 VBUS)
-```
+
+M6 measures the **entire switched positive bus**. An INA226 with R010 (10 mΩ) and ±81.92 mV shunt range clips current above about **8.2 A**; its separate bus-voltage reading remains usable. At the §6 screening demand of ~16 A, R010 dissipates **2.56 W**, beyond the selected ≥1 W shunt minimum. The R010 board is **not accepted** for this path until its actual shunt thermal rating and worst current are established, or a lower-value shunt/module is selected and recalibrated. The chassis negative return runs through `J-CHASSIS` to the rear negative star, then `J-BAT`/`J-PK` to the pack. Charger connects to both rear ports only with M1 OFF.
 
 ## 3. Connector families and parts
 
-| Family | Use | Housing | Terminal | Wire | Tool |
-|---|---|---|---|---|---|
-| Micro-Fit+ 3.0 mm | `J-PK` (wire-to-wire), `J3-1`, `J2-1`, `J3-2`, `J3-3`, `J4-1` (1×2); `J2-3`, `J4-3` (2×2) | Single-row receptacle (215759 series, `D` family) or dual row (206461-0200 for 2×2-class); exact PN at order (`U`) | Female 206460-0041, tin, 16 AWG, 13 A (`D`); 18 AWG sibling; male 215953 series for the `J-PK` plug half (`U`) | AWG16/18 UL1061 | Molex 213309-4400, 16/18 AWG UL1061 (`D`) |
-| Micro-Fit 3.0 | `J3-4`, `J4-2`, `J4-4`, `J4-5`, `J5-7`, `J8-1`, `J10-1`, `J2-8` (D-040), motor inline pairs | 43025 receptacle; 43645/43640 wire-to-wire (`D`) | Female 43030-0007, 20–24 AWG, 8.5 A max (`D`); male 43031 series | AWG22 (motor pairs: the MOT3001's own leads) | Molex 63819-0900 20–24 AWG (`E`, confirm the tool PN) |
-| JST GH 1.25 mm | All signals | GHR-xxV-S | Pre-crimped leads (SSHL-002T-P0.2 on AWG28) | AWG28 pre-crimped, double- or single-ended | None. Engineer PA-09 class only for re-pinning |
-| JST SM 2.5 mm | Pack NTC break | SMP-02V-BC / SMR-02V-B | Pre-wired pigtail pair | AWG22–26 pigtails, soldered | None |
-| 5264-3P servo | Feetech ST3215-HS yaw `J3-5`; STS3045M pitch/roll within head | Feetech/Waveshare 3-pin cable; [Waveshare states ST-series compatibility](https://www.waveshare.com/sr-cable-5264-3pin.htm) | Vendor | Vendor lead, current rating to confirm | None |
-| Butt splice | `BATBUS` + and − forks | Insulated 12–10 AWG seamless butt splice: 2 × AWG16 in one end, 1 × AWG16 folded double in the other; adhesive dual-wall heat-shrink over it | — | AWG16 | Ratcheting insulated-terminal crimper |
-| USB-C plug | Pi 5 power `W10` | Right-angle, solder type, cable exiting down (−Z), body ≤ 13 mm beyond the Pi edge (D-048), with a 56 kΩ Rp from CC to VBUS inside the shell (CN-03) | Soldered | AWG18 | Soldering iron |
+| Family | Fitted use and count | Parts and tooling |
+|---|---|---|
+| Micro-Fit+ | `J-PK`, `J-BAT`, `J-CHASSIS`: three 2-way pairs, 12 total contacts across both halves | AWG16 UL1061 red/black; 206460/215953 contact series and mating housings, exact gender and PN to confirm. Molex 213309-4400 16/18 AWG tool or professionally terminated pairs. Distinct keys/labels for three unlike supplies |
+| Micro-Fit 3.0 | `J8-1` 6 harness contacts, `J10-1` 2, two motor 2-way inline pairs 8 across both halves, two S18 output body-lift pairs 8 across both halves: **24 harness contacts**; fixed board-header pins are separate | AWG20–24; 43030-0007 female / matching 43031 male and 43025/43645/43640 housings; verify AWG20 terminal/tool compatibility and exact keys. Check 63819-0900 tool PN |
+| JST GH | Existing board-facing signals; W26 GH10 **still required** | GHR housings and bought pre-crimped AWG28 leads, solder/sleeve at module ends. No GH tool |
+| JST PA | One 3-way pack balance break | PAP-03V-S/PALR-03VF and SPHD/SPAL **pre-crimped AWG24** tails. Check received mating size and latch against D-095 channel |
+| JST XH | Rear-panel balance port | XHP-3 and SXH pre-crimped AWG24 leads; check charger mate and cell order |
+| XT30 | Rear-panel **female** charge port, one; XT60→XT30 charger adapter | Two insulated AWG16 solder-cup leads; print polarity on panel; strain relieve |
+| Feetech 5264-3P | PCB-08 `J8-8` to ST3215-HS | Vendor servo lead; verify cavity orientation |
+| Splices and passives | Rear charge pair, rear star pair, tub branch pair; M13 | **Rated sealed multiwire AWG16 splices** selected for actual wire count/cross-section; never force multiple wires into a single-wire butt barrel. Two SMBJ8.5A, two 100 µF ≥16 V, two 0.1 µF at VM; SS34-class W11 diode; audio hub resistors |
+
+The fuse, holder, PCB-01 and cell breaker retain prior selections. The table defines families and counts for Level 6; choose exact orderable PNs after sample mating and pull tests.
 
 ## 4. Wire list
 
-Lengths are `E`: Manhattan routes through CAD waypoints plus service slack. Cut at the first harness build and record as `W`. "P" means pre-crimped GH; "S" means soldered.
+Lengths are `E` cut allowances with service loop, **not measured CAD centerlines**. String-route and record `W` lengths on the assembled robot before cutting. At every module, solder to its *marked* VIN/GND/VOUT or signal pad, photograph pad labels and support the tail so the pad carries no cable strain. Leave ≥40 mm withdrawable slack at body-lift plugs.
 
 ### 4.1 Pack and power
 
-| Cable | From → to | Ends | Conductors | Length | Route |
-|---|---|---|---|---|---|
-| `W01` pack lead | Pack P+ (cell stack) / TIFPS0629 P− → `J-PK` pack half | S / Micro-Fit+ 1×2 male | 2 × AWG16 UL1061 red/black | 120 | Out through the +Y tub window into the channel |
-| `W02a` NTC, pack side | 103AT-2 on the cell → SM 2p plug | S / SM pigtail (S) | 2 × AWG26 | 100 | With `W01`, through the window, forward in the channel |
-| `W02b` NTC, body side | SM 2p receptacle → PCB-02 `J2-7` | S / GH 2 (P, single-ended) | 2 × AWG28 | 240 | Up past the fuse, along the +Y side to the PCB-02 top layer |
-| `W03a` fused feed + | `J-PK` body half → fuse holder input (front end, X 82) | Micro-Fit+ 1×2 female / crimp onto holder lead | 1 × AWG16 | 110 | Channel, up the front of the fuse bracket |
-| `W03a−` pack − | `J-PK` body half → negative star splice | Micro-Fit+ / splice | 1 × AWG16 | 70 | Up beside the bracket |
-| `W03b` | Fuse holder output (rear end, X 52) → + splice | Holder lead / splice | 1 × AWG16 | 30 | Straight back |
-| `W03c` BATBUS-M | Splices → PCB-03 `J3-1` | Splice / Micro-Fit+ 1×2 | 2 × AWG16 | 60 | Splices to `J3-1` (2.65 mm gap in CAD) |
-| `W03d` BATBUS-C | Splices → PCB-02 `J2-1` | Splice / Micro-Fit+ 1×2 | 2 × AWG16 | 220 | Rearward along +Y, across behind PCB-04 to the PCB-02 −Y edge |
-| ~~`W04`~~ | Deleted (H-01) | | | | |
-| `W05` `OPBUS` + `CHGBUS` | PCB-02 `J2-3` → PCB-04 `J4-3` | Micro-Fit+ 2×2 both ends | 4 × AWG18 | 170 | Under-board slot to the PCB-04 +Y edge |
-| `W06`/`W07` `PB-DRIVE-L/R` | PCB-03 `J3-2`/`J3-3` → #3297 `VM`/`GND` pins (power-boards §2.3) | Micro-Fit+ 1×2 / S, with 100 µF + 0.1 µF at `VM` | 2 × AWG18 each | 50 | Edge to the adjacent driver |
-| `W08`/`W09` motor L/R | #3297 `AOUT1+BOUT1` / `AOUT2+BOUT2` (bridges paralleled) → MOT3001 motor pair | S at the board / Micro-Fit 3.0 1×2 wire-to-wire at the inline reserve | Driver side 2 × AWG22; motor side the MOT3001's own leads | 230 | Motor connector → across the deck behind the posts (`HARNESS_MOTOR_BRANCH`) → tie bridge (CH-082) → inline pair |
-| `W10` `PB-COMPUTE` | PCB-04 `J4-1` → Pi 5 USB-C | Micro-Fit+ 1×2 / right-angle USB-C plug (S) | 2 × AWG18 | 100 | Pi −Y edge, down past the tray (`PI5_POWER_PIGTAIL_DROP`) |
-| `W11` `PB-SAFE-BASE` | PCB-04 `J4-4` → C3 `J10-1` | Micro-Fit 3.0 2×1 both ends | 2 × AWG22 | 110 | −Y side up to the carrier front edge |
-| `W12` `PB-AUDIO-OUT` | PCB-04 `J4-5` → PCB-05 `J5-7` | Micro-Fit 3.0 2×1 both ends | 2 × AWG22 | 160 | +Y, then forward (BO-006) |
-| `W13` `PB-HEAD-PR` pitch/roll | PCB-03 `J3-4` → PCB-08 `J8-1` pins 1/4 | Micro-Fit 3.0 2×1 / one leg of the `J8-1` 2×3 plug | 2 × AWG22 | 160 | 5.5 V setpoint; 2.8 A aligned head-servo stall allowance at the 6 V datasheet point, pending B1; −Y riser (`HARNESS_HEAD_RISER_*`) |
-| `W14` `PB-SAFE-C2` + `PB-DISPLAY` | PCB-04 `J4-2` → `J8-1` pins 2/5 and 3/6 | Micro-Fit 3.0 2×2 / the other leg of the `J8-1` plug | 4 × AWG22 | 140 | −Y riser, joins `W13` in one sleeve |
-| `W15` yaw servo | PCB-03 `J3-5` → ST3215-HS | Waveshare/Feetech 5264-3P servo lead | Vendor, current rating to confirm | 120 target; stocked leads are longer and need restraint | **12 V yaw-only supply**, GND and shared `SERVO_DATA`; routing and connector position to recheck after yaw-bay fit |
-| `W16` charge inlet ([D-040](../decisions.md#d-040)) | PCB-13 on the rear panel → PCB-02 `J2-8` | S / Micro-Fit 3.0 2-way (43025, female on the cable) | 2 × AWG22 (`VSNK`, `GND`) | 150 | +Y through the gap behind PCB-02 (`CHARGE_INLET_W16_LEAD_RESERVE_1/2`), forward to the `J2-8` plug on the PCB-02 +Y edge. Unplug before lifting the rear panel away |
+| ID | From → to / termination | Conductors; E cut | Route and check |
+|---|---|---|---|
+| `W01` | Pack protected +/− → `J-PK` pack half, solder/MF+ | 2×AWG16; 120 | Tub window; 1:+, 2:− |
+| `W02P` | Cell taps B−/mid/B+ → PA PAP half, solder/pre-crimp tails | 3×AWG24; 110 each | D-095 pack reserves beside W01. These taps bypass PCB-01's main power path and the 15 A fuse; **do not build** until a cell-end short-protection method, compatible with charger balancing/sensing, is selected and checked |
+| `W02B` | PA PALR half → rear XHP-3, pre-crimp/joined | 3×AWG24; 390 each | D-095 loop, deck hole X52/Y47.4, under left driver/cross rail; meter each cell at port |
+| `W03a` | `J-PK` body half → fuse input | AWG16 +; 110 | Front channel. Negative `W03a−` AWG16 to J-BAT −, E 270 |
+| `W03b` | Fuse output → `J-BAT` chassis half | AWG16 +; 250 | Front X52–82 to rear X−50, supported +Y; old W03d corridor reused |
+| `W03r` | `J-BAT` body half → rear +/− charge splices | 2×AWG16; 60 | Rear bay strain relief |
+| `W04` | Unswitched charge splices → female XT30 | 2×AWG16; 100 | Rear panel. A keyed AWG16 2-pole service pair is required **if** the panel cannot rest safely within this loop; mock up before build. Old W04 meaning retired |
+| `W05` | +splice→M1 VIN; M1 VOUT→M6 IN+; M6 IN−→+STAR; −splice→M1 GND/−STAR | AWG16; 40/80/60/100 | Rear bay; solder/screw at received module terminals, insulated and tie-supported |
+| `W05c` | +/−STAR → `J-CHASSIS` → tub distribution | 2×AWG16; 310 | Rear to front, one body-lift pair; sealed multiwire branch |
+| `W05b` | Body +/−STAR → M4 and M5 VIN/GND pads | 2×AWG18 per module; E 180 each | Down to under-tray modules. Each branch is independent and strain-relieved; check peak input current against AWG18 and splice capacity |
+| `W05t` | Tub +/−distribution → M2 and M3 VIN/GND pads | 2×AWG18 per module; E 110 each | Front tub plate; keep input and output leads on separate labelled sides, verify pad bend clearance |
+| `W05s` | M5 VOUT/GND pads → insulated shared-5 V +/− distribution | 2×AWG18; E 60 | One supported pigtail pair leaves M5; W11/W12/W14 branch at rated multiwire splices so the module pads do not carry three cables |
+| `W06/07` | Tub branch → #3297 L/R VM/GND pads | 2×AWG18 each; 90 | VM TVS/bulk/ceramic **at each driver** |
+| `W08/09` | #3297 paralleled outputs → MOT3001 via existing MF3 inline | 2×AWG22 each; 230 | Existing motor route/tie, verify forward polarity |
+| `W10` | M4 VOUT/GND → Pi right-angle USB-C solder plug | 2×AWG18; 100 | Under tray; ≤13 mm shell overhang, 56 kΩ Rp CC-to-VBUS per CN-03; N12 |
+| `W11` | M5 VOUT→SS34 anode→cathode→C3 `J10-1.1`; GND→.2 | 2×AWG22; 110 | Diode beside M5, **stripe toward C3**, separately sleeved/tied; N8 |
+| `W12` | M5 VOUT/GND → M8 amp VIN/GND pins | 2×AWG22; 160 | Amp bracket; solder and strain relief |
+| `W13` | M2 VOUT/GND → `J-S18-H` body-lift MF3 → `J8-1.1/.4` | 2×AWG20; 250 | Tub plate to −Y head riser; N2 head stall |
+| `W14` | M5 VOUT/GND → `J8-1.2/.5` and `.3/.6` | 4×AWG22; 140 | Independent C2/display pairs in riser sleeve |
+| `W17` | M3 VOUT/GND → `J-S18-Y` body-lift MF3 → PCB-08 yaw power pads | 2×AWG20; 250 | Tub plate to body; PCB-08 schematic must provide labelled 11.1 V landing pads |
+| `W15` | PCB-08 `J8-8` → ST3215-HS | Vendor 3-wire; 120 target | Restrain excess outside cassette; confirm orientation |
 
-### 4.2 Signals (all GH, AWG28 pre-crimped)
+`W02a/b`, old `W03c/d`, old OPBUS/CHGBUS `W05`, and `W16` are deleted. New W04 and W05 reuse numbers only after explicitly retiring their former functions.
 
-| Cable | From → to | Leads | Length | Notes |
-|---|---|---|---|---|
-| `W20` | PCB-02 `J2-4` ↔ PCB-04 `J4-6` | GH10, double-ended | 60 | |
-| `W21` | `J2-5` ↔ PCB-03 `J3-6` | GH8, double-ended | 110 | D-082 adds `PERMIT_OK` and its return on pins 7–8; recheck both board-edge courtyards before layout. |
-| ~~`W22` E-stop~~ | Deleted ([D-041](../decisions.md#d-041)): there is no E-stop and no `J3-7` | — | — | |
-| `W23a` | PCB-08 `J8-3` ↔ `J3-8` | GH8, double-ended | 200 | −Y riser |
-| `W23b` | `J8-5` ↔ `J2-6` | GH8, double-ended | 160 | −Y riser |
-| `W24` head link | PCB-09 `J9-1` ↔ `J8-4` | GH6, double-ended, pairs twisted | 170 | RS-422 |
-| `W25` base link | `J9-2` ↔ C3 `J10-2` | GH6, double-ended, pairs twisted | 200 | RS-422 |
-| `W26`–`W28` audio | Per [02-body BOM](../02-body/v1/BOM.md) (BO-006) | — | — | Unchanged |
-| `W29` IMU | PCB-07 ↔ `J10-7` | GH8 | — | PCB-07 is HOLD; its lead is in the IMU mass row |
-| `W30`/`W31` encoders | MOT3001 encoder wires (cut from the vendor cable, ~60 mm kept) → `J10-3`/`J10-4` | GH4, single-ended, soldered to the vendor wires under heat-shrink | 220/230 | Along the deck, up the −Y side |
-| `W32`/`W33` driver logic | #3297 `SLP`, `AIN1+BIN1`, `AIN2+BIN2`, `FLT`, `GND` → `J10-5`/`J10-6` | GH6, single-ended (S at the board) | 180/80 | D-038 mapping |
-| `W34` nose | GP2Y0A21 (S) and the Hall board pads (S) → `J10-8` | GH5, single-ended | 220 | `HARNESS_NOSE_J10_8_*` route (D-013, D-027) |
-| `W36` rear TCRT | TCRT5000 legs (S) → `J10-10` | GH4, 350 mm single-ended (CH-020) | 350 | [rear-tcrt-lead.md](../01-chassis/v1/research/rear-tcrt-lead.md) |
-| `W37` CSI | Pi 5 ↔ PCB-14 (head side: PCB-14 ↔ Camera Module 3) | 22-pin 0.5 mm FFC, about 200 mm (Raspberry Pi 5 camera cable), through the yaw cassette | — | Changed by [D-044](../decisions.md#d-044): it now crosses yaw in the FFC cassette (BO-050) and demates at PCB-14. [D-052](../decisions.md#d-052): enters the drum through the 0° slit, one 45° fold, into its joiner board's lower ZIF; the head-side cable must stay 22-pin width (11.5 mm) through the Ø21 disc bore and channel, so any 15-pin transition to the Camera Module 3 is inside the head |
-| `W42` yaw power FFC | PCB-08 `J8-6` ↔ PCB-14 (head side: a 22-pin 0.5 mm FFC from PCB-14 through the disc channel, D-052) | 22-pin 0.5 mm FFC, about 200 mm, in the cassette | — | Carries the three `J8-1` power pairs (7 + 7 head-servo, 2 + 2 C2, 2 + 2 display conductors). The 2.8 A aligned head stall divides to 0.40 A per parallel head conductor **only with verified equal sharing**; check FFC/contact ampacity and heat. The 12 V yaw supply stays on the body side |
-| `W43` yaw sideband FFC | PCB-08 `J8-7` ↔ PCB-14 (head side: a 22-pin 0.5 mm FFC from PCB-14 through the disc channel, D-052) | 22-pin 0.5 mm FFC, about 200 mm, in the cassette | — | D-044: the `J8-3`, `J8-5` and `J8-4` signals; D-082 carries the newly used `ARM_REQ` from `J8-5.8` through PCB-08/W43/PCB-14 to the C2 carrier. Allocate a dedicated conductor and adjacent return; freeze the exact 22-pin map during PCB-08/12 design. |
-| ~~`W38`~~ | Not fitted (D-041): `J10-11` carried the E-stop status | — | — | |
-| `W39` | `J10-12` ↔ `J3-9` | GH4, double-ended | 100 | |
-| `W40` power button ([D-041](../decisions.md#d-041)) | Mushroom NO terminals (S, heat-shrink) → PCB-02 `J2-9` | GH2, single-ended | 150 | Out past the contact block, +Y beside the Pi's rear edge, back above the PCB-02 +Y edge and down to `J2-9` (`POWER_BUTTON_W40_LEAD_RESERVE_1…4`). Rides with the rear panel; unplug at `J2-9` before lifting the panel away |
-| `W41` enclosure fan ([D-042](../decisions.md#d-042), [D-092](../decisions.md#d-092) amended) | BO-040 fan leads → PCB-09 `J9-4` | GH2 (GHR-02V): the fan's own 2-wire lead cut to ~80 mm and joined (solder + heat-shrink) to a pre-crimped single-ended GH 2-way lead (HN-004; no GH crimping, D-039) | ~80 | Along `HARNESS_W41_FAN_LEAD_1/2`: from the fan's top-front corner along −Y above PCB-09's top-entry plugs to `J9-4`. `J9-4` pin 1 is FAN+ (5 V from the 40-pin header), pin 2 is FAN− (drain of the PCB-09 low-side MOSFET, switched by Pi GPIO24). Unplug at `J9-4` to remove the fan or PCB-09 |
+### 4.2 Signals and audio
 
-**Pre-crimped GH lead buy list** (lengths rounded up to the stock 50/100/150/200/300 mm, one spare of each):
-
-| Circuits | Double-ended | Single-ended |
+| ID | From → to | Length / build |
 |---|---|---|
-| GH2 | — | 1 × 300 (`W02b`), 1 × 150 (`W40`), 1 × 100 (`W41`, joined to the fan lead; D-092 amended) |
-| GH3 | — (`W38` not fitted, D-041) | — |
-| GH4 | 1 × 150 (`W39`) | 2 × 300 (`W30`/`W31`); `W36` 350 already on CH-020 (`W22` deleted, D-041) |
-| GH5 | — | 1 × 300 (`W34`) |
-| GH6 | 1 × 150 (`W21`), 1 × 200 (`W24`), 1 × 300 (`W25`) | 1 × 200 (`W32`), 1 × 100 (`W33`) |
-| GH8 | 1 × 300 (`W23a`), 1 × 200 (`W23b`) | — |
-| GH10 | 1 × 100 (`W20`) | — |
+| `W24` | PCB-09 `J9-1` ↔ PCB-08 `J8-4`, head RS-422 | Existing GH6 1:1, 170 |
+| `W25` | PCB-09 `J9-2` ↔ C3 `J10-2`, base RS-422 | Existing GH6 1:1, 200 |
+| `W26` | PCB-09 `J9-3` GH10 → audio-hub perfboard | GH10 pre-crimp at PCB-09, solder at hub, E 160. Pin 10 remains isolated test pad, **never 5 V or a GPIO** |
+| `W27` | Hub → four INMP441 breakout pads | **6×AWG28 per mic**: VDD, GND, SCK, WS, SD, L/R. E 250 front / 190 rear, revise from CAD pigtail reserves. Front pair shares SDI0, rear pair SDI1; opposite L/R straps within each pair |
+| `W28` | M8 amp screw terminal → speaker | Twisted 2×AWG22, E 100, mark polarity |
+| `W29` | C3 `J10-7` GH8 → M7 LSM6DSOX solder pads | E 220. Pins 1–8: +3V3→VIN, GND, SCLK→SCK, MOSI→SDA/SI, MISO←DO, CS, INT1, INT2. Verify module pad lettering; no IMU-end GH8 |
+| `W30/31` | MOT3001 encoder → `J10-3/.4` | Existing GH4 220/230, 3V3 |
+| `W32/33` | #3297 logic → `J10-5/.6` | Existing GH6 180/80 |
+| `W34` | Nose sensor/Hall → `J10-8` | Existing GH5 220 |
+| `W36` | Rear TCRT → `J10-10` | Existing GH4 CH-020, 350 |
+| `W37` | Pi CSI → PCB-14/camera | Existing 22-pin FFC through yaw cassette |
+| `W40` | Mushroom NO → M1 ON/GND, button tap → Pi GPIO12 (physical 32); Pi GPIO13 (physical 33) → M1 OFF | E 150 switch pair + 220 tap/control. **Do not wire M1 ON straight to Pi**: its idle voltage may follow pack. Measure pull-up and add a high-impedance divider/buffer giving valid 3.3 V logic over 6.0–8.4 V pack. Verify 3.3 V OFF drive and pulse length; buffer if needed. Firmware must complete its storage shutdown steps before pulsing OFF; test that sequence under N1. GPIO12/13 are unused on PCB-09's current map; use insulated piggyback/header contacts, not J9-3 spare |
+| `W41` | Fan → PCB-09 `J9-4` | Existing GH2 / GPIO24 switch |
+| `W42` | PCB-08 `J8-6` ↔ PCB-14 | Existing 22-pin head-power FFC; verify current sharing |
+| `W43` | PCB-08 `J8-7` ↔ PCB-14 | Existing 22-pin sideband FFC; former ARM_REQ/READY/charge/status conductors marked **“reassign at PCB-08/12 design”**, not tied to power |
+| `W44` | M6 SDA/SCL/VCC/GND → Pi I²C1 | 4×AWG28, E 160. Pi physical 3 SDA1/GPIO2, 5 SCL1/GPIO3, 1 or 17 3V3, 6 or 9 GND. Share PCB-09's I²C1 service-pad bus only after pad/access check. No 5 V I²C. Set/verify address 0x40 unless occupied |
 
-**Wire stock.** AWG16 UL1061 3 m red + 3 m black (needs about 1.0 m). AWG18 UL1061 3 m + 3 m (about 1.1 m). AWG22 stranded 5 m + 5 m (about 1.4 m). AWG26 1 m pair for the NTC. 3:1 adhesive heat-shrink in 3.2/4.8/6.4 mm sizes, and 4 mm braided sleeving for the −Y riser bundle.
+`W20`, `W21`, `W23a/b`, `W39`, and old NTC GH2 are deleted. GH pre-crimp buy: GH2 W41 (and W40 if a detachable lead is selected); GH4 W30/31 plus CH-020 W36; GH5 W34; GH6 W24/25 double-ended and W32/33 single-ended; GH8 W29 single-ended; **GH10 one single-ended W26**. Buy one spare per fitted size after measured stock lengths are chosen.
 
-## 5. Pinouts
+**Audio hub, solder side concept (freeze after N9):**
 
-Pin 1 is the housing's marked cavity. On a dual-row Micro-Fit, pins 1…n are the latch row and the second row continues under them. **Rule:** on 2-circuit power, pin 1 is +, pin 2 is the return. On dual-row power, each return sits directly opposite its supply.
+```text
+J9-3 → [3V3/GND rails]  BCLK ─┬─33–100 Ω→ FL SCK  ┬─33–100 Ω→ FR SCK
+                              └─33–100 Ω→ RL SCK  ┴─33–100 Ω→ RR SCK
+          LRCLK ─ four separate 33–100 Ω branches → four WS pads
+          SDI0 ← front pair SD, 100 kΩ to GND at hub
+          SDI1 ← rear pair SD, 100 kΩ to GND at hub
+          SDO0 → amp DIN; AMP_SD → amp SD
+          pin 10 → isolated labelled pad only
+```
 
-### 5.1 Power
+Hub pads 1–10 follow `J9-3`: 3V3, LRCLK, GND, BCLK, GND, SDO0, SDI1, SDI0, AMP_SD, isolated. Each mic gets 3V3/GND; its **sixth conductor** carries the chosen hub-side 3V3 or GND strap to L/R. Strap one low and one high within each pair; label all four tails. Check actual channel assignment, clock edges and all four simultaneous captures (N9/N11). Measure 3V3 draw; prior PCB-09 audio allowance was 15 mA.
 
-| Connector | Pins |
+## 5. Pinouts and polarity
+
+Pin 1 means the **moulded cavity number**, not the leftmost cavity in a photograph. Meter every cable from cells to exposed ports before connecting a charger. Print `+`, `−`, `B−`, `BM`, `B+` next to rear ports at print stage.
+
+| Interface | Pin / pad map |
 |---|---|
-| `J-PK` (Micro-Fit+ 1×2) | 1 PACK+, 2 PACK− |
-| `J3-1`, `J2-1` (Micro-Fit+ 1×2) | 1 BATBUS+, 2 PGND (star) |
-| `J2-3` ↔ `J4-3` (Micro-Fit+ 2×2) | 1 OPBUS, 2 CHGBUS, 3 OPBUS_RTN, 4 CHGBUS_RTN |
-| `J3-2`, `J3-3` (Micro-Fit+ 1×2) | 1 PB-DRIVE+, 2 GND |
-| `J4-1` (Micro-Fit+ 1×2) | 1 +5V15_PI, 2 GND |
-| `J4-4` ↔ `J10-1`, `J4-5` ↔ `J5-7` (Micro-Fit 3.0 2×1) | 1 +5 V branch, 2 GND |
-| `J3-4` (Micro-Fit 3.0 2×1) | 1 +5V5_HEAD_PR, 2 GND_HEAD |
-| `J4-2` (Micro-Fit 3.0 2×2) | 1 +5V_C2, 2 +5V_DISPLAY, 3 GND_C2, 4 GND_DISPLAY |
-| `J8-1` (Micro-Fit 3.0 2×3) | 1 +5V5_HEAD_PR, 2 +5V_C2, 3 +5V_DISPLAY, 4 GND_HEAD, 5 GND_C2, 6 GND_DISPLAY |
-| Motor inline (Micro-Fit 3.0 1×2 wire-to-wire) | 1 OUT1 (`AOUT1+BOUT1`), 2 OUT2 (`AOUT2+BOUT2`). Set the forward sense in firmware after the first spin |
-| NTC break (SM 2p) | 1 TS, 2 TS_RTN (thermistor; polarity-free) |
-| `J2-7` (GH2) | 1 TS, 2 TS_RTN. TS_RTN is the BQ25798 ground pad on PCB-02, never a cell or B− (charge-path.md §4) |
-| `J2-8` (Micro-Fit 3.0 2×1) | 1 VSNK, 2 GND. Female contacts on the `W16` cable side, which is the source (D-040) |
+| `J-PK`, `J-BAT`, `J-CHASSIS` 2-way | 1 positive, 2 negative. Respectively protected pack, fused unswitched, switched shunt-monitored. Give unlike feeds distinct keys/labels |
+| M1 #2813 | VIN from charge +splice; GND from −splice; VOUT to M6 IN+; ON from mushroom NO-to-GND; OFF from verified Pi GPIO interface; CTRL unused. Check received board hole labels |
+| M6 INA226 R010 | IN+ M1 VOUT, IN− +STAR, bus voltage sense at IN− if separate pad exists; VCC Pi 3V3, GND −STAR, SDA/SCL I²C1. Check board trace/jumper arrangement and shunt |
+| M2/M3 S18V20ALV | VIN+/GND from tub branch; VOUT+/GND to W13 5.5 V or W17 11.1 V. Label setpoints at modules |
+| M4/M5 S13V30F5 | VIN+/GND from body stars; M4 VOUT Pi-only 5 V; M5 VOUT shared 5 V. Keep outputs separate |
+| `J8-1` MF3 2×3 | 1 +5V5_HEAD_PR, 2 +5V_C2, 3 +5V_DISPLAY, 4 GND_HEAD, 5 GND_C2, 6 GND_DISPLAY |
+| `J10-1` MF3 2-way | 1 +5V_C3 **after Schottky**, 2 GND |
+| PCB-08 `J8-8` 5264-3P | 1 GND, 2 +11V1_YAW, 3 SERVO_DATA, after received cable orientation check |
+| PA break and XHP-3 | Cavity 1 B−, 2 BM, 3 B+ on both halves **by cavity number**. Exposed XHP-3: 1→2 and 2→3 each one cell; 1→3 full pack. Confirm charger plug key and its cavity order |
+| XT30 female | Moulded + fused unswitched positive, moulded − pack negative; recessed source contacts, epoxied/retained and strain-relieved |
+| `J9-3` GH10 | 1 3V3, 2 LRCLK, 3 GND, 4 BCLK, 5 GND, 6 SDO0, 7 SDI1, 8 SDI0, 9 AMP_SD, 10 isolated sense pad |
+| `J10-7` GH8 | 1 3V3, 2 GND, 3 SCLK, 4 MOSI, 5 MISO, 6 CS, 7 INT1, 8 INT2 |
 
-### 5.2 Signals
+`J9-1/2`, `J10-2/3/4/5/6/8/10`, `J8-4/6/7` keep their designed-board maps. No J2/J3/J4/J5 or PCB-13 header is fitted. PCB-10 `J10-12` exists but is unmated.
 
-Each GH cable puts GND at pin 1 where it carries no supply, and keeps each differential or analog signal next to its return.
+## 6. Electrical and mass estimates
 
-| Connector | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
-|---|---|---|---|---|---|---|---|---|---|---|
-| `J2-4` ↔ `J4-6` (`W20`) | GND | +5V_C2 (pull-up supply to PCB-02) | PG_C2 | PG_BASE | SEQ_EN (latch out) | PG_COMPUTE | PG_DISPLAY | PG_AUDIO | spare | GND |
-| `J2-5` ↔ `J3-6` (`W21`, **GH8**, D-082) | GND | CHARGE_ABSENT | ENERGY_OK | SYSTEM_ARM | MOTOR_PRESENT | GND | PERMIT_OK | GND | | |
-| `J3-8` ↔ `J8-3` (`W23a`) | SIG_REF | SERVO_DATA | C2_READY_H | C2_READY_L | spare (was E_STOP_STATUS, D-041) | MOTOR_PRESENT | HEAD_OC | HEAD_PGOOD | | |
-| `J2-6` ↔ `J8-5` (`W23b`, D-082) | SIG_GND | V_PACK_ANA | SIG_GND | STAT | INT_PB | KILL | CHG_ABSENT_3V3 | ARM_REQ | | |
-| `J9-1` ↔ `J8-4` (`W24`, wired 1:1; set by [PCB-09](../04-pcbs/pcb-09-c0-link-adapter/README.md), [D-092](../decisions.md#d-092), the `W25` rule) | GND | C0TX+ | C0TX− | C2TX− | C2TX+ | spare | | | | |
-| `J9-2` ↔ `J10-2` (`W25`, wired 1:1; set by [PCB-10](../04-pcbs/pcb-10-c3-carrier/README.md#connectors-and-who-owns-each-pin-order), 2026-10-27, reordered at layout 2026-10-28) | GND | C0TX+ | C0TX− | C3TX− | C3TX+ | spare | | | | |
-| `J10-3`/`J10-4` (`W30`/`W31`) | GND | +3V3_ENC | ENC_A | ENC_B | | | | | | |
-| `J10-5`/`J10-6` (`W32`/`W33`) | SLP | IN1 | IN2 | FLT | GND | spare | | | | |
-| `J10-7` (`W29`) | +3V3 | GND | SCLK | MOSI | MISO | CS | INT1 | INT2 | | |
-| `J10-8` (`W34`) | +5V (GP2Y) | GND | GP2Y_VO | +3V3 (Hall) | HALL_OUT | | | | | |
-| `J10-10` (`W36`) | LED_A | LED_K | TCRT_OUT | GND | | | | | | |
-| `J10-12` ↔ `J3-9` (`W39`) | GND | C3_READY | MOTOR_PRESENT | GND | | | | | | |
-| `J2-9` (`W40`) | PB_SW (10 kΩ to latch `VIN`, 5.1 kΩ to `PB`) | GND | | | | | | | | |
-| `J9-4` (`W41`, GH2, D-092 amended) | FAN+ (+5 V, 40-pin header) | FAN− (low-side MOSFET drain; Pi GPIO24 `FAN_EN`) | | | | | | | | |
-| `J3-5` (Feetech 5264-3P mating header; verify footprint) | GND | +12V_YAW | SERVO_DATA | | | | | | | |
+AWG16/18/20/22 resistance at 20 °C: 13.2/21/33.3/53 mΩ/m; ×1.16 hot. These **screening estimates** omit unknown solder, fuse holder, splices and module losses. Micro-Fit+ contact assumed 2.5 mΩ typical or 10 mΩ maximum per mated contact. Two-way power pairs have a positive and return contact. Four-wire test the assembled pack-to-star and pack-to-driver paths at 5 A.
 
-**Servo bus electrical check (D-046/D-047).** The STS3045M [specification](https://pages.switch-science.com/comparison/files/feetech/serial-sts/STS3045M_datasheet.pdf) defines a 5264-3P lead as GND / Vcc / signal and recognizes a 2–5 V data high. Its supply is independent of that TTL signal. The ST3215-HS is in Waveshare's [ST-series 5264-3PIN cable family](https://www.waveshare.com/sr-cable-5264-3pin.htm). C2, two 5.5 V STS3045Ms and the 12 V ST3215-HS can therefore share **one signal net in principle**, provided all their grounds share a signal reference and the PCB-12 transceiver and every servo drive only a 3.3–5 V logic level. This is an electrical *hypothesis*, not a mixed-supply bus pass: measure idle/high/low voltage, rise time, turnaround contention, return current and error rate on the assembled W43/PCB-08/PCB-12/W15 path, including yaw at 12 V and head at 5.23 V. No 12 V pull-up may reach `SERVO_DATA` or C2. Confirm the received ST3215-HS cable cavity orientation before applying 12 V; the three logical functions in the table are not a license to copy the ROBOTIS EH footprint.
+| Segment | Hot round-trip copper | Typical/max MF+ contacts | Drop at current, before omitted losses |
+|---|---:|---:|---:|
+| J-PK→fuse→rear splice: + 0.11+0.25 m, − 0.27 m AWG16 | 9.7 mΩ | J-PK + J-BAT: 10/40 mΩ | **0.315/0.795 V at 16 A demand** |
+| Rear M1/M6/star, ~0.24 m + and 0.10 m − AWG16 | 5.2 mΩ | none | 0.083 V at 16 A, **plus** M1 and R010 shunt (0.160 V) |
+| Star→tub 0.31 m each way AWG16 | 9.5 mΩ | J-CHASSIS: 5/20 mΩ | 0.171/0.348 V at 11.8 A illustrative chassis demand |
+| Tub→each driver 0.09 m each way AWG18 | 4.4 mΩ | none | 0.009 V at 2 A each |
+| M2/M3→body 0.25 m each way AWG20 | 19.3 mΩ | MF3 resistance unmeasured | 0.054 V at 2.8 A head; 0.046 V at 2.4 A yaw, before connector/FFC |
+| M4→Pi 0.10 m each way AWG18 | 4.9 mΩ | USB-C loss unknown | 0.015 V at 3 A; N12 measures Pi input |
+| M5→C3 0.11 m each way AWG22 | 13.5 mΩ | MF3 and diode unknown | N8 measures loaded voltage/back-feed |
 
-`J2-4`/`J4-6` signal names follow RP-02 §6.4. The schematic may rename them, but not move a supply onto an end pin. The `W20` +5V_C2 replaces the RP-02 §8 `+5V_C2` line, which had no cable. `J10-8` and `J10-10` are unchanged from [nose-hall-board.md](../01-chassis/v1/research/nose-hall-board.md) and [rear-tcrt-lead.md](../01-chassis/v1/research/rear-tcrt-lead.md); the nose sensor is now the GP2Y0A21YK0F (D-019), not the A41.
+**D-093 low-pack current screen, 6.0 V input, assumed 90% conversion efficiency (`E`):** Pi 5 V × 3 A → 2.78 A pack; head 5.5 V × 2.8 A → 2.85 A; yaw 11.1 V × 2.4 A → 4.93 A; shared 5 V × 1.5 A → 1.39 A; both drives at the old 2 A each → 4.0 A. **Sum ≈15.95 A demand** (≈11.39 A at 8.4 V with the same output loads/efficiency). This is a coincident-stall *demand*, not a claim the chosen M2/M3 can deliver it: their ~2 A output capability may collapse first. Even limiting head and yaw outputs to 2 A yields about **14.3 A** at 6 V under the same assumptions. The former 10.2 A came from a superseded rail configuration and cannot size this harness.
 
-**Required at the receiving board (schematic):** a series resistor of 1 kΩ or more on every slow input that crosses a connector (READY, status and ADC lines), and 33–100 Ω on encoder and SPI lines. That keeps any half-mated or unpowered case to a few mA into ESD diodes (`PA-11.6`).
+**Duration-based design candidate, not a new limit:** if both head servos are proved to stay at or below 1.0 A each and yaw at or below 1.5 A **from the first instant of a stall**, the same arithmetic gives about **13.0 A** at a true 6.0 V *module input*. Feetech's protection-current register and overload timeout must not be assumed to be an instantaneous current regulator; measure current waveforms, persistence after power cycle, fault reset and torque/speed on the received servos. An 8 A continuous / ≤2 s peak budget is only a proposal until the real duty cycle, closed-body temperatures and source sag are measured. At 6.0 V **open-circuit** pack voltage, the old 84 mΩ pack estimate implies 1.09 V sag already at 13 A, so treating 6.0 V as both open-circuit and module-input voltage understates converter input current. Define the voltage observation point before adopting either number.
 
-## 6. Calculations (`E`)
+At the 16 A demand screen, the table sums to **0.558/1.038 V** typical/contact-maximum pack-to-M4/M5 input, **0.729/1.386 V** pack-to-M2/M3 input, and about **0.738/1.395 V** pack-to-driver VM; these exclude fuse/holder, PCB-01, M1, splices, pads and temperature rise beyond the 1.16 factor. The electrical path therefore needs redesign or a proved, enforced load/current envelope before release. Output copper adds 0.054 V head or 0.046 V yaw at the cited stall currents, plus MF3/FFC; M4 output adds 0.015 V at 3 A plus USB-C loss. Measure at the 6.0 V low-pack threshold and recompute from logged simultaneous branch currents.
 
-Resistance: AWG16 13.2, AWG18 21.0, AWG22 53, AWG28 213 mΩ/m at 20 °C, ×1.16 hot. Micro-Fit+ contact: 10 mΩ maximum (`D`), 2.5 mΩ typical assumed.
+`J-PK`, fuse, `J-BAT`, M1 and the charge splice face the ~16 A demand screen, **above** the harness's assumed 13 A Micro-Fit+ AWG16 contact rating and nominal 15 A fuse. The HP switch's 16 A vendor figure is at a 150 °C board, unacceptable in the PETG bay; N1 must establish a lower safe limit. Check fuse/holder time-current coordination and every connector's derated current, then enforce servo/drive limits and measure the coincident load. Charging in **OFF** instead carries only the selected charger's 1–2 A through J-PK/fuse/J-BAT/charge splice; XT30 carries charge current and the balance contacts carry balancing current. Charging while ON is prohibited, so charge current is not added to the operating case. Validate charger behavior if either main lead or balance lead disconnects. M3's ~2 A capability is below 2.4 A yaw lock; M2's ~2 A is below 2.8 A head stall. N2(b), N3 and N12 gate those rails.
 
-| Path | Wire | Contacts | Fuse, holder, splices | Total | Drop |
-|---|---|---|---|---|---|
-| Pack → PCB-03, split (H-01), typical | 8.7 mΩ | 4 × 2.5 = 10 mΩ | 6.4 mΩ | **25 mΩ** | 0.25 V at 10 A |
-| Same, Molex maximum | 8.7 | 4 × 10 = 40 | 6.4 | **55 mΩ** | 0.55 V at 10 A |
-| Old route via PCB-02, typical / maximum | — | 8 contacts | — | 44 / 104 mΩ | 0.44 / 1.04 V |
-| `W10` Pi feed (AWG18, 100 mm, Micro-Fit+, USB-C) | | | | 18 mΩ | 43 mV at 2.4 A, 90 mV at 5 A; inside the 100 mV steady allowance |
-| `W13` body side (AWG22, 2 Micro-Fit 3.0 mates) | | | | 40 mΩ | 40 mV at 1.0 A design, 143 mV at a 3.6 A stall; the 150 mV budget's body share holds at design |
+The **13 A Micro-Fit+ value is a continuous temperature-rise rating**, not an immediate trip threshold; a 16 A pulse is not automatically unacceptable. Its temperature rise after repeated pulses in the actual two-way wire-to-wire housings is unmeasured. [Molex's specification](https://www.molex.com/content/dam/molex/molex-dot-com/products/automated/en-us/productspecificationpdf/206/206460/2064600000-PS-000.pdf?inline=) calls for ambient/circuit derating. [Littelfuse's ATOF data](https://www.littelfuse.com/products/fuses-overcurrent-protection/fuses/automotive-fuses/blade-fuses-shunt/atof/287/0287015-l) makes 15 A the nominal part; the series time-current and ambient derating must be applied to the installed holder, not inferred from the label. [Pololu's #2813 data](https://www.pololu.com/product/2813/specs) calls 16 A continuous only at a **150 °C board**; its detailed thermal table gives **6 A at 55 °C** in 22 °C still air. N1 must log 8 A continuous and 13–16 A pulses in the **closed PETG body** before accepting a proposed duty budget.
 
-- **Against the ledger.** The 10 mΩ wiring allowance in the pack model (`2·22 + 30 + 10`) was low. With the split, the pack model becomes 44 + ≤ 30 (TIFPS0629 acceptance) + 25 ≈ **99 mΩ** typical. That is still inside the ledger's 80–100 mΩ range, but at its top. RP-02 §8.1 corner D (cold, aged) should be recomputed with the measured path. Measure it (4-wire, 5 A) in Phase C.
-- **Currents against ratings.** `BATBUS` peak is about 10.2 A (power-boards §4). `J-PK` and `J3-1` carry all of it, against 13 A per Micro-Fit+ AWG16 contact (`D`). `J2-1` carries `OPBUS` plus charge, about 5.5 A worst. Fuse: 15 A ATOF (CH-029). The drive feeds take 2.4 A, the head trunk 1.0 A (3.6 A worst), and Micro-Fit 3.0 is rated 8.5 A (`D`).
-- **Mass.** Conductors about 45 g, plugs, splices, sleeving and ties about 28 g: **about 73 g**. This excludes the pack lead, IMU lead, TCRT lead and audio cables, which have their own mass rows. The `HARNESS_AND_FASTENERS` row is 95 g, which leaves about 22 g for loose fasteners. The register is unchanged; weigh the built harness.
+**Balance-lead fault path:** W02P/B connects the cell taps to an external panel port **ahead of** the main fuse and PCB-01's output FETs. A short between balance cavities can draw cell current through AWG24 without the main fuse clearing it. Before fabrication, select and bench-check cell-end protection and wire/connector current limits against the chosen charger's sense and balancing behaviour. N5 must include reversed/mis-seated plug prevention, one open balance wire, main-lead disconnected and adjacent balance-pin short tests with a current-limited cell simulator, not live cells for fault injection. The D-095 CAD clearance checks do not establish electrical fault safety.
+
+**Cell-end fuse candidate:** one suitably DC-rated fuse per balance tap close to the cell is a plausible way to protect the long AWG24 lead; [Batrium's cell-monitor wiring guidance](https://wiki.batrium.com/en/product/cell-monitor/cellmate-k9) uses this pattern for larger packs. It is **not yet a three-part BOM selection** for Makad. Choose actual fuse clearing current/time, DC interrupt rating, cold resistance and construction against the selected charger's balance current and the cell fault source. An open tap must be detected before charging; check that a fuse opening cannot cause the charger to apply the wrong cell voltage. Add the three fuse bodies, joints, insulation and strain relief to pack CAD and mass before claiming D-095's channel and tub clearances still pass. A resettable PTC is not interchangeable with a one-shot fuse without its hot-state leakage and trip-time analysis.
+
+**Mass:** former ~73 g harness estimate excluded pack, IMU, TCRT and audio. New working allowance: ~52 g insulated conductors plus ~35 g connectors/splices/sleeve/ties = **~87 g (`E`)**, excluding W01 pack, W02 balance, W04 charge, W26–29 audio/IMU and CH-020 TCRT. This is a provisional +14 g to the former harness row, **not** an addition to the separate balance/charge rows already counted by D-095. Weigh the built sets and reconcile the whole-robot mass register at Level 7.
 
 ## 7. Service procedures
 
-### 7.1 Pack out
+### 7.1 Pack out and charge
 
-1. Put the robot in `OFF` and unplug the charger.
-2. Remove the four J11A screws and lower the hatch with the pack strapped to it.
-3. Slide the `J-PK` pair in through the tub window and unplug it.
-4. Pull the NTC pair back to the window and unplug it.
-5. The pack is free. Refit in reverse: NTC first, then `J-PK`.
+1. Orderly shutdown, verify M1 OFF and remove **both** charger leads. Open `J-PK` before touching any other power connector.
+2. Remove J11A hatch screws and lower the strapped pack. Bring `J-PK` into the tub window and separate it.
+3. Draw the PA break to the tub window and unlatch it. Pull the **pack half** back through the window; leave body half and rear port in place.
+4. Refit PA first with cavity order checked, then `J-PK` last, charger absent.
 
-### 7.2 Body off the chassis
+For in-place charging: M1 **OFF**; confirm port polarity; connect charger XT30 and balance plug; select **2S Li-ion 4.20 V/cell, 1–2 A**; charge. Remove both leads before ON or service. Rear panel is not a USB-C charge inlet.
 
-1. Pack out (7.1), or at least `J-PK` open (H-02).
-2. Remove the shell (body README) and the rear service panel. Draw the panel out along −X and unplug `W16` at `J2-8` and `W40` at `J2-9` (both on PCB-02's +Y edge) before setting it aside; PCB-13 and the power button stay on the panel (D-040, D-041).
-3. Unplug the 11 chassis leads at the body boards:
-   - `J3-1` and `J2-1`: the `BATBUS` branches. Their splices stay with the chassis.
-   - `J3-2` and `J3-3`: the drive feeds.
-   - `J2-7`: the NTC.
-   - `J10-3`, `J10-4`, `J10-5`, `J10-6`, `J10-8`: encoders, driver logic and nose.
-   - `J10-10`: rear TCRT.
-4. Leave `J10-7` (IMU) to come off with its lead, or unplug it too if PCB-07 is fitted. That makes 12.
-5. Undo J13 and lift the body (body README §Body frame/chassis assembly).
+### 7.2 Body off chassis; rear panel off
 
-Every chassis-side lead carries at least 40 mm of slack at its body-side plug, so the plug can be withdrawn before the body moves. **Check hand and tool reach at the first assembly.** PCB-03's edge plugs sit under the compute tray at Z 64–75 and are reached from ±Y with the shell off.
+1. Do pack-out steps 1–3, remove shell and support body.
+2. For rear-panel removal, separate W04 at a selected AWG16 service pair **or** lay panel beside body within its verified service loop. Unpark XHP-3 lead only if it obstructs travel; unplug mushroom W40 if its block has a detachable lead. Never pull XT30 cups or balance wires. Charge splice and M1 stay on rear-bay plate.
+3. Unmate **four power** body-lift plugs: `J-BAT`, `J-CHASSIS`, `J-S18-H`, `J-S18-Y`. Cap the chassis ends.
+4. Unmate **seven signals** at body boards: W29 `J10-7`; W30/31 `J10-3/.4`; W32/33 `J10-5/.6`; W34 `J10-8`; W36 `J10-10`.
+5. Confirm no cable crosses the J13 lift plane, undo J13, lift body. Refit by labels; `J-PK` last. Measure far-end rails before drive/servo enable.
+
+The **11** body-lift plugs are counted *after* J-PK and PA pack removal. A fitted rear-panel W04 service pair is additional. Verify hand access, strain relief and ≥40 mm withdrawal slack at first build.
 
 ### 7.3 Head off
 
-Unchanged (connector-schedule §3.4): unplug `J8-1`, `J8-3`, `J8-4`, `J8-5` and the CSI at the Pi, then lift the head with PCB-08.
+With power isolated, unplug `J8-1`, `J8-4`, yaw lead `J8-8` as needed and the CSI/FFCs at their service ends; support cassette before lifting. Former `J8-3/5` do not exist.
 
-## 8. Changes to the RP-06 schedule rows
+## 8. Schedule change record
 
-| Row | Was | Now |
-|---|---|---|
-| `W01` | AWG16 silicone | AWG16 UL1061 (H-05) |
-| `W02` | GH2 straight to `J2-7`, break open | `W02a`/`W02b` with the SM 2p break in the channel (H-07) |
-| `W03`/`W04` | Fuse on a PCB holder → PCB-02 → `W04` → PCB-03 | Inline holder (D-032), split at splices; `W04` and `J2-2` deleted (H-01) |
-| `W06`/`W07` | DRV8874 carrier `VIN` | #3297 `VM` pin (D-038) |
-| `W08`/`W09` | #4804 leads | MOT3001 cut lead, Micro-Fit 3.0 inline pair, paralleled outputs |
-| `W13`/`W14`, `J8-1` | Micro-Fit+ 1×2 + Micro-Fit 3.0 2×2 into a Micro-Fit+ 2×3 | All Micro-Fit 3.0 AWG22, one 2×3 plug (H-06) |
-| `W30`/`W31` | #4804 encoder, Vcc 3.5–20 V | MOT3001 encoder on 3V3 (H-09) |
-| `W32`/`W33` | DRV8874 `SLEEP`, `EN/IN1`, `PH/IN2`, `CS`, `FAULT` | DRV8833 `SLP`, `IN1`, `IN2`, `FLT` (D-038) |
-| `W34` | GP2Y0A41 + tact switch, PH3 at the sensor | GP2Y0A21 + DRV5055 Hall, soldered at the sensor (D-013, D-019, D-027) |
-| `W36` | 5 V/GND/analog/digital breakout | Bare TCRT lead, LED and load on PCB-10 (D-016) |
-| §5 items 1, 6, 7, 8 | Open | Closed here: NTC break, pinouts and mating rule, tooling, wire list |
+| Retired | Replacement |
+|---|---|
+| NTC W02a/b, SM2, J2-7 | PA W02P/B balance break and XHP-3 |
+| PCB-02/03/04/05/06/07/13 headers, old W03c/d, W04/05, W16 | Charge splice, M1/M6, stars, bought modules, new W04/W05 |
+| W20, W21, W23a/b, W39 | No cables; J10-12 unmated |
+| PCB-05 W26, PDM W27, old amp W28 | GH10 to hub, four six-wire I²S mics, direct breakout speaker |
+| PCB-07 GH8 at IMU | Soldered W29 at LSM6DSOX |
+| PCB-03 J3-5 yaw | M3→PCB-08 W17, J8-8→yaw W15 |
+| Former H-08 body-board list | Four power plus seven signal body-lift plugs |
 
-## 9. Open
+## 9. Open and acceptance
 
-- [ ] Molex housing and male-terminal part numbers for each Micro-Fit+ position (single-row 215759 receptacle and its plug). Confirm the 63819-0900 tool for 43030/43031. Get quotes; the Molex tools are the main cost.
-- [ ] MOT3001 6-wire colour code and encoder supply range on receipt (`U`): meter the cable before cutting it.
-- [ ] Received JST SM pair: measure its mated section against the 6.5 × 5.8 mm envelope.
-- [ ] Crimp qualification: pull-test three samples per tool and gauge to IPC/WHMA-A-620 Class 2, and section one Micro-Fit+ AWG16 crimp.
-- [ ] First harness build: cut-to-length values (`W`), the 4-wire pack → `J3-1` resistance at 5 A, and hand reach for the 12 body-lift plugs. Then weigh the harness against §6.
-- [ ] The body model (`02-body/v1/cad/body_v1_model.py`) carries pre-D-031 driver positions and the pre-D-032 fuse envelope. Its PCB-03 edge reserves clash with the stale drivers, and its PCB-04 edge reserves and the `J4-1` plug clash with `BODY_FRAME_MAIN_PRINT` (108 mm³ per reserve, 45.7 mm³ at `J4-1`). These clashes predate D-039 and were confirmed against the HEAD model. The frame/PCB-04 edge clash is real body-v1 geometry and must be fixed before the frame is printed.
-- [ ] `body_v1_model.wheel_assembly()` raises `NameError: WHEEL_MODEL` (pre-existing).
+| Item | Closure |
+|---|---|
+| Connector order | Verify MF+ housing gender/key and AWG16 contacts, MF3 AWG20 tool/contacts, PA/XH pre-crimp gauge/mate, multiwire splice capacity. Pull-test three samples per wire/contact combination. Choose W04 panel service pair after extraction mock-up |
+| CAD reserves | String-route W03b/W05c/W13/W17 with modules installed and body moving. D-095 models the balance route/modules but **does not yet reserve the new body-lift plugs or switched-star splice**. If they collide, edit only `final/v1/cad/makad-v1.step.py` and run a targeted fit check before print |
+| M6/control interfaces | Source stated R010 ≥1 W board, measure shunt and voltage sense, confirm I²C address. Measure #2813 ON idle voltage/OFF recognition; qualify GPIO12 buffer and GPIO13 OFF drive. Check Pi/PCB-09 I²C1 and GPIO access |
+| Bench | N1 switch heat, N2 head/shared rails, N3 yaw, N4 VM, N5 charge/balance fault cases, N8 Schottky/back-feed, N9 audio, N10 IMU, N11 mic timing, N12 Pi voltage: exact setup/pass in [plan §4.12](../simplification-plan.md#412-tests), with the added balance-lead cases in §6. Four-wire pack-to-star/driver at 5 A and hot load drop |
+| First build | Record `W` cut lengths, pad/termination photos, full polarity and balance voltages, 11-plug reach/slack, panel removal path and cable-set masses; reconcile D-095 balance/charge mass rows |
+
+These rows feed the Level 6 BOM. An estimated length, unverified pad or connector family name is not an assembly release.

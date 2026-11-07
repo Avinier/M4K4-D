@@ -1,5 +1,7 @@
 # Chassis prints
 
+> **D-095 export hold (2026-11-07).** The checked-in front-module STL and manifest were generated on **2026-11-01**, before [D-095](../../03-build/decisions.md#d-095) added the balance-lead Ø5 deck hole and tub-plate mounting features to final-v1 CAD. The `EXPORTED` row below describes the earlier chassis version, **not a released D-093 print**. Regenerate the front-module STL from `final/v1/cad/makad-v1.step.py`, check the new hole and pilots in the mesh, then update the manifest and print instructions before submitting a new chassis batch. The [D-096 harness](../../03-build/05-harness/README.md) also leaves four body-lift connector and rear-star reserves unplaced; check those before print if they require chassis clearance.
+
 The printed parts of [chassis v1](../../03-build/01-chassis/v1/BOM.md): the
 frame, the axle stack, the wheels, the nose and the rear keel. Most are PETG.
 The tyres are TPU and the nose touch cap is ASA. The steps and the status

@@ -54,11 +54,10 @@
 ```
  CHASSIS                                     BODY
  cells ─ PCB-01 (TIFPS0629) ─W01─ J-PK ─ FUSE 15 A ─ splice ─┬─ CHARGE PORT (rear panel, unswitched)
-   │                                                         └─ PUSHBUTTON POWER SWITCH ── switched bus
+   │                                                         └─ PUSHBUTTON POWER SWITCH ─ INA226 shunt ─ switched bus
    └─ balance lead (B−, mid, B+) ─ break ─────────────────────── BALANCE PORT (rear panel)
 
  switched bus ─┬─ #3297 L / R drive (VM: SMBJ8.5A + 100 µF + 0.1 µF each)
-               ├─ monitor (INA226/219, I²C)
                ├─ buck-boost → 5.5 V head pitch/roll (W13 → J8-1)
                ├─ buck-boost → 11.1 V yaw (→ PCB-08 → W15)
                ├─ buck-boost 5 V 3 A → Pi 5 (W10 USB-C; a non-PD Pi 5 assumes 3 A)
@@ -174,7 +173,7 @@ These are system records, outside `03-build`. The [03-build rule](README.md) say
 
 **Also**
 
-- The body-lift plug count (H-08, §7.2) drops.
+- The body-lift plug count (H-08, §7.2) is **11 after pack removal** in the [D-096 harness](05-harness/README.md#72-body-off-chassis-rear-panel-off): four power and seven signal breaks. It does not drop as initially expected because both S18 outputs cross the joint.
 - The Micro-Fit+ positions shrink: recheck the crimp-tool buy (§9).
 - The GH buy list loses GH10 ×1, GH8 ×2, GH4 ×1 and the GH2 NTC lead.
 
@@ -266,12 +265,12 @@ These are system records, outside `03-build`. The [03-build rule](README.md) say
 
 | # | Test | Setup | Pass |
 |---|---|---|---|
-| N1 | Power switch (M1) | Switch installed in its CAD position inside the closed body, shell on; bench supply or pack at 7.4 V; thermocouple on the switch board | (a) On from the mushroom, off from the OFF input (firmware pulse). (b) 10 A for 10 s. (c) A realistic duty cycle for 30 min: drive, head and Pi loads as in a demo, with the peaks as logged on the bench. (d) OFF current recorded. **Board temperature stays below 70 °C** in (b) and (c), clear of the PETG frame's softening range; record the peak |
+| N1 | Power switch (M1) | Switch installed in its CAD position inside the closed body, shell on; bench supply or pack at 7.4 V **and the 6.0 V low-pack corner**; thermocouple on the switch board and current/voltage scope | (a) On from the mushroom, off from the OFF input (firmware pulse). (b) 10 A for 10 s. (c) A realistic duty cycle for 30 min: drive, head and Pi loads as in a demo, with peaks logged. (d) OFF current recorded. (e) Screen repeated **13 A and 16 A, ≤2 s pulses** at the measured duty interval; record switch voltage drop and temperature, including after the 30 min warm-up. This is a candidate peak test, not an approved current budget. **Board temperature stays below 70 °C** in all fitted-body cases |
 | N2 | Module capacity (M2, M4, M5) | Each module at 6.0 V and 8.4 V in, inside the body, on its real lead | (a) Output at no load and at its design load. (b) **M2 head rail:** both head servos stalled at once with the Feetech protection current set; record each servo's set limit; the rail stays ≥ 5.23 V at the servo terminals and the module doesn't thermal-limit for the time the servos take to trip. (c) **M5 shared 5 V:** simultaneous power-up of C3, amp, C2 and display, then full-volume audio with the display on; stays ≥ 4.75 V at each load |
 | N3 | Yaw rail (M3) | Pack at 6.0 V and at 8.4 V; servo current limit set below the module's measured capability | (a) Sustained yaw load (continuous back-and-forth sweeps for 10 min): rail holds 11.1 V ±4 % and the module doesn't thermal-limit. (b) Stall and a hard stop at full speed: **< 12.6 V at the servo terminals** at every instant (scope) |
 | N4 | Drive `VM` | Both #3297 boards on the switched bus, real motors, SMBJ8.5A + 100 µF + 0.1 µF at each `VM` | Both motors released at the chopping limit (permit loss and `nSLEEP` low): **`VM` peak < 11.8 V** on a scope |
-| N5 | Charge in place | Robot `OFF`; charger on the rear ports | Full balance charge completes; cells end within the charger's balance band; nothing in the body gets warm |
-| N6 | Low battery | Pack drawn down under a demo load | Firmware stops motion at 6.0 V and shuts down before the TIFPS0629 under-voltage trip |
+| N5 | Charge in place | Robot `OFF`; charger on rear ports; use a current-limited cell simulator for balance fault injection | Full balance charge completes; cells end within charger balance band; nothing in body gets warm. On the simulator, verify reversed/mis-seated plug prevention, each open balance tap, main-lead disconnect, adjacent balance-pin short and proposed cell-end fuse operation; no uncontrolled charger output or unprotected AWG24 fault |
+| N6 | Low battery | Pack drawn down under a demo load, with pack/cell and **post-switch module-input** voltage logged | Firmware stops motion at its defined **loaded-voltage** threshold and shuts down before TIFPS0629 under-voltage trip. Inject the measured peak demand near the threshold; no protection-board trip, Pi blackout or unintended restart. Define the 6.0 V observation point before using it as a test condition |
 | N7 | Start together | Robot on from `OFF`, 20 cycles | Pi, C2, C3 and display start cleanly every time |
 | N8 | C3 supply and back-feed (M13 Schottky) | Schottky in `W11` | (a) **Loaded:** C3 running with its peripherals, robot `ON` at 6.0 V pack: DevKitC 5 V pin ≥ 4.5 V and its 3.3 V rail in tolerance. (b) **Back-feed:** service USB on the DevKitC with the robot `OFF`: the switched bus and the M5 output stay at 0 V |
 | N9 | Audio | Amp, four mics, audio hub with 100 kΩ SD pull-downs | Speaker plays while all four mics capture on I²S0, each mic in its own channel (tap each mic) |
@@ -326,7 +325,7 @@ The changes are applied in these levels. Q1–Q9 are decided (§6).
 | 2 | **Board docs:** [04-pcbs](04-pcbs/README.md) register and [workflow](04-pcbs/workflow.md) tracker; superseded banners on PCB-02, 03, 04, 05, 06, 07, 13; new inputs in the PCB-08, 10, 12 READMEs (§4.3) | Doc cleanup | — | **Done 2026-11-06** |
 | 3 | **Modules:** pick each part, check India stock, get dimensions and STEPs (§2, risks R1, R2, R7) | New design | — | **Done 2026-11-07**: [D-094](decisions.md#d-094), [module-selection.md](module-selection.md) |
 | 4 | **CAD** in `final/v1/cad`: module bays, rear-panel ports, balance-lead channel, mic and amp mounts, IMU adapter; targeted checks; mass/CoM (§4.5–4.8) | New design | 3 | **Done 2026-11-07**: [D-095](decisions.md#d-095); outlines of M6, M8, M9 unmeasured |
-| 5 | **Harness:** rewrite [05-harness](05-harness/README.md) power tree, wire list, pinouts, service procedures and buy list (§4.4) | New design | 3, 4 | Waits |
+| 5 | **Harness:** rewrite [05-harness](05-harness/README.md) power tree, wire list, pinouts, service procedures and buy list (§4.4) | New design | 3, 4 | **Topology documented; electrical HOLD 2026-11-07**: [D-096](decisions.md#d-096). ~16 A coincident low-pack demand exceeds the assumed 13 A connector rating and R010 shunt minimum; cut lengths, PNs and break/star CAD fit also open |
 | 6 | **BOM:** retire, promote and add rows (§4.10) | Records | 3 | Waits |
 | 7 | **Other docs:** foundation CON-TBD-09, the power/energy and mass ledgers, head BOM yaw-rail note, print READMEs, final v1 README (§4.1, 4.7, 4.9) | Doc cleanup | 3–6 | Waits |
 | 8 | **Firmware requirements** in `04-software`: low-battery stop, button-off, servo limits, the four-mic overlay (§4.11) | Software | — | Can start any time |

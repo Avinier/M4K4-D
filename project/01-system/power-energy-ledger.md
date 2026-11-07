@@ -1,5 +1,7 @@
 # Makad V1 Power / Energy / Thermal Ledger
 
+> **Build architecture notice (2026-11-07).** The RP-02 onboard charger, CHGBUS, independent protected branches and 10.2 A pack-peak assumptions below are historical for v1 after [D-093](../03-build/decisions.md#d-093). The current design uses an external 2S balance charger through XT30 + XH ports with the robot OFF, bought converters and the [D-096 harness](../03-build/05-harness/README.md). Its low-pack coincident-load screen is about **16 A demand**, an unresolved electrical HOLD, so this ledger's numeric budget is **not an acceptance basis** until Level 7 rewrites it and the new load limits are measured.
+
 | Field | Value |
 |---|---|
 | Status | **Living — Part-1 `CC/LP` vocabulary is registered under `RP02-P1-REG-01`, branch mapping/implementation under `RP02-P2-REG-01…03`, and compute/control identities under `RP02-P3-REG-01/02`; `LG-04`/`LG-10` envelopes refreshed from RP-03 `physics.md` as `E`/`U`. v0.15 records repeated-phrase heat duty and the 6.0 V vs 8.4 V drive note. Every numeric row remains `E`, `D`-cited or `U`. No `W` evidence exists.** |
