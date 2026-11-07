@@ -80,10 +80,11 @@ The central record of every decision and change made during the build phase. New
 | [D-074](#d-074) | 2026-10-31 | Body / electronics: PCB-09 socket strip (CH-084; final v1 CAD) | Extend only the strip's +Y edge from world Y 20.9 to 22.4 mm so both socket rows carry full copper and edge margin; core Z, bridge and wide area unchanged | ACTIVE; 40-pad edge and static body/chassis checks pass; other mechanical inputs OPEN |
 | [D-093](#d-093) | 2026-11-06 | Architecture: minimal safety and bought modules | Replaces RP-02 `BD-01`: minimal safety, pack charged outside the robot; PCB-02/03/04/05/06/07 bought, PCB-13 deleted; custom boards are PCB-08, 09, 10, 11, 12, 14, 15 | ACTIVE; changes not yet applied ([plan](simplification-plan.md)) |
 | [D-094](#d-094) | 2026-11-07 | Bought module selection for D-093 | Pololu HP switch, 2 × S18V20ALV (head 5.5 V, yaw 11.1 V), 2 × S13V30F5 (Pi, shared 5 V), INA226, LSM6DSOX, MAX98357A, 4 × INMP441, ISDT PD60; PCB-12 stays custom | SELECTED, not ordered |
-| [D-097](#d-097) | 2026-11-07 | BOM and firmware for D-093 | BOM reconciled (14 superseded, 12 rescoped, 18 new rows); firmware requirements in 04-software; PCB-09 rev A GPIO access gap found | ACTIVE; gap disposition in D-098; D-096 HOLD stands |
-| [D-098](#d-098) | 2026-11-07 | PCB-09 rev B service access for D-096 | Keep button sense and M1 OFF under Pi control; revise PCB-09 to expose GPIO12/13 and a qualified INA226 I²C/3V3/GND termination | SELECTED design input; rev B layout and fit unproved |
 | [D-095](#d-095) | 2026-11-07 | Final v1 CAD for D-093/D-094 (plan level 4) | Bought modules group; tub/tray/rear bays; XT30 + XH rear-panel ports; JST PA balance break in the 13.5 mm channel; INMP441 bosses; amp bracket; IMU adapter; PCB-08 servo plug; a_tip 1.670 neutral / 1.646 worst pose | ACTIVE; M6/M8/M9 outlines unmeasured |
 | [D-096](#d-096) | 2026-11-07 | D-093 harness power stars and body-lift breaks (plan level 5) | Rear insulated switched star after M6; one fused chassis→body feed and one switched body→chassis feeder; two S18 output breaks; seven chassis signal breaks, 11 body-lift plugs after pack removal | TOPOLOGY ONLY; electrical HOLD on ~16 A coincident demand, R010 dissipation, connector/fuse coordination; physical fit open |
+| [D-097](#d-097) | 2026-11-07 | BOM and firmware for D-093 | BOM reconciled (14 superseded, 12 rescoped, 18 new rows); firmware requirements in 04-software; PCB-09 rev A GPIO access gap found | ACTIVE; gap disposition in D-098; D-096 HOLD stands |
+| [D-098](#d-098) | 2026-11-07 | PCB-09 rev B service access for D-096 | Keep button sense and M1 OFF under Pi control; revise PCB-09 to expose GPIO12/13 and a qualified INA226 I²C/3V3/GND termination | SELECTED design input; rev B layout and fit unproved |
+| [D-099](#d-099) | 2026-11-07 | Body-lift CAD and chassis front export | D-096's four body-lift plugs and star splices placed (check 26/26); front frame STL re-exported with the D-095 hole and pilots (13/13) | ACTIVE; D-096 HOLD stands |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -3834,3 +3835,47 @@ The SELECTED rows are design choices with bench gates in their `release_check`; 
 **Electrical boundary.** The M1 ON node may sit at pack voltage. W40 must sense it only through the measured, high-impedance level-shift/buffer interface; the PCB-09 GPIO12 net itself must remain in the 0–3.3 V domain and must not back-power an unpowered Pi when the button is pressed. GPIO13 drives OFF only through a verified M1-compatible interface, with a defined inactive state during Pi reset, boot and halt; check that M1 cannot inject current into GPIO13 while the Pi is unpowered. Do not route pack voltage or switched load current through PCB-09. Confirm INA226 pull-ups, address, and Pi 3.3 V current allowance; label the four service nets so 3.3 V cannot be mistaken for Pi 5 V.
 
 **Release gate.** Update the PCB-09 schematic, layout, generated board outputs and final-v1 assembly model as rev B. Pass ERC/DRC, continuity and short checks on the six nets, populated connector/wire-exit clearance and body-lift access checks, then N1 button/OFF and INA226 tests. W40/W44 and PCB-09 fabrication wait for that evidence. This decision does not lift the separate D-096 pack-current, shunt, fuse, switch or balance-tap HOLD.
+
+## D-099
+
+**2026-11-07 · Final v1 CAD: D-096 body-lift plugs and star splices placed; chassis front module re-exported with the D-095 features (`final/v1/cad`, `04-print/01-chassis`) · ACTIVE; CAD and export only; harness still on the D-096 electrical HOLD**
+
+**Why.** D-096 defined four body-lift power plugs and two switched star splices with no CAD positions, so nothing proved they fit. The checked-in front-module STL (2026-11-01) predated D-095's balance-lead hole and tub-plate pilots, which put the primary chassis print on hold.
+
+**1. Body-lift plugs and stars.** Placed by surveying the droid tree for free space, as `BODYLIFT` and `bodylift_parts()` in `makad-v1.step.py`, in a new `Bought modules` subgroup "D-096 body-lift plugs and switched star". Mated pairs use the sizes of the existing pairs: Micro-Fit+ 1×2 22 × 8.3 × 10 (as J-PK), Micro-Fit 3.0 1×2 19 × 7 × 10 (as the motor inline pairs). Each is modelled as receptacle and plug halves along X.
+
+| Part | World box (mm) | Notes |
+|---|---|---|
+| `J-BAT` (MF+) | X −27.5..−5.5, Y −31..−22.7, Z 57–67 | Forward of the rear lower cross rail (X −36..−28, underside Z 61, top Z 69); 0.5 mm from the frame |
+| `J-CHASSIS` (MF+) | X −27.5..−5.5, Y 22.7..31, Z 57–67 | Mirror of J-BAT |
+| `J-S18-H` (MF3) | X −3..16, Y −38..−31, Z 57–67 | Behind the right motor, under the M5 tray module, toward the −Y head riser |
+| `J-S18-Y` (MF3) | X −3..16, Y −29.5..−22.5, Z 57–67 | Beside J-S18-H |
+| ± star splices | Ø6.5 × 24 along Y, X −31.75 (+) / −25.25 (−), Z 74.25 | Above the rail, beside M6, clear of the rail uprights at Y ±14 |
+
+The obvious first positions behind the rail failed: the rail fills X −36..−28 from Z 61 to 69. So did the slot between the rear-bay plate and the rail, which is too narrow for two Ø6.5 splices.
+
+**Check.** `check_d096_bodylift.py`, **26/26**:
+- every part 0.5 mm or more clear of the robot's parts, and outside every other reserve (harness trunks, motor pigtails, balance lead, charge splice);
+- J-BAT and J-CHASSIS draw 40 mm inward to unmate;
+- J-S18-H and J-S18-Y unmate in place: the −X half has 12 mm of axial travel, with 22–30 mm of hand room toward −Y. They cannot be drawn 40 mm in any direction, so unmating them depends on that axial travel;
+- stars between Z 71.0 and 77.5.
+
+**Re-run after the change:** `check_bay_rear` 23/23, `check_bay_tray` 24/24, `check_bay_tub` 37/37, `check_imu_adapter` 18/18. Their earlier runs today also passed `check_rear_panel_ports` 15/15 and `check_balance_channel` 15/15.
+
+**2. Chassis front module re-exported.** `export_chassis_front_stl.py` writes `CH-001_CHASSIS_FRAME_FRONT_MODULE.stl` from the droid tree in print orientation (tub bottom down, min corner at the origin, as the 2026-11-01 package) and updates its manifest row. **13/13:**
+- Ø5 balance hole open at (52, 47.4), in both the B-rep and the mesh;
+- two M3 × 4 pilots through the deck strip at (21, ±24.5) and two M3 × 6 pilots 6.6 mm deep in the crossmember at (83, ±20), each with wall on four sides over the insert depth;
+- mesh closed (one zero-area sliver dropped; the old STL had the same one) and volume within 0.0001 % of the B-rep.
+
+Volume 83,965.6 → 83,620.6 mm³ (−345 mm³, the hole plus four pilots); size unchanged at 75 × 128 × 41. Orientation and supports are unchanged, since the new holes are vertical. No other existing chassis print changed in D-095, so the rest of the package stands. **Not yet exported:** the new chassis-side prints CH-106 (tub-bay plate) and CH-107 (IMU adapter), and the body-side CH-108 (rear-bay plate).
+
+**Changed.**
+- `final/v1/cad`: `makad-v1.step.py`, `check_d096_bodylift.py`, `export_chassis_front_stl.py` and their reports.
+- `04-print/01-chassis`: the STL, `manifest.json`, the README (hold lifted for the front module) and the frame README note.
+- [05-harness](05-harness/README.md) §9 CAD reserves; [final/v1/README.md](final/v1/README.md); [simplification-plan.md](simplification-plan.md) level 5.
+
+**Unverified.**
+- Lead routes (W03b, W05c, W13, W17) are not string-routed.
+- Hand reach for the 11 body-lift plugs is checked at first build.
+- Connector part numbers, and therefore exact sizes, are still open (05-harness §3).
+- Plug and splice masses sit inside the D-096 harness allowance and are not added to `check_d095_mass.py`.

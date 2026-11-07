@@ -1,0 +1,179 @@
+{
+ "script": "export_chassis_front_stl",
+ "passed": 13,
+ "total": 13,
+ "rows": [
+  {
+   "check": "brep_balance_hole_open",
+   "ok": true,
+   "material_on_axis": [
+    [
+     71.0,
+     73.0
+    ]
+   ],
+   "material_beside": [
+    [
+     52.0,
+     56.0
+    ],
+    [
+     71.0,
+     73.0
+    ]
+   ]
+  },
+  {
+   "check": "brep_pilot_deck_strip_M3x4_+24",
+   "ok": true,
+   "axis_material": [],
+   "walls_cover_insert_depth": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "band": [
+    52.2,
+    55.8
+   ]
+  },
+  {
+   "check": "brep_pilot_deck_strip_M3x4_-24",
+   "ok": true,
+   "axis_material": [],
+   "walls_cover_insert_depth": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "band": [
+    52.2,
+    55.8
+   ]
+  },
+  {
+   "check": "brep_pilot_crossmember_M3x6_+20",
+   "ok": true,
+   "axis_material": [
+    [
+     32.0,
+     49.4
+    ]
+   ],
+   "walls_cover_insert_depth": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "band": [
+    50.2,
+    55.8
+   ]
+  },
+  {
+   "check": "brep_pilot_crossmember_M3x6_-20",
+   "ok": true,
+   "axis_material": [
+    [
+     32.0,
+     49.4
+    ]
+   ],
+   "walls_cover_insert_depth": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "band": [
+    50.2,
+    55.8
+   ]
+  },
+  {
+   "check": "mesh_closed",
+   "ok": true,
+   "open_edges": 0,
+   "degenerate_dropped": 1,
+   "triangles": 10229
+  },
+  {
+   "check": "mesh_volume_matches_brep",
+   "ok": true,
+   "mesh_mm3": 83620.6091,
+   "brep_mm3": 83620.6512
+  },
+  {
+   "check": "mesh_on_bed_at_origin",
+   "ok": true,
+   "min": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "size": [
+    75.0,
+    128.0,
+    41.0
+   ]
+  },
+  {
+   "check": "mesh_balance_hole_open",
+   "ok": true,
+   "crossings_in_deck_band": []
+  },
+  {
+   "check": "mesh_pilot_open_+21_+24",
+   "ok": true,
+   "axis_crossings": [],
+   "walls_cover_insert_depth": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "check": "mesh_pilot_open_+21_-24",
+   "ok": true,
+   "axis_crossings": [],
+   "walls_cover_insert_depth": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "check": "mesh_pilot_open_+83_+20",
+   "ok": true,
+   "axis_crossings": [
+    0.0,
+    17.4
+   ],
+   "walls_cover_insert_depth": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "check": "mesh_pilot_open_+83_-20",
+   "ok": true,
+   "axis_crossings": [
+    0.0,
+    17.4
+   ],
+   "walls_cover_insert_depth": [
+    true,
+    true,
+    true,
+    true
+   ]
+  }
+ ]
+}

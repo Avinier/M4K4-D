@@ -110,8 +110,8 @@
    "check": "clear_TUB_BAY_PLATE_M3X6_SCREW_2",
    "ok": true,
    "clashes": [],
-   "min_gap": 3.0,
-   "nearest": null
+   "min_gap": 2.15,
+   "nearest": "J_S18_Y_MICROFIT3_1X2_PLUG_HALF"
   },
   {
    "check": "clear_TUB_BAY_DECK_INSERT_M3X4_2",

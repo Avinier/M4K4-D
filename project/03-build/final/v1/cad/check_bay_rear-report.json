@@ -93,29 +93,29 @@
    "check": "clear_REAR_BAY_PLATE_M3X16_SCREW_1",
    "ok": true,
    "clashes": [],
-   "min_gap": 3.0,
-   "nearest": null
+   "min_gap": 2.1095,
+   "nearest": "J_BAT_MICROFIT_PLUS_1X2_RECEPTACLE_HALF"
   },
   {
    "check": "clear_REAR_BAY_RAIL_INSERT_M3X6_1",
    "ok": true,
    "clashes": [],
-   "min_gap": 3.0,
-   "nearest": null
+   "min_gap": 2.5,
+   "nearest": "J_BAT_MICROFIT_PLUS_1X2_RECEPTACLE_HALF"
   },
   {
    "check": "clear_REAR_BAY_PLATE_M3X16_SCREW_2",
    "ok": true,
    "clashes": [],
-   "min_gap": 3.0,
-   "nearest": null
+   "min_gap": 2.1095,
+   "nearest": "J_CHASSIS_MICROFIT_PLUS_1X2_RECEPTACLE_HALF"
   },
   {
    "check": "clear_REAR_BAY_RAIL_INSERT_M3X6_2",
    "ok": true,
    "clashes": [],
-   "min_gap": 3.0,
-   "nearest": null
+   "min_gap": 2.5,
+   "nearest": "J_CHASSIS_MICROFIT_PLUS_1X2_RECEPTACLE_HALF"
   },
   {
    "check": "clear_M1_POLOLU_2813_PUSHBUTTON_POWER_SWITCH_HP_STEP",

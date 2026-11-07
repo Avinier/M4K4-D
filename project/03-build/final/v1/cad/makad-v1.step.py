@@ -883,6 +883,23 @@ IMU_BOARD_Z = IMU["adapter"][5] + IMU["boss"][1]           # Z 60.0
 PCB08_SERVO = dict(header=(-9.5, 0.4, -42.6, -36.85, 113.6, 119.6),
                    plug=(-9.0, -0.1, -42.2, -37.25, 116.6, 126.0))
 
+# D-096 (plan level 5) harness parts placed for clearance: the four body-lift power plugs and the
+# switched +/- star splices. Mated wire-to-wire pairs lie loose on the chassis deck, chassis half
+# toward the chassis-side lead, and are unplugged before the body lifts (05-harness §7). Sizes as
+# the existing pairs: Micro-Fit+ 1x2 mated 22 x 8.3 x 10 (J-PK), Micro-Fit 3.0 1x2 mated 19 x 7 x
+# 10 (motor inline). J-BAT and J-CHASSIS sit forward of the rear lower cross rail (X -36..-28,
+# Z 61..69), clear of the motor pigtails; J-S18-H and J-S18-Y sit behind the right motor under the
+# tray modules, toward the -Y head riser. The two AWG16 multiwire star splices (heat-shrunk, Ø6.5
+# x 24 E) lie along Y above the rail, beside M6. check_d096_bodylift.py measures all of them.
+BODYLIFT = dict(
+    plugs=(("J_BAT", "MICROFIT_PLUS", (-27.5, -5.5, -31.0, -22.7, 57.0, 67.0)),
+           ("J_CHASSIS", "MICROFIT_PLUS", (-27.5, -5.5, 22.7, 31.0, 57.0, 67.0)),
+           ("J_S18_H", "MICROFIT3", (-3.0, 16.0, -38.0, -31.0, 57.0, 67.0)),
+           ("J_S18_Y", "MICROFIT3", (-3.0, 16.0, -29.5, -22.5, 57.0, 67.0))),
+    star_r=3.25, star_y=(-12.0, 12.0), star_z=74.25,
+    stars=(("POS", -31.75), ("NEG", -25.25)),
+)
+
 
 def _place(shape, location):
     """A free shape at a world location, sharing its OCC geometry."""
@@ -1304,8 +1321,22 @@ def pcb08_servo_plug():
             _tag(_blk(*PCB08_SERVO["plug"]), "YAW_JUNCTION_J8_8_YAW_SERVO_5264_3P_MATED_PLUG", "#F4F1E6")]
 
 
+def bodylift_parts():
+    """D-096: the four mated body-lift pairs (two halves each, along X) and the two star splices."""
+    m, out = BODYLIFT, []
+    for name, fam, (x0, x1, y0, y1, z0, z1) in m["plugs"]:
+        xm = (x0 + x1) / 2.0
+        out.append(_tag(_blk(x0, xm, y0, y1, z0, z1), f"{name}_{fam}_1X2_RECEPTACLE_HALF", "#2E3336"))
+        out.append(_tag(_blk(xm, x1, y0, y1, z0, z1), f"{name}_{fam}_1X2_PLUG_HALF", "#3A4044"))
+    y0, y1 = m["star_y"]
+    for pol, x in m["stars"]:
+        star = Cylinder(m["star_r"], y1 - y0, rotation=(90, 0, 0)).moved(Location((x, (y0 + y1) / 2.0, m["star_z"])))
+        out.append(_tag(star, f"SWITCHED_STAR_{pol}_AWG16_SPLICE", "#202020" if pol == "NEG" else "#8B1E1E"))
+    return out
+
+
 def bought_modules():
-    """The 'Bought modules' group: one subgroup per D-094 module (M1-M9, M12, M13)."""
+    """The 'Bought modules' group: one subgroup per D-094 module (M1-M9, M12, M13) and the D-096 harness parts."""
     (m2, m3), (m4, m5) = tub_modules(), tray_modules()
     switch, ina, splice = rear_modules()
     amp, hub = amp_parts()
@@ -1322,6 +1353,7 @@ def bought_modules():
         ("M9 microphones, INMP441 x4 (unmeasured)", mics),
         ("M12 charge and balance ports, charge splice", [*port_parts(), *splice]),
         ("M13 audio hub, perfboard", hub),
+        ("D-096 body-lift plugs and switched star", bodylift_parts()),
     ]
     return Compound(label="Bought modules", children=[Compound(label=name, children=parts) for name, parts in groups])
 

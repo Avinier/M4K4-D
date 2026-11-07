@@ -1,0 +1,202 @@
+{
+ "script": "check_d096_bodylift",
+ "passed": 26,
+ "total": 26,
+ "rows": [
+  {
+   "check": "parts_present",
+   "ok": true,
+   "count": 10
+  },
+  {
+   "check": "clear_J_BAT_MICROFIT_PLUS_1X2_RECEPTACLE_HALF",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 0.5,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "outside_reserves_J_BAT_MICROFIT_PLUS_1X2_RECEPTACLE_HALF",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "clear_J_BAT_MICROFIT_PLUS_1X2_PLUG_HALF",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.118,
+   "nearest": "CHASSIS_FRAME_REAR_MODULE"
+  },
+  {
+   "check": "outside_reserves_J_BAT_MICROFIT_PLUS_1X2_PLUG_HALF",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "clear_J_CHASSIS_MICROFIT_PLUS_1X2_RECEPTACLE_HALF",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 0.5,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "outside_reserves_J_CHASSIS_MICROFIT_PLUS_1X2_RECEPTACLE_HALF",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "clear_J_CHASSIS_MICROFIT_PLUS_1X2_PLUG_HALF",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.118,
+   "nearest": "CHASSIS_FRAME_REAR_MODULE"
+  },
+  {
+   "check": "outside_reserves_J_CHASSIS_MICROFIT_PLUS_1X2_PLUG_HALF",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "clear_J_S18_H_MICROFIT3_1X2_RECEPTACLE_HALF",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 2.8,
+   "nearest": "MOTOR_R_MOT3001_6V230_GEARBOX"
+  },
+  {
+   "check": "outside_reserves_J_S18_H_MICROFIT3_1X2_RECEPTACLE_HALF",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "clear_J_S18_H_MICROFIT3_1X2_PLUG_HALF",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.4142,
+   "nearest": "CHASSIS_FRAME_FRONT_MODULE"
+  },
+  {
+   "check": "outside_reserves_J_S18_H_MICROFIT3_1X2_PLUG_HALF",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "clear_J_S18_Y_MICROFIT3_1X2_RECEPTACLE_HALF",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 2.8,
+   "nearest": "MOTOR_R_MOT3001_6V230_GEARBOX"
+  },
+  {
+   "check": "outside_reserves_J_S18_Y_MICROFIT3_1X2_RECEPTACLE_HALF",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "clear_J_S18_Y_MICROFIT3_1X2_PLUG_HALF",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.4142,
+   "nearest": "CHASSIS_FRAME_FRONT_MODULE"
+  },
+  {
+   "check": "outside_reserves_J_S18_Y_MICROFIT3_1X2_PLUG_HALF",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "clear_SWITCHED_STAR_POS_AWG16_SPLICE",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.5,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "outside_reserves_SWITCHED_STAR_POS_AWG16_SPLICE",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "clear_SWITCHED_STAR_NEG_AWG16_SPLICE",
+   "ok": true,
+   "clashes": [],
+   "min_gap": 1.5,
+   "nearest": "BODY_FRAME_MAIN_PRINT"
+  },
+  {
+   "check": "outside_reserves_SWITCHED_STAR_NEG_AWG16_SPLICE",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "unmate_J_BAT",
+   "ok": true,
+   "route": "draw 40 mm",
+   "clear_draw_mm": {
+    "-Y": 6.0,
+    "+Y": 40.0,
+    "-X": 0.0,
+    "+X": 22.0,
+    "+Z": 8.0
+   },
+   "separate_12mm": {
+    "receptacle -X": false,
+    "plug +X": true
+   }
+  },
+  {
+   "check": "unmate_J_CHASSIS",
+   "ok": true,
+   "route": "draw 40 mm",
+   "clear_draw_mm": {
+    "-Y": 40.0,
+    "+Y": 8.0,
+    "-X": 0.0,
+    "+X": 22.0,
+    "+Z": 16.0
+   },
+   "separate_12mm": {
+    "receptacle -X": false,
+    "plug +X": true
+   }
+  },
+  {
+   "check": "unmate_J_S18_H",
+   "ok": true,
+   "route": "unmate in place",
+   "clear_draw_mm": {
+    "-Y": 22.0,
+    "+Y": 18.0,
+    "-X": 20.0,
+    "+X": 2.0,
+    "+Z": 8.0
+   },
+   "separate_12mm": {
+    "receptacle -X": true,
+    "plug +X": false
+   }
+  },
+  {
+   "check": "unmate_J_S18_Y",
+   "ok": true,
+   "route": "unmate in place",
+   "clear_draw_mm": {
+    "-Y": 30.0,
+    "+Y": 8.0,
+    "-X": 24.0,
+    "+X": 2.0,
+    "+Z": 8.0
+   },
+   "separate_12mm": {
+    "receptacle -X": true,
+    "plug +X": false
+   }
+  },
+  {
+   "check": "stars_above_rail_below_tray",
+   "ok": true,
+   "star_bottom": 71.0,
+   "star_top": 77.5
+  }
+ ]
+}

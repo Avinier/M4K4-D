@@ -1,6 +1,6 @@
 # Primary frame — parts, joints and the review layout
 
-> **D-093/D-095 print note (2026-11-07).** This review predates the front-deck balance hole and S18 tub plate in the current whole-robot CAD. The checked-in front-module STL predates both; see the [chassis print hold](../README.md). Recheck print orientation, support and the new hole/pilots on a regenerated mesh before using this page to release the primary chassis print.
+> **D-093/D-095 print note (2026-11-07).** This review predates the front-deck balance hole and the S18 tub plate. The front-module STL was re-exported with both sets of features ([D-099](../../../03-build/decisions.md#d-099), 13/13 checks): the Ø5 balance hole at (52, 47.4) through the deck, two M3 × 4 insert pilots through the deck strip at (21, ±24.5) and two M3 × 6 pilots in the front crossmember at (83, ±20). All four are vertical, so orientation and supports below are unchanged.
 
 The frame of [chassis v1](../README.md): the front module, the rear module and the battery
 hatch, and every joint they carry. This page starts the frame review (2026-10-30). §1–§4 lay
