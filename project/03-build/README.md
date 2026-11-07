@@ -1,6 +1,6 @@
 # 03 — Build
 
-> **D-093 integration status (2026-11-07).** The module/port CAD is done at Level 4, but the [Level 5 harness](05-harness/README.md) is on electrical HOLD after a ~16 A low-pack coincident-demand screen. The [project BOM](BOM.csv) still contains the superseded PCB-02/03/04/05/06/07/13 and NTC items pending Level 6 reconciliation. Do not order or assemble the new charge/power path from that CSV yet. The [primary chassis print package](../04-print/01-chassis/README.md) predates D-095's balance hole and tub plate.
+> **D-093 integration status (2026-11-07).** The module/port CAD is done at Level 4, but the [Level 5 harness](05-harness/README.md) is on electrical HOLD after a ~16 A low-pack coincident-demand screen. The [project BOM](BOM.csv) is reconciled to D-093–D-096 ([D-097](decisions.md#d-097)): the superseded boards and NTC are marked `SUPERSEDED`, and the modules, prints and hardware have rows; the subsystem BOM snapshots are not refreshed yet. Do not order or assemble the new charge/power path from that CSV yet. The [primary chassis print package](../04-print/01-chassis/README.md) predates D-095's balance hole and tub plate.
 
 Turn the [prototype decisions](../02-prototypes/) into parts that can be printed, assembled, measured, and revised. This phase is complete when the built robot passes its integration tests, not when the CAD looks finished.
 

@@ -80,6 +80,7 @@ The central record of every decision and change made during the build phase. New
 | [D-074](#d-074) | 2026-10-31 | Body / electronics: PCB-09 socket strip (CH-084; final v1 CAD) | Extend only the strip's +Y edge from world Y 20.9 to 22.4 mm so both socket rows carry full copper and edge margin; core Z, bridge and wide area unchanged | ACTIVE; 40-pad edge and static body/chassis checks pass; other mechanical inputs OPEN |
 | [D-093](#d-093) | 2026-11-06 | Architecture: minimal safety and bought modules | Replaces RP-02 `BD-01`: minimal safety, pack charged outside the robot; PCB-02/03/04/05/06/07 bought, PCB-13 deleted; custom boards are PCB-08, 09, 10, 11, 12, 14, 15 | ACTIVE; changes not yet applied ([plan](simplification-plan.md)) |
 | [D-094](#d-094) | 2026-11-07 | Bought module selection for D-093 | Pololu HP switch, 2 × S18V20ALV (head 5.5 V, yaw 11.1 V), 2 × S13V30F5 (Pi, shared 5 V), INA226, LSM6DSOX, MAX98357A, 4 × INMP441, ISDT PD60; PCB-12 stays custom | SELECTED, not ordered |
+| [D-097](#d-097) | 2026-11-07 | BOM and firmware for D-093 | BOM reconciled (14 superseded, 12 rescoped, 18 new rows); firmware requirements in 04-software; PCB-09 rev A can't reach GPIO12/13 (open) | ACTIVE; D-096 HOLD stands |
 | [D-095](#d-095) | 2026-11-07 | Final v1 CAD for D-093/D-094 (plan level 4) | Bought modules group; tub/tray/rear bays; XT30 + XH rear-panel ports; JST PA balance break in the 13.5 mm channel; INMP441 bosses; amp bracket; IMU adapter; PCB-08 servo plug; a_tip 1.670 neutral / 1.646 worst pose | ACTIVE; M6/M8/M9 outlines unmeasured |
 | [D-096](#d-096) | 2026-11-07 | D-093 harness power stars and body-lift breaks (plan level 5) | Rear insulated switched star after M6; one fused chassis→body feed and one switched body→chassis feeder; two S18 output breaks; seven chassis signal breaks, 11 body-lift plugs after pack removal | TOPOLOGY ONLY; electrical HOLD on ~16 A coincident demand, R010 dissipation, connector/fuse coordination; physical fit open |
 
@@ -3754,3 +3755,69 @@ The 1.763 quoted for this step is the chassis-only D-026 figure. Body v1's whole
 **Electrical audit correction (2026-11-07).** The first Level 5 draft reused the superseded 10.2 A pack peak. Recomputing the D-093 modules at 6.0 V, 90% conversion efficiency, 3 A Pi, 2.8 A head, 2.4 A yaw, 1.5 A shared 5 V and 4 A drives gives **about 16 A coincident demand**. The chosen S18 modules may current-limit before delivering those stalled outputs; that does not validate the rails. The 10 mΩ M6 shunt would dissipate **2.56 W** at 16 A, while the selected minimum is 1 W; the assumed Micro-Fit+ 13 A contact rating is exceeded and the 15 A fuse needs time-current coordination. The three external balance taps also bypass the main fuse/PCB-01 output FETs, so cell-end short protection and charger fault behaviour need a design and current-limited fault test. [Harness §6](05-harness/README.md#6-electrical-and-mass-estimates) marks the path HOLD until these are resolved.
 
 **Candidate resolution reviewed, not adopted.** A proposed 1.0 A limit per head servo plus 1.5 A yaw gives ~13 A *if those limits act immediately* at a true 6.0 V module input. Received-servo current waveforms, register behavior and torque margin are not yet known. The 13 A Micro-Fit+ rating is for continuous temperature rise; a short 16 A pulse may be acceptable after repeated-pulse thermal checks. The 15 A fuse also needs its time-current curve **and ambient derating**, and Pololu's HP switch is only 6 A continuous at its published 55 °C board condition in still air. A 5 mΩ/2 W INA226 shunt would dissipate 1.28 W at 16 A and reach the INA226's ±81.92 mV input limit at 16.4 A, leaving little range for source sag; select a measured shunt value with margin and recalibrate. Three cell-end balance fuses are a design candidate, not a BOM line until their clearing behavior, charger compatibility, insulation and pack CAD fit are checked. No D-097 is recorded as accepted on these assumptions alone.
+
+## D-097
+
+**2026-11-07 · BOM reconciled to D-093–D-096 (plan level 6) and firmware requirements recorded (plan level 8); PCB-09 GPIO access gap found · ACTIVE for the register; nothing ordered; the D-096 electrical HOLD stands**
+
+**Why.** [BOM.csv](BOM.csv) still listed PCB-02, 03, 04, 05, 06, 07 and 13 and the pack NTC as live items, and had no rows for the D-094 modules or the D-095 prints and hardware. The protection jobs D-093 moved into firmware had no written requirements.
+
+**BOM (level 6).** Only the rows below changed; every other line is byte-identical.
+
+**Superseded (14 rows), status `SUPERSEDED`, procurement `DO NOT ORDER`, each naming its replacement:**
+- CH-041, CH-042 and CH-043 (PCB-02/03/04);
+- CH-025 (pack NTC);
+- BO-002, BO-003, BO-004, BO-005, BO-012, BO-015, BO-017 and BO-064 (PCB-05/06/13 and their parts);
+- HN-005 (the NTC break).
+
+CH-046 was already superseded.
+
+**Rescoped (12 rows):**
+- CH-021: the bought LSM6DSOX, SELECTED.
+- BO-007: promoted from bench to the installed amp.
+- BO-006: audio cables to the hub.
+- BO-013 and BO-014: INMP441 clamps and gaskets.
+- BO-016: the charger's PD adapter.
+- BO-018: drives the switch's press-to-on input.
+- CH-083 (PCB-08): adds the yaw plug.
+- CH-086 (PCB-12): drops the watchdog.
+- HN-001, HN-002, HN-003 and HN-006: D-096 topology and counts.
+
+**New (18 rows):**
+
+| Rows | Item | Status |
+|---|---|---|
+| CH-096 | Power switch | SELECTED |
+| CH-097 | 2 × S18V20ALV | SELECTED |
+| CH-098 | 2 × S13V30F5 | SELECTED |
+| CH-099 | INA226 | **OPEN**: shunt value not chosen |
+| CH-100 | ISDT PD60 | CANDIDATE |
+| CH-101 | XT30 port and adapter lead | CANDIDATE |
+| CH-102 | JST PA break and XH port | CANDIDATE |
+| CH-103 | Cell-end balance tap fuses ×3 | **OPEN** |
+| CH-104 | VM protection sets | CANDIDATE |
+| CH-105 | `W11` Schottky | CANDIDATE |
+| CH-106, CH-107, CH-108 | The three D-095 prints | DESIGN |
+| CH-109, CH-110 | M3 and M2 mounting hardware | CANDIDATE |
+| BO-066 | 5 × INMP441 | SELECTED |
+| BO-067 | Audio hub | DESIGN |
+| BO-068 | Mic clamp washers | CANDIDATE |
+
+The SELECTED rows are design choices with bench gates in their `release_check`; they are not purchase approval. CH-099 and CH-103 are `OPEN` placeholders that keep the D-096 shunt and balance-fuse gaps visible in the register. They are not orderable lines; D-096 sets what closes them.
+
+**Firmware (level 8).** [04-software/firmware-requirements.md](04-software/firmware-requirements.md), 26 requirements with their tests:
+- **C0 power and battery:** INA226 loaded-voltage stop and shutdown with peak filtering, button-off through M1's OFF input, non-PD 3 A mode, throttle logging.
+- **C2 servos:** the Feetech max-torque register as the first-instant current cap, with protection current/time as backstop; a measured yaw torque check; 11.1 V tables.
+- **C3 base:** watchdog as the hardware motor stop, `MOTOR_PRESENT` always low, `V_bus` from C0, LSM6DSOX on `J10-7`.
+- **Audio:** the custom GPIO 18–22 I²S0 overlay for four mics plus playback, proved on loose breakouts before the shell is printed.
+
+**Found: PCB-09 rev A cannot reach D-096's control pins.**
+- D-096 puts the button sense on GPIO12 (header pin 32) and the M1 OFF drive on GPIO13 (pin 33). PCB-09 rev A leaves both unconnected, and its full SSW-120 socket covers the header (PCB-09 HA-02).
+- I²C1 reaches the INA226 only through PCB-09's SDA/SCL/GND service pads (D-073), and the INA226 also needs an accessible 3.3 V pad.
+- **Open, by decision before harness build:** a PCB-09 rev B adding GPIO12, GPIO13 and 3V3 pads (the board is not fabricated, so this is a layout edit), or move these jobs to another controller. This is the first change to a designed board since D-093 promised none.
+
+**Also corrected.** The other session's D-096 work added supersession banners to `02-prototypes/RP-02-electrical/README.md` and `power-calculation-ledger.md`. They were reverted before commit (`40a1f8c`) because `02-prototypes/` is read-only ([D-001](#d-001)). The 01-system ledger and 00-foundation edits were kept.
+
+**Not done.**
+- The dated subsystem BOM snapshots (01-chassis/v1/BOM.md, 02-body/v1/BOM.md) are not refreshed; refresh them deliberately before a release.
+- Plan level 7 (other docs) and level 9 (custom boards) are next on paper. The D-096 electrical HOLD needs bench measurements.

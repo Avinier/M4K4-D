@@ -326,9 +326,9 @@ The changes are applied in these levels. Q1–Q9 are decided (§6).
 | 3 | **Modules:** pick each part, check India stock, get dimensions and STEPs (§2, risks R1, R2, R7) | New design | — | **Done 2026-11-07**: [D-094](decisions.md#d-094), [module-selection.md](module-selection.md) |
 | 4 | **CAD** in `final/v1/cad`: module bays, rear-panel ports, balance-lead channel, mic and amp mounts, IMU adapter; targeted checks; mass/CoM (§4.5–4.8) | New design | 3 | **Done 2026-11-07**: [D-095](decisions.md#d-095); outlines of M6, M8, M9 unmeasured |
 | 5 | **Harness:** rewrite [05-harness](05-harness/README.md) power tree, wire list, pinouts, service procedures and buy list (§4.4) | New design | 3, 4 | **Topology documented; electrical HOLD 2026-11-07**: [D-096](decisions.md#d-096). ~16 A coincident low-pack demand exceeds the assumed 13 A connector rating and R010 shunt minimum; cut lengths, PNs and break/star CAD fit also open |
-| 6 | **BOM:** retire, promote and add rows (§4.10) | Records | 3 | Waits |
+| 6 | **BOM:** retire, promote and add rows (§4.10) | Records | 3 | **Done 2026-11-07**: [D-097](decisions.md#d-097); subsystem BOM snapshots not refreshed |
 | 7 | **Other docs:** foundation CON-TBD-09, the power/energy and mass ledgers, head BOM yaw-rail note, print READMEs, final v1 README (§4.1, 4.7, 4.9) | Doc cleanup | 3–6 | Waits |
-| 8 | **Firmware requirements** in `04-software`: low-battery stop, button-off, servo limits, the four-mic overlay (§4.11) | Software | — | Can start any time |
+| 8 | **Firmware requirements** in `04-software`: low-battery stop, button-off, servo limits, the four-mic overlay (§4.11) | Software | — | **Done 2026-11-07**: [firmware-requirements.md](04-software/firmware-requirements.md) ([D-097](decisions.md#d-097)); PCB-09 GPIO12/13 access open |
 | 9 | **Custom boards:** design PCB-08, PCB-12 (after the Waveshare fit check) and PCB-14; one fab order for all seven | New design | 4, 5 | Waits |
 | 10 | **Bench:** TIFPS0629 acceptance, the four-mic overlay on loose breakouts (before the shell is printed), tests N1–N11 (§4.12) | Physical | Parts in hand | Waits |
 

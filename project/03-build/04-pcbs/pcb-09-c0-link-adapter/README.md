@@ -409,3 +409,4 @@ Compared with the playbook and PCB-15, PCB-11, PCB-06, PCB-05 and PCB-10. Their 
   - Layout: written by hand in `layout_pcb09.py` (new `tools/kfile.py`); ERC 0/0; DRC 0/0/0.
   - Outputs: fab/revA and the board STEP.
   - Fit and integration: `check_pcb09_fit.py` 5/5; KiCad STEP installed in the final assembly with rebuilt plugs.
+- **2026-11-07:** [D-097](../../decisions.md#d-097): D-096 needs GPIO12 (button sense), GPIO13 (M1 OFF) and a 3V3 pad for the INA226, but rev A leaves GPIO12/13 unconnected under the full socket. Open: rev B with three pads, or move the jobs to another controller, by decision before the harness build.
