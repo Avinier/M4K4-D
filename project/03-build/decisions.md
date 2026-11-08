@@ -3622,7 +3622,7 @@ The PCB-02, 05, 06 and 13 KiCad work is archived in place as v2 reference.
 | M3 | Yaw 11.1 V | Pololu #2572 S18V20ALV set to 11.1 V | Fab.to.Lab ₹2,700 |
 | M4 | Pi 5 | Pololu #4082 S13V30F5, 5 V buck-boost | Fab.to.Lab |
 | M5 | C3, amp, C2, display | Pololu #4082 S13V30F5 | Fab.to.Lab |
-| M6 | Pack voltage/current | INA226 board with a stated R010 2512 shunt (8.2 A full scale), on the switched bus, read by the Pi | Open (Probots out of stock, shunt unstated) |
+| M6 | Pack voltage/current | INA226 board; D-094 initially proposed R010, superseded by the D-096 electrical audit. Full-bus shunt value OPEN, read by the Pi | Open (Probots out of stock, shunt unstated) |
 | M7 | Base IMU | Adafruit #4438 LSM6DSOX on `J10-7` (SPI) | ThingBits, Fab.to.Lab, Mouser India |
 | M8 | Speaker amp | SmartElex MAX98357A breakout (BO-007, promoted to installed) | Robocraze |
 | M9 | Mics | 4 + 1 spare INMP441 I²S modules (front pair SDI0, rear pair SDI1) | RoboBazar, Techiesms, Robocraze and others |
@@ -3748,7 +3748,7 @@ The 1.763 quoted for this step is the chassis-only D-026 figure. Body v1's whole
 
 **2026-11-07 · Harness / D-093 body-lift and distribution (plan level 5) · TOPOLOGY ONLY; electrical HOLD; no harness built or fit-checked**
 
-**Decision.** The fused AWG16 pack pair crosses the chassis/body joint at `J-BAT` and reaches the rear unswitched charge splice. The XT30 charge port branches there. M1 switches the other branch; M6's R010 shunt is in series with **all** switched positive loads. An insulated crimped AWG16 positive star sits directly after M6 `IN−`, beside a negative return star on the rear-bay plate. One AWG16 switched pair crosses back to the tub plate at `J-CHASSIS`, where rated splices feed both #3297 drivers and both S18V20ALV modules. The S18 outputs each cross the joint at a separate Micro-Fit 3.0 pair (`J-S18-H`, `J-S18-Y`). M4/M5 remain body-side. This keeps the existing D-095 module locations and avoids separate body breaks for four chassis input branches.
+**Decision.** The fused AWG16 pack pair crosses the chassis/body joint at `J-BAT` and reaches the rear unswitched charge splice. The XT30 charge port branches there. M1 switches the other branch; M6's shunt (CH-099 value OPEN) is in series with **all** switched positive loads. An insulated crimped AWG16 positive star sits directly after M6 `IN−`, beside a negative return star on the rear-bay plate. One AWG16 switched pair crosses back to the tub plate at `J-CHASSIS`, where rated splices feed both #3297 drivers and both S18V20ALV modules. The S18 outputs each cross the joint at a separate Micro-Fit 3.0 pair (`J-S18-H`, `J-S18-Y`). M4/M5 remain body-side. This keeps the existing D-095 module locations and avoids separate body breaks for four chassis input branches.
 
 **Body lift.** After `J-PK` and the PA balance break have been opened to remove the pack, unplug four power pairs (`J-BAT`, `J-CHASSIS`, `J-S18-H`, `J-S18-Y`) and seven signal leads (`W29/30/31/32/33/34/36`) at the body. **11 plugs** total; a rear-panel charge-lead service pair, if needed for panel extraction, is additional. The head and body connectors retain their designed far ends. [05-harness](05-harness/README.md) is the wire, pinout, calculation and service schedule.
 

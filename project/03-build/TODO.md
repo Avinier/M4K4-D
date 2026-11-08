@@ -25,7 +25,7 @@
 ## On receipt (ordered 2026-11-08)
 
 - [ ] Record seller, price and exact article in `BOM.csv` for CH-021, CH-096–CH-100, CH-104, CH-105, CH-109, CH-110, BO-007, BO-013, BO-016, BO-066, BO-067
-- [ ] CH-099 INA226: confirm the shunt is R010 (else fit a loose R010 2512 ≥ 1 W); confirm the I²C address
+- [ ] CH-099 INA226: record the received shunt marking, resistance, power rating, trace layout and I²C address. **Do not install an R010/≥1 W board in the full switched-bus path.** Screen a lower-value shunt/module (5 mΩ ≥2 W is a candidate, not selected), measure current peaks with an independent current probe, then choose the value with range and thermal margin and calibrate against a meter. An R010 board may be used only on an isolated, current-limited bench load below its measured limits
 - [ ] CH-100: note whether the ISDT PD60 or a fallback charger arrived; set LiPo 4.20 V/cell, never LiHV
 - [ ] BO-016 adapter: BIS CRS number on the label and a 15 V PDO
 - [ ] Measure outlines of M6 (CH-099), M8 (BO-007) and M9 (BO-066) and compare with the D-095 UNMEASURED envelopes

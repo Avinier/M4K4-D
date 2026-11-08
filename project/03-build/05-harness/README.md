@@ -28,7 +28,7 @@ PCB-02/03/04/05/06/07/13 are superseded. The remaining custom boards keep their 
 ```text
 CHASSIS                                     BODY / REAR PANEL
 cells → PCB-01 → W01 → J-PK → W03a → FUSE 15 A → W03b → J-BAT → (+) charge splice ┬→ XT30 charge + (unswitched)
-       balance taps → W02P → PA 3p → W02B → XHP-3                         └→ M1 VIN → VOUT → M6 IN+ → R010 → IN− → +STAR
+       balance taps → W02P → PA 3p → W02B → XHP-3                         └→ M1 VIN → VOUT → M6 IN+ → SHUNT (OPEN) → IN− → +STAR
 pack − ─────────────────────────── J-PK − ───────────── J-BAT − → (−) charge splice ─→ XT30 −                  → −STAR
 
 +/− STAR ┬→ J-CHASSIS → tub distribution ┬→ #3297 L/R VM/GND (SMBJ8.5A + 100 µF + 0.1 µF at each VM)
@@ -40,7 +40,7 @@ pack − ───────────────────────�
                             └→ W14 → J8-1 C2/display
 ```
 
-M6 measures the **entire switched positive bus**. An INA226 with R010 (10 mΩ) and ±81.92 mV shunt range clips current above about **8.2 A**; its separate bus-voltage reading remains usable. At the §6 screening demand of ~16 A, R010 dissipates **2.56 W**, beyond the selected ≥1 W shunt minimum. The R010 board is **not accepted** for this path until its actual shunt thermal rating and worst current are established, or a lower-value shunt/module is selected and recalibrated. The chassis negative return runs through `J-CHASSIS` to the rear negative star, then `J-BAT`/`J-PK` to the pack. Charger connects to both rear ports only with M1 OFF.
+M6 measures the **entire switched positive bus**, but its shunt value is **OPEN (CH-099)**. An INA226 with R010 (10 mΩ) and ±81.92 mV shunt range clips above about **8.2 A**; at the §6 ~16 A screen it dissipates **2.56 W**, beyond the originally proposed ≥1 W minimum. **Do not fit R010 in the full switched-bus path.** A 5 mΩ shunt rated ≥2 W is a candidate: it would dissipate 1.28 W at 16 A and reach full scale at 16.4 A, leaving little measurement margin. Use an independent current probe for N1–N3 peak waveforms, then select and calibrate a shunt/module after the measured peaks and thermal duty are known. An R010 board is useful only on an isolated, current-limited bench load within its verified range and rating. The chassis negative return runs through `J-CHASSIS` to the rear negative star, then `J-BAT`/`J-PK` to the pack. Charger connects to both rear ports only with M1 OFF.
 
 ## 3. Connector families and parts
 
@@ -80,7 +80,7 @@ Lengths are `E` cut allowances with service loop, **not measured CAD centerlines
 | `W06/07` | Tub branch → #3297 L/R VM/GND pads | 2×AWG18 each; 90 | VM TVS/bulk/ceramic **at each driver** |
 | `W08/09` | #3297 paralleled outputs → MOT3001 via existing MF3 inline | 2×AWG22 each; 230 | Existing motor route/tie, verify forward polarity |
 | `W10` | M4 VOUT/GND → Pi right-angle USB-C solder plug | 2×AWG18; 100 | Under tray; ≤13 mm shell overhang, 56 kΩ Rp CC-to-VBUS per CN-03; N12 |
-| `W11` | M5 VOUT→SS34 anode→cathode→C3 `J10-1.1`; GND→.2 | 2×AWG22; 110 | Diode beside M5, **stripe toward C3**, separately sleeved/tied; N8 |
+| `W11` | M5 VOUT→SS34 anode→cathode→C3 `J10-1.1`; GND→.2 | 2×AWG22; 110 | Diode beside M5, **stripe toward C3**, separately sleeved/tied; N8. **Ordered 2026-11-08: Slkor SS34, SMA (DO-214AC) SMD**, so no leads: tin both pads, solder the AWG22 wires flat along the body, then pot the joint in epoxy or hot glue under heat-shrink so the wires cannot lever on the pads |
 | `W12` | M5 VOUT/GND → M8 amp VIN/GND pins | 2×AWG22; 160 | Amp bracket; solder and strain relief |
 | `W13` | M2 VOUT/GND → `J-S18-H` body-lift MF3 → `J8-1.1/.4` | 2×AWG20; 250 | Tub plate to −Y head riser; N2 head stall |
 | `W14` | M5 VOUT/GND → `J8-1.2/.5` and `.3/.6` | 4×AWG22; 140 | Independent C2/display pairs in riser sleeve |
@@ -134,7 +134,7 @@ Pin 1 means the **moulded cavity number**, not the leftmost cavity in a photogra
 |---|---|
 | `J-PK`, `J-BAT`, `J-CHASSIS` 2-way | 1 positive, 2 negative. Respectively protected pack, fused unswitched, switched shunt-monitored. Give unlike feeds distinct keys/labels |
 | M1 #2813 | VIN from charge +splice; GND from −splice; VOUT to M6 IN+; ON from mushroom NO-to-GND; OFF from verified Pi GPIO interface; CTRL unused. Check received board hole labels |
-| M6 INA226 R010 | IN+ M1 VOUT, IN− +STAR, bus voltage sense at IN− if separate pad exists; VCC Pi 3V3, GND −STAR, SDA/SCL I²C1. Check board trace/jumper arrangement and shunt |
+| M6 INA226 (shunt OPEN, CH-099) | IN+ M1 VOUT, IN− +STAR, bus voltage sense at IN− if separate pad exists; VCC Pi 3V3, GND −STAR, SDA/SCL I²C1. Check board trace/jumper arrangement; choose and calibrate shunt after peak measurements |
 | M2/M3 S18V20ALV | VIN+/GND from tub branch; VOUT+/GND to W13 5.5 V or W17 11.1 V. Label setpoints at modules |
 | M4/M5 S13V30F5 | VIN+/GND from body stars; M4 VOUT Pi-only 5 V; M5 VOUT shared 5 V. Keep outputs separate |
 | `J8-1` MF3 2×3 | 1 +5V5_HEAD_PR, 2 +5V_C2, 3 +5V_DISPLAY, 4 GND_HEAD, 5 GND_C2, 6 GND_DISPLAY |
@@ -154,7 +154,7 @@ AWG16/18/20/22 resistance at 20 °C: 13.2/21/33.3/53 mΩ/m; ×1.16 hot. These **
 | Segment | Hot round-trip copper | Typical/max MF+ contacts | Drop at current, before omitted losses |
 |---|---:|---:|---:|
 | J-PK→fuse→rear splice: + 0.11+0.25 m, − 0.27 m AWG16 | 9.7 mΩ | J-PK + J-BAT: 10/40 mΩ | **0.315/0.795 V at 16 A demand** |
-| Rear M1/M6/star, ~0.24 m + and 0.10 m − AWG16 | 5.2 mΩ | none | 0.083 V at 16 A, **plus** M1 and R010 shunt (0.160 V) |
+| Rear M1/M6/star, ~0.24 m + and 0.10 m − AWG16 | 5.2 mΩ | none | 0.083 V at 16 A, **plus** M1 and the open M6 shunt choice (5 mΩ candidate: 0.080 V at 16 A) |
 | Star→tub 0.31 m each way AWG16 | 9.5 mΩ | J-CHASSIS: 5/20 mΩ | 0.171/0.348 V at 11.8 A illustrative chassis demand |
 | Tub→each driver 0.09 m each way AWG18 | 4.4 mΩ | none | 0.009 V at 2 A each |
 | M2/M3→body 0.25 m each way AWG20 | 19.3 mΩ | MF3 resistance unmeasured | 0.054 V at 2.8 A head; 0.046 V at 2.4 A yaw, before connector/FFC |
@@ -220,7 +220,7 @@ With power isolated, unplug `J8-1`, `J8-4`, yaw lead `J8-8` as needed and the CS
 |---|---|
 | Connector order | Verify MF+ housing gender/key and AWG16 contacts, MF3 AWG20 tool/contacts, PA/XH pre-crimp gauge/mate, multiwire splice capacity. Pull-test three samples per wire/contact combination. Choose W04 panel service pair after extraction mock-up |
 | CAD reserves | **Placed 2026-11-07 ([D-099](../decisions.md#d-099), `check_d096_bodylift.py` 26/26):** `J-BAT` X −27.5..−5.5, Y −31..−22.7; `J-CHASSIS` the same X at Y 22.7..31 (both forward of the rear lower cross rail, drawn 40 mm inward to unmate); `J-S18-H`/`J-S18-Y` X −3..16 at Y −38..−31 / −29.5..−22.5 behind the right motor (unmated in place: the −X half has 12 mm axial travel); all on the deck at Z 57–67; the ± star splices along Y above the rail at X −31.75/−25.25, Z 74.25. Still open: string-route W03b/W05c/W13/W17 with modules installed and the body moving, and hand reach at first build |
-| M6/control interfaces | Source stated R010 ≥1 W board, measure shunt and voltage sense, confirm I²C address. Measure #2813 ON idle voltage/OFF recognition; qualify GPIO12 buffer and GPIO13 OFF drive. PCB-09 rev B must pass six-net continuity, no-short, populated fit, and strain-relief checks before W40/W44 are built ([D-098](../decisions.md#d-098)) |
+| M6/control interfaces | Record the received INA226 board's shunt marking/rating, sense routing and I²C address; keep R010 off the full switched bus. Measure N1–N3 peaks independently; select a shunt/module with input-range and thermal margin (5 mΩ ≥2 W is only a candidate), then calibrate against a meter. Measure #2813 ON idle voltage/OFF recognition; qualify GPIO12 buffer and GPIO13 OFF drive. PCB-09 rev B must pass six-net continuity, no-short, populated fit, and strain-relief checks before W40/W44 are built ([D-098](../decisions.md#d-098)) |
 | Bench | N1 switch heat, N2 head/shared rails, N3 yaw, N4 VM, N5 charge/balance fault cases, N8 Schottky/back-feed, N9 audio, N10 IMU, N11 mic timing, N12 Pi voltage: exact setup/pass in [plan §4.12](../simplification-plan.md#412-tests), with the added balance-lead cases in §6. Four-wire pack-to-star/driver at 5 A and hot load drop |
 | First build | Record `W` cut lengths, pad/termination photos, full polarity and balance voltages, 11-plug reach/slack, panel removal path and cable-set masses; reconcile D-095 balance/charge mass rows |
 
