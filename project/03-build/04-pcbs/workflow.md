@@ -12,7 +12,7 @@ PCB-01 has no folder. It is the bought TIFPS0629 ([D-019](../decisions.md#d-019)
 
 | Folder | Board | BOM | Design | Procure | Integrate |
 |---|---|---|---|---|---|
-| [pcb-08-yaw-junction](pcb-08-yaw-junction/README.md) | Yaw junction | CH-083 | Not started; rescoped by D-093 | — | — |
+| [pcb-08-yaw-junction](pcb-08-yaw-junction/README.md) | Yaw junction | CH-083 | Inputs in progress: interface and FFC map drafted; select a fitting active 22-way ZIF and verify cable orientation before KiCad | — | — |
 | [pcb-09-c0-link-adapter](pcb-09-c0-link-adapter/README.md) | C0 link adapter | CH-084 | Rev B routed: Nightly DRC 0/0/0; CAD fit 8/8, mount 7/7, integration PASS ([D-098](../decisions.md#d-098)) | `fab/revB` drafted; wait for #2813, Pi-image and populated bench gates before ordering in D-064 batch | Rev B STEP and J6 mated plug installed in final CAD; pre-mate J6 before tray insertion; physical acceptance open |
 | [pcb-10-c3-carrier](pcb-10-c3-carrier/README.md) | C3 controller carrier | CH-044 | Done, rev A | — | CAD replacement complete; physical acceptance open |
 | [pcb-11-status-led](pcb-11-status-led/README.md) | Status LED carrier | CH-085 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
