@@ -207,6 +207,51 @@ class Board:
     def save(self):
         self.path.write_text(self.text)
 
+    def set_pad_nets(self, ref, nets):
+        """Update transferred pads when the schematic adds nets to an existing part."""
+        for kind, start, end in self.items:
+            raw = self.text[start:end]
+            if kind == "footprint" and re.search(r'\(property "Reference" "%s"' % re.escape(ref), raw):
+                break
+        else:
+            raise KeyError(ref)
+
+        def update(match):
+            pad = match.group(0)
+            number = re.match(r'\t\t\(pad "([^"]+)"', pad).group(1)
+            if number not in nets:
+                return pad
+            net = nets[number]
+            if re.search(r'\(net "[^"]*"\)', pad):
+                pad = re.sub(r'\(net "[^"]*"\)', f'(net "{net}")', pad, count=1)
+                if not net.startswith("unconnected-"):
+                    pad = pad.replace("passive+no_connect", "passive")
+                return pad
+            return pad.replace("\n\t\t)", f'\n\t\t\t(net "{net}")\n\t\t)', 1)
+
+        new = re.sub(r'\t\t\(pad .*?\n\t\t\)', update, raw, flags=re.S)
+        self.text = self.text[:start] + new + self.text[end:]
+        self._index()
+
+    def clone_footprint(self, source_ref, ref, value, symbol_uuid, nets, dnp=False):
+        """Clone a same-footprint, same-side part with fresh generated UUIDs."""
+        raw = next((raw for raw in self.blocks("footprint")
+                    if re.search(r'\(property "Reference" "%s"' % re.escape(source_ref), raw)), None)
+        if raw is None:
+            raise KeyError(source_ref)
+        raw = raw.replace(f'(property "Reference" "{source_ref}"',
+                          f'(property "Reference" "{ref}"', 1)
+        raw = re.sub(r'\(property "Value" "[^"]*"',
+                     f'(property "Value" "{value}"', raw, count=1)
+        raw = re.sub(r'\(path "/[^"]+"\)', f'(path "/{symbol_uuid}")', raw, count=1)
+        ids = iter(range(10000))
+        raw = re.sub(r'\(uuid "[^"]+"\)',
+                     lambda m: f'(uuid "{gen_uuid(ref + "/" + str(next(ids)))}")', raw)
+        if dnp:
+            raw = raw.replace('(attr smd)', '(attr smd dnp)', 1)
+        self.add(raw)
+        self.set_pad_nets(ref, nets)
+
 
 # ---------------------------------------------------------------- item text
 

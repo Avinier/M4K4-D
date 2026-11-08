@@ -34,14 +34,14 @@
 | PCB-07 base IMU | HOLD | **Bought** SPI 6-axis breakout | — |
 | PCB-13 charge inlet | Rev A | **Deleted** | — |
 | PCB-08 yaw junction | Not started | **Custom, simpler**: drops the permit/status sideband, **gains the yaw servo plug** (was PCB-03 `J3-5`) | Design |
-| PCB-09 C0 link adapter | Rev A (main); rev B schematic draft on `pcb-09-revB` | **Rev B (D-098 amendment)**; GPIO12/13 and local `i2c-gpio` INA226 wiring selected | Route and validate rev B; rev A is not the release design |
+| PCB-09 C0 link adapter | Rev B routed and CAD fitted on `pcb-09-revB`; Nightly DRC 0/0/0, fit 8/8, mount 7/7, integration PASS | **Rev B (D-098 amendment)**; GPIO12/13 and local `i2c-gpio` INA226 wiring selected | #2813 measurements, Pi-image checks and populated bench acceptance remain before release |
 | PCB-10 C3 carrier | Rev A | **Kept, no re-spin.** `J10-12` unused; its watchdog + AND gate become the motor kill | Procure |
 | PCB-11 status LED | Rev A | **Kept** | Procure |
 | PCB-12 C2 head carrier | Not started | **Custom, simpler** (no watchdog, `ARM_REQ` or READY pair). The Waveshare board doesn't fit the C2 bay (D-094) | Design |
 | PCB-14 ×3 yaw joiners | HOLD | **Kept custom** (passive; ZIF pick still open) | Design |
 | PCB-15 nose Hall | Rev A | **Kept** | Procure |
 
-**Count:** 14 custom designs → **7** (PCB-08, 09, 10, 11, 12, 14, 15). 4 have rev A designs; **3 are left to design** (08, 12, 14), and PCB-09 rev B remains to implement. All 7 go on one fab order ([D-064](decisions.md#d-064) batch). What's left to bring up is medium risk (PCB-09, 10, 12) or low (08, 11, 14, 15).
+**Count:** 14 custom designs → **7** (PCB-08, 09, 10, 11, 12, 14, 15). 4 have rev A designs; **3 are left to design** (08, 12, 14), and PCB-09 rev B is routed and CAD fitted but awaits physical acceptance. All 7 go on one fab order ([D-064](decisions.md#d-064) batch). What's left to bring up is medium risk (PCB-09, 10, 12) or low (08, 11, 14, 15).
 
 **Interface rule.** Boards already designed keep their connectors. Each bought module gets a soldered pigtail ending in the connector the board expects. No designed board is re-spun.
 
@@ -329,7 +329,7 @@ The changes are applied in these levels. Q1–Q9 are decided (§6).
 | 6 | **BOM:** retire, promote and add rows (§4.10) | Records | 3 | **Done 2026-11-07**: [D-097](decisions.md#d-097); subsystem BOM snapshots not refreshed. **Ordered 2026-11-08** (builder): modules, M13 small parts, BO-007, BO-016; harness connectors (CH-101, CH-102, Micro-Fit pairs, splices) wait for the 05-harness review |
 | 7 | **Other docs:** foundation CON-TBD-09, the power/energy and mass ledgers, head BOM yaw-rail note, print READMEs, final v1 README (§4.1, 4.7, 4.9) | Doc cleanup | 3–6 | **Done 2026-11-07** for documentation; power-ledger **peak budget remains D-096 HOLD** pending N1–N3 and CH-099 |
 | 8 | **Firmware requirements** in `04-software`: low-battery stop, button-off, servo limits, the four-mic overlay (§4.11) | Software | — | **Done 2026-11-07**: [firmware-requirements.md](04-software/firmware-requirements.md) ([D-097](decisions.md#d-097)); PCB-09 rev B interface selected by [D-098](decisions.md#d-098), physical implementation pending |
-| 9 | **Custom boards:** revise PCB-09 to rev B for GPIO12/13 and accessible, supported INA226 `i2c-gpio` SDA/SCL/3V3/GND wiring ([D-098 amendment](decisions.md#d-098)); preserve I²C1 TP1/TP2 on rev A routes; design PCB-08, PCB-12 (custom: the Waveshare board doesn't fit, D-094) and PCB-14; update final-v1 board STEP and fit checks before one fab order for all seven | New design | 4, 5 | Waits; rev A PCB-09 fab outputs are not the release design |
+| 9 | **Custom boards:** PCB-09 rev B adds GPIO12/13 and INA226 `i2c-gpio` SDA/SCL/3V3/GND wiring ([D-098 amendment](decisions.md#d-098)), retaining I²C1 TP1/TP2; design PCB-08, PCB-12 (custom: the Waveshare board doesn't fit, D-094) and PCB-14; complete physical acceptance before one fab order for all seven | New design | 4, 5 | PCB-09 layout and final-v1 CAD done on branch; `fab/revB` draft, #2813/Pi/bench gates open |
 | 10 | **Bench:** TIFPS0629 acceptance, the four-mic overlay on loose breakouts (before the shell is printed), tests N1–N11 (§4.12) | Physical | Parts in hand | Waits |
 
 ---

@@ -1,4 +1,4 @@
-"""PCB-09 rev A fit: place the KiCad board STEP where the droid CAD has the C0 link adapter and measure it.
+"""PCB-09 rev B fit: place the KiCad board STEP where the droid CAD has the C0 link adapter and measure it.
 
 Run from this folder with the legacy runtime and the PYTHONPATH in ../README.md.
 Builds the chassis and body trees with the droid edits (about 1 min), not the head.
@@ -31,7 +31,7 @@ spec.loader.exec_module(entry)
 MNT = entry.PCB09_MOUNT
 
 MIN_GAP = 0.2
-REGION = (-20.0, 72.0, 5.0, 50.0, 85.0, 170.0)
+REGION = (-65.0, 80.0, -40.0, 50.0, 60.0, 170.0)
 OWN = ("C0_LINK_ADAPTER_PCB09/", "PCB09_M25", "C0_LINK_ADAPTER_PCB09_RESERVE", "C0_LINK_ADAPTER_TOP_ENTRY_PLUG_RESERVE",
        "C0_LINK_ADAPTER_J91_PLUG_RESERVE", "C0_LINK_ADAPTER_J94_FAN_XH2_PLUG_RESERVE")
 SOFT = ("RESERVE", "KEEP_OUT", "HARNESS_")
@@ -65,6 +65,12 @@ def main():
     pi = B.raspberry_pi5()
     pi_parts = [(f"PI5_VENDOR/{i}", s.wrapped, _box(s)) for i, s in enumerate(pi.solids()) if _hit(_box(s), reg)]
     parts += pi_parts
+    switch, ina, splice = entry.rear_modules()
+    cable_parts = parts + [(p.label, p.wrapped, _box(p)) for group in (switch, ina, splice) for p in group]
+    def volume_box(bounds, margin=0.0):
+        x0, x1, y0, y1, z0, z1 = bounds
+        return Box(x1-x0+2*margin, y1-y0+2*margin, z1-z0+2*margin).moved(
+            Location(((x0+x1)/2, (y0+y1)/2, (z0+z1)/2)))
     get = lambda label: next(raw for p, raw, b in parts if p.endswith(label))
 
     (instance, loc), = P.placements(9, None, None)
@@ -126,7 +132,10 @@ def main():
             from OCP.BRepExtrema import BRepExtrema_DistShapeShape
             d = BRepExtrema_DistShapeShape(raw, other)
             if d.IsDone() and d.Value() < MIN_GAP:
-                hard.append(f"{label} {d.Value():.3f} to {name}")
+                a, b = d.PointOnShape1(1), d.PointOnShape2(1)
+                hard.append(f"{label} {d.Value():.3f} to {name} at "
+                            f"({a.X():.2f},{a.Y():.2f},{a.Z():.2f}) / "
+                            f"({b.X():.2f},{b.Y():.2f},{b.Z():.2f})")
     out.append((f"parts clear of the droid by {MIN_GAP} mm", not hard, "; ".join(hard[:6]) or "clear"))
     print("INFO  reserves near the real parts: " + ("; ".join(sorted(set(soft))[:8]) or "none"))
 
@@ -154,6 +163,36 @@ def main():
         if hits:
             rows.append(f"{label}: {hits}")
     out.append(("real parts slide in with the tray", ok, "; ".join(rows) or f"{len(comps)} parts' boxes swept clear"))
+
+    # 6. A 3 mm lead rises from J6, shifts to Y 20 ahead of the yaw drive, then
+    # runs to the rear bay and down beside M1. Check its rectangular reserve
+    # with 0.2 mm added on every face, including the bought rear modules.
+    cable = (
+        ("J6 rise", (70.5,73.5,29.5,32.5,115.5,119.5)),
+        ("shift to Y20", (70.5,73.5,18.5,32.5,116.5,119.5)),
+        ("rear run", (-44.0,72.0,18.5,21.5,116.5,119.5)),
+        ("rear drop", (-47.0,-44.0,18.5,21.5,95.0,119.5)),
+        ("front jog", (-47.0,-34.0,18.5,21.5,94.5,97.5)),
+        ("buffer lead", (-37.0,-34.0,-14.0,21.5,94.5,97.5)),
+    )
+    cable_hits = [(name, _hits(volume_box(bounds, MIN_GAP), cable_parts, OWN+SOFT)) for name,bounds in cable]
+    bad = [(name,hits) for name,hits in cable_hits if hits]
+    out.append(("J6 lead to the rear buffer reserve", not bad,
+                "; ".join(f"{name}: {hits}" for name,hits in bad) or "3 mm route clear with 0.2 mm margin via Y 20, Z 118"))
+
+    reserve_hits = _hits(volume_box(entry.REAR_BUTTON_BUFFER_RESERVE, MIN_GAP), cable_parts, OWN+SOFT)
+    out.append(("rear button buffer volume beside M1", not reserve_hits,
+                str(reserve_hits) if reserve_hits else f"{entry.REAR_BUTTON_BUFFER_RESERVE} clear with 0.2 mm margin"))
+
+    # 7. A pre-mated J6 plug must slide in with the tray, or its upward mating
+    # prism must be accessible after installation. Report both paths.
+    jb = next(b for label,raw,b in plugs if "_J6_" in label)
+    pre = (jb[0], jb[3]+90.0, jb[1], jb[4], jb[2], jb[5]+B.TRAY_INSTALL_LIFT)
+    insert = (jb[0], jb[3], jb[1], jb[4], jb[2], jb[5]+20.0)
+    pre_hits = _hits(volume_box(pre), parts, LATER)
+    insert_hits = _hits(volume_box(insert), parts, OWN+SOFT)
+    out.append(("J6 bench mating or later access", not pre_hits or not insert_hits,
+                f"pre-mated tray sweep: {pre_hits or 'clear'}; in-place insertion: {insert_hits or 'clear'}"))
 
     failed = 0
     for name, ok, detail in out:

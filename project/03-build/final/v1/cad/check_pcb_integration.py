@@ -51,10 +51,11 @@ def check(robot,body,head_origin):
     for n,name in P.GROUPS.items():
         print(f'Checking PCB-{n:02d} replacement and datums...',flush=True)
         group=next(c for c in groups.children if c.label==name)
-        real=[c for c in group.children if c.label.startswith(f"PCB{n:02d}_KICAD_REVA_")]
+        revision="REVB" if n==9 else "REVA"
+        real=[c for c in group.children if c.label.startswith(f"PCB{n:02d}_KICAD_{revision}_")]
         expected=P.placements(n,body,head_origin)
         assert len(real)==len(expected),(n,len(real))
-        assert not any(any(t in '/'.join(path) for t in ('C3_DEVKITC_V11_','status_LED_PCB08','BALL_NOSE_HALL_CARRIER_PCB')) for path,s in walk(group) if not any('_KICAD_REVA_' in label for label in path))
+        assert not any(any(t in '/'.join(path) for t in ('C3_DEVKITC_V11_','status_LED_PCB08','BALL_NOSE_HALL_CARRIER_PCB')) for path,s in walk(group) if not any('_KICAD_REV' in label for label in path))
         for board,(instance,loc) in zip(real,expected):
             assert len(board.children)==len(P.raw_parts(n))-len(P.dnp_refs(n))
             cores=[s for s in board.children if s.label.endswith('_PCB')]
@@ -66,8 +67,8 @@ def check(robot,body,head_origin):
             # rather than checking only that the placement helper agrees with itself.
             bb=bbox(cores[0]);centre=tuple((bb[k]+bb[k+3])/2 for k in range(3))
             if n==9:
-                # D-092 outline: strip X -11 (tab), bay to X 66, Y 16.3..39; core centred in the 1.6 mm board on the standoffs
-                assert max(abs(a-b) for a,b in zip((bb[0],bb[1],bb[3],bb[4]),(-11,16.3,66,39)))<0.01
+                # D-092 mount with the rev B service extension to X 78.
+                assert max(abs(a-b) for a,b in zip((bb[0],bb[1],bb[3],bb[4]),(-11,16.3,78,39)))<0.01
                 assert abs(centre[2]-107.25)<0.01
             elif n==10:
                 assert max(abs(a-b) for a,b in zip((bb[0],bb[3],bb[2],bb[5]),(-14,56,76,125.5)))<0.01
@@ -100,7 +101,7 @@ def check(robot,body,head_origin):
     # fit scripts; reservations are envelopes, not physical interference.
     obstacles=[]
     for path,shape in walk(robot):
-        if any('_KICAD_REVA_' in label for label in path):continue
+        if any('_KICAD_REV' in label for label in path):continue
         if any(token in '/'.join(path).upper() for token in ('RESERVE','KEEP_OUT','KEEPOUT','OVERLAY','PHYSICS','HARNESS','ENVELOPE')):continue
         obstacles.append((path,shape,bbox(shape)))
     static=[];contacts=[]

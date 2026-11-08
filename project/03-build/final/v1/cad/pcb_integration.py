@@ -1,4 +1,4 @@
-"""Install released KiCad rev-A STEP inputs in the final robot only.
+"""Install KiCad STEP inputs in the final robot.
 
 Millimetres. Static transforms are those proved by check_pcbNN_fit.py; no
 subsystem source or KiCad layout is changed.
@@ -21,7 +21,8 @@ GROUPS = {9:"PCB-09 C0 link adapter", 10:"PCB-10 C3 controller carrier", 11:"PCB
 
 def source_path(number):
     name = BOARDS[number]
-    return ROOT / "04-pcbs" / name / "cad" / (name + "-revA.step")
+    revision = "revB" if number == 9 else "revA"
+    return ROOT / "04-pcbs" / name / "cad" / (name + f"-{revision}.step")
 
 
 @lru_cache(None)
@@ -110,7 +111,8 @@ def installed_board(number, instance, loc):
         if label.endswith("_PCB"):
             part.color=Color(0.08,0.36,0.16)
         parts.append(part)
-    return Compound(label=f"PCB{number:02d}_KICAD_REVA_{instance}",children=parts)
+    revision = "REVB" if number == 9 else "REVA"
+    return Compound(label=f"PCB{number:02d}_KICAD_{revision}_{instance}",children=parts)
 
 
 def leaves(node, parent=Location()):
@@ -134,7 +136,8 @@ def retain(number,label):
 # PCB-09's placeholder plugs stood on the review-placement headers; the KiCad headers moved
 # (D-092), so the mated GHR plugs are rebuilt on the installed headers, as the body model
 # draws them: top-entry plugs above BM headers, J9-1's side-entry plug beyond the +Y edge.
-PCB09_PLUGS = {"J5":("J9_4",2,"top"), "J3":("J9_2",6,"top"), "J4":("J9_3",10,"top"), "J2":("J9_1",6,"side")}  # KiCad refs
+PCB09_PLUGS = {"J5":("J9_4",2,"top"), "J3":("J9_2",6,"top"), "J4":("J9_3",10,"top"),
+               "J2":("J9_1",6,"side"), "J6":("J6",6,"top")}  # KiCad refs
 
 
 def pcb09_mated_plugs(board,body):
@@ -157,7 +160,7 @@ def pcb09_mated_plugs(board,body):
         plug.label=f"C0_{cid}_GHR{n:02d}_MATED_PLUG"
         plug.color=Color(0.957,0.945,0.902)
         out.append(plug)
-    assert len(out)==4,[p.label for p in out]
+    assert len(out)==5,[p.label for p in out]
     return out
 
 

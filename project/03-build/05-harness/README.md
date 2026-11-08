@@ -110,7 +110,7 @@ Lengths are `E` cut allowances with service loop, **not measured CAD centerlines
 | `W43` | PCB-08 `J8-7` ↔ PCB-14 | Existing 22-pin sideband FFC; former ARM_REQ/READY/charge/status conductors marked **“reassign at PCB-08/12 design”**, not tied to power |
 | `W44` | M6 SDA/SCL/VCC/GND → PCB-09 rev B service termination → Pi `i2c-gpio`/3V3/GND | 4×AWG28, E 160. Draft bus pins: Pi physical 36 / GPIO16 SDA and 37 / GPIO26 SCL, with 4.7 kΩ pull-ups on PCB-09. Rev A I²C1 TP1/TP2/TP5 are 1 mm probe pads and stay outside this harness. Use only the designed, strain-relieved rev B interface after fit and continuity checks ([D-098 amendment](../decisions.md#d-098)). No 5 V I²C. Set/verify address 0x40 unless occupied |
 
-**Draft J6 GH6 lead:** one pre-crimped six-way lead leaves PCB-09 and splits at the rear-bay plate into W44's INA226 four wires and W40's button/OFF control pair. Connector placement, lead exit, split support and unplug method await the rev B CAD fit.
+**Draft J6 GH6 lead:** one pre-crimped six-way lead leaves PCB-09 and splits at the rear-bay plate into W44's INA226 four wires and W40's button/OFF control pair. Rev B CAD places J6 at the +X extension and checks a 3 mm lead corridor via world Y 20 and Z 118 to the rear buffer volume. Mate J6 on the bench before sliding in the tray: its in-place insertion prism clips the frame. Freeze lead length, split support and strain relief after the populated fit and pull test.
 
 | J6 pin | Net | Rear destination |
 |---|---|---|
@@ -121,7 +121,7 @@ Lengths are `E` cut allowances with service loop, **not measured CAD centerlines
 | 5 | BTN_SENSE | Rear button buffer output |
 | 6 | PWR_OFF | M1 OFF input interface |
 
-`W20`, `W21`, `W23a/b`, `W39`, and old NTC GH2 are deleted. GH pre-crimp buy: GH2 W41 (and W40 if a detachable lead is selected); GH4 W30/31 plus CH-020 W36; GH5 W34; GH6 W24/25 double-ended and W32/33 single-ended; GH8 W29 single-ended; **GH10 one single-ended W26**. Buy one spare per fitted size after measured stock lengths are chosen.
+`W20`, `W21`, `W23a/b`, `W39`, and old NTC GH2 are deleted. GH pre-crimp buy: GH2 W41; GH4 W30/31 plus CH-020 W36; GH5 W34; GH6 W24/25 double-ended, W32/33 single-ended and one single-ended J6 lead shared by W40/W44; GH8 W29 single-ended; **GH10 one single-ended W26**. Buy one spare per fitted size after measured stock lengths are chosen.
 
 **Audio hub, solder side concept (freeze after N9):**
 

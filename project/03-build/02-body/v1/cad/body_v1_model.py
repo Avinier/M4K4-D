@@ -1183,6 +1183,7 @@ C0_GPIO_SOCKET = _compute_shifted((-14.7, 37.1, 22.3, 28.3, 104.1, 106.4))  # so
 C0_LINK_ADAPTER_STRIP = _compute_shifted((-14.7, 26.0, 22.3, 26.9, 106.4, 108.2))
 C0_LINK_ADAPTER_BRIDGE = _compute_shifted((26.0, 37.1, 22.3, 28.5, 106.4, 108.2))
 C0_LINK_ADAPTER_BOX = _compute_shifted((26.0, 56.0, 28.5, 45.0, 104.0, 112.0))
+C0_LINK_ADAPTER_REVB_EXTENSION = _compute_shifted((56.0, 68.0, 28.5, 44.9, 104.0, 112.0))
 C0_LINK_ADAPTER_PLATE_Z = (106.4, 108.0)
 C0_LINK_ADAPTER_TOP_PLUGS = _compute_shifted((36.0, 54.0, 29.0, 42.0, 112.0, 116.0))
 C0_LINK_ADAPTER_SIDE_PLUG = _compute_shifted((26.0, 38.0, 45.0, 54.0, 108.0, 112.5))
@@ -4248,7 +4249,11 @@ def _c0_link_adapter(main_x_shift=0.0):
     wx0, wx1, wy0, wy1, _a, _b = C0_LINK_ADAPTER_BOX
     wx0 += main_x_shift
     wx1 += main_x_shift
-    plate = _block(sx0, sx1, sy0, sy1, z0, z1) + _block(bx0, bx1, by0, by1, z0, z1) + _block(wx0, wx1, wy0, wy1, z0, z1)
+    ex0, ex1, ey0, ey1, _a, _b = C0_LINK_ADAPTER_REVB_EXTENSION
+    plate = (_block(sx0, sx1, sy0, sy1, z0, z1)
+             + _block(bx0, bx1, by0, by1, z0, z1)
+             + _block(wx0, wx1, wy0, wy1, z0, z1)
+             + _block(ex0 + main_x_shift, ex1 + main_x_shift, ey0, ey1, z0, z1))
     parts = [
         _paint(plate, "C0_LINK_ADAPTER_PCB09_BOARD", PCB_GREEN, 1.0),
         _paint(_block(*C0_GPIO_SOCKET), "C0_GPIO_2X20_SOCKET_BODY", "#2E3336", 1.0),

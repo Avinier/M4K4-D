@@ -1,4 +1,4 @@
-"""PCB-09 rev A layout, written headless into the .kicad_pcb (D-092).
+"""PCB-09 rev B layout, written headless into the .kicad_pcb (D-092/D-098).
 
 Run from this folder with any Python 3 (no KiCad Python needed):
 
@@ -32,7 +32,8 @@ LIB = Path("/Applications/KiCad-nightly/KiCad.app/Contents/SharedSupport/footpri
 # Clockwise from the -X tab's top-left corner. The strip's +Y edge is y 116.6, the
 # bridge and bay meet at y 116.5, the +X tab's -Y edge is y 121.8 (world Y 17.2).
 OUTLINE = [
-    (93.7, 116.6), (134.7, 116.6), (134.7, 100.0), (170.7, 100.0), (170.7, 116.5),
+    (93.7, 116.6), (134.7, 116.6), (134.7, 100.0), (170.7, 100.0),
+    (170.7, 100.1), (182.7, 100.1), (182.7, 116.5),
     (158.1, 116.5), (158.1, 121.8), (151.8, 121.8), (151.8, 122.7), (93.7, 122.7),
 ]
 HOLES = {"H1": (96.9, 119.67), "H2": (154.9, 119.67)}   # Pi holes 3 and 4: world (-7.8, 19.33), (50.2, 19.33)
@@ -51,6 +52,7 @@ PLACE = {
     "J5": (153.7, 104.0, 0),       # J9-4 fan GH2 (D-092 amendment)
     "J4": (161.5, 111.3, 0),       # J9-3 audio, top entry; pads face the F audio band
     "J3": (164.5, 103.3, 0),       # J9-2 base, top entry; pads face U2's vias
+    "J6": (176.7, 108.0, 0),       # rear service, +X extension (pending populated CAD fit)
     "TP3": (136.6, 110.4, 0),      # GND service pad (moved off the strip)
     "TP5": (136.6, 107.6, 0),      # 3V3
     "TP6": (148.6, 109.9, 0),      # 5V, on the 5V track
@@ -68,6 +70,13 @@ PLACE = {
     "D1": (153.7, 108.4, 0),       # fan flyback
     "C3": (150.4, 105.4, 90),      # fan 10 uF
     "C4": (152.4, 105.0, 90),      # fan 100 nF
+    "R7": (172.8, 102.7, 0),      # button pull-up
+    "R8": (173.0, 108.5, 90),     # button series
+    "C5": (171.8, 105.0, 90),     # optional button capacitor, DNP
+    "R9": (179.5, 111.0, 90),     # OFF series
+    "R10": (180.5, 106.0, 90),    # OFF pull-down
+    "R11": (176.0, 102.8, 0),     # software I2C SDA pull-up
+    "R12": (179.2, 102.8, 0),     # software I2C SCL pull-up
 }
 TO_TOP = {"U1": ("Package_SO.pretty", "SOIC-8_3.9x4.9mm_P1.27mm"), "C1": ("Capacitor_SMD.pretty", "C_0603_1608Metric")}
 
@@ -118,6 +127,24 @@ def board_setup(b):
 
 
 def placement(b):
+    import uuid
+    sym = lambda ref: str(uuid.uuid5(uuid.NAMESPACE_URL, "makad/pcb09/" + ref))
+    b.set_pad_nets("J1", {"32": "/BTN_GPIO12", "33": "/OFF_GPIO13",
+                           "36": "/I2C_GPIO_SDA", "37": "/I2C_GPIO_SCL"})
+    b.clone_footprint("J3", "J6", "REAR_SERVICE_W40_W44", sym("J6"),
+                      dict(zip(map(str, range(1, 7)),
+                               ("/+3V3_PI", "/I2C_GPIO_SDA", "/I2C_GPIO_SCL",
+                                "/GND", "/BTN_SENSE", "/PWR_OFF"))))
+    for ref, source, value, nets, dnp in (
+        ("R7", "R6", "10k", ("/+3V3_PI", "/BTN_SENSE"), False),
+        ("R8", "R6", "2.2k", ("/BTN_SENSE", "/BTN_GPIO12"), False),
+        ("R9", "R6", "1k", ("/OFF_GPIO13", "/PWR_OFF"), False),
+        ("R10", "R6", "100k", ("/PWR_OFF", "/GND"), False),
+        ("R11", "R6", "4.7k", ("/+3V3_PI", "/I2C_GPIO_SDA"), False),
+        ("R12", "R6", "4.7k", ("/+3V3_PI", "/I2C_GPIO_SCL"), False),
+        ("C5", "C2", "100n", ("/BTN_GPIO12", "/GND"), True),
+    ):
+        b.clone_footprint(source, ref, value, sym(ref), {"1": nets[0], "2": nets[1]}, dnp=dnp)
     if "JST_XH_B2B-XH-A" in next(r for r in b.blocks("footprint") if '"Reference" "J5"' in r):
         K.replace_footprint(b, "J5", LIB / "Connector_JST.pretty", "JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical")
     for ref, (lib, name) in TO_TOP.items():
@@ -160,13 +187,33 @@ VIAS = {
     "V_3V3_U1": (141.14, 116.4, "/+3V3_PI"), "V_3V3_R1": (147.4, 112.0, "/+3V3_PI"),
     "V_3V3_TP5": (137.9, 107.6, "/+3V3_PI"), "V_3V3_J4": (155.875, 111.75, "/+3V3_PI"),
     "V_3V3_R2": (159.7, 111.6, "/+3V3_PI"), "V_3V3_U2": (168.4, 115.3, "/+3V3_PI"),
-    "V_5V_IN1": (144.95, 116.3, "/+5V_PI"), "V_5V_FAN": (152.2, 109.9, "/+5V_PI"),
+    "V_5V_IN1": (145.45, 116.33, "/+5V_PI"), "V_5V_FAN": (152.2, 109.9, "/+5V_PI"),
     "V_FAN_SW": (154.325, 107.3, "/FAN_SW"),
-    "V_BCLK": (148.76, 116.5, "/BCLK"), "V_SDI0": (152.6, 116.05, "/SDI0"), "V_AMP_SD": (153.8, 116.5, "/AMP_SD"),
+    "V_BCLK": (148.0, 116.5, "/BCLK"), "V_SDI0": (152.6, 116.05, "/SDI0"), "V_AMP_SD": (153.8, 116.5, "/AMP_SD"),
     "V_5VSENSE": (167.125, 111.75, "/5V_SENSE_TP_ONLY"),
     "V_GND_C1": (139.4, 111.6, "/GND"), "V_GND_J2": (147.2, 106.9, "/GND"), "V_GND_J4": (158.375, 111.75, "/GND"),
     "V_GND_Q1": (158.0, 109.9, "/GND"), "V_GND_R6": (160.9, 104.2, "/GND"), "V_GND_C3C4": (149.2, 103.0, "/GND"),
 "V_GND_C2": (169.4, 112.0, "/GND"),
+    # Rev B: no In1 signal tracks and no via at the LRCLK/5V strip exits.
+    "V_GPIO_SDA": (147.0, 115.8, "/I2C_GPIO_SDA"),
+    "V_J6_SDA": (174.825, 112.5, "/I2C_GPIO_SDA"),
+    "V_J6_SCL": (176.075, 112.5, "/I2C_GPIO_SCL"),
+    "V_GPIO_SCL": (149.2, 116.0, "/I2C_GPIO_SCL"),
+    "V_BTN_HEADER": (139.87, 115.8, "/BTN_GPIO12"),
+    "V_BTN_R8": (170.8, 113.0, "/BTN_GPIO12"),
+    "V_OFF_HEADER": (144.45, 116.05, "/OFF_GPIO13"),
+    "V_OFF_R9": (172.0, 113.6, "/OFF_GPIO13"),
+    "V_OFF_R9_B": (179.5, 113.6, "/OFF_GPIO13"),
+    "V_J6_3V3": (173.575, 112.5, "/+3V3_PI"),
+    "V_J6_GND": (177.325, 112.5, "/GND"),
+    "V_BTN_SENSE_R8": (172.0, 109.325, "/BTN_SENSE"),
+    "V_J6_BTN": (178.575, 108.5, "/BTN_SENSE"),
+    "V_J6_OFF": (179.825, 108.5, "/PWR_OFF"),
+    "V_R7_3V3": (171.975, 101.3, "/+3V3_PI"),
+    "V_R11_3V3": (175.175, 101.3, "/+3V3_PI"),
+    "V_R12_3V3": (178.375, 101.3, "/+3V3_PI"),
+    "V_C5_GND": (170.8, 104.175, "/GND"),
+    "V_R10_GND": (181.9, 104.3, "/GND"),
 }
 for i, x in enumerate((162.595, 163.865, 165.135, 166.405)):       # U2 5-8 up to J3 2-5
     VIAS[f"V_BASE_{i + 5}"] = (x, 106.75, ("/BASE_C0TX_P", "/BASE_C0TX_N", "/BASE_C3TX_N", "/BASE_C3TX_P")[i])
@@ -185,7 +232,7 @@ def routes():
     add("SDO0", "F.Cu", "/SDO0", 0.16, pin(40), (px(20), BAND["SDO0"]), (J4(6)[0], BAND["SDO0"]), J4(6))
     add("SDI1", "F.Cu", "/SDI1", 0.16, pin(15), (px(8), YW), (151.4, YW), (151.4, BAND["SDI1"]),
         (J4(7)[0], BAND["SDI1"]), J4(7))
-    add("BCLK_F", "F.Cu", "/BCLK", 0.16, VIAS["V_BCLK"][:2], (148.76, BAND["BCLK"]), (J4(4)[0], BAND["BCLK"]), J4(4))
+    add("BCLK_F", "F.Cu", "/BCLK", 0.16, VIAS["V_BCLK"][:2], (148.0, BAND["BCLK"]), (J4(4)[0], BAND["BCLK"]), J4(4))
     add("SDI0_F", "F.Cu", "/SDI0", 0.16, VIAS["V_SDI0"][:2], (152.6, BAND["SDI0"]), (J4(8)[0], BAND["SDI0"]), J4(8))
     add("AMP_SD_F", "F.Cu", "/AMP_SD", 0.16, VIAS["V_AMP_SD"][:2], (153.8, BAND["AMP_SD"]), (J4(9)[0], BAND["AMP_SD"]), J4(9))
     # head differential lines, straight from U1 8-5 to J2 5-2
@@ -195,7 +242,7 @@ def routes():
     add("U1_3V3", "F.Cu", "/+3V3_PI", 0.3, (139.4, 114.475), (141.14, 114.475), VIAS["V_3V3_U1"][:2])
     add("C1_GND", "F.Cu", "/GND", 0.3, (139.4, 112.825), VIAS["V_GND_C1"][:2])
     # 5V on F from the In1 via round U1 to J5 pin 1 (TP6 on it)
-    add("5V_F", "F.Cu", "/+5V_PI", 0.4, VIAS["V_5V_IN1"][:2], (145.75, 116.3), (145.75, 109.9), (152.2, 109.9),
+    add("5V_F", "F.Cu", "/+5V_PI", 0.4, VIAS["V_5V_IN1"][:2], (145.75, 116.03), (145.75, 109.9), (152.2, 109.9),
         (153.075, 109.025), (153.075, 105.95))
     add("FAN_SW_F", "F.Cu", "/FAN_SW", 0.3, (154.325, 105.95), VIAS["V_FAN_SW"][:2])
     # J4 supply, ground and isolated sense pins to their vias
@@ -211,14 +258,16 @@ def routes():
     add("SDA", "F.Cu", "/I2C1_SDA", 0.2, pin(3), (105.58, 119.6683))
     add("SCL", "F.Cu", "/I2C1_SCL", 0.2, pin(5), (108.12, 119.6683))
     # --- In2 lanes: three audio nets hop to F at their vias (In2 is the 3V3 plane elsewhere)
-    add("BCLK_IN2", "In2.Cu", "/BCLK", 0.2, pin(12), (px(6), YA), (148.76, YA), VIAS["V_BCLK"][:2])
+    add("BCLK_IN2", "In2.Cu", "/BCLK", 0.2, pin(12), (px(6), YA), (148.0, YA), VIAS["V_BCLK"][:2])
     add("SDI0_IN2", "In2.Cu", "/SDI0", 0.16, pin(38), (px(19), YU), (151.52, YU), (151.52, 116.05), VIAS["V_SDI0"][:2])
     add("AMP_SD_IN2", "In2.Cu", "/AMP_SD", 0.16, pin(16), (px(8), YL), (151.84, YL), (151.84, 116.95),
         (153.35, 116.95), VIAS["V_AMP_SD"][:2])
     add("3V3_LINK", "In2.Cu", "/+3V3_PI", 0.25, pin(1), (px(1), YW), (px(9), YW), pin(17))   # pins 1 and 17, same Pi rail
     # --- In1: 5V from pins 2/4 along the W lane (In1 is the GND plane elsewhere)
     add("5V_IN1", "In1.Cu", "/+5V_PI", 0.4, pin(4), (px(2), 119.6683), (gap(2), 119.6683), (gap(2), YW), (gap(17), YW),
-        (gap(17), 117.57), VIAS["V_5V_IN1"][:2])
+        (gap(17), 117.97))
+    add("5V_IN1_NECK", "In1.Cu", "/+5V_PI", 0.25,
+        (gap(17), 117.97), (145.2, 116.45), (145.33, 116.45), VIAS["V_5V_IN1"][:2])
     # 3V3 from pin 1 along In1's A lane to U1's via (In2's strip copper is cut off by AMP_SD)
     add("3V3_IN1", "In1.Cu", "/+3V3_PI", 0.3, pin(1), (px(1), 119.6683), (gap(1), 119.6683), (gap(1), YA), (141.14, YA),
         VIAS["V_3V3_U1"][:2])
@@ -229,8 +278,8 @@ def routes():
     add("BASE_TX", "B.Cu", "/BASE_TX", 0.16, pin(7), (px(4), YL), (gap(15), YL), (gap(15), BBAND["BASE_TX"]),
         (163.865, BBAND["BASE_TX"]), (163.865, 113.375))
     add("BASE_TX_R2", "B.Cu", "/BASE_TX", 0.16, (160.8, BBAND["BASE_TX"]), (160.8, 113.225))
-    add("BASE_RX", "B.Cu", "/BASE_RX", 0.16, pin(29), (px(15), YW), (gap(18), YW), (gap(18), BBAND["BASE_RX"]),
-        (165.135, BBAND["BASE_RX"]), (165.135, 113.375))
+    add("BASE_RX", "B.Cu", "/BASE_RX", 0.16, pin(29), (px(15), YW), (151.3, YW),
+        (151.3, BBAND["BASE_RX"]), (165.135, BBAND["BASE_RX"]), (165.135, 113.375))
     # head side: diff lines to R3, HEAD_TX to R1, R1 supply
     add("R3_A", "B.Cu", "/HEAD_C2TX_P", 0.2, VIAS["V_HEAD_A"][:2], (141.14, 106.81), (140.95, 106.62), (140.95, 106.0))
     add("R3_B", "B.Cu", "/HEAD_C2TX_N", 0.2, VIAS["V_HEAD_B"][:2], (142.41, 106.19), (142.6, 106.0))
@@ -257,6 +306,71 @@ def routes():
     add("R2_3V3", "B.Cu", "/+3V3_PI", 0.3, (160.8, 111.6), VIAS["V_3V3_R2"][:2])
     add("C2_GND", "B.Cu", "/GND", 0.3, (168.4, 112.625), (168.775, 112.625), (169.4, 112.0))
     add("TP4", "B.Cu", "/5V_SENSE_TP_ONLY", 0.25, VIAS["V_5VSENSE"][:2], (167.125, 110.2), (169.025, 108.3), (169.6, 108.3))
+    # --- rev B service interface and local rev A escape reroutes.
+    add("GPIO_SDA_B", "B.Cu", "/I2C_GPIO_SDA", 0.16, pin(36),
+        (146.2, 117.1483), (146.2, 115.4), (146.6, 115.4), VIAS["V_GPIO_SDA"][:2])
+    add("GPIO_SDA_IN2", "In2.Cu", "/I2C_GPIO_SDA", 0.16,
+        VIAS["V_GPIO_SDA"][:2], (147.0, 114.5), (174.825, 114.5),
+        VIAS["V_J6_SDA"][:2])
+    add("GPIO_SCL_B", "B.Cu", "/I2C_GPIO_SCL", 0.16, pin(37),
+        (148.76, 119.6683), (148.76, 116.44), VIAS["V_GPIO_SCL"][:2])
+    add("GPIO_SCL_IN2", "In2.Cu", "/I2C_GPIO_SCL", 0.16,
+        VIAS["V_GPIO_SCL"][:2], (149.2, 115.4), (151.4, 115.4),
+        (151.6, 115.2), (166.0, 115.2), (166.9, 116.1),
+        (169.9, 116.1), (170.6, 115.4),
+        (176.075, 115.4), VIAS["V_J6_SCL"][:2])
+    add("BTN_HEADER_B", "B.Cu", "/BTN_GPIO12", 0.16,
+        pin(32), VIAS["V_BTN_HEADER"][:2])
+    add("BTN_IN2", "In2.Cu", "/BTN_GPIO12", 0.16,
+        VIAS["V_BTN_HEADER"][:2], (139.87, 113.0), VIAS["V_BTN_R8"][:2])
+    add("OFF_HEADER_B", "B.Cu", "/OFF_GPIO13", 0.16,
+        pin(33), (142.41, YU), (143.55, YU), (143.55, 116.95), VIAS["V_OFF_HEADER"][:2])
+    add("OFF_IN2", "In2.Cu", "/OFF_GPIO13", 0.16,
+        VIAS["V_OFF_HEADER"][:2], (144.45, 113.8), (172.0, 113.8), VIAS["V_OFF_R9"][:2])
+    add("BTN_R8_B", "B.Cu", "/BTN_GPIO12", 0.16,
+        VIAS["V_BTN_R8"][:2], (170.8, 105.825), (171.8, 105.825))
+    add("BTN_R8_PAD", "B.Cu", "/BTN_GPIO12", 0.16,
+        (170.8, 107.675), (173.0, 107.675))
+    add("R7_3V3", "B.Cu", "/+3V3_PI", 0.2,
+        (171.975, 102.7), VIAS["V_R7_3V3"][:2])
+    add("R11_3V3", "B.Cu", "/+3V3_PI", 0.2,
+        (175.175, 102.8), VIAS["V_R11_3V3"][:2])
+    add("R12_3V3", "B.Cu", "/+3V3_PI", 0.2,
+        (178.375, 102.8), VIAS["V_R12_3V3"][:2])
+    add("R7_R8_SENSE", "B.Cu", "/BTN_SENSE", 0.16,
+        (173.625, 102.7), (173.625, 105.1), (173.9, 105.375),
+        (173.9, 109.325), VIAS["V_BTN_SENSE_R8"][:2])
+    add("SENSE_IN2", "In2.Cu", "/BTN_SENSE", 0.16,
+        VIAS["V_BTN_SENSE_R8"][:2], (178.575, 109.325), VIAS["V_J6_BTN"][:2])
+    add("OFF_R9_B", "B.Cu", "/OFF_GPIO13", 0.16,
+        VIAS["V_OFF_R9_B"][:2], (179.5, 111.825))
+    add("OFF_R9_F", "F.Cu", "/OFF_GPIO13", 0.16,
+        VIAS["V_OFF_R9"][:2], VIAS["V_OFF_R9_B"][:2])
+    add("J6_3V3_LINK", "B.Cu", "/+3V3_PI", 0.16,
+        VIAS["V_J6_3V3"][:2], (173.575, 114.8),
+        (168.4, 114.8), VIAS["V_3V3_U2"][:2])
+    add("PWR_OFF_R9", "B.Cu", "/PWR_OFF", 0.16,
+        VIAS["V_J6_OFF"][:2], (179.825, 109.85), (179.5, 110.175))
+    add("PWR_OFF_R10", "B.Cu", "/PWR_OFF", 0.16,
+        VIAS["V_J6_OFF"][:2], (179.825, 107.5), (180.5, 106.825))
+    add("R11_SDA", "B.Cu", "/I2C_GPIO_SDA", 0.16,
+        (176.825, 102.8), (174.825, 104.8), VIAS["V_J6_SDA"][:2])
+    add("R12_SCL", "B.Cu", "/I2C_GPIO_SCL", 0.16,
+        (180.025, 102.8), (180.025, 104.55), (176.075, 108.5),
+        VIAS["V_J6_SCL"][:2])
+    add("C5_GND", "B.Cu", "/GND", 0.2,
+        (171.8, 104.175), VIAS["V_C5_GND"][:2])
+    add("R10_GND", "B.Cu", "/GND", 0.2,
+        (180.5, 105.175), (181.425, 105.175), (181.9, 104.7), VIAS["V_R10_GND"][:2])
+    for name, net, x in (("3V3", "/+3V3_PI", 173.575),
+                         ("SDA", "/I2C_GPIO_SDA", 174.825),
+                         ("SCL", "/I2C_GPIO_SCL", 176.075),
+                         ("GND", "/GND", 177.325)):
+        add("J6_" + name, "F.Cu", net, 0.16, (x, 109.95), (x, 112.5))
+    add("J6_SENSE", "F.Cu", "/BTN_SENSE", 0.16,
+        VIAS["V_J6_BTN"][:2], (178.575, 109.95))
+    add("J6_OFF", "F.Cu", "/PWR_OFF", 0.16,
+        VIAS["V_J6_OFF"][:2], (179.825, 109.95))
     return r
 
 
@@ -275,13 +389,14 @@ def routing(b):
 
 
 # ---------------------------------------------------------------- outputs
-FAB = HERE.parent / "fab" / "revA"
-STEP = HERE.parent / "cad" / "pcb-09-c0-link-adapter-revA.step"
+FAB = HERE.parent / "fab" / "revB"
+STEP = HERE.parent / "cad" / "pcb-09-c0-link-adapter-revB.step"
 ORIGIN = (93.7, 122.7)    # board bottom-left as seen from the top: every output uses it (PCB-11 trap)
 COPPER_AND_FAB_LAYERS = "F.Cu,In1.Cu,In2.Cu,B.Cu,F.Mask,B.Mask,F.Paste,B.Paste,F.Silkscreen,B.Silkscreen,Edge.Cuts"
 MPN = {  # BOM part numbers; values come from the schematic
     "J1": ("SSW-120-01-T-D", "Samtec"), "J2": ("SM06B-GHS-TB(LF)(SN)", "JST"), "J3": ("BM06B-GHS-TBT(LF)(SN)(N)", "JST"),
     "J4": ("BM10B-GHS-TBT(LF)(SN)(N)", "JST"), "J5": ("BM02B-GHS-TBT(LF)(SN)(N)", "JST"),
+    "J6": ("BM06B-GHS-TBT(LF)(SN)(N)", "JST"),
     "U1": ("THVD1451DR", "Texas Instruments"), "U2": ("THVD1451DR", "Texas Instruments"),
     "Q1": ("AO3400A", "Alpha & Omega"), "D1": ("1N5819HW-7-F", "Diodes Inc."),
 }
@@ -293,7 +408,7 @@ def set_origin(b):
     b._index()
 
 
-def export():
+def export(include_step=True):
     import csv
     import shutil
     import subprocess
@@ -306,10 +421,10 @@ def export():
     run("pcb", "export", "gerbers", "--layers", COPPER_AND_FAB_LAYERS, "--use-drill-file-origin", "-o", str(gerb) + "/")
     run("pcb", "export", "drill", "--format", "excellon", "--excellon-units", "mm", "--drill-origin", "plot",
         "--excellon-separate-th", "--generate-map", "--map-format", "pdf", "-o", str(gerb) + "/")
-    pos = FAB / "pcb-09-c0-link-adapter-revA-pos.csv"
+    pos = FAB / "pcb-09-c0-link-adapter-revB-pos.csv"
     run("pcb", "export", "pos", "--side", "both", "--format", "csv", "--units", "mm", "--use-drill-file-origin",
         "--exclude-dnp", "-o", str(pos))
-    with open(pos) as f, open(FAB / "pcb-09-c0-link-adapter-revA-cpl-jlcpcb.csv", "w", newline="") as g:
+    with open(pos) as f, open(FAB / "pcb-09-c0-link-adapter-revB-cpl-jlcpcb.csv", "w", newline="") as g:
         w = csv.writer(g)
         w.writerow(["Designator", "Mid X", "Mid Y", "Layer", "Rotation"])
         for row in csv.DictReader(f):
@@ -320,32 +435,35 @@ def export():
     for raw in b.blocks("footprint"):
         n = K.parse(raw)
         attr = K.find(n, "attr") or []
-        if "exclude_from_bom" in attr or "board_only" in attr:
+        if "exclude_from_bom" in attr or "board_only" in attr or "dnp" in attr:
             continue
         props = {p[1]: p[2] for p in K.find_all(n, "property")}
         ref = props["Reference"]
         key = (props["Value"], n[1], *MPN.get(ref, ("", "")))
         groups.setdefault(key, []).append(ref)
     natural = lambda r: (re.match(r"\D+", r).group(0), int(re.search(r"\d+", r).group(0)))
-    with open(FAB / "pcb-09-c0-link-adapter-revA-bom.csv", "w", newline="") as g:
+    with open(FAB / "pcb-09-c0-link-adapter-revB-bom.csv", "w", newline="") as g:
         w = csv.writer(g, quoting=csv.QUOTE_ALL)
         w.writerow(["Comment", "Designator", "Footprint", "Quantity", "MPN", "Manufacturer", "LCSC Part #"])
         for (val, fp, mpn, mfr), refs in sorted(groups.items(), key=lambda kv: natural(sorted(kv[1], key=natural)[0])):
             refs = sorted(refs, key=natural)
             w.writerow([val, ",".join(refs), fp, len(refs), mpn, mfr, ""])
-    with zipfile.ZipFile(FAB / "pcb-09-c0-link-adapter-revA-gerbers.zip", "w", zipfile.ZIP_DEFLATED) as z:
+    with zipfile.ZipFile(FAB / "pcb-09-c0-link-adapter-revB-gerbers.zip", "w", zipfile.ZIP_DEFLATED) as z:
         for f in sorted(gerb.iterdir()):
             if f.suffix != ".pdf":
                 z.write(f, f.name)
-    # --user-origin 0x0mm: STEP (X, Y) = (KiCad x, -y), so world X = Xs - 104.7, Y = 139 + Ys (pcb_integration.py).
-    run("pcb", "export", "step", "--subst-models", "--force", "--user-origin", "0x0mm", "-o", str(STEP))
-    print("exported", FAB, STEP)
+    if include_step:
+        # --user-origin 0x0mm: STEP (X, Y) = (KiCad x, -y), so world X = Xs - 104.7, Y = 139 + Ys (pcb_integration.py).
+        run("pcb", "export", "step", "--subst-models", "--force", "--user-origin", "0x0mm", "-o", str(STEP))
+    print("exported", FAB, STEP if include_step else "(STEP unchanged)")
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-drc", action="store_true")
-    ap.add_argument("--export", action="store_true", help="also write fab/revA and cad/ outputs")
+    ap.add_argument("--step-only", action="store_true", help="export rev B STEP for CAD fit without fab outputs")
+    ap.add_argument("--fab-only", action="store_true", help="refresh rev B fabrication data without rewriting the fitted STEP")
+    ap.add_argument("--export", action="store_true", help="write fab/revB and STEP after CAD fit")
     args = ap.parse_args()
     b = K.Board(BOARD)
     b.drop_generated()
@@ -359,8 +477,16 @@ def main():
     r = K.drc(BOARD, HERE / "layout-drc.json")
     print(f"DRC: {r['violations']} violations, {r['unconnected']} unconnected, {r['parity']} parity")
     print(K.summary(r["report"]))
-    if args.export:
-        export()
+    if r['violations'] or r['unconnected'] or r['parity']:
+        raise SystemExit("DRC must be 0/0/0 before STEP or fab export")
+    if args.step_only:
+        import subprocess
+        STEP.parent.mkdir(exist_ok=True)
+        subprocess.run([K.CLI, "pcb", "export", "step", "--subst-models", "--force", "--user-origin", "0x0mm",
+                        "-o", str(STEP), str(BOARD)], check=True)
+        print("exported", STEP)
+    if args.export or args.fab_only:
+        export(include_step=args.export)
 
 
 if __name__ == "__main__":

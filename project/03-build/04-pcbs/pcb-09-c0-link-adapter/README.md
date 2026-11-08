@@ -1,6 +1,6 @@
 # PCB-09 — C0 link adapter
 
-Pi-header board: 2 × RS-422 (THVD1451), audio pass-through and the enclosure-fan switch `J9-4`. **Rev A designed** ([D-092](../../decisions.md#d-092)): 77 × 22.7 × 1.6 mm, four layers, on the Pi header through a Samtec SSW-120-01-T-D socket and two M2.5 × 11 mm standoffs. **Rev B schematic drafted; layout not released** ([D-098](../../decisions.md#d-098)): add the D-096 button/OFF and INA226 service interface before fabrication. The rev A fab files are historical outputs, not the board to order.
+Pi-header board: 2 × RS-422 (THVD1451), audio pass-through and the enclosure-fan switch `J9-4`. **Rev A designed** ([D-092](../../decisions.md#d-092)): 77 × 22.7 × 1.6 mm, four layers, on the Pi header through a Samtec SSW-120-01-T-D socket and two M2.5 × 11 mm standoffs. **Rev B routed and CAD fitted on `pcb-09-revB`, not released** ([D-098](../../decisions.md#d-098)): adds the D-096 button/OFF and INA226 service interface. The #2813, Pi-image and populated bench gates below still apply; do not order either revision yet.
 
 | | |
 |---|---|
@@ -10,7 +10,7 @@ Pi-header board: 2 × RS-422 (THVD1451), audio pass-through and the enclosure-fa
 | Specification | [audiosystem.md §4](../../02-body/v1/research/audiosystem.md#4-audio-functions-on-the-shared-boards)<br>[D-042](../../decisions.md#d-042), [D-073](../../decisions.md#d-073), [D-074](../../decisions.md#d-074), [D-092](../../decisions.md#d-092), [D-098](../../decisions.md#d-098) |
 | CAD placeholder | `_c0_link_adapter()` in [`body_v1_model.py`](../../02-body/v1/cad/body_v1_model.py) |
 | CAD labels | `C0_LINK_ADAPTER_PCB09` |
-| Final CAD | `Custom PCBs › PCB-09 C0 link adapter` in [makad-v1.step.py](../../final/v1/cad/makad-v1.step.py): currently the rev-A KiCad STEP, standoffs, screws and mated plugs ([pcb_integration.py](../../final/v1/cad/pcb_integration.py)); rev B update and populated cable-exit fit pending |
+| Final CAD | `Custom PCBs › PCB-09 C0 link adapter` in [makad-v1.step.py](../../final/v1/cad/makad-v1.step.py): rev-B KiCad STEP, standoffs, screws and five mated plugs ([pcb_integration.py](../../final/v1/cad/pcb_integration.py)); rev-B fit 8/8, mount 7/7 and integration PASS |
 
 ## Stages
 
@@ -18,15 +18,15 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | **Rev A done; rev B schematic drafted, routing open** ([D-098](../../decisions.md#d-098)) | Rev B schematic: ERC 0 violations, exported netlist audit PASS for 118 connected pins. The canonical PCB, STEP and fab files remain rev A; its DRC 0/0/0 and CAD checks do not validate rev B. See the [routing study](#rev-b-routing-study--2026-11-08) | 2026-11-08 |
+| 1. Design | **Rev B routed and CAD fitted; electrical release gates open** ([D-098](../../decisions.md#d-098)) | ERC 0; exported netlist audit PASS for 118 connected pins; Nightly DRC 0 violations / 0 unconnected / 0 parity; rev-B fit 8/8, mount 7/7, final integration PASS. `fab/revB` is a draft output, not an order release. | 2026-11-08 |
 | 2. Procure | Waits for rev B and the design batch ([D-064](../../decisions.md#d-064)) | Do not order fab/revA | — |
-| 3. Integrate | Rev A CAD replacement complete; rev B integration and physical acceptance open | [pcb_integration.py](../../final/v1/cad/pcb_integration.py), `check_pcb_integration.py`; rerun with rev B STEP and harness exit | 2026-11-07 |
+| 3. Integrate | Rev B CAD replacement complete; physical acceptance open | [pcb_integration.py](../../final/v1/cad/pcb_integration.py), `check_pcb_integration.py`; J6 lead route to rear bay passes a 3 mm CAD reserve with 0.2 mm margin. J6 must be mated before tray installation. | 2026-11-08 |
 
 ### Rev B input — D-098
 
 Preserve the rev A functions, socket, mounting and existing connector pinouts. Add accessible service access to **GPIO12 / header 32** for the qualified 0–3.3 V button-sense signal and **GPIO13 / header 33** for the M1 OFF command. The [D-098 amendment](../../decisions.md#d-098) assigns the INA226 to a local `i2c-gpio` bus: draft SDA on GPIO16 / header 36 and SCL on GPIO26 / header 37, plus Pi 3.3 V and GND. Physical pins 3/5 keep their rev A I²C1 routes to TP1/TP2 only. TP5 and TP1/TP2 are 1 mm probe pads, not harness terminations.
 
-Select a compact low-current connector if the fully populated fit allows it; otherwise provide labelled solder lands and positive wire strain relief with an assembly method and pull check. Freeze the actual footprint, pin order and cable exit in the rev B schematic/layout, then check the STEP in the final-v1 assembly. Keep the M1 ON pack-voltage node off this board: GPIO12 receives only the output of the measured high-impedance interface, with no back-power path into an unpowered Pi. Check GPIO13's inactive state through Pi reset, boot and halt, and any M1-to-GPIO13 injection with Pi power absent, before connecting OFF. ERC/DRC, six-net continuity/no-short checks and N1 are release gates. D-096's separate electrical HOLD still applies.
+Rev B selects J6 as a top-entry GH6 on the +X extension. CAD checks its mated plug, a 3 mm lead corridor toward the rear buffer, and pre-mated tray insertion; add strain relief and pull-test the lead on the populated build. Keep the M1 ON pack-voltage node off this board: GPIO12 receives only the output of the measured high-impedance interface, with no back-power path into an unpowered Pi. Check GPIO13's inactive state through Pi reset, boot and halt, and any M1-to-GPIO13 injection with Pi power absent, before connecting OFF. ERC/DRC, six-net continuity/no-short checks and N1 are release gates. D-096's separate electrical HOLD still applies.
 
 ### Rev B routing study — 2026-11-08
 
@@ -34,24 +34,28 @@ The [rev B schematic](design/pcb-09-c0-link-adapter.kicad_sch) adds J6 (GH6: **1
 
 | Header pin | Rev B schematic net | Destination | Layout status |
 |---|---|---|---|
-| 3 / GPIO2 | I2C1_SDA | TP1 only, unchanged from rev A | Routed in canonical rev A board |
-| 5 / GPIO3 | I2C1_SCL | TP2 only, unchanged from rev A | Routed in canonical rev A board |
-| 32 / GPIO12 | BTN_GPIO12 | R8 → BTN_SENSE at J6.5 | Unrouted in canonical rev A board |
-| 33 / GPIO13 | OFF_GPIO13 | R9 → PWR_OFF at J6.6 | Unrouted in canonical rev A board |
-| 36 / GPIO16 | I2C_GPIO_SDA | R11 pull-up and J6.2 | Unrouted in canonical rev A board |
-| 37 / GPIO26 | I2C_GPIO_SCL | R12 pull-up and J6.3 | Unrouted in canonical rev A board |
+| 3 / GPIO2 | I2C1_SDA | TP1 only, unchanged from rev A | Rev A route retained in rev B |
+| 5 / GPIO3 | I2C1_SCL | TP2 only, unchanged from rev A | Rev A route retained in rev B |
+| 32 / GPIO12 | BTN_GPIO12 | R8 → BTN_SENSE at J6.5 | Routed in rev B; DRC 0/0/0 |
+| 33 / GPIO13 | OFF_GPIO13 | R9 → PWR_OFF at J6.6 | Routed in rev B; DRC 0/0/0 |
+| 36 / GPIO16 | I2C_GPIO_SDA | R11 pull-up and J6.2 | Routed in rev B; DRC 0/0/0 |
+| 37 / GPIO26 | I2C_GPIO_SCL | R12 pull-up and J6.3 | Routed in rev B; DRC 0/0/0 |
 
-The draft rev B allocation has **15 functional GPIO** (rev A's 11 plus GPIO12/13/16/26) and keeps GPIO2/3 reserved for I²C1 service pads. The choice of GPIO16/26 and J6 footprint/position remains subject to layout DRC and CAD fit.
+The draft rev B allocation has **15 functional GPIO** (rev A's 11 plus GPIO12/13/16/26) and keeps GPIO2/3 reserved for I²C1 service pads. Layout and CAD fit validate GPIO16/26 and a top-entry GH6 at the +X extension; electrical acceptance is pending.
 
 An exploratory GH6 placement needed an extension at the bay's +X edge: the existing F.Cu courtyards occupy the top of the original bay. A geometric core-only probe of world X 66…78, Y 22.5…39, Z 106.25…108.25 found no intersecting robot solid. That probe did **not** validate the mated plug, cable exit, insertion sweep, mount or full board. Growing the +Y edge instead intersected the existing J9-1 mated plug and its reserve.
 
-The manually routed exploratory I²C1 board failed Nightly DRC: **29 violations, 2 unconnected and 0 parity** ([study report](design/revB-routing-study-drc.json)). The SDA F.Cu L path crossed LRCLK near header pin 35; the proposed layer change landed on the existing 5 V via. The SCL B.Cu U path crossed BASE_TX and approached a ground socket pad. The GPIO12/13 In1 paths isolated ground socket pads 30/34; J6's +X placement also conflicted with nearby vias. D-098 therefore switches the INA226 to local GPIO I²C and forbids new In1 tracks. This report is evidence from the rejected route, not a DRC result for the amended schematic. The canonical `.kicad_pcb`, layout script, STEP, and `fab/revA/` remain the validated rev A state. Require 0/0/0 parity DRC and the full CAD fit checks before exporting rev B fabrication data.
+The manually routed exploratory I²C1 board failed Nightly DRC: **29 violations, 2 unconnected and 0 parity** ([study report](design/revB-routing-study-drc.json)). The SDA F.Cu L path crossed LRCLK near header pin 35; the proposed layer change landed on the existing 5 V via. The SCL B.Cu U path crossed BASE_TX and approached a ground socket pad. The GPIO12/13 In1 paths isolated ground socket pads 30/34; J6's +X placement also conflicted with nearby vias. D-098 therefore switches the INA226 to local GPIO I²C and forbids new In1 tracks. This report is historical evidence from the rejected route.
+
+The amended rev B layout uses local rev A escape reroutes near header pins 32–38, preserves every rev A net and connector pinout, adds no signal track to In1, and passes Nightly DRC 0/0/0. The +X extension ends at world X 78 and steps its +Y edge back to Y 38.9 to clear the body frame. The rev B STEP passes `check_pcb09_fit.py` 8/8, `check_pcb09_mount.py` 7/7, and `check_pcb_integration.py` PASS. `fab/revB/` was exported only after that CAD fit and remains a draft until the bench gates close.
+
+Current evidence: [DRC/parity](design/layout-drc.json), [rev B board STEP](cad/pcb-09-c0-link-adapter-revB.step), [fit report](../../final/v1/cad/check_pcb09_fit-revB-report.json), [mount report](../../final/v1/cad/check_pcb09_mount-revB-report.json), [final STEP integration report](../../final/v1/cad/pcb-integration-report.json), and [draft fabrication outputs](fab/revB/README.md). C5 is DNP and omitted from the assembly BOM/CPL. J6's plug must be mated before the tray slide; its 3 mm lead reserve clears to the rear buffer volume with 0.2 mm CAD margin.
 
 ## Inputs
 
 Header audit started 2026-10-31. The electrical interface below is the **builder-agreed allocation baseline v0.2** ([D-073](../../decisions.md#d-073)); CR-02 and boot-safe audit closure remain open. The D-074 strip outline and all 40 socket pad positions have since been checked, and a review schematic and placement exist below. Socket selection, installed height, retention and populated fit were the remaining lesson-1 gaps; they are closed in the [input freeze](#input-freeze--2026-11-06-d-092) (D-092).
 
-**Set by PCB-05.** `J9-3` (audio, `W26` to PCB-05 `J5-1`) carries signals only: GPIO18 BCLK, GPIO19 LRCLK, GPIO20 SDI0, GPIO22 SDI1, GPIO21 SDO0, GPIO23 `AMP_SD`, the Pi's 3V3, two GND and one spare, and **no 5 V** ([D-067](../../decisions.md#d-067), PCB-05 2026-10-27; `CA-06` CR-01 accepted there). Pin order, set by the PCB-05 schematic (2026-10-27): **1 3V3, 2 LRCLK, 3 GND, 4 BCLK, 5 GND, 6 SDO0, 7 SDI1, 8 SDI0, 9 AMP_SD, 10 spare (5V_SENSE)** (reordered 2026-10-27 at PCB-05 routing, D-067); W26 is wired 1:1. Route the spare pin to a test pad: PCB-05 carries an unfitted 5V-present divider on it, which a later `CA-06` change could bring to a Pi GPIO.
+**Audio contract, inherited from PCB-05.** `J9-3` (audio, `W26` to the BO-067 audio hub) carries signals only: GPIO18 BCLK, GPIO19 LRCLK, GPIO20 SDI0, GPIO22 SDI1, GPIO21 SDO0, GPIO23 `AMP_SD`, the Pi's 3V3, two GND and one spare, and **no 5 V** ([D-067](../../decisions.md#d-067), PCB-05 2026-10-27; `CA-06` CR-01 accepted there). The retained pin order is **1 3V3, 2 LRCLK, 3 GND, 4 BCLK, 5 GND, 6 SDO0, 7 SDI1, 8 SDI0, 9 AMP_SD, 10 spare (5V_SENSE)**; W26 is wired 1:1 to the hub. The spare still reaches only an isolated test pad on PCB-09; the retired PCB-05 divider is not fitted or part of the current build.
 
 **Set by other boards.** `J9-2` (base link, `W25` to PCB-10 `J10-2`) was set by [PCB-10](../pcb-10-c3-carrier/README.md#connectors-and-who-owns-each-pin-order) on 2026-10-27 and reordered at its layout on 2026-10-28 (the order its THVD1451's pins come in, so the pairs run straight). The pairs are named by direction so `W25` is wired 1:1: 1 GND, 2 `C0TX+` and 3 `C0TX−` (this board's driver `Y`/`Z`), 4 `C3TX−` and 5 `C3TX+` (this board's receiver `B`/`A`, with its 120 Ω termination), 6 spare. The `J9-1` head link may follow the same rule; that is this board's choice.
 
@@ -76,13 +80,13 @@ Read on 2026-10-31. RP-02 is read-only; build changes belong here and in [decisi
 | B | Official [UART configuration](https://www.raspberrypi.com/documentation/computers/configuration.html#configuring-uarts) and [BOOT_UART](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#BOOT_UART) | Pi 5 debug UART is normally UART10 on the separate debug connector; configuration can change the primary UART, so silence on GPIO14 must be checked on the installed image |
 | C | RP-02 [CA-06](../../../02-prototypes/RP-02-electrical/compute-control-architecture.md#ca-06--pi-gpio-allocation-reserves-independent-transports), [D-042](../../decisions.md#d-042), [D-043](../../decisions.md#d-043), [D-067](../../decisions.md#d-067), PCB-05/PCB-10 READMEs linked above | Existing allocations, fan circuit, selected 3010 fan, connector contracts and audio power ownership |
 
-#### 40-row header interface (rev A allocation baseline v0.2)
+#### 40-row header interface (rev A baseline with rev B service additions)
 
 Directions are relative to the Pi. `N↑`/`N↓` mean **NULL function, output disabled, input buffer disabled**, with the indicated weak pull at RP1 reset (R/P); they do not promise an unchanged state throughout firmware, Linux or a warm reboot. Voltages are nominal signal/rail domains, not absolute maximum ratings. `NC` means a socket contact with **no trace, via, test pad or other load on PCB-09**, apart from its own land. Reserved contacts remain reserved even when NC. Supply rows are shared rail contacts, not competing GPIO owners.
 
 | Physical pin | BCM GPIO | PCB-09 net / disposition | Owner / authority | Direction | RP1 reset / external bias | Voltage |
 |---|---|---|---|---|---|---|
-| 1 | — | +3V3_PI | Pi supply → PCB-09 + PCB-05 | Power in | Rail sequencing | 3.3 V |
+| 1 | — | +3V3_PI | Pi supply → PCB-09 + audio hub | Power in | Rail sequencing | 3.3 V |
 | 2 | — | +5V_PI → fan only | D-042 / D-043 | Power in | May remain powered at halt | 5 V |
 | 3 | 2 | I2C1_SDA → labelled SDA service pad | CA-06 / D-073 housekeeping | Bidirectional | N↑; Pi has fixed pull-up | 3.3 V |
 | 4 | — | +5V_PI, same rail as pin 2 | D-042 / D-043 | Power in | May remain powered at halt | 5 V |
@@ -97,8 +101,8 @@ Directions are relative to the Pi. `N↑`/`N↓` mean **NULL function, output di
 | 13 | 27 | NC | PCB-09 unused | — | N↓ | 3.3 V |
 | 14 | — | GND | Common return | Return | GND | 0 V |
 | 15 | 22 | SDI1 ← J9-3.7 | CR-01 / D-067 I²S0 | In | N↓; converter powered by Pi | 3.3 V |
-| 16 | 23 | AMP_SD → J9-3.9 | CR-01 / D-067 GPIO | Out | N↓; PCB-05 SD_MODE pulls low | 3.3 V |
-| 17 | — | +3V3_PI, same rail as pin 1 | Pi supply → PCB-09 + PCB-05 | Power in | Rail sequencing | 3.3 V |
+| 16 | 23 | AMP_SD → J9-3.9 | CR-01 / D-067 GPIO | Out | N↓; verify amp/hub bias on the build | 3.3 V |
+| 17 | — | +3V3_PI, same rail as pin 1 | Pi supply → PCB-09 + audio hub | Power in | Rail sequencing | 3.3 V |
 | 18 | 24 | FAN_EN → 100 Ω → MOSFET gate | D-042 / D-073; CR-02 open | Out | N↓; 100 kΩ gate–source | 3.3 V |
 | 19 | 10 | NC; SPI0 MOSI reserved | CA-06 SPI/service | — | N↓ | 3.3 V |
 | 20 | — | GND | Common return | Return | GND | 0 V |
@@ -113,17 +117,17 @@ Directions are relative to the Pi. `N↑`/`N↓` mean **NULL function, output di
 | 29 | 5 | BASE_RX ← base THVD1451 R | CA-06 UART2 | In | N↑; R drives after VCC valid | 3.3 V |
 | 30 | — | GND | Common return | Return | GND | 0 V |
 | 31 | 6 | NC; UART2 CTS prohibited | PCB-09 unused | — | N↑ | 3.3 V |
-| 32 | 12 | NC; PWM-capable spare | PCB-09 unused | — | N↓ | 3.3 V |
-| 33 | 13 | NC; PWM-capable spare | PCB-09 unused | — | N↓ | 3.3 V |
+| 32 | 12 | BTN_GPIO12 via R8 from J6.5 BTN_SENSE | D-098 button sense | In | N↓; R7 pulls sense to Pi 3V3 | 3.3 V |
+| 33 | 13 | OFF_GPIO13 via R9 to J6.6 PWR_OFF | D-098 M1 OFF | Out | N↓; R10 pulls PWR_OFF low | 3.3 V |
 | 34 | — | GND | Common return | Return | GND | 0 V |
 | 35 | 19 | LRCLK → J9-3.2 | CA-06 / D-067 I²S0 | Out | N↓ | 3.3 V |
-| 36 | 16 | NC; UART0 CTS prohibited | PCB-09 unused | — | N↓ | 3.3 V |
-| 37 | 26 | NC | PCB-09 unused | — | N↓ | 3.3 V |
+| 36 | 16 | I2C_GPIO_SDA → J6.2; R11 pull-up | D-098 software I²C; UART0 CTS prohibited | Bidirectional | N↓; 4.7 kΩ to Pi 3V3 | 3.3 V |
+| 37 | 26 | I2C_GPIO_SCL → J6.3; R12 pull-up | D-098 software I²C | Bidirectional | N↓; 4.7 kΩ to Pi 3V3 | 3.3 V |
 | 38 | 20 | SDI0 ← J9-3.8 | CA-06 / D-067 I²S0 | In | N↓; converter powered by Pi | 3.3 V |
 | 39 | — | GND | Common return | Return | GND | 0 V |
 | 40 | 21 | SDO0 → J9-3.6 | CA-06 / D-067 I²S0 | Out | N↓ | 3.3 V |
 
-**Rev A count:** 11 functional GPIO (including FAN_EN with CR-02 open), 2 reserved I²C1 GPIO exposed on service pads, 15 other GPIO contacts, 4 supply contacts and 8 grounds = 40. [D-098](../../decisions.md#d-098) directs rev B to route physical 32/33 to GPIO12/13 service terminations and retain the 40 contacts; the rev B map must be checked against the actual schematic. GPIO0/1 have no adapter EEPROM or test points. Both contacts of each supply rail join that rail; all eight grounds join the common plane. J9-3.1 gets +3V3_PI; J9-3.3/.5 get GND. J9-3.10 goes **only to an isolated 5V_SENSE test pad**, never to a Pi GPIO or either supply. Its name does not make it a 5 V power connection. PCB-05's divider remains DNP; fitting it and connecting a GPIO needs CR-03.
+**Rev B count:** 15 functional GPIO (including FAN_EN with CR-02 open), 2 reserved I²C1 GPIO exposed only on service pads, 11 other GPIO contacts, 4 supply contacts and 8 grounds = 40. GPIO0/1 have no adapter EEPROM or test points. Both contacts of each supply rail join that rail; all eight grounds join the common plane. J9-3.1 gets +3V3_PI; J9-3.3/.5 get GND. J9-3.10 goes **only to an isolated 5V_SENSE test pad**, never to a Pi GPIO or either supply. Its name does not make it a 5 V power connection.
 
 #### Function selection and software ownership
 
@@ -137,7 +141,8 @@ Table 4 (R) confirms UART0 on GPIO14/15 at **a4**, UART2 on GPIO4/5 at **a2**, a
 | Amp control | 23 only | Start low; assert only after valid playback clocks/data; lower before stopping clocks and at orderly shutdown. One software owner; do not combine a permanent GPIO hog with a driver that also requests it |
 | `gpio-fan` | 24 only | Proposed `dtoverlay=gpio-fan,gpiopin=24,temp=60000,hyst=5000`: 60 °C on / 55 °C off. Explicit pin required: the default is GPIO12. Temperatures remain bench starting points |
 | I²C1 | 2, 3 reserved; SDA/SCL/GND service pads (D-073) | No additional pull-ups, attached consumer or bus cable. Keep the controller disabled until a consumer is deliberately configured |
-| Button sense and M1 OFF (rev B) | 12 input, 13 output (D-098) | Button sense must be 0–3.3 V after a qualified interface; verify GPIO13 does not assert OFF at boot/halt. Rev B service termination and cable fit pending |
+| Button sense and M1 OFF (rev B) | 12 input, 13 output (D-098) | Button sense must be 0–3.3 V after a qualified rear buffer; verify GPIO13 stays inactive through boot, reboot and halt. J6 termination and cable CAD fit pass; electrical checks remain |
+| `i2c-gpio` INA226 (rev B) | 16 SDA, 26 SCL | R11/R12 pull each line to Pi 3V3; keep UART0 flow control off and test INA226 at 0x40 on the actual Pi image |
 | SPI0 | None | Reservation preserved; no adapter traces or access. SPI0's usual second CS is GPIO7, outside CA-06's 8–11 shorthand; leave SPI disabled unless deliberately configured |
 
 **Console check is a release condition.** Pi 5 normally sends debug output through UART10, not GPIO14/15 (B); that is not proof that every EEPROM/image configuration is silent. Require EEPROM `BOOT_UART=0`, disable firmware debug output (`uart_2ndstage`), remove any kernel `console=`/`earlycon` targeting either link (including aliases), and disable serial getty/debug applications on both resolved ports. Preserve CA-06's stable udev names and boot mux self-test. Capture the installed EEPROM settings, `config.txt`, `cmdline.txt`, resolved aliases and enabled services; scope HEAD_TX through cold boot, warm reboot and shutdown. `enable_uart=1` alone is not the pin-ownership proof.
@@ -156,8 +161,8 @@ Both THVD1451 VCC pins and TX pull-ups must use **+3V3_PI, never +5V_PI**. TI's 
 | Header rail | Incremental loads | Paper allowance / remaining evidence |
 |---|---|---|
 | 3V3 | Two THVD1451, both continuously driving remote 120 Ω loads | No-load maximum **2 × 3 = 6 mA**. Termination current is additional: a deliberately conservative 3.3 V/120 Ω ceiling per driver gives **55 mA** total load current; about **61 mA** including quiescent, before dynamic/cable-capacitance current |
-| 3V3 | PCB-05 via J9-3.1 | **15 mA design allowance**, from its README; includes converters and four mics. Do not count it again as a 5 V load on PCB-09 |
-| 3V3 | TX pull-ups, AMP_SD and switching activity | Up to about **1.4 mA** if both TX held low, plus amp-control bias and dynamic current; use **80 mA provisional normal-operation allocation** for the complete sub-branch, then measure at link/audio load. This is not a short-circuit or inrush rating |
+| 3V3 | Four INMP441 modules via J9-3.1, INA226 via J6.1 | About **5.6 mA** for the four mics at 1.4 mA each and **0.3 mA** for the INA226; verify the bought modules and actual current. The retired PCB-05's 15 mA allowance is no longer the load model |
+| 3V3 | TX, I²C and button pull-ups; AMP_SD and switching activity | Up to about **1.4 mA** for both TX pull-ups held low, **1.4 mA** for both 4.7 kΩ I²C pull-ups held low, and **0.33 mA** for the 10 kΩ button pull-up held low, plus amp-control bias and dynamic current; retain **80 mA provisional normal-operation allocation** for the sub-branch and measure under link/audio load. This is not a short-circuit or inrush rating |
 | 5V | D-043's purchased 3010 fan via J9-4.1, local capacitor charging | Running, startup and locked-rotor currents **unknown**. No defensible numerical total or rail-margin pass yet; measure the actual fan, not the superseded 4010 listing |
 
 3V3 fault demand is separate: TI lists driver short-circuit current magnitude up to 250 mA per device; two shorted outputs could dominate the 80 mA normal allowance. Check supply droop/current limiting and fault behaviour before release. The Pi header rails are supply outputs here; there is no external rail tied in through W25/W26/W41. Size the 5 V path, ground return, MOSFET at its **2.5/3.3 V gate drive**, diode, connector and protection from measured fan startup/stall and capacitor inrush. `VGS(th)` is not an on-resistance specification. The full Pi + USB + Active Cooler + adapter budget remains under the compute branch; available fan margin cannot be inferred from a “5 A supply” label alone. Keep fan current loops away from mic/audio returns.
@@ -360,12 +365,12 @@ Totals: 142 segments, 27 vias, 4 pours, 3 rule areas.
 | Check | Result |
 |---|---|
 | Nightly ERC, all severities | **0 errors, 0 warnings** |
-| Nightly DRC with schematic parity, all severities, zones refilled | **0 violations, 0 unconnected, 0 parity issues** ([design/layout-drc.json](design/layout-drc.json)) |
+| Nightly DRC with schematic parity, all severities, zones refilled | **0 violations, 0 unconnected, 0 parity issues** in rev A; the current [layout-drc.json](design/layout-drc.json) records rev B |
 | Footprint/model audit | All 21 fitted footprints name a stock 3D model that exists on disk; the six test pads and two holes have none. The STEP's `PRODUCT` list carries every model |
 | `check_pcb09_mount.py` (final/v1/cad) | **7/7**: socket stack 106.447 vs standoff top 106.450; standoffs coaxial with the Pi inserts; ≥ 0.5 mm webs round both holes; mount clears its neighbours by 0.2 mm; planted hex standoff and un-raised tab hit the cooler; the bench-assembled unit slides in ([mount-check.json](mount-check.json)) |
-| `check_pcb09_fit.py` (final/v1/cad) | **5/5** ([fit-check.json](fit-check.json)): the KiCad core is the droid board (offset 0.000, underside Z 106.450, area + holes = 983.5 mm²); the socket model is centred on the Pi header and seated on its plastic (−0.03 mm); every part and the four rebuilt plugs clear the robot by 0.2 mm; the real parts slide in with the tray. Info: the J9-3 plug top is 0.1 mm under PCB-05's +Y edge plug reserve |
+| `check_pcb09_fit.py` (final/v1/cad) | **5/5 for historical rev A** ([fit-check.json](fit-check.json)): the KiCad core matched the former droid board, the socket seated on the Pi header, and four plugs cleared. The current rev B report is [check_pcb09_fit-revB-report.json](../../final/v1/cad/check_pcb09_fit-revB-report.json) |
 | `check_pcb09_inputs.py` | Reruns with the tabs and extension; zero core clashes ([mechanical-audit.json](mechanical-audit.json)) |
-| Final integration | PCB-09's KiCad STEP replaces the placeholder in `pcb_integration.py`. `check_pcb_integration.py` **PASS**: 10 installed board instances, 0 static interferences, 0 cross-board collisions, no PCB-09 part within 0.3 mm of the robot. The one intended contact, J1's model holding the Pi header (113.7 mm³, all with the header solid; nearest other Pi part 1.11 mm), is measured in `check_pcb09_fit.py` ([report](../../final/v1/cad/pcb-integration-report.json), [fit-check.json](fit-check.json)). Focused scene `pcbs-integrated.step` rebuilt; the two whole-robot STEPs (git-ignored) still need a rebuild |
+| Final integration | Historical rev A replacement passed. The current [integration report](../../final/v1/cad/pcb-integration-report.json) checks rev B in the rebuilt final STEP |
 
 Outputs:
 - the [board STEP](cad/pcb-09-c0-link-adapter-revA.step), exported with `--user-origin 0x0mm`;
@@ -385,7 +390,7 @@ Outputs:
   - TX idle level with the 4.7 kΩ pull-ups;
   - socket seating on a real Pi, and a tin-on-gold contact-resistance check after vibration.
 - **Stage 3:**
-  - harness dressing for W24–W26 and W41 (the J9-3 plug sits under PCB-05's plug reserve);
+  - harness dressing for W24–W26, W41 and the J6 rear service lead; mate J6 before the tray goes in and pull-test its strain relief;
   - PCB-08 `J8-4` and PCB-12 adopt the J9-1 order;
   - the builder's review of the board in the Nightly GUI.
 

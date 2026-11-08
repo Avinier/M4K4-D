@@ -801,6 +801,7 @@ REAR_BAY = dict(
 )
 CRADLE = dict(rim=1.2, gap=0.25, pad=1.5, pad_size=3.0, lip=0.8)
 REAR_SWITCH = dict(y0=-27.0, z_top=92.5)                  # board Y -27..-1.6, Z 72.18..92.5, terminals toward +Y
+REAR_BUTTON_BUFFER_RESERVE = (-41.0, -34.0, -20.0, -8.0, 94.0, 100.0)  # rev B: small open-drain buffer beside M1; circuit TBD after #2813 measurements
 INA226_BOARD = (25.5, 20.5, 1.6, 3.0)                     # UNMEASURED: Y, Z, thickness, parts height (+X)
 INA226_AT = (1.0, 72.0)                                    # board Y min, Z min
 CHARGE_SPLICE = dict(axis=(-45.6, -34.0), r=3.5, z=(62.0, 88.0),
@@ -1105,7 +1106,8 @@ def rear_bay_rail_pilots():
 
 def rear_modules():
     """M1 (switch) and M6 (INA226) groups, and the charge splice."""
-    switch = [_tag(_place(vendor_solid("PSW_2813"), _switch_frame()), "M1_POLOLU_2813_PUSHBUTTON_POWER_SWITCH_HP_STEP", "#2D6B3F")]
+    switch = [_tag(_place(vendor_solid("PSW_2813"), _switch_frame()), "M1_POLOLU_2813_PUSHBUTTON_POWER_SWITCH_HP_STEP", "#2D6B3F"),
+              _tag(_blk(*REAR_BUTTON_BUFFER_RESERVE), "M1_REAR_BUTTON_BUFFER_CAD_RESERVE", "#44BDD0", 0.25)]
     iy, iz = INA226_AT
     w, h, t, parts = INA226_BOARD
     bx = REAR_BAY["plate"][1] + CRADLE["pad"]

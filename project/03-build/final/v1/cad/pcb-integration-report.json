@@ -3,13 +3,15 @@
     {
       "board": 9,
       "instance": "MAIN",
-      "components": 19,
-      "dnp_omitted": [],
+      "components": 26,
+      "dnp_omitted": [
+        "C5"
+      ],
       "core_bbox": [
         -11.0,
         16.299999999999997,
         106.4919,
-        65.99999999999999,
+        77.99999999999999,
         39.0,
         108.0081
       ],
@@ -43,14 +45,14 @@
       "components": 3,
       "dnp_omitted": [],
       "core_bbox": [
-        50.47374076877715,
+        50.473740768777,
         12.700000000000003,
         278.8,
-        51.18374076877715,
+        51.183740768777,
         17.700000000000003,
         283.8
       ],
-      "transform_bbox_error_mm": 0.0
+      "transform_bbox_error_mm": 1.4921397450962104e-13
     },
     {
       "board": 15,
@@ -58,14 +60,14 @@
       "components": 4,
       "dnp_omitted": [],
       "core_bbox": [
-        126.24499999999999,
+        126.245,
         7.0,
         30.400000000000006,
-        126.95499999999998,
+        126.955,
         13.0,
         35.0
       ],
-      "transform_bbox_error_mm": 0.0
+      "transform_bbox_error_mm": 1.4210854715202004e-14
     }
   ],
   "board_count": 4,
@@ -73,6 +75,11 @@
   "cross_board_collisions": [],
   "static_interferences": [],
   "static_near_contacts": [
+    {
+      "part": "PCB09_MAIN_27__pcb-09-c0-link-adapter_PCB",
+      "obstacle": "Makad v1/BODY_V1/BODY_PRIMARY_FRAME/BODY_FRAME_MAIN_PRINT",
+      "gap_mm": 0.2499999999999929
+    },
     {
       "part": "PCB10_MAIN_73__pcb-10-c3-carrier_PCB",
       "obstacle": "Makad v1/BODY_V1/BODY_INTERNAL_ELECTRONICS/C3_CARRIER_PCB10_WITH_DEVKITC/BODY_FRAME_C3_CARRIER_UPRIGHT_1",
@@ -106,8 +113,8 @@
   ],
   "sources": {
     "9": {
-      "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-09-c0-link-adapter/cad/pcb-09-c0-link-adapter-revA.step",
-      "sha256": "c2ff6786044555e3694433fd501725a22d3bdddf9d3bc1580d083f8fcb2ed4b2"
+      "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-09-c0-link-adapter/cad/pcb-09-c0-link-adapter-revB.step",
+      "sha256": "9cdc22a624d87cf152938c9223c01da13296c9ee254e06e78587e9d7ade5cdc3"
     },
     "10": {
       "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-10-c3-carrier/cad/pcb-10-c3-carrier-revA.step",
@@ -123,5 +130,9 @@
     }
   },
   "scope": "replacement count, core transforms, duplicate placeholder removal and static cross-board and robot interference; intentional own fixing/plug contacts and the PCB09 socket on the Pi header excluded; the D-095 bought modules are obstacles; per-board installation sweeps are separate",
+  "checked_step": {
+    "path": "makad-v1.step",
+    "sha256": "db1bb26fda801b3f36263cb8a1f7340a6d06af12e57182d511d5cb053e0f036c"
+  },
   "result": "PASS"
 }
