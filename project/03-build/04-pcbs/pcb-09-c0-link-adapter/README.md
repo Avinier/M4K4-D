@@ -1,6 +1,6 @@
 # PCB-09 — C0 link adapter
 
-Pi-header board: 2 × RS-422 (THVD1451), audio pass-through and the enclosure-fan switch `J9-4`. **Rev A designed** ([D-092](../../decisions.md#d-092)): 77 × 22.7 × 1.6 mm, four layers, on the Pi header through a Samtec SSW-120-01-T-D socket and two M2.5 × 11 mm standoffs. **Rev B routed and CAD fitted on `pcb-09-revB`, not released** ([D-098](../../decisions.md#d-098)): adds the D-096 button/OFF and INA226 service interface. The #2813, Pi-image and populated bench gates below still apply; do not order either revision yet.
+Pi-header board: 2 × RS-422 (THVD1451), audio pass-through and the enclosure-fan switch `J9-4`. **Rev A designed** ([D-092](../../decisions.md#d-092)): 77 × 22.7 × 1.6 mm, four layers, on the Pi header through a Samtec SSW-120-01-T-D socket and two M2.5 × 11 mm standoffs. **Rev B routed and CAD fitted on `pcb-09-revB`, not released** ([D-098](../../decisions.md#d-098)): 89 × 22.7 × 1.6 mm overall, adding the D-096 button/OFF and INA226 service interface. The #2813, Pi-image and populated bench gates below still apply; do not order either revision yet.
 
 | | |
 |---|---|
@@ -379,7 +379,7 @@ Outputs:
 ## Open items
 
 - **Stage 2 (procure):**
-  - quote **two-sided assembly** (SMD on both faces) plus J1, one THT part on B;
+  - quote the rev B **89 × 22.7 mm**, four-layer outline with **two-sided assembly** (SMD on both faces) plus J1, one THT part on B;
   - source the SSW-120-01-T-D from element14;
   - order THVD1451DR × 2 from Mouser India (consign them);
   - find the round Ø ≤ 4.5 mm M2.5 × 11 standoffs (BO-065);

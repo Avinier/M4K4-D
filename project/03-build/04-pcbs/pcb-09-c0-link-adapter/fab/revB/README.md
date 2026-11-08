@@ -4,4 +4,4 @@
 
 `layout_pcb09.py --export` generated these Gerber, drill, position, CPL and BOM files after the CAD fit. All use the same bottom-left board origin. The outline is 89 × 22.7 mm overall with a stepped +X extension; the 3.3 V-side service interface uses J6 GH6, pins 1–6: 3V3, SDA, SCL, GND, BTN_SENSE, PWR_OFF. C5 is DNP and is absent from the assembly BOM and CPL.
 
-J6 must be mated before the tray goes in. The checked 3 mm lead corridor shifts to world Y 20, runs rearward at Z 118, and reaches the buffer reserve beside M1; add physical strain relief and pull-test the populated lead. The cable check is a static CAD reserve, not a wire bend or motion test.
+J6 must be mated before the tray goes in. The checked 3 mm lead corridor shifts to world Y 20, runs rearward at Z 118, and reaches the buffer reserve beside M1. The harness draft calls for an open, detachable six-circuit service break at the rear plate during the slide; its connector and support still need selection and CAD fit. Add physical strain relief and pull-test the populated lead. The cable check is a static CAD reserve, not a wire bend or motion test.
