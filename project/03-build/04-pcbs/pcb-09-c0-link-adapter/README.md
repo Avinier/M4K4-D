@@ -1,6 +1,6 @@
 # PCB-09 — C0 link adapter
 
-Pi-header board: 2 × RS-422 (THVD1451), audio pass-through and the enclosure-fan switch `J9-4`. **Rev A designed** ([D-092](../../decisions.md#d-092)): 77 × 22.7 × 1.6 mm, four layers, on the Pi header through a Samtec SSW-120-01-T-D socket and two M2.5 × 11 mm standoffs. **Rev B selected, not yet designed** ([D-098](../../decisions.md#d-098)): add the D-096 button/OFF and INA226 service interface before fabrication. The rev A fab files are historical outputs, not the board to order.
+Pi-header board: 2 × RS-422 (THVD1451), audio pass-through and the enclosure-fan switch `J9-4`. **Rev A designed** ([D-092](../../decisions.md#d-092)): 77 × 22.7 × 1.6 mm, four layers, on the Pi header through a Samtec SSW-120-01-T-D socket and two M2.5 × 11 mm standoffs. **Rev B schematic drafted; layout not released** ([D-098](../../decisions.md#d-098)): add the D-096 button/OFF and INA226 service interface before fabrication. The rev A fab files are historical outputs, not the board to order.
 
 | | |
 |---|---|
@@ -18,15 +18,34 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | **Rev A done; rev B required and pending** ([D-098](../../decisions.md#d-098)) | Rev A: [design/](design/), [fab/revA](fab/revA/README.md), [cad/](cad/); ERC 0/0; DRC 0 violations, 0 unconnected, 0 parity; `check_pcb09_mount.py` 7/7, `check_pcb09_fit.py` 5/5. These results do not validate rev B | 2026-11-07 |
+| 1. Design | **Rev A done; rev B schematic drafted, routing open** ([D-098](../../decisions.md#d-098)) | Rev B schematic: ERC 0 violations, exported netlist audit PASS for 118 connected pins. The canonical PCB, STEP and fab files remain rev A; its DRC 0/0/0 and CAD checks do not validate rev B. See the [routing study](#rev-b-routing-study--2026-11-08) | 2026-11-08 |
 | 2. Procure | Waits for rev B and the design batch ([D-064](../../decisions.md#d-064)) | Do not order fab/revA | — |
 | 3. Integrate | Rev A CAD replacement complete; rev B integration and physical acceptance open | [pcb_integration.py](../../final/v1/cad/pcb_integration.py), `check_pcb_integration.py`; rerun with rev B STEP and harness exit | 2026-11-07 |
 
 ### Rev B input — D-098
 
-Preserve the rev A functions, socket, mounting and existing connector pinouts. Add accessible service access to **GPIO12 / header 32** for the qualified 0–3.3 V button-sense signal and **GPIO13 / header 33** for the M1 OFF command. Also provide a permanent four-wire INA226 connection to I²C1 SDA, I²C1 SCL, Pi 3.3 V and GND. TP5 already carries +3V3_PI electrically, but is only a 1 mm probe pad. TP1/TP2 are 1 mm I²C probe pads in the socket strip. None of those is a released harness termination.
+Preserve the rev A functions, socket, mounting and existing connector pinouts. Add accessible service access to **GPIO12 / header 32** for the qualified 0–3.3 V button-sense signal and **GPIO13 / header 33** for the M1 OFF command. The [D-098 amendment](../../decisions.md#d-098) assigns the INA226 to a local `i2c-gpio` bus: draft SDA on GPIO16 / header 36 and SCL on GPIO26 / header 37, plus Pi 3.3 V and GND. Physical pins 3/5 keep their rev A I²C1 routes to TP1/TP2 only. TP5 and TP1/TP2 are 1 mm probe pads, not harness terminations.
 
 Select a compact low-current connector if the fully populated fit allows it; otherwise provide labelled solder lands and positive wire strain relief with an assembly method and pull check. Freeze the actual footprint, pin order and cable exit in the rev B schematic/layout, then check the STEP in the final-v1 assembly. Keep the M1 ON pack-voltage node off this board: GPIO12 receives only the output of the measured high-impedance interface, with no back-power path into an unpowered Pi. Check GPIO13's inactive state through Pi reset, boot and halt, and any M1-to-GPIO13 injection with Pi power absent, before connecting OFF. ERC/DRC, six-net continuity/no-short checks and N1 are release gates. D-096's separate electrical HOLD still applies.
+
+### Rev B routing study — 2026-11-08
+
+The [rev B schematic](design/pcb-09-c0-link-adapter.kicad_sch) adds J6 (GH6: **1 3V3, 2 SDA, 3 SCL, 4 GND, 5 BTN_SENSE, 6 PWR_OFF**), R7 10 kΩ button pull-up to Pi 3V3, R8 2.2 kΩ button series, C5 100 nF optional/DNP, R9 1 kΩ OFF series, R10 100 kΩ OFF pull-down, and R11/R12 4.7 kΩ pull-ups for the software I²C bus. GPIO12/13 terminate at header pins 32/33; draft SDA/SCL terminate at pins 36/37. The connector nets are on the 3.3 V side; pack voltage and load current are absent. The received #2813 measurements still gate final values and buffer choice.
+
+| Header pin | Rev B schematic net | Destination | Layout status |
+|---|---|---|---|
+| 3 / GPIO2 | I2C1_SDA | TP1 only, unchanged from rev A | Routed in canonical rev A board |
+| 5 / GPIO3 | I2C1_SCL | TP2 only, unchanged from rev A | Routed in canonical rev A board |
+| 32 / GPIO12 | BTN_GPIO12 | R8 → BTN_SENSE at J6.5 | Unrouted in canonical rev A board |
+| 33 / GPIO13 | OFF_GPIO13 | R9 → PWR_OFF at J6.6 | Unrouted in canonical rev A board |
+| 36 / GPIO16 | I2C_GPIO_SDA | R11 pull-up and J6.2 | Unrouted in canonical rev A board |
+| 37 / GPIO26 | I2C_GPIO_SCL | R12 pull-up and J6.3 | Unrouted in canonical rev A board |
+
+The draft rev B allocation has **15 functional GPIO** (rev A's 11 plus GPIO12/13/16/26) and keeps GPIO2/3 reserved for I²C1 service pads. The choice of GPIO16/26 and J6 footprint/position remains subject to layout DRC and CAD fit.
+
+An exploratory GH6 placement needed an extension at the bay's +X edge: the existing F.Cu courtyards occupy the top of the original bay. A geometric core-only probe of world X 66…78, Y 22.5…39, Z 106.25…108.25 found no intersecting robot solid. That probe did **not** validate the mated plug, cable exit, insertion sweep, mount or full board. Growing the +Y edge instead intersected the existing J9-1 mated plug and its reserve.
+
+The manually routed exploratory I²C1 board failed Nightly DRC: **29 violations, 2 unconnected and 0 parity** ([study report](design/revB-routing-study-drc.json)). The SDA F.Cu L path crossed LRCLK near header pin 35; the proposed layer change landed on the existing 5 V via. The SCL B.Cu U path crossed BASE_TX and approached a ground socket pad. The GPIO12/13 In1 paths isolated ground socket pads 30/34; J6's +X placement also conflicted with nearby vias. D-098 therefore switches the INA226 to local GPIO I²C and forbids new In1 tracks. This report is evidence from the rejected route, not a DRC result for the amended schematic. The canonical `.kicad_pcb`, layout script, STEP, and `fab/revA/` remain the validated rev A state. Require 0/0/0 parity DRC and the full CAD fit checks before exporting rev B fabrication data.
 
 ## Inputs
 

@@ -108,7 +108,18 @@ Lengths are `E` cut allowances with service loop, **not measured CAD centerlines
 | `W41` | Fan → PCB-09 `J9-4` | Existing GH2 / GPIO24 switch |
 | `W42` | PCB-08 `J8-6` ↔ PCB-14 | Existing 22-pin head-power FFC; verify current sharing |
 | `W43` | PCB-08 `J8-7` ↔ PCB-14 | Existing 22-pin sideband FFC; former ARM_REQ/READY/charge/status conductors marked **“reassign at PCB-08/12 design”**, not tied to power |
-| `W44` | M6 SDA/SCL/VCC/GND → PCB-09 rev B service termination → Pi I²C1/3V3/GND | 4×AWG28, E 160. Pi physical 3 SDA1/GPIO2, 5 SCL1/GPIO3, 1 or 17 3V3, 6 or 9 GND. Rev A TP1/TP2/TP5 are 1 mm probe pads, not released wire lands; use only the designed, strain-relieved rev B interface after fit and continuity checks ([D-098](../decisions.md#d-098)). No 5 V I²C. Set/verify address 0x40 unless occupied |
+| `W44` | M6 SDA/SCL/VCC/GND → PCB-09 rev B service termination → Pi `i2c-gpio`/3V3/GND | 4×AWG28, E 160. Draft bus pins: Pi physical 36 / GPIO16 SDA and 37 / GPIO26 SCL, with 4.7 kΩ pull-ups on PCB-09. Rev A I²C1 TP1/TP2/TP5 are 1 mm probe pads and stay outside this harness. Use only the designed, strain-relieved rev B interface after fit and continuity checks ([D-098 amendment](../decisions.md#d-098)). No 5 V I²C. Set/verify address 0x40 unless occupied |
+
+**Draft J6 GH6 lead:** one pre-crimped six-way lead leaves PCB-09 and splits at the rear-bay plate into W44's INA226 four wires and W40's button/OFF control pair. Connector placement, lead exit, split support and unplug method await the rev B CAD fit.
+
+| J6 pin | Net | Rear destination |
+|---|---|---|
+| 1 | +3V3_PI | M6 VCC |
+| 2 | I2C_GPIO_SDA | M6 SDA |
+| 3 | I2C_GPIO_SCL | M6 SCL |
+| 4 | GND | M6 GND |
+| 5 | BTN_SENSE | Rear button buffer output |
+| 6 | PWR_OFF | M1 OFF input interface |
 
 `W20`, `W21`, `W23a/b`, `W39`, and old NTC GH2 are deleted. GH pre-crimp buy: GH2 W41 (and W40 if a detachable lead is selected); GH4 W30/31 plus CH-020 W36; GH5 W34; GH6 W24/25 double-ended and W32/33 single-ended; GH8 W29 single-ended; **GH10 one single-ended W26**. Buy one spare per fitted size after measured stock lengths are chosen.
 
@@ -134,7 +145,7 @@ Pin 1 means the **moulded cavity number**, not the leftmost cavity in a photogra
 |---|---|
 | `J-PK`, `J-BAT`, `J-CHASSIS` 2-way | 1 positive, 2 negative. Respectively protected pack, fused unswitched, switched shunt-monitored. Give unlike feeds distinct keys/labels |
 | M1 #2813 | VIN from charge +splice; GND from −splice; VOUT to M6 IN+; ON from mushroom NO-to-GND; OFF from verified Pi GPIO interface; CTRL unused. Check received board hole labels |
-| M6 INA226 (shunt OPEN, CH-099) | IN+ M1 VOUT, IN− +STAR, bus voltage sense at IN− if separate pad exists; VCC Pi 3V3, GND −STAR, SDA/SCL I²C1. Check board trace/jumper arrangement; choose and calibrate shunt after peak measurements |
+| M6 INA226 (shunt OPEN, CH-099) | IN+ M1 VOUT, IN− +STAR, bus voltage sense at IN− if separate pad exists; VCC Pi 3V3, GND −STAR, SDA/SCL PCB-09 `i2c-gpio` bus. Check board trace/jumper arrangement; choose and calibrate shunt after peak measurements |
 | M2/M3 S18V20ALV | VIN+/GND from tub branch; VOUT+/GND to W13 5.5 V or W17 11.1 V. Label setpoints at modules |
 | M4/M5 S13V30F5 | VIN+/GND from body stars; M4 VOUT Pi-only 5 V; M5 VOUT shared 5 V. Keep outputs separate |
 | `J8-1` MF3 2×3 | 1 +5V5_HEAD_PR, 2 +5V_C2, 3 +5V_DISPLAY, 4 GND_HEAD, 5 GND_C2, 6 GND_DISPLAY |

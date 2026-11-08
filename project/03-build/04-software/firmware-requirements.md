@@ -11,17 +11,21 @@
 
 | ID | Requirement | Source | Proved by |
 |---|---|---|---|
-| FW-P1 | Read the INA226 (M6) on I²C1 (GPIO2/3, address 0x40 unless taken). Use its **bus voltage under load** as the battery measure, not an open-circuit estimate | D-094 M6, D-096 | N6 |
+| FW-P1 | Read the INA226 (M6) at address 0x40 on the PCB-09 `i2c-gpio` bus (draft: SDA GPIO16, SCL GPIO26; bus number set on the deployed image). Use its **bus voltage under load** as the battery measure, not an open-circuit estimate | D-094 M6, D-096, D-098 amendment | N6 |
 | FW-P2 | **Low-battery stop:** at a loaded bus voltage of 6.0 V (threshold to re-register after N6), command C2 and C3 to stop all motion and hold torque off | RP-02 §8.1 soft-critical, D-093 | N6 |
 | FW-P3 | **Low-battery shutdown:** after FW-P2, shut the Pi down cleanly, then turn M1 off (FW-P5) before the TIFPS0629 under-voltage trip. Filter for load peaks: a coincident stall can pull each cell about 0.35 V below its resting voltage (cell resistance only), so no shutdown on a single sample | D-096 duration screen | N6 with a peak-load pulse at the 6.0 V point |
-| FW-P4 | **Power button:** a press while on (sensed through a qualified high-impedance interface, never the M1 ON pad directly) starts an orderly shutdown | D-093 Q1, D-096 `W40` | N1(a) |
-| FW-P5 | **Power off:** after shutdown, pulse M1's OFF input (> 1 V); never drive M1 ON from a GPIO | D-094 M1, D-096 | N1(a) |
+| FW-P4 | **Power button:** a press while on (sensed through a qualified high-impedance interface, never the M1 ON pad directly) starts an orderly shutdown. Candidate kernel mechanism: `dtoverlay=gpio-shutdown,gpio_pin=12,...`; set the active level to match the measured rear buffer | D-093 Q1, D-096 `W40` | N1(a) |
+| FW-P5 | **Power off:** after shutdown, pulse M1's OFF input (> 1 V); never drive M1 ON from a GPIO. Candidate kernel mechanism: `dtoverlay=gpio-poweroff,gpiopin=13,...`, which must assert only at the end of shutdown | D-094 M1, D-096 | N1(a) |
 | FW-P6 | Leave the Pi in its non-PD 5 V / 3 A mode: do **not** set `PSU_MAX_CURRENT` or `usb_max_current_enable`. USB peripherals stay within 600 mA | D-094 M4, Raspberry Pi RP-009856 | N12 |
 | FW-P7 | Log `vcgencmd get_throttled` at boot and during operation; report any under-voltage flag | D-094 M4 | N12(c) |
 | FW-P8 | No sequencing logic: every rail comes up together. Each controller must tolerate the others starting in any order | D-093 | N7 |
 | FW-P9 | Charging happens only in `OFF`. Firmware cannot see the charger; the operating rule is in the user notes | D-093 | N5 |
 
-**Board interface selected; physical wiring blocked.** [D-098](../decisions.md#d-098) keeps button sense on GPIO12 (header pin 32), M1 OFF on GPIO13 (pin 33), and INA226 SDA/SCL on I²C1. PCB-09 rev A leaves GPIO12/13 unconnected under its full socket. Its Pi 3.3 V TP5 and I²C TP1/TP2 are 1 mm probe pads; TP1/TP2 are in the socket strip. PCB-09 rev B must expose the two GPIOs and provide an accessible, mechanically supported SDA/SCL/3V3/GND harness termination. GPIO12 sees only the qualified 0–3.3 V output of the button-sense interface; GPIO13's inactive boot/halt state and M1 OFF drive must be proved. FW-P1, FW-P4 and FW-P5 can be specified, but their harness build waits for the rev B board and N1 evidence.
+**Board interface selected; physical wiring blocked.** [D-098](../decisions.md#d-098), amended after the failed long-route study, keeps button sense on GPIO12 (header pin 32) and M1 OFF on GPIO13 (pin 33), but moves the INA226 to a software I²C bus near the connector bay. The draft schematic uses GPIO16 (pin 36) for SDA and GPIO26 (pin 37) for SCL, with two 4.7 kΩ pull-ups to Pi 3.3 V. Pi I²C1 pins 3/5 retain only their rev A TP1/TP2 service pads. PCB-09 rev B must provide an accessible, mechanically supported six-wire harness termination. GPIO12 sees only the qualified 0–3.3 V output of the button-sense interface; GPIO13's inactive boot/halt state and M1 OFF drive must be proved. FW-P1, FW-P4 and FW-P5 can be specified, but their harness build waits for the rev B board and N1 evidence.
+
+Candidate configuration: `dtoverlay=i2c-gpio,i2c_gpio_sda=16,i2c_gpio_scl=26,bus=<n>`, with the INA226 bound through the `ina2xx` driver. Verify parameter names, the chosen free bus number, pin ownership and the device at `0x40` on the **actual Pi 5 image** before release; this repository has not checked that image.
+
+The two overlay names and parameters above are implementation candidates, **not verified on the deployed Pi 5 image**. Before enabling them, inspect the actual image's overlay files/help and merged device tree; then scope GPIO12 and GPIO13 through cold boot, warm reboot and halt, including with M1 connected. Do not substitute a userspace shutdown pulse for the end-of-shutdown OFF requirement.
 
 ## 2. Servos (C2)
 

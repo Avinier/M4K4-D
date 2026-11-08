@@ -1,5 +1,7 @@
 # PCB-09 rev A: fabrication outputs
 
+**Historical — do not order.** D-098 requires a rev B interface for the button, M1 OFF and INA226 before PCB-09 fabrication. These files predate that interface.
+
 Exported 2026-11-06 from `../../design/pcb-09-c0-link-adapter.kicad_pcb` by `python3 layout_pcb09.py --export` with the KiCad 10.99 Nightly `kicad-cli`. These are design outputs, not an order. At stage 2 the fab is chosen by quote ([D-062](../../../../decisions.md#d-062)), and no board is ordered until every board is designed ([D-064](../../../../decisions.md#d-064)).
 
 **Every file uses one origin**: the board's bottom-left corner as seen from the top face, world (−11, 16.3). The Gerbers, the drill files and the placement files agree.

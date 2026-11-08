@@ -1,6 +1,6 @@
 {
   "J1": {
-    "value": "Pi_40_pin_socket_MPN_OPEN",
+    "value": "SSW-120-01-T-D",
     "symbol": "Connector_Generic:Conn_02x20_Odd_Even",
     "footprint": "Connector_PinSocket_2.54mm:PinSocket_2x20_P2.54mm_Vertical",
     "pins": {
@@ -35,16 +35,17 @@
       "29": "BASE_RX",
       "30": "GND",
       "31": null,
-      "32": null,
-      "33": null,
+      "32": "BTN_GPIO12",
+      "33": "OFF_GPIO13",
       "34": "GND",
       "35": "LRCLK",
-      "36": null,
-      "37": null,
+      "36": "I2C_GPIO_SDA",
+      "37": "I2C_GPIO_SCL",
       "38": "SDI0",
       "39": "GND",
       "40": "SDO0"
-    }
+    },
+    "dnp": false
   },
   "U1": {
     "value": "THVD1451DR",
@@ -59,7 +60,8 @@
       "6": "HEAD_C0TX_N",
       "7": "HEAD_C2TX_N",
       "8": "HEAD_C2TX_P"
-    }
+    },
+    "dnp": false
   },
   "J2": {
     "value": "J9-1_HEAD",
@@ -72,7 +74,8 @@
       "4": "HEAD_C2TX_N",
       "5": "HEAD_C2TX_P",
       "6": null
-    }
+    },
+    "dnp": false
   },
   "R1": {
     "value": "4.7k",
@@ -81,7 +84,8 @@
     "pins": {
       "1": "+3V3_PI",
       "2": "HEAD_TX"
-    }
+    },
+    "dnp": false
   },
   "R3": {
     "value": "120",
@@ -90,7 +94,8 @@
     "pins": {
       "1": "HEAD_C2TX_P",
       "2": "HEAD_C2TX_N"
-    }
+    },
+    "dnp": false
   },
   "C1": {
     "value": "100n",
@@ -99,7 +104,8 @@
     "pins": {
       "1": "+3V3_PI",
       "2": "GND"
-    }
+    },
+    "dnp": false
   },
   "U2": {
     "value": "THVD1451DR",
@@ -114,7 +120,8 @@
       "6": "BASE_C0TX_N",
       "7": "BASE_C3TX_N",
       "8": "BASE_C3TX_P"
-    }
+    },
+    "dnp": false
   },
   "J3": {
     "value": "J9-2_BASE",
@@ -127,7 +134,8 @@
       "4": "BASE_C3TX_N",
       "5": "BASE_C3TX_P",
       "6": null
-    }
+    },
+    "dnp": false
   },
   "R2": {
     "value": "4.7k",
@@ -136,7 +144,8 @@
     "pins": {
       "1": "+3V3_PI",
       "2": "BASE_TX"
-    }
+    },
+    "dnp": false
   },
   "R4": {
     "value": "120",
@@ -145,7 +154,8 @@
     "pins": {
       "1": "BASE_C3TX_P",
       "2": "BASE_C3TX_N"
-    }
+    },
+    "dnp": false
   },
   "C2": {
     "value": "100n",
@@ -154,7 +164,8 @@
     "pins": {
       "1": "+3V3_PI",
       "2": "GND"
-    }
+    },
+    "dnp": false
   },
   "J4": {
     "value": "J9-3_AUDIO_W26",
@@ -171,7 +182,8 @@
       "8": "SDI0",
       "9": "AMP_SD",
       "10": "5V_SENSE_TP_ONLY"
-    }
+    },
+    "dnp": false
   },
   "Q1": {
     "value": "AO3400A",
@@ -181,7 +193,8 @@
       "1": "FAN_GATE",
       "2": "GND",
       "3": "FAN_SW"
-    }
+    },
+    "dnp": false
   },
   "R5": {
     "value": "100",
@@ -190,7 +203,8 @@
     "pins": {
       "1": "FAN_EN",
       "2": "FAN_GATE"
-    }
+    },
+    "dnp": false
   },
   "R6": {
     "value": "100k",
@@ -199,16 +213,18 @@
     "pins": {
       "1": "FAN_GATE",
       "2": "GND"
-    }
+    },
+    "dnp": false
   },
   "J5": {
     "value": "J9-4_FAN",
     "symbol": "Connector_Generic:Conn_01x02",
-    "footprint": "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical",
+    "footprint": "Connector_JST:JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical",
     "pins": {
       "1": "+5V_PI",
       "2": "FAN_SW"
-    }
+    },
+    "dnp": false
   },
   "D1": {
     "value": "1N5819HW",
@@ -217,7 +233,8 @@
     "pins": {
       "1": "+5V_PI",
       "2": "FAN_SW"
-    }
+    },
+    "dnp": false
   },
   "C3": {
     "value": "10u_10V",
@@ -226,7 +243,8 @@
     "pins": {
       "1": "+5V_PI",
       "2": "GND"
-    }
+    },
+    "dnp": false
   },
   "C4": {
     "value": "100n",
@@ -235,7 +253,92 @@
     "pins": {
       "1": "+5V_PI",
       "2": "GND"
-    }
+    },
+    "dnp": false
+  },
+  "J6": {
+    "value": "REAR_SERVICE_W40_W44",
+    "symbol": "Connector_Generic:Conn_01x06",
+    "footprint": "Connector_JST:JST_GH_BM06B-GHS-TBT_1x06-1MP_P1.25mm_Vertical",
+    "pins": {
+      "1": "+3V3_PI",
+      "2": "I2C_GPIO_SDA",
+      "3": "I2C_GPIO_SCL",
+      "4": "GND",
+      "5": "BTN_SENSE",
+      "6": "PWR_OFF"
+    },
+    "dnp": false
+  },
+  "R7": {
+    "value": "10k",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "pins": {
+      "1": "+3V3_PI",
+      "2": "BTN_SENSE"
+    },
+    "dnp": false
+  },
+  "R8": {
+    "value": "2.2k",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "pins": {
+      "1": "BTN_SENSE",
+      "2": "BTN_GPIO12"
+    },
+    "dnp": false
+  },
+  "C5": {
+    "value": "100n",
+    "symbol": "Device:C",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "pins": {
+      "1": "BTN_GPIO12",
+      "2": "GND"
+    },
+    "dnp": true
+  },
+  "R9": {
+    "value": "1k",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "pins": {
+      "1": "OFF_GPIO13",
+      "2": "PWR_OFF"
+    },
+    "dnp": false
+  },
+  "R10": {
+    "value": "100k",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "pins": {
+      "1": "PWR_OFF",
+      "2": "GND"
+    },
+    "dnp": false
+  },
+  "R11": {
+    "value": "4.7k",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "pins": {
+      "1": "+3V3_PI",
+      "2": "I2C_GPIO_SDA"
+    },
+    "dnp": false
+  },
+  "R12": {
+    "value": "4.7k",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "pins": {
+      "1": "+3V3_PI",
+      "2": "I2C_GPIO_SCL"
+    },
+    "dnp": false
   },
   "TP1": {
     "value": "I2C1_SDA",
@@ -243,7 +346,8 @@
     "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
     "pins": {
       "1": "I2C1_SDA"
-    }
+    },
+    "dnp": false
   },
   "TP2": {
     "value": "I2C1_SCL",
@@ -251,7 +355,8 @@
     "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
     "pins": {
       "1": "I2C1_SCL"
-    }
+    },
+    "dnp": false
   },
   "TP3": {
     "value": "GND",
@@ -259,7 +364,8 @@
     "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
     "pins": {
       "1": "GND"
-    }
+    },
+    "dnp": false
   },
   "TP4": {
     "value": "5V_SENSE_TP_ONLY",
@@ -267,7 +373,8 @@
     "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
     "pins": {
       "1": "5V_SENSE_TP_ONLY"
-    }
+    },
+    "dnp": false
   },
   "TP5": {
     "value": "+3V3_PI",
@@ -275,7 +382,8 @@
     "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
     "pins": {
       "1": "+3V3_PI"
-    }
+    },
+    "dnp": false
   },
   "TP6": {
     "value": "+5V_PI",
@@ -283,7 +391,8 @@
     "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
     "pins": {
       "1": "+5V_PI"
-    }
+    },
+    "dnp": false
   },
   "#FLG01": {
     "value": "PWR_FLAG",
@@ -291,7 +400,8 @@
     "footprint": "",
     "pins": {
       "1": "+3V3_PI"
-    }
+    },
+    "dnp": false
   },
   "#FLG02": {
     "value": "PWR_FLAG",
@@ -299,7 +409,8 @@
     "footprint": "",
     "pins": {
       "1": "+5V_PI"
-    }
+    },
+    "dnp": false
   },
   "#FLG03": {
     "value": "PWR_FLAG",
@@ -307,6 +418,7 @@
     "footprint": "",
     "pins": {
       "1": "GND"
-    }
+    },
+    "dnp": false
   }
 }

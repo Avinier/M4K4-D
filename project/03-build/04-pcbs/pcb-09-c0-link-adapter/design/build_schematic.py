@@ -80,7 +80,7 @@ rootid = uid("root")
 instances, wires, labels, ncs, defs, manifest = [], [], [], [], {}, {}
 
 
-def add(ref, libid, value, footprint, x, y, nets, bom=True):
+def add(ref, libid, value, footprint, x, y, nets, bom=True, dnp=False):
     lib = symbol(libid)
     lib[1] = libid
     defs[libid] = lib
@@ -113,10 +113,10 @@ def add(ref, libid, value, footprint, x, y, nets, bom=True):
             justify = "right" if dx < 0 else "left"
             labels.append(f'(label "{net}" (at {ex} {ey} 0) (effects (font (size 1 1)) (justify {justify} bottom)) (uuid "{uid(ref+"/label/"+number)}"))')
     instances.append(f'(symbol (lib_id "{libid}") (at {x} {y} 0) (unit 1) '
-                     f'(in_bom {"yes" if bom else "no"}) (on_board yes) (dnp no) '
+                     f'(in_bom {"yes" if bom else "no"}) (on_board yes) (dnp {"yes" if dnp else "no"}) '
                      f'(uuid "{uid(ref)}") '+" ".join(properties+pinids)+
                      f' (instances (project "{NAME}" (path "/{rootid}" (reference "{ref}") (unit 1)))))')
-    manifest[ref] = {"value": value, "symbol": libid, "footprint": footprint, "pins": pinmap}
+    manifest[ref] = {"value": value, "symbol": libid, "footprint": footprint, "pins": pinmap, "dnp": dnp}
 
 
 if __name__ == "__main__":
@@ -124,7 +124,8 @@ if __name__ == "__main__":
     CFP = "Capacitor_SMD:C_0603_1608Metric"
     gpio = {1:"+3V3_PI",2:"+5V_PI",3:"I2C1_SDA",4:"+5V_PI",5:"I2C1_SCL",
             7:"BASE_TX",8:"HEAD_TX",10:"HEAD_RX",12:"BCLK",15:"SDI1",16:"AMP_SD",
-            17:"+3V3_PI",18:"FAN_EN",29:"BASE_RX",35:"LRCLK",38:"SDI0",40:"SDO0"}
+            17:"+3V3_PI",18:"FAN_EN",29:"BASE_RX",32:"BTN_GPIO12",33:"OFF_GPIO13",
+            35:"LRCLK",36:"I2C_GPIO_SDA",37:"I2C_GPIO_SCL",38:"SDI0",40:"SDO0"}
     gpio.update({n:"GND" for n in (6,9,14,20,25,30,34,39)})
     add("J1", "Connector_Generic:Conn_02x20_Odd_Even", "SSW-120-01-T-D",
         "Connector_PinSocket_2.54mm:PinSocket_2x20_P2.54mm_Vertical", 55.88, 76.2,
@@ -153,17 +154,31 @@ if __name__ == "__main__":
     add("D1","Device:D_Schottky","1N5819HW","Diode_SMD:D_SOD-123",345.44,187.96,{"1":"+5V_PI","2":"FAN_SW"})
     add("C3","Device:C","10u_10V","Capacitor_SMD:C_0805_2012Metric",345.44,218.44,{"1":"+5V_PI","2":"GND"})
     add("C4","Device:C","100n",CFP,375.92,218.44,{"1":"+5V_PI","2":"GND"})
+    # Rear-bay service interface. The button buffer at the rear is open-drain;
+    # only the Pi's 3.3 V rail biases BTN_SENSE. C5 is DNP by default.
+    add("J6","Connector_Generic:Conn_01x06","REAR_SERVICE_W40_W44",
+        "Connector_JST:JST_GH_BM06B-GHS-TBT_1x06-1MP_P1.25mm_Vertical",431.8,76.2,
+        {"1":"+3V3_PI","2":"I2C_GPIO_SDA","3":"I2C_GPIO_SCL","4":"GND",
+         "5":"BTN_SENSE","6":"PWR_OFF"})
+    add("R7","Device:R","10k",RFP,411.48,121.92,{"1":"+3V3_PI","2":"BTN_SENSE"})
+    add("R8","Device:R","2.2k",RFP,411.48,147.32,{"1":"BTN_SENSE","2":"BTN_GPIO12"})
+    add("C5","Device:C","100n",CFP,452.12,147.32,{"1":"BTN_GPIO12","2":"GND"},dnp=True)
+    add("R9","Device:R","1k",RFP,411.48,177.8,{"1":"OFF_GPIO13","2":"PWR_OFF"})
+    add("R10","Device:R","100k",RFP,452.12,177.8,{"1":"PWR_OFF","2":"GND"})
+    add("R11","Device:R","4.7k",RFP,431.8,218.44,{"1":"+3V3_PI","2":"I2C_GPIO_SDA"})
+    add("R12","Device:R","4.7k",RFP,472.44,218.44,{"1":"+3V3_PI","2":"I2C_GPIO_SCL"})
     for n,net in enumerate(["I2C1_SDA","I2C1_SCL","GND","5V_SENSE_TP_ONLY","+3V3_PI","+5V_PI"],1):
         add(f"TP{n}","Connector:TestPoint",net,"TestPoint:TestPoint_Pad_D1.0mm",50.8+40.64*(n-1),243.84,{"1":net},False)
     for n,net in enumerate(["+3V3_PI","+5V_PI","GND"],1):
         add(f"#FLG0{n}","power:PWR_FLAG","PWR_FLAG","",50.8+25.4*(n-1),269.24,{"1":net},False)
-    head = f'(kicad_sch (version 20261015) (generator "eeschema") (generator_version "10.99") (uuid "{rootid}") (paper "A3") '
-    head += '(title_block (title "PCB-09 C0 link adapter") (date "2026-11-06") (rev "A") (company "Makad") (comment 1 "D-073 / D-074 / D-092; CR-02 boot/overlay and fan-current evidence remain open"))'
+    head = f'(kicad_sch (version 20261015) (generator "eeschema") (generator_version "10.99") (uuid "{rootid}") (paper "A2") '
+    head += '(title_block (title "PCB-09 C0 link adapter") (date "2026-11-08") (rev "B") (company "Makad") (comment 1 "D-073 / D-074 / D-092 / D-098 amendment; #2813 and Pi-image gates open"))'
     text = head+' (lib_symbols '+" ".join(dump(n) for n in defs.values())+') '
     text += " ".join(instances+wires+labels+ncs)
     for title, x, y in [("PI HEADER / D-073",30.48,30.48),("HEAD RS-422 / UART0",121.92,30.48),
                          ("BASE RS-422 / UART2",101.6,121.92),("AUDIO / W26 SIGNALS ONLY",304.8,45.72),
-                         ("ENCLOSURE FAN / GPIO24",254,137.16),("SERVICE / TEST PADS",40.64,226.06)]:
+                         ("ENCLOSURE FAN / GPIO24",254,137.16),("REAR SERVICE / W40 + W44",406.4,45.72),
+                         ("SERVICE / TEST PADS",40.64,226.06)]:
         text += f'(text "{title}" (at {x} {y} 0) (effects (font (size 1.8 1.8)) (justify left bottom)) (uuid "{uid(title)}"))'
     text += f' (sheet_instances (path "/" (page "1"))) (embedded_fonts no))\n'
     (HERE/(NAME+".kicad_sch")).write_text(text)
