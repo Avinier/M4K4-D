@@ -25,6 +25,8 @@ In the register, `DESIGN` means custom geometry exists, `CANDIDATE` means a part
 
 Connectors, cables, pinouts and service breaks are in [05-harness](05-harness/README.md).
 
+Open procurement and receiving actions are in [TODO.md](TODO.md).
+
 Custom schematic, layout and board validation work has a separate [04-pcbs work area](04-pcbs/README.md), which also holds the build deltas to the RP-02 power-board specs. Its unreleased assemblies do not universally block isolated chassis fit or controlled external-supply tests.
 
 Work can overlap. Freeze only the interfaces needed for the next release; record changes that affect another subsystem. Each subsystem's `cad/` holds only that subsystem; the whole-robot CAD is in [`final/v1/cad/`](final/v1/README.md). The integrated [Layout 02 CAD](../02-prototypes/RP-06-cad/body-chassis/layout-02/) is the starting geometry, not a fabrication release or physical proof.
