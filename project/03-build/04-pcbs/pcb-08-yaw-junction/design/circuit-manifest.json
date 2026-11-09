@@ -1,0 +1,211 @@
+{
+  "J1": {
+    "value": "J8-1_HEAD_POWER_MF3",
+    "symbol": "Connector_Generic:Conn_02x03_Top_Bottom",
+    "footprint": "pcb08:Molex_Micro-Fit_3.0_43045-0621_2x03-1MP_P3.00mm_Horizontal",
+    "pins": {
+      "1": "+6V0_HEAD_PR",
+      "2": "+5V_C2",
+      "3": "+5V_DISPLAY",
+      "4": "GND_HEAD",
+      "5": "GND_C2",
+      "6": "GND_DISPLAY"
+    },
+    "dnp": false
+  },
+  "J2": {
+    "value": "J8-4_HEAD_LINK_W24",
+    "symbol": "Connector_Generic:Conn_01x06",
+    "footprint": "Connector_JST:JST_GH_BM06B-GHS-TBT_1x06-1MP_P1.25mm_Vertical",
+    "pins": {
+      "1": "LINK_GND",
+      "2": "C0TX_P",
+      "3": "C0TX_N",
+      "4": "C2TX_N",
+      "5": "C2TX_P",
+      "6": null
+    },
+    "dnp": false
+  },
+  "R1": {
+    "value": "0R",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0805_2012Metric",
+    "pins": {
+      "1": "LINK_GND",
+      "2": "GND_SIG"
+    },
+    "dnp": false
+  },
+  "J3": {
+    "value": "J8-6_W42_POWER_FFC",
+    "symbol": "Connector_Generic:Conn_01x22",
+    "footprint": "fh34:Hirose_FH34SRJ-22S-0.5SH_1x22_P0.50mm",
+    "pins": {
+      "1": "+6V0_HEAD_PR",
+      "2": "+6V0_HEAD_PR",
+      "3": "+6V0_HEAD_PR",
+      "4": "+6V0_HEAD_PR",
+      "5": "+6V0_HEAD_PR",
+      "6": "+6V0_HEAD_PR",
+      "7": "+6V0_HEAD_PR",
+      "8": "GND_HEAD",
+      "9": "GND_HEAD",
+      "10": "GND_HEAD",
+      "11": "GND_HEAD",
+      "12": "GND_HEAD",
+      "13": "GND_HEAD",
+      "14": "GND_HEAD",
+      "15": "+5V_C2",
+      "16": "+5V_C2",
+      "17": "GND_C2",
+      "18": "GND_C2",
+      "19": "+5V_DISPLAY",
+      "20": "+5V_DISPLAY",
+      "21": "GND_DISPLAY",
+      "22": "GND_DISPLAY"
+    },
+    "dnp": false
+  },
+  "J4": {
+    "value": "J8-7_W43_SIGNAL_FFC",
+    "symbol": "Connector_Generic:Conn_01x22",
+    "footprint": "fh34:Hirose_FH34SRJ-22S-0.5SH_1x22_P0.50mm",
+    "pins": {
+      "1": "GND_SIG",
+      "2": "C0TX_P",
+      "3": "C0TX_N",
+      "4": "GND_SIG",
+      "5": "C2TX_N",
+      "6": "C2TX_P",
+      "7": "GND_SIG",
+      "8": "SERVO_DATA",
+      "9": "GND_SIG",
+      "10": null,
+      "11": null,
+      "12": null,
+      "13": null,
+      "14": null,
+      "15": null,
+      "16": null,
+      "17": null,
+      "18": null,
+      "19": null,
+      "20": null,
+      "21": null,
+      "22": null
+    },
+    "dnp": false
+  },
+  "J5": {
+    "value": "J8-8_YAW_SERVO_5267",
+    "symbol": "Connector_Generic:Conn_01x03",
+    "footprint": "Connector_Molex:Molex_SPOX_5267-03A_1x03_P2.50mm_Vertical",
+    "pins": {
+      "1": "GND_SIG",
+      "2": "+11V1_YAW",
+      "3": "SERVO_DATA"
+    },
+    "dnp": false
+  },
+  "J6": {
+    "value": "W17_YAW_RAIL_PADS",
+    "symbol": "Connector_Generic:Conn_01x02",
+    "footprint": "Connector_Wire:SolderWire-0.5sqmm_1x02_P4.6mm_D0.9mm_OD2.1mm",
+    "pins": {
+      "1": "+11V1_YAW",
+      "2": "GND_SIG"
+    },
+    "dnp": false
+  },
+  "TP1": {
+    "value": "SERVO_DATA",
+    "symbol": "Connector:TestPoint",
+    "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+    "pins": {
+      "1": "SERVO_DATA"
+    },
+    "dnp": false
+  },
+  "TP2": {
+    "value": "GND_SIG",
+    "symbol": "Connector:TestPoint",
+    "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+    "pins": {
+      "1": "GND_SIG"
+    },
+    "dnp": false
+  },
+  "#FLG01": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "+6V0_HEAD_PR"
+    },
+    "dnp": false
+  },
+  "#FLG02": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "+5V_C2"
+    },
+    "dnp": false
+  },
+  "#FLG03": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "+5V_DISPLAY"
+    },
+    "dnp": false
+  },
+  "#FLG04": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "GND_HEAD"
+    },
+    "dnp": false
+  },
+  "#FLG05": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "GND_C2"
+    },
+    "dnp": false
+  },
+  "#FLG06": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "GND_DISPLAY"
+    },
+    "dnp": false
+  },
+  "#FLG07": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "+11V1_YAW"
+    },
+    "dnp": false
+  },
+  "#FLG08": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "GND_SIG"
+    },
+    "dnp": false
+  }
+}

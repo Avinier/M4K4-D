@@ -1,0 +1,97 @@
+{
+ "script": "check_pcb08_step_fit",
+ "passed": 5,
+ "total": 6,
+ "rows": [
+  {
+   "check": "board_outline_matches_cad",
+   "ok": true,
+   "bounds": [
+    -22.0,
+    -44.0,
+    112.045,
+    20.0,
+    -23.0,
+    113.555
+   ],
+   "core_thickness": 1.51
+  },
+  {
+   "check": "board_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "nearest": "C0_RASPBERRY_PI5_EXACT_STEP",
+   "min_gap": 0.135,
+   "bounds": [
+    -22.0,
+    -44.0,
+    112.045,
+    20.0,
+    -23.0,
+    113.555
+   ]
+  },
+  {
+   "check": "J2_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "nearest": "C0_RASPBERRY_PI5_EXACT_STEP",
+   "min_gap": 1.73,
+   "bounds": [
+    -10.0,
+    -29.0,
+    113.64,
+    0.75,
+    -24.05,
+    117.84
+   ]
+  },
+  {
+   "check": "R1_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "nearest": "C0_RASPBERRY_PI5_EXACT_STEP",
+   "min_gap": 1.73,
+   "bounds": [
+    4.3,
+    -25.1,
+    113.64,
+    6.3,
+    -23.9,
+    114.09
+   ]
+  },
+  {
+   "check": "j2_centered_on_mated_plug_datum",
+   "ok": true,
+   "actual": [
+    -10.0,
+    -29.0,
+    113.64,
+    0.75,
+    -24.05,
+    117.84
+   ],
+   "reserve": [
+    -10.0,
+    -29.0,
+    113.6,
+    0.75,
+    -24.0496,
+    117.8
+   ]
+  },
+  {
+   "check": "populated_models_present",
+   "ok": false,
+   "missing": [
+    "J1",
+    "J3",
+    "J4",
+    "J5",
+    "J6"
+   ],
+   "note": "J3/J4 FH34 footprints have no 3D model; J1/J5/J6 stock model files are unavailable"
+  }
+ ]
+}

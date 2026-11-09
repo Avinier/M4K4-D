@@ -2,7 +2,7 @@
 
 Each custom board goes through three stages: **design** it, **procure** its parts and the assembled board, then **integrate** the real board into the final CAD. **Every board is designed first, one at a time; procurement starts only when the design batch is done, and boards are then ordered together where they share a fab** ([D-064](../decisions.md#d-064)). A board starts a stage only after it has finished the stage before. How to design one board, step by step, is in [design-playbook.md](design-playbook.md). Each board has a folder in `04-pcbs/`. Its README records where the board is in this workflow.
 
-Since [D-093](../decisions.md#d-093) (2026-11-06) the design batch is seven boards: PCB-08, 09, 10, 11, 12, 14 and 15. PCB-08, 12 and 14 are still to be designed. PCB-02, 03, 04, 05, 06 and 07 became bought modules and PCB-13 was deleted.
+Since [D-093](../decisions.md#d-093) (2026-11-06) the design batch is seven boards: PCB-08, 09, 10, 11, 12, 14 and 15. PCB-08 has a routed rev A draft; PCB-12 and PCB-14 are still to be designed. PCB-02, 03, 04, 05, 06 and 07 became bought modules and PCB-13 was deleted.
 
 PCB-01 has no folder. It is the bought TIFPS0629 ([D-019](../decisions.md#d-019)), and its acceptance stays in [power-boards.md §3](power-boards.md#3-pcb-01--tifps0629-acceptance-before-cells-are-connected).
 
@@ -12,11 +12,11 @@ PCB-01 has no folder. It is the bought TIFPS0629 ([D-019](../decisions.md#d-019)
 
 | Folder | Board | BOM | Design | Procure | Integrate |
 |---|---|---|---|---|---|
-| [pcb-08-yaw-junction](pcb-08-yaw-junction/README.md) | Yaw junction | CH-083 | Inputs in progress: FH34SRJ shared candidate; back-to-back ZIF envelope collides with Pi, same-face outward exits cross; head-rail drop requires setpoint/map decision before KiCad | — | — |
+| [pcb-08-yaw-junction](pcb-08-yaw-junction/README.md) | Yaw junction | CH-083 | **Rev A layout routed** (D-100): ERC 0/0, netlist audit PASS, Nightly parity DRC 0/0/0; stepped FH34SRJ pair probed 14/14; FFC fold mock-up, N2 drop and populated fit open | — | — |
 | [pcb-09-c0-link-adapter](pcb-09-c0-link-adapter/README.md) | C0 link adapter | CH-084 | Rev B routed: Nightly DRC 0/0/0; CAD fit 8/8, mount 7/7, integration PASS ([D-098](../decisions.md#d-098)) | `fab/revB` drafted; wait for #2813, Pi-image and populated bench gates before ordering in D-064 batch | Rev B STEP and J6 mated plug installed in final CAD; pre-mate J6 before tray insertion; physical acceptance open |
 | [pcb-10-c3-carrier](pcb-10-c3-carrier/README.md) | C3 controller carrier | CH-044 | Done, rev A | — | CAD replacement complete; physical acceptance open |
 | [pcb-11-status-led](pcb-11-status-led/README.md) | Status LED carrier | CH-085 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
-| [pcb-12-c2-head-carrier](pcb-12-c2-head-carrier/README.md) | C2 head carrier | CH-086 | Inputs in progress: W43 signal/reference and provisional head-rail map shared with PCB-08; schematic not started | — | — |
+| [pcb-12-c2-head-carrier](pcb-12-c2-head-carrier/README.md) | C2 head carrier | CH-086 | Inputs in progress: W43 signal-only with `GND_SIG` to bond to C2 logic ground; 6.0 V head rail on W42 (D-100); schematic not started | — | — |
 | [pcb-14-yaw-rotor-joiner](pcb-14-yaw-rotor-joiner/README.md) | Yaw rotor joiner ×3 | BO-062 | Shared ZIF input study: FH12 fails depth; FH34SRJ body fits placeholder, real cable/actuator fit open | — | — |
 | [pcb-15-nose-hall](pcb-15-nose-hall/README.md) | Nose Hall carrier | CH-064 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
 
