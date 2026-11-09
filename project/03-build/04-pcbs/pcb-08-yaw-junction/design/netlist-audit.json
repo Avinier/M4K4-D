@@ -1,0 +1,21 @@
+{
+  "result": "PASS",
+  "exported_component_pins_checked": 51,
+  "checks": {
+    "manifest_matches_export": true,
+    "j8_1_harness_order": true,
+    "j8_6_head_7_plus_7": true,
+    "j8_6_c2_display_2_plus_2": true,
+    "j8_7_signal_only": true,
+    "j8_7_map": true,
+    "j8_7_10_to_22_isolated": true,
+    "j8_4_w24_order": true,
+    "rs422_pairs_pass_through": true,
+    "link_gnd_only_through_r1": true,
+    "gnd_sig_members": true,
+    "j8_8_yaw_order": true,
+    "yaw_rail_only_w17_to_j8_8": true,
+    "power_returns_separate": true
+  },
+  "errors": []
+}

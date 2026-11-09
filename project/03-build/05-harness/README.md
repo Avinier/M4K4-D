@@ -32,7 +32,7 @@ cells → PCB-01 → W01 → J-PK → W03a → FUSE 15 A → W03b → J-BAT → 
 pack − ─────────────────────────── J-PK − ───────────── J-BAT − → (−) charge splice ─→ XT30 −                  → −STAR
 
 +/− STAR ┬→ J-CHASSIS → tub distribution ┬→ #3297 L/R VM/GND (SMBJ8.5A + 100 µF + 0.1 µF at each VM)
-         │                               ├→ M2 S18V20ALV 5.5 V → W13 → J8-1 → pitch/roll
+         │                               ├→ M2 S18V20ALV 6.3 V → W13 → J8-1 → pitch/roll
          │                               └→ M3 S18V20ALV 11.1 V → W17 → PCB-08 J8-8 → W15 yaw
          ├→ M4 S13V30F5 5 V → W10 USB-C → Pi 5
          └→ M5 S13V30F5 5 V ┬→ W11 + SS34 → C3 J10-1
@@ -103,11 +103,11 @@ Lengths are `E` cut allowances with service loop, **not measured CAD centerlines
 | `W32/33` | #3297 logic → `J10-5/.6` | Existing GH6 180/80 |
 | `W34` | Nose sensor/Hall → `J10-8` | Existing GH5 220 |
 | `W36` | Rear TCRT → `J10-10` | Existing GH4 CH-020, 350 |
-| `W37` | Pi CSI → PCB-14/camera | Existing 22-pin FFC through yaw cassette |
+| `W37` | Pi CSI → PCB-14/camera | 22-to-22 mini-mini 0.5 mm CSI FPC through yaw cassette; exact cable SKU/end thickness and pin orientation pending shared FH34SRJ fit; do not substitute a 15-to-22 standard-mini camera lead |
 | `W40` | Mushroom NO → M1 ON/GND; qualified button-sense output → PCB-09 rev B GPIO12 (physical 32); PCB-09 rev B GPIO13 (physical 33) → M1 OFF interface | E 150 switch pair + 220 tap/control, carried on J6 pins 5/6 through a **detachable rear service break before the W40/W44 split**. **Do not wire M1 ON straight to Pi**: its idle voltage may follow pack. Measure pull-up and add a high-impedance divider/buffer giving valid 0–3.3 V logic over 6.0–8.4 V pack without back-powering an unpowered Pi. Verify the GPIO13 inactive state through reset/boot/halt, OFF drive voltage and pulse length, and no M1-to-Pi injection when off; buffer if needed. Firmware must complete its storage shutdown steps before pulsing OFF; test under N1. [D-098](../decisions.md#d-098) selects PCB-09 rev B; no piggyback/header contact or J9-3 spare |
 | `W41` | Fan → PCB-09 `J9-4` | Existing GH2 / GPIO24 switch |
-| `W42` | PCB-08 `J8-6` ↔ PCB-14 | Existing 22-pin head-power FFC; verify current sharing |
-| `W43` | PCB-08 `J8-7` ↔ PCB-14 | Existing 22-pin sideband FFC; former ARM_REQ/READY/charge/status conductors marked **“reassign at PCB-08/12 design”**, not tied to power |
+| `W42` | PCB-08 `J8-6` ↔ PCB-14 | 22-pin generic 0.3 mm head-power FFC (D-100): 1–7 `+6V3_HEAD_PR`, 8–14 `GND_HEAD`, 15–16/17–18 C2, 19–20/21–22 display; measure four-wire loop resistance and current sharing; head total ≤ 2.4 A |
+| `W43` | PCB-08 `J8-7` ↔ PCB-14 | 22-pin generic 0.3 mm signal FFC, **no power** (D-100): 1/4/7/9 `GND_SIG`, 2/3 `C0TX+/−`, 5/6 `C2TX−/+`, 8 `SERVO_DATA`, 10–22 isolated. `GND_SIG` joins the W24 link GND (via PCB-08 R1) and the yaw servo ground on PCB-08 |
 | `W44` | M6 SDA/SCL/VCC/GND → PCB-09 rev B service termination → Pi `i2c-gpio`/3V3/GND | 4×AWG28, E 160, carried on J6 pins 1–4 through the **same detachable rear service break as W40**. Pi physical 36 / GPIO16 is SDA and 37 / GPIO26 is SCL, with 4.7 kΩ pull-ups on PCB-09. Rev A I²C1 TP1/TP2/TP5 are 1 mm probe pads and stay outside this harness. Use only the designed, strain-relieved rev B interface after fit and continuity checks ([D-098 amendment](../decisions.md#d-098)). No 5 V I²C. Set/verify address 0x40 unless occupied |
 
 **Draft J6 GH6 lead:** one pre-crimped six-way lead leaves PCB-09 and reaches a detachable six-circuit service break at the rear-bay plate, then splits into W44's INA226 four wires and W40's button/OFF pair. This choice avoids storing about 90 mm of extra cable for the tray slide. Rev B CAD places J6 at the +X extension and checks a 3 mm lead corridor via world Y 20 and Z 118 to the rear buffer volume. Choose and CAD-fit the rear connector and its support before building this harness; the current CAD check covers the lead corridor and buffer reserve, not that connector. Freeze lead length, split support and strain relief after the populated fit and pull test.
@@ -148,9 +148,9 @@ Pin 1 means the **moulded cavity number**, not the leftmost cavity in a photogra
 | `J-PK`, `J-BAT`, `J-CHASSIS` 2-way | 1 positive, 2 negative. Respectively protected pack, fused unswitched, switched shunt-monitored. Give unlike feeds distinct keys/labels |
 | M1 #2813 | VIN from charge +splice; GND from −splice; VOUT to M6 IN+; ON from mushroom NO-to-GND; OFF from verified Pi GPIO interface; CTRL unused. Check received board hole labels |
 | M6 INA226 (shunt OPEN, CH-099) | IN+ M1 VOUT, IN− +STAR, bus voltage sense at IN− if separate pad exists; VCC Pi 3V3, GND −STAR, SDA/SCL PCB-09 `i2c-gpio` bus. Check board trace/jumper arrangement; choose and calibrate shunt after peak measurements |
-| M2/M3 S18V20ALV | VIN+/GND from tub branch; VOUT+/GND to W13 5.5 V or W17 11.1 V. Label setpoints at modules |
+| M2/M3 S18V20ALV | VIN+/GND from tub branch; VOUT+/GND to W13 6.3 V (D-100 amendment; was 6.0 V) or W17 11.1 V. Label setpoints at modules |
 | M4/M5 S13V30F5 | VIN+/GND from body stars; M4 VOUT Pi-only 5 V; M5 VOUT shared 5 V. Keep outputs separate |
-| `J8-1` MF3 2×3 | 1 +5V5_HEAD_PR, 2 +5V_C2, 3 +5V_DISPLAY, 4 GND_HEAD, 5 GND_C2, 6 GND_DISPLAY |
+| `J8-1` MF3 2×3 | 1 +6V3_HEAD_PR (D-100; was +5V5_HEAD_PR), 2 +5V_C2, 3 +5V_DISPLAY, 4 GND_HEAD, 5 GND_C2, 6 GND_DISPLAY |
 | `J10-1` MF3 2-way | 1 +5V_C3 **after Schottky**, 2 GND |
 | PCB-08 `J8-8` 5264-3P | 1 GND, 2 +11V1_YAW, 3 SERVO_DATA, after received cable orientation check |
 | PA break and XHP-3 | Cavity 1 B−, 2 BM, 3 B+ on both halves **by cavity number**. Exposed XHP-3: 1→2 and 2→3 each one cell; 1→3 full pack. Confirm charger plug key and its cavity order |
@@ -174,7 +174,7 @@ AWG16/18/20/22 resistance at 20 °C: 13.2/21/33.3/53 mΩ/m; ×1.16 hot. These **
 | M4→Pi 0.10 m each way AWG18 | 4.9 mΩ | USB-C loss unknown | 0.015 V at 3 A; N12 measures Pi input |
 | M5→C3 0.11 m each way AWG22 | 13.5 mΩ | MF3 and diode unknown | N8 measures loaded voltage/back-feed |
 
-**D-093 low-pack current screen, 6.0 V input, assumed 90% conversion efficiency (`E`):** Pi 5 V × 3 A → 2.78 A pack; head 5.5 V × 2.8 A → 2.85 A; yaw 11.1 V × 2.4 A → 4.93 A; shared 5 V × 1.5 A → 1.39 A; both drives at the old 2 A each → 4.0 A. **Sum ≈15.95 A demand** (≈11.39 A at 8.4 V with the same output loads/efficiency). This is a coincident-stall *demand*, not a claim the chosen M2/M3 can deliver it: their ~2 A output capability may collapse first. Even limiting head and yaw outputs to 2 A yields about **14.3 A** at 6 V under the same assumptions. The former 10.2 A came from a superseded rail configuration and cannot size this harness.
+**D-093 low-pack current screen, 6.0 V input, assumed 90% conversion efficiency (`E`):** Pi 5 V × 3 A → 2.78 A pack; head 5.5 V × 2.8 A → 2.85 A; yaw 11.1 V × 2.4 A → 4.93 A; shared 5 V × 1.5 A → 1.39 A; both drives at the old 2 A each → 4.0 A. **Sum ≈15.95 A demand** (≈11.39 A at 8.4 V with the same output loads/efficiency). This is a coincident-stall *demand*, not a claim the chosen M2/M3 can deliver it: their ~2 A output capability may collapse first. Even limiting head and yaw outputs to 2 A yields about **14.3 A** at 6 V under the same assumptions. The former 10.2 A came from a superseded rail configuration and cannot size this harness. **[D-100](../decisions.md#d-100) sets M2 to 6.3 V** with the head limited to ≤ 2.4 A in total: 6.3 V × 2.4 A → 2.80 A pack, below the 2.85 A head term above, so the screen is not raised; the unlimited 6.3 V × 2.8 A case would be 3.27 A. M2 current delivery at the 6.0 V low-pack point remains an N2(b) gate.
 
 **Duration-based design candidate, not a new limit:** if both head servos are proved to stay at or below 1.0 A each and yaw at or below 1.5 A **from the first instant of a stall**, the same arithmetic gives about **13.0 A** at a true 6.0 V *module input*. Feetech's protection-current register and overload timeout must not be assumed to be an instantaneous current regulator; measure current waveforms, persistence after power cycle, fault reset and torque/speed on the received servos. An 8 A continuous / ≤2 s peak budget is only a proposal until the real duty cycle, closed-body temperatures and source sag are measured. At 6.0 V **open-circuit** pack voltage, the old 84 mΩ pack estimate implies 1.09 V sag already at 13 A, so treating 6.0 V as both open-circuit and module-input voltage understates converter input current. Define the voltage observation point before adopting either number.
 

@@ -1,0 +1,311 @@
+{
+ "script": "check_pcb08_step_fit",
+ "passed": 18,
+ "total": 18,
+ "rows": [
+  {
+   "check": "board_outline_matches_cad",
+   "ok": true,
+   "bounds": [
+    -22.0,
+    -44.0,
+    112.045,
+    20.0,
+    -23.0,
+    113.555
+   ],
+   "core_thickness": 1.51
+  },
+  {
+   "check": "board_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "pi_faces_in_part_box": 0,
+   "nearest_non_pi": null,
+   "min_non_pi_gap": 3.0,
+   "bounds": [
+    -22.0,
+    -44.0,
+    112.045,
+    20.0,
+    -23.0,
+    113.555
+   ]
+  },
+  {
+   "check": "J2_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "pi_faces_in_part_box": 0,
+   "nearest_non_pi": null,
+   "min_non_pi_gap": 3.0,
+   "bounds": [
+    -10.0,
+    -29.0,
+    113.64,
+    0.75,
+    -24.05,
+    117.84
+   ]
+  },
+  {
+   "check": "J3_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "pi_faces_in_part_box": 0,
+   "nearest_non_pi": null,
+   "min_non_pi_gap": 3.0,
+   "bounds": [
+    15.7,
+    -40.0,
+    113.64,
+    19.5,
+    -27.0,
+    114.64
+   ]
+  },
+  {
+   "check": "J4_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "pi_faces_in_part_box": 0,
+   "nearest_non_pi": null,
+   "min_non_pi_gap": 3.0,
+   "bounds": [
+    5.86,
+    -40.0,
+    113.64,
+    9.66,
+    -27.0,
+    114.64
+   ]
+  },
+  {
+   "check": "R1_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "pi_faces_in_part_box": 0,
+   "nearest_non_pi": null,
+   "min_non_pi_gap": 3.0,
+   "bounds": [
+    4.3,
+    -25.1,
+    113.64,
+    6.3,
+    -23.9,
+    114.09
+   ]
+  },
+  {
+   "check": "J1_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "pi_faces_in_part_box": 0,
+   "nearest_non_pi": null,
+   "min_non_pi_gap": 3.0,
+   "bounds": [
+    -24.42,
+    -39.84,
+    110.46,
+    -10.75,
+    -27.19,
+    121.04
+   ]
+  },
+  {
+   "check": "J5_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "pi_faces_in_part_box": 0,
+   "nearest_non_pi": null,
+   "min_non_pi_gap": 3.0,
+   "bounds": [
+    -7.95,
+    -43.0,
+    110.14,
+    1.95,
+    -37.09,
+    119.54
+   ]
+  },
+  {
+   "check": "j2_centered_on_mated_plug_datum",
+   "ok": true,
+   "actual": [
+    -10.0,
+    -29.0,
+    113.64,
+    0.75,
+    -24.05,
+    117.84
+   ],
+   "reserve": [
+    -10.0,
+    -29.0,
+    113.6,
+    0.75,
+    -24.0496,
+    117.8
+   ]
+  },
+  {
+   "check": "j1_real_mated_plug_clear_and_pulls_6mm",
+   "ok": true,
+   "j1_body": [
+    -24.42,
+    -39.84,
+    110.46,
+    -10.75,
+    -27.19,
+    121.04
+   ],
+   "cad_plug_reserve": [
+    -36.42,
+    -40.145,
+    113.6,
+    -24.42,
+    -26.885,
+    123.6
+   ],
+   "shift_xy": [
+    -0.0,
+    0.0
+   ],
+   "real_plug": [
+    -36.42,
+    -40.145,
+    113.6,
+    -24.42,
+    -26.885,
+    123.6
+   ],
+   "plug_clashes": [],
+   "first_pull_hit": [
+    12.5,
+    "J1_PLUG",
+    "REAR_SERVICE_PANEL_OCTAGONAL",
+    0.774
+   ],
+   "note": "J1 mates -X; its housing overhang and plug datum are in the final CAD; shell removed for the pull"
+  },
+  {
+   "check": "j5_real_mated_plug_clear_and_pulls_6mm",
+   "ok": true,
+   "j5_body": [
+    -7.95,
+    -43.0,
+    110.14,
+    1.95,
+    -37.09,
+    119.54
+   ],
+   "cad_header_reserve": [
+    -7.95,
+    -42.92,
+    113.6,
+    1.95,
+    -37.17,
+    119.6
+   ],
+   "shift_xy": [
+    0.0,
+    0.0
+   ],
+   "real_plug": [
+    -7.45,
+    -42.52,
+    116.6,
+    1.45,
+    -37.57,
+    126.0
+   ],
+   "plug_clashes": [],
+   "first_pull_hit": [
+    8.5,
+    "J5_PLUG",
+    "BODY_FRAME_MAIN_PRINT",
+    9.0069
+   ]
+  },
+  {
+   "check": "j3_closed_body_matches_stepped_probe",
+   "ok": true,
+   "bounds": [
+    15.7,
+    -40.0,
+    113.64,
+    19.5,
+    -27.0,
+    114.64
+   ]
+  },
+  {
+   "check": "j4_closed_body_matches_stepped_probe",
+   "ok": true,
+   "bounds": [
+    5.86,
+    -40.0,
+    113.64,
+    9.66,
+    -27.0,
+    114.64
+   ]
+  },
+  {
+   "check": "pi_faces_surveyed_under_whole_board",
+   "ok": true,
+   "face_count": 340,
+   "highest_face_z": 99.845,
+   "board_underside_face_gap": 12.2,
+   "note": "broad Pi bounding-box gap is not a local underside clearance"
+  },
+  {
+   "check": "head_riser_route_reaches_j1_without_solid_clash",
+   "ok": true,
+   "solid_clashes": []
+  },
+  {
+   "check": "through_hole_tails_clear_pi_faces",
+   "ok": true,
+   "protrusion_mm": {
+    "J1": 5.0,
+    "J5": 4.1,
+    "J6": 3.5
+   },
+   "collisions": []
+  },
+  {
+   "check": "through_hole_tails_clear_head_riser_reserve",
+   "ok": true,
+   "reserve_segments": {
+    "HARNESS_HEAD_RISER_UPPER_RISE": [
+     -29.0,
+     -45.0,
+     100.0,
+     -25.0,
+     -38.0,
+     112.0
+    ],
+    "HARNESS_HEAD_RISER_UPPER_TO_J1": [
+     -29.0,
+     -39.0,
+     110.0,
+     -23.0,
+     -29.0,
+     120.0
+    ]
+   },
+   "collisions": [],
+   "min_clearance_mm": 1.875,
+   "nearest_tail": "J1.MP",
+   "nearest_segment": "HARNESS_HEAD_RISER_UPPER_TO_J1",
+   "required_mm": 0.5
+  },
+  {
+   "check": "populated_models_present",
+   "ok": true,
+   "missing": [],
+   "note": "J1/J3/J4/J5 are detailed drawing-based models (Molex/Hirose drawings), not vendor models; J6 has wire-tail envelopes"
+  }
+ ]
+}

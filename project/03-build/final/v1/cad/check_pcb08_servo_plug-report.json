@@ -12,11 +12,11 @@
    "check": "header_on_board_outline",
    "ok": true,
    "header": [
-    -9.5,
-    -42.6,
+    -7.95,
+    -42.92,
     113.6,
-    0.4,
-    -36.85,
+    1.95,
+    -37.17,
     119.6
    ],
    "board": [
@@ -32,8 +32,8 @@
    "check": "clear_YAW_JUNCTION_J8_8_FEETECH_5264_3P_HEADER",
    "ok": true,
    "clashes": [],
-   "min_gap": 2.5,
-   "nearest": "YAW_JUNCTION_J8_1_MICROFIT3_6P_RA_HEADER"
+   "min_gap": 2.8727,
+   "nearest": "C0_RASPBERRY_PI5_EXACT_STEP"
   },
   {
    "check": "clear_YAW_JUNCTION_J8_8_YAW_SERVO_5264_3P_MATED_PLUG",

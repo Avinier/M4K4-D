@@ -881,8 +881,8 @@ IMU_BOARD_Z = IMU["adapter"][5] + IMU["boss"][1]           # Z 60.0
 
 # PCB-08 (D-093): the W23a/W23b sideband headers J8-3 and J8-5 go; the yaw servo plug moves here
 # from PCB-03 J3-5: a Feetech 5264-3P (2.5 mm) top-entry header where J8-3 was, mated plug above.
-PCB08_SERVO = dict(header=(-9.5, 0.4, -42.6, -36.85, 113.6, 119.6),
-                   plug=(-9.0, -0.1, -42.2, -37.25, 116.6, 126.0))
+PCB08_SERVO = dict(header=(-7.95, 1.95, -42.92, -37.17, 113.6, 119.6),
+                   plug=(-7.45, 1.45, -42.52, -37.57, 116.6, 126.0))
 
 # D-096 (plan level 5) harness parts placed for clearance: the four body-lift power plugs and the
 # switched +/- star splices. Mated wire-to-wire pairs lie loose on the chassis deck, chassis half
@@ -1386,6 +1386,10 @@ DROID_REMOVES = [
     # 05, 06 x4, 07, 13 and the W16 inlet lead), and PCB-08's J8-3/J8-5 sideband headers.
     r"PCB0[2345]_\w+", r"J[234]_\d_(MICROFIT\w+|GHR\d\d_MATED_PLUG)", r"CHARGE_INLET_\w+", r"PDM_MIC_(FRONT|REAR)_[LR]", r"IMU_PCB07",
     r"YAW_JUNCTION_J8_[35]_\w+",
+    # W13/W14: replace the old board-sized upper placeholder with the route to J1's -X mouth.
+    r"HARNESS_HEAD_RISER_UPPER",
+    # W42/W43: the old flat box from the cassette exit, replaced by the predicted fold path below.
+    r"HARNESS_YAW_FFC_TO_PCB08",
 ]
 DROID_INSERTS = [
     (r"C3_CARRIER_PCB10_WITH_DEVKITC", pcb10_devkitc()),
@@ -1402,6 +1406,20 @@ DROID_INSERTS = [
     (r"BODY_PRIMARY_FRAME", rear_bay_plate()),
     *[(r"BODY_PRIMARY_FRAME", part) for part in rear_bay_hardware()],
     *[(r"YAW_JUNCTION_PCB08", part) for part in pcb08_servo_plug()],
+    (r"BODY_INTERNAL_HARNESS", _tag(_blk(-29.0, -25.0, -45.0, -38.0, 100.0, 112.0),
+                             "HARNESS_HEAD_RISER_UPPER_RISE", "#9566D9", 0.35)),
+    (r"BODY_INTERNAL_HARNESS", _tag(_blk(-29.0, -23.0, -39.0, -29.0, 110.0, 120.0),
+                             "HARNESS_HEAD_RISER_UPPER_TO_J1", "#9566D9", 0.35)),
+    # W42/W43 fold to PCB-08 (check_pcb08_ffc_fold.py): on-edge -Y run, creased 45 deg fold and
+    # descent, curl to flat, then the flat runs into J3 and over J3 to J4's S-bend.
+    (r"BODY_INTERNAL_HARNESS", _tag(_blk(28.16, 29.41, -39.25, -22.5, 121.35, 132.85),
+                             "HARNESS_YAW_FFC_FOLD_RUN", "#9566D9", 0.35)),
+    (r"BODY_INTERNAL_HARNESS", _tag(_blk(29.41, 30.66, -39.25, -27.75, 118.0, 132.85),
+                             "HARNESS_YAW_FFC_FOLD_DESCENT", "#9566D9", 0.35)),
+    (r"BODY_INTERNAL_HARNESS", _tag(_blk(26.5, 30.66, -39.25, -27.75, 113.95, 118.1),
+                             "HARNESS_YAW_FFC_FOLD_CURL", "#9566D9", 0.35)),
+    (r"BODY_INTERNAL_HARNESS", _tag(_blk(13.9, 26.5, -39.25, -27.75, 113.95, 115.2),
+                             "HARNESS_YAW_FFC_FOLD_FLAT", "#9566D9", 0.35)),
 ]
 
 
@@ -1477,6 +1495,9 @@ DROID_ADDS = [
     (r"BODY_FRAME_MAIN_PRINT", amp_bracket()),
 ]
 DROID_MOVES = [
+    # PCB-08 J1 housing overhangs the -X edge: place its mated-plug and header
+    # placeholders at the populated STEP position rather than the old flush edge.
+    (r"YAW_JUNCTION_J8_1_MICROFIT3_6P_(RA_HEADER|MATED_PLUG)", (-2.42, -0.015, 0.0)),
     # D-068 amended: C3 GH headers and plugs into the three proved rows; the J10-1 plug reserve down
     # with the real Micro-Fit (centre Z 89.5 -> 83.43).
     *pcb10_connector_moves(),

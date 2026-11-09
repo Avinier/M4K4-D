@@ -1,0 +1,154 @@
+{
+ "script": "check_pcb08_zif_envelopes",
+ "passed": 6,
+ "total": 8,
+ "rows": [
+  {
+   "check": "same_face_body_boxes_fit",
+   "ok": true,
+   "boxes": [
+    [
+     10.3,
+     14.1,
+     -40.0,
+     -27.0,
+     113.6,
+     114.6
+    ],
+    [
+     16.0,
+     19.8,
+     -40.0,
+     -27.0,
+     113.6,
+     114.6
+    ]
+   ]
+  },
+  {
+   "check": "same_face_stiffened_exit_blocked",
+   "ok": true,
+   "inner_exit": [
+    14.1,
+    25.0,
+    -39.25,
+    -27.75,
+    113.95,
+    114.25
+   ],
+   "outer_body": [
+    16.0,
+    19.8,
+    -40.0,
+    -27.0,
+    113.6,
+    114.6
+   ]
+  },
+  {
+   "check": "opposed_mouth_inward_exit_clear_of_robot",
+   "ok": true,
+   "clashes": [],
+   "box": [
+    4.0,
+    10.3,
+    -39.25,
+    -27.75,
+    113.95,
+    114.25
+   ]
+  },
+  {
+   "check": "back_to_back_bodies_on_extension",
+   "ok": true,
+   "boxes": [
+    [
+     16.0,
+     19.8,
+     -40.0,
+     -27.0,
+     113.6,
+     114.6
+    ],
+    [
+     16.0,
+     19.8,
+     -40.0,
+     -27.0,
+     111.0,
+     112.0
+    ]
+   ]
+  },
+  {
+   "check": "top_body_clear_of_robot_envelopes",
+   "ok": true,
+   "clashes": [],
+   "nearest": "C0_RASPBERRY_PI5_EXACT_STEP",
+   "min_gap": 1.6899,
+   "box": [
+    16.0,
+    19.8,
+    -40.0,
+    -27.0,
+    113.6,
+    114.6
+   ]
+  },
+  {
+   "check": "bottom_body_clear_of_robot_envelopes",
+   "ok": false,
+   "clashes": [
+    [
+     "C0_RASPBERRY_PI5_EXACT_STEP",
+     27.1388
+    ]
+   ],
+   "nearest": "C0_RASPBERRY_PI5_EXACT_STEP",
+   "min_gap": 0.0,
+   "box": [
+    16.0,
+    19.8,
+    -40.0,
+    -27.0,
+    111.0,
+    112.0
+   ]
+  },
+  {
+   "check": "top_exit_clear_of_robot_envelopes",
+   "ok": true,
+   "clashes": [],
+   "nearest": "C0_RASPBERRY_PI5_EXACT_STEP",
+   "min_gap": 2.0399,
+   "box": [
+    19.8,
+    25.0,
+    -39.25,
+    -27.75,
+    113.95,
+    114.25
+   ]
+  },
+  {
+   "check": "bottom_exit_clear_of_robot_envelopes",
+   "ok": false,
+   "clashes": [
+    [
+     "C0_RASPBERRY_PI5_EXACT_STEP",
+     11.0711
+    ]
+   ],
+   "nearest": "C0_RASPBERRY_PI5_EXACT_STEP",
+   "min_gap": 0.0,
+   "box": [
+    19.8,
+    25.0,
+    -39.25,
+    -27.75,
+    111.35,
+    111.65
+   ]
+  }
+ ]
+}
