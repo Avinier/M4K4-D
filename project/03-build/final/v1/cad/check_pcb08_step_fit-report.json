@@ -20,6 +20,7 @@
    "check": "board_external_clearance",
    "ok": true,
    "clashes": [],
+   "pi_faces_in_part_box": 0,
    "nearest_non_pi": null,
    "min_non_pi_gap": 3.0,
    "bounds": [
@@ -35,6 +36,7 @@
    "check": "J2_external_clearance",
    "ok": true,
    "clashes": [],
+   "pi_faces_in_part_box": 0,
    "nearest_non_pi": null,
    "min_non_pi_gap": 3.0,
    "bounds": [
@@ -50,6 +52,7 @@
    "check": "J3_external_clearance",
    "ok": true,
    "clashes": [],
+   "pi_faces_in_part_box": 0,
    "nearest_non_pi": null,
    "min_non_pi_gap": 3.0,
    "bounds": [
@@ -65,6 +68,7 @@
    "check": "J4_external_clearance",
    "ok": true,
    "clashes": [],
+   "pi_faces_in_part_box": 0,
    "nearest_non_pi": null,
    "min_non_pi_gap": 3.0,
    "bounds": [
@@ -80,6 +84,7 @@
    "check": "R1_external_clearance",
    "ok": true,
    "clashes": [],
+   "pi_faces_in_part_box": 0,
    "nearest_non_pi": null,
    "min_non_pi_gap": 3.0,
    "bounds": [
@@ -95,14 +100,15 @@
    "check": "J1_external_clearance",
    "ok": true,
    "clashes": [],
+   "pi_faces_in_part_box": 0,
    "nearest_non_pi": null,
    "min_non_pi_gap": 3.0,
    "bounds": [
     -24.42,
-    -40.875,
-    113.64,
+    -39.84,
+    110.46,
     -10.75,
-    -26.155,
+    -27.19,
     121.04
    ]
   },
@@ -110,13 +116,14 @@
    "check": "J5_external_clearance",
    "ok": true,
    "clashes": [],
+   "pi_faces_in_part_box": 0,
    "nearest_non_pi": null,
    "min_non_pi_gap": 3.0,
    "bounds": [
-    -8.45,
+    -7.95,
     -43.0,
-    113.64,
-    2.45,
+    110.14,
+    1.95,
     -37.09,
     119.54
    ]
@@ -146,10 +153,10 @@
    "ok": true,
    "j1_body": [
     -24.42,
-    -40.875,
-    113.64,
+    -39.84,
+    110.46,
     -10.75,
-    -26.155,
+    -27.19,
     121.04
    ],
    "cad_plug_reserve": [
@@ -185,10 +192,10 @@
    "check": "j5_real_mated_plug_clear_and_pulls_6mm",
    "ok": true,
    "j5_body": [
-    -8.45,
+    -7.95,
     -43.0,
-    113.64,
-    2.45,
+    110.14,
+    1.95,
     -37.09,
     119.54
    ],
@@ -298,7 +305,7 @@
    "check": "populated_models_present",
    "ok": true,
    "missing": [],
-   "note": "J1/J3/J4/J5 are conservative closed-body envelopes (Molex/Hirose drawings), not vendor models; J6 has wire-tail envelopes"
+   "note": "J1/J3/J4/J5 are detailed drawing-based models (Molex/Hirose drawings), not vendor models; J6 has wire-tail envelopes"
   }
  ]
 }

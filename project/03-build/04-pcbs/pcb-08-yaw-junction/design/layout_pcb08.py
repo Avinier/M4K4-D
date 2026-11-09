@@ -99,8 +99,8 @@ def setup(b):
             raw = raw[:raw.rfind(")")] + model + raw[raw.rfind(")"):]
             b.text = b.text[:start] + raw + b.text[end:]
             b._index()
-    # KiCad's 3D library has no J1/J5 models; use the drawing-based envelopes
-    # from lib/generate_pcb08_connector_bodies.py.
+    # KiCad's 3D library has no J1/J5 models; use the drawing-based models
+    # from lib/generate_connector_models.py.
     for ref, lib, name in (("J1", "Connector_Molex", "Molex_Micro-Fit_3.0_43045-0621_2x03-1MP_P3.00mm_Horizontal"),
                            ("J5", "Connector_Molex", "Molex_SPOX_5267-03A_1x03_P2.50mm_Vertical")):
         for kind, start, end in b.items:
@@ -255,13 +255,97 @@ def route_power(b):
     b.add(*parts)
 
 
+FAB = HERE.parent / "fab" / "revA"
+STEP = HERE.parent / "cad" / "pcb-08-yaw-junction-revA.step"
+ORIGIN = xy(-22, -44)   # board bottom-left as seen from the top: aux and grid origin
+LAYERS = "F.Cu,B.Cu,F.Mask,B.Mask,F.Paste,B.Paste,F.Silkscreen,B.Silkscreen,Edge.Cuts"
+BARE = ("J6", "TP1", "TP2")   # wire and test pads: not in the BOM or position files
+MPN = {  # BOM part numbers; values come from the schematic
+    "J1": ("43045-0621", "Molex"), "J2": ("BM06B-GHS-TBT(LF)(SN)(N)", "JST"),
+    "J3": ("FH34SRJ-22S-0.5SH(99)", "Hirose"), "J4": ("FH34SRJ-22S-0.5SH(99)", "Hirose"),
+    "J5": ("22-03-5035 (5267-03A)", "Molex"), "R1": ("RC0805JR-070RL", "Yageo"),
+}
+
+
+def set_origin_and_bare(b):
+    """Aux/grid origin at the board's bottom-left; bare pads out of position files."""
+    for key in ("aux_axis_origin", "grid_origin"):
+        line = f"({key} {ORIGIN[0]} {ORIGIN[1]})"
+        if f"({key} " in b.text:
+            b.text = re.sub(rf"\({key} [-\d.]+ [-\d.]+\)", line, b.text, count=1)
+        else:
+            b.text = b.text.replace("\t(setup\n", f"\t(setup\n\t\t{line}\n", 1)
+    b._index()
+    for ref in BARE:
+        for kind, start, end in b.items:
+            raw = b.text[start:end]
+            if kind == "footprint" and f'(property "Reference" "{ref}"' in raw:
+                break
+        else:
+            raise KeyError(ref)
+        if "exclude_from_pos_files" not in raw:
+            raw = raw.replace("(attr exclude_from_bom)", "(attr exclude_from_bom exclude_from_pos_files)", 1)
+            b.text = b.text[:start] + raw + b.text[end:]
+            b._index()
+
+
+def export():
+    """Fab outputs and the board STEP, with PCB-09's conventions (layout_pcb09.export)."""
+    import csv
+    import shutil
+    import subprocess
+    import zipfile
+    run = lambda *a: subprocess.run([K.CLI, *a, str(BOARD)], check=True, capture_output=True, text=True)
+    gerb = FAB / "gerbers"
+    shutil.rmtree(gerb, ignore_errors=True)
+    gerb.mkdir(parents=True)
+    run("pcb", "export", "gerbers", "--layers", LAYERS, "--use-drill-file-origin", "-o", str(gerb) + "/")
+    run("pcb", "export", "drill", "--format", "excellon", "--excellon-units", "mm", "--drill-origin", "plot",
+        "--excellon-separate-th", "--generate-map", "--map-format", "pdf", "-o", str(gerb) + "/")
+    pos = FAB / "pcb-08-yaw-junction-revA-pos.csv"
+    run("pcb", "export", "pos", "--side", "both", "--format", "csv", "--units", "mm", "--use-drill-file-origin",
+        "--exclude-dnp", "-o", str(pos))
+    with open(pos) as f, open(FAB / "pcb-08-yaw-junction-revA-cpl-jlcpcb.csv", "w", newline="") as g:
+        w = csv.writer(g)
+        w.writerow(["Designator", "Mid X", "Mid Y", "Layer", "Rotation"])
+        for row in csv.DictReader(f):
+            w.writerow([row["Ref"], f"{float(row['PosX']):.4f}mm", f"{float(row['PosY']):.4f}mm",
+                        "Top" if row["Side"] == "top" else "Bottom", f"{float(row['Rot']):g}"])
+    b = K.Board(BOARD)
+    groups = {}
+    for raw in b.blocks("footprint"):
+        n = K.parse(raw)
+        attr = K.find(n, "attr") or []
+        if "exclude_from_bom" in attr or "board_only" in attr or "dnp" in attr:
+            continue
+        props = {p[1]: p[2] for p in K.find_all(n, "property")}
+        ref = props["Reference"]
+        groups.setdefault((props["Value"], n[1], *MPN.get(ref, ("", ""))), []).append(ref)
+    natural = lambda r: (re.match(r"\D+", r).group(0), int(re.search(r"\d+", r).group(0)))
+    with open(FAB / "pcb-08-yaw-junction-revA-bom.csv", "w", newline="") as g:
+        w = csv.writer(g, quoting=csv.QUOTE_ALL)
+        w.writerow(["Comment", "Designator", "Footprint", "Quantity", "MPN", "Manufacturer", "LCSC Part #"])
+        for (val, fp, mpn, mfr), refs in sorted(groups.items(), key=lambda kv: natural(sorted(kv[1], key=natural)[0])):
+            refs = sorted(refs, key=natural)
+            w.writerow([val, ",".join(refs), fp, len(refs), mpn, mfr, ""])
+    with zipfile.ZipFile(FAB / "pcb-08-yaw-junction-revA-gerbers.zip", "w", zipfile.ZIP_DEFLATED) as z:
+        for f in sorted(gerb.iterdir()):
+            if f.suffix != ".pdf":
+                z.write(f, f.name)
+    # --user-origin 0x0mm: STEP (X, Y) = (KiCad x, -y); check_pcb08_step_fit.py maps it to world.
+    run("pcb", "export", "step", "--subst-models", "--force", "--user-origin", "0x0mm", "-o", str(STEP))
+    print("exported", FAB, STEP)
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--no-drc", action="store_true")
     p.add_argument("--placement-only", action="store_true")
+    p.add_argument("--export", action="store_true", help="write fab/revA and the board STEP after DRC")
     args = p.parse_args()
     b = K.Board(BOARD)
     setup(b)
+    set_origin_and_bare(b)
     if not args.placement_only:
         route_signals(b)
         route_power(b)
@@ -271,6 +355,8 @@ def main():
         result = K.drc(BOARD, REPORT, refill=not args.placement_only)
         print("DRC:", {k: v for k, v in result.items() if k != "report"})
         print(K.summary(result["report"], limit=80))
+        if args.export and result["violations"] == result["unconnected"] == result["parity"] == 0:
+            export()
 
 
 if __name__ == "__main__":

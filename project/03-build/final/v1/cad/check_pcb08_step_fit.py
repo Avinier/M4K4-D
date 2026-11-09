@@ -1,8 +1,8 @@
 """Probe the routed PCB-08 STEP and conservative through-hole tails.
 
 The KiCad STEP has a board core, J2/R1 stock models, and conservative
-closed-body envelopes for J3/J4 (FH34SRJ) and J1/J5 (Molex drawings, from
-04-pcbs/lib/generate_pcb08_connector_bodies.py). J6 is a pair of solder pads
+detailed drawing-based models for J1/J3/J4/J5 (Molex and Hirose drawings,
+04-pcbs/lib/generate_connector_models.py), pins below the board included. J6 is a pair of solder pads
 whose wire ends are represented by the tail probe.
 """
 
@@ -72,19 +72,28 @@ def main():
             and abs(bb.min.Y + 44) < 0.01 and abs(bb.max.Y + 23) < 0.01,
             bounds=box6(board), core_thickness=round(core_z, 3))
     skip = ("YAW_JUNCTION",)
+    # The Pi vendor STEP is one bounding box in C.clashes (top about Z 111.9),
+    # which the connector models' pins below the board would "hit". Compare
+    # each part with the Pi's real faces instead (Bnd_Box survey, no booleans).
+    pi = C.find(leaves, "C0_RASPBERRY_PI5_EXACT_STEP")
+    faces = face_boxes(pi.shape)
+
+    def pi_face_hits(shape):
+        b = C._box(shape)
+        return sum(1 for f in faces if all(f[i] < b[i + 3] and b[i] < f[i + 3] for i in range(3)))
+
     for label, part in (("board", board), ("J2", parts["J2"].moved(loc)),
                         ("J3", parts["J3"].moved(loc)),
                         ("J4", parts["J4"].moved(loc)),
                         ("R1", parts["R1"].moved(loc)),
                         ("J1", parts["J1"].moved(loc)),
                         ("J5", parts["J5"].moved(loc))):
-        hits = C.clashes(part, leaves, skip=skip)
-        # min_gap compares leaf bounding boxes, so the large Pi vendor wrapper
-        # reports a false nearest distance; the face survey below handles Pi.
+        hits = C.clashes(part, leaves, skip=skip + ("C0_RASPBERRY_PI5_EXACT_STEP",))
+        pi_hits = pi_face_hits(part)
         gap, near = C.min_gap(part, leaves,
                               skip=skip + ("C0_RASPBERRY_PI5_EXACT_STEP",))
-        r.check(label + "_external_clearance", not hits,
-                clashes=hits, nearest_non_pi=near,
+        r.check(label + "_external_clearance", not hits and not pi_hits,
+                clashes=hits, pi_faces_in_part_box=pi_hits, nearest_non_pi=near,
                 min_non_pi_gap=round(gap, 3), bounds=box6(part))
     j2 = parts["J2"].moved(loc)
     reserve = C.find(leaves, "YAW_JUNCTION_J8_4_JST_GH_BM06B_HEADER").box
@@ -142,8 +151,6 @@ def main():
                 and abs((zb.max.Z-zb.min.Z)-1.0) < 0.02,
                 bounds=box6(zif))
 
-    pi = C.find(leaves, "C0_RASPBERRY_PI5_EXACT_STEP")
-    faces = face_boxes(pi.shape)
     board_xy = (bb.min.X, bb.min.Y, bb.min.Z, bb.max.X, bb.max.Y, bb.max.Z)
     under_board = [f for f in faces if xy_overlaps(f, board_xy)]
     highest = max((f[5] for f in under_board), default=None)
@@ -184,7 +191,7 @@ def main():
             nearest_segment=near_segment, required_mm=0.5)
     missing = sorted(EXPECTED - parts.keys())
     r.check("populated_models_present", not missing, missing=missing,
-            note="J1/J3/J4/J5 are conservative closed-body envelopes (Molex/Hirose drawings), not vendor models; J6 has wire-tail envelopes")
+            note="J1/J3/J4/J5 are detailed drawing-based models (Molex/Hirose drawings), not vendor models; J6 has wire-tail envelopes")
     r.finish()
 
 
