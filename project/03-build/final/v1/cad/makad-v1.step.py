@@ -1357,6 +1357,41 @@ def pcb14_post_removals():
             (ax - r1 - 0.05, ax - r0 + 0.05, y0 - 0.05, y1 + 0.05, 137.0, 143.6)]
 
 
+# D-102: PCB-12 C2 carrier. The printed C2 tray is replaced by the carrier in its
+# front-wall plane (head-local X -25.0..-24.2, Y -44..-14, Z 8..51.5): the
+# ESP32-S3-Zero stays at its seat, soldered to the carrier's -X face. Two M2 x 4
+# button screws at Y -41.5/-16.5, Z = roll axis height, go through the carrier
+# into new crossbar bosses with M2 inserts; the old tray and its screws are
+# removed. Head-local geometry, shifted to the world by HEAD_ORIGIN_IN_CHASSIS at
+# the neutral pose. check_pcb12_fit.py measures the real board through the
+# roll/pitch envelope.
+PCB12 = dict(board=(-25.0, -24.2, -44.0, -14.0, 8.0, 51.5), screws_y=(-41.5, -16.5),
+             boss_r=3.0, boss_x=(-24.2, -21.0), insert_r=1.6, insert_depth=3.2)
+
+
+def _pcb12_x_cyl(r, x0, x1, y, z):
+    return Cylinder(r, x1 - x0).moved(Location(((x0 + x1) / 2.0, y, z), (0, 90, 0)))
+
+
+def pcb12_local(kind):
+    """Head-local PCB-12 mount geometry: 'boss', 'pocket' or 'screws'."""
+    m, z = PCB12, layout_model.ROLL_Z
+    out = []
+    for y in m["screws_y"]:
+        if kind == "boss":
+            out.append(_pcb12_x_cyl(m["boss_r"], *m["boss_x"], y, z) - _pcb12_x_cyl(m["insert_r"], m["boss_x"][0] - 0.1,
+                                                                                     m["boss_x"][0] + m["insert_depth"], y, z))
+        elif kind == "pocket":
+            out.append(_pcb12_x_cyl(m["insert_r"], m["boss_x"][0] - 0.1, m["boss_x"][0] + m["insert_depth"], y, z))
+        else:
+            out.append(layout_model.button_screw(m["board"][0], y, z, "x", -1, shank_length=4))
+    return out
+
+
+def pcb12_world(kind):
+    return [s.moved(Location(HEAD_ORIGIN_IN_CHASSIS)) for s in pcb12_local(kind)]
+
+
 def bodylift_parts():
     """D-096: the four mated body-lift pairs (two halves each, along X) and the two star splices."""
     m, out = BODYLIFT, []
@@ -1424,6 +1459,8 @@ DROID_REMOVES = [
     r"HARNESS_HEAD_RISER_UPPER",
     # W42/W43: the old flat box from the cassette exit, replaced by the predicted fold path below.
     r"HARNESS_YAW_FFC_TO_PCB08",
+    # D-102: the C2 tray and its two screws; PCB-12 carries the Zero now.
+    r"C2_removable_open_rear_tray", r"C2_tray_M2_-(39|19)",
 ]
 DROID_INSERTS = [
     (r"C3_CARRIER_PCB10_WITH_DEVKITC", pcb10_devkitc()),
@@ -1454,6 +1491,9 @@ DROID_INSERTS = [
                              "HARNESS_YAW_FFC_FOLD_CURL", "#9566D9", 0.35)),
     (r"BODY_INTERNAL_HARNESS", _tag(_blk(13.9, 26.5, -39.25, -27.75, 113.95, 115.2),
                              "HARNESS_YAW_FFC_FOLD_FLAT", "#9566D9", 0.35)),
+    # D-102: PCB-12's two M2 x 4 button screws.
+    *[(r"Head controller and light", _tag(sc, f"PCB12_M2X4_BUTTON_{k}", "#555b5a"))
+      for k, sc in enumerate(pcb12_world("screws"), start=1)],
 ]
 
 
@@ -1490,6 +1530,8 @@ DROID_CUTS = [
     *[(r"BODY_SHELL", tool) for tool in _MIC_CUTS],
     # D-101: the D-052 PCB-14 posts come off the rotor; the rebuilt ones are added below.
     *[(r"YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG", box) for box in pcb14_post_removals()],
+    # D-102: M2 insert pockets where PCB-12's bosses meet the crossbar.
+    *[(r"connected_rolling_cradle_flange_ear_stalks", sh) for sh in pcb12_world("pocket")],
 ]
 DROID_ADDS = [
     # D-074: PCB-09's strip must carry both rows of socket copper plus edge margin.
@@ -1531,6 +1573,8 @@ DROID_ADDS = [
     (r"BODY_FRAME_MAIN_PRINT", amp_bracket()),
     # D-101: PCB-14 posts with slots at the 4.5 mm pitch.
     (r"YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG", pcb14_posts()),
+    # D-102: PCB-12 screw bosses on the rolling crossbar.
+    *[(r"connected_rolling_cradle_flange_ear_stalks", sh) for sh in pcb12_world("boss")],
 ]
 DROID_MOVES = [
     # PCB-08 J1 housing overhangs the -X edge: place its mated-plug and header

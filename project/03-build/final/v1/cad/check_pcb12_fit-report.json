@@ -1,0 +1,157 @@
+{
+ "script": "check_pcb12_fit",
+ "passed": 7,
+ "total": 7,
+ "rows": [
+  {
+   "check": "board_core_placed",
+   "ok": true,
+   "core": [
+    -25.0,
+    -44.0,
+    8.0,
+    -24.29,
+    -14.0,
+    51.5
+   ],
+   "core_thickness": 0.71,
+   "missing_parts": []
+  },
+  {
+   "check": "zero_model_on_its_seat",
+   "ok": true,
+   "zero_model": [
+    -27.028,
+    -38.009,
+    27.991,
+    -25.087,
+    -19.991,
+    51.509
+   ],
+   "seat_placeholder": [
+    -26.6,
+    -38.0,
+    28.0,
+    -25.0,
+    -20.0,
+    51.5
+   ],
+   "note": "vendor model board bottom on the carrier copper (KiCad sets models about 0.085 mm off the core); USB-C up"
+  },
+  {
+   "check": "board_parts_and_plugs_clear_at_neutral",
+   "ok": true,
+   "clashes": {},
+   "note": "the board's back face bears on the two bosses (checked below), so the cradle is skipped for the core"
+  },
+  {
+   "check": "screws_through_holes_clear_of_zero",
+   "ok": true,
+   "clashes": [
+    [
+     1,
+     []
+    ],
+    [
+     2,
+     []
+    ]
+   ],
+   "head_to_zero_seat_mm": 1.75,
+   "head_to_zero_model_mm": 1.744
+  },
+  {
+   "check": "bosses_on_board_and_crossbar",
+   "ok": true,
+   "boss_to_board_back_mm": 0.09,
+   "cradle_volume_added_mm3": 24.1,
+   "boss_clashes": [
+    [],
+    []
+   ],
+   "boss_to_display_frame_mm": 1.8
+  },
+  {
+   "check": "c2_service_reserves_free",
+   "ok": true,
+   "overlaps": {
+    "C2_USB_C_installed_plug_reserve": [],
+    "C2_USB_C_withdrawal_BOOT_RESET_service_reserve": [],
+    "C2_BOOT_RESET_rear_tool_access_reserve": []
+   },
+   "note": "USB-C plug/withdrawal and the BOOT/RESET rear access; the Zero itself owns them"
+  },
+  {
+   "check": "roll_pitch_sweep_clear",
+   "ok": true,
+   "poses": 25,
+   "clashes": [],
+   "nearest_support": [
+    1.571,
+    "yaw_yoke_leg_-55",
+    [
+     -21.0,
+     43.0
+    ]
+   ],
+   "supports": [
+    "bearing_cartridge_trial",
+    "bearing_retainer_M2x4_39.5_225",
+    "bearing_retainer_M2x4_39.5_315",
+    "bearing_retainer_M2x4_64.1_225",
+    "bearing_retainer_M2x4_64.1_315",
+    "cartridge_M2x25_46_-10",
+    "cartridge_M2x25_46_10",
+    "cartridge_M2x25_57.5_-10",
+    "cartridge_M2x25_57.5_10",
+    "connected_pitch_frame_roll_servo_saddle",
+    "pitch_STS3045M_reference",
+    "pitch_hard_stop_pin",
+    "pitch_horn_25T_disc",
+    "pitch_horn_centre_M3x5",
+    "pitch_horn_to_leg_M3x6_135",
+    "pitch_horn_to_leg_M3x6_225",
+    "pitch_horn_to_leg_M3x6_315",
+    "pitch_horn_to_leg_M3x6_45",
+    "pitch_servo_ear_1_M2x6",
+    "pitch_servo_ear_1_washer",
+    "pitch_servo_ear_2_M2x6",
+    "pitch_servo_ear_2_washer",
+    "pitch_servo_ear_3_M2x6",
+    "pitch_servo_ear_3_washer",
+    "pitch_servo_ear_4_M2x6",
+    "pitch_servo_ear_4_washer",
+    "pitch_trunnion_D6x12_pin",
+    "pitch_trunnion_bearing_MR106ZZ",
+    "pitch_trunnion_retainer",
+    "pitch_trunnion_retainer_M2x4_240",
+    "pitch_trunnion_retainer_M2x4_300",
+    "roll_STS3045M_reference",
+    "roll_bearing_1_696_2Z",
+    "roll_bearing_2_696_2Z",
+    "roll_bearing_retainer_39.5",
+    "roll_bearing_retainer_64.1",
+    "roll_servo_ear_1_M2x6",
+    "roll_servo_ear_1_washer",
+    "roll_servo_ear_2_M2x6",
+    "roll_servo_ear_2_washer",
+    "roll_servo_ear_3_M2x6",
+    "roll_servo_ear_3_washer",
+    "roll_servo_ear_4_M2x6",
+    "roll_servo_ear_4_washer",
+    "yaw_disc_to_body_hub_M3x6_1",
+    "yaw_disc_to_body_hub_M3x6_2",
+    "yaw_disc_to_body_hub_M3x6_3",
+    "yaw_leg_to_disc_M2x6_-55_-12.5",
+    "yaw_leg_to_disc_M2x6_-55_-17.5",
+    "yaw_leg_to_disc_M2x6_55_-12.5",
+    "yaw_leg_to_disc_M2x6_55_-17.5",
+    "yaw_turntable_disc_flush",
+    "yaw_yoke_leg_-55",
+    "yaw_yoke_leg_55",
+    "yaw_yoke_spine_inlay_-55",
+    "yaw_yoke_spine_inlay_55"
+   ]
+  }
+ ]
+}

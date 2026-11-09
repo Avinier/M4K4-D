@@ -66,16 +66,17 @@ PLACE = {   # ref: (x, y, rotation); signals escape the Zero's outer pad ends in
     "R2": (102.32, 123.95, 0),      # C0TX termination, inline on the pair
     "R1": (104.6, 123.2, 90),       # GND_SIG -> GND
     "J1": (100.4, 128.0, 180),
-    # servo (right): inputs from the Zero's right pads, RX straight up into pad 10
+    # servo (right): inputs from the Zero's right pads, RX straight up into pad 10. J2 sits
+    # above the board's low -Y corner, which the roll/pitch sweep reserves (check_pcb12_fit.py).
     "U4": (107.0, 114.6, 90),       # RX buffer, OE low: VCC/Y on top, /OE A GND below
     "U3": (112.0, 114.6, 270),      # TX buffer, OE high: OE A GND on top, VCC/Y below
-    "R4": (109.05, 117.6, 180),     # 47R, DRV -> DATA
-    "R5": (110.2, 120.2, 180),      # SERVO_DATA pull-up
-    "C4": (114.0, 120.3, 270),      # U3/U4 decoupling
+    "R4": (109.5, 114.6, 270),      # 47R between them, DRV top -> DATA bottom
+    "C4": (104.55, 113.6, 90),      # U3/U4 decoupling, beside U4's VCC
+    "R5": (105.55, 119.9, 90),      # SERVO_DATA pull-up
+    "J2": (109.8, 120.2, 180),      # pins up, toward the buffers
+    "R7": (114.1, 120.0, 270),      # GND_HEAD_REF -> GND
     "R6": (112.95, 101.5, 90),      # SERVO_DIR pull-down, on the DIR lane
-    "R7": (112.4, 123.15, 90),      # GND_HEAD_REF -> GND
     "TP1": (113.6, 97.5, 0),        # GND
-    "J2": (110.6, 128.0, 180),
 }
 BARE = ("TP1",)
 
@@ -221,12 +222,12 @@ def route(b):
     t("5V_C1", "+5V_C2", 0.4, "F.Cu", v5b, (97.9, 123.975), (96.9, 122.975))
     # +3V3: B.Cu down x 92.9, across ky 115.0, branches to the parts' vias.
     vA, vC, vB, vU4 = (95.5, 119.075), (98.675, 115.0), (102.955, 115.0), (106.05, 112.0)
-    t("3V3_B", "+3V3", 0.3, "B.Cu", v3, (92.9, 95.37), (92.9, 115.0), (104.35, 115.0),
-      (104.35, 118.2), (112.6, 118.2), (113.4, 117.4))
+    vR5, vU3 = (106.0, 121.7), (114.2, 116.6)
+    t("3V3_B", "+3V3", 0.3, "B.Cu", v3, (92.9, 95.37), (92.9, 115.0), (103.9, 115.0),
+      (103.9, 121.7), vR5)
     t("3V3_B_A", "+3V3", 0.3, "B.Cu", (95.5, 115.0), vA)
-    t("3V3_B_U4", "+3V3", 0.3, "B.Cu", (104.35, 115.0), (105.65, 113.7), (106.05, 113.3), vU4)
-    vR5, vU3 = (111.025, 121.3), (113.4, 117.4)
-    t("3V3_B_R5", "+3V3", 0.3, "B.Cu", (111.025, 118.2), vR5)
+    t("3V3_B_U4", "+3V3", 0.3, "B.Cu", (103.9, 115.0), (106.05, 112.85), vU4)
+    t("3V3_B_U3", "+3V3", 0.3, "B.Cu", (103.9, 118.2), (112.6, 118.2), vU3)
     for n, at in (("A", vA), ("C", vC), ("B", vB), ("U4", vU4), ("R5", vR5), ("U3", vU3)):
         v("3V3_" + n, "+3V3", at)
     t("3V3_U5", "+3V3", 0.3, "F.Cu", (91.905, 120.3), (92.875, 120.3), P("C5", 1), vA)
@@ -235,9 +236,9 @@ def route(b):
     t("3V3_R3", "+3V3", 0.3, "F.Cu", P("R3", 1), vC)
     t("3V3_U2", "+3V3", 0.3, "F.Cu", vB, (102.955, 116.4))
     t("3V3_U4p", "+3V3", 0.3, "F.Cu", vU4, P("U4", 5))
-    t("3V3_U3p", "+3V3", 0.3, "F.Cu", vU3, (112.95, 116.95), P("U3", 5))
-    t("3V3_C4", "+3V3", 0.3, "F.Cu", vU3, (113.4, 118.925), P("C4", 1))
-    t("3V3_R5p", "+3V3", 0.3, "F.Cu", vR5, P("R5", 1))
+    t("3V3_U3p", "+3V3", 0.3, "F.Cu", vU3, (113.55, 116.6), P("U3", 5))
+    t("3V3_C4", "+3V3", 0.3, "F.Cu", vB, (103.53, 114.425), P("C4", 1))
+    t("3V3_R5p", "+3V3", 0.3, "F.Cu", P("R5", 1), (105.55, 121.25), vR5)
 
     # ---- Left strip, outer to inner: DISP_TX 85.7, DISP_DE 86.5, DISP_RX 87.1, LINK_TX 87.7, LINK_RX 88.3.
     t("DISP_TX", "DISP_TX", S, "F.Cu", P("U1", 4), (85.7, 97.46), (85.7, 114.8), (85.9, 115.0), (88.095, 115.0))
@@ -274,16 +275,17 @@ def route(b):
     t("SERVO_TX", "SERVO_TX", S, "F.Cu", P("U1", 11), (112.0, 107.62), P("U3", 2))
     t("SERVO_DIR", "SERVO_DIR", S, "F.Cu", P("U1", 12), (112.95, 105.08), P("U3", 1))
     t("SERVO_DIR_R6", "SERVO_DIR", S, "F.Cu", (112.95, 105.08), P("R6", 1))
-    vD, vD2 = (112.95, 111.2), (105.3, 117.4)
+    vD, vD2 = (112.95, 111.2), (104.9, 116.0)
     v("DIR_1", "SERVO_DIR", vD)
     v("DIR_2", "SERVO_DIR", vD2)
-    t("SERVO_DIR_B", "SERVO_DIR", S, "B.Cu", vD, (109.15, 115.0), (109.15, 117.4), vD2)
-    t("SERVO_DIR_U4", "SERVO_DIR", S, "F.Cu", vD2, (105.3, 117.2), (106.05, 116.45), P("U4", 1))
-    t("SERVO_DRV", "SERVO_DRV", S, "F.Cu", P("U3", 4), (111.05, 116.9), (110.35, 117.6), P("R4", 1))
-    t("SERVO_DATA", "SERVO_DATA", S, "F.Cu", P("R4", 2), (107.5, 117.6), (107.0, 117.1), P("U4", 2))
-    t("SERVO_DATA2", "SERVO_DATA", S, "F.Cu", P("R4", 2), (108.225, 123.475), (109.975, 125.225), P("J2", 2))
-    t("SERVO_DATA_R5", "SERVO_DATA", S, "F.Cu", (108.225, 120.2), P("R5", 2))
-    t("GND_HEAD", "GND_HEAD_REF", 0.3, "F.Cu", P("J2", 1), (111.225, 124.9), (112.05, 124.075), P("R7", 1))
+    t("SERVO_DIR_B", "SERVO_DIR", S, "B.Cu", vD, (109.15, 115.0), (105.9, 115.0), vD2)
+    t("SERVO_DIR_U4", "SERVO_DIR", S, "F.Cu", vD2, P("U4", 1))
+    t("SERVO_DRV", "SERVO_DRV", S, "F.Cu", P("U3", 4), (110.45, 115.7375), (110.45, 114.4), P("R4", 1))
+    t("SERVO_DATA", "SERVO_DATA", S, "F.Cu", P("R4", 2), (109.5, 116.9), (107.5, 116.9), (107.0, 116.4), P("U4", 2))
+    t("SERVO_DATA_J2", "SERVO_DATA", S, "F.Cu", (109.5, 116.9), P("J2", 2))
+    t("SERVO_DATA_R5", "SERVO_DATA", S, "F.Cu", (107.5, 116.9), (106.55, 116.9), (105.55, 117.9), P("R5", 2))
+    t("GND_HEAD", "GND_HEAD_REF", 0.3, "F.Cu", P("J2", 1), (110.425, 117.3), (113.0, 117.3), (113.9, 118.2),
+      P("R7", 1))
     # R6 GND to the plane.
     vR6 = (112.95, 99.6)
     t("R6_GND", "GND", 0.3, "F.Cu", P("R6", 2), vR6)
@@ -297,7 +299,7 @@ def route(b):
                         [(x0, y0), (91.0, y0), (91.0, 111.9), (109.0, 111.9), (109.0, y0), (x1, y0), (x1, y1), (x0, y1)],
                         clearance=0.2, min_width=0.2, solid=True))
     # Stitching vias round the lower area.
-    for i, at in enumerate([(95.5, 125.6), (106.9, 124.9), (114.2, 113.3), (86.0, 125.0),
+    for i, at in enumerate([(95.5, 125.6), (106.9, 124.9), (112.0, 126.5), (86.0, 125.0),
                             (92.9, 126.9), (108.0, 127.0)]):
         v(f"STITCH_{i}", "GND", at)
     b.add(*parts)
