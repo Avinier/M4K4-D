@@ -1386,6 +1386,8 @@ DROID_REMOVES = [
     # 05, 06 x4, 07, 13 and the W16 inlet lead), and PCB-08's J8-3/J8-5 sideband headers.
     r"PCB0[2345]_\w+", r"J[234]_\d_(MICROFIT\w+|GHR\d\d_MATED_PLUG)", r"CHARGE_INLET_\w+", r"PDM_MIC_(FRONT|REAR)_[LR]", r"IMU_PCB07",
     r"YAW_JUNCTION_J8_[35]_\w+",
+    # W13/W14: replace the old board-sized upper placeholder with the route to J1's -X mouth.
+    r"HARNESS_HEAD_RISER_UPPER",
 ]
 DROID_INSERTS = [
     (r"C3_CARRIER_PCB10_WITH_DEVKITC", pcb10_devkitc()),
@@ -1402,6 +1404,10 @@ DROID_INSERTS = [
     (r"BODY_PRIMARY_FRAME", rear_bay_plate()),
     *[(r"BODY_PRIMARY_FRAME", part) for part in rear_bay_hardware()],
     *[(r"YAW_JUNCTION_PCB08", part) for part in pcb08_servo_plug()],
+    (r"BODY_INTERNAL_HARNESS", _tag(_blk(-29.0, -25.0, -45.0, -38.0, 100.0, 112.0),
+                             "HARNESS_HEAD_RISER_UPPER_RISE", "#9566D9", 0.35)),
+    (r"BODY_INTERNAL_HARNESS", _tag(_blk(-29.0, -23.0, -39.0, -29.0, 110.0, 120.0),
+                             "HARNESS_HEAD_RISER_UPPER_TO_J1", "#9566D9", 0.35)),
 ]
 
 

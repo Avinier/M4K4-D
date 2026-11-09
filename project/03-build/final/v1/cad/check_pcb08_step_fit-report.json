@@ -1,7 +1,7 @@
 {
  "script": "check_pcb08_step_fit",
- "passed": 11,
- "total": 13,
+ "passed": 13,
+ "total": 14,
  "rows": [
   {
    "check": "board_outline_matches_cad",
@@ -144,6 +144,11 @@
    "note": "broad Pi bounding-box gap is not a local underside clearance"
   },
   {
+   "check": "head_riser_route_reaches_j1_without_solid_clash",
+   "ok": true,
+   "solid_clashes": []
+  },
+  {
    "check": "through_hole_tails_clear_pi_faces",
    "ok": true,
    "protrusion_mm": {
@@ -155,138 +160,30 @@
   },
   {
    "check": "through_hole_tails_clear_head_riser_reserve",
-   "ok": false,
-   "reserve": [
-    -22.0,
-    -40.0,
-    100.0,
-    -2.0,
-    -23.0,
-    126.0
-   ],
-   "collisions": [
-    [
-     "J1.1",
-     [
-      -15.85,
-      -37.36,
-      107.05,
-      -14.15,
-      -35.66,
-      112.05
-     ]
+   "ok": true,
+   "reserve_segments": {
+    "HARNESS_HEAD_RISER_UPPER_RISE": [
+     -29.0,
+     -45.0,
+     100.0,
+     -25.0,
+     -38.0,
+     112.0
     ],
-    [
-     "J1.2",
-     [
-      -15.85,
-      -34.36,
-      107.05,
-      -14.15,
-      -32.66,
-      112.05
-     ]
-    ],
-    [
-     "J1.3",
-     [
-      -15.85,
-      -31.36,
-      107.05,
-      -14.15,
-      -29.66,
-      112.05
-     ]
-    ],
-    [
-     "J1.4",
-     [
-      -12.85,
-      -37.36,
-      107.05,
-      -11.15,
-      -35.66,
-      112.05
-     ]
-    ],
-    [
-     "J1.5",
-     [
-      -12.85,
-      -34.36,
-      107.05,
-      -11.15,
-      -32.66,
-      112.05
-     ]
-    ],
-    [
-     "J1.6",
-     [
-      -12.85,
-      -31.36,
-      107.05,
-      -11.15,
-      -29.66,
-      112.05
-     ]
-    ],
-    [
-     "J1.MP",
-     [
-      -21.12,
-      -40.47,
-      107.05,
-      -17.51,
-      -36.86,
-      112.05
-     ]
-    ],
-    [
-     "J1.MP",
-     [
-      -21.12,
-      -30.17,
-      107.05,
-      -17.51,
-      -26.56,
-      112.05
-     ]
-    ],
-    [
-     "J5.1",
-     [
-      -6.53,
-      -41.71,
-      108.55,
-      -4.47,
-      -39.66,
-      112.05
-     ]
-    ],
-    [
-     "J5.2",
-     [
-      -4.03,
-      -41.71,
-      108.55,
-      -1.97,
-      -39.66,
-      112.05
-     ]
-    ],
-    [
-     "J6.1",
-     [
-      -5.17,
-      -34.48,
-      108.55,
-      -2.83,
-      -32.13,
-      112.05
-     ]
+    "HARNESS_HEAD_RISER_UPPER_TO_J1": [
+     -29.0,
+     -39.0,
+     110.0,
+     -23.0,
+     -29.0,
+     120.0
     ]
-   ]
+   },
+   "collisions": [],
+   "min_clearance_mm": 1.875,
+   "nearest_tail": "J1.MP",
+   "nearest_segment": "HARNESS_HEAD_RISER_UPPER_TO_J1",
+   "required_mm": 0.5
   },
   {
    "check": "populated_models_present",

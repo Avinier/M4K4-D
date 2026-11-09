@@ -106,19 +106,37 @@ def main():
             face_count=len(under_board), highest_face_z=highest,
             board_underside_face_gap=None if highest is None else round(bb.min.Z-highest, 3),
             note="broad Pi bounding-box gap is not a local underside clearance")
-    riser = C.find(leaves, "HARNESS_HEAD_RISER_UPPER")
-    pi_hits, riser_hits = [], []
+    riser = [C.find(leaves, "HARNESS_HEAD_RISER_UPPER_" + suffix)
+             for suffix in ("RISE", "TO_J1")]
+    lower_riser = C.find(leaves, "HARNESS_HEAD_RISER_LOWER")
+    j1_plug = C.find(leaves, "YAW_JUNCTION_J8_1_MICROFIT3_6P_MATED_PLUG")
+    route_clashes = [hit for segment in riser for hit in
+                     C.clashes(segment.shape, leaves, skip=("HARNESS", "YAW_JUNCTION"))]
+    r.check("head_riser_route_reaches_j1_without_solid_clash",
+            C.common(lower_riser.shape, riser[0].shape) > 1e-4
+            and C.common(riser[0].shape, riser[1].shape) > 1e-4
+            and C.common(riser[1].shape, j1_plug.shape) > 1e-4
+            and not route_clashes,
+            solid_clashes=route_clashes)
+    pi_hits, riser_hits, riser_gaps = [], [], []
     for name, tail in tail_boxes(bb.min.Z):
         local = [f for f in faces if xy_overlaps(f, tail)]
         top = max((f[5] for f in local), default=None)
         if top is not None and top >= tail[2]:
             pi_hits.append((name, round(top-tail[2], 3), tuple(round(v, 2) for v in tail)))
-        if xy_overlaps(tail, riser.box) and tail[2] < riser.box[5] and riser.box[2] < tail[5]:
-            riser_hits.append((name, tuple(round(v, 2) for v in tail)))
+        tail_shape = C.blk((tail[0], tail[3], tail[1], tail[4], tail[2], tail[5]))
+        for segment in riser:
+            if C.common(tail_shape, segment.shape) > 1e-4:
+                riser_hits.append((name, segment.label))
+            riser_gaps.append((C.distance(tail_shape, segment.shape), name, segment.label))
     r.check("through_hole_tails_clear_pi_faces", not pi_hits,
             protrusion_mm={"J1": 5.0, "J5": 3.5, "J6": 3.5}, collisions=pi_hits)
-    r.check("through_hole_tails_clear_head_riser_reserve", not riser_hits,
-            reserve=riser.box, collisions=riser_hits)
+    min_riser_gap, near_tail, near_segment = min(riser_gaps)
+    r.check("through_hole_tails_clear_head_riser_reserve",
+            not riser_hits and min_riser_gap >= 0.5,
+            reserve_segments={s.label: s.box for s in riser}, collisions=riser_hits,
+            min_clearance_mm=round(min_riser_gap, 3), nearest_tail=near_tail,
+            nearest_segment=near_segment, required_mm=0.5)
     missing = sorted(EXPECTED - parts.keys())
     r.check("populated_models_present", not missing, missing=missing,
             note="J3/J4 use conservative closed-body envelopes; J1/J5 stock model files are unavailable; J6 has wire-tail envelopes")
