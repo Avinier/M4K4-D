@@ -18,7 +18,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | Inputs in progress | Shared PCB-08/14 FH34SRJ candidate; no KiCad revision yet | 2026-11-09 |
+| 1. Design | Inputs in progress | Shared PCB-08/14 FH34SRJ footprint drafted; populated three-board fit and CSI sample open; no KiCad revision yet | 2026-11-09 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -28,8 +28,11 @@ The D-052 envelope is **height out from the 0.8 mm board ≤ 2.0 mm; insertion d
 
 The BO-050 CSI cable is described as a Pi 5 camera cable, but the usual official camera lead is 15-to-22 standard-mini. This joiner requires **22-to-22 mini-mini** on the cassette section. Raspberry Pi documents a mini-mini 200 mm product, but its end stiffener thickness and exact order code are not yet verified against FH34SRJ. Its published **standard-mini display** drawing gives 0.309 ± 0.05 mm at the 22-way end, a wider tolerance than FH34SRJ's 0.30 ± 0.03 mm acceptance; that drawing cannot qualify the different mini-mini cable. [Raspberry Pi mini-mini declaration](https://pip-assets.raspberrypi.com/categories/907-approvals/documents/RP-005161-CF/Mini_-_Mini_EU_DoC_Cam_Display); [standard-mini drawing](https://pip-assets.raspberrypi.com/categories/903-flexible-printed-circuit-fpc-cable-for-display-and-camera/documents/RP-008145-DS-1-mini-display-cable-200mm-reference-drawing.pdf); [official camera installation guidance](https://www.raspberrypi.com/documentation/accessories/camera-software.html).
 
+**[D-100](../../decisions.md#d-100) (2026-11-09).** The three **cassette** runs (power, sideband, CSI) are now one generic 22-way, 0.5 mm-pitch, 0.3 mm-thick FFC with a stated contact side, cut to length, so the down-facing ZIFs no longer depend on a branded mini-mini cable. The shared [FH34SRJ footprint](../lib/README.md) follows Hirose's 22-way copper and 0.1 mm-stencil signal-aperture patterns; assembler approval and PCB-14 populated placement still need review. The CSI cassette run ends in the Pi 5 camera socket, which takes the same 0.3 mm FPC. **Still open here:** the up-facing CSI ZIF takes the head-side run to the Camera Module 3 (15-way 1 mm), which stays a Pi standard-mini cable; its 22-way end (0.309 ± 0.05 mm) against FH34SRJ's 0.30 ± 0.03 mm needs a sample check, and CSI-2 stream errors through the generic FFC and both ZIFs need the BO-050 bench test.
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
 
 - **2026-11-09:** FH12 depth exceeds D-052's reserve. FH34SRJ is the shared eight-connector candidate; India listing found. Exact CSI mini-mini cable and real three-board actuator/cable fit remain open.
+- **2026-11-09:** [D-100](../../decisions.md#d-100): generic 0.3 mm cassette FFC for all three runs; the head-side CSI standard-mini end thickness stays open.

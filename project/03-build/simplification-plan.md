@@ -58,7 +58,7 @@
    └─ balance lead (B−, mid, B+) ─ break ─────────────────────── BALANCE PORT (rear panel)
 
  switched bus ─┬─ #3297 L / R drive (VM: SMBJ8.5A + 100 µF + 0.1 µF each)
-               ├─ buck-boost → 5.5 V head pitch/roll (W13 → J8-1)
+               ├─ buck-boost → 6.0 V head pitch/roll (W13 → J8-1; D-100)
                ├─ buck-boost → 11.1 V yaw (→ PCB-08 → W15)
                ├─ buck-boost 5 V 3 A → Pi 5 (W10 USB-C; a non-PD Pi 5 assumes 3 A)
                └─ buck-boost 5 V → C3 (W11, via a diode), amp (W12), C2 + display (W14 → J8-1)

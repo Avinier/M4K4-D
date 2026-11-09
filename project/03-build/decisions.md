@@ -85,6 +85,7 @@ The central record of every decision and change made during the build phase. New
 | [D-097](#d-097) | 2026-11-07 | BOM and firmware for D-093 | BOM reconciled (14 superseded, 12 rescoped, 18 new rows); firmware requirements in 04-software; PCB-09 rev A GPIO access gap found | ACTIVE; gap disposition in D-098; D-096 HOLD stands |
 | [D-098](#d-098) | 2026-11-07; amended 2026-11-08 | PCB-09 rev B service access for D-096 | Keep button sense and M1 OFF under Pi control; expose GPIO12/13 and an INA226 `i2c-gpio`/3V3/GND termination; preserve I²C1 only on TP1/TP2 | SELECTED design input; rev B layout and fit unproved |
 | [D-099](#d-099) | 2026-11-07 | Body-lift CAD and chassis front export | D-096's four body-lift plugs and star splices placed (check 26/26); front frame STL re-exported with the D-095 hole and pilots (13/13) | ACTIVE; D-096 HOLD stands |
+| [D-100](#d-100) | 2026-11-09 | PCB-08 inputs: head rail 6.0 V, 7/7 power map, signal-only sideband, generic cassette FFC, stepped ZIF stack | M2 set to 6.0 V; J8-6 7/7 head power; J8-7 carries no power; three cassette FFCs are one generic 0.3 mm 22-way FFC; FH34SRJ pair stepped on the top face (probe 13/13) | SELECTED design input; land pattern, received FFC resistance and N2 decide |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -3891,3 +3892,30 @@ All three print flat with no supports in PETG deep slate:
 - CH-108 on its back (−X) face, with the counterbores on the bed.
 
 CH-108's cradles are drawn around the UNMEASURED switch and INA226 outlines; re-check them on the received parts before printing it. The BOM rows CH-106–CH-108 note the STLs; [04-print/02-body](../04-print/02-body/README.md) is started for CH-108.
+
+## D-100
+
+**2026-11-09 · PCB-08 design inputs: head pitch/roll rail at 6.0 V with the 7/7 power map, signal-only `J8-7`, one generic cassette FFC, and a stepped FH34SRJ pair (CH-083, CH-097, BO-050, BO-062; amends [D-094](#d-094) M2) · SELECTED design input; received FFC, populated fit and N2 still decide**
+
+**Why.** The PCB-08 head-power screen (`04-pcbs/pcb-08-yaw-junction/head_power_drop.py`) gives a 0.255–0.297 Ω loop through the cassette FFC, PCB-14 and four ZIF contacts with the original 7 + 7 conductors. At 5.5 V the head terminals fall below N2's 5.23 V at any realistic current. A 13 + 13 map would have put servo current on `J8-7` beside the RS-422 pairs and `SERVO_DATA`. M2 (S18V20ALV) may deliver only about 2 A with its input near its output; its capacity at the selected 2.4 A ceiling needs N2(b). At 2.0 A and 6.0 V the 7/7 terminals are 5.49 V (0.035 mm copper) and 5.41 V (0.027 mm); the 5.23 V target holds up to about 3.0 A and 2.6 A in the cable-only screen. The 13/13 map is a fallback if measured drop invalidates the selected map.
+
+**Decision** (builder, 2026-11-09).
+1. **M2 is set to 6.0 V** (was 5.5 V). The STS3045M is specified for 4.8–7.4 V, and D-046 already preferred 6.0 V once yaw had its own rail. The net keeps its name `+5V5_HEAD_PR` in the existing pinouts until the schematic renames it.
+2. **`J8-6` keeps 7 + 7 head conductors** (1–7 positive, 8–14 return), with 2 + 2 for C2 and 2 + 2 for the display. **`J8-7` carries no power**: 1/4/7/9 reference, 2–3 and 5–6 the RS-422 pairs, 8 `SERVO_DATA`, 10–22 isolated and labelled.
+3. **Condition:** total head pitch/roll current limited to ≤ 2.4 A by the servo protection settings. The received FFC's measured resistance and N2(b) at the servo terminals confirm it; if either fails, revisit this decision (the 13/13 map is the recorded fallback).
+4. **Cassette FFCs:** all three cassette runs (power, sideband, CSI) are **one generic 22-way, 0.5 mm-pitch, 0.3 mm-thick FFC** with a stated contact side (type A or B), cut to the cassette length. Only the CSI run's Pi end must also fit the Pi 5 camera socket, which takes the same 0.3 mm FPC. This replaces the search for a branded 22-to-22 mini-mini cable. The head-side CSI run (PCB-14 to the Camera Module 3's 15-way 1 mm connector) still needs a Pi standard-mini cable; its 22-way end (0.309 ± 0.05 mm on Raspberry Pi's drawing) against FH34SRJ's 0.30 ± 0.03 mm acceptance stays open.
+5. **ZIF arrangement on PCB-08: stepped stack.** Both FH34SRJ-22S-0.5SH(99) on the top face, mouths toward +X: outer (`J8-6` or `J8-7`, at the layout) at X 15.7–19.5, inner at X 5.86–9.66, straddling the main plate and the extension. The outer solder tab then has 0.35 mm clearance to the board edge, above D-062's 0.3 mm rule. The inner cable has an assumed 1.0 mm straight exit before bending, climbs 0.95 mm in an S-bend (R 3 mm, 3.24 mm run) and passes over the outer body at Z 114.9–115.2. Plug order: outer cable first and latched, then the inner. The FFCs leave the cassette stacked, so the upper one lands on the inner ZIF.
+
+**Check.** `final/v1/cad/check_pcb08_zif_stepped.py`, **14/14**:
+- **Pi survey.** The earlier back-to-back failure was the Pi 5 vendor STEP's bounding box. The Pi's own faces under the extension top out at **Z 99.85**, 11.2 mm under a bottom-face ZIF. Back to back is therefore also geometrically open and stays the fallback.
+- Both bodies, the inner stiffener, the S-bend, the raised inner cable, the outer cable and both opened actuators (1.8 mm deep, 3.4 mm high, `E`) clear the robot's parts. The column up to Z 117.2 over the stack is free, so the yaw adapter plate does not limit actuator access.
+- The Hirose copper land pattern and recommended 0.1 mm-stencil signal apertures are drafted in `04-pcbs/lib/fh34.pretty`; the assembler must review the stencil. Not covered: the D-052-style 45° fold from the cassette's −Y window (X 26–31, Z 119.8–133, cables on edge) down to the ZIF mouths, and the existing `HARNESS_YAW_FFC_TO_PCB08` reserve (Y −27.5..−24), which no longer matches the ZIF Y span (−40..−27). An 11.5 mm-wide physical mock-up must establish the two-cable fold order before the reserve is revised.
+
+**Changed.** [module-selection.md](module-selection.md) M2; [BOM.csv](BOM.csv) CH-083, CH-097, BO-050; the [PCB-08](04-pcbs/pcb-08-yaw-junction/README.md) and [PCB-14](04-pcbs/pcb-14-yaw-rotor-joiner/README.md) inputs; [simplification-plan.md](simplification-plan.md) power tree.
+
+**Unverified.**
+- FFC copper thickness and conductor resistance: measure the received generic FFC four-wire.
+- The S-bend radius, 1.0 mm straight exit before bending and opened-actuator envelope are estimates (`E`); check them with the received connector and FFC. Hirose specifies the FFC end's 1.5 ± 0.3 mm exposed area and 2.5 ± 0.3 mm reinforcing section, not that straight-exit length.
+- Generic FFC on CSI-2: run the CSI stream-error test through the loop and both PCB-14 ZIFs (BO-050 release check).
+- Pin mirroring of every cable at PCB-08, PCB-14 and the Pi; dual contacts do not undo a pin-1 ↔ pin-22 mirror.
+- M2 at 6.0 V from a 6.0 V pack sits in the buck-boost transition; N2(b) decides its capacity.

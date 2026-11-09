@@ -32,7 +32,7 @@ cells → PCB-01 → W01 → J-PK → W03a → FUSE 15 A → W03b → J-BAT → 
 pack − ─────────────────────────── J-PK − ───────────── J-BAT − → (−) charge splice ─→ XT30 −                  → −STAR
 
 +/− STAR ┬→ J-CHASSIS → tub distribution ┬→ #3297 L/R VM/GND (SMBJ8.5A + 100 µF + 0.1 µF at each VM)
-         │                               ├→ M2 S18V20ALV 5.5 V → W13 → J8-1 → pitch/roll
+         │                               ├→ M2 S18V20ALV 6.0 V → W13 → J8-1 → pitch/roll
          │                               └→ M3 S18V20ALV 11.1 V → W17 → PCB-08 J8-8 → W15 yaw
          ├→ M4 S13V30F5 5 V → W10 USB-C → Pi 5
          └→ M5 S13V30F5 5 V ┬→ W11 + SS34 → C3 J10-1
@@ -148,7 +148,7 @@ Pin 1 means the **moulded cavity number**, not the leftmost cavity in a photogra
 | `J-PK`, `J-BAT`, `J-CHASSIS` 2-way | 1 positive, 2 negative. Respectively protected pack, fused unswitched, switched shunt-monitored. Give unlike feeds distinct keys/labels |
 | M1 #2813 | VIN from charge +splice; GND from −splice; VOUT to M6 IN+; ON from mushroom NO-to-GND; OFF from verified Pi GPIO interface; CTRL unused. Check received board hole labels |
 | M6 INA226 (shunt OPEN, CH-099) | IN+ M1 VOUT, IN− +STAR, bus voltage sense at IN− if separate pad exists; VCC Pi 3V3, GND −STAR, SDA/SCL PCB-09 `i2c-gpio` bus. Check board trace/jumper arrangement; choose and calibrate shunt after peak measurements |
-| M2/M3 S18V20ALV | VIN+/GND from tub branch; VOUT+/GND to W13 5.5 V or W17 11.1 V. Label setpoints at modules |
+| M2/M3 S18V20ALV | VIN+/GND from tub branch; VOUT+/GND to W13 6.0 V (D-100; was 5.5 V) or W17 11.1 V. Label setpoints at modules |
 | M4/M5 S13V30F5 | VIN+/GND from body stars; M4 VOUT Pi-only 5 V; M5 VOUT shared 5 V. Keep outputs separate |
 | `J8-1` MF3 2×3 | 1 +5V5_HEAD_PR, 2 +5V_C2, 3 +5V_DISPLAY, 4 GND_HEAD, 5 GND_C2, 6 GND_DISPLAY |
 | `J10-1` MF3 2-way | 1 +5V_C3 **after Schottky**, 2 GND |
@@ -174,7 +174,7 @@ AWG16/18/20/22 resistance at 20 °C: 13.2/21/33.3/53 mΩ/m; ×1.16 hot. These **
 | M4→Pi 0.10 m each way AWG18 | 4.9 mΩ | USB-C loss unknown | 0.015 V at 3 A; N12 measures Pi input |
 | M5→C3 0.11 m each way AWG22 | 13.5 mΩ | MF3 and diode unknown | N8 measures loaded voltage/back-feed |
 
-**D-093 low-pack current screen, 6.0 V input, assumed 90% conversion efficiency (`E`):** Pi 5 V × 3 A → 2.78 A pack; head 5.5 V × 2.8 A → 2.85 A; yaw 11.1 V × 2.4 A → 4.93 A; shared 5 V × 1.5 A → 1.39 A; both drives at the old 2 A each → 4.0 A. **Sum ≈15.95 A demand** (≈11.39 A at 8.4 V with the same output loads/efficiency). This is a coincident-stall *demand*, not a claim the chosen M2/M3 can deliver it: their ~2 A output capability may collapse first. Even limiting head and yaw outputs to 2 A yields about **14.3 A** at 6 V under the same assumptions. The former 10.2 A came from a superseded rail configuration and cannot size this harness.
+**D-093 low-pack current screen, 6.0 V input, assumed 90% conversion efficiency (`E`):** Pi 5 V × 3 A → 2.78 A pack; head 5.5 V × 2.8 A → 2.85 A; yaw 11.1 V × 2.4 A → 4.93 A; shared 5 V × 1.5 A → 1.39 A; both drives at the old 2 A each → 4.0 A. **Sum ≈15.95 A demand** (≈11.39 A at 8.4 V with the same output loads/efficiency). This is a coincident-stall *demand*, not a claim the chosen M2/M3 can deliver it: their ~2 A output capability may collapse first. Even limiting head and yaw outputs to 2 A yields about **14.3 A** at 6 V under the same assumptions. The former 10.2 A came from a superseded rail configuration and cannot size this harness. **[D-100](../decisions.md#d-100) moves M2 to 6.0 V** with the head limited to ≤ 2.4 A in total: 6.0 V × 2.4 A → 2.67 A pack, below the 2.85 A head term above, so the screen is not raised; the unlimited 6.0 V × 2.8 A case would be 3.11 A.
 
 **Duration-based design candidate, not a new limit:** if both head servos are proved to stay at or below 1.0 A each and yaw at or below 1.5 A **from the first instant of a stall**, the same arithmetic gives about **13.0 A** at a true 6.0 V *module input*. Feetech's protection-current register and overload timeout must not be assumed to be an instantaneous current regulator; measure current waveforms, persistence after power cycle, fault reset and torque/speed on the received servos. An 8 A continuous / ≤2 s peak budget is only a proposal until the real duty cycle, closed-body temperatures and source sag are measured. At 6.0 V **open-circuit** pack voltage, the old 84 mΩ pack estimate implies 1.09 V sag already at 13 A, so treating 6.0 V as both open-circuit and module-input voltage understates converter input current. Define the voltage observation point before adopting either number.
 
