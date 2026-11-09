@@ -881,8 +881,8 @@ IMU_BOARD_Z = IMU["adapter"][5] + IMU["boss"][1]           # Z 60.0
 
 # PCB-08 (D-093): the W23a/W23b sideband headers J8-3 and J8-5 go; the yaw servo plug moves here
 # from PCB-03 J3-5: a Feetech 5264-3P (2.5 mm) top-entry header where J8-3 was, mated plug above.
-PCB08_SERVO = dict(header=(-9.5, 0.4, -42.6, -36.85, 113.6, 119.6),
-                   plug=(-9.0, -0.1, -42.2, -37.25, 116.6, 126.0))
+PCB08_SERVO = dict(header=(-7.95, 1.95, -42.92, -37.17, 113.6, 119.6),
+                   plug=(-7.45, 1.45, -42.52, -37.57, 116.6, 126.0))
 
 # D-096 (plan level 5) harness parts placed for clearance: the four body-lift power plugs and the
 # switched +/- star splices. Mated wire-to-wire pairs lie loose on the chassis deck, chassis half
@@ -1483,6 +1483,9 @@ DROID_ADDS = [
     (r"BODY_FRAME_MAIN_PRINT", amp_bracket()),
 ]
 DROID_MOVES = [
+    # PCB-08 J1 housing overhangs the -X edge: place its mated-plug and header
+    # placeholders at the populated STEP position rather than the old flush edge.
+    (r"YAW_JUNCTION_J8_1_MICROFIT3_6P_(RA_HEADER|MATED_PLUG)", (-2.42, -0.015, 0.0)),
     # D-068 amended: C3 GH headers and plugs into the three proved rows; the J10-1 plug reserve down
     # with the real Micro-Fit (centre Z 89.5 -> 83.43).
     *pcb10_connector_moves(),
