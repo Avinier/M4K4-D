@@ -1,0 +1,1 @@
+(fp_lib_table (version 7) (lib (name "fh34") (type "KiCad") (uri "${KIPRJMOD}/../../lib/fh34.pretty") (options "") (descr "Shared PCB-08/PCB-14 FH34SRJ footprint")))

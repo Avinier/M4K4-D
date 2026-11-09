@@ -1,0 +1,253 @@
+{
+ "script": "check_pcb14_fit",
+ "passed": 22,
+ "total": 22,
+ "rows": [
+  {
+   "check": "disc_bore_and_pilot_as_d052",
+   "ok": true,
+   "bore_r": 10.45,
+   "pilot_bottom_z": 144.4,
+   "disc_box": [
+    -46.5,
+    -62.5,
+    141.0,
+    78.5,
+    62.5,
+    161.0
+   ]
+  },
+  {
+   "check": "board_core_placed",
+   "ok": true,
+   "core": [
+    2.4,
+    -5.725,
+    133.9,
+    29.6,
+    -5.015,
+    150.7
+   ],
+   "core_thickness": 0.71
+  },
+  {
+   "check": "zif_bodies_placed",
+   "ok": true,
+   "J1": [
+    9.5,
+    -4.93,
+    134.4,
+    22.5,
+    -3.93,
+    138.2
+   ],
+   "J2": [
+    9.5,
+    -4.93,
+    146.4,
+    22.5,
+    -3.93,
+    150.2
+   ],
+   "note": "KiCad places components on the core face; ZIF top 1.0 mm above it"
+  },
+  {
+   "check": "board1_core_clear",
+   "ok": true,
+   "clashes": [],
+   "nearest": "YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG",
+   "min_gap": 0.0
+  },
+  {
+   "check": "board1_J1_clear",
+   "ok": true,
+   "clashes": [],
+   "nearest": "YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG",
+   "min_gap": 2.842
+  },
+  {
+   "check": "board1_J2_clear",
+   "ok": true,
+   "clashes": [],
+   "nearest": "yaw_turntable_disc_flush",
+   "min_gap": 2.342
+  },
+  {
+   "check": "board2_core_clear",
+   "ok": true,
+   "clashes": [],
+   "nearest": "YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG",
+   "min_gap": 0.0
+  },
+  {
+   "check": "board2_J1_clear",
+   "ok": true,
+   "clashes": [],
+   "nearest": null,
+   "min_gap": 3.0
+  },
+  {
+   "check": "board2_J2_clear",
+   "ok": true,
+   "clashes": [],
+   "nearest": null,
+   "min_gap": 3.0
+  },
+  {
+   "check": "board3_core_clear",
+   "ok": true,
+   "clashes": [],
+   "nearest": "YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG",
+   "min_gap": 0.0
+  },
+  {
+   "check": "board3_J1_clear",
+   "ok": true,
+   "clashes": [],
+   "nearest": "YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG",
+   "min_gap": 2.757
+  },
+  {
+   "check": "board3_J2_clear",
+   "ok": true,
+   "clashes": [],
+   "nearest": "yaw_turntable_disc_flush",
+   "min_gap": 2.257
+  },
+  {
+   "check": "boards_clear_of_each_other",
+   "ok": true,
+   "overlaps": [],
+   "zif_top_to_next_board_mm": 2.7
+  },
+  {
+   "check": "tabs_in_slots_and_captured",
+   "ok": true,
+   "board_to_rotor_gap": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "shoulder_overhang_mm": 0.457,
+   "lift_gap_mm": 1.0
+  },
+  {
+   "check": "rebuilt_posts_clear_hub",
+   "ok": true,
+   "posts_to_hub_mm": 0.6,
+   "rotor_hub_overlap_mm3": 0.0,
+   "post_to_spigot_mm": 1.31
+  },
+  {
+   "check": "rotor_with_boards_rises_into_hub",
+   "ok": true,
+   "first_hit_going_down": null,
+   "cartridge": [
+    "YAW_BEARING_61810_2Z",
+    "YAW_CARTRIDGE_HOUSING",
+    "YAW_BEARING_CLAMP_RING",
+    "YAW_HUB_DRIVEN_GEAR_M1_Z37",
+    "YAW_HUB_M3X4_DISC_INSERT_1",
+    "YAW_HUB_M3X4_DISC_INSERT_2",
+    "YAW_HUB_M3X4_DISC_INSERT_3"
+   ],
+   "note": "bench cartridge only; the disc goes on at D-052 step 5"
+  },
+  {
+   "check": "upper_zifs_and_boards_inside_disc_bore",
+   "ok": true,
+   "board_corner_r": 9.238,
+   "upper_zif_r": 8.243,
+   "bore_r": 10.45
+  },
+  {
+   "check": "opened_actuators_clear",
+   "ok": true,
+   "clashes": [],
+   "clearance_to_next_board_or_bore": [
+    [
+     "board1_J1",
+     0.3
+    ],
+    [
+     "board1_J2",
+     0.3
+    ],
+    [
+     "board2_J1",
+     0.3
+    ],
+    [
+     "board2_J2",
+     0.3
+    ],
+    [
+     "board3_J1",
+     0.865
+    ],
+    [
+     "board3_J2",
+     0.865
+    ]
+   ],
+   "envelope_E": {
+    "height": 3.4,
+    "behind_rear": 1.8,
+    "into_body": 1.0,
+    "half_x": 6.0
+   }
+  },
+  {
+   "check": "upper_actuator_tool_column_open",
+   "ok": true,
+   "clashes": [],
+   "note": "3 mm wide tool column, beside the head FFC, from the disc top to the opened actuator"
+  },
+  {
+   "check": "ffc_exits_clear",
+   "ok": true,
+   "clashes": [],
+   "head_layers_z": {
+    "3": 153.7,
+    "2": 154.1,
+    "1": 154.5
+   },
+   "channel_floor": 153.5,
+   "disc_top": 155.0,
+   "head_stack_top_below_disc_top": 0.35,
+   "tail_length_mm": 1.55
+  },
+  {
+   "check": "drum_core_fold",
+   "ok": true,
+   "clashes": [],
+   "planes_y": [
+    -4.5,
+    -0.0,
+    4.5
+   ],
+   "fold_square_r": 7.61,
+   "fold_to_drum_bore_mm": 3.39,
+   "fanout_s_bend_radius_E": 2.57,
+   "note": "fan-out is a straight slab from the slit (R11, Y 0) to the fold edge in each plane, not a bent surface"
+  },
+  {
+   "check": "conductor_1_frame",
+   "ok": true,
+   "lower_travel": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "lower_w_1_to_22": [
+    1.0,
+    -0.0,
+    0.0
+   ],
+   "j1_contact1_x": 10.75,
+   "j2_contact22_x": 10.75,
+   "j2_contact1_x": 21.25,
+   "pcb12_input": "head FFC conductor 1 (= cassette conductor 1) on its -X edge: upper ZIF contact 22; travelling +Y in the disc channel at yaw 0, conductor 1 is on the -X side"
+  }
+ ]
+}

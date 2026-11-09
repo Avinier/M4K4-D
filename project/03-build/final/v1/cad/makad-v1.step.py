@@ -1323,6 +1323,40 @@ def pcb08_servo_plug():
             _tag(_blk(*PCB08_SERVO["plug"]), "YAW_JUNCTION_J8_8_YAW_SERVO_5264_3P_MATED_PLUG", "#F4F1E6")]
 
 
+# D-101: PCB-14 joiner stack at a 4.5 mm pitch (was D-052's 3.3 mm), so each
+# FH34SRJ's back-flip actuator (about 3.4 mm open, E) opens in the gap to the
+# next board. Back faces at Y -5.725/-1.225/3.275 put the three FFC planes at
+# -4.5/0/+4.5. The rotor's two slotted posts are rebuilt for the new slots and
+# widened to Y -6.9 (still 1.3 mm inside the hub spigot); check_pcb14_fit.py
+# measures the real boards in them.
+PCB14_BOARD_Y0 = (-5.725, -1.225, 3.275)
+_PCB14_D052_Y0 = (-4.7, -1.4, 1.9)   # _body._yaw_joiner_y() board y0
+PCB14_POST = dict(r=(11.0, 15.2), y=(-6.9, 5.6), z=(137.0, 143.4), slot_x=(10.0, 13.8), slot_z0=137.4,
+                  old=(11.0, 15.2, -5.6, 5.6))
+
+
+def pcb14_posts():
+    """The two rebuilt slotted posts, world frame, fused to the rotor ring top."""
+    m, ax = PCB14_POST, _body.BODY_AXIS_X
+    posts = None
+    for sx in (-1.0, 1.0):
+        x0, x1 = sorted((ax + sx * m["r"][0], ax + sx * m["r"][1]))
+        post = _blk(x0, x1, *m["y"], *m["z"])
+        for y0 in PCB14_BOARD_Y0:   # board 0.8 + 0.1 a side; tabs seat on a 0.4 mm floor
+            sx0, sx1 = sorted((ax + sx * m["slot_x"][0], ax + sx * m["slot_x"][1]))
+            post -= _blk(sx0, sx1, y0 - 0.1, y0 + 0.9, m["slot_z0"], m["z"][1] + 1.0)
+        posts = post if posts is None else posts + post
+    return posts
+
+
+def pcb14_post_removals():
+    """World boxes over the D-052 posts, above the rotor ring top (Z 137)."""
+    r0, r1, y0, y1 = PCB14_POST["old"]
+    ax = _body.BODY_AXIS_X
+    return [(ax + r0 - 0.05, ax + r1 + 0.05, y0 - 0.05, y1 + 0.05, 137.0, 143.6),
+            (ax - r1 - 0.05, ax - r0 + 0.05, y0 - 0.05, y1 + 0.05, 137.0, 143.6)]
+
+
 def bodylift_parts():
     """D-096: the four mated body-lift pairs (two halves each, along X) and the two star splices."""
     m, out = BODYLIFT, []
@@ -1454,6 +1488,8 @@ DROID_CUTS = [
     *[(r"COMPUTE_TRAY", tool) for tool in tray_holes_cuts()],
     *[(r"REAR_SERVICE_PANEL_OCTAGONAL", tool) for tool in rear_panel_port_cuts()],
     *[(r"BODY_SHELL", tool) for tool in _MIC_CUTS],
+    # D-101: the D-052 PCB-14 posts come off the rotor; the rebuilt ones are added below.
+    *[(r"YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG", box) for box in pcb14_post_removals()],
 ]
 DROID_ADDS = [
     # D-074: PCB-09's strip must carry both rows of socket copper plus edge margin.
@@ -1493,6 +1529,8 @@ DROID_ADDS = [
     (r"REAR_SERVICE_PANEL_OCTAGONAL", rear_panel_fill()),
     *[(r"BODY_SHELL", tool) for tool in _MIC_ADDS],
     (r"BODY_FRAME_MAIN_PRINT", amp_bracket()),
+    # D-101: PCB-14 posts with slots at the 4.5 mm pitch.
+    (r"YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG", pcb14_posts()),
 ]
 DROID_MOVES = [
     # PCB-08 J1 housing overhangs the -X edge: place its mated-plug and header
@@ -1507,6 +1545,9 @@ DROID_MOVES = [
     (r"BALL_NOSE_HALL_(CARRIER_PCB|DRV5055A3_SOT23)", (-0.4, 0.0, 0.0)),
     # D-092: PCB-09 and its placeholder parts rise 0.05 mm onto the 11 mm standoffs.
     (PCB09_MOVED, (0.0, 0.0, PCB09_MOUNT["lift"])),
+    # D-101: PCB-14 joiner placeholders to the 4.5 mm pitch.
+    *[(rf"PCB14_JOINER_(BOARD|LOWER_ZIF|UPPER_ZIF)_{k}", (0.0, new - old, 0.0))
+      for k, (new, old) in enumerate(zip(PCB14_BOARD_Y0, _PCB14_D052_Y0), start=1)],
 ]
 
 
