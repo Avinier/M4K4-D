@@ -157,6 +157,9 @@ Pin 1 means the **moulded cavity number**, not the leftmost cavity in a photogra
 | XT30 female | Moulded + fused unswitched positive, moulded − pack negative; recessed source contacts, epoxied/retained and strain-relieved |
 | `J9-3` GH10 | 1 3V3, 2 LRCLK, 3 GND, 4 BCLK, 5 GND, 6 SDO0, 7 SDI1, 8 SDI0, 9 AMP_SD, 10 isolated sense pad |
 | `J10-7` GH8 | 1 3V3, 2 GND, 3 SCLK, 4 MOSI, 5 MISO, 6 CS, 7 INT1, 8 INT2 |
+| PCB-12 `J1` GH7 (D-102) | 1 GND_SIG, 2 C0TX+, 3 C0TX−, 4 C2TX−, 5 C2TX+ (J9-1 order), 6 +5V_C2, 7 GND_C2. From the head FFC-to-wire break (head harness, open) |
+| PCB-12 `J2` GH2 | 1 GND_HEAD reference, 2 SERVO_DATA. Servo power does not pass PCB-12 |
+| PCB-12 `J3` GH3 | 1 GND_DISPLAY, 2 RS-485 B, 3 RS-485 A, to D1's RS-485 port; check D1's terminal labels before crimping |
 
 `J9-1/2`, `J10-2/3/4/5/6/8/10`, `J8-4/6/7` keep their designed-board maps. No J2/J3/J4/J5 or PCB-13 header is fitted. PCB-10 `J10-12` exists but is unmated.
 
