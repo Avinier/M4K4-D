@@ -189,8 +189,8 @@
    "check": "headroom_over_stepped_stack",
    "ok": true,
    "clashes": [],
-   "nearest": "C0_RASPBERRY_PI5_EXACT_STEP",
-   "gap_from_column": 2.6899,
+   "nearest": "YAW_JUNCTION_J8_8_FEETECH_5264_3P_HEADER",
+   "gap_from_column": 2.11,
    "column": [
     4.06,
     25.0,

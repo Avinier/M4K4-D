@@ -30,9 +30,12 @@ The BO-050 CSI cable is described as a Pi 5 camera cable, but the usual official
 
 **[D-100](../../decisions.md#d-100) (2026-11-09).** The three **cassette** runs (power, sideband, CSI) are now one generic 22-way, 0.5 mm-pitch, 0.3 mm-thick FFC with a stated contact side, cut to length, so the down-facing ZIFs no longer depend on a branded mini-mini cable. The shared [FH34SRJ footprint](../lib/README.md) follows Hirose's 22-way copper and 0.1 mm-stencil signal-aperture patterns; assembler approval and PCB-14 populated placement still need review. The CSI cassette run ends in the Pi 5 camera socket, which takes the same 0.3 mm FPC. **Still open here:** the up-facing CSI ZIF takes the head-side run to the Camera Module 3 (15-way 1 mm), which stays a Pi standard-mini cable; its 22-way end (0.309 ± 0.05 mm) against FH34SRJ's 0.30 ± 0.03 mm needs a sample check, and CSI-2 stream errors through the generic FFC and both ZIFs need the BO-050 bench test.
 
+
+**From the PCB-08 fold prediction (2026-11-09, [`check_pcb08_ffc_fold.py`](../../final/v1/cad/check_pcb08_ffc_fold.py)).** The cassette convention is **conductor 1 on the top edge** of every cassette FFC. That makes PCB-08's map straight. Through the D-052 drum-core fold (slit at 0°, one 45° fold up), conductor 1 then arrives at the **−X end of the lower ZIF** at yaw 0. Put lower-ZIF contact 1 there for a 1:1 path. The CSI run must keep the same convention, since the three boards are identical; check its Pi-end fold against the Pi 5 camera socket when its path is drawn.
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
 
 - **2026-11-09:** FH12 depth exceeds D-052's reserve. FH34SRJ is the shared eight-connector candidate; India listing found. Exact CSI mini-mini cable and real three-board actuator/cable fit remain open.
 - **2026-11-09:** [D-100](../../decisions.md#d-100): generic 0.3 mm cassette FFC for all three runs; the head-side CSI standard-mini end thickness stays open.
+- **2026-11-09:** PCB-08 fold prediction: conductor 1 on the cassette top edge; lower-ZIF contact 1 at −X (yaw 0).

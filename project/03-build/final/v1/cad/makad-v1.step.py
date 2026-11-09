@@ -1388,6 +1388,8 @@ DROID_REMOVES = [
     r"YAW_JUNCTION_J8_[35]_\w+",
     # W13/W14: replace the old board-sized upper placeholder with the route to J1's -X mouth.
     r"HARNESS_HEAD_RISER_UPPER",
+    # W42/W43: the old flat box from the cassette exit, replaced by the predicted fold path below.
+    r"HARNESS_YAW_FFC_TO_PCB08",
 ]
 DROID_INSERTS = [
     (r"C3_CARRIER_PCB10_WITH_DEVKITC", pcb10_devkitc()),
@@ -1408,6 +1410,16 @@ DROID_INSERTS = [
                              "HARNESS_HEAD_RISER_UPPER_RISE", "#9566D9", 0.35)),
     (r"BODY_INTERNAL_HARNESS", _tag(_blk(-29.0, -23.0, -39.0, -29.0, 110.0, 120.0),
                              "HARNESS_HEAD_RISER_UPPER_TO_J1", "#9566D9", 0.35)),
+    # W42/W43 fold to PCB-08 (check_pcb08_ffc_fold.py): on-edge -Y run, creased 45 deg fold and
+    # descent, curl to flat, then the flat runs into J3 and over J3 to J4's S-bend.
+    (r"BODY_INTERNAL_HARNESS", _tag(_blk(28.16, 29.41, -39.25, -22.5, 121.35, 132.85),
+                             "HARNESS_YAW_FFC_FOLD_RUN", "#9566D9", 0.35)),
+    (r"BODY_INTERNAL_HARNESS", _tag(_blk(29.41, 30.66, -39.25, -27.75, 118.0, 132.85),
+                             "HARNESS_YAW_FFC_FOLD_DESCENT", "#9566D9", 0.35)),
+    (r"BODY_INTERNAL_HARNESS", _tag(_blk(26.5, 30.66, -39.25, -27.75, 113.95, 118.1),
+                             "HARNESS_YAW_FFC_FOLD_CURL", "#9566D9", 0.35)),
+    (r"BODY_INTERNAL_HARNESS", _tag(_blk(13.9, 26.5, -39.25, -27.75, 113.95, 115.2),
+                             "HARNESS_YAW_FFC_FOLD_FLAT", "#9566D9", 0.35)),
 ]
 
 

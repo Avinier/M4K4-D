@@ -1,0 +1,173 @@
+{
+ "script": "check_pcb08_ffc_fold",
+ "passed": 10,
+ "total": 10,
+ "rows": [
+  {
+   "check": "window_exit_clear",
+   "ok": true,
+   "clashes": [],
+   "csi_overlap_mm3": 0.0,
+   "nearest_non_pi": "YAW_FFC_CASSETTE_STATOR",
+   "min_gap": 0.05
+  },
+  {
+   "check": "on_edge_curl_clear",
+   "ok": true,
+   "clashes": [],
+   "csi_overlap_mm3": 0.0,
+   "nearest_non_pi": "YAW_FFC_CASSETTE_STATOR",
+   "min_gap": 0.989
+  },
+  {
+   "check": "minus_y_run_clear",
+   "ok": true,
+   "clashes": [],
+   "csi_overlap_mm3": 0.0,
+   "nearest_non_pi": "BODY_FRAME_MAIN_PRINT",
+   "min_gap": 1.15
+  },
+  {
+   "check": "crease_and_descent_clear",
+   "ok": true,
+   "clashes": [],
+   "csi_overlap_mm3": 0.0,
+   "nearest_non_pi": "BODY_FRAME_MAIN_PRINT",
+   "min_gap": 1.15
+  },
+  {
+   "check": "curl_to_flat_clear",
+   "ok": true,
+   "clashes": [],
+   "csi_overlap_mm3": 0.0,
+   "nearest_non_pi": null,
+   "min_gap": 3.0
+  },
+  {
+   "check": "outer_flat_to_J3_clear",
+   "ok": true,
+   "clashes": [],
+   "csi_overlap_mm3": 0.0,
+   "nearest_non_pi": null,
+   "min_gap": 3.0
+  },
+  {
+   "check": "inner_raised_to_J4_clear",
+   "ok": true,
+   "clashes": [],
+   "csi_overlap_mm3": 0.0,
+   "nearest_non_pi": null,
+   "min_gap": 3.0
+  },
+  {
+   "check": "droid_reserves_carry_the_path",
+   "ok": true,
+   "old_reserve_left": [],
+   "solids_outside": [],
+   "reserves": [
+    [
+     28.16,
+     -39.25,
+     121.35,
+     29.41,
+     -22.5,
+     132.85
+    ],
+    [
+     29.41,
+     -39.25,
+     118.0,
+     30.66,
+     -27.75,
+     132.85
+    ],
+    [
+     26.5,
+     -39.25,
+     113.95,
+     30.66,
+     -27.75,
+     118.1
+    ],
+    [
+     13.9,
+     -39.25,
+     113.95,
+     26.5,
+     -27.75,
+     115.2
+    ]
+   ]
+  },
+  {
+   "check": "geometry",
+   "ok": true,
+   "window_centre": [
+    27.75,
+    -20.352
+   ],
+   "run_x": 28.786,
+   "descent_x": 30.036,
+   "curl_centre_xz": [
+    26.536,
+    118.075
+   ],
+   "inner_curl_radius": 3.025,
+   "flat_from_x": 26.536,
+   "note": "outer layer -> J3 at Z 114.1, inner -> J4 raised run at Z 115.05"
+  },
+  {
+   "check": "mirroring_resolved",
+   "ok": true,
+   "cases": {
+    "conductor 1 at the BOTTOM edge in the cassette": {
+     "pcb08_travel": [
+      -1.0,
+      0.0,
+      -0.0
+     ],
+     "pcb08_w": [
+      -0.0,
+      1.0,
+      0.0
+     ],
+     "pcb08_straight": false,
+     "pcb14_travel": [
+      0.0,
+      0.0,
+      1.0
+     ],
+     "pcb14_w": [
+      -1.0,
+      0.0,
+      -0.0
+     ]
+    },
+    "conductor 1 at the TOP edge in the cassette": {
+     "pcb08_travel": [
+      -1.0,
+      0.0,
+      -0.0
+     ],
+     "pcb08_w": [
+      0.0,
+      -1.0,
+      -0.0
+     ],
+     "pcb08_straight": true,
+     "pcb14_travel": [
+      0.0,
+      0.0,
+      1.0
+     ],
+     "pcb14_w": [
+      1.0,
+      -0.0,
+      0.0
+     ]
+    }
+   },
+   "rule": "FFC conductor 1 at the TOP edge in the cassette -> PCB-08 contact n meets conductor n; at PCB-14's lower ZIF (yaw 0) conductor 1 is then at the -X end (w points +X)"
+  }
+ ]
+}

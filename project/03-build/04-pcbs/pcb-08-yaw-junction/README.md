@@ -20,7 +20,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 
 | Stage | Status | Revision / evidence | Date |
 |---|---|---|---|
-| 1. Design | **Layout routed, populated fit 18/18** (rev A draft); fold mock-up open | [design/](design/): Nightly ERC 0/0, netlist audit 14/14 on 51 pins, parity DRC 0 violations / 0 unconnected / 0 parity; [STEP](cad/pcb-08-yaw-junction-revA.step) with J1/J5 drawing envelopes | 2026-11-09 |
+| 1. Design | **Layout routed, populated fit 18/18, fold predicted 10/10** (rev A draft); fab outputs next | [design/](design/): Nightly ERC 0/0, netlist audit 14/14 on 51 pins, parity DRC 0 violations / 0 unconnected / 0 parity; [STEP](cad/pcb-08-yaw-junction-revA.step) with J1/J5 drawing envelopes; `check_pcb08_ffc_fold.py` | 2026-11-09 |
 | 2. Procure | — | — | — |
 | 3. Integrate | — | — | — |
 
@@ -62,9 +62,24 @@ The **5.5 V setpoint fails the 5.23 V N2 terminal target** in this screen. The f
 - The Hirose 22-way copper land pattern, 0.25 × 0.65 mm recommended signal-paste apertures for a 0.1 mm stencil, and a conservative body/pad courtyard are now drafted in the shared footprint. The assembler still needs to approve the stencil. The catalog specifies a 1.5 ± 0.3 mm exposed FFC area and a 2.5 ± 0.3 mm reinforcing section; these do not establish the probe's 1.0 mm straight exit. The S-bend is still represented by an enclosing box, not a modeled cable surface or a verified bend radius.
 - Still open: the **45° creased fold** from the cassette's −Y window (X 26–31, Y −27.5..−21.5, Z 119.8–133, cables on edge) down to the horizontal mouths, following the drum-core method in D-052. The window and ZIF centre spans are about **9 mm apart in Y and 12 mm apart in Z**. A full-width twist needs too much free length here. First make an 11.5 mm-wide paper or scrap-FFC mock-up and verify that the two folded cables keep their stacked order: the upper cable must land on the inner ZIF. Then model the proven fold and replace `HARNESS_YAW_FFC_TO_PCB08` (currently Y −27.5..−24); its present reserve misses the ZIF span Y −40..−27.
 
+**FFC fold prediction (2026-11-09, [`check_pcb08_ffc_fold.py`](../../final/v1/cad/check_pcb08_ffc_fold.py) 10/10).** W42 and W43 leave the cassette's 300° window radially, on edge (width vertical, Z 121.35–132.85), as one two-cable band. The predicted path:
+1. 1 mm straight out of the window.
+2. A 30° on-edge curl (R 4 mm about Z, a bend through the thickness like the rolling loop) to run −Y at X 28.8.
+3. One **creased 45° fold** turning the band straight down. The crease runs from (Y −27.75, top edge) to (Y −39.25, bottom edge), so the width lands exactly on the contact span, and the folded part lies on the +X side (descent at X 30.0).
+4. A 3 mm descent, then a curl about Y (R 3.5 mm at the band centre; inner layer 3.0 mm) that lays both cables flat travelling −X from X 26.5.
+5. The curl's outer layer ends at Z 114.1 into J3; the inner layer ends 0.95 mm higher on J4's raised run over J3.
+
+Every segment clears the robot's parts (nearest: the body frame at 1.15 mm, and the cassette window, which the band passes through by design) and the CSI drop reserve. The droid CAD now carries the path as four reserves (`HARNESS_YAW_FFC_FOLD_RUN/DESCENT/CURL/FLAT`) in place of the old `HARNESS_YAW_FFC_TO_PCB08` box, and the check confirms every modelled segment sits inside them.
+
+**Results (frame calculation along the cable):**
+- **Pin mirroring is resolved: put conductor 1 of both FFCs on the TOP edge in the cassette.** Then PCB-08 contact *n* meets conductor *n* on both J3 and J4. With conductor 1 at the bottom edge the same path would mirror (1 ↔ 22). The PCB-08 numbering is frozen as drawn.
+- **PCB-14 input:** with that convention, the D-052 drum-core fold (slit at 0°, one 45° fold up) brings conductor 1 to the **−X end of PCB-14's lower ZIF** at yaw 0. PCB-14's lower-ZIF contact 1 goes there for a straight 1:1 path.
+- **Stack order:** the outer (bottom) layer at the mouths, **W42 power → J3**, must leave the window on its **clockwise side** (toward 270°); W43 signal → J4 on the anticlockwise side. The CSI peels off to the Pi separately; its own path is PCB-14/CSI work.
+- Estimates (`E`): 0.95 mm cable spacing, 0.3 mm FFC, curl radii 3–4 mm. The physical strip mock-up with the received FFC now **confirms** this before ordering; it no longer gates the design or the fab outputs.
+
 **Yaw connector naming.** Feetech calls the servo cable `5264-3P`; Molex's 5264 is the *cable receptacle* series, while its mating 3-circuit, 2.50 mm vertical PCB header is 5267 / 22035035. Treat the CAD `5264-3P header` as an envelope label, not a footprint selection. Check the received cable's key, pitch and cavity numbering against a sample before selecting the header and accepting the J8-8 fit. [Feetech servo specification](https://www.feetechrc.com/Data/feetechrc/upload/file/20240507/6385067068652648096680943.pdf); [Molex 5264](https://www.molex.com/en-us/products/series-chart/5264); [Molex 5267](https://www.molex.com/en-us/products/series-chart/5267).
 
-**Next design gate.** Mock up the cassette-window fold and update `HARNESS_YAW_FFC_TO_PCB08`; verify the open-actuator and straight-exit assumptions with a sample. The `J8-7` ground, routed schematic and populated CAD fit (18/18) are set; only the J8-6/J8-7 physical cable order may change after the mock-up. Measure the received FFC (four-wire resistance). N2(b) confirms the 6.3 V / 7/7 decision and M2's 2.4 A capacity. This board is not ready for fab output or order.
+**Next design gate.** The fold is predicted and in the CAD (above); confirm it with a strip of the received FFC, and verify the open-actuator and straight-exit assumptions with a sample. The `J8-7` ground, routed schematic and populated CAD fit (18/18) are set; the J8-6/J8-7 numbering is frozen (conductor 1 on the top edge in the cassette). Measure the received FFC (four-wire resistance). N2(b) confirms the 6.3 V / 7/7 decision and M2's 2.4 A capacity. This board is not ready for fab output or order.
 
 
 ## Schematic
@@ -125,3 +140,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-11-09:** routed checkpoint `b558d08`; D-100 amended to 6.3 V. Head same-net copper fields and a direct signal-ground link keep parity DRC 0/0/0. Whole-board Pi face survey clears 3.5 mm tail boxes, but 11 tails/pegs overlap the broad head-riser harness reserve; populated connector bodies and fold mock-up remain open.
 - **2026-11-09:** J1/J5 closed-body envelopes from the Molex drawings (SD-43045-008, 52670001-SD); STEP re-exported with every body; `check_pcb08_step_fit.py` 18/18. J1 overhangs the −X edge by 2.42 mm and J5 sits 1.55 mm +X of the CAD reserve; both real plugs clear the robot and pull ≥ 6 mm (12 mm and 8 mm). J5 tail envelope raised to 4.1 mm.
 - **2026-11-09:** final-v1 CAD placeholders for J8-1 and J8-8 moved to the populated J1/J5 positions. Fit 18/18 now requires plug-datum alignment; servo-plug probe 5/5.
+- **2026-11-09:** FFC fold predicted in CAD (`check_pcb08_ffc_fold.py` 10/10): on-edge curl, one creased 45° fold down, curl to flat. Conductor 1 on the top edge in the cassette gives a straight PCB-08 map; W42 on the window's clockwise side lands on J3. Droid reserves `HARNESS_YAW_FFC_FOLD_*` replace `HARNESS_YAW_FFC_TO_PCB08`. Step fit 18/18, ZIF stack 14/14 and servo plug 5/5 rerun clean.
