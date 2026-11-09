@@ -12,7 +12,7 @@ PCB-01 has no folder. It is the bought TIFPS0629 ([D-019](../decisions.md#d-019)
 
 | Folder | Board | BOM | Design | Procure | Integrate |
 |---|---|---|---|---|---|
-| [pcb-08-yaw-junction](pcb-08-yaw-junction/README.md) | Yaw junction | CH-083 | **Rev A layout routed** (D-100): ERC 0/0, netlist audit PASS, Nightly parity DRC 0/0/0; stepped FH34SRJ pair probed 14/14; FFC fold mock-up, N2 drop and populated fit open | — | — |
+| [pcb-08-yaw-junction](pcb-08-yaw-junction/README.md) | Yaw junction | CH-083 | **Rev A layout routed** (D-100 amended to 6.3 V): ERC 0/0, netlist audit PASS, Nightly parity DRC 0/0/0 with head copper fields; stepped FH34SRJ pair probed 14/14; FFC fold mock-up, head-riser tail conflict, M2 capacity and populated fit open | — | — |
 | [pcb-09-c0-link-adapter](pcb-09-c0-link-adapter/README.md) | C0 link adapter | CH-084 | Rev B routed: Nightly DRC 0/0/0; CAD fit 8/8, mount 7/7, integration PASS ([D-098](../decisions.md#d-098)) | `fab/revB` drafted; wait for #2813, Pi-image and populated bench gates before ordering in D-064 batch | Rev B STEP and J6 mated plug installed in final CAD; pre-mate J6 before tray insertion; physical acceptance open |
 | [pcb-10-c3-carrier](pcb-10-c3-carrier/README.md) | C3 controller carrier | CH-044 | Done, rev A | — | CAD replacement complete; physical acceptance open |
 | [pcb-11-status-led](pcb-11-status-led/README.md) | Status LED carrier | CH-085 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |

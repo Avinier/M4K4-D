@@ -12,6 +12,11 @@ CONTACTS_IN_SERIES = 4
 CONTACT_OHM_MAX = 0.1
 HEAD_CURRENT_A = 2.8
 HEAD_TERMINAL_TARGET_V = 5.23
+SELECTED_SETPOINT_V = 6.3
+PROTECTED_HEAD_CURRENT_A = 2.4
+# Conservative pre-pour PCB-08 trunk estimate at 27 um copper. Filled
+# copper lowers it, but the J5 throat prevents claiming an 8 mm path.
+PCB08_DROP_UPPER_EST_V = 0.10
 
 
 def loop_ohm(thickness_mm: float, positive: int, returns: int) -> float:
@@ -32,6 +37,11 @@ def main() -> None:
                 f"{thickness:9.3f}  {count:8d}  {count:7d}  "
                 f"{resistance:8.3f}  {drop:9.3f}  {HEAD_TERMINAL_TARGET_V + drop:14.3f}"
             )
+    thin = loop_ohm(0.027, 7, 7)
+    terminal = SELECTED_SETPOINT_V - PROTECTED_HEAD_CURRENT_A * thin - PCB08_DROP_UPPER_EST_V
+    print(f"D-100 amended: {SELECTED_SETPOINT_V:.1f} V, {PROTECTED_HEAD_CURRENT_A:.1f} A, "
+          f"thin FFC and pre-pour PCB upper estimate -> {terminal:.3f} V at head "
+          f"(target {HEAD_TERMINAL_TARGET_V:.2f} V; excludes regulator droop and other leads)")
 
 
 if __name__ == "__main__":

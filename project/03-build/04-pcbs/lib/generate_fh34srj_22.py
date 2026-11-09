@@ -64,6 +64,8 @@ items.append(line(5.7, -2.3, 6.2, -2.3, "F.SilkS", 0.12))
 items.append(line(6.2, -2.3, 6.2, -2.15, "F.SilkS", 0.12))
 items.append('\t(fp_text user "FFC ENTRY" (at 0 1.0 0) (layer "F.Fab") '
              '(effects (font (size 0.5 0.5) (thickness 0.08))))')
+items.append(f'\t(model "${{KIPRJMOD}}/../../lib/fh34.pretty/{NAME}.step" '
+             '(offset (xyz 0 0 0)) (scale (xyz 1 1 1)) (rotate (xyz 0 0 0)))')
 items.append(')')
 OUT.parent.mkdir(parents=True, exist_ok=True)
 OUT.write_text("\n".join(items) + "\n")

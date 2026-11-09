@@ -124,7 +124,7 @@ if __name__ == "__main__":
     # RS-422 J8-4 -> J8-7, SERVO_DATA J8-7 -> J8-8, yaw rail W17 -> J8-8.
     # GND_SIG joins the C0 link GND (through R1), the J8-7 references and the
     # yaw servo ground; the three power returns stay separate (D-100 amendment).
-    head, c2, disp = "+6V0_HEAD_PR", "+5V_C2", "+5V_DISPLAY"
+    head, c2, disp = "+6V3_HEAD_PR", "+5V_C2", "+5V_DISPLAY"
     add("J1", "Connector_Generic:Conn_02x03_Top_Bottom", "J8-1_HEAD_POWER_MF3",
         "pcb08:Molex_Micro-Fit_3.0_43045-0621_2x03-1MP_P3.00mm_Horizontal", 55.88, 76.2,
         {"1": head, "2": c2, "3": disp, "4": "GND_HEAD", "5": "GND_C2", "6": "GND_DISPLAY"})

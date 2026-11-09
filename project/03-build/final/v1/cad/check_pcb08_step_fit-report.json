@@ -1,7 +1,7 @@
 {
  "script": "check_pcb08_step_fit",
- "passed": 5,
- "total": 6,
+ "passed": 11,
+ "total": 13,
  "rows": [
   {
    "check": "board_outline_matches_cad",
@@ -20,8 +20,8 @@
    "check": "board_external_clearance",
    "ok": true,
    "clashes": [],
-   "nearest": "C0_RASPBERRY_PI5_EXACT_STEP",
-   "min_gap": 0.135,
+   "nearest_non_pi": null,
+   "min_non_pi_gap": 3.0,
    "bounds": [
     -22.0,
     -44.0,
@@ -35,8 +35,8 @@
    "check": "J2_external_clearance",
    "ok": true,
    "clashes": [],
-   "nearest": "C0_RASPBERRY_PI5_EXACT_STEP",
-   "min_gap": 1.73,
+   "nearest_non_pi": null,
+   "min_non_pi_gap": 3.0,
    "bounds": [
     -10.0,
     -29.0,
@@ -47,11 +47,41 @@
    ]
   },
   {
+   "check": "J3_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "nearest_non_pi": null,
+   "min_non_pi_gap": 3.0,
+   "bounds": [
+    15.7,
+    -40.0,
+    113.64,
+    19.5,
+    -27.0,
+    114.64
+   ]
+  },
+  {
+   "check": "J4_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "nearest_non_pi": null,
+   "min_non_pi_gap": 3.0,
+   "bounds": [
+    5.86,
+    -40.0,
+    113.64,
+    9.66,
+    -27.0,
+    114.64
+   ]
+  },
+  {
    "check": "R1_external_clearance",
    "ok": true,
    "clashes": [],
-   "nearest": "C0_RASPBERRY_PI5_EXACT_STEP",
-   "min_gap": 1.73,
+   "nearest_non_pi": null,
+   "min_non_pi_gap": 3.0,
    "bounds": [
     4.3,
     -25.1,
@@ -82,16 +112,190 @@
    ]
   },
   {
+   "check": "j3_closed_body_matches_stepped_probe",
+   "ok": true,
+   "bounds": [
+    15.7,
+    -40.0,
+    113.64,
+    19.5,
+    -27.0,
+    114.64
+   ]
+  },
+  {
+   "check": "j4_closed_body_matches_stepped_probe",
+   "ok": true,
+   "bounds": [
+    5.86,
+    -40.0,
+    113.64,
+    9.66,
+    -27.0,
+    114.64
+   ]
+  },
+  {
+   "check": "pi_faces_surveyed_under_whole_board",
+   "ok": true,
+   "face_count": 340,
+   "highest_face_z": 99.845,
+   "board_underside_face_gap": 12.2,
+   "note": "broad Pi bounding-box gap is not a local underside clearance"
+  },
+  {
+   "check": "through_hole_tails_clear_pi_faces",
+   "ok": true,
+   "protrusion_mm": {
+    "J1": 5.0,
+    "J5": 3.5,
+    "J6": 3.5
+   },
+   "collisions": []
+  },
+  {
+   "check": "through_hole_tails_clear_head_riser_reserve",
+   "ok": false,
+   "reserve": [
+    -22.0,
+    -40.0,
+    100.0,
+    -2.0,
+    -23.0,
+    126.0
+   ],
+   "collisions": [
+    [
+     "J1.1",
+     [
+      -15.85,
+      -37.36,
+      107.05,
+      -14.15,
+      -35.66,
+      112.05
+     ]
+    ],
+    [
+     "J1.2",
+     [
+      -15.85,
+      -34.36,
+      107.05,
+      -14.15,
+      -32.66,
+      112.05
+     ]
+    ],
+    [
+     "J1.3",
+     [
+      -15.85,
+      -31.36,
+      107.05,
+      -14.15,
+      -29.66,
+      112.05
+     ]
+    ],
+    [
+     "J1.4",
+     [
+      -12.85,
+      -37.36,
+      107.05,
+      -11.15,
+      -35.66,
+      112.05
+     ]
+    ],
+    [
+     "J1.5",
+     [
+      -12.85,
+      -34.36,
+      107.05,
+      -11.15,
+      -32.66,
+      112.05
+     ]
+    ],
+    [
+     "J1.6",
+     [
+      -12.85,
+      -31.36,
+      107.05,
+      -11.15,
+      -29.66,
+      112.05
+     ]
+    ],
+    [
+     "J1.MP",
+     [
+      -21.12,
+      -40.47,
+      107.05,
+      -17.51,
+      -36.86,
+      112.05
+     ]
+    ],
+    [
+     "J1.MP",
+     [
+      -21.12,
+      -30.17,
+      107.05,
+      -17.51,
+      -26.56,
+      112.05
+     ]
+    ],
+    [
+     "J5.1",
+     [
+      -6.53,
+      -41.71,
+      108.55,
+      -4.47,
+      -39.66,
+      112.05
+     ]
+    ],
+    [
+     "J5.2",
+     [
+      -4.03,
+      -41.71,
+      108.55,
+      -1.97,
+      -39.66,
+      112.05
+     ]
+    ],
+    [
+     "J6.1",
+     [
+      -5.17,
+      -34.48,
+      108.55,
+      -2.83,
+      -32.13,
+      112.05
+     ]
+    ]
+   ]
+  },
+  {
    "check": "populated_models_present",
    "ok": false,
    "missing": [
     "J1",
-    "J3",
-    "J4",
-    "J5",
-    "J6"
+    "J5"
    ],
-   "note": "J3/J4 FH34 footprints have no 3D model; J1/J5/J6 stock model files are unavailable"
+   "note": "J3/J4 use conservative closed-body envelopes; J1/J5 stock model files are unavailable; J6 has wire-tail envelopes"
   }
  ]
 }

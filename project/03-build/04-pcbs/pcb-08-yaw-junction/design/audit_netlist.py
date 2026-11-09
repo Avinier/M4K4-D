@@ -8,7 +8,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parents[1] / "tools"))
 import kfile as K  # noqa: E402
 
-HEAD, C2, DISP = "+6V0_HEAD_PR", "+5V_C2", "+5V_DISPLAY"
+HEAD, C2, DISP = "+6V3_HEAD_PR", "+5V_C2", "+5V_DISPLAY"
 POWER = (HEAD, C2, DISP, "GND_HEAD", "GND_C2", "GND_DISPLAY", "+11V1_YAW")
 
 

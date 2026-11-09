@@ -2,7 +2,7 @@
 	(version "E")
 	(design
 		(source "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-08-yaw-junction/design/pcb-08-yaw-junction.kicad_sch")
-		(date "2026-11-09T14:38:06")
+		(date "2026-11-09T18:34:59")
 		(tool "Eeschema 10.99.0-5923-gde08734017")
 		(sheet
 			(number "1")
@@ -1137,7 +1137,7 @@
 		)
 		(net
 			(code "3")
-			(name "/+6V0_HEAD_PR")
+			(name "/+6V3_HEAD_PR")
 			(class "Default")
 			(node
 				(ref "J1")

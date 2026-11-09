@@ -4,7 +4,7 @@
     "symbol": "Connector_Generic:Conn_02x03_Top_Bottom",
     "footprint": "pcb08:Molex_Micro-Fit_3.0_43045-0621_2x03-1MP_P3.00mm_Horizontal",
     "pins": {
-      "1": "+6V0_HEAD_PR",
+      "1": "+6V3_HEAD_PR",
       "2": "+5V_C2",
       "3": "+5V_DISPLAY",
       "4": "GND_HEAD",
@@ -42,13 +42,13 @@
     "symbol": "Connector_Generic:Conn_01x22",
     "footprint": "fh34:Hirose_FH34SRJ-22S-0.5SH_1x22_P0.50mm",
     "pins": {
-      "1": "+6V0_HEAD_PR",
-      "2": "+6V0_HEAD_PR",
-      "3": "+6V0_HEAD_PR",
-      "4": "+6V0_HEAD_PR",
-      "5": "+6V0_HEAD_PR",
-      "6": "+6V0_HEAD_PR",
-      "7": "+6V0_HEAD_PR",
+      "1": "+6V3_HEAD_PR",
+      "2": "+6V3_HEAD_PR",
+      "3": "+6V3_HEAD_PR",
+      "4": "+6V3_HEAD_PR",
+      "5": "+6V3_HEAD_PR",
+      "6": "+6V3_HEAD_PR",
+      "7": "+6V3_HEAD_PR",
       "8": "GND_HEAD",
       "9": "GND_HEAD",
       "10": "GND_HEAD",
@@ -141,7 +141,7 @@
     "symbol": "power:PWR_FLAG",
     "footprint": "",
     "pins": {
-      "1": "+6V0_HEAD_PR"
+      "1": "+6V3_HEAD_PR"
     },
     "dnp": false
   },

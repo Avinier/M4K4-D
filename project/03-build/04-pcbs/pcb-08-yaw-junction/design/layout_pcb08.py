@@ -85,6 +85,20 @@ def setup(b):
             raw = raw.replace('(layer "F.SilkS")', '(layer "F.Fab")')
         b.text = b.text[:start] + raw + b.text[end:]
         b._index()
+    model_name = "Hirose_FH34SRJ-22S-0.5SH_1x22_P0.50mm"
+    for ref in ("J3", "J4"):
+        for kind, start, end in b.items:
+            raw = b.text[start:end]
+            if kind == "footprint" and f'(property "Reference" "{ref}"' in raw:
+                break
+        else:
+            raise KeyError(ref)
+        if f"{model_name}.step" not in raw:
+            model = (f'\n\t\t(model "${{KIPRJMOD}}/../../lib/fh34.pretty/{model_name}.step" '
+                     '(offset (xyz 0 0 0)) (scale (xyz 1 1 1)) (rotate (xyz 0 0 0)))\n')
+            raw = raw[:raw.rfind(")")] + model + raw[raw.rfind(")"):]
+            b.text = b.text[:start] + raw + b.text[end:]
+            b._index()
 
 
 def route_signals(b):
@@ -154,6 +168,8 @@ def route_signals(b):
                   p, (106.8125, 123.9), via_at)
         else:
             track(f"GND_SIG_{ref}_F", "F.Cu", "/GND_SIG", 0.2, p, via_at)
+    track("GND_SIG_R1_TO_J4", "F.Cu", "/GND_SIG", 0.2,
+          (107.5, 123.9), (107.3, 124.1), (107.3, 128.25))
     parts.append(K.pour("GND_SIG_B", "B.Cu", "/GND_SIG",
                         [xy(*p) for p in OUTLINE_W], clearance=0.2,
                         min_width=0.2, solid=True))
@@ -169,14 +185,14 @@ def route_power(b):
                          [(jp, 136.515), (jp, 142.5),
                           (108.7, 142.5), (108.7, 131.8),
                           (111.0, 129.5)],
-                         1.4, "B.Cu", "/+6V0_HEAD_PR"))
-    parts.append(K.via("HEAD_POS_GROUP", (111.0, 129.5), "/+6V0_HEAD_PR", 0.8, 0.35))
+                         1.4, "B.Cu", "/+6V3_HEAD_PR"))
+    parts.append(K.via("HEAD_POS_GROUP", (111.0, 129.5), "/+6V3_HEAD_PR", 0.8, 0.35))
     parts.extend(K.track("HEAD_RET_F",
                          [(jr, 136.515), (jr, 142.5),
                           (108.8, 142.5), (108.8, 141.0),
                           (110.9, 141.0), (110.9, 133.5)],
                          1.3, "F.Cu", "/GND_HEAD"))
-    parts.append(K.pour("HEAD_POS_SEVEN", "F.Cu", "/+6V0_HEAD_PR",
+    parts.append(K.pour("HEAD_POS_SEVEN", "F.Cu", "/+6V3_HEAD_PR",
                         [(110.7, 128.1), (116.4, 128.1),
                          (116.4, 131.4), (110.7, 131.4)],
                         clearance=0.16, min_width=0.2, solid=True))
@@ -184,6 +200,17 @@ def route_power(b):
                         [(111.0, 131.6), (116.4, 131.6),
                          (116.4, 134.9), (111.0, 134.9)],
                         clearance=0.16, min_width=0.2, solid=True))
+    # Copper fields parallel the hand-routed trunks. The J5 through-hole
+    # row and the bottom board edge still create a narrow throat; the filled
+    # geometry, not this polygon's nominal width, controls resistance.
+    parts.append(K.pour("HEAD_POS_MAIN", "B.Cu", "/+6V3_HEAD_PR",
+                        [(83.3, 134.5), (111.5, 134.5),
+                         (111.5, 143.6), (83.3, 143.6)],
+                        clearance=0.2, min_width=0.2, priority=1, solid=True))
+    parts.append(K.pour("HEAD_RET_MAIN", "F.Cu", "/GND_HEAD",
+                        [(86.0, 134.5), (112.0, 134.5),
+                         (112.0, 143.6), (86.0, 143.6)],
+                        clearance=0.2, min_width=0.2, solid=True))
 
     # Four narrow 5 V/return trunks use the upper B.Cu corridor. Their
     # descending legs are ordered right to left, so none crosses another

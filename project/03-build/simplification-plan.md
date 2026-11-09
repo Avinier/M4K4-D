@@ -33,7 +33,7 @@
 | PCB-06 ×4 mics | Rev A | **Bought**: 4 I²S mic breakouts on two lanes (Q6) | — |
 | PCB-07 base IMU | HOLD | **Bought** SPI 6-axis breakout | — |
 | PCB-13 charge inlet | Rev A | **Deleted** | — |
-| PCB-08 yaw junction | Not started | **Custom, simpler**: drops the permit/status sideband, **gains the yaw servo plug** (was PCB-03 `J3-5`) | Design |
+| PCB-08 yaw junction | Rev A routed checkpoint, parity DRC 0/0/0 | **Custom, simpler**: drops the permit/status sideband, **gains the yaw servo plug** (was PCB-03 `J3-5`) | Fold, head-riser reserve, populated fit and N2(b) open |
 | PCB-09 C0 link adapter | Rev B routed and CAD fitted on `pcb-09-revB`; Nightly DRC 0/0/0, fit 8/8, mount 7/7, integration PASS | **Rev B (D-098 amendment)**; GPIO12/13 and local `i2c-gpio` INA226 wiring selected | #2813 measurements, Pi-image checks and populated bench acceptance remain before release |
 | PCB-10 C3 carrier | Rev A | **Kept, no re-spin.** `J10-12` unused; its watchdog + AND gate become the motor kill | Procure |
 | PCB-11 status LED | Rev A | **Kept** | Procure |
@@ -41,7 +41,7 @@
 | PCB-14 ×3 yaw joiners | HOLD | **Kept custom** (passive; ZIF pick still open) | Design |
 | PCB-15 nose Hall | Rev A | **Kept** | Procure |
 
-**Count:** 14 custom designs → **7** (PCB-08, 09, 10, 11, 12, 14, 15). 4 have rev A designs; **3 are left to design** (08, 12, 14), and PCB-09 rev B is routed and CAD fitted but awaits physical acceptance. All 7 go on one fab order ([D-064](decisions.md#d-064) batch). What's left to bring up is medium risk (PCB-09, 10, 12) or low (08, 11, 14, 15).
+**Count:** 14 custom designs → **7** (PCB-08, 09, 10, 11, 12, 14, 15). PCB-08 has a routed draft; PCB-12 and PCB-14 still need designs. PCB-09 rev B is routed and CAD fitted but awaits physical acceptance. All 7 go on one fab order ([D-064](decisions.md#d-064) batch).
 
 **Interface rule.** Boards already designed keep their connectors. Each bought module gets a soldered pigtail ending in the connector the board expects. No designed board is re-spun.
 
@@ -58,7 +58,7 @@
    └─ balance lead (B−, mid, B+) ─ break ─────────────────────── BALANCE PORT (rear panel)
 
  switched bus ─┬─ #3297 L / R drive (VM: SMBJ8.5A + 100 µF + 0.1 µF each)
-               ├─ buck-boost → 6.0 V head pitch/roll (W13 → J8-1; D-100)
+               ├─ buck-boost → 6.3 V head pitch/roll (W13 → J8-1; D-100 amendment)
                ├─ buck-boost → 11.1 V yaw (→ PCB-08 → W15)
                ├─ buck-boost 5 V 3 A → Pi 5 (W10 USB-C; a non-PD Pi 5 assumes 3 A)
                └─ buck-boost 5 V → C3 (W11, via a diode), amp (W12), C2 + display (W14 → J8-1)
