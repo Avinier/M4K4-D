@@ -3919,3 +3919,5 @@ CH-108's cradles are drawn around the UNMEASURED switch and INA226 outlines; re-
 - Generic FFC on CSI-2: run the CSI stream-error test through the loop and both PCB-14 ZIFs (BO-050 release check).
 - Pin mirroring of every cable at PCB-08, PCB-14 and the Pi; dual contacts do not undo a pin-1 ↔ pin-22 mirror.
 - M2 at 6.0 V from a 6.0 V pack sits in the buck-boost transition; N2(b) decides its capacity.
+
+**Amended 2026-11-09 (builder): PCB-08 signal ground.** One net, `GND_SIG`, on PCB-08: `J8-4` pin 1 (C0 link GND), `J8-7` pins 1/4/7/9 and `J8-8` pin 1 with the W17 yaw return, so `SERVO_DATA` (single-ended, C2 → yaw servo) returns beside its signal and meets the servo's ground. `GND_HEAD`, `GND_C2` and `GND_DISPLAY` stay separate on PCB-08; PCB-12 bonds `GND_SIG` to C2 logic ground, where all head grounds join. The loop Pi → M4 → star → M3 → W17 → PCB-08 → W24 → PCB-09 → Pi is accepted, with a ferrite/resistor footprint between `J8-4` pin 1 and `GND_SIG` as the fallback. Bench: W24 GND current at yaw stall, C0↔C2 common-mode voltage, `SERVO_DATA` edges at `J8-8`.
