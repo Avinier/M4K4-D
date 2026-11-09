@@ -37,13 +37,13 @@ def main():
                                         for n, c, r in (("GND_SIG", "J1", "R1"), ("GND_HEAD_REF", "J2", "R7"),
                                                         ("GND_DISPLAY", "J3", "R10")))
             and all(manifest[r]["value"] == "0R" for r in ("R1", "R7", "R10")),
-        "servo_data_one_pull_up_to_3v3": refs_of("SERVO_DATA") == {"J2", "U4", "R4", "R5", "TP1"}
+        "servo_data_one_pull_up_to_3v3": refs_of("SERVO_DATA") == {"J2", "U4", "R4", "R5"}
             and at("R5", 1) == "+3V3" and at("J2", 2) == "SERVO_DATA",
         "servo_direction_complementary": at("U3", 1) == at("U4", 1) == "SERVO_DIR"
             and manifest["U3"]["symbol"].endswith("1G126") and manifest["U4"]["symbol"].endswith("1G125")
             and at("R6", 2) == "GND",
         "display_half_duplex_de_re_tied": at("U5", 2) == at("U5", 3) == "DISP_DE" and at("R9", 2) == "GND"
-            and "R8" in dnp and [at("J3", p) for p in (1, 2, 3)] == ["GND_DISPLAY", "DISP_A", "DISP_B"],
+            and not refs_of("DISP_A") - {"U5", "J3"} and [at("J3", p) for p in (1, 2, 3)] == ["GND_DISPLAY", "DISP_B", "DISP_A"],
         "zero_uses_agreed_pads_only": zero_used == AGREED_ZERO_PADS,
         "zero_power": at("U1", 1) == "+5V_C2" and at("U1", 2) == "GND" and at("U1", 3) == "+3V3",
         "no_servo_or_display_power_on_board": not any(n in actual.values() for n in ("+6V3_HEAD_PR", "+5V_DISPLAY", "GND_HEAD")),

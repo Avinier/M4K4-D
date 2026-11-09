@@ -23,21 +23,27 @@ def line(x0, y0, x1, y1, layer, width):
             f'(stroke (width {width}) (type solid)) (layer "{layer}"))')
 
 
+def pad(number, x, y):
+    # Multi-line, as KiCad writes pads: kfile.replace_footprint carries nets onto this form.
+    return (f'\t(pad "{number}" smd roundrect\n\t\t(at {x} {y})\n\t\t(size 3 1.5)\n'
+            f'\t\t(layers "F.Cu" "F.Mask" "F.Paste")\n\t\t(roundrect_rratio 0.15)\n\t)')
+
+
 items = [
     f'(footprint "{NAME}"', '\t(version 20241229)', '\t(generator "makad-generate_esp32s3_zero")',
     '\t(layer "F.Cu")',
     '\t(descr "Waveshare ESP32-S3-Zero, 18 castellated edge pads at 2.54 mm; USB-C at -Y; bottom pads not landed")',
     '\t(tags "ESP32-S3 Zero Waveshare castellated module")',
-    '\t(property "Reference" "REF**" (at 0 -14.5 0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))',
-    f'\t(property "Value" "{NAME}" (at 0 13.2 0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))',
+    '\t(property "Reference" "REF**"\n\t\t(at 0 -14.5 0)\n\t\t(layer "F.SilkS")\n\t\t(effects (font (size 1 1) (thickness 0.15)))\n\t)',
+    f'\t(property "Value" "{NAME}"\n\t\t(at 0 13.2 0)\n\t\t(layer "F.Fab")\n\t\t(effects (font (size 1 1) (thickness 0.15)))\n\t)',
     '\t(attr smd)',
 ]
 for k in range(9):
     y = round(-10.16 + 2.54 * k, 3)
-    items.append(f'\t(pad "{k + 1}" smd roundrect (at -8.7 {y}) (size 3 1.5) (layers "F.Cu" "F.Mask" "F.Paste") (roundrect_rratio 0.15))')
+    items.append(pad(k + 1, -8.7, y))
 for k in range(9):
     y = round(10.16 - 2.54 * k, 3)
-    items.append(f'\t(pad "{k + 10}" smd roundrect (at 8.7 {y}) (size 3 1.5) (layers "F.Cu" "F.Mask" "F.Paste") (roundrect_rratio 0.15))')
+    items.append(pad(k + 10, 8.7, y))
 # Module outline and USB-C overhang on Fab; courtyard round the pads and the USB-C.
 for seg in [(-9, -11.75, 9, -11.75), (9, -11.75, 9, 11.75), (9, 11.75, -9, 11.75), (-9, 11.75, -9, -11.75),
             (-4.5, -11.75, -4.5, -13.25), (-4.5, -13.25, 4.5, -13.25), (4.5, -13.25, 4.5, -11.75)]:

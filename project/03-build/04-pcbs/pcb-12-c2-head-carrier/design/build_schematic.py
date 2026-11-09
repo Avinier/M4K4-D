@@ -128,20 +128,19 @@ if __name__ == "__main__":
     # (half-duplex RS-485, THVD1450). All head grounds join GND here through
     # 0 R links (D-100), so a ferrite or resistor can replace any one at bench.
     RFP, CFP = "Resistor_SMD:R_0603_1608Metric", "Capacitor_SMD:C_0603_1608Metric"
-    zero = {"1": "+5V_C2", "2": "GND", "3": "+3V3", "4": "DISP_DE", "5": "DISP_RX", "7": "DISP_TX",
-            "8": "LINK_TX", "9": "LINK_RX", "10": "SERVO_TX", "11": "SERVO_RX", "12": "SERVO_DIR"}
+    zero = {"1": "+5V_C2", "2": "GND", "3": "+3V3", "4": "DISP_TX", "5": "DISP_DE", "7": "DISP_RX",
+            "8": "LINK_TX", "9": "LINK_RX", "10": "SERVO_RX", "11": "SERVO_TX", "12": "SERVO_DIR"}
     add("U1", "Connector_Generic:Conn_01x18", "ESP32-S3-Zero", "pcb12:Waveshare_ESP32-S3-Zero_Castellated",
         55.88, 88.9, zero)
     add("J1", "Connector_Generic:Conn_01x07", "HEAD_LINK_C2_POWER",
         "Connector_JST:JST_GH_BM07B-GHS-TBT_1x07-1MP_P1.25mm_Vertical", 55.88, 160.02,
         {"1": "GND_SIG", "2": "C0TX_P", "3": "C0TX_N", "4": "C2TX_N", "5": "C2TX_P", "6": "+5V_C2", "7": "GND"})
     add("C1", "Device:C", "10u_10V", "Capacitor_SMD:C_0805_2012Metric", 25.4, 200.66, {"1": "+5V_C2", "2": "GND"})
-    add("C2", "Device:C", "100n", CFP, 45.72, 200.66, {"1": "+5V_C2", "2": "GND"})
     add("R1", "Device:R", "0R", RFP, 76.2, 200.66, {"1": "GND_SIG", "2": "GND"})
     # Head link: receive C0TX (terminated here, as PCB-09 terminates C2TX), drive C2TX.
     add("U2", "Interface_UART:THVD1451D", "THVD1451DR", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", 152.4, 76.2,
         {"1": "+3V3", "2": "LINK_RX", "3": "LINK_TX", "4": "GND", "5": "C2TX_P", "6": "C2TX_N", "7": "C0TX_N", "8": "C0TX_P"})
-    add("R2", "Device:R", "120", RFP, 198.12, 101.6, {"1": "C0TX_P", "2": "C0TX_N"})
+    add("R2", "Device:R", "120", RFP, 198.12, 101.6, {"1": "C0TX_N", "2": "C0TX_P"})
     add("R3", "Device:R", "4.7k", RFP, 114.3, 76.2, {"1": "+3V3", "2": "LINK_TX"})
     add("C3", "Device:C", "100n", CFP, 152.4, 116.84, {"1": "+3V3", "2": "GND"})
     # Servo bus: SERVO_DIR high transmits (U3 enabled), low receives (U4 enabled).
@@ -162,15 +161,13 @@ if __name__ == "__main__":
     # (same RO/~RE/DE/DI/GND/A/B/VCC pinout); the nested derived copy fails ERC's library match.
     add("U5", "Interface_UART:LTC2850xS8", "THVD1450DR", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", 279.4, 76.2,
         {"1": "DISP_RX", "2": "DISP_DE", "3": "DISP_DE", "4": "DISP_TX", "5": "GND", "6": "DISP_A", "7": "DISP_B", "8": "+3V3"})
-    add("R8", "Device:R", "120", RFP, 325.12, 101.6, {"1": "DISP_A", "2": "DISP_B"}, dnp=True)
     add("R9", "Device:R", "10k", RFP, 241.3, 106.68, {"1": "DISP_DE", "2": "GND"})
     add("C5", "Device:C", "100n", CFP, 279.4, 116.84, {"1": "+3V3", "2": "GND"})
     add("J3", "Connector_Generic:Conn_01x03", "DISPLAY_RS485",
         "Connector_JST:JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", 363.22, 76.2,
-        {"1": "GND_DISPLAY", "2": "DISP_A", "3": "DISP_B"})
+        {"1": "GND_DISPLAY", "2": "DISP_B", "3": "DISP_A"})
     add("R10", "Device:R", "0R", RFP, 363.22, 106.68, {"1": "GND_DISPLAY", "2": "GND"})
-    for n, net in enumerate(["SERVO_DATA", "GND"], 1):
-        add(f"TP{n}", "Connector:TestPoint", net, "TestPoint:TestPoint_Pad_D1.0mm", 320.04 + 20.32 * (n - 1), 180.34, {"1": net}, False)
+    add("TP1", "Connector:TestPoint", "GND", "TestPoint:TestPoint_Pad_D1.0mm", 320.04, 180.34, {"1": "GND"}, False)
     for n, net in enumerate(["+5V_C2", "+3V3", "GND", "GND_SIG", "GND_HEAD_REF", "GND_DISPLAY"], 1):
         add(f"#FLG0{n}", "power:PWR_FLAG", "PWR_FLAG", "", 40.64 + 25.4 * (n - 1), 236.22, {"1": net}, False)
     top = f'(kicad_sch (version 20261015) (generator "eeschema") (generator_version "10.99") (uuid "{rootid}") (paper "A3") '
@@ -181,7 +178,7 @@ if __name__ == "__main__":
                         ("HEAD LINK J9-1 ORDER + C2 POWER (W43/W42 via head junction)", 30.48, 142.24),
                         ("RS-422: RX C0TX (120R here), TX C2TX", 127, 45.72),
                         ("SERVO BUS: DIR high = TX, one 10k pull-up to 3V3, no 12 V pull-up", 127, 142.24),
-                        ("DISPLAY: half-duplex RS-485 to D1, 115200; R8 DNP", 254, 45.72),
+                        ("DISPLAY: half-duplex RS-485 to D1, 115200; THVD1450 fail-safe, no termination", 254, 45.72),
                         ("GROUND BONDS (D-100): 0R links, ferrite fallback", 30.48, 220.98)]:
         text += f'(text "{title}" (at {x} {y} 0) (effects (font (size 1.8 1.8)) (justify left bottom)) (uuid "{uid(title)}"))'
     text += ' (sheet_instances (path "/" (page "1"))) (embedded_fonts no))\n'

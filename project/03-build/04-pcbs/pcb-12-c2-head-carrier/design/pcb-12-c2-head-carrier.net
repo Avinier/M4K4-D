@@ -2,7 +2,7 @@
 	(version "E")
 	(design
 		(source "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-12-c2-head-carrier/design/pcb-12-c2-head-carrier.kicad_sch")
-		(date "2026-11-10T01:06:03")
+		(date "2026-11-10T01:53:22")
 		(tool "Eeschema 10.99.0-5923-gde08734017")
 		(sheet
 			(number "1")
@@ -94,60 +94,6 @@
 				(tstamps "/")
 			)
 			(tstamps "9add4600-516b-59c6-aa81-6cc8b552a303")
-			(units
-				(unit
-					(name "A")
-					(pins
-						(pin
-							(num "1")
-						)
-						(pin
-							(num "2")
-						)
-					)
-				)
-			)
-		)
-		(comp
-			(ref "C2")
-			(value "100n")
-			(footprint "Capacitor_SMD:C_0603_1608Metric")
-			(fields
-				(field
-					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-			)
-			(libsource
-				(lib "Device")
-				(part "C")
-				(description "Unpolarized capacitor")
-			)
-			(property
-				(name "Sheetname")
-				(value "pcb-12-c2-head-carrier")
-			)
-			(property
-				(name "Sheetfile")
-				(value "pcb-12-c2-head-carrier.kicad_sch")
-			)
-			(property
-				(name "ki_keywords")
-				(value "cap capacitor")
-			)
-			(property
-				(name "ki_fp_filters")
-				(value "C_*")
-			)
-			(sheetpath
-				(names "/")
-				(tstamps "/")
-			)
-			(tstamps "bb90e9c2-ca2e-5753-959f-55e979001a1f")
 			(units
 				(unit
 					(name "A")
@@ -883,63 +829,6 @@
 			)
 		)
 		(comp
-			(ref "R8")
-			(value "120")
-			(footprint "Resistor_SMD:R_0603_1608Metric")
-			(fields
-				(field
-					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-			)
-			(libsource
-				(lib "Device")
-				(part "R")
-				(description "Resistor")
-			)
-			(property
-				(name "Sheetname")
-				(value "pcb-12-c2-head-carrier")
-			)
-			(property
-				(name "Sheetfile")
-				(value "pcb-12-c2-head-carrier.kicad_sch")
-			)
-			(property
-				(name "dnp")
-			)
-			(property
-				(name "ki_keywords")
-				(value "R res resistor")
-			)
-			(property
-				(name "ki_fp_filters")
-				(value "R_*")
-			)
-			(sheetpath
-				(names "/")
-				(tstamps "/")
-			)
-			(tstamps "da4f963f-6dbb-5f5f-880c-99b2bd56042c")
-			(units
-				(unit
-					(name "A")
-					(pins
-						(pin
-							(num "1")
-						)
-						(pin
-							(num "2")
-						)
-					)
-				)
-			)
-		)
-		(comp
 			(ref "R9")
 			(value "10k")
 			(footprint "Resistor_SMD:R_0603_1608Metric")
@@ -1049,60 +938,6 @@
 		)
 		(comp
 			(ref "TP1")
-			(value "SERVO_DATA")
-			(footprint "TestPoint:TestPoint_Pad_D1.0mm")
-			(fields
-				(field
-					(name "Footprint") "TestPoint:TestPoint_Pad_D1.0mm")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-			)
-			(libsource
-				(lib "Connector")
-				(part "TestPoint")
-				(description "test point")
-			)
-			(property
-				(name "Sheetname")
-				(value "pcb-12-c2-head-carrier")
-			)
-			(property
-				(name "Sheetfile")
-				(value "pcb-12-c2-head-carrier.kicad_sch")
-			)
-			(property
-				(name "exclude_from_bom")
-			)
-			(property
-				(name "ki_keywords")
-				(value "test point tp")
-			)
-			(property
-				(name "ki_fp_filters")
-				(value "Pin* Test*")
-			)
-			(sheetpath
-				(names "/")
-				(tstamps "/")
-			)
-			(tstamps "992bf29d-ff96-54f5-8567-bc27f6016b97")
-			(units
-				(unit
-					(name "A")
-					(pins
-						(pin
-							(num "1")
-						)
-					)
-				)
-			)
-		)
-		(comp
-			(ref "TP2")
 			(value "GND")
 			(footprint "TestPoint:TestPoint_Pad_D1.0mm")
 			(fields
@@ -1143,7 +978,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c47e4871-6be1-5b6f-a07b-5aae208a30d6")
+			(tstamps "992bf29d-ff96-54f5-8567-bc27f6016b97")
 			(units
 				(unit
 					(name "A")
@@ -2197,11 +2032,6 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "C2")
-				(pin "1")
-				(pintype "passive")
-			)
-			(node
 				(ref "J1")
 				(pin "6")
 				(pinfunction "Pin_6_6")
@@ -2226,7 +2056,7 @@
 			)
 			(node
 				(ref "R2")
-				(pin "2")
+				(pin "1")
 				(pintype "passive")
 			)
 			(node
@@ -2248,7 +2078,7 @@
 			)
 			(node
 				(ref "R2")
-				(pin "1")
+				(pin "2")
 				(pintype "passive")
 			)
 			(node
@@ -2298,13 +2128,8 @@
 			(class "Default")
 			(node
 				(ref "J3")
-				(pin "2")
-				(pinfunction "Pin_2_2")
-				(pintype "passive")
-			)
-			(node
-				(ref "R8")
-				(pin "1")
+				(pin "3")
+				(pinfunction "Pin_3_3")
 				(pintype "passive")
 			)
 			(node
@@ -2320,13 +2145,8 @@
 			(class "Default")
 			(node
 				(ref "J3")
-				(pin "3")
-				(pinfunction "Pin_3_3")
-				(pintype "passive")
-			)
-			(node
-				(ref "R8")
 				(pin "2")
+				(pinfunction "Pin_2_2")
 				(pintype "passive")
 			)
 			(node
@@ -2347,8 +2167,8 @@
 			)
 			(node
 				(ref "U1")
-				(pin "4")
-				(pinfunction "Pin_4_4")
+				(pin "5")
+				(pinfunction "Pin_5_5")
 				(pintype "passive")
 			)
 			(node
@@ -2370,8 +2190,8 @@
 			(class "Default")
 			(node
 				(ref "U1")
-				(pin "5")
-				(pinfunction "Pin_5_5")
+				(pin "7")
+				(pinfunction "Pin_7_7")
 				(pintype "passive")
 			)
 			(node
@@ -2387,8 +2207,8 @@
 			(class "Default")
 			(node
 				(ref "U1")
-				(pin "7")
-				(pinfunction "Pin_7_7")
+				(pin "4")
+				(pinfunction "Pin_4_4")
 				(pintype "passive")
 			)
 			(node
@@ -2404,11 +2224,6 @@
 			(class "Default")
 			(node
 				(ref "C1")
-				(pin "2")
-				(pintype "passive")
-			)
-			(node
-				(ref "C2")
 				(pin "2")
 				(pintype "passive")
 			)
@@ -2459,7 +2274,7 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "TP2")
+				(ref "TP1")
 				(pin "1")
 				(pinfunction "1_1")
 				(pintype "passive")
@@ -2603,12 +2418,6 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "TP1")
-				(pin "1")
-				(pinfunction "1_1")
-				(pintype "passive")
-			)
-			(node
 				(ref "U4")
 				(pin "2")
 				(pintype "input")
@@ -2661,8 +2470,8 @@
 			(class "Default")
 			(node
 				(ref "U1")
-				(pin "11")
-				(pinfunction "Pin_11_11")
+				(pin "10")
+				(pinfunction "Pin_10_10")
 				(pintype "passive")
 			)
 			(node
@@ -2677,8 +2486,8 @@
 			(class "Default")
 			(node
 				(ref "U1")
-				(pin "10")
-				(pinfunction "Pin_10_10")
+				(pin "11")
+				(pinfunction "Pin_11_11")
 				(pintype "passive")
 			)
 			(node

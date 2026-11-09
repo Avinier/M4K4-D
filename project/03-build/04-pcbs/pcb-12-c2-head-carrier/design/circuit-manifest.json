@@ -7,14 +7,14 @@
       "1": "+5V_C2",
       "2": "GND",
       "3": "+3V3",
-      "4": "DISP_DE",
-      "5": "DISP_RX",
+      "4": "DISP_TX",
+      "5": "DISP_DE",
       "6": null,
-      "7": "DISP_TX",
+      "7": "DISP_RX",
       "8": "LINK_TX",
       "9": "LINK_RX",
-      "10": "SERVO_TX",
-      "11": "SERVO_RX",
+      "10": "SERVO_RX",
+      "11": "SERVO_TX",
       "12": "SERVO_DIR",
       "13": null,
       "14": null,
@@ -44,16 +44,6 @@
     "value": "10u_10V",
     "symbol": "Device:C",
     "footprint": "Capacitor_SMD:C_0805_2012Metric",
-    "pins": {
-      "1": "+5V_C2",
-      "2": "GND"
-    },
-    "dnp": false
-  },
-  "C2": {
-    "value": "100n",
-    "symbol": "Device:C",
-    "footprint": "Capacitor_SMD:C_0603_1608Metric",
     "pins": {
       "1": "+5V_C2",
       "2": "GND"
@@ -91,8 +81,8 @@
     "symbol": "Device:R",
     "footprint": "Resistor_SMD:R_0603_1608Metric",
     "pins": {
-      "1": "C0TX_P",
-      "2": "C0TX_N"
+      "1": "C0TX_N",
+      "2": "C0TX_P"
     },
     "dnp": false
   },
@@ -218,16 +208,6 @@
     },
     "dnp": false
   },
-  "R8": {
-    "value": "120",
-    "symbol": "Device:R",
-    "footprint": "Resistor_SMD:R_0603_1608Metric",
-    "pins": {
-      "1": "DISP_A",
-      "2": "DISP_B"
-    },
-    "dnp": true
-  },
   "R9": {
     "value": "10k",
     "symbol": "Device:R",
@@ -254,8 +234,8 @@
     "footprint": "Connector_JST:JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical",
     "pins": {
       "1": "GND_DISPLAY",
-      "2": "DISP_A",
-      "3": "DISP_B"
+      "2": "DISP_B",
+      "3": "DISP_A"
     },
     "dnp": false
   },
@@ -270,15 +250,6 @@
     "dnp": false
   },
   "TP1": {
-    "value": "SERVO_DATA",
-    "symbol": "Connector:TestPoint",
-    "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
-    "pins": {
-      "1": "SERVO_DATA"
-    },
-    "dnp": false
-  },
-  "TP2": {
     "value": "GND",
     "symbol": "Connector:TestPoint",
     "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
