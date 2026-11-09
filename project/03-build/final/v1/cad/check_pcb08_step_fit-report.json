@@ -1,7 +1,7 @@
 {
  "script": "check_pcb08_step_fit",
- "passed": 13,
- "total": 14,
+ "passed": 18,
+ "total": 18,
  "rows": [
   {
    "check": "board_outline_matches_cad",
@@ -92,6 +92,36 @@
    ]
   },
   {
+   "check": "J1_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "nearest_non_pi": null,
+   "min_non_pi_gap": 3.0,
+   "bounds": [
+    -24.42,
+    -40.875,
+    113.64,
+    -10.75,
+    -26.155,
+    121.04
+   ]
+  },
+  {
+   "check": "J5_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "nearest_non_pi": null,
+   "min_non_pi_gap": 3.0,
+   "bounds": [
+    -8.45,
+    -43.0,
+    113.64,
+    2.45,
+    -37.09,
+    119.54
+   ]
+  },
+  {
    "check": "j2_centered_on_mated_plug_datum",
    "ok": true,
    "actual": [
@@ -109,6 +139,85 @@
     0.75,
     -24.0496,
     117.8
+   ]
+  },
+  {
+   "check": "j1_real_mated_plug_clear_and_pulls_6mm",
+   "ok": true,
+   "j1_body": [
+    -24.42,
+    -40.875,
+    113.64,
+    -10.75,
+    -26.155,
+    121.04
+   ],
+   "cad_plug_reserve": [
+    -34.0,
+    -40.13,
+    113.6,
+    -22.0,
+    -26.87,
+    123.6
+   ],
+   "shift_xy": [
+    -2.42,
+    -0.015
+   ],
+   "real_plug": [
+    -36.42,
+    -40.145,
+    113.6,
+    -24.42,
+    -26.885,
+    123.6
+   ],
+   "plug_clashes": [],
+   "first_pull_hit": [
+    12.5,
+    "J1_PLUG",
+    "REAR_SERVICE_PANEL_OCTAGONAL",
+    0.774
+   ],
+   "note": "J1 mates -X and its housing overhangs the board edge by the shift; shell removed for the pull"
+  },
+  {
+   "check": "j5_real_mated_plug_clear_and_pulls_6mm",
+   "ok": true,
+   "j5_body": [
+    -8.45,
+    -43.0,
+    113.64,
+    2.45,
+    -37.09,
+    119.54
+   ],
+   "cad_header_reserve": [
+    -9.5,
+    -42.6,
+    113.6,
+    0.4,
+    -36.85,
+    119.6
+   ],
+   "shift_xy": [
+    1.55,
+    -0.32
+   ],
+   "real_plug": [
+    -7.45,
+    -42.52,
+    116.6,
+    1.45,
+    -37.57,
+    126.0
+   ],
+   "plug_clashes": [],
+   "first_pull_hit": [
+    8.5,
+    "J5_PLUG",
+    "BODY_FRAME_MAIN_PRINT",
+    9.0069
    ]
   },
   {
@@ -153,7 +262,7 @@
    "ok": true,
    "protrusion_mm": {
     "J1": 5.0,
-    "J5": 3.5,
+    "J5": 4.1,
     "J6": 3.5
    },
    "collisions": []
@@ -187,12 +296,9 @@
   },
   {
    "check": "populated_models_present",
-   "ok": false,
-   "missing": [
-    "J1",
-    "J5"
-   ],
-   "note": "J3/J4 use conservative closed-body envelopes; J1/J5 stock model files are unavailable; J6 has wire-tail envelopes"
+   "ok": true,
+   "missing": [],
+   "note": "J1/J3/J4/J5 are conservative closed-body envelopes (Molex/Hirose drawings), not vendor models; J6 has wire-tail envelopes"
   }
  ]
 }

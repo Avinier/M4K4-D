@@ -1,8 +1,9 @@
 """Probe the routed PCB-08 STEP and conservative through-hole tails.
 
-The KiCad STEP has a board core, J2/R1, and conservative closed-body J3/J4
-envelopes. J1 and J5 bodies still prevent a populated fit release; J6 is a
-pair of solder pads whose wire ends are represented by the tail probe.
+The KiCad STEP has a board core, J2/R1 stock models, and conservative
+closed-body envelopes for J3/J4 (FH34SRJ) and J1/J5 (Molex drawings, from
+04-pcbs/lib/generate_pcb08_connector_bodies.py). J6 is a pair of solder pads
+whose wire ends are represented by the tail probe.
 """
 
 import sys
@@ -21,6 +22,7 @@ import kfile as K  # noqa: E402
 
 STEP = "../../../04-pcbs/pcb-08-yaw-junction/cad/pcb-08-yaw-junction-revA.step"
 EXPECTED = {"J1", "J2", "J3", "J4", "J5", "R1"}
+TAIL = {"J1": 5.0, "J5": 4.1, "J6": 3.5}
 BOARD = ROOT / "04-pcbs" / "pcb-08-yaw-junction" / "design" / "pcb-08-yaw-junction.kicad_pcb"
 
 
@@ -35,14 +37,15 @@ def xy_overlaps(a, b):
 
 
 def tail_boxes(underside):
-    """Conservative drilled-pad tails: J1 5 mm; J5/J6 3.5 mm.
+    """Conservative drilled-pad tails: J1 5.0 mm (SD-43045-008: tails 3.18,
+    clip 4.60 +/- 0.30); J5 4.1 mm (52670001-SD: 3.5 +/- 0.6); J6 3.5 mm.
 
     XY uses a conservative square around the pad (max pad dimension plus
     0.2 mm). This includes J1's two unnetted plastic/retention pegs.
     """
     b = K.Board(BOARD)
     for ref in ("J1", "J5", "J6"):
-        protrusion = 5.0 if ref == "J1" else 3.5
+        protrusion = TAIL[ref]
         for p in b.fp(ref)["pads"]:
             if p["kind"] != "thru_hole":
                 continue
@@ -72,7 +75,9 @@ def main():
     for label, part in (("board", board), ("J2", parts["J2"].moved(loc)),
                         ("J3", parts["J3"].moved(loc)),
                         ("J4", parts["J4"].moved(loc)),
-                        ("R1", parts["R1"].moved(loc))):
+                        ("R1", parts["R1"].moved(loc)),
+                        ("J1", parts["J1"].moved(loc)),
+                        ("J5", parts["J5"].moved(loc))):
         hits = C.clashes(part, leaves, skip=skip)
         # min_gap compares leaf bounding boxes, so the large Pi vendor wrapper
         # reports a false nearest distance; the face survey below handles Pi.
@@ -88,6 +93,46 @@ def main():
             abs((jb.min.X + jb.max.X) / 2 - (reserve[0] + reserve[3]) / 2) < 0.02
             and abs((jb.min.Y + jb.max.Y) / 2 - (reserve[1] + reserve[4]) / 2) < 0.02,
             actual=box6(j2), reserve=reserve)
+    # J1/J5 against their final-assembly placeholders and pull corridors.
+    def shifted(box, dx, dy, dz=0.0):
+        return (box[0]+dx, box[1]+dy, box[2]+dz, box[3]+dx, box[4]+dy, box[5]+dz)
+
+    def as_blk(b):
+        return C.blk((b[0], b[3], b[1], b[4], b[2], b[5]))
+
+    j1 = parts["J1"].moved(loc).bounding_box()
+    plug = C.find(leaves, "YAW_JUNCTION_J8_1_MICROFIT3_6P_MATED_PLUG").box
+    dx1 = j1.min.X - plug[3]
+    dy1 = (j1.min.Y + j1.max.Y) / 2 - (plug[1] + plug[4]) / 2
+    real_plug = shifted(plug, dx1, dy1)
+    hits = C.clashes(as_blk(real_plug), leaves, skip=skip)
+    # Head service (05-harness): shell off, then unplug J8-1. Same 6 mm
+    # straight-pull standard as check_pcb08_servo_plug.py; the free travel
+    # up to 15 mm is recorded.
+    steps = [0.5 + k * 0.5 for k in range(30)]
+    pull_skip = skip + ("BODY_SHELL",)
+    pull1 = C.sweep([("J1_PLUG", as_blk(real_plug))], leaves, (-1, 0, 0), steps, skip=pull_skip)
+    r.check("j1_real_mated_plug_clear_and_pulls_6mm",
+            abs(dx1) < 0.03 and abs(dy1) < 0.03 and not hits
+            and (pull1 is None or pull1[0] > 6.0),
+            j1_body=box6(parts["J1"].moved(loc)), cad_plug_reserve=plug,
+            shift_xy=(round(dx1, 3), round(dy1, 3)), real_plug=real_plug,
+            plug_clashes=hits, first_pull_hit=pull1,
+            note="J1 mates -X; its housing overhang and plug datum are in the final CAD; shell removed for the pull")
+    j5 = parts["J5"].moved(loc).bounding_box()
+    hdr = C.find(leaves, "YAW_JUNCTION_J8_8_FEETECH_5264_3P_HEADER").box
+    plug5 = C.find(leaves, "YAW_JUNCTION_J8_8_YAW_SERVO_5264_3P_MATED_PLUG").box
+    dx5 = (j5.min.X + j5.max.X) / 2 - (hdr[0] + hdr[3]) / 2
+    dy5 = (j5.min.Y + j5.max.Y) / 2 - (hdr[1] + hdr[4]) / 2
+    real_plug5 = shifted(plug5, dx5, dy5)
+    hits5 = C.clashes(as_blk(real_plug5), leaves, skip=skip)
+    pull5 = C.sweep([("J5_PLUG", as_blk(real_plug5))], leaves, (0, 0, 1), steps, skip=skip)
+    r.check("j5_real_mated_plug_clear_and_pulls_6mm",
+            abs(dx5) < 0.03 and abs(dy5) < 0.03 and not hits5
+            and (pull5 is None or pull5[0] > 6.0),
+            j5_body=box6(parts["J5"].moved(loc)), cad_header_reserve=hdr,
+            shift_xy=(round(dx5, 3), round(dy5, 3)), real_plug=real_plug5,
+            plug_clashes=hits5, first_pull_hit=pull5)
     for ref, x0, x1 in (("J3", 15.7, 19.5), ("J4", 5.86, 9.66)):
         zif = parts[ref].moved(loc)
         zb = zif.bounding_box()
@@ -109,13 +154,13 @@ def main():
     riser = [C.find(leaves, "HARNESS_HEAD_RISER_UPPER_" + suffix)
              for suffix in ("RISE", "TO_J1")]
     lower_riser = C.find(leaves, "HARNESS_HEAD_RISER_LOWER")
-    j1_plug = C.find(leaves, "YAW_JUNCTION_J8_1_MICROFIT3_6P_MATED_PLUG")
+    j1_plug_shape = as_blk(real_plug)
     route_clashes = [hit for segment in riser for hit in
                      C.clashes(segment.shape, leaves, skip=("HARNESS", "YAW_JUNCTION"))]
     r.check("head_riser_route_reaches_j1_without_solid_clash",
             C.common(lower_riser.shape, riser[0].shape) > 1e-4
             and C.common(riser[0].shape, riser[1].shape) > 1e-4
-            and C.common(riser[1].shape, j1_plug.shape) > 1e-4
+            and C.common(riser[1].shape, j1_plug_shape) > 1e-4
             and not route_clashes,
             solid_clashes=route_clashes)
     pi_hits, riser_hits, riser_gaps = [], [], []
@@ -130,7 +175,7 @@ def main():
                 riser_hits.append((name, segment.label))
             riser_gaps.append((C.distance(tail_shape, segment.shape), name, segment.label))
     r.check("through_hole_tails_clear_pi_faces", not pi_hits,
-            protrusion_mm={"J1": 5.0, "J5": 3.5, "J6": 3.5}, collisions=pi_hits)
+            protrusion_mm=TAIL, collisions=pi_hits)
     min_riser_gap, near_tail, near_segment = min(riser_gaps)
     r.check("through_hole_tails_clear_head_riser_reserve",
             not riser_hits and min_riser_gap >= 0.5,
@@ -139,7 +184,7 @@ def main():
             nearest_segment=near_segment, required_mm=0.5)
     missing = sorted(EXPECTED - parts.keys())
     r.check("populated_models_present", not missing, missing=missing,
-            note="J3/J4 use conservative closed-body envelopes; J1/J5 stock model files are unavailable; J6 has wire-tail envelopes")
+            note="J1/J3/J4/J5 are conservative closed-body envelopes (Molex/Hirose drawings), not vendor models; J6 has wire-tail envelopes")
     r.finish()
 
 

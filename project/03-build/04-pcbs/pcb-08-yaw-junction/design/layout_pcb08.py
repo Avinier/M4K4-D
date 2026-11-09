@@ -99,6 +99,21 @@ def setup(b):
             raw = raw[:raw.rfind(")")] + model + raw[raw.rfind(")"):]
             b.text = b.text[:start] + raw + b.text[end:]
             b._index()
+    # KiCad's 3D library has no J1/J5 models; use the drawing-based envelopes
+    # from lib/generate_pcb08_connector_bodies.py.
+    for ref, lib, name in (("J1", "Connector_Molex", "Molex_Micro-Fit_3.0_43045-0621_2x03-1MP_P3.00mm_Horizontal"),
+                           ("J5", "Connector_Molex", "Molex_SPOX_5267-03A_1x03_P2.50mm_Vertical")):
+        for kind, start, end in b.items:
+            raw = b.text[start:end]
+            if kind == "footprint" and f'(property "Reference" "{ref}"' in raw:
+                break
+        else:
+            raise KeyError(ref)
+        stock = f"${{KICAD10_3DMODEL_DIR}}/{lib}.3dshapes/{name}.step"
+        if stock in raw:
+            raw = raw.replace(stock, f"${{KIPRJMOD}}/../../lib/pcb08.pretty/{name}.step")
+            b.text = b.text[:start] + raw + b.text[end:]
+            b._index()
 
 
 def route_signals(b):

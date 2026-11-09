@@ -1317,7 +1317,7 @@
 			(uuid "6007e093-b46e-42af-9b4e-c193d7452710")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_Molex.3dshapes/Molex_Micro-Fit_3.0_43045-0621_2x03-1MP_P3.00mm_Horizontal.step"
+		(model "${KIPRJMOD}/../../lib/pcb08.pretty/Molex_Micro-Fit_3.0_43045-0621_2x03-1MP_P3.00mm_Horizontal.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -2279,7 +2279,7 @@
 			(uuid "f1820280-d961-4efc-99aa-11910ebadcd4")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_Molex.3dshapes/Molex_SPOX_5267-03A_1x03_P2.50mm_Vertical.step"
+		(model "${KIPRJMOD}/../../lib/pcb08.pretty/Molex_SPOX_5267-03A_1x03_P2.50mm_Vertical.step"
 			(offset
 				(xyz 0 0 0)
 			)
