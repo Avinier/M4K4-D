@@ -1,0 +1,62 @@
+{
+  "J1": {
+    "value": "LOWER_CASSETTE_FFC",
+    "symbol": "Connector_Generic:Conn_01x22",
+    "footprint": "fh34:Hirose_FH34SRJ-22S-0.5SH_1x22_P0.50mm",
+    "pins": {
+      "1": "FFC01",
+      "2": "FFC02",
+      "3": "FFC03",
+      "4": "FFC04",
+      "5": "FFC05",
+      "6": "FFC06",
+      "7": "FFC07",
+      "8": "FFC08",
+      "9": "FFC09",
+      "10": "FFC10",
+      "11": "FFC11",
+      "12": "FFC12",
+      "13": "FFC13",
+      "14": "FFC14",
+      "15": "FFC15",
+      "16": "FFC16",
+      "17": "FFC17",
+      "18": "FFC18",
+      "19": "FFC19",
+      "20": "FFC20",
+      "21": "FFC21",
+      "22": "FFC22"
+    },
+    "dnp": false
+  },
+  "J2": {
+    "value": "UPPER_HEAD_FFC",
+    "symbol": "Connector_Generic:Conn_01x22",
+    "footprint": "fh34:Hirose_FH34SRJ-22S-0.5SH_1x22_P0.50mm",
+    "pins": {
+      "1": "FFC22",
+      "2": "FFC21",
+      "3": "FFC20",
+      "4": "FFC19",
+      "5": "FFC18",
+      "6": "FFC17",
+      "7": "FFC16",
+      "8": "FFC15",
+      "9": "FFC14",
+      "10": "FFC13",
+      "11": "FFC12",
+      "12": "FFC11",
+      "13": "FFC10",
+      "14": "FFC09",
+      "15": "FFC08",
+      "16": "FFC07",
+      "17": "FFC06",
+      "18": "FFC05",
+      "19": "FFC04",
+      "20": "FFC03",
+      "21": "FFC02",
+      "22": "FFC01"
+    },
+    "dnp": false
+  }
+}

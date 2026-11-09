@@ -1,0 +1,13 @@
+{
+  "result": "PASS",
+  "exported_component_pins_checked": 44,
+  "checks": {
+    "manifest_matches_export": true,
+    "two_connectors_only": true,
+    "lower_contact_n_is_conductor_n": true,
+    "straight_through_n_to_23_minus_n": true,
+    "22_nets_two_pins_each": true,
+    "no_contact_isolated": true
+  },
+  "errors": []
+}
