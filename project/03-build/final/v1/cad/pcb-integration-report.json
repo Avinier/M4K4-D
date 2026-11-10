@@ -1,6 +1,21 @@
 {
   "installed_boards": [
     {
+      "board": 8,
+      "instance": "MAIN",
+      "components": 6,
+      "dnp_omitted": [],
+      "core_bbox": [
+        -22.0,
+        -44.0,
+        112.045,
+        20.0,
+        -23.0,
+        113.555
+      ],
+      "transform_bbox_error_mm": 0.0
+    },
+    {
       "board": 9,
       "instance": "MAIN",
       "components": 26,
@@ -45,14 +60,74 @@
       "components": 3,
       "dnp_omitted": [],
       "core_bbox": [
-        50.473740768777,
+        50.47374076877715,
         12.700000000000003,
         278.8,
-        51.183740768777,
+        51.18374076877715,
         17.700000000000003,
         283.8
       ],
-      "transform_bbox_error_mm": 1.4921397450962104e-13
+      "transform_bbox_error_mm": 0.0
+    },
+    {
+      "board": 12,
+      "instance": "C2",
+      "components": 21,
+      "dnp_omitted": [],
+      "core_bbox": [
+        33.41874076877715,
+        -44.0,
+        197.5,
+        34.12874076877715,
+        -14.0,
+        241.0
+      ],
+      "transform_bbox_error_mm": 0.0
+    },
+    {
+      "board": 14,
+      "instance": "JOINER_1",
+      "components": 2,
+      "dnp_omitted": [],
+      "core_bbox": [
+        2.4000000000000057,
+        -5.725,
+        133.9,
+        29.599999999999994,
+        -5.015,
+        150.70000000000002
+      ],
+      "transform_bbox_error_mm": 0.0
+    },
+    {
+      "board": 14,
+      "instance": "JOINER_2",
+      "components": 2,
+      "dnp_omitted": [],
+      "core_bbox": [
+        2.4000000000000057,
+        -1.225,
+        133.9,
+        29.599999999999994,
+        -0.5150000000000001,
+        150.70000000000002
+      ],
+      "transform_bbox_error_mm": 0.0
+    },
+    {
+      "board": 14,
+      "instance": "JOINER_3",
+      "components": 2,
+      "dnp_omitted": [],
+      "core_bbox": [
+        2.4000000000000057,
+        3.275,
+        133.9,
+        29.599999999999994,
+        3.985,
+        150.70000000000002
+      ],
+      "transform_bbox_error_mm": 0.0
     },
     {
       "board": 15,
@@ -60,25 +135,59 @@
       "components": 4,
       "dnp_omitted": [],
       "core_bbox": [
-        126.245,
+        126.24499999999999,
         7.0,
         30.400000000000006,
-        126.955,
+        126.95499999999998,
         13.0,
         35.0
       ],
-      "transform_bbox_error_mm": 1.4210854715202004e-14
+      "transform_bbox_error_mm": 0.0
+    },
+    {
+      "board": 16,
+      "instance": "DISC",
+      "components": 2,
+      "dnp_omitted": [],
+      "core_bbox": [
+        -3.9812592312228503,
+        35.5,
+        155.0,
+        32.418740768777155,
+        54.0,
+        155.71
+      ],
+      "transform_bbox_error_mm": 0.0
     }
   ],
-  "board_count": 4,
-  "cross_board_neighbours": [],
+  "board_count": 10,
+  "cross_board_neighbours": [
+    {
+      "a": "PCB14/JOINER_1",
+      "b": "PCB14/JOINER_2",
+      "gap_mm": 2.7049999999999996,
+      "parts": [
+        "PCB14_JOINER_1_00__J2",
+        "PCB14_JOINER_2_02__pcb-14-yaw-rotor-joiner_PCB"
+      ]
+    },
+    {
+      "a": "PCB14/JOINER_2",
+      "b": "PCB14/JOINER_3",
+      "gap_mm": 2.705,
+      "parts": [
+        "PCB14_JOINER_2_00__J2",
+        "PCB14_JOINER_3_02__pcb-14-yaw-rotor-joiner_PCB"
+      ]
+    }
+  ],
   "cross_board_collisions": [],
   "static_interferences": [],
   "static_near_contacts": [
     {
       "part": "PCB09_MAIN_27__pcb-09-c0-link-adapter_PCB",
       "obstacle": "Makad v1/BODY_V1/BODY_PRIMARY_FRAME/BODY_FRAME_MAIN_PRINT",
-      "gap_mm": 0.2499999999999929
+      "gap_mm": 0.2499999999999858
     },
     {
       "part": "PCB10_MAIN_73__pcb-10-c3-carrier_PCB",
@@ -96,6 +205,36 @@
       "gap_mm": 0.03499999999999659
     },
     {
+      "part": "PCB12_C2_21__pcb-12-c2-head-carrier_PCB",
+      "obstacle": "Makad v1/Head v1/Head controller and light/PCB12_M2X4_BUTTON_1",
+      "gap_mm": 0.0
+    },
+    {
+      "part": "PCB12_C2_21__pcb-12-c2-head-carrier_PCB",
+      "obstacle": "Makad v1/Head v1/Head controller and light/PCB12_M2X4_BUTTON_2",
+      "gap_mm": 0.0
+    },
+    {
+      "part": "PCB12_C2_21__pcb-12-c2-head-carrier_PCB",
+      "obstacle": "Makad v1/Head v1/Roll assembly/connected_rolling_cradle_flange_ear_stalks",
+      "gap_mm": 0.0899999999999963
+    },
+    {
+      "part": "PCB14_JOINER_1_02__pcb-14-yaw-rotor-joiner_PCB",
+      "obstacle": "Makad v1/Head v1/BODY_YAW_DRIVE_MOVING/YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG",
+      "gap_mm": 0.0
+    },
+    {
+      "part": "PCB14_JOINER_2_02__pcb-14-yaw-rotor-joiner_PCB",
+      "obstacle": "Makad v1/Head v1/BODY_YAW_DRIVE_MOVING/YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG",
+      "gap_mm": 0.0
+    },
+    {
+      "part": "PCB14_JOINER_3_02__pcb-14-yaw-rotor-joiner_PCB",
+      "obstacle": "Makad v1/Head v1/BODY_YAW_DRIVE_MOVING/YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG",
+      "gap_mm": 0.0
+    },
+    {
       "part": "PCB15_NOSE_00__U1",
       "obstacle": "Makad v1/CHASSIS_V1_REFERENCE/CHASSIS_PRIMARY_FRAME/BALL_POD/BALL_POD_PRINTED_SEAT",
       "gap_mm": 0.1999999999999993
@@ -109,9 +248,33 @@
       "part": "PCB15_NOSE_04__pcb-15-nose-hall_PCB",
       "obstacle": "Makad v1/CHASSIS_V1_REFERENCE/CHASSIS_PRIMARY_FRAME/BALL_POD/BALL_POD_PRINTED_SEAT",
       "gap_mm": 0.09999999999999964
+    },
+    {
+      "part": "PCB16_DISC_02__pcb-16-head-junction_PCB",
+      "obstacle": "Makad v1/Head v1/Yaw mount/yaw_yoke_leg_55",
+      "gap_mm": 0.29999999999999716
+    },
+    {
+      "part": "PCB16_DISC_02__pcb-16-head-junction_PCB",
+      "obstacle": "Makad v1/Head v1/Yaw mount/yaw_turntable_disc_flush",
+      "gap_mm": 0.0
+    },
+    {
+      "part": "PCB16_DISC_02__pcb-16-head-junction_PCB",
+      "obstacle": "Makad v1/Head v1/Yaw mount/PCB16_M2X4_BUTTON_1",
+      "gap_mm": 0.09000000000000341
+    },
+    {
+      "part": "PCB16_DISC_02__pcb-16-head-junction_PCB",
+      "obstacle": "Makad v1/Head v1/Yaw mount/PCB16_M2X4_BUTTON_2",
+      "gap_mm": 0.09000000000000341
     }
   ],
   "sources": {
+    "8": {
+      "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-08-yaw-junction/cad/pcb-08-yaw-junction-revA.step",
+      "sha256": "6ab7ee858d3dd2e9792973b2b86d03e2c3f3078c50c1913b675feb9591fd8a8e"
+    },
     "9": {
       "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-09-c0-link-adapter/cad/pcb-09-c0-link-adapter-revB.step",
       "sha256": "9cdc22a624d87cf152938c9223c01da13296c9ee254e06e78587e9d7ade5cdc3"
@@ -124,15 +287,23 @@
       "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-11-status-led/cad/pcb-11-status-led-revA.step",
       "sha256": "f09936ce268fe6aa65814cfb2f623cecaf45f3b2a9f2669a4d237ab8e3640b06"
     },
+    "12": {
+      "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-12-c2-head-carrier/cad/pcb-12-c2-head-carrier-revA.step",
+      "sha256": "1eb421dd6e7cc7cf71a56e8575a5f8ec9b9784e79cbb5d1d825792114ad1af40"
+    },
+    "14": {
+      "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-14-yaw-rotor-joiner/cad/pcb-14-yaw-rotor-joiner-revA.step",
+      "sha256": "fa5a36d9fc7ada04338cb69ae326c4296549afa657d0206ca3a9320e1def7de5"
+    },
     "15": {
       "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-15-nose-hall/cad/pcb-15-nose-hall-revA.step",
       "sha256": "26a8aefa1c8b48197edd1d0451418a6e0ba96f506b7c78133e7ab31d4a70fd15"
+    },
+    "16": {
+      "path": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-16-head-junction/cad/pcb-16-head-junction-revA.step",
+      "sha256": "960ce8c9c40bcacaf7eef82548ab66eaa9e86a1780f025f69d116f7e8a223b0d"
     }
   },
   "scope": "replacement count, core transforms, duplicate placeholder removal and static cross-board and robot interference; intentional own fixing/plug contacts and the PCB09 socket on the Pi header excluded; the D-095 bought modules are obstacles; per-board installation sweeps are separate",
-  "checked_step": {
-    "path": "makad-v1.step",
-    "sha256": "db1bb26fda801b3f36263cb8a1f7340a6d06af12e57182d511d5cb053e0f036c"
-  },
   "result": "PASS"
 }

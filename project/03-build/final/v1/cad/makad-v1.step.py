@@ -1721,7 +1721,7 @@ CUSTOM_PCBS = [
     ("PCB-09 C0 link adapter", r"C0_LINK_ADAPTER_PCB09"),
     ("PCB-10 C3 controller carrier", r"C3_CARRIER_PCB10_WITH_DEVKITC"),
     ("PCB-11 status LED carrier", r"status_LED_(PCB08_carrier_5x5|WS2812B_2020)"),
-    # Only the ESP32-S3-Zero module is drawn; the carrier board is not modelled yet.
+    # The subsystem draws only the ESP32-S3-Zero; pcb_integration installs PCB-12 rev A (Zero included, D-102).
     ("PCB-12 C2 head controller", r"C2_ESP32_S3_Zero_23_5x18_footprint"),
     ("PCB-14 yaw rotor joiners x3", r"PCB14_JOINER_(BOARD|LOWER_ZIF|UPPER_ZIF)_[1-3]"),
     ("PCB-15 nose Hall carrier", r"BALL_NOSE_HALL_(CARRIER_PCB|DRV5055A3_SOT23)"),
