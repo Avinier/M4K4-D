@@ -89,6 +89,7 @@ The central record of every decision and change made during the build phase. New
 | [D-101](#d-101) | 2026-11-10 | PCB-14 rev A: straight-through joiner map and a 4.5 mm board pitch | J1 contact n joins J2 contact 23−n (one conductor keeps one X); boards at a 4.5 mm pitch so FH34SRJ actuators open in place; rotor posts rebuilt in final CAD; fit 22/22 | SELECTED design input; FH34SRJ sample (open actuator), FFC fold mock-up and CSI bench test decide |
 | [D-102](#d-102) | 2026-11-10 | PCB-12 rev A: signals-only C2 carrier replacing the C2 tray | PCB-12 carries the ESP32-S3-Zero, RS-422 head link, servo-bus buffers and display RS-485 on three GH headers; head FFCs end at a separate head-harness break; the board replaces the tray's front wall (22 → 30 × 43.5 mm); fit 7/7 through the roll/pitch envelope | SELECTED design input; Zero pad check, ST3215-HS bus levels (B5), head-harness break and bench decide |
 | [D-103](#d-103) | 2026-11-10 | PCB-16 head junction: the head FFCs end on a passive board on the yaw disc | W42/W43 head FFCs plug into two FH34SRJ on a board lying on the disc top beside the +Y leg foot, under the sweep floor; wires from per-net pads to the servos, PCB-12 and D1; pitch/roll wire crossings and the CSI path stay open; fit 7/7 | SELECTED design input; bundle crossings, CSI path and FFC strip mock-up decide |
+| [D-104](#d-104) | 2026-11-10 | Head wire bundle across the pitch joint through a hollow −Y trunnion, inside the −Y leg | Fixed Ø10 × 1 tube in the −Y leg pad, 6700-2Z in a grown pitch boss (D-051 pin, MR106ZZ, retainer out); closed 6.4 × 2.6 mm channel inside the leg from a plinth tunnel to a side window in the tube; flat two-row bundle; branch routes to the pitch servo and across the roll axis to PCB-12; check 7/7 over 30 poses | SELECTED design input; wire torsion cycle test, leg-channel coupon and pull-through mock-up decide |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -4046,3 +4047,60 @@ CH-108's cradles are drawn around the UNMEASURED switch and INA226 outlines; re-
 - Mass: +1.34 g (`check_batch_mass.py`).
 
 **Changed.** [PCB-16](04-pcbs/pcb-16-head-junction/README.md) (new); `04-pcbs/lib/pcb16.pretty`; `final/v1/cad/makad-v1.step.py` (`PCB16`, `PCB16_RESERVES`, disc pockets, screws) and `check_pcb16_fit.py`; [board register](04-pcbs/README.md#board-register); [workflow.md](04-pcbs/workflow.md); [BOM.csv](BOM.csv) CH-111; [05-harness](05-harness/README.md) pad map; [PCB-12](04-pcbs/pcb-12-c2-head-carrier/README.md) input.
+
+## D-104
+
+**2026-11-10 · Head wire bundle across the pitch joint through a hollow −Y trunnion, inside the −Y leg (HD-008, HD-009, HD-010; head −Y leg M011-Y and pitch frame M011-P in final/v1; head harness; amends [D-051](#d-051) −Y pivot; closes D-103's bundle crossings) · SELECTED design input; a wire torsion cycle test, a printed leg-channel coupon and a pull-through mock-up decide**
+
+**Why.** D-103 left the wire bundle from PCB-16 to the pitch servo and PCB-12 unrouted. `final/v1/cad/study_head_cable_passage.py` maps free space in each head frame over 234 clamped roll × pitch poses at 1.25 mm. It found no passage across the pitch joint inside the head: the only crossings are 50 mm or more off the axis, outside the shell, and none reach PCB-12 at 2 mm clearance. Crossings exist within 0.5 mm of the roll axis. The builder chose a hollow −Y trunnion. A survey of the −Y leg then showed the moving head within 0.63–1.0 mm of the leg from Z −15 to 38 (head-local; ear inlay, cradle, skin, saddle). The bundle therefore cannot run beside the leg, and the leg cannot grow without changing head-owned reliefs. An outboard cap over the pad does not fit either: the ear trim band recesses the outer face to Y −56.8. So the bundle runs **inside** the leg, and the trunnion is turned inside out.
+
+**Decision** (builder, 2026-11-10: hollow −Y trunnion; flat bundle inside the leg).
+1. **Inverted hollow trunnion.**
+   - **Tube:** a Ø10 × 1 aluminium tube (HD-009) is pressed into the −Y leg pad from the outer face and stays yaw-carried (Y −58…−42).
+   - **Bearing:** a 6700-2Z (10 × 15 × 4, HD-008) has its outer ring in the pitch frame's boss, which grows from r 6.2 to r 9.5 at Y −51…−43. The seat is Ø15.1, there is a Ø12.6 clearance to the tube, and the boss keeps the stop dowel's hole. The inner ring slides on the tube, so the frame keeps its axial float.
+   - **Removed:** the D-051 pin, MR106ZZ, retainer and its two screws (HD-010 superseded). The old recess and insert pockets are filled back to the leg faces.
+2. **Closed channel inside the leg.** A 6.4 × 2.6 mm void at Y −55.8…−53.2:
+   - **Entry:** from a tunnel through the plinth at Z −27.6…−24.6, 0.6 mm over the D-051 key socket.
+   - **Run:** vertical in the waist (X −63.1…−56.7), then straight to the axis.
+   - **Exit:** through a 6.4 mm side window into the tube.
+   - **Designed walls:** 0.8 mm across, 1.0 mm outboard and inboard. The tube's outboard end is open for pulling the wires and takes a printed plug afterwards.
+3. **Bundle.** 2 × AWG24 silicone (`+6V3_HEAD_PR`, `GND_HEAD`; OD 1.4 `E`) and 11 × AWG30 silicone (signals, C2 and display power; OD 0.8 `E`), laid in two rows, about 6.0 × 2.2 mm.
+   - **Yaw frame:** from PCB-16's +X exit, along the disc top under the sweep floor (X −25.9…−19.9), across to the −Y leg (Y −46.5…−40.5), up a riser beside the plinth into the tunnel, then the channel and the tube.
+   - **Pitch frame:** the wires leave the tube at Y −42 with a free length, so the pitch turn is torsion about the axis. They split there into a servo branch (r 1.2) to the pitch servo lead and a PCB-12 branch (r 1.1).
+   - **Roll frame:** the PCB-12 branch crosses the roll joint 1 mm off its axis and runs down to J1/J2.
+   - The fan-out at each end, the display leads to D1 and the servo daisy chain stay dressing.
+4. **CAD.** All edits are in `final/v1/cad/makad-v1.step.py` (`D104`, `d104_local`):
+   - `DROID_CUTS`/`DROID_ADDS` on the −Y leg and the saddle;
+   - `DROID_REMOVES` for the D-051 parts;
+   - `DROID_INSERTS` for the tube, plug, bearing and nine labelled bundle reserves.
+
+   The head sources are unchanged; the head's own `check_d051_joints.py` still describes D-051.
+
+**Check.** `final/v1/cad/check_d104_head_routes.py` **7/7** (about 1.7 h):
+- **Leg edits:** the leg is cut and the D-051 recess filled with 268 mm³; nothing is left in the channel or bore.
+- **Channel walls:** grown by the designed walls, they stay inside the leg as drawn (0 mm³ outside). The tunnel floor is 0.6 mm over the key socket.
+- **Trunnion:** tube and bearing are seated with no overlap; the boss is 1.0 mm from the leg.
+- **Neutral pose:** every yaw-carried item is clear of the yaw parts and PCB-16 (the disc run is 10 mm from J1).
+- **Motion:** 30 clamped poses with no clash across frames, including PCB-12 in the roll frame. Nearest gaps:
+
+  | Item | Gap | Nearest part |
+  |---|---|---|
+  | PCB-12 pitch branch | 1.06 mm | cradle |
+  | Boss and bearing | 1.0 mm | −Y leg |
+  | Tube | 1.3 mm | boss, through its clearance |
+  | Leg channel | 1.5 mm | stop dowel |
+  | Servo branch | 2.42 mm | — |
+  | Roll branch | 4.7 mm | — |
+  | Disc riser | 5.4 mm | — |
+
+- **Assembly:** the tube inserts from outside the leg, and the bundle fits the channel, the tunnel and the Ø8 bore.
+
+**Unverified.**
+- **Wire torsion:** 68° of pitch twists the wires over about 4–6 mm of free length past the tube end. This needs a cycle test with the chosen silicone wire before freeze, and the PCB-12 branch at r 1.1 depends on PTFE or thin-wall AWG30 if silicone runs fat.
+- **Leg strength:** the closed channel reduces the waist to a box section with 0.8 mm side walls; print a coupon and load it before freeze.
+- **Current:** AWG24 on `+6V3_HEAD_PR` covers running current; both servos stalling together relies on the stop limits.
+- **Fits:** press fit and tube window alignment are `E`.
+- **Mass:** about −1 g net (`E`; pin, MR106ZZ and retainer out; tube, 6700-2Z and the larger boss in). The head A0 register is not updated.
+- **CSI:** the CSI FFC still has no path across the joints (D-103 open).
+
+**Changed.** `final/v1/cad/makad-v1.step.py` (`D104`, `D104_Y_RESERVES`, `D104_BRANCHES`, droid tables), `check_d104_head_routes.py`, `study_head_cable_passage.py`; [BOM.csv](BOM.csv) HD-008, HD-009, HD-010.

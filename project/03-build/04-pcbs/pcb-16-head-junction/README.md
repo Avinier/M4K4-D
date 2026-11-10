@@ -75,7 +75,7 @@ The PCB-12 leads are pre-crimped single-ended GH7 and GH2 leads, cut and soldere
 
 ## Open
 
-- The wire bundle's routes across the pitch joint (near its axis, outboard of the +Y leg) and the roll joint, from the two labelled exits.
+- ~~The wire bundle's routes across the pitch and roll joints~~: routed by [D-104](../../decisions.md#d-104) from the +X exit, along the disc to the −Y leg and through a hollow −Y trunnion (`check_d104_head_routes.py` 7/7). The +Y exit reserve stays unused.
 - The CSI's path to the camera across both joints, as an FFC.
 - A strip of the received FFC to confirm the S-bends.
 - Pad sizes against the received wire.
