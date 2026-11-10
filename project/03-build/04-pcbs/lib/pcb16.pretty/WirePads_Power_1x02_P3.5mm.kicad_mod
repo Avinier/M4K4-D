@@ -1,0 +1,33 @@
+(footprint "WirePads_Power_1x02_P3.5mm"
+	(version 20241229)
+	(generator "makad-generate_wire_pads")
+	(layer "F.Cu")
+	(descr "2 bare SMD wire pads, 3.5 mm pitch, 2.2 x 3.5 mm; wire leaves toward -Y")
+	(tags "wire pad solder")
+	(property "Reference" "REF**"
+		(at 0 -2.75 0)
+		(layer "F.Fab")
+		(effects (font (size 0.8 0.8) (thickness 0.12)))
+	)
+	(property "Value" "WirePads_Power_1x02_P3.5mm"
+		(at 0 2.75 0)
+		(layer "F.Fab")
+		(effects (font (size 0.8 0.8) (thickness 0.12)))
+	)
+	(attr smd exclude_from_pos_files exclude_from_bom)
+	(pad "1" smd rect
+		(at -1.750 0)
+		(size 2.2 3.5)
+		(layers "F.Cu" "F.Mask")
+	)
+	(pad "2" smd rect
+		(at 1.750 0)
+		(size 2.2 3.5)
+		(layers "F.Cu" "F.Mask")
+	)
+	(fp_line (start -3.100 -2.000) (end 3.100 -2.000) (stroke (width 0.05) (type solid)) (layer "F.CrtYd"))
+	(fp_line (start 3.100 -2.000) (end 3.100 2.000) (stroke (width 0.05) (type solid)) (layer "F.CrtYd"))
+	(fp_line (start 3.100 2.000) (end -3.100 2.000) (stroke (width 0.05) (type solid)) (layer "F.CrtYd"))
+	(fp_line (start -3.100 2.000) (end -3.100 -2.000) (stroke (width 0.05) (type solid)) (layer "F.CrtYd"))
+	(fp_text user "1" (at -1.750 -2.350 0) (layer "F.Fab") (effects (font (size 0.6 0.6) (thickness 0.1))))
+)

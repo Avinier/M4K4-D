@@ -20,7 +20,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 |---|---|---|---|
 | 1. Design | **Rev A draft complete** ([D-102](../../decisions.md#d-102)); [fab/revA](fab/revA/README.md) written (**do not order**) | [design/](design/): Nightly ERC 0/0, netlist audit 13/13 on 76 pins, parity DRC 0/0/0; [STEP](cad/pcb-12-c2-head-carrier-revA.step); [fit](../../final/v1/cad/check_pcb12_fit.py) 7/7 | 2026-11-10 |
 | 2. Procure | Waits for the gates in [fab/revA](fab/revA/README.md#before-ordering) (D-064 batch) | Do not order fab/revA yet | — |
-| 3. Integrate | — | — | — |
+| 3. Integrate | Rev A STEP installed in final CAD (`pcb_integration.py`, integration PASS) | Physical acceptance open | 2026-11-10 |
 
 ## Inputs
 
@@ -91,6 +91,8 @@ The first layout put J2 in the board's low −Y corner. That corner sweeps into 
 
 **Not done here.** Stage 3 (the real board replacing `C2_ESP32_S3_Zero_23_5x18_footprint` in `pcb_integration.py`), rebuilding the whole-robot STEPs, the head mass register (tray off, board on), and the head-harness break.
 
+**Head-side break ([D-103](../../decisions.md#d-103), 2026-11-10).** The break D-102 left open is PCB-16, on the yaw disc. Its J4/J5 pads take the cut ends of PCB-12's J1 lead (GH7) and J2 lead (GH2), in the same pin order as J1/J2 here. Stage 3: the rev A STEP is installed in the final CAD in place of the C2 tray (`pcb_integration.py`; integration PASS, 10 boards). Mass about 5.4 g (`E`), inside the head's 20 g C2 allowance (`check_batch_mass.py`).
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
@@ -101,3 +103,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-11-09:** interface updated for D-100: J8-7 signal-only with `GND_SIG` (C0 link GND + yaw servo ground on PCB-08); bond to C2 logic ground here; head rail 6.3 V after the routed-board amendment.
 - **2026-11-10:** PCB-14 rev A ([D-101](../../decisions.md#d-101)): head FFC conductor 1 arrives on the −X edge (straight-through joiner); recorded as an input.
 - **2026-11-10:** rev A draft ([D-102](../../decisions.md#d-102)): signals-only carrier replacing the C2 tray (30 × 43.5 mm, 0.8 mm), head FFCs end at a separate head-harness break. ERC 0/0, netlist audit 13/13, parity DRC 0/0/0, fit 7/7 through the roll/pitch envelope; fab/revA written, do not order.
+- **2026-11-10:** stage 3: rev A STEP installed in the final CAD; head-side break is PCB-16 ([D-103](../../decisions.md#d-103)).

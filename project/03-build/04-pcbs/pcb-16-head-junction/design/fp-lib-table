@@ -1,0 +1,1 @@
+(fp_lib_table (version 7) (lib (name "fh34") (type "KiCad") (uri "${KIPRJMOD}/../../lib/fh34.pretty") (options "") (descr "Shared FH34SRJ footprint")) (lib (name "pcb16") (type "KiCad") (uri "${KIPRJMOD}/../../lib/pcb16.pretty") (options "") (descr "PCB-16 wire pads")))

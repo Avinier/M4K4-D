@@ -20,7 +20,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 |---|---|---|---|
 | 1. Design | **Rev A draft complete** ([D-101](../../decisions.md#d-101)): straight-through map, 4.5 mm pitch; [fab/revA](fab/revA/README.md) written (**do not order**) | [design/](design/): Nightly ERC 0/0, netlist audit 6/6 on 44 pins, parity DRC 0 violations / 0 unconnected / 0 parity; [STEP](cad/pcb-14-yaw-rotor-joiner-revA.step); [fit](../../final/v1/cad/check_pcb14_fit.py) 22/22 | 2026-11-10 |
 | 2. Procure | Waits for PCB-12 (D-064) and the gates in [fab/revA](fab/revA/README.md#before-ordering) | Do not order fab/revA yet | — |
-| 3. Integrate | — | — | — |
+| 3. Integrate | Rev A STEP installed in final CAD (`pcb_integration.py`, integration PASS) | Physical acceptance open | 2026-11-10 |
 
 ## Inputs
 
@@ -83,6 +83,8 @@ The BO-050 CSI cable is described as a Pi 5 camera cable, but the usual official
 
 **Not done here.** The real boards do not yet replace the placeholders in `pcb_integration.py` (stage 3), and the whole-robot STEPs are not rebuilt. The hand-kept body mass register still carries D-052's estimates: three boards at 0.51 g, six ZIFs at 0.4 g; rev A is about 0.47 g per board and 0.1 g per ZIF.
 
+**Stage 3 and cassette assignment (2026-11-10).** The rev A STEP is installed three times in the final CAD (`pcb_integration.py`; integration PASS, 10 boards). PCB-16 ([D-103](../../decisions.md#d-103)) needs **W43 on board 3, W42 on board 2 and the CSI on board 1**, so that the lowest head FFC in the channel is W43. Mass: −2.09 g against D-052's estimate (`check_batch_mass.py`).
+
 ## Log
 
 Record dated entries: decisions raised, revisions, orders, bench results.
@@ -91,3 +93,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-11-09:** [D-100](../../decisions.md#d-100): generic 0.3 mm cassette FFC for all three runs; the head-side CSI standard-mini end thickness stays open.
 - **2026-11-09:** PCB-08 fold prediction: conductor 1 on the cassette top edge; lower-ZIF contact 1 at −X (yaw 0).
 - **2026-11-10:** rev A draft ([D-101](../../decisions.md#d-101)): straight-through map (J1 *n* → J2 23 − *n*) and a 4.5 mm pitch so the FH34SRJ actuators open in place; rotor posts rebuilt in final CAD. ERC 0/0, netlist audit PASS, parity DRC 0/0/0, STEP, fit 22/22; fab/revA written, do not order. PCB-12 input: head FFC conductor 1 on the −X edge.
+- **2026-11-10:** stage 3: rev A STEP ×3 installed in the final CAD; cassette assignment from D-103 (board 1 CSI, 2 W42, 3 W43).

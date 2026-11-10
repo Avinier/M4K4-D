@@ -88,6 +88,7 @@ The central record of every decision and change made during the build phase. New
 | [D-100](#d-100) | 2026-11-09; amended 2026-11-09 | PCB-08 inputs: head rail 6.3 V, 7/7 power map, signal-only sideband, generic cassette FFC, stepped ZIF stack | M2 set to 6.3 V; J8-6 7/7 head power; J8-7 carries no power; three cassette FFCs are one generic 0.3 mm 22-way FFC; FH34SRJ pair stepped on the top face (probe 14/14) | SELECTED design input; received FFC resistance, M2 current and N2 decide |
 | [D-101](#d-101) | 2026-11-10 | PCB-14 rev A: straight-through joiner map and a 4.5 mm board pitch | J1 contact n joins J2 contact 23−n (one conductor keeps one X); boards at a 4.5 mm pitch so FH34SRJ actuators open in place; rotor posts rebuilt in final CAD; fit 22/22 | SELECTED design input; FH34SRJ sample (open actuator), FFC fold mock-up and CSI bench test decide |
 | [D-102](#d-102) | 2026-11-10 | PCB-12 rev A: signals-only C2 carrier replacing the C2 tray | PCB-12 carries the ESP32-S3-Zero, RS-422 head link, servo-bus buffers and display RS-485 on three GH headers; head FFCs end at a separate head-harness break; the board replaces the tray's front wall (22 → 30 × 43.5 mm); fit 7/7 through the roll/pitch envelope | SELECTED design input; Zero pad check, ST3215-HS bus levels (B5), head-harness break and bench decide |
+| [D-103](#d-103) | 2026-11-10 | PCB-16 head junction: the head FFCs end on a passive board on the yaw disc | W42/W43 head FFCs plug into two FH34SRJ on a board lying on the disc top beside the +Y leg foot, under the sweep floor; wires from per-net pads to the servos, PCB-12 and D1; pitch/roll wire crossings and the CSI path stay open; fit 7/7 | SELECTED design input; bundle crossings, CSI path and FFC strip mock-up decide |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -4006,3 +4007,42 @@ CH-108's cradles are drawn around the UNMEASURED switch and INA226 outlines; re-
 - The head harness: the FFC-to-wire break, the routes across the pitch and roll joints, and the head-side reserves `yaw_FFC_x3_*` (still at D-052's planes, not D-101's).
 
 **Changed.** [PCB-12](04-pcbs/pcb-12-c2-head-carrier/README.md) design, `cad/` and `fab/revA`; `04-pcbs/lib/pcb12.pretty`; `final/v1/cad/makad-v1.step.py` (`PCB12`, tray removal, bosses, screws) and `check_pcb12_fit.py`; [workflow.md](04-pcbs/workflow.md); [board register](04-pcbs/README.md#board-register); [BOM.csv](BOM.csv) CH-086; [05-harness](05-harness/README.md) pinouts.
+
+## D-103
+
+**2026-11-10 · PCB-16 head junction: the head FFCs end on a passive board on the yaw disc (new CH-111; head disc M012 and head FFC reserves in final/v1; head harness) · SELECTED design input; the wire-bundle crossings, the CSI path and an FFC strip mock-up decide**
+
+**Why.** D-102 left the head FFCs' far end to a separate head-harness break. The survey for it found that D-052's riser (FFCs up the +Y leg into the pitch frame) is blocked: the pitch servo fills the inside of the leg from Z ≈ 15 to 65 (head-local), against the leg's inner face. A roll × pitch sweep of the head shows the band from the disc top (Z −34.5) to about Z −24 stays clear of every moving part beside the leg foot. The head already reserves everything below Z −30.5 (`SWEEP_FLOOR_Z`) as moving-part clearance above the disc.
+
+**Decision** (builder, 2026-11-10).
+1. **A custom passive board, PCB-16, in the yaw frame.** It lies flat on the disc top past the channel's outer end, beside the +Y leg foot: head-local X −62.4…−26, Y 35.5…54, Z −34.5…−33.7, stepped to X −47.6 past the foot's flare. Everything on it, and both FFC arrivals, stays under the sweep floor.
+2. **Two FH34SRJ, stepped as on PCB-08.** The near ZIF J1 (mouth at Y 36.0) takes the **lower** channel FFC, which must be **W43 signal**. The far ZIF J2 (mouth Y 43.4) takes the upper one, **W42 power**, by a raised run over J1. The CSI is the **top** FFC and leaves the channel before Y 29.8 (`HARNESS_HEAD_CSI_EXIT_UNROUTED`).
+   - **Cassette input:** at PCB-14 this puts W43 on board 3, W42 on board 2 and the CSI on board 1 (D-101's channel stack, board 3 lowest). Confirm with the fold mock-up.
+3. **Conductor numbering.** The head FFC reaches PCB-16 with conductor 1 at −X (D-101), and the ZIFs' contact 1 is at +X. So contact *m* carries conductor 23 − *m*. Nets are named by conductor, matching PCB-08's `J8-6`/`J8-7`.
+4. **Wire pads, not connectors.** The tilting assembly comes off by unplugging at the far ends: PCB-12 J1/J2, the pitch servo's 5264 and D1. So the junction ends are soldered, with each pad sitting where its net is:
+   - J3 (2.2 × 3.5 mm): `+6V3_HEAD_PR` and `GND_HEAD` for AWG20. The GND pad also takes PCB-12's AWG28 `GND_HEAD` reference wire.
+   - J4 (1.0 × 2.5 mm column): `GND_SIG`, C0TX±, C2TX± (PCB-12 J1 lead wires 1–5) and two `SERVO_DATA` pads (the servo bundle and PCB-12's J2 lead).
+   - J5: `+5V_C2`/`GND_C2` (PCB-12 J1 lead wires 6–7).
+   - J6: `+5V_DISPLAY`/`GND_DISPLAY` to D1.
+   - The four grounds stay separate on the board; PCB-12 bonds them (D-100).
+5. **Fixing.** Two M2 × 4 button screws go into M2 inserts in the disc plate (3.2 mm pockets leave a 0.8 mm floor).
+
+**Check.**
+- **Board:** ERC 0/0; netlist audit 10/10 (W42/W43 conductor maps against `J8-6`/`J8-7`, W43 without power, pad maps, grounds separate, `SERVO_DATA` hub); Nightly parity DRC 0/0/0; the rules probe flags all four ZIF tabs.
+- **Fit:** `final/v1/cad/check_pcb16_fit.py` **7/7**:
+  - board, ZIFs and mouths placed; clear of the yaw-frame parts, 0.3 mm from the leg foot and 0.83 mm from J2;
+  - everything under the sweep floor, the highest item being the CSI-exit reserve;
+  - 10 mm clear of the moving head over 30 poses;
+  - FFC reserves into both mouths, the raised run 0.055 mm over J1;
+  - inserts in the plate;
+  - conductor 1 on contact 22.
+- The head FFC reserves are re-drawn in the droid CAD at PCB-14's D-101 planes (bore riser Y ±4.65, channel to Y 30). The head subsystem's own `yaw_FFC_x3_*` reserves are superseded there and left unchanged.
+
+**Open.**
+- The wire bundle's routes across the pitch joint (near its axis, outboard of the +Y leg) and the roll joint, from the two labelled exits.
+- The CSI's path to the camera, as an FFC across both joints.
+- A strip of the received FFC to confirm the S-bends: about R3 (`E`), 1 mm straight into J1, none into J2.
+- Pad sizes against the received wire.
+- Mass: +1.34 g (`check_batch_mass.py`).
+
+**Changed.** [PCB-16](04-pcbs/pcb-16-head-junction/README.md) (new); `04-pcbs/lib/pcb16.pretty`; `final/v1/cad/makad-v1.step.py` (`PCB16`, `PCB16_RESERVES`, disc pockets, screws) and `check_pcb16_fit.py`; [board register](04-pcbs/README.md#board-register); [workflow.md](04-pcbs/workflow.md); [BOM.csv](BOM.csv) CH-111; [05-harness](05-harness/README.md) pad map; [PCB-12](04-pcbs/pcb-12-c2-head-carrier/README.md) input.

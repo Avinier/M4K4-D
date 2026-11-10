@@ -1,0 +1,95 @@
+{
+ "script": "check_batch_mass",
+ "passed": 5,
+ "total": 5,
+ "rows": [
+  {
+   "check": "d095_state_reproduced",
+   "ok": true,
+   "mass_g": 2628.5306,
+   "a_tip": 1.6704,
+   "worst_pose_a_tip": 1.6462
+  },
+  {
+   "check": "pcb12_within_head_c2_allowance",
+   "ok": true,
+   "assembly_g_E": 5.4,
+   "allowance_g": 20.0,
+   "breakdown": {
+    "core": 1.7,
+    "zero_E": 2.0,
+    "ics_connectors_passives_E": 1.2,
+    "screws_inserts_E": 0.5
+   },
+   "note": "M008 'C2 installed allowance' 20 g (E) in 03-head mass_layout.py stays; the printed tray (removed) was owned by M008 too"
+  },
+  {
+   "check": "batch_rows",
+   "ok": true,
+   "total_g": 0.559,
+   "rows": [
+    [
+     "PCB-08 rev A replaces its estimate",
+     1.226,
+     [
+      -3.4,
+      -33.5,
+      113.0
+     ],
+     "core 1252 mm3 x 1.85 = 2.32 g + parts 2.35 g (E); less 3.0 g row and 0.44 g J8-8 block"
+    ],
+    [
+     "PCB-14 rev A x3 replaces D-052's estimate",
+     -2.09,
+     [
+      16.0,
+      -1.0,
+      142.3
+     ],
+     "3 x core 223 mm3 x 1.85 + 6 FH34SRJ (E) = 1.84 g; was 3.93 g"
+    ],
+    [
+     "YAW_ROTOR D-101 posts",
+     0.084,
+     [
+      16.0,
+      -6.5,
+      140.2
+     ],
+     "measured +69.9 mm3 x 1.2"
+    ],
+    [
+     "PCB16_HEAD_JUNCTION",
+     1.339,
+     [
+      14.2,
+      44.7,
+      155.6
+     ],
+     "core 345 mm3 x 1.85 = 0.64 g + ZIFs, screws and inserts 0.70 g (E); wires in the head harness allowance"
+    ]
+   ]
+  },
+  {
+   "check": "neutral_a_tip_above_minimum",
+   "ok": true,
+   "a_tip": 1.6695,
+   "before": 1.6704,
+   "minimum": 1.5823,
+   "mass_g": 2629.0895,
+   "mass_before_g": 2628.5306,
+   "com_mm": [
+    18.6694,
+    1.2847,
+    109.7038
+   ]
+  },
+  {
+   "check": "worst_head_pose_a_tip_above_minimum",
+   "ok": true,
+   "worst_pose_a_tip": 1.6453,
+   "before": 1.6462,
+   "minimum": 1.5823
+  }
+ ]
+}

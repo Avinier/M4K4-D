@@ -160,6 +160,7 @@ Pin 1 means the **moulded cavity number**, not the leftmost cavity in a photogra
 | PCB-12 `J1` GH7 (D-102) | 1 GND_SIG, 2 C0TX+, 3 C0TX−, 4 C2TX−, 5 C2TX+ (J9-1 order), 6 +5V_C2, 7 GND_C2. From the head FFC-to-wire break (head harness, open) |
 | PCB-12 `J2` GH2 | 1 GND_HEAD reference, 2 SERVO_DATA. Servo power does not pass PCB-12 |
 | PCB-12 `J3` GH3 | 1 GND_DISPLAY, 2 RS-485 B, 3 RS-485 A, to D1's RS-485 port; check D1's terminal labels before crimping |
+| PCB-16 head junction pads (D-103) | J3 1 +6V3_HEAD_PR, 2 GND_HEAD (AWG20 servo bundle; pad 2 also takes PCB-12 J2-lead wire 1); J4 1 GND_SIG, 2 C0TX+, 3 C0TX−, 4 C2TX−, 5 C2TX+ (PCB-12 J1-lead wires 1–5), 6 SERVO_DATA (PCB-12 J2-lead wire 2), 7 SERVO_DATA (servo bundle); J5 1 +5V_C2, 2 GND_C2 (PCB-12 J1-lead wires 6–7); J6 1 +5V_DISPLAY, 2 GND_DISPLAY (D1). Head FFCs: W43 signal in J1 (near), W42 power in J2 (far) |
 
 `J9-1/2`, `J10-2/3/4/5/6/8/10`, `J8-4/6/7` keep their designed-board maps. No J2/J3/J4/J5 or PCB-13 header is fitted. PCB-10 `J10-12` exists but is unmated.
 

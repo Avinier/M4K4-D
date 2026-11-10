@@ -55,7 +55,10 @@ def check(robot,body,head_origin):
         real=[c for c in group.children if c.label.startswith(f"PCB{n:02d}_KICAD_{revision}_")]
         expected=P.placements(n,body,head_origin)
         assert len(real)==len(expected),(n,len(real))
-        assert not any(any(t in '/'.join(path) for t in ('C3_DEVKITC_V11_','status_LED_PCB08','BALL_NOSE_HALL_CARRIER_PCB')) for path,s in walk(group) if not any('_KICAD_REV' in label for label in path))
+        assert not any(any(t in '/'.join(path) for t in ('C3_DEVKITC_V11_','status_LED_PCB08','BALL_NOSE_HALL_CARRIER_PCB',
+                                                         'YAW_JUNCTION_PCB08_BOARD','YAW_JUNCTION_J8_6_J8_7','PCB14_JOINER_',
+                                                         'C2_ESP32_S3_Zero'))
+                       for path,s in walk(group) if not any('_KICAD_REV' in label for label in path))
         for board,(instance,loc) in zip(real,expected):
             assert len(board.children)==len(P.raw_parts(n))-len(P.dnp_refs(n))
             cores=[s for s in board.children if s.label.endswith('_PCB')]
@@ -78,9 +81,20 @@ def check(robot,body,head_origin):
                 assert abs(bb[3]+0.035-(-7.2+head_origin[0]))<0.01
             elif n==15:
                 assert abs(centre[0]-126.6)<0.01 and abs(centre[1]-10)<0.01 and abs(centre[2]-32.7)<0.01
+            elif n==8:      # main plate X -22..10 and the +X extension to 20, Y -44..-23
+                assert max(abs(a-b) for a,b in zip((bb[0],bb[1],bb[3],bb[4]),(-22,-44,20,-23)))<0.01
+            elif n==12:     # head-local X -25.0 component face, Y -44..-14, Z 8..51.5
+                assert abs(bb[0]-(-25.0+head_origin[0]))<0.01 and abs(bb[1]-(-44+head_origin[1]))<0.01
+                assert abs(bb[2]-(8+head_origin[2]))<0.01 and abs(bb[5]-(51.5+head_origin[2]))<0.01
+            elif n==14:     # 27.2 mm across the tabs about the yaw axis X 16, Z 133.9..150.7, D-101 plane
+                y0=P.PCB14_BOARD_Y0[int(instance[-1])-1]
+                assert max(abs(a-b) for a,b in zip((bb[0],bb[3],bb[2],bb[5],bb[1]),(2.4,29.6,133.9,150.7,y0)))<0.01
+            elif n==16:     # head-local X -62.4..-26, Y 35.5..54 on the disc top Z -34.5
+                assert max(abs(a-b) for a,b in zip((bb[0],bb[1],bb[2],bb[3],bb[4]),
+                           (-62.4+head_origin[0],35.5+head_origin[1],-34.5+head_origin[2],-26+head_origin[0],54+head_origin[1])))<0.01
             boards.append((n,instance,board))
             records.append(dict(board=n,instance=instance,components=len(board.children)-1,dnp_omitted=sorted(P.dnp_refs(n)),core_bbox=bbox(cores[0]),transform_bbox_error_mm=err))
-    assert len(boards)==4  # D-093/D-095: PCB-05, PCB-06 x4 and PCB-13 are no longer custom boards
+    assert len(boards)==10  # PCB-08, 09, 10, 11, 12, 14 x3, 15, 16 (D-093/D-095 removed PCB-05, 06, 13)
     # All completed boards against each other, not against their old envelopes.
     pairs=[];collisions=[]
     for i,(n,inst,a) in enumerate(boards):
@@ -137,7 +151,7 @@ def main():
     else:
         print('Building current final assembly...',flush=True)
         robot=m.build_robot()
-    print('Checking the four installed boards...',flush=True)
+    print('Checking the ten installed boards...',flush=True)
     result=check(robot,m._body,m.HEAD_ORIGIN_IN_CHASSIS)
     if args.from_step:result['checked_step']=dict(path=str(args.from_step),sha256=hashlib.sha256(args.from_step.read_bytes()).hexdigest())
     result['result']='PASS' if not result['cross_board_collisions'] and not result['static_interferences'] else 'FAIL'

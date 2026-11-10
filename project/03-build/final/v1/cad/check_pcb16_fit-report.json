@@ -1,0 +1,116 @@
+{
+ "script": "check_pcb16_fit",
+ "passed": 7,
+ "total": 7,
+ "rows": [
+  {
+   "check": "board_and_zifs_placed",
+   "ok": true,
+   "core": [
+    -62.4,
+    35.5,
+    -34.5,
+    -26.0,
+    54.0,
+    -33.79
+   ],
+   "J1": [
+    -48.9,
+    36.0,
+    -33.705,
+    -35.9,
+    39.8,
+    -32.705
+   ],
+   "J2": [
+    -48.9,
+    43.4,
+    -33.705,
+    -35.9,
+    47.2,
+    -32.705
+   ]
+  },
+  {
+   "check": "clear_of_yaw_frame_parts",
+   "ok": true,
+   "clashes": {},
+   "gap_to_leg_mm": {
+    "board": 0.3,
+    "J2": 0.826,
+    "J1": 8.222,
+    "screw_1": 8.072,
+    "screw_2": 14.281
+   },
+   "board_on_disc_overlap_mm3": 0.0
+  },
+  {
+   "check": "under_the_sweep_floor",
+   "ok": true,
+   "sweep_floor_z": -30.5,
+   "highest": "HARNESS_HEAD_CSI_EXIT_UNROUTED",
+   "tops": {
+    "board": -33.79,
+    "J2": -32.705,
+    "J1": -32.705,
+    "HARNESS_HEAD_FFC_BORE_RISER": -35.95,
+    "HARNESS_HEAD_FFC_CHANNEL": -34.9,
+    "HARNESS_HEAD_FFC_RISE_TO_PCB16_J1": -33.1,
+    "HARNESS_HEAD_FFC_STRAIGHT_INTO_J1": -33.125,
+    "HARNESS_HEAD_FFC_RISE_TO_PCB16_J2": -32.35,
+    "HARNESS_HEAD_FFC_RAISED_OVER_J1": -32.35,
+    "HARNESS_HEAD_FFC_DROP_TO_PCB16_J2": -32.35,
+    "HARNESS_HEAD_CSI_EXIT_UNROUTED": -30.6,
+    "HARNESS_HEAD_BUNDLE_EXIT_X_UNROUTED": -30.6,
+    "HARNESS_HEAD_BUNDLE_EXIT_Y_UNROUTED": -30.6
+   },
+   "screw_head_top": -32.519
+  },
+  {
+   "check": "clear_of_moving_head_over_envelope",
+   "ok": true,
+   "poses": 30,
+   "clashes": [],
+   "nearest": [
+    10.04,
+    "main_octagonal_skin_lower",
+    [
+     -21.0,
+     -25.0
+    ]
+   ]
+  },
+  {
+   "check": "ffc_paths_into_the_mouths",
+   "ok": true,
+   "overlaps": {
+    "bend_J1": [],
+    "straight_J1": [],
+    "rise_J2": [],
+    "over_J1": [],
+    "drop_J2": []
+   },
+   "raised_run_above_J1_mm": 0.055,
+   "note": "S-bends are enclosing boxes (E: about R 3 mm; 1 mm straight into J1, none into J2), as PCB-08's stepped probe"
+  },
+  {
+   "check": "inserts_in_the_disc_plate",
+   "ok": true,
+   "pocket_floor_z": -37.7,
+   "plate_bottom_z": -38.5,
+   "floor_left_mm": 0.8,
+   "disc_bottom_z": -48.5,
+   "shank_in_pocket_mm3": [
+    10.367,
+    10.367
+   ]
+  },
+  {
+   "check": "conductor_1_lands_on_contact_22",
+   "ok": true,
+   "j1_contact22_x": -47.65,
+   "j1_contact1_x": -37.15,
+   "rule": "head FFC conductor 1 on its -X edge (D-101) meets contact 22 at -X: contact m = conductor 23-m"
+  }
+ ]
+}
