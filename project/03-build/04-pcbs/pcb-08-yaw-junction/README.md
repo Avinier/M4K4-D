@@ -22,7 +22,7 @@ See [workflow.md](../workflow.md) for what each stage involves and when it is do
 |---|---|---|---|
 | 1. Design | **Rev A draft complete**: routed, populated fit 18/18, fold predicted 10/10, [fab/revA](fab/revA/README.md) written (**do not order**) | [design/](design/): Nightly ERC 0/0, netlist audit 14/14 on 51 pins, parity DRC 0 violations / 0 unconnected / 0 parity; [STEP](cad/pcb-08-yaw-junction-revA.step) with detailed connector models | 2026-11-09 |
 | 2. Procure | Waits for the PCB-12/14 designs (D-064) and the bench gates in [fab/revA](fab/revA/README.md#before-ordering) | Do not order fab/revA yet | — |
-| 3. Integrate | — | — | — |
+| 3. Integrate | Rev A STEP installed in final CAD (`pcb_integration.py`, integration PASS) | Physical acceptance open | 2026-11-10 |
 
 ## Design inputs (2026-11-09; preliminary)
 
@@ -142,3 +142,4 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-11-09:** final-v1 CAD placeholders for J8-1 and J8-8 moved to the populated J1/J5 positions. Fit 18/18 now requires plug-datum alignment; servo-plug probe 5/5.
 - **2026-11-09:** FFC fold predicted in CAD (`check_pcb08_ffc_fold.py` 10/10): on-edge curl, one creased 45° fold down, curl to flat. Conductor 1 on the top edge in the cassette gives a straight PCB-08 map; W42 on the window's clockwise side lands on J3. Droid reserves `HARNESS_YAW_FFC_FOLD_*` replace `HARNESS_YAW_FFC_TO_PCB08`. Step fit 18/18, ZIF stack 14/14 and servo plug 5/5 rerun clean.
 - **2026-11-09:** detailed drawing-based 3D models for J1, J3/J4 and J5 (`lib/generate_connector_models.py`) replace the envelope boxes; renders in `cad/`. Fit check compares parts with the Pi's real faces (pins below the board), 18/18. `layout_pcb08.py --export` sets the aux origin at the bottom-left, keeps J6/TP1/TP2 out of the position files, and writes [fab/revA](fab/revA/README.md) after DRC 0/0/0: Gerbers, drill, BOM (6 parts), position and CPL. Marked do not order.
+- **2026-11-10:** stage 3: rev A STEP installed in the final CAD with the three mated plugs kept (`pcb_integration.py`; integration PASS, 10 boards). Mass +1.23 g against the register estimate (`check_batch_mass.py`, a_tip 1.6695 / 1.6453).
