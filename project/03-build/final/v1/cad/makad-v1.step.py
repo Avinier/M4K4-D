@@ -1435,6 +1435,128 @@ def pcb16_reserves_world():
             for name, (x0, x1, y0, y1, z0, z1) in PCB16_RESERVES.items()]
 
 
+# D-104: the head wire bundle crosses the pitch joint through a hollow -Y trunnion. The
+# D-051 pin, MR106ZZ, retainer and its screws are replaced by a fixed Ø10 x 1 tube pressed
+# into the -Y leg pad and a 6700-2Z (10 x 15 x 4) seated in a grown pitch-frame boss, so
+# the pitch frame turns on the yaw-carried tube. The bundle (two rows of silicone wire,
+# about 6.0 x 2.2 mm, E) leaves PCB-16 at +X, runs on the disc top under the sweep floor,
+# crosses to the -Y leg, rises into a tunnel through the plinth above the D-051 key socket,
+# climbs a closed channel inside the leg (vertical in the waist, then straight at the
+# axis), enters the tube through a side window and leaves its inboard end inside the
+# pitch frame. There it splits: servo power and data to the pitch servo lead (pitch
+# frame), and PCB-12's leads across the roll joint near its axis (roll frame). The tube's
+# outboard end takes a printed plug once the wires are pulled through. Head-local, shifted
+# to the world at the neutral pose; check_d104_head_routes.py measures it.
+D104 = dict(
+    tube=dict(r=5.0, r_in=4.0, y=(-58.0, -42.0)),          # Ø10 x 1 6063 tube (E)
+    pad_bore=dict(r=5.0, y=(-58.1, -51.9)),                 # press fit, ream on the print (E)
+    bearing=dict(sku="6700-2Z", d=10.0, D=15.0, B=4.0, y=(-51.0, -47.0)),
+    boss=dict(r=9.5, y=(-51.0, -43.0), seat_r=7.55, hole_r=6.3),
+    channel=dict(w=6.4, y=(-55.8, -53.2), dx=-17.5, bottom_z=-27.6, knee_dz=-30.0),
+    tunnel=dict(y=(-55.8, -48.0), z=(-27.6, -24.6)),
+    plug=dict(r=4.0, y=(-58.0, -56.6)),
+    stop_pin=dict(dx=-10.0, r=1.0, y=(-54.0, -46.0)),       # details.PITCH_STOP_PIN, kept clear
+)
+D104_Y_RESERVES = {   # head-local boxes (x0, x1, y0, y1, z0, z1), yaw-carried
+    "HARNESS_D104_DISC_RUN": (-25.9, -19.9, -46.5, 48.0, -34.5, -32.3),
+    "HARNESS_D104_DISC_CROSS": (-63.12, -19.9, -46.5, -40.5, -34.5, -32.3),
+    "HARNESS_D104_RISER": (-63.12, -56.72, -46.5, -44.3, -34.5, -24.6),
+    "HARNESS_D104_TUNNEL_ENTRY": (-63.12, -56.72, -48.0, -44.3, -27.6, -24.6),
+}
+# Branch centrelines, head-local, from the free-space study (study_head_cable_passage.py maps),
+# with the bundle radius: pitch-frame runs from the tube's inboard end; the roll-frame run
+# starts where PCB-12's branch crosses the roll joint 1 mm off its axis.
+D104_BRANCHES = {
+    "HARNESS_D104_SERVO_BRANCH": ("P", 1.2, ((-42.42, -40.0, 45.55), (-45.8, -8.2, 67.8),
+                                             (-39.5, 14.2, 65.2), (-35.8, 18.0, 61.5))),
+    "HARNESS_D104_PCB12_BRANCH_PITCH": ("P", 1.1, ((-42.42, -40.0, 45.55), (-25.8, -9.5, 47.8),
+                                                   (-25.8, -2.0, 47.8))),
+    "HARNESS_D104_PCB12_BRANCH_ROLL": ("R", 1.1, ((-25.8, -2.0, 47.8), (-25.8, -9.5, 46.5),
+                                                  (-33.2, -20.8, 35.2), (-33.2, -30.8, 24.0))),
+}
+
+
+def _y_cyl(r, y0, y1, x=None, z=None):
+    return layout_model.yspan(r, y0, y1, x, z)
+
+
+def _xz_bar(p0, p1, w, y0, y1):
+    """Box of width w (in XZ, across the run) and Y y0..y1 from p0 to p1, both (x, z)."""
+    dx, dz = p1[0] - p0[0], p1[1] - p0[1]
+    length = math.hypot(dx, dz)
+    bar = Box(length, y1 - y0, w).rotate(Axis.Y, -math.degrees(math.atan2(dz, dx)))
+    return bar.moved(Location(((p0[0] + p1[0]) / 2.0, (y0 + y1) / 2.0, (p0[1] + p1[1]) / 2.0)))
+
+
+def _tube_path(points, r):
+    from build123d import Solid, Sphere, Vector
+    out = None
+    for a, b in zip(points, points[1:]):
+        a, b = Vector(*a), Vector(*b)
+        seg = Solid.make_cylinder(r, (b - a).length, Plane(origin=a, z_dir=b - a))
+        out = seg if out is None else out + seg
+    for p in points[1:-1]:
+        out = out + Sphere(r).moved(Location(p))
+    return out
+
+
+def d104_local(kind):
+    """Head-local D-104 geometry by kind (one shape, or a list for 'leg_fill' and 'reserves')."""
+    m, px, pz = D104, layout_model.PITCH_X, layout_model.PITCH_Z
+    c, t = m["channel"], m["tunnel"]
+    x0, x1 = px + c["dx"] - c["w"] / 2, px + c["dx"] + c["w"] / 2
+    knee = (px + c["dx"], pz + c["knee_dz"])
+    if kind == "channel":
+        # The leg's cable void: tunnel, vertical run, knee and the straight run to the axis.
+        vert = _blk(x0, x1, c["y"][0], c["y"][1], c["bottom_z"], knee[1])
+        tun = _blk(x0, x1, t["y"][0], t["y"][1], *t["z"])
+        diag = _xz_bar(knee, (px, pz), c["w"], *c["y"])
+        return tun + vert + _y_cyl(c["w"] / 2, *c["y"], *knee) + diag
+    if kind == "pad_bore":
+        return _y_cyl(m["pad_bore"]["r"], *m["pad_bore"]["y"])
+    if kind == "leg_cut":
+        return d104_local("pad_bore") + d104_local("channel")
+    if kind == "leg_fill":
+        # The D-051 recess, seat, lip hole and insert pockets go back to solid, inside the leg
+        # face (Y -58) and inner face (Y -52), except where the new bore and channel run.
+        old = layout_model.trunnion_leg_cut() & _blk(px - 20, px + 20, -58.0, -52.0, pz - 20, pz + 20)
+        return [old - d104_local("leg_cut")]
+    if kind == "tube":
+        tb = m["tube"]
+        tube = _y_cyl(tb["r"], *tb["y"]) - _y_cyl(tb["r_in"], tb["y"][0] - 0.1, tb["y"][1] + 0.1)
+        return tube - _xz_bar(knee, (px, pz), c["w"], *c["y"])     # side window into the channel
+    if kind == "plug":
+        return _y_cyl(m["plug"]["r"], *m["plug"]["y"])
+    if kind == "bearing":
+        b = m["bearing"]
+        return _y_cyl(b["D"] / 2, *b["y"]) - _y_cyl(b["d"] / 2, b["y"][0] - 0.1, b["y"][1] + 0.1)
+    bo, sp = m["boss"], m["stop_pin"]
+    seat = _y_cyl(bo["seat_r"], bo["y"][0] - 0.1, m["bearing"]["y"][1])
+    hole = _y_cyl(bo["hole_r"], m["bearing"]["y"][1] - 0.1, bo["y"][1] + 0.1)
+    if kind == "boss_cut":
+        return seat + hole
+    if kind == "boss":
+        return _y_cyl(bo["r"], *bo["y"]) - seat - hole - _y_cyl(sp["r"], *sp["y"], px + sp["dx"], pz)
+    if kind == "reserves":
+        out = [(n, "Y", _blk(*b)) for n, b in D104_Y_RESERVES.items()]
+        out.append(("HARNESS_D104_LEG_CHANNEL", "Y", d104_local("channel")))
+        out.append(("HARNESS_D104_TUBE_BORE", "Y", _y_cyl(m["tube"]["r_in"], m["plug"]["y"][1], m["tube"]["y"][1])))
+        out += [(n, f, _tube_path(pts, r)) for n, (f, r, pts) in D104_BRANCHES.items()]
+        return out
+    raise ValueError(kind)
+
+
+def d104_world(kind):
+    s = d104_local(kind)
+    loc = Location(HEAD_ORIGIN_IN_CHASSIS)
+    if kind == "reserves":
+        return [(n, f, x.moved(loc)) for n, f, x in s]
+    return [x.moved(loc) for x in s] if isinstance(s, list) else s.moved(loc)
+
+
+_D104_GROUP = {"Y": "Yaw mount", "P": "Pitch assembly", "R": "Roll assembly"}
+
+
 def bodylift_parts():
     """D-096: the four mated body-lift pairs (two halves each, along X) and the two star splices."""
     m, out = BODYLIFT, []
@@ -1504,6 +1626,9 @@ DROID_REMOVES = [
     r"HARNESS_YAW_FFC_TO_PCB08",
     # D-102: the C2 tray and its two screws; PCB-12 carries the Zero now.
     r"C2_removable_open_rear_tray", r"C2_tray_M2_-(39|19)",
+    # D-104: the D-051 trunnion pin, MR106ZZ, retainer and its screws; the hollow trunnion replaces them.
+    r"pitch_trunnion_D6x12_pin", r"pitch_trunnion_bearing_MR106ZZ", r"pitch_trunnion_retainer",
+    r"pitch_trunnion_retainer_M2x4_(240|300)",
 ]
 DROID_INSERTS = [
     (r"C3_CARRIER_PCB10_WITH_DEVKITC", pcb10_devkitc()),
@@ -1541,6 +1666,11 @@ DROID_INSERTS = [
     *[(r"Yaw mount", _tag(sc, f"PCB16_M2X4_BUTTON_{k}", "#555b5a"))
       for k, sc in enumerate(pcb16_world("screws"), start=1)],
     *[(r"Yaw mount", res) for res in pcb16_reserves_world()],
+    # D-104: the trunnion tube and its plug (yaw-carried), the 6700-2Z (pitch frame) and the bundle reserves.
+    (r"Yaw mount", _tag(d104_world("tube"), "PITCH_TRUNNION_D104_TUBE_10X1", "#b7bfc0")),
+    (r"Yaw mount", _tag(d104_world("plug"), "PITCH_TRUNNION_D104_TUBE_PLUG", "#536b78")),
+    (r"Pitch assembly", _tag(d104_world("bearing"), "PITCH_TRUNNION_D104_BEARING_6700_2Z", "#acb5b9")),
+    *[(_D104_GROUP[f], _tag(sh, name, "#d3a860", 0.35)) for name, f, sh in d104_world("reserves")],
 ]
 
 
@@ -1581,6 +1711,9 @@ DROID_CUTS = [
     *[(r"connected_rolling_cradle_flange_ear_stalks", sh) for sh in pcb12_world("pocket")],
     # D-103: M2 insert pockets in the yaw disc for PCB-16.
     *[(r"yaw_turntable_disc_flush", sh) for sh in pcb16_world("pocket")],
+    # D-104: tube bore and cable channel in the -Y leg; bearing seat and tube clearance in the pitch boss.
+    (r"yaw_yoke_leg_-55", d104_world("leg_cut")),
+    (r"connected_pitch_frame_roll_servo_saddle", d104_world("boss_cut")),
 ]
 DROID_ADDS = [
     # D-074: PCB-09's strip must carry both rows of socket copper plus edge margin.
@@ -1624,6 +1757,9 @@ DROID_ADDS = [
     (r"YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG", pcb14_posts()),
     # D-102: PCB-12 screw bosses on the rolling crossbar.
     *[(r"connected_rolling_cradle_flange_ear_stalks", sh) for sh in pcb12_world("boss")],
+    # D-104: the D-051 recess and pockets filled back to the leg faces; the grown boss round the seat.
+    *[(r"yaw_yoke_leg_-55", sh) for sh in d104_world("leg_fill")],
+    (r"connected_pitch_frame_roll_servo_saddle", d104_world("boss")),
 ]
 DROID_MOVES = [
     # PCB-08 J1 housing overhangs the -X edge: place its mated-plug and header

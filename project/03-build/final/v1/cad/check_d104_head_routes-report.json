@@ -1,0 +1,204 @@
+{
+ "script": "check_d104_head_routes",
+ "passed": 7,
+ "total": 7,
+ "rows": [
+  {
+   "check": "leg_bore_and_channel_cut_recess_filled",
+   "ok": true,
+   "leg_volume_before_mm3": 11016.5,
+   "after_mm3": 9975.6,
+   "d051_recess_filled_mm3": 267.8,
+   "leg_left_in_channel_mm3": 0.0,
+   "leg_left_in_bore_mm3": 0.0
+  },
+  {
+   "check": "channel_walls_inside_the_leg",
+   "ok": true,
+   "designed_walls_mm": {
+    "across": 0.8,
+    "outboard": 1.0,
+    "inboard": 1.0,
+    "tunnel_floor_over_key_socket": 0.6
+   },
+   "grown_volume_outside_leg_mm3": {
+    "vertical": -0.0,
+    "diagonal": 0.0,
+    "tunnel": 0.0
+   },
+   "note": "tunnel mouth (inner face), the knee-to-axis run's last 45 % (pad, tube window) are left out"
+  },
+  {
+   "check": "tunnel_over_the_key_socket",
+   "ok": true,
+   "floor_over_socket_mm": 0.6,
+   "key_screws_clear_mm": 1.5
+  },
+  {
+   "check": "hollow_trunnion_fits",
+   "ok": true,
+   "tube_in_leg_overlap_mm3": 0.0,
+   "tube_window_left_in_channel_mm3": 0.0,
+   "bearing_overlaps_mm3": {
+    "tube": 0.0,
+    "saddle": 0.0,
+    "leg": 0.0
+   },
+   "bearing_to_seat_mm": 0.0,
+   "boss_to_leg_mm": 1.0,
+   "boss_to_stop_dowel_region_mm3": 1.863,
+   "tube_inboard_end_y": -42.0,
+   "bearing": {
+    "sku": "6700-2Z",
+    "d": 10.0,
+    "D": 15.0,
+    "B": 4.0,
+    "y": [
+     -51.0,
+     -47.0
+    ]
+   }
+  },
+  {
+   "check": "yaw_items_clear_at_neutral",
+   "ok": true,
+   "clashes": {},
+   "disc_run_to_pcb16_J1_mm": 10.0,
+   "sweep_floor_z": -30.5
+  },
+  {
+   "check": "clear_over_the_motion_envelope",
+   "ok": true,
+   "poses": 30,
+   "clashes": [],
+   "same_frame": {},
+   "nearest": {
+    "tube": [
+     1.3,
+     "connected_pitch_frame_roll_servo_saddle",
+     [
+      21.0,
+      43.0
+     ]
+    ],
+    "HARNESS_D104_LEG_CHANNEL": [
+     1.499,
+     "pitch_hard_stop_pin",
+     [
+      -21.0,
+      -25.0
+     ]
+    ],
+    "HARNESS_D104_TUBE_BORE": [
+     2.3,
+     "connected_pitch_frame_roll_servo_saddle",
+     [
+      21.0,
+      43.0
+     ]
+    ],
+    "plug": [
+     4.47,
+     "main_octagonal_skin",
+     [
+      21.0,
+      -25.0
+     ]
+    ],
+    "HARNESS_D104_RISER": [
+     5.411,
+     "main_octagonal_skin_lower",
+     [
+      21.0,
+      -25.0
+     ]
+    ],
+    "HARNESS_D104_TUNNEL_ENTRY": [
+     5.411,
+     "main_octagonal_skin_lower",
+     [
+      21.0,
+      -25.0
+     ]
+    ],
+    "boss": [
+     1.0,
+     "yaw_yoke_leg_-55",
+     [
+      -21.0,
+      -25.0
+     ]
+    ],
+    "bearing": [
+     1.0,
+     "yaw_yoke_leg_-55",
+     [
+      -21.0,
+      -25.0
+     ]
+    ],
+    "HARNESS_D104_SERVO_BRANCH": [
+     2.42,
+     "connected_rolling_cradle_flange_ear_stalks",
+     [
+      -21.0,
+      -25.0
+     ]
+    ],
+    "HARNESS_D104_PCB12_BRANCH_PITCH": [
+     1.063,
+     "connected_rolling_cradle_flange_ear_stalks",
+     [
+      21.0,
+      43.0
+     ]
+    ],
+    "HARNESS_D104_PCB12_BRANCH_ROLL": [
+     4.7,
+     "connected_pitch_frame_roll_servo_saddle",
+     [
+      21.0,
+      43.0
+     ]
+    ]
+   }
+  },
+  {
+   "check": "tube_inserts_from_outside_and_bundle_fits",
+   "ok": true,
+   "insertion_path_clashes": [],
+   "bundle": {
+    "rows": 2,
+    "width_mm": 6.0,
+    "thickness_mm": 2.2,
+    "wires": "2 x AWG24 silicone (+6V3_HEAD_PR, GND_HEAD; OD 1.4 E), 11 x AWG30 silicone (OD 0.8 E)"
+   },
+   "fits_mm": {
+    "channel": [
+     6.4,
+     2.6
+    ],
+    "tunnel": [
+     6.4,
+     3.0
+    ],
+    "tube_bore_diag": 8.0,
+    "ribbon_diag": 6.39
+   },
+   "branches": {
+    "HARNESS_D104_SERVO_BRANCH": {
+     "frame": "P",
+     "radius": 1.2
+    },
+    "HARNESS_D104_PCB12_BRANCH_PITCH": {
+     "frame": "P",
+     "radius": 1.1
+    },
+    "HARNESS_D104_PCB12_BRANCH_ROLL": {
+     "frame": "R",
+     "radius": 1.1
+    }
+   }
+  }
+ ]
+}
