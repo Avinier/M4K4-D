@@ -1,0 +1,170 @@
+{
+  "J1": {
+    "value": "W43_HEAD_SIGNAL_FFC",
+    "symbol": "Connector_Generic:Conn_01x22",
+    "footprint": "fh34:Hirose_FH34SRJ-22S-0.5SH_1x22_P0.50mm",
+    "pins": {
+      "1": null,
+      "2": null,
+      "3": null,
+      "4": null,
+      "5": null,
+      "6": null,
+      "7": null,
+      "8": null,
+      "9": null,
+      "10": null,
+      "11": null,
+      "12": null,
+      "13": null,
+      "14": "GND_SIG",
+      "15": "SERVO_DATA",
+      "16": "GND_SIG",
+      "17": "C2TX_P",
+      "18": "C2TX_N",
+      "19": "GND_SIG",
+      "20": "C0TX_N",
+      "21": "C0TX_P",
+      "22": "GND_SIG"
+    },
+    "dnp": false
+  },
+  "J2": {
+    "value": "W42_HEAD_POWER_FFC",
+    "symbol": "Connector_Generic:Conn_01x22",
+    "footprint": "fh34:Hirose_FH34SRJ-22S-0.5SH_1x22_P0.50mm",
+    "pins": {
+      "1": "GND_DISPLAY",
+      "2": "GND_DISPLAY",
+      "3": "+5V_DISPLAY",
+      "4": "+5V_DISPLAY",
+      "5": "GND_C2",
+      "6": "GND_C2",
+      "7": "+5V_C2",
+      "8": "+5V_C2",
+      "9": "GND_HEAD",
+      "10": "GND_HEAD",
+      "11": "GND_HEAD",
+      "12": "GND_HEAD",
+      "13": "GND_HEAD",
+      "14": "GND_HEAD",
+      "15": "GND_HEAD",
+      "16": "+6V3_HEAD_PR",
+      "17": "+6V3_HEAD_PR",
+      "18": "+6V3_HEAD_PR",
+      "19": "+6V3_HEAD_PR",
+      "20": "+6V3_HEAD_PR",
+      "21": "+6V3_HEAD_PR",
+      "22": "+6V3_HEAD_PR"
+    },
+    "dnp": false
+  },
+  "J3": {
+    "value": "HEAD_POWER_PADS",
+    "symbol": "Connector_Generic:Conn_01x02",
+    "footprint": "pcb16:WirePads_Power_1x02_P3.5mm",
+    "pins": {
+      "1": "+6V3_HEAD_PR",
+      "2": "GND_HEAD"
+    },
+    "dnp": false
+  },
+  "J4": {
+    "value": "SIGNAL_PADS",
+    "symbol": "Connector_Generic:Conn_01x07",
+    "footprint": "pcb16:WirePads_1x07_P1.5mm",
+    "pins": {
+      "1": "GND_SIG",
+      "2": "C0TX_P",
+      "3": "C0TX_N",
+      "4": "C2TX_N",
+      "5": "C2TX_P",
+      "6": "SERVO_DATA",
+      "7": "SERVO_DATA"
+    },
+    "dnp": false
+  },
+  "J5": {
+    "value": "C2_POWER_PADS",
+    "symbol": "Connector_Generic:Conn_01x02",
+    "footprint": "pcb16:WirePads_1x02_P1.5mm",
+    "pins": {
+      "1": "+5V_C2",
+      "2": "GND_C2"
+    },
+    "dnp": false
+  },
+  "J6": {
+    "value": "DISPLAY_POWER_PADS",
+    "symbol": "Connector_Generic:Conn_01x02",
+    "footprint": "pcb16:WirePads_1x02_P1.5mm",
+    "pins": {
+      "1": "+5V_DISPLAY",
+      "2": "GND_DISPLAY"
+    },
+    "dnp": false
+  },
+  "#FLG01": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "+6V3_HEAD_PR"
+    },
+    "dnp": false
+  },
+  "#FLG02": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "GND_HEAD"
+    },
+    "dnp": false
+  },
+  "#FLG03": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "+5V_C2"
+    },
+    "dnp": false
+  },
+  "#FLG04": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "GND_C2"
+    },
+    "dnp": false
+  },
+  "#FLG05": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "+5V_DISPLAY"
+    },
+    "dnp": false
+  },
+  "#FLG06": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "GND_DISPLAY"
+    },
+    "dnp": false
+  },
+  "#FLG07": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "GND_SIG"
+    },
+    "dnp": false
+  }
+}

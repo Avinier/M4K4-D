@@ -1,0 +1,17 @@
+{
+  "result": "PASS",
+  "exported_component_pins_checked": 44,
+  "checks": {
+    "manifest_matches_export": true,
+    "w42_conductors_match_j8_6": true,
+    "w43_conductors_match_j8_7": true,
+    "w43_carries_no_power": true,
+    "pcb12_j1_lead_pads": true,
+    "servo_data_pads": true,
+    "head_power_pads": true,
+    "display_power": true,
+    "grounds_kept_separate": true,
+    "servo_data_hub": true
+  },
+  "errors": []
+}
