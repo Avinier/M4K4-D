@@ -60,14 +60,14 @@
       "components": 3,
       "dnp_omitted": [],
       "core_bbox": [
-        50.47374076877715,
+        50.473740768777,
         12.700000000000003,
         278.8,
-        51.18374076877715,
+        51.183740768777,
         17.700000000000003,
         283.8
       ],
-      "transform_bbox_error_mm": 0.0
+      "transform_bbox_error_mm": 1.4921397450962104e-13
     },
     {
       "board": 12,
@@ -75,14 +75,14 @@
       "components": 21,
       "dnp_omitted": [],
       "core_bbox": [
-        33.41874076877715,
+        33.418740768777,
         -44.0,
         197.5,
-        34.12874076877715,
+        34.128740768777,
         -14.0,
         241.0
       ],
-      "transform_bbox_error_mm": 0.0
+      "transform_bbox_error_mm": 1.4921397450962104e-13
     },
     {
       "board": 14,
@@ -135,14 +135,14 @@
       "components": 4,
       "dnp_omitted": [],
       "core_bbox": [
-        126.24499999999999,
+        126.245,
         7.0,
         30.400000000000006,
-        126.95499999999998,
+        126.955,
         13.0,
         35.0
       ],
-      "transform_bbox_error_mm": 0.0
+      "transform_bbox_error_mm": 1.4210854715202004e-14
     },
     {
       "board": 16,
@@ -150,14 +150,14 @@
       "components": 2,
       "dnp_omitted": [],
       "core_bbox": [
-        -3.9812592312228503,
+        -3.981259231219994,
         35.5,
         155.0,
-        32.418740768777155,
+        32.41874076878001,
         54.0,
         155.71
       ],
-      "transform_bbox_error_mm": 0.0
+      "transform_bbox_error_mm": 2.8563817977556027e-12
     }
   ],
   "board_count": 10,
@@ -187,7 +187,7 @@
     {
       "part": "PCB09_MAIN_27__pcb-09-c0-link-adapter_PCB",
       "obstacle": "Makad v1/BODY_V1/BODY_PRIMARY_FRAME/BODY_FRAME_MAIN_PRINT",
-      "gap_mm": 0.2499999999999858
+      "gap_mm": 0.2499999999999929
     },
     {
       "part": "PCB10_MAIN_73__pcb-10-c3-carrier_PCB",
@@ -305,5 +305,9 @@
     }
   },
   "scope": "replacement count, core transforms, duplicate placeholder removal and static cross-board and robot interference; intentional own fixing/plug contacts and the PCB09 socket on the Pi header excluded; the D-095 bought modules are obstacles; per-board installation sweeps are separate",
+  "checked_step": {
+    "path": "makad-v1.step",
+    "sha256": "e7858587906fab5d1f66c2857bb925fada71cf887c279ace146bf3aab6e9907a"
+  },
   "result": "PASS"
 }
