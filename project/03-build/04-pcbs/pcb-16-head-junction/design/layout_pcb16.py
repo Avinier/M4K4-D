@@ -41,19 +41,21 @@ def xy(x, y):
     return (round(x + 142.4, 4), round(150.0 - y, 4))
 
 
-# Board on the disc top: X -49.5..-26, Y 41..59.5, plus a tab to X -62.4 for Y 41..46.5
-# (clear of the leg foot's inner face at Y 48.2 and its M2 screw heads from Y 46.97).
-OUTLINE_PTS = [(80.0, 103.5), (92.9, 103.5), (92.9, 90.5), (116.4, 90.5), (116.4, 109.0), (80.0, 109.0)]
-HOLES = [(85.0, 106.3), (110.5, 92.5)]
+# Board on the disc top: X -49.5..-26, Y 35.5..54, stepped in to X -47.6 (from Y 47.7) beside the leg foot
+# (whose flare reaches X -47.95 from Y 48.05 up at the disc), plus a tab to X -62.4 for Y 35.5..41, clear of the
+# foot's M2 screw heads (from Y 46.97). Both ZIFs end before the leg's inner face.
+OUTLINE_PTS = [(80.0, 114.5), (80.0, 109.0), (92.9, 109.0), (92.9, 102.3), (94.8, 102.3), (94.8, 96.0),
+               (116.4, 96.0), (116.4, 114.5)]
+HOLES = [(85.0, 111.8), (110.5, 98.0)]
 HOLE_R, HEAD_KEEPOUT_R = 1.1, 2.0
 
 PLACE = {   # ref: (x, y, rotation)
-    "J1": (100.0, 106.6, 0),     # near FH34SRJ, W43 signal, mouth -Y (entry face Y 41.5)
-    "J2": (100.0, 98.5, 0),      # far FH34SRJ, W42 power, mouth -Y (entry face Y 49.6)
-    "J3": (98.0, 92.55, 0),      # +6V3 / GND_HEAD AWG20 pads over J2's power contacts
-    "J5": (102.75, 92.55, 0),    # +5V_C2 / GND_C2
-    "J6": (105.75, 92.55, 0),    # +5V_DISPLAY / GND_DISPLAY
-    "J4": (114.5, 101.5, 270),   # signal column: GND_SIG, C0TX+/-, C2TX-/+, SERVO_DATA x2
+    "J1": (100.0, 112.1, 0),     # near FH34SRJ, W43 signal, mouth -Y (entry face Y 36.0)
+    "J2": (100.0, 104.7, 0),     # far FH34SRJ, W42 power, mouth -Y (entry face Y 43.4, rear Y 47.2)
+    "J3": (98.0, 98.05, 0),      # +6V3 / GND_HEAD AWG20 pads over J2's power contacts
+    "J5": (102.75, 98.05, 0),    # +5V_C2 / GND_C2
+    "J6": (105.75, 98.05, 0),    # +5V_DISPLAY / GND_DISPLAY
+    "J4": (114.5, 107.0, 270),   # signal column: GND_SIG, C0TX+/-, C2TX-/+, SERVO_DATA x2
 }
 BARE = ("J3", "J4", "J5", "J6")
 
@@ -154,7 +156,7 @@ def setup(b):
         raw = re.sub(r'(\(property "Reference" "[^"]+"\s+\(at [^)]*\)\s+\(layer )"F.SilkS"', r'\1"F.Fab"', raw, count=1)
         b.text = b.text[:start] + raw + b.text[end:]
         b._index()
-    b.add(f'\t(gr_text "PCB-16 A"\n\t\t(at 100 102.6 0)\n\t\t(layer "B.SilkS")\n\t\t(uuid "{K.gen_uuid("silk-id")}")\n'
+    b.add(f'\t(gr_text "PCB-16 A"\n\t\t(at 100 108.1 0)\n\t\t(layer "B.SilkS")\n\t\t(uuid "{K.gen_uuid("silk-id")}")\n'
           '\t\t(effects\n\t\t\t(font\n\t\t\t\t(size 1 1)\n\t\t\t\t(thickness 0.16)\n\t\t\t)\n\t\t\t(justify mirror)\n\t\t)\n\t)')
 
 
@@ -180,11 +182,11 @@ def route(b):
     def t(name, net, width, layer, *pts):
         parts.extend(K.track(name, octo(list(pts)), width, layer, "/" + net))
 
-    rear2 = 96.6    # J2 pad rear ends are at y 96.45
+    rear2 = 102.1   # J2 pad rear ends are at y 101.95
     # ---- W42 power (J2) straight back into the far-edge pads.
-    parts.append(K.pour("HEAD_POS", "F.Cu", "/+6V3_HEAD_PR", [(94.4, 94.0), (98.0, 94.0), (98.0, 97.3), (94.4, 97.3)],
+    parts.append(K.pour("HEAD_POS", "F.Cu", "/+6V3_HEAD_PR", [(94.5, 99.5), (98.0, 99.5), (98.0, 102.8), (94.5, 102.8)],
                         clearance=0.16, min_width=0.2, solid=True))
-    parts.append(K.pour("HEAD_RET", "F.Cu", "/GND_HEAD", [(98.0, 94.0), (101.5, 94.0), (101.5, 97.3), (98.0, 97.3)],
+    parts.append(K.pour("HEAD_RET", "F.Cu", "/GND_HEAD", [(98.0, 99.5), (101.5, 99.5), (101.5, 102.8), (98.0, 102.8)],
                         clearance=0.16, min_width=0.2, solid=True))
     for name, net, (m_a, m_b), pad in (("C2P", "+5V_C2", (8, 7), P("J5", 1)), ("C2R", "GND_C2", (6, 5), P("J5", 2)),
                                        ("DSP", "+5V_DISPLAY", (4, 3), P("J6", 1)), ("DSR", "GND_DISPLAY", (2, 1), P("J6", 2))):
@@ -193,30 +195,30 @@ def route(b):
         t(name + "_BAR", net, 0.3, "F.Cu", (a[0], rear2), (c[0], rear2))
         t(name + "_A", net, 0.3, "F.Cu", a, (a[0], rear2))
         t(name + "_B", net, 0.3, "F.Cu", c, (c[0], rear2))
-        t(name, net, 0.3, "F.Cu", (xc, rear2), (xc, 95.3), (pad[0], round(95.3 - abs(pad[0] - xc), 4)), pad)
+        t(name, net, 0.3, "F.Cu", (xc, rear2), (xc, 100.8), (pad[0], round(100.8 - abs(pad[0] - xc), 4)), pad)
 
     # ---- W43 signal (J1). GND_SIG contacts join under the ZIF body (Hirose allows traces there).
     g = [P("J1", m) for m in (22, 19, 16, 14)]
-    bar = 105.9
+    bar = 111.4
     for k, gp in enumerate(g):
         t(f"GSIG_STUB_{k}", "GND_SIG", 0.2, "F.Cu", gp, (gp[0], bar))
     t("GSIG_BAR", "GND_SIG", 0.2, "F.Cu", (g[0][0], bar), (g[-1][0], bar))
     # Lanes: leftmost contact highest; each turns up at its column and lands on J4.
     lanes = (  # net, contact, lane y, turn x, J4 pad
-        ("GND_SIG", 22, 101.8, 108.5, 1), ("C0TX_P", 21, 102.4, 109.1, 2), ("C0TX_N", 20, 102.8, 109.7, 3),
-        ("C2TX_N", 18, 103.2, 110.3, 4), ("C2TX_P", 17, 103.6, 110.9, 5))
+        ("GND_SIG", 22, 107.3, 108.5, 1), ("C0TX_P", 21, 107.9, 109.1, 2), ("C0TX_N", 20, 108.3, 109.7, 3),
+        ("C2TX_N", 18, 108.7, 110.3, 4), ("C2TX_P", 17, 109.1, 110.9, 5))
     for net, m, ly, tx, pin in lanes:
         sp, dp = P("J1", m), P("J4", pin)
         t(f"LANE_{m}", net, 0.2, "F.Cu", sp, (sp[0], ly + 0.3), (sp[0] + 0.3, ly), (tx, ly), (tx, dp[1]), dp)
     sd, d6, d7 = P("J1", 15), P("J4", 6), P("J4", 7)
-    t("LANE_SD", "SERVO_DATA", 0.2, "F.Cu", sd, (sd[0], 104.0), (111.5, 104.0), (111.5, d7[1]), d7)
+    t("LANE_SD", "SERVO_DATA", 0.2, "F.Cu", sd, (sd[0], 109.5), (111.5, 109.5), (111.5, d7[1]), d7)
     t("LANE_SD6", "SERVO_DATA", 0.2, "F.Cu", (111.5, d6[1]), d6)
     b.add(*parts)
 
 
 FAB = HERE.parent / "fab" / "revA"
 STEP = HERE.parent / "cad" / f"{NAME}-revA.step"
-ORIGIN = (80.0, 109.0)
+ORIGIN = (80.0, 114.5)
 LAYERS = "F.Cu,B.Cu,F.Mask,B.Mask,F.Paste,B.Paste,F.Silkscreen,B.Silkscreen,Edge.Cuts"
 
 

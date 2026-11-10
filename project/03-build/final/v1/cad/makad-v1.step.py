@@ -1392,6 +1392,49 @@ def pcb12_world(kind):
     return [s.moved(Location(HEAD_ORIGIN_IN_CHASSIS)) for s in pcb12_local(kind)]
 
 
+# D-103: PCB-16 head junction, flat on the yaw disc's top over the channel's outer end,
+# beside the +Y leg foot, under the head's sweep floor (Z -30.5). Head-local: board
+# X -62.4..-26, Y 35.5..54 (stepped to X -47.6 past the foot), Z -34.5..-33.7; two M2 x 4 button screws into M2 inserts
+# in the disc plate. The head FFC reserves follow PCB-14's D-101 planes (-4.5/0/+4.5)
+# up the bore, along the channel and up into PCB-16's two mouths; the CSI exit and
+# the two wire-bundle exits are labelled keep-outs, still unrouted. Shifted to the
+# world by HEAD_ORIGIN_IN_CHASSIS at the neutral pose; check_pcb16_fit.py measures it.
+PCB16 = dict(holes=((-57.4, 38.2), (-31.9, 52.0)), board_z=(-34.5, -33.7), insert_r=1.6, insert_depth=3.2)
+PCB16_RESERVES = {   # head-local (x0, x1, y0, y1, z0, z1)
+    "HARNESS_HEAD_FFC_BORE_RISER": (-48.3, -36.5, -4.65, 4.65, -38.8, -35.95),
+    "HARNESS_HEAD_FFC_CHANNEL": (-48.3, -36.5, -4.65, 30.0, -35.95, -34.9),
+    "HARNESS_HEAD_FFC_RISE_TO_PCB16_J1": (-48.15, -36.65, 30.0, 35.0, -36.0, -33.1),
+    "HARNESS_HEAD_FFC_STRAIGHT_INTO_J1": (-48.15, -36.65, 35.0, 36.0, -33.425, -33.125),
+    "HARNESS_HEAD_FFC_RISE_TO_PCB16_J2": (-48.15, -36.65, 29.8, 35.0, -35.65, -32.35),
+    "HARNESS_HEAD_FFC_RAISED_OVER_J1": (-48.15, -36.65, 35.0, 40.3, -32.65, -32.35),
+    "HARNESS_HEAD_FFC_DROP_TO_PCB16_J2": (-48.15, -36.65, 40.3, 43.4, -33.45, -32.35),
+    "HARNESS_HEAD_CSI_EXIT_UNROUTED": (-48.3, -36.5, 22.0, 29.8, -35.5, -30.6),
+    "HARNESS_HEAD_BUNDLE_EXIT_X_UNROUTED": (-26.6, -22.0, 38.0, 48.0, -34.5, -30.6),
+    "HARNESS_HEAD_BUNDLE_EXIT_Y_UNROUTED": (-47.5, -34.5, 54.0, 56.5, -34.5, -30.6),
+}
+
+
+def pcb16_local(kind):
+    """Head-local PCB-16 mount geometry: 'pocket' or 'screws'."""
+    m, out = PCB16, []
+    for x, y in m["holes"]:
+        if kind == "pocket":
+            out.append(_z_cyl(m["insert_r"], m["board_z"][0] - m["insert_depth"], m["board_z"][0] + 0.1, x, y))
+        else:
+            out.append(layout_model.button_screw(x, y, m["board_z"][1], "z", 1, shank_length=4))
+    return out
+
+
+def pcb16_world(kind):
+    return [s.moved(Location(HEAD_ORIGIN_IN_CHASSIS)) for s in pcb16_local(kind)]
+
+
+def pcb16_reserves_world():
+    ox, oy, oz = HEAD_ORIGIN_IN_CHASSIS
+    return [_tag(_blk(x0 + ox, x1 + ox, y0 + oy, y1 + oy, z0 + oz, z1 + oz), name, "#d3a860", 0.35)
+            for name, (x0, x1, y0, y1, z0, z1) in PCB16_RESERVES.items()]
+
+
 def bodylift_parts():
     """D-096: the four mated body-lift pairs (two halves each, along X) and the two star splices."""
     m, out = BODYLIFT, []
@@ -1494,6 +1537,10 @@ DROID_INSERTS = [
     # D-102: PCB-12's two M2 x 4 button screws.
     *[(r"Head controller and light", _tag(sc, f"PCB12_M2X4_BUTTON_{k}", "#555b5a"))
       for k, sc in enumerate(pcb12_world("screws"), start=1)],
+    # D-103: PCB-16's two M2 x 4 button screws and the head FFC / bundle reserves.
+    *[(r"Yaw mount", _tag(sc, f"PCB16_M2X4_BUTTON_{k}", "#555b5a"))
+      for k, sc in enumerate(pcb16_world("screws"), start=1)],
+    *[(r"Yaw mount", res) for res in pcb16_reserves_world()],
 ]
 
 
@@ -1532,6 +1579,8 @@ DROID_CUTS = [
     *[(r"YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG", box) for box in pcb14_post_removals()],
     # D-102: M2 insert pockets where PCB-12's bosses meet the crossbar.
     *[(r"connected_rolling_cradle_flange_ear_stalks", sh) for sh in pcb12_world("pocket")],
+    # D-103: M2 insert pockets in the yaw disc for PCB-16.
+    *[(r"yaw_turntable_disc_flush", sh) for sh in pcb16_world("pocket")],
 ]
 DROID_ADDS = [
     # D-074: PCB-09's strip must carry both rows of socket copper plus edge margin.
