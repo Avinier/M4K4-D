@@ -1,0 +1,20 @@
+{
+  "result": "PASS",
+  "exported_component_pins_checked": 76,
+  "checks": {
+    "manifest_matches_export": true,
+    "j1_j9_1_order_plus_c2_power": true,
+    "rs422_receive_c0tx_polarity": true,
+    "rs422_drive_c2tx_polarity": true,
+    "c0tx_terminated_here_only": true,
+    "ground_bonds_each_one_0r": true,
+    "servo_data_one_pull_up_to_3v3": true,
+    "servo_direction_complementary": true,
+    "display_half_duplex_de_re_tied": true,
+    "zero_uses_agreed_pads_only": true,
+    "zero_power": true,
+    "no_servo_or_display_power_on_board": true,
+    "logic_on_3v3": true
+  },
+  "errors": []
+}

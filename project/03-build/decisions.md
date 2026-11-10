@@ -87,6 +87,7 @@ The central record of every decision and change made during the build phase. New
 | [D-099](#d-099) | 2026-11-07 | Body-lift CAD and chassis front export | D-096's four body-lift plugs and star splices placed (check 26/26); front frame STL re-exported with the D-095 hole and pilots (13/13) | ACTIVE; D-096 HOLD stands |
 | [D-100](#d-100) | 2026-11-09; amended 2026-11-09 | PCB-08 inputs: head rail 6.3 V, 7/7 power map, signal-only sideband, generic cassette FFC, stepped ZIF stack | M2 set to 6.3 V; J8-6 7/7 head power; J8-7 carries no power; three cassette FFCs are one generic 0.3 mm 22-way FFC; FH34SRJ pair stepped on the top face (probe 14/14) | SELECTED design input; received FFC resistance, M2 current and N2 decide |
 | [D-101](#d-101) | 2026-11-10 | PCB-14 rev A: straight-through joiner map and a 4.5 mm board pitch | J1 contact n joins J2 contact 23−n (one conductor keeps one X); boards at a 4.5 mm pitch so FH34SRJ actuators open in place; rotor posts rebuilt in final CAD; fit 22/22 | SELECTED design input; FH34SRJ sample (open actuator), FFC fold mock-up and CSI bench test decide |
+| [D-102](#d-102) | 2026-11-10 | PCB-12 rev A: signals-only C2 carrier replacing the C2 tray | PCB-12 carries the ESP32-S3-Zero, RS-422 head link, servo-bus buffers and display RS-485 on three GH headers; head FFCs end at a separate head-harness break; the board replaces the tray's front wall (22 → 30 × 43.5 mm); fit 7/7 through the roll/pitch envelope | SELECTED design input; Zero pad check, ST3215-HS bus levels (B5), head-harness break and bench decide |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -3960,3 +3961,48 @@ CH-108's cradles are drawn around the UNMEASURED switch and INA226 outlines; re-
 **Service order (head off).** Lift board 1's head FFC first: it lies on top of the channel stack. Then do board 2, then board 3.
 
 **Changed.** [PCB-14](04-pcbs/pcb-14-yaw-rotor-joiner/README.md) design, `cad/` and `fab/revA`; `final/v1/cad/makad-v1.step.py` (`PCB14_*`, rotor posts, placeholder moves) and `check_pcb14_fit.py`; [workflow.md](04-pcbs/workflow.md); [board register](04-pcbs/README.md#board-register); [BOM.csv](BOM.csv) BO-062; [PCB-12](04-pcbs/pcb-12-c2-head-carrier/README.md) input.
+
+## D-102
+
+**2026-11-10 · PCB-12 rev A: signals-only C2 carrier replacing the C2 tray (CH-086; head CAD in final/v1; head harness) · SELECTED design input; received Zero, ST3215-HS bus levels (B5), the head-harness break and bench tests decide**
+
+**Why.** Starting PCB-12 found three gaps in its inputs:
+1. **Nothing defined the head harness past PCB-14.** The head FFCs stop at a keep-out under the +Y leg (D-052 open item). Both servos ride the pitch frame, while C2 and the display ride the roll frame.
+2. **The C2 bay had no carrier envelope.** The printed tray holds only the bare ESP32-S3-Zero. Its components face the rear, its flat side bears on the tray's 1.2 mm front wall, and the roll crossbar sits 2.6 mm behind.
+3. **The Zero's pinout sources disagree.** All agree on the left row (5V, GND, 3V3, GPIO1–6) and on GPIO7–12, but not on the order of TX, RX and GPIO13.
+
+**Decision** (builder, 2026-11-10).
+1. **Signals only.** The W42/W43 head FFCs end at a separate FFC-to-wire break in the pitch frame (a head-harness item, still to be designed or bought). That break sends servo power to the two servos, display power to D1, and the rest to PCB-12 on wires. PCB-12 carries:
+   - J1 GH7: head link plus C2 power. Pins 1 `GND_SIG`, 2 `C0TX+`, 3 `C0TX−`, 4 `C2TX−`, 5 `C2TX+` (the J9-1 order, D-092), 6 `+5V_C2`, 7 GND.
+   - J2 GH2: servo bus. 1 `GND_HEAD_REF`, 2 `SERVO_DATA`.
+   - J3 GH3: display RS-485. 1 `GND_DISPLAY`, 2 B, 3 A.
+   - All head grounds join here (D-100), each through its own 0 Ω link (R1, R7, R10), so a ferrite can replace any one at the bench.
+2. **Envelope.** One 0.8 mm board in the tray's front-wall plane, head-local X −25.0…−24.2, **30 × 43.5 mm** (Y −44…−14, Z 8…51.5). The survey found that space free; the tray was 22 mm wide.
+   - The Zero solders by its castellations onto the board's rear face at its old seat. Its position, USB-C and BOOT/RESET access don't change.
+   - The transceivers, buffers and headers sit below the Zero (Z 8…28), and the plugs mate from the rear.
+   - The **printed tray and its two screws are removed** (`DROID_REMOVES`). Two M2 × 4 button screws at Y −41.5/−16.5, roll-axis height, go through the board into two new crossbar bosses with M2 insert pockets (`PCB12`, `pcb12_world()` in `makad-v1.step.py`).
+3. **Circuit.** THVD1451 for the head link, as on PCB-09. C0TX is terminated here (120 Ω) because PCB-09 terminates C2TX, and a 4.7 kΩ pull-up holds the idle state. The servo bus uses SN74LVC1G126 (TX, enabled on DIR high) and SN74LVC1G125 (RX, enabled on DIR low):
+   - LVC inputs and disabled outputs tolerate 5.5 V, with Ioff for an unpowered port.
+   - There is one 10 kΩ pull-up to 3.3 V and no 12 V pull-up (feetech-link-contract), plus a 47 Ω series resistor and a 10 kΩ DIR pull-down.
+   - THVD1450 drives the display RS-485 with DE and /RE tied (10 kΩ pull-down) and no termination. It relies on its fail-safe receiver; the run is short at 115 200 baud.
+4. **Zero pins.** Only pads all sources agree on are used: GPIO1 DISP_TX, GPIO2 DISP_DE, GPIO4 DISP_RX, GPIO5 LINK_TX, GPIO6 LINK_RX, GPIO7 SERVO_RX, GPIO8 SERVO_TX, GPIO9 SERVO_DIR. GPIO3 (strapping) and the right-row pads 13–18 are not used. The land pattern (`04-pcbs/lib/generate_esp32s3_zero.py`) is the 2 × 9, 2.54 mm grid of the two community footprints, viewed from the module's component side. The bottom pads are not landed, and the ceramic antenna gets a copper keep-out on both layers.
+
+**Check.**
+- **Board:** ERC 0/0. Netlist audit 13/13 on 76 pins, covering the J9-1 order, pair polarity, termination location, the single bond per ground, the single 3.3 V pull-up, complementary buffer enables, the agreed Zero pads and no servo or display power on the board. Nightly parity DRC 0/0/0 with the fab-neutral rules; a scratch copy at a 0.8 mm via minimum flags all 20 vias.
+- **Fit:** `final/v1/cad/check_pcb12_fit.py` **7/7**:
+  - core placed; the Zero model on its seat;
+  - every part and each mated GH plug envelope (9 mm rearward, `E`) clear at neutral;
+  - screws through the holes, 1.75 mm from the Zero;
+  - bosses 0.09 mm behind the board, fused to the crossbar, 1.8 mm from the display frame;
+  - the USB-C and BOOT/RESET reserves free;
+  - a 25-pose roll × pitch grid clamped to the motion envelope, closest approach **1.57 mm** (−Y yoke leg at roll −21°, pitch 43°).
+- The first layout put J2 in the board's low −Y corner. A placement map showed that corner sweeps into the −Y yoke leg at the roll stop, so J2 moved up into the servo group.
+
+**Unverified.**
+- The received Zero's pad positions and pin labels (meter 5V to USB VBUS; GPIO1–9 by firmware toggle) before the land pattern is ordered.
+- ST3215-HS VIH/VIL, output high and unpowered leakage (B5), which decide the LVC bus interface.
+- Whether the carrier's 20 mm cantilever below the Zero needs support while plugs are mated: about 0.7 mm deflection at 5 N (`E`).
+- The Zero's antenna sits over the carrier. Wi-Fi/BLE isn't needed for the wired links, so this is accepted.
+- The head harness: the FFC-to-wire break, the routes across the pitch and roll joints, and the head-side reserves `yaw_FFC_x3_*` (still at D-052's planes, not D-101's).
+
+**Changed.** [PCB-12](04-pcbs/pcb-12-c2-head-carrier/README.md) design, `cad/` and `fab/revA`; `04-pcbs/lib/pcb12.pretty`; `final/v1/cad/makad-v1.step.py` (`PCB12`, tray removal, bosses, screws) and `check_pcb12_fit.py`; [workflow.md](04-pcbs/workflow.md); [board register](04-pcbs/README.md#board-register); [BOM.csv](BOM.csv) CH-086; [05-harness](05-harness/README.md) pinouts.

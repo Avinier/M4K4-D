@@ -1,0 +1,315 @@
+{
+  "U1": {
+    "value": "ESP32-S3-Zero",
+    "symbol": "Connector_Generic:Conn_01x18",
+    "footprint": "pcb12:Waveshare_ESP32-S3-Zero_Castellated",
+    "pins": {
+      "1": "+5V_C2",
+      "2": "GND",
+      "3": "+3V3",
+      "4": "DISP_TX",
+      "5": "DISP_DE",
+      "6": null,
+      "7": "DISP_RX",
+      "8": "LINK_TX",
+      "9": "LINK_RX",
+      "10": "SERVO_RX",
+      "11": "SERVO_TX",
+      "12": "SERVO_DIR",
+      "13": null,
+      "14": null,
+      "15": null,
+      "16": null,
+      "17": null,
+      "18": null
+    },
+    "dnp": false
+  },
+  "J1": {
+    "value": "HEAD_LINK_C2_POWER",
+    "symbol": "Connector_Generic:Conn_01x07",
+    "footprint": "Connector_JST:JST_GH_BM07B-GHS-TBT_1x07-1MP_P1.25mm_Vertical",
+    "pins": {
+      "1": "GND_SIG",
+      "2": "C0TX_P",
+      "3": "C0TX_N",
+      "4": "C2TX_N",
+      "5": "C2TX_P",
+      "6": "+5V_C2",
+      "7": "GND"
+    },
+    "dnp": false
+  },
+  "C1": {
+    "value": "10u_10V",
+    "symbol": "Device:C",
+    "footprint": "Capacitor_SMD:C_0805_2012Metric",
+    "pins": {
+      "1": "+5V_C2",
+      "2": "GND"
+    },
+    "dnp": false
+  },
+  "R1": {
+    "value": "0R",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "pins": {
+      "1": "GND_SIG",
+      "2": "GND"
+    },
+    "dnp": false
+  },
+  "U2": {
+    "value": "THVD1451DR",
+    "symbol": "Interface_UART:THVD1451D",
+    "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+    "pins": {
+      "1": "+3V3",
+      "2": "LINK_RX",
+      "3": "LINK_TX",
+      "4": "GND",
+      "5": "C2TX_P",
+      "6": "C2TX_N",
+      "7": "C0TX_N",
+      "8": "C0TX_P"
+    },
+    "dnp": false
+  },
+  "R2": {
+    "value": "120",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "pins": {
+      "1": "C0TX_N",
+      "2": "C0TX_P"
+    },
+    "dnp": false
+  },
+  "R3": {
+    "value": "4.7k",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "pins": {
+      "1": "+3V3",
+      "2": "LINK_TX"
+    },
+    "dnp": false
+  },
+  "C3": {
+    "value": "100n",
+    "symbol": "Device:C",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "pins": {
+      "1": "+3V3",
+      "2": "GND"
+    },
+    "dnp": false
+  },
+  "U3": {
+    "value": "SN74LVC1G126DBVR",
+    "symbol": "74xGxx:74LVC1G126",
+    "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+    "pins": {
+      "1": "SERVO_DIR",
+      "2": "SERVO_TX",
+      "3": "GND",
+      "4": "SERVO_DRV",
+      "5": "+3V3"
+    },
+    "dnp": false
+  },
+  "U4": {
+    "value": "SN74LVC1G125DBVR",
+    "symbol": "74xGxx:74LVC1G125",
+    "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+    "pins": {
+      "1": "SERVO_DIR",
+      "2": "SERVO_DATA",
+      "3": "GND",
+      "4": "SERVO_RX",
+      "5": "+3V3"
+    },
+    "dnp": false
+  },
+  "R4": {
+    "value": "47",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "pins": {
+      "1": "SERVO_DRV",
+      "2": "SERVO_DATA"
+    },
+    "dnp": false
+  },
+  "R5": {
+    "value": "10k",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "pins": {
+      "1": "+3V3",
+      "2": "SERVO_DATA"
+    },
+    "dnp": false
+  },
+  "R6": {
+    "value": "10k",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "pins": {
+      "1": "SERVO_DIR",
+      "2": "GND"
+    },
+    "dnp": false
+  },
+  "C4": {
+    "value": "100n",
+    "symbol": "Device:C",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "pins": {
+      "1": "+3V3",
+      "2": "GND"
+    },
+    "dnp": false
+  },
+  "J2": {
+    "value": "SERVO_BUS",
+    "symbol": "Connector_Generic:Conn_01x02",
+    "footprint": "Connector_JST:JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical",
+    "pins": {
+      "1": "GND_HEAD_REF",
+      "2": "SERVO_DATA"
+    },
+    "dnp": false
+  },
+  "R7": {
+    "value": "0R",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "pins": {
+      "1": "GND_HEAD_REF",
+      "2": "GND"
+    },
+    "dnp": false
+  },
+  "U5": {
+    "value": "THVD1450DR",
+    "symbol": "Interface_UART:LTC2850xS8",
+    "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+    "pins": {
+      "1": "DISP_RX",
+      "2": "DISP_DE",
+      "3": "DISP_DE",
+      "4": "DISP_TX",
+      "5": "GND",
+      "6": "DISP_A",
+      "7": "DISP_B",
+      "8": "+3V3"
+    },
+    "dnp": false
+  },
+  "R9": {
+    "value": "10k",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "pins": {
+      "1": "DISP_DE",
+      "2": "GND"
+    },
+    "dnp": false
+  },
+  "C5": {
+    "value": "100n",
+    "symbol": "Device:C",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "pins": {
+      "1": "+3V3",
+      "2": "GND"
+    },
+    "dnp": false
+  },
+  "J3": {
+    "value": "DISPLAY_RS485",
+    "symbol": "Connector_Generic:Conn_01x03",
+    "footprint": "Connector_JST:JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical",
+    "pins": {
+      "1": "GND_DISPLAY",
+      "2": "DISP_B",
+      "3": "DISP_A"
+    },
+    "dnp": false
+  },
+  "R10": {
+    "value": "0R",
+    "symbol": "Device:R",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "pins": {
+      "1": "GND_DISPLAY",
+      "2": "GND"
+    },
+    "dnp": false
+  },
+  "TP1": {
+    "value": "GND",
+    "symbol": "Connector:TestPoint",
+    "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+    "pins": {
+      "1": "GND"
+    },
+    "dnp": false
+  },
+  "#FLG01": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "+5V_C2"
+    },
+    "dnp": false
+  },
+  "#FLG02": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "+3V3"
+    },
+    "dnp": false
+  },
+  "#FLG03": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "GND"
+    },
+    "dnp": false
+  },
+  "#FLG04": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "GND_SIG"
+    },
+    "dnp": false
+  },
+  "#FLG05": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "GND_HEAD_REF"
+    },
+    "dnp": false
+  },
+  "#FLG06": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "GND_DISPLAY"
+    },
+    "dnp": false
+  }
+}
