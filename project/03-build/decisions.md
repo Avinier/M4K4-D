@@ -90,6 +90,7 @@ The central record of every decision and change made during the build phase. New
 | [D-102](#d-102) | 2026-11-10 | PCB-12 rev A: signals-only C2 carrier replacing the C2 tray | PCB-12 carries the ESP32-S3-Zero, RS-422 head link, servo-bus buffers and display RS-485 on three GH headers; head FFCs end at a separate head-harness break; the board replaces the tray's front wall (22 → 30 × 43.5 mm); fit 7/7 through the roll/pitch envelope | SELECTED design input; Zero pad check, ST3215-HS bus levels (B5), head-harness break and bench decide |
 | [D-103](#d-103) | 2026-11-10 | PCB-16 head junction: the head FFCs end on a passive board on the yaw disc | W42/W43 head FFCs plug into two FH34SRJ on a board lying on the disc top beside the +Y leg foot, under the sweep floor; wires from per-net pads to the servos, PCB-12 and D1; pitch/roll wire crossings and the CSI path stay open; fit 7/7 | SELECTED design input; bundle crossings, CSI path and FFC strip mock-up decide |
 | [D-104](#d-104) | 2026-11-10 | Head wire bundle across the pitch joint through a hollow −Y trunnion, inside the −Y leg | Fixed Ø10 × 1 tube in the −Y leg pad, 6700-2Z in a grown pitch boss (D-051 pin, MR106ZZ, retainer out); closed 6.4 × 2.6 mm channel inside the leg from a plinth tunnel to a side window in the tube; flat two-row bundle; branch routes to the pitch servo and across the roll axis to PCB-12; check 7/7 over 30 poses | SELECTED design input; wire torsion cycle test, leg-channel coupon and pull-through mock-up decide |
+| [D-105](#d-105) | 2026-11-11 | Camera ribbon across pitch and roll in a free loop behind the head | Yaw crossing stays in the cassette; 140 mm C-loop from a yaw-carried bracket (printed, two CF tubes, a fourth PCB-14) to a clamp on the rear cover on the roll axis (roll only twists it); static generic FFC to the bracket (W45), Pi standard-mini 300 mm loop cable (W46); check 10/10, R min 15.4 mm, worst-yaw a_tip 1.5901 | SELECTED design input; loop flex-cycle test, full-chain CSI stream test and a printed bracket decide |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -4104,3 +4105,61 @@ CH-108's cradles are drawn around the UNMEASURED switch and INA226 outlines; re-
 - **CSI:** the CSI FFC still has no path across the joints (D-103 open).
 
 **Changed.** `final/v1/cad/makad-v1.step.py` (`D104`, `D104_Y_RESERVES`, `D104_BRANCHES`, droid tables), `check_d104_head_routes.py`, `study_head_cable_passage.py`; [BOM.csv](BOM.csv) HD-008, HD-009, HD-010.
+
+## D-105
+
+**2026-11-11 · Camera ribbon across pitch and roll in a free loop behind the head (HD-017–HD-020, BO-062 ×4, BO-050 stock for W45; head rear cover M019, roof guide M010 and yaw disc M012 in final/v1; harness W45/W46; closes D-103's CSI path) · SELECTED design input; a loop flex-cycle test, the full-chain CSI stream test and a printed bracket decide**
+
+**Why.** D-104's free-space study found no internal passage for the CSI's 11.5–16 mm ribbon across the pitch joint, and the hollow trunnion is a Ø8 bore. The builder accepted a visible ribbon outside the head (function over form) and asked for the design best for the ribbon's life and the camera connection.
+
+**Decision** (builder, 2026-11-11).
+1. **The yaw crossing stays in the cassette** (W37 → PCB-14 board 1). A loop hung from the body would have to wind through the full yaw travel. The outside loop spans only pitch and roll, from a yaw-carried bracket to the head.
+2. **The loop meets the head on the roll axis**, at the rear cover (head-local X −119, Y −1, Z 48.16), and leaves heading straight back along it.
+   - Roll turns that point in place, so the ribbon only twists (±21°, 0.3°/mm over the 140 mm free length).
+   - Pitch moves it on a 73 mm arc in the X–Z plane, bending the ribbon in its easy direction.
+   - The ribbon never bends edgewise.
+   - The sides are blocked by the yoke legs; the bottom and off-axis points sway edgewise.
+3. **The loop is a 140 mm C-loop** in the head's X–Z plane. The bracket clamp is at X −150, Z 110, heading 15° (forward, slightly up). The loop runs back to X −190, and the cable is clamped at both ends, so all flexing happens between the clamps.
+4. **Bracket** (HD-018/019, 15.0 g):
+   - **Base:** a printed foot on the disc top behind the head, with 4 × M2 × 6 into inserts in the disc plate (0.8 mm floor). Two rails and an FFC tray run 48 mm past the rim.
+   - **Tubes:** two Ø4 × 2 carbon tubes at Y −15 and +13, either side of the loop band.
+   - **Top:** a bridge, the loop clamp and a cradle carrying a **fourth PCB-14 rev A** (BO-062 ×4, the same board).
+   - **Joiner:** J1 takes the loop cable 2.5 mm past the clamp; J2 takes the static FFC.
+5. **Two cables, split at the joiner.**
+   - **W45 (static, yaw-carried):** generic 22-way FFC (BO-050 stock), about 355 mm (`E`). It runs from PCB-14 board 1 up the bore and channel, folds 45° out at D-103's CSI exit, lies flat on the disc top and the bracket tray (Y 16.6–28.6, under the sweep floor and clear of PCB-16's rise reserves), climbs beside the +Y tube and folds over the joiner into J2.
+   - **W46 (the wear part):** a Raspberry Pi standard-mini 300 mm (HD-017), with its 22-way end in J1 and its 15-way end in the Camera Module 3. It passes the bracket clamp, the loop and the head clamp. Then it climbs the outside of the rear cover under the clamp's 1.2 mm strip, because the roll servo fills the cover's inside on the roll axis. It enters through a slot at Z 80 and runs forward under the roof at Z 80 into the head's own `camera_CSI_exit_and_bend_reserve`. Route length is 292 mm. Replacing it needs only the rear cover open.
+6. **Head end** (HD-020):
+   - The clamp base is bonded to the 1.6 mm rear cover. The cover can't take inserts, and the roll servo's sweep leaves no room for bosses behind it.
+   - The upper jaw pinches the ribbon with 2 × M2 × 6 into inserts in the clamp's own lower jaw (1.3 mm floor).
+   - The round `CSI_roof_straight_exit_guide` (sized for a 2 mm jacket) is replaced by a slotted FFC guide.
+7. **CAD.** All edits are in `final/v1/cad/makad-v1.step.py` (`D105`, `d105_local`, `d105_loop`, droid tables):
+   - cuts: the cover slot and the disc pockets;
+   - removes: the old guide;
+   - inserts: the bracket, the joiner from the PCB-14 STEP, the clamps, the guide, and the static, inside and neutral-loop reserves.
+
+   `ribbon_elastica.py` solves the loop.
+
+**Check.** `final/v1/cad/check_d105_csi_loop.py` **10/10** (about 13 min):
+- **Loop shape:** solved as a planar elastica, with the cable's own weight, at 36 pitches and stiffness 50/100/200 N·mm² (`E`). Minimum bend radius is **15.4 mm** (≥ 15 target; 1.0 % outer strain), at pitch 43°.
+- **Loop clearance:** clear of the posed head (3.39 mm to the clamp jaw at roll −21°, pitch 43°), the bracket tubes (4.0 mm) and the yaw parts over 15 roll × pitch poses.
+- **Bracket on the yaw frame:**
+  - clear of the yaw parts, PCB-16, its reserves and the D-104 bundle;
+  - 7.2 mm from the moving head;
+  - 13.5 mm over the body at any yaw (body and chassis box survey, radius 114.7 mm).
+- **Joiner:** seated in the cradle, with its mouths facing the two runs.
+- **Head end:** clamp, guide and inside runs clear of the roll-frame parts. Over the envelope the outside run is 2.6 mm from the roll servo.
+- **Cable lengths:** loop cable 292 mm against the 300 mm cable.
+- **Mass and tipping:** +19.1 g (bracket 15.0 g, head end 4.1 g). a_tip is **1.6023 neutral** (was 1.6695). With the bracket and head swept together over yaw, the **worst is 1.5901 at yaw 24°** against the 1.5823 minimum (was 1.6453).
+
+**Unverified.**
+- **Flex life:** the official cable is polyester FFC and isn't rated for continuous flexing. Run a jig cycle test at R 15 mm while streaming (target 50k cycles). If it fails, the drop-in upgrade is a polyimide flex cable in the same joiner.
+- **Signal integrity:** the CSI chain is now about 850 mm with four extra ZIF transitions (`E`). The BO-050 stream test must run on this exact chain. If it's marginal, drop the bracket joiner and use one longer cable.
+- **Tipping margin:** it is now 0.5 % at the worst yaw. Any bracket growth must be re-checked, and the front ballast (D-026) is the lever if margin is needed.
+- **Fold and bond:** the static top folds and the 45° fold-out are reserve boxes for a paper mock-up. The bonded clamp needs a pull test.
+- **Head mass register:** the head A0 register is not updated (head end 4.1 g).
+- **Grouping:** the fourth PCB-14 sits in "Yaw mount", not the Custom PCBs group.
+
+**Changed.**
+- `final/v1/cad/`: `makad-v1.step.py`, `ribbon_elastica.py`, `check_d105_csi_loop.py`.
+- [BOM.csv](BOM.csv): BO-062 (×4), BO-050, HD-017–HD-020.
+- [05-harness](05-harness/README.md): W37, W45, W46.
