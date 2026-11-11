@@ -1,0 +1,374 @@
+{
+ "script": "check_d105_csi_loop",
+ "passed": 10,
+ "total": 10,
+ "rows": [
+  {
+   "check": "loop_bend_radius_at_every_pitch",
+   "ok": true,
+   "target_mm": 15.0,
+   "by_stiffness_N_mm2": {
+    "50.0": {
+     "converged": true,
+     "r_min_mm": 15.45,
+     "at_pitch": 43.0,
+     "rearmost_x": -189.6,
+     "lowest_z": 13.5
+    },
+    "100.0": {
+     "converged": true,
+     "r_min_mm": 15.39,
+     "at_pitch": 43.0,
+     "rearmost_x": -189.7,
+     "lowest_z": 13.5
+    },
+    "200.0": {
+     "converged": true,
+     "r_min_mm": 15.37,
+     "at_pitch": 43.0,
+     "rearmost_x": -189.8,
+     "lowest_z": 13.5
+    }
+   },
+   "pitches": 36,
+   "strain_at_r_min": 0.0098,
+   "roll_twist_deg_per_mm": 0.3,
+   "note": "the head clamp lies on the roll axis heading along it, so roll only twists the free length"
+  },
+  {
+   "check": "loop_clear_of_head_bracket_and_yaw_parts",
+   "ok": true,
+   "poses": 15,
+   "clashes": [],
+   "nearest_head": {
+    "pose": [
+     -21.0,
+     43.0
+    ],
+    "gap_mm": 3.39,
+    "part": "CSI_LOOP_HEAD_CLAMP_JAW"
+   },
+   "nearest_yaw": {
+    "CSI_LOOP_MAST_TUBE_1": [
+     4.0,
+     [
+      -21.0,
+      -25.0
+     ]
+    ],
+    "CSI_LOOP_MAST_TUBE_2": [
+     4.0,
+     [
+      -21.0,
+      -25.0
+     ]
+    ],
+    "CSI_JOINER_BOARD": [
+     9.43,
+     [
+      -21.0,
+      -25.0
+     ]
+    ],
+    "CSI_JOINER_J1": [
+     9.93,
+     [
+      -21.0,
+      -25.0
+     ]
+    ],
+    "CSI_JOINER_J2": [
+     17.67,
+     [
+      -21.0,
+      43.0
+     ]
+    ]
+   },
+   "free_strip_to_bracket_top_mm": 0.25
+  },
+  {
+   "check": "bracket_and_static_runs_on_the_yaw_frame",
+   "ok": true,
+   "clashes": {},
+   "base_into_disc_mm3": 0.0,
+   "tubes_into_sockets_mm3": {
+    "CSI_LOOP_MAST_TUBE_1": 0.0,
+    "CSI_LOOP_MAST_TUBE_2": 0.0
+   },
+   "insert_floor_mm": 0.8,
+   "note": "the foot bears on the disc top; the 45-degree fold lies in the channel mouth"
+  },
+  {
+   "check": "bracket_clear_of_moving_head",
+   "ok": true,
+   "poses": 15,
+   "clashes": [],
+   "nearest": [
+    7.161,
+    "CSI_LOOP_MAST_BASE / removable_octagonal_rear_cover",
+    [
+     21.0,
+     -25.0
+    ]
+   ]
+  },
+  {
+   "check": "bracket_clear_of_body_over_yaw",
+   "ok": true,
+   "bracket_lowest_world_z": 153.5,
+   "bracket_radius_from_yaw_axis_mm": 114.7,
+   "highest_body_part_in_ring": [
+    140.0,
+    "BODY_SHELL"
+   ],
+   "gap_mm": 13.5,
+   "method": "body and chassis leaf boxes reaching beyond the disc rim (r > 63) inside the bracket radius; any yaw"
+  },
+  {
+   "check": "joiner_seated_mouths_facing_the_runs",
+   "ok": true,
+   "overlaps_mm3": {
+    "CSI_JOINER_J2": 0.0,
+    "CSI_JOINER_J1": 0.0,
+    "CSI_JOINER_BOARD": 0.0
+   },
+   "board_to_cradle_mm": 0.0,
+   "j1_u_mm": 8.4,
+   "j2_u_mm": 20.4,
+   "clamp_u": [
+    -4.0,
+    4.0
+   ],
+   "note": "J1 (mouth -u) takes the loop cable 2.5 mm past the clamp; J2 (mouth +u) the static FFC"
+  },
+  {
+   "check": "head_clamp_cover_slot_and_inside_runs",
+   "ok": true,
+   "clashes": {},
+   "clamp_to_cover_mm": 0.0,
+   "cover_left_in_run_mm3": 0.0,
+   "clamp_insert_floor_mm": 1.3,
+   "jaw_into_base_mm3": 0.0,
+   "guide_to_roof_mm": 0.0,
+   "note": "the clamp is bonded to the 1.6 mm cover (no cover inserts: the roll servo sweeps behind it); its two M2 pinch the ribbon into inserts in its own lower jaw; the round CSI_roof_straight_exit_guide is replaced by a slotted one"
+  },
+  {
+   "check": "inside_runs_clear_over_the_envelope",
+   "ok": true,
+   "poses": 15,
+   "clashes": [],
+   "nearest": [
+    2.6,
+    "HARNESS_D105_CSI_COVER_OUTSIDE / roll_STS3045M_reference",
+    [
+     21.0,
+     43.0
+    ]
+   ]
+  },
+  {
+   "check": "cable_lengths",
+   "ok": true,
+   "loop_cable_mm": 292.3,
+   "standard_mini_mm": 300.0,
+   "static_ffc_mm_E": 354.0,
+   "note": "loop cable = joiner mouth to camera exit reserve (+15 mm into the camera); static = PCB-14 board 1 to the bracket joiner incl. bore/channel (45, E) and top folds (45, E); slack goes in the roof run"
+  },
+  {
+   "check": "mass_and_tipping",
+   "ok": true,
+   "d105_added_g": 19.11,
+   "bracket_g": 15.01,
+   "rows": [
+    [
+     "CSI_LOOP_MAST_BASE",
+     4.765,
+     [
+      -67.2,
+      2.4,
+      156.3
+     ]
+    ],
+    [
+     "CSI_LOOP_MAST_TOP",
+     2.633,
+     [
+      -85.3,
+      -1.4,
+      298.5
+     ]
+    ],
+    [
+     "CSI_LOOP_MAST_TUBE_1",
+     2.104,
+     [
+      -91.6,
+      -15.0,
+      225.5
+     ]
+    ],
+    [
+     "CSI_LOOP_MAST_TUBE_2",
+     2.104,
+     [
+      -91.6,
+      13.0,
+      225.5
+     ]
+    ],
+    [
+     "CSI_LOOP_MAST_M2X6_1",
+     0.199,
+     [
+      -42.6,
+      -14.5,
+      155.4
+     ]
+    ],
+    [
+     "CSI_LOOP_MAST_M2X6_2",
+     0.199,
+     [
+      -42.6,
+      11.5,
+      155.4
+     ]
+    ],
+    [
+     "CSI_LOOP_MAST_M2X6_3",
+     0.199,
+     [
+      -37.1,
+      -14.5,
+      155.4
+     ]
+    ],
+    [
+     "CSI_LOOP_MAST_M2X6_4",
+     0.199,
+     [
+      -37.1,
+      11.5,
+      155.4
+     ]
+    ],
+    [
+     "CSI_JOINER_J2",
+     0.046,
+     [
+      -72.1,
+      -1.0,
+      304.8
+     ]
+    ],
+    [
+     "CSI_JOINER_J1",
+     0.046,
+     [
+      -83.3,
+      -1.0,
+      301.8
+     ]
+    ],
+    [
+     "CSI_JOINER_BOARD",
+     0.413,
+     [
+      -77.9,
+      -1.0,
+      302.3
+     ]
+    ],
+    [
+     "CSI_LOOP_MAST_INSERTS_M2X3",
+     0.4,
+     [
+      -39.6,
+      1.0,
+      153.5
+     ]
+    ],
+    [
+     "CSI_STATIC_FFC_22W",
+     1.7,
+     [
+      -41.6,
+      28.0,
+      209.5
+     ]
+    ],
+    [
+     "CSI_LOOP_HEAD_CLAMP",
+     1.122,
+     [
+      -57.9,
+      -1.0,
+      244.9
+     ]
+    ],
+    [
+     "CSI_LOOP_HEAD_CLAMP_JAW",
+     0.364,
+     [
+      -59.2,
+      -1.0,
+      240.4
+     ]
+    ],
+    [
+     "CSI_ROOF_FFC_GUIDE",
+     0.612,
+     [
+      11.4,
+      -1.0,
+      271.1
+     ]
+    ],
+    [
+     "CSI_LOOP_HEAD_CLAMP_M2X6_1",
+     0.199,
+     [
+      -59.2,
+      -12.5,
+      240.5
+     ]
+    ],
+    [
+     "CSI_LOOP_HEAD_CLAMP_M2X6_2",
+     0.199,
+     [
+      -59.2,
+      10.5,
+      240.5
+     ]
+    ],
+    [
+     "CSI_LOOP_HEAD_CLAMP_INSERTS",
+     0.2,
+     [
+      -55.0,
+      -1.0,
+      237.7
+     ]
+    ],
+    [
+     "CSI_STANDARD_MINI_CABLE",
+     1.403,
+     [
+      -61.6,
+      -1.0,
+      259.5
+     ]
+    ]
+   ],
+   "a_tip_neutral": 1.6023,
+   "a_tip_neutral_before": 1.6695,
+   "worst_yaw_a_tip": 1.5901,
+   "at_yaw_deg": 24.0,
+   "d095_worst_before": 1.6453,
+   "minimum": 1.5823,
+   "note": "worst pose: head pitch/roll offsets as check_d095_mass.tip, with the head and the yaw-carried bracket swept together over yaw"
+  }
+ ]
+}
