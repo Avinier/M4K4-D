@@ -1,5 +1,7 @@
 # Primary frame — parts, joints and the review layout
 
+> **D-106 (2026-11-13).** The harness features below marked D-106 (nose tunnel, W03a slot, column tie tunnel, two tie lugs) are in the re-exported front-module STL; orientation unchanged, supports 1109 mm². See [D-106](../../../03-build/decisions.md#d-106).
+>
 > **D-093/D-095 print note (2026-11-07).** This review predates the front-deck balance hole and the S18 tub plate. The front-module STL was re-exported with both sets of features ([D-099](../../../03-build/decisions.md#d-099), 13/13 checks): the Ø5 balance hole at (52, 47.4) through the deck, two M3 × 4 insert pilots through the deck strip at (21, ±24.5) and two M3 × 6 pilots in the front crossmember at (83, ±20). All four are vertical, so orientation and supports below are unchanged.
 
 The frame of [chassis v1](../README.md): the front module, the rear module and the battery
@@ -49,10 +51,13 @@ motor bay: the motors sit in it, and the deck has no plate there.
 | Front crossmember | X 80–92, Y ±62, Z 35–52; Z 32 up to X 90.5 (D-076) | Nose pod seat (J07B); takes caster loads into the rails |
 | Pod insert pilots | Ø4.0 axial, X 85–93, at (Y ±10, Z 42) | J07B inserts (nose review) |
 | J10-8 cable bore | Ø5 vertical at (86, −31), through crossmember and deck | Nose sensor cable riser |
+| J10-8 tunnel (D-106) | 4.5 × 3 mm along Y under the crossmember, X 85–89.5, Y −33 to 3, Z 33–36 (1 mm floor on the bed, roof bridged); a notch at X 89.5–92, Y ±3.5 joins the pod channel mouth | Nose cable from the pod channel to the bore (the D-076 fill had closed it) |
+| W03a deck slot (D-106) | 4.5 × 4.5 mm through the deck at X 49.5–54, Y 37.5–42, past J-PK's +X end | J-PK body half's +/− leads up to the fuse and J-BAT |
+| Harness tie lugs (D-106), 2 | X 64–69, Y 33.5–37.5 and X 24–29, Y 29–33; Z 56–59, tie tunnel 3 × 1.5 along Y | W03b run; +Y power trunk (CH-082) |
 | Ballast screw holes | Ø3.4 with a 90° countersink Ø6.5 at (74, ±20) | J12 |
 | Driver posts, 4 × Ø7 | Z 56–66 at (41.05, ±34.04) and (41.05, ±54.36); Ø3.5 × 4.1 insert pilot (D-075; was Ø3.9) | J15B |
 | Motor-lead tie bridges, 2 | X 19–24, \|Y\| 37–43, Z 56–59 | One zip tie each (CH-082) |
-| Fuse bracket (D-032) | Column X 75–81, Y 40–48, up to Z 71; shelf X 52–82, Y 39–49, Z 71–73 | Main-fuse holder (ATOF) on the +Y side |
+| Fuse bracket (D-032) | Column X 75–81, Y 40–48, up to Z 71; shelf X 52–82, Y 39–49, Z 71–73; D-106 tie tunnel 3 × 1.6 along Y through the column at Z 66.5–68.1 | Main-fuse holder (ATOF) on the +Y side, one tie round column, shelf and holder |
 | IMU seat | Flat deck at X 13–29, Y ±10; Ø1.6 pilots through the deck at (22, ±7.5) (D-075) | J15A |
 
 ### 1.2 Rear module, feature by feature
@@ -136,7 +141,7 @@ filaments, the J04 inserts pull along the layers and the J13 bolts clamp across 
 
 | Print | Face on the bed | Bed | Support (tree, PETG) | Faces that must come out clean |
 |---|---|---|---|---|
-| Front module | **Tub bottom** (Z 32), as it sits in the robot | 2901 mm² | 1131 mm²: deck underside at X 17–24 (7 mm ledge on the motor bay), the two corner pockets beside the tub's front corners and round the front-left J13 socket, the fuse shelf, the tub window head. The D-077 J13 bosses print without support | J04 rail-end faces, keys and pilots; deck top (J13 feet, posts); the four hatch bosses (on the bed); J13 sockets; pod pilots and the crossmember front face |
+| Front module | **Tub bottom** (Z 32), as it sits in the robot | 2894 mm² (D-106) | 1109 mm² (D-106; the nose tunnel roof is a 9 mm² bridge): deck underside at X 17–24 (7 mm ledge on the motor bay), the two corner pockets beside the tub's front corners and round the front-left J13 socket, the fuse shelf, the tub window head. The D-077 J13 bosses print without support | J04 rail-end faces, keys and pilots; deck top (J13 feet, posts); the four hatch bosses (on the bed); J13 sockets; pod pilots and the crossmember front face |
 | Rear module | **Deck top** (Z 56) | 3551 mm² | 194 mm²: the four crossmember ends beyond the deck (\|Y\| 56–66) and the tie lug | Deck top (on the bed: J13 seat); J04 rail-end faces, keys and pilots; keel pilots and the crossmember underside |
 | Hatch | **Outer face** (Z 30.5) | 4915 mm² | None | Flat both sides; four screw holes; strap slots |
 

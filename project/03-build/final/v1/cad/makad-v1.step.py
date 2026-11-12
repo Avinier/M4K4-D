@@ -411,6 +411,15 @@ FRAME_PRINT = dict(
     nose_bore=(86.0, -31.0, 2.5),
     rear_fill=(-48.0, -41.0, -66.0, 66.0, 48.0, 56.0),
 )
+# D-106: the fill above buried the J10-8 nose cable's run under the crossmember (D-011, Z 32.8-34.9)
+# between the pod channel mouth (X 92, Y +-3, Z 32-35) and the Ø5 bore at (86, -31). A closed
+# tunnel brings it back: 4.5 x 3 mm along Y with a 1 mm floor on the bed and a 1 mm front wall, its
+# roof a 4.5 mm bridge; a notch through the front wall joins it to the channel mouth (roof bridged
+# across Y). Both are cut from the crossmember and kept out of the fill.
+D106_NOSE = dict(
+    tunnel=(85.0, 89.5, -33.0, 3.0, 33.0, 36.0),
+    notch=(89.5, 92.1, -3.5, 3.5, 31.9, 36.0),
+)
 
 
 def frame_print_edits():
@@ -431,6 +440,8 @@ def frame_print_edits():
         fill = fill - _z_cyl(p["j13_socket_r"], z0 - 1.0, z1 + 1.0, x, y)
     x, y, r = p["nose_bore"]
     fill = fill - _z_cyl(r, z0 - 1.0, z1 + 1.0, x, y)
+    for b in D106_NOSE.values():
+        fill = fill - box(*b)
     return [(r"CHASSIS_FRAME_FRONT_MODULE", fill), (r"CHASSIS_FRAME_REAR_MODULE", box(*p["rear_fill"]))]
 
 
@@ -892,14 +903,138 @@ PCB08_SERVO = dict(header=(-7.95, 1.95, -42.92, -37.17, 113.6, 119.6),
 # Z 61..69), clear of the motor pigtails; J-S18-H and J-S18-Y sit behind the right motor under the
 # tray modules, toward the -Y head riser. The two AWG16 multiwire star splices (heat-shrunk, Ø6.5
 # x 24 E) lie along Y above the rail, beside M6. check_d096_bodylift.py measures all of them.
+# D-106: the D-099 positions left no room for the leads to leave the housings: J-BAT's ends were 1 mm
+# from the rail and 3 mm from J-S18-Y, J-CHASSIS's body end 1 mm from the rail. J-BAT and J-CHASSIS
+# move 8 mm forward (8.5 mm to the rail for the body lead to turn up); J-S18-Y takes J-S18-H's place
+# and J-S18-H moves 7.5 mm outboard, so J-BAT's chassis end is free; both J-S18 rise 2.4 mm so their
+# chassis leads pass over the right motor tie bridge (0.5 mm under the M5 tray module). Chassis half
+# +X, body half -X on all four. check_d106_harness.py measures the lead exits.
 BODYLIFT = dict(
-    plugs=(("J_BAT", "MICROFIT_PLUS", (-27.5, -5.5, -31.0, -22.7, 57.0, 67.0)),
-           ("J_CHASSIS", "MICROFIT_PLUS", (-27.5, -5.5, 22.7, 31.0, 57.0, 67.0)),
-           ("J_S18_H", "MICROFIT3", (-3.0, 16.0, -38.0, -31.0, 57.0, 67.0)),
-           ("J_S18_Y", "MICROFIT3", (-3.0, 16.0, -29.5, -22.5, 57.0, 67.0))),
+    plugs=(("J_BAT", "MICROFIT_PLUS", (-19.5, 2.5, -31.0, -22.7, 57.0, 67.0)),
+           ("J_CHASSIS", "MICROFIT_PLUS", (-19.5, 2.5, 22.7, 31.0, 57.0, 67.0)),
+           ("J_S18_H", "MICROFIT3", (-3.0, 16.0, -45.5, -38.5, 59.4, 69.4)),
+           ("J_S18_Y", "MICROFIT3", (-3.0, 16.0, -38.0, -31.0, 59.4, 69.4))),
     star_r=3.25, star_y=(-12.0, 12.0), star_z=74.25,
     stars=(("POS", -31.75), ("NEG", -25.25)),
 )
+
+# D-106: the chassis harness (05-harness §4) routed in CAD, and the print features it needs. Each
+# route is a chain of world boxes (x0, x1, y0, y1, z0, z1) drawn round the bundle with bend room,
+# labelled HARNESS_D106_*; check_d106_harness.py keeps them out of every part and checks the chains.
+#  - W03a+/W03a-: J-PK's body half (+X end, X 49) turns up through a new deck slot and runs under the
+#    left driver board between its posts; W03a+ rises behind the board and crosses over it into the
+#    fuse holder's -X lead, W03a- joins W03b.
+#  - W03b: the fuse holder's +X lead drops in front of the bracket column onto the crossmember, runs
+#    back along Y 33-38.5 (between the tub plate and the J13 foot), over a deck tie lug, and with
+#    W03a- along the +Y trunk to the motor bay, crosses it at X 6-12 and enters J-BAT's chassis end.
+#  - W05c: J-CHASSIS's chassis end into the +Y trunk and forward to the plate's +Y strip (W05t/W06/W07
+#    leave the strip; the tub splices themselves are not placed, HN-006 open).
+#  - W13/W17: the modules' -Y strip, off the plate edge and back to the J-S18 chassis ends.
+#  - W08/W09: pigtail, tie bridge and the Micro-Fit 3.0 inline pair on each board (D-031). The right
+#    pair's D-031 place is now PCB-10 and its J10-1; it moves on top of the right board.
+#  - J10-8 nose cable: D106_NOSE tunnel, bore and riser. J10-10 TCRT: slack loop and the tie at the lug
+#    (Z 37-42, 4.4 mm to the shell), rising just inboard of the lug; the Layout 02 riser is in the shell.
+# Pads, lead exits and connector sizes are E (S18V20 VIN/VOUT ends, holder lead height, motor pair):
+# check them on receipt. Tie lugs copy the J15B bridge: 3 mm tall, a 3 x 1.5 mm tunnel along Y under
+# a 1.5 mm roof for a 2.5 mm tie (CH-082); the wires lie along X on top.
+D106 = dict(
+    pack_slot=(49.5, 54.0, 37.5, 42.0, 51.9, 56.1),       # W03a+/- through the front deck
+    column_tunnel=(76.5, 79.5, 39.9, 48.1, 66.5, 68.1),   # fuse holder tie, through the bracket column
+    deck_lugs=((64.0, 69.0, 33.5, 37.5), (24.0, 29.0, 29.0, 33.0)),   # W03b run; +Y trunk
+    plate_lugs=((25.0, 30.0, 22.5, 27.5), (25.0, 30.0, -27.5, -22.5)),  # CH-106 arms: leads off the plate
+    lug_h=3.0, lug_tunnel=(3.0, 1.5),
+)
+D106_ROUTES = {
+    # power, pack side
+    "W03A_JPK_RISE": (49.5, 54.0, 37.5, 42.0, 44.5, 56.5),
+    "W03_UNDER_DRIVER": (30.0, 54.0, 38.0, 44.0, 56.5, 61.5),
+    "W03A_UP_BEHIND_DRIVER": (30.5, 37.5, 38.0, 44.0, 56.5, 72.0),
+    "W03A_OVER_DRIVER": (30.5, 52.0, 41.5, 47.0, 70.0, 77.0),
+    "W03B_FUSE_DROP": (82.0, 87.0, 33.0, 47.0, 56.5, 80.0),
+    "W03B_RUN_FRONT": (69.2, 87.0, 33.0, 38.5, 56.5, 60.5),
+    "W03B_RUN_OVER_LUG": (63.8, 69.2, 33.0, 38.5, 59.2, 63.2),
+    "W03B_RUN_REAR": (45.5, 63.8, 33.0, 38.5, 56.5, 60.5),
+    "PY_TRUNK_JOIN": (30.0, 37.5, 28.5, 44.0, 56.5, 61.0),
+    "PY_TRUNK": (2.5, 30.0, 28.5, 33.0, 59.2, 63.5),
+    "W03_CROSSING": (6.0, 12.0, -31.0, 33.0, 57.5, 62.5),
+    "J_BAT_CHASSIS_ENTRY": (2.5, 12.0, -31.0, -22.7, 57.5, 66.0),
+    "J_CHASSIS_CHASSIS_EXIT": (2.5, 12.0, 22.7, 31.0, 57.5, 66.0),
+    "J_BAT_BODY_EXIT": (-27.5, -19.5, -31.0, -22.7, 57.5, 72.0),
+    "J_CHASSIS_BODY_EXIT": (-27.5, -19.5, 22.7, 31.0, 57.5, 72.0),
+    # tub plate: W05t in, W13/W17 out, W06/W07 to the drivers' VM pins
+    "PLATE_STRIP_PY": (30.2, 76.0, 22.0, 28.0, 58.6, 63.0),
+    "PLATE_STRIP_PY_OVER_LUG": (24.5, 30.2, 22.0, 28.0, 61.7, 64.5),
+    "PLATE_TO_TRUNK": (24.5, 30.0, 28.0, 33.0, 59.2, 64.5),
+    "PLATE_STRIP_NY": (30.2, 76.0, -28.0, -22.0, 58.6, 63.0),
+    "PLATE_STRIP_NY_OVER_LUG": (24.5, 30.2, -28.0, -22.0, 61.7, 64.5),
+    "NY_LINK": (16.0, 30.0, -33.0, -28.0, 57.5, 64.5),
+    "W13_W17_TO_JS18": (16.0, 22.0, -45.5, -28.5, 59.4, 69.0),
+    "JS18_BODY_LEADS": (-12.0, -3.0, -42.0, -31.0, 57.5, 75.0),
+    "W06_RISE_L": (45.5, 56.0, 28.0, 33.0, 60.0, 66.0),
+    "W07_RISE_R": (45.5, 56.0, -33.0, -28.0, 60.0, 66.0),
+    # W08/W09 motor leads
+    "MOTOR_L_ALONG_X": (-1.0, 18.0, 13.5, 18.5, 56.5, 62.5),
+    "MOTOR_L_UP_Y": (12.5, 18.0, 13.5, 43.0, 56.5, 62.5),
+    "MOTOR_L_BRIDGE": (18.0, 24.0, 37.0, 43.0, 59.0, 63.0),
+    "MOTOR_L_TO_PAIR": (24.0, 37.5, 40.0, 50.0, 59.0, 70.0),
+    "MOTOR_L_INLINE_MF3_PAIR": (37.5, 58.0, 49.5, 59.0, 69.6, 82.0),
+    "MOTOR_R_ALONG_X": (-1.0, 18.0, -18.5, -13.5, 56.5, 62.5),
+    "MOTOR_R_UP_Y": (12.5, 16.0, -30.5, -13.5, 56.5, 62.5),
+    "MOTOR_R_UNDER_JS18": (12.5, 18.0, -43.0, -30.5, 56.5, 59.2),
+    "MOTOR_R_BRIDGE": (18.0, 24.0, -43.0, -37.0, 59.0, 63.0),
+    "MOTOR_R_TO_PAIR": (24.0, 37.0, -45.5, -38.0, 59.0, 80.0),
+    "MOTOR_R_INLINE_MF3_PAIR": (37.0, 56.0, -46.0, -39.0, 70.0, 80.0),
+    # J10-8 nose cable (inside D106_NOSE, 0.2 mm in from the walls) and J10-10 TCRT lead
+    "NOSE_J10_8_CHANNEL_EXIT": (89.5, 92.0, -3.0, 3.0, 32.2, 35.8),
+    "NOSE_J10_8_TURN": (85.2, 89.5, -3.0, 3.0, 33.2, 35.8),
+    "NOSE_J10_8_TUNNEL": (85.2, 89.3, -30.0, 3.0, 33.2, 35.8),
+    "NOSE_J10_8_RISER": (83.0, 89.0, -34.0, -28.0, 56.5, 78.0),
+    "TCRT_J10_10_SERVICE_LOOP": (-55.5, -51.1, -30.0, 3.0, 35.0, 42.0),
+    "TCRT_J10_10_AT_LUG": (-55.5, -51.1, -33.0, -27.0, 37.0, 42.0),
+    "TCRT_J10_10_RISER": (-53.0, -50.0, -27.0, -18.0, 37.0, 70.0),
+}
+D106_NOSE_BORE = (2.0, 33.2, 56.5, 86.0, -31.0)   # r, z0, z1, x, y: the cable in the Ø5 bore
+# Route chains (each a list of D106_ROUTES keys whose consecutive boxes must touch or overlap).
+D106_CHAINS = {
+    "W03a+": ["W03A_JPK_RISE", "W03_UNDER_DRIVER", "W03A_UP_BEHIND_DRIVER", "W03A_OVER_DRIVER"],
+    "W03a-": ["W03A_JPK_RISE", "W03_UNDER_DRIVER", "PY_TRUNK_JOIN", "PY_TRUNK", "W03_CROSSING", "J_BAT_CHASSIS_ENTRY"],
+    "W03b": ["W03B_FUSE_DROP", "W03B_RUN_FRONT", "W03B_RUN_OVER_LUG", "W03B_RUN_REAR", "W03_UNDER_DRIVER", "PY_TRUNK_JOIN",
+             "PY_TRUNK", "W03_CROSSING", "J_BAT_CHASSIS_ENTRY"],
+    "W05c": ["J_CHASSIS_CHASSIS_EXIT", "PY_TRUNK", "PLATE_TO_TRUNK", "PLATE_STRIP_PY_OVER_LUG", "PLATE_STRIP_PY"],
+    "W06": ["PLATE_STRIP_PY", "W06_RISE_L"],
+    "W07": ["PLATE_STRIP_NY", "W07_RISE_R"],
+    "W13/W17": ["PLATE_STRIP_NY", "PLATE_STRIP_NY_OVER_LUG", "NY_LINK", "W13_W17_TO_JS18"],
+    "W08 left": ["MOTOR_L_ALONG_X", "MOTOR_L_UP_Y", "MOTOR_L_BRIDGE", "MOTOR_L_TO_PAIR", "MOTOR_L_INLINE_MF3_PAIR"],
+    "W09 right": ["MOTOR_R_ALONG_X", "MOTOR_R_UP_Y", "MOTOR_R_UNDER_JS18", "MOTOR_R_BRIDGE", "MOTOR_R_TO_PAIR", "MOTOR_R_INLINE_MF3_PAIR"],
+    "W34 nose": ["NOSE_J10_8_CHANNEL_EXIT", "NOSE_J10_8_TURN", "NOSE_J10_8_TUNNEL"],
+    "W36 TCRT": ["TCRT_J10_10_AT_LUG", "TCRT_J10_10_SERVICE_LOOP", "TCRT_J10_10_RISER"],
+}
+
+
+def d106_lug(x0, x1, y0, y1, z0):
+    """A J15B-style tie bridge standing on z0: wires along X on top, the tie through a tunnel along Y."""
+    h, (w, t) = D106["lug_h"], D106["lug_tunnel"]
+    xm = (x0 + x1) / 2.0
+    return _blk(x0, x1, y0, y1, z0 - 0.01, z0 + h) - _blk(xm - w / 2.0, xm + w / 2.0, y0 - 0.1, y1 + 0.1, z0 - 0.1, z0 + t)
+
+
+def d106_front_cuts():
+    """CHASSIS_FRAME_FRONT_MODULE cuts: the W03a deck slot, the fuse-holder tie tunnel, the nose tunnel and notch."""
+    return [D106["pack_slot"], D106["column_tunnel"], *D106_NOSE.values()]
+
+
+def d106_front_lugs():
+    return [d106_lug(*b, TUB_BAY["plate"][4]) for b in D106["deck_lugs"]]
+
+
+def d106_reserves():
+    """The D-106 route boxes as tagged reserve solids (not parts: labels carry HARNESS)."""
+    colour = lambda n: "#F28C28" if n.startswith(("W03", "PY_", "J_", "PLATE", "NY_", "W13", "JS18", "W06", "W07")) \
+        else ("#D94A3A" if n.startswith("MOTOR") else "#44BDD0")
+    out = [_tag(_blk(*b), f"HARNESS_D106_{n}", colour(n), 0.35) for n, b in D106_ROUTES.items()]
+    r, z0, z1, x, y = D106_NOSE_BORE
+    out.append(_tag(_z_cyl(r, z0, z1, x, y), "HARNESS_D106_NOSE_J10_8_BORE", "#44BDD0", 0.35))
+    return out
 
 
 def _place(shape, location):
@@ -971,6 +1106,9 @@ def tub_bay_plate():
     r, depth = m["ballast_relief"]
     for y in (-20.0, 20.0):
         plate = plate - _z_cyl(r, m["plate"][4] - 0.1, m["plate"][4] + depth, 74.0, y)
+    # D-106: a tie lug on each arm for the leads leaving the plate (W05t in, W13/W17 out).
+    for b in D106["plate_lugs"]:
+        plate = plate + d106_lug(*b, top)
     return _tag(plate, "TUB_BAY_MODULE_PLATE", "#4F575B")
 
 
@@ -1794,6 +1932,7 @@ def bought_modules():
         ("M12 charge and balance ports, charge splice", [*port_parts(), *splice]),
         ("M13 audio hub, perfboard", hub),
         ("D-096 body-lift plugs and switched star", bodylift_parts()),
+        ("D-106 chassis harness routes", d106_reserves()),
     ]
     return Compound(label="Bought modules", children=[Compound(label=name, children=parts) for name, parts in groups])
 
@@ -1937,6 +2076,9 @@ DROID_CUTS = [
     # D-105: the ribbon slot through the rear cover at Z 80; M2 insert pockets for the bracket foot.
     (r"removable_octagonal_rear_cover", d105_world("cover_cut")),
     *[(r"yaw_turntable_disc_flush", sh) for sh in d105_world("disc_pockets")],
+    # D-106: the W03a deck slot, the fuse-holder tie tunnel and the J10-8 tunnel and notch (the D-076
+    # fill above is built without them).
+    *[(r"CHASSIS_FRAME_FRONT_MODULE", b) for b in d106_front_cuts()],
 ]
 DROID_ADDS = [
     # D-074: PCB-09's strip must carry both rows of socket copper plus edge margin.
@@ -1983,6 +2125,8 @@ DROID_ADDS = [
     # D-104: the D-051 recess and pockets filled back to the leg faces; the grown boss round the seat.
     *[(r"yaw_yoke_leg_-55", sh) for sh in d104_world("leg_fill")],
     (r"connected_pitch_frame_roll_servo_saddle", d104_world("boss")),
+    # D-106: tie lugs on the front deck for the W03b run and the +Y trunk.
+    *[(r"CHASSIS_FRAME_FRONT_MODULE", lug) for lug in d106_front_lugs()],
 ]
 DROID_MOVES = [
     # PCB-08 J1 housing overhangs the -X edge: place its mated-plug and header

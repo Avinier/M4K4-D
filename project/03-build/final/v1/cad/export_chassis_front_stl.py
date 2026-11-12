@@ -1,12 +1,14 @@
-"""Export CH-001 CHASSIS_FRAME_FRONT_MODULE to 04-print with every droid edit (D-095 included).
+"""Export CH-001 CHASSIS_FRAME_FRONT_MODULE to 04-print with every droid edit (D-095 and D-106 included).
 
 Run from this folder with the legacy runtime and the PYTHONPATH in ../README.md; about 1 min.
-The front module is the only chassis print D-095 changed: the balance-lead Ø5 deck hole and the
-tub-bay plate's insert pilots (two M3 x 4 in the deck strip, two M3 x 6 in the front crossmember).
-The script checks those features in the B-rep, writes the STL in print orientation (tub bottom
-down, as it sits, D-076; min corner at the origin, as the 2026-11-01 package), then re-checks the
-mesh: closed (every edge in exactly two triangles), volume against the B-rep, the hole open and
-each pilot open on a vertical ray. It updates the manifest row and prints a JSON summary.
+D-095 added the balance-lead Ø5 deck hole and the tub-bay plate's insert pilots (two M3 x 4 in the
+deck strip, two M3 x 6 in the front crossmember). D-106 added the harness features: the W03a deck
+slot, the J10-8 tunnel and notch under the crossmember, the fuse-holder tie tunnel through the
+bracket column and two deck tie lugs. The script checks the D-095 features in the B-rep
+(check_d106_harness.py checks the D-106 ones), writes the STL in print orientation (tub bottom down,
+as it sits, D-076; min corner at the origin, as the 2026-11-01 package), then re-checks the mesh:
+closed (every edge in exactly two triangles), volume against the B-rep, the hole, pilots, slot and
+tunnels open on rays along their axes. It updates the manifest row and prints a JSON summary.
 """
 
 import json
@@ -48,7 +50,15 @@ def mesh_volume(tri):
 
 def ray_z_hits(tri, x, y):
     """Z values where the vertical line at (x, y) crosses the mesh (Moller-Trumbore on +Z)."""
-    o, d = np.array([x, y, -1000.0]), np.array([0.0, 0.0, 1.0])
+    return ray_hits(tri, (x, y, -1000.0), 2)
+
+
+def ray_hits(tri, origin, axis):
+    """Coordinates along `axis` (0 X, 1 Y, 2 Z) where the line through origin parallel to it crosses the mesh."""
+    o = np.array(origin, dtype=float)
+    o[axis] = -1000.0
+    d = np.zeros(3)
+    d[axis] = 1.0
     e1, e2 = tri[:, 1] - tri[:, 0], tri[:, 2] - tri[:, 0]
     p = np.cross(d, e2)
     det = np.einsum("ij,ij->i", e1, p)
@@ -60,7 +70,7 @@ def ray_z_hits(tri, x, y):
     v = (q @ d) * inv
     t = np.einsum("ij,ij->i", e2, q) * inv
     m = ok & (u >= 0) & (v >= 0) & (u + v <= 1) & (t > 0)
-    return sorted(set(np.round(o[2] + t[m], 3)))
+    return sorted(set(np.round(o[axis] + t[m], 3)))
 
 
 def main():
@@ -119,6 +129,27 @@ def main():
             walls.append(any(a <= z0 and b >= z1 for a, b in zip(zs[0::2], zs[1::2])))
         r.check(f"mesh_pilot_open_{x:+.0f}_{y:+.0f}", axis_open and all(walls), axis_crossings=axis, walls_cover_insert_depth=walls)
 
+    # D-106 features on the mesh: no crossing inside each opening along its axis.
+    sx, sy, sz = shift
+
+    def open_on(name, origin, axis, a, b):
+        p = [origin[0] + sx, origin[1] + sy, origin[2] + sz]
+        lo_, hi_ = a + shift[axis], b + shift[axis]
+        hits = [c for c in ray_hits(tri, p, axis) if lo_ + 0.05 < c < hi_ - 0.05]
+        r.check(f"mesh_d106_{name}_open", not hits, crossings=hits)
+
+    x0, x1, y0, y1, z0, z1 = entry.D106["pack_slot"]
+    open_on("pack_slot", ((x0 + x1) / 2, (y0 + y1) / 2, 0.0), 2, 50.0, 57.0)
+    x0, x1, y0, y1, z0, z1 = entry.D106_NOSE["tunnel"]
+    open_on("nose_tunnel", ((x0 + x1) / 2, 0.0, (z0 + z1) / 2), 1, y0, y1)
+    open_on("nose_notch", (0.0, 0.0, 34.5), 0, (x0 + x1) / 2, 92.0)
+    open_on("nose_bore", (86.0, -31.0, 0.0), 2, z0, 56.0)
+    x0, x1, y0, y1, z0, z1 = entry.D106["column_tunnel"]
+    open_on("fuse_column_tunnel", ((x0 + x1) / 2, 0.0, (z0 + z1) / 2), 1, y0, y1)
+    t = entry.D106["lug_tunnel"][1]
+    for x0, x1, y0, y1 in entry.D106["deck_lugs"]:
+        open_on(f"lug_tunnel_{(x0 + x1) / 2:+.0f}", ((x0 + x1) / 2, 0.0, 56.0 + t / 2), 1, y0, y1)
+
     # 4. Manifest row.
     mf = OUT / "manifest.json"
     rows = json.loads(mf.read_text())
@@ -126,7 +157,7 @@ def main():
     old = dict(row)
     row["size_mm"] = [round(float(v), 1) for v in (hi - lo)]
     row["volume_mm3"] = round(vol_mesh, 3)
-    row["source"] = "final/v1/cad/export_chassis_front_stl.py (D-095 features; regenerated 2026-11-07)"
+    row["source"] = "final/v1/cad/export_chassis_front_stl.py (D-095 and D-106 features; regenerated 2026-11-13)"
     mf.write_text(json.dumps(rows, indent=2) + "\n")
     print(json.dumps(dict(old=dict(size=old["size_mm"], volume=old["volume_mm3"]), new=dict(size=row["size_mm"], volume=row["volume_mm3"], triangles=len(tri))), indent=1))
     r.finish()

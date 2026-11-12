@@ -11,8 +11,8 @@
       128.0,
       41.0
     ],
-    "volume_mm3": 83620.609,
-    "source": "final/v1/cad/export_chassis_front_stl.py (D-095 features; regenerated 2026-11-07)"
+    "volume_mm3": 83101.885,
+    "source": "final/v1/cad/export_chassis_front_stl.py (D-095 and D-106 features; regenerated 2026-11-13)"
   },
   {
     "file": "CH-001_CHASSIS_FRAME_REAR_MODULE.stl",
@@ -276,10 +276,10 @@
     "size_mm": [
       66.5,
       56.0,
-      5.0
+      5.5
     ],
-    "volume_mm3": 8288.538,
-    "source": "final/v1/cad/export_d095_prints_stl.py (D-095 print; exported 2026-11-07)"
+    "volume_mm3": 8393.538,
+    "source": "final/v1/cad/export_d095_prints_stl.py (D-095 print, D-106 tie lugs; exported 2026-11-13)"
   },
   {
     "file": "CH-107_IMU_ADAPTER_LSM6DSOX.stl",

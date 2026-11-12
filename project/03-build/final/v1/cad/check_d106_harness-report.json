@@ -1,0 +1,757 @@
+{
+ "script": "check_d106_harness",
+ "passed": 134,
+ "total": 134,
+ "rows": [
+  {
+   "check": "routes_present",
+   "ok": true,
+   "count": 44
+  },
+  {
+   "check": "clear_HARNESS_D106_W03A_JPK_RISE",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_W03_UNDER_DRIVER",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_W03A_UP_BEHIND_DRIVER",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_W03A_OVER_DRIVER",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_W03B_FUSE_DROP",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_W03B_RUN_FRONT",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_W03B_RUN_OVER_LUG",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_W03B_RUN_REAR",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_PY_TRUNK_JOIN",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_PY_TRUNK",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_W03_CROSSING",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_J_BAT_CHASSIS_ENTRY",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_J_CHASSIS_CHASSIS_EXIT",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_J_BAT_BODY_EXIT",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_J_CHASSIS_BODY_EXIT",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_PLATE_STRIP_PY",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_PLATE_STRIP_PY_OVER_LUG",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_PLATE_TO_TRUNK",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_PLATE_STRIP_NY",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_PLATE_STRIP_NY_OVER_LUG",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_NY_LINK",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_W13_W17_TO_JS18",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_JS18_BODY_LEADS",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_W06_RISE_L",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_W07_RISE_R",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_MOTOR_L_ALONG_X",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_MOTOR_L_UP_Y",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_MOTOR_L_BRIDGE",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_MOTOR_L_TO_PAIR",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_MOTOR_L_INLINE_MF3_PAIR",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_MOTOR_R_ALONG_X",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_MOTOR_R_UP_Y",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_MOTOR_R_UNDER_JS18",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_MOTOR_R_BRIDGE",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_MOTOR_R_TO_PAIR",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_MOTOR_R_INLINE_MF3_PAIR",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_NOSE_J10_8_CHANNEL_EXIT",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_NOSE_J10_8_TURN",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_NOSE_J10_8_TUNNEL",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_NOSE_J10_8_RISER",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_TCRT_J10_10_SERVICE_LOOP",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_TCRT_J10_10_AT_LUG",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_TCRT_J10_10_RISER",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_HARNESS_D106_NOSE_J10_8_BORE",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_MOTOR_L_PIGTAIL_RESERVE",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_MOTOR_R_PIGTAIL_RESERVE",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_GP2Y_J10_8_SOLDERED_LEAD_RESERVE",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_M12_BALANCE_PACK_LEAD_RESERVE_1",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_M12_BALANCE_PACK_LEAD_RESERVE_2",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_M12_BALANCE_BODY_LEAD_RESERVE_1",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_M12_BALANCE_BODY_LEAD_RESERVE_2",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_M12_BALANCE_BODY_LEAD_RESERVE_3",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_M12_BALANCE_BODY_LEAD_RESERVE_4",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_M12_BALANCE_BODY_LEAD_RESERVE_5",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_M12_BALANCE_BODY_LEAD_RESERVE_6",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_M12_BALANCE_BODY_LEAD_RESERVE_7",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "clear_CHARGE_SPLICE_AND_LEADS_RESERVE",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_W03A_JPK_RISE",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_W03_UNDER_DRIVER",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_W03A_UP_BEHIND_DRIVER",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_W03A_OVER_DRIVER",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_W03B_FUSE_DROP",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_W03B_RUN_FRONT",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_W03B_RUN_OVER_LUG",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_W03B_RUN_REAR",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_PY_TRUNK_JOIN",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_PY_TRUNK",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_W03_CROSSING",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_J_BAT_CHASSIS_ENTRY",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_J_CHASSIS_CHASSIS_EXIT",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_J_BAT_BODY_EXIT",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_J_CHASSIS_BODY_EXIT",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_PLATE_STRIP_PY",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_PLATE_STRIP_PY_OVER_LUG",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_PLATE_TO_TRUNK",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_PLATE_STRIP_NY",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_PLATE_STRIP_NY_OVER_LUG",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_NY_LINK",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_W13_W17_TO_JS18",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_JS18_BODY_LEADS",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_W06_RISE_L",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_W07_RISE_R",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_MOTOR_L_ALONG_X",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_MOTOR_L_UP_Y",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_MOTOR_L_BRIDGE",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_MOTOR_L_TO_PAIR",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_MOTOR_L_INLINE_MF3_PAIR",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_MOTOR_R_ALONG_X",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_MOTOR_R_UP_Y",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_MOTOR_R_UNDER_JS18",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_MOTOR_R_BRIDGE",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_MOTOR_R_TO_PAIR",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_MOTOR_R_INLINE_MF3_PAIR",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_NOSE_J10_8_CHANNEL_EXIT",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_NOSE_J10_8_TURN",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_NOSE_J10_8_TUNNEL",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_NOSE_J10_8_RISER",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_TCRT_J10_10_SERVICE_LOOP",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_TCRT_J10_10_AT_LUG",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_TCRT_J10_10_RISER",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "outside_keepouts_HARNESS_D106_NOSE_J10_8_BORE",
+   "ok": true,
+   "reserves": []
+  },
+  {
+   "check": "chain_W03a+",
+   "ok": true,
+   "breaks": []
+  },
+  {
+   "check": "chain_W03a-",
+   "ok": true,
+   "breaks": []
+  },
+  {
+   "check": "chain_W03b",
+   "ok": true,
+   "breaks": []
+  },
+  {
+   "check": "chain_W05c",
+   "ok": true,
+   "breaks": []
+  },
+  {
+   "check": "chain_W06",
+   "ok": true,
+   "breaks": []
+  },
+  {
+   "check": "chain_W07",
+   "ok": true,
+   "breaks": []
+  },
+  {
+   "check": "chain_W13/W17",
+   "ok": true,
+   "breaks": []
+  },
+  {
+   "check": "chain_W08 left",
+   "ok": true,
+   "breaks": []
+  },
+  {
+   "check": "chain_W09 right",
+   "ok": true,
+   "breaks": []
+  },
+  {
+   "check": "chain_W34 nose",
+   "ok": true,
+   "breaks": []
+  },
+  {
+   "check": "chain_W36 TCRT",
+   "ok": true,
+   "breaks": []
+  },
+  {
+   "check": "chain_W34_bore",
+   "ok": true
+  },
+  {
+   "check": "lead_exit_J_BAT_-X body",
+   "ok": true,
+   "length": 8.0,
+   "clashes": []
+  },
+  {
+   "check": "lead_exit_J_BAT_+X chassis",
+   "ok": true,
+   "length": 8.0,
+   "clashes": []
+  },
+  {
+   "check": "lead_exit_J_CHASSIS_-X body",
+   "ok": true,
+   "length": 8.0,
+   "clashes": []
+  },
+  {
+   "check": "lead_exit_J_CHASSIS_+X chassis",
+   "ok": true,
+   "length": 8.0,
+   "clashes": []
+  },
+  {
+   "check": "lead_exit_J_S18_H_-X body",
+   "ok": true,
+   "length": 6.0,
+   "clashes": []
+  },
+  {
+   "check": "lead_exit_J_S18_H_+X chassis",
+   "ok": true,
+   "length": 6.0,
+   "clashes": []
+  },
+  {
+   "check": "lead_exit_J_S18_Y_-X body",
+   "ok": true,
+   "length": 6.0,
+   "clashes": []
+  },
+  {
+   "check": "lead_exit_J_S18_Y_+X chassis",
+   "ok": true,
+   "length": 6.0,
+   "clashes": []
+  },
+  {
+   "check": "pack_slot_open_49.8_37.8",
+   "ok": true,
+   "material": []
+  },
+  {
+   "check": "pack_slot_open_51.8_39.8",
+   "ok": true,
+   "material": []
+  },
+  {
+   "check": "pack_slot_open_53.7_41.7",
+   "ok": true,
+   "material": []
+  },
+  {
+   "check": "nose_tunnel_open_along_Y",
+   "ok": true,
+   "material": []
+  },
+  {
+   "check": "nose_tunnel_floor_and_roof",
+   "ok": true,
+   "z_material": [
+    [
+     32.0,
+     33.0
+    ],
+    [
+     36.0,
+     56.0
+    ]
+   ]
+  },
+  {
+   "check": "nose_notch_joins_channel",
+   "ok": true,
+   "material": []
+  },
+  {
+   "check": "nose_bore_open_tunnel_to_deck",
+   "ok": true,
+   "material": []
+  },
+  {
+   "check": "fuse_column_tie_tunnel_open",
+   "ok": true,
+   "material": []
+  },
+  {
+   "check": "lug_deck_+66_+36",
+   "ok": true,
+   "roof": [
+    [
+     32.0,
+     56.0
+    ],
+    [
+     57.5,
+     59.0
+    ]
+   ],
+   "post": [
+    [
+     32.0,
+     59.0
+    ]
+   ],
+   "tunnel_material": []
+  },
+  {
+   "check": "lug_deck_+26_+31",
+   "ok": true,
+   "roof": [
+    [
+     52.0,
+     56.0
+    ],
+    [
+     57.5,
+     59.0
+    ]
+   ],
+   "post": [
+    [
+     32.0,
+     59.0
+    ]
+   ],
+   "tunnel_material": []
+  },
+  {
+   "check": "lug_plate_+28_+25",
+   "ok": true,
+   "roof": [
+    [
+     56.0,
+     58.5
+    ],
+    [
+     60.0,
+     61.5
+    ]
+   ],
+   "post": [
+    [
+     56.0,
+     61.5
+    ]
+   ],
+   "tunnel_material": []
+  },
+  {
+   "check": "lug_plate_+28_-25",
+   "ok": true,
+   "roof": [
+    [
+     56.0,
+     58.5
+    ],
+    [
+     60.0,
+     61.5
+    ]
+   ],
+   "post": [
+    [
+     56.0,
+     61.5
+    ]
+   ],
+   "tunnel_material": []
+  }
+ ]
+}

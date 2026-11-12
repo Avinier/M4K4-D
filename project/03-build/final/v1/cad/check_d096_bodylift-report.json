@@ -12,8 +12,8 @@
    "check": "clear_J_BAT_MICROFIT_PLUS_1X2_RECEPTACLE_HALF",
    "ok": true,
    "clashes": [],
-   "min_gap": 0.5,
-   "nearest": "BODY_FRAME_MAIN_PRINT"
+   "min_gap": 1.0,
+   "nearest": "CHASSIS_FRAME_REAR_MODULE"
   },
   {
    "check": "outside_reserves_J_BAT_MICROFIT_PLUS_1X2_RECEPTACLE_HALF",
@@ -24,8 +24,8 @@
    "check": "clear_J_BAT_MICROFIT_PLUS_1X2_PLUG_HALF",
    "ok": true,
    "clashes": [],
-   "min_gap": 1.118,
-   "nearest": "CHASSIS_FRAME_REAR_MODULE"
+   "min_gap": 2.8,
+   "nearest": "MOTOR_R_MOT3001_6V230_GEARBOX"
   },
   {
    "check": "outside_reserves_J_BAT_MICROFIT_PLUS_1X2_PLUG_HALF",
@@ -36,8 +36,8 @@
    "check": "clear_J_CHASSIS_MICROFIT_PLUS_1X2_RECEPTACLE_HALF",
    "ok": true,
    "clashes": [],
-   "min_gap": 0.5,
-   "nearest": "BODY_FRAME_MAIN_PRINT"
+   "min_gap": 1.0,
+   "nearest": "CHASSIS_FRAME_REAR_MODULE"
   },
   {
    "check": "outside_reserves_J_CHASSIS_MICROFIT_PLUS_1X2_RECEPTACLE_HALF",
@@ -48,8 +48,8 @@
    "check": "clear_J_CHASSIS_MICROFIT_PLUS_1X2_PLUG_HALF",
    "ok": true,
    "clashes": [],
-   "min_gap": 1.118,
-   "nearest": "CHASSIS_FRAME_REAR_MODULE"
+   "min_gap": 2.8,
+   "nearest": "MOTOR_L_MOT3001_6V230_GEARBOX"
   },
   {
    "check": "outside_reserves_J_CHASSIS_MICROFIT_PLUS_1X2_PLUG_HALF",
@@ -60,8 +60,8 @@
    "check": "clear_J_S18_H_MICROFIT3_1X2_RECEPTACLE_HALF",
    "ok": true,
    "clashes": [],
-   "min_gap": 2.8,
-   "nearest": "MOTOR_R_MOT3001_6V230_GEARBOX"
+   "min_gap": 3.0,
+   "nearest": null
   },
   {
    "check": "outside_reserves_J_S18_H_MICROFIT3_1X2_RECEPTACLE_HALF",
@@ -72,8 +72,8 @@
    "check": "clear_J_S18_H_MICROFIT3_1X2_PLUG_HALF",
    "ok": true,
    "clashes": [],
-   "min_gap": 1.4142,
-   "nearest": "CHASSIS_FRAME_FRONT_MODULE"
+   "min_gap": 3.0,
+   "nearest": null
   },
   {
    "check": "outside_reserves_J_S18_H_MICROFIT3_1X2_PLUG_HALF",
@@ -84,8 +84,8 @@
    "check": "clear_J_S18_Y_MICROFIT3_1X2_RECEPTACLE_HALF",
    "ok": true,
    "clashes": [],
-   "min_gap": 2.8,
-   "nearest": "MOTOR_R_MOT3001_6V230_GEARBOX"
+   "min_gap": 3.0,
+   "nearest": null
   },
   {
    "check": "outside_reserves_J_S18_Y_MICROFIT3_1X2_RECEPTACLE_HALF",
@@ -96,8 +96,8 @@
    "check": "clear_J_S18_Y_MICROFIT3_1X2_PLUG_HALF",
    "ok": true,
    "clashes": [],
-   "min_gap": 1.4142,
-   "nearest": "CHASSIS_FRAME_FRONT_MODULE"
+   "min_gap": 3.0,
+   "nearest": null
   },
   {
    "check": "outside_reserves_J_S18_Y_MICROFIT3_1X2_PLUG_HALF",
@@ -133,10 +133,10 @@
    "ok": true,
    "route": "draw 40 mm",
    "clear_draw_mm": {
-    "-Y": 6.0,
+    "-Y": 8.0,
     "+Y": 40.0,
-    "-X": 0.0,
-    "+X": 22.0,
+    "-X": 8.0,
+    "+X": 14.0,
     "+Z": 8.0
    },
    "separate_12mm": {
@@ -151,8 +151,8 @@
    "clear_draw_mm": {
     "-Y": 40.0,
     "+Y": 8.0,
-    "-X": 0.0,
-    "+X": 22.0,
+    "-X": 8.0,
+    "+X": 14.0,
     "+Z": 16.0
    },
    "separate_12mm": {
@@ -163,17 +163,17 @@
   {
    "check": "unmate_J_S18_H",
    "ok": true,
-   "route": "unmate in place",
+   "route": "draw 40 mm",
    "clear_draw_mm": {
-    "-Y": 22.0,
-    "+Y": 18.0,
-    "-X": 20.0,
-    "+X": 2.0,
-    "+Z": 8.0
+    "-Y": 14.0,
+    "+Y": 24.0,
+    "-X": 8.0,
+    "+X": 22.0,
+    "+Z": 40.0
    },
    "separate_12mm": {
-    "receptacle -X": true,
-    "plug +X": false
+    "receptacle -X": false,
+    "plug +X": true
    }
   },
   {
@@ -181,15 +181,15 @@
    "ok": true,
    "route": "unmate in place",
    "clear_draw_mm": {
-    "-Y": 30.0,
-    "+Y": 8.0,
-    "-X": 24.0,
-    "+X": 2.0,
-    "+Z": 8.0
+    "-Y": 22.0,
+    "+Y": 18.0,
+    "-X": 20.0,
+    "+X": 20.0,
+    "+Z": 6.0
    },
    "separate_12mm": {
     "receptacle -X": true,
-    "plug +X": false
+    "plug +X": true
    }
   },
   {

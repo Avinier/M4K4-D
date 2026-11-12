@@ -222,8 +222,14 @@ def main():
     for label in ("CHASSIS_FRAME_FRONT_MODULE", "CHASSIS_FRAME_REAR_MODULE"):
         n, dv = len(edited[label].solids()), (edited[label].volume - raw[label].volume) / 1000.0
         fill = sum(sh.volume for lab, sh in entry._FRAME_PRINT_ADDS + entry._J13_ADDS if lab == label) / 1000.0
-        check(f"{label} is one solid, volume change = fills + pilot rings", n == 1 and abs(dv - fill) < 0.4,
-              f"{n} solid; {raw[label].volume / 1000:.2f} -> {edited[label].volume / 1000:.2f} cm3 ({dv:+.3f}; D-076 and D-077 fills {fill:.3f})")
+        # Later front-module edits: D-095 balance hole and tub-plate pilots, D-106 slot, tunnels and tie lugs.
+        later = 0.0
+        if label == "CHASSIS_FRAME_FRONT_MODULE":
+            cuts = [entry.balance_deck_hole(), *entry.tub_bay_deck_pilots(), *[entry._blk(*b) for b in entry.d106_front_cuts()]]
+            later = (sum(lug.volume for lug in entry.d106_front_lugs()) - sum((raw[label] & c).volume for c in cuts)) / 1000.0
+        check(f"{label} is one solid, volume change = fills + pilot rings", n == 1 and abs(dv - fill - later) < 0.4,
+              f"{n} solid; {raw[label].volume / 1000:.2f} -> {edited[label].volume / 1000:.2f} cm3 ({dv:+.3f}; D-076 and D-077 fills "
+              f"{fill:.3f}; D-095/D-106 cuts and lugs {later:+.3f})")
 
     old = []
     for name, shape, axis, c, a0, a1 in pilots(raw):

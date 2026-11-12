@@ -91,6 +91,7 @@ The central record of every decision and change made during the build phase. New
 | [D-103](#d-103) | 2026-11-10 | PCB-16 head junction: the head FFCs end on a passive board on the yaw disc | W42/W43 head FFCs plug into two FH34SRJ on a board lying on the disc top beside the +Y leg foot, under the sweep floor; wires from per-net pads to the servos, PCB-12 and D1; pitch/roll wire crossings and the CSI path stay open; fit 7/7 | SELECTED design input; bundle crossings, CSI path and FFC strip mock-up decide |
 | [D-104](#d-104) | 2026-11-10 | Head wire bundle across the pitch joint through a hollow −Y trunnion, inside the −Y leg | Fixed Ø10 × 1 tube in the −Y leg pad, 6700-2Z in a grown pitch boss (D-051 pin, MR106ZZ, retainer out); closed 6.4 × 2.6 mm channel inside the leg from a plinth tunnel to a side window in the tube; flat two-row bundle; branch routes to the pitch servo and across the roll axis to PCB-12; check 7/7 over 30 poses | SELECTED design input; wire torsion cycle test, leg-channel coupon and pull-through mock-up decide |
 | [D-105](#d-105) | 2026-11-11 | Camera ribbon across pitch and roll in a free loop behind the head | Yaw crossing stays in the cassette; 140 mm C-loop from a yaw-carried bracket (printed, two CF tubes, a fourth PCB-14) to a clamp on the rear cover on the roll axis (roll only twists it); static generic FFC to the bracket (W45), Pi standard-mini 300 mm loop cable (W46); check 10/10, R min 15.4 mm; amended 2026-11-12: copper ballast (+11.1 g), worst-yaw a_tip 1.6152 (2.1 %), fourth PCB-14 integrated, bench tests in 05-harness | SELECTED design input; loop flex-cycle test, full-chain CSI stream test and a printed bracket decide |
+| [D-106](#d-106) | 2026-11-13 | Chassis harness routed in CAD; print features and body-lift plug moves it needs | Every chassis wire run of 05-harness §4 drawn as reserve chains; found and fixed: J10-8 nose run buried by the D-076 fill (tunnel), no deck passage for W03a (slot), J-BAT/J-CHASSIS/J-S18-Y leads with no exit room (plugs moved), right motor inline pair on PCB-10 (moved), TCRT riser in the shell (re-routed); fuse-holder tie tunnel, two deck and two tub-plate tie lugs; front module and CH-106 re-exported; check 134/134 | ACTIVE; CAD and export only; harness still on the D-096 electrical HOLD; splices and balance fuses not placed |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -4188,3 +4189,77 @@ CH-108's cradles are drawn around the UNMEASURED switch and INA226 outlines; re-
   - a 50k-cycle loop jig at the real arc and twist;
   - the W45 fold mock-up, with the fold sequence and a ≤ 360 mm length;
   - a VHB pull test on the head clamp (≥ 20 N normal, 10 N shear).
+
+## D-106
+
+**2026-11-13 · Chassis harness routed in CAD, with the print features and plug moves it needs (`final/v1/cad`, `04-print/01-chassis`: CH-001 front module, CH-106; harness W03a/b, W05c/t, W06–W09, W13, W17, W34, W36) · ACTIVE; CAD and export only; harness still on the D-096 electrical HOLD**
+
+**Why.** Before printing (nothing printed yet), the builder asked whether the chassis STLs account for the whole harness. Only the motor pigtails, the GP2Y lead, the D-095 balance lead and the charge splice had reserves in the final droid. Nothing had checked W01–W17's chassis runs, the TCRT lead or the nose cable against the D-076 print fills.
+
+**Found** (a 1 mm occupancy map of the droid tree, then exact B-rep checks):
+1. **J10-8 nose cable blocked.** D-076 took the front crossmember down to the bed (Z 32) for printing and buried the D-011 run under it (Z 32.8–34.9) between the pod channel mouth and the Ø5 bore at (86, −31). The bore stayed open, but nothing reached it. This was in the 2026-11-07 STL.
+2. **No way up for W03a.** J-PK sits below the deck in the +Y channel and the fuse sits above the deck on its shelf. The deck closes the channel everywhere except the D-095 balance hole.
+3. **Body-lift plugs with no room for their leads.** At the D-099 positions, J-BAT's ends were 1 mm from the rear lower cross rail and 3 mm from J-S18-Y, J-CHASSIS's body end was 1 mm from the rail, and J-S18-Y's −X end was 2 mm from J-BAT. D-099 checked unmating, not lead exits.
+4. **Right motor inline pair on PCB-10.** The D-031 position (X 50.9–57.9, Y −59.5..−38.5, Z 69.6–82) now overlaps the C3 carrier and its J10-1 header.
+5. **TCRT riser in the shell.** The Layout 02 riser (X −55.2..−51.2, Y −34..−26) runs into the final body shell.
+6. **Fuse holder untied.** D-032 left open how the holder is held on its shelf.
+
+**Changed in `makad-v1.step.py`** (`D106`, `D106_NOSE`, `D106_ROUTES`, `D106_CHAINS`, droid tables):
+- **Front module (CH-001):**
+  - a 4.5 × 3 mm tunnel along Y under the crossmember from the channel mouth to the bore. It has a 1 mm floor on the bed and a 1 mm front wall, its roof is a 4.5 mm bridge, and a notch through the wall joins the channel. It is cut from the crossmember and kept out of the D-076 fill;
+  - a 4.5 × 4.5 mm slot through the deck at X 49.5–54, Y 37.5–42, just past J-PK's +X end, for W03a+ and W03a−;
+  - a 3 × 1.6 mm tie tunnel along Y through the fuse bracket column under the shelf: one 2.5 mm tie round column, shelf and holder at X 76.5–79.5;
+  - two J15B-style tie lugs (3 mm tall, 3 × 1.5 mm tunnel along Y) on the deck: one at X 64–69, Y 33.5–37.5 under the W03b run, one at X 24–29, Y 29–33 under the +Y trunk.
+- **Tub-bay plate (CH-106):** the same lug on each arm (X 25–30, |Y| 22.5–27.5) for the leads leaving the plate.
+- **Body-lift plugs (`BODYLIFT`):** J-BAT and J-CHASSIS move 8 mm forward (X −19.5..2.5), leaving 8.5 mm to the rail for the body leads to turn up. J-S18-Y takes J-S18-H's old place (Y −38..−31), and J-S18-H moves outboard (Y −45.5..−38.5). Both J-S18 rise 2.4 mm (Z 59.4–69.4) so their chassis leads pass over the right motor tie bridge, 0.5 mm under the M5 tray module. On all four, the chassis half is +X and the body half −X.
+- **Routes** (`D-106 chassis harness routes` group, `HARNESS_D106_*`, 45 boxes plus the nose bore):
+  - **W03a+:** J-PK up the slot, under the left driver board between its posts, up behind it and over it into the fuse holder's −X lead.
+  - **W03b:** the holder's +X lead drops in front of the column, runs back along Y 33–38.5 between the tub plate and the J13 foot, over the deck lug, and then joins W03a−.
+  - **W03a− and W03b together:** the +Y trunk to the motor bay, across it at X 6–12, and into J-BAT's chassis end.
+  - **W05c:** from J-CHASSIS's chassis end into the trunk and on to the plate's +Y strip.
+  - **W13/W17:** the plate's −Y strip, off the plate edge to the J-S18 chassis ends.
+  - **W06/W07:** risers from the strips to the driver boards.
+  - **W08/W09:** pigtail, tie bridge, and the MF3 inline pair on each board. The right pair moves on top of the right board (X 37–56, Y −46..−39, Z 70–80), mirroring the left.
+  - **W34:** the nose tunnel, bore and riser.
+  - **W36:** the TCRT slack loop, the tie at the lug at Z 37–42 (4.4 mm to the shell), and the riser just inboard of the lug.
+  - **Plug exits:** J-BAT, J-CHASSIS and J-S18 body-lead exits.
+
+**Check.** New `check_d106_harness.py`, **134/134** (about 3 min):
+- every D-106 route and every older chassis harness reserve is clear of every part;
+- the D-106 routes are outside every non-harness keep-out;
+- all 11 chains are continuous, plus the nose bore;
+- 8 mm (Micro-Fit+) or 6 mm (Micro-Fit 3.0) of lead room past both ends of all four body-lift plugs;
+- the slot, tunnel, notch, bore and column tunnel are open on their axes, and all four lugs stand with their tunnels open.
+
+**Re-run after the change:**
+
+| Check | Result |
+|---|---|
+| `check_d096_bodylift` | 26/26 |
+| `check_bay_tub` | 37/37 |
+| `check_balance_channel` | 15/15 |
+| `check_nose_keel_print` | 42/42 |
+| `check_nose_keel_assembly` | 53/53 |
+| `check_frame_print` | 36/36 |
+
+`check_frame_print`'s volume tally now counts the D-095 and D-106 cuts and lugs (−0.546 cm³). Front-module supports are 1109 mm² (was 1131); the tunnel roof is a 9 mm² bridge. `check_frame_assembly` stops at `BALLAST_STEEL_BAR`, which the D-105 amendment replaced; that predates this change.
+
+**Exported.**
+- **CH-001 front module:** `export_chassis_front_stl.py` **20/20**, now with mesh rays through the slot, tunnel, notch, bore, column tunnel and lug tunnels. 83,620.6 → 83,101.9 mm³.
+- **CH-106:** `export_d095_prints_stl.py` **29/29**, with the lug tunnels. 8,288.5 → 8,393.5 mm³ and 5.5 mm tall. It still prints bottom down with no supports.
+
+CH-107 and CH-108 re-exported unchanged. Mass changes by about −0.3 g of PETG, inside the register's rounding; `check_d105_csi_loop` was not re-run.
+
+**Not done.**
+- **Tub splices (HN-006) and cell-end balance fuses (CH-103):** not placed, because neither part is selected (builder: skip for now). Placing them can still change the front module or CH-106.
+- **J-PK pack lead (W01) and the body-side ends:** W01 stays with the pack and its slide path. Body-side ends past the plug exits are body routing.
+
+**Unverified (`E`).**
+- **Lead entry points:** the S18V20 VIN/VOUT ends (assumed VIN at +Y), the fuse holder's lead height (Z 73–80 at both ends; the holder is still CH-028 HOLD), and the driver VM pin positions.
+- **Fill and pinch points:** route boxes include bend room, but bundle fill is not proved. Tightest: the shared +Y trunk (4 × AWG16 plus the left motor cable) and the right motor lead beside W13/W17. String-route on the assembled chassis as 05-harness §4 requires.
+- **Ties:** five more 2.5 mm ties (CH-082). The column tie must not cross the fuse opening on the received holder.
+
+**Changed.**
+- `final/v1/cad/`: `makad-v1.step.py`, `check_d106_harness.py`, `check_frame_print.py`, `export_chassis_front_stl.py`, `export_d095_prints_stl.py` and their reports.
+- `04-print/01-chassis/`: the two STLs, `manifest.json`, the README and `frame/README.md`.
+- [05-harness](05-harness/README.md) §9; [final/v1/README.md](final/v1/README.md); [BOM.csv](BOM.csv) CH-082.

@@ -110,8 +110,8 @@
    "check": "clear_TUB_BAY_PLATE_M3X6_SCREW_2",
    "ok": true,
    "clashes": [],
-   "min_gap": 2.15,
-   "nearest": "J_S18_Y_MICROFIT3_1X2_PLUG_HALF"
+   "min_gap": 3.0,
+   "nearest": null
   },
   {
    "check": "clear_TUB_BAY_DECK_INSERT_M3X4_2",
@@ -132,7 +132,7 @@
    "ok": true,
    "clashes": [],
    "min_gap": 2.3,
-   "nearest": "BALLAST_STEEL_BAR"
+   "nearest": "BALLAST_COPPER_BAR_C110"
   },
   {
    "check": "clear_TUB_BAY_PLATE_M3X8_SCREW_4",
@@ -146,7 +146,7 @@
    "ok": true,
    "clashes": [],
    "min_gap": 2.3,
-   "nearest": "BALLAST_STEEL_BAR"
+   "nearest": "BALLAST_COPPER_BAR_C110"
   },
   {
    "check": "clear_M2_POLOLU_2572_S18V20ALV_5V5_HEAD_STEP",

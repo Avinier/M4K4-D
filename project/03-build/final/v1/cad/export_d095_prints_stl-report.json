@@ -1,20 +1,20 @@
 {
  "script": "export_d095_prints_stl",
- "passed": 27,
- "total": 27,
+ "passed": 29,
+ "total": 29,
  "rows": [
   {
    "check": "CH-106_mesh_closed",
    "ok": true,
    "open_edges": 0,
    "degenerate_dropped": 0,
-   "triangles": 5596
+   "triangles": 5668
   },
   {
    "check": "CH-106_volume_matches_brep",
    "ok": true,
-   "mesh_mm3": 8288.5381,
-   "brep_mm3": 8288.8467
+   "mesh_mm3": 8393.5381,
+   "brep_mm3": 8393.8467
   },
   {
    "check": "CH-106_on_bed_at_origin",
@@ -22,7 +22,7 @@
    "size": [
     66.5,
     56.0,
-    5.0
+    5.5
    ]
   },
   {
@@ -132,6 +132,16 @@
     0.7,
     4.8
    ]
+  },
+  {
+   "check": "CH-106_lug_tunnel_open_+25",
+   "ok": true,
+   "crossings_in_band": []
+  },
+  {
+   "check": "CH-106_lug_tunnel_open_-25",
+   "ok": true,
+   "crossings_in_band": []
   },
   {
    "check": "CH-107_mesh_closed",

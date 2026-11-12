@@ -6,7 +6,8 @@ rear-bay plate (body side) goes to 04-print/02-body/stl. All three print flat wi
 the tub plate and IMU adapter bottom down as they sit; the rear-bay plate on its back (-X) face,
 counterbores on the bed, arms and cradles up. For each STL the script checks the mesh is closed,
 its volume matches the B-rep, it sits on the bed at the origin, and every through hole and pilot
-is open on a ray along its axis; then it writes or updates the manifest row.
+is open on a ray along its axis (and, D-106, the CH-106 tie-lug tunnels); then it writes or updates
+the manifest row.
 """
 
 import json
@@ -16,7 +17,7 @@ import numpy as np
 from build123d import Axis, export_stl
 
 import module_checks as C
-from export_chassis_front_stl import mesh_closed, mesh_volume, ray_z_hits, read_stl
+from export_chassis_front_stl import mesh_closed, mesh_volume, ray_hits, ray_z_hits, read_stl
 
 PRINT = C.HERE.parents[2].parent / "04-print"
 
@@ -34,7 +35,8 @@ def parts(entry):
     rear_holes = [("m3", y, z, rb["plate"][0], rb["arm_x"][1]) for y, z in rb["screw_yz"]]
     return [
         dict(bom="CH-106", label="TUB_BAY_MODULE_PLATE", folder="01-chassis", turn=None, bed="-Z",
-             holes=tub_holes + tub_pilots, material="PETG deep slate"),
+             holes=tub_holes + tub_pilots, material="PETG deep slate", lugs=entry.D106["plate_lugs"], z_lug=top,
+             note="D-095 print, D-106 tie lugs; exported 2026-11-13"),
         dict(bom="CH-107", label="IMU_ADAPTER_LSM6DSOX", folder="01-chassis", turn=None, bed="-Z",
              holes=imu_holes + imu_pilots, material="PETG deep slate"),
         dict(bom="CH-108", label="REAR_BAY_MODULE_PLATE", folder="02-body", turn=-90.0, bed="-X",
@@ -76,6 +78,13 @@ def main():
             inside = [z for z in hits if band[0] + 0.05 < z < band[1] - 0.05]
             r.check(f"{p['bom']}_{kind}_open_{a:+.1f}_{b:+.1f}", not inside, crossings_in_band=inside, band=list(band))
 
+        # D-106 tie lugs (CH-106): the tie tunnel open along Y under each roof.
+        t = entry.D106["lug_tunnel"][1]
+        for x0, x1, y0, y1 in p.get("lugs", ()):
+            hits = ray_hits(tri, ((x0 + x1) / 2 + shift[0], 0.0, p["z_lug"] + t / 2 + shift[2]), 1)
+            inside = [c for c in hits if y0 + shift[1] + 0.05 < c < y1 + shift[1] - 0.05]
+            r.check(f"{p['bom']}_lug_tunnel_open_{(y0 + y1) / 2:+.0f}", not inside, crossings_in_band=inside)
+
         # Manifest row (new or updated).
         mf = out_dir / "manifest.json"
         rows = json.loads(mf.read_text()) if mf.exists() else []
@@ -84,7 +93,7 @@ def main():
             row = dict(file=name, bom=p["bom"], cad_label=p["label"], quantity=1, material=p["material"], bed_down=p["bed"])
             rows.append(row)
         row.update(size_mm=[round(float(v), 1) for v in (hi - lo)], volume_mm3=round(vol_mesh, 3),
-                   source="final/v1/cad/export_d095_prints_stl.py (D-095 print; exported 2026-11-07)")
+                   source=f"final/v1/cad/export_d095_prints_stl.py ({p.get('note', 'D-095 print; exported 2026-11-07')})")
         mf.write_text(json.dumps(rows, indent=2) + "\n")
         summary[p["bom"]] = dict(file=f"{p['folder']}/stl/{name}", size=row["size_mm"], volume=row["volume_mm3"], triangles=len(tri))
     print(json.dumps(summary, indent=1))
