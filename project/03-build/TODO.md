@@ -30,3 +30,15 @@
 - [ ] BO-016 adapter: BIS CRS number on the label and a 15 V PDO
 - [ ] Measure outlines of M6 (CH-099), M8 (BO-007) and M9 (BO-066) and compare with the D-095 UNMEASURED envelopes
 - [ ] CH-039 (old 2 × M2 × 5 IMU screw row): check whether CH-110 covers it, then retire or order
+
+## Feetech release order (moved from the retired feetech-migration-status.md, 2026-10-07)
+
+Bench protocol: [03-head/v1/feetech-bench-protocol.md](03-head/v1/feetech-bench-protocol.md). Some steps may already be closed by D-048/D-049/D-095; tick them against `decisions.md`.
+
+- [ ] Verify the provisional yaw packaging against the received ST3215-HS
+- [ ] Complete the cradle, BO-056 hub, compute tray and PCB-09 source integration
+- [ ] Redesign the head mounts/horns against the received STS3045M horn, coupler and thread fits
+- [ ] Solve the head mass/axes and verify all mechanical clearances
+- [ ] Regenerate body/chassis stability and §11.3/P07
+- [ ] Run B1–B6, then freeze the electrical/firmware thresholds from those results
+- [ ] Add the yaw servo to the AR-61 mic noise test (gate 3.10)

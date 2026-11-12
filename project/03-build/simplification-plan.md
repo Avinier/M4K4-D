@@ -207,7 +207,6 @@ These are system records, outside `03-build`. The [03-build rule](README.md) say
 | [Head BOM](03-head/v1/BOM.md) yaw rail note (BO-043) | "Second LTC3119 on PCB-03" → bought buck-boost at 11.1 V; servo current limit below the module's 2 A |
 | PCB-12 | Simplified scope, or the Waveshare board in the C2 tray (Q5) |
 | `J8-1` head trunk | Unchanged pinout; the supplies now come from modules |
-| [feetech-migration-status.md](feetech-migration-status.md) | Update the rail lines |
 
 ### 4.8 Final CAD ([final/v1/cad](final/v1/README.md))
 

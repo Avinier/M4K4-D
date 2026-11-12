@@ -1,6 +1,6 @@
 # Makad / M4K4-D
 
-> **Current project overview** — last reconciled **26 September 2026**
+> **Current project overview**: last reconciled **12 November 2026**
 >
 > Foundation approved: **14 August 2026** · V1 deadline: **5 December 2026**
 
@@ -12,101 +12,101 @@ The central V1 priority is simple:
 
 Makad's defining advantage is expressiveness. That expression comes from what M4 understands, sees, and hears, and from how convincingly its display, status light, astromech audio, head, wheeled base, and timing communicate one intent.
 
-`00-foundation` is the product-intent authority. Documents under `01-system` and `02-prototypes` are engineering reference. Design, sourcing, CAD, software, and hardware proceed together.
+## Authority
 
-This README orients the repository around the current design, current build state, and immediate next work. [`MEMORY.md`](MEMORY.md) is a short chronological log of later consequential discoveries and decisions.
+- [`project/00-foundation`](project/00-foundation/) is the product-intent authority.
+- [`project/03-build`](project/03-build/README.md) governs every engineering decision, part selection, BOM change and CAD edit from 2026-09-28. Its ledger is [`decisions.md`](project/03-build/decisions.md) and its parts register is [`BOM.csv`](project/03-build/BOM.csv).
+- [`project/01-system`](project/01-system/) and [`project/02-prototypes`](project/02-prototypes/) are read-only engineering reference. Where they disagree with `03-build`, `03-build` wins.
+
+[`MEMORY.md`](MEMORY.md) is a short chronological log of the project's turning points.
 
 ## Current design
 
-M4 is a battery-powered floor droid with a three-axis head, an animated face, a camera-side status light, body-mounted hearing and speech, and a two-wheel base. The head carries the display, camera, status light, C2 motion controller, and local structure. The body carries four PDM microphones, the speaker, battery, and main compute. Floor mode is primary; tabletop mode inhibits locomotion by default.
+M4 is a battery-powered floor droid with a three-axis head, an animated face, a camera-side status light, body-mounted hearing and speech, and a two-wheel base. The head carries the display, camera, status light and C2 motion controller. The body carries the yaw stage, four I²S microphones, the speaker, main compute and the bought power modules; the chassis carries the battery, drive and floor sensors. Floor mode is primary; tabletop mode inhibits locomotion by default.
 
-The current physical target is **300 × 205 × 180 mm**. Head Layout 04 and body/chassis Layout 02 give a **293.5 mm** neutral stack (140 mm body-top datum + 49.5 mm neck + 104 mm crown-inclusive head). Drive geometry is Ø84 mm wheels, 170 mm track, 110 mm axle-to-front-support, and a mandatory rear anti-tip skid. Front support is a Ø1″ ball transfer; a swivel caster remains a comparison article on a rig, while the present CAD mount is ball-only.
-
-Working geometry lives in [`docs/02-prototypes/RP-06-cad/`](docs/02-prototypes/RP-06-cad/README.md): head [Layout 04](docs/02-prototypes/RP-06-cad/head/layout-04/README.md) and body/chassis [Layout 02](docs/02-prototypes/RP-06-cad/body-chassis/layout-02/README.md).
+Drive geometry is Ø84 mm wheels on a ~170 mm track with a front ball caster and a mandatory rear anti-tip keel ([dimensional baseline](project/01-system/dimensional-baseline.md) v1.15). The whole robot is modelled in [`project/03-build/final/v1`](project/03-build/final/v1/README.md); subsystem CAD lives in [01-chassis](project/03-build/01-chassis/), [02-body](project/03-build/02-body/) and [03-head](project/03-build/03-head/).
 
 ### Selected components
 
+States follow the [BOM](project/03-build/BOM.csv): selected parts are settled but not yet measured or bench-proven.
+
 | Item | Selection | Record |
 |---|---|---|
-| Face display | Waveshare ESP32-S3-LCD-4.3, **no-touch, SKU 30493** — 800×480 IPS with on-board ESP32-S3/LVGL renderer | [`display-candidate-study.md`](docs/01-system/display-candidate-study.md) |
-| Head camera | Raspberry Pi Camera Module 3 **Wide**, visible-light, **SC0874** | [`camera-candidate-study.md`](docs/01-system/camera-candidate-study.md) |
-| Head motion controller (C2) | Waveshare **ESP32-S3-Zero**, headerless; bench twin ESP32-S3-DevKitC-1-N8R8 | [`control-topology-options.md`](docs/01-system/control-topology-options.md) §6.3 |
-| Main compute (C0) | **Raspberry Pi 5, 2 GB** with official Pi 5 Active Cooler; storage and power-entry implementation still open | [`compute-control architecture`](docs/02-prototypes/RP-02-electrical/compute-control-architecture.md) |
-| Base controller (C3 prototype) | **Espressif ESP32-S3-DevKitC-1-N8**, selected over N8R8 to preserve GPIO35–37 | same, CA-03 |
-| Control split | C0 owns semantic behaviour; D1 renders eyes; C2 owns head trajectory and local safety; C3 owns base loops and local hazards. Production links are differential UART; C2 relays face/light state locally | same |
-| Drive topology | Two encoder wheels + **front ball transfer** + mandatory rear anti-tip skid | [`dimensional-baseline.md`](docs/01-system/dimensional-baseline.md) v1.12 |
-| Head construction | PLA structure and skin (provisional beyond first head), real M2 button-heads, nine-step weathered finish | [`material-finish-mass-decision.md`](docs/02-prototypes/RP-01-head/material-finish-mass-decision.md) |
-| Head layout | Serial body→yaw→pitch→roll; coaxial direct roll on a supported spindle; ears roll with the face; trapezoidal camera crown; external yaw cable loop; C2 on the rolling cradle; A0 balance target | [`head/decisions.md`](docs/02-prototypes/RP-06-cad/head/decisions.md) |
-
-Working choices now cover XC330-M181-T yaw and XC330-M288-T pitch/roll at 5 V, a two-cell Samsung 25R pack with custom protection, Pololu #4804 as the preferred drive-motor candidate, the audio and status-light parts, and the four-board power architecture. These are not purchased or bench-frozen. Motor SKU lock, production camera interconnect, moving harness, storage, board schematics and layouts, and power/safety proof remain open.
+| Face display | Waveshare ESP32-S3-LCD-4.3, **no-touch, SKU 30493**: 800×480 IPS with on-board ESP32-S3/LVGL renderer | [display study](project/01-system/display-candidate-study.md) |
+| Head camera | Raspberry Pi Camera Module 3 **Wide**, **SC0874**; ribbon crosses pitch and roll in a free loop behind the head | [D-105](project/03-build/decisions.md#d-105) |
+| Main compute (C0) | **Raspberry Pi 5, 2 GB** with the official Active Cooler, on PCB-09 (2 × RS-422 link adapter) | [D-048](project/03-build/decisions.md#d-048), [04-pcbs](project/03-build/04-pcbs/README.md) |
+| Head motion controller (C2) | Waveshare **ESP32-S3-Zero** on the custom PCB-12 carrier | [D-102](project/03-build/decisions.md#d-102) |
+| Base controller (C3) | Espressif **ESP32-S3-DevKitC-1 v1.1** on the custom PCB-10 carrier | [04-pcbs](project/03-build/04-pcbs/README.md) |
+| Head actuators | Yaw: **Waveshare ST3215-HS** at 11.1 V. Pitch and roll: **Feetech STS3045M** at 6.3 V. Candidates until bench tests B1–B6 | [D-046](project/03-build/decisions.md#d-046)–[D-049](project/03-build/decisions.md#d-049) |
+| Drive | **ThinkRobotics MOT3001-6V230RPM** encoder gearmotors (received), two DRV8833 carriers, printed PETG/TPU wheels, Pololu #2691 ball caster | [D-003](project/03-build/decisions.md#d-003) |
+| Battery | **2S1P Samsung INR18650-25R** (7.2 V, 18 Wh) with a bought TIFPS0629 protection board and copper ballast; charged off-board (ISDT PD60) | [D-093](project/03-build/decisions.md#d-093) |
+| Power | Pololu #2813 pushbutton switch, two S18V20ALV servo rails, two S13V30F5 5 V rails, INA226 monitor | [D-094](project/03-build/decisions.md#d-094), [module selection](project/03-build/module-selection.md) |
+| Audio and IMU | Visaton K 50 WP speaker, MAX98357A amp, 4 × INMP441 mics, Adafruit LSM6DSOX base IMU | [D-094](project/03-build/decisions.md#d-094) |
+| Control split | C0 owns semantic behaviour; D1 renders eyes; C2 owns head trajectory and local safety; C3 owns base loops and local hazards. Links are differential UART; C2 relays face/light state locally | [control topology](project/01-system/control-topology-options.md) |
 
 ## Current build state
 
-The design is far ahead of the physical robot. Head and body CAD exist; electrical and locomotion behaviour are specified on paper; no integrated article has been built, weighed, or run.
+The design is ahead of the physical robot. The whole-robot CAD is integrated and checked; first parts have arrived; nothing is printed, wired or running.
 
-| Area | State (2026-09-26) |
+| Area | State (2026-11-12) |
 |---|---|
-| Foundation | Approved. Some numeric thresholds remain open. |
-| Geometry | Head Layout 04 is the working 1:1 model; body/chassis Layout 02 live-imports it. Neutral height is 293.5 mm. Screw collisions and sign mapping are closed in CAD; stiffness, hard-stop impact, bearing fit and balance trim await hardware. The body layout still has unresolved connector, joint and safety details. Not a fabrication release. |
-| Head mechanism | Concept A (elevated-ear serial gimbal) is the path. The XC330 family is a working choice, with internal inertia bounded on paper. Nothing is weighed; actuator B1–B6 tests remain. |
-| Electrical / control | States, power topology, compute split, and C0↔C2 message/recovery design are written. Host codec work is exploratory. Pack sizing still needs drive measurements. |
-| Locomotion | Two-wheel + ball + skid is the V1 type. Pololu #4804 is the preferred motor candidate and its official STEP is in CAD; SKU lock, hubs, axle proof and drive tests remain. Layout 02 packages one guarded rear TCRT channel, short of the fuller stop-path sensing in the control design. |
-| Interaction / following | Audio-path requirements and following architecture are documented. No SKU, corpus, or physical test. |
-| Software / firmware | Timebase, link contract, C2/C3 firmware, and C0 behaviour are specified more than implemented. |
-| Physical hardware | Selected display, camera, C2, Pi 5, and cooler are locked on paper. First weigh-ins wait on samples. No head, chassis, or electrical rig has been built. |
+| CAD | Chassis, body and head v1 are integrated in `final/v1` with targeted checks. Tipping margin a_tip 1.670 neutral / 1.646 worst pose against 1.582 ([D-095](project/03-build/decisions.md#d-095)); camera-loop ballast keeps the worst-yaw margin above 1.5% ([D-105](project/03-build/decisions.md#d-105)). Not yet a fabrication release for body and head. |
+| Electrical | D-093 replaced the custom power boards with bought modules. The [harness](project/03-build/05-harness/README.md) topology is drawn but on **electrical HOLD** ([D-096](project/03-build/decisions.md#d-096)). Custom boards: PCB-09 rev B routed; PCB-10/11/15 rev A; PCB-08/12/14/16 rev A drafts, not ordered. |
+| Procurement | Modules and small parts ordered 2026-11-08; deliveries logged in [BOM-deliveries.md](project/03-build/BOM-deliveries.md). Open actions in [TODO.md](project/03-build/TODO.md). |
+| Printing | Chassis print package exported to [04-print](project/04-print/README.md); body and head prints not started. |
+| Software / firmware | [Firmware requirements](project/03-build/04-software/firmware-requirements.md) recorded; timebase, link contract and behaviour are specified more than implemented. |
+| Physical tests | None run. Bench register N1–N12 and actuator tests B1–B6 are open. |
 
 `visuals/` are provisional references; several show superseded details (mouths, ear microphones, yoke-mounted ears).
 
 ## Immediate next work
 
-Sourcing, CAD, software, and hardware proceed together. The useful next work is:
-
-- **Verify the current head design on hardware:** measure pitch/roll stiffness, hard-stop impact and balance trim; trial-fit the 696-2Z bearings and XC330 actuators.
-- **Choose and source remaining parts** as packaging needs them — head servos, wheels/hubs/motors, ball transfer, battery and power hardware, audio, status LED, connectors — and replace CAD envelopes with real geometry.
-- **Keep the whole-robot model current** in RP-06: the 293.5 mm stack is closed in CAD; reconcile Layout 02's rear-only cliff channel and low-object contact gap with the base safety design.
-- **Implement firmware and software** on the same timeline: C2/C3, C0 behaviour and perception, the serial link and timebase, and face rendering on the display.
-- **Build and measure** as parts arrive: weigh display, camera, C2, prints, and finish coupons; print the head and chassis; stand up a protected bench and start moving hardware.
+- **Receive and measure** the ordered parts; record them in the BOM and correct dependent CAD.
+- **Run the bench tests**: power switch, servo and 5 V rails (N1–N12), Feetech actuators (B1–B6), pack protection acceptance.
+- **Clear the harness HOLD** from measured peaks, then build and test the harness.
+- **Finish the custom boards** (PCB-08, 12, 14, 16) and order all of them together.
+- **Print and assemble the chassis**, then body and head, through [04-print](project/04-print/README.md).
+- **Implement firmware and software** on the same timeline: C2/C3, C0 behaviour and perception, the serial link and face rendering.
 
 ## Documents
 
-### Product intent — authoritative
+### Product intent: authoritative
 
-- [Vision](docs/00-foundation/vision.md)
-- [V1 scope](docs/00-foundation/v1-scope.md)
-- [Constraints](docs/00-foundation/constraints.md)
-- [Success criteria](docs/00-foundation/success-criteria.md)
-- [Core interaction scenarios](docs/00-foundation/core-interaction-scenarios.md)
+- [Vision](project/00-foundation/vision.md)
+- [V1 scope](project/00-foundation/v1-scope.md)
+- [Constraints](project/00-foundation/constraints.md)
+- [Success criteria](project/00-foundation/success-criteria.md)
+- [Core interaction scenarios](project/00-foundation/core-interaction-scenarios.md)
 
-### Current engineering
+### Build: governing
 
-- [Dimensional and packaging baseline](docs/01-system/dimensional-baseline.md)
-- Working CAD: [RP-06-cad](docs/02-prototypes/RP-06-cad/README.md) — [head Layout 04](docs/02-prototypes/RP-06-cad/head/layout-04/README.md), [body/chassis Layout 02](docs/02-prototypes/RP-06-cad/body-chassis/layout-02/README.md)
-- Ledgers: [mass/envelope](docs/01-system/mass-envelope-ledger.md), [power/energy/thermal](docs/01-system/power-energy-ledger.md), [candidate sourcing](docs/01-system/candidate-sourcing-matrix.md)
-- Studies: [control topology](docs/01-system/control-topology-options.md), [display](docs/01-system/display-candidate-study.md), [camera](docs/01-system/camera-candidate-study.md), [head harness](docs/01-system/head-harness-routing-study.md)
+- [03-build overview](project/03-build/README.md): status, file map and build rules
+- [Decisions ledger](project/03-build/decisions.md), [BOM](project/03-build/BOM.csv), [simplification plan](project/03-build/simplification-plan.md)
+- [Whole robot (final v1)](project/03-build/final/v1/README.md) and its [print guide](project/03-build/final/v1/printguide.md)
+- [Custom PCBs](project/03-build/04-pcbs/README.md), [harness](project/03-build/05-harness/README.md)
+- [Printing](project/04-print/README.md)
 
-### Research and history
+### Engineering reference (read-only)
 
-These folders are engineering reference. They do not set how work proceeds.
-
-- [System design brief](docs/01-system/system-design-brief.md), [risk-prototype plan](docs/01-system/risk-prototype-plan.md), [workbench](docs/01-system/workbench.md), [run-record convention](docs/01-system/run-record-convention.md)
-- Head: [`RP-01-head/`](docs/02-prototypes/RP-01-head/)
-- Electrical: [`RP-02-electrical/`](docs/02-prototypes/RP-02-electrical/README.md)
-- Locomotion: [`RP-03-locomotion/`](docs/02-prototypes/RP-03-locomotion/README.md)
-- Coordination: [`RP-04-coordination/`](docs/02-prototypes/RP-04-coordination/README.md)
-- Interaction: [`RP-05-interaction/`](docs/02-prototypes/RP-05-interaction/README.md)
-- Following: [`RP-07-following/`](docs/02-prototypes/RP-07-following/README.md)
-- Earlier memory log: [`archive/MEMORY-20260921.md`](archive/MEMORY-20260921.md)
+- [Dimensional and packaging baseline](project/01-system/dimensional-baseline.md)
+- Ledgers: [mass/envelope](project/01-system/mass-envelope-ledger.md), [power/energy/thermal](project/01-system/power-energy-ledger.md), [candidate sourcing](project/01-system/candidate-sourcing-matrix.md)
+- Studies: [control topology](project/01-system/control-topology-options.md), [display](project/01-system/display-candidate-study.md), [camera](project/01-system/camera-candidate-study.md), [head harness](project/01-system/head-harness-routing-study.md), [timebase](project/01-system/timebase.md)
+- [System design brief](project/01-system/system-design-brief.md), [risk-prototype plan](project/01-system/risk-prototype-plan.md), [workbench](project/01-system/workbench.md), [run-record convention](project/01-system/run-record-convention.md)
+- Risk prototypes: [head](project/02-prototypes/RP-01-head/), [electrical](project/02-prototypes/RP-02-electrical/README.md), [locomotion](project/02-prototypes/RP-03-locomotion/README.md), [coordination](project/02-prototypes/RP-04-coordination/README.md), [interaction](project/02-prototypes/RP-05-interaction/README.md), [CAD layouts](project/02-prototypes/RP-06-cad/README.md), [following](project/02-prototypes/RP-07-following/README.md)
+- Earlier memory logs: [`archive/`](archive/)
 
 ## Repository
 
 ```
-docs/00-foundation/     product intent and constraints     authoritative
-docs/01-system/         engineering reference
-docs/02-prototypes/     studies, calculations, and working CAD
-docs/archive/           superseded documents
-archive/                prior process log
-MEMORY.md               chronological build and decision log
-README.md               this orientation
+project/00-foundation/   product intent and constraints      authoritative
+project/01-system/       system studies and ledgers          reference
+project/02-prototypes/   risk prototypes and early CAD       reference
+project/03-build/        decisions, BOM, CAD, PCBs, harness  governs
+project/04-print/        print lab, workflow, STL exports
+visuals/                 provisional renders
+archive/                 earlier memory logs
+MEMORY.md                chronological log of turning points
+README.md                this orientation
 ```
 
 ## Identity and design direction
@@ -123,7 +123,7 @@ M4 is a droid, not a desktop assistant, smart speaker, or generic social robot. 
 
 ## V1 Core
 
-V1 is not complete unless the following outcomes work together as one droid. Exact wording lives in [`v1-scope.md`](docs/00-foundation/v1-scope.md) (SCOPE-01…21).
+V1 is not complete unless the following outcomes work together as one droid. Exact wording lives in [`v1-scope.md`](project/00-foundation/v1-scope.md) (SCOPE-01…21).
 
 **Expression and character** — animated face on the onboard display; powered roll, pitch and yaw head motion; at least one controllable LED beside the camera; a builder-authored non-English astromech language; idle aliveness without manual control; display, LED, audio, head, base and timing express one intent; at least one bounded excited spin.
 
@@ -139,7 +139,7 @@ V1 is not complete unless the following outcomes work together as one droid. Exa
 
 ## Approved Core scenarios
 
-Source: [`core-interaction-scenarios.md`](docs/00-foundation/core-interaction-scenarios.md).
+Source: [`core-interaction-scenarios.md`](project/00-foundation/core-interaction-scenarios.md).
 
 **1. Wake, socialize, assist.** M4 idles head-down. A person calls its name. M4 wakes as one coordinated performance: three-axis head rise, eyes, camera-side LED, astromech acknowledgement, face acquisition and gaze. A greeting produces an in-character response. The person can request the time, a timer, an alarm, or Spotify playback; M4 confirms visibly, performs it, and vibes during music.
 
@@ -147,4 +147,4 @@ Source: [`core-interaction-scenarios.md`](docs/00-foundation/core-interaction-sc
 
 ## Success definition
 
-V1 succeeds when M4 delivers these interactions as a convincing, repeatable droid encounter on battery power, not as a sequence of manually rescued subsystem demos. The validation categories and open thresholds are in [`success-criteria.md`](docs/00-foundation/success-criteria.md) (SC-01…25).
+V1 succeeds when M4 delivers these interactions as a convincing, repeatable droid encounter on battery power, not as a sequence of manually rescued subsystem demos. The validation categories and open thresholds are in [`success-criteria.md`](project/00-foundation/success-criteria.md) (SC-01…25).
