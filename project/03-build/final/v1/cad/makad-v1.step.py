@@ -1435,6 +1435,332 @@ def pcb16_reserves_world():
             for name, (x0, x1, y0, y1, z0, z1) in PCB16_RESERVES.items()]
 
 
+# D-104: the head wire bundle crosses the pitch joint through a hollow -Y trunnion. The
+# D-051 pin, MR106ZZ, retainer and its screws are replaced by a fixed Ø10 x 1 tube pressed
+# into the -Y leg pad and a 6700-2Z (10 x 15 x 4) seated in a grown pitch-frame boss, so
+# the pitch frame turns on the yaw-carried tube. The bundle (two rows of silicone wire,
+# about 6.0 x 2.2 mm, E) leaves PCB-16 at +X, runs on the disc top under the sweep floor,
+# crosses to the -Y leg, rises into a tunnel through the plinth above the D-051 key socket,
+# climbs a closed channel inside the leg (vertical in the waist, then straight at the
+# axis), enters the tube through a side window and leaves its inboard end inside the
+# pitch frame. There it splits: servo power and data to the pitch servo lead (pitch
+# frame), and PCB-12's leads across the roll joint near its axis (roll frame). The tube's
+# outboard end takes a printed plug once the wires are pulled through. Head-local, shifted
+# to the world at the neutral pose; check_d104_head_routes.py measures it.
+D104 = dict(
+    tube=dict(r=5.0, r_in=4.0, y=(-58.0, -42.0)),          # Ø10 x 1 6063 tube (E)
+    pad_bore=dict(r=5.0, y=(-58.1, -51.9)),                 # press fit, ream on the print (E)
+    bearing=dict(sku="6700-2Z", d=10.0, D=15.0, B=4.0, y=(-51.0, -47.0)),
+    boss=dict(r=9.5, y=(-51.0, -43.0), seat_r=7.55, hole_r=6.3),
+    channel=dict(w=6.4, y=(-55.8, -53.2), dx=-17.5, bottom_z=-27.6, knee_dz=-30.0),
+    tunnel=dict(y=(-55.8, -48.0), z=(-27.6, -24.6)),
+    plug=dict(r=4.0, y=(-58.0, -56.6)),
+    stop_pin=dict(dx=-10.0, r=1.0, y=(-54.0, -46.0)),       # details.PITCH_STOP_PIN, kept clear
+)
+D104_Y_RESERVES = {   # head-local boxes (x0, x1, y0, y1, z0, z1), yaw-carried
+    "HARNESS_D104_DISC_RUN": (-25.9, -19.9, -46.5, 48.0, -34.5, -32.3),
+    "HARNESS_D104_DISC_CROSS": (-63.12, -19.9, -46.5, -40.5, -34.5, -32.3),
+    "HARNESS_D104_RISER": (-63.12, -56.72, -46.5, -44.3, -34.5, -24.6),
+    "HARNESS_D104_TUNNEL_ENTRY": (-63.12, -56.72, -48.0, -44.3, -27.6, -24.6),
+}
+# Branch centrelines, head-local, from the free-space study (study_head_cable_passage.py maps),
+# with the bundle radius: pitch-frame runs from the tube's inboard end; the roll-frame run
+# starts where PCB-12's branch crosses the roll joint 1 mm off its axis.
+D104_BRANCHES = {
+    "HARNESS_D104_SERVO_BRANCH": ("P", 1.2, ((-42.42, -40.0, 45.55), (-45.8, -8.2, 67.8),
+                                             (-39.5, 14.2, 65.2), (-35.8, 18.0, 61.5))),
+    "HARNESS_D104_PCB12_BRANCH_PITCH": ("P", 1.1, ((-42.42, -40.0, 45.55), (-25.8, -9.5, 47.8),
+                                                   (-25.8, -2.0, 47.8))),
+    "HARNESS_D104_PCB12_BRANCH_ROLL": ("R", 1.1, ((-25.8, -2.0, 47.8), (-25.8, -9.5, 46.5),
+                                                  (-33.2, -20.8, 35.2), (-33.2, -30.8, 24.0))),
+}
+
+
+def _y_cyl(r, y0, y1, x=None, z=None):
+    return layout_model.yspan(r, y0, y1, x, z)
+
+
+def _xz_bar(p0, p1, w, y0, y1):
+    """Box of width w (in XZ, across the run) and Y y0..y1 from p0 to p1, both (x, z)."""
+    dx, dz = p1[0] - p0[0], p1[1] - p0[1]
+    length = math.hypot(dx, dz)
+    bar = Box(length, y1 - y0, w).rotate(Axis.Y, -math.degrees(math.atan2(dz, dx)))
+    return bar.moved(Location(((p0[0] + p1[0]) / 2.0, (y0 + y1) / 2.0, (p0[1] + p1[1]) / 2.0)))
+
+
+def _tube_path(points, r):
+    from build123d import Solid, Sphere, Vector
+    out = None
+    for a, b in zip(points, points[1:]):
+        a, b = Vector(*a), Vector(*b)
+        seg = Solid.make_cylinder(r, (b - a).length, Plane(origin=a, z_dir=b - a))
+        out = seg if out is None else out + seg
+    for p in points[1:-1]:
+        out = out + Sphere(r).moved(Location(p))
+    return out
+
+
+def d104_local(kind):
+    """Head-local D-104 geometry by kind (one shape, or a list for 'leg_fill' and 'reserves')."""
+    m, px, pz = D104, layout_model.PITCH_X, layout_model.PITCH_Z
+    c, t = m["channel"], m["tunnel"]
+    x0, x1 = px + c["dx"] - c["w"] / 2, px + c["dx"] + c["w"] / 2
+    knee = (px + c["dx"], pz + c["knee_dz"])
+    if kind == "channel":
+        # The leg's cable void: tunnel, vertical run, knee and the straight run to the axis.
+        vert = _blk(x0, x1, c["y"][0], c["y"][1], c["bottom_z"], knee[1])
+        tun = _blk(x0, x1, t["y"][0], t["y"][1], *t["z"])
+        diag = _xz_bar(knee, (px, pz), c["w"], *c["y"])
+        return tun + vert + _y_cyl(c["w"] / 2, *c["y"], *knee) + diag
+    if kind == "pad_bore":
+        return _y_cyl(m["pad_bore"]["r"], *m["pad_bore"]["y"])
+    if kind == "leg_cut":
+        return d104_local("pad_bore") + d104_local("channel")
+    if kind == "leg_fill":
+        # The D-051 recess, seat, lip hole and insert pockets go back to solid, inside the leg
+        # face (Y -58) and inner face (Y -52), except where the new bore and channel run.
+        old = layout_model.trunnion_leg_cut() & _blk(px - 20, px + 20, -58.0, -52.0, pz - 20, pz + 20)
+        return [old - d104_local("leg_cut")]
+    if kind == "tube":
+        tb = m["tube"]
+        tube = _y_cyl(tb["r"], *tb["y"]) - _y_cyl(tb["r_in"], tb["y"][0] - 0.1, tb["y"][1] + 0.1)
+        return tube - _xz_bar(knee, (px, pz), c["w"], *c["y"])     # side window into the channel
+    if kind == "plug":
+        return _y_cyl(m["plug"]["r"], *m["plug"]["y"])
+    if kind == "bearing":
+        b = m["bearing"]
+        return _y_cyl(b["D"] / 2, *b["y"]) - _y_cyl(b["d"] / 2, b["y"][0] - 0.1, b["y"][1] + 0.1)
+    bo, sp = m["boss"], m["stop_pin"]
+    seat = _y_cyl(bo["seat_r"], bo["y"][0] - 0.1, m["bearing"]["y"][1])
+    hole = _y_cyl(bo["hole_r"], m["bearing"]["y"][1] - 0.1, bo["y"][1] + 0.1)
+    if kind == "boss_cut":
+        return seat + hole
+    if kind == "boss":
+        return _y_cyl(bo["r"], *bo["y"]) - seat - hole - _y_cyl(sp["r"], *sp["y"], px + sp["dx"], pz)
+    if kind == "reserves":
+        out = [(n, "Y", _blk(*b)) for n, b in D104_Y_RESERVES.items()]
+        out.append(("HARNESS_D104_LEG_CHANNEL", "Y", d104_local("channel")))
+        out.append(("HARNESS_D104_TUBE_BORE", "Y", _y_cyl(m["tube"]["r_in"], m["plug"]["y"][1], m["tube"]["y"][1])))
+        out += [(n, f, _tube_path(pts, r)) for n, (f, r, pts) in D104_BRANCHES.items()]
+        return out
+    raise ValueError(kind)
+
+
+def d104_world(kind):
+    s = d104_local(kind)
+    loc = Location(HEAD_ORIGIN_IN_CHASSIS)
+    if kind == "reserves":
+        return [(n, f, x.moved(loc)) for n, f, x in s]
+    return [x.moved(loc) for x in s] if isinstance(s, list) else s.moved(loc)
+
+
+_D104_GROUP = {"Y": "Yaw mount", "P": "Pitch assembly", "R": "Roll assembly"}
+
+
+# D-105: the camera ribbon crosses pitch and roll in a free loop behind the head. The yaw
+# crossing stays in the BO-059 cassette (W37 -> PCB-14 board 1). From there a generic 22-way
+# FFC (static, yaw-carried) runs up the bore and channel, folds out at the CSI exit, lies
+# flat on the disc top and on the bracket's arm, climbs the bracket's +Y tube and folds
+# into a fourth PCB-14 rev A at the bracket top. The loop cable (a Raspberry Pi
+# standard-mini, 22-way end in the joiner, 15-way end in the Camera Module 3) leaves the
+# joiner through a clamp, hangs in a C-loop behind the head in the head's XZ plane on the
+# roll axis, enters a clamp on the rear cover heading forward along the roll axis (roll
+# only twists it), climbs the cover's inside face, runs forward under the roof through a
+# slotted guide and drops into the head's own camera exit reserve. All flexing is between
+# the two clamps. Head-local; the bracket is yaw-carried, the head clamp and inside run
+# roll-carried. check_d105_csi_loop.py solves the loop shape at every pose.
+D105 = dict(
+    ribbon=dict(width=16.0, t=0.3, y=-1.0, static_width=12.0),   # standard-mini body (E, the 15-way end); generic 22-way
+    loop=dict(head=(-119.0, 48.1565), head_heading_deg=180.0, mast=(-150.0, 110.0),
+              mast_heading_deg=15.0, length=140.0),          # (x, z); headings from +X towards +Z
+    head_clamp=dict(x=(-119.0, -116.2), y=(-14.5, 12.5), z=(43.16, 53.16), slot_t=1.0,
+                    screws=((-117.6, -12.5), (-117.6, 10.5)), insert_r=1.6, insert_depth=3.2,
+                    plate=dict(x=(-116.2, -115.0), y=(-14.5, 12.5), strip_y=(-10.5, 8.5), z=(43.16, 82.0), channel_x=-115.6)),
+    cover_slot_z=(79.4, 80.6),
+    roof_run=dict(x=(-115.6, -24.0), z=(79.4, 80.6)),
+    guide=dict(x=(-49.0, -45.0), y=(-12.0, 10.0), z=(78.0, 84.7)),
+    tube=dict(r=2.0, r_in=1.0, y=(-15.0, 13.0), x=-150.0, z=(-36.0, 108.0)),   # Ø4 x 2 carbon tubes
+    foot=dict(x=(-103.4, -93.0), y=(-18.0, 15.0), z=(-34.5, -32.0),
+              screws=((-101.0, -14.5), (-101.0, 11.5), (-95.5, -14.5), (-95.5, 11.5))),
+    arm=dict(x=(-153.0, -105.5), z=(-36.0, -32.0), rails=((-17.0, -13.0), (11.0, 15.0), (-17.0, 15.0)),
+             tray=dict(y=(16.5, 28.5), z=(-33.2, -32.0))),
+    bridge=dict(x=(-145.5, -140.5), y=(-17.0, 15.0), z=(104.5, 110.0)),
+    clamp=dict(u=(-4.0, 4.0), v=(-11.0, 9.0), w=(-1.8, 2.0)),
+    cradle=dict(u=(-1.0, 24.0), v=(-14.0, 12.0), w=(-2.9, -1.15), window=((3.0, 19.0), (-8.0, 6.0))),
+    joiner=dict(u0=6.0, w0=-1.15),
+)
+# D-105 amendment: the bracket cut the worst-yaw tipping margin to 0.5 %. The ballast bar cannot grow (frame
+# 0.8 mm each side in Y, tub hatch 1 mm below), so it is machined from C110 copper in the same envelope and
+# with the same two tapped M3 holes: +11.1 g at X 74 (check_d105_csi_loop.py, mass_and_tipping).
+D105_BALLAST = dict(material="C110 copper", density=8.94, was_density=7.85)
+
+
+def d105_copper_ballast():
+    """World-frame copper ballast bar: the body's bar geometry, relabelled and recoloured."""
+    bar = next(c for c in _body.ballast_bar().children if c.label == "BALLAST_STEEL_BAR")
+    return _tag(bar, "BALLAST_COPPER_BAR_C110", "#b87333")
+
+
+D105_STATIC_RESERVES = {   # head-local (x0, x1, y0, y1, z0, z1), yaw-carried generic 22-way FFC
+    "HARNESS_D105_CSI_45_FOLD_OUT": (-48.3, -36.5, 16.5, 29.8, -35.3, -33.5),
+    "HARNESS_D105_CSI_DISC_RUN": (-91.5, -36.5, 16.6, 28.6, -34.5, -34.1),
+    "HARNESS_D105_CSI_ONTO_ARM": (-105.5, -91.5, 16.6, 28.6, -34.5, -31.6),
+    "HARNESS_D105_CSI_ARM_RUN": (-150.6, -105.5, 16.6, 28.6, -32.0, -31.6),
+    "HARNESS_D105_CSI_CLIMB": (-150.6, -149.4, 16.6, 28.6, -32.0, 118.0),
+}
+D105_STATIC_TOP = {   # bracket-top frame (u, v, w) boxes: over the board and down into J2's mouth
+    "HARNESS_D105_CSI_TOP_OVER_BOARD": ((-3.0, 31.0), (-8.0, 30.6), (2.0, 7.0)),
+    "HARNESS_D105_CSI_TOP_INTO_J2": ((22.4, 31.0), (-8.0, 6.0), (-0.6, 7.0)),
+}
+
+
+def _d105_frame():
+    """Bracket-top frame: origin at the loop clamp, u along the loop heading, v along +Y, w normal (up and back)."""
+    a = math.radians(D105["loop"]["mast_heading_deg"])
+    mx, mz = D105["loop"]["mast"]
+    d, n = (math.cos(a), 0.0, math.sin(a)), (-math.sin(a), 0.0, math.cos(a))
+    return (mx, D105["ribbon"]["y"], mz), d, n
+
+
+def _uvw_box(u, v, w):
+    """Box spanning u, v, w ranges in the bracket-top frame (v measured from the ribbon centre)."""
+    o, d, n = _d105_frame()
+    box = Box(u[1] - u[0], v[1] - v[0], w[1] - w[0])
+    pl = Plane(origin=o, x_dir=d, z_dir=n)          # its y = n x d = +Y
+    return box.moved(pl.location * Location(((u[0] + u[1]) / 2, (v[0] + v[1]) / 2, (w[0] + w[1]) / 2)))
+
+
+def _z_tube(r, z0, z1, x, y):
+    return Cylinder(r, z1 - z0).moved(Location((x, y, (z0 + z1) / 2)))
+
+
+def _x_cyl(r, x0, x1, y, z):
+    return Cylinder(r, x1 - x0).moved(Location(((x0 + x1) / 2, y, z), (0, 90, 0)))
+
+
+def d105_joiner_location():
+    """Head-local placement of a PCB-14 rev A STEP (KiCad x, y, z) in the bracket-top cradle."""
+    o, d, n = _d105_frame()
+    j, yc = D105["joiner"], D105["ribbon"]["y"]
+    # STEP x -> -Y (centre x 100 on the ribbon centre), y -> u (board edge y -108.4 at u0), z -> w.
+    org = tuple(o[i] + (j["u0"] + 108.4) * d[i] + j["w0"] * n[i] for i in range(3))
+    org = (org[0], yc + 100.0, org[2])
+    return Plane(origin=org, x_dir=(0, -1, 0), z_dir=n).location
+
+
+def d105_local(kind):
+    """Head-local D-105 geometry by kind."""
+    m, rb = D105, D105["ribbon"]
+    yc, half = rb["y"], rb["width"] / 2 + 0.25
+    if kind in ("head_clamp", "head_jaw"):
+        # Base (bonded to the cover): a 1.2 mm plate with the ribbon channel on its cover side from the exit
+        # up to the cover slot, and the lower jaw. Jaw: the upper half, screwed into inserts in the lower jaw.
+        c, hz = m["head_clamp"], m["loop"]["head"][1]
+        pl, lo, hi = c["plate"], hz - c["slot_t"] / 2, hz + c["slot_t"] / 2
+        if kind == "head_jaw":
+            jaw = _blk(*c["x"], *c["y"], hi, c["z"][1])
+            for x, y in c["screws"]:
+                jaw = jaw - _z_cyl(1.15, hi - 0.1, c["z"][1] + 0.1, x, y)
+            return jaw
+        base = _blk(*pl["x"], *pl["y"], pl["z"][0], c["z"][1]) + _blk(*pl["x"], *pl["strip_y"], c["z"][1] - 0.1, pl["z"][1])
+        base = base + _blk(*c["x"], *c["y"], c["z"][0], lo)
+        base = base - _blk(pl["channel_x"], pl["x"][1] + 0.01, yc - half, yc + half, lo, m["cover_slot_z"][1])
+        base = base - _blk(c["x"][0] - 0.1, pl["channel_x"] + 0.01, yc - half, yc + half, lo, hi)
+        for x, y in c["screws"]:
+            base = base - _z_cyl(c["insert_r"], lo - c["insert_depth"], lo + 0.1, x, y)
+        return base
+    if kind == "head_screws":
+        c = m["head_clamp"]
+        return [layout_model.button_screw(x, y, c["z"][1], "z", 1, shank_length=6) for x, y in c["screws"]]
+    if kind == "cover_cut":
+        return _blk(-115.1, -110.8, yc - half, yc + half, *m["cover_slot_z"])
+    if kind == "guide":
+        g = m["guide"]
+        return _blk(*g["x"], *g["y"], *g["z"]) - _blk(g["x"][0] - 0.1, g["x"][1] + 0.1, yc - half, yc + half,
+                                                       *m["roof_run"]["z"])
+    if kind == "head_reserves":
+        rr, hz, c = m["roof_run"], m["loop"]["head"][1], m["head_clamp"]
+        return [("HARNESS_D105_CSI_COVER_OUTSIDE", _blk(c["plate"]["channel_x"], -115.0, yc - half, yc + half, hz - 0.5, rr["z"][1])),
+                ("HARNESS_D105_CSI_ROOF_RUN", _blk(*rr["x"], yc - half, yc + half, *rr["z"]))]
+    if kind == "tubes":
+        t = m["tube"]
+        return [_z_tube(t["r"], *t["z"], t["x"], y) - _z_tube(t["r_in"], t["z"][0] - 0.1, t["z"][1] + 0.1, t["x"], y)
+                for y in t["y"]]
+    if kind == "mast_base":
+        f, a, t = m["foot"], m["arm"], m["tube"]
+        base = _blk(*f["x"], *f["y"], *f["z"]) + _blk(-107.0, f["x"][0] + 0.5, f["y"][0], f["y"][1], -34.0, f["z"][1])
+        y0r, y1r = a["rails"][0], a["rails"][1]
+        base = base + _blk(*a["x"], *y0r, *a["z"]) + _blk(*a["x"], *y1r, *a["z"])
+        base = base + _blk(a["x"][0], t["x"] + 3.5, a["rails"][2][0], a["rails"][2][1], *a["z"])   # end bar
+        base = base + _blk(t["x"] + 1.5, -107.0, *a["tray"]["y"], *a["tray"]["z"])                     # FFC tray
+        for y in t["y"]:
+            base = base + _z_tube(3.5, a["z"][1] - 0.1, a["z"][1] + 6.0, t["x"], y)                  # sockets
+            base = base - _z_tube(t["r"] + 0.05, t["z"][0], a["z"][1] + 6.1, t["x"], y)
+        for x, y in f["screws"]:
+            base = base - _z_tube(1.15, f["z"][0] - 0.1, f["z"][1] + 0.1, x, y)
+        return base
+    if kind == "mast_screws":
+        f = m["foot"]
+        return [layout_model.button_screw(x, y, f["z"][1], "z", 1, shank_length=6) for x, y in f["screws"]]
+    if kind == "disc_pockets":
+        f = m["foot"]
+        return [_z_cyl(1.6, f["z"][0] - 3.2, f["z"][0] + 0.1, x, y) for x, y in f["screws"]]
+    if kind == "mast_top":
+        b, t = m["bridge"], m["tube"]
+        top = _blk(*b["x"], *b["y"], *b["z"])
+        for y in t["y"]:
+            top = top + _z_tube(3.5, b["z"][0], b["z"][1], t["x"], y)
+        c, cd = m["clamp"], m["cradle"]
+        top = top + _uvw_box(cd["u"], cd["v"], cd["w"]) - _uvw_box(*cd["window"], (cd["w"][0] - 0.1, cd["w"][1] + 0.1))
+        top = top + _uvw_box(c["u"], c["v"], (c["w"][0], -0.5)) + _uvw_box(c["u"], c["v"], (0.5, c["w"][1]))
+        top = top + _uvw_box(c["u"], (c["v"][0], -half), (-0.5, 0.5)) + _uvw_box(c["u"], (half, c["v"][1]), (-0.5, 0.5))
+        for y in t["y"]:
+            top = top - _z_tube(t["r"] + 0.05, b["z"][0] - 0.1, t["z"][1], t["x"], y)
+        return top
+    if kind == "static_reserves":
+        return [(n, _blk(*b)) for n, b in D105_STATIC_RESERVES.items()] + \
+            [(n, _uvw_box(*b)) for n, b in D105_STATIC_TOP.items()]
+    if kind == "loop_reserves":
+        return [("HARNESS_D105_CSI_LOOP_NEUTRAL", d105_strip(d105_loop(0.0)[0]))]
+    raise ValueError(kind)
+
+
+def d105_loop(pitch_deg, q_over_ei=4.7e-7, guess=None, n=80):
+    """Loop centreline (x, z) at a head pitch (roll only twists it): (points, headings, max curvature, ok)."""
+    if str(Path(__file__).resolve().parent) not in sys.path:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import ribbon_elastica
+    lp = D105["loop"]
+    ax, az = layout_model.PITCH_X, layout_model.PITCH_Z
+    c, s = math.cos(math.radians(pitch_deg)), math.sin(math.radians(pitch_deg))
+    hx, hz = lp["head"][0] - ax, lp["head"][1] - az
+    p0 = (ax + hx * c + hz * s, az - hx * s + hz * c)        # rotation about +Y, as the head
+    a0 = math.radians(lp["head_heading_deg"] - pitch_deg)
+    return ribbon_elastica.solve(p0, a0, lp["mast"], math.radians(lp["mast_heading_deg"]), lp["length"],
+                                 n=n, guess=guess, q_over_ei=q_over_ei)
+
+
+def d105_strip(points, t=None):
+    """Ribbon solid along a planar centreline: one thin box per segment, ribbon width along Y."""
+    rb = D105["ribbon"]
+    t = rb["t"] if t is None else t
+    out = None
+    for (x0, z0), (x1, z1) in zip(points[:-1], points[1:]):
+        L = math.hypot(x1 - x0, z1 - z0)
+        seg = Box(L + 0.02, rb["width"], t).rotate(Axis.Y, -math.degrees(math.atan2(z1 - z0, x1 - x0)))
+        seg = seg.moved(Location(((x0 + x1) / 2, rb["y"], (z0 + z1) / 2)))
+        out = seg if out is None else out + seg
+    return out
+
+
+def d105_world(kind):
+    s = d105_local(kind)
+    loc = Location(HEAD_ORIGIN_IN_CHASSIS)
+    if kind.endswith("reserves"):
+        return [(n, x.moved(loc)) for n, x in s]
+    return [x.moved(loc) for x in s] if isinstance(s, list) else s.moved(loc)
+
+
 def bodylift_parts():
     """D-096: the four mated body-lift pairs (two halves each, along X) and the two star splices."""
     m, out = BODYLIFT, []
@@ -1504,6 +1830,11 @@ DROID_REMOVES = [
     r"HARNESS_YAW_FFC_TO_PCB08",
     # D-102: the C2 tray and its two screws; PCB-12 carries the Zero now.
     r"C2_removable_open_rear_tray", r"C2_tray_M2_-(39|19)",
+    # D-104: the D-051 trunnion pin, MR106ZZ, retainer and its screws; the hollow trunnion replaces them.
+    r"pitch_trunnion_D6x12_pin", r"pitch_trunnion_bearing_MR106ZZ", r"pitch_trunnion_retainer",
+    r"pitch_trunnion_retainer_M2x4_(240|300)",
+    # D-105: the round CSI roof guide; a slotted FFC guide replaces it. The mild-steel ballast bar; a copper one replaces it.
+    r"CSI_roof_straight_exit_guide", r"BALLAST_STEEL_BAR",
 ]
 DROID_INSERTS = [
     (r"C3_CARRIER_PCB10_WITH_DEVKITC", pcb10_devkitc()),
@@ -1541,6 +1872,25 @@ DROID_INSERTS = [
     *[(r"Yaw mount", _tag(sc, f"PCB16_M2X4_BUTTON_{k}", "#555b5a"))
       for k, sc in enumerate(pcb16_world("screws"), start=1)],
     *[(r"Yaw mount", res) for res in pcb16_reserves_world()],
+    # D-104: the trunnion tube and its plug (yaw-carried), the 6700-2Z (pitch frame) and the bundle reserves.
+    (r"Yaw mount", _tag(d104_world("tube"), "PITCH_TRUNNION_D104_TUBE_10X1", "#b7bfc0")),
+    (r"Yaw mount", _tag(d104_world("plug"), "PITCH_TRUNNION_D104_TUBE_PLUG", "#536b78")),
+    (r"Pitch assembly", _tag(d104_world("bearing"), "PITCH_TRUNNION_D104_BEARING_6700_2Z", "#acb5b9")),
+    *[(_D104_GROUP[f], _tag(sh, name, "#d3a860", 0.35)) for name, f, sh in d104_world("reserves")],
+    # D-105: the camera ribbon loop bracket (yaw-carried), its joiner and FFC reserves; the head clamp,
+    # slotted roof guide and inside runs (roll-carried).
+    (r"Yaw mount", _tag(d105_world("mast_base"), "CSI_LOOP_MAST_BASE", "#536b78")),
+    (r"Yaw mount", _tag(d105_world("mast_top"), "CSI_LOOP_MAST_TOP", "#536b78")),
+    *[(r"Yaw mount", _tag(sh, f"CSI_LOOP_MAST_TUBE_CF4X2_{k}", "#2b2b2b")) for k, sh in enumerate(d105_world("tubes"), 1)],
+    *[(r"Yaw mount", _tag(sh, f"CSI_LOOP_MAST_M2X6_BUTTON_{k}", "#555b5a")) for k, sh in enumerate(d105_world("mast_screws"), 1)],
+    *[(r"Yaw mount", _tag(sh, name, "#65a584", 0.35)) for name, sh in d105_world("static_reserves")],
+    *[(r"Yaw mount", _tag(sh, name, "#65a584", 0.35)) for name, sh in d105_world("loop_reserves")],
+    (r"Shell and covers", _tag(d105_world("head_clamp"), "CSI_LOOP_HEAD_CLAMP", "#536b78")),
+    (r"Shell and covers", _tag(d105_world("head_jaw"), "CSI_LOOP_HEAD_CLAMP_JAW", "#536b78")),
+    *[(r"Fasteners", _tag(sh, f"CSI_LOOP_HEAD_CLAMP_M2X6_{k}", "#555b5a")) for k, sh in enumerate(d105_world("head_screws"), 1)],
+    (r"Camera", _tag(d105_world("guide"), "CSI_ROOF_FFC_GUIDE", "#678c81")),
+    (r"BALLAST_BAR", d105_copper_ballast()),
+    *[(r"Camera", _tag(sh, name, "#65a584", 0.35)) for name, sh in d105_world("head_reserves")],
 ]
 
 
@@ -1581,6 +1931,12 @@ DROID_CUTS = [
     *[(r"connected_rolling_cradle_flange_ear_stalks", sh) for sh in pcb12_world("pocket")],
     # D-103: M2 insert pockets in the yaw disc for PCB-16.
     *[(r"yaw_turntable_disc_flush", sh) for sh in pcb16_world("pocket")],
+    # D-104: tube bore and cable channel in the -Y leg; bearing seat and tube clearance in the pitch boss.
+    (r"yaw_yoke_leg_-55", d104_world("leg_cut")),
+    (r"connected_pitch_frame_roll_servo_saddle", d104_world("boss_cut")),
+    # D-105: the ribbon slot through the rear cover at Z 80; M2 insert pockets for the bracket foot.
+    (r"removable_octagonal_rear_cover", d105_world("cover_cut")),
+    *[(r"yaw_turntable_disc_flush", sh) for sh in d105_world("disc_pockets")],
 ]
 DROID_ADDS = [
     # D-074: PCB-09's strip must carry both rows of socket copper plus edge margin.
@@ -1624,6 +1980,9 @@ DROID_ADDS = [
     (r"YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG", pcb14_posts()),
     # D-102: PCB-12 screw bosses on the rolling crossbar.
     *[(r"connected_rolling_cradle_flange_ear_stalks", sh) for sh in pcb12_world("boss")],
+    # D-104: the D-051 recess and pockets filled back to the leg faces; the grown boss round the seat.
+    *[(r"yaw_yoke_leg_-55", sh) for sh in d104_world("leg_fill")],
+    (r"connected_pitch_frame_roll_servo_saddle", d104_world("boss")),
 ]
 DROID_MOVES = [
     # PCB-08 J1 housing overhangs the -X edge: place its mated-plug and header
@@ -1723,7 +2082,7 @@ CUSTOM_PCBS = [
     ("PCB-11 status LED carrier", r"status_LED_(PCB08_carrier_5x5|WS2812B_2020)"),
     # The subsystem draws only the ESP32-S3-Zero; pcb_integration installs PCB-12 rev A (Zero included, D-102).
     ("PCB-12 C2 head controller", r"C2_ESP32_S3_Zero_23_5x18_footprint"),
-    ("PCB-14 yaw rotor joiners x3", r"PCB14_JOINER_(BOARD|LOWER_ZIF|UPPER_ZIF)_[1-3]"),
+    ("PCB-14 FFC joiners x4", r"PCB14_JOINER_(BOARD|LOWER_ZIF|UPPER_ZIF)_[1-3]"),   # the fourth (D-105) is added by pcb_integration
     ("PCB-15 nose Hall carrier", r"BALL_NOSE_HALL_(CARRIER_PCB|DRV5055A3_SOT23)"),
 ]
 # Printed frame parts inside a board group stay where they are.

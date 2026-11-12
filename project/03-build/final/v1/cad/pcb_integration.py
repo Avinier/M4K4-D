@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[3]
 BOARDS = {8:"pcb-08-yaw-junction", 9:"pcb-09-c0-link-adapter", 10:"pcb-10-c3-carrier", 11:"pcb-11-status-led",
           12:"pcb-12-c2-head-carrier", 14:"pcb-14-yaw-rotor-joiner", 15:"pcb-15-nose-hall", 16:"pcb-16-head-junction"}
 GROUPS = {8:"PCB-08 yaw junction", 9:"PCB-09 C0 link adapter", 10:"PCB-10 C3 controller carrier",
-          11:"PCB-11 status LED carrier", 12:"PCB-12 C2 head controller", 14:"PCB-14 yaw rotor joiners x3",
+          11:"PCB-11 status LED carrier", 12:"PCB-12 C2 head controller", 14:"PCB-14 FFC joiners x4",
           15:"PCB-15 nose Hall carrier", 16:"PCB-16 head junction"}
 PCB14_BOARD_Y0 = (-5.725, -1.225, 3.275)   # D-101 back faces (makad-v1 PCB14_BOARD_Y0)
 
@@ -45,6 +45,18 @@ def core_bounds(number):
     return next(s for label, s in raw_parts(number) if label.endswith("_PCB")).bounding_box()
 
 
+def _entry():
+    """The makad-v1 entry module (already loaded during a build, else loaded here) for its D-105 transform."""
+    import sys
+    loaded=next((m for m in list(sys.modules.values()) if hasattr(m,"d105_joiner_location")),None)
+    if loaded is not None:
+        return loaded
+    import importlib.util
+    spec=importlib.util.spec_from_file_location("makad_v1_entry",Path(__file__).resolve().parent/"makad-v1.step.py")
+    mod=importlib.util.module_from_spec(spec);sys.modules["makad_v1_entry"]=mod;spec.loader.exec_module(mod)
+    return mod
+
+
 def placements(number, body, head_origin):
     """(instance, STEP-to-world Location), shared with integration verification."""
     bb = core_bounds(number)
@@ -58,8 +70,10 @@ def placements(number, body, head_origin):
         return [("C2",Location(head_origin)*loc)]
     if number == 14:
         # check_pcb14_fit.py: x -> -X, y -> +Z, z -> +Y; back face on each D-101 plane (yaw 0).
-        return [(f"JOINER_{k}",Location(Plane(origin=(116.0,y0-bb.min.Z,242.3),x_dir=(-1,0,0),z_dir=(0,1,0))))
-                for k,y0 in enumerate(PCB14_BOARD_Y0,start=1)]
+        rotor=[(f"JOINER_{k}",Location(Plane(origin=(116.0,y0-bb.min.Z,242.3),x_dir=(-1,0,0),z_dir=(0,1,0))))
+               for k,y0 in enumerate(PCB14_BOARD_Y0,start=1)]
+        # D-105: the fourth board joins the CSI on the camera-loop bracket (check_d105_csi_loop.py).
+        return rotor+[("JOINER_4_CSI_LOOP",Location(head_origin)*_entry().d105_joiner_location())]
     if number == 16:
         # check_pcb16_fit.py: head-local, flat on the yaw disc top (Z -34.5).
         loc=Location(Plane(origin=(-142.4,150.0,-34.5-bb.min.Z),x_dir=(1,0,0),z_dir=(0,0,1)))

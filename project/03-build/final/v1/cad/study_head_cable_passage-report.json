@@ -1,0 +1,42 @@
+{
+ "poses": 234,
+ "grid_mm": 1.25,
+ "rows": [
+  {
+   "clearance_mm": 1.25,
+   "yaw_reachable_voxels": 63884,
+   "yaw_pitch_crossings": 32232,
+   "nearest_yaw_pitch_crossing_to_pitch_axis_mm": 50.51739761646476,
+   "pitch_roll_crossings": 128086,
+   "nearest_pitch_roll_crossing_to_roll_axis_mm": 0.49168059754275534,
+   "reaches_pcb12": true
+  },
+  {
+   "clearance_mm": 2.0,
+   "yaw_reachable_voxels": 45951,
+   "yaw_pitch_crossings": 16576,
+   "nearest_yaw_pitch_crossing_to_pitch_axis_mm": 52.94822907274614,
+   "pitch_roll_crossings": 30715,
+   "nearest_pitch_roll_crossing_to_roll_axis_mm": 0.49168059754275534,
+   "reaches_pcb12": false
+  },
+  {
+   "clearance_mm": 2.5,
+   "yaw_reachable_voxels": 44440,
+   "yaw_pitch_crossings": 15565,
+   "nearest_yaw_pitch_crossing_to_pitch_axis_mm": 53.24735403698478,
+   "pitch_roll_crossings": 30318,
+   "nearest_pitch_roll_crossing_to_roll_axis_mm": 0.49168059754275534,
+   "reaches_pcb12": false
+  },
+  {
+   "clearance_mm": 3.0,
+   "yaw_reachable_voxels": 33454,
+   "yaw_pitch_crossings": 8397,
+   "nearest_yaw_pitch_crossing_to_pitch_axis_mm": 58.28223967848181,
+   "pitch_roll_crossings": 24390,
+   "nearest_pitch_roll_crossing_to_roll_axis_mm": 0.49168059754275534,
+   "reaches_pcb12": false
+  }
+ ]
+}
