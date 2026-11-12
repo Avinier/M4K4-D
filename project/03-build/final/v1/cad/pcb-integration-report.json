@@ -130,6 +130,21 @@
       "transform_bbox_error_mm": 0.0
     },
     {
+      "board": 14,
+      "instance": "JOINER_4_CSI_LOOP",
+      "components": 2,
+      "dnp_omitted": [],
+      "core_bbox": [
+        -85.67182389363064,
+        -14.599999999999994,
+        299.94209957032643,
+        -69.26050848995325,
+        12.599999999999994,
+        304.97606686472176
+      ],
+      "transform_bbox_error_mm": 5.6218141253339127e-11
+    },
+    {
       "board": 15,
       "instance": "NOSE",
       "components": 4,
@@ -160,7 +175,7 @@
       "transform_bbox_error_mm": 2.8563817977556027e-12
     }
   ],
-  "board_count": 10,
+  "board_count": 11,
   "cross_board_neighbours": [
     {
       "a": "PCB14/JOINER_1",
@@ -235,6 +250,11 @@
       "gap_mm": 0.0
     },
     {
+      "part": "PCB14_JOINER_4_CSI_LOOP_02__pcb-14-yaw-rotor-joiner_PCB",
+      "obstacle": "Makad v1/Head v1/Yaw mount/CSI_LOOP_MAST_TOP",
+      "gap_mm": 3.589841923209014e-11
+    },
+    {
       "part": "PCB15_NOSE_00__U1",
       "obstacle": "Makad v1/CHASSIS_V1_REFERENCE/CHASSIS_PRIMARY_FRAME/BALL_POD/BALL_POD_PRINTED_SEAT",
       "gap_mm": 0.1999999999999993
@@ -307,7 +327,7 @@
   "scope": "replacement count, core transforms, duplicate placeholder removal and static cross-board and robot interference; intentional own fixing/plug contacts and the PCB09 socket on the Pi header excluded; the D-095 bought modules are obstacles; per-board installation sweeps are separate",
   "checked_step": {
     "path": "makad-v1.step",
-    "sha256": "e7858587906fab5d1f66c2857bb925fada71cf887c279ace146bf3aab6e9907a"
+    "sha256": "e80e979fe709bf6ebaec482dc6887f4e90c34ec656938c3abf5e2dca9165ccd1"
   },
   "result": "PASS"
 }
