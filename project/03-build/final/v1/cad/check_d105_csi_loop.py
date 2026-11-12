@@ -62,7 +62,8 @@ def main():
     r = C.Report("check_d105_csi_loop")
     P = entry.D105
 
-    # Droid edits in the head frame (D-102/103/104 and D-105).
+    # Droid edits in the head frame (D-102/103/104 and D-105); keep the D-104 parts before for the mass rows.
+    d104_before = {n: parts[n]["shape"] for n in (LEG, SADDLE) + OLD[:5]}
     shapes[LEG] = shapes[LEG] - entry.d104_local("leg_cut")
     for sh in entry.d104_local("leg_fill"):
         shapes[LEG] = shapes[LEG] + sh
@@ -324,6 +325,26 @@ def main():
         v, c = D.centroid(s)
         rho = CF if "TUBE" in k else (D.STEEL if "M2X6" in k else (1.85 if "BOARD" in k else (1.3 if k.endswith(("J1", "J2")) else PETG)))
         yaw_rows.append((k, v * rho / 1000.0, w(c)))
+    # D-104 (hollow trunnion) measured deltas, carried with the head (neutral pose).
+    d104_rows = []
+    for k, rho in ((LEG, PETG), (SADDLE, PETG)):
+        v0, c0 = D.centroid(d104_before[k])
+        v1, c1 = D.centroid(shapes[k])
+        dv = v1 - v0
+        c = tuple((v1 * c1[i] - v0 * c0[i]) / dv for i in range(3)) if abs(dv) > 1e-3 else c1
+        d104_rows.append((f"D104_{k}_volume_change", dv * rho / 1000.0, w(c)))
+    for k, rho in (("pitch_trunnion_D6x12_pin", D.STEEL), ("pitch_trunnion_retainer", PETG),
+                   ("pitch_trunnion_retainer_M2x4_240", D.STEEL), ("pitch_trunnion_retainer_M2x4_300", D.STEEL)):
+        v, c = D.centroid(d104_before[k])
+        d104_rows.append((f"D104_removed_{k}", -v * rho / 1000.0, w(c)))
+    vb, cb = D.centroid(d104_before["pitch_trunnion_bearing_MR106ZZ"])
+    d104_rows.append(("D104_removed_MR106ZZ", -1.1, w(cb)))            # E catalogue mass
+    vt, ct = D.centroid(entry.d104_local("tube"))
+    d104_rows.append(("D104_TUBE_10X1_6063", vt * 2.70 / 1000.0, w(ct)))
+    vp, cp = D.centroid(entry.d104_local("plug"))
+    d104_rows.append(("D104_TUBE_PLUG", vp * PETG / 1000.0, w(cp)))
+    vb2, cb2 = D.centroid(entry.d104_local("bearing"))
+    d104_rows.append(("D104_6700_2Z", 2.2, w(cb2)))                    # E catalogue mass
     yaw_rows += [("CSI_LOOP_MAST_INSERTS_M2X3", 4 * 0.10, w((-98.0, 1.0, -36.0))),
                  ("CSI_STATIC_FFC_22W", 0.0048 * static_len, w((-100.0, 28.0, 20.0)))]
     head_rows = []
@@ -332,7 +353,12 @@ def main():
         head_rows.append((k, v * (D.STEEL if "M2X6" in k else PETG) / 1000.0, w(c)))
     head_rows += [("CSI_LOOP_HEAD_CLAMP_INSERTS", 2 * 0.10, w((-113.4, -1.0, 48.2))),
                   ("CSI_STANDARD_MINI_CABLE", 0.0048 * loop_cable, w((-120.0, -1.0, 70.0)))]
-    now_rows = rows + yaw_rows + head_rows
+    bal = entry.D105_BALLAST
+    bal_row = [("BALLAST_BAR_COPPER_C110_DELTA", M.BALLAST_BAR_G * (bal["density"] / bal["was_density"] - 1.0),
+                (sum(M.BALLAST_X) / 2.0, 0.0, sum(M.BALLAST_Z) / 2.0))]
+    steel_rows = rows + yaw_rows + head_rows + d104_rows
+    now_steel = D.tip(steel_rows, M)
+    now_rows = steel_rows + bal_row
     now = D.tip(now_rows, M)
     # The bracket turns with the head: sweep yaw for the bracket and the head together.
     total = now["mass_g"]
@@ -343,23 +369,34 @@ def main():
           + 2 * roll_w["mass_g"] * math.hypot(roll_w["center_mm"][1] - axes["roll_y"], roll_w["center_mm"][2] - axes["roll_z"])) / total
     th_h = math.atan2(M.HEAD_LOCAL_COM[1], M.HEAD_LOCAL_COM[0] - M.HEAD_LOCAL_YAW[0])
     r_h = math.hypot(M.HEAD_LOCAL_COM[0] - M.HEAD_LOCAL_YAW[0], M.HEAD_LOCAL_COM[1])
-    yawed = [(g, math.atan2(c[1] - ay_w, c[0] - ax_w), math.hypot(c[0] - ax_w, c[1] - ay_w)) for _, g, c in yaw_rows + head_rows]
-    worst = (1e9, None)
-    for psi in np.arange(0, 360, 2.0):
-        ps = math.radians(psi)
-        dx = M.HEAD_MASS_G * r_h * (math.cos(th_h + ps) - math.cos(th_h))
-        dx += sum(g * rr * (math.cos(th + ps) - math.cos(th)) for g, th, rr in yawed)
-        a = 9.81 * (x + dx / total - pr) / (z + pr)
-        if a < worst[0]:
-            worst = (round(a, 4), float(psi))
+    yawed = [(g, math.atan2(c[1] - ay_w, c[0] - ax_w), math.hypot(c[0] - ax_w, c[1] - ay_w)) for _, g, c in yaw_rows + head_rows + d104_rows]
+
+    def sweep(xc, zc, tot):
+        best = (1e9, None)
+        for psi in np.arange(0, 360, 2.0):
+            ps = math.radians(psi)
+            dx = M.HEAD_MASS_G * r_h * (math.cos(th_h + ps) - math.cos(th_h))
+            dx += sum(g * rr * (math.cos(th + ps) - math.cos(th)) for g, th, rr in yawed)
+            a = 9.81 * (xc + dx / tot - pr) / (zc + pr)
+            if a < best[0]:
+                best = (round(a, 4), float(psi))
+        return best
+    worst = sweep(x, z, total)
+    worst_steel = sweep(now_steel["com_mm"][0], now_steel["com_mm"][2], now_steel["mass_g"])
     d105_g = round(sum(g for _, g, _ in yaw_rows + head_rows), 2)
-    r.check("mass_and_tipping", now["a_tip"] >= D.A_TIP_MIN and worst[0] >= D.A_TIP_MIN,
-            d105_added_g=d105_g, bracket_g=round(sum(g for _, g, _ in yaw_rows), 2),
+    d104_g = round(sum(g for _, g, _ in d104_rows), 2)
+    r.check("mass_and_tipping", now["a_tip"] >= D.A_TIP_MIN and worst[0] >= D.A_TIP_MIN * 1.015,
+            d105_added_g=d105_g, bracket_g=round(sum(g for _, g, _ in yaw_rows), 2), d104_net_g=d104_g,
+            d104_rows=[(k, round(g, 3), [round(v, 1) for v in c]) for k, g, c in d104_rows],
+            ballast=dict(material=bal["material"], added_g=round(bal_row[0][1], 2),
+                         worst_yaw_a_tip_with_steel_bar=worst_steel[0], neutral_with_steel_bar=round(now_steel["a_tip"], 4)),
+            margin_pct=round(100 * (worst[0] / D.A_TIP_MIN - 1), 2),
             rows=[(k, round(g, 3), [round(v, 1) for v in c]) for k, g, c in yaw_rows + head_rows],
             a_tip_neutral=round(now["a_tip"], 4), a_tip_neutral_before=round(before["a_tip"], 4),
             worst_yaw_a_tip=worst[0], at_yaw_deg=worst[1], d095_worst_before=round(before["worst_pose_a_tip"], 4),
             minimum=round(D.A_TIP_MIN, 4),
-            note="worst pose: head pitch/roll offsets as check_d095_mass.tip, with the head and the yaw-carried bracket swept together over yaw")
+            note="worst pose: head pitch/roll offsets as check_d095_mass.tip (head working masses from mass-placement.json, not re-solved), "
+                 "with the head, the D-104 deltas and the yaw-carried bracket swept together over yaw")
     r.finish()
 
 

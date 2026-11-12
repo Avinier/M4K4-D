@@ -1,4 +1,4 @@
-# PCB-14 (×3) — Yaw rotor joiner
+# PCB-14 (×4) — Yaw rotor joiner (×3) and camera-loop joiner (×1)
 
 Straight-through 22-pin 0.5 mm FFC joiner with two FH34SRJ ZIFs ([D-101](../../decisions.md#d-101): lower contact *n* → upper contact 23 − *n*, one conductor per X), passing the cassette FFCs through the rotating yaw hub. Three boards use six ZIFs; PCB-08 uses two more of the same part.
 
@@ -10,7 +10,7 @@ Straight-through 22-pin 0.5 mm FFC joiner with two FH34SRJ ZIFs ([D-101](../../d
 | Specification | [02-body/v1/BOM.md](../../02-body/v1/BOM.md)<br>[D-052](../../decisions.md#d-052) |
 | CAD placeholder | `_yaw_joiner_parts()` in [`body_v1_model.py`](../../02-body/v1/cad/body_v1_model.py) |
 | CAD labels | `PCB14_JOINER_BOARD_1` … `_3` and their ZIFs |
-| Final CAD | `Custom PCBs › PCB-14 yaw rotor joiners x3` in [makad-v1.step.py](../../final/v1/cad/makad-v1.step.py) |
+| Final CAD | `Custom PCBs › PCB-14 FFC joiners x4` in [makad-v1.step.py](../../final/v1/cad/makad-v1.step.py): three in the rotor posts, the fourth on the D-105 camera-loop bracket ([D-105](../../decisions.md#d-105), `check_d105_csi_loop.py`) |
 
 ## Stages
 

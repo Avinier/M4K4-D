@@ -1589,6 +1589,18 @@ D105 = dict(
     cradle=dict(u=(-1.0, 24.0), v=(-14.0, 12.0), w=(-2.9, -1.15), window=((3.0, 19.0), (-8.0, 6.0))),
     joiner=dict(u0=6.0, w0=-1.15),
 )
+# D-105 amendment: the bracket cut the worst-yaw tipping margin to 0.5 %. The ballast bar cannot grow (frame
+# 0.8 mm each side in Y, tub hatch 1 mm below), so it is machined from C110 copper in the same envelope and
+# with the same two tapped M3 holes: +11.1 g at X 74 (check_d105_csi_loop.py, mass_and_tipping).
+D105_BALLAST = dict(material="C110 copper", density=8.94, was_density=7.85)
+
+
+def d105_copper_ballast():
+    """World-frame copper ballast bar: the body's bar geometry, relabelled and recoloured."""
+    bar = next(c for c in _body.ballast_bar().children if c.label == "BALLAST_STEEL_BAR")
+    return _tag(bar, "BALLAST_COPPER_BAR_C110", "#b87333")
+
+
 D105_STATIC_RESERVES = {   # head-local (x0, x1, y0, y1, z0, z1), yaw-carried generic 22-way FFC
     "HARNESS_D105_CSI_45_FOLD_OUT": (-48.3, -36.5, 16.5, 29.8, -35.3, -33.5),
     "HARNESS_D105_CSI_DISC_RUN": (-91.5, -36.5, 16.6, 28.6, -34.5, -34.1),
@@ -1741,21 +1753,6 @@ def d105_strip(points, t=None):
     return out
 
 
-def d105_joiner_parts():
-    """World-frame PCB-14 rev A STEP parts for the bracket joiner (core, J1, J2), labelled for D-105."""
-    from cadgen.step_scene import import_step
-    step = BUILD / "04-pcbs" / "pcb-14-yaw-rotor-joiner" / "cad" / "pcb-14-yaw-rotor-joiner-revA.step"
-    loc = Location(HEAD_ORIGIN_IN_CHASSIS) * d105_joiner_location()
-    out = []
-    for c in import_step(str(step)).children:
-        if not c.solids():
-            continue
-        name = {"J1": "CSI_LOOP_JOINER_PCB14_LOOP_ZIF", "J2": "CSI_LOOP_JOINER_PCB14_STATIC_ZIF"}.get(c.label, "CSI_LOOP_JOINER_PCB14_BOARD")
-        color = "#1f5f3a" if name.endswith("BOARD") else "#d8d2c4"
-        out.append(_tag(Compound(children=c.solids()).moved(loc), name, color))
-    return out
-
-
 def d105_world(kind):
     s = d105_local(kind)
     loc = Location(HEAD_ORIGIN_IN_CHASSIS)
@@ -1836,8 +1833,8 @@ DROID_REMOVES = [
     # D-104: the D-051 trunnion pin, MR106ZZ, retainer and its screws; the hollow trunnion replaces them.
     r"pitch_trunnion_D6x12_pin", r"pitch_trunnion_bearing_MR106ZZ", r"pitch_trunnion_retainer",
     r"pitch_trunnion_retainer_M2x4_(240|300)",
-    # D-105: the round CSI roof guide; a slotted FFC guide replaces it.
-    r"CSI_roof_straight_exit_guide",
+    # D-105: the round CSI roof guide; a slotted FFC guide replaces it. The mild-steel ballast bar; a copper one replaces it.
+    r"CSI_roof_straight_exit_guide", r"BALLAST_STEEL_BAR",
 ]
 DROID_INSERTS = [
     (r"C3_CARRIER_PCB10_WITH_DEVKITC", pcb10_devkitc()),
@@ -1886,13 +1883,13 @@ DROID_INSERTS = [
     (r"Yaw mount", _tag(d105_world("mast_top"), "CSI_LOOP_MAST_TOP", "#536b78")),
     *[(r"Yaw mount", _tag(sh, f"CSI_LOOP_MAST_TUBE_CF4X2_{k}", "#2b2b2b")) for k, sh in enumerate(d105_world("tubes"), 1)],
     *[(r"Yaw mount", _tag(sh, f"CSI_LOOP_MAST_M2X6_BUTTON_{k}", "#555b5a")) for k, sh in enumerate(d105_world("mast_screws"), 1)],
-    *[(r"Yaw mount", part) for part in d105_joiner_parts()],
     *[(r"Yaw mount", _tag(sh, name, "#65a584", 0.35)) for name, sh in d105_world("static_reserves")],
     *[(r"Yaw mount", _tag(sh, name, "#65a584", 0.35)) for name, sh in d105_world("loop_reserves")],
     (r"Shell and covers", _tag(d105_world("head_clamp"), "CSI_LOOP_HEAD_CLAMP", "#536b78")),
     (r"Shell and covers", _tag(d105_world("head_jaw"), "CSI_LOOP_HEAD_CLAMP_JAW", "#536b78")),
     *[(r"Fasteners", _tag(sh, f"CSI_LOOP_HEAD_CLAMP_M2X6_{k}", "#555b5a")) for k, sh in enumerate(d105_world("head_screws"), 1)],
     (r"Camera", _tag(d105_world("guide"), "CSI_ROOF_FFC_GUIDE", "#678c81")),
+    (r"BALLAST_BAR", d105_copper_ballast()),
     *[(r"Camera", _tag(sh, name, "#65a584", 0.35)) for name, sh in d105_world("head_reserves")],
 ]
 
@@ -2085,7 +2082,7 @@ CUSTOM_PCBS = [
     ("PCB-11 status LED carrier", r"status_LED_(PCB08_carrier_5x5|WS2812B_2020)"),
     # The subsystem draws only the ESP32-S3-Zero; pcb_integration installs PCB-12 rev A (Zero included, D-102).
     ("PCB-12 C2 head controller", r"C2_ESP32_S3_Zero_23_5x18_footprint"),
-    ("PCB-14 yaw rotor joiners x3", r"PCB14_JOINER_(BOARD|LOWER_ZIF|UPPER_ZIF)_[1-3]"),
+    ("PCB-14 FFC joiners x4", r"PCB14_JOINER_(BOARD|LOWER_ZIF|UPPER_ZIF)_[1-3]"),   # the fourth (D-105) is added by pcb_integration
     ("PCB-15 nose Hall carrier", r"BALL_NOSE_HALL_(CARRIER_PCB|DRV5055A3_SOT23)"),
 ]
 # Printed frame parts inside a board group stay where they are.
