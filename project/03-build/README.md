@@ -12,7 +12,7 @@ Turn the [prototype decisions](../02-prototypes/) into parts that can be printed
 
 Before detailing chassis v1, check and freeze the whole-robot spatial baseline: envelopes, datums, key clearances, mass/centre-of-mass assumptions, and subsystem interfaces. Fabrication details remain revisable.
 
-The [project BOM](BOM.csv) is the single parts register. The [chassis v1 BOM](01-chassis/v1/BOM.md) is its dated working snapshot for one chassis; it is not yet a fabrication release.
+The [project BOM](BOM.csv) is the single parts register. The [chassis v1 BOM](01-chassis/v1/BOM.md) is its dated working snapshot for one chassis; it is not yet a fabrication release. [BOM-deliveries.md](BOM-deliveries.md) records what has physically arrived, mapped to BOM rows, with any problems found.
 
 In the register, `DESIGN` means custom geometry exists, `CANDIDATE` means a part or family is proposed, `SELECTED` means the build choice is settled with receiving and physical verification still separate, `OPEN` means the design needs a choice before release, and `HOLD` means do not order or fabricate until its blocker is resolved. `supplier_candidate` is a lead to verify, not a stock claim. Update `procurement` and `received_measurements` with order and caliper evidence; do not infer receipt from CAD or an old availability check. Refresh a version snapshot deliberately after a BOM change.
 
