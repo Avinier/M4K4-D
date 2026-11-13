@@ -49,8 +49,12 @@ def build_robot(label="Makad v1"):
     from pcb_integration import replace_completed_boards
     robot = replace_completed_boards(_group_custom_pcbs(_apply_droid_cuts(robot)),
                                      _body, HEAD_ORIGIN_IN_CHASSIS)
-    # D-095: the D-093 bought modules, one group each, beside the custom PCBs.
-    return _relabel(robot.label, [*robot.children, bought_modules()], robot.location)
+    # D-095: bought modules; visible cable bodies in a separate,
+    # switchable Harness / Head wires group.  Reserve volumes stay in their
+    # engineering groups so the installed-cable view can be shown on its own.
+    from head_harness import build_head_harness
+    head_harness = build_head_harness(sys.modules[__name__]).moved(Location(HEAD_ORIGIN_IN_CHASSIS))
+    return _relabel(robot.label, [*robot.children, bought_modules(), head_harness], robot.location)
 
 
 # Droid-level CAD changes. From 2026-10-14 the droid's CAD changes are made in
@@ -2023,7 +2027,6 @@ DROID_INSERTS = [
     *[(r"Yaw mount", _tag(sh, f"CSI_LOOP_MAST_TUBE_CF4X2_{k}", "#2b2b2b")) for k, sh in enumerate(d105_world("tubes"), 1)],
     *[(r"Yaw mount", _tag(sh, f"CSI_LOOP_MAST_M2X6_BUTTON_{k}", "#555b5a")) for k, sh in enumerate(d105_world("mast_screws"), 1)],
     *[(r"Yaw mount", _tag(sh, name, "#65a584", 0.35)) for name, sh in d105_world("static_reserves")],
-    *[(r"Yaw mount", _tag(sh, name, "#65a584", 0.35)) for name, sh in d105_world("loop_reserves")],
     (r"Shell and covers", _tag(d105_world("head_clamp"), "CSI_LOOP_HEAD_CLAMP", "#536b78")),
     (r"Shell and covers", _tag(d105_world("head_jaw"), "CSI_LOOP_HEAD_CLAMP_JAW", "#536b78")),
     *[(r"Fasteners", _tag(sh, f"CSI_LOOP_HEAD_CLAMP_M2X6_{k}", "#555b5a")) for k, sh in enumerate(d105_world("head_screws"), 1)],
