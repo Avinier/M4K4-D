@@ -49,12 +49,15 @@ def build_robot(label="Makad v1"):
     from pcb_integration import replace_completed_boards
     robot = replace_completed_boards(_group_custom_pcbs(_apply_droid_cuts(robot)),
                                      _body, HEAD_ORIGIN_IN_CHASSIS)
-    # D-095: bought modules; visible cable bodies in a separate,
-    # switchable Harness / Head wires group.  Reserve volumes stay in their
+    # D-095/D-106: bought modules; visible cable bodies in a separate,
+    # switchable Harness group with head and chassis subgroups. Reserves stay in their
     # engineering groups so the installed-cable view can be shown on its own.
     from head_harness import build_head_harness
-    head_harness = build_head_harness(sys.modules[__name__]).moved(Location(HEAD_ORIGIN_IN_CHASSIS))
-    return _relabel(robot.label, [*robot.children, bought_modules(), head_harness], robot.location)
+    from chassis_harness import build_chassis_harness
+    head_wires = build_head_harness(sys.modules[__name__]).children[0].moved(Location(HEAD_ORIGIN_IN_CHASSIS))
+    visible_harness = Compound(label="Harness", children=[
+        head_wires, build_chassis_harness(sys.modules[__name__])])
+    return _relabel(robot.label, [*robot.children, bought_modules(), visible_harness], robot.location)
 
 
 # Droid-level CAD changes. From 2026-10-14 the droid's CAD changes are made in

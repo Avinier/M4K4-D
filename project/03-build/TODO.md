@@ -8,7 +8,7 @@
 
 ## Order
 
-- [ ] **CH-103 balance-tap fuses, 3 + 2 spares.** One per balance wire (B−, mid, B+) at the cell end; the taps bypass the main fuse and PCB-01. Candidate Littelfuse 0251001.MXL (Pico II, 1 A very fast, 125 V AC/DC, 0.128 Ω cold), element14 India / Mouser India. Before ordering, confirm the PD60 balance current is well under 1 A. Can wait for the harness review
+- [ ] **CH-103 balance-tap protection — design hold, do not order yet.** One protected tap per B−/mid/B+ is needed because these leads bypass the main fuse and PCB-01. Littelfuse 0251001.MXL (1 A, 125 V DC, 0.128 Ω cold) is a candidate, but four three-fuse envelope rows at the current pack exit all collide with the cell/strap or J-PK ([fit study](final/v1/cad/study_ch103_fuse_fit.py)). Select the actual fuse/joint/sleeve and charger fault behavior, redesign the pack-end arrangement, then confirm fit and quantity before ordering 3 + 2 spares
 - [ ] **BO-068 DIN 9021 M2 washers (Ø6), 8.** Clamp the INMP441 edges under the BO-013 screws. Skip if they came with the screw order
 - [ ] **CH-110 non-screw items:** 4 × M2 × 5 F-F round standoffs (S13V30F5 modules) and VHB foam tape. Skip if already in hand
 

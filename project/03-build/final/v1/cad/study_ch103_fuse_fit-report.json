@@ -1,0 +1,244 @@
+{
+  "study": "CH-103 balance-tap fuse envelope screen",
+  "assumption": "three insulated cylindrical envelopes, diameter 4 mm, length 12 mm (E)",
+  "scope": "four candidate three-fuse rows at D-095 pack exit; fixed current geometry",
+  "rows": [
+    {
+      "name": "cell_side_low",
+      "axis": "X",
+      "taps": [
+        {
+          "centre_mm": [
+            34,
+            31.5,
+            43
+          ],
+          "clashes_mm3": [
+            [
+              "BATTERY_CELL_A_SAMSUNG_25R_ENVELOPE",
+              121.3156
+            ],
+            [
+              "BATTERY_END_STRAP_FRONT_Y",
+              29.4809
+            ]
+          ]
+        },
+        {
+          "centre_mm": [
+            46,
+            31.5,
+            43
+          ],
+          "clashes_mm3": [
+            [
+              "BATTERY_CELL_A_SAMSUNG_25R_ENVELOPE",
+              55.7547
+            ],
+            [
+              "BATTERY_CELL_B_SAMSUNG_25R_ENVELOPE",
+              50.6998
+            ],
+            [
+              "BATTERY_END_STRAP_FRONT_Y",
+              29.4809
+            ]
+          ]
+        },
+        {
+          "centre_mm": [
+            58,
+            31.5,
+            43
+          ],
+          "clashes_mm3": [
+            [
+              "BATTERY_CELL_B_SAMSUNG_25R_ENVELOPE",
+              121.3156
+            ],
+            [
+              "BATTERY_END_STRAP_FRONT_Y",
+              29.4809
+            ]
+          ]
+        }
+      ],
+      "all_clear": false
+    },
+    {
+      "name": "cell_side_high",
+      "axis": "X",
+      "taps": [
+        {
+          "centre_mm": [
+            34,
+            31.5,
+            46
+          ],
+          "clashes_mm3": [
+            [
+              "BATTERY_CELL_A_SAMSUNG_25R_ENVELOPE",
+              115.2265
+            ],
+            [
+              "BATTERY_END_STRAP_FRONT_Y",
+              29.4809
+            ]
+          ]
+        },
+        {
+          "centre_mm": [
+            46,
+            31.5,
+            46
+          ],
+          "clashes_mm3": [
+            [
+              "BATTERY_CELL_A_SAMSUNG_25R_ENVELOPE",
+              44.8203
+            ],
+            [
+              "BATTERY_CELL_B_SAMSUNG_25R_ENVELOPE",
+              39.7657
+            ],
+            [
+              "BATTERY_END_STRAP_FRONT_Y",
+              29.4809
+            ]
+          ]
+        },
+        {
+          "centre_mm": [
+            58,
+            31.5,
+            46
+          ],
+          "clashes_mm3": [
+            [
+              "BATTERY_CELL_B_SAMSUNG_25R_ENVELOPE",
+              118.4079
+            ],
+            [
+              "BATTERY_END_STRAP_FRONT_Y",
+              29.4809
+            ]
+          ]
+        }
+      ],
+      "all_clear": false
+    },
+    {
+      "name": "exit_beside_jpk",
+      "axis": "Y",
+      "taps": [
+        {
+          "centre_mm": [
+            33,
+            40,
+            44
+          ],
+          "clashes_mm3": [
+            [
+              "PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE",
+              81.6814
+            ]
+          ]
+        },
+        {
+          "centre_mm": [
+            40,
+            40,
+            44
+          ],
+          "clashes_mm3": [
+            [
+              "PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE",
+              81.6814
+            ]
+          ]
+        },
+        {
+          "centre_mm": [
+            47,
+            40,
+            44
+          ],
+          "clashes_mm3": [
+            [
+              "PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE",
+              81.6814
+            ]
+          ]
+        }
+      ],
+      "all_clear": false
+    },
+    {
+      "name": "exit_above_jpk",
+      "axis": "Y",
+      "taps": [
+        {
+          "centre_mm": [
+            33,
+            38,
+            48
+          ],
+          "clashes_mm3": [
+            [
+              "PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE",
+              56.5487
+            ],
+            [
+              "BATTERY_CELL_A_SAMSUNG_25R_ENVELOPE",
+              6.1683
+            ],
+            [
+              "BATTERY_END_STRAP_FRONT_Y",
+              12.5664
+            ]
+          ]
+        },
+        {
+          "centre_mm": [
+            40,
+            38,
+            48
+          ],
+          "clashes_mm3": [
+            [
+              "PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE",
+              56.5487
+            ],
+            [
+              "BATTERY_CELL_A_SAMSUNG_25R_ENVELOPE",
+              6.1683
+            ],
+            [
+              "BATTERY_END_STRAP_FRONT_Y",
+              12.5664
+            ]
+          ]
+        },
+        {
+          "centre_mm": [
+            47,
+            38,
+            48
+          ],
+          "clashes_mm3": [
+            [
+              "PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE",
+              56.5487
+            ],
+            [
+              "BATTERY_END_STRAP_FRONT_Y",
+              12.5664
+            ]
+          ]
+        }
+      ],
+      "all_clear": false
+    }
+  ],
+  "clear_rows": []
+}

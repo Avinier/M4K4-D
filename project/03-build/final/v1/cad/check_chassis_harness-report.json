@@ -1,0 +1,82 @@
+{
+  "scope": "neutral CAD pose; nominal outer cable and splice envelopes",
+  "checks": [
+    {
+      "name": "34 cables and 2 splice envelopes",
+      "pass": true,
+      "unexpected": []
+    },
+    {
+      "name": "W29 versus assembly",
+      "pass": true,
+      "unexpected": []
+    },
+    {
+      "name": "W29 versus visible power",
+      "pass": true,
+      "unexpected": []
+    },
+    {
+      "name": "W30 versus assembly",
+      "pass": true,
+      "unexpected": []
+    },
+    {
+      "name": "W30 versus visible power",
+      "pass": true,
+      "unexpected": []
+    },
+    {
+      "name": "W31 versus assembly",
+      "pass": true,
+      "unexpected": []
+    },
+    {
+      "name": "W31 versus visible power",
+      "pass": true,
+      "unexpected": []
+    },
+    {
+      "name": "W32 versus assembly",
+      "pass": true,
+      "unexpected": []
+    },
+    {
+      "name": "W32 versus visible power",
+      "pass": true,
+      "unexpected": []
+    },
+    {
+      "name": "W33 versus assembly",
+      "pass": true,
+      "unexpected": []
+    },
+    {
+      "name": "W33 versus visible power",
+      "pass": true,
+      "unexpected": []
+    },
+    {
+      "name": "HN006_TUB_POS_AWG16_MULTI_WIRE_SPLICE_ENVELOPE versus assembly",
+      "pass": true,
+      "unexpected": []
+    },
+    {
+      "name": "HN006_TUB_POS_AWG16_MULTI_WIRE_SPLICE_ENVELOPE versus visible wires",
+      "pass": true,
+      "unexpected": []
+    },
+    {
+      "name": "HN006_TUB_NEG_AWG16_MULTI_WIRE_SPLICE_ENVELOPE versus assembly",
+      "pass": true,
+      "unexpected": []
+    },
+    {
+      "name": "HN006_TUB_NEG_AWG16_MULTI_WIRE_SPLICE_ENVELOPE versus visible wires",
+      "pass": true,
+      "unexpected": []
+    }
+  ],
+  "passed": 15,
+  "total": 15
+}
