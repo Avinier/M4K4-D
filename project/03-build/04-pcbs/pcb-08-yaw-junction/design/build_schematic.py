@@ -133,15 +133,14 @@ if __name__ == "__main__":
         {"1": "LINK_GND", "2": "C0TX_P", "3": "C0TX_N", "4": "C2TX_N", "5": "C2TX_P"})
     add("R1", "Device:R", "0R", "Resistor_SMD:R_0805_2012Metric", 96.52, 167.64,
         {"1": "LINK_GND", "2": "GND_SIG"})
-    zif = "fh34:Hirose_FH34SRJ-22S-0.5SH_1x22_P0.50mm"
-    power_map = {str(n): head for n in range(1, 8)}
-    power_map.update({str(n): "GND_HEAD" for n in range(8, 15)})
-    power_map.update({"15": c2, "16": c2, "17": "GND_C2", "18": "GND_C2",
-                      "19": disp, "20": disp, "21": "GND_DISPLAY", "22": "GND_DISPLAY"})
-    add("J3", "Connector_Generic:Conn_01x22", "J8-6_W42_POWER_FFC", zif, 190.5, 76.2, power_map)
-    add("J4", "Connector_Generic:Conn_01x22", "J8-7_W43_SIGNAL_FFC", zif, 279.4, 76.2,
-        {"1": "GND_SIG", "2": "C0TX_P", "3": "C0TX_N", "4": "GND_SIG", "5": "C2TX_N",
-         "6": "C2TX_P", "7": "GND_SIG", "8": "SERVO_DATA", "9": "GND_SIG"})
+    # D-107: W47 preserves J8-1's six power pins and W24's signal order.
+    add("J3", "Connector_Generic:Conn_02x03_Top_Bottom", "J8-9_W47_POWER_MF3",
+        "pcb08:Molex_Micro-Fit_3.0_43045-0621_2x03-1MP_P3.00mm_Horizontal", 190.5, 76.2,
+        {"1": head, "2": c2, "3": disp, "4": "GND_HEAD", "5": "GND_C2", "6": "GND_DISPLAY"})
+    add("J4", "Connector_Generic:Conn_01x06", "J8-10_W47_SIGNALS_GH6",
+        "Connector_JST:JST_GH_BM06B-GHS-TBT_1x06-1MP_P1.25mm_Vertical", 279.4, 76.2,
+        {"1": "GND_SIG", "2": "C0TX_P", "3": "C0TX_N", "4": "C2TX_N",
+         "5": "C2TX_P", "6": "SERVO_DATA"})
     add("J5", "Connector_Generic:Conn_01x03", "J8-8_YAW_SERVO_5267",
         "Connector_Molex:Molex_SPOX_5267-03A_1x03_P2.50mm_Vertical", 368.3, 76.2,
         {"1": "GND_SIG", "2": "+11V1_YAW", "3": "SERVO_DATA"})
@@ -154,13 +153,13 @@ if __name__ == "__main__":
     for n, net in enumerate([head, c2, disp, "GND_HEAD", "GND_C2", "GND_DISPLAY", "+11V1_YAW", "GND_SIG"], 1):
         add(f"#FLG0{n}", "power:PWR_FLAG", "PWR_FLAG", "", 40.64+25.4*(n-1), 218.44, {"1": net}, False)
     top = f'(kicad_sch (version 20261015) (generator "eeschema") (generator_version "10.99") (uuid "{rootid}") (paper "A3") '
-    top += '(title_block (title "PCB-08 yaw junction") (date "2026-11-09") (rev "A") (company "Makad") (comment 1 "D-093 / D-100: 6.0 V head 7+7; J8-7 signal-only; GND_SIG"))'
+    top += '(title_block (title "PCB-08 yaw junction") (date "2026-11-13") (rev "B") (company "Makad") (comment 1 "D-107: W47 centre umbilical; separate power returns; GND_SIG"))'
     text = top+' (lib_symbols '+" ".join(dump(n) for n in defs.values())+') '
     text += " ".join(instances+wires+labels+ncs)
     for title, x, y in [("HEAD POWER IN / W13 + W14", 30.48, 30.48), ("HEAD LINK / W24 (D-092 order)", 30.48, 121.92),
                         ("LINK GND -> GND_SIG: 0R, ferrite fallback", 76.2, 157.48),
-                        ("W42 POWER FFC: 7+7 HEAD, 2+2 C2, 2+2 DISPLAY", 165.1, 30.48),
-                        ("W43 SIGNAL FFC: NO POWER, 10-22 ISOLATED", 254, 30.48),
+                        ("W47 POWER: J8-9 MIRRORS J8-1", 165.1, 30.48),
+                        ("W47 SIGNALS: J8-10 GH6; PIN 6 SERVO_DATA", 254, 30.48),
                         ("YAW SERVO / W15 + W17 RAIL", 342.9, 45.72), ("BENCH PADS", 342.9, 157.48)]:
         text += f'(text "{title}" (at {x} {y} 0) (effects (font (size 1.8 1.8)) (justify left bottom)) (uuid "{uid(title)}"))'
     text += ' (sheet_instances (path "/" (page "1"))) (embedded_fonts no))\n'

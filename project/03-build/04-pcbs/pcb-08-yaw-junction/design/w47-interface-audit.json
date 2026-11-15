@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "checks": {
+    "body_power": true,
+    "body_signals": true,
+    "pcb12_j1": true,
+    "servo_branch_in_head": true,
+    "head_ground_bonds": true
+  },
+  "release_holds": [
+    "K2: status LED driver remains unassigned; assign and audit before PCB-12 order",
+    "K3: D1 power inlet and received servo cavity order remain unverified",
+    "Three servo conductors cross roll; GND_HEAD/SERVO_DATA branch to J2 is made in the head clamp fan-out"
+  ]
+}

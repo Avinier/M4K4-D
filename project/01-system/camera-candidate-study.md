@@ -92,3 +92,7 @@ Reopen the camera-module selection only after a recorded hard failure: procureme
 | 2026-08-29 | 0.3 | Linked the source-grounded moving-head harness study; adopted axis-conditioned flex zones and live-camera endurance monitoring as the active test direction while keeping the exact production interconnect unselected. |
 | 2026-09-14 | 0.4 | Component review (MEM-20260914-01): recorded that IMX708 support binds the body SBC to Raspberry Pi in practice, the Pi 5 22-to-15-pin cable consequence, AF-lock and pixel-budget notes. Selection unchanged; SBC still formally unselected. |
 | 2026-09-16 | 0.5 | Consumed `RP02-P2-REG-02`: Raspberry Pi 5 2 GB is now selected as the body SBC; camera module and moving-interconnect evidence obligations are unchanged. |
+
+## D-107 moving link update — 2026-11-13
+
+SC0874 and the native Pi pipeline remain selected. The CAD implementation uses a passive B0091 adapter pair, short static CSI ribbons and a slim HDMI lead with its neck section stripped to loose pairs. No Ethernet receiver or HAT is installed. Geometry is documented/envelope based; camera function, noise, fatigue and received plug dimensions remain the C0–C4 gates in [head-umbilical-plan.md](../03-build/head-umbilical-plan.md).

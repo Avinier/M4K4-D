@@ -1,0 +1,400 @@
+{
+ "script": "check_d107_body",
+ "passed": 31,
+ "total": 31,
+ "rows": [
+  {
+   "check": "PCB08_MAIN_00__J3_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_bbox_hits": 0,
+   "bounds": [
+    0.75,
+    -42.325,
+    110.47,
+    14.42,
+    -29.675,
+    121.05
+   ]
+  },
+  {
+   "check": "PCB08_MAIN_01__J1_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_bbox_hits": 0,
+   "bounds": [
+    -24.42,
+    -41.825,
+    110.47,
+    -10.75,
+    -29.175,
+    121.05
+   ]
+  },
+  {
+   "check": "PCB08_MAIN_02__J2_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_bbox_hits": 0,
+   "bounds": [
+    -9.675,
+    -27.275,
+    113.65,
+    1.075,
+    -22.3246,
+    117.85
+   ]
+  },
+  {
+   "check": "PCB08_MAIN_03__J5_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_bbox_hits": 0,
+   "bounds": [
+    -20.95,
+    -26.31,
+    110.15,
+    -11.05,
+    -20.4,
+    119.55
+   ]
+  },
+  {
+   "check": "PCB08_MAIN_04__R1_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_bbox_hits": 0,
+   "bounds": [
+    3.0,
+    -24.6,
+    113.65,
+    5.0,
+    -23.4,
+    114.1
+   ]
+  },
+  {
+   "check": "PCB08_MAIN_05__J4_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_bbox_hits": 0,
+   "bounds": [
+    -8.475,
+    -40.375,
+    113.65,
+    -3.5246,
+    -29.625,
+    117.85
+   ]
+  },
+  {
+   "check": "PCB08_MAIN_06__pcb-08-yaw-junction_PCB_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_bbox_hits": 0,
+   "bounds": [
+    -22.0,
+    -46.0,
+    112.035,
+    12.0,
+    -21.0,
+    113.565
+   ]
+  },
+  {
+   "check": "D107_PCB08_J8_9_MATED_PLUG_E_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_bbox_hits": 0,
+   "bounds": [
+    14.42,
+    -42.6,
+    114.0,
+    22.42,
+    -29.4,
+    121.0
+   ]
+  },
+  {
+   "check": "D107_PCB08_J8_1_MATED_PLUG_E_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_bbox_hits": 0,
+   "bounds": [
+    -32.42,
+    -42.1,
+    114.0,
+    -24.42,
+    -28.9,
+    121.0
+   ]
+  },
+  {
+   "check": "D107_PCB08_J8_4_MATED_PLUG_E_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_bbox_hits": 0,
+   "bounds": [
+    -8.675,
+    -26.8748,
+    117.85,
+    0.075,
+    -22.7248,
+    124.85
+   ]
+  },
+  {
+   "check": "D107_PCB08_J8_8_MATED_PLUG_E_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_bbox_hits": 0,
+   "bounds": [
+    -20.0,
+    -25.855,
+    119.55,
+    -12.0,
+    -20.855,
+    126.55
+   ]
+  },
+  {
+   "check": "D107_PCB08_J8_10_MATED_PLUG_E_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_bbox_hits": 0,
+   "bounds": [
+    -8.0748,
+    -39.375,
+    117.85,
+    -3.9248,
+    -30.625,
+    124.85
+   ]
+  },
+  {
+   "check": "frame_with_mounts_is_one_valid_solid",
+   "ok": true,
+   "solids": 1,
+   "valid": true,
+   "pieces": [
+    [
+     130873.3973,
+     [
+      -42.0,
+      -71.0,
+      56.0,
+      74.0,
+      71.0,
+      138.0
+     ]
+    ]
+   ]
+  },
+  {
+   "check": "BODY_CAMERA_MOUNT_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "pi_face_hits": []
+  },
+  {
+   "check": "BODY_CLAMP_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "pi_face_hits": []
+  },
+  {
+   "check": "PCB08_CRADLE_external_clearance",
+   "ok": true,
+   "clashes": [],
+   "pi_face_hits": []
+  },
+  {
+   "check": "B0091_BODY_BOARD_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_hits": 0
+  },
+  {
+   "check": "B0091_BODY_HDMI_SOCKET_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_hits": 0
+  },
+  {
+   "check": "B0091_BODY_HDMI_MATED_PLUG_E_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_hits": 0
+  },
+  {
+   "check": "B0091_BODY_CSI15_SOCKET_E_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_hits": 0
+  },
+  {
+   "check": "B0091_BODY_RETAINING_TIE_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_hits": 0
+  },
+  {
+   "check": "diameter18_axial_passage",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "body_run_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_face_hits": 0
+  },
+  {
+   "check": "body_bundle_clear_of_own_mounts",
+   "ok": true,
+   "minimum_mm": 0.5
+  },
+  {
+   "check": "individual_body_wires_clear",
+   "ok": true,
+   "minima": [
+    [
+     "W47_+6V3_HEAD_PR_AWG22",
+     [
+      0.9,
+      "BODY_FRAME_MAIN_PRINT"
+     ]
+    ],
+    [
+     "W47_+5V_C2_AWG26",
+     [
+      1.4648,
+      "BODY_FRAME_MAIN_PRINT"
+     ]
+    ],
+    [
+     "W47_+5V_DISPLAY_AWG26",
+     [
+      2.3,
+      "BODY_FRAME_MAIN_PRINT"
+     ]
+    ],
+    [
+     "W47_GND_HEAD_AWG22",
+     [
+      2.05,
+      "BODY_FRAME_MAIN_PRINT"
+     ]
+    ],
+    [
+     "W47_GND_C2_AWG26",
+     [
+      2.3,
+      "BODY_FRAME_MAIN_PRINT"
+     ]
+    ],
+    [
+     "W47_GND_DISPLAY_AWG26",
+     [
+      1.7047,
+      "BODY_FRAME_MAIN_PRINT"
+     ]
+    ],
+    [
+     "W47_GND_SIG_AWG28",
+     [
+      1.3471,
+      "D107_PCB08_J8_9_MATED_PLUG_E"
+     ]
+    ],
+    [
+     "W47_C0TX_P_AWG28",
+     [
+      1.3471,
+      "D107_PCB08_J8_9_MATED_PLUG_E"
+     ]
+    ],
+    [
+     "W47_C0TX_N_AWG28",
+     [
+      1.3471,
+      "D107_PCB08_J8_9_MATED_PLUG_E"
+     ]
+    ],
+    [
+     "W47_C2TX_N_AWG28",
+     [
+      1.3002,
+      "BODY_FRAME_MAIN_PRINT"
+     ]
+    ],
+    [
+     "W47_C2TX_P_AWG28",
+     [
+      0.5984,
+      "BODY_FRAME_MAIN_PRINT"
+     ]
+    ],
+    [
+     "W47_SERVO_DATA_AWG28",
+     [
+      0.4097,
+      "BODY_FRAME_MAIN_PRINT"
+     ]
+    ],
+    [
+     "W47_STRIPPED_HDMI_INNER_PAIRS_E",
+     [
+      1.95,
+      "YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG"
+     ]
+    ]
+   ]
+  },
+  {
+   "check": "body_camera_ribbon_continuous_valid",
+   "ok": true,
+   "pieces": 1,
+   "solids": 1,
+   "valid": true,
+   "note": "mitered thin envelope and tapered15-to22 end; received fold and contact orientation remain U"
+  },
+  {
+   "check": "body_static_camera_ribbon_clear",
+   "ok": true,
+   "clashes": [],
+   "pi_csi_mouth_mm": [
+    37.4,
+    -24.72,
+    99.55
+   ],
+   "note": "mouth from imported Pi STEP; received FFC latch/contact dress remains U"
+  },
+  {
+   "check": "microfit_straight_pull_6mm",
+   "ok": true,
+   "clashes": [],
+   "note": "shell removed and neck harness slack released"
+  },
+  {
+   "check": "pcb08_service_removal",
+   "ok": true,
+   "clashes": [],
+   "sequence": "shell and rear panel off; unplug all five; remove M2\u00d74 and keeper; tilt front15\u00b0; slide +Y6mm; withdraw -X60mm"
+  },
+  {
+   "check": "assumed_plug_sections_only",
+   "ok": true,
+   "microfit_diagonal_mm": 14.9412,
+   "hdmi_diagonal_mm": 17.4642,
+   "clear_bore_mm": 18,
+   "physical_passage_qualified": false,
+   "note": "ENVELOPE ARITHMETIC ONLY. Buy HDMI cable first; measure full housing/boot. If it fails18mm, do not print/order closed inserts; use head-end unplugging or redesign split inserts for the bare21mm bore."
+  },
+  {
+   "check": "cassette_and_joiners_absent",
+   "ok": true,
+   "obsolete": []
+  }
+ ]
+}

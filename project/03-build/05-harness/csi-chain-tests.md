@@ -1,5 +1,7 @@
 # CSI chain: bench tests before ordering (D-105)
 
+> **Superseded by [D-107](../decisions.md#d-107) (2026-11-13).** The camera ribbon chain tested here is gone: the camera link is the Arducam B0091 HDMI pair through the yaw-axis bundle. Its acceptance gate is C0–C4 in [head-umbilical-plan.md §3.5](../head-umbilical-plan.md#35-camera-and-its-link).
+
 D-105 runs the camera ribbon outside the head. The CAD check (`final/v1/cad/check_d105_csi_loop.py`) proves the geometry, but four questions can only be answered on the bench. Run them in this order: the stream test decides whether the chain survives at all, and the other three refine it.
 
 The chain under test, Pi end to camera end:

@@ -1,0 +1,32 @@
+{
+  "scope": "Unedited subsystem body_panels() and purchased yaw-servo STEP, before final droid edits; no D107 repair applied",
+  "rows": [
+    {
+      "label": "WHEEL_ARCH_POD_L",
+      "unedited_source_valid": true,
+      "volume_mm3": 14170.856516320693
+    },
+    {
+      "label": "WHEEL_ARCH_POD_R",
+      "unedited_source_valid": true,
+      "volume_mm3": 14170.855358345525
+    },
+    {
+      "label": "YAW_SERVO_ST3215_HS_STEP solid 3",
+      "unedited_source_valid": false,
+      "volume_mm3": 11128.230269220652
+    }
+  ],
+  "independent_unedited_arches_STEP_roundtrip": [
+    {
+      "label": "=>[0:1:1:2]",
+      "valid_after_STEP_roundtrip": false,
+      "volume_mm3": 14170.856516320271
+    },
+    {
+      "label": "=>[0:1:1:3]",
+      "valid_after_STEP_roundtrip": false,
+      "volume_mm3": 14170.8553583462
+    }
+  ]
+}

@@ -253,3 +253,14 @@ def sweep(subjects, leaves, direction, distances, skip=(), parts_only=True):
 def own(leaves, *tokens):
     """Leaves whose path contains any of `tokens`."""
     return [lf for lf in leaves if any(t in "/".join(lf.path) for t in tokens)]
+
+
+def face_boxes(shape):
+    """Local vendor-face bounds, including shell-only parts (D-107)."""
+    from OCP.TopAbs import TopAbs_FACE
+    from OCP.TopExp import TopExp_Explorer
+    out=[];ex=TopExp_Explorer(shape.wrapped,TopAbs_FACE)
+    while ex.More():
+        b=Bnd_Box();BRepBndLib.AddOptimal_s(ex.Current(),b,False,False)
+        out.append(b.Get());ex.Next()
+    return out

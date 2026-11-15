@@ -1,5 +1,7 @@
 # PCB-16 — Head junction
 
+> **Superseded by [D-107](../../decisions.md#d-107) (2026-11-13). Do not order.** The head wires now run as one loose bundle up the yaw axis and end on pre-made leads in the head, with no junction board. This page and its design files stay as the record. The droid CAD still carries the board until the D-107 CAD edits remove it.
+
 Passive FFC-to-wire break for the two head FFCs (W42 power, W43 signal). It lies flat on the yaw disc beside the +Y yoke leg's foot, so the tilting head needs only wires across its pitch and roll joints ([D-103](../../decisions.md#d-103)).
 
 | | |

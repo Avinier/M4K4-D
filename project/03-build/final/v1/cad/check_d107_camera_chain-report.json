@@ -1,0 +1,68 @@
+{
+  "qualified": false,
+  "passed": 2,
+  "total": 5,
+  "checks": [
+    {
+      "name": "head_hdmi_cable_approaches_from_plug_rear",
+      "pass": false,
+      "head_plug_rear_y_mm": 15.915,
+      "preterminal_xyz_mm": [
+        -67.0,
+        14.5,
+        71.0
+      ],
+      "terminal_xyz_mm": [
+        -67.0,
+        15.5,
+        75.0
+      ],
+      "finding": "Current lead approaches from below and reverses the required +Y cable exit."
+    },
+    {
+      "name": "body_hdmi_cable_leaves_plug_rear",
+      "pass": true,
+      "body_plug_rear_y_mm": 5.914999999999999,
+      "first_two_xyz_mm": [
+        [
+          53.0,
+          5.915,
+          120.0
+        ],
+        [
+          53.0,
+          14.0,
+          120.0
+        ]
+      ]
+    },
+    {
+      "name": "head_15way_envelope_is_one_continuous_part",
+      "pass": false,
+      "separate_solid_count": 5,
+      "finding": "Five segment solids only model nominal clearance, not a folded single FFC."
+    },
+    {
+      "name": "body_150mm_ribbon_excess_is_dressed_in_model",
+      "pass": false,
+      "modeled_centerline_mm": 59.965,
+      "purchased_length_mm": 150.0,
+      "insertion_and_service_allowance_mm": 25.0,
+      "undressed_excess_mm": 65.035,
+      "finding": "One valid loft does not represent the stock ribbon or its excess-length folds."
+    },
+    {
+      "name": "head_150mm_ribbon_length_reaches_nominal_route",
+      "pass": true,
+      "modeled_centerline_mm": 111.19807376969477,
+      "stock_length_mm": 150.0,
+      "reserve_after_allowances_mm": 13.801926230305227
+    }
+  ],
+  "physical_gates": [
+    "Received B0091 connector positions/contact faces and board retention",
+    "Actual HDMI plug/boot through finished bore and intact-cable flex performance",
+    "Camera stream at all head poses after any HDMI jacket modification",
+    "Received 15-way and 15-to-22 ribbon fold, contact polarity and slack dress"
+  ]
+}

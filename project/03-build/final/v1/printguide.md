@@ -320,3 +320,10 @@ The visit answered most of this list. The answers and the remaining questions
 (own-spool ASA and PA-CF permissions, slicer, thin walls, faculty sponsor, stock
 colours against the [palette](#4-colour-scheme), inserts, paint) are tracked in
 [04-print/lab.md](../../../04-print/lab.md#still-open).
+
+## D-107 print changes — 2026-11-13
+
+Use final droid geometry: lower skin opening/collar, split clamp jaw, roof B0091 cradle with tie slots, body frame B0091 cradle/strain-relief saddle/PCB08 cradle, removable PCB08 keeper, disc bushing and rotor liner. Retire D105 camera bracket and D104 hollow leg/channel; the solid D051 pivot remains. Integral mounts inherit their parent material/colour; jaw and keeper PETG dark grey, bushing/liner smooth PA12 or PETG after edge finishing (received cable wear check required). Silicone grip pads are cut soft liners, not rigid prints. Two M2×8 plus inserts retain the head jaw; one M2×4 retains PCB08. Two 2.5 mm ties retain the B0091 boards. No new STLs, slicing or prints have been released by D107; derive them from the rebuilt final STEP after received-part checks.
+
+
+**2026-11-14 structural correction:** PCB08’s former2×2 hanger is replaced by a9.6×18mm web, an upper rear-crossrail tie and deeper cradle beams. The body saddle has a6.4×9.4mm gusset throat. Apply solid-infill/perimeter modifiers through the beams, web and frame roots in PETG; the hand screen assumes20MPa printed strength with factor2 at service load and does not establish interlayer strength/creep. The actual selected print process must demonstrate this credit. Before production use, proof the complete cradle100N in connector directions and saddle100N cable pull,10s each, without cracking or permanent set; fixture/method and stress limits are in [corrections](d107-corrections.md). The liner’s OD24.8 flange seats on rotor topZ137 and prevents downward escape. Buy/measure HDMI before printing the closedØ18 inserts. Tape/repack the bundle to6.8±0.05mm at the padded clamp, or revise the clamp if the bare bundle is larger. No print release is implied by nominal clearance.

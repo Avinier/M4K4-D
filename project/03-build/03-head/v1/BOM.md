@@ -123,3 +123,12 @@ These parts are in the head CAD and mass tree but have no BOM row yet. The `M0xx
 6. **Rails:** record the 5.5 V head setpoint, the clamp change and the 12 V yaw rail in `04-pcbs/power-boards.md`.
 7. **Order the second STS3045M** once B1 and B4 pass.
 8. **Register the head parts above** as HD rows as their selections firm up.
+
+## D-107 current head cable installation
+
+The final assembly restores HD-008 MR106 bearing, HD-009 solid D-051 pivot pin and HD-010 retainer hardware. HD-017–020 (PCB16/D104/D105 cable parts) are superseded. HD-021 W47 is twelve loose wires plus camera pairs; HD-022 is the flared Ø18 bore bushing, HD-023 the B0091 pair with slim HDMI and two static CSI ribbons, HD-024 the split clamp (two M2×8, two M2×3 inserts, silicone grip liners), and HD-025 the Ø18 rotor liner. The roof cradle is integral to the upper skin with a 2.5 mm retaining tie; the lower skin has the opening and fixed clamp half. SC0874 remains the camera. See [execution](../../final/v1/d107-execution.md), [W47](../../05-harness/README.md). Subsystem CAD is historical; use final droid geometry. None of these items is received or physically accepted.
+
+
+2026-11-14 correction: HD-026 is a separately counted150mm15-way1mm-pitch head camera FFC; HD-027 is a150mm15-to22 Pi5 FPC (Arducam B0210-class). The kit’s60mm15-way ribbon cannot reach and is a spare. HD-025 now has a rotor-seated OD24.8 flange. Repack/tape W47 to6.8±0.05mm at HD-024’s padded clamp; verify actual grip and do not crush an oversize bundle. See [corrections](../../final/v1/d107-corrections.md).
+
+HD-023 is one bought B0091 adapter-pair kit. HD-028 is the separately bought slim HDMI cable; HD-026/027 are the two separate installed150mm static ribbons. CAD `D107_B0091_*` solids are adapter placement envelopes, not printed replacements for the bought boards.

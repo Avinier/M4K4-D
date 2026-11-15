@@ -75,3 +75,7 @@ structure change usually changes a skin.
 
 **Budget:** about 1.5 kg of filament per complete set and 1.5–2 sets in all.
 See [lab.md § Cost](lab.md#cost).
+
+## D-107 source update
+
+Head/body source CAD does not include the current cable edits. Export the updated lower/upper skins, solid yoke leg, body frame, split clamp, PCB08 keeper, bushing and liner from final/v1 only; omit the cassette, PCB14/16 mounts and D105 bracket. See the [print guide](../03-build/final/v1/printguide.md). This change does not authorize fabrication or replace physical fit acceptance.

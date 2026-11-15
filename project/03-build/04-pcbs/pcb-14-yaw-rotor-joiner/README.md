@@ -1,5 +1,7 @@
 # PCB-14 (×4) — Yaw rotor joiner (×3) and camera-loop joiner (×1)
 
+> **Superseded by [D-107](../../decisions.md#d-107) (2026-11-13). Do not order.** No ribbon crosses the yaw joint any more: the head wires and the camera link run as one loose bundle up the yaw axis. This page and its design files stay as the record. The droid CAD still carries the boards until the D-107 CAD edits remove them.
+
 Straight-through 22-pin 0.5 mm FFC joiner with two FH34SRJ ZIFs ([D-101](../../decisions.md#d-101): lower contact *n* → upper contact 23 − *n*, one conductor per X), passing the cassette FFCs through the rotating yaw hub. Three boards use six ZIFs; PCB-08 uses two more of the same part.
 
 | | |

@@ -1,0 +1,52 @@
+{
+  "rows": [
+    {
+      "ref": "J3",
+      "library": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/lib/pcb08.pretty/Molex_Micro-Fit_3.0_43045-0621_2x03-1MP_P3.00mm_Horizontal.kicad_mod",
+      "pads_match": true
+    },
+    {
+      "ref": "J6",
+      "library": "/Applications/KiCad-nightly/KiCad.app/Contents/SharedSupport/footprints/Connector_Wire.pretty/SolderWire-0.5sqmm_1x02_P4.6mm_D0.9mm_OD2.1mm.kicad_mod",
+      "pads_match": true
+    },
+    {
+      "ref": "J1",
+      "library": "/Users/avinier/robotics/makad/project/03-build/04-pcbs/lib/pcb08.pretty/Molex_Micro-Fit_3.0_43045-0621_2x03-1MP_P3.00mm_Horizontal.kicad_mod",
+      "pads_match": true
+    },
+    {
+      "ref": "J2",
+      "library": "/Applications/KiCad-nightly/KiCad.app/Contents/SharedSupport/footprints/Connector_JST.pretty/JST_GH_BM06B-GHS-TBT_1x06-1MP_P1.25mm_Vertical.kicad_mod",
+      "pads_match": true
+    },
+    {
+      "ref": "TP1",
+      "library": "/Applications/KiCad-nightly/KiCad.app/Contents/SharedSupport/footprints/TestPoint.pretty/TestPoint_Pad_D1.0mm.kicad_mod",
+      "pads_match": true
+    },
+    {
+      "ref": "J5",
+      "library": "/Applications/KiCad-nightly/KiCad.app/Contents/SharedSupport/footprints/Connector_Molex.pretty/Molex_SPOX_5267-03A_1x03_P2.50mm_Vertical.kicad_mod",
+      "pads_match": true
+    },
+    {
+      "ref": "R1",
+      "library": "/Applications/KiCad-nightly/KiCad.app/Contents/SharedSupport/footprints/Resistor_SMD.pretty/R_0805_2012Metric.kicad_mod",
+      "pads_match": true
+    },
+    {
+      "ref": "J4",
+      "library": "/Applications/KiCad-nightly/KiCad.app/Contents/SharedSupport/footprints/Connector_JST.pretty/JST_GH_BM06B-GHS-TBT_1x06-1MP_P1.25mm_Vertical.kicad_mod",
+      "pads_match": true
+    },
+    {
+      "ref": "TP2",
+      "library": "/Applications/KiCad-nightly/KiCad.app/Contents/SharedSupport/footprints/TestPoint.pretty/TestPoint_Pad_D1.0mm.kicad_mod",
+      "pads_match": true
+    }
+  ],
+  "scope": "Pad number/type/shape, local position/angle, size, drill, layers and roundrect ratio; rotation normalized; graphics/model differences remain library warnings.",
+  "board_sha256": "f486017c66df1a0e6c40fb971f82f515e5e2f684b5c1dba4866d417fe7ad6618",
+  "passed": true
+}

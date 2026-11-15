@@ -1,0 +1,339 @@
+{
+ "script": "check_d107_mass",
+ "passed": 3,
+ "total": 3,
+ "rows": [
+  {
+   "check": "mass_rows",
+   "ok": true,
+   "rows": [
+    [
+     "cassette stator removed",
+     -4.5037,
+     [
+      15.7832,
+      0.3376,
+      124.8333
+     ],
+     "E CAD volume \u00d7 PETG 1.20"
+    ],
+    [
+     "cassette FFCs removed",
+     -4.5,
+     [
+      16,
+      0,
+      127
+     ],
+     "E D-044 register allowance"
+    ],
+    [
+     "PCB14 x3 and six sockets removed",
+     -3.93,
+     [
+      16,
+      -1,
+      142.3
+     ],
+     "E D-052 register: 3\u00d70.51 + 6\u00d70.4"
+    ],
+    [
+     "source PCB14 rotor posts removed",
+     -0.6016,
+     [
+      16.0,
+      0.2011,
+      140.1598
+     ],
+     "E exact edited-minus-source volume"
+    ],
+    [
+     "cassette screws removed",
+     -0.6,
+     [
+      16,
+      0,
+      135
+     ],
+     "E three M2\u00d76"
+    ],
+    [
+     "PCB08 rev B replaces existing allowance",
+     3.2158,
+     [
+      -5,
+      -33.5,
+      116
+     ],
+     "E measured FR4 core + two 1.5 g Micro-Fits + two .25 g GH + .4 g SPOX + .02 g R1 + .42 g isolated inner fills; replaces 3 g plus D-095 header"
+    ],
+    [
+     "body camera cradle",
+     1.2103,
+     [
+      53.0,
+      -24.619,
+      119.9662
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "body strain relief",
+     2.5039,
+     [
+      34.2138,
+      -24.3173,
+      119.8257
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "PCB08 edge cradle",
+     9.7621,
+     [
+      19.8067,
+      -37.3665,
+      119.9578
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "PCB08 removable keeper",
+     0.0265,
+     [
+      6.8177,
+      -20.2026,
+      114.6
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "PCB08 keeper screw",
+     0.15,
+     [
+      6.5,
+      -19,
+      114
+     ],
+     "E M2\u00d74"
+    ],
+    [
+     "B0091 body board and static HDMI share",
+     10.8,
+     [
+      53.0,
+      -30.0,
+      113.0
+     ],
+     "E 4.3 g populated adapter + .5 g 150mm Pi FPC + 6 g of the HDMI lead"
+    ],
+    [
+     "M006 prior CSI allowance removed",
+     -8.0,
+     [
+      28.4187,
+      10,
+      254.5
+     ],
+     "E existing head mass-placement.json allowance"
+    ],
+    [
+     "B0091 head board, ribbon and HDMI share",
+     11.8,
+     [
+      -8.5813,
+      -20.0,
+      258.5
+     ],
+     "E 4.3 g adapter + .5 g static ribbon + 7 g HDMI share"
+    ],
+    [
+     "lower skin opening and collar",
+     0.0722,
+     [
+      8.0187,
+      0,
+      191.5
+     ],
+     "E exact signed CAD volume change at collar centre"
+    ],
+    [
+     "roof camera cradle",
+     2.6852,
+     [
+      -8.5813,
+      -20.5734,
+      265.369
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "head clamp jaw",
+     0.9621,
+     [
+      11.7378,
+      0.0,
+      193.627
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "disc bore bushing",
+     1.086,
+     [
+      16.0,
+      -0.0,
+      150.7058
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "rotor liner",
+     3.4452,
+     [
+      16.0,
+      0.0,
+      132.5112
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "head clamp screws and inserts",
+     0.7,
+     [
+      8.0187,
+      0,
+      193.5
+     ],
+     "E two M2\u00d78 plus two M2\u00d73 brass inserts"
+    ],
+    [
+     "head clamp silicone liners",
+     0.03,
+     [
+      8.0187,
+      0,
+      195.0
+     ],
+     "E two thin silicone half liners"
+    ],
+    [
+     "B0091 retaining ties",
+     0.1,
+     [
+      53.0,
+      -30.0,
+      113.0
+     ],
+     "E one 2.5 mm nylon tie"
+    ],
+    [
+     "B0091 head retaining tie",
+     0.1,
+     [
+      -8.5813,
+      -20.0,
+      258.5
+     ],
+     "E one 2.5 mm nylon tie"
+    ]
+   ],
+   "net_delta_g": 26.5141,
+   "retained_allowances": "M008 C2 20 g; M020 wires and fanout 15 g; neither double counted",
+   "note": "D/E estimates only; D-095 baseline before D-104/105; full 360\u00b0 yaw and actual 1\u00b0 pitch/roll centroid sweep"
+  },
+  {
+   "check": "mass_and_tipping",
+   "ok": true,
+   "steel": {
+    "mass_g": 2655.0447,
+    "com_mm": [
+     18.651,
+     0.7882,
+     110.1515
+    ],
+    "worst_yaw_a_tip": 1.6549,
+    "pose_yaw_pitch_roll": [
+     29,
+     -19,
+     -21
+    ],
+    "margin_pct": 4.5922,
+    "poses": 1068120,
+    "method": "actual frame centroids over 1 degree pitch/roll grid to hard stops, full 360 degree yaw"
+   },
+   "copper": {
+    "mass_g": 2666.0894,
+    "com_mm": [
+     18.8803,
+     0.785,
+     109.8712
+    ],
+    "worst_yaw_a_tip": 1.6796,
+    "pose_yaw_pitch_roll": [
+     29,
+     -19,
+     -21
+    ],
+    "margin_pct": 6.1546,
+    "poses": 1068120,
+    "method": "actual frame centroids over 1 degree pitch/roll grid to hard stops, full 360 degree yaw"
+   },
+   "minimum": 1.5823,
+   "ballast_choice": "steel restored",
+   "required_margin_pct": 1.5,
+   "steel_release_margin_pct": 3.0
+  },
+  {
+   "check": "original_register_bound_and_camera_mass_sensitivity",
+   "ok": true,
+   "original_register_bound": {
+    "mass_g": 2655.0447,
+    "com_mm": [
+     18.651,
+     0.7882,
+     110.1515
+    ],
+    "a_tip": 1.661,
+    "worst_pose_a_tip": 1.6372,
+    "margin_pct": 3.4707,
+    "extra_camera_g": 0.0,
+    "method": "D095 original register bound, unchanged source-head radii; final delta centroids stationary"
+   },
+   "original_register_extra10g": {
+    "mass_g": 2665.0447,
+    "com_mm": [
+     18.5489,
+     0.7102,
+     110.7081
+    ],
+    "a_tip": 1.6436,
+    "worst_pose_a_tip": 1.62,
+    "margin_pct": 2.3844,
+    "extra_camera_g": 10.0,
+    "method": "D095 original register bound, unchanged source-head radii; final delta centroids stationary"
+   },
+   "actual_moving_frame_extra10g": {
+    "mass_g": 2665.0447,
+    "com_mm": [
+     18.5489,
+     0.7102,
+     110.7081
+    ],
+    "worst_yaw_a_tip": 1.6371,
+    "pose_yaw_pitch_roll": [
+     17,
+     -25,
+     -21
+    ],
+    "margin_pct": 3.4683,
+    "poses": 1068120,
+    "method": "actual frame centroids over 1 degree pitch/roll grid to hard stops, full 360 degree yaw"
+   },
+   "steel_release_margin_pct": 3.0,
+   "original_register_extra10g_clears_3pct": false,
+   "physical_release": "HOLD: original register all10g-in-head sensitivity is below3%; weigh/dress actual cable and validate physical tipping",
+   "note": "PASS records nominal>=3%, moving-frame adverse>=3% and legacy adverse>=1.5% operating minimum; it does NOT assert every method/scenario clears3%"
+  }
+ ]
+}

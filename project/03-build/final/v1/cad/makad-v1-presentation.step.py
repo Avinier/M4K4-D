@@ -34,6 +34,7 @@ NOT_PARTS = ("RESERVE", "OVERLAY", "PHYSICS", "HARNESS", "KEEP_OUT", "KEEPOUT", 
 
 def _is_part(label):
     label = (label or "").upper()
+    if label == "HARNESS": return True  # D-107 actual wire bodies, distinct from reserve groups
     return not any(token in label for token in NOT_PARTS)
 
 

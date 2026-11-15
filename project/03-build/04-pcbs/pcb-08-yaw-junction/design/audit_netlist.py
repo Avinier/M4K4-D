@@ -1,4 +1,4 @@
-"""Check PCB-08's exported Nightly netlist against the circuit manifest and the D-100 contracts."""
+"""Check PCB-08's exported Nightly netlist against the circuit manifest and the D-107 W47 contracts."""
 
 import json
 import sys
@@ -29,17 +29,15 @@ def main():
               for (ref, pin), net in expected.items() if actual.get((ref, pin)) != net]
     at = lambda ref, pin: actual.get((ref, str(pin)))
     pins_of = lambda net: sorted(k for k, v in actual.items() if v == net)
-    j3 = [at("J3", p) for p in range(1, 23)]
-    j4 = [at("J4", p) for p in range(1, 23)]
+    j3 = [at("J3", p) for p in range(1, 7)]
+    j4 = [at("J4", p) for p in range(1, 7)]
     checks = {
         "manifest_matches_export": not errors,
         "j8_1_harness_order": [at("J1", p) for p in range(1, 7)] ==
             [HEAD, C2, DISP, "GND_HEAD", "GND_C2", "GND_DISPLAY"],
-        "j8_6_head_7_plus_7": j3[:7] == [HEAD] * 7 and j3[7:14] == ["GND_HEAD"] * 7,
-        "j8_6_c2_display_2_plus_2": j3[14:] == [C2, C2, "GND_C2", "GND_C2", DISP, DISP, "GND_DISPLAY", "GND_DISPLAY"],
-        "j8_7_signal_only": not any(n in POWER for n in j4),
-        "j8_7_map": j4[:9] == ["GND_SIG", "C0TX_P", "C0TX_N", "GND_SIG", "C2TX_N", "C2TX_P", "GND_SIG", "SERVO_DATA", "GND_SIG"],
-        "j8_7_10_to_22_isolated": all(n is None or n.startswith("unconnected") for n in j4[9:]),
+        "j8_9_mirrors_j8_1": j3 == [at("J1", p) for p in range(1, 7)],
+        "j8_10_signal_only": not any(n in POWER for n in j4),
+        "j8_10_w47_map": j4 == ["GND_SIG", "C0TX_P", "C0TX_N", "C2TX_N", "C2TX_P", "SERVO_DATA"],
         "j8_4_w24_order": [at("J2", p) for p in range(1, 6)] == ["LINK_GND", "C0TX_P", "C0TX_N", "C2TX_N", "C2TX_P"]
             and (at("J2", 6) is None or at("J2", 6).startswith("unconnected")),
         "rs422_pairs_pass_through": all(sorted(r for r, _ in pins_of(n)) == ["J2", "J4"]

@@ -1,0 +1,62 @@
+{
+  "result": "PASS",
+  "board_sha256": "f486017c66df1a0e6c40fb971f82f515e5e2f684b5c1dba4866d417fe7ad6618",
+  "head_power": [
+    {
+      "name": "HEAD_POSITIVE_FILL",
+      "net": "/+6V3_HEAD_PR",
+      "layer": "In1.Cu",
+      "filled_area_mm2": 664.7778130296552,
+      "solid_pad_connection": true,
+      "sheet_squares": 3.5317735028629955,
+      "grid_mm": 0.1,
+      "scenarios": [
+        {
+          "copper_um": 35.0,
+          "resistance_at60C_ohm": 0.0020131238128321466,
+          "drop_at2_4A_V": 0.004831497150797151,
+          "joule_heat_at2_4A_W": 0.011595593161913163,
+          "approved_copper": true
+        },
+        {
+          "copper_um": 17.5,
+          "resistance_at60C_ohm": 0.004026247625664293,
+          "drop_at2_4A_V": 0.009662994301594303,
+          "joule_heat_at2_4A_W": 0.023191186323826326,
+          "approved_copper": false
+        }
+      ]
+    },
+    {
+      "name": "HEAD_RETURN_FILL",
+      "net": "/GND_HEAD",
+      "layer": "In2.Cu",
+      "filled_area_mm2": 670.8520391156393,
+      "solid_pad_connection": true,
+      "sheet_squares": 4.751072384838071,
+      "grid_mm": 0.1,
+      "scenarios": [
+        {
+          "copper_um": 35.0,
+          "resistance_at60C_ohm": 0.002708128634708137,
+          "drop_at2_4A_V": 0.006499508723299528,
+          "joule_heat_at2_4A_W": 0.015598820935918868,
+          "approved_copper": true
+        },
+        {
+          "copper_um": 17.5,
+          "resistance_at60C_ohm": 0.005416257269416274,
+          "drop_at2_4A_V": 0.012999017446599056,
+          "joule_heat_at2_4A_W": 0.031197641871837736,
+          "approved_copper": false
+        }
+      ]
+    }
+  ],
+  "yaw_supply_min_width_mm": 1.5,
+  "yaw_return_wide_segments": 8,
+  "yaw_return_width_mm": 1.5,
+  "minimum_finished_inner_copper_um": 35,
+  "half_copper_substitution_permitted": false,
+  "limitations": "Resistor sheet estimate only; no temperature prediction. Prototype load/temperature test and fab written stack-up acceptance remain required."
+}

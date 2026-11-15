@@ -38,10 +38,10 @@
 | PCB-10 C3 carrier | Rev A | **Kept, no re-spin.** `J10-12` unused; its watchdog + AND gate become the motor kill | Procure |
 | PCB-11 status LED | Rev A | **Kept** | Procure |
 | PCB-12 C2 head carrier | Not started | **Custom, simpler** (no watchdog, `ARM_REQ` or READY pair). The Waveshare board doesn't fit the C2 bay (D-094) | Design |
-| PCB-14 ×3 yaw joiners | HOLD | **Kept custom** (passive; ZIF pick still open) | Design |
+| PCB-14 yaw joiners | SUPERSEDED D-107 | Removed with cassette | Historical |
 | PCB-15 nose Hall | Rev A | **Kept** | Procure |
 
-**Count:** 14 custom designs → **7** (PCB-08, 09, 10, 11, 12, 14, 15). PCB-08 has a routed draft; PCB-12 and PCB-14 still need designs. PCB-09 rev B is routed and CAD fitted but awaits physical acceptance. All 7 go on one fab order ([D-064](decisions.md#d-064) batch).
+**Count:** 14 custom designs → **6** (PCB-08, 09, 10, 11, 12, 15). PCB-08 has a routed draft; PCB-12 rev A is drafted; PCB-08 rev B replaces its FFCs with W47 plugs. PCB-09 rev B is routed and CAD fitted but awaits physical acceptance. All 6 go on one fab order ([D-064](decisions.md#d-064) batch).
 
 **Interface rule.** Boards already designed keep their connectors. Each bought module gets a soldered pigtail ending in the connector the board expects. No designed board is re-spun.
 
@@ -164,7 +164,7 @@ These are system records, outside `03-build`. The [03-build rule](README.md) say
 | `W20`, `W21`, `W23b`, `W39` | **Deleted** |
 | `W23a` | **Deleted**; `SERVO_DATA` for yaw now stays on PCB-08 |
 | `W40` power button | To the power switch's button input |
-| `W43` sideband FFC | Fewer conductors; reassign at PCB-08/12 design |
+| `W47` head umbilical | Twelve wires; PCB08 rev B to PCB12/display/servos; camera pairs share route |
 | `W26` audio (`J9-3` GH10) | **Changed**: `J9-3` → a small audio hub (perfboard or splices) → amp breakout and the four mic breakouts. BCLK, LRCLK, 3V3 and GND go to every mic, with a 33–100 Ω series resistor per clock branch at the hub (as PCB-05 had); SDI0 from the front pair, SDI1 from the rear pair; SDO0 and `AMP_SD` go to the amp |
 | `W27` mic leads | **Changed**: 6 wires per I²S mic (VDD, GND, SCK, WS, SD, L/R strap) instead of the PDM GH4 |
 | `W28` speaker | To the breakout's screw terminal |
@@ -328,7 +328,7 @@ The changes are applied in these levels. Q1–Q9 are decided (§6).
 | 6 | **BOM:** retire, promote and add rows (§4.10) | Records | 3 | **Done 2026-11-07**: [D-097](decisions.md#d-097); subsystem BOM snapshots not refreshed. **Ordered 2026-11-08** (builder): modules, M13 small parts, BO-007, BO-016; harness connectors (CH-101, CH-102, Micro-Fit pairs, splices) wait for the 05-harness review |
 | 7 | **Other docs:** foundation CON-TBD-09, the power/energy and mass ledgers, head BOM yaw-rail note, print READMEs, final v1 README (§4.1, 4.7, 4.9) | Doc cleanup | 3–6 | **Done 2026-11-07** for documentation; power-ledger **peak budget remains D-096 HOLD** pending N1–N3 and CH-099 |
 | 8 | **Firmware requirements** in `04-software`: low-battery stop, button-off, servo limits, the four-mic overlay (§4.11) | Software | — | **Done 2026-11-07**: [firmware-requirements.md](04-software/firmware-requirements.md) ([D-097](decisions.md#d-097)); PCB-09 rev B interface selected by [D-098](decisions.md#d-098), physical implementation pending |
-| 9 | **Custom boards:** PCB-09 rev B adds GPIO12/13 and INA226 `i2c-gpio` SDA/SCL/3V3/GND wiring ([D-098 amendment](decisions.md#d-098)), retaining I²C1 TP1/TP2; design PCB-08, PCB-12 (custom: the Waveshare board doesn't fit, D-094) and PCB-14; complete physical acceptance before one fab order for all seven | New design | 4, 5 | PCB-09 layout and final-v1 CAD done on branch; `fab/revB` draft, #2813/Pi/bench gates open |
+| 9 | **Custom boards:** PCB-09 rev B adds GPIO12/13 and INA226 `i2c-gpio` SDA/SCL/3V3/GND wiring ([D-098 amendment](decisions.md#d-098)), retaining I²C1 TP1/TP2; design PCB-08, PCB-12 (custom: the Waveshare board doesn't fit, D-094) ; complete physical acceptance before one fab order for all six | New design | 4, 5 | PCB-09 layout and final-v1 CAD done on branch; `fab/revB` draft, #2813/Pi/bench gates open |
 | 10 | **Bench:** TIFPS0629 acceptance, the four-mic overlay on loose breakouts (before the shell is printed), tests N1–N11 (§4.12) | Physical | Parts in hand | Waits |
 
 ---

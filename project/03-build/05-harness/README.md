@@ -1,10 +1,10 @@
-# 05 — Harness: chassis and body wiring
+# 05 — Harness: chassis wiring and D-107 head umbilical
 
 | Field | Value |
 |---|---|
 | Status | **Electrical HOLD**, 2026-11-07: the D-093 low-pack coincident-load screen in §6 exceeds the assumed 13 A Micro-Fit+ contact rating and R010 shunt thermal allowance. No wire cut, crimped or tested. [D-096](../decisions.md#d-096) sets topology only; lengths are estimates |
 | Basis | [D-093](../decisions.md#d-093), [D-094](../decisions.md#d-094), [D-095](../decisions.md#d-095), [module selection](../module-selection.md), [simplification plan](../simplification-plan.md#44-harness), final-v1 CAD |
-| Scope | Installed body/chassis wiring. Head-internal wiring stays with the head design |
+| Scope | Installed body/chassis wiring and D107 W47 head wiring (§4.3) |
 | Evidence | `D` vendor/documented, `E` estimate, `U` verify on receipt, `W` measured. No `W` values yet |
 
 PCB-02/03/04/05/06/07/13 are superseded. The remaining custom boards keep their designed connectors; bought modules get soldered pigtails to those connectors. All lengths below are millimetres.
@@ -136,14 +136,9 @@ Lengths are `E` cut allowances with service loop, **not measured CAD centerlines
 | `W32/33` | #3297 logic → `J10-5/.6` | Existing GH6 180/80 |
 | `W34` | Nose sensor/Hall → `J10-8` | Existing GH5 220 |
 | `W36` | Rear TCRT → `J10-10` | Existing GH4 CH-020, 350 |
-| `W37` | Pi CSI → PCB-14 | 22-to-22 mini-mini 0.5 mm CSI FPC through yaw cassette; exact cable SKU/end thickness and pin orientation pending shared FH34SRJ fit; do not substitute a 15-to-22 standard-mini camera lead here (the camera end is W46, D-105) |
 | `W40` | Mushroom NO → M1 ON/GND; qualified button-sense output → PCB-09 rev B GPIO12 (physical 32); PCB-09 rev B GPIO13 (physical 33) → M1 OFF interface | E 150 switch pair + 220 tap/control, carried on J6 pins 5/6 through a **detachable rear service break before the W40/W44 split**. **Do not wire M1 ON straight to Pi**: its idle voltage may follow pack. Measure pull-up and add a high-impedance divider/buffer giving valid 0–3.3 V logic over 6.0–8.4 V pack without back-powering an unpowered Pi. Verify the GPIO13 inactive state through reset/boot/halt, OFF drive voltage and pulse length, and no M1-to-Pi injection when off; buffer if needed. Firmware must complete its storage shutdown steps before pulsing OFF; test under N1. [D-098](../decisions.md#d-098) selects PCB-09 rev B; no piggyback/header contact or J9-3 spare |
 | `W41` | Fan → PCB-09 `J9-4` | Existing GH2 / GPIO24 switch |
-| `W42` | PCB-08 `J8-6` ↔ PCB-14 | 22-pin generic 0.3 mm head-power FFC (D-100): 1–7 `+6V3_HEAD_PR`, 8–14 `GND_HEAD`, 15–16/17–18 C2, 19–20/21–22 display; measure four-wire loop resistance and current sharing; head total ≤ 2.4 A |
-| `W43` | PCB-08 `J8-7` ↔ PCB-14 | 22-pin generic 0.3 mm signal FFC, **no power** (D-100): 1/4/7/9 `GND_SIG`, 2/3 `C0TX+/−`, 5/6 `C2TX−/+`, 8 `SERVO_DATA`, 10–22 isolated. `GND_SIG` joins the W24 link GND (via PCB-08 R1) and the yaw servo ground on PCB-08 |
 | `W44` | M6 SDA/SCL/VCC/GND → PCB-09 rev B service termination → Pi `i2c-gpio`/3V3/GND | 4×AWG28, E 160, carried on J6 pins 1–4 through the **same detachable rear service break as W40**. Pi physical 36 / GPIO16 is SDA and 37 / GPIO26 is SCL, with 4.7 kΩ pull-ups on PCB-09. Rev A I²C1 TP1/TP2/TP5 are 1 mm probe pads and stay outside this harness. Use only the designed, strain-relieved rev B interface after fit and continuity checks ([D-098 amendment](../decisions.md#d-098)). No 5 V I²C. Set/verify address 0x40 unless occupied |
-| `W45` | PCB-14 board 1 upper ZIF → camera-loop bracket joiner J2 | D-105: generic 22-way 0.5 mm 0.3 mm FFC (BO-050 stock), static and yaw-carried, ~355 mm `E`: up the bore and channel, 45° fold out at the CSI exit, flat on the disc top and the bracket tray, up beside the +Y tube, folded over the joiner into J2; conductor 1 kept on one edge through the straight-through joiners |
-| `W46` | Bracket joiner J1 → Camera Module 3 | D-105: Raspberry Pi standard-mini 300 mm (HD-017), the wear part: clamp at the bracket, 140 mm free C-loop behind the head on the roll axis, clamp on the rear cover, up the cover's outside under the clamp strip, through the Z 80 slot, forward under the roof through the slotted guide into the head's camera exit; route 292 mm |
 
 **Draft J6 GH6 lead:** one pre-crimped six-way lead leaves PCB-09 and reaches a detachable six-circuit service break at the rear-bay plate, then splits into W44's INA226 four wires and W40's button/OFF pair. This choice avoids storing about 90 mm of extra cable for the tray slide. Rev B CAD places J6 at the +X extension and checks a 3 mm lead corridor via world Y 20 and Z 118 to the rear buffer volume. Choose and CAD-fit the rear connector and its support before building this harness; the current CAD check covers the lead corridor and buffer reserve, not that connector. Freeze lead length, split support and strain relief after the populated fit and pull test.
 
@@ -174,6 +169,28 @@ J9-3 → [3V3/GND rails]  BCLK ─┬─33–100 Ω→ FL SCK  ┬─33–100 Ω
 
 Hub pads 1–10 follow `J9-3`: 3V3, LRCLK, GND, BCLK, GND, SDO0, SDI1, SDI0, AMP_SD, isolated. Each mic gets 3V3/GND; its **sixth conductor** carries the chosen hub-side 3V3 or GND strap to L/R. Strap one low and one high within each pair; label all four tails. Check actual channel assignment, clock edges and all four simultaneous captures (N9/N11). Measure 3V3 draw; prior PCB-09 audio allowance was 15 mA.
 
+### 4.3 W47 head umbilical (D-107)
+
+W47 replaces W37/W42/W43/W45/W46, PCB-14/16 and the hollow trunnion. Twelve loose silicone wires and the B0091 HDMI inner conductors rise through the yaw-axis bore. The 95 mm neck span has no jacket, hose or tight sleeve. The physical wire/HDMI combination must pass C0 and C4; the solver is geometric evidence only.
+
+| Net | Wire | PCB-08 rev B body end | Head end |
+|---|---|---|---|
+| +6V3_HEAD_PR | AWG22 | J8-9.1 | Servo pin2 |
+| +5V_C2 | AWG26 | J8-9.2 | PCB-12 J1.6 |
+| +5V_DISPLAY | AWG26 | J8-9.3 | D1 power+ (K3 inlet to verify) |
+| GND_HEAD | AWG22 | J8-9.4 | Servo pin1; AWG28 branch PCB-12 J2.1 |
+| GND_C2 | AWG26 | J8-9.5 | PCB-12 J1.7 |
+| GND_DISPLAY | AWG26 | J8-9.6 | D1 power− |
+| GND_SIG | AWG28 | J8-10.1 | PCB-12 J1.1 |
+| C0TX+ / C0TX− | AWG28 pair | J8-10.2 / .3 | PCB-12 J1.2 / .3 |
+| C2TX− / C2TX+ | AWG28 pair | J8-10.4 / .5 | PCB-12 J1.4 / .5 |
+| SERVO_DATA | AWG28 | J8-10.6 | Servo pin3; branch PCB-12 J2.2 in the head |
+| Camera | HDMI inner pairs | B0091 body board | B0091 head board → HD-026150mm static15-way ribbon → SC0874 |
+
+J8-9 mirrors J8-1. PCB-08 keeps all three power returns separate; LINK_GND reaches GND_SIG through R1. PCB-12 bonds signal, servo reference and display return to its local GND through R1/R7/R10. The exported-netlist audit is `04-pcbs/pcb-08-yaw-junction/design/audit_w47.py`. C2 status LED driver K2 remains a PCB-12 order hold.
+
+The corrected collar is at head-local X−50.4,Y0,Z6, with a 34×30.2 mm underside opening. Z13 failed the exact full-length bundle check at full roll. The flared bushing and liner leave Ø18 clear. Do not restore the source's cassette, PCB-14 posts, PCB-16 pockets, leg channel or camera mast.
+
 ## 5. Pinouts and polarity
 
 Pin 1 means the **moulded cavity number**, not the leftmost cavity in a photograph. Meter every cable from cells to exposed ports before connecting a charger. Print `+`, `−`, `B−`, `BM`, `B+` next to rear ports at print stage.
@@ -186,18 +203,19 @@ Pin 1 means the **moulded cavity number**, not the leftmost cavity in a photogra
 | M2/M3 S18V20ALV | VIN+/GND from tub branch; VOUT+/GND to W13 6.3 V (D-100 amendment; was 6.0 V) or W17 11.1 V. Label setpoints at modules |
 | M4/M5 S13V30F5 | VIN+/GND from body stars; M4 VOUT Pi-only 5 V; M5 VOUT shared 5 V. Keep outputs separate |
 | `J8-1` MF3 2×3 | 1 +6V3_HEAD_PR (D-100; was +5V5_HEAD_PR), 2 +5V_C2, 3 +5V_DISPLAY, 4 GND_HEAD, 5 GND_C2, 6 GND_DISPLAY |
+| `J8-9` MF3 2×3 | Same numbered net map as J8-1; head output W47 |
+| `J8-10` GH6 | 1 GND_SIG, 2 C0TX+, 3 C0TX−, 4 C2TX−, 5 C2TX+, 6 SERVO_DATA |
 | `J10-1` MF3 2-way | 1 +5V_C3 **after Schottky**, 2 GND |
 | PCB-08 `J8-8` 5264-3P | 1 GND, 2 +11V1_YAW, 3 SERVO_DATA, after received cable orientation check |
 | PA break and XHP-3 | Cavity 1 B−, 2 BM, 3 B+ on both halves **by cavity number**. Exposed XHP-3: 1→2 and 2→3 each one cell; 1→3 full pack. Confirm charger plug key and its cavity order |
 | XT30 female | Moulded + fused unswitched positive, moulded − pack negative; recessed source contacts, epoxied/retained and strain-relieved |
 | `J9-3` GH10 | 1 3V3, 2 LRCLK, 3 GND, 4 BCLK, 5 GND, 6 SDO0, 7 SDI1, 8 SDI0, 9 AMP_SD, 10 isolated sense pad |
 | `J10-7` GH8 | 1 3V3, 2 GND, 3 SCLK, 4 MOSI, 5 MISO, 6 CS, 7 INT1, 8 INT2 |
-| PCB-12 `J1` GH7 (D-102) | 1 GND_SIG, 2 C0TX+, 3 C0TX−, 4 C2TX−, 5 C2TX+ (J9-1 order), 6 +5V_C2, 7 GND_C2. From the head FFC-to-wire break (head harness, open) |
+| PCB-12 `J1` GH7 (D-102) | 1 GND_SIG, 2 C0TX+, 3 C0TX−, 4 C2TX−, 5 C2TX+ (J9-1 order), 6 +5V_C2, 7 GND_C2. From W47 direct wire fan-out (§4.3) |
 | PCB-12 `J2` GH2 | 1 GND_HEAD reference, 2 SERVO_DATA. Servo power does not pass PCB-12 |
 | PCB-12 `J3` GH3 | 1 GND_DISPLAY, 2 RS-485 B, 3 RS-485 A, to D1's RS-485 port; check D1's terminal labels before crimping |
-| PCB-16 head junction pads (D-103) | J3 1 +6V3_HEAD_PR, 2 GND_HEAD (AWG20 servo bundle; pad 2 also takes PCB-12 J2-lead wire 1); J4 1 GND_SIG, 2 C0TX+, 3 C0TX−, 4 C2TX−, 5 C2TX+ (PCB-12 J1-lead wires 1–5), 6 SERVO_DATA (PCB-12 J2-lead wire 2), 7 SERVO_DATA (servo bundle); J5 1 +5V_C2, 2 GND_C2 (PCB-12 J1-lead wires 6–7); J6 1 +5V_DISPLAY, 2 GND_DISPLAY (D1). Head FFCs: W43 signal in J1 (near), W42 power in J2 (far) |
 
-`J9-1/2`, `J10-2/3/4/5/6/8/10`, `J8-4/6/7` keep their designed-board maps. No J2/J3/J4/J5 or PCB-13 header is fitted. PCB-10 `J10-12` exists but is unmated.
+`J9-1/2`, `J10-2/3/4/5/6/8/10`, `J8-4/9/10` keep their designed-board maps. No J2/J3/J4/J5 or PCB-13 header is fitted. PCB-10 `J10-12` exists but is unmated.
 
 ## 6. Electrical and mass estimates
 
@@ -209,7 +227,7 @@ AWG16/18/20/22 resistance at 20 °C: 13.2/21/33.3/53 mΩ/m; ×1.16 hot. These **
 | Rear M1/M6/star, ~0.24 m + and 0.10 m − AWG16 | 5.2 mΩ | none | 0.083 V at 16 A, **plus** M1 and the open M6 shunt choice (5 mΩ candidate: 0.080 V at 16 A) |
 | Star→tub 0.31 m each way AWG16 | 9.5 mΩ | J-CHASSIS: 5/20 mΩ | 0.171/0.348 V at 11.8 A illustrative chassis demand |
 | Tub→each driver 0.09 m each way AWG18 | 4.4 mΩ | none | 0.009 V at 2 A each |
-| M2/M3→body 0.25 m each way AWG20 | 19.3 mΩ | MF3 resistance unmeasured | 0.054 V at 2.8 A head; 0.046 V at 2.4 A yaw, before connector/FFC |
+| M2/M3→body 0.25 m each way AWG20 | 19.3 mΩ | MF3 resistance unmeasured | 0.054 V at 2.8 A head; 0.046 V at 2.4 A yaw, before connector/W47 |
 | M4→Pi 0.10 m each way AWG18 | 4.9 mΩ | USB-C loss unknown | 0.015 V at 3 A; N12 measures Pi input |
 | M5→C3 0.11 m each way AWG22 | 13.5 mΩ | MF3 and diode unknown | N8 measures loaded voltage/back-feed |
 
@@ -252,7 +270,10 @@ The **11** body-lift plugs are counted *after* J-PK and PA pack removal. A fitte
 
 ### 7.3 Head off
 
-With power isolated, unplug `J8-1`, `J8-4`, yaw lead `J8-8` as needed and the CSI/FFCs at their service ends; support cassette before lifting. Former `J8-3/5` do not exist.
+1. Power off and remove the shell for body-end access.
+2. Unplug W47 at PCB-08 J8-9/J8-10 and the HDMI cable at the body B0091. Release the body strain-relief ties.
+3. Lift the head and pass the small housings through the Ø18 clear liner one at a time. Verify the received plug sections before assembly. A full-size HDMI housing need not pass: unplug at the head B0091 and leave that cable in the body if required.
+4. For cable replacement, remove the head rear cover, unplug the fan-out leads, undo the split jaw and draw the replaceable bundle down through the underside opening. Keep the pivot bearing, pin and retainer installed.
 
 ## 8. Schedule change record
 
@@ -285,3 +306,33 @@ or measured hardware. The priority list below is the current release checklist.
 | First build — **open, P1** | Record `W` cut lengths, pad/termination photos, full polarity and balance voltages, 11-plug reach/slack, panel removal path and cable-set masses; reconcile D-095 balance/charge mass rows |
 
 These rows feed the Level 6 BOM. An estimated length, unverified pad or connector family name is not an assembly release.
+
+### D-107 acceptance update (2026-11-13)
+
+The earlier FFC resistance/fold acceptance is superseded. AWG22 copper alone over 0.30 m each way is about0.0318Ω, 0.076V at2.4A (`E`, excludes plugs/PCB). At350mm each way it is about0.0371Ω /0.089V at20°C, or0.0430Ω /0.103V with the §6 hot factor1.16. Review M2's 6.3V setpoint against measured servo voltage; retain N2(b), ground-loop current and servo-bus edge checks. Camera gates C0–C4 are in `head-umbilical-plan.md` §3.5. Inspect bushing and clamp wear after the first hour. K2 LED driver, K3 D1 inlet, crimp/contact selection, received connector sizes and physical cable life remain open.
+
+W47 contact stock: AWG26 power leads need genuine Micro-Fit contacts rated for that gauge; the older AWG20–24 H04 stock alone is insufficient. GH leads must satisfy JST eGH AWG30–26 and insulation OD0.76–1.0mm. Verify actual housings, contact part numbers and crimp tool before cutting wire.
+
+
+### D107 received-cable corrections —2026-11-14
+
+Static camera ribbons are separate BOM items: HD-026150mm15-way head FFC (route111.20mm +25mm insertion/service), HD-027150mm15-to22 Pi5 FPC (route59.97mm +25mm). B0091’s included60mm15-way ribbons are spares. Check contact faces, continuity, insertion and static excess-length dressing; never tension the sockets.
+
+Buy/measure the entire HDMI plug housing/latch/boot before printing closed inserts: their finished bore is18mm, versus bare21mm. The assumed16×7mm plug is not receipt evidence. If it fails, unplug at the head or separately design/check split inserts. At the head clamp, repack/tape the bundle to6.8±0.05mm; if bare OD>6.85mm revise pads/clamp instead of crushing pairs.
+
+The roll-frame servo anchor is now(−28,−12,46), with1.5418mm minimum screw clearance across85 poses at0.5°. Secure/dress actual wires and inspect the first full sweep for rubbing. The body route ends at(28,−24,118) before the saddle atY−16. The strengthened PCB08 cradle removes by front tilt15°, +Y6mm then−X60mm after all five plugs and the keeper are removed.
+
+PCB08 uses separate solid head supply/return fills,1.5mm yaw tracks and >=35µm finished inner copper;17.5µm is not accepted. N2(b) must still establish actual terminal voltage and closed-body PCB temperature. See [functional/proof record](../final/v1/d107-corrections.md).
+
+
+### Camera signal path and head fan-out
+
+The camera does **not** use a ribbon through the neck. The installed chain is:
+
+`SC0874 camera → HD-026 150 mm 15-way ribbon → B0091 head adapter → HDMI plug → stripped HDMI inner pairs through head clamp / neck (alongside W47) → intact HDMI cable in body → B0091 body adapter → HD-027 150 mm 15-to-22 ribbon → Pi 5 CSI socket`.
+
+One selected Arducam B0091 kit (HD-023) supplies the **pair** of passive boards represented by `D107_B0091_HEAD_*` and `D107_B0091_BODY_*` CAD envelopes. The slim HDMI cable (HD-028) and two installed150mm ribbons (HD-026/027) are separate purchase rows; the kit's60mm camera ribbon is too short. Buy/measure the HDMI cable before printing the closed bore inserts. B0091 does not replace the Camera Module 3 Wide.
+
+In the head, the clamp takes the common loose bundle before separate leads fan out: head power continues to the first head servo; link and C2 power go to PCB-12 J1; servo data/ground branch to PCB-12 J2 and the servo lead crossing the roll joint; display power reaches D1; the camera inner pairs continue as `W47_LEAD_HEAD_CAMERA_HDMI` to the B0091 head adapter's **mated HDMI plug**. This is a physical cable branch, not an electrical splice of CSI into the twelve W47 wires. The route now terminates inside the plug envelope, instead of stopping beyond it.
+
+The body Pi ribbon is shown as one continuous thin, tapered FPC envelope through the static body route, with mitered bends. **This geometry failed follow-up verification:** its stock-length slack is absent and the Viewer shape is not a credible installed fold. The head HDMI lead also approaches the plug from below despite overlapping its envelope. See the [camera verification](../final/v1/d107-camera-verification.md); the camera harness remains HOLD.

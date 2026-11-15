@@ -5,16 +5,19 @@ static interferences are errors, small positive clearances are reported. Existin
 per-board checks own datasheet heights and assembly sweeps; no new sweep pass is
 claimed by this checker.
 """
+import sys
 import importlib.util
 import json
 import hashlib
 import argparse
+import re
 from pathlib import Path
 from build123d import Location, Compound
 from OCP.BRepAlgoAPI import BRepAlgoAPI_Common
 from OCP.BRepGProp import BRepGProp
 from OCP.GProp import GProp_GProps
 import pcb_integration as P
+import module_checks as C
 
 HERE=Path(__file__).resolve().parent
 
@@ -46,12 +49,23 @@ def walk(node,parent=Location(),path=()):
 
 
 def check(robot,body,head_origin):
+    leaves=list(walk(robot));labels=[path[-1] for path,s in leaves]
+    obsolete=[n for n in labels if n.startswith(('D104_','D105_','PCB14_JOINER_',
+              'PCB16_','YAW_FFC_CASSETTE_STATOR','YAW_FFC_ROLLING_LOOP_RESERVE','YAW_CASSETTE_M2X6_POST_SCREW_'))]
+    assert not obsolete,obsolete
+    # STEP names each cylinder segment with a numbered suffix; count the
+    # twelve conductor branches, not those exported segment leaves.
+    wire_names={n for path,sh in leaves for n in path if re.fullmatch(r'W47_.+_AWG(?:22|26|28)',n)}
+    assert len(wire_names)==12,sorted(wire_names)
+    ties=[sh for path,sh in leaves if path[-1]=='D107_B0091_HEAD_RETAINING_TIE_E']
+    assert len(ties)==1
+    tb=bbox(ties[0]);assert abs(tb[3]-tb[0]-33.2)<1e-5,('stale retaining tie export',tb)
     groups=next(c for c in robot.children if c.label=="Custom PCBs")
     boards=[];records=[]
     for n,name in P.GROUPS.items():
         print(f'Checking PCB-{n:02d} replacement and datums...',flush=True)
         group=next(c for c in groups.children if c.label==name)
-        revision="REVB" if n==9 else "REVA"
+        revision="REVB" if n in (8,9) else "REVA"
         real=[c for c in group.children if c.label.startswith(f"PCB{n:02d}_KICAD_{revision}_")]
         expected=P.placements(n,body,head_origin)
         assert len(real)==len(expected),(n,len(real))
@@ -81,22 +95,14 @@ def check(robot,body,head_origin):
                 assert abs(bb[3]+0.035-(-7.2+head_origin[0]))<0.01
             elif n==15:
                 assert abs(centre[0]-126.6)<0.01 and abs(centre[1]-10)<0.01 and abs(centre[2]-32.7)<0.01
-            elif n==8:      # main plate X -22..10 and the +X extension to 20, Y -44..-23
-                assert max(abs(a-b) for a,b in zip((bb[0],bb[1],bb[3],bb[4]),(-22,-44,20,-23)))<0.01
+            elif n==8:      # D107 rev B core X -22..12, Y -46..-21
+                assert max(abs(a-b) for a,b in zip((bb[0],bb[1],bb[3],bb[4]),(-22,-46,12,-21)))<0.01
             elif n==12:     # head-local X -25.0 component face, Y -44..-14, Z 8..51.5
                 assert abs(bb[0]-(-25.0+head_origin[0]))<0.01 and abs(bb[1]-(-44+head_origin[1]))<0.01
                 assert abs(bb[2]-(8+head_origin[2]))<0.01 and abs(bb[5]-(51.5+head_origin[2]))<0.01
-            elif n==14 and instance=="JOINER_4_CSI_LOOP":   # D-105 bracket top: 27.2 across Y about the ribbon centre Y -1
-                assert abs(bb[4]-bb[1]-27.2)<0.01 and abs((bb[1]+bb[4])/2-(-1.0+head_origin[1]))<0.01 and bb[0]<-125+head_origin[0]
-            elif n==14:     # 27.2 mm across the tabs about the yaw axis X 16, Z 133.9..150.7, D-101 plane
-                y0=P.PCB14_BOARD_Y0[int(instance[-1])-1]
-                assert max(abs(a-b) for a,b in zip((bb[0],bb[3],bb[2],bb[5],bb[1]),(2.4,29.6,133.9,150.7,y0)))<0.01
-            elif n==16:     # head-local X -62.4..-26, Y 35.5..54 on the disc top Z -34.5
-                assert max(abs(a-b) for a,b in zip((bb[0],bb[1],bb[2],bb[3],bb[4]),
-                           (-62.4+head_origin[0],35.5+head_origin[1],-34.5+head_origin[2],-26+head_origin[0],54+head_origin[1])))<0.01
             boards.append((n,instance,board))
             records.append(dict(board=n,instance=instance,components=len(board.children)-1,dnp_omitted=sorted(P.dnp_refs(n)),core_bbox=bbox(cores[0]),transform_bbox_error_mm=err))
-    assert len(boards)==11  # PCB-08, 09, 10, 11, 12, 14 x4 (D-105 adds the camera-loop joiner), 15, 16 (D-093/D-095 removed PCB-05, 06, 13)
+    assert len(boards)==6  # D107: 08,09,10,11,12,15
     # All completed boards against each other, not against their old envelopes.
     pairs=[];collisions=[]
     for i,(n,inst,a) in enumerate(boards):
@@ -120,7 +126,7 @@ def check(robot,body,head_origin):
         if any('_KICAD_REV' in label for label in path):continue
         if any(token in '/'.join(path).upper() for token in ('RESERVE','KEEP_OUT','KEEPOUT','OVERLAY','PHYSICS','HARNESS','ENVELOPE')):continue
         obstacles.append((path,shape,bbox(shape)))
-    static=[];contacts=[]
+    static=[];contacts=[];vendor_faces={}
     for n,inst,board in boards:
         print(f'Checking PCB-{n:02d}/{inst} static interferences...',flush=True)
         board_box=bbox(board)
@@ -131,31 +137,45 @@ def check(robot,body,head_origin):
                 if gap(pb,ob)>=0.3:continue
                 # D-092: PCB-09's socket mates the Pi header by design; check_pcb09_fit.py measures the stack.
                 if n==9 and part.label.endswith('__J1') and 'C0_RASPBERRY_PI5_EXACT_STEP' in path:continue
-                d=part.distance(o)
-                if d<0.3:contacts.append(dict(part=part.label,obstacle='/'.join(path),gap_mm=d))
-                if d<1e-6:
+                # A component outside every vendor face bound cannot touch
+                # that vendor. This conservative broad phase avoids running
+                # whole-Pi distance/Boolean work for THT tails in empty space.
+                if any(v in path for v in ('C0_RASPBERRY_PI5_EXACT_STEP','PI5_ACTIVE_COOLER_STEP')):
+                    key='/'.join(path)
+                    if key not in vendor_faces:vendor_faces[key]=C.face_boxes(o)
+                    if not any(gap(pb,fb)<.3 for fb in vendor_faces[key]):continue
+                # Static acceptance is intersection volume. A full distance
+                # search against the entire frame/Pi is unnecessary and very
+                # expensive; separated bounds already prove no intersection.
+                bg=gap(pb,ob)
+                contacts.append(dict(part=part.label,obstacle='/'.join(path),bbox_gap_lower_bound_mm=bg))
+                if bg<=0:
                     v=intersection_volume(part,o)
                     if v>1e-5:static.append(dict(part=part.label,obstacle='/'.join(path),volume_mm3=v))
-    return dict(installed_boards=records,board_count=len(boards),cross_board_neighbours=pairs,cross_board_collisions=collisions,static_interferences=static,static_near_contacts=contacts,
+    return dict(d107_export=dict(obsolete_labels=obsolete,individual_W47_wires=12,head_retaining_tie_bbox=tb),
+                installed_boards=records,board_count=len(boards),cross_board_neighbours=pairs,cross_board_collisions=collisions,static_interferences=static,static_bbox_neighbours=contacts,
                 sources={str(n):dict(path=str(P.source_path(n)),sha256=hashlib.sha256(P.source_path(n).read_bytes()).hexdigest()) for n in P.BOARDS},
-                scope="replacement count, core transforms, duplicate placeholder removal and static cross-board and robot interference; intentional own fixing/plug contacts and the PCB09 socket on the Pi header excluded; the D-095 bought modules are obstacles; per-board installation sweeps are separate")
+                scope="replacement count, core transforms, duplicate placeholder removal and exact static cross-board/robot intersection volume; static bbox neighbours are conservative candidates, not measured clearances; own fixing/plug contacts and the PCB09 socket on the Pi header excluded; bought modules are obstacles; per-board installation sweeps are separate")
 
 
 def main():
     spec=importlib.util.spec_from_file_location('makad_pcb_integration',HERE/'makad-v1.step.py')
-    m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+    m=importlib.util.module_from_spec(spec);sys.modules[spec.name]=m;spec.loader.exec_module(m)
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--from-step',type=Path,help='Check the actual rebuilt inspection STEP')
     args=parser.parse_args()
     if args.from_step:
+        input_hash=hashlib.sha256(args.from_step.read_bytes()).hexdigest()
         print('Reading rebuilt final STEP...',flush=True)
         robot=P.import_step(str(args.from_step.resolve()))
     else:
         print('Building current final assembly...',flush=True)
         robot=m.build_robot()
-    print('Checking the eleven installed boards...',flush=True)
+    print('Checking the six installed boards...',flush=True)
     result=check(robot,m._body,m.HEAD_ORIGIN_IN_CHASSIS)
-    if args.from_step:result['checked_step']=dict(path=str(args.from_step),sha256=hashlib.sha256(args.from_step.read_bytes()).hexdigest())
+    if args.from_step:
+        assert hashlib.sha256(args.from_step.read_bytes()).hexdigest()==input_hash,'STEP changed while checking; rerun after export completes'
+        result['checked_step']=dict(path=str(args.from_step),sha256=input_hash)
     result['result']='PASS' if not result['cross_board_collisions'] and not result['static_interferences'] else 'FAIL'
     (HERE/'pcb-integration-report.json').write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps(result,indent=2),flush=True)

@@ -7,8 +7,8 @@ and measures it against the head parts with the D-102 droid edits applied
 two M2 x 4 button screws), built from 03-head/v1/cad (catalog off):
 
 - core and Zero placement: the Zero model on its old seat;
-- every board part and each mated GH plug envelope (header footprint, 9 mm
-  rearward) clear of the head at the neutral pose;
+- every board part and each mated GH plug envelope (JST eGH mated body, 7.4 mm total stack; cable bends checked separately
+  by D-107) clear of the head at the neutral pose;
 - screws through the board holes, heads clear of the Zero, bosses on the
   board's back face and fused to the crossbar, clear of the display frame;
 - the C2 service reserves (USB-C plug and withdrawal, BOOT/RESET rear access)
@@ -36,7 +36,7 @@ sys.path.insert(0, str(ROOT / "04-pcbs" / "tools"))
 import kfile as K  # noqa: E402
 
 F_FACE_X = -25.0
-PLUG_DEPTH = 9.0          # GH mated plug and wire bend behind the header face (E)
+PLUG_DEPTH = 7.4          # total top-entry mated stack, JST eGH 7.3 + 0.1 allowance
 REMOVED = ("C2_removable_open_rear_tray", "C2_tray_M2_-39", "C2_tray_M2_-19")
 OWN = ("C2_ESP32_S3_Zero_23_5x18_footprint", "C2_installed_components_reserve")
 SERVICE = ("C2_USB_C_installed_plug_reserve", "C2_USB_C_withdrawal_BOOT_RESET_service_reserve",
@@ -94,11 +94,8 @@ def main():
             note="vendor model board bottom on the carrier copper (KiCad sets models about 0.085 mm off the core); USB-C up")
 
     # Mated plug envelopes behind each GH header (rear, -X).
-    b = K.Board(BOARD)
-    plugs = {}
-    for ref in ("J1", "J2", "J3"):
-        hb = C._box(placed[ref])
-        plugs[ref] = C.blk((F_FACE_X - PLUG_DEPTH, F_FACE_X, hb[1], hb[4], hb[2], hb[5]))
+    import d107_umbilical as U
+    plugs = U.pcb12_plugs()
 
     others = {n: s for n, s in shapes.items()
               if n not in REMOVED + OWN and kinds[n] == "physical"}

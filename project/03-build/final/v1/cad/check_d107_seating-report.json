@@ -1,0 +1,73 @@
+{
+ "script": "check_d107_seating",
+ "passed": 7,
+ "total": 7,
+ "rows": [
+  {
+   "check": "head_adapter_and_tie_clear_of_own_frame",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "head_tie_motion_clear",
+   "ok": true,
+   "minimum_mm": [
+    8.1898,
+    "connected_pitch_frame_roll_servo_saddle",
+    [
+     43.0,
+     -21.0
+    ]
+   ],
+   "poses": 45
+  },
+  {
+   "check": "head_board_on_edge_lips",
+   "ok": true,
+   "overlap_mm3": 0.0,
+   "seat_gap_mm": 0.0
+  },
+  {
+   "check": "bushing_flange_seated_on_disc",
+   "ok": true,
+   "overlap_mm3": 0.0,
+   "seat_gap_mm": 0.0,
+   "bushing_valid": true
+  },
+  {
+   "check": "liner_clear_of_rotor_and_hub",
+   "ok": true,
+   "measurements": [
+    [
+     "YAW_HUB_DRIVEN_GEAR_M1_Z37",
+     0.0,
+     2.35
+    ],
+    [
+     "YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG",
+     0.0,
+     0.0
+    ]
+   ],
+   "liner_valid": true,
+   "liner_bushing_end_gap_mm": 0.0
+  },
+  {
+   "check": "liner_flange_positive_downward_capture",
+   "ok": true,
+   "downward_half_mm_obstruction_mm3": 51.4593,
+   "bearing_land_mm2": 102.9186,
+   "flange_world_Z": [
+    137.0,
+    138.0
+   ],
+   "removal": "remove disc bushing and lift liner upward through hub"
+  },
+  {
+   "check": "finished_18mm_bore_through_both_liners",
+   "ok": true,
+   "overlap_mm3": 0.0,
+   "axis_head_x": -42.4187
+  }
+ ]
+}

@@ -104,3 +104,7 @@ Record dated entries: decisions raised, revisions, orders, bench results.
 - **2026-11-10:** PCB-14 rev A ([D-101](../../decisions.md#d-101)): head FFC conductor 1 arrives on the −X edge (straight-through joiner); recorded as an input.
 - **2026-11-10:** rev A draft ([D-102](../../decisions.md#d-102)): signals-only carrier replacing the C2 tray (30 × 43.5 mm, 0.8 mm), head FFCs end at a separate head-harness break. ERC 0/0, netlist audit 13/13, parity DRC 0/0/0, fit 7/7 through the roll/pitch envelope; fab/revA written, do not order.
 - **2026-11-10:** stage 3: rev A STEP installed in the final CAD; head-side break is PCB-16 ([D-103](../../decisions.md#d-103)).
+
+## D-107 interface replacement — current
+
+W47 replaces every W42/W43/PCB14/PCB16 reference above. PCB12 rev A electrical files are unchanged: GH7 J1 receives W47 signal pair order plus C2 5V/return; GH2 J2 receives GND_HEAD_REF and SERVO_DATA. [Independent exported-netlist audit](../pcb-08-yaw-junction/design/w47-interface-audit.json) checks the complete mapping and R1/R7/R10 ground bonds. K2 (PCB11 LED driver), K3 (D1 power inlet) and received servo pin order remain open. GH body geometry now follows JST eGH 7.3mm mated stack (+0.1 allowance), with explicit wire bends in D107 instead of the former 9mm bend box. See the current [fit report](../../final/v1/cad/check_pcb12_fit-report.json) and [D107 evidence](../../final/v1/d107-execution.md).

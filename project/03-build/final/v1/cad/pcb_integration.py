@@ -14,19 +14,16 @@ from OCP.gp import gp_Trsf
 
 ROOT = Path(__file__).resolve().parents[3]
 # D-093/D-095: PCB-05 and PCB-06 became bought modules and PCB-13 was deleted.
-# 2026-11-10: the D-064 batch drafts PCB-08 (D-100), PCB-12 (D-102), PCB-14 x3 (D-101) and
-# PCB-16 (D-103) are installed too, each at the transform its check_pcbNN_fit.py proved.
+# D107: six completed designs; PCB08 rev B and PCB12 rev A replace
+# the superseded cassette, PCB14 and PCB16 installation.
 BOARDS = {8:"pcb-08-yaw-junction", 9:"pcb-09-c0-link-adapter", 10:"pcb-10-c3-carrier", 11:"pcb-11-status-led",
-          12:"pcb-12-c2-head-carrier", 14:"pcb-14-yaw-rotor-joiner", 15:"pcb-15-nose-hall", 16:"pcb-16-head-junction"}
+          12:"pcb-12-c2-head-carrier", 15:"pcb-15-nose-hall"}
 GROUPS = {8:"PCB-08 yaw junction", 9:"PCB-09 C0 link adapter", 10:"PCB-10 C3 controller carrier",
-          11:"PCB-11 status LED carrier", 12:"PCB-12 C2 head controller", 14:"PCB-14 FFC joiners x4",
-          15:"PCB-15 nose Hall carrier", 16:"PCB-16 head junction"}
-PCB14_BOARD_Y0 = (-5.725, -1.225, 3.275)   # D-101 back faces (makad-v1 PCB14_BOARD_Y0)
-
-
+          11:"PCB-11 status LED carrier", 12:"PCB-12 C2 head controller",
+          15:"PCB-15 nose Hall carrier"}
 def source_path(number):
     name = BOARDS[number]
-    revision = "revB" if number == 9 else "revA"
+    revision = "revB" if number in (8,9) else "revA"
     return ROOT / "04-pcbs" / name / "cad" / (name + f"-{revision}.step")
 
 
@@ -45,18 +42,6 @@ def core_bounds(number):
     return next(s for label, s in raw_parts(number) if label.endswith("_PCB")).bounding_box()
 
 
-def _entry():
-    """The makad-v1 entry module (already loaded during a build, else loaded here) for its D-105 transform."""
-    import sys
-    loaded=next((m for m in list(sys.modules.values()) if hasattr(m,"d105_joiner_location")),None)
-    if loaded is not None:
-        return loaded
-    import importlib.util
-    spec=importlib.util.spec_from_file_location("makad_v1_entry",Path(__file__).resolve().parent/"makad-v1.step.py")
-    mod=importlib.util.module_from_spec(spec);sys.modules["makad_v1_entry"]=mod;spec.loader.exec_module(mod)
-    return mod
-
-
 def placements(number, body, head_origin):
     """(instance, STEP-to-world Location), shared with integration verification."""
     bb = core_bounds(number)
@@ -68,16 +53,6 @@ def placements(number, body, head_origin):
         # check_pcb12_fit.py: head-local, component face (-X) at X -25.0; x -> -Y, y -> +Z.
         loc=Location(Plane(origin=(-25.0+bb.max.Z,71.0,139.75),x_dir=(0,-1,0),z_dir=(-1,0,0)))
         return [("C2",Location(head_origin)*loc)]
-    if number == 14:
-        # check_pcb14_fit.py: x -> -X, y -> +Z, z -> +Y; back face on each D-101 plane (yaw 0).
-        rotor=[(f"JOINER_{k}",Location(Plane(origin=(116.0,y0-bb.min.Z,242.3),x_dir=(-1,0,0),z_dir=(0,1,0))))
-               for k,y0 in enumerate(PCB14_BOARD_Y0,start=1)]
-        # D-105: the fourth board joins the CSI on the camera-loop bracket (check_d105_csi_loop.py).
-        return rotor+[("JOINER_4_CSI_LOOP",Location(head_origin)*_entry().d105_joiner_location())]
-    if number == 16:
-        # check_pcb16_fit.py: head-local, flat on the yaw disc top (Z -34.5).
-        loc=Location(Plane(origin=(-142.4,150.0,-34.5-bb.min.Z),x_dir=(1,0,0),z_dir=(0,0,1)))
-        return [("DISC",Location(head_origin)*loc)]
     if number == 9:
         # D-092: STEP exported with --user-origin 0x0mm, (Xs, Ys) = (KiCad x, -y); KiCad x = X + 104.7,
         # y = 139 - Y. The board's underside is on the standoffs at Pi top + 11.0 = Z 106.45.
@@ -145,7 +120,7 @@ def installed_board(number, instance, loc):
         if label.endswith("_PCB"):
             part.color=Color(0.08,0.36,0.16)
         parts.append(part)
-    revision = "REVB" if number == 9 else "REVA"
+    revision = "REVB" if number in (8,9) else "REVA"
     return Compound(label=f"PCB{number:02d}_KICAD_{revision}_{instance}",children=parts)
 
 
@@ -165,7 +140,7 @@ def retain(number,label):
     if number == 10:
         return "MATED_PLUG" in label or label.startswith("C3_CARRIER_M25_SCREW_")
     if number == 8:
-        return "MATED_PLUG" in label       # J8-1, J8-4, J8-8 plugs at the populated positions
+        return False  # D-107: rebuild all five plugs from the rev B headers
     return False
 
 
@@ -200,6 +175,28 @@ def pcb09_mated_plugs(board,body):
     return out
 
 
+def pcb08_mated_plugs(board,body):
+    """Rev B plugs follow real STEP bodies; numbers match the W47 contract."""
+    from build123d import Box
+    out=[]
+    names={"J1":"J8_1","J2":"J8_4","J3":"J8_9","J4":"J8_10","J5":"J8_8"}
+    for part in board.children:
+        ref=part.label.split("__")[-1]
+        if ref not in names: continue
+        bb=part.bounding_box();cx=(bb.min.X+bb.max.X)/2;cy=(bb.min.Y+bb.max.Y)/2
+        if ref in ("J1","J3"):
+            # 11 x 7 mm section and 8 mm engagement housing (E).
+            face=bb.min.X if ref=="J1" else bb.max.X
+            cen=(face+(-4 if ref=="J1" else 4),cy,117.5);size=(8,13.2,7)
+        else:
+            cen=(cx,cy,bb.max.Z+3.5)
+            size=(body.GH_PLUG_THICKNESS,body.gh_plug_width(6),7.) if ref=="J4" else ((body.gh_plug_width(6),body.GH_PLUG_THICKNESS,7.) if ref=="J2" else (8.,5.,7.))
+        sh=Box(*size).moved(Location(cen));sh.label=f"D107_PCB08_{names[ref]}_MATED_PLUG_E"
+        sh.color=Color(.93,.92,.87);out.append(sh)
+    assert len(out)==5,len(out)
+    return out
+
+
 def replace_completed_boards(robot,body,head_origin):
     custom=next(c for c in robot.children if c.label=="Custom PCBs")
     replacements={}
@@ -207,11 +204,13 @@ def replace_completed_boards(robot,body,head_origin):
         old=next((c for c in custom.children if c.label==name),None)
         # PCB-16 had no placeholder in the subsystem trees.
         hardware=[] if old is None else [placed_copy(node,parent) for node,parent in leaves(old) if retain(number,node.label or "")]
-        expected={8:3,9:4,10:14,11:0,12:0,14:0,15:0,16:0}[number]
+        expected={8:0,9:4,10:14,11:0,12:0,14:0,15:0,16:0}[number]
         assert len(hardware)==expected,(number,"retained hardware count",len(hardware),[s.label for s in hardware])
         boards=[installed_board(number,instance,loc) for instance,loc in placements(number,body,head_origin)]
         if number == 9:
             hardware+=pcb09_mated_plugs(boards[0],body)
+        if number == 8:
+            hardware+=pcb08_mated_plugs(boards[0],body)
         replacements[name]=Compound(label=name,children=[*boards,*hardware])
     kept=[replacements.pop(c.label,c) for c in custom.children]
     newcustom=Compound(label="Custom PCBs",children=[*kept,*replacements.values()])

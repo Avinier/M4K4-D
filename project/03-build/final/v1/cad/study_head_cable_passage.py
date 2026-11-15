@@ -17,7 +17,9 @@ sys.path.insert(0, "/Users/avinier/robotics/makad/project/03-build/final/v1/cad"
 from scipy import ndimage
 import module_checks as C
 from cadgen.step_scene import import_step
-import check_pcb12_fit as F12, check_pcb16_fit as F16
+import check_pcb12_fit as F12
+# D-103 historical study: use git history to reproduce its retired PCB-16 scene.
+raise SystemExit("Historical D-103 study; retained report only. Use check_d107_neck.py for the current assembly.")
 t0=time.time()
 entry=C.load_entry()
 import layout_model as m, motion_envelope as env

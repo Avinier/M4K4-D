@@ -9,7 +9,7 @@ The build follows the [D-093](decisions.md#d-093) simplification: bought power m
 - **Modules** selected ([D-094](decisions.md#d-094), [module-selection.md](module-selection.md)) and **ordered 2026-11-08**; each still has a bench gate (N1–N12).
 - **Droid CAD** for the modules, ports and mounts is done ([D-095](decisions.md#d-095)); the chassis front module and the D-095 mount prints are re-exported to [04-print](../04-print/01-chassis/README.md) ([D-099](decisions.md#d-099)).
 - **Harness** topology is documented, but [05-harness](05-harness/README.md) is on **electrical HOLD** ([D-096](decisions.md#d-096)): the ~16 A low-pack coincident load exceeds the contact and shunt allowances. Do not cut wire or build the charge/power path yet.
-- **Custom boards** ([04-pcbs](04-pcbs/README.md)): PCB-09 rev B routed; PCB-08, PCB-12, PCB-14 and PCB-16 are rev A drafts (do not order). The head wiring route is set by [D-104](decisions.md#d-104) (hollow −Y trunnion) and [D-105](decisions.md#d-105) (camera ribbon loop).
+- **Custom boards** ([04-pcbs](04-pcbs/README.md)): Six custom designs: PCB-08/09 rev B and PCB-10/11/12/15 rev A. PCB-14/16 are superseded. [D-107](head-umbilical-plan.md) uses twelve loose wires and stripped HDMI pairs through the yaw axis, two B0091 adapters, and the restored D-051 pivot. Draft fabrication and physical acceptance remain HOLD. See the [execution evidence](final/v1/d107-execution.md).
 - **BOM**: [BOM.csv](BOM.csv) is reconciled to D-093–D-097; the subsystem BOM snapshots still predate D-093.
 
 ## Where things are

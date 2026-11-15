@@ -1,0 +1,225 @@
+{
+ "script": "check_d107_neck",
+ "passed": 13,
+ "total": 13,
+ "rows": [
+  {
+   "check": "opening_cuts_lower_skin_only",
+   "ok": true,
+   "hits": [
+    [
+     "main_octagonal_skin_lower",
+     1334.84
+    ]
+   ]
+  },
+  {
+   "check": "lower_skin_and_collar_fused",
+   "ok": true,
+   "solids": 1,
+   "valid": true,
+   "volume_delta_mm3": 60.1914
+  },
+  {
+   "check": "head_camera_mount_fused_to_roof",
+   "ok": true,
+   "solids": 1,
+   "valid": true
+  },
+  {
+   "check": "neck_clear_of_head_over_45_poses",
+   "ok": true,
+   "minima": {
+    "Y": [
+     6.0652,
+     "yaw_turntable_disc_flush",
+     [
+      -8.5,
+      0.0
+     ]
+    ],
+    "P": [
+     4.2553,
+     "connected_pitch_frame_roll_servo_saddle",
+     [
+      0.0,
+      21.0
+     ]
+    ],
+    "R": [
+     3.6833,
+     "front_bezel_integral_camera_crown",
+     [
+      43.0,
+      -21.0
+     ]
+    ]
+   },
+   "poses": 45,
+   "radius_mm": 3.5,
+   "note": "exact OCC distance from every piecewise-linear centreline segment minus bundle radius; yaw symmetry about the bore"
+  },
+  {
+   "check": "opening_edge_margin",
+   "ok": true,
+   "minimum_mm": [
+    4.6101,
+    [
+     43.0,
+     -21.0
+    ]
+   ],
+   "opening": [
+    -65.3,
+    -31.3,
+    -15.8,
+    14.4
+   ]
+  },
+  {
+   "check": "free_length_slack",
+   "ok": true,
+   "free_mm": 95.0,
+   "longest_span_mm": 70.6785,
+   "margin_pct": 34.4115,
+   "bend_radius_min_mm": 9.5234,
+   "twist_deg_per_mm": 0.6421,
+   "solver_residual": 8.9697,
+   "note": "solver force/torque are estimates, not an equilibrium certificate"
+  },
+  {
+   "check": "d051_pivot_restored",
+   "ok": true,
+   "labels": [
+    "pitch_trunnion_D6x12_pin",
+    "pitch_trunnion_bearing_MR106ZZ",
+    "pitch_trunnion_retainer",
+    "pitch_trunnion_retainer_M2x4_240",
+    "pitch_trunnion_retainer_M2x4_300"
+   ],
+   "leg_channel_edits": false
+  },
+  {
+   "check": "camera_and_clamp_clear_of_pitch_and_yaw",
+   "ok": true,
+   "minimum_mm": [
+    2.1397,
+    "COLLAR/connected_pitch_frame_roll_servo_saddle",
+    [
+     0.0,
+     21.0
+    ]
+   ],
+   "clashes": []
+  },
+  {
+   "check": "clamp_grip_and_tool_access",
+   "ok": true,
+   "hard_jaw_min_mm": 0.0428,
+   "tool_diameter_mm": 2.6,
+   "tool_reach_mm": 15,
+   "clashes": [],
+   "note": "soft silicone pads grip a bundle repacked/taped to6.8 +/-0.05mm; actual grip requires physical acceptance; remove front jaw along +X"
+  },
+  {
+   "check": "head_hdmi_lead_seated_in_plug",
+   "ok": true,
+   "terminal_overlap_mm3": 24.8355,
+   "terminal": [
+    -67.0,
+    15.5,
+    75.0
+   ],
+   "note": "plug is an E housing envelope; received cable exit and strain relief still need checking"
+  },
+  {
+   "check": "internal_roll_frame_leads_clear",
+   "ok": true,
+   "minima": [
+    [
+     "PCB12_J1",
+     [
+      1.0,
+      "GHR_J1",
+      [
+       43.0,
+       21.0
+      ]
+     ]
+    ],
+    [
+     "HEAD_CAMERA_HDMI",
+     [
+      0.2,
+      "CLAMP_COLLAR",
+      [
+       43.0,
+       -10.5
+      ]
+     ]
+    ],
+    [
+     "SERVO_ROLL",
+     [
+      0.9946,
+      "connected_rolling_cradle_flange_ear_stalks",
+      [
+       0.0,
+       0.0
+      ]
+     ]
+    ],
+    [
+     "DISPLAY_POWER",
+     [
+      0.7,
+      "display_module_1to1_envelope",
+      [
+       43.0,
+       21.0
+      ]
+     ]
+    ],
+    [
+     "PCB12_J2_BRANCH",
+     [
+      0.2037,
+      "CLAMP_JAW",
+      [
+       43.0,
+       21.0
+      ]
+     ]
+    ]
+   ]
+  },
+  {
+   "check": "head_static_camera_ribbon_clear",
+   "ok": true,
+   "clashes": [],
+   "poses": 45
+  },
+  {
+   "check": "servo_roll_crossing_and_pitch_lead_clear",
+   "ok": true,
+   "pitch_lead": [
+    2.1201,
+    "connected_rolling_cradle_flange_ear_stalks",
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "roll_loop": [
+    1.6833,
+    "connected_rolling_cradle_flange_ear_stalks",
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "loop_length_mm": 30.0,
+   "loop_min_bend_radius_mm": 8.2237
+  }
+ ]
+}

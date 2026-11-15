@@ -1,0 +1,196 @@
+{
+  "implementation_date": "2026-11-14",
+  "status": "CAMERA VERIFICATION FAILED; physical release HOLD",
+  "export_freshness": "D107 review baseline from 2026-11-14; makad-v1.step.py changed in separate chassis-harness commit on 2026-11-15, so regenerate whole-robot STEPs before integrated release",
+  "correction_record": "../d107-corrections.md",
+  "camera_verification": {
+    "report": "../d107-camera-verification.md",
+    "geometry_report": "check_d107_camera_chain-report.json",
+    "passed": 2,
+    "total": 5,
+    "qualified": false
+  },
+  "targeted_checks": {
+    "check_d107_neck": {
+      "passed": 13,
+      "total": 13,
+      "report_sha256": "4c51b4762e1c9b6088f6621fd5e676a2d7b46b4a8701b735f07ec0b05c1cde1d"
+    },
+    "check_d107_body": {
+      "passed": 31,
+      "total": 31,
+      "report_sha256": "8945263a1793c149271f7bcd69f0133faf76a653e49ace8a90bbffdea108b468"
+    },
+    "check_d107_seating": {
+      "passed": 7,
+      "total": 7,
+      "report_sha256": "5b79954844d10b7772df42e14290ed58a183f9228189a268032f6db83ad66c78"
+    },
+    "check_d107_controller_mount": {
+      "passed": 2,
+      "total": 2,
+      "report_sha256": "679db561020f97189db1207e13cee719e231aa1d09de904e7130008ceb6d6df4"
+    },
+    "check_d107_functional": {
+      "passed": 9,
+      "total": 9,
+      "report_sha256": "752955666cff8b738b950fb8029b7e31ce44050b3552afea69042962a74881b9"
+    },
+    "check_d107_mass": {
+      "passed": 3,
+      "total": 3,
+      "report_sha256": "7e166e5d324e537bfee14a86c9269ada43b0f5c691dc1de673ea7ad042c69aba"
+    },
+    "check_pcb12_fit": {
+      "passed": 7,
+      "total": 7,
+      "report_sha256": "2f97f741b2fb24c758e65581647aceb10c77fe1134d8d2df46707a2fbc79690b"
+    }
+  },
+  "targeted_rows": 72,
+  "export_integration": "PASS",
+  "board_count": 6,
+  "exports": {
+    "makad-v1.step": {
+      "sha256": "a23da15a300a1755ebe3482ecb79c09d32cac090c5cacb94492796208fae434b",
+      "bytes": 564499235
+    },
+    "makad-v1-presentation.step": {
+      "sha256": "49be2488cb120591e78d617890e6a9d749529a9a2079de610a1955e7bc8ba899",
+      "bytes": 562879085
+    },
+    "d107-body-camera-ribbon-envelope.step": {
+      "sha256": "babe9d5d59f162e4e21cd10e89ec43b35b1eb68b83eff417fcf79385dacb88a4",
+      "bytes": 73218
+    }
+  },
+  "pcb08": {
+    "step": {
+      "sha256": "a1c1b4b41f4b30a073f2763bbe3c460d833272449f9fabfe4740811bb4828e26",
+      "bytes": 726355
+    },
+    "board": {
+      "sha256": "f486017c66df1a0e6c40fb971f82f515e5e2f684b5c1dba4866d417fe7ad6618",
+      "bytes": 186399
+    },
+    "gerbers": {
+      "sha256": "9d64415ac07f392c73ebf10cbff0675ee98606cb9dc0cb95aa56cb560a61d359",
+      "bytes": 36358
+    },
+    "drc_errors": 0,
+    "unconnected": 0,
+    "parity": 0,
+    "library_warnings": 6,
+    "minimum_finished_inner_copper_um": 35
+  },
+  "full_assembly_topology": {
+    "leaf_occurrences": 3933,
+    "prototypes": 3803,
+    "failure_count": 3,
+    "unchanged_findings": [
+      {
+        "ref": "o1.2.10.4.1",
+        "name": "WHEEL_ARCH_POD_L",
+        "reasons": [
+          "invalidTopology"
+        ],
+        "solidCount": 1,
+        "volumes": [
+          14170.856516320271
+        ],
+        "occurrences": [
+          {
+            "ref": "o1.2.10.4.1",
+            "name": "WHEEL_ARCH_POD_L"
+          }
+        ]
+      },
+      {
+        "ref": "o1.2.10.5.1",
+        "name": "WHEEL_ARCH_POD_R",
+        "reasons": [
+          "invalidTopology"
+        ],
+        "solidCount": 1,
+        "volumes": [
+          14170.8553583462
+        ],
+        "occurrences": [
+          {
+            "ref": "o1.2.10.5.1",
+            "name": "WHEEL_ARCH_POD_R"
+          }
+        ]
+      },
+      {
+        "ref": "o1.2.13.26.3",
+        "name": "=>[0:1:1:516]",
+        "reasons": [
+          "invalidTopology"
+        ],
+        "solidCount": 1,
+        "volumes": [
+          11127.94494559131
+        ],
+        "occurrences": [
+          {
+            "ref": "o1.2.13.26.3",
+            "name": "=>[0:1:1:516]"
+          }
+        ]
+      }
+    ]
+  },
+  "boolean_self_intersection": "skipped",
+  "physical_acceptance": "OPEN; no procurement/printing/power tests performed",
+  "mass_sensitivity": {
+    "steel_selected": true,
+    "nominal_sweep_margin_pct": 4.5922,
+    "nominal_original_register_margin_pct": 3.4707,
+    "all10g_in_head_sweep_margin_pct": 3.4683,
+    "all10g_in_head_original_register_margin_pct": 2.3844,
+    "all_methods_and_scenarios_clear_3pct": false,
+    "release": "HOLD pending received cable mass/dress and physical tipping"
+  },
+  "strength": "Hand beam/section screen only; E20MPa printed-PETG credit, factor2 service; solid roots and first-print100N proof required",
+  "reviewed_snapshots": {
+    "snapshots/d107-iso.png": {
+      "sha256": "d66e9389821a79b7758f4568b83889399a158b9cf7392ad5fd70b7f7b99fac60",
+      "bytes": 474542
+    },
+    "snapshots/d107-opposite.png": {
+      "sha256": "840e7cef17702ca96bd4681874c892b650145867c2970765fd0bcb8659e8f496",
+      "bytes": 604669
+    },
+    "snapshots/d107-top.png": {
+      "sha256": "1eed7576a6576a860bddb99e2dd8c773a74f2ca318d3960d9f512d703da4ba8f",
+      "bytes": 195022
+    },
+    "snapshots/d107-front.png": {
+      "sha256": "b78950de45c7f88e6bbdd3027e4aa85f70986530ede2c9f7344cc95b72706ad3",
+      "bytes": 235942
+    },
+    "snapshots/d107-umbilical.png": {
+      "sha256": "dae48c9e7cbd62f17ad1af47f981325daa7edfb7130243b65cc8ab905ad49078",
+      "bytes": 520349
+    },
+    "snapshots/d107-camera-head.png": {
+      "sha256": "23246b51b525b5ad120b6183fbcfecc25d50d52a524861cfeb51c690e5d99865",
+      "bytes": 1053843
+    },
+    "snapshots/d107-camera-body.png": {
+      "sha256": "f5b263c19f2c5d6f0dcb16d9d125e90e2f04b8f07e46b255b8e52ec7ec4e843a",
+      "bytes": 1076322
+    },
+    "snapshots/d107-body-camera-ribbon-only.png": {
+      "sha256": "b5d3908a89d1ca53922b2d96d701af31e4ca52ba2052a93256a62b1dd4db2273",
+      "bytes": 191976
+    }
+  },
+  "viewer": {
+    "inspection": "http://127.0.0.1:3247/?file=final/v1/cad/makad-v1.step",
+    "presentation": "http://127.0.0.1:3247/?file=final/v1/cad/makad-v1-presentation.step",
+    "pcb08": "http://127.0.0.1:3247/?file=04-pcbs/pcb-08-yaw-junction/cad/pcb-08-yaw-junction-revB.step",
+    "body_ribbon": "http://127.0.0.1:3247/?file=final/v1/cad/d107-body-camera-ribbon-envelope.step"
+  }
+}

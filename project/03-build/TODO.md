@@ -42,3 +42,14 @@ Bench protocol: [03-head/v1/feetech-bench-protocol.md](03-head/v1/feetech-bench-
 - [ ] Regenerate body/chassis stability and §11.3/P07
 - [ ] Run B1–B6, then freeze the electrical/firmware thresholds from those results
 - [ ] Add the yaw servo to the AR-61 mic noise test (gate 3.10)
+
+## D-107 physical integration (current)
+
+CAD/electrical implementation is recorded in [d107-execution.md](final/v1/d107-execution.md). Before release: receive and measure the slim HDMI plugs, B0091 adapters, GH/Micro-Fit housings and gauge-compatible contacts; verify all cavity and servo pin orders; identify D1 power inlet (K3) and PCB11 LED driver (K2); run C0–C4 camera gates, head-link/servo-bus/rail checks, strain-relief pull checks and first-hour wear inspection. The moved servo-wire anchor has at least1.54mm nominal screw clearance in the CAD sweep; verify actual wire dress before motion. Weigh printed parts and the cable; confirm tipping. No board, cable or print has been ordered by this work.
+
+Whole STEP topology follow-up: both unchanged wheel-arch pods are valid in source but fail STEP round trip; the purchased ST3215-HS case has an already-documented invalid solid. D107 geometry passes. Evidence: [full validity](final/v1/cad/d107-assembly-validity.json), [independent reproduction](final/v1/cad/d107-unchanged-topology.json). Resolve before treating the whole robot as a clean fabrication solid set.
+
+
+D1072026-11-14 corrections are implemented; fabrication stays HOLD: buy/measure HDMI before closed inserts, verify two150mm static FPCs/contact dress, tape clamp to6.8±0.05mm, confirm >=35µm finished inner copper with fab, qualify solid PETG support roots and100N first-print proof. Weigh actual cable/robot and validate tipping: original-register all10g-in-head sensitivity gives2.38%, below3% buffer, though moving-frame sensitivity gives3.47%. Retain camera C0–C4, N2(b) temperature/voltage, first-motion/wear and existing contact/driver/inlet gates. [Record](final/v1/d107-corrections.md).
+
+Camera chain review: [verification](final/v1/d107-camera-verification.md) fails3/5 additional checks. Correct the head HDMI plug approach, replace the head's five ribbon slabs with a credible continuous cable, and dress the body ribbon's65.035mm surplus before camera release. The jacket-stripped HDMI section has no manufacturer qualification; bench-test the received cable through motion before printing or ordering closed inserts.

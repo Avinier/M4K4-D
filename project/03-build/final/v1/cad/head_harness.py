@@ -1,127 +1,148 @@
-"""Nominal, visible head cable solids in the head-local neutral pose.
+"""D-107 W47: twelve loose wires and stripped HDMI pairs, no hose.
 
-The source harness schedule and D-104/D-105 routes define these paths.  These
-are cable bodies for visual assembly review, separate from the larger HARNESS_*
-clearance volumes.  Connector dress and the exact wire split still need a
-physical fit on the assembled head.
+Nominal neutral route. Dynamic candidates and all clearances are checked by
+check_d107_neck.py; connector dress and cable life require physical acceptance.
 """
+import math
+from build123d import Compound, Location
+import d107_umbilical as U
 
-from build123d import Box, Compound, Location, Plane, Solid, Sphere, Vector
+WIRES = [
+    ("+6V3_HEAD_PR",22,.75,"#c93a35"),("+5V_C2",26,.5,"#da8642"),
+    ("+5V_DISPLAY",26,.5,"#d0ba42"),("GND_HEAD",22,.75,"#272b31"),
+    ("GND_C2",26,.5,"#42474a"),("GND_DISPLAY",26,.5,"#63686b"),
+    ("GND_SIG",28,.4,"#777e85"),("C0TX_P",28,.4,"#69a989"),
+    ("C0TX_N",28,.4,"#b8cfbd"),("C2TX_N",28,.4,"#8aacc7"),
+    ("C2TX_P",28,.4,"#4376a4"),("SERVO_DATA",28,.4,"#c59bd7")]
+
+# The candidate router produces these static roll-frame paths. Exact solids,
+# including the new mounts and adapter, are the acceptance check.
+import json
+import numpy as np
+from pathlib import Path
+from study_umbilical_span import bezier_guess, rot
+SERVO_R_ANCHOR=(-28.,-12.,46.)
+SERVO_P_ANCHOR=(-33.,-18.,64.)
+SERVO_P_PATH=[SERVO_P_ANCHOR,(-45.8,-8.2,67.8),
+              (-39.5,14.2,65.2),(-35.8,18.,61.5)]
+SERVO_LOOP_LENGTH=30.
+HEAD_FFC_LENGTH=150.       # separate15-way1mm-pitch camera ribbon
+BODY_FFC_LENGTH=150.       # Arducam B0210-class15-way to22-way camera FPC
+FFC_INSERTION_ALLOWANCE=10.  # two5mm ends, E until received
+FFC_SERVICE_ALLOWANCE=15.
+
+BODY_POWER=[(22.42,-36.,117.5),(26.,-32.,118.),(26.,-27.,118.),(28.,-24.,118.)]
+BODY_SIGNALS=[(-6.,-35.,125.),(-6.,-35.,125.5),(22.,-35.,125.5),
+              (26.,-31.,118.),(26.,-27.,118.),(28.,-24.,118.)]
+BODY_HDMI=[(53.,5.915,120.),(53.,14.,120.),(42.,14.,118.),(28.,8.,118.),(28.,-16.,118.)]
 
 
-def _wire(points, radius):
-    """A round insulated conductor with connected, rounded bends."""
-    pieces = []
-    for a, b in zip(points, points[1:]):
-        start, end = Vector(*a), Vector(*b)
-        delta = end - start
-        pieces.append(Solid.make_cylinder(radius, delta.length,
-                                          Plane(origin=start, z_dir=delta)))
-    pieces += [Sphere(radius).moved(Location(p)) for p in points[1:-1]]
-    return Compound(children=pieces)
+def ribbon_segment(a,b,width_axis,width,thickness=.3):
+    from build123d import Box,Plane,Vector
+    a,b=Vector(*a),Vector(*b);along=(b-a).normalized();across=Vector(*width_axis)
+    normal=along.cross(across).normalized()
+    return Box((b-a).length,width,thickness).moved(Plane(origin=(a+b)*.5,x_dir=along,z_dir=normal).location)
 
 
-def _ribbon_segment(a, b, width_axis, width, thickness=0.3):
-    """A flat FFC segment; the width direction is explicit at every fold."""
-    start, end = Vector(*a), Vector(*b)
-    along = (end - start).normalized()
-    across = Vector(*width_axis).normalized()
-    normal = along.cross(across).normalized()
-    mid = (start + end) * 0.5
-    return Box((end - start).length, width, thickness).moved(
-        Plane(origin=mid, x_dir=along, z_dir=normal).location)
+HEAD_FFC_POINTS=[(-67.,-33.915,72.6),(-67.,-25.,83.),(-67.,10.,83.),(-35.,10.,83.),(-35.,0.,83.),(-14.5,0.,83.)]
+BODY_FFC_POINTS=[(53.,-43.915,117.),(53.,-48.,117.),(53.,-48.,109.5),(53.,-39.,109.5),
+                 (37.4,-39.,109.5),(37.4,-24.72,109.5),(37.4,-24.72,100.)]
 
 
-def _ribbon(points, width_axis, width):
-    return Compound(children=[_ribbon_segment(a, b, width_axis, width)
-                              for a, b in zip(points, points[1:])])
+def head_ffc():
+    p=HEAD_FFC_POINTS
+    axes=[(1,0,0),(1,0,0),(0,1,0),(1,0,0),(0,1,0)]
+    return [ribbon_segment(a,b,w,16.) for a,b,w in zip(p,p[1:],axes)]
+
+
+def body_ffc():
+    """One continuous, mitered FPC envelope with a tapered adapter tail.
+
+    Each section follows the mean incoming/outgoing tangent. This removes the
+    disconnected rectangular plates at bends and shows the change from the
+    15-way end to the 22-way end. The exact received fold geometry is still U.
+    """
+    from build123d import Vector, Wire, Solid
+    p=[Vector(*x) for x in BODY_FFC_POINTS]
+    axes=[Vector(*x) for x in ((1,0,0),(1,0,0),(1,0,0),
+                               (1,1,0),(1,1,0),(1,1,0),(0,1,0))]
+    widths=(16.,16.,16.,14.,12.,12.,12.)
+    sections=[]
+    for i,c in enumerate(p):
+        incoming=(p[i]-p[i-1]).normalized() if i else (p[1]-p[0]).normalized()
+        outgoing=(p[i+1]-p[i]).normalized() if i<len(p)-1 else incoming
+        tangent=(incoming+outgoing).normalized()
+        across=(axes[i]-tangent*axes[i].dot(tangent)).normalized()
+        normal=tangent.cross(across).normalized()
+        a=across*widths[i]/2.;b=normal*.15
+        sections.append(Wire.make_polygon([c-a-b,c+a-b,c+a+b,c-a+b],close=True))
+    return [Solid.make_loft(sections,ruled=True)]
+
+def lead_paths():
+    doc=json.loads((Path(__file__).parent/'d107-internal-routes.json').read_text())
+    paths={}
+    for name,points in doc['paths'].items():
+        if points is None: raise ValueError(f'unrouted D-107 internal lead: {name}')
+        pts=[list(U.CLAMP),[U.CLAMP[0],0.,9.]]+points[1:]
+        # Clear the top of the jaw before the fan-out turns down to the floor.
+        if pts[2][2]<9.:pts[2][2]=9.
+        paths[name]=pts
+    paths['SERVO_ROLL']=paths['SERVO_ROLL'][:-2]+[[-28.,-12.,44.],list(SERVO_R_ANCHOR)]
+    # The routed lead used to stop 3.1 mm beyond the modeled plug face.
+    # Seat its last segment into the B0091 head HDMI plug envelope.
+    paths['HEAD_CAMERA_HDMI']=paths['HEAD_CAMERA_HDMI'][:-2]+[[-67.,14.5,71.],[-67.,15.5,75.]]
+    paths['PCB12_J1']=[list(U.CLAMP),[-50.4,0.,10.],[-44.5,-6.5,10.],[-44.5,-16.,10.],
+                       [-44.5,-23.,6.5],[-39.,-29.4,11.75]]
+    paths['PCB12_J1'].append([-32.485,-29.4,11.75])
+    paths['PCB12_J2_BRANCH']=[list(U.CLAMP),[U.CLAMP[0],0,9],[-44.5,-6.5,9],[-44.5,-23,6.5],
+                              [-33.6,-29.4,8.],[-33.6,-38.8,8.],[-33.6,-38.8,19.55],[-32.485,-38.8,19.55]]
+    return paths
+
+def servo_loop(roll,roll_axis):
+    o=np.asarray(roll_axis);p0=o+(np.asarray(SERVO_R_ANCHOR)-o)@rot('x',roll).T
+    p1=np.asarray(SERVO_P_ANCHOR)
+    # A fixed-length circular arc with free end tangents. Loose internal
+    # wires have strain-relief points, not the neck solver's fixed headings.
+    # This avoids a cubic hairpin whose apparent clearance hides a sub-mm kink.
+    length=SERVO_LOOP_LENGTH;d=np.linalg.norm(p1-p0);u=(p1-p0)/d
+    v=np.array([-.3,-1.,0.]);v-=u*np.dot(v,u);v/=np.linalg.norm(v)
+    lo,hi=1e-6,2*math.pi-1e-6
+    for _ in range(60):
+        theta=(lo+hi)/2
+        if 2*math.sin(theta/2)/theta>d/length:lo=theta
+        else:hi=theta
+    theta=(lo+hi)/2;radius=length/theta;t=np.linspace(-theta/2,theta/2,40)
+    centre=(p0+p1)/2-v*radius*math.cos(theta/2)
+    return centre+radius*(np.sin(t)[:,None]*u+np.cos(t)[:,None]*v)
+
+
+def body_wire_paths(origin=None,include_neck=False):
+    body=list(reversed(U.body_path()))
+    neck=U.neutral_points((0,0,0)) if include_neck else []
+    path=body+neck[1:] if include_neck else body
+    out=[]
+    for i,(name,awg,radius,colour) in enumerate(WIRES):
+        a=2*math.pi*i/len(WIRES);dx,dy=2.35*math.cos(a),2.35*math.sin(a)
+        fan=BODY_POWER if i<6 else BODY_SIGNALS
+        port=(22.42,(-33.,-36.,-39.)[i%3],115.85 if i<3 else 118.85) if i<6 else (-6.,-38.125+1.25*(i-6),125.)
+        pts=[port,*fan[1:-1]]+[(x+dx,y+dy,z) for x,y,z in path]
+        out.append((f"W47_{name}_AWG{awg}",pts,radius,colour))
+    cam=BODY_HDMI+body[2:]+neck[1:] if include_neck else BODY_HDMI+body[2:]
+    out.append(("W47_STRIPPED_HDMI_INNER_PAIRS_E",cam,1.45,"#b7b1a4"))
+    return out
 
 
 def build_head_harness(entry):
-    """One switchable Harness / Head wires group, in the head-local frame."""
-    paint = entry._tag
-    px, pz = entry.layout_model.PITCH_X, entry.layout_model.PITCH_Z
-
-    # D-104: two insulated AWG24 power conductors and eleven AWG30 signal
-    # conductors.  Two rows fill the documented 6.0 x 2.2 mm bundle envelope.
-    # Each core is shown through the disc run, left leg, tube and its branch.
-    core_specs = [
-        ("+6V3_HEAD_PR", 0.7, "#c93a35"),
-        ("GND_HEAD", 0.7, "#272b31"),
-        *[(f"SIGNAL_{i:02d}", 0.4, "#e2b34f" if i % 2 else "#6a8eb4")
-          for i in range(1, 12)],
-    ]
-    columns = (-2.45, -1.65, -0.85, -0.05, 0.75, 1.55, 2.35)
-    wire_children = []
-    for i, (name, radius, color) in enumerate(core_specs):
-        col = columns[i // 2]
-        row = -0.55 if i % 2 == 0 else 0.55
-        # Centreline follows the D-104 reserved disc crossing, channel and
-        # 8 mm tube bore.  The bend inside the leg is a neutral-pose sketch.
-        common = [
-            (-22.9 + col, 42.0, -33.4 + row),
-            (-22.9 + col, -43.4, -33.4 + row),
-            (-59.9 + col, -43.4, -33.4 + row),
-            (-59.9 + col, -46.0, -26.0 + row),
-            (-59.9 + col, -54.3, -26.0 + row),
-            (-59.9 + col, -54.3, pz - 30.0 + row),
-            (px + col, -54.3, pz + row),
-            (px + col, -42.6, pz + row),
-            (px + col, -40.0, pz + row),
-        ]
-        # The schedule gives the bundle count but does not allocate every
-        # signal to a branch.  A four-way servo / nine-way PCB-12 split is
-        # shown as the current packaging assumption.
-        key = "HARNESS_D104_SERVO_BRANCH" if i < 4 else "HARNESS_D104_PCB12_BRANCH_PITCH"
-        branch_points = list(entry.D104_BRANCHES[key][2])[1:]
-        if i >= 4:
-            branch_points += list(entry.D104_BRANCHES["HARNESS_D104_PCB12_BRANCH_ROLL"][2])[1:]
-        path = common + [(x + col * 0.45, y, z + row * 0.45) for x, y, z in branch_points]
-        wire_children.append(paint(_wire(path, radius), f"{name}_INSULATED_WIRE", color))
-    wires = Compound(label="13 conductors through left trunnion (nominal split)",
-                     children=wire_children)
-
-    # Rotor-to-head FFCs, 22 contacts, 11.5 mm wide and 0.3 mm thick.  The
-    # first upper ZIF feeds W45; the remaining two feed the head electronics.
-    rotor_ffcs = []
-    for label, y0, z in (("W45_CSI_TO_DISC", -4.5, -34.6),
-                         ("W42_HEAD_POWER", 0.0, -34.2),
-                         ("W43_HEAD_SIGNAL", 4.5, -33.8)):
-        path = [(px, y0, -36.1), (px, y0, z), (px, 14.0, z)]
-        rotor_ffcs.append(paint(_ribbon(path, (1, 0, 0), 11.5),
-                                label, "#d9aa63"))
-    rotor = Compound(label="Three rotor-to-head FFCs", children=rotor_ffcs)
-
-    # W45 follows the D-105 yaw-carried static route up the bracket.  Folds
-    # between runs are represented as short flat segments at the neutral pose.
-    w45_runs = [
-        _ribbon_segment((px, 19.0, -34.3), (-91.5, 22.6, -34.3), (0, 1, 0), 12.0),
-        _ribbon_segment((-91.5, 22.6, -34.3), (-105.5, 22.6, -31.8), (0, 1, 0), 12.0),
-        _ribbon_segment((-105.5, 22.6, -31.8), (-150.0, 22.6, -31.8), (0, 1, 0), 12.0),
-        _ribbon_segment((-150.0, 22.6, -31.8), (-150.0, 22.6, 108.0), (0, 1, 0), 12.0),
-    ]
-    # The top FFC lies along the mast's 15 degree bracket-top frame.
-    top_origin, direction, normal = entry._d105_frame()
-    top_a = tuple(top_origin[k] + 2.0 * normal[k] for k in range(3))
-    top_b = tuple(top_origin[k] + 29.0 * direction[k] + 2.0 * normal[k] for k in range(3))
-    top_side = (top_a[0], 22.6, top_a[2])
-    w45_runs.append(_ribbon_segment((-150.0, 22.6, 108.0), top_side,
-                                    (0, 1, 0), 12.0))
-    w45_runs.append(_ribbon_segment(top_side, top_a, (1, 0, 0), 12.0))
-    w45_runs.append(_ribbon_segment(top_a, top_b, (0, 1, 0), 12.0))
-    w45 = paint(Compound(children=w45_runs), "W45_STATIC_CSI_FFC_TO_TOP_JOINER", "#d9aa63")
-
-    # W46 is the 16 mm standard-mini wear cable.  Reuse the neutral-pose
-    # elastica ribbon already solved by D-105; continue it through the cover
-    # slot and roof guide as thin cable rather than the large reserve blocks.
-    loop = entry.d105_local("loop_reserves")[0][1]
-    w46_loop = paint(loop, "W46_CSI_FREE_C_LOOP_NEUTRAL_POSE", "#e0c9a5")
-    w46_inside = paint(Compound(children=[
-        _ribbon_segment((-116.0, -1.0, 48.16), (-115.4, -1.0, 80.0), (0, 1, 0), 16.0),
-        _ribbon_segment((-115.4, -1.0, 80.0), (-24.0, -1.0, 80.0), (0, 1, 0), 16.0),
-    ]), "W46_CSI_THROUGH_COVER_AND_ROOF", "#e0c9a5")
-    csi = Compound(label="CSI ribbons W45 and W46", children=[w45, w46_loop, w46_inside])
-
-    return Compound(label="Harness", children=[
-        Compound(label="Head wires", children=[wires, rotor, csi]),
-    ])
+    origin=entry.HEAD_ORIGIN_IN_CHASSIS
+    wires=[entry._tag(U.tube([(x-origin[0],y-origin[1],z-origin[2]) for x,y,z in pts],radius),name,colour)
+           for name,pts,radius,colour in body_wire_paths(origin,include_neck=True)]
+    leads=[entry._tag(U.tube(p,.8 if name=='PCB12_J2_BRANCH' else (1.8 if name=='HEAD_CAMERA_HDMI' else (1. if name=='DISPLAY_POWER' else 1.5))),
+                      f"W47_LEAD_{name}","#bb925f") for name,p in lead_paths().items()]
+    axis=(0.,entry.layout_model.ROLL_AXIS.position.Y,entry.layout_model.ROLL_AXIS.position.Z)
+    leads.extend([entry._tag(U.tube(servo_loop(0.,axis),1.5),"W47_THREE_SERVO_WIRES_ROLL_LOOP","#b48d6a"),
+                  entry._tag(U.tube(SERVO_P_PATH,1.5),"W47_THREE_SERVO_WIRES_PITCH_FRAME","#b48d6a")])
+    leads.extend(entry._tag(sh,f'W47_CAMERA_HEAD_STATIC_FFC_{i}','#d6b480') for i,sh in enumerate(head_ffc(),1))
+    leads.extend(entry._tag(sh.moved(Location(tuple(-v for v in origin))),f'W47_CAMERA_BODY_STATIC_FFC_{i}','#d6b480') for i,sh in enumerate(body_ffc(),1))
+    return Compound(label="Harness",children=[Compound(label="Head wires",children=[
+        Compound(label="W47 twelve loose wires and camera pairs",children=wires),
+        Compound(label="W47 head fan-out",children=leads)])])

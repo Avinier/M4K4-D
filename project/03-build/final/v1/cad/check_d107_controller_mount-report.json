@@ -1,0 +1,35 @@
+{
+ "script": "check_d107_controller_mount",
+ "passed": 2,
+ "total": 2,
+ "rows": [
+  {
+   "check": "w47_clear_of_added_controller_bosses_and_screws",
+   "ok": true,
+   "minimum": [
+    "servo_roll_loop/16.5",
+    "screws_1",
+    1.5418
+   ],
+   "required_nominal_gap_mm": 0.1,
+   "rolls": 85,
+   "note": "same 0.1 mm nominal wire clearance gate as the body check; received-wire dress and tolerance remain physical gates; relative P/R placement depends only on roll"
+  },
+  {
+   "check": "roll_loop_screw_clearance_at_least_1mm",
+   "ok": true,
+   "minimum": [
+    16.5,
+    "screws_1",
+    1.5418
+   ],
+   "roll_step_deg": 0.5,
+   "below_1mm_poses": 0,
+   "roll_anchor_R": [
+    -28.0,
+    -12.0,
+    46.0
+   ]
+  }
+ ]
+}
