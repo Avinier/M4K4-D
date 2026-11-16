@@ -94,6 +94,7 @@ The central record of every decision and change made during the build phase. New
 | [D-106](#d-106) | 2026-11-13 | Chassis harness routed in CAD; print features and body-lift plug moves it needs | Every chassis wire run of 05-harness §4 drawn as reserve chains; found and fixed: J10-8 nose run buried by the D-076 fill (tunnel), no deck passage for W03a (slot), J-BAT/J-CHASSIS/J-S18-Y leads with no exit room (plugs moved), right motor inline pair on PCB-10 (moved), TCRT riser in the shell (re-routed); fuse-holder tie tunnel, two deck and two tub-plate tie lugs; front module and CH-106 re-exported; check 134/134 | ACTIVE; CAD and export only; harness still on the D-096 electrical HOLD; splices and balance fuses not placed |
 | [D-107](#d-107) | 2026-11-13 | Head umbilical: one bundle up the yaw axis replaces the head ribbon, joiner, trunnion and bracket path | All head wires and the camera link rise through the yaw disc's bore and enter the head's underside as loose wires (amended the same day: the rear hose first selected failed its study and is withdrawn); camera stays SC0874 on the Arducam B0091 passive HDMI pair with its cable stripped to loose pairs in the neck; PCB-14 and PCB-16 retired, PCB-08 to rev B without ribbon sockets, D-051 pivot and solid −Y leg restored; plan in head-umbilical-plan.md | SELECTED design input; no CAD, board or BOM change yet; no bench test possible, so the camera link is first proved on the built robot |
 | [D-108](#d-108) | 2026-11-15 | Harness electrical HOLD lifted | Builder accepts the ~16 A all-loads-stalled, flat-pack case as unlikely and releases the chassis/body harness for build; kept: W02P not built until cell-end tap protection (CH-103), no R010 in the switched-bus path, one closed-body normal-duty heat check of M1 at first power-up | ACTIVE |
+| [D-109](#d-109) | 2026-11-15 | Body harness design choices ([body-harness-plan](body-harness-plan.md)) | Mic leads break at four 2.54 mm locking headers on an enlarged hub; M4/M5 roles chosen from CAD lengths; J6 rear break is a Micro-Fit 3.0 1×6; W17 travels with PCB-08; HN-006-style shared-5 V splices; second (−) charge splice; speaker inline break; fused body tie lugs; 5 mm signal/power segregation | ACTIVE; CAD Levels 0–6 done; copper ballast is the release configuration (F1) |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -4348,3 +4349,37 @@ Full-path exact checks supersede the sampled study's clamp at Z13: the actual cl
 **Accepted risk.** A sustained near-16 A event can overheat M1 or the Micro-Fit+ contacts, or open the 15 A fuse. The fuse opening is the intended failure. The 10 A/10 s and 16 A/2 s N1 pulse cases are no longer release gates. Voltage-drop and M2/M3 delivery gates (N2, N3) are unchanged.
 
 **Changed.** [05-harness](05-harness/README.md) status; [README](README.md) harness line; [chassis design review](05-harness/chassis-design-review.md) main-current-path row; D-096 status.
+
+## D-109
+
+**2026-11-15 · Harness: body harness design choices ([body-harness-plan.md](body-harness-plan.md) §4) · ACTIVE; builder decision; CAD Levels 0–6 done 2026-11-16**
+
+**Why.** The body is the last unrouted harness segment. Preparing it found gaps that block drawing it: the shell-mounted mics (D-037) lost their disconnect when PCB-05 became a perfboard hub; M4 (Pi 5 V) sits at +Y while the Pi USB-C is on the −Y edge; W17 is soldered to PCB-08 J6 but PCB-08 removal only unplugs five plugs; the shared-5 V node, SS34, J6 rear break and the − charge splice have no CAD envelope.
+
+**Decision** (builder chose B-01, B-03, B-04, B-06 on 2026-11-15; the rest take the plan's recommendation):
+
+- **B-01** W27: four 6-way 2.54 mm-pitch locking headers (KK 254 class, `U`) on an enlarged audio hub, plugged through the front aperture in the D-037 order.
+- **B-02** Shared 5 V: two insulated splice envelopes beside M5 under the tray (HN-006 pattern).
+- **B-03** M4/M5 roles: decided from CAD wire lengths of both variants (Level 4); no hardware change either way.
+- **B-04** J6 rear service break: Micro-Fit 3.0 1×6 inline pair with AWG26–28 contacts (`U`); PicoBlade if no such contact exists.
+- **B-05** Dress: D-106-style tie lugs fused into body prints.
+- **B-06** W17 stays soldered and leaves with PCB-08 after unplugging J-S18-Y; an inline MF3 break only if the sweep fails.
+- **B-07** A separate − charge splice beside the + splice.
+- **B-08** W28 gets a 2-way inline break; the amp screw terminal is not a service connector.
+- **B-09** Signal/audio envelopes keep ≥ 5 mm (`E`) from power envelopes except named crossings.
+- **B-10** The camera FPC surplus dress stays a D-107 fix; body routes reserve its fold volume.
+
+**Changed.** [body-harness-plan.md](body-harness-plan.md). CAD and 05-harness updates follow per the plan's levels.
+
+**Amendment, 2026-11-16 (CAD Levels 0–6; [design review](05-harness/body-design-review.md)).**
+
+- **B-01 refined:** the hub cannot grow down (fuse-holder envelope tops out at Z 99) or toward +Y (frame post at Y 58.5), so audio hub v2 is 18.5 × 23 mm with four 2.54 mm **2×3 latching headers (Molex C-Grid III class, `U`)** in a 2×2 grid, 0805 resistors on the bracket side in the boss gap, held in a printed cradle with VHB; its two M2 screws are dropped.
+- **B-03 resolved: keep roles.** A swap saves about 35 mm in total and moves the shared node away from C3 and J8-1.
+- **Button buffer reserve** moved to (−43.5…−36.5, −18.5…−11.5, 94…100), out of the mushroom keep-out.
+- **Tipping:** routed body harness mass (50.7 g `E`) moves the CoM 0.42 mm rearward; full sweep steel 2.15 %, copper 3.72 %. Below the 3 % steel buffer, so **copper ballast (C110) is the release configuration**, per the D-107 rule, until the built harness is weighed.
+- **Open:** J10-1's +X lead exit faces the J101 reserve; W27 must be dressed untied for shell lift; PCB-08 rev A connector shapes remain in the droid tree.
+
+**Changed (amendment).** `final/v1/cad`: `body_harness_endpoints.py`, `d109_body_parts.py`, `d109_routes.py`, `body_harness.py`, `body-harness.step.py`, five `check_*` scripts and reports, `makad-v1.step.py` (drops, buffer move, D-109 parts and body wires), `check_d095_mass.py` (hub row), `check_d107_mass.py` (`MAKAD_D109_MASS` option). [05-harness](05-harness/README.md) §4.4 and §7.2a.
+
+**Amendment 2, 2026-11-16 (open items).** Body wires clear the D-107 head harness (31/31) after lowering W24 and moving W25 outboard of the Pi FPC. A **mic-end W27 break was screened and rejected** (anything riding with the shell inboard of |Y| 70.3 meets the upper side rail); hub-end plugs stay, but they cannot be drawn back through the FR/RR/RL passages, so shell lift is **OPEN** for the D-037 mock-up. Tray removal unplugs W10 and the four PCB-09 leads; the W40 mushroom lead takes a 2-way header at the buffer for panel withdrawal. Two fused tie lugs added to the frame print (a riser lug was rejected for blocking PCB-08 removal). `check_pcb09_*` entry loading fixed. One cut list for all three harnesses (`harness_cut_list.py`).
+
