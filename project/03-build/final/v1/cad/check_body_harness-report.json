@@ -1,0 +1,393 @@
+{
+ "script": "check_body_harness",
+ "passed": 77,
+ "total": 77,
+ "rows": [
+  {
+   "check": "W03r vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W03r no reversal",
+   "ok": true,
+   "worst_turn_deg": 71.0
+  },
+  {
+   "check": "W03r- vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W03r- no reversal",
+   "ok": true,
+   "worst_turn_deg": 71.8
+  },
+  {
+   "check": "W04 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W04 no reversal",
+   "ok": true,
+   "worst_turn_deg": 87.2
+  },
+  {
+   "check": "W05 M1 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W05 M1 no reversal",
+   "ok": true,
+   "worst_turn_deg": 87.9
+  },
+  {
+   "check": "W05 M6 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W05 M6 no reversal",
+   "ok": true,
+   "worst_turn_deg": 85.0
+  },
+  {
+   "check": "W05 stars vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W05 stars no reversal",
+   "ok": true,
+   "worst_turn_deg": 87.8
+  },
+  {
+   "check": "W05c vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W05c no reversal",
+   "ok": true,
+   "worst_turn_deg": 62.3
+  },
+  {
+   "check": "W05b M4 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W05b M4 no reversal",
+   "ok": true,
+   "worst_turn_deg": 55.2
+  },
+  {
+   "check": "W05b M5 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W05b M5 no reversal",
+   "ok": true,
+   "worst_turn_deg": 83.5
+  },
+  {
+   "check": "W10 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W10 no reversal",
+   "ok": true,
+   "worst_turn_deg": 90.0
+  },
+  {
+   "check": "W05s vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W05s no reversal",
+   "ok": true,
+   "worst_turn_deg": 46.1
+  },
+  {
+   "check": "W11 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W11 no reversal",
+   "ok": true,
+   "worst_turn_deg": 5.4
+  },
+  {
+   "check": "W11 J10-1 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W11 J10-1 no reversal",
+   "ok": true,
+   "worst_turn_deg": 89.1
+  },
+  {
+   "check": "W14 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W14 no reversal",
+   "ok": true,
+   "worst_turn_deg": 90.0
+  },
+  {
+   "check": "W13 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W13 no reversal",
+   "ok": true,
+   "worst_turn_deg": 90.2
+  },
+  {
+   "check": "W17 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W17 no reversal",
+   "ok": true,
+   "worst_turn_deg": 90.0
+  },
+  {
+   "check": "W12 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W12 no reversal",
+   "ok": true,
+   "worst_turn_deg": 101.7
+  },
+  {
+   "check": "W24 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W24 no reversal",
+   "ok": true,
+   "worst_turn_deg": 98.3
+  },
+  {
+   "check": "W25 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W25 no reversal",
+   "ok": true,
+   "worst_turn_deg": 92.5
+  },
+  {
+   "check": "W41 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W41 no reversal",
+   "ok": true,
+   "worst_turn_deg": 63.8
+  },
+  {
+   "check": "J6 lead vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "J6 lead no reversal",
+   "ok": true,
+   "worst_turn_deg": 91.7
+  },
+  {
+   "check": "W44 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W44 no reversal",
+   "ok": true,
+   "worst_turn_deg": 16.0
+  },
+  {
+   "check": "W40 sense vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W40 sense no reversal",
+   "ok": true,
+   "worst_turn_deg": 99.6
+  },
+  {
+   "check": "W40 switch vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W40 switch no reversal",
+   "ok": true,
+   "worst_turn_deg": 78.2
+  },
+  {
+   "check": "W40 M1 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W40 M1 no reversal",
+   "ok": true,
+   "worst_turn_deg": 72.9
+  },
+  {
+   "check": "W26 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W26 no reversal",
+   "ok": true,
+   "worst_turn_deg": 91.2
+  },
+  {
+   "check": "W27 FL vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W27 FL no reversal",
+   "ok": true,
+   "worst_turn_deg": 70.6
+  },
+  {
+   "check": "W27 FR vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W27 FR no reversal",
+   "ok": true,
+   "worst_turn_deg": 91.1
+  },
+  {
+   "check": "W27 RL vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W27 RL no reversal",
+   "ok": true,
+   "worst_turn_deg": 87.0
+  },
+  {
+   "check": "W27 RR vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W27 RR no reversal",
+   "ok": true,
+   "worst_turn_deg": 91.1
+  },
+  {
+   "check": "W28 vs assembly",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W28 no reversal",
+   "ok": true,
+   "worst_turn_deg": 29.7
+  },
+  {
+   "check": "W24 segregated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W25 segregated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W41 segregated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "J6 lead segregated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W44 segregated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W40 sense segregated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W40 switch segregated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W40 M1 segregated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W26 segregated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W27 FL segregated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W27 FR segregated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W27 RL segregated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W27 RR segregated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W28 segregated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "lengths written",
+   "ok": true,
+   "total_conductor_g_E": 38.6,
+   "wires": 31
+  }
+ ]
+}

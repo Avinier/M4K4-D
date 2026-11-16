@@ -9,6 +9,7 @@ centred in the 1.6 mm board on the standoffs (underside Z 106.45, D-092). check_
 owns the fixing and the socket stack; this script owns the real parts and their mated plugs.
 The vendor Pi and Active Cooler are tested as their real solids (standalone vendor import).
 """
+import sys
 
 import argparse
 import importlib.util
@@ -27,6 +28,7 @@ from check_pcb09_mount import _header_plastic_top, _hits, _vol
 HERE = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location("makad_v1_entry", HERE / "makad-v1.step.py")
 entry = importlib.util.module_from_spec(spec)
+sys.modules['makad_v1_entry'] = entry  # D-107 inserts() looks itself up
 spec.loader.exec_module(entry)
 MNT = entry.PCB09_MOUNT
 
@@ -167,18 +169,14 @@ def main():
     # 6. A 3 mm lead rises from J6, shifts to Y 20 ahead of the yaw drive, then
     # runs to the rear bay and down beside M1. Check its rectangular reserve
     # with 0.2 mm added on every face, including the bought rear modules.
-    cable = (
-        ("J6 rise", (70.5,73.5,29.5,32.5,115.5,119.5)),
-        ("shift to Y20", (70.5,73.5,18.5,32.5,116.5,119.5)),
-        ("rear run", (-44.0,72.0,18.5,21.5,116.5,119.5)),
-        ("rear drop", (-47.0,-44.0,18.5,21.5,95.0,119.5)),
-        ("front jog", (-47.0,-34.0,18.5,21.5,94.5,97.5)),
-        ("buffer lead", (-37.0,-34.0,-14.0,21.5,94.5,97.5)),
-    )
+    # D-109: the J6 lead runs to the Micro-Fit 3.0 1x6 rear break above M6 (d109_routes.py);
+    # the W40 sense pair continues from the break to the moved buffer reserve.
+    import d109_routes as R109
+    cable = tuple((n, R109.ROUTES[n]) for n in R109.CHAINS["J6 lead"][1])
     cable_hits = [(name, _hits(volume_box(bounds, MIN_GAP), cable_parts, OWN+SOFT)) for name,bounds in cable]
     bad = [(name,hits) for name,hits in cable_hits if hits]
     out.append(("J6 lead to the rear buffer reserve", not bad,
-                "; ".join(f"{name}: {hits}" for name,hits in bad) or "3 mm route clear with 0.2 mm margin via Y 20, Z 118"))
+                "; ".join(f"{name}: {hits}" for name,hits in bad) or "D-109 J6 route clear with 0.2 mm margin to the rear break"))
 
     reserve_hits = _hits(volume_box(entry.REAR_BUTTON_BUFFER_RESERVE, MIN_GAP), cable_parts, OWN+SOFT)
     out.append(("rear button buffer volume beside M1", not reserve_hits,

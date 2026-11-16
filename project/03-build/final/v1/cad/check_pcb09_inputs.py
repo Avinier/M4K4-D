@@ -4,6 +4,7 @@ Run with the legacy runtime and PYTHONPATH documented in ../README.md.
 Uses the current body + chassis with droid edits, plus the nightly stock lands.
 No robot geometry is changed. --output writes the inspectable survey JSON.
 """
+import sys
 
 import argparse
 import importlib.util
@@ -17,6 +18,7 @@ from build123d import Compound
 HERE = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location("makad_v1_entry", HERE / "makad-v1.step.py")
 entry = importlib.util.module_from_spec(spec)
+sys.modules['makad_v1_entry'] = entry  # D-107 inserts() looks itself up
 spec.loader.exec_module(entry)
 
 import body_v1_model as B

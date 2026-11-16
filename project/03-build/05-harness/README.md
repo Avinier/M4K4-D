@@ -191,6 +191,46 @@ J8-9 mirrors J8-1. PCB-08 keeps all three power returns separate; LINK_GND reach
 
 The corrected collar is at head-local X−50.4,Y0,Z6, with a 34×30.2 mm underside opening. Z13 failed the exact full-length bundle check at full roll. The flared bushing and liner leave Ø18 clear. Do not restore the source's cassette, PCB-14 posts, PCB-16 pockets, leg channel or camera mast.
 
+### 4.4 Body harness (D-109, 2026-11-15)
+
+`final/v1/cad/body_harness.py` adds `Harness → Body wires` beside the head and chassis wires: 31 outer envelopes along the D-109 route chains (`d109_routes.py`), with D-109 placement envelopes for the − charge splice, shared-5 V splices, potted SS34, J6 rear break (Micro-Fit 3.0 1×6), audio hub v2 with four 2×3 latching mic headers, and the W28 speaker break. Checks: endpoints 47/47, placements 8/8, routes 95/95, wires 77/77, vs head harness 31/31, service 10/13 (shell-lift plug passage OPEN); [design review](body-design-review.md). One cut list for all three harnesses: `final/v1/cad/harness-cut-list.csv` (`harness_cut_list.py`). These are **body-side** lengths: chassis portions of W13/W17/W05c are in §4.1. Cut = centreline + 2 × 15 mm terminations + body-lift slack (40 mm per body-lift end) + service allowance (W04 panel 52.4, W27 shell 40, J6 tray 30, W17 PCB-08 removal 60). All `E`; string-route and record `W` lengths on the built robot.
+
+| Chain | CAD label | CAD centreline | Slack | Cut `E` |
+|---|---|---:|---:|---:|
+| `W03r` | `W03r_JBAT_TO_CHARGE_SPLICE_POS_AWG16` | 45 | 40 | 115 |
+| `W03r-` | `W03r_JBAT_TO_CHARGE_SPLICE_NEG_AWG16` | 34 | 40 | 104 |
+| `W04` | `W04_CHARGE_SPLICES_TO_XT30_2XAWG16` | 46 | 52 | 128 |
+| `W05 M1` | `W05_POS_SPLICE_TO_M1_VIN_AWG16` | 39 | 0 | 69 |
+| `W05 M6` | `W05_M1_VOUT_TO_M6_INPLUS_AWG16` | 19 | 0 | 49 |
+| `W05 stars` | `W05_M6_INMINUS_TO_POS_STAR_AWG16` | 32 | 0 | 62 |
+| `W05c` | `W05c_STARS_TO_JCHASSIS_2XAWG16` | 23 | 40 | 93 |
+| `W05b M4` | `W05b_STARS_TO_M4_2XAWG18` | 20 | 0 | 50 |
+| `W05b M5` | `W05b_STARS_TO_M5_2XAWG18` | 44 | 0 | 74 |
+| `W10` | `W10_M4_TO_PI5_USBC_2XAWG18` | 91 | 0 | 121 |
+| `W05s` | `W05s_M5_TO_SHARED_5V_2XAWG18` | 19 | 0 | 49 |
+| `W11` | `W11_SHARED_5V_TO_SS34_2XAWG22` | 16 | 0 | 46 |
+| `W11 J10-1` | `W11_SS34_TO_C3_J10_1_2XAWG22` | 64 | 0 | 94 |
+| `W14` | `W14_SHARED_5V_TO_J8_1_4XAWG22` | 89 | 0 | 119 |
+| `W13` | `W13_JS18H_TO_J8_1_HEAD_6V3_2XAWG20` | 97 | 40 | 167 |
+| `W17` | `W17_JS18Y_TO_PCB08_J6_YAW_11V1_2XAWG20` | 127 | 100 | 257 |
+| `W12` | `W12_SHARED_5V_TO_AMP_2XAWG22` | 182 | 0 | 212 |
+| `W24` | `W24_J9_1_TO_J8_4_GH6_CABLE` | 111 | 0 | 141 |
+| `W25` | `W25_J10_2_TO_J9_2_GH6_CABLE` | 182 | 0 | 212 |
+| `W41` | `W41_FAN_TO_J9_4_GH2_CABLE` | 48 | 0 | 78 |
+| `J6 lead` | `J6_PCB09_TO_REAR_BREAK_GH6_CABLE` | 147 | 30 | 207 |
+| `W44` | `W44_REAR_BREAK_TO_M6_4XAWG28` | 16 | 0 | 46 |
+| `W40 sense` | `W40_REAR_BREAK_TO_BUTTON_BUFFER_2XAWG28` | 64 | 0 | 94 |
+| `W40 switch` | `W40_MUSHROOM_TO_BUTTON_BUFFER_2XAWG24` | 23 | 0 | 53 |
+| `W40 M1` | `W40_BUFFER_TO_M1_ON_OFF_3XAWG24` | 24 | 0 | 54 |
+| `W26` | `W26_J9_3_TO_HUB_GH10_CABLE` | 27 | 0 | 57 |
+| `W27 FL` | `W27_HUB_TO_MIC_FRONT_L_6XAWG28` | 28 | 40 | 99 |
+| `W27 FR` | `W27_HUB_TO_MIC_FRONT_R_6XAWG28` | 145 | 40 | 215 |
+| `W27 RL` | `W27_HUB_TO_MIC_REAR_L_6XAWG28` | 84 | 40 | 154 |
+| `W27 RR` | `W27_HUB_TO_MIC_REAR_R_6XAWG28` | 210 | 40 | 281 |
+| `W28` | `W28_AMP_TO_SPEAKER_TWISTED_2XAWG22` | 55 | 0 | 85 |
+
+Body conductors 38.6 g `E`; with ties and D-109 parts 50.7 g, replacing that share of the body's 95 g harness-and-fastener allowance. That rearward CoM shift brings the steel-ballast worst-pose tipping margin to 2.15 % (copper 3.72 %), so copper ballast is the release configuration ([review F1](body-design-review.md#findings)). M4/M5 keep their roles (B-03). W10 drops through the old Pi pigtail passage in the tray.
+
 ## 5. Pinouts and polarity
 
 Pin 1 means the **moulded cavity number**, not the leftmost cavity in a photograph. Meter every cable from cells to exposed ports before connecting a charger. Print `+`, `−`, `B−`, `BM`, `B+` next to rear ports at print stage.
@@ -267,6 +307,12 @@ For in-place charging: M1 **OFF**; confirm port polarity; connect charger XT30 a
 5. Confirm no cable crosses the J13 lift plane, undo J13, lift body. Refit by labels; `J-PK` last. Measure far-end rails before drive/servo enable.
 
 The **11** body-lift plugs are counted *after* J-PK and PA pack removal. A fitted rear-panel W04 service pair is additional. Verify hand access, strain relief and ≥40 mm withdrawal slack at first build.
+
+### 7.2a Shell off and tray out (D-109)
+
+1. Front panel and speaker off: unplug the W28 inline break, then the four W27 mic plugs at hub v2 through the front aperture. W27 is dressed **untied** in its reserves so it can follow the shell. **OPEN:** the 2×3 plugs (5.6 × 8.1 mm `E`) cannot be drawn back through the 2.5–3.7 mm passages of FR, RR and RL (`check_d109_service`); resolve in the D-037 shell mock-up before printing.
+2. Lift the shell; the mic leads ride with it.
+3. Tray out (front, 90 mm): speaker and W28 already off; open the J6 rear break (Micro-Fit 3.0 1×6 above M6); unplug W10 at the Pi and W24/W25/W26/W41 at PCB-09 (it leaves with the tray); slide the tray. Refit: mate J6 on the bench, slide, then close the rear break.
 
 ### 7.3 Head off
 

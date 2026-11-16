@@ -1,0 +1,79 @@
+{
+ "script": "check_d109_placements",
+ "passed": 8,
+ "total": 8,
+ "rows": [
+  {
+   "check": "D109_CHARGE_SPLICE_NEG_AWG16_ENVELOPE clear",
+   "ok": true,
+   "hits": [],
+   "gap": [
+    0.6135,
+    "COMPUTE_TRAY"
+   ]
+  },
+  {
+   "check": "D109_SHARED_5V_POS_SPLICE_ENVELOPE clear",
+   "ok": true,
+   "hits": [],
+   "gap": [
+    0.1,
+    "HARNESS_D106_JS18_BODY_LEADS"
+   ]
+  },
+  {
+   "check": "D109_SHARED_5V_NEG_SPLICE_ENVELOPE clear",
+   "ok": true,
+   "hits": [],
+   "gap": [
+    0.1,
+    "C3_CARRIER_TOP_ENTRY_SIGNAL_PLUG_LAYER_RESERVE"
+   ]
+  },
+  {
+   "check": "D109_W11_SS34_POTTED_JOINT_ENVELOPE clear",
+   "ok": true,
+   "hits": [],
+   "gap": [
+    1.0649,
+    "M5_M2X4_BOARD_SCREW_1"
+   ]
+  },
+  {
+   "check": "D109_J6_REAR_BREAK_MICROFIT3_1X6_MATED_ENVELOPE clear",
+   "ok": true,
+   "hits": [],
+   "gap": [
+    0.05,
+    "REAR_BAY_MODULE_PLATE"
+   ]
+  },
+  {
+   "check": "D109_AUDIO_HUB_V2_PERFBOARD clear",
+   "ok": true,
+   "hits": [],
+   "gap": [
+    0.0,
+    "BODY_FRAME_MAIN_PRINT"
+   ]
+  },
+  {
+   "check": "D109_W27_FOUR_2X3_MIC_HEADERS_MATED_ENVELOPE clear",
+   "ok": true,
+   "hits": [],
+   "gap": [
+    1.0,
+    "BODY_FRAME_MAIN_PRINT"
+   ]
+  },
+  {
+   "check": "D109_W28_SPEAKER_INLINE_BREAK_ENVELOPE clear",
+   "ok": true,
+   "hits": [],
+   "gap": [
+    1.45,
+    "C0_LINK_ADAPTER_PCB09_BOARD"
+   ]
+  }
+ ]
+}

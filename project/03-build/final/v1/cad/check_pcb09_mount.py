@@ -10,6 +10,7 @@ screws go down through the board into them. Two outline tabs reach the holes. Th
 Pi and Active Cooler are tested as their real solids (the standalone vendor import, as in
 check_pcb09_inputs.py), the rest as built.
 """
+import sys
 
 import argparse
 import importlib.util
@@ -27,6 +28,7 @@ from module_checks import _box, _hit, _leaves
 
 spec = importlib.util.spec_from_file_location("makad_v1_entry", Path(__file__).resolve().with_name("makad-v1.step.py"))
 entry = importlib.util.module_from_spec(spec)
+sys.modules['makad_v1_entry'] = entry  # D-107 inserts() looks itself up
 spec.loader.exec_module(entry)
 MNT = entry.PCB09_MOUNT
 

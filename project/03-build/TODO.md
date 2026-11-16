@@ -53,3 +53,19 @@ Whole STEP topology follow-up: both unchanged wheel-arch pods are valid in sourc
 D1072026-11-14 corrections are implemented; fabrication stays HOLD: buy/measure HDMI before closed inserts, verify two150mm static FPCs/contact dress, tape clamp to6.8±0.05mm, confirm >=35µm finished inner copper with fab, qualify solid PETG support roots and100N first-print proof. Weigh actual cable/robot and validate tipping: original-register all10g-in-head sensitivity gives2.38%, below3% buffer, though moving-frame sensitivity gives3.47%. Retain camera C0–C4, N2(b) temperature/voltage, first-motion/wear and existing contact/driver/inlet gates. [Record](final/v1/d107-corrections.md).
 
 Camera chain review: [verification](final/v1/d107-camera-verification.md) fails3/5 additional checks. Correct the head HDMI plug approach, replace the head's five ribbon slabs with a credible continuous cable, and dress the body ribbon's65.035mm surplus before camera release. The jacket-stripped HDMI section has no manufacturer qualification; bench-test the received cable through motion before printing or ordering closed inserts.
+
+## D-109 body harness (current)
+
+CAD Levels 0–6 done ([review](05-harness/body-design-review.md)). Remaining:
+
+- [x] Service sweeps (10/13): tray, panel, body lift and PCB-08 pass
+- [ ] **Shell lift OPEN:** W27 FR/RR/RL hub plugs cannot pass their 2.5–3.7 mm passages; decide in the D-037 shell mock-up before printing the shell
+- [x] Body wires vs head harness, HDMI and camera FPC (31/31)
+- [x] Tie lugs: two fused on the frame print (`d109-tie-lugs.json`)
+- [ ] J10-1 lead exit vs the J101 reserve, on the received plug
+- [ ] 2-way header at the button buffer for the W40 mushroom lead
+- [ ] Order samples: Molex C-Grid III 2×3 latching headers/housings ×4 + spares, Micro-Fit 3.0 1×6 inline pair with AWG26–28 contacts, 2-way speaker inline pair
+- [ ] Weigh the built harness; re-run `MAKAD_D109_MASS=1 check_d107_mass.py`; keep copper ballast until steel shows ≥ 3 %
+- [x] Rebuild `makad-v1.step` (inspection)
+- [ ] Rebuild the presentation STEP
+

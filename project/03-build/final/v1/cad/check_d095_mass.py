@@ -46,7 +46,7 @@ MODULE_MASS = {
     "M12_JST_XHP_3_BALANCE_PORT_PLUG": (0.5, "E XHP-3 with three SXH contacts"),
     "M12_JST_PA_3P_BALANCE_BREAK_MATED_PAIR": (0.5, "E PAP-03V-S + PALR-03VF with contacts"),
     "CHARGE_SPLICE_HEATSHRUNK_AWG16": (4.4, "E butt splice 1.5 g + 2 x AWG16 x 150 mm XT30 leads 2.9 g"),
-    "M13_AUDIO_HUB_PERFBOARD": (3.0, "E perfboard with resistors and wire ends"),
+    "D109_AUDIO_HUB_V2_PERFBOARD": (5.0, "E D-109 hub v2: 18.5 x 23 perfboard, four 2x3 latching headers, SMD resistors, wire ends (was M13 3.0 g)"),
 }
 # Leads with no solid: (mass g, centroid, evidence)
 EXTRA = {"BALANCE_LEAD_3XAWG24": (4.3, None, "E 3 x AWG24 x 0.55 m at 2.6 g/m, at the lead reserves' centroid")}

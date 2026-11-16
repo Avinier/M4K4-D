@@ -55,8 +55,10 @@ def build_robot(label="Makad v1"):
     from head_harness import build_head_harness
     from chassis_harness import build_chassis_harness
     head_wires = build_head_harness(sys.modules[__name__]).children[0].moved(Location(HEAD_ORIGIN_IN_CHASSIS))
+    from body_harness import build_body_harness
     visible_harness = Compound(label="Harness", children=[
-        head_wires, build_chassis_harness(sys.modules[__name__])])
+        head_wires, build_chassis_harness(sys.modules[__name__]),
+        build_body_harness(sys.modules[__name__])])   # D-109
     return _relabel(robot.label, [*robot.children, bought_modules(), visible_harness], robot.location)
 
 
@@ -819,7 +821,7 @@ REAR_BAY = dict(
 )
 CRADLE = dict(rim=1.2, gap=0.25, pad=1.5, pad_size=3.0, lip=0.8)
 REAR_SWITCH = dict(y0=-27.0, z_top=92.5)                  # board Y -27..-1.6, Z 72.18..92.5, terminals toward +Y
-REAR_BUTTON_BUFFER_RESERVE = (-41.0, -34.0, -20.0, -8.0, 94.0, 100.0)  # rev B: small open-drain buffer beside M1; circuit TBD after #2813 measurements
+REAR_BUTTON_BUFFER_RESERVE = (-43.5, -36.5, -18.5, -11.5, 94.0, 100.0)  # D-109: moved out of the mushroom keep-out (Y +-11); was (-41, -34, -20, -8)  # rev B: small open-drain buffer beside M1; circuit TBD after #2813 measurements
 INA226_BOARD = (25.5, 20.5, 1.6, 3.0)                     # UNMEASURED: Y, Z, thickness, parts height (+X)
 INA226_AT = (1.0, 72.0)                                    # board Y min, Z min
 CHARGE_SPLICE = dict(axis=(-45.6, -34.0), r=3.5, z=(62.0, 88.0),
@@ -1535,6 +1537,26 @@ def bodylift_parts():
     return out
 
 
+def d109_tie_lugs():
+    """D-109 B-05: fused 4 x 4 x 3 tie lugs from study_d109_tie_lugs.py, each with a 3 x 1.5 mm tunnel for a 2.5 mm tie."""
+    import json
+    path = Path(__file__).resolve().with_name("d109-tie-lugs.json")
+    out = []
+    for name, d in (json.loads(path.read_text()) if path.exists() else {}).items():
+        x0, x1, y0, y1, z0, z1 = d["lug"]
+        lug = _blk(x0, x1, y0, y1, z0, z1)
+        c = ((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2)
+        w, t = D106["lug_tunnel"]
+        ax = "XYZ".index(d["tunnel_axis"])
+        half = [w / 2, t / 2, t / 2] if ax != 0 else [5.0, w / 2, t / 2]
+        if ax == 1:
+            half = [w / 2, 5.0, t / 2]
+        if ax == 2:
+            half = [w / 2, t / 2, 5.0]
+        out.append(lug - _blk(*[v for i in range(3) for v in (c[i] - half[i], c[i] + half[i])]))
+    return out
+
+
 def bought_modules():
     """The 'Bought modules' group: one subgroup per D-094 module (M1-M9, M12, M13) and the D-096 harness parts."""
     (m2, m3), (m4, m5) = tub_modules(), tray_modules()
@@ -1552,7 +1574,8 @@ def bought_modules():
         ("M8 amplifier, MAX98357A breakout (unmeasured)", amp),
         ("M9 microphones, INMP441 x4 (unmeasured)", mics),
         ("M12 charge and balance ports, charge splice", [*port_parts(), *splice]),
-        ("M13 audio hub, perfboard", hub),
+        # D-109: audio hub v2 (four mic headers, cradle-held) replaces the M13 perfboard and its screws.
+        ("D-109 body harness parts", _d109_parts.parts(_tag)),
         ("D-096 body-lift plugs and switched star", bodylift_parts()),
         ("D-106 chassis harness routes", d106_reserves()),
     ]
@@ -1569,6 +1592,7 @@ PRINT_TOOLS = [
 # Parts dropped whole (label fully matched, leaf or group), and parts inserted, world frame,
 # as new children of the group whose label fully matches.
 import d107_umbilical as _d107
+import d109_body_parts as _d109_parts
 
 DROID_REMOVES = [
     # D-068: the generic DevKitC STEP and its header blocks; the two upper screws.
@@ -1603,6 +1627,9 @@ DROID_REMOVES = [
     # Head's nonphysical yaw_FFC_x3_* and camera_CSI_* reserves are already
     # omitted by parts_scene(); removal rules here must match actual tree nodes.
     # Steel ballast restored after the D-107 full-pose mass sweep.
+    # D-109 Level 0: stale Layout-02 body reserves that ran to deleted boards (W40 to PCB-02 J2-9,
+    # Pi pigtail to PCB-04 J4-1) and the old -Y head riser; the D-109 routes replace them.
+    r"POWER_BUTTON_W40_LEAD_RESERVE_\d", r"PI5_POWER_PIGTAIL_DROP_RESERVE", r"HARNESS_HEAD_RISER_LOWER",
 
 ]
 DROID_INSERTS = [
@@ -1620,10 +1647,7 @@ DROID_INSERTS = [
     (r"BODY_PRIMARY_FRAME", rear_bay_plate()),
     *[(r"BODY_PRIMARY_FRAME", part) for part in rear_bay_hardware()],
     *[(r"YAW_JUNCTION_PCB08", part) for part in pcb08_servo_plug()],
-    (r"BODY_INTERNAL_HARNESS", _tag(_blk(-29.0, -25.0, -45.0, -38.0, 100.0, 112.0),
-                             "HARNESS_HEAD_RISER_UPPER_RISE", "#9566D9", 0.35)),
-    (r"BODY_INTERNAL_HARNESS", _tag(_blk(-29.0, -23.0, -39.0, -29.0, 110.0, 120.0),
-                             "HARNESS_HEAD_RISER_UPPER_TO_J1", "#9566D9", 0.35)),
+    # D-109: the W13/W14 riser boxes (pre-D-107 J1 position) are retired; D109_ROUTES draws the riser.
     # D-102: PCB-12's two M2 x 4 button screws.
     *[(r"Head controller and light", _tag(sc, f"PCB12_M2X4_BUTTON_{k}", "#555b5a"))
       for k, sc in enumerate(pcb12_world("screws"), start=1)],
@@ -1712,6 +1736,7 @@ DROID_ADDS = [
     (r"REAR_SERVICE_PANEL_OCTAGONAL", rear_panel_fill()),
     *[(r"BODY_SHELL", tool) for tool in _MIC_ADDS],
     (r"BODY_FRAME_MAIN_PRINT", amp_bracket()),
+    *[(r"BODY_FRAME_MAIN_PRINT", lug) for lug in d109_tie_lugs()],   # D-109 B-05
     # D-102: PCB-12 screw bosses on the rolling crossbar.
     *[(r"connected_rolling_cradle_flange_ear_stalks", sh) for sh in pcb12_world("boss")],
     (r"BODY_FRAME_MAIN_PRINT", _d107.body_camera_mount()),

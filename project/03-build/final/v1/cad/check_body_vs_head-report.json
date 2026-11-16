@@ -1,0 +1,211 @@
+{
+ "script": "check_body_vs_head",
+ "passed": 31,
+ "total": 31,
+ "rows": [
+  {
+   "check": "W03r_JBAT_TO_CHARGE_SPLICE_POS_AWG16 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W03r_JBAT_TO_CHARGE_SPLICE_NEG_AWG16 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W05_POS_SPLICE_TO_M1_VIN_AWG16 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W05_M1_VOUT_TO_M6_INPLUS_AWG16 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W05_M6_INMINUS_TO_POS_STAR_AWG16 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W05c_STARS_TO_JCHASSIS_2XAWG16 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W04_CHARGE_SPLICES_TO_XT30_2XAWG16 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W44_REAR_BREAK_TO_M6_4XAWG28 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W40_REAR_BREAK_TO_BUTTON_BUFFER_2XAWG28 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W40_MUSHROOM_TO_BUTTON_BUFFER_2XAWG24 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W40_BUFFER_TO_M1_ON_OFF_3XAWG24 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W05b_STARS_TO_M4_2XAWG18 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W05b_STARS_TO_M5_2XAWG18 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W10_M4_TO_PI5_USBC_2XAWG18 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W05s_M5_TO_SHARED_5V_2XAWG18 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W11_SHARED_5V_TO_SS34_2XAWG22 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W11_SS34_TO_C3_J10_1_2XAWG22 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W14_SHARED_5V_TO_J8_1_4XAWG22 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W13_JS18H_TO_J8_1_HEAD_6V3_2XAWG20 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W17_JS18Y_TO_PCB08_J6_YAW_11V1_2XAWG20 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W12_SHARED_5V_TO_AMP_2XAWG22 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": [
+    35.59,
+    "W47_CAMERA_BODY_STATIC_FFC_1"
+   ]
+  },
+  {
+   "check": "W26_J9_3_TO_HUB_GH10_CABLE vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W27_HUB_TO_MIC_FRONT_L_6XAWG28 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W27_HUB_TO_MIC_FRONT_R_6XAWG28 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": [
+    3.69,
+    "W47_CAMERA_BODY_STATIC_FFC_1"
+   ]
+  },
+  {
+   "check": "W27_HUB_TO_MIC_REAR_L_6XAWG28 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W27_HUB_TO_MIC_REAR_R_6XAWG28 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": [
+    3.69,
+    "W47_CAMERA_BODY_STATIC_FFC_1"
+   ]
+  },
+  {
+   "check": "W28_AMP_TO_SPEAKER_TWISTED_2XAWG22 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W24_J9_1_TO_J8_4_GH6_CABLE vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": [
+    0.71,
+    "W47_STRIPPED_HDMI_INNER_PAIRS_E_03"
+   ]
+  },
+  {
+   "check": "W25_J10_2_TO_J9_2_GH6_CABLE vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": [
+    1.64,
+    "W47_CAMERA_BODY_STATIC_FFC_1"
+   ]
+  },
+  {
+   "check": "W41_FAN_TO_J9_4_GH2_CABLE vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "J6_PCB09_TO_REAR_BREAK_GH6_CABLE vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": [
+    3.26,
+    "W47_STRIPPED_HDMI_INNER_PAIRS_E_02"
+   ]
+  }
+ ]
+}

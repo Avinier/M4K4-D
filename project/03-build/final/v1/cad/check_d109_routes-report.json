@@ -1,0 +1,608 @@
+{
+ "script": "check_d109_routes",
+ "passed": 95,
+ "total": 95,
+ "rows": [
+  {
+   "check": "box T1_JBAT_AFT clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T1_POS_SPLICE_SIDE clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T1_SPLICE_TO_XT30 clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T1_XT30_UP clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T1_XT30_LOW clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T1_M1_M6_FRONT clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T1_M1_M6_GAP clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T1_TO_STARS clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T1_STARS_TO_JCH clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T2_STARS_FWD clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T2_M5_TO_S5 clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T2_W10_FROM_M4 clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T2_W10_TO_DROP clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T2_W10_TRAY_DROP clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T2_W11_UP_FROM_SS34 clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T2_W11_FWD clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T2_W11_DROP clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T2_W11_UNDER_J10_1 clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T3_JS18_AFT clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T3_S5_TO_RISER clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T3_RISER clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T3_TO_J8_1 clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T3_TO_PCB08_J6 clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T3_J6_PAD_DROP clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T4_W24_UP clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T4_W24_MINUS_Y clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T4_W24_ACROSS_X clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T4_W24_TO_J8_4 clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T4_W25_J10_2_UP clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T4_W25_CHANNEL clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T4_W25_RISE clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T4_W25_TO_FRONT clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T45_FRONT_RIGHT_CORRIDOR clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T4_W25_TO_J9_2 clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T4_W41_A clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T4_W41_B clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T4_J6_RISE clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T4_J6_SHIFT clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T4_J6_AFT clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T4_J6_DROP clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_W26_UP clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_W26_OVER clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_FL clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_FR_JOG clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_FR_DOWN clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_MINUS_Y_GAP clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_RR_DROP clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_RL_AFT clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_RL_OUT clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_W28_A clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_W28_B clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_W12_CROSS clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_W12_UNDER_PY clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_W12_PY_RISE clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_W12_PY_FWD clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_W12_JOG clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_W12_TO_AMP clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T5_W12_AMP_PINS clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T6_BREAK_TO_M6 clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T6_BREAK_FWD clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T6_PASS_KEEPOUT clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T6_TO_BUFFER clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T6_MUSHROOM_TO_BUFFER clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T6_BUFFER_TO_M1 clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "chain W03r",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W03r-",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W04",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W05 M1",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W05 M6",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W05 stars",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W05c",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W05b M4",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W05b M5",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W10",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W05s",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W11",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W11 J10-1",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W14",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W13",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W17",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W24",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W25",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W41",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain J6 lead",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W44",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W40 sense",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W40 switch",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W40 M1",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W26",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W27 FL",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W27 FR",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W27 RL",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W27 RR",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W28",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  },
+  {
+   "check": "chain W12",
+   "ok": true,
+   "gaps": [],
+   "start": true,
+   "end": true
+  }
+ ]
+}

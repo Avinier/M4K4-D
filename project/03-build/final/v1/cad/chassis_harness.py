@@ -79,12 +79,16 @@ def _shift(points, dx=0., dy=0., dz=0.):
     return [(x + dx, y + dy, z + dz) for x, y, z in points]
 
 
+LAST_PATHS = {}   # label -> centreline points of the last build (harness_cut_list.py)
+
+
 def build_chassis_harness(entry):
     groups = {name: [] for name in (
         "Pack and balance", "Fused and switched distribution", "Drive and motor",
         "Head supply from tub", "Chassis control signals", "Chassis sensors")}
 
     def wire(group, label, points, radius, colour):
+        LAST_PATHS[label] = [tuple(map(float, p)) for p in points]
         groups[group].append(entry._tag(_tube(points, radius), label, colour))
 
     def pair(group, stem, chain, awg, radius, colours=("#cf413a", "#30343a")):

@@ -1,0 +1,1122 @@
+{
+ "script": "check_body_endpoints",
+ "passed": 47,
+ "total": 47,
+ "rows": [
+  {
+   "check": "endpoint J_BAT_BODY",
+   "ok": true,
+   "label": "J_BAT_MICROFIT_PLUS_1X2_RECEPTACLE_HALF",
+   "matches": 1,
+   "mouth": [
+    -19.5,
+    -26.85,
+    62.0
+   ],
+   "direction": [
+    -1,
+    0,
+    0
+   ],
+   "wires": "W03r",
+   "box": [
+    -19.5,
+    -31.0,
+    57.0,
+    -8.5,
+    -22.7,
+    67.0
+   ]
+  },
+  {
+   "check": "endpoint J_CHASSIS_BODY",
+   "ok": true,
+   "label": "J_CHASSIS_MICROFIT_PLUS_1X2_RECEPTACLE_HALF",
+   "matches": 1,
+   "mouth": [
+    -19.5,
+    26.85,
+    62.0
+   ],
+   "direction": [
+    -1,
+    0,
+    0
+   ],
+   "wires": "W05c",
+   "box": [
+    -19.5,
+    22.7,
+    57.0,
+    -8.5,
+    31.0,
+    67.0
+   ]
+  },
+  {
+   "check": "endpoint J_S18_H_BODY",
+   "ok": true,
+   "label": "J_S18_H_MICROFIT3_1X2_RECEPTACLE_HALF",
+   "matches": 1,
+   "mouth": [
+    -3.0,
+    -42.0,
+    64.4
+   ],
+   "direction": [
+    -1,
+    0,
+    0
+   ],
+   "wires": "W13",
+   "box": [
+    -3.0,
+    -45.5,
+    59.4,
+    6.5,
+    -38.5,
+    69.4
+   ]
+  },
+  {
+   "check": "endpoint J_S18_Y_BODY",
+   "ok": true,
+   "label": "J_S18_Y_MICROFIT3_1X2_RECEPTACLE_HALF",
+   "matches": 1,
+   "mouth": [
+    -3.0,
+    -34.5,
+    64.4
+   ],
+   "direction": [
+    -1,
+    0,
+    0
+   ],
+   "wires": "W17",
+   "box": [
+    -3.0,
+    -38.0,
+    59.4,
+    6.5,
+    -31.0,
+    69.4
+   ]
+  },
+  {
+   "check": "endpoint CHARGE_SPLICE_POS",
+   "ok": true,
+   "label": "CHARGE_SPLICE_HEATSHRUNK_AWG16",
+   "matches": 1,
+   "mouth": [
+    -45.6,
+    -34.0,
+    88.0
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W03r W04 W05",
+   "box": [
+    -49.1,
+    -37.5,
+    62.0,
+    -42.1,
+    -30.5,
+    88.0
+   ]
+  },
+  {
+   "check": "endpoint STAR_POS",
+   "ok": true,
+   "label": "SWITCHED_STAR_POS_AWG16_SPLICE",
+   "matches": 1,
+   "mouth": [
+    -31.75,
+    12.0,
+    74.25
+   ],
+   "direction": [
+    0,
+    1,
+    0
+   ],
+   "wires": "W05 W05c W05b",
+   "box": [
+    -35.0,
+    -12.0,
+    71.0,
+    -28.5,
+    12.0,
+    77.5
+   ]
+  },
+  {
+   "check": "endpoint STAR_NEG",
+   "ok": true,
+   "label": "SWITCHED_STAR_NEG_AWG16_SPLICE",
+   "matches": 1,
+   "mouth": [
+    -25.25,
+    12.0,
+    74.25
+   ],
+   "direction": [
+    0,
+    1,
+    0
+   ],
+   "wires": "W05 W05c W05b",
+   "box": [
+    -28.5,
+    -12.0,
+    71.0,
+    -22.0,
+    12.0,
+    77.5
+   ]
+  },
+  {
+   "check": "endpoint M1",
+   "ok": true,
+   "label": "M1_POLOLU_2813_PUSHBUTTON_POWER_SWITCH_HP_STEP",
+   "matches": 1,
+   "mouth": [
+    -44.118,
+    -1.599,
+    82.34
+   ],
+   "direction": [
+    0,
+    1,
+    0
+   ],
+   "wires": "W05 W40",
+   "box": [
+    -46.1,
+    -27.0,
+    72.18,
+    -42.13,
+    -1.6,
+    92.5
+   ]
+  },
+  {
+   "check": "endpoint M6",
+   "ok": true,
+   "label": "M6_INA226_PARTS_ENVELOPE_UNMEASURED",
+   "matches": 1,
+   "mouth": [
+    -41.5,
+    13.75,
+    82.25
+   ],
+   "direction": [
+    1,
+    0,
+    0
+   ],
+   "wires": "W05 W44",
+   "box": [
+    -44.5,
+    3.0,
+    74.0,
+    -41.5,
+    24.5,
+    90.5
+   ]
+  },
+  {
+   "check": "endpoint BUTTON_BUFFER",
+   "ok": true,
+   "label": "M1_REAR_BUTTON_BUFFER_CAD_RESERVE",
+   "matches": 1,
+   "mouth": [
+    -36.5,
+    -15.0,
+    97.0
+   ],
+   "direction": [
+    1,
+    0,
+    0
+   ],
+   "wires": "W40 J6",
+   "box": [
+    -43.5,
+    -18.5,
+    94.0,
+    -36.5,
+    -11.5,
+    100.0
+   ]
+  },
+  {
+   "check": "endpoint XT30",
+   "ok": true,
+   "label": "M12_XT30U_FEMALE_CHARGE_PORT",
+   "matches": 1,
+   "mouth": [
+    -45.5,
+    -8.0,
+    64.0
+   ],
+   "direction": [
+    1,
+    0,
+    0
+   ],
+   "wires": "W04",
+   "box": [
+    -61.5,
+    -13.1,
+    61.4,
+    -45.5,
+    -2.9,
+    66.6
+   ]
+  },
+  {
+   "check": "endpoint MUSHROOM",
+   "ok": true,
+   "label": "POWER_BUTTON_MUSHROOM_RED_MUSHROOM_HEAD",
+   "matches": 12,
+   "mouth": [
+    -28.2,
+    0.0,
+    105.5
+   ],
+   "direction": [
+    1,
+    0,
+    0
+   ],
+   "wires": "W40",
+   "box": [
+    -61.0,
+    -12.6,
+    92.9,
+    -28.2,
+    12.6,
+    118.1
+   ]
+  },
+  {
+   "check": "endpoint M4",
+   "ok": true,
+   "label": "M4_POLOLU_4082_S13V30F5_PI5_STEP",
+   "matches": 1,
+   "mouth": [
+    -7.57,
+    9.159,
+    69.924
+   ],
+   "direction": [
+    0,
+    0,
+    -1
+   ],
+   "wires": "W05b W10|W05s",
+   "box": [
+    -19.0,
+    -3.34,
+    69.92,
+    3.86,
+    21.66,
+    79.5
+   ]
+  },
+  {
+   "check": "endpoint M5",
+   "ok": true,
+   "label": "M5_POLOLU_4082_S13V30F5_SHARED_5V_STEP",
+   "matches": 1,
+   "mouth": [
+    -7.57,
+    -22.659,
+    69.924
+   ],
+   "direction": [
+    0,
+    0,
+    -1
+   ],
+   "wires": "W05b W05s|W10",
+   "box": [
+    -19.0,
+    -35.16,
+    69.92,
+    3.86,
+    -10.16,
+    79.5
+   ]
+  },
+  {
+   "check": "endpoint PI_USBC",
+   "ok": true,
+   "label": "PI5_POWER_USBC_RIGHT_ANGLE_PLUG_RESERVE",
+   "matches": 1,
+   "mouth": [
+    -0.1,
+    -41.2,
+    92.2
+   ],
+   "direction": [
+    0,
+    0,
+    -1
+   ],
+   "wires": "W10",
+   "box": [
+    -6.2,
+    -47.8,
+    92.2,
+    6.0,
+    -34.6,
+    100.2
+   ]
+  },
+  {
+   "check": "endpoint J10_1",
+   "ok": true,
+   "label": "C3_J10_1_MICROFIT3_2P_MATED_PLUG",
+   "matches": 1,
+   "mouth": [
+    62.0,
+    -51.8,
+    78.6
+   ],
+   "direction": [
+    0,
+    0,
+    -1
+   ],
+   "wires": "W11",
+   "box": [
+    56.0,
+    -56.8,
+    78.6,
+    68.0,
+    -46.8,
+    88.26
+   ]
+  },
+  {
+   "check": "endpoint J10_2",
+   "ok": true,
+   "label": "C3_J10_2_GHR06_MATED_PLUG",
+   "matches": 1,
+   "mouth": [
+    1.03,
+    -51.0,
+    88.525
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W25",
+   "box": [
+    -3.35,
+    -52.6,
+    84.37,
+    5.41,
+    -49.4,
+    88.53
+   ]
+  },
+  {
+   "check": "endpoint J9_1",
+   "ok": true,
+   "label": "C0_J9_1_JST_GH_SM06B_HEADER",
+   "matches": 2,
+   "mouth": [
+    41.575,
+    38.125,
+    112.3
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W24",
+   "box": [
+    36.2,
+    34.05,
+    108.05,
+    46.95,
+    42.2,
+    112.3
+   ]
+  },
+  {
+   "check": "endpoint J9_2",
+   "ok": true,
+   "label": "C0_J9_2_JST_GH_BM06B_HEADER",
+   "matches": 2,
+   "mouth": [
+    52.375,
+    26.475,
+    115.45
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W25",
+   "box": [
+    47.0,
+    24.0,
+    108.05,
+    57.75,
+    28.95,
+    115.45
+   ]
+  },
+  {
+   "check": "endpoint J9_3",
+   "ok": true,
+   "label": "C0_J9_3_JST_GH_BM10B_HEADER",
+   "matches": 2,
+   "mouth": [
+    54.875,
+    32.975,
+    115.45
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W26",
+   "box": [
+    47.0,
+    30.5,
+    108.05,
+    62.75,
+    35.45,
+    115.45
+   ]
+  },
+  {
+   "check": "endpoint J9_4",
+   "ok": true,
+   "label": "C0_LINK_ADAPTER_J94_FAN_XH2_PLUG_RESERVE",
+   "matches": 1,
+   "mouth": [
+    41.0,
+    27.0,
+    121.0
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W41",
+   "box": [
+    37.0,
+    24.0,
+    108.0,
+    45.0,
+    30.0,
+    121.0
+   ]
+  },
+  {
+   "check": "endpoint FAN",
+   "ok": true,
+   "label": "ENCLOSURE_FAN_3010_BLACK_30MM_FRAME_FOUR_MOUNTING_HOLES",
+   "matches": 11,
+   "mouth": [
+    32.5,
+    63.9,
+    110.0
+   ],
+   "direction": [
+    1,
+    0,
+    0
+   ],
+   "wires": "W41",
+   "box": [
+    2.5,
+    58.9,
+    95.0,
+    32.5,
+    68.9,
+    125.0
+   ]
+  },
+  {
+   "check": "endpoint HUB_MIC_HEADERS",
+   "ok": true,
+   "label": "D109_W27_FOUR_2X3_MIC_HEADERS_MATED_ENVELOPE",
+   "matches": 1,
+   "mouth": [
+    49.0,
+    49.25,
+    111.0
+   ],
+   "direction": [
+    -1,
+    0,
+    0
+   ],
+   "wires": "W27",
+   "box": [
+    49.0,
+    40.5,
+    100.0,
+    63.2,
+    58.0,
+    122.0
+   ]
+  },
+  {
+   "check": "endpoint HUB_W26_PADS",
+   "ok": true,
+   "label": "D109_AUDIO_HUB_V2_PERFBOARD",
+   "matches": 1,
+   "mouth": [
+    64.0,
+    49.25,
+    122.5
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W26",
+   "box": [
+    63.2,
+    40.0,
+    99.5,
+    64.8,
+    58.5,
+    122.5
+   ]
+  },
+  {
+   "check": "endpoint SPEAKER_BREAK",
+   "ok": true,
+   "label": "D109_W28_SPEAKER_INLINE_BREAK_ENVELOPE",
+   "matches": 1,
+   "mouth": [
+    82.0,
+    33.0,
+    102.5
+   ],
+   "direction": [
+    1,
+    0,
+    0
+   ],
+   "wires": "W28",
+   "box": [
+    74.0,
+    30.0,
+    100.0,
+    82.0,
+    36.0,
+    105.0
+   ]
+  },
+  {
+   "check": "endpoint CHARGE_SPLICE_NEG",
+   "ok": true,
+   "label": "D109_CHARGE_SPLICE_NEG_AWG16_ENVELOPE",
+   "matches": 1,
+   "mouth": [
+    -37.5,
+    -34.0,
+    84.0
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W03r W04 W05",
+   "box": [
+    -40.75,
+    -37.25,
+    70.0,
+    -34.25,
+    -30.75,
+    84.0
+   ]
+  },
+  {
+   "check": "endpoint SHARED_5V_POS",
+   "ok": true,
+   "label": "D109_SHARED_5V_POS_SPLICE_ENVELOPE",
+   "matches": 1,
+   "mouth": [
+    -4.0,
+    -38.2,
+    77.6
+   ],
+   "direction": [
+    1,
+    0,
+    0
+   ],
+   "wires": "W05s W11 W12 W14",
+   "box": [
+    -20.0,
+    -40.7,
+    75.1,
+    -4.0,
+    -35.7,
+    80.1
+   ]
+  },
+  {
+   "check": "endpoint SHARED_5V_NEG",
+   "ok": true,
+   "label": "D109_SHARED_5V_NEG_SPLICE_ENVELOPE",
+   "matches": 1,
+   "mouth": [
+    -4.0,
+    -43.4,
+    77.6
+   ],
+   "direction": [
+    1,
+    0,
+    0
+   ],
+   "wires": "W05s W11 W12 W14",
+   "box": [
+    -20.0,
+    -45.9,
+    75.1,
+    -4.0,
+    -40.9,
+    80.1
+   ]
+  },
+  {
+   "check": "endpoint SS34",
+   "ok": true,
+   "label": "D109_W11_SS34_POTTED_JOINT_ENVELOPE",
+   "matches": 1,
+   "mouth": [
+    12.0,
+    -38.5,
+    78.5
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W11",
+   "box": [
+    3.0,
+    -41.5,
+    72.5,
+    21.0,
+    -35.5,
+    78.5
+   ]
+  },
+  {
+   "check": "endpoint REAR_BREAK",
+   "ok": true,
+   "label": "D109_J6_REAR_BREAK_MICROFIT3_1X6_MATED_ENVELOPE",
+   "matches": 1,
+   "mouth": [
+    -40.5,
+    14.0,
+    97.75
+   ],
+   "direction": [
+    0,
+    -1,
+    0
+   ],
+   "wires": "J6 W40 W44",
+   "box": [
+    -45.5,
+    14.0,
+    94.0,
+    -35.5,
+    35.0,
+    101.5
+   ]
+  },
+  {
+   "check": "endpoint AMP",
+   "ok": true,
+   "label": "M8_MAX98357A_BOARD_UNMEASURED",
+   "matches": 1,
+   "mouth": [
+    70.6,
+    49.5,
+    102.0
+   ],
+   "direction": [
+    0,
+    0,
+    -1
+   ],
+   "wires": "W12",
+   "box": [
+    69.8,
+    40.6,
+    102.0,
+    71.4,
+    58.4,
+    121.4
+   ]
+  },
+  {
+   "check": "endpoint AMP_TERMINAL",
+   "ok": true,
+   "label": "M8_SPEAKER_SCREW_TERMINAL_UNMEASURED",
+   "matches": 1,
+   "mouth": [
+    79.9,
+    49.5,
+    117.6
+   ],
+   "direction": [
+    1,
+    0,
+    0
+   ],
+   "wires": "W28",
+   "box": [
+    71.4,
+    46.0,
+    113.8,
+    79.9,
+    53.0,
+    121.4
+   ]
+  },
+  {
+   "check": "endpoint SPEAKER",
+   "ok": true,
+   "label": "SPEAKER_K50WP_MAGNET",
+   "matches": 1,
+   "mouth": [
+    82.0,
+    0.0,
+    99.0
+   ],
+   "direction": [
+    -1,
+    0,
+    0
+   ],
+   "wires": "W28",
+   "box": [
+    82.0,
+    -13.0,
+    86.0,
+    88.5,
+    13.0,
+    112.0
+   ]
+  },
+  {
+   "check": "endpoint MIC_FRONT_L",
+   "ok": true,
+   "label": "M9_INMP441_FRONT_L_PIGTAIL_RESERVE",
+   "matches": 1,
+   "mouth": [
+    44.0,
+    70.3,
+    123.0
+   ],
+   "direction": [
+    0,
+    -1,
+    0
+   ],
+   "wires": "W27",
+   "box": [
+    37.0,
+    70.3,
+    121.0,
+    51.0,
+    71.3,
+    125.0
+   ]
+  },
+  {
+   "check": "endpoint MIC_FRONT_R",
+   "ok": true,
+   "label": "M9_INMP441_FRONT_R_PIGTAIL_RESERVE",
+   "matches": 1,
+   "mouth": [
+    44.0,
+    -70.3,
+    123.0
+   ],
+   "direction": [
+    0,
+    1,
+    0
+   ],
+   "wires": "W27",
+   "box": [
+    37.0,
+    -71.3,
+    121.0,
+    51.0,
+    -70.3,
+    125.0
+   ]
+  },
+  {
+   "check": "endpoint MIC_REAR_L",
+   "ok": true,
+   "label": "M9_INMP441_REAR_L_PIGTAIL_RESERVE",
+   "matches": 1,
+   "mouth": [
+    -12.0,
+    70.3,
+    113.0
+   ],
+   "direction": [
+    0,
+    -1,
+    0
+   ],
+   "wires": "W27",
+   "box": [
+    -19.0,
+    70.3,
+    111.0,
+    -5.0,
+    71.3,
+    115.0
+   ]
+  },
+  {
+   "check": "endpoint MIC_REAR_R",
+   "ok": true,
+   "label": "M9_INMP441_REAR_R_PIGTAIL_RESERVE",
+   "matches": 1,
+   "mouth": [
+    -12.0,
+    -70.3,
+    113.0
+   ],
+   "direction": [
+    0,
+    1,
+    0
+   ],
+   "wires": "W27",
+   "box": [
+    -19.0,
+    -71.3,
+    111.0,
+    -5.0,
+    -70.3,
+    115.0
+   ]
+  },
+  {
+   "check": "endpoint J8_1",
+   "ok": true,
+   "label": "FIXED:J8_1",
+   "matches": 1,
+   "mouth": [
+    -32.42,
+    -35.5,
+    117.5
+   ],
+   "direction": [
+    -1,
+    0,
+    0
+   ],
+   "wires": "W13 W14",
+   "box": [
+    -32.42,
+    -42.1,
+    114.0,
+    -24.42,
+    -28.9,
+    121.0
+   ]
+  },
+  {
+   "check": "endpoint J8_4",
+   "ok": true,
+   "label": "FIXED:J8_4",
+   "matches": 1,
+   "mouth": [
+    -4.3,
+    -24.8,
+    124.85
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W24",
+   "box": [
+    -8.68,
+    -26.88,
+    117.85,
+    0.07,
+    -22.73,
+    124.85
+   ]
+  },
+  {
+   "check": "endpoint J8_8",
+   "ok": true,
+   "label": "FIXED:J8_8",
+   "matches": 1,
+   "mouth": [
+    -16.0,
+    -23.355,
+    126.55
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W15",
+   "box": [
+    -20.0,
+    -25.86,
+    119.55,
+    -12.0,
+    -20.86,
+    126.55
+   ]
+  },
+  {
+   "check": "endpoint PCB08_J6_PADS",
+   "ok": true,
+   "label": "FIXED:PCB08_J6_PADS",
+   "matches": 1,
+   "mouth": [
+    -6.0,
+    -43.5,
+    113.565
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W17",
+   "box": [
+    -8.5,
+    -45.0,
+    112.03,
+    -3.5,
+    -42.0,
+    113.56
+   ]
+  },
+  {
+   "check": "endpoint PCB08_BOARD",
+   "ok": true,
+   "label": "FIXED:PCB08_BOARD",
+   "matches": 1,
+   "mouth": [
+    -5.0,
+    -33.5,
+    113.565
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "-",
+   "box": [
+    -22.0,
+    -46.0,
+    112.03,
+    12.0,
+    -21.0,
+    113.56
+   ]
+  },
+  {
+   "check": "endpoint J8_9",
+   "ok": true,
+   "label": "FIXED:J8_9",
+   "matches": 1,
+   "mouth": [
+    22.42,
+    -36.0,
+    117.5
+   ],
+   "direction": [
+    1,
+    0,
+    0
+   ],
+   "wires": "W47",
+   "box": [
+    14.42,
+    -42.6,
+    114.0,
+    22.42,
+    -29.4,
+    121.0
+   ]
+  },
+  {
+   "check": "endpoint J8_10",
+   "ok": true,
+   "label": "FIXED:J8_10",
+   "matches": 1,
+   "mouth": [
+    -6.0,
+    -35.0,
+    124.85
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W47",
+   "box": [
+    -8.07,
+    -39.38,
+    117.85,
+    -3.92,
+    -30.62,
+    124.85
+   ]
+  },
+  {
+   "check": "stale POWER_BUTTON_W40_LEAD_RESERVE_\\d removed",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "stale PI5_POWER_PIGTAIL_DROP_RESERVE removed",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "stale HARNESS_HEAD_RISER_\\w+ removed",
+   "ok": true,
+   "hits": []
+  }
+ ]
+}

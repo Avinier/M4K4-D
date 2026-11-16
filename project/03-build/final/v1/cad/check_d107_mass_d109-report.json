@@ -1,0 +1,749 @@
+{
+ "script": "check_d107_mass_d109",
+ "passed": 2,
+ "total": 3,
+ "rows": [
+  {
+   "check": "mass_rows",
+   "ok": true,
+   "rows": [
+    [
+     "cassette stator removed",
+     -4.5037,
+     [
+      15.7832,
+      0.3376,
+      124.8333
+     ],
+     "E CAD volume \u00d7 PETG 1.20"
+    ],
+    [
+     "cassette FFCs removed",
+     -4.5,
+     [
+      16,
+      0,
+      127
+     ],
+     "E D-044 register allowance"
+    ],
+    [
+     "PCB14 x3 and six sockets removed",
+     -3.93,
+     [
+      16,
+      -1,
+      142.3
+     ],
+     "E D-052 register: 3\u00d70.51 + 6\u00d70.4"
+    ],
+    [
+     "source PCB14 rotor posts removed",
+     -0.6016,
+     [
+      16.0,
+      0.2011,
+      140.1598
+     ],
+     "E exact edited-minus-source volume"
+    ],
+    [
+     "cassette screws removed",
+     -0.6,
+     [
+      16,
+      0,
+      135
+     ],
+     "E three M2\u00d76"
+    ],
+    [
+     "PCB08 rev B replaces existing allowance",
+     3.2158,
+     [
+      -5,
+      -33.5,
+      116
+     ],
+     "E measured FR4 core + two 1.5 g Micro-Fits + two .25 g GH + .4 g SPOX + .02 g R1 + .42 g isolated inner fills; replaces 3 g plus D-095 header"
+    ],
+    [
+     "body camera cradle",
+     1.2103,
+     [
+      53.0,
+      -24.619,
+      119.9662
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "body strain relief",
+     2.5039,
+     [
+      34.2138,
+      -24.3173,
+      119.8257
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "PCB08 edge cradle",
+     9.7621,
+     [
+      19.8067,
+      -37.3665,
+      119.9578
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "PCB08 removable keeper",
+     0.0265,
+     [
+      6.8177,
+      -20.2026,
+      114.6
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "PCB08 keeper screw",
+     0.15,
+     [
+      6.5,
+      -19,
+      114
+     ],
+     "E M2\u00d74"
+    ],
+    [
+     "B0091 body board and static HDMI share",
+     10.8,
+     [
+      53.0,
+      -30.0,
+      113.0
+     ],
+     "E 4.3 g populated adapter + .5 g 150mm Pi FPC + 6 g of the HDMI lead"
+    ],
+    [
+     "M006 prior CSI allowance removed",
+     -8.0,
+     [
+      28.4187,
+      10,
+      254.5
+     ],
+     "E existing head mass-placement.json allowance"
+    ],
+    [
+     "B0091 head board, ribbon and HDMI share",
+     11.8,
+     [
+      -8.5813,
+      -20.0,
+      258.5
+     ],
+     "E 4.3 g adapter + .5 g static ribbon + 7 g HDMI share"
+    ],
+    [
+     "lower skin opening and collar",
+     0.0722,
+     [
+      8.0187,
+      0,
+      191.5
+     ],
+     "E exact signed CAD volume change at collar centre"
+    ],
+    [
+     "roof camera cradle",
+     2.6852,
+     [
+      -8.5813,
+      -20.5734,
+      265.369
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "head clamp jaw",
+     0.9621,
+     [
+      11.7378,
+      0.0,
+      193.627
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "disc bore bushing",
+     1.086,
+     [
+      16.0,
+      -0.0,
+      150.7058
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "rotor liner",
+     3.4452,
+     [
+      16.0,
+      0.0,
+      132.5112
+     ],
+     "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
+    ],
+    [
+     "head clamp screws and inserts",
+     0.7,
+     [
+      8.0187,
+      0,
+      193.5
+     ],
+     "E two M2\u00d78 plus two M2\u00d73 brass inserts"
+    ],
+    [
+     "head clamp silicone liners",
+     0.03,
+     [
+      8.0187,
+      0,
+      195.0
+     ],
+     "E two thin silicone half liners"
+    ],
+    [
+     "B0091 retaining ties",
+     0.1,
+     [
+      53.0,
+      -30.0,
+      113.0
+     ],
+     "E one 2.5 mm nylon tie"
+    ],
+    [
+     "B0091 head retaining tie",
+     0.1,
+     [
+      -8.5813,
+      -20.0,
+      258.5
+     ],
+     "E one 2.5 mm nylon tie"
+    ],
+    [
+     "D-109 W03r_JBAT_TO_CHARGE_SPLICE_POS_AWG16",
+     1.6,
+     [
+      -34.9,
+      -30.4,
+      76.8
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W03r_JBAT_TO_CHARGE_SPLICE_NEG_AWG16",
+     1.46,
+     [
+      -29.5,
+      -30.1,
+      73.5
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W04_CHARGE_SPLICES_TO_XT30_2XAWG16",
+     3.6,
+     [
+      -43.0,
+      -22.1,
+      75.5
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W05_POS_SPLICE_TO_M1_VIN_AWG16",
+     0.97,
+     [
+      -43.5,
+      -19.9,
+      84.5
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W05_M1_VOUT_TO_M6_INPLUS_AWG16",
+     0.69,
+     [
+      -41.8,
+      2.9,
+      82.4
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W05_M6_INMINUS_TO_POS_STAR_AWG16",
+     0.87,
+     [
+      -36.8,
+      8.3,
+      79.2
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W05c_STARS_TO_JCHASSIS_2XAWG16",
+     2.62,
+     [
+      -22.8,
+      21.1,
+      69.2
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W05b_STARS_TO_M4_2XAWG18",
+     0.9,
+     [
+      -18.5,
+      10.6,
+      72.4
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W05b_STARS_TO_M5_2XAWG18",
+     1.33,
+     [
+      -18.5,
+      -3.2,
+      72.4
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W10_M4_TO_PI5_USBC_2XAWG18",
+     2.18,
+     [
+      1.9,
+      -16.4,
+      80.0
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W05s_M5_TO_SHARED_5V_2XAWG18",
+     0.88,
+     [
+      -6.4,
+      -32.0,
+      74.0
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W11_SHARED_5V_TO_SS34_2XAWG22",
+     0.37,
+     [
+      4.7,
+      -38.4,
+      78.2
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W11_SS34_TO_C3_J10_1_2XAWG22",
+     0.75,
+     [
+      40.4,
+      -43.7,
+      79.6
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W14_SHARED_5V_TO_J8_1_4XAWG22",
+     1.9,
+     [
+      -28.0,
+      -39.4,
+      93.1
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W13_JS18H_TO_J8_1_HEAD_6V3_2XAWG20",
+     2.01,
+     [
+      -26.5,
+      -39.8,
+      88.5
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W17_JS18Y_TO_PCB08_J6_YAW_11V1_2XAWG20",
+     3.08,
+     [
+      -16.9,
+      -41.5,
+      95.6
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W12_SHARED_5V_TO_AMP_2XAWG22",
+     1.69,
+     [
+      43.0,
+      21.1,
+      92.1
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W24_J9_1_TO_J8_4_GH6_CABLE",
+     0.98,
+     [
+      19.2,
+      7.2,
+      116.8
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W25_J10_2_TO_J9_2_GH6_CABLE",
+     1.47,
+     [
+      41.6,
+      -28.0,
+      107.8
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W41_FAN_TO_J9_4_GH2_CABLE",
+     0.19,
+     [
+      36.2,
+      48.3,
+      118.2
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 J6_PCB09_TO_REAR_BREAK_GH6_CABLE",
+     1.45,
+     [
+      15.7,
+      22.4,
+      111.6
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W44_REAR_BREAK_TO_M6_4XAWG28",
+     0.22,
+     [
+      -41.0,
+      13.9,
+      91.1
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W40_REAR_BREAK_TO_BUTTON_BUFFER_2XAWG28",
+     0.23,
+     [
+      -32.8,
+      -0.2,
+      100.0
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W40_MUSHROOM_TO_BUTTON_BUFFER_2XAWG24",
+     0.18,
+     [
+      -32.8,
+      -9.8,
+      100.9
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W40_BUFFER_TO_M1_ON_OFF_3XAWG24",
+     0.27,
+     [
+      -39.8,
+      -10.8,
+      91.3
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W26_J9_3_TO_HUB_GH10_CABLE",
+     0.68,
+     [
+      58.3,
+      38.4,
+      120.6
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W27_HUB_TO_MIC_FRONT_L_6XAWG28",
+     0.71,
+     [
+      47.3,
+      56.5,
+      117.3
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W27_HUB_TO_MIC_FRONT_R_6XAWG28",
+     1.55,
+     [
+      53.8,
+      -30.5,
+      120.1
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W27_HUB_TO_MIC_REAR_L_6XAWG28",
+     1.11,
+     [
+      19.1,
+      55.6,
+      115.2
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W27_HUB_TO_MIC_REAR_R_6XAWG28",
+     2.02,
+     [
+      37.8,
+      -30.3,
+      118.6
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 W28_AMP_TO_SPEAKER_TWISTED_2XAWG22",
+     0.68,
+     [
+      81.2,
+      23.6,
+      105.4
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 ties and sleeve",
+     3.0,
+     [
+      -3.3,
+      -11.3,
+      91.1
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 D109_CHARGE_SPLICE_NEG_AWG16_ENVELOPE",
+     1.5,
+     [
+      -37.5,
+      -34.0,
+      77.0
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 D109_SHARED_5V_POS_SPLICE_ENVELOPE",
+     1.2,
+     [
+      -12.0,
+      -38.2,
+      77.6
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 D109_SHARED_5V_NEG_SPLICE_ENVELOPE",
+     1.2,
+     [
+      -12.0,
+      -43.4,
+      77.6
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 D109_W11_SS34_POTTED_JOINT_ENVELOPE",
+     0.8,
+     [
+      12.0,
+      -38.5,
+      75.5
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 D109_J6_REAR_BREAK_MICROFIT3_1X6_MATED_ENVELOPE",
+     1.6,
+     [
+      -40.5,
+      24.5,
+      97.8
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 D109_AUDIO_HUB_V2_PERFBOARD",
+     0.0,
+     [
+      64.0,
+      49.2,
+      111.0
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 D109_W27_FOUR_2X3_MIC_HEADERS_MATED_ENVELOPE",
+     2.4,
+     [
+      56.1,
+      49.2,
+      111.0
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 D109_W28_SPEAKER_INLINE_BREAK_ENVELOPE",
+     0.4,
+     [
+      78.0,
+      33.0,
+      102.5
+     ],
+     "E routed body harness (check_d109_mass)"
+    ],
+    [
+     "D-109 share of HARNESS_AND_FASTENERS allowance",
+     -50.74,
+     [
+      20.0,
+      0.0,
+      88.0
+     ],
+     "E"
+    ]
+   ],
+   "net_delta_g": 26.5141,
+   "retained_allowances": "M008 C2 20 g; M020 wires and fanout 15 g; neither double counted",
+   "note": "D/E estimates only; D-095 baseline before D-104/105; full 360\u00b0 yaw and actual 1\u00b0 pitch/roll centroid sweep"
+  },
+  {
+   "check": "mass_and_tipping",
+   "ok": true,
+   "steel": {
+    "mass_g": 2655.0447,
+    "com_mm": [
+     18.2268,
+     0.6069,
+     110.2092
+    ],
+    "worst_yaw_a_tip": 1.6163,
+    "pose_yaw_pitch_roll": [
+     29,
+     -19,
+     -21
+    ],
+    "margin_pct": 2.1506,
+    "poses": 1068120,
+    "method": "actual frame centroids over 1 degree pitch/roll grid to hard stops, full 360 degree yaw"
+   },
+   "copper": {
+    "mass_g": 2666.0894,
+    "com_mm": [
+     18.4578,
+     0.6044,
+     109.9287
+    ],
+    "worst_yaw_a_tip": 1.6411,
+    "pose_yaw_pitch_roll": [
+     29,
+     -19,
+     -21
+    ],
+    "margin_pct": 3.7161,
+    "poses": 1068120,
+    "method": "actual frame centroids over 1 degree pitch/roll grid to hard stops, full 360 degree yaw"
+   },
+   "minimum": 1.5823,
+   "ballast_choice": "retain copper",
+   "required_margin_pct": 1.5,
+   "steel_release_margin_pct": 3.0
+  },
+  {
+   "check": "original_register_bound_and_camera_mass_sensitivity",
+   "ok": false,
+   "original_register_bound": {
+    "mass_g": 2655.0447,
+    "com_mm": [
+     18.2268,
+     0.6069,
+     110.2092
+    ],
+    "a_tip": 1.6224,
+    "worst_pose_a_tip": 1.5986,
+    "margin_pct": 1.0312,
+    "extra_camera_g": 0.0,
+    "method": "D095 original register bound, unchanged source-head radii; final delta centroids stationary"
+   },
+   "original_register_extra10g": {
+    "mass_g": 2665.0447,
+    "com_mm": [
+     18.1262,
+     0.5296,
+     110.7656
+    ],
+    "a_tip": 1.6054,
+    "worst_pose_a_tip": 1.5817,
+    "margin_pct": -0.0332,
+    "extra_camera_g": 10.0,
+    "method": "D095 original register bound, unchanged source-head radii; final delta centroids stationary"
+   },
+   "actual_moving_frame_extra10g": {
+    "mass_g": 2665.0447,
+    "com_mm": [
+     18.1262,
+     0.5296,
+     110.7656
+    ],
+    "worst_yaw_a_tip": 1.5988,
+    "pose_yaw_pitch_roll": [
+     17,
+     -25,
+     -21
+    ],
+    "margin_pct": 1.0476,
+    "poses": 1068120,
+    "method": "actual frame centroids over 1 degree pitch/roll grid to hard stops, full 360 degree yaw"
+   },
+   "steel_release_margin_pct": 3.0,
+   "original_register_extra10g_clears_3pct": false,
+   "physical_release": "HOLD: original register all10g-in-head sensitivity is below3%; weigh/dress actual cable and validate physical tipping",
+   "note": "PASS records nominal>=3%, moving-frame adverse>=3% and legacy adverse>=1.5% operating minimum; it does NOT assert every method/scenario clears3%"
+  }
+ ]
+}

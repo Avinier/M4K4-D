@@ -17,7 +17,7 @@ HERE=Path(__file__).resolve().parent
 
 
 def main():
-    e=C.load_entry();M=e._body;r=C.Report('check_d107_mass')
+    e=C.load_entry();M=e._body;r=C.Report('check_d107_mass_d109' if __import__('os').environ.get('MAKAD_D109_MASS') else 'check_d107_mass')
     rep={x['check']:x for x in json.loads((HERE/'check_d095_mass-report.json').read_text())['rows']}
     removed={n for n,g in rep['removed_rows']['rows']}
     base=[(n,g,tuple(c)) for n,g,c,_ in M.MASS_ROWS if n not in removed]
@@ -75,6 +75,14 @@ def main():
     # Retain the full 15 g M020 allowance for W47 and its internal fan-out.
     # This exceeds the copper/silicone estimate (~9.4 g for 350 mm of all
     # twelve wires) and includes plugs; no extra wire mass is added twice.
+    import os
+    if os.environ.get('MAKAD_D109_MASS'):
+        # D-109: routed body-harness rows (check_d109_mass) move out of the 95 g allowance.
+        d109=json.loads((HERE/'check_d109_mass-report.json').read_text())
+        d109=next(x for x in d109['rows'] if x['check']=='mass rows')['rows']
+        for n,g,c in d109:
+            add(f'D-109 {n}',g,tuple(c),'E routed body harness (check_d109_mass)')
+        add('D-109 share of HARNESS_AND_FASTENERS allowance',-sum(g for n,g,c in d109),(20.,0.,88.),'E')
     rows=base+[(n,g,c) for n,g,c,w in delta]
     bal=e.D105_BALLAST
     copper_g=M.BALLAST_BAR_G*(bal['density']/bal['was_density']-1)
