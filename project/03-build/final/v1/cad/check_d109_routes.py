@@ -5,8 +5,7 @@ import d109_routes as R
 from body_harness_endpoints import resolve
 
 IGNORE = ("HARNESS_", "M12_BALANCE_", "C3_CARRIER_TOP_ENTRY_SIGNAL_PLUG_LAYER_RESERVE", "CHARGE_SPLICE_AND_LEADS_RESERVE",
-          "YAW_JUNCTION_", "C0_LINK_ADAPTER_TOP_ENTRY_PLUG_RESERVE", "C0_LINK_ADAPTER_J91_PLUG_RESERVE",
-          "C3_CARRIER_EDGE_CONNECTOR_J101_RESERVE")  # plug lead reserves; J101 vs W11 exit is an open finding  # rev A PCB-08 parts; rev B comes from pcb_integration (FIXED obstacles below)
+          "YAW_JUNCTION_", "C0_LINK_ADAPTER_TOP_ENTRY_PLUG_RESERVE", "C0_LINK_ADAPTER_J91_PLUG_RESERVE")  # plug lead reserves  # rev A PCB-08 parts; rev B comes from pcb_integration (FIXED obstacles below)
 
 
 def touches(a, b, pad=0.5):

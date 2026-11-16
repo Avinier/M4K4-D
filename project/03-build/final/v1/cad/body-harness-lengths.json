@@ -1,6 +1,6 @@
 {
  "note": "E: CAD centreline + 2 x 15 mm terminations + body-lift/service slack; conductor mass only",
- "total_conductor_g_E": 38.6,
+ "total_conductor_g_E": 41.6,
  "wires": [
   {
    "chain": "W03r",
@@ -187,14 +187,14 @@
    "label": "W11_SS34_TO_C3_J10_1_2XAWG22",
    "cls": "power",
    "group": "Tray 5 V",
-   "cad_mm": 64.1,
+   "cad_mm": 80.4,
    "slack_mm": 0.0,
-   "cut_mm_E": 94,
-   "mass_g_E": 0.75,
+   "cut_mm_E": 110,
+   "mass_g_E": 0.88,
    "centroid": [
-    40.4,
-    -43.7,
-    79.6
+    50.9,
+    -45.9,
+    79.5
    ]
   },
   {
@@ -232,13 +232,13 @@
    "label": "W17_JS18Y_TO_PCB08_J6_YAW_11V1_2XAWG20",
    "cls": "power",
    "group": "Riser to PCB-08",
-   "cad_mm": 126.8,
+   "cad_mm": 126.9,
    "slack_mm": 100.0,
    "cut_mm_E": 257,
    "mass_g_E": 3.08,
    "centroid": [
     -16.9,
-    -41.5,
+    -41.7,
     95.6
    ]
   },
@@ -397,14 +397,14 @@
    "label": "W27_HUB_TO_MIC_FRONT_L_6XAWG28",
    "cls": "audio",
    "group": "Audio",
-   "cad_mm": 28.5,
+   "cad_mm": 130.6,
    "slack_mm": 40.0,
-   "cut_mm_E": 99,
-   "mass_g_E": 0.71,
+   "cut_mm_E": 201,
+   "mass_g_E": 1.44,
    "centroid": [
-    47.3,
-    56.5,
-    117.3
+    65.7,
+    56.3,
+    114.8
    ]
   },
   {
@@ -412,14 +412,14 @@
    "label": "W27_HUB_TO_MIC_FRONT_R_6XAWG28",
    "cls": "audio",
    "group": "Audio",
-   "cad_mm": 145.1,
+   "cad_mm": 240.3,
    "slack_mm": 40.0,
-   "cut_mm_E": 215,
-   "mass_g_E": 1.55,
+   "cut_mm_E": 310,
+   "mass_g_E": 2.23,
    "centroid": [
-    53.8,
-    -30.5,
-    120.1
+    67.3,
+    0.4,
+    116.2
    ]
   },
   {
@@ -427,13 +427,13 @@
    "label": "W27_HUB_TO_MIC_REAR_L_6XAWG28",
    "cls": "audio",
    "group": "Audio",
-   "cad_mm": 84.2,
+   "cad_mm": 199.2,
    "slack_mm": 40.0,
-   "cut_mm_E": 154,
-   "mass_g_E": 1.11,
+   "cut_mm_E": 269,
+   "mass_g_E": 1.94,
    "centroid": [
-    19.1,
-    55.6,
+    65.7,
+    56.2,
     115.2
    ]
   },
@@ -442,14 +442,14 @@
    "label": "W27_HUB_TO_MIC_REAR_R_6XAWG28",
    "cls": "audio",
    "group": "Audio",
-   "cad_mm": 210.5,
+   "cad_mm": 295.7,
    "slack_mm": 40.0,
-   "cut_mm_E": 281,
-   "mass_g_E": 2.02,
+   "cut_mm_E": 366,
+   "mass_g_E": 2.63,
    "centroid": [
-    37.8,
-    -30.3,
-    118.6
+    67.3,
+    0.5,
+    116.6
    ]
   },
   {

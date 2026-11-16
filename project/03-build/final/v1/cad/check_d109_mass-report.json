@@ -6,20 +6,20 @@
   {
    "check": "routed body harness within the 95 g allowance",
    "ok": true,
-   "routed_g": 50.8,
-   "allowance_left_for_fasteners_g": 44.2
+   "routed_g": 53.7,
+   "allowance_left_for_fasteners_g": 41.3
   },
   {
    "check": "tipping bound with routed body harness (informational)",
    "ok": true,
    "d_com_mm": [
-    -0.424,
-    -0.182,
-    0.058
+    -0.305,
+    -0.104,
+    0.084
    ],
    "d_equiv_mm": 18.58,
-   "a_tip_worst_bound": 1.6129,
-   "margin_pct_bound": 1.936,
+   "a_tip_worst_bound": 1.6249,
+   "margin_pct_bound": 2.693,
    "baseline_margin_pct": 4.5922,
    "note": "stationary bound, worst direction; not a re-run of the 1068120-pose sweep"
   },
@@ -137,11 +137,11 @@
     ],
     [
      "W11_SS34_TO_C3_J10_1_2XAWG22",
-     0.75,
+     0.88,
      [
-      40.4,
-      -43.7,
-      79.6
+      50.9,
+      -45.9,
+      79.5
      ]
     ],
     [
@@ -167,7 +167,7 @@
      3.08,
      [
       -16.9,
-      -41.5,
+      -41.7,
       95.6
      ]
     ],
@@ -263,38 +263,38 @@
     ],
     [
      "W27_HUB_TO_MIC_FRONT_L_6XAWG28",
-     0.71,
+     1.44,
      [
-      47.3,
-      56.5,
-      117.3
+      65.7,
+      56.3,
+      114.8
      ]
     ],
     [
      "W27_HUB_TO_MIC_FRONT_R_6XAWG28",
-     1.55,
+     2.23,
      [
-      53.8,
-      -30.5,
-      120.1
+      67.3,
+      0.4,
+      116.2
      ]
     ],
     [
      "W27_HUB_TO_MIC_REAR_L_6XAWG28",
-     1.11,
+     1.94,
      [
-      19.1,
-      55.6,
+      65.7,
+      56.2,
       115.2
      ]
     ],
     [
      "W27_HUB_TO_MIC_REAR_R_6XAWG28",
-     2.02,
+     2.63,
      [
-      37.8,
-      -30.3,
-      118.6
+      67.3,
+      0.5,
+      116.6
      ]
     ],
     [
@@ -310,9 +310,9 @@
      "ties and sleeve",
      3.0,
      [
-      -3.3,
-      -11.4,
-      91.1
+      5.3,
+      -6.0,
+      92.4
      ]
     ],
     [

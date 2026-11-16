@@ -359,11 +359,11 @@
     ],
     [
      "D-109 W11_SS34_TO_C3_J10_1_2XAWG22",
-     0.75,
+     0.88,
      [
-      40.4,
-      -43.7,
-      79.6
+      50.9,
+      -45.9,
+      79.5
      ],
      "E routed body harness (check_d109_mass)"
     ],
@@ -392,7 +392,7 @@
      3.08,
      [
       -16.9,
-      -41.5,
+      -41.7,
       95.6
      ],
      "E routed body harness (check_d109_mass)"
@@ -409,21 +409,21 @@
     ],
     [
      "D-109 W24_J9_1_TO_J8_4_GH6_CABLE",
-     0.98,
+     0.99,
      [
       19.2,
       7.2,
-      116.8
+      116.6
      ],
      "E routed body harness (check_d109_mass)"
     ],
     [
      "D-109 W25_J10_2_TO_J9_2_GH6_CABLE",
-     1.47,
+     1.48,
      [
       41.6,
-      -28.0,
-      107.8
+      -28.6,
+      108.0
      ],
      "E routed body harness (check_d109_mass)"
     ],
@@ -499,41 +499,41 @@
     ],
     [
      "D-109 W27_HUB_TO_MIC_FRONT_L_6XAWG28",
-     0.71,
+     1.44,
      [
-      47.3,
-      56.5,
-      117.3
+      65.7,
+      56.3,
+      114.8
      ],
      "E routed body harness (check_d109_mass)"
     ],
     [
      "D-109 W27_HUB_TO_MIC_FRONT_R_6XAWG28",
-     1.55,
+     2.23,
      [
-      53.8,
-      -30.5,
-      120.1
+      67.3,
+      0.4,
+      116.2
      ],
      "E routed body harness (check_d109_mass)"
     ],
     [
      "D-109 W27_HUB_TO_MIC_REAR_L_6XAWG28",
-     1.11,
+     1.94,
      [
-      19.1,
-      55.6,
+      65.7,
+      56.2,
       115.2
      ],
      "E routed body harness (check_d109_mass)"
     ],
     [
      "D-109 W27_HUB_TO_MIC_REAR_R_6XAWG28",
-     2.02,
+     2.63,
      [
-      37.8,
-      -30.3,
-      118.6
+      67.3,
+      0.5,
+      116.6
      ],
      "E routed body harness (check_d109_mass)"
     ],
@@ -551,9 +551,9 @@
      "D-109 ties and sleeve",
      3.0,
      [
-      -3.3,
-      -11.3,
-      91.1
+      5.3,
+      -6.0,
+      92.4
      ],
      "E routed body harness (check_d109_mass)"
     ],
@@ -639,7 +639,7 @@
     ],
     [
      "D-109 share of HARNESS_AND_FASTENERS allowance",
-     -50.74,
+     -53.74,
      [
       20.0,
       0.0,
@@ -658,34 +658,34 @@
    "steel": {
     "mass_g": 2655.0447,
     "com_mm": [
-     18.2268,
-     0.6069,
-     110.2092
+     18.3456,
+     0.6844,
+     110.2357
     ],
-    "worst_yaw_a_tip": 1.6163,
+    "worst_yaw_a_tip": 1.6265,
     "pose_yaw_pitch_roll": [
      29,
      -19,
      -21
     ],
-    "margin_pct": 2.1506,
+    "margin_pct": 2.7945,
     "poses": 1068120,
     "method": "actual frame centroids over 1 degree pitch/roll grid to hard stops, full 360 degree yaw"
    },
    "copper": {
     "mass_g": 2666.0894,
     "com_mm": [
-     18.4578,
-     0.6044,
-     109.9287
+     18.5762,
+     0.6815,
+     109.955
     ],
-    "worst_yaw_a_tip": 1.6411,
+    "worst_yaw_a_tip": 1.6512,
     "pose_yaw_pitch_roll": [
      29,
      -19,
      -21
     ],
-    "margin_pct": 3.7161,
+    "margin_pct": 4.3586,
     "poses": 1068120,
     "method": "actual frame centroids over 1 degree pitch/roll grid to hard stops, full 360 degree yaw"
    },
@@ -700,43 +700,43 @@
    "original_register_bound": {
     "mass_g": 2655.0447,
     "com_mm": [
-     18.2268,
-     0.6069,
-     110.2092
+     18.3456,
+     0.6844,
+     110.2357
     ],
-    "a_tip": 1.6224,
-    "worst_pose_a_tip": 1.5986,
-    "margin_pct": 1.0312,
+    "a_tip": 1.6326,
+    "worst_pose_a_tip": 1.6088,
+    "margin_pct": 1.675,
     "extra_camera_g": 0.0,
     "method": "D095 original register bound, unchanged source-head radii; final delta centroids stationary"
    },
    "original_register_extra10g": {
     "mass_g": 2665.0447,
     "com_mm": [
-     18.1262,
-     0.5296,
-     110.7656
+     18.2446,
+     0.6067,
+     110.792
     ],
-    "a_tip": 1.6054,
-    "worst_pose_a_tip": 1.5817,
-    "margin_pct": -0.0332,
+    "a_tip": 1.6155,
+    "worst_pose_a_tip": 1.5918,
+    "margin_pct": 0.6052,
     "extra_camera_g": 10.0,
     "method": "D095 original register bound, unchanged source-head radii; final delta centroids stationary"
    },
    "actual_moving_frame_extra10g": {
     "mass_g": 2665.0447,
     "com_mm": [
-     18.1262,
-     0.5296,
-     110.7656
+     18.2446,
+     0.6067,
+     110.792
     ],
-    "worst_yaw_a_tip": 1.5988,
+    "worst_yaw_a_tip": 1.6089,
     "pose_yaw_pitch_roll": [
      17,
      -25,
      -21
     ],
-    "margin_pct": 1.0476,
+    "margin_pct": 1.6864,
     "poses": 1068120,
     "method": "actual frame centroids over 1 degree pitch/roll grid to hard stops, full 360 degree yaw"
    },

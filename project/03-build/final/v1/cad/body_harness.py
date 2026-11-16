@@ -98,9 +98,21 @@ def cached_ends(path=Path(__file__).with_name("check_body_endpoints-report.json"
     return out
 
 
+def shell_dressed():
+    """{chain: polyline} of the W27 runs clipped to the shell skin (study_d109_mic_leads.py)."""
+    path = Path(__file__).with_name("d109-mic-leads.json")
+    if not path.exists():
+        return {}
+    return {f"W27 {n[0]}{n.split('_')[1]}": [tuple(p) for p in d["points"]]
+            for n, d in json.loads(path.read_text()).items()}
+
+
 def build_body_harness(entry, ends=None):
     ends = ends or cached_ends()
     groups = {}
+    for chain, pts in shell_dressed().items():
+        groups.setdefault("Audio, shell-dressed", []).append(
+            entry._tag(_tube(pts, 1.2), WIRES[chain][0].replace("_6XAWG28", "_SHELL_RUN_6XAWG28"), "#9b74c2"))
     for chain, pts in paths(entry, ends).items():
         label, r, colour, _, group, _ = WIRES[chain]
         groups.setdefault(group, []).append(entry._tag(_tube(pts, r), label, colour))
@@ -112,7 +124,7 @@ def write_lengths(entry, ends, path=Path(__file__).with_name("body-harness-lengt
     for chain, pts in paths(entry, ends).items():
         label, _, _, cls, group, gpm = WIRES[chain]
         a, _, z = R.CHAINS[chain]
-        cad = length(pts)
+        cad = length(pts) + (length(shell_dressed()[chain]) if chain in shell_dressed() else 0.0)
         slack = sum(BODY_LIFT_SLACK for e in (a, z) if e and e.endswith("_BODY")) + SERVICE.get(chain, 0.0)
         cut = cad + 2 * TERMINATION + slack
         mass = cut / 1000 * gpm

@@ -1,6 +1,6 @@
 {
  "script": "check_d109_service",
- "passed": 10,
+ "passed": 13,
  "total": 13,
  "rows": [
   {
@@ -11,103 +11,20 @@
   },
   {
    "check": "shell lift: W27 FR plug draws back along its route",
-   "ok": false,
-   "constrictions": [
-    [
-     "T45_FRONT_RIGHT_CORRIDOR",
-     [
-      3.5,
-      8.0,
-      91.0
-     ]
-    ],
-    [
-     "T5_FR_JOG",
-     [
-      4.0,
-      6.0,
-      8.7
-     ]
-    ],
-    [
-     "T5_FR_DOWN",
-     [
-      2.5,
-      6.0,
-      24.3
-     ]
-    ],
-    [
-     "T5_MINUS_Y_GAP",
-     [
-      3.7,
-      4.5,
-      77.8
-     ]
-    ]
-   ],
+   "ok": true,
+   "constrictions": [],
    "note": "OPEN if failing: resolve in the D-037 shell mock-up (smaller plug, reroute, or wider gap)"
   },
   {
    "check": "shell lift: W27 RL plug draws back along its route",
-   "ok": false,
-   "constrictions": [
-    [
-     "T5_RL_AFT",
-     [
-      3.5,
-      5.5,
-      63.0
-     ]
-    ]
-   ],
+   "ok": true,
+   "constrictions": [],
    "note": "OPEN if failing: resolve in the D-037 shell mock-up (smaller plug, reroute, or wider gap)"
   },
   {
    "check": "shell lift: W27 RR plug draws back along its route",
-   "ok": false,
-   "constrictions": [
-    [
-     "T45_FRONT_RIGHT_CORRIDOR",
-     [
-      3.5,
-      8.0,
-      91.0
-     ]
-    ],
-    [
-     "T5_FR_JOG",
-     [
-      4.0,
-      6.0,
-      8.7
-     ]
-    ],
-    [
-     "T5_FR_DOWN",
-     [
-      2.5,
-      6.0,
-      24.3
-     ]
-    ],
-    [
-     "T5_MINUS_Y_GAP",
-     [
-      3.7,
-      4.5,
-      77.8
-     ]
-    ],
-    [
-     "T5_RR_DROP",
-     [
-      4.2,
-      14.0,
-      14.0
-     ]
-    ]
-   ],
+   "ok": true,
+   "constrictions": [],
    "note": "OPEN if failing: resolve in the D-037 shell mock-up (smaller plug, reroute, or wider gap)"
   },
   {
@@ -169,7 +86,7 @@
     122.4
    ],
    "need_mm_E": 111.4,
-   "cad_plus_service_mm": 226.8,
+   "cad_plus_service_mm": 226.9,
    "note": "J-S18-Y unplugged on the deck, riser ties released first"
   }
  ]

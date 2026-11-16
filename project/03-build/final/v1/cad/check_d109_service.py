@@ -43,7 +43,7 @@ def main():
             b = R.box(entry, n)
             sides = sorted(b[2 * i + 1] - b[2 * i] for i in range(3))
             # the plug travels along the box's longest side; the other two are its section
-            if not (sides[0] >= PLUG_SECTION[0] and sides[1] >= PLUG_SECTION[1]):
+            if not (sides[0] >= PLUG_SECTION[0] - 0.01 and sides[1] >= PLUG_SECTION[1] - 0.01):
                 tight.append((n, [round(v, 1) for v in sides]))
         r.check(f"shell lift: {chain} plug draws back along its route", not tight, constrictions=tight,
                 note="OPEN if failing: resolve in the D-037 shell mock-up (smaller plug, reroute, or wider gap)")

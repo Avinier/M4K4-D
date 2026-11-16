@@ -1,0 +1,107 @@
+{
+ "script": "check_d109_mic_leads",
+ "passed": 16,
+ "total": 16,
+ "rows": [
+  {
+   "check": "FRONT_L lead clear of the shell skin",
+   "ok": true,
+   "overlap": 0.0,
+   "gap": [
+    0.7071,
+    "BODY_SHELL"
+   ]
+  },
+  {
+   "check": "FRONT_L lead clear of mic parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "FRONT_L clips clear of the shell skin",
+   "ok": true,
+   "clips": 2,
+   "note": "clip base bonds to the skin: <= 0.3 mm3 contact allowed"
+  },
+  {
+   "check": "FRONT_L lead rides with the shell (0-140 mm)",
+   "ok": true,
+   "first_hit": null
+  },
+  {
+   "check": "FRONT_R lead clear of the shell skin",
+   "ok": true,
+   "overlap": 0.0,
+   "gap": [
+    0.7071,
+    "BODY_SHELL"
+   ]
+  },
+  {
+   "check": "FRONT_R lead clear of mic parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "FRONT_R clips clear of the shell skin",
+   "ok": true,
+   "clips": 2,
+   "note": "clip base bonds to the skin: <= 0.3 mm3 contact allowed"
+  },
+  {
+   "check": "FRONT_R lead rides with the shell (0-140 mm)",
+   "ok": true,
+   "first_hit": null
+  },
+  {
+   "check": "REAR_L lead clear of the shell skin",
+   "ok": true,
+   "overlap": 0.04,
+   "gap": [
+    0.0,
+    "BODY_SHELL"
+   ]
+  },
+  {
+   "check": "REAR_L lead clear of mic parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "REAR_L clips clear of the shell skin",
+   "ok": true,
+   "clips": 4,
+   "note": "clip base bonds to the skin: <= 0.3 mm3 contact allowed"
+  },
+  {
+   "check": "REAR_L lead rides with the shell (0-140 mm)",
+   "ok": true,
+   "first_hit": null
+  },
+  {
+   "check": "REAR_R lead clear of the shell skin",
+   "ok": true,
+   "overlap": 0.0,
+   "gap": [
+    0.864,
+    "BODY_SHELL"
+   ]
+  },
+  {
+   "check": "REAR_R lead clear of mic parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "REAR_R clips clear of the shell skin",
+   "ok": true,
+   "clips": 7,
+   "note": "clip base bonds to the skin: <= 0.3 mm3 contact allowed"
+  },
+  {
+   "check": "REAR_R lead rides with the shell (0-140 mm)",
+   "ok": true,
+   "first_hit": null
+  }
+ ]
+}

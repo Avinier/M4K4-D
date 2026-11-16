@@ -271,7 +271,7 @@
   {
    "check": "W27 FL no reversal",
    "ok": true,
-   "worst_turn_deg": 70.6
+   "worst_turn_deg": 86.5
   },
   {
    "check": "W27 FR vs assembly",
@@ -281,7 +281,7 @@
   {
    "check": "W27 FR no reversal",
    "ok": true,
-   "worst_turn_deg": 91.1
+   "worst_turn_deg": 90.0
   },
   {
    "check": "W27 RL vs assembly",
@@ -291,7 +291,7 @@
   {
    "check": "W27 RL no reversal",
    "ok": true,
-   "worst_turn_deg": 87.0
+   "worst_turn_deg": 86.5
   },
   {
    "check": "W27 RR vs assembly",
@@ -301,7 +301,7 @@
   {
    "check": "W27 RR no reversal",
    "ok": true,
-   "worst_turn_deg": 91.1
+   "worst_turn_deg": 92.3
   },
   {
    "check": "W28 vs assembly",
@@ -386,7 +386,7 @@
   {
    "check": "lengths written",
    "ok": true,
-   "total_conductor_g_E": 38.6,
+   "total_conductor_g_E": 41.6,
    "wires": 31
   }
  ]

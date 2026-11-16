@@ -59,13 +59,15 @@ Camera chain review: [verification](final/v1/d107-camera-verification.md) fails3
 CAD Levels 0–6 done ([review](05-harness/body-design-review.md)). Remaining:
 
 - [x] Service sweeps (10/13): tray, panel, body lift and PCB-08 pass
-- [ ] **Shell lift OPEN:** W27 FR/RR/RL hub plugs cannot pass their 2.5–3.7 mm passages; decide in the D-037 shell mock-up before printing the shell
+- [x] Shell lift: W27 shell-dressed (16/16, service 13/13)
+- [ ] Shell mock-up: adhesive cable clips on PETG and W27 dress, before printing the shell
 - [x] Body wires vs head harness, HDMI and camera FPC (31/31)
-- [x] Tie lugs: two fused on the frame print (`d109-tie-lugs.json`)
-- [ ] J10-1 lead exit vs the J101 reserve, on the received plug
+- [x] Tie lugs: none qualify; frame runs tie to each other/module cradles, shell runs use adhesive clips
+- [x] J10-1 lead exit: the J101 box is its own lead reserve
 - [ ] 2-way header at the button buffer for the W40 mushroom lead
+- [ ] Adhesive cable clips for the shell-dressed W27 (about 12)
 - [ ] Order samples: Molex C-Grid III 2×3 latching headers/housings ×4 + spares, Micro-Fit 3.0 1×6 inline pair with AWG26–28 contacts, 2-way speaker inline pair
 - [ ] Weigh the built harness; re-run `MAKAD_D109_MASS=1 check_d107_mass.py`; keep copper ballast until steel shows ≥ 3 %
 - [x] Rebuild `makad-v1.step` (inspection)
-- [ ] Rebuild the presentation STEP
+- [x] Rebuild the presentation STEP
 

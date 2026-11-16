@@ -123,11 +123,36 @@ class Leaf:
         return bbox_shape(self.box) if self.vendor else self.shape
 
 
-def droid_tree(entry=None, with_modules=True):
+def _drop(node, test):
+    kids = list(node.children) if getattr(node, "children", None) else []
+    if not kids:
+        return node
+    keep = [k for k in kids if not test(k.label or "")]
+    kept = [_drop(k, test) for k in keep]
+    if len(keep) == len(kids) and all(a is b for a, b in zip(kept, kids)):
+        return node                     # unchanged branch: keep it as is
+    out = Compound(label=node.label, children=kept)
+    out.location = node.location        # keep the group's placement
+    return out
+
+
+def _swap_pcb08_revb(tree, entry, body):
+    """D-109: the droid tree carried PCB-08's rev A placeholders (YAW_JUNCTION_*); the full build
+    swaps in rev B through pcb_integration. Do the same here so checks see the real board."""
+    import pcb_integration as P
+    tree = _drop(tree, lambda lab: lab.startswith("YAW_JUNCTION_"))
+    board = [P.installed_board(8, i, loc) for i, loc in P.placements(8, body, entry.HEAD_ORIGIN_IN_CHASSIS)][0]
+    plugs = P.pcb08_mated_plugs(board, body)
+    return Compound(children=[tree, Compound(label="PCB-08 yaw junction rev B", children=[board, *plugs])])
+
+
+def droid_tree(entry=None, with_modules=True, revb_pcb08=True):
     """(entry, tree, leaves) for the chassis + body trees with all droid edits and the bought modules."""
     entry = entry or load_entry()
     import body_v1_model as B
     tree = entry._apply_droid_cuts(Compound(children=[B.build_body_assembly(), B.chassis_v1_reference()]), strict=False)
+    if revb_pcb08:
+        tree = _swap_pcb08_revb(tree, entry, B)
     if with_modules:
         tree = Compound(children=[tree, entry.bought_modules()])
     log("droid tree built")

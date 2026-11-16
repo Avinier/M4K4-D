@@ -1,7 +1,7 @@
 {
  "script": "check_d109_routes",
- "passed": 95,
- "total": 95,
+ "passed": 96,
+ "total": 96,
  "rows": [
   {
    "check": "box T1_JBAT_AFT clear",
@@ -107,6 +107,12 @@
   },
   {
    "check": "box T2_W11_UNDER_J10_1 clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T2_W11_REAR_UP clear",
    "ok": true,
    "hits": [],
    "where": []
@@ -256,43 +262,43 @@
    "where": []
   },
   {
-   "check": "box T5_FL clear",
+   "check": "box T5_TAIL_IN_PY clear",
    "ok": true,
    "hits": [],
    "where": []
   },
   {
-   "check": "box T5_FR_JOG clear",
+   "check": "box T5_TAIL_IN_NY clear",
    "ok": true,
    "hits": [],
    "where": []
   },
   {
-   "check": "box T5_FR_DOWN clear",
+   "check": "box T5_TAIL_UP_NY clear",
    "ok": true,
    "hits": [],
    "where": []
   },
   {
-   "check": "box T5_MINUS_Y_GAP clear",
+   "check": "box T5_TAIL_CROSS_HIGH clear",
    "ok": true,
    "hits": [],
    "where": []
   },
   {
-   "check": "box T5_RR_DROP clear",
+   "check": "box T5_TAIL_UP clear",
    "ok": true,
    "hits": [],
    "where": []
   },
   {
-   "check": "box T5_RL_AFT clear",
+   "check": "box T5_TAIL_OVER_HUB clear",
    "ok": true,
    "hits": [],
    "where": []
   },
   {
-   "check": "box T5_RL_OUT clear",
+   "check": "box T5_TAIL_DOWN clear",
    "ok": true,
    "hits": [],
    "where": []

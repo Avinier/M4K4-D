@@ -1557,6 +1557,27 @@ def d109_tie_lugs():
     return out
 
 
+def d109_mic_lead_notches():
+    """D-109 F2: one box per W27 exit segment (d109-mic-leads.json notch points), 1.5 mm round the
+    lead, cut from the mic bosses; inboard of the skin's inner surface."""
+    import json
+    path = Path(__file__).resolve().with_name("d109-mic-leads.json")
+    out = []
+    for d in (json.loads(path.read_text()).values() if path.exists() else []):
+        pts = d["notch"]
+        for a, b in zip(pts[1:], pts[2:]):
+            lo = [min(a[i], b[i]) - 1.5 for i in range(3)]
+            hi = [max(a[i], b[i]) + 1.5 for i in range(3)]
+            out.append(_blk(lo[0], hi[0], lo[1], hi[1], lo[2], hi[2]))
+    return out
+
+
+def _notched(tool):
+    for box in d109_mic_lead_notches():
+        tool = tool - box
+    return tool
+
+
 def bought_modules():
     """The 'Bought modules' group: one subgroup per D-094 module (M1-M9, M12, M13) and the D-096 harness parts."""
     (m2, m3), (m4, m5) = tub_modules(), tray_modules()
@@ -1687,6 +1708,7 @@ DROID_CUTS = [
     *[(r"COMPUTE_TRAY", tool) for tool in tray_holes_cuts()],
     *[(r"REAR_SERVICE_PANEL_OCTAGONAL", tool) for tool in rear_panel_port_cuts()],
     *[(r"BODY_SHELL", tool) for tool in _MIC_CUTS],
+    *[(r"BODY_SHELL", tool) for tool in d109_mic_lead_notches()],   # D-109 F2: W27 exits through the mic bosses
     # D-101: the D-052 PCB-14 posts come off the rotor; the rebuilt ones are added below.
     *[(r"YAW_ROTOR_CLAMP_DRUM_AND_STOP_DOG", box) for box in d107_rotor_post_removals()],
     # D-102: M2 insert pockets where PCB-12's bosses meet the crossbar.
@@ -1734,7 +1756,7 @@ DROID_ADDS = [
     # D-095: the PCB-13 pocket, hole, relief and pilots filled round the new ports; the INMP441 bosses
     # (built with their own voids, so the cuts above stay open); the amp bracket on the front +Y post.
     (r"REAR_SERVICE_PANEL_OCTAGONAL", rear_panel_fill()),
-    *[(r"BODY_SHELL", tool) for tool in _MIC_ADDS],
+    *[(r"BODY_SHELL", _notched(tool)) for tool in _MIC_ADDS],   # D-109 F2: the W27 exit notches cut the added bosses too
     (r"BODY_FRAME_MAIN_PRINT", amp_bracket()),
     *[(r"BODY_FRAME_MAIN_PRINT", lug) for lug in d109_tie_lugs()],   # D-109 B-05
     # D-102: PCB-12 screw bosses on the rolling crossbar.

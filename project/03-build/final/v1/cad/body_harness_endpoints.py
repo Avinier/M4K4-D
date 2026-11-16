@@ -12,6 +12,13 @@ import re
 
 # name: (label regex, exit direction, wires)
 ENDPOINTS = {
+    # PCB-08 rev B mated plugs (module_checks swaps rev B into the droid tree, D-109)
+    "J8_1": (r"D107_PCB08_J8_1_MATED_PLUG_E", (-1, 0, 0), "W13 W14"),
+    "J8_4": (r"D107_PCB08_J8_4_MATED_PLUG_E", (0, 0, 1), "W24"),
+    "J8_8": (r"D107_PCB08_J8_8_MATED_PLUG_E", (0, 0, 1), "W15"),
+    "J8_9": (r"D107_PCB08_J8_9_MATED_PLUG_E", (1, 0, 0), "W47"),
+    "J8_10": (r"D107_PCB08_J8_10_MATED_PLUG_E", (0, 0, 1), "W47"),
+    "PCB08_BOARD": (r"PCB08_MAIN_06__pcb-08-yaw-junction_PCB", (0, 0, 1), "-"),
     # rear-bay power
     "J_BAT_BODY": (r"J_BAT_MICROFIT_PLUS_1X2_RECEPTACLE_HALF", (-1, 0, 0), "W03r"),
     "J_CHASSIS_BODY": (r"J_CHASSIS_MICROFIT_PLUS_1X2_RECEPTACLE_HALF", (-1, 0, 0), "W05c"),
@@ -29,7 +36,7 @@ ENDPOINTS = {
     "M4": (r"M4_POLOLU_4082_S13V30F5_\w+_STEP", (0, 0, -1), "W05b W10|W05s"),
     "M5": (r"M5_POLOLU_4082_S13V30F5_\w+_STEP", (0, 0, -1), "W05b W05s|W10"),
     "PI_USBC": (r"PI5_POWER_USBC_RIGHT_ANGLE_PLUG_RESERVE", (0, 0, -1), "W10"),
-    "J10_1": (r"C3_J10_1_MICROFIT3_2P_MATED_PLUG", (0, 0, -1), "W11"),   # +X exit blocked by the J101 reserve: leads turn down (open finding)
+    "J10_1": (r"C3_J10_1_MICROFIT3_2P_MATED_PLUG|C3_CARRIER_EDGE_CONNECTOR_J101_RESERVE", (1, 0, 0), "W11"),   # the "J101" box is J10-1's own plug/lead reserve (C3_POWER_PLUG_RESERVE)
     "J10_2": (r"\w*J10_2\w*MATED_PLUG\w*", (0, 0, 1), "W25"),
     # compute
     "J9_1": (r"C0_\w*J9_1\w*", (0, 0, 1), "W24"),
@@ -56,17 +63,28 @@ ENDPOINTS = {
     "MIC_REAR_R": (r"M9_INMP441_REAR_R_PIGTAIL_RESERVE", (0, 1, 0), "W27"),
 }
 
-# PCB-08 mated plugs (check_d107_body-report.json bounds, world mm) and exit directions.
+# PCB-08 rev B J6 bare pads (no solid in the board STEP).
 FIXED = {
-    "J8_1": ((-32.42, -42.1, 114.0, -24.42, -28.9, 121.0), (-1, 0, 0), "W13 W14"),
-    "J8_4": ((-8.675, -26.875, 117.85, 0.075, -22.725, 124.85), (0, 0, 1), "W24"),
-    "J8_8": ((-20.0, -25.855, 119.55, -12.0, -20.855, 126.55), (0, 0, 1), "W15"),
     # J6 bare pads at layout_pcb08.py PLACE (91.5, 144) -> world about (-6, -43.4): KiCad x - 97.5, 100.6 - KiCad y (from J3/J5)
     "PCB08_J6_PADS": ((-8.5, -45.0, 112.035, -3.5, -42.0, 113.565), (0, 0, 1), "W17"),
-    "PCB08_BOARD": ((-22.0, -46.0, 112.035, 12.0, -21.0, 113.565), (0, 0, 1), "-"),
-    "J8_9": ((14.42, -42.6, 114.0, 22.42, -29.4, 121.0), (1, 0, 0), "W47"),
-    "J8_10": ((-8.075, -39.375, 117.85, -3.925, -30.625, 124.85), (0, 0, 1), "W47"),
 }
+
+
+# W27 skin exits (shell-dressed leads, study_d109_mic_leads.py): 3 mm cubes at the exit points.
+def _skin_exits():
+    import json
+    from pathlib import Path
+    path = Path(__file__).resolve().with_name("d109-mic-leads.json")
+    if not path.exists():
+        return {}
+    out = {}
+    for name, d in json.loads(path.read_text()).items():
+        x, y, z = d["skin_exit"]
+        out[f"SKIN_EXIT_{name}"] = ((x - 1.5, y - 1.5, z - 1.5, x + 1.5, y + 1.5, z + 1.5), (1, 0, 0), "W27")
+    return out
+
+
+FIXED.update(_skin_exits())
 
 
 def mouth(box, direction):

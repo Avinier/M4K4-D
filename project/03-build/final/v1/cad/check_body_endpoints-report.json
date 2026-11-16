@@ -1,8 +1,158 @@
 {
  "script": "check_body_endpoints",
- "passed": 47,
- "total": 47,
+ "passed": 51,
+ "total": 51,
  "rows": [
+  {
+   "check": "endpoint J8_1",
+   "ok": true,
+   "label": "D107_PCB08_J8_1_MATED_PLUG_E",
+   "matches": 1,
+   "mouth": [
+    -32.42,
+    -35.5,
+    117.5
+   ],
+   "direction": [
+    -1,
+    0,
+    0
+   ],
+   "wires": "W13 W14",
+   "box": [
+    -32.42,
+    -42.1,
+    114.0,
+    -24.42,
+    -28.9,
+    121.0
+   ]
+  },
+  {
+   "check": "endpoint J8_4",
+   "ok": true,
+   "label": "D107_PCB08_J8_4_MATED_PLUG_E",
+   "matches": 1,
+   "mouth": [
+    -4.3,
+    -24.8,
+    124.85
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W24",
+   "box": [
+    -8.68,
+    -26.87,
+    117.85,
+    0.08,
+    -22.72,
+    124.85
+   ]
+  },
+  {
+   "check": "endpoint J8_8",
+   "ok": true,
+   "label": "D107_PCB08_J8_8_MATED_PLUG_E",
+   "matches": 1,
+   "mouth": [
+    -16.0,
+    -23.355,
+    126.55
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W15",
+   "box": [
+    -20.0,
+    -25.86,
+    119.55,
+    -12.0,
+    -20.85,
+    126.55
+   ]
+  },
+  {
+   "check": "endpoint J8_9",
+   "ok": true,
+   "label": "D107_PCB08_J8_9_MATED_PLUG_E",
+   "matches": 1,
+   "mouth": [
+    22.42,
+    -36.0,
+    117.5
+   ],
+   "direction": [
+    1,
+    0,
+    0
+   ],
+   "wires": "W47",
+   "box": [
+    14.42,
+    -42.6,
+    114.0,
+    22.42,
+    -29.4,
+    121.0
+   ]
+  },
+  {
+   "check": "endpoint J8_10",
+   "ok": true,
+   "label": "D107_PCB08_J8_10_MATED_PLUG_E",
+   "matches": 1,
+   "mouth": [
+    -6.0,
+    -35.0,
+    124.85
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "W47",
+   "box": [
+    -8.07,
+    -39.38,
+    117.85,
+    -3.92,
+    -30.62,
+    124.85
+   ]
+  },
+  {
+   "check": "endpoint PCB08_BOARD",
+   "ok": true,
+   "label": "PCB08_MAIN_06__pcb-08-yaw-junction_PCB",
+   "matches": 1,
+   "mouth": [
+    -5.0,
+    -33.5,
+    113.565
+   ],
+   "direction": [
+    0,
+    0,
+    1
+   ],
+   "wires": "-",
+   "box": [
+    -22.0,
+    -46.0,
+    112.03,
+    12.0,
+    -21.0,
+    113.57
+   ]
+  },
   {
    "check": "endpoint J_BAT_BODY",
    "ok": true,
@@ -382,25 +532,25 @@
    "check": "endpoint J10_1",
    "ok": true,
    "label": "C3_J10_1_MICROFIT3_2P_MATED_PLUG",
-   "matches": 1,
+   "matches": 2,
    "mouth": [
-    62.0,
-    -51.8,
-    78.6
+    74.0,
+    -51.65,
+    83.43
    ],
    "direction": [
+    1,
     0,
-    0,
-    -1
+    0
    ],
    "wires": "W11",
    "box": [
     56.0,
     -56.8,
-    78.6,
-    68.0,
-    -46.8,
-    88.26
+    77.93,
+    74.0,
+    -46.5,
+    88.93
    ]
   },
   {
@@ -929,81 +1079,6 @@
    ]
   },
   {
-   "check": "endpoint J8_1",
-   "ok": true,
-   "label": "FIXED:J8_1",
-   "matches": 1,
-   "mouth": [
-    -32.42,
-    -35.5,
-    117.5
-   ],
-   "direction": [
-    -1,
-    0,
-    0
-   ],
-   "wires": "W13 W14",
-   "box": [
-    -32.42,
-    -42.1,
-    114.0,
-    -24.42,
-    -28.9,
-    121.0
-   ]
-  },
-  {
-   "check": "endpoint J8_4",
-   "ok": true,
-   "label": "FIXED:J8_4",
-   "matches": 1,
-   "mouth": [
-    -4.3,
-    -24.8,
-    124.85
-   ],
-   "direction": [
-    0,
-    0,
-    1
-   ],
-   "wires": "W24",
-   "box": [
-    -8.68,
-    -26.88,
-    117.85,
-    0.07,
-    -22.73,
-    124.85
-   ]
-  },
-  {
-   "check": "endpoint J8_8",
-   "ok": true,
-   "label": "FIXED:J8_8",
-   "matches": 1,
-   "mouth": [
-    -16.0,
-    -23.355,
-    126.55
-   ],
-   "direction": [
-    0,
-    0,
-    1
-   ],
-   "wires": "W15",
-   "box": [
-    -20.0,
-    -25.86,
-    119.55,
-    -12.0,
-    -20.86,
-    126.55
-   ]
-  },
-  {
    "check": "endpoint PCB08_J6_PADS",
    "ok": true,
    "label": "FIXED:PCB08_J6_PADS",
@@ -1029,78 +1104,103 @@
    ]
   },
   {
-   "check": "endpoint PCB08_BOARD",
+   "check": "endpoint SKIN_EXIT_FRONT_L",
    "ok": true,
-   "label": "FIXED:PCB08_BOARD",
+   "label": "FIXED:SKIN_EXIT_FRONT_L",
    "matches": 1,
    "mouth": [
-    -5.0,
-    -33.5,
-    113.565
-   ],
-   "direction": [
-    0,
-    0,
-    1
-   ],
-   "wires": "-",
-   "box": [
-    -22.0,
-    -46.0,
-    112.03,
-    12.0,
-    -21.0,
-    113.56
-   ]
-  },
-  {
-   "check": "endpoint J8_9",
-   "ok": true,
-   "label": "FIXED:J8_9",
-   "matches": 1,
-   "mouth": [
-    22.42,
-    -36.0,
-    117.5
+    79.0,
+    73.46,
+    103.0
    ],
    "direction": [
     1,
     0,
     0
    ],
-   "wires": "W47",
+   "wires": "W27",
    "box": [
-    14.42,
-    -42.6,
-    114.0,
-    22.42,
-    -29.4,
-    121.0
+    76.0,
+    71.96,
+    101.5,
+    79.0,
+    74.96,
+    104.5
    ]
   },
   {
-   "check": "endpoint J8_10",
+   "check": "endpoint SKIN_EXIT_FRONT_R",
    "ok": true,
-   "label": "FIXED:J8_10",
+   "label": "FIXED:SKIN_EXIT_FRONT_R",
    "matches": 1,
    "mouth": [
-    -6.0,
-    -35.0,
-    124.85
+    79.0,
+    -73.46,
+    103.0
    ],
    "direction": [
+    1,
     0,
-    0,
-    1
+    0
    ],
-   "wires": "W47",
+   "wires": "W27",
    "box": [
-    -8.07,
-    -39.38,
-    117.85,
-    -3.92,
-    -30.62,
-    124.85
+    76.0,
+    -74.96,
+    101.5,
+    79.0,
+    -71.96,
+    104.5
+   ]
+  },
+  {
+   "check": "endpoint SKIN_EXIT_REAR_L",
+   "ok": true,
+   "label": "FIXED:SKIN_EXIT_REAR_L",
+   "matches": 1,
+   "mouth": [
+    79.0,
+    73.11,
+    106.0
+   ],
+   "direction": [
+    1,
+    0,
+    0
+   ],
+   "wires": "W27",
+   "box": [
+    76.0,
+    71.61,
+    104.5,
+    79.0,
+    74.61,
+    107.5
+   ]
+  },
+  {
+   "check": "endpoint SKIN_EXIT_REAR_R",
+   "ok": true,
+   "label": "FIXED:SKIN_EXIT_REAR_R",
+   "matches": 1,
+   "mouth": [
+    79.0,
+    -73.11,
+    106.0
+   ],
+   "direction": [
+    1,
+    0,
+    0
+   ],
+   "wires": "W27",
+   "box": [
+    76.0,
+    -74.61,
+    104.5,
+    79.0,
+    -71.61,
+    107.5
    ]
   },
   {

@@ -4,7 +4,7 @@
   "chassis": 3108,
   "head W47": 2988,
   "head fan-out": 403,
-  "body": 3585
+  "body": 3998
  },
  "rows": [
   {
@@ -458,9 +458,9 @@
   {
    "harness": "body",
    "label": "W11_SS34_TO_C3_J10_1_2XAWG22",
-   "cad_mm": 64.1,
-   "allowance_mm": 29.9,
-   "cut_mm_E": 94
+   "cad_mm": 80.4,
+   "allowance_mm": 29.6,
+   "cut_mm_E": 110
   },
   {
    "harness": "body",
@@ -479,8 +479,8 @@
   {
    "harness": "body",
    "label": "W17_JS18Y_TO_PCB08_J6_YAW_11V1_2XAWG20",
-   "cad_mm": 126.8,
-   "allowance_mm": 130.2,
+   "cad_mm": 126.9,
+   "allowance_mm": 130.1,
    "cut_mm_E": 257
   },
   {
@@ -556,30 +556,30 @@
   {
    "harness": "body",
    "label": "W27_HUB_TO_MIC_FRONT_L_6XAWG28",
-   "cad_mm": 28.5,
-   "allowance_mm": 70.5,
-   "cut_mm_E": 99
+   "cad_mm": 130.6,
+   "allowance_mm": 70.4,
+   "cut_mm_E": 201
   },
   {
    "harness": "body",
    "label": "W27_HUB_TO_MIC_FRONT_R_6XAWG28",
-   "cad_mm": 145.1,
-   "allowance_mm": 69.9,
-   "cut_mm_E": 215
+   "cad_mm": 240.3,
+   "allowance_mm": 69.7,
+   "cut_mm_E": 310
   },
   {
    "harness": "body",
    "label": "W27_HUB_TO_MIC_REAR_L_6XAWG28",
-   "cad_mm": 84.2,
+   "cad_mm": 199.2,
    "allowance_mm": 69.8,
-   "cut_mm_E": 154
+   "cut_mm_E": 269
   },
   {
    "harness": "body",
    "label": "W27_HUB_TO_MIC_REAR_R_6XAWG28",
-   "cad_mm": 210.5,
-   "allowance_mm": 70.5,
-   "cut_mm_E": 281
+   "cad_mm": 295.7,
+   "allowance_mm": 70.3,
+   "cut_mm_E": 366
   },
   {
    "harness": "body",

@@ -12,7 +12,7 @@
    "check": "no_new_material_outside_skin",
    "ok": true,
    "outside_mm3_source": 328.7824,
-   "outside_mm3_droid": 328.7643
+   "outside_mm3_droid": 328.7656
   },
   {
    "check": "FRONT_L_board_in_pocket",

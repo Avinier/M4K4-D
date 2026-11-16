@@ -12,7 +12,7 @@ from module_checks import face_boxes
 
 
 def main():
-    entry,tree,leaves=C.droid_tree()
+    entry,tree,leaves=C.droid_tree(revb_pcb08=False)   # this check installs rev B itself
     report=C.Report('check_d107_body')
     loc=P.placements(8,entry._body,entry.HEAD_ORIGIN_IN_CHASSIS)[0][1]
     board=P.installed_board(8,'MAIN',loc)

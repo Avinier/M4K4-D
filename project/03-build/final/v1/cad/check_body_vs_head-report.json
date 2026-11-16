@@ -1,8 +1,32 @@
 {
  "script": "check_body_vs_head",
- "passed": 31,
- "total": 31,
+ "passed": 35,
+ "total": 35,
  "rows": [
+  {
+   "check": "W27_HUB_TO_MIC_FRONT_L_SHELL_RUN_6XAWG28 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W27_HUB_TO_MIC_FRONT_R_SHELL_RUN_6XAWG28 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W27_HUB_TO_MIC_REAR_L_SHELL_RUN_6XAWG28 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
+  {
+   "check": "W27_HUB_TO_MIC_REAR_R_SHELL_RUN_6XAWG28 vs head harness",
+   "ok": true,
+   "hits": [],
+   "nearest": null
+  },
   {
    "check": "W03r_JBAT_TO_CHARGE_SPLICE_POS_AWG16 vs head harness",
    "ok": true,
@@ -149,7 +173,7 @@
    "ok": true,
    "hits": [],
    "nearest": [
-    3.69,
+    18.24,
     "W47_CAMERA_BODY_STATIC_FFC_1"
    ]
   },
@@ -164,7 +188,7 @@
    "ok": true,
    "hits": [],
    "nearest": [
-    3.69,
+    18.24,
     "W47_CAMERA_BODY_STATIC_FFC_1"
    ]
   },

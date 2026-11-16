@@ -193,7 +193,7 @@ The corrected collar is at head-local X−50.4,Y0,Z6, with a 34×30.2 mm undersi
 
 ### 4.4 Body harness (D-109, 2026-11-15)
 
-`final/v1/cad/body_harness.py` adds `Harness → Body wires` beside the head and chassis wires: 31 outer envelopes along the D-109 route chains (`d109_routes.py`), with D-109 placement envelopes for the − charge splice, shared-5 V splices, potted SS34, J6 rear break (Micro-Fit 3.0 1×6), audio hub v2 with four 2×3 latching mic headers, and the W28 speaker break. Checks: endpoints 47/47, placements 8/8, routes 95/95, wires 77/77, vs head harness 31/31, service 10/13 (shell-lift plug passage OPEN); [design review](body-design-review.md). One cut list for all three harnesses: `final/v1/cad/harness-cut-list.csv` (`harness_cut_list.py`). These are **body-side** lengths: chassis portions of W13/W17/W05c are in §4.1. Cut = centreline + 2 × 15 mm terminations + body-lift slack (40 mm per body-lift end) + service allowance (W04 panel 52.4, W27 shell 40, J6 tray 30, W17 PCB-08 removal 60). All `E`; string-route and record `W` lengths on the built robot.
+`final/v1/cad/body_harness.py` adds `Harness → Body wires` beside the head and chassis wires: 31 outer envelopes along the D-109 route chains (`d109_routes.py`), with D-109 placement envelopes for the − charge splice, shared-5 V splices, potted SS34, J6 rear break (Micro-Fit 3.0 1×6), audio hub v2 with four 2×3 latching mic headers, and the W28 speaker break. Checks: endpoints 47/47, placements 8/8, routes 95/95, wires 77/77, vs head harness 35/35, service 13/13, shell-dressed mic leads 16/16; [design review](body-design-review.md). One cut list for all three harnesses: `final/v1/cad/harness-cut-list.csv` (`harness_cut_list.py`). These are **body-side** lengths: chassis portions of W13/W17/W05c are in §4.1. Cut = centreline + 2 × 15 mm terminations + body-lift slack (40 mm per body-lift end) + service allowance (W04 panel 52.4, W27 shell 40, J6 tray 30, W17 PCB-08 removal 60). All `E`; string-route and record `W` lengths on the built robot.
 
 | Chain | CAD label | CAD centreline | Slack | Cut `E` |
 |---|---|---:|---:|---:|
@@ -209,7 +209,7 @@ The corrected collar is at head-local X−50.4,Y0,Z6, with a 34×30.2 mm undersi
 | `W10` | `W10_M4_TO_PI5_USBC_2XAWG18` | 91 | 0 | 121 |
 | `W05s` | `W05s_M5_TO_SHARED_5V_2XAWG18` | 19 | 0 | 49 |
 | `W11` | `W11_SHARED_5V_TO_SS34_2XAWG22` | 16 | 0 | 46 |
-| `W11 J10-1` | `W11_SS34_TO_C3_J10_1_2XAWG22` | 64 | 0 | 94 |
+| `W11 J10-1` | `W11_SS34_TO_C3_J10_1_2XAWG22` | 80 | 0 | 110 |
 | `W14` | `W14_SHARED_5V_TO_J8_1_4XAWG22` | 89 | 0 | 119 |
 | `W13` | `W13_JS18H_TO_J8_1_HEAD_6V3_2XAWG20` | 97 | 40 | 167 |
 | `W17` | `W17_JS18Y_TO_PCB08_J6_YAW_11V1_2XAWG20` | 127 | 100 | 257 |
@@ -223,13 +223,13 @@ The corrected collar is at head-local X−50.4,Y0,Z6, with a 34×30.2 mm undersi
 | `W40 switch` | `W40_MUSHROOM_TO_BUTTON_BUFFER_2XAWG24` | 23 | 0 | 53 |
 | `W40 M1` | `W40_BUFFER_TO_M1_ON_OFF_3XAWG24` | 24 | 0 | 54 |
 | `W26` | `W26_J9_3_TO_HUB_GH10_CABLE` | 27 | 0 | 57 |
-| `W27 FL` | `W27_HUB_TO_MIC_FRONT_L_6XAWG28` | 28 | 40 | 99 |
-| `W27 FR` | `W27_HUB_TO_MIC_FRONT_R_6XAWG28` | 145 | 40 | 215 |
-| `W27 RL` | `W27_HUB_TO_MIC_REAR_L_6XAWG28` | 84 | 40 | 154 |
-| `W27 RR` | `W27_HUB_TO_MIC_REAR_R_6XAWG28` | 210 | 40 | 281 |
+| `W27 FL` | `W27_HUB_TO_MIC_FRONT_L_6XAWG28` | 131 | 40 | 201 |
+| `W27 FR` | `W27_HUB_TO_MIC_FRONT_R_6XAWG28` | 240 | 40 | 310 |
+| `W27 RL` | `W27_HUB_TO_MIC_REAR_L_6XAWG28` | 199 | 40 | 269 |
+| `W27 RR` | `W27_HUB_TO_MIC_REAR_R_6XAWG28` | 296 | 40 | 366 |
 | `W28` | `W28_AMP_TO_SPEAKER_TWISTED_2XAWG22` | 55 | 0 | 85 |
 
-Body conductors 38.6 g `E`; with ties and D-109 parts 50.7 g, replacing that share of the body's 95 g harness-and-fastener allowance. That rearward CoM shift brings the steel-ballast worst-pose tipping margin to 2.15 % (copper 3.72 %), so copper ballast is the release configuration ([review F1](body-design-review.md#findings)). M4/M5 keep their roles (B-03). W10 drops through the old Pi pigtail passage in the tray.
+Body conductors 41.6 g `E`; with ties and D-109 parts 50.7 g, replacing that share of the body's 95 g harness-and-fastener allowance. That CoM shift brings the steel-ballast worst-pose tipping margin to 2.79 % (copper 4.36 %), so copper ballast is the release configuration ([review F1](body-design-review.md#findings)). M4/M5 keep their roles (B-03). W10 drops through the old Pi pigtail passage in the tray.
 
 ## 5. Pinouts and polarity
 
@@ -310,8 +310,8 @@ The **11** body-lift plugs are counted *after* J-PK and PA pack removal. A fitte
 
 ### 7.2a Shell off and tray out (D-109)
 
-1. Front panel and speaker off: unplug the W28 inline break, then the four W27 mic plugs at hub v2 through the front aperture. W27 is dressed **untied** in its reserves so it can follow the shell. **OPEN:** the 2×3 plugs (5.6 × 8.1 mm `E`) cannot be drawn back through the 2.5–3.7 mm passages of FR, RR and RL (`check_d109_service`); resolve in the D-037 shell mock-up before printing.
-2. Lift the shell; the mic leads ride with it.
+1. Front panel and speaker off: unplug the W28 inline break, then the four W27 2×3 plugs at hub v2 through the front aperture. Each W27 lead is **clipped to the shell's inner skin** (adhesive cable clips) from its mic to the open front (X 77.5); only a ~0.2–0.3 m free tail runs over the hub bracket to the headers. Draw the four tails out through the front aperture.
+2. Lift the shell vertically; the mic leads ride with it (CAD sweep 0–140 mm clear).
 3. Tray out (front, 90 mm): speaker and W28 already off; open the J6 rear break (Micro-Fit 3.0 1×6 above M6); unplug W10 at the Pi and W24/W25/W26/W41 at PCB-09 (it leaves with the tray); slide the tray. Refit: mate J6 on the bench, slide, then close the rear break.
 
 ### 7.3 Head off

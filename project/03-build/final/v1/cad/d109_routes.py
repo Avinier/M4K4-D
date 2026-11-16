@@ -26,14 +26,15 @@ ROUTES = {
     "T2_W11_UP_FROM_SS34": (3.0, 21.0, -41.5, -35.5, 78.5, 84.4),
     "T2_W11_FWD": (3.0, 60.0, -46.0, -38.0, 80.0, 84.4),             # over the right motor inline pair (Z 80), under the tray
     "T2_W11_DROP": (56.0, 60.0, -46.5, -38.0, 74.5, 84.4),           # between the inline pair (X 56) and the tray column (X 60)
-    "T2_W11_UNDER_J10_1": (56.0, 68.0, -56.0, -46.5, 74.5, 78.6),    # J10-1's +X exit is blocked by the J101 reserve
+    "T2_W11_UNDER_J10_1": (56.0, 68.0, -56.0, -46.5, 74.5, 77.8),    # under the plug and its lead reserve (Z 77.9)
+    "T2_W11_REAR_UP": (68.0, 74.0, -56.0, -46.5, 74.5, 77.8),        # up into J10-1's lead reserve behind the plug
     # T3 -Y riser: W13, W14, W17 (behind the tray's rear edge, X -35.5)
     "T3_JS18_AFT": (-45.0, -12.0, -46.0, -38.0, 70.0, 75.0),
     "T3_S5_TO_RISER": (-45.0, -18.0, -46.0, -38.0, 74.5, 80.0),
     "T3_RISER": (-45.0, -40.0, -46.0, -38.0, 70.0, 117.5),         # shell above Z 117.8
     "T3_TO_J8_1": (-45.0, -32.42, -41.0, -29.0, 114.0, 117.5),
-    "T3_TO_PCB08_J6": (-45.0, -3.5, -44.8, -42.2, 115.0, 117.5),
-    "T3_J6_PAD_DROP": (-8.5, -3.5, -44.8, -42.2, 113.6, 117.5),
+    "T3_TO_PCB08_J6": (-45.0, -3.5, -45.4, -42.9, 115.0, 117.5),
+    "T3_J6_PAD_DROP": (-8.5, -3.5, -45.4, -42.9, 113.6, 117.5),
     # T4 compute: W24, W25, W41, J6 lead
     "T4_W24_UP": (33.0, 40.0, 36.5, 42.2, 112.3, 117.5),
     "T4_W24_MINUS_Y": (27.5, 35.5, -11.5, 42.2, 112.5, 117.5),       # between the yaw servo (X 26.1) and J9-4 (X 37); over the Pi
@@ -54,13 +55,16 @@ ROUTES = {
     # T5 audio: W26, W27 x4, W28, W12
     "T5_W26_UP": (54.0, 58.0, 30.5, 35.5, 115.45, 125.5),
     "T5_W26_OVER": (54.0, 64.8, 30.5, 50.0, 122.5, 125.5),
-    "T5_FL": (40.0, 49.0, 50.0, 70.3, 118.0, 125.0),
-    "T5_FR_JOG": (56.3, 65.0, -50.0, -46.0, 119.0, 125.0),
-    "T5_FR_DOWN": (56.3, 58.8, -70.3, -46.0, 119.0, 125.0),          # between PCB-10's +X end (56) and the frame post (59)
-    "T5_MINUS_Y_GAP": (-19.0, 58.8, -69.8, -66.1, 120.5, 125.0),
-    "T5_RR_DROP": (-19.0, -5.0, -70.3, -66.1, 111.0, 125.0),     # outboard of the PCB-10 uprights (Y -66), inside the mic seats
-    "T5_RL_AFT": (-14.0, 49.0, 50.5, 54.0, 117.0, 122.5),
-    "T5_RL_OUT": (-14.0, -5.0, 50.5, 70.3, 111.0, 122.5),
+    # W27 free tails (F2 fix): the leads are dressed on the shell skin (study_d109_mic_leads.py)
+    # to exits in the open front; only these tails move relative to the shell. Each box admits
+    # the 2x3 plug section (5.6 x 8.1, E) across its travel.
+    "T5_TAIL_IN_PY": (74.5, 80.1, 58.0, 74.0, 100.0, 110.0),        # from the +Y skin exits inboard, low
+    "T5_TAIL_IN_NY": (74.5, 80.1, -74.0, -58.0, 100.0, 110.0),
+    "T5_TAIL_UP_NY": (74.5, 80.1, -64.5, -56.0, 100.0, 132.0),       # inside the narrowing skin; 8.5 wide for the plug
+    "T5_TAIL_CROSS_HIGH": (74.5, 80.1, -64.5, 62.0, 123.5, 132.0),   # over the Pi/PCB-09 (X 78) and the amp terminal (Z 121.4); shell front wall at X 80.2
+    "T5_TAIL_UP": (74.5, 80.1, 53.2, 62.0, 106.0, 132.0),           # +Y of the amp terminal (Y 53)
+    "T5_TAIL_OVER_HUB": (53.6, 80.1, 41.0, 58.5, 123.5, 132.0),     # over the hub bracket and amp; frame lip at X < 53.5
+    "T5_TAIL_DOWN": (53.6, 62.0, 41.0, 58.5, 110.0, 132.0),         # down to the hub headers' mouths
     "T5_W28_A": (79.9, 84.0, 34.0, 53.0, 104.0, 119.0),
     "T5_W28_B": (78.0, 81.9, 10.0, 36.0, 100.0, 106.0),
     "T5_W12_CROSS": (5.5, 10.0, -46.0, 30.0, 78.0, 84.4),            # under the tray to beyond its +Y edge (23.5)
@@ -93,7 +97,7 @@ CHAINS = {
     "W10": ("M4", ["T2_W10_FROM_M4", "T5_W12_CROSS", "T2_W10_TO_DROP", "T2_W10_TRAY_DROP"], "PI_USBC"),
     "W05s": ("M5", ["T2_M5_TO_S5"], "SHARED_5V_POS"),
     "W11": ("SHARED_5V_POS", ["T2_M5_TO_S5"], "SS34"),
-    "W11 J10-1": ("SS34", ["T2_W11_UP_FROM_SS34", "T2_W11_FWD", "T2_W11_DROP", "T2_W11_UNDER_J10_1"], "J10_1"),
+    "W11 J10-1": ("SS34", ["T2_W11_UP_FROM_SS34", "T2_W11_FWD", "T2_W11_DROP", "T2_W11_UNDER_J10_1", "T2_W11_REAR_UP"], "J10_1"),
     "W14": ("SHARED_5V_POS", ["T2_M5_TO_S5", "T3_S5_TO_RISER", "T3_RISER", "T3_TO_J8_1"], "J8_1"),
     "W13": ("J_S18_H_BODY", ["D106:JS18_BODY_LEADS", "T3_JS18_AFT", "T3_RISER", "T3_TO_J8_1"], "J8_1"),
     "W17": ("J_S18_Y_BODY", ["D106:JS18_BODY_LEADS", "T3_JS18_AFT", "T3_RISER", "T3_TO_PCB08_J6", "T3_J6_PAD_DROP"], "PCB08_J6_PADS"),
@@ -107,10 +111,10 @@ CHAINS = {
     "W40 switch": ("MUSHROOM", ["T6_MUSHROOM_TO_BUFFER"], "BUTTON_BUFFER"),
     "W40 M1": ("BUTTON_BUFFER", ["T6_BUFFER_TO_M1"], "M1"),
     "W26": ("J9_3", ["T5_W26_UP", "T5_W26_OVER"], "HUB_W26_PADS"),
-    "W27 FL": ("HUB_MIC_HEADERS", ["T5_FL"], "MIC_FRONT_L"),
-    "W27 FR": ("HUB_MIC_HEADERS", ["T45_FRONT_RIGHT_CORRIDOR", "T5_FR_JOG", "T5_FR_DOWN", "T5_MINUS_Y_GAP"], "MIC_FRONT_R"),
-    "W27 RL": ("HUB_MIC_HEADERS", ["T5_RL_AFT", "T5_RL_OUT"], "MIC_REAR_L"),
-    "W27 RR": ("HUB_MIC_HEADERS", ["T45_FRONT_RIGHT_CORRIDOR", "T5_FR_JOG", "T5_FR_DOWN", "T5_MINUS_Y_GAP", "T5_RR_DROP"], "MIC_REAR_R"),
+    "W27 FL": ("HUB_MIC_HEADERS", ["T5_TAIL_DOWN", "T5_TAIL_OVER_HUB", "T5_TAIL_UP", "T5_TAIL_IN_PY"], "SKIN_EXIT_FRONT_L"),
+    "W27 FR": ("HUB_MIC_HEADERS", ["T5_TAIL_DOWN", "T5_TAIL_OVER_HUB", "T5_TAIL_CROSS_HIGH", "T5_TAIL_UP_NY", "T5_TAIL_IN_NY"], "SKIN_EXIT_FRONT_R"),
+    "W27 RL": ("HUB_MIC_HEADERS", ["T5_TAIL_DOWN", "T5_TAIL_OVER_HUB", "T5_TAIL_UP", "T5_TAIL_IN_PY"], "SKIN_EXIT_REAR_L"),
+    "W27 RR": ("HUB_MIC_HEADERS", ["T5_TAIL_DOWN", "T5_TAIL_OVER_HUB", "T5_TAIL_CROSS_HIGH", "T5_TAIL_UP_NY", "T5_TAIL_IN_NY"], "SKIN_EXIT_REAR_R"),
     "W28": ("AMP_TERMINAL", ["T5_W28_A", "T5_W28_B"], "SPEAKER"),
     "W12": ("SHARED_5V_POS", ["T2_M5_TO_S5", "T5_W12_CROSS", "T5_W12_UNDER_PY", "T5_W12_PY_RISE", "T5_W12_PY_FWD",
                               "T5_W12_JOG", "T5_W12_TO_AMP", "T5_W12_AMP_PINS"], "AMP"),

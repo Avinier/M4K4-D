@@ -17,7 +17,7 @@ HERE = Path(__file__).resolve().parent
 PRINTS = ("BODY_FRAME_MAIN_PRINT", "REAR_BAY_MODULE_PLATE")   # not the tray: it slides out
 WANT = ["T1_JBAT_AFT", "T1_M1_M6_FRONT", "T1_TO_STARS", "T2_W11_FWD", "T3_RISER",   # not T3_TO_PCB08_J6: a lug there blocks the J8-1 pull and PCB-08 removal (check_d107_body)
        
-        "T4_W24_MINUS_Y", "T4_W25_CHANNEL", "T4_J6_AFT", "T5_RL_AFT", "T5_W12_PY_FWD", "T5_FL"]
+        "T4_W24_MINUS_Y", "T4_W25_CHANNEL", "T4_J6_AFT", "T5_W12_PY_FWD"]   # W27 is shell-dressed (adhesive clips)
 LUG = (4.0, 4.0, 3.0)
 
 
