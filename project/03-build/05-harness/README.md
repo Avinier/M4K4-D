@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Electrical HOLD**, 2026-11-07: the D-093 low-pack coincident-load screen in §6 exceeds the assumed 13 A Micro-Fit+ contact rating and R010 shunt thermal allowance. No wire cut, crimped or tested. [D-096](../decisions.md#d-096) sets topology only; lengths are estimates |
+| Status | **Released for build with conditions**, 2026-11-15 ([D-108](../decisions.md#d-108)): the builder lifted the 2026-11-07 electrical HOLD, accepting the §6 ~16 A all-loads-stalled screen as unlikely. Conditions: W02P stays unbuilt until CH-103 tap protection; no R010 in the switched-bus path; one closed-body 30-minute normal-duty heat check of M1 (< 70 °C) at first power-up. No wire cut, crimped or tested yet; lengths are estimates |
 | Basis | [D-093](../decisions.md#d-093), [D-094](../decisions.md#d-094), [D-095](../decisions.md#d-095), [module selection](../module-selection.md), [simplification plan](../simplification-plan.md#44-harness), final-v1 CAD |
 | Scope | Installed body/chassis wiring and D107 W47 head wiring (§4.3) |
 | Evidence | `D` vendor/documented, `E` estimate, `U` verify on receipt, `W` measured. No `W` values yet |
