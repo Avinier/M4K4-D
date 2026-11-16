@@ -87,11 +87,11 @@ Resin is optional.
 
 | Material | Density, solid (g/cm³) | Look as printed | Heat (softens near) | Stiffness (GPa) | Used for | Status |
 |---|---|---|---|---|---|---|
-| **ASA** | 1.07 | Naturally dead matte; UV-stable; takes primer and paint well | ~95 °C | ~2.0 | Every visible skin: body shell and panels, head skins and covers, ear caps | **Proposed** (§3); body BOM records PETG today |
+| **ASA** | 1.07 | Naturally dead matte; UV-stable; takes primer and paint well | ~95 °C | ~2.0 | Every visible skin: body shell and panels, head skins and covers, ear caps | **Proposed** (§3); body BOM records PETG today. Spool chosen 2026-11-16: 3Idea white ASA, painted ([filament log #1](../../../04-print/filament-log.md)); brand approval pending |
 | **PETG** | 1.27 | Satin to gloss; layer lines visible; paint needs a primer | ~75 °C | ~2.0 | Hidden or working parts: chassis frame, wheel rims, keel parts, body frame, compute tray, the whole yaw stage | Recorded (D-017, D-033, D-044, body BOM) |
 | **TPU 95A** | 1.21 | Soft semi-matte rubber; reads as a real tyre | ~80 °C | — (flexible) | Tyres | Recorded (D-005); HOLD on the lab printing it |
 | **PLA** | 1.24 | Matte grades available; hides layer lines well | ~55 °C | ~3.5 (2.3 worst case) | Head frames, cradle and turntable disc (the parts the head FEA is based on) | Recorded in the head mass tree |
-| **CF-filled filament** | ~1.15–1.30, grade dependent | Matte, slightly textured; **black or dark grey only** for the stiff grades | Grade dependent: PLA-CF ~55 °C, PA-CF ~100 °C+ | Must be ≥ 4.5 along the layers | Head yoke legs | Recorded (D-049); grade not chosen, coupon open |
+| **CF-filled filament** | ~1.15–1.30, grade dependent | Matte, slightly textured; **black or dark grey only** for the stiff grades | Grade dependent: PLA-CF ~55 °C, PA-CF ~100 °C+ | Must be ≥ 4.5 along the layers | Head yoke legs | Recorded (D-049); grade proposed 2026-11-16: 3Idea PLA-CF black, below the 4.5 GPa target, so a bar test and a new decision come first ([filament log #8](../../../04-print/filament-log.md)) |
 | **Resin (tough / standard)** | ~1.15–1.20 | Smooth, no layer lines | ~50–60 °C (standard) | — | Small cosmetic head details only | Optional |
 
 ### What this means for the CAD
@@ -227,6 +227,14 @@ So four finishes carry **two values**:
   (`finish_colours.py` `PALETTE`) uses, tuned by eye in the cadgen viewer.
 - **Neutral-light value:** what the Fusion `makad-v1` appearances use, and the
   value to match filament or paint to (`NEUTRAL_LIGHT`).
+
+**As bought (2026-11-16).** Most palette colours are not sold in the right
+material, so the builder buys five spools and paints the rest; see the
+[filament log](../../../04-print/filament-log.md). Ivory, taupe and amber are paint on
+white ASA (the keel and bezel: paint on PETG); deep slate prints as grey PETG and dark
+grey PLA; slate blue and gunmetal wheel parts print grey, paint optional; carbon is
+black PLA-CF pending its bar test. The hex values below stay the paint and render
+targets.
 
 Judge colour in Fusion, or on a physical swatch. When buying, use the
 neutral-light value.

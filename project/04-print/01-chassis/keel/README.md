@@ -60,6 +60,23 @@ the TCRT looks down through the keel's sensor flat for cliffs and edges.
 - **Shims:** the bezel's outline, 1.2 mm thick (D-079), with the 11.8 × 7.6 mm cradle-clearance window and two Ø2.2 holes. The
   optical face sits on the bezel at Z 12.4 − total shim thickness: two give Z 10.
 
+### 1.3 Filament and finish (2026-11-16)
+
+Decision (builder): the keel and bezel stay **PETG** and are **painted taupe**, the same paint as the
+front and rear service panels, so the rear reads as one colour. No taupe PETG spool is bought.
+Spool choices are in [filament-log.md](../../filament-log.md).
+
+| Print | Material | Colour | Spool | Finish |
+|---|---|---|---|---|
+| Keel (CH-008) | PETG | taupe `#9D9886`, painted | Sunlu PETG grey, 1 kg, the structure spool ([log #3](../../filament-log.md#3-deep-slate-the-structure-petg-spool-2026-11-16)) | Primer, then matte taupe paint (the panel paint) |
+| TCRT bezel (CH-010) | PETG | taupe `#9D9886`, painted | Same | Same |
+| Wear shoe (CH-009), shims (CH-068) | PETG | deep slate | Same | Hidden: no finish work |
+
+Paint risks (proposed, not yet tried): keep paint **out of the bezel's 9 × 7.6 mm optical window and the
+sensor cradles**, because the TCRT sensor reads reflected infrared through them. Mask the J09A and J09B
+mating faces and the dovetail groove, since a coat there changes the fit. Primer on satin PETG is needed
+for the paint to hold; test the paint on a spare print first. Do not paint the wear shoe or shims.
+
 ## 2. Joints
 
 | Joint | What holds what | Hardware | Driven from | Register |

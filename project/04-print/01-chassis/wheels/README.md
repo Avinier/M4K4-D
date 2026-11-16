@@ -227,9 +227,9 @@ For the two wheels. The stub, bearings and motor are on the [axle page §7](../a
 
 | What | Qty for the robot | Where | Note |
 |---|---|---|---|
-| Rims and clamp rings, CH-004 | 2 + 2 | 3D lab, own PETG slate blue (CH-091) | Rim lip side down; PLA interface (CH-094) under the web |
-| Hub caps, CH-058 | 2 | 3D lab, own PETG gunmetal (CH-092) | |
-| Tyres, CH-005 | 2 (one first) | 3D lab, TPU 95A black (CH-093, own spool or the lab's) | Direct-drive A1; dry the spool |
+| Rims and clamp rings, CH-004 | 2 + 2 | 3D lab, structure grey PETG (CH-090; slate blue spool CH-091 superseded) | Rim lip side down; PLA interface (CH-094) under the web |
+| Hub caps, CH-058 | 2 | 3D lab, structure grey PETG (CH-090; gunmetal spool CH-092 superseded) | |
+| Tyres, CH-005 | 2 (one first) | 3D lab, TPU 95A black (CH-093, the lab's; own spool is the fallback) | Direct-drive A1; dry the spool |
 | M3 × 4 slant-knurled inserts, CH-049 | 12 | OnlyScrews, in hand 2026-10-30, enough for the build | Measure the OD on arrival (gap F) |
 | M3 × 8 button heads, CH-048 | 12 | OnlyScrews (pack of 20, the same listing as the J04 CH-060) | |
 | M3 × 6 button heads, CH-056 | 6 | OnlyScrews (the same listing as the motor face screws CH-030) | |

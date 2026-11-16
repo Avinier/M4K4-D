@@ -67,6 +67,21 @@ sensor. A top notch passes the lid hump through the 3 mm travel. Two vertical sn
 that ride in the pod's flank slots. A Ø3.06 × 1.5 mm magnet pocket opens on the inside of the
 face at (Y 10, Z 32.6).
 
+### 1.4 Filament and finish (2026-11-16)
+
+The builder buys the spools (own-spool route, [lab.md](../../lab.md)); the choices are logged in
+[filament-log.md](../../filament-log.md). Colour is matched to the neutral-light hex in
+[print guide §4](../../../03-build/final/v1/printguide.md#4-colour-scheme).
+
+| Print | Material | Colour target | Spool | Finish |
+|---|---|---|---|---|
+| Pod seat (CH-002) | PETG | deep slate `#34495C` | Sunlu PETG grey, 1 kg, the structure spool ([log #3](../../filament-log.md#3-deep-slate-the-structure-petg-spool-2026-11-16)) | Hidden: no finish work |
+| Sensor lid (CH-003) | PETG | deep slate `#34495C` | Same spool as the seat | Hidden: no finish work |
+| Touch cap (CH-007) | ASA | ivory `#DAD5C3` | 3Idea white ASA, 1.75 mm, 1 kg ([log #1](../../filament-log.md#1-ivory-2026-11-16)), shared with the body shell; **brand approval and own-spool ASA permission pending** | Painted matte ivory over white. **No fuzzy skin:** the 0.5 mm running gap, the snap fingers and the visor must stay at nominal; the face on the bed takes its grain from the textured PEI plate. Paint must not thicken the running faces or fingers: mask them or test-fit after painting (proposed, not yet tried) |
+
+The cap is the only nose part that is painted ivory, so its paint thickness on the running faces
+is a fit risk. Check the 0.5 mm gap on the real cap after painting.
+
 ## 2. Joints
 
 | Joint | What holds what | Hardware | Driven from | Register |

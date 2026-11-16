@@ -62,11 +62,11 @@ the parts that depend on it are printed.
 
 | Phase | What | Printers | Ends with | Status |
 |---|---|---|---|---|
-| 0. Access | Lab sign-off, faculty sponsor, spools bought and dried; open questions in [lab.md](lab.md#still-open) answered | — | Permission for ASA on the X1E and PA-CF on the X-CF Pro | Open |
+| 0. Access | Lab sign-off, faculty sponsor, spools bought and dried (choices in [filament-log.md](filament-log.md)); open questions in [lab.md](lab.md#still-open) answered | — | Permission for ASA on the X1E and approval of the 3Idea brand (white ASA, PLA-CF) | Open |
 | 1. Chassis | [Frame, axle stack, wheels, nose and keel](01-chassis/README.md), about 20 parts, mostly PETG. Small parts and one tyre first | A1, Guider II; A1 for TPU | The rolling-chassis tests in [chassis testsystem.md](../03-build/01-chassis/v1/testsystem.md) | Not started |
 | 2. Body structure | Body frame and foot cassette, compute tray, yaw stage and gears (PETG) | A1, Guider II | Frame on the chassis; the yaw stage bench test (D-044) | Not started |
 | 3. Body skins | Shell, service panels, wheel-arch pods, trims (ASA, ivory and taupe) | X1E | The shell lowered over the frame; panels and mics fitted | Not started |
-| 4. Head | PLA frames, PA-CF yoke legs (after a stiffness test bar, D-049), ASA skins, two-tone ears | X1E, X-CF Pro, A1 | Head assembled on the yaw disc; the D-053 assembly paths tried | Not started |
+| 4. Head | PLA frames, CF yoke legs (3Idea PLA-CF proposed, after the stiffness test bar; D-049 still asks 4.5 GPa), ASA skins, two-tone ears | X1E, X-CF Pro, A1 | Head assembled on the yaw disc; the D-053 assembly paths tried | Not started |
 | 5. Finish | Primer, paint, clear coat, weathering | — | The finished look in the print guide §3 | Not started |
 
 Phases 2 and 4 can overlap with phase 1 once the chassis small parts have shown
@@ -75,6 +75,12 @@ structure change usually changes a skin.
 
 **Budget:** about 1.5 kg of filament per complete set and 1.5–2 sets in all.
 See [lab.md § Cost](lab.md#cost).
+
+**Spools (2026-11-16):** five, chosen by the builder and logged in
+[filament-log.md](filament-log.md): white ASA (ivory and taupe skins, painted),
+Sunlu grey PETG (all PETG structure, wheels, painted keel), eSUN ePLA-Matte dark
+grey (head frames), 3Idea PLA-CF black (yoke legs, bar test first) and the lab's
+black TPU 95A. Amber, taupe, slate blue and gunmetal are paint, not spools.
 
 ## D-107 source update
 

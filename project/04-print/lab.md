@@ -94,6 +94,9 @@ Ask by email or on the next visit; record the answer here with its date.
 
 - **ASA on the X1E with an own spool:** is the X1E open to students, and is ASA
   allowed?
+- **3Idea brand approval:** two chosen spools are 3Idea (white ASA for the
+  skins, PLA-CF for the yoke legs), which is not an approved brand ([filament log](filament-log.md#1-ivory-2026-11-16)).
+  Ask the Lab Manager, or switch to Polymaker or eSun white ASA.
 - **PA-CF on the X-CF Pro:** allowed, given that printer damage is the
   student's responsibility?
 - **Slicer:** Bambu Studio or Orca? Makad hands over raw STLs with the settings
@@ -103,7 +106,7 @@ Ask by email or on the next visit; record the answer here with its date.
   or does it thicken? The keel TCRT shims were raised to 1.2 mm on 2026-11-01
   (D-079), with the sensor flat recessed 0.4 mm to retain the nominal sensor height.
 - **Academic status:** which faculty member to CC so own-filament prints are free.
-- Filament colours in stock, by brand and material, against the [palette](../03-build/final/v1/printguide.md#4-colour-scheme): ivory or white **ASA** and a warm taupe or khaki-grey **ASA**, matte amber or ochre, a very dark blue-grey (deep slate) in **PETG** and **PLA**, a lighter blue-grey (slate blue) **PETG** for the wheels, taupe **PETG** for the keel, matte gunmetal, black TPU 95A. Take photos next to a printed colour card. Screen hex values are only a guide. Numakers and Polymaker spools were seen on the shelves.
+- *Superseded 2026-11-16: the builder buys every spool; see [filament-log.md](filament-log.md).* Filament colours in stock, by brand and material, against the [palette](../03-build/final/v1/printguide.md#4-colour-scheme): ivory or white **ASA** and a warm taupe or khaki-grey **ASA**, matte amber or ochre, a very dark blue-grey (deep slate) in **PETG** and **PLA**, a lighter blue-grey (slate blue) **PETG** for the wheels, taupe **PETG** for the keel, matte gunmetal, black TPU 95A. Take photos next to a printed colour card. Screen hex values are only a guide. Numakers and Polymaker spools were seen on the shelves.
 - Heat-set insert tip, a spray area for primer and paint, and use of the
   vacuum former (a possible clear display window, M003).
 - Whether any lab on campus has a UTM for the CF stiffness test bar.
