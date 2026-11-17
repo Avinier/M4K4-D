@@ -8,13 +8,13 @@
    "ok": true,
    "open_edges": 0,
    "degenerate_dropped": 0,
-   "triangles": 5668
+   "triangles": 5684
   },
   {
    "check": "CH-106_volume_matches_brep",
    "ok": true,
-   "mesh_mm3": 8393.5381,
-   "brep_mm3": 8393.8467
+   "mesh_mm3": 8335.7881,
+   "brep_mm3": 8336.0967
   },
   {
    "check": "CH-106_on_bed_at_origin",

@@ -8,7 +8,7 @@
 
 ## Order
 
-- [ ] **CH-103 balance-tap protection — open, do not order.** D-111 card reopened by [D-114](decisions.md#d-114): it cannot leave with the pack. Pick option A (card on the BMS, CH-106 relief), B (tub +2.5 mm in Y) or C (thin fuses in the end gaps), then re-run `check_ch103_protection.py`. **B changes the chassis tub, so decide before printing the chassis.**
+- [ ] **CH-103 balance-tap fuse card — design selected ([D-115](decisions.md#d-115)), do not order yet.** Three 0466001.NRHF fuses on a 1.8 mm card on the BMS; CH-106 has the relief pocket (re-exported). Next: check the received TIFPS0629 pad positions, lay out the card, then run N5 with it potted. Order 3 fuses + 2 spares once the layout is fixed
 - [ ] **BO-068 DIN 9021 M2 washers (Ø6), 8.** Clamp the INMP441 edges under the BO-013 screws. Skip if they came with the screw order
 - [ ] **CH-110 non-screw items:** 4 × M2 × 5 F-F round standoffs (S13V30F5 modules) and VHB foam tape. Skip if already in hand
 

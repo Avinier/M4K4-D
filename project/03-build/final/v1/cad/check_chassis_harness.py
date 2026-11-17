@@ -25,7 +25,7 @@ import module_checks as C
 # Endpoint parts a wire may enter (label regex), keyed by wire stem.
 ENDPOINT_PARTS = {
     "W01": r"PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE",
-    "W02P": r"M12_JST_PA_3P_BALANCE_BREAK_MATED_PAIR|M12_CH103_\w+",
+    "W02P": r"M12_JST_PA_3P_BALANCE_BREAK_MATED_PAIR|M12_CH103_\w+|PACK_STRAP_HOOK_LOOP_L|BATTERY_BMS_\w+",  # D-115: tails dressed under the pack strap
     "W02B": r"M12_JST_PA_3P_BALANCE_BREAK_MATED_PAIR|M12_JST_XHP\w*",
     "W03a": r"PACK_DISCONNECT\w*|PACK_ATOF_FUSE_HOLDER_ENVELOPE|J_BAT_\w*",
     "W03b": r"PACK_ATOF_FUSE_HOLDER_ENVELOPE|J_BAT_\w*",

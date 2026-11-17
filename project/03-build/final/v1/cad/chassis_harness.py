@@ -114,12 +114,17 @@ def build_chassis_harness(entry):
     for n, dx, z, colour in (("BMINUS", -1.1, 42.2, "#484d54"),
                            ("BMID", 0., 44.8, "#e6be48"),
                            ("BPLUS", 1.1, 47.4, "#c44942")):
-        # Pack-carried CH-103 card at the window: three short, doubly insulated
-        # cell-side stubs end at separate fuse pads; only fused tails reach PA.
-        cell_stub = [(30., 35.8, z), (38.5, 35.8, z), (43., 36., z)]
-        protected = [(46.2, 36., z), (49., 38., z),
+        # D-115: CH-103 card on the BMS. Short stubs from the BMS B-/BM/B+
+        # pads (+Y end, U) to the fuses; fused tails leave the card's +Y edge,
+        # cross over the pack's +Y end, drop in the strap-to-wall gap and enter
+        # the tub window to join the PA lead.
+        fx = {"BMINUS": 41.5, "BMID": 44.5, "BPLUS": 47.5}[n]
+        cell_stub = [(fx, 22.8, 55.0), (fx, 20.6, 55.1)]
+        protected = [(fx, 17.4, 55.1), (fx, 24.0, 55.1), (fx, 24.6, 54.6),
+                     (fx, 24.6, 51.3), (44.0 + dx, 30.0, 51.3), (44.0 + dx, 34.05, 51.3),
+                     (44.0 + dx, 34.05, z), (44.0 + dx, 36.0, z),
                      *_shift(balance_pack[1:], dx=dx)]
-        wire("Pack and balance", f"W02P_CELL_TO_CH103_{n}_AWG24", cell_stub, .52, colour)
+        wire("Pack and balance", f"W02P_BMS_TO_CH103_{n}_AWG24", cell_stub, .52, colour)
         wire("Pack and balance", f"W02P_CH103_TO_PA_{n}_AWG24", protected, .52, colour)
         wire("Pack and balance", f"W02B_PA_TO_XHP3_{n}_AWG24",
              _shift(balance_body, dx=dx), .52, colour)

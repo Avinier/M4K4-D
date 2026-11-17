@@ -13,10 +13,20 @@ def main():
     hits = C.clashes(card, leaves, skip=skip, min_vol=.01)
     r.check("potted_card_clear_of_fixed_parts", not hits, clashes=hits)
     b = entry.BALANCE_FUSE
-    x0, x1, _, _, z0, z1 = b["carrier"]
-    wx0, wx1, wz0, wz1 = C.find(leaves, label).shape.bounding_box().min.X, C.find(leaves, label).shape.bounding_box().max.X, 40., 50.
-    r.check("carrier_fits_tub_window", x0 >= 26.9 and x1 <= 49.5 and z0 >= wz0 and z1 <= wz1,
-            carrier=b["carrier"], window=(26.9, 49.5, 40., 50.))
+    bms = C.find(leaves, "BATTERY_BMS_PCB01_PACK_PROTECTION").shape.bounding_box()
+    x0, x1, y0, y1, z0, z1 = b["carrier"]
+    r.check("card_lies_on_bms", x0 >= bms.min.X and x1 <= bms.max.X and y0 >= bms.min.Y
+            and y1 <= bms.max.Y and z0 >= bms.max.Z, carrier=b["carrier"],
+            bms=[round(v, 2) for v in (bms.min.X, bms.max.X, bms.min.Y, bms.max.Y, bms.max.Z)])
+    plate = C.find(leaves, "TUB_BAY_MODULE_PLATE").shape
+    gap = C.distance(card, plate)
+    r.check("plate_pocket_clears_card", gap >= 0.3, clearance_mm=round(gap, 3))
+    # The 2.5 mm plate over the pocket must stay solid for at least 2.0 mm.
+    from build123d import Box, Location
+    px0, px1, py0, py1, pz0, pz1 = b["pocket"]
+    roof = Box(px1 - px0, py1 - py0, 1.95).moved(Location(((px0 + px1) / 2, (py0 + py1) / 2, pz1 + 0.975)))
+    solid = C.piece_common(roof, plate) / roof.volume
+    r.check("pocket_roof_at_least_2mm", solid > 0.999, solid_fraction=round(solid, 4))
     # The pack leaves downward through the bottom hatch (body_chassis_model:
     # "drops out downward"), so a pack-carried card must translate -Z with the
     # pack. Skip only parts that move with it; the tub wall/window must clear.
@@ -25,9 +35,9 @@ def main():
                   [0.5 * i for i in range(1, 41)], skip=moving)
     r.check("carrier_drops_with_pack", hit is None, first_hit=hit, travel_mm=20,
             note="2026-11-18 review: the earlier -Y sweep skipped the cells and moved the card through the pack")
-    r.check("three_separate_tap_fuses", len(b["fuse_z"]) == 3 and
-            min(y - x for x, y in zip(b["fuse_z"], b["fuse_z"][1:])) >= 2.5,
-            tap_z=b["fuse_z"])
+    xs = sorted((f[0] + f[1]) / 2 for f in b["fuses"])
+    r.check("three_separate_tap_fuses", len(xs) == 3 and min(q - p for p, q in zip(xs, xs[1:])) >= 3.0,
+            fuse_x=xs)
     r.finish()
 
 

@@ -1,7 +1,7 @@
 {
  "script": "check_ch103_protection",
- "passed": 3,
- "total": 4,
+ "passed": 6,
+ "total": 6,
  "rows": [
   {
    "check": "potted_card_clear_of_fixed_parts",
@@ -9,42 +9,48 @@
    "clashes": []
   },
   {
-   "check": "carrier_fits_tub_window",
+   "check": "card_lies_on_bms",
    "ok": true,
    "carrier": [
-    39.0,
-    49.0,
-    35.0,
-    37.0,
-    41.0,
-    49.0
+    39.3,
+    48.8,
+    14.0,
+    24.0,
+    54.2,
+    56.0
    ],
-   "window": [
-    26.9,
-    49.5,
-    40.0,
-    50.0
+   "bms": [
+    36.25,
+    56.25,
+    -24.0,
+    24.0,
+    53.9
    ]
   },
   {
+   "check": "plate_pocket_clears_card",
+   "ok": true,
+   "clearance_mm": 0.5
+  },
+  {
+   "check": "pocket_roof_at_least_2mm",
+   "ok": true,
+   "solid_fraction": 1.0
+  },
+  {
    "check": "carrier_drops_with_pack",
-   "ok": false,
-   "first_hit": [
-    1.5,
-    "M12_CH103_THREE_FUSE_PACK_CARRIER_POTTED_ENVELOPE",
-    "CHASSIS_FRAME_FRONT_MODULE",
-    7.5
-   ],
+   "ok": true,
+   "first_hit": null,
    "travel_mm": 20,
    "note": "2026-11-18 review: the earlier -Y sweep skipped the cells and moved the card through the pack"
   },
   {
    "check": "three_separate_tap_fuses",
    "ok": true,
-   "tap_z": [
-    42.2,
-    44.8,
-    47.4
+   "fuse_x": [
+    41.5,
+    44.5,
+    47.5
    ]
   }
  ]

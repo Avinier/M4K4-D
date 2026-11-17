@@ -20,7 +20,7 @@
    "hits": []
   },
   {
-   "check": "W02P_CELL_TO_CH103_BMINUS_AWG24 vs parts",
+   "check": "W02P_BMS_TO_CH103_BMINUS_AWG24 vs parts",
    "ok": true,
    "hits": []
   },
@@ -35,7 +35,7 @@
    "hits": []
   },
   {
-   "check": "W02P_CELL_TO_CH103_BMID_AWG24 vs parts",
+   "check": "W02P_BMS_TO_CH103_BMID_AWG24 vs parts",
    "ok": true,
    "hits": []
   },
@@ -50,7 +50,7 @@
    "hits": []
   },
   {
-   "check": "W02P_CELL_TO_CH103_BPLUS_AWG24 vs parts",
+   "check": "W02P_BMS_TO_CH103_BPLUS_AWG24 vs parts",
    "ok": true,
    "hits": []
   },
@@ -260,7 +260,7 @@
    "near": []
   },
   {
-   "check": "W02P_CELL_TO_CH103_BMINUS_AWG24 vs body wires",
+   "check": "W02P_BMS_TO_CH103_BMINUS_AWG24 vs body wires",
    "ok": true,
    "near": []
   },
@@ -275,7 +275,7 @@
    "near": []
   },
   {
-   "check": "W02P_CELL_TO_CH103_BMID_AWG24 vs body wires",
+   "check": "W02P_BMS_TO_CH103_BMID_AWG24 vs body wires",
    "ok": true,
    "near": []
   },
@@ -290,7 +290,7 @@
    "near": []
   },
   {
-   "check": "W02P_CELL_TO_CH103_BPLUS_AWG24 vs body wires",
+   "check": "W02P_BMS_TO_CH103_BPLUS_AWG24 vs body wires",
    "ok": true,
    "near": []
   },

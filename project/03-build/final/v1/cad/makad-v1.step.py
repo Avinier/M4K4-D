@@ -860,15 +860,18 @@ BALANCE = dict(
     deck_hole=(52.0, 47.4, 2.5),                           # x, y, r through the front deck
 )
 
-# CH-103: three 1206 very-fast 1 A fuses on a small potted, pack-carried
-# carrier at the staged joint just inside the +Y service window. The short
-# cell-tab pigtails enter from -X and the three protected AWG24 tails leave
-# toward the PA break. The encapsulated card, not loose inline fuse sleeves,
-# withdraws with the pack through the window. Dimensions are an E envelope;
-# received insulation and cell-tab construction remain build gates.
-BALANCE_FUSE = dict(carrier=(39.0, 49.0, 35.0, 37.0, 41.0, 49.0),
-                    fuse_x=(43.0, 46.2), fuse_y=(35.7, 36.3),
-                    fuse_z=(42.2, 44.8, 47.4))
+# CH-103 (D-115, option A of D-114): three 1206 very-fast 1 A fuses on a small
+# potted card lying on the PCB-01 BMS at its +Y end, where the B-/BM/B+ balance
+# pads are taken (pad positions are U until the TIFPS0629 is in hand). The card
+# rides on the pack and drops with it through the hatch; the protected AWG24
+# tails run under the pack strap on the cell tops (pack-wrap wiring, as W01)
+# and down the 1.5 mm +Y end-face gap to the tub window. The CH-106 plate
+# (2.5 mm thick, underside Z 56.0, 1.8 mm over the pack wrap) carries a 0.6 mm
+# relief pocket over it, leaving a 2.0 mm roof under the M2 module.
+BALANCE_FUSE = dict(carrier=(39.3, 48.8, 14.0, 24.0, 54.2, 56.0),   # 0.6 board + 0.55 fuse + thin potting, 1.8 (E)
+                    fuses=tuple((x - .8, x + .8, 17.4, 20.6, 54.8, 55.35)  # 1206 along Y, on the board
+                                for x in (41.5, 44.5, 47.5)),
+                    pocket=(38.8, 49.3, 13.5, 24.5, 55.9, 56.5))     # 0.5 mm over the card; 2.0 mm roof; clear of the M2 boss pilot at X 50.3
 
 # Microphones (D-093 Q6): four INMP441 modules at the four D-037 port axes. UNMEASURED module:
 # 14 x 14 x 1.6 board, port on its centre, INMP441 4.72 x 3.76 x 1.0 inboard over the port. The
@@ -1128,6 +1131,8 @@ def tub_bay_plate():
     # D-106: a tie lug on each arm for the leads leaving the plate (W05t in, W13/W17 out).
     for b in D106["plate_lugs"]:
         plate = plate + d106_lug(*b, top)
+    # D-115: relief pocket in the underside over the CH-103 fuse card on the BMS.
+    plate = plate - _blk(*BALANCE_FUSE["pocket"])
     return _tag(plate, "TUB_BAY_MODULE_PLATE", "#4F575B")
 
 
@@ -1308,11 +1313,8 @@ def port_parts():
            _tag(_blk(*BALANCE["pair"]), "M12_JST_PA_3P_BALANCE_BREAK_MATED_PAIR", "#F4F1E6")]
     out.append(_tag(_blk(*BALANCE_FUSE["carrier"]),
                     "M12_CH103_THREE_FUSE_PACK_CARRIER_POTTED_ENVELOPE", "#CDA44D"))
-    for tap, z in zip(("B_MINUS", "MID", "B_PLUS"), BALANCE_FUSE["fuse_z"]):
-        x0, x1 = BALANCE_FUSE["fuse_x"]
-        y0, y1 = BALANCE_FUSE["fuse_y"]
-        out.append(_tag(_blk(x0, x1, y0, y1, z - .8, z + .8),
-                        f"M12_CH103_{tap}_LITTELFUSE_0466001_1206", "#A89B79"))
+    for tap, box in zip(("B_MINUS", "MID", "B_PLUS"), BALANCE_FUSE["fuses"]):
+        out.append(_tag(_blk(*box), f"M12_CH103_{tap}_LITTELFUSE_0466001_1206", "#A89B79"))
     length, w, h = PORTS["corridor"]
     mouth = PORTS["face_x"] + PORTS["recess"]
     for k in ("xt30", "xh"):
