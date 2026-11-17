@@ -1,7 +1,7 @@
 {
  "script": "check_d109_mic_leads",
- "passed": 16,
- "total": 16,
+ "passed": 20,
+ "total": 20,
  "rows": [
   {
    "check": "FRONT_L lead clear of the shell skin",
@@ -11,6 +11,11 @@
     0.7071,
     "BODY_SHELL"
    ]
+  },
+  {
+   "check": "FRONT_L lead clear of the frame and fixed parts",
+   "ok": true,
+   "hits": []
   },
   {
    "check": "FRONT_L lead clear of mic parts",
@@ -38,6 +43,11 @@
    ]
   },
   {
+   "check": "FRONT_R lead clear of the frame and fixed parts",
+   "ok": true,
+   "hits": []
+  },
+  {
    "check": "FRONT_R lead clear of mic parts",
    "ok": true,
    "hits": []
@@ -56,11 +66,16 @@
   {
    "check": "REAR_L lead clear of the shell skin",
    "ok": true,
-   "overlap": 0.04,
+   "overlap": 0.0,
    "gap": [
-    0.0,
+    0.2327,
     "BODY_SHELL"
    ]
+  },
+  {
+   "check": "REAR_L lead clear of the frame and fixed parts",
+   "ok": true,
+   "hits": []
   },
   {
    "check": "REAR_L lead clear of mic parts",
@@ -70,7 +85,7 @@
   {
    "check": "REAR_L clips clear of the shell skin",
    "ok": true,
-   "clips": 4,
+   "clips": 10,
    "note": "clip base bonds to the skin: <= 0.3 mm3 contact allowed"
   },
   {
@@ -86,6 +101,11 @@
     0.864,
     "BODY_SHELL"
    ]
+  },
+  {
+   "check": "REAR_R lead clear of the frame and fixed parts",
+   "ok": true,
+   "hits": []
   },
   {
    "check": "REAR_R lead clear of mic parts",

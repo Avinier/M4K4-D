@@ -26,9 +26,13 @@ def main():
     for name, d in json.loads((HERE / "d109-mic-leads.json").read_text()).items():
         t = _tube(d["points"], R)
         run = _tube(d["points"][1:], R)    # exit segments run in the droid-cut boss notch; the pigtail stub stays in its pocket
-        r.check(f"{name} lead clear of the shell skin", C.common(run, shell.shape) < 0.05,
-                overlap=round(C.common(run, shell.shape), 3), gap=C.min_gap(run, [shell], reach=2.0, parts_only=False))
-        hits = [h for h in C.clashes(t, mics, min_vol=0.05, parts_only=False)
+        # piecewise throughout: whole-tube Booleans read 0 for a lead 12 mm inside the shell (2026-11-17)
+        skin = C.piece_common(run, shell.shape)
+        frame_hits = C.piece_clashes(run, fixed, min_vol=0.05, parts_only=False)
+        r.check(f"{name} lead clear of the shell skin", skin < 0.05,
+                overlap=round(skin, 3), gap=C.min_gap(run, [shell], reach=2.0, parts_only=False))
+        r.check(f"{name} lead clear of the frame and fixed parts", not frame_hits, hits=frame_hits[:6])
+        hits = [h for h in C.piece_clashes(t, mics, min_vol=0.05, parts_only=False)
                 if not h[0].endswith(("_BOARD_UNMEASURED",))]
         r.check(f"{name} lead clear of mic parts", not hits, hits=hits)
         # adhesive cable clips (bought, E 6 x 3.2 x 4.8 around the lead) at the clip points ride too
@@ -42,7 +46,7 @@ def main():
                 clips=len(clips), note="clip base bonds to the skin: <= 0.3 mm3 contact allowed")
         first = None
         for dz in range(0, 141, 5):
-            hits = [h for part in (t, *clips) for h in C.clashes(C.moved(part, (0, 0, dz)), fixed, min_vol=0.05, parts_only=False)]
+            hits = [h for part in (*C._solids(t), *clips) for h in C.clashes(C.moved(part, (0, 0, dz)), fixed, min_vol=0.05, parts_only=False)]
             if hits:
                 first = (dz, hits[:4])
                 break

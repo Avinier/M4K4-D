@@ -1569,6 +1569,10 @@ def d109_mic_lead_notches():
             lo = [min(a[i], b[i]) - 1.5 for i in range(3)]
             hi = [max(a[i], b[i]) + 1.5 for i in range(3)]
             out.append(_blk(lo[0], hi[0], lo[1], hi[1], lo[2], hi[2]))
+        # 2026-11-17: REAR_L passes over the fan collar ring; its print peak is cut back
+        # (study_d109_mic_leads.COLLAR_PEAK_NOTCH). Boxes are (x0, x1, y0, y1, z0, z1).
+        for b in d.get("shell_cuts", []):
+            out.append(_blk(*b))
     return out
 
 
