@@ -860,18 +860,27 @@ BALANCE = dict(
     deck_hole=(52.0, 47.4, 2.5),                           # x, y, r through the front deck
 )
 
-# CH-103 (D-115, option A of D-114): three 1206 very-fast 1 A fuses on a small
-# potted card lying on the PCB-01 BMS at its +Y end, where the B-/BM/B+ balance
-# pads are taken (pad positions are U until the TIFPS0629 is in hand). The card
-# rides on the pack and drops with it through the hatch; the protected AWG24
-# tails run under the pack strap on the cell tops (pack-wrap wiring, as W01)
-# and down the 1.5 mm +Y end-face gap to the tub window. The CH-106 plate
-# (2.5 mm thick, underside Z 56.0, 1.8 mm over the pack wrap) carries a 0.6 mm
-# relief pocket over it, leaving a 2.0 mm roof under the M2 module.
-BALANCE_FUSE = dict(carrier=(39.3, 48.8, 14.0, 24.0, 54.2, 56.0),   # 0.6 board + 0.55 fuse + thin potting, 1.8 (E)
-                    fuses=tuple((x - .8, x + .8, 17.4, 20.6, 54.8, 55.35)  # 1206 along Y, on the board
-                                for x in (41.5, 44.5, 47.5)),
-                    pocket=(38.8, 49.3, 13.5, 24.5, 55.9, 56.5))     # 0.5 mm over the card; 2.0 mm roof; clear of the M2 boss pilot at X 50.3
+# CH-103 (D-115, revised D-116): the TIFPS0629 is the common HW-391 board. Its
+# 0V (B-) and 8.4V (B+) pads sit at the two corners of one short end; the
+# 4.2V (BM) pad and the P+/P- pads sit at the other end (listing photos). The
+# board lies long side along Y with the BM/P end at +Y, toward J-PK. Each tap
+# gets a 1206 very-fast 1 A fuse on a low-profile potted card at its own end:
+# BM at +Y, B- and B+ at -Y. Cards are 0.6 board + 0.55 fuse + thin potting,
+# 1.8 mm (E). The fused tails run along the board's -X edge to +Y, under the
+# pack strap on the cell tops (pack-wrap dressing, as W01) and down the 1.5 mm
+# +Y end-face gap to the tub window. CH-106 (2.5 mm, underside Z 56.0) carries
+# a 0.6 mm relief over each card, leaving a 2.0 mm roof, clear of the M2 boss
+# pilots at X 50.3.
+BMS_PADS = {"B_MINUS": (37.5, -22.8), "B_PLUS": (55.0, -22.8), "MID": (55.0, 22.8)}  # E: corners per HW-391 photos
+BALANCE_FUSE = dict(cards=(
+    dict(name="PY_BM", carrier=(41.0, 47.0, 16.0, 24.0, 54.2, 56.0),
+         fuses=(("MID", (43.2, 44.8, 17.4, 20.6, 54.8, 55.35)),),
+         pocket=(40.5, 47.5, 15.5, 24.5, 55.9, 56.5)),
+    dict(name="NY_BMINUS_BPLUS", carrier=(39.3, 48.8, -24.0, -14.0, 54.2, 56.0),
+         fuses=(("B_MINUS", (41.2, 42.8, -20.6, -17.4, 54.8, 55.35)),
+                ("B_PLUS", (45.2, 46.8, -20.6, -17.4, 54.8, 55.35))),
+         pocket=(38.8, 49.3, -24.5, -13.5, 55.9, 56.5)),
+))
 
 # Microphones (D-093 Q6): four INMP441 modules at the four D-037 port axes. UNMEASURED module:
 # 14 x 14 x 1.6 board, port on its centre, INMP441 4.72 x 3.76 x 1.0 inboard over the port. The
@@ -1131,8 +1140,9 @@ def tub_bay_plate():
     # D-106: a tie lug on each arm for the leads leaving the plate (W05t in, W13/W17 out).
     for b in D106["plate_lugs"]:
         plate = plate + d106_lug(*b, top)
-    # D-115: relief pocket in the underside over the CH-103 fuse card on the BMS.
-    plate = plate - _blk(*BALANCE_FUSE["pocket"])
+    # D-115/D-116: relief pockets in the underside over the CH-103 fuse cards on the BMS.
+    for card in BALANCE_FUSE["cards"]:
+        plate = plate - _blk(*card["pocket"])
     return _tag(plate, "TUB_BAY_MODULE_PLATE", "#4F575B")
 
 
@@ -1311,10 +1321,11 @@ def port_parts():
     out = [_tag(_port_box("xt30"), "M12_XT30U_FEMALE_CHARGE_PORT", "#E5C34B"),
            _tag(_port_box("xh"), "M12_JST_XHP_3_BALANCE_PORT_PLUG", "#F4F1E6"),
            _tag(_blk(*BALANCE["pair"]), "M12_JST_PA_3P_BALANCE_BREAK_MATED_PAIR", "#F4F1E6")]
-    out.append(_tag(_blk(*BALANCE_FUSE["carrier"]),
-                    "M12_CH103_THREE_FUSE_PACK_CARRIER_POTTED_ENVELOPE", "#CDA44D"))
-    for tap, box in zip(("B_MINUS", "MID", "B_PLUS"), BALANCE_FUSE["fuses"]):
-        out.append(_tag(_blk(*box), f"M12_CH103_{tap}_LITTELFUSE_0466001_1206", "#A89B79"))
+    for card in BALANCE_FUSE["cards"]:
+        out.append(_tag(_blk(*card["carrier"]),
+                        f"M12_CH103_{card['name']}_FUSE_CARD_POTTED_ENVELOPE", "#CDA44D"))
+        for tap, box in card["fuses"]:
+            out.append(_tag(_blk(*box), f"M12_CH103_{tap}_LITTELFUSE_0466001_1206", "#A89B79"))
     length, w, h = PORTS["corridor"]
     mouth = PORTS["face_x"] + PORTS["recess"]
     for k in ("xt30", "xh"):

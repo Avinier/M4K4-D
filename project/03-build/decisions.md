@@ -100,7 +100,8 @@ The central record of every decision and change made during the build phase. New
 | [D-112](#d-112) | 2026-11-17 | CH-099 current monitor | Select 4 mΩ, 3 W Littelfuse WPC2512QLR004FWR shunt on paper | SELECTED ON PAPER; board and first-power calibration open |
 | [D-113](#d-113) | 2026-11-17 | HN-006 tub distribution | Two WAGO 221-415 five-conductor lever splices, one per polarity; explicit 1×AWG16 plus 4×AWG18 tails per housing | TUB SELECTED; received fit and current test open; rear splices open |
 | [D-114](#d-114) | 2026-11-18 | Review of D-110–D-113 | CH-103 reopened (removal fails); wheel-arch pilot Ø4.10 and ST3215-HS case envelope recorded; records corrected | ACTIVE; CH-103 option A chosen in [D-115](#d-115) |
-| [D-115](#d-115) | 2026-11-18 | CH-103 balance taps | Option A: low-profile fuse card on the PCB-01 BMS, taps from its pads, 0.6 mm relief in CH-106 | DESIGN SELECTED; card layout and N5 open |
+| [D-115](#d-115) | 2026-11-18 | CH-103 balance taps | Option A: low-profile fuse card on the PCB-01 BMS, taps from its pads, 0.6 mm relief in CH-106 | **Revised by [D-116](#d-116)** (two cards) |
+| [D-116](#d-116) | 2026-11-18 | CH-103 card split | HW-391 pads are at both ends: BM fuse card at +Y, B−/B+ card at −Y; card build spec and N5 procedure | DESIGN SELECTED; received-board check and N5 open |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -4432,3 +4433,39 @@ Full-path exact checks supersede the sampled study's clamp at Z13: the actual cl
 **Checks.** `check_ch103_protection` 6/6: clear of fixed parts, lies on the BMS, 0.5 mm pocket clearance, 2.0 mm solid roof, drops 20 mm with the pack, 3 mm fuse pitch. `check_chassis_harness` 96/96, `check_balance_channel` 15/15, `check_d106_harness` 134/134. CH-106 STL re-exported (`export_d095_prints_stl` 29/29). Whole-robot and chassis-harness STEPs rebuilt.
 
 **Open.** BMS balance-pad positions and the received board's height are `U`: if the pads aren't at the +Y end, the card moves along the BMS inside the plate pocket footprint, or the pocket moves. The 1.8 mm card needs a real layout: six AWG24 joints lying flat and potting no thicker than about 0.6 mm. It's a small custom board, to be added to the board batch or built on 0.6 mm stock by hand. Strap pressure on the dressed tails must be checked at pack build. N5 (PD60 open-tap and adjacent-short abort, fuse heating at 0.5 A) is run with the card potted. W02P stays unbuilt until N5 passes.
+
+## D-116
+
+**2026-11-18 · CH-103 fuse cards split to match the PCB-01 pads · DESIGN SELECTED.** Revises the D-115 placement. The fuse part and fault contract (D-111) and the on-BMS principle (D-115) stand.
+
+**Why.** The Robocraze TIFPS0629 listing photos show the common **HW-391** 2S 20 A board. Its **0V (B−)** and **8.4V (B+)** pads are at the two corners of one short end. The **4.2V (BM)** pad and the **P+/P−** output pads are at the other end. D-115 had assumed all three balance pads at one end. One card can't reach all three taps with short stubs.
+
+**Decision.** The board lies long side along Y with its BM/P end at +Y, toward J-PK. Two potted cards sit on it, one at each end:
+- **+Y card (BM):** X 41–47, Y 16–24, one fuse.
+- **−Y card (B−, B+):** X 39.3–48.8, Y −24…−14, two fuses 4 mm apart.
+
+CH-106 gets a mirrored 0.6 mm underside relief over each card (2.0 mm roof, clear of the M2 boss pilots at X 50.3; the bosses are symmetric about Y = 0). Pad-to-fuse distances are 11.6 (BM), 5.9 (B−) and 9.8 mm (B+), with pads `E` from the photos. The two fused −Y tails run along the board's −X edge strip (X 37.4/38.5, Z 55.2) to +Y, where all three dress under the pack strap and down the +Y end gap as in D-115. `BMS_PADS` and `BALANCE_FUSE["cards"]` in `makad-v1.step.py`.
+
+**Checks.** `check_ch103_protection` 12/12 (each card: clear, on the BMS, pocket clearance 0.5 mm, 2.0 mm roof, drops 20 mm with the pack; one fuse per tap; every stub ≤ 15 mm). `check_chassis_harness` 96/96, `check_balance_channel` 15/15, `check_d106_harness` 134/134, `export_d095_prints_stl` 29/29 (CH-106 re-exported). Chassis-harness and whole-robot STEPs rebuilt.
+
+**Card build spec** (hand-built; no fab order needed):
+- Board: 0.6 mm FR4, single-sided 1 oz copper. +Y card 6 × 8 mm, −Y card 9.5 × 10 mm.
+- Per fuse: one 1206 land pair (1.0 × 1.8 mm pads, 2.0 mm gap). A 1.5 × 2.5 mm wire pad continues from each land toward its wire's exit.
+- Copper: ≥ 0.8 mm between nets; ≥ 0.5 mm to the board edge.
+- Wires: AWG24 PTFE or silicone (OD ≤ 1.2 mm), tinned, laid flat on the pad with ≤ 3 mm of strip. The pad-side stub is sleeved twice.
+- Potting: thin silicone or epoxy over the fuse and joints, ≤ 0.6 mm above the fuse; 1.8 mm overall. Mark B−/BM/B+ on the potting.
+- Fixing: a 0.25 mm foam pad bonds the card to the BMS components.
+
+**Received-board check (before building the cards).** Confirm the pad corners and the MOSFET end. Measure the full board height. The CAD BMS is a 2.9 mm placeholder; TO-252 MOSFETs on a 1.0–1.6 mm board give about 3.3–4.0 mm. Under the cards, the parts are small SOT/0805, so the card sits on them. If the board plus card exceeds 1.8 mm of pack-to-plate gap at either end, deepen that CH-106 relief, keeping a 1.5 mm roof minimum, and re-run `check_ch103_protection.py`. If the pads differ from the photos, move `BMS_PADS`/cards and re-run.
+
+**Pack build: strap pressure.** The three fused tails lie flat side by side on the cell tops under the strap, never crossed. A 0.5 mm Kapton or fish-paper strip goes over them under the strap. After strapping, check every tail's continuity, and check for no short between taps or to the cell cans. Then flex the strap once and re-measure.
+
+**N5 procedure** (before W02P is connected to live cells):
+1. Bench supply limited to 1 A and two cell-simulator resistor strings, or a 2S simulator. No live cells for fault injection.
+2. Measure each potted fuse's cold resistance (expect about 0.075 Ω).
+3. Run 0.5 A for 30 min through each fuse, potted; record the card temperature.
+4. Connect the PD60 through the PA/XHP-3 path. Open one tap: the charger must alarm and stop.
+5. Short adjacent XHP-3 pins on the simulator side: the charger must stop, or the fuse must open.
+6. Disconnect the main lead while the balance lead is still connected: no charging.
+
+Any continued charge fails N5. W02P stays unbuilt until N5 passes.

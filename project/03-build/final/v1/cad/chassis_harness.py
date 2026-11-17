@@ -118,12 +118,22 @@ def build_chassis_harness(entry):
         # pads (+Y end, U) to the fuses; fused tails leave the card's +Y edge,
         # cross over the pack's +Y end, drop in the strap-to-wall gap and enter
         # the tub window to join the PA lead.
-        fx = {"BMINUS": 41.5, "BMID": 44.5, "BPLUS": 47.5}[n]
-        cell_stub = [(fx, 22.8, 55.0), (fx, 20.6, 55.1)]
-        protected = [(fx, 17.4, 55.1), (fx, 24.0, 55.1), (fx, 24.6, 54.6),
-                     (fx, 24.6, 51.3), (44.0 + dx, 30.0, 51.3), (44.0 + dx, 34.05, 51.3),
-                     (44.0 + dx, 34.05, z), (44.0 + dx, 36.0, z),
-                     *_shift(balance_pack[1:], dx=dx)]
+        # D-116: each tap is fused at its own BMS end (BM at +Y, B-/B+ at -Y).
+        tap = {"BMINUS": "B_MINUS", "BMID": "MID", "BPLUS": "B_PLUS"}[n]
+        fuse = next(b for c in entry.BALANCE_FUSE["cards"] for t, b in c["fuses"] if t == tap)
+        fx, fy = (fuse[0] + fuse[1]) / 2, (fuse[2] + fuse[3]) / 2
+        px, py = entry.BMS_PADS[tap]
+        side = 1.0 if py > 0 else -1.0
+        near, far = fy + side * 1.6, fy - side * 1.6      # pad-side and tail-side fuse ends
+        cell_stub = [(px, py, 54.5), (px, near + side * 1.5, 55.1), (fx, near + side * 1.5, 55.1), (fx, near, 55.1)]
+        if tap == "MID":
+            protected = [(fx, far, 55.1), (fx, 15.0, 55.1), (fx, 15.0, 55.2), (fx, 24.6, 55.2)]
+        else:
+            ex = 37.4 if tap == "B_MINUS" else 38.5     # run along the board's -X edge strip
+            protected = [(fx, far, 55.1), (fx, -12.5, 55.2), (ex, -12.5, 55.2), (ex, 24.6, 55.2)]
+        protected += [(protected[-1][0], 24.6, 51.3), (44.0 + dx, 30.0, 51.3),
+                      (44.0 + dx, 34.05, 51.3), (44.0 + dx, 34.05, z), (44.0 + dx, 36.0, z),
+                      *_shift(balance_pack[1:], dx=dx)]
         wire("Pack and balance", f"W02P_BMS_TO_CH103_{n}_AWG24", cell_stub, .52, colour)
         wire("Pack and balance", f"W02P_CH103_TO_PA_{n}_AWG24", protected, .52, colour)
         wire("Pack and balance", f"W02B_PA_TO_XHP3_{n}_AWG24",

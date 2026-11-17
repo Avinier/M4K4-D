@@ -1,57 +1,101 @@
 {
  "script": "check_ch103_protection",
- "passed": 6,
- "total": 6,
+ "passed": 12,
+ "total": 12,
  "rows": [
   {
-   "check": "potted_card_clear_of_fixed_parts",
+   "check": "PY_BM_clear_of_fixed_parts",
    "ok": true,
    "clashes": []
   },
   {
-   "check": "card_lies_on_bms",
+   "check": "PY_BM_lies_on_bms",
    "ok": true,
    "carrier": [
-    39.3,
-    48.8,
-    14.0,
+    41.0,
+    47.0,
+    16.0,
     24.0,
     54.2,
     56.0
-   ],
-   "bms": [
-    36.25,
-    56.25,
-    -24.0,
-    24.0,
-    53.9
    ]
   },
   {
-   "check": "plate_pocket_clears_card",
+   "check": "PY_BM_plate_pocket_clears_card",
    "ok": true,
    "clearance_mm": 0.5
   },
   {
-   "check": "pocket_roof_at_least_2mm",
+   "check": "PY_BM_pocket_roof_at_least_2mm",
    "ok": true,
    "solid_fraction": 1.0
   },
   {
-   "check": "carrier_drops_with_pack",
+   "check": "PY_BM_drops_with_pack",
    "ok": true,
    "first_hit": null,
-   "travel_mm": 20,
-   "note": "2026-11-18 review: the earlier -Y sweep skipped the cells and moved the card through the pack"
+   "travel_mm": 20
   },
   {
-   "check": "three_separate_tap_fuses",
+   "check": "NY_BMINUS_BPLUS_clear_of_fixed_parts",
    "ok": true,
-   "fuse_x": [
-    41.5,
-    44.5,
-    47.5
+   "clashes": []
+  },
+  {
+   "check": "NY_BMINUS_BPLUS_lies_on_bms",
+   "ok": true,
+   "carrier": [
+    39.3,
+    48.8,
+    -24.0,
+    -14.0,
+    54.2,
+    56.0
    ]
+  },
+  {
+   "check": "NY_BMINUS_BPLUS_plate_pocket_clears_card",
+   "ok": true,
+   "clearance_mm": 0.5
+  },
+  {
+   "check": "NY_BMINUS_BPLUS_pocket_roof_at_least_2mm",
+   "ok": true,
+   "solid_fraction": 1.0
+  },
+  {
+   "check": "NY_BMINUS_BPLUS_drops_with_pack",
+   "ok": true,
+   "first_hit": null,
+   "travel_mm": 20
+  },
+  {
+   "check": "one_fuse_per_tap",
+   "ok": true,
+   "taps": [
+    [
+     "MID",
+     11.6
+    ],
+    [
+     "B_MINUS",
+     5.9
+    ],
+    [
+     "B_PLUS",
+     9.8
+    ]
+   ]
+  },
+  {
+   "check": "pad_to_fuse_stubs_at_most_15mm",
+   "ok": true,
+   "stub_mm": {
+    "MID": 11.6,
+    "B_MINUS": 5.9,
+    "B_PLUS": 9.8
+   },
+   "note": "straight-line pad-to-fuse distance; pads E from HW-391 photos"
   }
  ]
 }
