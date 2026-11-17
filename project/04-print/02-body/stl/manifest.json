@@ -13,5 +13,155 @@
     ],
     "volume_mm3": 5540.361,
     "source": "final/v1/cad/export_d095_prints_stl.py (D-095 print; exported 2026-11-07)"
+  },
+  {
+    "file": "BO-025_BODY_FRAME_MAIN_PRINT.stl",
+    "bom": "BO-025",
+    "cad_label": "BODY_FRAME_MAIN_PRINT",
+    "quantity": 1,
+    "material": "PETG, Sunlu grey",
+    "bed_down": "Bottom (-Z)",
+    "size_mm": [
+      116.0,
+      142.0,
+      82.0
+    ],
+    "volume_mm3": 130876.75,
+    "source": "final/v1/cad/export_body_prints_stl.py"
+  },
+  {
+    "file": "BO-026_BODY_FRAME_FRONT_LEFT_FOOT_CASSETTE.stl",
+    "bom": "BO-026",
+    "cad_label": "BODY_FRAME_FRONT_LEFT_FOOT_CASSETTE",
+    "quantity": 1,
+    "material": "PETG, Sunlu grey",
+    "bed_down": "Bottom (-Z)",
+    "size_mm": [
+      20.0,
+      21.0,
+      14.0
+    ],
+    "volume_mm3": 4147.26,
+    "source": "final/v1/cad/export_body_prints_stl.py"
+  },
+  {
+    "file": "BO-033_COMPUTE_TRAY.stl",
+    "bom": "BO-033",
+    "cad_label": "COMPUTE_TRAY",
+    "quantity": 1,
+    "material": "PETG, Sunlu grey",
+    "bed_down": "Bottom (-Z)",
+    "size_mm": [
+      116.0,
+      77.0,
+      9.55
+    ],
+    "volume_mm3": 17095.76,
+    "source": "final/v1/cad/export_body_prints_stl.py"
+  },
+  {
+    "file": "BO-019_BODY_SHELL.stl",
+    "bom": "BO-019",
+    "cad_label": "BODY_SHELL",
+    "quantity": 1,
+    "material": "ASA, white; ivory finish",
+    "bed_down": "Open rim (-Z)",
+    "size_mm": [
+      162.2,
+      182.2,
+      110.0
+    ],
+    "volume_mm3": 142509.67,
+    "source": "final/v1/cad/export_body_prints_stl.py"
+  },
+  {
+    "file": "BO-020_FRONT_SERVICE_PANEL_EXPOSED_SPEAKER.stl",
+    "bom": "BO-020",
+    "cad_label": "FRONT_SERVICE_PANEL_EXPOSED_SPEAKER",
+    "quantity": 1,
+    "material": "ASA, white; taupe finish",
+    "bed_down": "Outer face (+X)",
+    "size_mm": [
+      76.0,
+      128.0,
+      17.5
+    ],
+    "volume_mm3": 21983.56,
+    "source": "final/v1/cad/export_body_prints_stl.py"
+  },
+  {
+    "file": "BO-021_REAR_SERVICE_PANEL_OCTAGONAL.stl",
+    "bom": "BO-021",
+    "cad_label": "REAR_SERVICE_PANEL_OCTAGONAL",
+    "quantity": 1,
+    "material": "ASA, white; taupe finish",
+    "bed_down": "Outer face (-X)",
+    "size_mm": [
+      92.0,
+      126.0,
+      17.5
+    ],
+    "volume_mm3": 26959.11,
+    "source": "final/v1/cad/export_body_prints_stl.py"
+  },
+  {
+    "file": "BO-008_WHEEL_ARCH_POD_L.stl",
+    "bom": "BO-008",
+    "cad_label": "WHEEL_ARCH_POD_L",
+    "quantity": 1,
+    "material": "ASA, white; ivory finish",
+    "bed_down": "Outer face (+Y)",
+    "size_mm": [
+      108.0,
+      53.99,
+      18.23
+    ],
+    "volume_mm3": 14163.27,
+    "source": "final/v1/cad/export_body_prints_stl.py"
+  },
+  {
+    "file": "BO-008_WHEEL_ARCH_POD_R.stl",
+    "bom": "BO-008",
+    "cad_label": "WHEEL_ARCH_POD_R",
+    "quantity": 1,
+    "material": "ASA, white; ivory finish",
+    "bed_down": "Outer face (-Y)",
+    "size_mm": [
+      108.0,
+      53.99,
+      18.23
+    ],
+    "volume_mm3": 14163.36,
+    "source": "final/v1/cad/export_body_prints_stl.py"
+  },
+  {
+    "file": "BO-009_WHEEL_ARCH_UPPER_TRIM_L.stl",
+    "bom": "BO-009",
+    "cad_label": "WHEEL_ARCH_UPPER_TRIM_L",
+    "quantity": 1,
+    "material": "ASA, white; amber finish",
+    "bed_down": "Outer face (+Y)",
+    "size_mm": [
+      96.0,
+      47.99,
+      3.0
+    ],
+    "volume_mm3": 1733.7,
+    "source": "final/v1/cad/export_body_prints_stl.py"
+  },
+  {
+    "file": "BO-009_WHEEL_ARCH_UPPER_TRIM_R.stl",
+    "bom": "BO-009",
+    "cad_label": "WHEEL_ARCH_UPPER_TRIM_R",
+    "quantity": 1,
+    "material": "ASA, white; amber finish",
+    "bed_down": "Outer face (-Y)",
+    "size_mm": [
+      96.0,
+      47.99,
+      3.0
+    ],
+    "volume_mm3": 1733.7,
+    "source": "final/v1/cad/export_body_prints_stl.py"
   }
 ]

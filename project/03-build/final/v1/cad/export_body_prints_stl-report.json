@@ -1,0 +1,227 @@
+{
+ "script": "export_body_prints_stl",
+ "passed": 30,
+ "total": 30,
+ "rows": [
+  {
+   "check": "BODY_FRAME_MAIN_PRINT_closed",
+   "ok": true,
+   "open_edges": 0,
+   "degenerate_dropped": 0,
+   "triangles": 30208
+  },
+  {
+   "check": "BODY_FRAME_MAIN_PRINT_volume",
+   "ok": true,
+   "mesh_mm3": 130876.75,
+   "cad_mm3": 130873.4
+  },
+  {
+   "check": "BODY_FRAME_MAIN_PRINT_bed",
+   "ok": true,
+   "low_mm": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "check": "BODY_FRAME_FRONT_LEFT_FOOT_CASSETTE_closed",
+   "ok": true,
+   "open_edges": 0,
+   "degenerate_dropped": 0,
+   "triangles": 4484
+  },
+  {
+   "check": "BODY_FRAME_FRONT_LEFT_FOOT_CASSETTE_volume",
+   "ok": true,
+   "mesh_mm3": 4147.26,
+   "cad_mm3": 4147.08
+  },
+  {
+   "check": "BODY_FRAME_FRONT_LEFT_FOOT_CASSETTE_bed",
+   "ok": true,
+   "low_mm": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "check": "COMPUTE_TRAY_closed",
+   "ok": true,
+   "open_edges": 0,
+   "degenerate_dropped": 0,
+   "triangles": 10676
+  },
+  {
+   "check": "COMPUTE_TRAY_volume",
+   "ok": true,
+   "mesh_mm3": 17095.76,
+   "cad_mm3": 17095.88
+  },
+  {
+   "check": "COMPUTE_TRAY_bed",
+   "ok": true,
+   "low_mm": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "check": "BODY_SHELL_closed",
+   "ok": true,
+   "open_edges": 0,
+   "degenerate_dropped": 0,
+   "triangles": 51988
+  },
+  {
+   "check": "BODY_SHELL_volume",
+   "ok": true,
+   "mesh_mm3": 142509.67,
+   "cad_mm3": 142505.09
+  },
+  {
+   "check": "BODY_SHELL_bed",
+   "ok": true,
+   "low_mm": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "check": "FRONT_SERVICE_PANEL_EXPOSED_SPEAKER_closed",
+   "ok": true,
+   "open_edges": 0,
+   "degenerate_dropped": 0,
+   "triangles": 6648
+  },
+  {
+   "check": "FRONT_SERVICE_PANEL_EXPOSED_SPEAKER_volume",
+   "ok": true,
+   "mesh_mm3": 21983.56,
+   "cad_mm3": 21981.43
+  },
+  {
+   "check": "FRONT_SERVICE_PANEL_EXPOSED_SPEAKER_bed",
+   "ok": true,
+   "low_mm": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "check": "REAR_SERVICE_PANEL_OCTAGONAL_closed",
+   "ok": true,
+   "open_edges": 0,
+   "degenerate_dropped": 0,
+   "triangles": 4052
+  },
+  {
+   "check": "REAR_SERVICE_PANEL_OCTAGONAL_volume",
+   "ok": true,
+   "mesh_mm3": 26959.11,
+   "cad_mm3": 26959.02
+  },
+  {
+   "check": "REAR_SERVICE_PANEL_OCTAGONAL_bed",
+   "ok": true,
+   "low_mm": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "check": "WHEEL_ARCH_POD_L_closed",
+   "ok": true,
+   "open_edges": 0,
+   "degenerate_dropped": 0,
+   "triangles": 2810
+  },
+  {
+   "check": "WHEEL_ARCH_POD_L_volume",
+   "ok": true,
+   "mesh_mm3": 14163.27,
+   "cad_mm3": 14167.68
+  },
+  {
+   "check": "WHEEL_ARCH_POD_L_bed",
+   "ok": true,
+   "low_mm": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "check": "WHEEL_ARCH_POD_R_closed",
+   "ok": true,
+   "open_edges": 0,
+   "degenerate_dropped": 0,
+   "triangles": 2812
+  },
+  {
+   "check": "WHEEL_ARCH_POD_R_volume",
+   "ok": true,
+   "mesh_mm3": 14163.36,
+   "cad_mm3": 14167.67
+  },
+  {
+   "check": "WHEEL_ARCH_POD_R_bed",
+   "ok": true,
+   "low_mm": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "check": "WHEEL_ARCH_UPPER_TRIM_L_closed",
+   "ok": true,
+   "open_edges": 0,
+   "degenerate_dropped": 0,
+   "triangles": 636
+  },
+  {
+   "check": "WHEEL_ARCH_UPPER_TRIM_L_volume",
+   "ok": true,
+   "mesh_mm3": 1733.7,
+   "cad_mm3": 1734.16
+  },
+  {
+   "check": "WHEEL_ARCH_UPPER_TRIM_L_bed",
+   "ok": true,
+   "low_mm": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "check": "WHEEL_ARCH_UPPER_TRIM_R_closed",
+   "ok": true,
+   "open_edges": 0,
+   "degenerate_dropped": 0,
+   "triangles": 636
+  },
+  {
+   "check": "WHEEL_ARCH_UPPER_TRIM_R_volume",
+   "ok": true,
+   "mesh_mm3": 1733.7,
+   "cad_mm3": 1734.16
+  },
+  {
+   "check": "WHEEL_ARCH_UPPER_TRIM_R_bed",
+   "ok": true,
+   "low_mm": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  }
+ ]
+}

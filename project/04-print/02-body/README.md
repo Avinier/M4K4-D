@@ -1,5 +1,7 @@
 # Body prints
 
+**2026-11-18 export:** The frame, foot cassette, compute tray, shell, front and rear panels, both arch pods and both trims are in [`stl/`](stl/) with individual [part cards](cards/). `export_body_prints_stl.py` passes 30/30 mesh checks. These are review exports, pending camera contact and strain-relief resolution, received hardware fits, and the print process checks in each card. **Before the shell (BO-019):** the adhesive-clip/W27 shell mock-up and the four-mic overlay bench test ([TODO](../../03-build/TODO.md)). Not yet exported: yaw stage, PCB-08 cradle, BO-069/BO-070 and the audio hub cradle. Arch pods carry a Ø4.10 top pilot ([D-114](../../03-build/decisions.md#d-114)). Head prints remain held for the received servo horns.
+
 The printed parts of [body v1](../../03-build/02-body/v1/BOM.md). This page is started early for one part; the body frame, compute tray, yaw stage and skins are added when phase 2 and phase 3 export (see the [print plan](../README.md#plan)).
 
 Materials and colours are from the [print guide](../../03-build/final/v1/printguide.md#4-colour-scheme). STLs are written from the final CAD with every droid edit; each script checks its meshes before writing the manifest.
