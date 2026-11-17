@@ -181,6 +181,38 @@ def clashes(subject, leaves, skip=(), pad=0.0, min_vol=1e-4, parts_only=True):
     return out
 
 
+def _solids(shape):
+    s = list(shape.solids()) if hasattr(shape, "solids") else []
+    return s or [shape]
+
+
+def piece_clashes(subject, leaves, skip=(), pad=0.0, min_vol=1e-4, parts_only=True):
+    """clashes() for a harness tube (a compound of overlapping cylinders and spheres).
+
+    A Boolean on the whole self-overlapping compound returned 0 for about half of the
+    real wire/part intersections (2026-11-17 review: W30/W31 ran 14 mm through the rear
+    deck and read 0). Test each solid and sum per leaf; joint overlaps make the sum an
+    over-estimate, which is the safe side for a clash test.
+    """
+    tot = {}
+    for s in _solids(subject):
+        for label, v in clashes(s, leaves, skip=skip, pad=pad, min_vol=1e-6, parts_only=parts_only):
+            tot[label] = tot.get(label, 0.0) + v
+    return [(k, round(v, 4)) for k, v in sorted(tot.items(), key=lambda kv: -kv[1]) if v > min_vol]
+
+
+def piece_common(a, b):
+    """Intersection volume of two shapes, either of which may be a harness tube (see piece_clashes)."""
+    tot = 0.0
+    bs = [(s, _box(s)) for s in _solids(b)]
+    for sa in _solids(a):
+        ba = _box(sa)
+        for sb, bb in bs:
+            if _hit(ba, bb):
+                tot += common(sa, sb)
+    return tot
+
+
 def min_gap(subject, leaves, skip=(), reach=3.0, parts_only=True):
     """(gap, label) to the nearest leaf within `reach`; vendor leaves as boxes."""
     sb = _box(subject)

@@ -37,7 +37,7 @@ def main():
         hits = []
         for sname, s in solids:
             if C._hit(C._box(w), C._box(s)):
-                v = C.common(w, s)
+                v = C.piece_common(w, s)   # piecewise: whole-tube Booleans miss hits (2026-11-17)
                 if v > 0.05:
                     hits.append((sname, round(v, 3)))
         near = sorted((round(C.distance(w, s), 2), sname) for sname, s in solids if C._hit(C._box(w), C._box(s), 3.0))
