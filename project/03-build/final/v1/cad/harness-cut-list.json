@@ -1,10 +1,10 @@
 {
  "note": "One cut list for the chassis, head (W47) and body harnesses, from CAD centrelines. All E.",
  "totals_mm_E": {
-  "chassis": 3108,
-  "head W47": 2988,
-  "head fan-out": 403,
-  "body": 3998
+  "chassis": 3901,
+  "head W47": 3919,
+  "head fan-out": 93,
+  "body": 4016
  },
  "rows": [
   {
@@ -12,581 +12,632 @@
    "label": "W01_PACK_TO_JPK_POS_AWG16",
    "cad_mm": 10.7,
    "allowance_mm": 30.0,
-   "cut_mm_E": 41
+   "cut_mm_E": 120,
+   "partial": true
   },
   {
    "harness": "chassis",
    "label": "W01_PACK_TO_JPK_NEG_AWG16",
    "cad_mm": 10.7,
    "allowance_mm": 30.0,
-   "cut_mm_E": 41
+   "cut_mm_E": 120,
+   "partial": true
   },
   {
    "harness": "chassis",
    "label": "W02P_CELL_TO_PA_BMINUS_AWG24",
    "cad_mm": 20.6,
    "allowance_mm": 30.0,
-   "cut_mm_E": 51
+   "cut_mm_E": 110,
+   "partial": true
   },
   {
    "harness": "chassis",
    "label": "W02B_PA_TO_XHP3_BMINUS_AWG24",
    "cad_mm": 165.9,
    "allowance_mm": 30.0,
-   "cut_mm_E": 196
+   "cut_mm_E": 196,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W02P_CELL_TO_PA_BMID_AWG24",
    "cad_mm": 20.6,
    "allowance_mm": 30.0,
-   "cut_mm_E": 51
+   "cut_mm_E": 110,
+   "partial": true
   },
   {
    "harness": "chassis",
    "label": "W02B_PA_TO_XHP3_BMID_AWG24",
    "cad_mm": 165.9,
    "allowance_mm": 30.0,
-   "cut_mm_E": 196
+   "cut_mm_E": 196,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W02P_CELL_TO_PA_BPLUS_AWG24",
    "cad_mm": 20.6,
    "allowance_mm": 30.0,
-   "cut_mm_E": 51
+   "cut_mm_E": 110,
+   "partial": true
   },
   {
    "harness": "chassis",
    "label": "W02B_PA_TO_XHP3_BPLUS_AWG24",
    "cad_mm": 165.9,
    "allowance_mm": 30.0,
-   "cut_mm_E": 196
+   "cut_mm_E": 196,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W03a_JPK_TO_FUSE_POS_AWG16",
    "cad_mm": 43.9,
    "allowance_mm": 30.0,
-   "cut_mm_E": 74
+   "cut_mm_E": 74,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W03a_JPK_TO_JBAT_NEG_AWG16",
    "cad_mm": 118.3,
    "allowance_mm": 30.0,
-   "cut_mm_E": 148
+   "cut_mm_E": 148,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W03b_FUSE_TO_JBAT_POS_AWG16",
    "cad_mm": 154.3,
    "allowance_mm": 30.0,
-   "cut_mm_E": 184
+   "cut_mm_E": 184,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W05c_JCHASSIS_TO_TUB_POS_AWG16",
-   "cad_mm": 32.9,
+   "cad_mm": 33.5,
    "allowance_mm": 30.0,
-   "cut_mm_E": 63
+   "cut_mm_E": 64,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W05c_JCHASSIS_TO_TUB_NEG_AWG16",
-   "cad_mm": 32.9,
+   "cad_mm": 33.5,
    "allowance_mm": 30.0,
-   "cut_mm_E": 63
+   "cut_mm_E": 64,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W05t_TUB_TO_M2_M3_INPUT_POS_AWG18",
    "cad_mm": 41.8,
    "allowance_mm": 30.0,
-   "cut_mm_E": 72
+   "cut_mm_E": 110,
+   "partial": true
   },
   {
    "harness": "chassis",
    "label": "W05t_TUB_TO_M2_M3_INPUT_NEG_AWG18",
    "cad_mm": 41.8,
    "allowance_mm": 30.0,
-   "cut_mm_E": 72
+   "cut_mm_E": 110,
+   "partial": true
   },
   {
    "harness": "chassis",
    "label": "W06_TUB_TO_DRIVER_L_POS_AWG18",
    "cad_mm": 6.8,
    "allowance_mm": 30.0,
-   "cut_mm_E": 37
+   "cut_mm_E": 90,
+   "partial": true
   },
   {
    "harness": "chassis",
    "label": "W06_TUB_TO_DRIVER_L_NEG_AWG18",
    "cad_mm": 6.8,
    "allowance_mm": 30.0,
-   "cut_mm_E": 37
+   "cut_mm_E": 90,
+   "partial": true
   },
   {
    "harness": "chassis",
    "label": "W07_TUB_TO_DRIVER_R_POS_AWG18",
    "cad_mm": 6.8,
    "allowance_mm": 30.0,
-   "cut_mm_E": 37
+   "cut_mm_E": 90,
+   "partial": true
   },
   {
    "harness": "chassis",
    "label": "W07_TUB_TO_DRIVER_R_NEG_AWG18",
    "cad_mm": 6.8,
    "allowance_mm": 30.0,
-   "cut_mm_E": 37
+   "cut_mm_E": 90,
+   "partial": true
   },
   {
    "harness": "chassis",
    "label": "W08_DRIVER_TO_MOTOR_L_POS_AWG22",
    "cad_mm": 67.9,
    "allowance_mm": 30.0,
-   "cut_mm_E": 98
+   "cut_mm_E": 98,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W08_DRIVER_TO_MOTOR_L_NEG_AWG22",
    "cad_mm": 67.9,
    "allowance_mm": 30.0,
-   "cut_mm_E": 98
+   "cut_mm_E": 98,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W09_DRIVER_TO_MOTOR_R_POS_AWG22",
    "cad_mm": 65.6,
    "allowance_mm": 30.0,
-   "cut_mm_E": 96
+   "cut_mm_E": 96,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W09_DRIVER_TO_MOTOR_R_NEG_AWG22",
    "cad_mm": 65.6,
    "allowance_mm": 30.0,
-   "cut_mm_E": 96
+   "cut_mm_E": 96,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W13_M2_TO_JS18H_HEAD_6V3_POS_AWG20",
    "cad_mm": 42.6,
    "allowance_mm": 30.0,
-   "cut_mm_E": 73
+   "cut_mm_E": 73,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W13_M2_TO_JS18H_HEAD_6V3_NEG_AWG20",
    "cad_mm": 42.6,
    "allowance_mm": 30.0,
-   "cut_mm_E": 73
+   "cut_mm_E": 73,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W17_M3_TO_JS18Y_YAW_11V1_POS_AWG20",
    "cad_mm": 42.6,
    "allowance_mm": 30.0,
-   "cut_mm_E": 73
+   "cut_mm_E": 73,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W17_M3_TO_JS18Y_YAW_11V1_NEG_AWG20",
    "cad_mm": 42.6,
    "allowance_mm": 30.0,
-   "cut_mm_E": 73
+   "cut_mm_E": 73,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W34_NOSE_HALL_TOUCH_TO_J10_8_GH5_CABLE",
-   "cad_mm": 67.4,
+   "cad_mm": 130.5,
    "allowance_mm": 30.0,
-   "cut_mm_E": 97
+   "cut_mm_E": 160,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W36_REAR_TCRT_TO_J10_10_GH4_CABLE",
-   "cad_mm": 21.6,
+   "cad_mm": 145.4,
    "allowance_mm": 30.0,
-   "cut_mm_E": 52
+   "cut_mm_E": 175,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W29_IMU_TO_J10_7_GH8_CABLE",
-   "cad_mm": 61.7,
+   "cad_mm": 67.8,
    "allowance_mm": 30.0,
-   "cut_mm_E": 92
+   "cut_mm_E": 98,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W30_ENCODER_L_TO_J10_3_GH4_CABLE",
-   "cad_mm": 166.2,
+   "cad_mm": 122.6,
    "allowance_mm": 30.0,
-   "cut_mm_E": 196
+   "cut_mm_E": 153,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W31_ENCODER_R_TO_J10_4_GH4_CABLE",
-   "cad_mm": 110.4,
+   "cad_mm": 111.5,
    "allowance_mm": 30.0,
-   "cut_mm_E": 140
+   "cut_mm_E": 141,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W32_DRIVER_L_TO_J10_5_GH6_CABLE",
-   "cad_mm": 108.0,
+   "cad_mm": 127.5,
    "allowance_mm": 30.0,
-   "cut_mm_E": 138
+   "cut_mm_E": 158,
+   "partial": false
   },
   {
    "harness": "chassis",
    "label": "W33_DRIVER_R_TO_J10_6_GH6_CABLE",
-   "cad_mm": 36.0,
+   "cad_mm": 34.1,
    "allowance_mm": 30.0,
-   "cut_mm_E": 66
+   "cut_mm_E": 64,
+   "partial": false
   },
   {
    "harness": "head W47",
    "label": "W47_+6V3_HEAD_PR_AWG22",
-   "cad_mm": 181.7,
+   "cad_mm": 315.8,
    "allowance_mm": 30.0,
-   "cut_mm_E": 212
+   "cut_mm_E": 346,
+   "partial": false
   },
   {
    "harness": "head W47",
    "label": "W47_+5V_C2_AWG26",
-   "cad_mm": 183.7,
+   "cad_mm": 230.3,
    "allowance_mm": 30.0,
-   "cut_mm_E": 214
+   "cut_mm_E": 260,
+   "partial": false
   },
   {
    "harness": "head W47",
    "label": "W47_+5V_DISPLAY_AWG26",
-   "cad_mm": 186.3,
+   "cad_mm": 231.0,
    "allowance_mm": 30.0,
-   "cut_mm_E": 216
+   "cut_mm_E": 261,
+   "partial": false
   },
   {
    "harness": "head W47",
    "label": "W47_GND_HEAD_AWG22",
-   "cad_mm": 181.7,
+   "cad_mm": 315.7,
    "allowance_mm": 30.0,
-   "cut_mm_E": 212
+   "cut_mm_E": 346,
+   "partial": false
   },
   {
    "harness": "head W47",
    "label": "W47_GND_C2_AWG26",
-   "cad_mm": 182.7,
+   "cad_mm": 229.3,
    "allowance_mm": 30.0,
-   "cut_mm_E": 213
+   "cut_mm_E": 259,
+   "partial": false
   },
   {
    "harness": "head W47",
    "label": "W47_GND_DISPLAY_AWG26",
-   "cad_mm": 184.2,
+   "cad_mm": 229.0,
    "allowance_mm": 30.0,
-   "cut_mm_E": 214
+   "cut_mm_E": 259,
+   "partial": false
   },
   {
    "harness": "head W47",
    "label": "W47_GND_SIG_AWG28",
-   "cad_mm": 214.7,
+   "cad_mm": 261.3,
    "allowance_mm": 30.0,
-   "cut_mm_E": 245
+   "cut_mm_E": 291,
+   "partial": false
   },
   {
    "harness": "head W47",
    "label": "W47_C0TX_P_AWG28",
-   "cad_mm": 212.3,
+   "cad_mm": 258.9,
    "allowance_mm": 30.0,
-   "cut_mm_E": 242
+   "cut_mm_E": 289,
+   "partial": false
   },
   {
    "harness": "head W47",
    "label": "W47_C0TX_N_AWG28",
-   "cad_mm": 210.6,
+   "cad_mm": 257.2,
    "allowance_mm": 30.0,
-   "cut_mm_E": 241
+   "cut_mm_E": 287,
+   "partial": false
   },
   {
    "harness": "head W47",
    "label": "W47_C2TX_N_AWG28",
-   "cad_mm": 211.5,
+   "cad_mm": 258.0,
    "allowance_mm": 30.0,
-   "cut_mm_E": 241
+   "cut_mm_E": 288,
+   "partial": false
   },
   {
    "harness": "head W47",
    "label": "W47_C2TX_P_AWG28",
-   "cad_mm": 213.8,
+   "cad_mm": 260.4,
    "allowance_mm": 30.0,
-   "cut_mm_E": 244
+   "cut_mm_E": 290,
+   "partial": false
   },
   {
    "harness": "head W47",
    "label": "W47_SERVO_DATA_AWG28",
-   "cad_mm": 216.1,
+   "cad_mm": 350.2,
    "allowance_mm": 30.0,
-   "cut_mm_E": 246
+   "cut_mm_E": 380,
+   "partial": false
   },
   {
    "harness": "head W47",
    "label": "W47_STRIPPED_HDMI_INNER_PAIRS_E",
-   "cad_mm": 217.7,
+   "cad_mm": 333.0,
    "allowance_mm": 30.0,
-   "cut_mm_E": 248
-  },
-  {
-   "harness": "head fan-out",
-   "label": "W47_LEAD_PCB12_J1",
-   "cad_mm": 46.6,
-   "allowance_mm": 15.0,
-   "cut_mm_E": 62
-  },
-  {
-   "harness": "head fan-out",
-   "label": "W47_LEAD_HEAD_CAMERA_HDMI",
-   "cad_mm": 115.3,
-   "allowance_mm": 15.0,
-   "cut_mm_E": 130
-  },
-  {
-   "harness": "head fan-out",
-   "label": "W47_LEAD_SERVO_ROLL",
-   "cad_mm": 57.6,
-   "allowance_mm": 15.0,
-   "cut_mm_E": 73
-  },
-  {
-   "harness": "head fan-out",
-   "label": "W47_LEAD_DISPLAY_POWER",
-   "cad_mm": 44.8,
-   "allowance_mm": 15.0,
-   "cut_mm_E": 60
+   "cut_mm_E": 363,
+   "partial": false
   },
   {
    "harness": "head fan-out",
    "label": "W47_LEAD_PCB12_J2_BRANCH",
    "cad_mm": 63.3,
-   "allowance_mm": 15.0,
-   "cut_mm_E": 78
+   "allowance_mm": 30.0,
+   "cut_mm_E": 93,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W03r_JBAT_TO_CHARGE_SPLICE_POS_AWG16",
    "cad_mm": 44.6,
    "allowance_mm": 70.4,
-   "cut_mm_E": 115
+   "cut_mm_E": 115,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W03r_JBAT_TO_CHARGE_SPLICE_NEG_AWG16",
    "cad_mm": 34.2,
    "allowance_mm": 69.8,
-   "cut_mm_E": 104
+   "cut_mm_E": 104,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W04_CHARGE_SPLICES_TO_XT30_2XAWG16",
    "cad_mm": 46.0,
    "allowance_mm": 82.0,
-   "cut_mm_E": 128
+   "cut_mm_E": 128,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W05_POS_SPLICE_TO_M1_VIN_AWG16",
    "cad_mm": 39.1,
    "allowance_mm": 29.9,
-   "cut_mm_E": 69
+   "cut_mm_E": 69,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W05_M1_VOUT_TO_M6_INPLUS_AWG16",
    "cad_mm": 19.1,
    "allowance_mm": 29.9,
-   "cut_mm_E": 49
+   "cut_mm_E": 49,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W05_M6_INMINUS_TO_POS_STAR_AWG16",
    "cad_mm": 32.1,
    "allowance_mm": 29.9,
-   "cut_mm_E": 62
+   "cut_mm_E": 62,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W05c_STARS_TO_JCHASSIS_2XAWG16",
    "cad_mm": 23.4,
    "allowance_mm": 69.6,
-   "cut_mm_E": 93
+   "cut_mm_E": 93,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W05b_STARS_TO_M4_2XAWG18",
    "cad_mm": 20.0,
    "allowance_mm": 30.0,
-   "cut_mm_E": 50
+   "cut_mm_E": 50,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W05b_STARS_TO_M5_2XAWG18",
    "cad_mm": 44.0,
    "allowance_mm": 30.0,
-   "cut_mm_E": 74
+   "cut_mm_E": 74,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W10_M4_TO_PI5_USBC_2XAWG18",
    "cad_mm": 90.9,
    "allowance_mm": 30.1,
-   "cut_mm_E": 121
+   "cut_mm_E": 121,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W05s_M5_TO_SHARED_5V_2XAWG18",
    "cad_mm": 18.9,
    "allowance_mm": 30.1,
-   "cut_mm_E": 49
+   "cut_mm_E": 49,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W11_SHARED_5V_TO_SS34_2XAWG22",
    "cad_mm": 16.0,
    "allowance_mm": 30.0,
-   "cut_mm_E": 46
+   "cut_mm_E": 46,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W11_SS34_TO_C3_J10_1_2XAWG22",
    "cad_mm": 80.4,
    "allowance_mm": 29.6,
-   "cut_mm_E": 110
+   "cut_mm_E": 110,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W14_SHARED_5V_TO_J8_1_4XAWG22",
    "cad_mm": 88.6,
    "allowance_mm": 30.4,
-   "cut_mm_E": 119
+   "cut_mm_E": 119,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W13_JS18H_TO_J8_1_HEAD_6V3_2XAWG20",
    "cad_mm": 97.1,
    "allowance_mm": 69.9,
-   "cut_mm_E": 167
+   "cut_mm_E": 167,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W17_JS18Y_TO_PCB08_J6_YAW_11V1_2XAWG20",
    "cad_mm": 126.9,
    "allowance_mm": 130.1,
-   "cut_mm_E": 257
+   "cut_mm_E": 257,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W12_SHARED_5V_TO_AMP_2XAWG22",
    "cad_mm": 181.7,
    "allowance_mm": 30.3,
-   "cut_mm_E": 212
+   "cut_mm_E": 212,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W24_J9_1_TO_J8_4_GH6_CABLE",
-   "cad_mm": 111.1,
-   "allowance_mm": 29.9,
-   "cut_mm_E": 141
+   "cad_mm": 112.6,
+   "allowance_mm": 30.4,
+   "cut_mm_E": 143,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W25_J10_2_TO_J9_2_GH6_CABLE",
    "cad_mm": 181.8,
    "allowance_mm": 30.2,
-   "cut_mm_E": 212
+   "cut_mm_E": 212,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W41_FAN_TO_J9_4_GH2_CABLE",
    "cad_mm": 48.1,
    "allowance_mm": 29.9,
-   "cut_mm_E": 78
+   "cut_mm_E": 78,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "J6_PCB09_TO_REAR_BREAK_GH6_CABLE",
    "cad_mm": 146.6,
    "allowance_mm": 60.4,
-   "cut_mm_E": 207
+   "cut_mm_E": 207,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W44_REAR_BREAK_TO_M6_4XAWG28",
    "cad_mm": 15.6,
    "allowance_mm": 30.4,
-   "cut_mm_E": 46
+   "cut_mm_E": 46,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W40_REAR_BREAK_TO_BUTTON_BUFFER_2XAWG28",
    "cad_mm": 64.2,
    "allowance_mm": 29.8,
-   "cut_mm_E": 94
+   "cut_mm_E": 94,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W40_MUSHROOM_TO_BUTTON_BUFFER_2XAWG24",
-   "cad_mm": 23.0,
-   "allowance_mm": 30.0,
-   "cut_mm_E": 53
+   "cad_mm": 37.1,
+   "allowance_mm": 29.9,
+   "cut_mm_E": 67,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W40_BUFFER_TO_M1_ON_OFF_3XAWG24",
    "cad_mm": 23.8,
    "allowance_mm": 30.2,
-   "cut_mm_E": 54
+   "cut_mm_E": 54,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W26_J9_3_TO_HUB_GH10_CABLE",
    "cad_mm": 26.8,
    "allowance_mm": 30.2,
-   "cut_mm_E": 57
+   "cut_mm_E": 57,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W27_HUB_TO_MIC_FRONT_L_6XAWG28",
    "cad_mm": 130.6,
    "allowance_mm": 70.4,
-   "cut_mm_E": 201
+   "cut_mm_E": 201,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W27_HUB_TO_MIC_FRONT_R_6XAWG28",
    "cad_mm": 240.3,
    "allowance_mm": 69.7,
-   "cut_mm_E": 310
+   "cut_mm_E": 310,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W27_HUB_TO_MIC_REAR_L_6XAWG28",
-   "cad_mm": 199.2,
-   "allowance_mm": 69.8,
-   "cut_mm_E": 269
+   "cad_mm": 199.5,
+   "allowance_mm": 70.5,
+   "cut_mm_E": 270,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W27_HUB_TO_MIC_REAR_R_6XAWG28",
    "cad_mm": 295.7,
    "allowance_mm": 70.3,
-   "cut_mm_E": 366
+   "cut_mm_E": 366,
+   "partial": false
   },
   {
    "harness": "body",
    "label": "W28_AMP_TO_SPEAKER_TWISTED_2XAWG22",
-   "cad_mm": 54.8,
-   "allowance_mm": 30.2,
-   "cut_mm_E": 85
+   "cad_mm": 55.9,
+   "allowance_mm": 30.1,
+   "cut_mm_E": 86,
+   "partial": false
   }
  ]
 }
