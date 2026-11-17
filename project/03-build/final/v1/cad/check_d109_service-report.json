@@ -1,7 +1,7 @@
 {
  "script": "check_d109_service",
- "passed": 13,
- "total": 13,
+ "passed": 16,
+ "total": 16,
  "rows": [
   {
    "check": "shell lift: W27 FL plug draws back along its route",
@@ -28,6 +28,64 @@
    "note": "OPEN if failing: resolve in the D-037 shell mock-up (smaller plug, reroute, or wider gap)"
   },
   {
+   "check": "tray slide as built is blocked (why the service state is needed)",
+   "ok": true,
+   "first_contact": [
+    0,
+    "COMPUTE_TRAY",
+    [
+     [
+      "TRAY_M3X8_SCREW_1",
+      27.1233
+     ],
+     [
+      "TRAY_M3X8_SCREW_2",
+      27.1233
+     ],
+     [
+      "TRAY_M3X8_SCREW_3",
+      19.8537
+     ]
+    ]
+   ],
+   "note": "C3 J10 headers meet the tray edge; M5 and its standoffs meet the frame near 57 mm"
+  },
+  {
+   "check": "M4/M5 board screws reachable from below, body lifted off the chassis",
+   "ok": true,
+   "screws": [
+    [
+     "M4_M2X4_BOARD_SCREW_1",
+     []
+    ],
+    [
+     "M4_M2X4_BOARD_SCREW_2",
+     []
+    ],
+    [
+     "M5_M2X4_BOARD_SCREW_1",
+     []
+    ],
+    [
+     "M5_M2X4_BOARD_SCREW_2",
+     []
+    ]
+   ],
+   "tool": "3 mm driver, 40 mm straight",
+   "lifts_aside": [
+    "J_S18_Y_MICROFIT3_1X2_RECEPTACLE_HALF",
+    "J_S18_H_MICROFIT3_1X2_RECEPTACLE_HALF"
+   ]
+  },
+  {
+   "check": "tray slide in the service state clears every fixed part",
+   "ok": true,
+   "first_contact": null,
+   "riders": 18,
+   "state": "C3 carrier out; tray M3x8 out; M4/M5 M2x4 and standoffs out, modules on their leads",
+   "note": "vendor Pi/cooler are checked by 02-body check_compute_mount.py (D-042 insertion sweep); not swept here"
+  },
+  {
    "check": "tray slide meets only unplugged or travelling leads",
    "ok": true,
    "met": [
@@ -49,7 +107,7 @@
    "check": "panel withdrawal: W40 switch",
    "ok": true,
    "straight_after_mm": 36.1,
-   "cad_plus_service_mm": 23.0,
+   "cad_plus_service_mm": 37.1,
    "via": "2-way header at the button buffer (unplug before withdrawing the panel)"
   },
   {
