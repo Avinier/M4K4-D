@@ -431,8 +431,8 @@
   {
    "check": "endpoint MUSHROOM",
    "ok": true,
-   "label": "POWER_BUTTON_MUSHROOM_RED_MUSHROOM_HEAD",
-   "matches": 12,
+   "label": "POWER_BUTTON_MUSHROOM_LEFT_TERMINAL_SCREW_HEAD",
+   "matches": 2,
    "mouth": [
     -28.2,
     0.0,
@@ -445,12 +445,12 @@
    ],
    "wires": "W40",
    "box": [
-    -61.0,
-    -12.6,
-    92.9,
+    -29.2,
+    -1.55,
+    99.55,
     -28.2,
-    12.6,
-    118.1
+    1.55,
+    111.45
    ]
   },
   {
@@ -585,13 +585,13 @@
    "matches": 2,
    "mouth": [
     41.575,
-    38.125,
-    112.3
+    42.2,
+    110.175
    ],
    "direction": [
     0,
-    0,
-    1
+    1,
+    0
    ],
    "wires": "W24",
    "box": [

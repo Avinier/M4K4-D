@@ -31,7 +31,7 @@ ENDPOINTS = {
     "M6": (r"M6_INA226_PARTS_ENVELOPE_UNMEASURED", (1, 0, 0), "W05 W44"),   # pads on the parts side
     "BUTTON_BUFFER": (r"M1_REAR_BUTTON_BUFFER_CAD_RESERVE", (1, 0, 0), "W40 J6"),
     "XT30": (r"M12_XT30U_FEMALE_CHARGE_PORT", (1, 0, 0), "W04"),
-    "MUSHROOM": (r"POWER_BUTTON_MUSHROOM_(?!BEHIND)\w+", (1, 0, 0), "W40"),
+    "MUSHROOM": (r"POWER_BUTTON_MUSHROOM_(LEFT|RIGHT)_TERMINAL_SCREW_HEAD", (1, 0, 0), "W40"),   # the two NO terminals, not the whole button (2026-11-17)
     # tray
     "M4": (r"M4_POLOLU_4082_S13V30F5_\w+_STEP", (0, 0, -1), "W05b W10|W05s"),
     "M5": (r"M5_POLOLU_4082_S13V30F5_\w+_STEP", (0, 0, -1), "W05b W05s|W10"),
@@ -39,7 +39,7 @@ ENDPOINTS = {
     "J10_1": (r"C3_J10_1_MICROFIT3_2P_MATED_PLUG|C3_CARRIER_EDGE_CONNECTOR_J101_RESERVE", (1, 0, 0), "W11"),   # the "J101" box is J10-1's own plug/lead reserve (C3_POWER_PLUG_RESERVE)
     "J10_2": (r"\w*J10_2\w*MATED_PLUG\w*", (0, 0, 1), "W25"),
     # compute
-    "J9_1": (r"C0_\w*J9_1\w*", (0, 0, 1), "W24"),
+    "J9_1": (r"C0_\w*J9_1\w*", (0, 1, 0), "W24"),   # SM06B side-entry: the mated plug and its lead face +Y (2026-11-17)
     "J9_2": (r"C0_\w*J9_2\w*", (0, 0, 1), "W25"),
     "J9_3": (r"C0_\w*J9_3\w*", (0, 0, 1), "W26"),
     "J9_4": (r"C0_LINK_ADAPTER_J94_FAN_XH2_PLUG_RESERVE", (0, 0, 1), "W41"),

@@ -1,7 +1,7 @@
 {
  "script": "check_d109_routes",
- "passed": 96,
- "total": 96,
+ "passed": 100,
+ "total": 100,
  "rows": [
   {
    "check": "box T1_JBAT_AFT clear",
@@ -316,6 +316,12 @@
    "where": []
   },
   {
+   "check": "box T5_W28_C clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
    "check": "box T5_W12_CROSS clear",
    "ok": true,
    "hits": [],
@@ -382,7 +388,25 @@
    "where": []
   },
   {
-   "check": "box T6_MUSHROOM_TO_BUFFER clear",
+   "check": "box T6_SW_EXIT clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T6_SW_SIDE clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T6_SW_BACK clear",
+   "ok": true,
+   "hits": [],
+   "where": []
+  },
+  {
+   "check": "box T6_SW_DOWN clear",
    "ok": true,
    "hits": [],
    "where": []

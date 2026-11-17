@@ -6,7 +6,8 @@
   {
    "check": "W03r vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W03r no reversal",
@@ -16,7 +17,8 @@
   {
    "check": "W03r- vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W03r- no reversal",
@@ -26,7 +28,8 @@
   {
    "check": "W04 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W04 no reversal",
@@ -36,7 +39,8 @@
   {
    "check": "W05 M1 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W05 M1 no reversal",
@@ -46,7 +50,8 @@
   {
    "check": "W05 M6 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W05 M6 no reversal",
@@ -56,7 +61,8 @@
   {
    "check": "W05 stars vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W05 stars no reversal",
@@ -66,7 +72,8 @@
   {
    "check": "W05c vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W05c no reversal",
@@ -76,7 +83,8 @@
   {
    "check": "W05b M4 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W05b M4 no reversal",
@@ -86,7 +94,8 @@
   {
    "check": "W05b M5 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W05b M5 no reversal",
@@ -96,7 +105,8 @@
   {
    "check": "W10 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W10 no reversal",
@@ -106,7 +116,8 @@
   {
    "check": "W05s vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W05s no reversal",
@@ -116,7 +127,8 @@
   {
    "check": "W11 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W11 no reversal",
@@ -126,7 +138,8 @@
   {
    "check": "W11 J10-1 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W11 J10-1 no reversal",
@@ -136,7 +149,8 @@
   {
    "check": "W14 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W14 no reversal",
@@ -146,7 +160,8 @@
   {
    "check": "W13 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W13 no reversal",
@@ -156,7 +171,8 @@
   {
    "check": "W17 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W17 no reversal",
@@ -166,7 +182,8 @@
   {
    "check": "W12 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W12 no reversal",
@@ -176,17 +193,19 @@
   {
    "check": "W24 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W24 no reversal",
    "ok": true,
-   "worst_turn_deg": 98.3
+   "worst_turn_deg": 89.6
   },
   {
    "check": "W25 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W25 no reversal",
@@ -196,7 +215,8 @@
   {
    "check": "W41 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W41 no reversal",
@@ -206,7 +226,8 @@
   {
    "check": "J6 lead vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "J6 lead no reversal",
@@ -216,7 +237,8 @@
   {
    "check": "W44 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W44 no reversal",
@@ -226,7 +248,8 @@
   {
    "check": "W40 sense vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W40 sense no reversal",
@@ -236,17 +259,21 @@
   {
    "check": "W40 switch vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": {
+    "POWER_BUTTON_MUSHROOM_BEHIND_PANEL_KEEP_OUT": 0
+   }
   },
   {
    "check": "W40 switch no reversal",
    "ok": true,
-   "worst_turn_deg": 78.2
+   "worst_turn_deg": 90.0
   },
   {
    "check": "W40 M1 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W40 M1 no reversal",
@@ -256,7 +283,8 @@
   {
    "check": "W26 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W26 no reversal",
@@ -266,7 +294,8 @@
   {
    "check": "W27 FL vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W27 FL no reversal",
@@ -276,7 +305,8 @@
   {
    "check": "W27 FR vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W27 FR no reversal",
@@ -286,7 +316,8 @@
   {
    "check": "W27 RL vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W27 RL no reversal",
@@ -296,7 +327,8 @@
   {
    "check": "W27 RR vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": null
   },
   {
    "check": "W27 RR no reversal",
@@ -306,12 +338,15 @@
   {
    "check": "W28 vs assembly",
    "ok": true,
-   "hits": []
+   "hits": [],
+   "keepout_beyond_terminal_zone_mm3": {
+    "SPEAKER_ACOUSTIC_CAVITY_KEEP_OUT": 0
+   }
   },
   {
    "check": "W28 no reversal",
    "ok": true,
-   "worst_turn_deg": 29.7
+   "worst_turn_deg": 56.7
   },
   {
    "check": "W24 segregated from power",
@@ -386,7 +421,7 @@
   {
    "check": "lengths written",
    "ok": true,
-   "total_conductor_g_E": 41.6,
+   "total_conductor_g_E": 41.7,
    "wires": 31
   }
  ]

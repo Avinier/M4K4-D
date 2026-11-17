@@ -1,6 +1,6 @@
 {
  "note": "E: CAD centreline + 2 x 15 mm terminations + body-lift/service slack; conductor mass only",
- "total_conductor_g_E": 41.6,
+ "total_conductor_g_E": 41.7,
  "wires": [
   {
    "chain": "W03r",
@@ -262,14 +262,14 @@
    "label": "W24_J9_1_TO_J8_4_GH6_CABLE",
    "cls": "signal",
    "group": "Compute signals",
-   "cad_mm": 111.1,
+   "cad_mm": 112.6,
    "slack_mm": 0.0,
-   "cut_mm_E": 141,
-   "mass_g_E": 0.99,
+   "cut_mm_E": 143,
+   "mass_g_E": 1.0,
    "centroid": [
     19.2,
-    7.2,
-    116.6
+    8.4,
+    116.3
    ]
   },
   {
@@ -352,14 +352,14 @@
    "label": "W40_MUSHROOM_TO_BUTTON_BUFFER_2XAWG24",
    "cls": "signal",
    "group": "Rear panel",
-   "cad_mm": 23.0,
+   "cad_mm": 37.1,
    "slack_mm": 0.0,
-   "cut_mm_E": 53,
-   "mass_g_E": 0.18,
+   "cut_mm_E": 67,
+   "mass_g_E": 0.23,
    "centroid": [
-    -32.8,
-    -9.8,
-    100.9
+    -31.0,
+    -8.8,
+    103.2
    ]
   },
   {
@@ -427,9 +427,9 @@
    "label": "W27_HUB_TO_MIC_REAR_L_6XAWG28",
    "cls": "audio",
    "group": "Audio",
-   "cad_mm": 199.2,
+   "cad_mm": 199.5,
    "slack_mm": 40.0,
-   "cut_mm_E": 269,
+   "cut_mm_E": 270,
    "mass_g_E": 1.94,
    "centroid": [
     65.7,
@@ -457,14 +457,14 @@
    "label": "W28_AMP_TO_SPEAKER_TWISTED_2XAWG22",
    "cls": "audio",
    "group": "Audio",
-   "cad_mm": 54.8,
+   "cad_mm": 55.9,
    "slack_mm": 0.0,
-   "cut_mm_E": 85,
-   "mass_g_E": 0.68,
+   "cut_mm_E": 86,
+   "mass_g_E": 0.69,
    "centroid": [
-    81.2,
-    23.6,
-    105.4
+    80.6,
+    21.4,
+    105.5
    ]
   }
  ]

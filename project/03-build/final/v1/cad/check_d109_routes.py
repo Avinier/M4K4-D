@@ -29,7 +29,8 @@ def main():
     for name, b in R.ROUTES.items():
         hits = [h for h in C.clashes(C.blk(b), leaves, min_vol=0.05, parts_only=False)
                 if not h[0].startswith(IGNORE) and h[0] not in allowed.get(name, ())
-                and not any(h[0].startswith(p) for p in ("D109_", "M9_INMP441", "J_S18", "J_BAT", "J_CHASSIS"))]
+                and not any(h[0].startswith(p) for p in ("D109_", "M9_INMP441", "J_S18", "J_BAT", "J_CHASSIS"))
+                and R.KEEPOUT_ENTRY.get(name) != h[0]]
         where = []
         for lab, _ in hits[:4]:
             lf = next(l for l in leaves if l.label == lab)

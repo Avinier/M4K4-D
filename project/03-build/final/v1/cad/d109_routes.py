@@ -65,8 +65,11 @@ ROUTES = {
     "T5_TAIL_UP": (74.5, 80.1, 53.2, 62.0, 106.0, 132.0),           # +Y of the amp terminal (Y 53)
     "T5_TAIL_OVER_HUB": (53.6, 80.1, 41.0, 58.5, 123.5, 132.0),     # over the hub bracket and amp; frame lip at X < 53.5
     "T5_TAIL_DOWN": (53.6, 62.0, 41.0, 58.5, 110.0, 132.0),         # down to the hub headers' mouths
-    "T5_W28_A": (79.9, 84.0, 34.0, 53.0, 104.0, 119.0),
-    "T5_W28_B": (78.0, 81.9, 10.0, 36.0, 100.0, 106.0),
+    # W28 stays -X of the speaker acoustic cavity keep-out (X >= 82) except at its two ends
+    # (2026-11-17: the old boxes ran the lead 2 mm inside the cavity along its whole length).
+    "T5_W28_A": (79.9, 81.4, 34.0, 53.0, 104.0, 119.0),
+    "T5_W28_B": (78.0, 80.5, 1.0, 36.0, 100.0, 106.0),
+    "T5_W28_C": (80.0, 82.0, -1.5, 1.5, 98.0, 101.0),               # last 2 mm to the speaker tabs
     "T5_W12_CROSS": (5.5, 10.0, -46.0, 30.0, 78.0, 84.4),            # under the tray to beyond its +Y edge (23.5)
     "T5_W12_UNDER_PY": (4.0, 32.0, 24.0, 30.0, 78.0, 84.4),          # under the yaw servo (Z 84.6)
     "T5_W12_PY_RISE": (27.0, 32.0, 23.6, 32.0, 78.0, 100.0),          # +X of the yaw servo
@@ -79,7 +82,13 @@ ROUTES = {
     "T6_BREAK_FWD": (-35.5, -22.0, 14.0, 18.0, 100.0, 105.0),
     "T6_PASS_KEEPOUT": (-26.0, -22.0, -18.5, 18.0, 100.0, 105.0),
     "T6_TO_BUFFER": (-43.5, -22.0, -18.5, -11.5, 100.0, 105.0),
-    "T6_MUSHROOM_TO_BUFFER": (-43.5, -30.0, -13.0, -11.0, 96.5, 104.0),   # above the tray rear edge plus its 2 mm lift,
+    # W40 switch (2026-11-17): off the NO terminals +X out of the mushroom keep-out (X -26.1),
+    # over the W40 sense run (X -24, Z 102.5), back along Y -12.3 outside the keep-out (|Y| 11),
+    # down into the buffer. Replaces T6_MUSHROOM_TO_BUFFER, which ran 12 mm inside the keep-out.
+    "T6_SW_EXIT": (-28.7, -24.2, -1.5, 1.5, 104.5, 107.5),
+    "T6_SW_SIDE": (-25.8, -24.2, -13.2, 1.5, 105.5, 107.5),
+    "T6_SW_BACK": (-35.8, -24.2, -13.2, -11.4, 105.5, 107.5),
+    "T6_SW_DOWN": (-36.6, -34.2, -13.2, -11.4, 96.5, 107.5),
     "T6_BUFFER_TO_M1": (-42.0, -36.5, -18.5, -11.5, 92.0, 94.0),
 }
 
@@ -108,17 +117,22 @@ CHAINS = {
     "J6 lead": (None, ["T4_J6_RISE", "T4_J6_SHIFT", "T4_J6_AFT", "T4_J6_DROP"], "REAR_BREAK"),
     "W44": ("REAR_BREAK", ["T6_BREAK_TO_M6"], "M6"),
     "W40 sense": ("REAR_BREAK", ["T6_BREAK_FWD", "T6_PASS_KEEPOUT", "T6_TO_BUFFER"], "BUTTON_BUFFER"),
-    "W40 switch": ("MUSHROOM", ["T6_MUSHROOM_TO_BUFFER"], "BUTTON_BUFFER"),
+    "W40 switch": ("MUSHROOM", ["T6_SW_EXIT", "T6_SW_SIDE", "T6_SW_BACK", "T6_SW_DOWN"], "BUTTON_BUFFER"),
     "W40 M1": ("BUTTON_BUFFER", ["T6_BUFFER_TO_M1"], "M1"),
     "W26": ("J9_3", ["T5_W26_UP", "T5_W26_OVER"], "HUB_W26_PADS"),
     "W27 FL": ("HUB_MIC_HEADERS", ["T5_TAIL_DOWN", "T5_TAIL_OVER_HUB", "T5_TAIL_UP", "T5_TAIL_IN_PY"], "SKIN_EXIT_FRONT_L"),
     "W27 FR": ("HUB_MIC_HEADERS", ["T5_TAIL_DOWN", "T5_TAIL_OVER_HUB", "T5_TAIL_CROSS_HIGH", "T5_TAIL_UP_NY", "T5_TAIL_IN_NY"], "SKIN_EXIT_FRONT_R"),
     "W27 RL": ("HUB_MIC_HEADERS", ["T5_TAIL_DOWN", "T5_TAIL_OVER_HUB", "T5_TAIL_UP", "T5_TAIL_IN_PY"], "SKIN_EXIT_REAR_L"),
     "W27 RR": ("HUB_MIC_HEADERS", ["T5_TAIL_DOWN", "T5_TAIL_OVER_HUB", "T5_TAIL_CROSS_HIGH", "T5_TAIL_UP_NY", "T5_TAIL_IN_NY"], "SKIN_EXIT_REAR_R"),
-    "W28": ("AMP_TERMINAL", ["T5_W28_A", "T5_W28_B"], "SPEAKER"),
+    "W28": ("AMP_TERMINAL", ["T5_W28_A", "T5_W28_B", "T5_W28_C"], "SPEAKER"),
     "W12": ("SHARED_5V_POS", ["T2_M5_TO_S5", "T5_W12_CROSS", "T5_W12_UNDER_PY", "T5_W12_PY_RISE", "T5_W12_PY_FWD",
                               "T5_W12_JOG", "T5_W12_TO_AMP", "T5_W12_AMP_PINS"], "AMP"),
 }
+
+
+# Route boxes that must enter a keep-out to reach their endpoint's terminals (checked by
+# check_d109_routes; the visible wire is held to the endpoint zone by check_body_harness).
+KEEPOUT_ENTRY = {"T6_SW_EXIT": "POWER_BUTTON_MUSHROOM_BEHIND_PANEL_KEEP_OUT"}   # NO screw terminals sit inside it
 
 
 def box(entry, name):
