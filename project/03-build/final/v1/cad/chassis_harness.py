@@ -27,22 +27,27 @@ TUB_SPLICES = {"POS": (19.0, 14.0, 69.0), "NEG": (27.0, 14.0, 69.0)}
 TUB_SPLICE_RADIUS = 3.25
 TUB_SPLICE_LENGTH = 24.0
 
-# Initial continuous signal-cable dress to the fitted PCB-10 GH plugs. These
-# paths are CAD-cleared at neutral; cable clips, actual connector exits and
-# lift slack remain E until the populated first build.
+# Continuous signal-cable dress to the fitted PCB-10 GH plugs. Rerouted 2026-11-17
+# after the D-106..D-109 review (piecewise clash test): W30/W31 rise through the
+# motor-bay deck opening (X > -17) beside the encoder cap instead of through the
+# solid rear deck; all five cross under W11 (Z 82.2) and over W09 in the X 22-35
+# window at Y -38..-46, then rise in the plug layer (Y -44..-48) to their plugs.
+# W29 no longer passes through the SS34 joint; W32 leaves the left driver between
+# W03a+ and W08. Cable clips, connector exits and lift slack remain E.
 SIGNAL_CABLES = (
     ("W29_IMU_TO_J10_7_GH8_CABLE", 1.4, "#65a7b5",
-     [(25,-13,64),(30,-18,67),(25,-25,69),(10,-35,72),(10,-44,78),(13,-49,93)]),
+     [(25,-13,64),(26,-20,70),(24.5,-33,73.5),(24.5,-47,73.5),(16,-47,73.5),(16,-47,93),(16,-50,93)]),
     ("W30_ENCODER_L_TO_J10_3_GH4_CABLE", 1.1, "#9bba71",
-     [(-13,11,42),(-22,18,52),(-22,35,57),(-10,35,63),(0,35,66),
-      (10,35,70),(10,0,72),(15,-25,72),(25,-44,78),(25,-49,93)]),
+     [(-13,11,42),(-14.6,11,46),(-14.6,11,59),(-8,11,65),(6,5,67),(6,-8,68.5),(14,-20,71),
+      (25.5,-28.5,76),(27,-38,76.5),(27,-47,76.5),(27,-47,93),(26.5,-50,93)]),
     ("W31_ENCODER_R_TO_J10_4_GH4_CABLE", 1.1, "#709f6d",
-     [(-13,-11,42),(-22,-18,52),(-22,-36,57),(-10,-36,73),
-      (0,-36,74),(20,-45,74),(35,-49,93)]),
+     [(-13,-11,42),(-14.6,-11,46),(-14.6,-11,59),(-8,-11,65),(9,-13,66),(28,-27,68.5),
+      (34,-35,73),(34,-38,75.5),(34,-47,75.5),(34,-47,93),(34,-50,93)]),
     ("W32_DRIVER_L_TO_J10_5_GH6_CABLE", 1.3, "#71a4ca",
-     [(40,45,70),(35,35,73),(25,30,74),(15,0,75),(13,-44,78),(13,-49,86)]),
+     [(39,45.5,69.3),(34,45.5,72.5),(31,43,75.5),(28,34,75.5),(25,30,75),(19,0,75),(19,-28,77),
+      (23,-33,78),(23,-43.5,78),(11.5,-43.5,78),(11.5,-43.5,86.5),(11.5,-50,86.5)]),
     ("W33_DRIVER_R_TO_J10_6_GH6_CABLE", 1.3, "#6b86b9",
-     [(40,-34,71),(32,-34,73),(25,-35,73),(33,-49,86)]),
+     [(40,-34,71),(36,-36,78),(30.5,-39,78),(30.5,-47,78),(30.5,-47,86.5),(30.5,-50,86.5)]),
 )
 
 
@@ -126,7 +131,9 @@ def build_chassis_harness(entry):
     wire("Fused and switched distribution", "W03b_FUSE_TO_JBAT_POS_AWG16",
          fused, .9, "#cf413a")
     feeder = _path(entry, entry.D106_CHAINS["W05c"])
-    feeder = feeder[:-1] + [(32.2, 25., 61.)]  # end at the still-unplaced tub distribution
+    # End at the still-unplaced tub distribution. Hold the over-lug height until past
+    # the CH-106 lug's +X face (X 30): the old descent cut the lug corner with W05c-.
+    feeder = feeder[:-2] + [(31.0, 28.0, 62.35), (32.2, 25., 61.)]
     for suffix, dy, dz, colour in (("POS", -1.0, 1.1, "#cf413a"),
                                    ("NEG", 1.0, -1.1, "#30343a")):
         wire("Fused and switched distribution", f"W05c_JCHASSIS_TO_TUB_{suffix}_AWG16",
@@ -160,10 +167,16 @@ def build_chassis_harness(entry):
     # the Ø5 nose bore or the rear keel tunnel.
     nose = _path(entry, entry.D106_CHAINS["W34 nose"])
     nose += [(86., -31., 34.5), (86., -31., 56.5), _mid(entry.D106_ROUTES["NOSE_J10_8_RISER"])]
+    # 2026-11-17: continued to the C3 J10-8 plug (grid-routed: parts >= 0.4, power >= 0.5, W08/W09 >= 5 mm)
+    nose += [(86.2,-30.8,70.2),(67.2,-47.8,73.2),(55.8,-47.8,73.2),(49.2,-47.8,80.6),(38.6,-48.2,80.6),
+             (38.2,-48.4,79.8),(38.0,-50.,79.6)]
     wire("Chassis sensors", "W34_NOSE_HALL_TOUCH_TO_J10_8_GH5_CABLE",
          nose, 1.0, "#55a8a9")
     wire("Chassis sensors", "W36_REAR_TCRT_TO_J10_10_GH4_CABLE",
-         _path(entry, entry.D106_CHAINS["W36 TCRT"]), .9, "#6989b6")
+         _path(entry, entry.D106_CHAINS["W36 TCRT"]) + [   # 2026-11-17: on to the C3 J10-10 plug (grid-routed)
+             (-51.2,-22.2,60.2),(-48.8,-25.8,58.2),(-25.8,-28.8,59.2),(-17.8,-33.8,64.2),(-8.2,-34.2,69.8),
+             (-6.2,-36.3,71.7),(4.2,-44.2,75.2),(22.2,-44.2,75.2),(24.8,-45.2,77.5),(26.2,-44.8,79.2),
+             (32.8,-44.2,85.8),(44.2,-46.8,93.2),(44.3,-50.,93.2)], .9, "#6989b6")
     for label, radius, colour, points in SIGNAL_CABLES:
         wire("Chassis control signals", label, points, radius, colour)
     return Compound(label="Chassis wires", children=[

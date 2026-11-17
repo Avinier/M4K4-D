@@ -1,82 +1,408 @@
 {
-  "scope": "neutral CAD pose; nominal outer cable and splice envelopes",
-  "checks": [
-    {
-      "name": "34 cables and 2 splice envelopes",
-      "pass": true,
-      "unexpected": []
-    },
-    {
-      "name": "W29 versus assembly",
-      "pass": true,
-      "unexpected": []
-    },
-    {
-      "name": "W29 versus visible power",
-      "pass": true,
-      "unexpected": []
-    },
-    {
-      "name": "W30 versus assembly",
-      "pass": true,
-      "unexpected": []
-    },
-    {
-      "name": "W30 versus visible power",
-      "pass": true,
-      "unexpected": []
-    },
-    {
-      "name": "W31 versus assembly",
-      "pass": true,
-      "unexpected": []
-    },
-    {
-      "name": "W31 versus visible power",
-      "pass": true,
-      "unexpected": []
-    },
-    {
-      "name": "W32 versus assembly",
-      "pass": true,
-      "unexpected": []
-    },
-    {
-      "name": "W32 versus visible power",
-      "pass": true,
-      "unexpected": []
-    },
-    {
-      "name": "W33 versus assembly",
-      "pass": true,
-      "unexpected": []
-    },
-    {
-      "name": "W33 versus visible power",
-      "pass": true,
-      "unexpected": []
-    },
-    {
-      "name": "HN006_TUB_POS_AWG16_MULTI_WIRE_SPLICE_ENVELOPE versus assembly",
-      "pass": true,
-      "unexpected": []
-    },
-    {
-      "name": "HN006_TUB_POS_AWG16_MULTI_WIRE_SPLICE_ENVELOPE versus visible wires",
-      "pass": true,
-      "unexpected": []
-    },
-    {
-      "name": "HN006_TUB_NEG_AWG16_MULTI_WIRE_SPLICE_ENVELOPE versus assembly",
-      "pass": true,
-      "unexpected": []
-    },
-    {
-      "name": "HN006_TUB_NEG_AWG16_MULTI_WIRE_SPLICE_ENVELOPE versus visible wires",
-      "pass": true,
-      "unexpected": []
-    }
-  ],
-  "passed": 15,
-  "total": 15
+ "script": "check_chassis_harness",
+ "passed": 80,
+ "total": 80,
+ "rows": [
+  {
+   "check": "34 wires and 2 splice envelopes",
+   "ok": true,
+   "wires": 34,
+   "splices": 2
+  },
+  {
+   "check": "W01_PACK_TO_JPK_POS_AWG16 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W01_PACK_TO_JPK_NEG_AWG16 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W02P_CELL_TO_PA_BMINUS_AWG24 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W02B_PA_TO_XHP3_BMINUS_AWG24 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W02P_CELL_TO_PA_BMID_AWG24 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W02B_PA_TO_XHP3_BMID_AWG24 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W02P_CELL_TO_PA_BPLUS_AWG24 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W02B_PA_TO_XHP3_BPLUS_AWG24 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W03a_JPK_TO_FUSE_POS_AWG16 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W03a_JPK_TO_JBAT_NEG_AWG16 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W03b_FUSE_TO_JBAT_POS_AWG16 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W05c_JCHASSIS_TO_TUB_POS_AWG16 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W05c_JCHASSIS_TO_TUB_NEG_AWG16 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W05t_TUB_TO_M2_M3_INPUT_POS_AWG18 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W05t_TUB_TO_M2_M3_INPUT_NEG_AWG18 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W06_TUB_TO_DRIVER_L_POS_AWG18 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W06_TUB_TO_DRIVER_L_NEG_AWG18 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W07_TUB_TO_DRIVER_R_POS_AWG18 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W07_TUB_TO_DRIVER_R_NEG_AWG18 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W08_DRIVER_TO_MOTOR_L_POS_AWG22 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W08_DRIVER_TO_MOTOR_L_NEG_AWG22 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W09_DRIVER_TO_MOTOR_R_POS_AWG22 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W09_DRIVER_TO_MOTOR_R_NEG_AWG22 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W13_M2_TO_JS18H_HEAD_6V3_POS_AWG20 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W13_M2_TO_JS18H_HEAD_6V3_NEG_AWG20 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W17_M3_TO_JS18Y_YAW_11V1_POS_AWG20 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W17_M3_TO_JS18Y_YAW_11V1_NEG_AWG20 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W29_IMU_TO_J10_7_GH8_CABLE vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W30_ENCODER_L_TO_J10_3_GH4_CABLE vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W31_ENCODER_R_TO_J10_4_GH4_CABLE vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W32_DRIVER_L_TO_J10_5_GH6_CABLE vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W33_DRIVER_R_TO_J10_6_GH6_CABLE vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W34_NOSE_HALL_TOUCH_TO_J10_8_GH5_CABLE vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W36_REAR_TCRT_TO_J10_10_GH4_CABLE vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "HN006_TUB_POS_AWG16_MULTI_WIRE_SPLICE_ENVELOPE vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "HN006_TUB_NEG_AWG16_MULTI_WIRE_SPLICE_ENVELOPE vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W29 separated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W30 separated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W31 separated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W32 separated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W33 separated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W34 separated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W36 separated from power",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W01_PACK_TO_JPK_POS_AWG16 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W01_PACK_TO_JPK_NEG_AWG16 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W02P_CELL_TO_PA_BMINUS_AWG24 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W02B_PA_TO_XHP3_BMINUS_AWG24 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W02P_CELL_TO_PA_BMID_AWG24 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W02B_PA_TO_XHP3_BMID_AWG24 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W02P_CELL_TO_PA_BPLUS_AWG24 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W02B_PA_TO_XHP3_BPLUS_AWG24 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W03a_JPK_TO_FUSE_POS_AWG16 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W03a_JPK_TO_JBAT_NEG_AWG16 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W03b_FUSE_TO_JBAT_POS_AWG16 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W05c_JCHASSIS_TO_TUB_POS_AWG16 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W05c_JCHASSIS_TO_TUB_NEG_AWG16 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W05t_TUB_TO_M2_M3_INPUT_POS_AWG18 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W05t_TUB_TO_M2_M3_INPUT_NEG_AWG18 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W06_TUB_TO_DRIVER_L_POS_AWG18 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W06_TUB_TO_DRIVER_L_NEG_AWG18 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W07_TUB_TO_DRIVER_R_POS_AWG18 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W07_TUB_TO_DRIVER_R_NEG_AWG18 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W08_DRIVER_TO_MOTOR_L_POS_AWG22 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W08_DRIVER_TO_MOTOR_L_NEG_AWG22 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W09_DRIVER_TO_MOTOR_R_POS_AWG22 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W09_DRIVER_TO_MOTOR_R_NEG_AWG22 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W13_M2_TO_JS18H_HEAD_6V3_POS_AWG20 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W13_M2_TO_JS18H_HEAD_6V3_NEG_AWG20 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W17_M3_TO_JS18Y_YAW_11V1_POS_AWG20 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W17_M3_TO_JS18Y_YAW_11V1_NEG_AWG20 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W29_IMU_TO_J10_7_GH8_CABLE vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W30_ENCODER_L_TO_J10_3_GH4_CABLE vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W31_ENCODER_R_TO_J10_4_GH4_CABLE vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W32_DRIVER_L_TO_J10_5_GH6_CABLE vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W33_DRIVER_R_TO_J10_6_GH6_CABLE vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W34_NOSE_HALL_TOUCH_TO_J10_8_GH5_CABLE vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W36_REAR_TCRT_TO_J10_10_GH4_CABLE vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "HN006_TUB_POS_AWG16_MULTI_WIRE_SPLICE_ENVELOPE vs wires",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "HN006_TUB_NEG_AWG16_MULTI_WIRE_SPLICE_ENVELOPE vs wires",
+   "ok": true,
+   "hits": []
+  }
+ ]
 }
