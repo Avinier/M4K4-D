@@ -45,14 +45,32 @@ def ribbon_segment(a,b,width_axis,width,thickness=.3):
 
 
 HEAD_FFC_POINTS=[(-67.,-33.915,72.6),(-67.,-25.,83.),(-67.,10.,83.),(-35.,10.,83.),(-35.,0.,83.),(-14.5,0.,83.)]
-BODY_FFC_POINTS=[(53.,-43.915,117.),(53.,-48.,117.),(53.,-48.,109.5),(53.,-39.,109.5),
+BODY_FFC_POINTS=[(53.,-43.915,117.),(53.,-48.,117.),(53.,-48.,103.),(53.,-39.,103.),
+                 (40.12,-39.,103.),(40.12,-39.,104.5),(53.,-39.,104.5),
+                 (53.,-39.,106.),(40.12,-39.,106.),(40.12,-39.,107.5),
+                 (53.,-39.,107.5),(53.,-39.,109.),(37.4,-39.,109.),
                  (37.4,-39.,109.5),(37.4,-24.72,109.5),(37.4,-24.72,100.)]
 
 
 def head_ffc():
-    p=HEAD_FFC_POINTS
-    axes=[(1,0,0),(1,0,0),(0,1,0),(1,0,0),(0,1,0)]
-    return [ribbon_segment(a,b,w,16.) for a,b,w in zip(p,p[1:],axes)]
+    """One connected 15-way ribbon, with 5 mm seated tails at both sockets.
+
+    The broad face follows the bend; the real contact side remains a receipt
+    check because the B0091 and SC0874 socket drawings do not set it here.
+    """
+    from build123d import Vector, Wire, Solid
+    p=[Vector(*x) for x in HEAD_FFC_POINTS]
+    axes=[Vector(*x) for x in ((1,0,0),(1,0,0),(1,0,0),(0,1,0),(0,1,0),(0,1,0))]
+    sections=[]
+    for i,c in enumerate(p):
+        incoming=(p[i]-p[i-1]).normalized() if i else (p[1]-p[0]).normalized()
+        outgoing=(p[i+1]-p[i]).normalized() if i<len(p)-1 else incoming
+        tangent=(incoming+outgoing).normalized()
+        across=(axes[i]-tangent*axes[i].dot(tangent)).normalized()
+        normal=tangent.cross(across).normalized()
+        a=across*8.;b=normal*.15
+        sections.append(Wire.make_polygon([c-a-b,c+a-b,c+a+b,c-a+b],close=True))
+    return [Solid.make_loft(sections,ruled=True)]
 
 
 def body_ffc():
@@ -64,9 +82,8 @@ def body_ffc():
     """
     from build123d import Vector, Wire, Solid
     p=[Vector(*x) for x in BODY_FFC_POINTS]
-    axes=[Vector(*x) for x in ((1,0,0),(1,0,0),(1,0,0),
-                               (1,1,0),(1,1,0),(1,1,0),(0,1,0))]
-    widths=(16.,16.,16.,14.,12.,12.,12.)
+    axes=[Vector(1,0,0) if i<3 or i>=13 else Vector(0,1,0) for i in range(len(p))]
+    widths=(16.,16.,16.,16.,16.,16.,16.,16.,16.,16.,16.,16.,12.,12.,12.,12.)
     sections=[]
     for i,c in enumerate(p):
         incoming=(p[i]-p[i-1]).normalized() if i else (p[1]-p[0]).normalized()
@@ -90,7 +107,7 @@ def lead_paths():
     paths['SERVO_ROLL']=paths['SERVO_ROLL'][:-2]+[[-28.,-12.,44.],list(SERVO_R_ANCHOR)]
     # The routed lead used to stop 3.1 mm beyond the modeled plug face.
     # Seat its last segment into the B0091 head HDMI plug envelope.
-    paths['HEAD_CAMERA_HDMI']=paths['HEAD_CAMERA_HDMI'][:-2]+[[-67.,14.5,71.],[-67.,15.5,75.]]
+    paths['HEAD_CAMERA_HDMI']=paths['HEAD_CAMERA_HDMI'][:-2]+[[-67.,29.,75.],[-67.,22.,75.],[-67.,15.5,75.]]
     paths['PCB12_J1']=[list(U.CLAMP),[-50.4,0.,10.],[-44.5,-6.5,10.],[-44.5,-16.,10.],
                        [-44.5,-23.,6.5],[-39.,-29.4,11.75]]
     paths['PCB12_J1'].append([-32.485,-29.4,11.75])

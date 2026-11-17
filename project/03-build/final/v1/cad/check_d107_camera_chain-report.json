@@ -1,23 +1,23 @@
 {
-  "qualified": false,
-  "passed": 2,
+  "qualified": true,
+  "passed": 5,
   "total": 5,
   "checks": [
     {
       "name": "head_hdmi_cable_approaches_from_plug_rear",
-      "pass": false,
+      "pass": true,
       "head_plug_rear_y_mm": 15.915,
       "preterminal_xyz_mm": [
         -67.0,
-        14.5,
-        71.0
+        22.0,
+        75.0
       ],
       "terminal_xyz_mm": [
         -67.0,
         15.5,
         75.0
       ],
-      "finding": "Current lead approaches from below and reverses the required +Y cable exit."
+      "finding": "Head lead must approach the +Y rear face along -Y with boot room."
     },
     {
       "name": "body_hdmi_cable_leaves_plug_rear",
@@ -38,18 +38,18 @@
     },
     {
       "name": "head_15way_envelope_is_one_continuous_part",
-      "pass": false,
-      "separate_solid_count": 5,
-      "finding": "Five segment solids only model nominal clearance, not a folded single FFC."
+      "pass": true,
+      "separate_solid_count": 1,
+      "finding": "A continuous ribbon solid is required through all bends."
     },
     {
       "name": "body_150mm_ribbon_excess_is_dressed_in_model",
-      "pass": false,
-      "modeled_centerline_mm": 59.965,
+      "pass": true,
+      "modeled_centerline_mm": 124.48500000000001,
       "purchased_length_mm": 150.0,
       "insertion_and_service_allowance_mm": 25.0,
-      "undressed_excess_mm": 65.035,
-      "finding": "One valid loft does not represent the stock ribbon or its excess-length folds."
+      "undressed_excess_mm": 0.5149999999999864,
+      "finding": "The 150 mm stock length must fit its fold and insertion allowance."
     },
     {
       "name": "head_150mm_ribbon_length_reaches_nominal_route",

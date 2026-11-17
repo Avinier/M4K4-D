@@ -8,7 +8,7 @@
 
 ## Order
 
-- [ ] **CH-103 balance-tap protection — design hold, do not order yet.** One protected tap per B−/mid/B+ is needed because these leads bypass the main fuse and PCB-01. Littelfuse 0251001.MXL (1 A, 125 V DC, 0.128 Ω cold) is a candidate, but four three-fuse envelope rows at the current pack exit all collide with the cell/strap or J-PK ([fit study](final/v1/cad/study_ch103_fuse_fit.py)). Select the actual fuse/joint/sleeve and charger fault behavior, redesign the pack-end arrangement, then confirm fit and quantity before ordering 3 + 2 spares
+- [ ] **CH-103 balance-tap protection — open, do not order.** D-111 card reopened by [D-114](decisions.md#d-114): it cannot leave with the pack. Pick option A (card on the BMS, CH-106 relief), B (tub +2.5 mm in Y) or C (thin fuses in the end gaps), then re-run `check_ch103_protection.py`. **B changes the chassis tub, so decide before printing the chassis.**
 - [ ] **BO-068 DIN 9021 M2 washers (Ø6), 8.** Clamp the INMP441 edges under the BO-013 screws. Skip if they came with the screw order
 - [ ] **CH-110 non-screw items:** 4 × M2 × 5 F-F round standoffs (S13V30F5 modules) and VHB foam tape. Skip if already in hand
 
@@ -16,6 +16,8 @@
 
 - [ ] CH-101 XT30U female panel port + XT60→XT30 lead for the PD60
 - [ ] CH-102 JST PA 3P balance break (PAP-03V-S / PALR-03VF, pre-crimped SPHD/SPAL AWG24) + JST XH 3P rear balance port (XHP-3, pre-crimped SXH AWG24)
+- [ ] HN-006 tub pair: 2 × WAGO 221-415 ([D-113](decisions.md#d-113)); four rear splices still to select
+- [ ] CH-099 shunt: Littelfuse WPC2512QLR004FWR 4 mΩ 3 W ([D-112](decisions.md#d-112))
 - [ ] Micro-Fit+ 2-way pairs for `J-BAT` and `J-CHASSIS` (206460/215953 series, AWG16); exact gender/key/PN open
 - [ ] Micro-Fit 3.0 2-way pairs for `J-S18-H` and `J-S18-Y` (43030/43025 + 43031/43020)
 - [ ] Crimp tools (Molex 213309-4400 MF+, 63819-0900 MF3; check PN) or professionally terminated pairs

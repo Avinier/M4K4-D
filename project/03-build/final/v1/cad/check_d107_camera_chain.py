@@ -1,8 +1,8 @@
 """D-107 camera harness qualification gaps missed by clearance checks.
 
-Run with the legacy CAD Python from this directory. This is expected to fail
-until the camera leads/ribbons have a physically credible, stock-length model.
-It does not claim electrical validation of a modified HDMI cable.
+Run with the legacy CAD Python from this directory. Five nominal geometry
+screens are distinct from received-connector, strain-relief and electrical
+validation of a modified HDMI cable.
 """
 
 import json
@@ -36,7 +36,7 @@ def main():
             'head_plug_rear_y_mm': head_plug.max.Y,
             'preterminal_xyz_mm': head_before,
             'terminal_xyz_mm': head_end,
-            'finding': 'Current lead approaches from below and reverses the required +Y cable exit.',
+            'finding': 'Head lead must approach the +Y rear face along -Y with boot room.',
         },
         {
             'name': 'body_hdmi_cable_leaves_plug_rear',
@@ -48,7 +48,7 @@ def main():
             'name': 'head_15way_envelope_is_one_continuous_part',
             'pass': len(H.head_ffc()) == 1,
             'separate_solid_count': len(H.head_ffc()),
-            'finding': 'Five segment solids only model nominal clearance, not a folded single FFC.',
+            'finding': 'A continuous ribbon solid is required through all bends.',
         },
         {
             'name': 'body_150mm_ribbon_excess_is_dressed_in_model',
@@ -57,7 +57,7 @@ def main():
             'purchased_length_mm': H.BODY_FFC_LENGTH,
             'insertion_and_service_allowance_mm': H.FFC_INSERTION_ALLOWANCE + H.FFC_SERVICE_ALLOWANCE,
             'undressed_excess_mm': body_undressed,
-            'finding': 'One valid loft does not represent the stock ribbon or its excess-length folds.',
+            'finding': 'The 150 mm stock length must fit its fold and insertion allowance.',
         },
         {
             'name': 'head_150mm_ribbon_length_reaches_nominal_route',

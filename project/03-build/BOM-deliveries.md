@@ -4,6 +4,10 @@ This file lists parts that have physically arrived and maps each one to its row 
 
 "Delivered" means the builder confirmed the parcel arrived. It does not mean the part has been measured, fitted or tested. Those checks stay open in each BOM row's `release_check`.
 
+## 2026-11-17: speaker receipt
+
+The builder reports **BO-001 Visaton K 50 WP 2915 speaker, quantity 1, received**. Supplier, order number, dimensions, impedance and acoustic checks were not supplied; the BO-001 release checks remain open. This supersedes the earlier cancelled element14 order as a statement of current stock, without assuming that order was reinstated.
+
 ## 2026-11-12: six orders, 26 lines
 
 Source: the builder's summary of supplier emails and delivery confirmations, pasted 2026-11-12.

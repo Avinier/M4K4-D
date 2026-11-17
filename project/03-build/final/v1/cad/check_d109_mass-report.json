@@ -19,7 +19,7 @@
    ],
    "d_equiv_mm": 18.58,
    "a_tip_worst_bound": 1.6248,
-   "margin_pct_bound": 2.687,
+   "margin_pct_bound": 2.688,
    "baseline_margin_pct": 4.5922,
    "note": "stationary bound, worst direction; not a re-run of the 1068120-pose sweep"
   },
@@ -299,11 +299,11 @@
     ],
     [
      "W28_AMP_TO_SPEAKER_TWISTED_2XAWG22",
-     0.68,
+     0.69,
      [
-      81.0,
+      80.6,
       21.4,
-      105.4
+      105.5
      ]
     ],
     [

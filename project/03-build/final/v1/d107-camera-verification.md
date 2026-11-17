@@ -1,6 +1,6 @@
 # D-107 camera harness verification — 2026-11-14
 
-**Result: FAIL / HOLD.** The signal-chain concept is supported by the B0091 documentation, but the current CAD does not verify a buildable camera harness. Do not use the earlier 72/72 clearance count as camera-chain qualification. No hardware was ordered, printed or bench-tested in this review.
+**2026-11-17 CAD update: 5/5 camera geometry checks pass; physical release remains HOLD.** The head HDMI lead now approaches the rear of its +Y-facing plug along −Y with a straight 6.5 mm boot run before the plug. The head 15-way FFC is one valid, positive-volume loft; the body FPC has a stacked accordion fold in the D-109 space, with 124.49 mm modeled centerline and 0.51 mm remaining after 25 mm insertion/service allowance. These remain nominal envelopes: fold radii, contact sides, received connector geometry, retention and powered C0–C4 streaming require first hardware. The earlier 72/72 clearance count did not establish camera-chain qualification.
 
 ## Manufacturer facts
 
@@ -12,7 +12,7 @@
 
 ## Independent CAD audit
 
-Reproduce with `check_d107_camera_chain.py` using the legacy runtime specified in [final/v1 README](README.md). The report is [2/5 PASS](cad/check_d107_camera_chain-report.json); the three failures are:
+The 2026-11-14 audit found 2/5 passing. The three historical failures were:
 
 1. **Head HDMI approach is wrong.** The modeled head plug extends to Y=+15.915 mm and Z=72…79 mm. The last two lead points are (−67,14.5,71) and (−67,15.5,75). The lead comes from **below the plug** and points toward +Y. A real cable must approach the plug's rear from beyond Y=+15.915 and point toward −Y into it, with room for its boot and a bend. The old 24.835 mm³ overlap test proves only that the solids intersect; it misses this reversed approach.
 2. **Head ribbon is five independent slabs.** Its 111.198 mm centerline reaches under the chosen 150 mm stock budget (13.802 mm nominal reserve after 25 mm insertion/service), but the CAD does not model a continuous ribbon with contact direction or fold/strain relief at its sockets.

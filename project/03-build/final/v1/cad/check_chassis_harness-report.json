@@ -1,12 +1,12 @@
 {
  "script": "check_chassis_harness",
- "passed": 80,
- "total": 80,
+ "passed": 96,
+ "total": 96,
  "rows": [
   {
-   "check": "34 wires and 2 splice envelopes",
+   "check": "39 wires and 2 rated five-wire splices",
    "ok": true,
-   "wires": 34,
+   "wires": 39,
    "splices": 2
   },
   {
@@ -20,7 +20,12 @@
    "hits": []
   },
   {
-   "check": "W02P_CELL_TO_PA_BMINUS_AWG24 vs parts",
+   "check": "W02P_CELL_TO_CH103_BMINUS_AWG24 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W02P_CH103_TO_PA_BMINUS_AWG24 vs parts",
    "ok": true,
    "hits": []
   },
@@ -30,7 +35,12 @@
    "hits": []
   },
   {
-   "check": "W02P_CELL_TO_PA_BMID_AWG24 vs parts",
+   "check": "W02P_CELL_TO_CH103_BMID_AWG24 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W02P_CH103_TO_PA_BMID_AWG24 vs parts",
    "ok": true,
    "hits": []
   },
@@ -40,7 +50,12 @@
    "hits": []
   },
   {
-   "check": "W02P_CELL_TO_PA_BPLUS_AWG24 vs parts",
+   "check": "W02P_CELL_TO_CH103_BPLUS_AWG24 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W02P_CH103_TO_PA_BPLUS_AWG24 vs parts",
    "ok": true,
    "hits": []
   },
@@ -70,17 +85,27 @@
    "hits": []
   },
   {
+   "check": "W05t_TUB_TO_M2_POS_AWG18 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
+   "check": "W05t_TUB_TO_M3_POS_AWG18 vs parts",
+   "ok": true,
+   "hits": []
+  },
+  {
    "check": "W05c_JCHASSIS_TO_TUB_NEG_AWG16 vs parts",
    "ok": true,
    "hits": []
   },
   {
-   "check": "W05t_TUB_TO_M2_M3_INPUT_POS_AWG18 vs parts",
+   "check": "W05t_TUB_TO_M2_NEG_AWG18 vs parts",
    "ok": true,
    "hits": []
   },
   {
-   "check": "W05t_TUB_TO_M2_M3_INPUT_NEG_AWG18 vs parts",
+   "check": "W05t_TUB_TO_M3_NEG_AWG18 vs parts",
    "ok": true,
    "hits": []
   },
@@ -90,12 +115,12 @@
    "hits": []
   },
   {
-   "check": "W06_TUB_TO_DRIVER_L_NEG_AWG18 vs parts",
+   "check": "W07_TUB_TO_DRIVER_R_POS_AWG18 vs parts",
    "ok": true,
    "hits": []
   },
   {
-   "check": "W07_TUB_TO_DRIVER_R_POS_AWG18 vs parts",
+   "check": "W06_TUB_TO_DRIVER_L_NEG_AWG18 vs parts",
    "ok": true,
    "hits": []
   },
@@ -180,12 +205,12 @@
    "hits": []
   },
   {
-   "check": "HN006_TUB_POS_AWG16_MULTI_WIRE_SPLICE_ENVELOPE vs parts",
+   "check": "HN006_TUB_POS_WAGO_221_415_INSULATED vs parts",
    "ok": true,
    "hits": []
   },
   {
-   "check": "HN006_TUB_NEG_AWG16_MULTI_WIRE_SPLICE_ENVELOPE vs parts",
+   "check": "HN006_TUB_NEG_WAGO_221_415_INSULATED vs parts",
    "ok": true,
    "hits": []
   },
@@ -235,7 +260,12 @@
    "near": []
   },
   {
-   "check": "W02P_CELL_TO_PA_BMINUS_AWG24 vs body wires",
+   "check": "W02P_CELL_TO_CH103_BMINUS_AWG24 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W02P_CH103_TO_PA_BMINUS_AWG24 vs body wires",
    "ok": true,
    "near": []
   },
@@ -245,7 +275,12 @@
    "near": []
   },
   {
-   "check": "W02P_CELL_TO_PA_BMID_AWG24 vs body wires",
+   "check": "W02P_CELL_TO_CH103_BMID_AWG24 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W02P_CH103_TO_PA_BMID_AWG24 vs body wires",
    "ok": true,
    "near": []
   },
@@ -255,7 +290,12 @@
    "near": []
   },
   {
-   "check": "W02P_CELL_TO_PA_BPLUS_AWG24 vs body wires",
+   "check": "W02P_CELL_TO_CH103_BPLUS_AWG24 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W02P_CH103_TO_PA_BPLUS_AWG24 vs body wires",
    "ok": true,
    "near": []
   },
@@ -285,17 +325,27 @@
    "near": []
   },
   {
+   "check": "W05t_TUB_TO_M2_POS_AWG18 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
+   "check": "W05t_TUB_TO_M3_POS_AWG18 vs body wires",
+   "ok": true,
+   "near": []
+  },
+  {
    "check": "W05c_JCHASSIS_TO_TUB_NEG_AWG16 vs body wires",
    "ok": true,
    "near": []
   },
   {
-   "check": "W05t_TUB_TO_M2_M3_INPUT_POS_AWG18 vs body wires",
+   "check": "W05t_TUB_TO_M2_NEG_AWG18 vs body wires",
    "ok": true,
    "near": []
   },
   {
-   "check": "W05t_TUB_TO_M2_M3_INPUT_NEG_AWG18 vs body wires",
+   "check": "W05t_TUB_TO_M3_NEG_AWG18 vs body wires",
    "ok": true,
    "near": []
   },
@@ -305,12 +355,12 @@
    "near": []
   },
   {
-   "check": "W06_TUB_TO_DRIVER_L_NEG_AWG18 vs body wires",
+   "check": "W07_TUB_TO_DRIVER_R_POS_AWG18 vs body wires",
    "ok": true,
    "near": []
   },
   {
-   "check": "W07_TUB_TO_DRIVER_R_POS_AWG18 vs body wires",
+   "check": "W06_TUB_TO_DRIVER_L_NEG_AWG18 vs body wires",
    "ok": true,
    "near": []
   },
@@ -395,14 +445,113 @@
    "near": []
   },
   {
-   "check": "HN006_TUB_POS_AWG16_MULTI_WIRE_SPLICE_ENVELOPE vs wires",
+   "check": "HN006_TUB_POS_WAGO_221_415_INSULATED vs wires",
    "ok": true,
    "hits": []
   },
   {
-   "check": "HN006_TUB_NEG_AWG16_MULTI_WIRE_SPLICE_ENVELOPE vs wires",
+   "check": "HN006_TUB_NEG_WAGO_221_415_INSULATED vs wires",
    "ok": true,
    "hits": []
+  },
+  {
+   "check": "HN006_TUB_POS_WAGO_221_415_INSULATED insulated from HN006_TUB_NEG_WAGO_221_415_INSULATED",
+   "ok": true,
+   "clearance_mm": 2.9
+  },
+  {
+   "check": "HN006_POS_one_input_four_outputs",
+   "ok": true,
+   "labels": [
+    "W05c_JCHASSIS_TO_TUB_POS_AWG16",
+    "W05t_TUB_TO_M2_POS_AWG18",
+    "W05t_TUB_TO_M3_POS_AWG18",
+    "W06_TUB_TO_DRIVER_L_POS_AWG18",
+    "W07_TUB_TO_DRIVER_R_POS_AWG18"
+   ]
+  },
+  {
+   "check": "HN006_POS_housing_separate_from_opposite_tails",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "HN006_NEG_one_input_four_outputs",
+   "ok": true,
+   "labels": [
+    "W05c_JCHASSIS_TO_TUB_NEG_AWG16",
+    "W05t_TUB_TO_M2_NEG_AWG18",
+    "W05t_TUB_TO_M3_NEG_AWG18",
+    "W06_TUB_TO_DRIVER_L_NEG_AWG18",
+    "W07_TUB_TO_DRIVER_R_NEG_AWG18"
+   ]
+  },
+  {
+   "check": "HN006_NEG_housing_separate_from_opposite_tails",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "HN006_insulated_tails_and_housing_separation",
+   "ok": true,
+   "jacket_contacts": [
+    [
+     "W05c_JCHASSIS_TO_TUB_POS_AWG16",
+     "W05c_JCHASSIS_TO_TUB_NEG_AWG16",
+     26.398
+    ],
+    [
+     "W05c_JCHASSIS_TO_TUB_POS_AWG16",
+     "W06_TUB_TO_DRIVER_L_NEG_AWG18",
+     7.396
+    ],
+    [
+     "W05t_TUB_TO_M2_POS_AWG18",
+     "W05t_TUB_TO_M2_NEG_AWG18",
+     10.273
+    ],
+    [
+     "W05t_TUB_TO_M2_POS_AWG18",
+     "W06_TUB_TO_DRIVER_L_NEG_AWG18",
+     3.785
+    ],
+    [
+     "W05t_TUB_TO_M3_POS_AWG18",
+     "W05t_TUB_TO_M3_NEG_AWG18",
+     10.273
+    ],
+    [
+     "W06_TUB_TO_DRIVER_L_POS_AWG18",
+     "W06_TUB_TO_DRIVER_L_NEG_AWG18",
+     15.805
+    ],
+    [
+     "W07_TUB_TO_DRIVER_R_POS_AWG18",
+     "W05c_JCHASSIS_TO_TUB_NEG_AWG16",
+     4.425
+    ],
+    [
+     "W07_TUB_TO_DRIVER_R_POS_AWG18",
+     "W05t_TUB_TO_M2_NEG_AWG18",
+     12.671
+    ],
+    [
+     "W07_TUB_TO_DRIVER_R_POS_AWG18",
+     "W05t_TUB_TO_M3_NEG_AWG18",
+     10.725
+    ],
+    [
+     "W07_TUB_TO_DRIVER_R_POS_AWG18",
+     "W06_TUB_TO_DRIVER_L_NEG_AWG18",
+     3.97
+    ],
+    [
+     "W07_TUB_TO_DRIVER_R_POS_AWG18",
+     "W07_TUB_TO_DRIVER_R_NEG_AWG18",
+     15.517
+    ]
+   ],
+   "assembly_gate": "sleeve and secure touching jackets"
   }
  ]
 }

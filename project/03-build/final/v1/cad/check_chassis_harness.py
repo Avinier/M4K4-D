@@ -25,7 +25,7 @@ import module_checks as C
 # Endpoint parts a wire may enter (label regex), keyed by wire stem.
 ENDPOINT_PARTS = {
     "W01": r"PACK_DISCONNECT_MICROFIT_PLUS_1X2_MATED_ENVELOPE",
-    "W02P": r"M12_JST_PA_3P_BALANCE_BREAK_MATED_PAIR",
+    "W02P": r"M12_JST_PA_3P_BALANCE_BREAK_MATED_PAIR|M12_CH103_\w+",
     "W02B": r"M12_JST_PA_3P_BALANCE_BREAK_MATED_PAIR|M12_JST_XHP\w*",
     "W03a": r"PACK_DISCONNECT\w*|PACK_ATOF_FUSE_HOLDER_ENVELOPE|J_BAT_\w*",
     "W03b": r"PACK_ATOF_FUSE_HOLDER_ENVELOPE|J_BAT_\w*",
@@ -60,9 +60,9 @@ def main():
     r = C.Report("check_chassis_harness")
     harness = H.build_chassis_harness(entry)
     groups = {g.label: list(g.children) for g in harness.children}
-    wires = [w for name, ws in groups.items() for w in ws if not w.label.startswith("HN006_")]
-    splices = [w for ws in groups.values() for w in ws if w.label.startswith("HN006_")]
-    r.check("34 wires and 2 splice envelopes", len(wires) == 34 and len(splices) == 2,
+    wires = [w for name, ws in groups.items() for w in ws if not w.label.endswith("_INSULATED")]
+    splices = [w for ws in groups.values() for w in ws if w.label.endswith("_INSULATED")]
+    r.check("39 wires and 2 rated five-wire splices", len(wires) == 39 and len(splices) == 2,
             wires=len(wires), splices=len(splices))
 
     # 1. vs parts, plus the D-109 body envelopes (splices, SS34 joint, breaks), which the
@@ -118,9 +118,47 @@ def main():
 
     # 4. splices vs visible wires
     for s in splices:
+        pol = "POS" if "_POS_" in s.label else "NEG"
+        expected = (f"W05c_JCHASSIS_TO_TUB_{pol}", f"W05t_TUB_TO_M2_{pol}",
+                    f"W05t_TUB_TO_M3_{pol}", f"W06_TUB_TO_DRIVER_L_{pol}",
+                    f"W07_TUB_TO_DRIVER_R_{pol}")
         hits = [(w.label, round(C.piece_common(s, w), 3)) for w in wires
-                if C._hit(C._box(s), C._box(w)) and C.piece_common(s, w) > 0.05]
+                if C._hit(C._box(s), C._box(w)) and C.piece_common(s, w) > 0.05
+                and not w.label.startswith(expected)]
         r.check(f"{s.label} vs wires", not hits, hits=hits)
+    for i, a in enumerate(splices):
+        for b in splices[i+1:]:
+            d = C.distance(a, b)
+            r.check(f"{a.label} insulated from {b.label}", d >= 2.5,
+                    clearance_mm=round(d, 3))
+    # Each housing has one input and four distinct outputs. Only insulated
+    # same-polarity tails may enter it; opposite-polarity conductors stay out.
+    for pol in ("POS", "NEG"):
+        own = [w for w in wires if w.label.startswith(("W05c_", "W05t_", "W06_", "W07_"))
+               and f"_{pol}_" in w.label]
+        opposite = "NEG" if pol == "POS" else "POS"
+        other = [w for w in wires if w.label.startswith(("W05c_", "W05t_", "W06_", "W07_"))
+                 and f"_{opposite}_" in w.label]
+        housing = next(s for s in splices if f"_{pol}_" in s.label)
+        r.check(f"HN006_{pol}_one_input_four_outputs", len(own) == 5,
+                labels=[w.label for w in own])
+        clashes = [(w.label, round(C.piece_common(housing, w), 3)) for w in other
+                   if C._hit(C._box(housing), C._box(w)) and C.piece_common(housing, w) > .05]
+        r.check(f"HN006_{pol}_housing_separate_from_opposite_tails", not clashes,
+                clashes=clashes)
+    pos = [w for w in wires if w.label.startswith(("W05c_", "W05t_", "W06_", "W07_"))
+           and "_POS_" in w.label]
+    neg = [w for w in wires if w.label.startswith(("W05c_", "W05t_", "W06_", "W07_"))
+           and "_NEG_" in w.label]
+    overlaps = [(a.label, b.label, round(C.piece_common(a, b), 3)) for a in pos for b in neg
+                if C._hit(C._box(a), C._box(b)) and C.piece_common(a, b) > .05]
+    # Crossing cable envelopes are insulated jackets, so touching jackets are
+    # permitted.  Bare stripped ends exist only inside the separate rated
+    # housings; the build card requires abrasion sleeve at each contact.
+    r.check("HN006_insulated_tails_and_housing_separation",
+            all(w.label.endswith(("_AWG16", "_AWG18")) for w in pos + neg)
+            and len(pos) == len(neg) == 5,
+            jacket_contacts=overlaps, assembly_gate="sleeve and secure touching jackets")
     r.finish()
 
 

@@ -860,6 +860,16 @@ BALANCE = dict(
     deck_hole=(52.0, 47.4, 2.5),                           # x, y, r through the front deck
 )
 
+# CH-103: three 1206 very-fast 1 A fuses on a small potted, pack-carried
+# carrier at the staged joint just inside the +Y service window. The short
+# cell-tab pigtails enter from -X and the three protected AWG24 tails leave
+# toward the PA break. The encapsulated card, not loose inline fuse sleeves,
+# withdraws with the pack through the window. Dimensions are an E envelope;
+# received insulation and cell-tab construction remain build gates.
+BALANCE_FUSE = dict(carrier=(39.0, 49.0, 35.0, 37.0, 41.0, 49.0),
+                    fuse_x=(43.0, 46.2), fuse_y=(35.7, 36.3),
+                    fuse_z=(42.2, 44.8, 47.4))
+
 # Microphones (D-093 Q6): four INMP441 modules at the four D-037 port axes. UNMEASURED module:
 # 14 x 14 x 1.6 board, port on its centre, INMP441 4.72 x 3.76 x 1.0 inboard over the port. The
 # board sits 1.6 mm deep in a 15 x 15 pocket in a larger boss (its inboard face flush with the old
@@ -1296,6 +1306,13 @@ def port_parts():
     out = [_tag(_port_box("xt30"), "M12_XT30U_FEMALE_CHARGE_PORT", "#E5C34B"),
            _tag(_port_box("xh"), "M12_JST_XHP_3_BALANCE_PORT_PLUG", "#F4F1E6"),
            _tag(_blk(*BALANCE["pair"]), "M12_JST_PA_3P_BALANCE_BREAK_MATED_PAIR", "#F4F1E6")]
+    out.append(_tag(_blk(*BALANCE_FUSE["carrier"]),
+                    "M12_CH103_THREE_FUSE_PACK_CARRIER_POTTED_ENVELOPE", "#CDA44D"))
+    for tap, z in zip(("B_MINUS", "MID", "B_PLUS"), BALANCE_FUSE["fuse_z"]):
+        x0, x1 = BALANCE_FUSE["fuse_x"]
+        y0, y1 = BALANCE_FUSE["fuse_y"]
+        out.append(_tag(_blk(x0, x1, y0, y1, z - .8, z + .8),
+                        f"M12_CH103_{tap}_LITTELFUSE_0466001_1206", "#A89B79"))
     length, w, h = PORTS["corridor"]
     mouth = PORTS["face_x"] + PORTS["recess"]
     for k in ("xt30", "xh"):
@@ -1682,6 +1699,14 @@ DROID_INSERTS = [
 
 
 DROID_CUTS = [
+    # STEP round-trip repair: the top arch insert pilot at exact Ø4.00 creates
+    # a serialized seam defect on both pods. Ø4.10 preserves the pilot datum;
+    # its heat-set fit is a first-print gate. Both repaired pods round-trip valid.
+    *[(rf"WHEEL_ARCH_POD_{side}", _body._axial_bore_y(
+        2.05, *sorted((sign * (_body._wheel_arch_fasteners()[1][2] - 1.0),
+                       sign * (_body._wheel_arch_fasteners()[1][2] + _body.WHEEL_ARCH_INSERT_HOLE_DEPTH))),
+        _body._wheel_arch_fasteners()[1][0], _body._wheel_arch_fasteners()[1][1]))
+      for sign, side in ((1., "L"), (-1., "R"))],
     # D-059: PCB-15 component relief behind the nose Hall board, open at the top and
     # into the lead groove. D-063 deepens it 0.4 mm (to 1.3 mm) with the board.
     (r"BALL_POD_PRINTED_SEAT", (125.3, 126.6, 7.8, 12.2, 30.3, 35.01)),
@@ -1803,6 +1828,23 @@ def _tool(value):
 def _cut_parts(node, parent_location, hits):
     children = list(node.children) if getattr(node, "children", None) else []
     if children:
+        if node.label == "YAW_SERVO_ST3215_HS_STEP":
+            # The vendor STEP's main case is invalid even before export. Keep
+            # the seven valid vendor solids and replace only that case with a
+            # conservative installed-coordinate solid. Received-part geometry
+            # still controls the mount and cable clearance release.
+            repaired = []
+            for child in children:
+                if child.is_valid:
+                    repaired.append(child)
+                else:
+                    bb = child.bounding_box()
+                    size = bb.size
+                    case = Box(size.X + .2, size.Y + .2, size.Z + .2).moved(
+                        Location(tuple(bb.center())))
+                    case.label = "ST3215_HS_CASE_CONSERVATIVE_ENVELOPE"
+                    repaired.append(case)
+            return _relabel(node.label, repaired, node.location, node.color)
         here = parent_location * node.location
         kept = []
         for child in children:

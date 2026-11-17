@@ -124,7 +124,7 @@
   {
    "check": "head_hdmi_lead_seated_in_plug",
    "ok": true,
-   "terminal_overlap_mm3": 24.8355,
+   "terminal_overlap_mm3": 4.2242,
    "terminal": [
     -67.0,
     15.5,

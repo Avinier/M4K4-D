@@ -94,17 +94,22 @@ The yaw servo sits in the body and is counted in the [body BOM](../../02-body/v1
 
 PCB-12's servo-bus interface must carry the Feetech protocol for HD-001 (D-046).
 
+## Registered display, camera and controller
+
+| ID | Part | Qty | State |
+|---|---|---:|---|
+| HD-029 | Waveshare ESP32-S3-LCD-4.3 non-touch, SKU 30493; M002 133 g display and retention allowance | 1 | SELECTED; measure received board and connector |
+| HD-030 | Raspberry Pi Camera Module 3 Wide, SC0874; M005/M006 10 g camera plus 8 g bracket/ribbon allowance | 1 | SELECTED; C0–C4 camera verification open |
+| HD-031 | Waveshare ESP32-S3-Zero on CH-086 PCB-12; M008 20 g installed allowance | 1 | SELECTED; received fit and firmware open |
+
 ## Not yet registered
 
 These parts are in the head CAD and mass tree but have no BOM row yet. The `M0xx` IDs are mass-tree allowances, not BOM IDs.
 
 | Mass row | Part | Mass basis |
 |---|---|---|
-| M002 | Waveshare 4.3 inch display and retention (non-touch variant; printed rear frame, D-053) | 133 g allowance |
 | M003 | Display window and full-width mask | 15 g allowance |
-| M005, M006 | Raspberry Pi Camera Module 3 Wide, bracket, CSI cable and strain relief | 10 g + 8 g |
 | M007 | Addressable LED, installed (with CH-085) | 5 g |
-| M008 | C2: Waveshare ESP32-S3-Zero on CH-086 | 20 g, installed mass unknown |
 | M019a | Prints: front bezel and camera crown, octagonal skin (upper and lower halves, D-053), removable rear cover, two ears (inner mount, removable cap, amber inlay, dark centre) | CAD volume, PLA |
 | M010, M011, M012 | Prints: rolling cradle and ear stalks, roll bearing cartridge (trial), pitch frame and roll saddle, yaw yoke legs, yaw turntable disc, CSI exit guide | CAD volume, PLA |
 | M016–M018 | Roll and pitch bearings and shafts | 6 + 8 + 8 g allowances |

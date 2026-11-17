@@ -40,7 +40,7 @@ pack − ───────────────────────�
                             └→ W14 → J8-1 C2/display
 ```
 
-M6 measures the **entire switched positive bus**, but its shunt value is **OPEN (CH-099)**. An INA226 with R010 (10 mΩ) and ±81.92 mV shunt range clips above about **8.2 A**; at the §6 ~16 A screen it dissipates **2.56 W**, beyond the originally proposed ≥1 W minimum. **Do not fit R010 in the full switched-bus path.** A 5 mΩ shunt rated ≥2 W is a candidate: it would dissipate 1.28 W at 16 A and reach full scale at 16.4 A, leaving little measurement margin. Use an independent current probe for N1–N3 peak waveforms, then select and calibrate a shunt/module after the measured peaks and thermal duty are known. An R010 board is useful only on an isolated, current-limited bench load within its verified range and rating. The chassis negative return runs through `J-CHASSIS` to the rear negative star, then `J-BAT`/`J-PK` to the pack. Charger connects to both rear ports only with M1 OFF.
+M6 measures the **entire switched positive bus**. [D-112](../decisions.md#d-112) selects a 4 mΩ, 3 W shunt for CH-099 on paper: 64 mV and 1.024 W at 16 A, with a 20.48 A INA226 input full scale. The monitor board's R010 shunt cannot be used on this bus. Check the received board's 2512 footprint, copper, terminals and heat path before installing the selected shunt; measure peaks and temperature, then calibrate at first power-up. The chassis negative return runs through `J-CHASSIS` to the rear negative star, then `J-BAT`/`J-PK` to the pack. Charger connects to both rear ports only with M1 OFF.
 
 ## 3. Connector families and parts
 
@@ -86,10 +86,11 @@ replacement for the physical harness check.
 
 `W29`–`W33` now have continuous neutral-pose CAD paths to their GH plugs.
 The chassis-side source exit, clips, body-lift slack and separation from live
-motor leads still need a physical dressing check. The HN-006 bodies are
-**placement envelopes**, not selected splices; W05c and W05t do not yet form
-an electrically complete fan-out at them. Pack cell-end joints, balance-tap
-protection and exact module-pad terminations also remain open. The visible
+motor leads still need a physical dressing check. The two tub HN-006 bodies
+represent selected WAGO 221-415 five-port splices, with one W05c input and four
+AWG18 outputs per polarity. Opposite-polarity jackets overlap at several routing
+crossings in the drawing (bundle size and lever access are unproved); sleeve and tie them against abrasion at assembly. Pack cell-end joints,
+CH-103 potting and exact module-pad terminations require first-build inspection. The visible
 shapes are routing aids; the wire list and terminations remain the tables below.
 
 Lengths are `E` cut allowances with service loop, **not measured CAD centerlines**. String-route and record `W` lengths on the assembled robot before cutting. At every module, solder to its *marked* VIN/GND/VOUT or signal pad, photograph pad labels and support the tail so the pad carries no cable strain. Leave ≥40 mm withdrawable slack at body-lift plugs.
@@ -239,7 +240,7 @@ Pin 1 means the **moulded cavity number**, not the leftmost cavity in a photogra
 |---|---|
 | `J-PK`, `J-BAT`, `J-CHASSIS` 2-way | 1 positive, 2 negative. Respectively protected pack, fused unswitched, switched shunt-monitored. Give unlike feeds distinct keys/labels |
 | M1 #2813 | VIN from charge +splice; GND from −splice; VOUT to M6 IN+; ON from mushroom NO-to-GND; OFF from verified Pi GPIO interface; CTRL unused. Check received board hole labels |
-| M6 INA226 (shunt OPEN, CH-099) | IN+ M1 VOUT, IN− +STAR, bus voltage sense at IN− if separate pad exists; VCC Pi 3V3, GND −STAR, SDA/SCL PCB-09 `i2c-gpio` bus. Check board trace/jumper arrangement; choose and calibrate shunt after peak measurements |
+| M6 INA226 (4 mΩ shunt selected on paper, CH-099) | IN+ M1 VOUT, IN− +STAR, bus voltage sense at IN− if separate pad exists; VCC Pi 3V3, GND −STAR, SDA/SCL PCB-09 `i2c-gpio` bus. Check board trace/jumper arrangement, fit and calibrate the selected shunt after peak and thermal measurements |
 | M2/M3 S18V20ALV | VIN+/GND from tub branch; VOUT+/GND to W13 6.3 V (D-100 amendment; was 6.0 V) or W17 11.1 V. Label setpoints at modules |
 | M4/M5 S13V30F5 | VIN+/GND from body stars; M4 VOUT Pi-only 5 V; M5 VOUT shared 5 V. Keep outputs separate |
 | `J8-1` MF3 2×3 | 1 +6V3_HEAD_PR (D-100; was +5V5_HEAD_PR), 2 +5V_C2, 3 +5V_DISPLAY, 4 GND_HEAD, 5 GND_C2, 6 GND_DISPLAY |
@@ -342,8 +343,8 @@ or measured hardware. The priority list below is the current release checklist.
 | Item | Closure |
 |---|---|
 | Connector order — **open, P1** | Verify MF+ housing gender/key and AWG16 contacts, MF3 AWG20 tool/contacts, PA/XH pre-crimp gauge/mate, multiwire splice capacity. Pull-test three samples per wire/contact combination. Choose W04 panel service pair after extraction mock-up |
-| CH-103 balance-tap protection — **open, P0** | Four fixed-geometry rows of three assumed insulated fuse envelopes were screened; none cleared the cells/straps and J-PK. Select a protection method and actual joint/sleeve dimensions, revise the pack-end arrangement, then re-run fit, removal and charger fault checks. [Study and report](../final/v1/cad/study_ch103_fuse_fit.py) |
-| HN-006 tub distribution — **placement done; design P1** | Two nominal splice envelopes clear the print and other modeled wires. Each polarity needs one AWG16 feed and four AWG18 outputs (M2, M3, left/right drivers). Select a rated five-wire or staged-splice topology, connect the tails explicitly, then recheck actual body dimensions, support and insulation |
+| CH-103 balance-tap protection — **open, P0 (reopened by [D-114](../decisions.md#d-114))** | The D-111 potted card cannot leave with the pack: the pack drops −Z and the card meets the chassis front module after 1.5 mm. One tap also cannot reach a +Y card with a short stub. Choose option A/B/C in D-114, re-run `check_ch103_protection.py`, then N5. W02P stays unbuilt. |
+| HN-006 tub distribution — **WAGO 221-415 selected; physical P1** | [D-113](../decisions.md#d-113): two 30 × 18.6 × 8.4 mm rated five-conductor housings over the tub modules, one AWG16 input and four AWG18 output tails per polarity. Explicit CAD tails and neutral-pose clearances pass; verify housing support, 11 mm strips, strain relief, tray service and hot current at first build. Rear HN-006 splices remain separate open choices. |
 | W04 panel service — **distance screen done; physical P1** | A 40 mm rearward withdrawal puts the CAD splice-to-XT30 inner-body-end separation at 47.6 mm against the 100 mm cut allowance; the actual cup exit, bends and stable panel rest are unproved. Mock up the withdrawal; add a keyed AWG16 break if the supported loop loads the cups or splice |
 | CAD reserves — **CAD done; first-build P1** | **Placed 2026-11-07 ([D-099](../decisions.md#d-099)); moved and routed 2026-11-13 ([D-106](../decisions.md#d-106), `check_d106_harness.py` 134/134):** `J-BAT` X −19.5..2.5, Y −31..−22.7, Z 57–67 and `J-CHASSIS` the same X at Y 22.7..31 (drawn 40 mm inward to unmate; 8 mm lead room past both ends); `J-S18-Y` / `J-S18-H` X −3..16 at Y −38..−31 / −45.5..−38.5, Z 59.4–69.4 (unmated in place); chassis half +X, body half −X on all four; the ± star splices along Y above the rail at X −31.75/−25.25, Z 74.25. Every chassis run of §4 is drawn as a reserve chain (`HARNESS_D106_*`): W03a up a new deck slot past J-PK and over the left driver into the fuse; W03b from the fuse back along Y 33–38.5 and the +Y trunk, across the motor bay into J-BAT; W05c to the tub-plate +Y strip; W13/W17 from the −Y strip to the J-S18 chassis ends; W06–W09 (the right motor inline pair now on top of its board); W34 through the restored under-crossmember tunnel; W36 tied at the rear lug. Five more 2.5 mm ties (CH-082): fuse column, two deck lugs, two tub-plate lugs. 2026-11-15 update: nominal HN-006 splice envelopes are placed without printed-part collision, but actual splice selection and fan-out remain open; CH-103 fuse bodies failed the four tested three-fuse pack-exit rows (see design review). Module pad ends and fuse-holder lead height are `E`; string-route W03b/W05c/W13/W17 with modules installed and the body moving, and check hand reach at first build |
 | Chassis signal dressing — **CAD done; physical P1** | W29 IMU, W30/W31 motor encoders, and W32/W33 driver logic now have continuous neutral-pose cable envelopes in `Harness → Chassis wires`; printed-part and modeled power-lead intersections clear. Dress and retain the actual leads, check source exits and separation, verify body-lift motion and ≥40 mm withdrawal slack, then replace estimated cuts with measured lengths |

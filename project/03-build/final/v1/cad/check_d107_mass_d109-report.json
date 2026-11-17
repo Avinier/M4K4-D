@@ -409,11 +409,11 @@
     ],
     [
      "D-109 W24_J9_1_TO_J8_4_GH6_CABLE",
-     0.99,
+     1.0,
      [
       19.2,
-      7.2,
-      116.6
+      8.4,
+      116.3
      ],
      "E routed body harness (check_d109_mass)"
     ],
@@ -469,11 +469,11 @@
     ],
     [
      "D-109 W40_MUSHROOM_TO_BUTTON_BUFFER_2XAWG24",
-     0.18,
+     0.23,
      [
-      -32.8,
-      -9.8,
-      100.9
+      -31.0,
+      -8.8,
+      103.2
      ],
      "E routed body harness (check_d109_mass)"
     ],
@@ -539,11 +539,11 @@
     ],
     [
      "D-109 W28_AMP_TO_SPEAKER_TWISTED_2XAWG22",
-     0.68,
+     0.69,
      [
-      81.2,
-      23.6,
-      105.4
+      80.6,
+      21.4,
+      105.5
      ],
      "E routed body harness (check_d109_mass)"
     ],
@@ -553,7 +553,7 @@
      [
       5.3,
       -6.0,
-      92.4
+      92.5
      ],
      "E routed body harness (check_d109_mass)"
     ],
@@ -639,7 +639,7 @@
     ],
     [
      "D-109 share of HARNESS_AND_FASTENERS allowance",
-     -53.74,
+     -53.81,
      [
       20.0,
       0.0,
@@ -658,34 +658,34 @@
    "steel": {
     "mass_g": 2655.0447,
     "com_mm": [
-     18.3456,
-     0.6844,
-     110.2357
+     18.3449,
+     0.6843,
+     110.2363
     ],
-    "worst_yaw_a_tip": 1.6265,
+    "worst_yaw_a_tip": 1.6264,
     "pose_yaw_pitch_roll": [
      29,
      -19,
      -21
     ],
-    "margin_pct": 2.7945,
+    "margin_pct": 2.7896,
     "poses": 1068120,
     "method": "actual frame centroids over 1 degree pitch/roll grid to hard stops, full 360 degree yaw"
    },
    "copper": {
     "mass_g": 2666.0894,
     "com_mm": [
-     18.5762,
-     0.6815,
-     109.955
+     18.5754,
+     0.6814,
+     109.9557
     ],
-    "worst_yaw_a_tip": 1.6512,
+    "worst_yaw_a_tip": 1.6511,
     "pose_yaw_pitch_roll": [
      29,
      -19,
      -21
     ],
-    "margin_pct": 4.3586,
+    "margin_pct": 4.3537,
     "poses": 1068120,
     "method": "actual frame centroids over 1 degree pitch/roll grid to hard stops, full 360 degree yaw"
    },
@@ -700,35 +700,35 @@
    "original_register_bound": {
     "mass_g": 2655.0447,
     "com_mm": [
-     18.3456,
-     0.6844,
-     110.2357
+     18.3449,
+     0.6843,
+     110.2363
     ],
-    "a_tip": 1.6326,
-    "worst_pose_a_tip": 1.6088,
-    "margin_pct": 1.675,
+    "a_tip": 1.6325,
+    "worst_pose_a_tip": 1.6087,
+    "margin_pct": 1.6701,
     "extra_camera_g": 0.0,
     "method": "D095 original register bound, unchanged source-head radii; final delta centroids stationary"
    },
    "original_register_extra10g": {
     "mass_g": 2665.0447,
     "com_mm": [
-     18.2446,
-     0.6067,
-     110.792
+     18.2438,
+     0.6066,
+     110.7926
     ],
-    "a_tip": 1.6155,
+    "a_tip": 1.6154,
     "worst_pose_a_tip": 1.5918,
-    "margin_pct": 0.6052,
+    "margin_pct": 0.6004,
     "extra_camera_g": 10.0,
     "method": "D095 original register bound, unchanged source-head radii; final delta centroids stationary"
    },
    "actual_moving_frame_extra10g": {
     "mass_g": 2665.0447,
     "com_mm": [
-     18.2446,
-     0.6067,
-     110.792
+     18.2438,
+     0.6066,
+     110.7926
     ],
     "worst_yaw_a_tip": 1.6089,
     "pose_yaw_pitch_roll": [
@@ -736,7 +736,7 @@
      -25,
      -21
     ],
-    "margin_pct": 1.6864,
+    "margin_pct": 1.6816,
     "poses": 1068120,
     "method": "actual frame centroids over 1 degree pitch/roll grid to hard stops, full 360 degree yaw"
    },

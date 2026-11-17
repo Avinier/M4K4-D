@@ -91,11 +91,11 @@
    "check": "PI_22_TO_15_purchased_length_reaches",
    "ok": true,
    "stock_mm": 150.0,
-   "routed_mm": 59.965,
+   "routed_mm": 124.485,
    "straight_mm": 30.0135,
    "insertion_allowance_mm": 10.0,
    "service_allowance_mm": 15.0,
-   "reserve_mm": 65.035,
+   "reserve_mm": 0.515,
    "kit60mm_reaches": false,
    "note": "separate BOM ribbon; verify contact face/pin mapping and dress unused length at receipt, never tension the socket"
   },

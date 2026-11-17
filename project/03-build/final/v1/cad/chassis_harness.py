@@ -5,7 +5,7 @@ cut-length or bend-radius proofs.  D106_ROUTES and BALANCE in the final assembly
 remain the routing authority; their translucent boxes are inspection reserves.
 """
 
-from build123d import Compound, Cylinder, Location, Plane, Solid, Sphere, Vector
+from build123d import Box, Compound, Cylinder, Location, Plane, Solid, Sphere, Vector
 
 
 def _tube(points, radius):
@@ -20,12 +20,13 @@ def _tube(points, radius):
     pieces.extend(Sphere(radius).moved(Location(tuple(p))) for p in points[1:-1])
     return Compound(children=pieces)
 
-# HN-006: two supported, insulated multiwire splice envelopes. The bodies lie
-# along Y over the CH-106 rear arms, one each side of the IMU. Dimensions are E
-# until the selected rated splice and sleeve are measured.
-TUB_SPLICES = {"POS": (19.0, 14.0, 69.0), "NEG": (27.0, 14.0, 69.0)}
-TUB_SPLICE_RADIUS = 3.25
-TUB_SPLICE_LENGTH = 24.0
+# HN-006: two WAGO 221-415 five-conductor connectors, each with one AWG16
+# input and four AWG18 outputs. Manufacturer dimensions 30 x 18.6 x 8.4 mm;
+# fine-stranded 24–12 AWG, 32 A/450 V nominal. The boxes lie above the tub
+# modules, under the compute tray, with 2.9 mm separation between polarities.
+TUB_SPLICES = {"POS": (35., 65., 1.5, 20.1, 74.5, 82.9),
+               "NEG": (35., 65., -20., -1.4, 74.5, 82.9)}
+TUB_SPLICE_PORT_X = {"IN": 38., "M2": 44., "M3": 50., "LEFT": 56., "RIGHT": 62.}
 
 # Continuous signal-cable dress to the fitted PCB-10 GH plugs. Rerouted 2026-11-17
 # after the D-106..D-109 review (piecewise clash test): W30/W31 rise through the
@@ -110,12 +111,18 @@ def build_chassis_harness(entry):
     balance_pack = _through_boxes(entry.BALANCE["pack_lead"])
     balance_pack += [_mid(entry.BALANCE["pair"])]
     balance_body = [_mid(entry.BALANCE["pair"])] + _through_boxes(entry.BALANCE["body_lead"])
-    for n, dx, colour in (("BMINUS", -1.1, "#484d54"), ("BMID", 0., "#e6be48"),
-                          ("BPLUS", 1.1, "#c44942")):
-        for stem, points in (("W02P_CELL_TO_PA", balance_pack),
-                             ("W02B_PA_TO_XHP3", balance_body)):
-            wire("Pack and balance", f"{stem}_{n}_AWG24",
-                 _shift(points, dx=dx), .52, colour)
+    for n, dx, z, colour in (("BMINUS", -1.1, 42.2, "#484d54"),
+                           ("BMID", 0., 44.8, "#e6be48"),
+                           ("BPLUS", 1.1, 47.4, "#c44942")):
+        # Pack-carried CH-103 card at the window: three short, doubly insulated
+        # cell-side stubs end at separate fuse pads; only fused tails reach PA.
+        cell_stub = [(30., 35.8, z), (38.5, 35.8, z), (43., 36., z)]
+        protected = [(46.2, 36., z), (49., 38., z),
+                     *_shift(balance_pack[1:], dx=dx)]
+        wire("Pack and balance", f"W02P_CELL_TO_CH103_{n}_AWG24", cell_stub, .52, colour)
+        wire("Pack and balance", f"W02P_CH103_TO_PA_{n}_AWG24", protected, .52, colour)
+        wire("Pack and balance", f"W02B_PA_TO_XHP3_{n}_AWG24",
+             _shift(balance_body, dx=dx), .52, colour)
 
     wire("Fused and switched distribution", "W03a_JPK_TO_FUSE_POS_AWG16",
          _shift(_path(entry, entry.D106_CHAINS["W03a+"]), dy=-1.2, dz=1.0), .85, "#cf413a")
@@ -131,24 +138,44 @@ def build_chassis_harness(entry):
     wire("Fused and switched distribution", "W03b_FUSE_TO_JBAT_POS_AWG16",
          fused, .9, "#cf413a")
     feeder = _path(entry, entry.D106_CHAINS["W05c"])
-    # End at the still-unplaced tub distribution. Hold the over-lug height until past
-    # the CH-106 lug's +X face (X 30): the old descent cut the lug corner with W05c-.
-    feeder = feeder[:-2] + [(31.0, 28.0, 62.35), (32.2, 25., 61.)]
-    for suffix, dy, dz, colour in (("POS", -1.0, 1.1, "#cf413a"),
-                                   ("NEG", 1.0, -1.1, "#30343a")):
-        wire("Fused and switched distribution", f"W05c_JCHASSIS_TO_TUB_{suffix}_AWG16",
-             _shift(feeder, dy=dy, dz=dz), 1.0, colour)
-    for polarity, xyz in TUB_SPLICES.items():
-        splice = Cylinder(TUB_SPLICE_RADIUS, TUB_SPLICE_LENGTH,
-                          rotation=(90, 0, 0)).moved(Location(xyz))
+    feeder = feeder[:-2] + [(31., 28., 62.35), (32.2, 25., 61.)]
+    for polarity, box in TUB_SPLICES.items():
+        x0,x1,y0,y1,z0,z1=box
+        block=Box(x1-x0,y1-y0,z1-z0).moved(Location(((x0+x1)/2,(y0+y1)/2,(z0+z1)/2)))
         groups["Fused and switched distribution"].append(entry._tag(
-            splice, f"HN006_TUB_{polarity}_AWG16_MULTI_WIRE_SPLICE_ENVELOPE",
-            "#a22b2b" if polarity == "POS" else "#22282e"))
-    # The +Y and -Y plate strips represent the unfrozen tub distribution.
-    pair("Fused and switched distribution", "W05t_TUB_TO_M2_M3_INPUT",
-         ["PLATE_STRIP_PY"], 18, .83)
-    for side, stem in (("L", "W06_TUB_TO_DRIVER_L"), ("R", "W07_TUB_TO_DRIVER_R")):
-        pair("Drive and motor", stem, entry.D106_CHAINS["W06" if side == "L" else "W07"], 18, .83)
+            block,f"HN006_TUB_{polarity}_WAGO_221_415_INSULATED",
+            "#a22b2b" if polarity=="POS" else "#22282e"))
+        colour="#cf413a" if polarity=="POS" else "#30343a"
+        mouth=y1 if polarity=="POS" else y0
+        outside=26. if polarity=="POS" else -26.
+        z=(z0+z1)/2
+        port=lambda name:(TUB_SPLICE_PORT_X[name],mouth,z)
+        if polarity=="POS":
+            source=[*_shift(feeder,dy=-1.,dz=1.1),(32.,26.,70.),(38.,26.,70.),(38.,outside,z),port("IN")]
+        else:
+            source=[*_shift(feeder,dy=1.,dz=-1.1),(33.,26.,67.),(33.,26.,82.7),(33.,-26.,82.7),(38.,-26.,z),port("IN")]
+        wire("Fused and switched distribution",f"W05c_JCHASSIS_TO_TUB_{polarity}_AWG16",source,1.,colour)
+        for module,x in (("M2",40.),("M3",64.)):
+            if polarity=="POS":
+                pts=[port(module),(TUB_SPLICE_PORT_X[module],26.,z),(x,26.,z),(x,26.,70.),(x,23.,64.)]
+            else:
+                pts=[port(module),(TUB_SPLICE_PORT_X[module],-26.,z),(33.,-26.,z),
+                     (33.,-26.,82.7),(33.,26.,82.7),(x,26.,82.7),(x,23.,64.)]
+            wire("Fused and switched distribution",f"W05t_TUB_TO_{module}_{polarity}_AWG18",pts,.83,colour)
+        for side, key in (("LEFT","W06"),("RIGHT","W07")):
+            route=_path(entry,entry.D106_CHAINS[key]);end=route[0]
+            if polarity=="POS" and side=="LEFT":
+                pts=[port(side),(TUB_SPLICE_PORT_X[side],26.,z),(end[0],26.,70.),end]
+            elif polarity=="NEG" and side=="RIGHT":
+                pts=[port(side),(TUB_SPLICE_PORT_X[side],-26.,z),(end[0],-26.,70.),end]
+            elif polarity=="POS":
+                pts=[port(side),(TUB_SPLICE_PORT_X[side],26.,z),(33.5,26.,79.),
+                     (33.5,-26.,79.),end]
+            else:
+                pts=[port(side),(TUB_SPLICE_PORT_X[side],-26.,z),(33.,-26.,82.7),
+                     (33.,26.,82.7),end]
+            stem="W06_TUB_TO_DRIVER_L" if side=="LEFT" else "W07_TUB_TO_DRIVER_R"
+            wire("Drive and motor",f"{stem}_{polarity}_AWG18",[ *pts,*_offset(route[1:],.83 if polarity=="POS" else -.83)],.83,colour)
     for side, stem in (("L", "W08_DRIVER_TO_MOTOR_L"), ("R", "W09_DRIVER_TO_MOTOR_R")):
         points = _path(entry, entry.D106_CHAINS["W08 left" if side == "L" else "W09 right"])
         for suffix, dy, colour in (("POS", .55, "#c46a39"), ("NEG", -.55, "#5d6470")):

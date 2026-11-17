@@ -38,6 +38,9 @@ def main():
         hits = C.clashes(lf.shape, leaves, min_vol=1e-3)
         if lf.label.startswith("CHARGE_SPLICE"):          # the reserve wraps its own splice
             hits = [h for h in hits if not h[0].startswith("CHARGE_SPLICE")]
+        if lf.label == "M12_BALANCE_PACK_LEAD_RESERVE_1":
+            # The protected pack lead terminates on this card; overlap is intentional.
+            hits = [h for h in hits if not h[0].startswith("M12_CH103_")]
         r.check(f"clear_{lf.label}", not hits, clashes=hits)
     for lf in mine:
         rsv = [h for h in C.clashes(lf.shape, leaves, parts_only=False, min_vol=1e-3)
