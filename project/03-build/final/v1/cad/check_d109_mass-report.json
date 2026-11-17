@@ -6,20 +6,20 @@
   {
    "check": "routed body harness within the 95 g allowance",
    "ok": true,
-   "routed_g": 53.7,
-   "allowance_left_for_fasteners_g": 41.3
+   "routed_g": 53.8,
+   "allowance_left_for_fasteners_g": 41.2
   },
   {
    "check": "tipping bound with routed body harness (informational)",
    "ok": true,
    "d_com_mm": [
-    -0.305,
+    -0.306,
     -0.104,
-    0.084
+    0.085
    ],
    "d_equiv_mm": 18.58,
-   "a_tip_worst_bound": 1.6249,
-   "margin_pct_bound": 2.693,
+   "a_tip_worst_bound": 1.6248,
+   "margin_pct_bound": 2.687,
    "baseline_margin_pct": 4.5922,
    "note": "stationary bound, worst direction; not a re-run of the 1068120-pose sweep"
   },
@@ -182,11 +182,11 @@
     ],
     [
      "W24_J9_1_TO_J8_4_GH6_CABLE",
-     0.99,
+     1.0,
      [
       19.2,
-      7.2,
-      116.6
+      8.4,
+      116.3
      ]
     ],
     [
@@ -236,11 +236,11 @@
     ],
     [
      "W40_MUSHROOM_TO_BUTTON_BUFFER_2XAWG24",
-     0.18,
+     0.23,
      [
-      -32.8,
-      -9.8,
-      100.9
+      -31.0,
+      -8.8,
+      103.2
      ]
     ],
     [
@@ -301,8 +301,8 @@
      "W28_AMP_TO_SPEAKER_TWISTED_2XAWG22",
      0.68,
      [
-      81.2,
-      23.6,
+      81.0,
+      21.4,
       105.4
      ]
     ],
@@ -312,7 +312,7 @@
      [
       5.3,
       -6.0,
-      92.4
+      92.5
      ]
     ],
     [
