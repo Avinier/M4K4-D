@@ -1,0 +1,18 @@
+{
+  "result": "PASS",
+  "checks": {
+    "BM_cell_pad_to_fuse_pin1": true,
+    "BM_fuse_pin2_to_fused_pad": true,
+    "BM_nets_touch_only_their_card": true,
+    "BM_pin1_toward_bms_pad_end": true,
+    "BMINUS_cell_pad_to_fuse_pin1": true,
+    "BMINUS_fuse_pin2_to_fused_pad": true,
+    "BMINUS_nets_touch_only_their_card": true,
+    "BMINUS_pin1_toward_bms_pad_end": true,
+    "BPLUS_cell_pad_to_fuse_pin1": true,
+    "BPLUS_fuse_pin2_to_fused_pad": true,
+    "BPLUS_nets_touch_only_their_card": true,
+    "BPLUS_pin1_toward_bms_pad_end": true,
+    "no_cell_net_shares_a_fused_net": true
+  }
+}

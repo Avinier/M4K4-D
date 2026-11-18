@@ -1,0 +1,719 @@
+(export
+	(version "E")
+	(design
+		(source "/Users/avinier/robotics/makad/project/03-build/04-pcbs/pcb-17-balance-fuse-cards/design/pcb-17-balance-fuse-cards.kicad_sch")
+		(date "2026-11-18T10:57:42")
+		(tool "Eeschema 10.99.0-5923-gde08734017")
+		(sheet
+			(number "1")
+			(name "/")
+			(tstamps "/")
+			(title_block
+				(title "PCB-17 balance-tap fuse cards")
+				(company "Makad")
+				(rev "A")
+				(date "2026-11-18")
+				(source "pcb-17-balance-fuse-cards.kicad_sch")
+				(comment
+					(number "1")
+					(value "D-116: card A = F1 (BM), card B = F2 (B-), F3 (B+); 1 A very-fast per tap")
+				)
+				(comment
+					(number "2")
+					(value "")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+	)
+	(components
+		(comp
+			(ref "F1")
+			(value "0466001.NRHF 1A")
+			(footprint "Fuse:Fuse_1206_3216Metric")
+			(fields
+				(field
+					(name "Footprint") "Fuse:Fuse_1206_3216Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Sheetname")
+				(value "pcb-17-balance-fuse-cards")
+			)
+			(property
+				(name "Sheetfile")
+				(value "pcb-17-balance-fuse-cards.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "ab901e20-fd66-55b2-b47b-fcc16b1b0214")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F2")
+			(value "0466001.NRHF 1A")
+			(footprint "Fuse:Fuse_1206_3216Metric")
+			(fields
+				(field
+					(name "Footprint") "Fuse:Fuse_1206_3216Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Sheetname")
+				(value "pcb-17-balance-fuse-cards")
+			)
+			(property
+				(name "Sheetfile")
+				(value "pcb-17-balance-fuse-cards.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "cb7b38c2-f7e6-5a86-983b-6c31c04a42bf")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F3")
+			(value "0466001.NRHF 1A")
+			(footprint "Fuse:Fuse_1206_3216Metric")
+			(fields
+				(field
+					(name "Footprint") "Fuse:Fuse_1206_3216Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Sheetname")
+				(value "pcb-17-balance-fuse-cards")
+			)
+			(property
+				(name "Sheetfile")
+				(value "pcb-17-balance-fuse-cards.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "824b9111-7ac0-5870-b8ed-078cbd7a51ee")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J1")
+			(value "BM_CELL_PAD")
+			(footprint "pcb17:WirePad_1x01_2.5x1.5mm")
+			(fields
+				(field
+					(name "Footprint") "pcb17:WirePad_1x01_2.5x1.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x01")
+				(description "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Sheetname")
+				(value "pcb-17-balance-fuse-cards")
+			)
+			(property
+				(name "Sheetfile")
+				(value "pcb-17-balance-fuse-cards.kicad_sch")
+			)
+			(property
+				(name "exclude_from_bom")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "f82b5d58-9fea-5c8e-9ec2-56d2342b15fd")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J2")
+			(value "BM_FUSED_PAD")
+			(footprint "pcb17:WirePad_1x01_2.5x1.5mm")
+			(fields
+				(field
+					(name "Footprint") "pcb17:WirePad_1x01_2.5x1.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x01")
+				(description "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Sheetname")
+				(value "pcb-17-balance-fuse-cards")
+			)
+			(property
+				(name "Sheetfile")
+				(value "pcb-17-balance-fuse-cards.kicad_sch")
+			)
+			(property
+				(name "exclude_from_bom")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "39be3e80-a60a-5e8d-8f58-96e006e1b72c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J3")
+			(value "BMINUS_CELL_PAD")
+			(footprint "pcb17:WirePad_1x01_2.5x1.5mm")
+			(fields
+				(field
+					(name "Footprint") "pcb17:WirePad_1x01_2.5x1.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x01")
+				(description "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Sheetname")
+				(value "pcb-17-balance-fuse-cards")
+			)
+			(property
+				(name "Sheetfile")
+				(value "pcb-17-balance-fuse-cards.kicad_sch")
+			)
+			(property
+				(name "exclude_from_bom")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "80702a82-dfd7-5e2f-baed-4017c6ecc3e1")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J4")
+			(value "BMINUS_FUSED_PAD")
+			(footprint "pcb17:WirePad_1x01_2.5x1.5mm")
+			(fields
+				(field
+					(name "Footprint") "pcb17:WirePad_1x01_2.5x1.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x01")
+				(description "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Sheetname")
+				(value "pcb-17-balance-fuse-cards")
+			)
+			(property
+				(name "Sheetfile")
+				(value "pcb-17-balance-fuse-cards.kicad_sch")
+			)
+			(property
+				(name "exclude_from_bom")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "b1467a7e-1882-5784-ab9e-2046c2e96438")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J5")
+			(value "BPLUS_CELL_PAD")
+			(footprint "pcb17:WirePad_1x01_2.5x1.5mm")
+			(fields
+				(field
+					(name "Footprint") "pcb17:WirePad_1x01_2.5x1.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x01")
+				(description "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Sheetname")
+				(value "pcb-17-balance-fuse-cards")
+			)
+			(property
+				(name "Sheetfile")
+				(value "pcb-17-balance-fuse-cards.kicad_sch")
+			)
+			(property
+				(name "exclude_from_bom")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "cfb5d021-0857-56de-8d79-13342f027cc3")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J6")
+			(value "BPLUS_FUSED_PAD")
+			(footprint "pcb17:WirePad_1x01_2.5x1.5mm")
+			(fields
+				(field
+					(name "Footprint") "pcb17:WirePad_1x01_2.5x1.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x01")
+				(description "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Sheetname")
+				(value "pcb-17-balance-fuse-cards")
+			)
+			(property
+				(name "Sheetfile")
+				(value "pcb-17-balance-fuse-cards.kicad_sch")
+			)
+			(property
+				(name "exclude_from_bom")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "f7a25c76-0256-5dfa-ae0e-e76187900cc6")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+	)
+	(groups)
+	(variants)
+	(libparts
+		(libpart
+			(lib "Connector_Generic")
+			(part "Conn_01x01")
+			(description "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			(footprints
+				(fp "Connector*:*_1x??_*")
+			)
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "Conn_01x01")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "Pin_1")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Device")
+			(part "Fuse")
+			(description "Fuse")
+			(footprints
+				(fp "*Fuse*")
+			)
+			(fields
+				(field
+					(name "Reference") "F")
+				(field
+					(name "Value") "Fuse")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Fuse")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "")
+					(type "passive")
+				)
+			)
+		)
+	)
+	(libraries
+		(library
+			(logical "Connector_Generic")
+			(uri "${KICAD10_SYMBOL_DIR}/Connector_Generic.kicad_sym")
+		)
+		(library
+			(logical "Device")
+			(uri "${KICAD10_SYMBOL_DIR}/Device.kicad_sym")
+		)
+	)
+	(nets
+		(net
+			(code "1")
+			(name "/BMINUS_CELL")
+			(class "Default")
+			(node
+				(ref "F2")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J3")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "2")
+			(name "/BMINUS_FUSED")
+			(class "Default")
+			(node
+				(ref "F2")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J4")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "3")
+			(name "/BM_CELL")
+			(class "Default")
+			(node
+				(ref "F1")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "4")
+			(name "/BM_FUSED")
+			(class "Default")
+			(node
+				(ref "F1")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "5")
+			(name "/BPLUS_CELL")
+			(class "Default")
+			(node
+				(ref "F3")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J5")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "6")
+			(name "/BPLUS_FUSED")
+			(class "Default")
+			(node
+				(ref "F3")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J6")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+	)
+)

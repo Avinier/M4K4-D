@@ -2,7 +2,7 @@
 
 Each custom board goes through three stages: **design** it, **procure** its parts and the assembled board, then **integrate** the real board into the final CAD. **Every board is designed first, one at a time; procurement starts only when the design batch is done, and boards are then ordered together where they share a fab** ([D-064](../decisions.md#d-064)). A board starts a stage only after it has finished the stage before. How to design one board, step by step, is in [design-playbook.md](design-playbook.md). Each board has a folder in `04-pcbs/`. Its README records where the board is in this workflow.
 
-D-107 supersedes PCB-14 and PCB-16. The current design batch is **six boards: PCB-08,09,10,11,12,15**. PCB-08 is rev B; the others retain their selected revisions. No board is ordered until its recorded electrical, mechanical and physical release gates and the D-064 batch requirements are satisfied.
+D-107 supersedes PCB-14 and PCB-16. The current design batch is **seven boards: PCB-08,09,10,11,12,15,17** (PCB-17 added by D-117, panelled with PCB-11/15). PCB-08 is rev B; the others retain their selected revisions. No board is ordered until its recorded electrical, mechanical and physical release gates and the D-064 batch requirements are satisfied.
 
 PCB-01 has no folder. It is the bought TIFPS0629 ([D-019](../decisions.md#d-019)), and its acceptance stays in [power-boards.md §3](power-boards.md#3-pcb-01--tifps0629-acceptance-before-cells-are-connected).
 
@@ -20,6 +20,7 @@ PCB-01 has no folder. It is the bought TIFPS0629 ([D-019](../decisions.md#d-019)
 | [pcb-14-yaw-rotor-joiner](pcb-14-yaw-rotor-joiner/README.md) | FFC joiners ×4 | BO-062 | **Superseded D-107** | Do not order | Removed from final CAD; archive retained |
 | [pcb-16-head-junction](pcb-16-head-junction/README.md) | Head junction | CH-111 | **Superseded D-107** | Do not order | Removed from final CAD; archive retained |
 | [pcb-15-nose-hall](pcb-15-nose-hall/README.md) | Nose Hall carrier | CH-064 | Done (rev A) | Waits for the design batch | CAD replacement complete; physical acceptance open |
+| [pcb-17-balance-fuse-cards](pcb-17-balance-fuse-cards/README.md) | Balance-tap fuse cards ×2 | CH-103 | **Rev A** ([D-117](../decisions.md#d-117)): ERC 0/0, audit 13/13, parity DRC 0/0/0; fab/revA | Panel with PCB-11/15 in the batch; received HW-391 check first | CAD envelopes match; `check_ch103_protection` 12/12; STEP swap and physical acceptance open |
 
 **Superseded boards** ([D-093](../decisions.md#d-093), 2026-11-06). Their folders and KiCad work are kept as the record:
 

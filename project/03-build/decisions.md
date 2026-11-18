@@ -101,7 +101,8 @@ The central record of every decision and change made during the build phase. New
 | [D-113](#d-113) | 2026-11-17 | HN-006 tub distribution | Two WAGO 221-415 five-conductor lever splices, one per polarity; explicit 1×AWG16 plus 4×AWG18 tails per housing | TUB SELECTED; received fit and current test open; rear splices open |
 | [D-114](#d-114) | 2026-11-18 | Review of D-110–D-113 | CH-103 reopened (removal fails); wheel-arch pilot Ø4.10 and ST3215-HS case envelope recorded; records corrected | ACTIVE; CH-103 option A chosen in [D-115](#d-115) |
 | [D-115](#d-115) | 2026-11-18 | CH-103 balance taps | Option A: low-profile fuse card on the PCB-01 BMS, taps from its pads, 0.6 mm relief in CH-106 | **Revised by [D-116](#d-116)** (two cards) |
-| [D-116](#d-116) | 2026-11-18 | CH-103 card split | HW-391 pads are at both ends: BM fuse card at +Y, B−/B+ card at −Y; card build spec and N5 procedure | DESIGN SELECTED; received-board check and N5 open |
+| [D-116](#d-116) | 2026-11-18 | CH-103 card split | HW-391 pads are at both ends: BM fuse card at +Y, B−/B+ card at −Y; card build spec and N5 procedure | Cards become PCB-17 by [D-117](#d-117) |
+| [D-117](#d-117) | 2026-11-18 | PCB-17 | The CH-103 cards become custom board PCB-17 rev A, 0.8 mm, panelised with PCB-11/15; CH-106 reliefs 0.8 mm | DESIGNED; procure in the D-064 batch |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -4448,7 +4449,7 @@ CH-106 gets a mirrored 0.6 mm underside relief over each card (2.0 mm roof, clea
 
 **Checks.** `check_ch103_protection` 12/12 (each card: clear, on the BMS, pocket clearance 0.5 mm, 2.0 mm roof, drops 20 mm with the pack; one fuse per tap; every stub ≤ 15 mm). `check_chassis_harness` 96/96, `check_balance_channel` 15/15, `check_d106_harness` 134/134, `export_d095_prints_stl` 29/29 (CH-106 re-exported). Chassis-harness and whole-robot STEPs rebuilt.
 
-**Card build spec** (hand-built; no fab order needed):
+**Card build spec** (superseded by [D-117](#d-117): the cards are now fab-made PCB-17; the wire, potting and fixing notes still apply):
 - Board: 0.6 mm FR4, single-sided 1 oz copper. +Y card 6 × 8 mm, −Y card 9.5 × 10 mm.
 - Per fuse: one 1206 land pair (1.0 × 1.8 mm pads, 2.0 mm gap). A 1.5 × 2.5 mm wire pad continues from each land toward its wire's exit.
 - Copper: ≥ 0.8 mm between nets; ≥ 0.5 mm to the board edge.
@@ -4469,3 +4470,20 @@ CH-106 gets a mirrored 0.6 mm underside relief over each card (2.0 mm roof, clea
 6. Disconnect the main lead while the balance lead is still connected: no charging.
 
 Any continued charge fails N5. W02P stays unbuilt until N5 passes.
+
+## D-117
+
+**2026-11-18 · CH-103 fuse cards become PCB-17 · DESIGNED (builder chose to fab them with the batch).**
+
+**Why.** D-116's cards were two small custom boards that weren't in the register. Hand-cutting copper-clad to 0.6 mm risks the pad geometry and the insulation between taps. Panelling them with PCB-11 and PCB-15 costs almost nothing and gives real lands, a polarity silk and a known thickness.
+
+**Decision.** PCB-17 rev A ([board folder](04-pcbs/pcb-17-balance-fuse-cards/README.md)): two cards in one design, **0.8 mm** to match the PCB-11/15 panel.
+- Card A: 6 × 9 mm, F1 (BM).
+- Card B: 9.5 × 10 mm, F2 (B−) and F3 (B+), 4 mm pitch.
+- Littelfuse 0466001.NRHF 1206 fuses, 2.5 × 1.5 mm bare wire pads, 0.8 mm tracks, silk `BM`/`B-`/`B+`.
+
+Built headless as PCB-16: `build_schematic.py` → Nightly ERC 0/0 → netlist → `layout_pcb17.py` (no autorouter) → parity DRC 0/0/0 → `audit_netlist.py` 13/13 (each fuse pin 1 faces its BMS pad end) → fab/revA and STEP.
+
+**CAD follows.** The thicker board makes each card 2.0 mm with fuse and potting. The droid cards are now Z 54.2–56.2, and card A is 9 mm long (Y 15–24). The CH-106 reliefs deepen to 0.8 mm (to Z 56.7), leaving a 1.8 mm roof. `check_ch103_protection` 12/12 (roof check now ≥ 1.75 mm; stubs ≤ 11.5 mm), `check_chassis_harness` 96/96, `check_balance_channel` 15/15, `check_d106_harness` 134/134, `export_d095_prints_stl` 29/29 (CH-106 re-exported). Whole-robot and chassis-harness STEPs rebuilt.
+
+**Open.** Received HW-391 pad corners and height (if they differ, re-place the cards and reliefs, roof ≥ 1.5 mm). Panel layout at DFM. Swap the board STEP in through `pcb_integration.py`. Potting ≤ 0.6 mm. N5 per D-116. W02P stays unbuilt until N5 passes.

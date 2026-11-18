@@ -14,10 +14,10 @@
    "carrier": [
     41.0,
     47.0,
-    16.0,
+    15.0,
     24.0,
     54.2,
-    56.0
+    56.2
    ]
   },
   {
@@ -26,7 +26,7 @@
    "clearance_mm": 0.5
   },
   {
-   "check": "PY_BM_pocket_roof_at_least_2mm",
+   "check": "PY_BM_pocket_roof_at_least_1p75mm",
    "ok": true,
    "solid_fraction": 1.0
   },
@@ -50,7 +50,7 @@
     -24.0,
     -14.0,
     54.2,
-    56.0
+    56.2
    ]
   },
   {
@@ -59,7 +59,7 @@
    "clearance_mm": 0.5
   },
   {
-   "check": "NY_BMINUS_BPLUS_pocket_roof_at_least_2mm",
+   "check": "NY_BMINUS_BPLUS_pocket_roof_at_least_1p75mm",
    "ok": true,
    "solid_fraction": 1.0
   },
@@ -75,7 +75,7 @@
    "taps": [
     [
      "MID",
-     11.6
+     11.5
     ],
     [
      "B_MINUS",
@@ -91,7 +91,7 @@
    "check": "pad_to_fuse_stubs_at_most_15mm",
    "ok": true,
    "stub_mm": {
-    "MID": 11.6,
+    "MID": 11.5,
     "B_MINUS": 5.9,
     "B_PLUS": 9.8
    },

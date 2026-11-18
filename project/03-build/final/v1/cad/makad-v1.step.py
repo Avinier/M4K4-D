@@ -865,21 +865,21 @@ BALANCE = dict(
 # 4.2V (BM) pad and the P+/P- pads sit at the other end (listing photos). The
 # board lies long side along Y with the BM/P end at +Y, toward J-PK. Each tap
 # gets a 1206 very-fast 1 A fuse on a low-profile potted card at its own end:
-# BM at +Y, B- and B+ at -Y. Cards are 0.6 board + 0.55 fuse + thin potting,
-# 1.8 mm (E). The fused tails run along the board's -X edge to +Y, under the
+# BM at +Y, B- and B+ at -Y. The cards are PCB-17 rev A (D-117): 0.8 mm board
+# (panelled with PCB-11/15) + 0.55 mm fuse + thin potting, 2.0 mm overall. The fused tails run along the board's -X edge to +Y, under the
 # pack strap on the cell tops (pack-wrap dressing, as W01) and down the 1.5 mm
 # +Y end-face gap to the tub window. CH-106 (2.5 mm, underside Z 56.0) carries
-# a 0.6 mm relief over each card, leaving a 2.0 mm roof, clear of the M2 boss
+# a 0.8 mm relief over each card, leaving a 1.8 mm roof, clear of the M2 boss
 # pilots at X 50.3.
 BMS_PADS = {"B_MINUS": (37.5, -22.8), "B_PLUS": (55.0, -22.8), "MID": (55.0, 22.8)}  # E: corners per HW-391 photos
 BALANCE_FUSE = dict(cards=(
-    dict(name="PY_BM", carrier=(41.0, 47.0, 16.0, 24.0, 54.2, 56.0),
-         fuses=(("MID", (43.2, 44.8, 17.4, 20.6, 54.8, 55.35)),),
-         pocket=(40.5, 47.5, 15.5, 24.5, 55.9, 56.5)),
-    dict(name="NY_BMINUS_BPLUS", carrier=(39.3, 48.8, -24.0, -14.0, 54.2, 56.0),
-         fuses=(("B_MINUS", (41.2, 42.8, -20.6, -17.4, 54.8, 55.35)),
-                ("B_PLUS", (45.2, 46.8, -20.6, -17.4, 54.8, 55.35))),
-         pocket=(38.8, 49.3, -24.5, -13.5, 55.9, 56.5)),
+    dict(name="PY_BM", carrier=(41.0, 47.0, 15.0, 24.0, 54.2, 56.2),          # PCB-17 card A, 6 x 9
+         fuses=(("MID", (43.2, 44.8, 17.9, 21.1, 55.0, 55.55)),),
+         pocket=(40.5, 47.5, 14.5, 24.5, 55.9, 56.7)),
+    dict(name="NY_BMINUS_BPLUS", carrier=(39.3, 48.8, -24.0, -14.0, 54.2, 56.2),  # PCB-17 card B, 9.5 x 10
+         fuses=(("B_MINUS", (41.2, 42.8, -20.6, -17.4, 55.0, 55.55)),
+                ("B_PLUS", (45.2, 46.8, -20.6, -17.4, 55.0, 55.55))),
+         pocket=(38.8, 49.3, -24.5, -13.5, 55.9, 56.7)),
 ))
 
 # Microphones (D-093 Q6): four INMP441 modules at the four D-037 port axes. UNMEASURED module:

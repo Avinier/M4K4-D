@@ -13,8 +13,8 @@
   {
    "check": "CH-106_volume_matches_brep",
    "ok": true,
-   "mesh_mm3": 8304.2881,
-   "brep_mm3": 8304.5967
+   "mesh_mm3": 8263.6881,
+   "brep_mm3": 8263.9967
   },
   {
    "check": "CH-106_on_bed_at_origin",

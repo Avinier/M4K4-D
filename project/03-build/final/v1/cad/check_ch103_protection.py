@@ -25,9 +25,9 @@ def main():
         gap = C.distance(card, plate)
         r.check(f"{n}_plate_pocket_clears_card", gap >= 0.3, clearance_mm=round(gap, 3))
         px0, px1, py0, py1, pz0, pz1 = spec["pocket"]
-        roof = Box(px1 - px0, py1 - py0, 1.95).moved(Location(((px0 + px1) / 2, (py0 + py1) / 2, pz1 + 0.975)))
+        roof = Box(px1 - px0, py1 - py0, 1.75).moved(Location(((px0 + px1) / 2, (py0 + py1) / 2, pz1 + 0.875)))
         solid = C.piece_common(roof, plate) / roof.volume
-        r.check(f"{n}_pocket_roof_at_least_2mm", solid > 0.999, solid_fraction=round(solid, 4))
+        r.check(f"{n}_pocket_roof_at_least_1p75mm", solid > 0.999, solid_fraction=round(solid, 4))
         # The pack leaves downward through the bottom hatch, so a pack-carried
         # card translates -Z with it; skip only parts that move with the pack.
         hit = C.sweep([(label, card)], leaves, (0, 0, -1), [0.5 * i for i in range(1, 41)], skip=moving)

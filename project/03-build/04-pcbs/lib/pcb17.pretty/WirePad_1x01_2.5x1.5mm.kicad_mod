@@ -1,0 +1,27 @@
+(footprint "WirePad_1x01_2.5x1.5mm"
+	(version 20241229)
+	(generator "makad-pcb17")
+	(layer "F.Cu")
+	(descr "One bare SMD wire pad 2.5 x 1.5 mm for an AWG24 lead laid flat along X (PCB-17, D-116)")
+	(tags "wire pad solder")
+	(property "Reference" "REF**"
+		(at 0 -1.6 0)
+		(layer "F.Fab")
+		(effects (font (size 0.6 0.6) (thickness 0.1)))
+	)
+	(property "Value" "WirePad_1x01_2.5x1.5mm"
+		(at 0 1.6 0)
+		(layer "F.Fab")
+		(effects (font (size 0.6 0.6) (thickness 0.1)))
+	)
+	(attr smd exclude_from_pos_files exclude_from_bom)
+	(pad "1" smd rect
+		(at 0 0)
+		(size 2.5 1.5)
+		(layers "F.Cu" "F.Mask")
+	)
+	(fp_line (start -1.5 -1) (end 1.5 -1) (stroke (width 0.05) (type solid)) (layer "F.CrtYd"))
+	(fp_line (start 1.5 -1) (end 1.5 1) (stroke (width 0.05) (type solid)) (layer "F.CrtYd"))
+	(fp_line (start 1.5 1) (end -1.5 1) (stroke (width 0.05) (type solid)) (layer "F.CrtYd"))
+	(fp_line (start -1.5 1) (end -1.5 -1) (stroke (width 0.05) (type solid)) (layer "F.CrtYd"))
+)

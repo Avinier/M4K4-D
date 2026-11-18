@@ -1,0 +1,1411 @@
+(kicad_pcb
+	(version 20261018)
+	(generator "pcbnew")
+	(generator_version "10.99")
+	(general
+		(thickness 0.8)
+		(legacy_teardrops no)
+	)
+	(paper "A4")
+	(layers
+		(0 "F.Cu" signal)
+		(2 "B.Cu" signal)
+		(9 "F.Adhes" user "F.Adhesive")
+		(11 "B.Adhes" user "B.Adhesive")
+		(13 "F.Paste" user)
+		(15 "B.Paste" user)
+		(5 "F.SilkS" user "F.Silkscreen")
+		(7 "B.SilkS" user "B.Silkscreen")
+		(1 "F.Mask" user)
+		(3 "B.Mask" user)
+		(17 "Dwgs.User" user "User.Drawings")
+		(19 "Cmts.User" user "User.Comments")
+		(21 "Eco1.User" user "User.Eco1")
+		(23 "Eco2.User" user "User.Eco2")
+		(25 "Edge.Cuts" user)
+		(27 "Margin" user)
+		(31 "F.CrtYd" user "F.Courtyard")
+		(29 "B.CrtYd" user "B.Courtyard")
+		(35 "F.Fab" user)
+		(33 "B.Fab" user)
+		(39 "User.1" user)
+		(41 "User.2" user)
+		(43 "User.3" user)
+		(45 "User.4" user)
+	)
+	(setup
+		(pad_to_mask_clearance 0)
+		(allow_soldermask_bridges_in_footprints no)
+		(tenting
+			(front yes)
+			(back yes)
+		)
+		(covering
+			(front no)
+			(back no)
+		)
+		(plugging
+			(front no)
+			(back no)
+		)
+		(capping no)
+		(filling no)
+		(aux_axis_origin 100 110)
+		(grid_origin 100 110)
+		(pcbplotparams
+			(layerselection 0x00000000_00000000_55555555_5755f5ff)
+			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
+			(disableapertmacros no)
+			(usegerberextensions no)
+			(usegerberattributes yes)
+			(usegerberadvancedattributes yes)
+			(creategerberjobfile yes)
+			(dashed_line_dash_ratio 12)
+			(dashed_line_gap_ratio 3)
+			(svgprecision 4)
+			(pngdpi 300)
+			(pngantialias yes)
+			(plotframeref no)
+			(mode 1)
+			(useauxorigin no)
+			(pdf_front_fp_property_popups yes)
+			(pdf_back_fp_property_popups yes)
+			(pdf_metadata yes)
+			(pdf_single_document no)
+			(dxfpolygonmode yes)
+			(dxfimperialunits yes)
+			(dxfusepcbnewfont yes)
+			(psnegative no)
+			(psa4output no)
+			(plot_black_and_white yes)
+			(sketchpadsonfab no)
+			(plotpadnumbers no)
+			(hidednponfab no)
+			(sketchdnponfab yes)
+			(crossoutdnponfab yes)
+			(subtractmaskfromsilk no)
+			(outputformat 1)
+			(mirror no)
+			(drillshape 1)
+			(scaleselection 1)
+			(outputdirectory "")
+		)
+	)
+	(footprint "pcb17:WirePad_1x01_2.5x1.5mm"
+		(layer "F.Cu")
+		(uuid "0abee794-9274-533e-b77f-1464d1962140")
+		(transform
+			(translate 103 101.15)
+			(rotate 0)
+			(scale 1 1)
+		)
+		(descr "One bare SMD wire pad 2.5 x 1.5 mm for an AWG24 lead laid flat along X (PCB-17, D-116)")
+		(tags "wire pad solder")
+		(property "Reference" "J1"
+			(at 0 -3.2 0)
+			(layer "F.Fab")
+			(uuid "e48afdbb-2461-5c7e-b6e0-641bd27471b2")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Value" "BM_CELL_PAD"
+			(at 0 3.2 0)
+			(layer "F.Fab")
+			(uuid "8ca1bc85-36bd-5b2b-9209-b41614573f10")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "fec356cc-b624-5f16-ad58-7a5ba77151db")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "b7345bb2-edba-5bf4-b07f-0e11da38dc41")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(path "/f82b5d58-9fea-5c8e-9ec2-56d2342b15fd")
+		(sheetname "/")
+		(sheetfile "pcb-17-balance-fuse-cards.kicad_sch")
+		(attr smd exclude_from_pos_files exclude_from_bom)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -1.5 -1)
+			(end 1.5 -1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "9f902948-dc63-42b8-bfa1-1ed9b4930446")
+		)
+		(fp_line
+			(start -1.5 1)
+			(end -1.5 -1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "df3a3773-f98c-4d90-862d-26616444a086")
+		)
+		(fp_line
+			(start 1.5 -1)
+			(end 1.5 1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "bc8340d2-aba9-4e3f-b47b-c790e923b5d7")
+		)
+		(fp_line
+			(start 1.5 1)
+			(end -1.5 1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "5d20ae51-cd3e-4cba-b20e-fa20e5e71764")
+		)
+		(pad "1" smd rect
+			(at 0 0)
+			(size 2.5 1.5)
+			(layers "F.Cu" "F.Mask")
+			(net "/BM_CELL")
+			(pinfunction "Pin_1_1")
+			(pintype "passive")
+			(uuid "17779e01-eeb9-4d17-9266-f24d8c3961a1")
+		)
+		(embedded_fonts no)
+	)
+	(footprint "Fuse:Fuse_1206_3216Metric"
+		(layer "F.Cu")
+		(uuid "169f392a-0109-5683-a756-297b49e5c768")
+		(transform
+			(translate 116.7 105)
+			(rotate 90)
+			(scale 1 1)
+		)
+		(descr "Fuse SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf)")
+		(tags "fuse")
+		(property "Reference" "F3"
+			(at 0 -3.2 0)
+			(layer "F.Fab")
+			(uuid "b80b0d77-f0d3-590e-8e65-8ca2b41ba7dd")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Value" "0466001.NRHF 1A"
+			(at 0 3.2 0)
+			(layer "F.Fab")
+			(uuid "ffa4ab93-914b-563a-b462-692ba915a7fa")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "7b59847d-f9ca-5cf6-84b0-ee7ac2465d9d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "27f00254-fb23-52d4-8516-c45b37941816")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "ed52f578-80b4-4978-97a1-6ae5062fb2b3")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(path "/824b9111-7ac0-5870-b8ed-078cbd7a51ee")
+		(sheetname "/")
+		(sheetfile "pcb-17-balance-fuse-cards.kicad_sch")
+		(attr smd)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -0.602064 -0.91)
+			(end 0.602064 -0.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "555a0a36-0f13-48de-8d4d-0f5c2ea810b6")
+		)
+		(fp_line
+			(start -0.602064 0.91)
+			(end 0.602064 0.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "d3e525d4-a56e-4d93-8b73-469c447642ba")
+		)
+		(fp_rect
+			(start -2.28 -1.13)
+			(end 2.28 1.13)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+			(uuid "ee0b043c-f511-4885-8f73-ee1f56a8abfe")
+		)
+		(fp_rect
+			(start -1.6 -0.8)
+			(end 1.6 0.8)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "e54c30cb-7b6a-4a8a-8b0f-680350411115")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(uuid "1f1f92de-e2ac-4f45-ae3d-a76118b6df31")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(pad "1" smd roundrect
+			(at -1.4 0 90)
+			(size 1.25 1.75)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.2)
+			(net "/BPLUS_CELL")
+			(pinfunction "Pin_1_1")
+			(pintype "passive")
+			(uuid "c9a7a5ea-1caa-43b4-9b08-be888a2251d5")
+		)
+		(pad "2" smd roundrect
+			(at 1.4 0 90)
+			(size 1.25 1.75)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.2)
+			(net "/BPLUS_FUSED")
+			(pinfunction "Pin_2_2")
+			(pintype "passive")
+			(uuid "a8c4fcff-a496-4d99-891d-53e6f075f105")
+		)
+		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_1206_3216Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint "pcb17:WirePad_1x01_2.5x1.5mm"
+		(layer "F.Cu")
+		(uuid "1c832e7f-9329-5745-8f8d-a389f3ec5bfd")
+		(transform
+			(translate 112.7 101.15)
+			(rotate 0)
+			(scale 1 1)
+		)
+		(descr "One bare SMD wire pad 2.5 x 1.5 mm for an AWG24 lead laid flat along X (PCB-17, D-116)")
+		(tags "wire pad solder")
+		(property "Reference" "J4"
+			(at 0 -3.2 0)
+			(layer "F.Fab")
+			(uuid "1c0a60e5-f8f4-563d-b3b2-981c634fc36e")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Value" "BMINUS_FUSED_PAD"
+			(at 0 3.2 0)
+			(layer "F.Fab")
+			(uuid "6be8dd60-1472-58da-83d2-d04bcffe7049")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "aa118505-293b-50be-bb60-c7ca869d87d2")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ad620d31-131a-5773-9dbb-2a7fb19cc84c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(path "/b1467a7e-1882-5784-ab9e-2046c2e96438")
+		(sheetname "/")
+		(sheetfile "pcb-17-balance-fuse-cards.kicad_sch")
+		(attr smd exclude_from_pos_files exclude_from_bom)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -1.5 -1)
+			(end 1.5 -1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "cc622cea-b626-4149-9527-68a5771f26f4")
+		)
+		(fp_line
+			(start -1.5 1)
+			(end -1.5 -1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "26574ef1-492d-45d7-98bd-a0c38e496082")
+		)
+		(fp_line
+			(start 1.5 -1)
+			(end 1.5 1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "f908620c-5d66-4e9f-86f7-094432f90006")
+		)
+		(fp_line
+			(start 1.5 1)
+			(end -1.5 1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "921e2d2f-9c1b-4be7-9171-46e89e2a7664")
+		)
+		(pad "1" smd rect
+			(at 0 0)
+			(size 2.5 1.5)
+			(layers "F.Cu" "F.Mask")
+			(net "/BMINUS_FUSED")
+			(pinfunction "Pin_1_1")
+			(pintype "passive")
+			(uuid "172811e7-fbcb-4305-a4e0-222999d402e6")
+		)
+		(embedded_fonts no)
+	)
+	(footprint "Fuse:Fuse_1206_3216Metric"
+		(layer "F.Cu")
+		(uuid "2c309b6f-7a5a-50bb-a5a4-6673b40eb363")
+		(transform
+			(translate 112.7 105)
+			(rotate 90)
+			(scale 1 1)
+		)
+		(descr "Fuse SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf)")
+		(tags "fuse")
+		(property "Reference" "F2"
+			(at 0 -3.2 0)
+			(layer "F.Fab")
+			(uuid "801e5150-0b53-5c61-9930-79c68a9f93ad")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Value" "0466001.NRHF 1A"
+			(at 0 3.2 0)
+			(layer "F.Fab")
+			(uuid "54f84425-67e7-55c0-8d7e-57d6bde6a21d")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8c327902-08d2-54d7-b87c-b8c81f3b53ea")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ededb3b2-ad7b-5a99-b00a-b779eb403da6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "5d215767-f6e2-4364-861b-af776d37dc87")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(path "/cb7b38c2-f7e6-5a86-983b-6c31c04a42bf")
+		(sheetname "/")
+		(sheetfile "pcb-17-balance-fuse-cards.kicad_sch")
+		(attr smd)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -0.602064 -0.91)
+			(end 0.602064 -0.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "945c460e-683f-4eb8-8632-de0056770a89")
+		)
+		(fp_line
+			(start -0.602064 0.91)
+			(end 0.602064 0.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "da53d99d-b683-4a9e-ac11-0014ec2a5aa1")
+		)
+		(fp_rect
+			(start -2.28 -1.13)
+			(end 2.28 1.13)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+			(uuid "ec6613de-f6b8-405a-9171-880397d240b0")
+		)
+		(fp_rect
+			(start -1.6 -0.8)
+			(end 1.6 0.8)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "e0938d10-269d-4452-a70d-f5354c1d8266")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(uuid "4b644245-2094-46d5-ab4b-64ab94ca5796")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(pad "1" smd roundrect
+			(at -1.4 0 90)
+			(size 1.25 1.75)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.2)
+			(net "/BMINUS_CELL")
+			(pinfunction "Pin_1_1")
+			(pintype "passive")
+			(uuid "ac8bbac9-b5e7-4e0e-a256-14c1c003d214")
+		)
+		(pad "2" smd roundrect
+			(at 1.4 0 90)
+			(size 1.25 1.75)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.2)
+			(net "/BMINUS_FUSED")
+			(pinfunction "Pin_2_2")
+			(pintype "passive")
+			(uuid "5423848d-759f-42bf-bf4e-fb4a158d0cb0")
+		)
+		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_1206_3216Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint "pcb17:WirePad_1x01_2.5x1.5mm"
+		(layer "F.Cu")
+		(uuid "30a6a4ae-6259-556b-9dbb-103567e4e5f5")
+		(transform
+			(translate 116.7 108.85)
+			(rotate 0)
+			(scale 1 1)
+		)
+		(descr "One bare SMD wire pad 2.5 x 1.5 mm for an AWG24 lead laid flat along X (PCB-17, D-116)")
+		(tags "wire pad solder")
+		(property "Reference" "J5"
+			(at 0 -3.2 0)
+			(layer "F.Fab")
+			(uuid "caa50ef0-78c0-5b00-abfd-ba60f02b09c3")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Value" "BPLUS_CELL_PAD"
+			(at 0 3.2 0)
+			(layer "F.Fab")
+			(uuid "a39870ef-7b8e-5aa3-a87e-ad1e62d0b8d9")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "4bf40e14-b1de-54ce-8c24-4da734100d8e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "696938ba-f58e-5882-b1ef-bd6327f8c065")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(path "/cfb5d021-0857-56de-8d79-13342f027cc3")
+		(sheetname "/")
+		(sheetfile "pcb-17-balance-fuse-cards.kicad_sch")
+		(attr smd exclude_from_pos_files exclude_from_bom)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -1.5 -1)
+			(end 1.5 -1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "f8bf69a4-15f1-4954-b48b-6f790cc3777f")
+		)
+		(fp_line
+			(start -1.5 1)
+			(end -1.5 -1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "e99b515d-6dc2-4750-a37e-4c6f1719ea22")
+		)
+		(fp_line
+			(start 1.5 -1)
+			(end 1.5 1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "e48f4c7c-77b0-4ea8-9cb5-4865bcba675b")
+		)
+		(fp_line
+			(start 1.5 1)
+			(end -1.5 1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "74453516-1e43-432b-95e9-ee225d60eb26")
+		)
+		(pad "1" smd rect
+			(at 0 0)
+			(size 2.5 1.5)
+			(layers "F.Cu" "F.Mask")
+			(net "/BPLUS_CELL")
+			(pinfunction "Pin_1_1")
+			(pintype "passive")
+			(uuid "d8151099-f65b-4d8f-9b1b-52002ce2c0aa")
+		)
+		(embedded_fonts no)
+	)
+	(footprint "pcb17:WirePad_1x01_2.5x1.5mm"
+		(layer "F.Cu")
+		(uuid "34b88a5a-1da3-59cb-8ec3-1e4983b344ff")
+		(transform
+			(translate 116.7 101.15)
+			(rotate 0)
+			(scale 1 1)
+		)
+		(descr "One bare SMD wire pad 2.5 x 1.5 mm for an AWG24 lead laid flat along X (PCB-17, D-116)")
+		(tags "wire pad solder")
+		(property "Reference" "J6"
+			(at 0 -3.2 0)
+			(layer "F.Fab")
+			(uuid "b49c2f2f-4882-5b34-9a1c-d5863807d7dc")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Value" "BPLUS_FUSED_PAD"
+			(at 0 3.2 0)
+			(layer "F.Fab")
+			(uuid "8672de10-f333-59cd-be29-11a5dcd9285d")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "4c8f16df-7441-5e20-8cc9-e4989a458fec")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "a6f31daa-ff19-53df-9bcd-441298ab6c5e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(path "/f7a25c76-0256-5dfa-ae0e-e76187900cc6")
+		(sheetname "/")
+		(sheetfile "pcb-17-balance-fuse-cards.kicad_sch")
+		(attr smd exclude_from_pos_files exclude_from_bom)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -1.5 -1)
+			(end 1.5 -1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "4d9d4fa9-71dc-4046-94d2-3a115e36226a")
+		)
+		(fp_line
+			(start -1.5 1)
+			(end -1.5 -1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "cd4fdb29-df90-4446-a05c-81c9068daa2c")
+		)
+		(fp_line
+			(start 1.5 -1)
+			(end 1.5 1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "2601db3f-5f08-4691-9b00-eebf6271dad7")
+		)
+		(fp_line
+			(start 1.5 1)
+			(end -1.5 1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "f0f66064-0ec9-4877-a26a-681b5ab72b90")
+		)
+		(pad "1" smd rect
+			(at 0 0)
+			(size 2.5 1.5)
+			(layers "F.Cu" "F.Mask")
+			(net "/BPLUS_FUSED")
+			(pinfunction "Pin_1_1")
+			(pintype "passive")
+			(uuid "de5949fd-0506-4a64-a34f-29d24f1006e6")
+		)
+		(embedded_fonts no)
+	)
+	(footprint "pcb17:WirePad_1x01_2.5x1.5mm"
+		(layer "F.Cu")
+		(uuid "91c7652b-8c79-5c9a-8b3b-0d62c1439db0")
+		(transform
+			(translate 103 107.85)
+			(rotate 0)
+			(scale 1 1)
+		)
+		(descr "One bare SMD wire pad 2.5 x 1.5 mm for an AWG24 lead laid flat along X (PCB-17, D-116)")
+		(tags "wire pad solder")
+		(property "Reference" "J2"
+			(at 0 -3.2 0)
+			(layer "F.Fab")
+			(uuid "4a47f50e-5a63-5e1a-a37a-803c49e80de7")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Value" "BM_FUSED_PAD"
+			(at 0 3.2 0)
+			(layer "F.Fab")
+			(uuid "978ab5fb-79ed-506b-953f-f59946d17e49")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "271a3cdd-5722-53be-98ad-52c1d7d94c4b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "2ec71e03-ce7f-5d39-b26a-fe21b7052088")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(path "/39be3e80-a60a-5e8d-8f58-96e006e1b72c")
+		(sheetname "/")
+		(sheetfile "pcb-17-balance-fuse-cards.kicad_sch")
+		(attr smd exclude_from_pos_files exclude_from_bom)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -1.5 -1)
+			(end 1.5 -1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "b2ac095a-b5e0-4113-ab4f-262c52bbc7d2")
+		)
+		(fp_line
+			(start -1.5 1)
+			(end -1.5 -1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "e39e2bfc-a5de-4eed-ac2b-cda5d4b6f875")
+		)
+		(fp_line
+			(start 1.5 -1)
+			(end 1.5 1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "2c77c66c-7467-4898-80c8-f6e3abe9cc17")
+		)
+		(fp_line
+			(start 1.5 1)
+			(end -1.5 1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "ab6fc4fb-0891-426f-8ef0-a62c6bb19ac5")
+		)
+		(pad "1" smd rect
+			(at 0 0)
+			(size 2.5 1.5)
+			(layers "F.Cu" "F.Mask")
+			(net "/BM_FUSED")
+			(pinfunction "Pin_1_1")
+			(pintype "passive")
+			(uuid "5cde2089-0256-469f-9f96-fabdc8f6fd66")
+		)
+		(embedded_fonts no)
+	)
+	(footprint "Fuse:Fuse_1206_3216Metric"
+		(layer "F.Cu")
+		(uuid "98a3e5e5-e08b-5ba2-8953-76aea0c5c1ef")
+		(transform
+			(translate 103 104.5)
+			(rotate -90)
+			(scale 1 1)
+		)
+		(descr "Fuse SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf)")
+		(tags "fuse")
+		(property "Reference" "F1"
+			(at 0 -3.2 0)
+			(layer "F.Fab")
+			(uuid "f83d4842-f60f-5732-b303-10f56badfa9c")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Value" "0466001.NRHF 1A"
+			(at 0 3.2 0)
+			(layer "F.Fab")
+			(uuid "83f7109f-f489-5cd8-a112-db39f60f3a88")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "dcf11b35-4b5f-5401-bf2c-3445b63d8434")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "fb744b34-86d8-5c0a-bafc-6d3f7960e2fc")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "f421be08-6e4d-4edd-b2c2-164927456054")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(path "/ab901e20-fd66-55b2-b47b-fcc16b1b0214")
+		(sheetname "/")
+		(sheetfile "pcb-17-balance-fuse-cards.kicad_sch")
+		(attr smd)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -0.602064 -0.91)
+			(end 0.602064 -0.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "2aac608a-7894-44da-b9dd-51e2bc4bbe5a")
+		)
+		(fp_line
+			(start -0.602064 0.91)
+			(end 0.602064 0.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "e9f577b0-d84b-488f-bb68-67ec1f1e3ffa")
+		)
+		(fp_rect
+			(start -2.28 -1.13)
+			(end 2.28 1.13)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+			(uuid "351e25b0-165a-4a60-a559-c2891297b12b")
+		)
+		(fp_rect
+			(start -1.6 -0.8)
+			(end 1.6 0.8)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "aa735dfc-fdcd-466d-b734-176e46d6c118")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(uuid "049a3dd4-0417-49f4-a64a-fe7a209e8237")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(pad "1" smd roundrect
+			(at -1.4 0 270)
+			(size 1.25 1.75)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.2)
+			(net "/BM_CELL")
+			(pinfunction "Pin_1_1")
+			(pintype "passive")
+			(uuid "ff0ef3ed-1b62-4980-a0a6-aa0a13a402a1")
+		)
+		(pad "2" smd roundrect
+			(at 1.4 0 270)
+			(size 1.25 1.75)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.2)
+			(net "/BM_FUSED")
+			(pinfunction "Pin_2_2")
+			(pintype "passive")
+			(uuid "bcc0b57c-34f7-48e0-9862-9d333be46cb2")
+		)
+		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_1206_3216Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint "pcb17:WirePad_1x01_2.5x1.5mm"
+		(layer "F.Cu")
+		(uuid "b2a22b99-90c6-5b54-905b-d38ec9daa366")
+		(transform
+			(translate 112.7 108.85)
+			(rotate 0)
+			(scale 1 1)
+		)
+		(descr "One bare SMD wire pad 2.5 x 1.5 mm for an AWG24 lead laid flat along X (PCB-17, D-116)")
+		(tags "wire pad solder")
+		(property "Reference" "J3"
+			(at 0 -3.2 0)
+			(layer "F.Fab")
+			(uuid "4a16dee7-d811-5748-a865-ef245555e1b2")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Value" "BMINUS_CELL_PAD"
+			(at 0 3.2 0)
+			(layer "F.Fab")
+			(uuid "2b3d024c-e720-5b65-aa84-4e7b3d3807e8")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "fe8968b2-0407-5507-ab28-9dad0a9fd61d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "bb79e6a2-524d-517a-878f-b0930017af34")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(path "/80702a82-dfd7-5e2f-baed-4017c6ecc3e1")
+		(sheetname "/")
+		(sheetfile "pcb-17-balance-fuse-cards.kicad_sch")
+		(attr smd exclude_from_pos_files exclude_from_bom)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -1.5 -1)
+			(end 1.5 -1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "6f1684b7-0726-41bd-9956-b81b1eb8aa06")
+		)
+		(fp_line
+			(start -1.5 1)
+			(end -1.5 -1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "f1425222-a624-41f3-b152-25fbc284a6b5")
+		)
+		(fp_line
+			(start 1.5 -1)
+			(end 1.5 1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "b5ea2fc9-3b77-4c71-8c64-e0219932b629")
+		)
+		(fp_line
+			(start 1.5 1)
+			(end -1.5 1)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "3ec1dde6-8d92-447c-8f85-bd73d6d3e038")
+		)
+		(pad "1" smd rect
+			(at 0 0)
+			(size 2.5 1.5)
+			(layers "F.Cu" "F.Mask")
+			(net "/BMINUS_CELL")
+			(pinfunction "Pin_1_1")
+			(pintype "passive")
+			(uuid "a2c2ce5b-cf0e-4e19-962a-809ca8641912")
+		)
+		(embedded_fonts no)
+	)
+	(gr_line
+		(start 100 100)
+		(end 106 100)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "0909c0de-e956-51a6-882b-d073b1789c3c")
+	)
+	(gr_line
+		(start 100 109)
+		(end 100 100)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "0909c0de-01d1-5766-88d2-e3798682505e")
+	)
+	(gr_line
+		(start 106 100)
+		(end 106 109)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "0909c0de-69be-52dc-8c04-eb4cb798050a")
+	)
+	(gr_line
+		(start 106 109)
+		(end 100 109)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "0909c0de-6c37-509e-b4e2-82d4aa9895a9")
+	)
+	(gr_line
+		(start 110 100)
+		(end 119.5 100)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "0909c0de-75d5-563c-9797-bde9421a1aa6")
+	)
+	(gr_line
+		(start 110 110)
+		(end 110 100)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "0909c0de-07a0-550d-8a1b-b76ed07c85c3")
+	)
+	(gr_line
+		(start 119.5 100)
+		(end 119.5 110)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "0909c0de-8289-5dd1-8341-4b8fa8b65f6d")
+	)
+	(gr_line
+		(start 119.5 110)
+		(end 110 110)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "0909c0de-b0aa-5e8d-97a9-ec24b5aa388d")
+	)
+	(gr_text "BM"
+		(at 105 104.5 90)
+		(layer "F.SilkS")
+		(uuid "0909c0de-dada-5c8e-b319-8c437547a38c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.16)
+			)
+		)
+	)
+	(gr_text "B-"
+		(at 110.85 105 90)
+		(layer "F.SilkS")
+		(uuid "0909c0de-30bd-53a1-ac19-988a65f2efbc")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.16)
+			)
+		)
+	)
+	(gr_text "B+"
+		(at 118.65 105 90)
+		(layer "F.SilkS")
+		(uuid "0909c0de-d35f-5b61-8205-f7687f8148fa")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.16)
+			)
+		)
+	)
+	(gr_text "17A"
+		(at 103 104.5 90)
+		(layer "B.SilkS")
+		(uuid "0909c0de-c14b-5389-abc3-fd70ec7d676e")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.16)
+			)
+			(justify mirror)
+		)
+	)
+	(gr_text "17B"
+		(at 114.75 105 90)
+		(layer "B.SilkS")
+		(uuid "0909c0de-87dc-5aad-9db0-8ea70bb7762f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.16)
+			)
+			(justify mirror)
+		)
+	)
+	(segment
+		(start 103 101.15)
+		(end 103 103.1)
+		(width 0.8)
+		(layer "F.Cu")
+		(net "/BM_CELL")
+		(uuid "0909c0de-aaff-58bf-a45d-699d97b6cf5f")
+	)
+	(segment
+		(start 116.7 108.85)
+		(end 116.7 106.4)
+		(width 0.8)
+		(layer "F.Cu")
+		(net "/BPLUS_CELL")
+		(uuid "0909c0de-f2de-5552-b02b-f7898d01ed5a")
+	)
+	(segment
+		(start 116.7 103.6)
+		(end 116.7 101.15)
+		(width 0.8)
+		(layer "F.Cu")
+		(net "/BPLUS_FUSED")
+		(uuid "0909c0de-cbf6-573f-840f-475a03fa4f05")
+	)
+	(segment
+		(start 112.7 103.6)
+		(end 112.7 101.15)
+		(width 0.8)
+		(layer "F.Cu")
+		(net "/BMINUS_FUSED")
+		(uuid "0909c0de-adcb-5471-9304-a09b677b6b76")
+	)
+	(segment
+		(start 112.7 108.85)
+		(end 112.7 106.4)
+		(width 0.8)
+		(layer "F.Cu")
+		(net "/BMINUS_CELL")
+		(uuid "0909c0de-5c25-5cbc-a954-f1387b6584bd")
+	)
+	(segment
+		(start 103 105.9)
+		(end 103 107.85)
+		(width 0.8)
+		(layer "F.Cu")
+		(net "/BM_FUSED")
+		(uuid "0909c0de-b024-517d-b2a7-7b45094d9022")
+	)
+	(embedded_fonts no)
+)

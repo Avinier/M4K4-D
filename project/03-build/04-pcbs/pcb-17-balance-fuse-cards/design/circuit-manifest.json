@@ -1,0 +1,113 @@
+{
+  "J1": {
+    "value": "BM_CELL_PAD",
+    "symbol": "Connector_Generic:Conn_01x01",
+    "footprint": "pcb17:WirePad_1x01_2.5x1.5mm",
+    "pins": {
+      "1": "BM_CELL"
+    },
+    "dnp": false
+  },
+  "F1": {
+    "value": "0466001.NRHF 1A",
+    "symbol": "Device:Fuse",
+    "footprint": "Fuse:Fuse_1206_3216Metric",
+    "pins": {
+      "1": "BM_CELL",
+      "2": "BM_FUSED"
+    },
+    "dnp": false
+  },
+  "J2": {
+    "value": "BM_FUSED_PAD",
+    "symbol": "Connector_Generic:Conn_01x01",
+    "footprint": "pcb17:WirePad_1x01_2.5x1.5mm",
+    "pins": {
+      "1": "BM_FUSED"
+    },
+    "dnp": false
+  },
+  "J3": {
+    "value": "BMINUS_CELL_PAD",
+    "symbol": "Connector_Generic:Conn_01x01",
+    "footprint": "pcb17:WirePad_1x01_2.5x1.5mm",
+    "pins": {
+      "1": "BMINUS_CELL"
+    },
+    "dnp": false
+  },
+  "F2": {
+    "value": "0466001.NRHF 1A",
+    "symbol": "Device:Fuse",
+    "footprint": "Fuse:Fuse_1206_3216Metric",
+    "pins": {
+      "1": "BMINUS_CELL",
+      "2": "BMINUS_FUSED"
+    },
+    "dnp": false
+  },
+  "J4": {
+    "value": "BMINUS_FUSED_PAD",
+    "symbol": "Connector_Generic:Conn_01x01",
+    "footprint": "pcb17:WirePad_1x01_2.5x1.5mm",
+    "pins": {
+      "1": "BMINUS_FUSED"
+    },
+    "dnp": false
+  },
+  "J5": {
+    "value": "BPLUS_CELL_PAD",
+    "symbol": "Connector_Generic:Conn_01x01",
+    "footprint": "pcb17:WirePad_1x01_2.5x1.5mm",
+    "pins": {
+      "1": "BPLUS_CELL"
+    },
+    "dnp": false
+  },
+  "F3": {
+    "value": "0466001.NRHF 1A",
+    "symbol": "Device:Fuse",
+    "footprint": "Fuse:Fuse_1206_3216Metric",
+    "pins": {
+      "1": "BPLUS_CELL",
+      "2": "BPLUS_FUSED"
+    },
+    "dnp": false
+  },
+  "J6": {
+    "value": "BPLUS_FUSED_PAD",
+    "symbol": "Connector_Generic:Conn_01x01",
+    "footprint": "pcb17:WirePad_1x01_2.5x1.5mm",
+    "pins": {
+      "1": "BPLUS_FUSED"
+    },
+    "dnp": false
+  },
+  "#FLG01": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "BM_CELL"
+    },
+    "dnp": false
+  },
+  "#FLG02": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "BMINUS_CELL"
+    },
+    "dnp": false
+  },
+  "#FLG03": {
+    "value": "PWR_FLAG",
+    "symbol": "power:PWR_FLAG",
+    "footprint": "",
+    "pins": {
+      "1": "BPLUS_CELL"
+    },
+    "dnp": false
+  }
+}
