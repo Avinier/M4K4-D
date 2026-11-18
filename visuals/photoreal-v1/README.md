@@ -1,6 +1,6 @@
 # Makad v1 — photorealistic prompt pack
 
-Prepared 2026-10-13 from the current build sources and the 2026-10-12 finish snapshots. This folder contains a prompt and unchanged CAD reference images; **no photorealistic images have been generated yet**.
+Prepared 2026-10-13 from the build sources and finish snapshots available then. A first photorealistic visual study was generated on 2026-11-18: [`makad-photoreal-front-20261118.png`](../makad-photoreal-front-20261118.png). It uses a fresh snapshot of the 2026-11-18 presentation STEP as its geometry reference: [`references/03-current-front-20261118.png`](references/03-current-front-20261118.png). It is an AI appearance study, not a geometry-verified Fusion render.
 
 ## Use
 
