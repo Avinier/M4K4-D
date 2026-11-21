@@ -1650,6 +1650,7 @@ import d107_umbilical as _d107
 import d109_body_parts as _d109_parts
 import d120_roll_horn_hub as _d120
 import d121_trunnion_pan_heads as _d121
+import d125_pinion_dbore as _d125
 
 DROID_REMOVES = [
     # D-068: the generic DevKitC STEP and its header blocks; the two upper screws.
@@ -1772,6 +1773,7 @@ DROID_CUTS = [
     # D-120: 0.5 mm +Y flat on the roll spindle's rear end for the hub set screws.
     *_d120.cuts(sys.modules[__name__]),
     *_d121.cuts(sys.modules[__name__]),   # D-121: retainer lug counterbores
+    *_d125.CUTS,   # D-125: BO-047 D-flat (the ordered D-shaft stock), full length
 ]
 DROID_ADDS = [
     # D-074: PCB-09's strip must carry both rows of socket copper plus edge margin.
@@ -1822,6 +1824,8 @@ DROID_ADDS = [
     (r"main_octagonal_skin", _d107.head_camera_mount().moved(Location(HEAD_ORIGIN_IN_CHASSIS))),
     # D-106: tie lugs on the front deck for the W03b run and the +Y trunk.
     *[(r"CHASSIS_FRAME_FRONT_MODULE", lug) for lug in d106_front_lugs()],
+    # D-125: the fixed pinion half's bore gets the D-flat that keys it to BO-047 (D-044).
+    *_d125.ADDS,
 ]
 DROID_MOVES = [
     # PCB-08 J1 housing overhangs the -X edge: place its mated-plug and header

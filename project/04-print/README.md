@@ -12,6 +12,7 @@ inspected and weighed.
 | [workflow.md](workflow.md) | The steps every part goes through, the part card, file names and what "print-ready" means |
 | [01-chassis/](01-chassis/README.md) | Chassis v1 prints |
 | `02-body/` | Body v1 prints (not started) |
+| [04-cnc/](04-cnc/README.md) | Machined and cut parts (CH-012, CH-013, CH-052, BO-046 fixed half, BO-047, HD-004, HD-009, HD-034): order pack, quote text, upload files copied from `final/v1/fab/` |
 | `03-head/` | Head v1 prints (not started) |
 | `05-finish/` | Primer, paint and weathering (not started) |
 

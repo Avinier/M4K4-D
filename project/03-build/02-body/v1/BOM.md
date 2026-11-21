@@ -61,9 +61,10 @@ The Pi's four M2.5 holes are modeled over tray bosses; the Active Cooler's push-
 | BO-043 | Waveshare ST3215-HS yaw servo on a 12 V yaw-only rail ([D-047](../../decisions.md#d-047)); horn up on the pinion axis, case −X, 7.6 mm below the old seat, clamped by four M2 screws to a frame ring ([D-048](../../decisions.md#d-048)) | 1 | CANDIDATE |
 | BO-044 | 61810-2Z (6810ZZ) deep-groove bearing, 50 × 65 × 7, metal shields: e.g. [Koyo 6810ZZ, Moglix](https://www.moglix.com/koyo-deep-groove-bearing-6810/mp/msn8580ypj8492) (₹955, on request) | 1 | CANDIDATE |
 | BO-045 | Yaw hub print (PETG): m1 z37 driven gear, shoulder, bearing spigot and three disc-insert bosses; R13.15 bore pilots the head disc ([D-052](../../decisions.md#d-052)) | 1 | DESIGN |
-| BO-046 | Scissor pinion, two PETG m1 z37 halves of 2.0 mm (sprung below, fixed above) | 1 assembly (2 halves) | DESIGN |
-| BO-047 | Ø5 h6 steel D-shaft, 17.4 mm, M2-tapped top end | 1 | CANDIDATE |
-| BO-048 | Custom torsion spring (music wire Ø1.2, OD 8, 4 coils, axial legs) and an M2 × 4 countersunk screw holding the fixed half | 1 set | CANDIDATE |
+| BO-046 | Scissor pinion, two m1 z37 halves of 2.0 mm: PETG sprung half below, 7075-T6 aluminium fixed half above ([D-125](../../decisions.md#d-125)) | 1 assembly (2 halves) | DESIGN |
+| BO-047 | Ø5 h6 steel D-shaft, 17.4 mm, full-length flat, no tapped hole ([D-125](../../decisions.md#d-125)) | 1 | CANDIDATE |
+| BO-048 | Custom torsion spring (music wire Ø1.2, OD 8, 4 coils, axial legs) (the M2 × 4 countersunk screw is dropped by [D-125](../../decisions.md#d-125)) | 1 set | CANDIDATE |
+| BO-072 | Pre-wind peg, ISO 8734 Ø2 × 4 m6 dowel pressed into the fixed half ([D-125](../../decisions.md#d-125)) | 1 | CANDIDATE |
 | BO-049 | Bearing clamp ring print (stationary), with 3 × M2 × 8 thread-forming screws | 1 | DESIGN |
 | BO-050 | Three 22-pin 0.5 mm FFCs, about 200 mm (power, sideband, CSI); CSI needs a 22-to-22 mini-mini Pi camera/display FPC or qualified equivalent, with 0.3 mm end/stiffener compatibility verified against the shared PCB-08/14 ZIF | 1 set | SUPERSEDED by [D-107](../../decisions.md#d-107) |
 | BO-056 | Pinion drive hub print on the ST3215-HS horn (four screws on its 7.11 mm-radius holes), from the horn face to Z 136.2 (D-048) | 1 | DESIGN |

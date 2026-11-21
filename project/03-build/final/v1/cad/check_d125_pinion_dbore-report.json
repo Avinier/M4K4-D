@@ -1,0 +1,125 @@
+{
+ "script": "check_d125_pinion_dbore",
+ "passed": 10,
+ "total": 10,
+ "rows": [
+  {
+   "check": "shaft_flat_full_length",
+   "ok": true,
+   "volume": 323.8675,
+   "expected": 323.8675,
+   "across_flat": 4.5
+  },
+  {
+   "check": "droid_half_is_fab_half_plus_peg",
+   "ok": true,
+   "symdiff_mm3": 0.0,
+   "half_volume": 2071.9168,
+   "peg_volume": 12.5664
+  },
+  {
+   "check": "shaft_clears_fixed_half",
+   "ok": true,
+   "nominal_mm3": 0.0,
+   "thickest_stock_flat_mm3": 0.0,
+   "clearance_nominal": 0.05
+  },
+  {
+   "check": "key_engages",
+   "ok": true,
+   "turned_3deg_mm3": {
+    "-3.0": 0.0136,
+    "3.0": 0.0136
+   },
+   "play_each_way_deg": 1.9547,
+   "note": "play cannot open as lash while demand < preload: the preload loads the key one way"
+  },
+  {
+   "check": "peg_stop_and_travel",
+   "ok": true,
+   "peg_vs_sprung_mm3_by_turn_deg": {
+    "0.0": 0.0,
+    "0.8": 0.0,
+    "1.6": 0.1407,
+    "-12.4": 0.0,
+    "-13.4": 0.2173
+   },
+   "note": "+deg = the spring's direction: stops on the slot end after ~1.2 deg (0.39 mm at the pitch circle); winds ~12.9 deg the other way"
+  },
+  {
+   "check": "peg_clear_of_other_parts",
+   "ok": true,
+   "clashes": [],
+   "peg_bottom_above_sprung_bottom_mm": 0.2
+  },
+  {
+   "check": "slot_ligaments_mm",
+   "ok": true,
+   "to_bore": 6.25,
+   "to_root": 6.1
+  },
+  {
+   "check": "sprung_half_and_hub_unchanged",
+   "ok": true,
+   "sprung_mm3": 0.0,
+   "hub_mm3": 0.0,
+   "note": "hub bore stays round; the shaft is bonded in it"
+  },
+  {
+   "check": "fixed_half_key_bearing_stress",
+   "ok": true,
+   "flat_width": 3.0,
+   "key_length": 2.0,
+   "preload_only_MPa": [
+    48.9,
+    73.3
+   ],
+   "preload_plus_paper_peak_MPa": [
+    97.8,
+    146.7
+   ],
+   "preload_plus_ceiling_MPa": [
+    115.6,
+    173.3
+   ],
+   "aluminium_6061_yield_MPa": 240.0,
+   "petg_sustained_screen_MPa": 15.0,
+   "petg_fails": true,
+   "note": "E; the steel shaft side is far below its yield"
+  },
+  {
+   "check": "mass rows",
+   "ok": true,
+   "rows": [
+    [
+     "fixed pinion half PETG removed",
+     -2.492,
+     [
+      16.0,
+      37.0,
+      149.6
+     ]
+    ],
+    [
+     "fixed pinion half 7075-T6",
+     5.822,
+     [
+      16.0,
+      37.0,
+      149.6
+     ]
+    ],
+    [
+     "pre-wind peg ISO 8734 2x4",
+     0.099,
+     [
+      16.0,
+      47.0,
+      148.6
+     ]
+    ]
+   ],
+   "net_g": 3.429
+  }
+ ]
+}

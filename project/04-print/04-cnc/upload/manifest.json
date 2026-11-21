@@ -1,0 +1,63 @@
+{
+ "source": "project/03-build/final/v1/fab",
+ "parts": {
+  "CH-012_stub": {
+   "process": "CNC turning (EN8)",
+   "files": {
+    "CH-012_stub.step": "7bb2d10eb8e81cad6c4e4fd81fe142c4980dbf200fcfb300b9bb9511ad981e81",
+    "CH-012_stub_drawing.pdf": "ed748d7305fdcf56c6b6e32efe12a35b1e2f33df7414f45457e154b6a061d15b"
+   }
+  },
+  "CH-013_ballast_bar": {
+   "process": "CNC milling (C110 copper)",
+   "files": {
+    "CH-013_ballast_bar.step": "b34f00fe7e31a78a89d82914a537cc3ce0ea3eaa57600fbc09f1369d0c5ae28c",
+    "CH-013_ballast_bar_drawing.pdf": "aa05ecd4a9f6e01e5145a0f415ed6595b2f163988e0354796f361d7be2337be1"
+   }
+  },
+  "CH-052_cap": {
+   "process": "Fibre laser / waterjet (1.2 mm aluminium)",
+   "files": {
+    "CH-052_cap.dxf": "78d2352f3a73f5e8b6a9d2d6104d93ee8e444fba8ff1fc518af7ead55ad682c1",
+    "CH-052_cap.step": "c817cfb6393b810931b4f84c29abe2e94b8a37c05072597ef4452f181f47b485",
+    "CH-052_cap_drawing.pdf": "03192dc164bfe6897ecc6d3749c0bac92b00aa95b982c7b861d961f7b920772e"
+   }
+  },
+  "BO-047_pinion_shaft": {
+   "process": "Cut to length (from 5 mm D-shaft stock)",
+   "files": {
+    "BO-047_pinion_shaft.step": "9cf34ee7bfcadbf4fbeb1b9f660d0480473e2bfde913d0711d58ca1c4a166c6e",
+    "BO-047_pinion_shaft_drawing.pdf": "5e9ea06fd5f3dd8fc16d237f6bbd03caa64c1403a30edffda07d1ebb66dadcee"
+   }
+  },
+  "BO-046_fixed_pinion_half": {
+   "process": "Wire EDM / fibre laser (2 mm 7075-T6 plate)",
+   "files": {
+    "BO-046_fixed_pinion_half.dxf": "73420f2cbbd0e5e1a3b6b905f4df2f4769dad09dc4e487af986800eb7ef720ef",
+    "BO-046_fixed_pinion_half.step": "07f01594447d9254d0f99f332097497707fb53bd66f8a5b8435ac1990d92eeff",
+    "BO-046_fixed_pinion_half_drawing.pdf": "3289d0e0926865a59c1dccdcb61a0139bcd718877c8317d930ae183425194366"
+   }
+  },
+  "HD-004_roll_hub_collar": {
+   "process": "CNC turning (6061 aluminium)",
+   "files": {
+    "HD-004_roll_hub_collar.step": "4a963e0f051b2d784f0fa750ec708d39b730a369ebfc32a6964d0882fe1813c7",
+    "HD-004_roll_hub_collar_drawing.pdf": "01944bce8855667fc8dd255581114bb3ca31bbd619446b0b29822be3f743b60b"
+   }
+  },
+  "HD-009_pivot_pin": {
+   "process": "Cut + surface grind (from \u00d86 h6 rod)",
+   "files": {
+    "HD-009_pivot_pin.step": "4ab29341be645096f4e422453265629babaa40e452fe832605941b3f22f56edc",
+    "HD-009_pivot_pin_drawing.pdf": "4e6d2c914746231ba7258a83912666d2c8ce7fc296b6e79f92a5bc689d6f04d1"
+   }
+  },
+  "HD-034_roll_spindle": {
+   "process": "Cut + surface grind (from \u00d86 h6 rod)",
+   "files": {
+    "HD-034_roll_spindle.step": "9f32879d75cd89ae06d4ca9f60947602180d8e9af6b65940cf52005db956695e",
+    "HD-034_roll_spindle_drawing.pdf": "04320428824c905ae602e1493b19aa3ec41c279efb2ca8d6e0e91493fc6b8e9c"
+   }
+  }
+ }
+}

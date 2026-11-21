@@ -63,6 +63,7 @@ RULES = [
     (r"_dark_centre$", "deep_slate"),
     (r"^WHEEL_[LR]_HUB_CAP_PETG$", "gunmetal"),
     (r"^AXLE_BEARING_CAP_[LR]$", "aluminium"),  # the 1.2 mm aluminium cap (D-007)
+    (r"^YAW_DRIVE_SCISSOR_PINION_FIXED_HALF$", "aluminium"),  # D-125: 7075-T6 fixed pinion half
     # Raw CF.
     (r"^yaw_yoke_leg", "carbon"),
     (r"^pitch_trunnion_retainer$", "carbon"),
@@ -78,7 +79,7 @@ RULES = [
     (r"^COMPUTE_TRAY$", "deep_slate"),
     (r"^(TUB_BAY_MODULE_PLATE|REAR_BAY_MODULE_PLATE|IMU_ADAPTER_LSM6DSOX)$", "deep_slate"),  # D-095 prints
     (r"^YAW_(CARTRIDGE_HOUSING|BEARING_CLAMP_RING|FFC_CASSETTE_STATOR|DRIVE_HUB_ON_ST3215_HS_HORN"
-     r"|DRIVE_SCISSOR_PINION_(FIXED|SPRUNG)_HALF|HUB_DRIVEN_GEAR_M1_Z37|ROTOR_CLAMP_DRUM_AND_STOP_DOG)$",
+     r"|DRIVE_SCISSOR_PINION_SPRUNG_HALF|HUB_DRIVEN_GEAR_M1_Z37|ROTOR_CLAMP_DRUM_AND_STOP_DOG)$",
      "deep_slate"),
     (r"^connected_pitch_frame_roll_servo_saddle$", "deep_slate"),
     (r"^connected_rolling_cradle_flange_ear_stalks$", "deep_slate"),

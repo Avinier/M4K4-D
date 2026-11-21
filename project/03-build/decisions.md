@@ -105,6 +105,7 @@ The central record of every decision and change made during the build phase. New
 | [D-117](#d-117) | 2026-11-18 | PCB-17 | The CH-103 cards become custom board PCB-17 rev A, 0.8 mm, panelised with PCB-11/15; CH-106 reliefs 0.8 mm | DESIGNED; procure in the D-064 batch |
 | [D-120](#d-120) | 2026-11-19 | Head roll output (HD-004) | Probots 25T disc horn + turned 6061 hub collar replace the goBILDA 4001-0025-0006 coupler (not sold in India); 4 × M2 × 6 from the servo side, 2 × M3 × 3 set screws on a new +Y spindle flat; droid edit in final/v1 | ACTIVE; CAD and check 19/19; HOLD on received horn (hub Ø, PCD) and spline fit |
 | [D-121](#d-121) | 2026-11-20 | Head M2 screw heads (HD-006/010/011/032) | M2 hex button heads not available: Phillips pan heads (≤ Ø4.0 × 1.6) replace ISO 7380 at all four rows; HD-010 becomes M2 × 3 in 0.4 mm counterbores in the retainer lugs; droid edit in final/v1 | ACTIVE; check 15/15; HOLD on received screw heads and the HD-032 horn hub (≤ Ø9.6) |
+| [D-125](#d-125) | 2026-11-21 | CNC fab pack; yaw pinion fixed half (CH-013, BO-046, BO-047, BO-072, HD-009, HD-034) | STEPs + drawings for every machined part from the droid constants (check_cnc_fab 14/14). A PETG fixed half would see 49–73 MPa on its D-key under the preload alone, so (builder) the fixed half is 7075-T6 aluminium on BO-047's full-length flat with Loctite 641; the useless M2 screw and BO-047's tap go; Ø2 pre-wind peg (BO-072) in a sprung-half arc slot (final/v1 droid edit, check_d125 10/10); copper margin 4.35 → 4.27 %. HD-009 has no thread (hardened stock); HD-034 flats 9.8 and 8.6 mm |
 
 Status words: `ACTIVE` is in force, `SUPERSEDED` names its replacement, and `HOLD` names the evidence that must arrive before dependent work is released.
 
@@ -4525,3 +4526,61 @@ Built headless as PCB-16: `build_schematic.py` → Nightly ERC 0/0 → netlist �
 
 **Holds.** On receipt, measure the pan heads: ≤ Ø4.0 × 1.6 and a machine thread (M2 × 0.4, not self-tapping). Measure the HD-032 horn hub (≤ Ø9.6). Check that the taller HD-006 heads (+0.5 mm) clear the parts beside the ear slots, which hasn't been measured in CAD. Print the retainer with 0.2 mm layers so that 0.6 mm is three full layers. Tighten HD-010 lightly with Loctite 222, because the 0.6 mm PETG under each head is the weakest part of the joint.
 
+## D-125
+
+**2026-11-21 · CNC fab pack; aluminium fixed pinion half on BO-047's D-flat with a pre-wind peg (final/v1 droid edit) · ACTIVE; CAD and checks complete; bench B4 lash open**
+
+**Why.** Seven parts are machined or cut, and only CH-012, CH-052 (D-071) and HD-004 (D-120) had fabrication files. The builder has ordered stock for four of them (BOM 2026-11-21): a copper offcut for CH-013, 5 mm ground D-shaft for BO-047, and Ø6 hardened EN-31 rod for HD-009 and HD-034. The parts have to be drawn for that stock. Making the pack exposed three gaps in the D-044 yaw pinion:
+- the fixed half is "keyed by a D-flat", but the body source models the shaft and its bore round;
+- the M2 countersunk screw "retaining the fixed half" cannot: its head (~Ø3.8) sits wholly on the Ø5 shaft end and never bears on the half;
+- the pre-wind peg and arc slot are not modelled.
+
+The key load settled the choice. The spring sits on the hub collar under the sprung half, so the 0.22 N·m preload passes through the fixed half's key all the time. On a 3.0 × 2.0 mm flat, a PETG half sees 49–73 MPa (`E`, uniform to triangular pressure) under the preload alone, against a 15 MPa sustained screen. That rises to 116–173 MPa at the proposed 0.30 N·m ceiling. The half cannot grow (0.4 mm under the disc). **Builder's choice (2026-11-21): a metal fixed half**, D-044's own fallback, over bonding a PETG half.
+
+**Decision.**
+- **BO-047:** cut from the ordered D-shaft; its full-length flat (4.45–4.55 across, 0.5 deep) is the part's flat. In the droid it faces world −Y at neutral. **No tapped hole** any more. Ends chamfered 0.3/0.2.
+- **BO-046 fixed half:**
+  - Material and process: 7075-T6 aluminium (6061-T6 acceptable), 2.0 mm plate, cut by wire EDM (preferred) or fibre laser from `fab/BO-046_fixed_pinion_half.dxf`.
+  - Teeth: the model's thinned m1 z37 profile; span over 5 teeth 13.732 −0.03.
+  - Bore: Ø5 H7 with a flat 4.55 +0.03 across, 2.05 from the axis. That is the head D-bores' 0.05 mm rule, and line contact at the stock's thickest flat. Play is about 2° each way; it cannot show as lash while the demand stays under the preload, because the preload loads the key one way.
+  - Retention: Loctite 641 (CH-057) on the metal-to-steel D-fit.
+  - Mass 5.8 g; tooth-edge breaks 0.3 on the lower face as the mesh lead-in.
+  - Key stress against aluminium: 173 MPa worst case against 240 MPa yield for 6061-T6 (7075-T6 is about 500).
+- **M2 screw dropped** from BO-048; the screws already ordered are spares.
+- **Pre-wind peg BO-072:** an ISO 8734 Ø2 × 4 m6 dowel pressed flush into a Ø2 H7 hole at R10, opposite the flat, running 1.8 mm into a 2.3 mm arc slot in the sprung half.
+  - The spring turns the sprung half counter-clockwise seen from +Z. The slot's clockwise end stops it 1.2° past the meshed position, 0.39 mm at the pitch circle, inside the 0.5 mm lead-in chamfers; on meshing the flanks wind it back that far.
+  - The slot runs about 12.9° the other way, so the half can be wound past and the fixed half dropped on.
+  - The spring's leg holes still have to be drawn for the spring maker (BO-048) so that the stop gives the 0.22 N·m wind-up.
+- **Unchanged:** the BO-056 hub bore stays round (the shaft is bonded there, and the crescent beside the flat fills with adhesive). The sprung half stays PETG, free on the round part of the shaft.
+- **HD-009:** no M2 extraction thread, because hardened EN-31 cannot be tapped. To remove the pin, push it out from the boss side, or pull it with a magnet once the retainer is off. The flat is ground, 5.5 +0/−0.05 across.
+- **HD-034:** both flats ground, 5.5 +0/−0.05 across, 90° ± 2° apart. Lengths as modelled: front 9.8 +0.3/−0, from the cradle D-bore start at X −40 to the tip, so it may not be shorter; rear 8.6 ± 0.3. The "10" and "8.7" in D-053/D-120 were the cutting tools' lengths. Both flats stay clear of the 696 journals (0.5 and 2.9 mm).
+- **CH-013:** C110/ETP copper milled to 60 × 9 × 19, 2 × M3 × 8, 40 ± 0.1 apart; 90.8 g. Brass and steel are not allowed (D-109 tipping margin).
+- **Fab files:** STEP + drawing for every machined part in `final/v1/fab/`, plus the CH-052 and BO-046 DXFs.
+  - `export_cnc_fab.py` builds the new STEPs from the droid's constants.
+  - `cnc_drawings.py` draws them from `fab/cnc-facts.json`.
+  - [04-print/04-cnc](../04-print/04-cnc/README.md) has the order pack.
+
+**Where.**
+- `final/v1/cad/d125_pinion_dbore.py` supplies, in `makad-v1.step.py`:
+  - DROID_CUTS: the shaft flat and the sprung-half slot;
+  - DROID_ADDS: the bore key, and the peg fused into the fixed half.
+- `finish_colours.py` shows the fixed half as aluminium.
+- `check_d107_mass.py` takes the D-125 mass rows from the check report.
+- The body source is unchanged. `d120_collar_drawing.py` now points to the HD-034 drawing.
+
+**Checks.**
+- `check_d125_pinion_dbore.py` **10/10**:
+  - shaft flat full length; the droid's fixed half equals the fab half plus the peg (0.0 mm³);
+  - shaft clear of the half at the nominal and the thickest stock flat; the key engages at ±3° (play 1.95°);
+  - the peg is clear at neutral, stops the sprung half at +1.2° and lets it wind to −12.9°, and is clear of every other part; slot ligaments 6.25/6.1 mm;
+  - sprung half and hub unchanged; key stress inside aluminium yield;
+  - mass rows: PETG half −2.49 g, aluminium half +5.82 g, peg +0.10 g.
+- `MAKAD_D109_MASS=1 check_d107_mass.py`, worst-pose margin over the full sweep:
+  - **copper 4.27 %** (was 4.35), steel 2.71 % (was 2.79);
+  - the camera-sensitivity row stays on its D-107 HOLD, unchanged.
+- `check_cnc_fab.py` **14/14**: every machined part against the droid geometry (symmetric difference < 0.01 mm³), the STEPs current, the pack complete (eight parts), and the spindle flats against the journals and screws.
+
+**Holds.**
+- Bench B4 lash with the metal fixed half against the PETG hub gear. Wear moves to the PETG hub teeth: check them after the yaw endurance run.
+- Draw the BO-048 leg positions for the spring maker against the slot stop.
+- On receipt: span-check the fixed half; measure the parts per the 04-cnc receiving table; weigh CH-013.

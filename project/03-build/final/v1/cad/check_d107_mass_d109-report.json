@@ -59,7 +59,7 @@
     ],
     [
      "PCB08 rev B replaces existing allowance",
-     3.2158,
+     3.2023,
      [
       -5,
       -33.5,
@@ -89,11 +89,11 @@
     ],
     [
      "PCB08 edge cradle",
-     9.7621,
+     10.09,
      [
-      19.8067,
-      -37.3665,
-      119.9578
+      18.9061,
+      -37.0577,
+      119.2431
      ],
      "E authored volume \u00d7 PETG 1.20; complete mounting envelope conservatively counted"
     ],
@@ -646,9 +646,39 @@
       88.0
      ],
      "E"
+    ],
+    [
+     "D-125 fixed pinion half PETG removed",
+     -2.492,
+     [
+      16.0,
+      37.0,
+      149.6
+     ],
+     "E CAD volume \u00d7 density (check_d125_pinion_dbore)"
+    ],
+    [
+     "D-125 fixed pinion half 7075-T6",
+     5.822,
+     [
+      16.0,
+      37.0,
+      149.6
+     ],
+     "E CAD volume \u00d7 density (check_d125_pinion_dbore)"
+    ],
+    [
+     "D-125 pre-wind peg ISO 8734 2x4",
+     0.099,
+     [
+      16.0,
+      47.0,
+      148.6
+     ],
+     "E CAD volume \u00d7 density (check_d125_pinion_dbore)"
     ]
    ],
-   "net_delta_g": 26.5141,
+   "net_delta_g": 30.2575,
    "retained_allowances": "M008 C2 20 g; M020 wires and fanout 15 g; neither double counted",
    "note": "D/E estimates only; D-095 baseline before D-104/105; full 360\u00b0 yaw and actual 1\u00b0 pitch/roll centroid sweep"
   },
@@ -656,36 +686,36 @@
    "check": "mass_and_tipping",
    "ok": true,
    "steel": {
-    "mass_g": 2655.0447,
+    "mass_g": 2658.7881,
     "com_mm": [
-     18.3449,
-     0.6843,
-     110.2363
+     18.3387,
+     0.7281,
+     110.2855
     ],
-    "worst_yaw_a_tip": 1.6264,
+    "worst_yaw_a_tip": 1.6251,
     "pose_yaw_pitch_roll": [
      29,
      -19,
      -21
     ],
-    "margin_pct": 2.7896,
+    "margin_pct": 2.7097,
     "poses": 1068120,
     "method": "actual frame centroids over 1 degree pitch/roll grid to hard stops, full 360 degree yaw"
    },
    "copper": {
-    "mass_g": 2666.0894,
+    "mass_g": 2669.8328,
     "com_mm": [
-     18.5754,
-     0.6814,
-     109.9557
+     18.569,
+     0.7251,
+     110.0051
     ],
-    "worst_yaw_a_tip": 1.6511,
+    "worst_yaw_a_tip": 1.6498,
     "pose_yaw_pitch_roll": [
      29,
      -19,
      -21
     ],
-    "margin_pct": 4.3537,
+    "margin_pct": 4.2711,
     "poses": 1068120,
     "method": "actual frame centroids over 1 degree pitch/roll grid to hard stops, full 360 degree yaw"
    },
@@ -698,45 +728,45 @@
    "check": "original_register_bound_and_camera_mass_sensitivity",
    "ok": false,
    "original_register_bound": {
-    "mass_g": 2655.0447,
+    "mass_g": 2658.7881,
     "com_mm": [
-     18.3449,
-     0.6843,
-     110.2363
+     18.3387,
+     0.7281,
+     110.2855
     ],
-    "a_tip": 1.6325,
-    "worst_pose_a_tip": 1.6087,
-    "margin_pct": 1.6701,
+    "a_tip": 1.6312,
+    "worst_pose_a_tip": 1.6075,
+    "margin_pct": 1.5924,
     "extra_camera_g": 0.0,
     "method": "D095 original register bound, unchanged source-head radii; final delta centroids stationary"
    },
    "original_register_extra10g": {
-    "mass_g": 2665.0447,
+    "mass_g": 2668.7881,
     "com_mm": [
-     18.2438,
-     0.6066,
-     110.7926
+     18.2379,
+     0.6504,
+     110.8408
     ],
-    "a_tip": 1.6154,
-    "worst_pose_a_tip": 1.5918,
-    "margin_pct": 0.6004,
+    "a_tip": 1.6141,
+    "worst_pose_a_tip": 1.5906,
+    "margin_pct": 0.5253,
     "extra_camera_g": 10.0,
     "method": "D095 original register bound, unchanged source-head radii; final delta centroids stationary"
    },
    "actual_moving_frame_extra10g": {
-    "mass_g": 2665.0447,
+    "mass_g": 2668.7881,
     "com_mm": [
-     18.2438,
-     0.6066,
-     110.7926
+     18.2379,
+     0.6504,
+     110.8408
     ],
-    "worst_yaw_a_tip": 1.6089,
+    "worst_yaw_a_tip": 1.6076,
     "pose_yaw_pitch_roll": [
      17,
      -25,
      -21
     ],
-    "margin_pct": 1.6816,
+    "margin_pct": 1.6044,
     "poses": 1068120,
     "method": "actual frame centroids over 1 degree pitch/roll grid to hard stops, full 360 degree yaw"
    },

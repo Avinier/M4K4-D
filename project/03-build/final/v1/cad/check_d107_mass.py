@@ -83,6 +83,10 @@ def main():
         for n,g,c in d109:
             add(f'D-109 {n}',g,tuple(c),'E routed body harness (check_d109_mass)')
         add('D-109 share of HARNESS_AND_FASTENERS allowance',-sum(g for n,g,c in d109),(20.,0.,88.),'E')
+    # D-125: aluminium fixed pinion half and its steel pre-wind peg (check_d125_pinion_dbore).
+    d125=json.loads((HERE/'check_d125_pinion_dbore-report.json').read_text())
+    for n,g,c in next(x for x in d125['rows'] if x['check']=='mass rows')['rows']:
+        add(f'D-125 {n}',g,tuple(c),'E CAD volume × density (check_d125_pinion_dbore)')
     rows=base+[(n,g,c) for n,g,c,w in delta]
     bal=e.D105_BALLAST
     copper_g=M.BALLAST_BAR_G*(bal['density']/bal['was_density']-1)

@@ -38,6 +38,8 @@ The [project BOM](../../BOM.csv) carries the specification, source and release c
 | HD-014 | Display rear frame screws, M2 × 18 Phillips pan head (an M2 × 20 pan head cut to 18.5 ± 0.5 mm; uncut, it stands 1.1 mm behind the tab), through the four upper skin bosses into the frame tabs (replace four of the six front M2 × 8) | 4 | CANDIDATE |
 | HD-015 | Display rear foam pads, closed-cell Ø7 × 1.5 mm free, 0.7 mm installed on the display's M3 standoffs | 4 | CANDIDATE |
 | HD-016 | M2 × 3 heat-set inserts (OD 3.6) in the display rear frame tabs | 4 | CANDIDATE |
+| HD-034 | Roll spindle, Ø6 g6/h6 hardened steel × 44.4 mm: front 9.8 mm 0.5 mm D-flat (+Z) into the cradle boss, rear 0.5 × 8.6 mm flat (+Y) for the HD-004 collar ([D-053](../../decisions.md#d-053), [D-120](../../decisions.md#d-120)); row added 2026-11-21; drawing `final/v1/fab/HD-034_roll_spindle_drawing.pdf` ([D-125](../../decisions.md#d-125)) | 1 | CANDIDATE |
+| HD-035 | Roll bearings, 696-2Z (6 × 15 × 5 mm), two in the roll bearing cartridge on HD-034; row added 2026-11-21 | 2 | SELECTED |
 
 **Why ([D-053](../../decisions.md#d-053)).** The head could not be assembled as drawn. The roll spindle only butted against the cradle, so it now runs into a D-bore in a cradle boss, held by HD-012. Nothing held the display from behind. A printed rear frame now presses the board's four M3 standoffs through HD-015. It hangs from the four upper front receivers, whose screws (HD-014) pass through the bosses into its inserts (HD-016). The frame and both skin halves are prints (M002, M019a).
 
@@ -115,7 +117,7 @@ These parts are in the head CAD and mass tree but have no BOM row yet. The `M0xx
 | M019a | Prints: front bezel and camera crown, octagonal skin (upper and lower halves, D-053), removable rear cover, two ears (inner mount, removable cap, amber inlay, dark centre) | CAD volume, PLA |
 | M010, M011, M012 | Prints: rolling cradle and ear stalks, roll bearing cartridge (trial), pitch frame and roll saddle, yaw yoke legs, yaw turntable disc, CSI exit guide | CAD volume, PLA |
 | M016–M018 | Roll and pitch bearings and shafts | 6 + 8 + 8 g allowances |
-| M016 | Ø6 × 44.4 steel roll spindle with a 10 mm D-flat at its front end (D-053; was 34.6 mm) | Modelled |
+| M016 | Ø6 × 44.4 steel roll spindle with a 9.8 mm D-flat at its front end (D-053; was 34.6 mm) and a 0.5 × 8.6 mm flat at its rear end facing +Y for the HD-033 set screws ([D-120](../../decisions.md#d-120), final/v1 droid edit); BOM.csv **HD-034** (added 2026-11-21), bearings **HD-035** 2 × 696-2Z | Modelled |
 | M021a, M021 | Fasteners: ear M2 screws, front M2 × 8 (2) and M2 × 18 (4, HD-014), rear M2 × 6 (4), hidden hardware; see `cad/generated/fastener-stack.json` | Modelled |
 | M022 | Trim: tungsten ear slugs, brass rear-cover washers | 9.4 g nominal |
 | M020 | Non-camera head harness | 15 g allowance |

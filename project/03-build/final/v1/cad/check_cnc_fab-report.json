@@ -1,0 +1,94 @@
+{
+ "script": "check_cnc_fab",
+ "passed": 14,
+ "total": 14,
+ "rows": [
+  {
+   "check": "pack_files_present",
+   "ok": true,
+   "missing": [],
+   "parts": 8
+  },
+  {
+   "check": "CH-013_ballast_bar_step_is_current",
+   "ok": true,
+   "symdiff_mm3": 0.0,
+   "volume": 10152.7254
+  },
+  {
+   "check": "BO-047_pinion_shaft_step_is_current",
+   "ok": true,
+   "symdiff_mm3": 0.0,
+   "volume": 323.0682
+  },
+  {
+   "check": "BO-046_fixed_pinion_half_step_is_current",
+   "ok": true,
+   "symdiff_mm3": 0.0,
+   "volume": 2071.9168
+  },
+  {
+   "check": "HD-009_pivot_pin_step_is_current",
+   "ok": true,
+   "symdiff_mm3": 0.0,
+   "volume": 311.4549
+  },
+  {
+   "check": "HD-034_roll_spindle_step_is_current",
+   "ok": true,
+   "symdiff_mm3": 0.0,
+   "volume": 1233.3099
+  },
+  {
+   "check": "CH-013_matches_droid_bar",
+   "ok": true,
+   "symdiff_mm3": 0.0,
+   "droid_volume": 10132.7655
+  },
+  {
+   "check": "BO-047_matches_droid_shaft_with_d125_flat",
+   "ok": true,
+   "symdiff_mm3": 0.0,
+   "droid_volume": 323.8675
+  },
+  {
+   "check": "CH-012_stub_step_matches_droid",
+   "ok": true,
+   "symdiff_mm3": 0.0,
+   "volume": 1691.4442
+  },
+  {
+   "check": "CH-052_cap_step_matches_droid",
+   "ok": true,
+   "symdiff_mm3": 0.0,
+   "volume": 761.5126
+  },
+  {
+   "check": "HD-034_matches_droid_spindle_with_d120_flat",
+   "ok": true,
+   "symdiff_mm3": 0.0,
+   "droid_volume": 1234.6733
+  },
+  {
+   "check": "HD-009_matches_droid_pin",
+   "ok": true,
+   "symdiff_mm3": 0.0,
+   "droid_volume": 312.2129
+  },
+  {
+   "check": "HD-004_step_matches_d120_collar",
+   "ok": true,
+   "symdiff_mm3": -0.0002,
+   "volume": 1771.1629
+  },
+  {
+   "check": "fab_interface_facts",
+   "ok": true,
+   "spindle_rear_flat_clear_of_rear_bearing_mm": 2.9,
+   "spindle_front_flat_clear_of_front_bearing_mm": 0.5,
+   "spindle_collar_set_screws_on_rear_flat": true,
+   "spindle_cradle_screw_on_front_flat": true,
+   "pivot_outer_chamfer_inside_bearing_band_mm": 0.1
+  }
+ ]
+}
