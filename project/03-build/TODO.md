@@ -14,7 +14,7 @@
 
 ## Order after the 05-harness review (part B)
 
-- [ ] CH-101 XT30U female panel port + XT60→XT30 lead for the PD60
+- [x] CH-101 charge port: 3 × AMASS XT30 pairs + 2 × HOTA XT60F→XT30M adapters, fioparts, ordered 2026-11-21. On receipt: XT30 (not XT30U) body vs the rear-panel opening; PD60 output must be XT60 male
 - [ ] CH-102 JST PA 3P balance break (PAP-03V-S / PALR-03VF, pre-crimped SPHD/SPAL AWG24) + JST XH 3P rear balance port (XHP-3, pre-crimped SXH AWG24)
 - [ ] HN-006 tub pair: 2 × WAGO 221-415 ([D-113](decisions.md#d-113)); four rear splices still to select
 - [ ] CH-099 shunt: Littelfuse WPC2512QLR004FWR 4 mΩ 3 W ([D-112](decisions.md#d-112))
@@ -22,6 +22,7 @@
 - [ ] Micro-Fit 3.0 2-way pairs for `J-S18-H` and `J-S18-Y` (43030/43025 + 43031/43020)
 - [ ] Crimp tools (Molex 213309-4400 MF+, 63819-0900 MF3; check PN) or professionally terminated pairs
 - [ ] AWG16 UL1061 red/black wire; rated multi-wire AWG16 splices (charge splice, rear ± star, tub branch)
+- [ ] **Lamington Road trip** ([05-harness/lamington-road-shopping.md](05-harness/lamington-road-shopping.md)): AWG16 thin-wall teflon OD ≤ 2.0 mm (UL1061 not found by builder, 2026-11-21), HN-010 right-angle USB-C cable, cable clips, VHB, 9.5 mm heat-shrink, M2.5 × 4 inserts, BO-065 and CH-110 standoffs
 - [ ] Sample each connector first: confirm mate/key, pull-test three per wire/contact combination ([05-harness §9](05-harness/README.md#9-open-and-acceptance))
 
 ## On receipt (ordered 2026-11-08)

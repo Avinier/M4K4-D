@@ -8,15 +8,15 @@ screenshot.
 
 | # | Colour | Hex (neutral light) | Status |
 |---|---|---|---|
-| 1 | Ivory | `#DAD5C3` | Chosen 2026-11-16, not yet ordered |
+| 1 | Ivory | `#DAD5C3` | Chosen 2026-11-16; **ordered 2026-11-21** (3Idea white ASA, ₹1,349; BOM BO-071). Lab brand approval still open |
 | 2 | Taupe | `#9D9886` | Decided 2026-11-16, paint only, no taupe spool: panels = white ASA painted; keel and bezel = structure PETG, primed and painted |
-| 3 | Deep slate | `#34495C` | Chosen 2026-11-16: Sunlu PETG grey, 1 kg, not yet bought |
-| 3a | Deep slate, head PLA | `#34495C` | Chosen 2026-11-16: eSUN ePLA-Matte dark grey, 1 kg, not yet bought |
+| 3 | Deep slate | `#34495C` | Chosen 2026-11-16: Sunlu PETG grey, 1 kg; **ordered 2026-11-21** (BOM CH-090) |
+| 3a | Deep slate, head PLA | `#34495C` | Chosen 2026-11-16: eSUN ePLA-Matte dark grey, 1 kg; **ordered 2026-11-21**, ₹1,200 (BOM HD-036; also the PLA support interface, CH-094) |
 | 4 | Slate blue | `#587A94` | Decided 2026-11-16: no spool; rims and clamp rings print in the structure grey, painting optional |
 | 5 | Gunmetal | `#3A464D` | Decided 2026-11-16: no spool; hub caps print in the structure grey, painting optional |
 | 6 | Amber | `#B88636` | Decided 2026-11-16: paint only, no spool; printed parts in white ASA, painted |
 | 7 | Signal amber | `#D39F36` | Decided 2026-11-16: paint only, no spool; rear button bezel land |
-| 8 | Carbon | `#2A2C2E` | Chosen 2026-11-16: 3Idea PLA-CF black, 1 kg, ₹1,099, not yet bought; stiffness unverified (bar test) |
+| 8 | Carbon | `#2A2C2E` | Chosen 2026-11-16: 3Idea PLA-CF black, 1 kg; **ordered 2026-11-21**, ₹1,099 (BOM HD-037); stiffness unverified (bar test), lab brand approval open |
 | 9 | Tyre black | `#2B3034` | Decided 2026-11-16: black TPU 95A from the lab (builder: lab has it in black) |
 
 ## 1. Ivory (2026-11-16)
