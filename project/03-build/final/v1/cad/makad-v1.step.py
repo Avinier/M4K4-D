@@ -1648,6 +1648,8 @@ PRINT_TOOLS = [
 # as new children of the group whose label fully matches.
 import d107_umbilical as _d107
 import d109_body_parts as _d109_parts
+import d120_roll_horn_hub as _d120
+import d121_trunnion_pan_heads as _d121
 
 DROID_REMOVES = [
     # D-068: the generic DevKitC STEP and its header blocks; the two upper screws.
@@ -1685,6 +1687,9 @@ DROID_REMOVES = [
     # D-109 Level 0: stale Layout-02 body reserves that ran to deleted boards (W40 to PCB-02 J2-9,
     # Pi pigtail to PCB-04 J4-1) and the old -Y head riser; the D-109 routes replace them.
     r"POWER_BUTTON_W40_LEAD_RESERVE_\d", r"PI5_POWER_PIGTAIL_DROP_RESERVE", r"HARNESS_HEAD_RISER_LOWER",
+    # D-120: the goBILDA roll coupler and its M4 clamp (not sold in India); horn + turned hub below.
+    *_d120.REMOVES,
+    *_d121.REMOVES,   # D-121: HD-010 button heads -> M2 x 3 pan heads
 
 ]
 DROID_INSERTS = [
@@ -1707,6 +1712,9 @@ DROID_INSERTS = [
     *[(r"Head controller and light", _tag(sc, f"PCB12_M2X4_BUTTON_{k}", "#555b5a"))
       for k, sc in enumerate(pcb12_world("screws"), start=1)],
     *[(group, shape) for group, shape in _d107.inserts(sys.modules[__name__])],
+    # D-120: Probots 25T horn, 6061 hub collar, 4 x M2 x 6 and 2 x M3 x 3 set screws on the roll output.
+    *_d120.inserts(sys.modules[__name__]),
+    *_d121.inserts(sys.modules[__name__]),
 
 ]
 
@@ -1761,6 +1769,9 @@ DROID_CUTS = [
     # D-106: the W03a deck slot, the fuse-holder tie tunnel and the J10-8 tunnel and notch (the D-076
     # fill above is built without them).
     *[(r"CHASSIS_FRAME_FRONT_MODULE", b) for b in d106_front_cuts()],
+    # D-120: 0.5 mm +Y flat on the roll spindle's rear end for the hub set screws.
+    *_d120.cuts(sys.modules[__name__]),
+    *_d121.cuts(sys.modules[__name__]),   # D-121: retainer lug counterbores
 ]
 DROID_ADDS = [
     # D-074: PCB-09's strip must carry both rows of socket copper plus edge margin.

@@ -12,10 +12,12 @@ The [project BOM](../../BOM.csv) carries the specification, source and release c
 |---|---|---:|---|
 | HD-001 | **Feetech STS3045M** pitch and roll servo: 4.8–7.4 V, 0.59 N·m stall / 0.20 N·m rated and 75 rpm no-load at 6 V, 34.8 g, 36 × 15 × 29.2 mm, 1:281 gears, 25T/Ø5.9 mm output, coreless, 12-bit magnetic encoder, Feetech half-duplex TTL ([D-046](../../decisions.md#d-046), [build screen](feetech-actuator-screen.md)) | 2 | CANDIDATE, first choice |
 | HD-002 | Pitch output horn: 25T aluminium Ø20 disc, 4 × M3 on Ø14 PCD (`E` listing values), screwed to the +Y yoke leg ([D-049](../../decisions.md#d-049)) | 1 | HOLD: measure before printing the leg |
-| HD-003 | Output centre screws, ISO 4762 M3 × 5 (coupler floor and horn web into the servo output) | 2 | CANDIDATE |
-| HD-004 | Roll output coupler, goBILDA 4001-0025-0006 (25T spline to Ø6 clamping bore) | 1 | CANDIDATE; spline fit on the received servo |
+| HD-003 | Output centre screws, ISO 4762 M3 × 5 (roll and pitch horn webs into the servo output) | 2 | CANDIDATE |
+| HD-004 | Roll output: second Probots 25T horn + turned 6061 hub collar (Ø20/Ø12, Ø6 H7 bore), replacing the goBILDA coupler ([D-120](../../decisions.md#d-120)); drawing in final/v1/fab | 1 | DESIGN; horn ordered, collar to quote |
+| HD-032 | Roll horn to hub screws, M2 × 6 Phillips pan head ([D-121](../../decisions.md#d-121); horn hub must be ≤ Ø9.6), from the servo side ([D-120](../../decisions.md#d-120)) | 4 | CANDIDATE |
+| HD-033 | Roll hub set screws, ISO 4029 M3 × 3 cup point, on the spindle's new rear flat ([D-120](../../decisions.md#d-120)) | 2 | CANDIDATE |
 | HD-005 | Horn-to-leg screws, ISO 7380 M3 × 6 | 4 | CANDIDATE |
-| HD-006 | Servo ear screws, ISO 7380 M2 × 6, into M2 × 3 inserts | 8 | CANDIDATE |
+| HD-006 | Servo ear screws, M2 × 6 Phillips pan head ([D-121](../../decisions.md#d-121)), into M2 × 3 inserts | 8 | CANDIDATE |
 | HD-007 | Servo ear washers, ISO 7089 M2.5 (Ø6 × 0.5) | 8 | CANDIDATE |
 
 ## Pitch pivot and yoke joints
@@ -24,8 +26,8 @@ The [project BOM](../../BOM.csv) carries the specification, source and release c
 |---|---|---:|---|
 | HD-008 | MR106ZZ bearing (6 × 10 × 3) in the −Y yoke leg: the passive pitch pivot ([D-051](../../decisions.md#d-051)) | 1 | CANDIDATE |
 | HD-009 | Ø6 h6 steel D-shaft pin, cut to 11.5 mm: through the bearing into a D-bore on the pitch frame's −Y boss | 1 | CANDIDATE |
-| HD-010 | Pivot retainer screws, ISO 7380 M2 × 4, into two M2 × 3 inserts in the −Y leg pad; heads flush with the leg face | 2 | CANDIDATE |
-| HD-011 | Yoke leg to disc screws, ISO 7380 M2 × 6, from each plinth's inner face into M2 × 3 inserts in the disc keys | 4 | CANDIDATE |
+| HD-010 | Pivot retainer screws, M2 × 3 Phillips pan head (an in-hand M2 × 4 pan head cut to 3.0 mm), into two M2 × 3 inserts in the −Y leg pad; heads in 0.4 mm retainer-lug counterbores, 0.1 mm below the leg face ([D-121](../../decisions.md#d-121)) | 2 | CANDIDATE |
+| HD-011 | Yoke leg to disc screws, M2 × 6 Phillips pan head ([D-121](../../decisions.md#d-121)), from each plinth's inner face into M2 × 3 inserts in the disc keys | 4 | CANDIDATE |
 
 ## Assembly-path hardware
 
@@ -33,7 +35,7 @@ The [project BOM](../../BOM.csv) carries the specification, source and release c
 |---|---|---:|---|
 | HD-012 | Roll spindle set screw, ISO 4029 M3 × 5 cup point, on the spindle's D-flat in the cradle boss ([D-053](../../decisions.md#d-053)) | 1 | CANDIDATE |
 | HD-013 | M3 × 4 short heat-set insert for HD-012, from +Z in the cradle's spindle boss | 1 | CANDIDATE |
-| HD-014 | Display rear frame screws, M2 × 18 button head, through the four upper skin bosses into the frame tabs (replace four of the six front M2 × 8) | 4 | CANDIDATE |
+| HD-014 | Display rear frame screws, M2 × 18 Phillips pan head (an M2 × 20 pan head cut to 18.5 ± 0.5 mm; uncut, it stands 1.1 mm behind the tab), through the four upper skin bosses into the frame tabs (replace four of the six front M2 × 8) | 4 | CANDIDATE |
 | HD-015 | Display rear foam pads, closed-cell Ø7 × 1.5 mm free, 0.7 mm installed on the display's M3 standoffs | 4 | CANDIDATE |
 | HD-016 | M2 × 3 heat-set inserts (OD 3.6) in the display rear frame tabs | 4 | CANDIDATE |
 
@@ -124,7 +126,7 @@ These parts are in the head CAD and mass tree but have no BOM row yet. The `M0xx
 2. **Measure the received HS** against the D-048 model: horn-axis offset, corner holes (drawing and STEP differ 0.8 mm), horn thread, plug height with cables.
 3. **Bench B1:** one STS3045M against a pitch mock-up (0.00079 kg·m², real CoM offset) at 5.23 V on the 70% trajectory; log current and position.
 4. **Bench B4:** loaded and unloaded lash on both servos (the HS result picks between it and the STS3250) with an external angle reference, dead-zone registers at minimum.
-5. **Received-part checks for D-049:** measure the pitch horn (HD-002) before printing the +Y leg, try the goBILDA coupler (HD-004) on the servo spline, and print a modulus coupon of the CF leg filament (≥ 4.5 GPa along the layers).
+5. **Received-part checks for D-049:** measure the pitch horn (HD-002) before printing the +Y leg, measure the roll horn and fit horn + collar (HD-004, D-120) on the servo spline, and print a modulus coupon of the CF leg filament (≥ 4.5 GPa along the layers).
 6. **Rails:** record the 5.5 V head setpoint, the clamp change and the 12 V yaw rail in `04-pcbs/power-boards.md`.
 7. **Order the second STS3045M** once B1 and B4 pass.
 8. **Register the head parts above** as HD rows as their selections firm up.

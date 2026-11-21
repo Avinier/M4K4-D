@@ -1,0 +1,131 @@
+{
+ "script": "check_d121_trunnion_pan_heads",
+ "passed": 15,
+ "total": 15,
+ "rows": [
+  {
+   "check": "removed_button_heads",
+   "ok": true,
+   "removed": [
+    "pitch_trunnion_retainer_M2x4_240",
+    "pitch_trunnion_retainer_M2x4_300"
+   ]
+  },
+  {
+   "check": "parts_valid_single_solids",
+   "ok": true,
+   "plate": [
+    true,
+    1
+   ],
+   "screws": {
+    "pan_240": [
+     true,
+     1
+    ],
+    "pan_300": [
+     true,
+     1
+    ]
+   }
+  },
+  {
+   "check": "plate_under_head_mm",
+   "ok": true,
+   "thickness": 0.6
+  },
+  {
+   "check": "cut_outside_bearing_outer_ring",
+   "ok": true,
+   "axis_to_cut": 5.9,
+   "bearing_R": 5.0
+  },
+  {
+   "check": "retainer_still_on_bearing",
+   "ok": true,
+   "gap": 0.0
+  },
+  {
+   "check": "counterbore_material_small",
+   "ok": true,
+   "removed_g": 0.0155
+  },
+  {
+   "check": "heads_seated_on_plate",
+   "ok": true,
+   "gaps": [
+    0.0,
+    0.0
+   ],
+   "overlap_mm3": [
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "check": "heads_below_leg_face_mm",
+   "ok": true,
+   "below": 0.1,
+   "leg_face_y": -58.0
+  },
+  {
+   "check": "head_radial_room_in_recess_mm",
+   "ok": true,
+   "nearest_leg": 0.6
+  },
+  {
+   "check": "thread_in_insert_mm",
+   "ok": true,
+   "engagement": 2.4,
+   "note": "fastener-stack min_engagement 2.4 (1.2 d)"
+  },
+  {
+   "check": "tip_short_of_pocket_floor_mm",
+   "ok": true,
+   "margin": 1.0,
+   "note": "covers the +/-0.24 length tolerance"
+  },
+  {
+   "check": "no_interference_at_neutral",
+   "ok": true,
+   "clashes": []
+  },
+  {
+   "check": "roll_pitch_grid_vs_heads",
+   "ok": true,
+   "poses": 25,
+   "clashes": [],
+   "nearest_within_3mm": [
+    2.3,
+    "connected_pitch_frame_roll_servo_saddle",
+    [
+     -21.0,
+     -25.0
+    ]
+   ],
+   "d051_button_heads_were": [
+    1.7,
+    "connected_pitch_frame_roll_servo_saddle",
+    [
+     -21.0,
+     -25.0
+    ]
+   ]
+  },
+  {
+   "check": "droid_entry_applies_d121",
+   "ok": true,
+   "missing": [],
+   "still_present": [],
+   "retainer_cut": true
+  },
+  {
+   "check": "mass_delta_small",
+   "ok": true,
+   "pan_g": 0.4666,
+   "button_g": 0.3009,
+   "plate_removed_g": 0.0155,
+   "delta_g": 0.1502
+  }
+ ]
+}

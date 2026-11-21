@@ -1,0 +1,187 @@
+{
+ "script": "check_d120_roll_coupler",
+ "passed": 19,
+ "total": 19,
+ "rows": [
+  {
+   "check": "removed_coupler_and_clamp",
+   "ok": true,
+   "removed": [
+    "roll_coupler_clamp_M4x10",
+    "roll_coupler_goBILDA_4001_0025_0006"
+   ]
+  },
+  {
+   "check": "new_parts_valid_single_solids",
+   "ok": true,
+   "parts": {
+    "horn": [
+     true,
+     1
+    ],
+    "collar": [
+     true,
+     1
+    ],
+    "m2_45": [
+     true,
+     1
+    ],
+    "m2_135": [
+     true,
+     1
+    ],
+    "m2_225": [
+     true,
+     1
+    ],
+    "m2_315": [
+     true,
+     1
+    ],
+    "set_1": [
+     true,
+     1
+    ],
+    "set_2": [
+     true,
+     1
+    ]
+   }
+  },
+  {
+   "check": "horn_hub_to_boss_mm",
+   "ok": true,
+   "gap": 0.3
+  },
+  {
+   "check": "horn_spline_engagement_mm",
+   "ok": true,
+   "engagement": 3.3,
+   "goBILDA_was": 2.9
+  },
+  {
+   "check": "centre_screw_seat_on_horn_web",
+   "ok": true,
+   "seat_x": -78.1,
+   "screw_box_x": [
+    -83.1,
+    -75.1
+   ]
+  },
+  {
+   "check": "centre_screw_thread_in_output_mm",
+   "ok": true,
+   "thread": 3.8
+  },
+  {
+   "check": "centre_screw_head_passes_collar_bore",
+   "ok": true,
+   "radial_gap": 0.25
+  },
+  {
+   "check": "m2_thread_in_flange_mm",
+   "ok": true,
+   "thread": 4.0,
+   "tip_x": -74.1,
+   "flange_front_x": -74.1
+  },
+  {
+   "check": "m2_heads_beside_horn_hub_mm",
+   "ok": true,
+   "radial_gap": 0.25,
+   "note": "E: Probots hub diameter not published; measure <= 10.4 mm on receipt"
+  },
+  {
+   "check": "m2_heads_above_case_top_mm",
+   "ok": true,
+   "gap": 1.8
+  },
+  {
+   "check": "spindle_in_collar_bore_mm",
+   "ok": true,
+   "engagement": 9.0
+  },
+  {
+   "check": "set_screws_on_flat",
+   "ok": true,
+   "screw_edge_margins": [
+    0.9,
+    0.9
+   ],
+   "flat_x": [
+    -74.7,
+    -66.0
+   ],
+   "flat_end_inside_collar": 0.4,
+   "flat_to_rear_bearing": 2.9
+  },
+  {
+   "check": "set_screw_tips_on_flat_and_recessed",
+   "ok": true,
+   "tip_gaps": [
+    0.0,
+    0.0
+   ],
+   "recess": [
+    0.5,
+    0.5
+   ]
+  },
+  {
+   "check": "no_interference_at_neutral",
+   "ok": true,
+   "clashes": [],
+   "between_new_parts": [],
+   "nearest_non_roll_part": [
+    0.3,
+    "horn",
+    "roll_STS3045M_reference"
+   ]
+  },
+  {
+   "check": "roll_sweep_vs_pitch_frame",
+   "ok": true,
+   "poses": 29,
+   "clashes": [],
+   "nearest": [
+    1.1,
+    "roll_bearing_retainer_64.1",
+    -21.0
+   ],
+   "horn_to_servo_min": 0.3
+  },
+  {
+   "check": "roll_pitch_grid_vs_yaw_frame",
+   "ok": true,
+   "poses": 25,
+   "clashes": [],
+   "nearest_within_3mm": [
+    99.0,
+    null,
+    null
+   ]
+  },
+  {
+   "check": "set_screw_key_paths_clear_from_plus_y",
+   "ok": true,
+   "blocked": [],
+   "path": "3 x 3 mm, collar face to +60 mm"
+  },
+  {
+   "check": "droid_entry_applies_d120",
+   "ok": true,
+   "missing": [],
+   "still_present": []
+  },
+  {
+   "check": "mass_delta_small",
+   "ok": true,
+   "new_g": 7.7165,
+   "coupler_and_clamp_g": 6.898,
+   "flat_removed_g": 0.076,
+   "delta_g": 0.7426,
+   "collar_g": 4.7821
+  }
+ ]
+}
